@@ -8,6 +8,11 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #20 Engineer's Handbook and in-game screenshots
+- **Engineer's Handbook** (book + copper ingot): an in-game guide with 9 chapters and 36 pages. Each page gives what a block does, its power use, its crafting grid and example recipes, and you can hover over items.
+- The content is generated from the mod's own tables, so it can't go out of date.
+- **Client game tests:** CI starts a real game client, builds a showroom of every machine, opens a machine screen and the handbook, and saves screenshots as a build artifact.
+
 ### #19 Machine control
 - **Upgrades:** every powered processing machine gets two upgrade slots.
   - **Speed Upgrade:** 4 cards make it 3× as fast for twice the energy per item.

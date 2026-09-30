@@ -28,3 +28,46 @@ jobs:
         run: python3 tools/check_mod_data.py
       - name: Build mod
         run: ./gradlew build --no-daemon
+
+  # A real game client with software rendering (Mesa): runs the client game tests in
+  # src/gametest (JugcraftClientGameTests), which build a showroom and take screenshots.
+  client:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Install Mesa (software rendering)
+        run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers
+      - name: Prepare run directory
+        run: |
+          mkdir -p run && echo "eula=true" > run/eula.txt
+          echo 'preferredGraphicsBackend:"opengl"' > run/options.txt
+      - name: Run client game tests
+        run: ./gradlew runClientGameTest --no-daemon
+      - name: Print small previews of the screenshots
+        if: always()
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          import base64, glob, io, os
+          from PIL import Image
+          for path in sorted(glob.glob("**/screenshots/*.png", recursive=True)):
+              image = Image.open(path).convert("RGB")
+              image.thumbnail((480, 270))
+              buffer = io.BytesIO()
+              image.save(buffer, "JPEG", quality=60)
+              print(f"=== SCREENSHOT {os.path.basename(path)} {image.size}")
+              print(base64.b64encode(buffer.getvalue()).decode())
+              print("=== END")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: client-screenshots
+          path: '**/screenshots/*.png'

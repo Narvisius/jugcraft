@@ -20,7 +20,7 @@ DATA = RES / "data"
 PACKS = RES / "resourcepacks"
 
 GENERATED_DIRS = [
-    ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang",
+    ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang", ASSETS / "handbook",
     DATA / MOD / "loot_table", DATA / MOD / "recipe", DATA / MOD / "worldgen",
     DATA / "c" / "tags", DATA / "minecraft" / "tags", RES / MOD, PACKS,
 ]
@@ -513,6 +513,8 @@ def main():
         if directory.exists():
             shutil.rmtree(directory)
     assets()
+    import handbook
+    write(ASSETS / "handbook" / "en_us.json", handbook.build())
     loot_tables()
     recipes()
     tags()

@@ -47,7 +47,7 @@ LOGISTICS_BLOCKS = {
     "pneumatic_extractor": {"display": "Pneumatic Extractor"},
     "item_sorter": {"display": "Item Sorter"},
 }
-TOOLS = {"brass_wrench": "Brass Wrench"}
+TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook"}
 # Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
 # At most 4 of each kind count. Numbers are in machine/MachineUpgrades.java.
 UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency Upgrade"}
@@ -181,6 +181,8 @@ CRAFTING = {
     "item_sorter": (["PCP", "THT", "PPP"], {"P": "#c:plates/brass", "C": "minecraft:comparator",
                                            "T": "jugcraft:brass_item_pipe", "H": "minecraft:hopper"}, 1),
     "brass_wrench": (["B B", " B ", " B "], {"B": "#c:ingots/brass"}, 1),
+    # The in-game guide (tools/handbook.py): available from the start.
+    "engineers_handbook": (["BC"], {"B": "minecraft:book", "C": "#c:ingots/copper"}, 1),
     # Processing depth. The pulverizer follows the metal press (plates, gears); the ore washer needs
     # invar and a circuit, so the three-fold route comes after the workshop tier.
     "pulverizer": (["FGF", "CMC", "PGP"], {"F": "minecraft:flint", "G": "#c:gears/iron", "C": "jugcraft:copper_cable",

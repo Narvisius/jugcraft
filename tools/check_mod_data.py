@@ -391,6 +391,27 @@ def check_large_machines():
                 err(f"{path.name}: element outside -16..32")
 
 
+def check_handbook(registered):
+    """Every Jugcraft item the Engineer's Handbook shows must exist."""
+    book = load(ASSETS / "handbook" / "en_us.json")
+    if book is None:
+        err("assets/jugcraft/handbook/en_us.json is missing")
+        return
+    refs = []
+    for chapter in book["chapters"]:
+        refs.append(chapter["icon"])
+        for page in chapter["pages"]:
+            refs.append(page["icon"])
+            craft = page.get("craft")
+            if craft:
+                refs += [ref for ref in craft["grid"] if ref] + [craft["result"]]
+            for row in page.get("recipes", []):
+                refs += [ref for ref, _ in row["in"]] + [row["out"][0]] + [ref for ref, _ in row.get("extra", [])]
+    for ref in refs:
+        if split(ref)[0] == MOD and split(ref)[1] not in registered:
+            err(f"handbook: unknown item {ref}")
+
+
 def check_style_pack():
     """Both machine styles must cover every machine completely, and everything they reference must exist."""
     from machines import PARTS, FLUID_BLOCKS
@@ -444,6 +465,7 @@ def main():
     check_machines(registered)
     check_large_machines()
     check_style_pack()
+    check_handbook(registered)
     for path in RES.rglob("*.json"):
         load(path)
     if errors:

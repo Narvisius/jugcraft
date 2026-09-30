@@ -50,7 +50,7 @@ fabricApi {
 		createSourceSet = true
 		modId = "jugcraft-test"
 		enableGameTests = true
-		enableClientGameTests = false
+		enableClientGameTests = true // Real client with rendering; CI job "client" runs it and keeps the screenshots.
 		eula = true // Accepts the Minecraft EULA for the test server only.
 	}
 }

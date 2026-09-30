@@ -506,6 +506,26 @@ def wrench_item():
     return img
 
 
+def handbook_item():
+    """A leather-bound book with brass corners and a small gear on the cover."""
+    from steampunk_textures import BRASS as SP_BRASS
+    leather = [(70, 36, 22), (92, 50, 30), (112, 64, 38)]
+    img = new()
+    for y in range(2, 15):
+        for x in range(3, 14):
+            c = leather[1] if (x + 2 * y) % 7 else leather[2]
+            if x == 3:
+                c = leather[0]
+            img.putpixel((x, y), c + (255,))
+    for y in range(3, 14):
+        img.putpixel((13, y), (230, 220, 190, 255))
+    for x, y in ((3, 2), (4, 2), (3, 3), (12, 2), (3, 14), (4, 14), (3, 13), (12, 14)):
+        img.putpixel((x, y), SP_BRASS[3] + (255,))
+    for x, y in ((8, 6), (7, 7), (9, 7), (6, 8), (10, 8), (7, 9), (9, 9), (8, 10), (8, 8)):
+        img.putpixel((x, y), (SP_BRASS[4] if (x, y) != (8, 8) else leather[0]) + (255,))
+    return img
+
+
 def upgrade_card(accent, symbol):
     """A brass-framed punch card with a colored accent and a small symbol (speed: arrow, efficiency: leaf)."""
     from steampunk_textures import BRASS as SP_BRASS
@@ -1025,6 +1045,7 @@ def machines():
     save(pipe_texture(), "block", "bronze_fluid_pipe")
     save(item_tube_texture(), "block", "brass_item_pipe")
     save(wrench_item(), "item", "brass_wrench")
+    save(handbook_item(), "item", "engineers_handbook")
     arrow = [(5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (9, 7), (8, 6), (9, 9), (8, 10)]
     leaf = [(7, 7), (8, 7), (6, 8), (7, 8), (8, 8), (9, 8), (7, 9), (8, 9), (6, 10), (5, 10)]
     save(upgrade_card([(160, 40, 30), (220, 70, 40)], arrow), "item", "speed_upgrade")

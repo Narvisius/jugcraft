@@ -1,0 +1,1364 @@
+{
+  "chapters": [
+    {
+      "title": "Getting Started",
+      "icon": "jugcraft:engineers_handbook",
+      "pages": [
+        {
+          "title": "Welcome, Engineer",
+          "icon": "jugcraft:engineers_handbook",
+          "text": [
+            "This handbook covers every Jugcraft machine: what it does, what it needs and how to build it.",
+            "Pick a chapter on the left. Page through a chapter with the arrows.",
+            "Power is measured in JE (Jugcraft Energy) per tick, fluids in mB (1,000 mB is a bucket)."
+          ]
+        },
+        {
+          "title": "Your First Power",
+          "icon": "jugcraft:coal_generator",
+          "text": [
+            "Mine tin and zinc, then make bronze (3 copper + 1 tin) by hand and smelt it.",
+            "Build a Machine Casing (bronze and zinc), a Coal Generator and some Copper Cable, then an Electric Furnace. Run cable from the generator to the furnace, or place them side by side.",
+            "Every machine holds its own charge, so it keeps working for a while after the power stops."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "jugcraft:zinc_ingot",
+              "jugcraft:bronze_ingot",
+              "jugcraft:zinc_ingot",
+              null,
+              "jugcraft:zinc_ingot",
+              "jugcraft:bronze_ingot",
+              "jugcraft:zinc_ingot",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:machine_casing",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "title": "Materials",
+      "icon": "jugcraft:bronze_ingot",
+      "pages": [
+        {
+          "title": "Ores",
+          "icon": "jugcraft:tin_ore",
+          "text": [
+            "Jugcraft ores appear in the stone and deepslate of every Overworld biome:",
+            "Tin: Y -32 to 96, needs a stone pickaxe.",
+            "Zinc: Y -16 to 80, needs a stone pickaxe.",
+            "Lead: Y -48 to 64, needs a stone pickaxe.",
+            "Silver: Y -64 to 32, needs a iron pickaxe.",
+            "Nickel: Y -64 to 16, needs a iron pickaxe.",
+            "Tungsten: Y -64 to 0, needs a iron pickaxe.",
+            "Uranium: Y -64 to -16, needs a iron pickaxe.",
+            "Rock Salt: Y 0 to 64.",
+            "Phosphorite: Y -16 to 48.",
+            "Lepidolite: Y -48 to 32.",
+            "Monazite: Y -64 to 16."
+          ]
+        },
+        {
+          "title": "Ore Processing",
+          "icon": "jugcraft:tin_dust",
+          "text": [
+            "Smelting an ore gives one ingot.",
+            "Crushing or pulverizing it first gives 2.",
+            "Washing it, then pulverizing the washed ore, gives 3.",
+            "Pulverizing ore sometimes gives a second metal's dust: copper gives gold, iron gives nickel, gold gives silver, tin gives tungsten, zinc gives lead, lead gives silver."
+          ]
+        },
+        {
+          "title": "Parts",
+          "icon": "jugcraft:bronze_gear",
+          "text": [
+            "Plates (Metal Press): copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten, steel.",
+            "Gears (four plates): iron, bronze, brass, invar, steel.",
+            "Wires (Wire Drawer): copper, silver, aluminum.",
+            "Every part works with other mods' parts through c: tags."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Power",
+      "icon": "jugcraft:coal_generator",
+      "pages": [
+        {
+          "title": "Coal Generator",
+          "icon": "jugcraft:coal_generator",
+          "text": [
+            "Burns coal, charcoal, coal blocks or coke to make power. It stops burning when full, so fuel is never wasted.",
+            "Makes up to 32 JE/t. Holds 16,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "jugcraft:bronze_ingot",
+              "minecraft:furnace",
+              "jugcraft:bronze_ingot",
+              "jugcraft:bronze_ingot",
+              "jugcraft:machine_casing",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:coal_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Solar Panel",
+          "icon": "jugcraft:solar_panel",
+          "text": [
+            "Makes power from daylight under open sky: 8 JE/t in sun, half in rain, nothing at night.",
+            "Makes up to 8 JE/t. Holds 4,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:glass",
+              "minecraft:glass",
+              "minecraft:glass",
+              "jugcraft:silicon",
+              "jugcraft:silicon",
+              "jugcraft:silicon",
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:solar_panel",
+            "count": 1
+          }
+        },
+        {
+          "title": "Steam Generator",
+          "icon": "jugcraft:steam_generator",
+          "text": [
+            "Boils water with coal or bitumen: twice the power of the coal generator per fuel. A water source block directly below refills it for free.",
+            "Makes up to 64 JE/t. Holds 40,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "minecraft:bucket",
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:coal_generator",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "jugcraft:machine_casing",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:steam_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Geothermal Generator",
+          "icon": "jugcraft:geothermal_generator",
+          "text": [
+            "Two blocks wide. Burns lava from its tank (buckets, pumps or pipes): one bucket lasts 1,000 ticks.",
+            "Makes up to 64 JE/t. Holds 30,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:invar_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:invar_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:machine_casing",
+              "jugcraft:bronze_gear",
+              "jugcraft:invar_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:invar_plate"
+            ],
+            "result": "jugcraft:geothermal_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Wind Turbine",
+          "icon": "jugcraft:wind_turbine",
+          "text": [
+            "Three blocks tall. The higher it stands and the worse the weather, the more it makes. Keep the air around its top clear.",
+            "Makes up to 24 JE/t. Holds 16,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:aluminum_plate",
+              "jugcraft:aluminum_plate",
+              "jugcraft:aluminum_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:machine_casing",
+              "jugcraft:bronze_gear",
+              "jugcraft:bronze_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_plate"
+            ],
+            "result": "jugcraft:wind_turbine",
+            "count": 1
+          }
+        },
+        {
+          "title": "Battery Box",
+          "icon": "jugcraft:battery_box",
+          "text": [
+            "Stores power. It charges from every side and gives power out of its front only.",
+            "Holds 400,000 JE; 256 JE/t in and out."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:lead_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:lead_ingot",
+              "jugcraft:lead_ingot",
+              "minecraft:redstone_block",
+              "jugcraft:lead_ingot",
+              "jugcraft:lead_ingot",
+              "jugcraft:machine_casing",
+              "jugcraft:lead_ingot"
+            ],
+            "result": "jugcraft:battery_box",
+            "count": 1
+          }
+        },
+        {
+          "title": "Copper Cable",
+          "icon": "jugcraft:copper_cable",
+          "text": [
+            "Carries power between generators, batteries and machines. It connects by itself to anything that stores or uses power on the touching face."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:copper_ingot",
+              "jugcraft:tin_ingot",
+              "minecraft:copper_ingot",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:copper_cable",
+            "count": 6
+          }
+        }
+      ]
+    },
+    {
+      "title": "Processing",
+      "icon": "jugcraft:crusher",
+      "pages": [
+        {
+          "title": "Electric Furnace",
+          "icon": "jugcraft:electric_furnace",
+          "text": [
+            "Smelts anything a vanilla furnace can, twice as fast.",
+            "Uses 10 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "minecraft:redstone",
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "minecraft:furnace",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "jugcraft:machine_casing",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:electric_furnace",
+            "count": 1
+          }
+        },
+        {
+          "title": "Crusher",
+          "icon": "jugcraft:crusher",
+          "text": [
+            "Crushes one ore into two raw ores, minerals into extra minerals, cobblestone into gravel and gravel into sand.",
+            "Uses 16 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:flint",
+              "minecraft:flint",
+              "minecraft:flint",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "minecraft:redstone",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:crusher",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "jugcraft:tin_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:raw_tin",
+                2
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:zinc_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:raw_zinc",
+                2
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:lead_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:raw_lead",
+                2
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:silver_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:raw_silver",
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Alloy Smelter",
+          "icon": "jugcraft:alloy_smelter",
+          "text": [
+            "A 2x2 furnace that melts two ingredients together into alloys. Power goes in only through its copper socket, on the outer side of its lower right block.",
+            "Uses 20 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "minecraft:furnace",
+              "jugcraft:machine_casing",
+              "minecraft:furnace",
+              "jugcraft:bronze_ingot",
+              "minecraft:redstone",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:alloy_smelter",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:copper_ingot",
+                  3
+                ],
+                [
+                  "jugcraft:tin_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:bronze_ingot",
+                4
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:copper_ingot",
+                  3
+                ],
+                [
+                  "jugcraft:zinc_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:brass_ingot",
+                4
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:iron_ingot",
+                  2
+                ],
+                [
+                  "jugcraft:nickel_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:invar_ingot",
+                3
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:tin_ingot",
+                  1
+                ],
+                [
+                  "jugcraft:lead_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:solder_ingot",
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Metal Press",
+          "icon": "jugcraft:metal_press",
+          "text": [
+            "Presses one ingot into one plate. Four plates craft a gear.",
+            "Uses 16 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "minecraft:piston",
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "minecraft:anvil",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:metal_press",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:copper_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:copper_plate",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:iron_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:iron_plate",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:tin_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:tin_plate",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:bronze_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:bronze_plate",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Wire Drawer",
+          "icon": "jugcraft:wire_drawer",
+          "text": [
+            "Draws one ingot into three wires.",
+            "Uses 12 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_ingot",
+              "minecraft:shears",
+              "jugcraft:brass_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:brass_ingot",
+              "minecraft:redstone",
+              "jugcraft:brass_ingot"
+            ],
+            "result": "jugcraft:wire_drawer",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:copper_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:copper_wire",
+                3
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:silver_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:silver_wire",
+                3
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:aluminum_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:aluminum_wire",
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Circuit Assembler",
+          "icon": "jugcraft:circuit_assembler",
+          "text": [
+            "Assembles circuits from up to three ingredients, in any slots.",
+            "Uses 32 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:tin_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:tin_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:tin_plate",
+              "minecraft:redstone",
+              "jugcraft:tin_plate"
+            ],
+            "result": "jugcraft:circuit_assembler",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "jugcraft:silicon",
+                  1
+                ],
+                [
+                  "jugcraft:copper_wire",
+                  3
+                ],
+                [
+                  "jugcraft:solder_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:basic_circuit",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:basic_circuit",
+                  2
+                ],
+                [
+                  "jugcraft:silver_wire",
+                  3
+                ],
+                [
+                  "jugcraft:invar_plate",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:advanced_circuit",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Arc Furnace Controller",
+          "icon": "jugcraft:arc_furnace_controller",
+          "text": [
+            "The heart of the Arc Furnace: build a solid 3x3x3 cube of Arc Furnace Casing with this block in the middle of one face, facing out. It melts what an ordinary furnace cannot.",
+            "Uses 64 JE/t while working. Holds 50,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:nickel_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:nickel_ingot",
+              "minecraft:redstone",
+              "jugcraft:machine_casing",
+              "minecraft:redstone",
+              "jugcraft:nickel_ingot",
+              "minecraft:blast_furnace",
+              "jugcraft:nickel_ingot"
+            ],
+            "result": "jugcraft:arc_furnace_controller",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:quartz",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:silicon",
+                2
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:bauxite",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:aluminum_ingot",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:raw_tungsten",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:tungsten_ingot",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:raw_nickel",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:nickel_ingot",
+                1
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Ore Processing",
+      "icon": "jugcraft:pulverizer",
+      "pages": [
+        {
+          "title": "Pulverizer",
+          "icon": "jugcraft:pulverizer",
+          "text": [
+            "Grinds ore into two dusts, with a chance of a second metal. Also grinds washed ore, raw metal and ingots.",
+            "Uses 20 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:flint",
+              "jugcraft:iron_gear",
+              "minecraft:flint",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_plate",
+              "jugcraft:iron_gear",
+              "jugcraft:bronze_plate"
+            ],
+            "result": "jugcraft:pulverizer",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:copper_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:copper_dust",
+                2
+              ],
+              "extra": [
+                [
+                  "jugcraft:gold_dust",
+                  0.1
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:washed_copper_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:copper_dust",
+                1
+              ],
+              "extra": [
+                [
+                  "jugcraft:gold_dust",
+                  0.1
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:raw_copper",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:copper_dust",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:copper_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:copper_dust",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Ore Washer",
+          "icon": "jugcraft:ore_washer",
+          "text": [
+            "Washes one ore into three washed ores, using 500 mB of water each time. Grind them in the pulverizer.",
+            "Uses 16 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:invar_plate",
+              "minecraft:bucket",
+              "jugcraft:invar_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:machine_casing",
+              "jugcraft:bronze_gear",
+              "jugcraft:invar_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:invar_plate"
+            ],
+            "result": "jugcraft:ore_washer",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:copper_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:washed_copper_ore",
+                3
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:iron_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:washed_iron_ore",
+                3
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:gold_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:washed_gold_ore",
+                3
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:tin_ore",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:washed_tin_ore",
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Sieve",
+          "icon": "jugcraft:sieve",
+          "text": [
+            "Sifts gravel into flint and soul sand into soul soil, with a small chance of nuggets or quartz.",
+            "Uses 8 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:iron_plate",
+              "minecraft:iron_bars",
+              "jugcraft:iron_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:iron_plate",
+              "minecraft:hopper",
+              "jugcraft:iron_plate"
+            ],
+            "result": "jugcraft:sieve",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:gravel",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:flint",
+                1
+              ],
+              "extra": [
+                [
+                  "minecraft:iron_nugget",
+                  0.12
+                ],
+                [
+                  "jugcraft:tin_nugget",
+                  0.08
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:soul_sand",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:soul_soil",
+                1
+              ],
+              "extra": [
+                [
+                  "minecraft:quartz",
+                  0.15
+                ],
+                [
+                  "minecraft:gold_nugget",
+                  0.08
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Sawmill",
+          "icon": "jugcraft:sawmill",
+          "text": [
+            "Cuts logs into six planks (four by hand) with sawdust, and planks into three sticks.",
+            "Uses 12 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:iron_ingot",
+              "jugcraft:iron_gear",
+              "minecraft:iron_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:iron_plate",
+              "jugcraft:iron_plate",
+              "jugcraft:iron_plate"
+            ],
+            "result": "jugcraft:sawmill",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:oak_log",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:oak_planks",
+                6
+              ],
+              "extra": [
+                [
+                  "jugcraft:sawdust",
+                  0.5
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:spruce_log",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:spruce_planks",
+                6
+              ],
+              "extra": [
+                [
+                  "jugcraft:sawdust",
+                  0.5
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:birch_log",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:birch_planks",
+                6
+              ],
+              "extra": [
+                [
+                  "jugcraft:sawdust",
+                  0.5
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:jungle_log",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:jungle_planks",
+                6
+              ],
+              "extra": [
+                [
+                  "jugcraft:sawdust",
+                  0.5
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Steel",
+      "icon": "jugcraft:steel_ingot",
+      "pages": [
+        {
+          "title": "Coke Oven",
+          "icon": "jugcraft:coke_oven",
+          "text": [
+            "Two blocks tall, needs no power. Bakes coal into coal coke, a hotter fuel and the carbon for steel.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "minecraft:iron_ingot",
+              "minecraft:bricks",
+              "minecraft:bricks",
+              "minecraft:furnace",
+              "minecraft:bricks",
+              "minecraft:bricks",
+              "minecraft:iron_ingot",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:coke_oven",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:coal",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:coke",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Steel Foundry",
+          "icon": "jugcraft:steel_foundry",
+          "text": [
+            "Three blocks tall, needs no power. Refines one iron ingot with one coke into one steel ingot.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "minecraft:hopper",
+              "minecraft:bricks",
+              "jugcraft:iron_plate",
+              "minecraft:blast_furnace",
+              "jugcraft:iron_plate",
+              "minecraft:bricks",
+              "minecraft:bricks",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:steel_foundry",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:iron_ingot",
+                  1
+                ],
+                [
+                  "jugcraft:coke",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:steel_ingot",
+                1
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Fluids",
+      "icon": "jugcraft:fluid_tank",
+      "pages": [
+        {
+          "title": "Bronze Fluid Pipe",
+          "icon": "jugcraft:bronze_fluid_pipe",
+          "text": [
+            "Carries fluid that a pump pushes into it to every tank and fluid machine it touches."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_plate",
+              "minecraft:glass",
+              "jugcraft:bronze_plate",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:bronze_fluid_pipe",
+            "count": 4
+          }
+        },
+        {
+          "title": "Tinplate Tank",
+          "icon": "jugcraft:fluid_tank",
+          "text": [
+            "Holds 16 buckets of one fluid. Fill or empty it with buckets; right-click with an empty hand to read it."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:tin_plate",
+              "jugcraft:tin_plate",
+              "jugcraft:tin_plate",
+              "jugcraft:tin_plate",
+              "minecraft:glass",
+              "jugcraft:tin_plate",
+              "jugcraft:tin_plate",
+              "jugcraft:tin_plate",
+              "jugcraft:tin_plate"
+            ],
+            "result": "jugcraft:fluid_tank",
+            "count": 1
+          }
+        },
+        {
+          "title": "Electric Pump",
+          "icon": "jugcraft:electric_pump",
+          "text": [
+            "Pulls water or lava from the block below it and pushes it out of its top and sides."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_plate",
+              "minecraft:bucket",
+              "jugcraft:bronze_plate",
+              "jugcraft:iron_gear",
+              "jugcraft:machine_casing",
+              "jugcraft:iron_gear",
+              "jugcraft:bronze_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_plate"
+            ],
+            "result": "jugcraft:electric_pump",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "title": "Logistics",
+      "icon": "jugcraft:brass_item_pipe",
+      "pages": [
+        {
+          "title": "Machine Sides",
+          "icon": "jugcraft:crusher",
+          "text": [
+            "Every processing machine's screen has six face buttons: front, back, left, right, top and bottom.",
+            "Click one to cycle: In (blue), Out (orange), Both (green) or Off (gray).",
+            "Eject makes the machine push its results out of its Out faces by itself.",
+            "The R button sets how it reacts to redstone: always run, run with a signal, or run without one."
+          ]
+        },
+        {
+          "title": "Brass Item Pipe",
+          "icon": "jugcraft:brass_item_pipe",
+          "text": [
+            "Joins inventories into a network. Items go to matching sorters first, then take turns between the other inventories."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_plate",
+              "minecraft:glass",
+              "jugcraft:brass_plate",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:brass_item_pipe",
+            "count": 6
+          }
+        },
+        {
+          "title": "Pneumatic Extractor",
+          "icon": "jugcraft:pneumatic_extractor",
+          "text": [
+            "Pulls 16 items every 8 ticks from what it faces and pushes them out of its other sides. A redstone signal pauses it."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_plate",
+              "minecraft:hopper",
+              "jugcraft:brass_plate",
+              "jugcraft:brass_plate",
+              "jugcraft:brass_item_pipe",
+              "jugcraft:brass_plate",
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:pneumatic_extractor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Item Sorter",
+          "icon": "jugcraft:item_sorter",
+          "text": [
+            "Takes only the items in its 9-slot filter, and puts them into the inventory it faces."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_plate",
+              "minecraft:comparator",
+              "jugcraft:brass_plate",
+              "jugcraft:brass_item_pipe",
+              "minecraft:hopper",
+              "jugcraft:brass_item_pipe",
+              "jugcraft:brass_plate",
+              "jugcraft:brass_plate",
+              "jugcraft:brass_plate"
+            ],
+            "result": "jugcraft:item_sorter",
+            "count": 1
+          }
+        },
+        {
+          "title": "Brass Wrench",
+          "icon": "jugcraft:brass_wrench",
+          "text": [
+            "Right-click turns a machine. Sneak and right-click to pick a Jugcraft block up, with everything inside."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_ingot",
+              null,
+              "jugcraft:brass_ingot",
+              null,
+              "jugcraft:brass_ingot",
+              null,
+              null,
+              "jugcraft:brass_ingot",
+              null
+            ],
+            "result": "jugcraft:brass_wrench",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "title": "Upgrades",
+      "icon": "jugcraft:speed_upgrade",
+      "pages": [
+        {
+          "title": "Speed Upgrade",
+          "icon": "jugcraft:speed_upgrade",
+          "text": [
+            "In a machine's upgrade slot: each card makes it faster but uses more energy per item. Four cards: 3x as fast for twice the energy."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:redstone",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "minecraft:redstone",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:speed_upgrade",
+            "count": 1
+          }
+        },
+        {
+          "title": "Efficiency Upgrade",
+          "icon": "jugcraft:efficiency_upgrade",
+          "text": [
+            "In a machine's upgrade slot: each card cuts energy use by a fifth. Four cards: 41% of the energy."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:copper_wire",
+              "jugcraft:steel_plate",
+              "jugcraft:copper_wire",
+              "jugcraft:basic_circuit",
+              "jugcraft:copper_wire",
+              "jugcraft:steel_plate",
+              "jugcraft:copper_wire",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:efficiency_upgrade",
+            "count": 1
+          }
+        },
+        {
+          "title": "Comparators",
+          "icon": "minecraft:comparator",
+          "text": [
+            "A comparator next to a generator or battery shows how full it is.",
+            "Next to a processing machine, it shows how full its slots are, like a chest."
+          ]
+        }
+      ]
+    }
+  ]
+}
