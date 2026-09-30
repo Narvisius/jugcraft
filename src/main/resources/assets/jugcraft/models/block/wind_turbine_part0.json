@@ -1,0 +1,112 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_base": "jugcraft:block/wind_turbine_base",
+    "wind_turbine_blade": "jugcraft:block/wind_turbine_blade",
+    "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
+    "wind_turbine_nacelle": "jugcraft:block/wind_turbine_nacelle",
+    "wind_turbine_tip": "jugcraft:block/wind_turbine_tip",
+    "front": "jugcraft:block/wind_turbine_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_base"
+        },
+        "south": {
+          "texture": "#wind_turbine_base"
+        },
+        "east": {
+          "texture": "#wind_turbine_base"
+        },
+        "west": {
+          "texture": "#wind_turbine_base"
+        },
+        "up": {
+          "texture": "#wind_turbine_base"
+        },
+        "down": {
+          "texture": "#wind_turbine_base"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        3,
+        2
+      ],
+      "to": [
+        14,
+        14,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#machine_side"
+        },
+        "east": {
+          "texture": "#machine_side"
+        },
+        "west": {
+          "texture": "#machine_side"
+        },
+        "up": {
+          "texture": "#machine_top"
+        },
+        "down": {
+          "texture": "#machine_side"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        14,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_base"
+        },
+        "south": {
+          "texture": "#wind_turbine_base"
+        },
+        "east": {
+          "texture": "#wind_turbine_base"
+        },
+        "west": {
+          "texture": "#wind_turbine_base"
+        },
+        "up": {
+          "texture": "#wind_turbine_base"
+        },
+        "down": {
+          "texture": "#wind_turbine_base"
+        }
+      }
+    }
+  ]
+}

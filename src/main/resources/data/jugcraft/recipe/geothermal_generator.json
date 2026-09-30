@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "GMG",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/invar",
+    "T": "jugcraft:fluid_tank",
+    "G": "#c:gears/bronze",
+    "M": "jugcraft:machine_casing",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:geothermal_generator",
+    "count": 1
+  }
+}

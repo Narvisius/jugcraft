@@ -120,7 +120,7 @@ public final class EnergyNetworks {
 			return network;
 		}
 
-		/** Splits energy evenly across every endpoint that can accept it, except the source. */
+		/** Splits energy evenly across every storage that can accept it (each counted once), except the source. */
 		long distribute(Level level, BlockPos sourcePos, EnergyStorage source, long budget) {
 			List<EnergyStorage> receivers = new ArrayList<>();
 			for (Endpoint endpoint : endpoints) {
@@ -128,7 +128,8 @@ public final class EnergyNetworks {
 					continue;
 				}
 				EnergyStorage storage = EnergyStorage.SIDED.find(level, endpoint.pos, endpoint.side);
-				if (storage != null && storage.supportsInsertion() && storage != source) {
+				if (storage != null && storage.supportsInsertion() && storage != source
+						&& !receivers.contains(storage)) {
 					receivers.add(storage);
 				}
 			}

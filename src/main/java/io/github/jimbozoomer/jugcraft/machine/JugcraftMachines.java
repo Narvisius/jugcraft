@@ -48,7 +48,12 @@ public final class JugcraftMachines {
 
 		for (MachineKind kind : MachineKind.values()) {
 			// Furnace properties include light emission while LIT, which machines share.
-			MachineBlock machine = new MachineBlock(properties(kind.id, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)), kind);
+			BlockBehaviour.Properties props = properties(kind.id, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+			// Multi-block machines have detailed, not full-cube, models. Pistons already refuse to move them:
+			// every part is an entity block (even dummies without a block entity), which pistons never push.
+			MachineBlock machine = kind.isLarge()
+					? new LargeMachineBlock(props.noOcclusion(), kind)
+					: new MachineBlock(props, kind);
 			MACHINES.put(kind, (MachineBlock) block(kind.id, machine));
 
 			ExtendedMenuType<MachineMenu, BlockPos> menu = new ExtendedMenuType<>(
@@ -59,7 +64,11 @@ public final class JugcraftMachines {
 
 		MACHINE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("machine"),
 				FabricBlockEntityTypeBuilder.create(MachineBlockEntity::new, MACHINES.values().toArray(Block[]::new)).build());
-		EnergyStorage.SIDED.registerForBlockEntity(MachineBlockEntity::energyFor, MACHINE_ENTITY);
+		// Registered per block, not per block entity, so the dummy parts of multi-block machines answer too.
+		EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
+			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
+			return machine == null ? null : machine.energyFor(side);
+		}, MACHINES.values().toArray(Block[]::new));
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(COPPER_CABLE);

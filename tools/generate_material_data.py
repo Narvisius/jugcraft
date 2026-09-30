@@ -92,10 +92,134 @@ def assets():
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 
+FACES = ("north", "south", "east", "west", "up", "down")
+# For each face: the two axes spanning it (u, v) and the axis it faces along with its side.
+FACE_AXES = {"north": (0, 1, 2, 0), "south": (0, 1, 2, 1), "east": (2, 1, 0, 1), "west": (2, 1, 0, 0),
+             "up": (0, 2, 1, 1), "down": (0, 2, 1, 0)}
+
+
+def _element(frm, to, texture, uv=False, skip=()):
+    """One model element; uv=True gives explicit UVs for elements outside 0..16 or scaled ones."""
+    faces = {}
+    for face in FACES:
+        if face in skip:
+            continue
+        tex = texture.get(face, texture.get("*")) if isinstance(texture, dict) else texture
+        ref = tex if tex.startswith("#") else f"#{tex}"
+        entry = {"texture": ref}
+        if uv:
+            u_axis, v_axis = FACE_AXES[face][:2]
+            width = min(16, abs(to[u_axis] - frm[u_axis]))
+            height = min(16, abs(to[v_axis] - frm[v_axis]))
+            entry["uv"] = [0, 0, round(width, 3), round(height, 3)]
+        faces[face] = entry
+    return {"from": [round(v, 4) for v in frm], "to": [round(v, 4) for v in to], "faces": faces}
+
+
+def _textures(elements, front):
+    names = set()
+    for _, _, texture in elements:
+        names |= set(texture.values()) if isinstance(texture, dict) else {texture}
+    textures = {name: rid(f"block/{name}") for name in sorted(names) if not name.startswith("#")}
+    textures["front"] = rid(f"block/{front}")
+    textures["particle"] = rid("block/machine_side")
+    return textures
+
+
+def slice_large_model(machine):
+    """Cuts one structure-space model into per-part models, like Immersive Engineering's split models."""
+    from large_machines import FOOTPRINTS, MODELS
+    footprint = FOOTPRINTS[machine]
+    parts = [[] for _ in footprint]
+    for frm, to, texture in MODELS[machine]:
+        volume = (to[0] - frm[0]) * (to[1] - frm[1]) * (to[2] - frm[2])
+        pieces, covered = [], 0.0
+        for index, offset in enumerate(footprint):
+            low = [offset[axis] * 16 for axis in range(3)]
+            a = [max(frm[axis], low[axis]) for axis in range(3)]
+            b = [min(to[axis], low[axis] + 16) for axis in range(3)]
+            if all(a[axis] < b[axis] for axis in range(3)):
+                covered += (b[0] - a[0]) * (b[1] - a[1]) * (b[2] - a[2])
+                # Drop faces created by the cut: they are inside the element.
+                skip = []
+                for face, (_, _, axis, side) in FACE_AXES.items():
+                    edge = b[axis] if side else a[axis]
+                    original = to[axis] if side else frm[axis]
+                    if edge != original:
+                        skip.append(face)
+                local_a = [a[axis] - low[axis] for axis in range(3)]
+                local_b = [b[axis] - low[axis] for axis in range(3)]
+                pieces.append((index, _element(local_a, local_b, texture, skip=skip)))
+        if pieces and abs(covered - volume) < 1e-6:
+            for index, element in pieces:
+                parts[index].append(element)
+        else:
+            # Reaches outside the footprint: keep it whole on the part nearest its center.
+            center = [(frm[axis] + to[axis]) / 2 for axis in range(3)]
+            index = min(range(len(footprint)), key=lambda i: sum(
+                (center[axis] - (footprint[i][axis] * 16 + 8)) ** 2 for axis in range(3)))
+            low = [footprint[index][axis] * 16 for axis in range(3)]
+            local_a = [frm[axis] - low[axis] for axis in range(3)]
+            local_b = [to[axis] - low[axis] for axis in range(3)]
+            if min(local_a) < -16 or max(local_b) > 32:
+                raise ValueError(f"{machine}: element {frm}..{to} is too far from its part")
+            parts[index].append(_element(local_a, local_b, texture, uv=True))
+    return parts
+
+
+def item_model(machine):
+    """The whole machine scaled down into one block, for the inventory and hand."""
+    from large_machines import MODELS
+    elements = MODELS[machine]
+    low = [min(min(f[axis], t[axis]) for f, t, _ in elements) for axis in range(3)]
+    high = [max(max(f[axis], t[axis]) for f, t, _ in elements) for axis in range(3)]
+    scale = 16 / max(high[axis] - low[axis] for axis in range(3))
+    shift = [(16 - (high[axis] - low[axis]) * scale) / 2 for axis in range(3)]
+    out = []
+    for frm, to, texture in elements:
+        a = [(frm[axis] - low[axis]) * scale + shift[axis] for axis in range(3)]
+        b = [(to[axis] - low[axis]) * scale + shift[axis] for axis in range(3)]
+        out.append(_element(a, b, texture, uv=True))
+    return out
+
+
+def large_machine_assets(machine, info):
+    from large_machines import FOOTPRINTS, MODELS, FRONTS
+    front = FRONTS[machine]
+    textures = _textures(MODELS[machine], front)
+    for index, elements in enumerate(slice_large_model(machine)):
+        write(ASSETS / "models" / "block" / f"{machine}_part{index}.json",
+              {"ambientocclusion": False, "textures": textures, "elements": elements})
+        if info["lit"]:
+            write(ASSETS / "models" / "block" / f"{machine}_part{index}_on.json",
+                  {"parent": rid(f"block/{machine}_part{index}"), "textures": {"front": rid(f"block/{front}_on")}})
+    write(ASSETS / "models" / "block" / "large_machine_empty.json",
+          {"textures": {"particle": rid("block/machine_side")}, "elements": []})
+    variants = {}
+    for facing, y in FACING_Y.items():
+        rotation = {"y": y} if y else {}
+        for lit in ("false", "true"):
+            for part in range(3):  # LargeMachineBlock.PART is 0..2
+                if part < len(FOOTPRINTS[machine]):
+                    on = "_on" if lit == "true" and info["lit"] else ""
+                    model = rid(f"block/{machine}_part{part}{on}")
+                else:
+                    model = rid("block/large_machine_empty")
+                variants[f"facing={facing},lit={lit},part={part}"] = {"model": model, **rotation}
+    write(ASSETS / "blockstates" / f"{machine}.json", {"variants": variants})
+    write(ASSETS / "models" / "item" / f"{machine}.json",
+          {"parent": "minecraft:block/block", "textures": textures, "elements": item_model(machine)})
+    write(ASSETS / "items" / f"{machine}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{machine}")}})
+
+
 def machine_assets(lang):
+    from large_machines import FOOTPRINTS
     for machine, info in MACHINES.items():
         lang[f"block.{MOD}.{machine}"] = info["display"]
         lang[f"container.{MOD}.{machine}"] = info["display"]
+        if machine in FOOTPRINTS:
+            large_machine_assets(machine, info)
+            continue
         for suffix, front in (("", "front"), ("_on", "front_on")):
             if suffix and not info["lit"]:
                 continue
@@ -175,6 +299,8 @@ def machine_assets(lang):
     lang[f"message.{MOD}.pump"] = "Energy %s / %s JE, holding %s mB"
     lang[f"container.{MOD}.arc_furnace.incomplete"] = "Structure incomplete"
     lang[f"container.{MOD}.arc_furnace.formed"] = "Arc furnace formed"
+    lang[f"container.{MOD}.wind_turbine.clear"] = "Rotor turning"
+    lang[f"container.{MOD}.wind_turbine.blocked"] = "Rotor blocked: clear the blocks beside and above the top"
 
 
 # ---------------------------------------------------------------- loot tables

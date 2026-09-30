@@ -45,8 +45,8 @@ These unlock whole groups of machines, so they should be designed first.
 | **Chemical Reactor** (Chemistry branch) | Sulfur + water → sulfuric acid; phosphate + acid → fertilizer; lithium carbonate → battery compounds | Sulfur, phosphate, lithium | Farming (fertilizer), batteries, ore leaching |
 | **Circuit Assembler** ✅ implemented | Silicon + copper wire + solder → basic circuit; basic circuits + silver wire + invar plate → advanced circuit | Silicon, silver, solder | Every higher-tier machine, rockets, magic-tech bridges |
 | **Lithium Battery** | Small high-density battery block and a portable battery item | Lithium, aluminum | Portable tools, rovers, space |
-| **Geothermal Generator** | Lava → power | Fluid API | Nether and cave bases |
-| **Wind Turbine** (multiblock) | Height- and weather-scaled power | Aluminum, bronze gears | Remote and cozy off-grid bases |
+| **Geothermal Generator** ✅ implemented (placeable, 2 blocks wide) | Lava → power | Fluid API | Nether and cave bases |
+| **Wind Turbine** ✅ implemented (placeable, 3 blocks tall) | Height- and weather-scaled power | Aluminum, bronze gears | Remote and cozy off-grid bases |
 
 ### Tier 3: Industry and expeditions
 | Machine | Does | Uses | Feeds |

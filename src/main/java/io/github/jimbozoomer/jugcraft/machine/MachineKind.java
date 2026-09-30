@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.StringRepresentable;
 
 /**
@@ -18,7 +19,10 @@ public enum MachineKind implements StringRepresentable {
 	ALLOY_SMELTER("alloy_smelter", 10_000, 128, 0, 20, 3),
 	METAL_PRESS("metal_press", 10_000, 128, 0, 16, 2),
 	WIRE_DRAWER("wire_drawer", 10_000, 128, 0, 12, 2),
-	CIRCUIT_ASSEMBLER("circuit_assembler", 20_000, 256, 0, 32, 4);
+	CIRCUIT_ASSEMBLER("circuit_assembler", 20_000, 256, 0, 32, 4),
+	// Multi-block machines (see Footprint and LargeMachineBlock).
+	GEOTHERMAL_GENERATOR("geothermal_generator", 30_000, 0, 128, 0, 0),
+	WIND_TURBINE("wind_turbine", 16_000, 0, 64, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -32,6 +36,18 @@ public enum MachineKind implements StringRepresentable {
 	public static final int STEAM_TANK = 8_000;
 	/** mB per tick drawn from a water source block directly beneath the steam generator. */
 	public static final int STEAM_SOURCE_REFILL = 20;
+	/** JE per tick while the geothermal generator has lava. */
+	public static final int GEOTHERMAL_PER_TICK = 64;
+	/** Lava (mB) the geothermal generator uses per tick: one bucket lasts 1,000 ticks (64,000 JE). */
+	public static final int GEOTHERMAL_LAVA_PER_TICK = 1;
+	/** Geothermal generator lava tank (mB). */
+	public static final int GEOTHERMAL_TANK = 4_000;
+	/** Wind turbine JE per tick at or below sea level; one more per 4 blocks higher. */
+	public static final int WIND_BASE_PER_TICK = 4;
+	/** Wind turbine output cap before weather. */
+	public static final int WIND_MAX_PER_TICK = 24;
+	/** Ticks between checks that the wind turbine's rotor has room to turn. */
+	public static final int WIND_CHECK_INTERVAL = 100;
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -82,7 +98,24 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Generators only produce energy; they never accept it. */
 	public boolean isGenerator() {
-		return this == COAL_GENERATOR || this == SOLAR_PANEL || this == STEAM_GENERATOR;
+		return this == COAL_GENERATOR || this == SOLAR_PANEL || this == STEAM_GENERATOR
+				|| this == GEOTHERMAL_GENERATOR || this == WIND_TURBINE;
+	}
+
+	/**
+	 * The blocks this machine fills, facing north. The geothermal generator's lava tank sits to
+	 * the right of its body (seen from the front); the wind turbine is three blocks tall.
+	 */
+	public Footprint footprint() {
+		return switch (this) {
+			case GEOTHERMAL_GENERATOR -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0));
+			case WIND_TURBINE -> Footprint.tall(3);
+			default -> Footprint.SINGLE;
+		};
+	}
+
+	public boolean isLarge() {
+		return footprint().size() > 1;
 	}
 
 	@Override

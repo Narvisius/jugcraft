@@ -472,6 +472,114 @@ def pump_port(seed, intake):
     return img
 
 
+def hazard_plinth(seed):
+    """Dark steel footing with a yellow-black hazard edge."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            if y in (0, 15) or x in (0, 15):
+                c = (214, 170, 40) if (x + y) // 2 % 2 else (30, 28, 26)
+            else:
+                c = STEEL[rng.choice([0, 1, 1])]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def geothermal_front(seed, lit):
+    """Vented front with a glowing heat exchanger when running."""
+    img = panel(seed)
+    glow = [(255, 120, 20), (255, 170, 40), (230, 80, 10)] if lit else [(60, 30, 24), (74, 36, 28)]
+    rng = random.Random(seed + 1)
+    for y in range(3, 13):
+        for x in range(3, 13):
+            if y % 2 == 0:
+                img.putpixel((x, y), STEEL[0] + (255,))
+            else:
+                img.putpixel((x, y), rng.choice(glow) + (255,))
+    return img
+
+
+def geothermal_tank(seed):
+    """Tinted steel shell with a narrow window of lava."""
+    rng = random.Random(seed)
+    img = new()
+    lava = [(230, 90, 20), (250, 140, 30), (200, 60, 10)]
+    for y in range(16):
+        for x in range(16):
+            if 6 <= x <= 9 and 2 <= y <= 13:
+                c = STEEL[0] if x in (6, 9) else rng.choice(lava)
+            else:
+                c = (STEEL[1] if (x + y) % 5 else STEEL[2])
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def stack(seed):
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = STEEL[0] if y % 4 == 0 else STEEL[rng.choice([1, 2])]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def lattice(seed):
+    """Mast: steel with a climbing-rung pattern."""
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            rung = y % 4 == 0
+            edge = x % 8 in (0, 7)
+            c = STEEL[3] if rung else (STEEL[1] if edge else STEEL[2])
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def nacelle(seed):
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (224, 226, 228) if y > 1 else (180, 184, 190)
+            if rng.random() < 0.08:
+                c = (206, 208, 212)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def blade(seed):
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (238, 240, 242) if (x + y) % 4 else (216, 220, 226)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def blade_tip():
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            img.putpixel((x, y), ((206, 56, 46) if (x + y) % 4 else (180, 44, 38)) + (255,))
+    return img
+
+
+def turbine_front(seed):
+    """Base housing door with a small grille."""
+    img = panel(seed)
+    for y in range(3, 15):
+        for x in range(5, 11):
+            edge = x in (5, 10) or y == 3
+            img.putpixel((x, y), (STEEL[0] if edge else STEEL[3]) + (255,))
+    for y in (5, 7, 9):
+        for x in range(6, 10):
+            img.putpixel((x, y), (20, 22, 26, 255))
+    img.putpixel((9, 11), BRONZE[4] + (255,))
+    return img
+
+
 def gui():
     """Generic 176x166 machine screen: beveled panel and player inventory slots."""
     img = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
@@ -699,6 +807,17 @@ def machines():
     save(circuit(True), "item", "advanced_circuit")
     save(cable_texture(), "block", "copper_cable")
     save(pipe_texture(), "block", "bronze_fluid_pipe")
+    save(hazard_plinth(530), "block", "geothermal_plinth")
+    save(geothermal_front(531, False), "block", "geothermal_generator_front")
+    save(geothermal_front(531, True), "block", "geothermal_generator_front_on")
+    save(geothermal_tank(532), "block", "geothermal_tank")
+    save(stack(533), "block", "geothermal_stack")
+    save(hazard_plinth(534), "block", "wind_turbine_base")
+    save(turbine_front(535), "block", "wind_turbine_front")
+    save(lattice(536), "block", "wind_turbine_mast")
+    save(nacelle(537), "block", "wind_turbine_nacelle")
+    save(blade(538), "block", "wind_turbine_blade")
+    save(blade_tip(), "block", "wind_turbine_tip")
     save(tank_side(520), "block", "fluid_tank_side")
     save(tank_cap(521, True), "block", "fluid_tank_top")
     save(tank_cap(522, False), "block", "fluid_tank_bottom")

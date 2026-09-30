@@ -52,6 +52,8 @@ flowchart LR
 8. **Better power:**
    - **Steam Generator:** an upgraded coal generator that also burns bitumen.
    - **Solar Panel:** needs silicon.
+   - **Wind Turbine** (3 blocks tall, aluminum plates): free power that grows with height.
+   - **Geothermal Generator** (2 blocks wide, needs a basic circuit): runs on lava. An electric pump on lava feeds it through pipes.
 9. **Fluids:** **Bronze Fluid Pipes** and the **Tinplate Tank** are crafted from press-made plates; the **Electric Pump** adds iron gears, a bucket and a casing. A pump on water, piped to a steam generator, keeps the boiler full without buckets.
 
 ## Machines
@@ -70,7 +72,43 @@ All machines hold their own internal battery and accept power from cables or dir
 | Metal Press | Mechanical | Ingot → plate (1:1) | 16 JE/t | bronze, piston, cable, casing, anvil |
 | Wire Drawer | Mechanical | Ingot → 3 wires | 12 JE/t | brass, shears, cable, casing, redstone |
 | Circuit Assembler | Mechanical | Up to three ingredient stacks (any order) → circuits | 32 JE/t | tin plates, bronze gear, cable, casing, redstone |
+| Geothermal Generator (2 blocks wide) | Power | Lava → 64 JE/t (1 mB/t; a bucket lasts 1,000 ticks) | produces | invar plates, tinplate tank, bronze gears, casing, basic circuit |
+| Wind Turbine (3 blocks tall) | Power | 4–24 JE/t by height above sea level; more in rain and thunder; rotor needs clear air | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
 | Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
+
+## Multi-block machines
+
+Most machines stay **simple one-block machines**. The ones where size is part of what they are (towers, tanks, big engines) are **multi-block machines**: you place one item and it fills two or three blocks with one detailed model. This works like Immersive Engineering's pump and sample drill; no Immersive Engineering code or art is used.
+
+| Geothermal Generator: body plus a lava tank to its right | Wind Turbine: base, mast and rotor |
+| --- | --- |
+| ![Geothermal generator](images/geothermal_generator.png) | ![Wind turbine](images/wind_turbine.png) |
+
+*Approximate renders made from the generated block models and textures, not game screenshots.*
+
+**How they behave**
+
+- **Placing:**
+  - The item places only if every block of the machine is free (air, grass, water and so on) and inside the world.
+  - The machine faces you, and its extra blocks turn with it.
+- **Breaking:** breaking **any** part removes the whole machine and drops **one** item, so nothing is lost and nothing is duplicated. Pistons leave the parts alone (vanilla never pushes entity blocks; not yet checked in game).
+- **Using:**
+  - Every part acts as the machine. Right-click any part to open the screen.
+  - Cables and pipes connect to any part, and comparators read the machine through any part.
+  - Buckets fill its tank through any part.
+- **Server cost:**
+  - Only the main block (part 0) has a block entity and ticks. The other parts are plain blocks.
+  - Energy and fluid lookups on a part go straight to the main block.
+- **Look:** each part renders its own slice of one big model. Blades, stacks and fins may reach into the air beside the machine. The wind turbine needs that air clear to turn.
+
+**How it is built** (to add another one)
+
+1. Give the machine a `MachineKind` with a `footprint()`: the blocks it fills, written for a north-facing machine (`Footprint.tall(3)`, or offsets such as `new Vec3i(-1, 0, 0)` for "one block to the right").
+2. Author its model once in `tools/large_machines.py`. The model is written in structure coordinates, with the main block at 0–16 on each axis.
+3. Run `python3 tools/generate_material_data.py`. It slices the model into one model per block and writes the blockstates for every facing and part, plus a scaled-down model for the inventory.
+4. `tools/check_mod_data.py` checks that the Python and Java footprints match and that no model leaves Minecraft's −16…32 limit.
+
+Code: `machine/Footprint.java` (offsets and rotation) and `machine/LargeMachineBlock.java` (placing, breaking, forwarding to the main block).
 
 ## Cables and pipes
 

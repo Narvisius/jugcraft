@@ -3,6 +3,7 @@ package io.github.jimbozoomer.jugcraft.fluid;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
+import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -52,7 +53,10 @@ public final class JugcraftFluids {
 
 		FluidStorage.SIDED.registerForBlockEntity((tank, side) -> tank.storage, TANK_ENTITY);
 		FluidStorage.SIDED.registerForBlockEntity(ElectricPumpBlockEntity::fluidFor, PUMP_ENTITY);
-		FluidStorage.SIDED.registerForBlockEntity(MachineBlockEntity::fluidFor, JugcraftMachines.MACHINE_ENTITY);
+		FluidStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
+			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
+			return machine == null ? null : machine.fluidFor(side);
+		}, JugcraftMachines.MACHINES.values().toArray(Block[]::new));
 		EnergyStorage.SIDED.registerForBlockEntity((pump, side) -> pump.energy(), PUMP_ENTITY);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {

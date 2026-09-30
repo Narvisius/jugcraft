@@ -299,6 +299,29 @@ def check_machines(registered):
         err("MachineKind.java and tools/machines.py list different machines")
 
 
+def check_large_machines():
+    """Footprints must match MachineKind.footprint(); model elements must stay in Minecraft's -16..32 range."""
+    from large_machines import FOOTPRINTS
+    kinds = MACHINE_JAVA.read_text(encoding="utf-8")
+    for machine, footprint in FOOTPRINTS.items():
+        match = re.search(r"case " + machine.upper() + r" -> Footprint\.(tall|of)\((.*?)\);", kinds)
+        if not match:
+            err(f"MachineKind.footprint() has no case for {machine}")
+            continue
+        if match.group(1) == "tall":
+            java = [(0, y, 0) for y in range(int(match.group(2)))]
+        else:
+            java = [(0, 0, 0) if part.strip() == "Vec3i.ZERO"
+                    else tuple(int(v) for v in re.fullmatch(r"\s*new Vec3i\((-?\d+), (-?\d+), (-?\d+)\)\s*", part).groups())
+                    for part in re.split(r",\s*(?=new|Vec3i)", match.group(2))]
+        if java != [tuple(offset) for offset in footprint]:
+            err(f"{machine}: footprint {java} in Java, {footprint} in large_machines.py")
+    for path in sorted((ASSETS / "models").rglob("*.json")):
+        for element in (load(path) or {}).get("elements", []):
+            if min(element["from"] + element["to"]) < -16 or max(element["from"] + element["to"]) > 32:
+                err(f"{path.name}: element outside -16..32")
+
+
 def main():
     registered = set(all_blocks()) | set(all_items()) | set(machine_blocks())
     check_assets(sorted(registered))
@@ -308,6 +331,7 @@ def main():
     check_worldgen()
     check_java()
     check_machines(registered)
+    check_large_machines()
     for path in RES.rglob("*.json"):
         load(path)
     if errors:

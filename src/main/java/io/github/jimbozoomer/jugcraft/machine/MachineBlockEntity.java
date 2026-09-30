@@ -33,6 +33,7 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -55,7 +56,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_BURN = 6;
 	public static final int DATA_MAX_BURN = 7;
 	public static final int DATA_FORMED = 8;
-	public static final int DATA_WATER = 9;
+	/** mB in the machine's fluid tank (steam generator water, geothermal lava). */
+	public static final int DATA_TANK = 9;
 	public static final int DATA_COUNT = 10;
 
 	/** Steam generator slots. */
@@ -79,8 +81,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private int maxProgress;
 	private int burn;
 	private int maxBurn;
+	/** Arc furnace: structure complete. Wind turbine: rotor has room to turn. */
 	private boolean formed;
-	private int water;
+	/** mB in the machine's tank: water for the steam generator, lava for the geothermal generator. Saved as "water". */
+	private int tank;
+	/** Wind turbine: whether the rotor check has run since loading. */
+	private boolean windChecked;
 
 	private final ContainerData data = new ContainerData() {
 		@Override
@@ -95,7 +101,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				case DATA_BURN -> burn;
 				case DATA_MAX_BURN -> maxBurn;
 				case DATA_FORMED -> formed ? 1 : 0;
-				case DATA_WATER -> water;
+				case DATA_TANK -> tank;
 				default -> 0;
 			};
 		}
@@ -119,45 +125,61 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		long insert = kind.isGenerator() ? 0 : kind.maxInput;
 		long extract = kind.isProcessor() ? 0 : kind.maxOutput;
 		this.energy = new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
+		this.inlet = switch (kind) {
+			case STEAM_GENERATOR -> new TankInlet(Fluids.WATER, MachineKind.STEAM_TANK);
+			case GEOTHERMAL_GENERATOR -> new TankInlet(Fluids.LAVA, MachineKind.GEOTHERMAL_TANK);
+			default -> null;
+		};
 	}
 
 	public MachineKind kind() {
 		return kind;
 	}
 
-	/** Fluid exposed on a side: only the steam generator takes fluid (water, into its boiler tank). */
+	/**
+	 * Fluid exposed on a side (the same on every side and every part): the steam generator takes
+	 * water and the geothermal generator takes lava into their tanks. Other machines have none.
+	 */
 	public @Nullable Storage<FluidVariant> fluidFor(@Nullable Direction side) {
-		return kind == MachineKind.STEAM_GENERATOR ? waterInlet : null;
+		return inlet;
 	}
 
 	/**
-	 * Lets pumps and pipes fill the steam generator's water tank. The tank counts whole
+	 * Lets pumps, pipes and buckets fill the machine's tank with one fluid. The tank counts whole
 	 * millibuckets, so insertion is rounded down to multiples of {@link FluidNetworks#DROPLETS_PER_MB}.
 	 */
-	private final class WaterInlet extends SnapshotParticipant<Integer> implements InsertionOnlyStorage<FluidVariant> {
+	private final class TankInlet extends SnapshotParticipant<Integer> implements InsertionOnlyStorage<FluidVariant> {
+		private final Fluid fluid;
+		private final int capacity;
+
+		TankInlet(Fluid fluid, int capacity) {
+			this.fluid = fluid;
+			this.capacity = capacity;
+		}
+
 		@Override
 		public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction) {
 			StoragePreconditions.notBlankNotNegative(resource, maxAmount);
-			if (!resource.isOf(Fluids.WATER)) {
+			if (!resource.isOf(fluid)) {
 				return 0;
 			}
-			long millibuckets = Math.min(maxAmount / FluidNetworks.DROPLETS_PER_MB, MachineKind.STEAM_TANK - water);
+			long millibuckets = Math.min(maxAmount / FluidNetworks.DROPLETS_PER_MB, capacity - tank);
 			if (millibuckets <= 0) {
 				return 0;
 			}
 			updateSnapshots(transaction);
-			water += (int) millibuckets;
+			tank += (int) millibuckets;
 			return millibuckets * FluidNetworks.DROPLETS_PER_MB;
 		}
 
 		@Override
 		protected Integer createSnapshot() {
-			return water;
+			return tank;
 		}
 
 		@Override
 		protected void readSnapshot(Integer snapshot) {
-			water = snapshot;
+			tank = snapshot;
 		}
 
 		@Override
@@ -166,7 +188,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 	}
 
-	private final WaterInlet waterInlet = new WaterInlet();
+	private final @Nullable TankInlet inlet;
 
 	/** The storage exposed on a side; the battery box only discharges through its front. */
 	public @Nullable EnergyStorage energyFor(@Nullable Direction side) {
@@ -215,6 +237,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
 			case BATTERY_BOX -> tickBattery(level, pos, state);
+			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
+			case WIND_TURBINE -> tickWind(level, pos, state);
 			default -> tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
@@ -256,10 +280,62 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return false;
 	}
 
+	private boolean tickGeothermal(ServerLevel level, BlockPos pos, BlockState state) {
+		boolean running = tank >= MachineKind.GEOTHERMAL_LAVA_PER_TICK
+				&& energy.getAmount() + MachineKind.GEOTHERMAL_PER_TICK <= energy.getCapacity();
+		if (running) {
+			tank -= MachineKind.GEOTHERMAL_LAVA_PER_TICK;
+			energy.setAmount(energy.getAmount() + MachineKind.GEOTHERMAL_PER_TICK);
+			setChanged();
+		}
+		pushFromAllParts(level, pos, state);
+		return running;
+	}
+
+	/**
+	 * Output grows with height above sea level and with rain or thunder. The rotor needs the blocks
+	 * beside and above the top of the turbine clear; that is checked every few seconds, not every tick.
+	 */
+	private boolean tickWind(ServerLevel level, BlockPos pos, BlockState state) {
+		Direction facing = state.getValue(MachineBlock.FACING);
+		BlockPos top = kind.footprint().partPos(pos, facing, 2);
+		if (!windChecked || level.getGameTime() % MachineKind.WIND_CHECK_INTERVAL == 0) {
+			windChecked = true;
+			formed = level.isEmptyBlock(top.above()) && level.isEmptyBlock(top.relative(facing.getClockWise()))
+					&& level.isEmptyBlock(top.relative(facing.getCounterClockWise()));
+		}
+		int rate = 0;
+		if (formed) {
+			int height = Math.max(0, top.getY() - level.getSeaLevel());
+			rate = Math.min(MachineKind.WIND_MAX_PER_TICK, MachineKind.WIND_BASE_PER_TICK + height / 4);
+			if (level.isThundering()) {
+				rate *= 2;
+			} else if (level.isRaining()) {
+				rate = rate * 3 / 2;
+			}
+		}
+		if (rate > 0 && energy.getAmount() < energy.getCapacity()) {
+			energy.setAmount(energy.getAmount() + rate);
+			setChanged();
+		}
+		pushFromAllParts(level, pos, state);
+		return rate > 0;
+	}
+
+	/** Generators that fill several blocks can feed cables touching any of their parts. */
+	private void pushFromAllParts(ServerLevel level, BlockPos pos, BlockState state) {
+		Footprint footprint = kind.footprint();
+		Direction facing = state.getValue(MachineBlock.FACING);
+		for (int part = 0; part < footprint.size(); part++) {
+			EnergyNetworks.pushToNeighbors(level, footprint.partPos(pos, facing, part), energy, kind.maxOutput,
+					EnumSet.allOf(Direction.class));
+		}
+	}
+
 	private boolean tickSteam(ServerLevel level, BlockPos pos) {
 		refillWater(level, pos);
 		boolean room = energy.getAmount() < energy.getCapacity();
-		boolean hasWater = water >= MachineKind.STEAM_WATER_PER_TICK;
+		boolean hasWater = tank >= MachineKind.STEAM_WATER_PER_TICK;
 		if (burn <= 0 && room && hasWater) {
 			ItemStack fuel = items.get(SLOT_FUEL);
 			int ticks = GeneratorFuels.steamBurnTicks(fuel);
@@ -273,7 +349,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		boolean boiling = burn > 0 && room && hasWater;
 		if (boiling) {
 			burn--;
-			water -= MachineKind.STEAM_WATER_PER_TICK;
+			tank -= MachineKind.STEAM_WATER_PER_TICK;
 			energy.setAmount(energy.getAmount() + MachineKind.STEAM_PER_TICK);
 			setChanged();
 		}
@@ -282,21 +358,21 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	private void refillWater(ServerLevel level, BlockPos pos) {
-		if (water < MachineKind.STEAM_TANK && level.getFluidState(pos.below()).isSourceOfType(Fluids.WATER)) {
-			water = Math.min(MachineKind.STEAM_TANK, water + MachineKind.STEAM_SOURCE_REFILL);
+		if (tank < MachineKind.STEAM_TANK && level.getFluidState(pos.below()).isSourceOfType(Fluids.WATER)) {
+			tank = Math.min(MachineKind.STEAM_TANK, tank + MachineKind.STEAM_SOURCE_REFILL);
 			setChanged();
 		}
 		ItemStack bucket = items.get(SLOT_WATER_IN);
 		ItemStack empties = items.get(SLOT_BUCKET_OUT);
 		boolean emptySpace = empties.isEmpty() || (empties.is(Items.BUCKET) && empties.getCount() < empties.getMaxStackSize());
-		if (bucket.is(Items.WATER_BUCKET) && water <= MachineKind.STEAM_TANK - 1000 && emptySpace) {
+		if (bucket.is(Items.WATER_BUCKET) && tank <= MachineKind.STEAM_TANK - 1000 && emptySpace) {
 			bucket.shrink(1);
 			if (empties.isEmpty()) {
 				items.set(SLOT_BUCKET_OUT, new ItemStack(Items.BUCKET));
 			} else {
 				empties.grow(1);
 			}
-			water += 1000;
+			tank += 1000;
 			setChanged();
 		}
 	}
@@ -494,7 +570,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		maxProgress = input.getInt("max_progress").orElse(0);
 		burn = input.getInt("burn").orElse(0);
 		maxBurn = input.getInt("max_burn").orElse(0);
-		water = input.getInt("water").orElse(0);
+		tank = input.getInt("water").orElse(0);
 	}
 
 	@Override
@@ -506,6 +582,6 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		output.putInt("max_progress", maxProgress);
 		output.putInt("burn", burn);
 		output.putInt("max_burn", maxBurn);
-		output.putInt("water", water);
+		output.putInt("water", tank);
 	}
 }

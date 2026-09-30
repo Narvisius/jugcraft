@@ -26,6 +26,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	private static final int PROGRESS = 0xFF60A0E0;
 	private static final int FLAME = 0xFFE06020;
 	private static final int WATER = 0xFF3060D0;
+	private static final int LAVA = 0xFFE87010;
 	private static final int TEXT = 0xFF404040;
 
 	public MachineScreen(MachineMenu menu, Inventory inventory, Component title) {
@@ -72,8 +73,13 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			graphics.fill(x + 57, y + 37 + 14 - flame, x + 71, y + 51, FLAME);
 			// Water tank gauge on the right.
 			graphics.fill(x + 149, y + BAR_Y - 1, x + 163, y + BAR_Y + BAR_HEIGHT + 1, DARK);
-			int water = menu.data(MachineBlockEntity.DATA_WATER) * BAR_HEIGHT / MachineKind.STEAM_TANK;
+			int water = menu.data(MachineBlockEntity.DATA_TANK) * BAR_HEIGHT / MachineKind.STEAM_TANK;
 			graphics.fill(x + 150, y + BAR_Y + BAR_HEIGHT - water, x + 162, y + BAR_Y + BAR_HEIGHT, WATER);
+		} else if (kind == MachineKind.GEOTHERMAL_GENERATOR) {
+			// Lava tank gauge on the right.
+			graphics.fill(x + 149, y + BAR_Y - 1, x + 163, y + BAR_Y + BAR_HEIGHT + 1, DARK);
+			int lava = menu.data(MachineBlockEntity.DATA_TANK) * BAR_HEIGHT / MachineKind.GEOTHERMAL_TANK;
+			graphics.fill(x + 150, y + BAR_Y + BAR_HEIGHT - lava, x + 162, y + BAR_Y + BAR_HEIGHT, LAVA);
 		} else if (kind.isProcessor()) {
 			int inputs = kind.outputSlot();
 			for (int slot = 0; slot < inputs; slot++) {
@@ -95,6 +101,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		if (menu.kind() == MachineKind.ARC_FURNACE) {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.arc_furnace.formed" : "container.jugcraft.arc_furnace.incomplete";
+			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
+		} else if (menu.kind() == MachineKind.WIND_TURBINE) {
+			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
+					? "container.jugcraft.wind_turbine.clear" : "container.jugcraft.wind_turbine.blocked";
 			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
 		}
 	}

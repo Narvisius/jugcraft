@@ -3,14 +3,19 @@ package io.github.jimbozoomer.jugcraft.machine;
 import io.github.jimbozoomer.jugcraft.energy.EnergyConnectable;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -46,6 +51,19 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 		return kind;
 	}
 
+	/** The block holding this machine's block entity; only multi-block machines differ from {@code pos}. */
+	public BlockPos masterPos(BlockPos pos, BlockState state) {
+		return pos;
+	}
+
+	/** The machine a block belongs to, from any of its parts, or null. */
+	public static @Nullable MachineBlockEntity machineAt(Level level, BlockPos pos, BlockState state) {
+		if (!(state.getBlock() instanceof MachineBlock machine)) {
+			return null;
+		}
+		return level.getBlockEntity(machine.masterPos(pos, state)) instanceof MachineBlockEntity entity ? entity : null;
+	}
+
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new MachineBlockEntity(pos, state);
@@ -58,6 +76,18 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 		}
 		return createTickerHelper(type, JugcraftMachines.MACHINE_ENTITY,
 				(tickLevel, pos, tickState, machine) -> machine.serverTick((ServerLevel) tickLevel, pos, tickState));
+	}
+
+	/** Buckets and other fluid containers fill (or drain) a machine's tank instead of opening its screen. */
+	@Override
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		MachineBlockEntity machine = machineAt(level, pos, state);
+		Storage<FluidVariant> tank = machine == null ? null : machine.fluidFor(null);
+		if (tank != null && FluidStorageUtil.interactWithFluidStorage(tank, player, hand)) {
+			return InteractionResult.SUCCESS;
+		}
+		return super.useItemOn(stack, state, level, pos, player, hand, hit);
 	}
 
 	@Override

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "GMG",
+    "BCB"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "G": "#c:gears/bronze",
+    "M": "jugcraft:machine_casing",
+    "B": "#c:plates/bronze",
+    "C": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:wind_turbine",
+    "count": 1
+  }
+}

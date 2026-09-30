@@ -18,6 +18,9 @@ MACHINES = {
     "metal_press": {"display": "Metal Press", "lit": True},
     "wire_drawer": {"display": "Wire Drawer", "lit": True},
     "circuit_assembler": {"display": "Circuit Assembler", "lit": True},
+    # Multi-block machines: models and footprints live in tools/large_machines.py.
+    "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
+    "wind_turbine": {"display": "Wind Turbine", "lit": False},
 }
 
 # Plain crafting-component / structure blocks.
@@ -61,6 +64,11 @@ STATS = {
     "metal_press": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
     "wire_drawer": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 12},
     "circuit_assembler": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32},
+    # Two blocks wide. Burns 1 mB of lava per tick for 64 JE: a bucket lasts 1,000 ticks.
+    "geothermal_generator": {"capacity": 30_000, "output_per_tick": 128, "generation_per_tick": 64,
+                             "lava_per_tick": 1, "tank": 4_000},
+    # Three blocks tall. 4 JE/t at sea level, +1 per 4 blocks higher, capped at 24; x1.5 rain, x2 thunder.
+    "wind_turbine": {"capacity": 16_000, "output_per_tick": 64, "generation_per_tick": 24},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -114,6 +122,13 @@ CRAFTING = {
     "electric_pump": (["PUP", "GMG", "PCP"],
                       {"P": "#c:plates/bronze", "U": "minecraft:bucket", "G": "#c:gears/iron",
                        "M": "jugcraft:machine_casing", "C": "jugcraft:copper_cable"}, 1),
+    # Multi-block power: built from plates, gears and circuits, so they come after the workshop tier.
+    "geothermal_generator": (["PTP", "GMG", "PCP"],
+                             {"P": "#c:plates/invar", "T": "jugcraft:fluid_tank", "G": "#c:gears/bronze",
+                              "M": "jugcraft:machine_casing", "C": "jugcraft:basic_circuit"}, 1),
+    "wind_turbine": (["AAA", "GMG", "BCB"],
+                     {"A": "#c:plates/aluminum", "G": "#c:gears/bronze", "M": "jugcraft:machine_casing",
+                      "B": "#c:plates/bronze", "C": "jugcraft:copper_cable"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",

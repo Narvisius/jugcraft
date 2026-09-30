@@ -103,7 +103,7 @@ public final class FluidNetworks {
 			return network;
 		}
 
-		/** Splits fluid evenly across every endpoint that can accept it, except the source. */
+		/** Splits fluid evenly across every storage that can accept it (each counted once), except the source. */
 		long distribute(Level level, BlockPos sourcePos, Storage<FluidVariant> source, long budget) {
 			List<Storage<FluidVariant>> receivers = new ArrayList<>();
 			for (Endpoint endpoint : endpoints) {
@@ -111,7 +111,8 @@ public final class FluidNetworks {
 					continue;
 				}
 				Storage<FluidVariant> storage = FluidStorage.SIDED.find(level, endpoint.pos, endpoint.side);
-				if (storage != null && storage.supportsInsertion() && storage != source) {
+				if (storage != null && storage.supportsInsertion() && storage != source
+						&& !receivers.contains(storage)) {
 					receivers.add(storage);
 				}
 			}
