@@ -4,7 +4,7 @@
 
 Open a Feature proposal or Existing mod integration issue using the Issues tab. Search existing issues first. Describe the player experience, progression tier, inputs, outputs, and connections to other systems. Small documentation corrections and bug fixes can go straight to a PR.
 
-Wait for a maintainer to approve the scope in the issue before starting substantial work. Maintainers should assign one lead contributor to avoid duplicate work. While the platform and license milestones are open, contribute proposals and documentation; implementation is gated on those decisions.
+Wait for a maintainer to approve the scope in the issue before starting substantial work. Maintainers should assign one lead contributor to avoid duplicate work. The project license is MIT (see LICENSE_POLICY.md). While the platform milestone is open, contribute proposals and documentation; implementation is gated on the verified platform bootstrap.
 
 ## 2. Fork, branch, commit
 

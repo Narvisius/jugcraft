@@ -1,4 +1,4 @@
-"""Validate the documentation foundation; deliberately not a Minecraft build."""
+"""Validate repository structure and documentation links; deliberately not a Minecraft build."""
 from pathlib import Path
 import json
 import re
@@ -14,17 +14,28 @@ required = ["README.md", "CONTRIBUTING.md", "CLAUDE.md", "SECURITY.md",
             ".github/ISSUE_TEMPLATE/feature.yml", ".github/ISSUE_TEMPLATE/integration.yml",
             ".github/ISSUE_TEMPLATE/bug.yml", ".github/ISSUE_TEMPLATE/config.yml",
             ".github/workflows/foundation.yml", "project-status.json"]
+bootstrap_required = ["LICENSE", "build.gradle", "settings.gradle", "gradle.properties", "gradlew",
+                      "gradlew.bat", "gradle/wrapper/gradle-wrapper.properties",
+                      "gradle/wrapper/gradle-wrapper.jar", "src/main/resources/fabric.mod.json",
+                      ".github/workflows/build.yml", "tools/check_mod_data.py"]
 errors = [f"Missing: {name}" for name in required if not (root / name).is_file()]
+phase = None
 try:
     status = json.loads((root / "project-status.json").read_text(encoding="utf-8"))
-    if status.get("phase") != "contribution-foundation" or status.get("playable") is not False:
-        errors.append("Bootstrap must replace this foundation gate with real platform/build checks.")
+    phase = status.get("phase")
+    if phase not in {"contribution-foundation", "bootstrap"}:
+        errors.append(f"Unknown phase in project-status.json: {phase}")
+    if status.get("playable") is not False:
+        errors.append("Do not mark the project playable until a build and two-client test are verified.")
 except (OSError, ValueError) as exc:
     errors.append(f"Invalid project-status.json: {exc}")
+if phase == "bootstrap":
+    # Real compilation happens in the Build workflow (./gradlew build).
+    errors += [f"Missing bootstrap file: {name}" for name in bootstrap_required if not (root / name).is_file()]
 for path in root.rglob("*"):
-    if ".git" in path.parts or not path.is_file():
+    if {".git", "build", ".gradle", "run"} & set(path.parts) or not path.is_file():
         continue
-    if path.suffix in {".java", ".kt", ".gradle", ".jar"} or path.name.endswith(".gradle.kts"):
+    if phase != "bootstrap" and (path.suffix in {".java", ".kt", ".gradle", ".jar"} or path.name.endswith(".gradle.kts")):
         errors.append(f"Implementation requires approved platform bootstrap: {path.relative_to(root)}")
     if path.suffix != ".md":
         continue
@@ -39,4 +50,4 @@ for path in root.rglob("*"):
 if errors:
     print("\n".join(errors), file=sys.stderr)
     sys.exit(1)
-print("PASS: contribution foundation and local documentation links. No gameplay/build tests performed.")
+print(f"PASS: repository structure ({phase}) and local documentation links. No gameplay/build tests performed.")

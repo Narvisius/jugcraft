@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:ingots/copper",
+    "#c:ingots/copper",
+    "#c:ingots/copper",
+    "#c:ingots/tin"
+  ],
+  "result": {
+    "id": "jugcraft:bronze_blend",
+    "count": 4
+  }
+}

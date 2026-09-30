@@ -30,6 +30,23 @@ One feature per PR. Include the proposal, integration contract, and actual test 
 
 Use **Claude Opus 5.5** for AI-assisted feature implementation and review your output yourself. Follow [CLAUDE.md](CLAUDE.md). Declare model use honestly; documentation, ideas, and hand-made art do not require an AI subscription. Git history cannot prove model provenance. This initial repository foundation was prepared with OpenAI Codex, not Opus 5.5.
 
+## Building the mod
+
+The first content, tin and bronze, compiles in CI but has **not been played yet**. With JDK 25 installed:
+
+```sh
+./gradlew build          # Windows: gradlew.bat build
+./gradlew runClient
+./gradlew runServer
+```
+
+`build` is verified in CI; `runClient` and `runServer` are the standard Loom commands and have not been tried yet. Data checks that do not need Minecraft:
+
+```sh
+python3 -m pip install pillow
+python3 tools/check_mod_data.py
+```
+
 ## Local repository checks
 
 Install Python 3.11 or newer, then run:
@@ -42,4 +59,4 @@ This checks the contribution foundation only. It does **not** compile Minecraft 
 
 ## Rights and conduct
 
-Be constructive and credit contributors. Follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). See [LICENSE_POLICY.md](LICENSE_POLICY.md): maintainers must choose and publish the project license before accepting implementation or asset contributions.
+Be constructive and credit contributors. Follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). Jugcraft is licensed under the [MIT License](LICENSE); contributions are accepted under the same license. See [LICENSE_POLICY.md](LICENSE_POLICY.md) for third-party material and asset rules.

@@ -1,0 +1,30 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mod:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Install Pillow for data checks
+        run: python3 -m pip install --quiet pillow
+      - name: Check generated JSON is up to date
+        run: |
+          python3 tools/generate_material_data.py
+          git diff --exit-code -- src/main/resources
+      - name: Check material data
+        run: python3 tools/check_mod_data.py
+      - name: Build mod
+        run: ./gradlew build --no-daemon

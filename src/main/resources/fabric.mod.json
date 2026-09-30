@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "jugcraft",
+	"version": "${version}",
+	"name": "Jugcraft",
+	"description": "Factories and magical workshops that grow together. First content: tin and bronze.",
+	"authors": ["jimbozoomer-byte", "Jugcraft contributors"],
+	"contact": {
+		"sources": "https://github.com/jimbozoomer-byte/jugcraft",
+		"issues": "https://github.com/jimbozoomer-byte/jugcraft/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/jugcraft/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["io.github.jimbozoomer.jugcraft.Jugcraft"],
+		"client": ["io.github.jimbozoomer.jugcraft.client.JugcraftClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.18.0",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
