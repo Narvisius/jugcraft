@@ -109,6 +109,7 @@ Other blocks:
 | `brass_item_pipe` | `logistics/ItemPipeBlock` | 6 px item transmitter |
 | `pneumatic_extractor`, `high_pressure_extractor` | `logistics/PneumaticExtractorBlock` | pull 16 items / 8 ticks (brass) or 32 / 4 (steel) from what they face |
 | `item_sorter` | `logistics/ItemSorterBlock(Entity)` | 9-slot filter into the inventory it faces |
+| `conveyor`, `conveyor_splitter` | `logistics/ConveyorBlock(Entity)` | KE-driven belts; 4 stacks each; `ConveyorBlockEntity.accept(stack, progress)`; insert-only `ItemStorage`; client `ConveyorRenderer` |
 | `brass_wrench` (item) | `logistics/BrassWrenchItem` | rotate; sneak to dismantle |
 | `item_crate` | `storage/CrateBlock(Entity)`, `JugcraftStorage` | 32 stacks of one item; Fabric `SingleItemStorage` |
 | `iron_shaft`, `brass_gearbox` | `kinetic/ShaftBlock(Entity)`, `GearboxBlock` | carry KE (along the axis / out of all sides); `turning` block state |

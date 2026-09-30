@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,turning=false": {
+      "model": "jugcraft:block/conveyor_splitter"
+    },
+    "facing=east,turning=false": {
+      "model": "jugcraft:block/conveyor_splitter",
+      "y": 90
+    },
+    "facing=south,turning=false": {
+      "model": "jugcraft:block/conveyor_splitter",
+      "y": 180
+    },
+    "facing=west,turning=false": {
+      "model": "jugcraft:block/conveyor_splitter",
+      "y": 270
+    },
+    "facing=north,turning=true": {
+      "model": "jugcraft:block/conveyor_splitter_active"
+    },
+    "facing=east,turning=true": {
+      "model": "jugcraft:block/conveyor_splitter_active",
+      "y": 90
+    },
+    "facing=south,turning=true": {
+      "model": "jugcraft:block/conveyor_splitter_active",
+      "y": 180
+    },
+    "facing=west,turning=true": {
+      "model": "jugcraft:block/conveyor_splitter_active",
+      "y": 270
+    }
+  }
+}

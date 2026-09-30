@@ -16,6 +16,8 @@ import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.kinetic.ShaftBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
+import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlock;
+import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlockEntity;
 import io.github.jimbozoomer.jugcraft.logistics.ItemSorterBlockEntity;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.logistics.PneumaticExtractorBlock;
@@ -764,6 +766,79 @@ public class JugcraftGameTests {
 				helper.absolutePos(new BlockPos(3, 2, 1)));
 		helper.assertTrue("axis".equals(reason), "Pulleys at different heights linked: " + reason);
 		helper.succeed();
+	}
+
+	// ------------------------------------------------------------------ conveyors
+
+	/** A charged electric motor at {@code pos} facing east, driving whatever is east of it. */
+	private static void motorFacingEast(GameTestHelper helper, BlockPos pos) {
+		helper.setBlock(pos, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
+		helper.getBlockEntity(pos, ElectricMotorBlockEntity.class).energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+	}
+
+	private static ConveyorBlockEntity conveyor(GameTestHelper helper, BlockPos pos, Direction facing, boolean splitter) {
+		helper.setBlock(pos, (splitter ? JugcraftLogistics.CONVEYOR_SPLITTER : JugcraftLogistics.CONVEYOR).defaultBlockState()
+				.setValue(ConveyorBlock.FACING, facing));
+		return helper.getBlockEntity(pos, ConveyorBlockEntity.class);
+	}
+
+	/** Items put in at the back of a driven two-conveyor line (as a pipe would) end up in the chest at its end. */
+	@GameTest(maxTicks = 200)
+	public void conveyorCarriesItemsIntoChest(GameTestHelper helper) {
+		conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
+		conveyor(helper, new BlockPos(3, 1, 2), Direction.EAST, false);
+		ChestBlockEntity chest = chest(helper, new BlockPos(4, 1, 2));
+		motorFacingEast(helper, new BlockPos(1, 1, 2));
+		Storage<ItemVariant> belt = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 2)), Direction.UP);
+		helper.assertTrue(belt != null, "The conveyor takes no items");
+		try (Transaction transaction = Transaction.openOuter()) {
+			helper.assertTrue(belt.insert(ItemVariant.of(Items.COBBLESTONE), 16, transaction) == 16, "The conveyor refused cobblestone");
+			transaction.commit();
+		}
+		helper.succeedWhen(() -> helper.assertTrue(count(chest, Items.COBBLESTONE) == 16,
+				"The chest holds " + count(chest, Items.COBBLESTONE) + " cobblestone"));
+	}
+
+	/** Without a drive, items stay on the belt. */
+	@GameTest(maxTicks = 100)
+	public void conveyorNeedsRotation(GameTestHelper helper) {
+		ConveyorBlockEntity belt = conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
+		ChestBlockEntity chest = chest(helper, new BlockPos(3, 1, 2));
+		helper.assertTrue(belt.accept(new ItemStack(Items.COBBLESTONE), 0.5F), "The conveyor refused an item");
+		helper.runAtTickTime(60, () -> {
+			helper.assertTrue(count(chest, Items.COBBLESTONE) == 0, "An undriven conveyor moved an item");
+			helper.assertTrue(belt.items().size() == 1, "The item left the belt");
+			helper.succeed();
+		});
+	}
+
+	/** An item entity dropped on a driven conveyor is picked up and carried off. */
+	@GameTest(maxTicks = 200)
+	public void conveyorPicksUpDroppedItems(GameTestHelper helper) {
+		conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
+		ChestBlockEntity chest = chest(helper, new BlockPos(3, 1, 2));
+		motorFacingEast(helper, new BlockPos(1, 1, 2));
+		helper.spawnItem(Items.IRON_INGOT, 2.5F, 1.5F, 2.5F);
+		helper.succeedWhen(() -> helper.assertTrue(count(chest, Items.IRON_INGOT) == 1, "The dropped ingot did not arrive"));
+	}
+
+	/** A splitter sends one stack left, one straight on and one right. */
+	@GameTest(maxTicks = 200)
+	public void splitterTakesTurns(GameTestHelper helper) {
+		ConveyorBlockEntity splitter = conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, true);
+		ChestBlockEntity left = chest(helper, new BlockPos(2, 1, 1));
+		ChestBlockEntity ahead = chest(helper, new BlockPos(3, 1, 2));
+		ChestBlockEntity right = chest(helper, new BlockPos(2, 1, 3));
+		for (float progress : new float[] {0.75F, 0.5F, 0.25F}) {
+			helper.assertTrue(splitter.accept(new ItemStack(Items.COBBLESTONE), progress), "The splitter refused an item");
+		}
+		motorFacingEast(helper, new BlockPos(1, 1, 2));
+		helper.succeedWhen(() -> {
+			for (ChestBlockEntity chest : List.of(left, ahead, right)) {
+				helper.assertTrue(count(chest, Items.COBBLESTONE) == 1, "Split unevenly: " + count(left, Items.COBBLESTONE) + " left, "
+						+ count(ahead, Items.COBBLESTONE) + " ahead, " + count(right, Items.COBBLESTONE) + " right");
+			}
+		});
 	}
 
 	// ------------------------------------------------------------------ auto-crafter

@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
 /**
- * Registers item logistics: brass item pipes, the pneumatic extractor, the item sorter and the
- * brass wrench. Machines' own side configuration and ejecting live in the machine package.
+ * Registers item logistics: brass item pipes, the pneumatic extractor, the item sorter, conveyors and
+ * the brass wrench. Machines' own side configuration and ejecting live in the machine package.
  */
 public final class JugcraftLogistics {
 	public static Block BRASS_ITEM_PIPE;
@@ -28,7 +28,10 @@ public final class JugcraftLogistics {
 	public static Block HIGH_PRESSURE_EXTRACTOR;
 	public static Block ITEM_SORTER;
 	public static Item BRASS_WRENCH;
+	public static Block CONVEYOR;
+	public static Block CONVEYOR_SPLITTER;
 	public static BlockEntityType<ItemSorterBlockEntity> SORTER_ENTITY;
+	public static BlockEntityType<ConveyorBlockEntity> CONVEYOR_ENTITY;
 
 	private JugcraftLogistics() {
 	}
@@ -44,6 +47,10 @@ public final class JugcraftLogistics {
 				PneumaticExtractorBlock.HIGH_PRESSURE_INTERVAL, PneumaticExtractorBlock.HIGH_PRESSURE_ITEMS));
 		ITEM_SORTER = block("item_sorter", new ItemSorterBlock(properties("item_sorter",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
+		CONVEYOR = block("conveyor", new ConveyorBlock(properties("conveyor",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F).noOcclusion()), false));
+		CONVEYOR_SPLITTER = block("conveyor_splitter", new ConveyorBlock(properties("conveyor_splitter",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F).noOcclusion()), true));
 
 		ResourceKey<Item> wrenchKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("brass_wrench"));
 		BRASS_WRENCH = Registry.register(BuiltInRegistries.ITEM, wrenchKey,
@@ -52,12 +59,17 @@ public final class JugcraftLogistics {
 		SORTER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("item_sorter"),
 				FabricBlockEntityTypeBuilder.create(ItemSorterBlockEntity::new, ITEM_SORTER).build());
 		ItemStorage.SIDED.registerForBlockEntity(ItemSorterBlockEntity::itemsFor, SORTER_ENTITY);
+		CONVEYOR_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("conveyor"),
+				FabricBlockEntityTypeBuilder.create(ConveyorBlockEntity::new, CONVEYOR, CONVEYOR_SPLITTER).build());
+		ItemStorage.SIDED.registerForBlockEntity((conveyor, side) -> conveyor.storage(), CONVEYOR_ENTITY);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(BRASS_ITEM_PIPE);
 			output.accept(PNEUMATIC_EXTRACTOR);
 			output.accept(HIGH_PRESSURE_EXTRACTOR);
 			output.accept(ITEM_SORTER);
+			output.accept(CONVEYOR);
+			output.accept(CONVEYOR_SPLITTER);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> output.accept(BRASS_WRENCH));
 	}

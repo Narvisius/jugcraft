@@ -636,6 +636,25 @@ def belt_texture():
     return img
 
 
+def conveyor_frame(shift):
+    """Rubberised conveyor belt, seen from above with the front (where items go) at the top: dark rubber with
+    chevron ribs pointing forwards. Shifting the ribs two pixels a frame makes them run at the items' speed."""
+    rng = random.Random(975)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (38, 36, 34) if rng.random() < 0.75 else (46, 43, 40)
+            phase = (y - int(abs(x - 7.5) / 2) + shift) % 8
+            if phase == 0:
+                c = (78, 74, 68)
+            elif phase == 1:
+                c = (58, 55, 51)
+            if x in (0, 15):
+                c = (26, 24, 22)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
 def belt_item():
     """A coiled leather belt with a brass buckle."""
     from steampunk_textures import BRASS as SP_BRASS
@@ -1190,6 +1209,8 @@ def machines():
     save(prospector_item(), "item", "prospector")
     save(belt_texture(), "block", "belt")
     save(belt_item(), "item", "belt")
+    save(conveyor_frame(0), "block", "conveyor_belt")
+    save_animation([conveyor_frame(2 * i) for i in range(4)], "conveyor_belt_moving", frametime=1)
     save(shaft_frame(0), "block", "iron_shaft")
     save(gearbox_frame(0), "block", "brass_gearbox")
     save_animation([gearbox_frame(i * 11.25) for i in range(4)], "brass_gearbox_turning")

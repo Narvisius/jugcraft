@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB",
+    "PSP"
+  ],
+  "key": {
+    "B": "jugcraft:belt",
+    "P": "#c:plates/iron",
+    "S": "jugcraft:iron_shaft"
+  },
+  "result": {
+    "id": "jugcraft:conveyor",
+    "count": 6
+  }
+}

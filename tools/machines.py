@@ -82,6 +82,9 @@ KINETIC_BLOCKS = {
     "belt_pulley": {"display": "Belt Pulley", "states": "axis"},
     # JE -> KE at 75%; its shaft points the way the player looked when placing it.
     "electric_motor": {"display": "Electric Motor", "states": "facing"},
+    # Item conveyors (logistics/ConveyorBlock): driven by rotation, facing the way items travel.
+    "conveyor": {"display": "Conveyor", "states": "horizontal"},
+    "conveyor_splitter": {"display": "Conveyor Splitter", "states": "horizontal"},
 }
 # Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
 STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
@@ -285,6 +288,9 @@ CRAFTING = {
     "belt": (["LSL"], {"L": "minecraft:leather", "S": "minecraft:string"}, 1),
     "electric_motor": (["PWP", "WSW", "PCP"], {"P": "#c:plates/iron", "W": "#c:wires/copper", "S": "jugcraft:iron_shaft",
                                              "C": "jugcraft:copper_cable"}, 1),
+    # Conveyors: leather belts over iron plates and a shaft; the splitter adds bronze gears and a brass plate.
+    "conveyor": (["BBB", "PSP"], {"B": "jugcraft:belt", "P": "#c:plates/iron", "S": "jugcraft:iron_shaft"}, 6),
+    "conveyor_splitter": ([" R ", "GCG"], {"R": "#c:plates/brass", "G": "#c:gears/bronze", "C": "jugcraft:conveyor"}, 1),
     "dynamo": (["CRC", "RSR", "CRC"], {"C": "#c:ingots/copper", "R": "minecraft:redstone", "S": "jugcraft:iron_shaft"}, 1),
     # Renewables: the water wheel and cobblestone generator are early (bronze); the tree farm needs a circuit.
     "cobblestone_generator": (["BWB", "CMC", "BLB"], {"B": "#c:ingots/bronze", "W": "minecraft:water_bucket",

@@ -11,6 +11,9 @@ import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.kinetic.ShaftBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
+import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlock;
+import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlockEntity;
+import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
@@ -90,6 +93,13 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.waitTicks(60);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_belts");
+
+			// A conveyor line with items riding it, a splitter at the end and a chest on each of its outputs.
+			server.runOnServer(minecraft -> buildConveyorLine(minecraft.overworld(), new BlockPos(x + 6, y, z + 2)));
+			server.runCommand("tp @p %d %d %d 180 40".formatted(x + 8, y + 2, z + 5));
+			context.waitTicks(10);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_conveyors");
 
 			// Multi-block machines, ten blocks away, in three views along the row (the wind turbine is nine tall).
 			for (int view = 0; view < 3; view++) {
@@ -193,6 +203,33 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 		level.setBlock(upper.east(), JugcraftKinetics.IRON_SHAFT.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.X), 3);
 		level.setBlock(upper.east(2), JugcraftMachines.MACHINES.get(MachineKind.CRUSHER).defaultBlockState()
 				.setValue(MachineBlock.FACING, Direction.SOUTH), 3);
+	}
+
+	/**
+	 * Three conveyors running east with items on them, into a splitter with chests on its three outputs; a charged
+	 * motor at the back drives them all.
+	 */
+	private static void buildConveyorLine(ServerLevel level, BlockPos start) {
+		ItemStack[] cargo = {new ItemStack(Items.IRON_INGOT), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COAL),
+				new ItemStack(Items.OAK_LOG)};
+		for (int i = 1; i <= 4; i++) {
+			BlockPos pos = start.east(i);
+			level.setBlock(pos, (i == 4 ? JugcraftLogistics.CONVEYOR_SPLITTER : JugcraftLogistics.CONVEYOR).defaultBlockState()
+					.setValue(ConveyorBlock.FACING, Direction.EAST), 3);
+			if (i < 4 && level.getBlockEntity(pos) instanceof ConveyorBlockEntity conveyor) {
+				for (int slot = 0; slot < 3; slot++) {
+					conveyor.accept(cargo[(i + slot) % cargo.length].copy(), slot * 0.3F);
+				}
+			}
+		}
+		BlockPos splitter = start.east(4);
+		for (BlockPos chest : new BlockPos[] {splitter.north(), splitter.east(), splitter.south()}) {
+			level.setBlock(chest, Blocks.CHEST.defaultBlockState(), 3);
+		}
+		level.setBlock(start, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST), 3);
+		if (level.getBlockEntity(start) instanceof ElectricMotorBlockEntity motor) {
+			motor.energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+		}
 	}
 
 	/** Position of a one-block machine in the showroom row (multi-block machines skipped). */

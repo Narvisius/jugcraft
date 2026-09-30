@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    "GCG"
+  ],
+  "key": {
+    "R": "#c:plates/brass",
+    "G": "#c:gears/bronze",
+    "C": "jugcraft:conveyor"
+  },
+  "result": {
+    "id": "jugcraft:conveyor_splitter",
+    "count": 1
+  }
+}

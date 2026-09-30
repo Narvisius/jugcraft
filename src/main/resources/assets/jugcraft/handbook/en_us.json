@@ -1612,6 +1612,50 @@
           }
         },
         {
+          "title": "Conveyor",
+          "icon": "jugcraft:conveyor",
+          "text": [
+            "Carries items the way you faced when placing it, 2.5 blocks a second, while rotation drives it. A shaft, gearbox or motor on any side drives every conveyor joined to it, for 1 KE per conveyor per tick. Pipes, hoppers and machines load it, and so do items dropped on it; at the end items go into the conveyor or inventory ahead, or onto the ground. It carries you too; sneak to stand still."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:belt",
+              "jugcraft:belt",
+              "jugcraft:belt",
+              "jugcraft:iron_plate",
+              "jugcraft:iron_shaft",
+              "jugcraft:iron_plate",
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:conveyor",
+            "count": 6
+          }
+        },
+        {
+          "title": "Conveyor Splitter",
+          "icon": "jugcraft:conveyor_splitter",
+          "text": [
+            "A conveyor that sends items left, straight on and right in turn, skipping any way that is blocked."
+          ],
+          "craft": {
+            "grid": [
+              null,
+              "jugcraft:brass_plate",
+              null,
+              "jugcraft:bronze_gear",
+              "jugcraft:conveyor",
+              "jugcraft:bronze_gear",
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:conveyor_splitter",
+            "count": 1
+          }
+        },
+        {
           "title": "Brass Wrench",
           "icon": "jugcraft:brass_wrench",
           "text": [

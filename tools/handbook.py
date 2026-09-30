@@ -65,6 +65,12 @@ ABOUT = {
     "pneumatic_extractor": "Pulls 16 items every 8 ticks from what it faces and pushes them out of its other sides. A "
                            "redstone signal pauses it.",
     "item_sorter": "Takes only the items in its 9-slot filter, and puts them into the inventory it faces.",
+    "conveyor": "Carries items the way you faced when placing it, 2.5 blocks a second, while rotation drives it. A shaft, "
+                "gearbox or motor on any side drives every conveyor joined to it, for 1 KE per conveyor per tick. Pipes, "
+                "hoppers and machines load it, and so do items dropped on it; at the end items go into the conveyor or "
+                "inventory ahead, or onto the ground. It carries you too; sneak to stand still.",
+    "conveyor_splitter": "A conveyor that sends items left, straight on and right in turn, skipping any way that is "
+                         "blocked.",
     "brass_wrench": "Right-click turns a machine. Sneak and right-click to pick a Jugcraft block up, with everything inside.",
     "speed_upgrade": "In a machine's upgrade slot: each card makes it faster but uses more energy per item. Four cards: 3x as "
                      "fast for twice the energy.",
@@ -254,6 +260,8 @@ def build():
             block_page("pneumatic_extractor", LOGISTICS_BLOCKS["pneumatic_extractor"]["display"]),
             block_page("high_pressure_extractor", LOGISTICS_BLOCKS["high_pressure_extractor"]["display"]),
             block_page("item_sorter", LOGISTICS_BLOCKS["item_sorter"]["display"]),
+            block_page("conveyor", KINETIC_BLOCKS["conveyor"]["display"]),
+            block_page("conveyor_splitter", KINETIC_BLOCKS["conveyor_splitter"]["display"]),
             block_page("brass_wrench", TOOLS["brass_wrench"]),
         ]},
         {"title": "Storage", "icon": f"{MOD}:item_crate", "pages":

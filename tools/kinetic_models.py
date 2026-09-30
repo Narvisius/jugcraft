@@ -9,10 +9,13 @@ from steampunk_models import BRASS, BRASS_PLATE, COPPER, IRON, IRON_PLATE, box, 
 
 # Texture swapped for its animated version while the block turns (the gearbox has no rotor: its face gears are
 # animated), and the lit steam engine's glow.
-TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning")}
+TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning"),
+           "conveyor": ("conveyor_belt", "conveyor_belt_moving"),
+           "conveyor_splitter": ("conveyor_belt", "conveyor_belt_moving")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
 # Blocks with a "turning" block state.
-STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor"}
+STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "conveyor",
+                  "conveyor_splitter"}
 
 
 def iron_shaft():
@@ -110,6 +113,34 @@ def electric_motor():
     return m, rotor
 
 
+def conveyor():
+    """A low conveyor: a rubber belt (items ride on it at 5 pixels, heading north) between riveted iron side rails,
+    over rollers at both ends, with brass drive hubs on the rails where a shaft or motor meets it."""
+    m = []
+    for x0, x1 in ((0.5, 2), (14, 15.5)):
+        m.append(box((x0, 0, 0), (x1, 6, 16), {"*": IRON_PLATE, "up": IRON}))
+    m.append(box((2, 1.5, 0.25), (14, 5, 15.75), {"*": "belt", "up": "conveyor_belt"}))
+    for z in (2, 14):
+        m += cyl("x", 3.25, z, 1.75, 2, 14, IRON, BRASS)
+    m.append(box((2, 0, 6), (14, 1.5, 10), IRON_PLATE))
+    for x0, x1 in ((0, 0.5), (15.5, 16)):
+        m += cyl("x", 3.25, 8, 1.5, x0, x1, BRASS_PLATE, BRASS)
+    return m
+
+
+def conveyor_splitter():
+    """A conveyor under a brass arch with a copper flap at the front that sends items left, straight on and right in
+    turn, and a selector dial on top."""
+    m = conveyor()
+    for x0, x1 in ((0.5, 2), (14, 15.5)):
+        m.append(box((x0, 6, 6.5), (x1, 11, 9.5), BRASS))
+    m.append(box((0.5, 11, 6), (15.5, 12.5, 10), BRASS_PLATE))
+    m.append(dial("up", (8, 12.5, 8), 3, depth=0.5))
+    m.append(box((7.5, 5, 1), (8.5, 9, 6), COPPER))
+    m.append(box((7.25, 9, 3), (8.75, 11, 4.5), BRASS))
+    return m
+
+
 def brass_gearbox_parts():
     return brass_gearbox(), []
 
@@ -120,7 +151,8 @@ def dynamo_parts():
 
 PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "hand_crank": hand_crank(),
          "steam_engine": steam_engine(), "dynamo": dynamo_parts(), "belt_pulley": belt_pulley(),
-         "electric_motor": electric_motor()}
+         "electric_motor": electric_motor(), "conveyor": (conveyor(), []),
+         "conveyor_splitter": (conveyor_splitter(), [])}
 # Full models (rotor standing still) and the static parts shown while the rotor spins.
 MODELS = {block: static + rotor for block, (static, rotor) in PARTS.items()}
 STATIC = {block: static for block, (static, rotor) in PARTS.items()}
