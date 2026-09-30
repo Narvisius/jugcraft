@@ -16,6 +16,7 @@ Jugcraft's original gameplay ships as one mod, organized into internal feature p
 - [Propose an existing mod integration](../../issues/new?template=integration.yml).
 - [Contribute code, art, or documentation](CONTRIBUTING.md).
 - [Read the connected gameplay design](docs/DESIGN.md).
+- [See everything that exists so far](docs/WHAT_EXISTS.md) (content, APIs and file map, for contributors and AI agents) and [what changed](CHANGELOG.md).
 - [See how the technology tree works](docs/TECH_TREE.md), including the planned [Chemistry branch](docs/branches/CHEMISTRY.md).
 - [Explore specialties, magic schools, creatures and seasonal briefs](docs/CONTENT_BRANCHES.md).
 - [See architecture and integration rules](docs/ARCHITECTURE.md).

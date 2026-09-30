@@ -31,7 +31,7 @@ Machines look steampunk by default. The original look is a built-in resource pac
 
 **Arc furnace structure:** a solid 3×3×3 cube of 26 Arc Furnace Casing blocks, with the Arc Furnace Controller in the center of one face, facing outward. Feed power into the controller's front. The screen shows whether the structure is formed; the structure is rechecked every second.
 
-Hoppers work with every machine: they insert into the input (or fuel) slot from the top or sides and pull results from the bottom.
+Hoppers work with every machine: by default they insert into the input (or fuel) slot from the top or sides and pull results from the bottom. Processing machines' faces can be reconfigured on their screen ([item logistics](item-logistics.md)).
 
 ## Crafting (every part uses Jugcraft metals)
 - **Machine Casing:** bronze and zinc.
@@ -74,7 +74,7 @@ How everything connects is documented in [../TECH_TREE.md](../TECH_TREE.md); fut
 - **Breaking a machine** drops its items; the stored energy is lost.
 - **Config switch:** `machines.enabled=false` in `config/jugcraft.properties` removes the machine crafting recipes and the crusher and arc furnace recipes. Placed machines keep existing.
 
-Not yet designed: ownership and permissions (anyone can open any machine), per-side configuration, and chunk-unload behavior beyond vanilla block entities (machines pause when unloaded).
+Not yet designed: ownership and permissions (anyone can open any machine) and chunk-unload behavior beyond vanilla block entities (machines pause when unloaded). Per-side configuration now exists; see [item logistics](item-logistics.md).
 
 ## Dependencies and assets
 - **Dependencies:** Fabric API only. Jugcraft defines its own energy API (`EnergyStorage.SIDED`, JE); an adapter to Team Reborn Energy can come later, once that library supports 26.3.
