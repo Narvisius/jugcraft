@@ -8,6 +8,10 @@ import io.github.jimbozoomer.jugcraft.materials.JugcraftMaterials;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftWorldgen;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +35,21 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftFluids.register();
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
+		registerMachineStylePack();
 		LOGGER.info("Jugcraft loaded");
+	}
+
+	/**
+	 * Machines look steampunk by default. The other look (classic) ships as a built-in resource pack,
+	 * off by default, so anyone can switch in Options > Resource Packs. See tools/model_writer.py.
+	 */
+	private static void registerMachineStylePack() {
+		boolean registered = FabricLoader.getInstance().getModContainer(MOD_ID)
+				.map(container -> ResourceLoader.registerBuiltinPack(id("alternate_machines"), container,
+						Component.translatable("pack.jugcraft.alternate_machines"), PackActivationType.NORMAL))
+				.orElse(false);
+		if (!registered) {
+			LOGGER.warn("Could not register the built-in alternate machine style pack");
+		}
 	}
 }

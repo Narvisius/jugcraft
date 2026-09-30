@@ -42,9 +42,9 @@ public final class JugcraftFluids {
 		BRONZE_FLUID_PIPE = block("bronze_fluid_pipe", new FluidPipeBlock(properties("bronze_fluid_pipe",
 				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.0F).sound(SoundType.COPPER).noOcclusion())));
 		FLUID_TANK = block("fluid_tank", new FluidTankBlock(properties("fluid_tank",
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F))));
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
 		ELECTRIC_PUMP = block("electric_pump", new ElectricPumpBlock(properties("electric_pump",
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F))));
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion())));
 
 		TANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_tank"),
 				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK).build());

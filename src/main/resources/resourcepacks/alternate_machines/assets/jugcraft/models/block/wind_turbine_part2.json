@@ -1,0 +1,678 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_base": "jugcraft:block/wind_turbine_base",
+    "wind_turbine_blade": "jugcraft:block/wind_turbine_blade",
+    "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
+    "wind_turbine_nacelle": "jugcraft:block/wind_turbine_nacelle",
+    "wind_turbine_tip": "jugcraft:block/wind_turbine_tip",
+    "front": "jugcraft:block/wind_turbine_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_mast"
+        },
+        "south": {
+          "texture": "#wind_turbine_mast"
+        },
+        "east": {
+          "texture": "#wind_turbine_mast"
+        },
+        "west": {
+          "texture": "#wind_turbine_mast"
+        },
+        "up": {
+          "texture": "#wind_turbine_mast"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        6,
+        3
+      ],
+      "to": [
+        12,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "south": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "east": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "west": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "up": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "down": {
+          "texture": "#wind_turbine_nacelle"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        12,
+        6
+      ],
+      "to": [
+        11,
+        13,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "south": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "east": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "west": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "up": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "down": {
+          "texture": "#wind_turbine_nacelle"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        6,
+        16
+      ],
+      "to": [
+        8.5,
+        14,
+        24
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        7,
+        1
+      ],
+      "to": [
+        10,
+        11,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "south": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "east": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "west": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "up": {
+          "texture": "#wind_turbine_nacelle"
+        },
+        "down": {
+          "texture": "#wind_turbine_nacelle"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        8,
+        0
+      ],
+      "to": [
+        9,
+        10,
+        1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_base"
+        },
+        "south": {
+          "texture": "#wind_turbine_base"
+        },
+        "east": {
+          "texture": "#wind_turbine_base"
+        },
+        "west": {
+          "texture": "#wind_turbine_base"
+        },
+        "up": {
+          "texture": "#wind_turbine_base"
+        },
+        "down": {
+          "texture": "#wind_turbine_base"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        11,
+        1.5
+      ],
+      "to": [
+        9,
+        28,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            2,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            2,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            2,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            2,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        28,
+        1.5
+      ],
+      "to": [
+        9,
+        32,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            2,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            2,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            1.0,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            1.0,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            2,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            2,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        1.5
+      ],
+      "to": [
+        9,
+        7,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_blade"
+        },
+        "south": {
+          "texture": "#wind_turbine_blade"
+        },
+        "east": {
+          "texture": "#wind_turbine_blade"
+        },
+        "west": {
+          "texture": "#wind_turbine_blade"
+        },
+        "up": {
+          "texture": "#wind_turbine_blade"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        8,
+        1.5
+      ],
+      "to": [
+        27,
+        10,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        27,
+        8,
+        1.5
+      ],
+      "to": [
+        31,
+        10,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -11,
+        8,
+        1.5
+      ],
+      "to": [
+        6,
+        10,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            16,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -15,
+        8,
+        1.5
+      ],
+      "to": [
+        -11,
+        10,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_tip",
+          "uv": [
+            0,
+            0,
+            4,
+            1.0
+          ]
+        }
+      }
+    }
+  ]
+}

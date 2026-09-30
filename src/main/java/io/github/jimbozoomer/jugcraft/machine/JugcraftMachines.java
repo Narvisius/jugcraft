@@ -47,13 +47,12 @@ public final class JugcraftMachines {
 		ARC_FURNACE_CASING = JugcraftRegistry.block("arc_furnace_casing", Blocks.BRICKS);
 
 		for (MachineKind kind : MachineKind.values()) {
-			// Furnace properties include light emission while LIT, which machines share.
-			BlockBehaviour.Properties props = properties(kind.id, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
-			// Multi-block machines have detailed, not full-cube, models. Pistons already refuse to move them:
-			// every part is an entity block (even dummies without a block entity), which pistons never push.
-			MachineBlock machine = kind.isLarge()
-					? new LargeMachineBlock(props.noOcclusion(), kind)
-					: new MachineBlock(props, kind);
+			// Furnace properties include light emission while LIT, which machines share. Machine models are
+			// detailed rather than full cubes (in either style), so they must not hide their neighbours' faces.
+			BlockBehaviour.Properties props = properties(kind.id, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)).noOcclusion();
+			// Pistons already refuse to move multi-block machines: every part is an entity block (even
+			// dummies without a block entity), which pistons never push.
+			MachineBlock machine = kind.isLarge() ? new LargeMachineBlock(props, kind) : new MachineBlock(props, kind);
 			MACHINES.put(kind, (MachineBlock) block(kind.id, machine));
 
 			ExtendedMenuType<MachineMenu, BlockPos> menu = new ExtendedMenuType<>(

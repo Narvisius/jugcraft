@@ -1,0 +1,204 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "alloy_crucible": "jugcraft:block/alloy_crucible",
+    "alloy_hopper": "jugcraft:block/alloy_hopper",
+    "alloy_hopper_top": "jugcraft:block/alloy_hopper_top",
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "bronze_block": "jugcraft:block/bronze_block",
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "power_port_frame": "jugcraft:block/power_port_frame",
+    "front": "jugcraft:block/alloy_smelter_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        4
+      ],
+      "to": [
+        14,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_crucible"
+        },
+        "south": {
+          "texture": "#alloy_crucible"
+        },
+        "east": {
+          "texture": "#alloy_crucible"
+        },
+        "west": {
+          "texture": "#alloy_crucible"
+        },
+        "up": {
+          "texture": "#alloy_crucible"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        2
+      ],
+      "to": [
+        12,
+        11.9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_crucible"
+        },
+        "south": {
+          "texture": "#alloy_crucible"
+        },
+        "east": {
+          "texture": "#alloy_crucible"
+        },
+        "west": {
+          "texture": "#alloy_crucible"
+        },
+        "up": {
+          "texture": "#alloy_crucible"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        12,
+        3.5
+      ],
+      "to": [
+        14.5,
+        13,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_block"
+        },
+        "south": {
+          "texture": "#bronze_block"
+        },
+        "east": {
+          "texture": "#bronze_block"
+        },
+        "west": {
+          "texture": "#bronze_block"
+        },
+        "up": {
+          "texture": "#bronze_block"
+        },
+        "down": {
+          "texture": "#bronze_block"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        12,
+        1.5
+      ],
+      "to": [
+        12.5,
+        12.9,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_block"
+        },
+        "south": {
+          "texture": "#bronze_block"
+        },
+        "east": {
+          "texture": "#bronze_block"
+        },
+        "west": {
+          "texture": "#bronze_block"
+        },
+        "up": {
+          "texture": "#bronze_block"
+        },
+        "down": {
+          "texture": "#bronze_block"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_stack"
+        },
+        "south": {
+          "texture": "#geothermal_stack"
+        },
+        "east": {
+          "texture": "#geothermal_stack"
+        },
+        "west": {
+          "texture": "#geothermal_stack"
+        },
+        "up": {
+          "texture": "#geothermal_stack"
+        },
+        "down": {
+          "texture": "#geothermal_stack"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        1,
+        6
+      ],
+      "to": [
+        16,
+        4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe"
+        }
+      }
+    }
+  ]
+}

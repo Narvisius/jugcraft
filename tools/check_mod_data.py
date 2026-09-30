@@ -24,6 +24,7 @@ JAVA = JAVA_ROOT / "materials" / "JugcraftMaterials.java"
 CONFIG = JAVA_ROOT / "config" / "JugcraftConfig.java"
 WORLDGEN = JAVA_ROOT / "materials" / "JugcraftWorldgen.java"
 MACHINE_JAVA = JAVA_ROOT / "machine" / "MachineKind.java"
+STYLE_PACK = RES / "resourcepacks" / "alternate_machines"
 
 # Tags that Jugcraft reads but that vanilla/Fabric API define.
 EXTERNAL_TAGS = {"c:ingots/copper", "minecraft:stone_ore_replaceables", "minecraft:deepslate_ore_replaceables"}
@@ -321,10 +322,51 @@ def check_large_machines():
                   re.findall(r"(\w+) \? new PowerPort\((\d+), Direction\.(\w+)\)", kinds)}
     if java_ports != POWER_PORTS:
         err(f"Power ports differ: {java_ports} in MachineKind.java, {POWER_PORTS} in large_machines.py")
-    for path in sorted((ASSETS / "models").rglob("*.json")):
+    for path in sorted((ASSETS / "models").rglob("*.json")) + sorted(STYLE_PACK.rglob("models/**/*.json")):
         for element in (load(path) or {}).get("elements", []):
             if min(element["from"] + element["to"]) < -16 or max(element["from"] + element["to"]) > 32:
                 err(f"{path.name}: element outside -16..32")
+
+
+def check_style_pack():
+    """Both machine styles must cover every machine completely, and everything they reference must exist."""
+    from machines import PARTS, FLUID_BLOCKS
+    pack_assets = STYLE_PACK / "assets" / MOD
+    if not (STYLE_PACK / "pack.mcmeta").is_file():
+        err("resourcepacks/alternate_machines has no pack.mcmeta")
+
+    def resolve(ref, root):
+        ns, path = split(ref)
+        if ns == "minecraft":
+            return
+        file = root / "models" / f"{path}.json"
+        data = load(file if file.is_file() else ASSETS / "models" / f"{path}.json")
+        if data is None:
+            return
+        for value in data.get("textures", {}).values():
+            if not value.startswith("#"):
+                texture(value)
+        if data.get("parent", "").startswith(MOD + ":"):
+            resolve(data["parent"], root)
+
+    for block in list(MACHINES) + list(PARTS) + list(FLUID_BLOCKS):
+        keys = {}
+        for root, label in ((ASSETS, "default style"), (pack_assets, "alternate style pack")):
+            path = root / "blockstates" / f"{block}.json"
+            if not path.is_file():
+                err(f"The {label} has no blockstate for {block}")
+                continue
+            variants = (load(path) or {}).get("variants", {})
+            keys[label] = set(variants)
+            for variant in variants.values():
+                resolve(variant["model"], root)
+            item = root / "items" / f"{block}.json"
+            if not item.is_file():
+                err(f"The {label} has no item model for {block}")
+            else:
+                resolve((load(item) or {})["model"]["model"], root)
+        if len(keys) == 2 and len(set(map(frozenset, keys.values()))) != 1:
+            err(f"{block}: the two styles cover different block states")
 
 
 def main():
@@ -337,6 +379,7 @@ def main():
     check_java()
     check_machines(registered)
     check_large_machines()
+    check_style_pack()
     for path in RES.rglob("*.json"):
         load(path)
     if errors:

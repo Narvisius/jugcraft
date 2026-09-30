@@ -923,6 +923,8 @@ def main():
     icon.resize((128, 128), Image.NEAREST).save(TEX.parent / "icon.png", optimize=True)
     main_extra()
     machines()
+    import steampunk_textures
+    steampunk_textures.draw_all()
 
 
 if __name__ == "__main__":

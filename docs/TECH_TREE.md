@@ -76,6 +76,43 @@ All machines hold their own internal battery and accept power from cables or dir
 | Wind Turbine (3 blocks tall) | Power | 4–24 JE/t by height above sea level; more in rain and thunder; rotor needs clear air | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
 | Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
 
+## Machine looks: steampunk and classic
+
+Machines are drawn in a **steampunk** style by default: brass, copper and riveted iron, with gauges, gears, valve wheels, glowing fireboxes and portholes. The look is purely visual. Blocks, recipes, footprints, screens and power connections are the same in both styles.
+
+![Steampunk machines, each shown from the front-left and front-right](images/steampunk_machines.png)
+
+![Steampunk multi-block machines, from both sides](images/steampunk_large_machines.png)
+
+*Approximate renders of the generated models, not game screenshots. Machines that glow are shown running.*
+
+**Switching back to the classic look**
+
+- **In game, per player:** Options → Resource Packs → turn on **Jugcraft: Classic Machines**.
+  - This pack is built into the mod and off by default.
+  - Every machine goes back to its original model; turn the pack off to get steampunk back.
+  - Nothing in the world or on the server changes.
+- **For everyone, permanently:**
+  - Set `DEFAULT_STYLE = "classic"` in `tools/model_writer.py` and run `python3 tools/generate_material_data.py`.
+  - The mod then ships classic by default, and the built-in pack becomes **Jugcraft: Steampunk Machines**.
+- **Remove steampunk entirely:** revert the pull request that added it (a single squash commit).
+
+![The classic look, which the built-in pack restores](images/classic_machines.png)
+
+**How it is built**
+
+- `tools/steampunk_models.py`: every steampunk model. The models are built from helpers for round boilers and drums, gears, valve wheels, gauges, lamps and pipes. One-block machines stay inside their block, and multi-block ones are sliced per block as described below.
+- `tools/steampunk_textures.py`: the original steampunk textures (`sp_*`).
+- `tools/model_writer.py`: writes either style. The classic style is the earlier output, byte for byte.
+- `src/main/resources/resourcepacks/alternate_machines/`: the generated built-in pack.
+- `tools/check_mod_data.py` checks three things:
+  - both styles cover every machine and every block state;
+  - everything the models reference exists;
+  - no model leaves Minecraft's −16…32 range.
+- **Glowing parts:** firebox doors, portholes and lamps switch to their lit texture while a machine runs.
+- **Where cables and pipes meet the machine:** near the middle of each side, every steampunk machine has a terminal, flange or plate within about two pixels of the edge, so a connecting cable or pipe touches the machine. The solar collector's top is the exception, because it has to see the sky.
+- **Neighbouring blocks:** because the models are not full cubes, machine blocks no longer hide the faces of the blocks next to them.
+
 ## Multi-block machines
 
 Most machines stay **simple one-block machines**. The ones where size is part of what they are (towers, tanks, big engines) are **multi-block machines**: you place one item and it fills two or three blocks with one detailed model. This works like Immersive Engineering's pump and sample drill; no Immersive Engineering code or art is used.
@@ -105,7 +142,7 @@ Most machines stay **simple one-block machines**. The ones where size is part of
 **How it is built** (to add another one)
 
 1. Give the machine a `MachineKind` with a `footprint()`: the blocks it fills, written for a north-facing machine (`Footprint.tall(3)`, or offsets such as `new Vec3i(-1, 0, 0)` for "one block to the right").
-2. Author its model once in `tools/large_machines.py`. The model is written in structure coordinates, with the main block at 0–16 on each axis.
+2. Author its model in both styles, in structure coordinates with the main block at 0–16 on each axis: `tools/steampunk_models.py` for the default look and `tools/large_machines.py` for the classic one.
 3. Run `python3 tools/generate_material_data.py`. It slices the model into one model per block and writes the blockstates for every facing and part, plus a scaled-down model for the inventory.
 4. `tools/check_mod_data.py` checks that the Python and Java footprints match and that no model leaves Minecraft's −16…32 limit.
 
@@ -118,7 +155,7 @@ Every powered block follows one of two rules, and a cable shows which by where i
 | Rule | Machines | What you see |
 | --- | --- | --- |
 | **Any side** | Every one-block machine, generator and battery; the electric pump; the geothermal generator and wind turbine (any face of any of their blocks) | A cable next to any face bends to it and connects. A generator or battery placed directly against the machine also powers it. |
-| **Power socket only** | The Alloy Smelter | Its **copper socket in a yellow-and-black frame**, on the outer side of its lower right block (seen from the front). Cables connect only there; a cable along any other face doesn't bend toward it. |
+| **Power socket only** | The Alloy Smelter | Its **copper socket in a brass frame** (a yellow-and-black frame in the classic look), on the outer side of its lower right block (seen from the front). Cables connect only there; a cable along any other face doesn't bend toward it. |
 
 The battery box is "any side" for charging. It gives power out only through its front, and a cable at the front still connects.
 
@@ -191,7 +228,8 @@ Every part carries `c:` convention tags (`c:plates/bronze`, `c:gears/iron`, `c:w
 | To change | Edit | Then run |
 | --- | --- | --- |
 | Materials, parts, tags, worldgen | `tools/materials.py` | `python3 tools/generate_material_data.py` |
-| Machines, machine recipes, crafting | `tools/machines.py` (plus the matching Java: `MachineKind`, `JugcraftComponents`) |
+| Machines, machine recipes, crafting | `tools/machines.py` (plus the matching Java: `MachineKind`, `JugcraftComponents`) | `python3 tools/generate_material_data.py` |
+| Machine looks | `tools/steampunk_models.py` and `tools/steampunk_textures.py` (steampunk), `tools/large_machines.py` (classic multi-block models), `DEFAULT_STYLE` in `tools/model_writer.py` | `python3 tools/generate_textures.py`, then `python3 tools/generate_material_data.py` |
 | Fluid blocks and their numbers | `tools/machines.py` (`PIPES`, `FLUID_BLOCKS`, `FLUID_STATS`) plus the constants in `fluid/FluidPipeBlock`, `FluidTankBlockEntity` and `ElectricPumpBlockEntity` | `python3 tools/generate_material_data.py` |
 | Textures | `tools/generate_textures.py` | `python3 tools/generate_textures.py` |
 | Verify | — | `python3 tools/check_mod_data.py` and `./gradlew build` |

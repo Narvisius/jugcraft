@@ -9,6 +9,8 @@ Primary specialty and supported player role: engineering
 ## Player experience
 Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and store surplus in a **Battery Box**. Every machine has its own internal battery that holds charge, so machines keep working briefly after the power stops, and a generator placed directly against a machine powers it without cable.
 
+Machines look steampunk by default. The original look is a built-in resource pack, **Jugcraft: Classic Machines**; see [machine looks](../TECH_TREE.md#machine-looks-steampunk-and-classic).
+
 | Block | What it does | Energy (JE) |
 | --- | --- | --- |
 | Coal Generator | Burns coal/charcoal (1600 ticks) or coal blocks (16000 ticks) | Makes 32/t while burning, holds 16,000, outputs 64/t to every side. Stops burning when full, so fuel is never wasted |

@@ -1,0 +1,204 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "alloy_crucible": "jugcraft:block/alloy_crucible",
+    "alloy_hopper": "jugcraft:block/alloy_hopper",
+    "alloy_hopper_top": "jugcraft:block/alloy_hopper_top",
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "bronze_block": "jugcraft:block/bronze_block",
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "power_port_frame": "jugcraft:block/power_port_frame",
+    "front": "jugcraft:block/alloy_smelter_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth"
+        },
+        "south": {
+          "texture": "#heavy_plinth"
+        },
+        "east": {
+          "texture": "#heavy_plinth"
+        },
+        "up": {
+          "texture": "#heavy_plinth"
+        },
+        "down": {
+          "texture": "#heavy_plinth"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "east": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "up": {
+          "texture": "#machine_top"
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        2,
+        0.5
+      ],
+      "to": [
+        15.5,
+        3,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_block"
+        },
+        "south": {
+          "texture": "#bronze_block"
+        },
+        "east": {
+          "texture": "#bronze_block"
+        },
+        "west": {
+          "texture": "#bronze_block"
+        },
+        "up": {
+          "texture": "#bronze_block"
+        },
+        "down": {
+          "texture": "#bronze_block"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        12.5,
+        0.5
+      ],
+      "to": [
+        15.5,
+        13.5,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_block"
+        },
+        "south": {
+          "texture": "#bronze_block"
+        },
+        "east": {
+          "texture": "#bronze_block"
+        },
+        "west": {
+          "texture": "#bronze_block"
+        },
+        "up": {
+          "texture": "#bronze_block"
+        },
+        "down": {
+          "texture": "#bronze_block"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        14,
+        3
+      ],
+      "to": [
+        6,
+        16,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_hopper"
+        },
+        "south": {
+          "texture": "#alloy_hopper"
+        },
+        "east": {
+          "texture": "#alloy_hopper"
+        },
+        "west": {
+          "texture": "#alloy_hopper"
+        },
+        "down": {
+          "texture": "#alloy_hopper"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        14,
+        10
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_hopper"
+        },
+        "south": {
+          "texture": "#alloy_hopper"
+        },
+        "east": {
+          "texture": "#alloy_hopper"
+        },
+        "west": {
+          "texture": "#alloy_hopper"
+        },
+        "down": {
+          "texture": "#alloy_hopper"
+        }
+      }
+    }
+  ]
+}
