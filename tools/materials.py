@@ -12,7 +12,7 @@ MOD = "jugcraft"
 
 # Feature switches (config/jugcraft.properties). Order is the config file order.
 FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "aluminum",
-            "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil"]
+            "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil", "machines"]
 
 # Metals use the vanilla form set. "mined" adds ore, deepslate ore, raw item and raw block.
 # cook: which vanilla cookers can smelt the ore/raw form. tool: minimum pickaxe tier.
@@ -134,4 +134,9 @@ def feature_of(entry_id):
             return info["feature"]
     if entry_id in ROCKS:
         return ROCKS[entry_id]["feature"]
-    return ITEMS[entry_id]["feature"]
+    if entry_id in ITEMS:
+        return ITEMS[entry_id]["feature"]
+    from machines import machine_blocks, FEATURE
+    if entry_id in machine_blocks():
+        return FEATURE
+    raise KeyError(entry_id)

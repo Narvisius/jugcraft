@@ -10,6 +10,8 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of)
 
+from machines import MACHINES, PARTS, CABLES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
 ASSETS = RES / "assets" / MOD
@@ -18,8 +20,12 @@ DATA = RES / "data"
 GENERATED_DIRS = [
     ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang",
     DATA / MOD / "loot_table", DATA / MOD / "recipe", DATA / MOD / "worldgen",
-    DATA / "c" / "tags", DATA / "minecraft" / "tags",
+    DATA / "c" / "tags", DATA / "minecraft" / "tags", RES / MOD,
 ]
+
+FACING_Y = {"north": 0, "east": 90, "south": 180, "west": 270}
+CABLE_ROTATION = {"north": {}, "east": {"y": 90}, "south": {"y": 180}, "west": {"y": 270},
+                  "up": {"x": 270}, "down": {"x": 90}}
 
 
 def write(path, obj):
@@ -80,7 +86,69 @@ def assets():
               {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
         lang[f"item.{MOD}.{item}"] = item_name(item)
+    machine_assets(lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
+
+
+def machine_assets(lang):
+    for machine, info in MACHINES.items():
+        lang[f"block.{MOD}.{machine}"] = info["display"]
+        lang[f"container.{MOD}.{machine}"] = info["display"]
+        for suffix, front in (("", "front"), ("_on", "front_on")):
+            if suffix and not info["lit"]:
+                continue
+            write(ASSETS / "models" / "block" / f"{machine}{suffix}.json", {
+                "parent": "minecraft:block/orientable",
+                "textures": {"top": rid("block/machine_top"), "side": rid("block/machine_side"),
+                             "front": rid(f"block/{machine}_{front}")},
+            })
+        variants = {}
+        for facing, y in FACING_Y.items():
+            rotation = {"y": y} if y else {}
+            for lit in ("false", "true"):
+                on = lit == "true" and info["lit"]
+                model = rid(f"block/{machine}_on" if on else f"block/{machine}")
+                variants[f"facing={facing},lit={lit}"] = {"model": model, **rotation}
+        write(ASSETS / "blockstates" / f"{machine}.json", {"variants": variants})
+        write(ASSETS / "items" / f"{machine}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{machine}")}})
+
+    for part, display in PARTS.items():
+        lang[f"block.{MOD}.{part}"] = display
+        write(ASSETS / "blockstates" / f"{part}.json", {"variants": {"": {"model": rid(f"block/{part}")}}})
+        write(ASSETS / "models" / "block" / f"{part}.json",
+              {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{part}")}})
+        write(ASSETS / "items" / f"{part}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{part}")}})
+
+    for cable, info in CABLES.items():
+        lang[f"block.{MOD}.{cable}"] = info["display"]
+        texture = rid(f"block/{cable}")
+        write(ASSETS / "models" / "block" / f"{cable}_core.json", {
+            "textures": {"cable": texture, "particle": texture},
+            "elements": [{"from": [6, 6, 6], "to": [10, 10, 10], "faces": {
+                face: {"uv": [6, 6, 10, 10], "texture": "#cable"}
+                for face in ("north", "east", "south", "west", "up", "down")}}],
+        })
+        write(ASSETS / "models" / "block" / f"{cable}_arm.json", {
+            "textures": {"cable": texture, "particle": texture},
+            "elements": [{"from": [6, 6, 0], "to": [10, 10, 6], "faces": {
+                "north": {"uv": [6, 6, 10, 10], "texture": "#cable"},
+                "east": {"uv": [0, 6, 6, 10], "texture": "#cable"},
+                "west": {"uv": [0, 6, 6, 10], "texture": "#cable"},
+                "up": {"uv": [6, 0, 10, 6], "texture": "#cable"},
+                "down": {"uv": [6, 0, 10, 6], "texture": "#cable"},
+            }}],
+        })
+        parts = [{"apply": {"model": rid(f"block/{cable}_core")}}]
+        for direction, rotation in CABLE_ROTATION.items():
+            parts.append({"when": {direction: "true"}, "apply": {"model": rid(f"block/{cable}_arm"), **rotation}})
+        write(ASSETS / "blockstates" / f"{cable}.json", {"multipart": parts})
+        write(ASSETS / "models" / "item" / f"{cable}.json",
+              {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{cable}")}})
+        write(ASSETS / "items" / f"{cable}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{cable}")}})
+
+    lang[f"tooltip.{MOD}.energy"] = "%s / %s JE"
+    lang[f"container.{MOD}.arc_furnace.incomplete"] = "Structure incomplete"
+    lang[f"container.{MOD}.arc_furnace.formed"] = "Arc furnace formed"
 
 
 # ---------------------------------------------------------------- loot tables
@@ -124,6 +192,8 @@ def loot_tables():
         for block in mineral_blocks(mineral):
             table = ore_drop(block, mineral, low, high) if block.endswith("_ore") else self_drop(block)
             write(out / f"{block}.json", table)
+    for block in machine_blocks():
+        write(out / f"{block}.json", self_drop(block))
     for rock, info in ROCKS.items():
         drop = info["drop"]
         table = ore_drop(rock, drop["item"], drop["min"], drop["max"]) if drop else self_drop(rock)
@@ -176,6 +246,15 @@ def recipes():
 
     for mineral, info in MINERALS.items():
         compaction(out, info["feature"], rid(mineral), mineral, f"{mineral}_block")
+
+    for result, (pattern, key, count) in CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted({
+            feature_of(f"{ref.split('/')[-1]}_ingot") for ref in key.values() if ref.startswith("#c:ingots/")
+            and ref.split("/")[-1] != "copper"})
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    write(RES / MOD / "machine_recipes.json", machine_recipes())
 
     for recipe in PROCESSING:
         if recipe["kind"] == "shapeless":
@@ -253,6 +332,9 @@ def tags():
 
     for rock, info in ROCKS.items():
         tags.add("block", f"minecraft:mineable/{info['tool']}", rid(rock))
+
+    for block in machine_blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
 
     for item, info in ITEMS.items():
         if info["tag"]:

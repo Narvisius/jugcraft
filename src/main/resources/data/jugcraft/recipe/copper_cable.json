@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CTC"
+  ],
+  "key": {
+    "C": "#c:ingots/copper",
+    "T": "#c:ingots/tin"
+  },
+  "result": {
+    "id": "jugcraft:copper_cable",
+    "count": 6
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NCN",
+    "RMR",
+    "NFN"
+  ],
+  "key": {
+    "N": "#c:ingots/nickel",
+    "C": "jugcraft:copper_cable",
+    "R": "minecraft:redstone",
+    "M": "jugcraft:machine_casing",
+    "F": "minecraft:blast_furnace"
+  },
+  "result": {
+    "id": "jugcraft:arc_furnace_controller",
+    "count": 1
+  }
+}

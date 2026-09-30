@@ -281,6 +281,171 @@ def main_extra():
     save(pile(306, [(232, 196, 210), (196, 224, 196), (240, 228, 196), (214, 206, 232)]), "item", "rare_earth_oxide")
 
 
+STEEL = [(62, 66, 72), (86, 90, 97), (110, 114, 121), (134, 138, 145), (160, 164, 170)]
+
+
+def panel(seed, palette=STEEL, trim=BRONZE):
+    """A riveted machine panel: bronze frame around a steel plate."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                c = trim[1]
+            elif x == 1 or y == 1:
+                c = trim[3]
+            elif x == 14 or y == 14:
+                c = trim[0]
+            else:
+                c = palette[rng.choice([1, 2, 2, 3])]
+            img.putpixel((x, y), c + (255,))
+    for x, y in [(2, 2), (13, 2), (2, 13), (13, 13)]:
+        img.putpixel((x, y), trim[4] + (255,))
+    return img
+
+
+def window(seed, inner, glow=None):
+    """A machine front with a recessed dark window; glow colors light it when running."""
+    img = panel(seed)
+    rng = random.Random(seed + 1)
+    for y in range(4, 12):
+        for x in range(4, 12):
+            edge = x in (4, 11) or y in (4, 11)
+            if edge:
+                img.putpixel((x, y), STEEL[0] + (255,))
+            else:
+                palette = glow if glow else inner
+                img.putpixel((x, y), rng.choice(palette) + (255,))
+    return img
+
+
+def grate(seed, glow=None):
+    img = window(seed, [(24, 22, 22), (34, 30, 28)], glow)
+    for y in (6, 8, 10):
+        for x in range(5, 11):
+            img.putpixel((x, y), STEEL[1] + (255,))
+    return img
+
+
+def jaws(seed, active):
+    img = window(seed, [(40, 40, 44), (52, 52, 58)])
+    tooth = STEEL[4] if active else STEEL[3]
+    for x in range(5, 11):
+        top = 5 + (x % 2)
+        bottom = 10 - (x % 2)
+        img.putpixel((x, top), tooth + (255,))
+        img.putpixel((x, bottom), tooth + (255,))
+    if active:
+        for x, y in [(6, 7), (8, 8), (9, 7)]:
+            img.putpixel((x, y), (190, 180, 160, 255))
+    return img
+
+
+def battery_front(seed):
+    img = panel(seed, palette=[(40, 44, 58), (64, 70, 86), (90, 96, 114), (116, 122, 140), (146, 152, 170)])
+    red, black = (200, 40, 40), (30, 30, 34)
+    for x in range(4, 7):
+        img.putpixel((x, 7), red + (255,))
+    img.putpixel((5, 6), red + (255,))
+    img.putpixel((5, 8), red + (255,))
+    for x in range(9, 12):
+        img.putpixel((x, 7), black + (255,))
+    return img
+
+
+def bricks(seed):
+    rng = random.Random(seed)
+    img = new()
+    brick = [(196, 176, 150), (210, 192, 166), (182, 160, 134)]
+    mortar = (120, 110, 100)
+    for y in range(16):
+        for x in range(16):
+            row = y // 4
+            offset = 4 if row % 2 else 0
+            if y % 4 == 3 or (x + offset) % 8 == 7:
+                c = mortar
+            else:
+                c = rng.choice(brick)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def cable_texture():
+    img = new()
+    rubber = [(40, 36, 34), (52, 48, 44)]
+    copper = COPPER
+    rng = random.Random(400)
+    for y in range(16):
+        for x in range(16):
+            band = (x + y) % 6 == 0
+            img.putpixel((x, y), (rng.choice(copper) if band else rng.choice(rubber)) + (255,))
+    return img
+
+
+def cable_item():
+    img = new()
+    for i in range(2, 14):
+        for w in (-1, 0, 1):
+            x, y = i, 15 - i + w
+            if 0 <= y < 16:
+                img.putpixel((x, y), ((52, 48, 44) if w else (40, 36, 34)) + (255,))
+    for i in (1, 14):
+        img.putpixel((i, 15 - i), COPPER[2] + (255,))
+        img.putpixel((i + (1 if i == 1 else -1), 15 - i), COPPER[1] + (255,))
+    return img
+
+
+def gui():
+    """Generic 176x166 machine screen: beveled panel and player inventory slots."""
+    img = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+    light, face, dark, slot_bg = (255, 255, 255), (198, 198, 198), (85, 85, 85), (139, 139, 139)
+    for y in range(166):
+        for x in range(176):
+            c = face
+            if x < 2 or y < 2:
+                c = light
+            elif x > 173 or y > 163:
+                c = dark
+            img.putpixel((x, y), c + (255,))
+
+    def slot(sx, sy):
+        for y in range(18):
+            for x in range(18):
+                c = slot_bg
+                if x == 0 or y == 0:
+                    c = dark
+                elif x == 17 or y == 17:
+                    c = light
+                img.putpixel((sx + x, sy + y), c + (255,))
+
+    for row in range(3):
+        for col in range(9):
+            slot(7 + col * 18, 83 + row * 18)
+    for col in range(9):
+        slot(7 + col * 18, 141)
+    img.save(TEX / "gui" / "machine.png", optimize=True)
+
+
+def machines():
+    (TEX / "gui").mkdir(parents=True, exist_ok=True)
+    save(panel(500), "block", "machine_side")
+    save(panel(501, trim=STEEL), "block", "machine_top")
+    save(grate(502), "block", "coal_generator_front")
+    save(grate(502, glow=[(250, 140, 30), (255, 190, 60), (220, 80, 20)]), "block", "coal_generator_front_on")
+    save(window(503, [(30, 26, 26), (44, 36, 34)]), "block", "electric_furnace_front")
+    save(window(503, [(30, 26, 26)], glow=[(230, 70, 40), (250, 120, 50), (200, 40, 30)]), "block", "electric_furnace_front_on")
+    save(jaws(504, False), "block", "crusher_front")
+    save(jaws(504, True), "block", "crusher_front_on")
+    save(battery_front(505), "block", "battery_box_front")
+    save(window(506, [(28, 30, 40), (36, 40, 52)]), "block", "arc_furnace_controller_front")
+    save(window(506, [(28, 30, 40)], glow=[(170, 210, 255), (230, 240, 255), (120, 170, 255)]), "block", "arc_furnace_controller_front_on")
+    save(panel(507, palette=BRONZE, trim=STEEL), "block", "machine_casing")
+    save(bricks(508), "block", "arc_furnace_casing")
+    save(cable_texture(), "block", "copper_cable")
+    save(cable_item(), "item", "copper_cable")
+    gui()
+
+
 def main():
     save(ore(STONE, 11), "block", "tin_ore")
     save(ore(DEEPSLATE, 12, streaks=True), "block", "deepslate_tin_ore")
@@ -297,6 +462,7 @@ def main():
     icon.paste(from_mask(INGOT, BRONZE), (0, 3), from_mask(INGOT, BRONZE))
     icon.resize((128, 128), Image.NEAREST).save(TEX.parent / "icon.png", optimize=True)
     main_extra()
+    machines()
 
 
 if __name__ == "__main__":

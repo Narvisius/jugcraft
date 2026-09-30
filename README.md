@@ -32,7 +32,7 @@ Use **Claude Opus 5.5** for AI-assisted feature implementation and review your o
 
 ## Building the mod
 
-The first content, tin and bronze plus the base materials (zinc, lead, silver, nickel, tungsten, uranium, aluminum, salt, phosphate, lithium, rare earths, sulfur, silicon and oil sand; see [docs/features/base-materials.md](docs/features/base-materials.md)), has **not been played yet**. With JDK 25 installed:
+The first content, tin and bronze plus the base materials (zinc, lead, silver, nickel, tungsten, uranium, aluminum, salt, phosphate, lithium, rare earths, sulfur, silicon and oil sand; see [docs/features/base-materials.md](docs/features/base-materials.md)), has **not been played yet**. The first machines and electricity (coal generator, copper cable, battery box, electric furnace, crusher, arc furnace multiblock) are described in [docs/features/machines-and-power.md](docs/features/machines-and-power.md). With JDK 25 installed:
 
 ```sh
 ./gradlew build          # Windows: gradlew.bat build

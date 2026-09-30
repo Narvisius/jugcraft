@@ -12,6 +12,7 @@ from pathlib import Path
 from PIL import Image
 
 from materials import MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, all_blocks, all_items, feature_of
+from machines import MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, machine_blocks, machine_recipes
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -21,6 +22,7 @@ JAVA_ROOT = ROOT / "src" / "main" / "java" / "io" / "github" / "jimbozoomer" / "
 JAVA = JAVA_ROOT / "materials" / "JugcraftMaterials.java"
 CONFIG = JAVA_ROOT / "config" / "JugcraftConfig.java"
 WORLDGEN = JAVA_ROOT / "materials" / "JugcraftWorldgen.java"
+MACHINE_JAVA = JAVA_ROOT / "machine" / "MachineKind.java"
 
 # Tags that Jugcraft reads but that vanilla/Fabric API define.
 EXTERNAL_TAGS = {"c:ingots/copper", "minecraft:stone_ore_replaceables", "minecraft:deepslate_ore_replaceables"}
@@ -76,11 +78,13 @@ def model(ref):
 
 def check_assets(registered):
     lang = load(ASSETS / "lang" / "en_us.json") or {}
-    for block in all_blocks():
+    for block in all_blocks() + machine_blocks():
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
-            for variant in state["variants"].values():
+            for variant in state.get("variants", {}).values():
                 model(variant["model"])
+            for part in state.get("multipart", []):
+                model(part["apply"]["model"])
         if f"block.{MOD}.{block}" not in lang:
             err(f"Missing name for block {block}")
         if not (DATA / MOD / "loot_table" / "blocks" / f"{block}.json").is_file():
@@ -89,7 +93,7 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             model(definition["model"]["model"])
-        if item not in all_blocks() and f"item.{MOD}.{item}" not in lang:
+        if item not in all_blocks() + machine_blocks() and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
 
@@ -105,7 +109,7 @@ def check_loot(registered):
 UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_blocks": 81}
 
 
-NON_METAL = set(MINERALS) | set(ITEMS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
+NON_METAL = set(MINERALS) | set(ITEMS) | set(machine_blocks()) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
 
 
 def item_units(ref):
@@ -131,8 +135,9 @@ def item_units(ref):
     if path == "bronze_blend":
         return {"bronze": 9}
     if path == "bauxite":
-        # Stand-in until an electrolysis machine exists: one block yields at most one nugget.
-        return {"aluminum": 1}
+        # One bauxite holds one ingot of aluminum: the arc furnace recovers all of it,
+        # the blast-furnace stand-in only a nugget.
+        return {"aluminum": 9}
     if path in NON_METAL:
         return {}
     err(f"No metal content known for {ref}")
@@ -149,8 +154,8 @@ def check_recipes(registered):
         features = [c.get("feature") for c in conditions if c.get("condition") == f"{MOD}:feature_enabled"]
         if not features:
             err(f"{name}: missing feature switch condition")
-        elif split(recipe["result"]["id"])[1] in registered and features[0] != feature_of(split(recipe["result"]["id"])[1]):
-            err(f"{name}: gated by {features[0]} but its result belongs to {feature_of(split(recipe['result']['id'])[1])}")
+        elif split(recipe["result"]["id"])[1] in registered and feature_of(split(recipe["result"]["id"])[1]) not in features:
+            err(f"{name}: gated by {features} but its result belongs to {feature_of(split(recipe['result']['id'])[1])}")
 
         kind = recipe["type"]
         if kind == "minecraft:crafting_shaped":
@@ -188,7 +193,7 @@ def check_tags():
             if value.startswith("#"):
                 if not tag_exists(registry, value[1:]):
                     err(f"{path.relative_to(ROOT)}: unknown tag {value}")
-            elif split(value)[0] == MOD and split(value)[1] not in all_blocks() + all_items():
+            elif split(value)[0] == MOD and split(value)[1] not in all_blocks() + all_items() + machine_blocks():
                 err(f"{path.relative_to(ROOT)}: unknown entry {value}")
 
 
@@ -238,14 +243,53 @@ def check_java():
             err(f"JugcraftWorldgen gates {name} by {feature}, expected {owner}")
 
 
+def check_machines(registered):
+    """Audits crusher/arc furnace recipes and keeps Java machine stats in sync with tools/machines.py."""
+    generated = load(RES / MOD / "machine_recipes.json") or {}
+    if generated != machine_recipes():
+        err("jugcraft/machine_recipes.json is stale; run tools/generate_material_data.py")
+    for machine, recipes in machine_recipes().items():
+        for recipe in recipes:
+            label = f"{machine} {recipe['input']}"
+            for ref in (recipe["input"], recipe["output"]):
+                if split(ref)[0] == MOD and split(ref)[1] not in registered:
+                    err(f"{label}: unknown item {ref}")
+            for feature in recipe["features"]:
+                if feature not in FEATURES:
+                    err(f"{label}: unknown feature {feature}")
+            units_in = sum(item_units(recipe["input"]).values())
+            units_out = sum(item_units(recipe["output"]).values()) * recipe["count"]
+            allowed = units_in * (ORE_PROCESSING_MULTIPLIER if recipe.get("ore") else 1)
+            if recipe.get("ore") and not recipe["input"].endswith("_ore"):
+                err(f"{label}: only ores get the ore-processing bonus")
+            if units_out > allowed:
+                err(f"{label}: creates metal ({units_in} in, {units_out} out, {allowed} allowed)")
+
+    kinds = MACHINE_JAVA.read_text(encoding="utf-8")
+    for machine, stats in STATS.items():
+        match = re.search(r'\("' + machine + r'", ([\d_]+), ([\d_]+), ([\d_]+), ([\d_]+),', kinds)
+        if not match:
+            err(f"MachineKind.java has no entry for {machine}")
+            continue
+        capacity, max_in, max_out, use = (int(v.replace("_", "")) for v in match.groups())
+        if capacity != stats["capacity"]:
+            err(f"{machine}: capacity {capacity} in Java, {stats['capacity']} in machines.py")
+        expected_use = stats.get("use_per_tick", 0)
+        if use != expected_use:
+            err(f"{machine}: use {use} in Java, {expected_use} in machines.py")
+    if set(MACHINES) != set(re.findall(r'\("([a-z_]+)", [\d_]+,', kinds)):
+        err("MachineKind.java and tools/machines.py list different machines")
+
+
 def main():
-    registered = set(all_blocks()) | set(all_items())
+    registered = set(all_blocks()) | set(all_items()) | set(machine_blocks())
     check_assets(sorted(registered))
     check_loot(registered)
     check_recipes(registered)
     check_tags()
     check_worldgen()
     check_java()
+    check_machines(registered)
     for path in RES.rglob("*.json"):
         load(path)
     if errors:

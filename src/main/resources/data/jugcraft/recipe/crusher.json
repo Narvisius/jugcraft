@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FFF",
+    "CMC",
+    "BRB"
+  ],
+  "key": {
+    "F": "minecraft:flint",
+    "C": "jugcraft:copper_cable",
+    "M": "jugcraft:machine_casing",
+    "B": "#c:ingots/bronze",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:crusher",
+    "count": 1
+  }
+}

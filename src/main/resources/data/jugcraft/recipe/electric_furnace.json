@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BRB",
+    "CFC",
+    "BMB"
+  ],
+  "key": {
+    "B": "#c:ingots/bronze",
+    "R": "minecraft:redstone",
+    "C": "jugcraft:copper_cable",
+    "F": "minecraft:furnace",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:electric_furnace",
+    "count": 1
+  }
+}

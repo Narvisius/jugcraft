@@ -21,7 +21,7 @@ public final class JugcraftConfig {
 	/** Every feature switch. Keep in sync with FEATURES in tools/materials.py. */
 	public static final List<String> FEATURES = List.of(
 			"tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "aluminum",
-			"salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil");
+			"salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil", "machines");
 
 	private static final String FILE_NAME = "jugcraft.properties";
 	private static final Map<String, Boolean> ENABLED = new LinkedHashMap<>();

@@ -1,0 +1,75 @@
+# Machines and electricity
+
+Status: implemented in source; **not yet played**. Compilation is checked by the Build workflow.
+Proposal issue: none yet; requested directly by the owner on 30 September 2026.
+Owner: @jimbozoomer-byte
+Target milestone and tier: Workshops (technology), first powered tier
+Primary specialty and supported player role: engineering
+
+## Player experience
+Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and store surplus in a **Battery Box**. Every machine has its own internal battery that holds charge, so machines keep working briefly after the power stops, and a generator placed directly against a machine powers it without cable.
+
+| Block | What it does | Energy (JE) |
+| --- | --- | --- |
+| Coal Generator | Burns coal/charcoal (1600 ticks) or coal blocks (16000 ticks) | Makes 32/t while burning, holds 16,000, outputs 64/t to every side. Stops burning when full, so fuel is never wasted |
+| Copper Cable | Connects generators, batteries and machines; shows connections visually | Up to 256/t per push; energy is split evenly between receivers |
+| Battery Box | Stores energy | Holds 400,000; charges from any side except the front, discharges 256/t out of the **front** |
+| Electric Furnace | Smelts anything the vanilla furnace can | 10/t, 100 ticks per item (twice the vanilla furnace's speed); holds 10,000 |
+| Crusher | Ore → 2 raw ore; mineral ores → extra minerals; sulfur → 6 sulfur dust; oil sand → 3 bitumen; cobblestone → gravel → sand | 16/t; holds 10,000 |
+| Arc Furnace (multiblock) | High-temperature processing: quartz → 2 silicon, bauxite → aluminum ingot, raw nickel/tungsten/uranium → ingots, lepidolite → 2 lithium carbonate, monazite → 2 rare earth oxide | 64/t; holds 50,000 |
+
+**Arc furnace structure:** a solid 3×3×3 cube of 26 Arc Furnace Casing blocks, with the Arc Furnace Controller in the center of one face, facing outward. Feed power into the controller's front. The screen shows whether the structure is formed; the structure is rechecked every second.
+
+Hoppers work with every machine: they insert into the input (or fuel) slot from the top or sides and pull results from the bottom.
+
+## Crafting (every part uses Jugcraft metals)
+- **Machine Casing:** bronze and zinc.
+- **Copper Cable:** 2 copper and 1 tin make 6 cables.
+- **Coal Generator:** bronze, cable, furnace and a casing.
+- **Battery Box:** lead, cable, a redstone block and a casing.
+- **Electric Furnace:** bronze, redstone, cable, furnace and a casing.
+- **Crusher:** flint, cable, a casing, bronze and redstone.
+- **Arc Furnace Casing:** bricks and nickel make 8.
+- **Arc Furnace Controller:** nickel, cable, redstone, a casing and a blast furnace.
+
+The first powered setup (generator, cable and electric furnace) needs only tin, zinc, copper, iron-tier tools and vanilla items. Nickel for the arc furnace is the step up.
+
+## Connections
+- Input producers: coal/charcoal; every Jugcraft ore and material.
+- Output consumers: the crusher and arc furnace replace the blast-furnace stand-ins with better yields. Bronze, zinc, lead, tin and nickel finally have uses.
+- Required vs optional: nothing here gates vanilla or magic progression. The blast-furnace stand-ins remain as slower, lossy routes.
+
+## Balance and automation
+- Coal in a generator gives 51,200 JE, enough for 5,120 electric-furnace ticks: about 51 items, versus 8 in a vanilla furnace.
+- The **ore-processing bonus** (crusher ore → 2 raw) is defined once (`ORE_PROCESSING_MULTIPLIER`) and applies to every ore the same way. `tools/check_mod_data.py` audits every crusher and arc furnace recipe: only ores may gain, and nothing else creates metal.
+- The electric furnace does not award smelting XP (a deliberate simplification that also prevents XP duplication).
+- Idle machines only check their input; cables have no block entities.
+
+## Multiplayer and persistence
+- **Server-authoritative:** all logic runs on the server, the screens only display synced values, and clients can't write machine state.
+- **Energy transfers** use Fabric transactions, so energy is never duplicated or lost by a failed transfer.
+- **Cable networks** are found by a search capped at 2,048 cables, cached per world, and rebuilt when any cable or machine next to a cable changes.
+- **Saving:** machines save items, energy, progress and burn time.
+- **Breaking a machine** drops its items; the stored energy is lost.
+- **Config switch:** `machines.enabled=false` in `config/jugcraft.properties` removes the machine crafting recipes and the crusher and arc furnace recipes. Placed machines keep existing.
+
+Not yet designed: ownership and permissions (anyone can open any machine), per-side configuration, and chunk-unload behavior beyond vanilla block entities (machines pause when unloaded).
+
+## Dependencies and assets
+- **Dependencies:** Fabric API only. Jugcraft defines its own energy API (`EnergyStorage.SIDED`, JE); an adapter to Team Reborn Energy can come later, once that library supports 26.3.
+- **Textures:** all original, generated by `tools/generate_textures.py` (MIT).
+
+## Verification
+Run in a sandbox without Minecraft (30 September 2026):
+- `python3 tools/check_mod_data.py`: PASS (87 IDs, including machine models, loot, crafting, the machine recipe audit and Java stats sync).
+- Negative test: a crusher recipe tripling raw tin was flagged three ways (stale file, bonus on a non-ore, metal gain).
+- `javac`: no syntax errors.
+- The Minecraft/Fabric APIs used were taken from Minecraft 26.3 classes decompiled in CI (the vanilla furnace, menu and screen) and from the fabric-api 0.161.0+26.3 source.
+
+Not run: in-game use, dedicated server with two clients, cable networks under load, performance.
+
+## Open questions
+- Should the battery box keep its charge when broken?
+- Should machines have ownership or locking?
+- Faster cable tiers, more generators (solar, steam), upgrades.
+- Should the electric furnace award XP?

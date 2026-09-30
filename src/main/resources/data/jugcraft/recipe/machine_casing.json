@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BZB",
+    "Z Z",
+    "BZB"
+  ],
+  "key": {
+    "B": "#c:ingots/bronze",
+    "Z": "#c:ingots/zinc"
+  },
+  "result": {
+    "id": "jugcraft:machine_casing",
+    "count": 1
+  }
+}

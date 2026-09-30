@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KNK",
+    "N N",
+    "KNK"
+  ],
+  "key": {
+    "K": "minecraft:bricks",
+    "N": "#c:ingots/nickel"
+  },
+  "result": {
+    "id": "jugcraft:arc_furnace_casing",
+    "count": 8
+  }
+}
