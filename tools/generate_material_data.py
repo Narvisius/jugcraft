@@ -182,6 +182,7 @@ def machine_assets(lang):
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
     # Kinetic blocks: one model each, a turning or lit variant where they have one, and rotations.
     import kinetic_models
+    import kinetic_rotors
     for block, info in KINETIC_BLOCKS.items():
         lang[f"block.{MOD}.{block}"] = info["display"]
         elements = kinetic_models.MODELS[block]
@@ -191,7 +192,18 @@ def machine_assets(lang):
             "parent": "minecraft:block/block", "textures": textures,
             "elements": model_writer.slice_model(block, elements, [(0, 0, 0)])[0]})
         swap = kinetic_models.TURNING.get(block) or kinetic_models.LIT.get(block)
-        if swap:
+        if block in kinetic_models.ROTORS:
+            # Spinning: only the static parts; client/KineticRotorRenderer draws the rotor.
+            static = kinetic_models.STATIC[block]
+            active_textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(static)}
+            active_textures["particle"] = rid("block/sp_iron")
+            if swap:
+                active_textures[swap[0]] = rid(f"block/{swap[1]}")
+            write(ASSETS / "models" / "block" / f"{block}_active.json", {
+                "parent": "minecraft:block/block", "textures": active_textures,
+                "elements": model_writer.slice_model(block, static, [(0, 0, 0)])[0] if static else []})
+            swap = True
+        elif swap:
             write(ASSETS / "models" / "block" / f"{block}_active.json", {
                 "parent": rid(f"block/{block}"), "textures": {swap[0]: rid(f"block/{swap[1]}")}})
         # The block state property the variants depend on (the Java blocks define the same ones).
@@ -214,6 +226,7 @@ def machine_assets(lang):
                 variants[suffix] = {"model": model(active)}
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {k.rstrip(","): v for k, v in variants.items()}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    write(ASSETS / "kinetic_rotors.json", kinetic_rotors.export(KINETIC_BLOCKS))
     lang[f"message.{MOD}.hand_crank"] = "Turning for %s more seconds"
     lang[f"message.{MOD}.steam_engine"] = "Steam engine: %s fuel, %s / %s mB water"
     lang[f"message.{MOD}.dynamo"] = "Dynamo: %s / %s JE"

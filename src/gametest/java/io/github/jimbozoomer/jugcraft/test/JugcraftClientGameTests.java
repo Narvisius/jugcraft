@@ -3,7 +3,10 @@ package io.github.jimbozoomer.jugcraft.test;
 import io.github.jimbozoomer.jugcraft.client.HandbookScreen;
 import io.github.jimbozoomer.jugcraft.client.MachineScreen;
 import io.github.jimbozoomer.jugcraft.client.ProspectorScreen;
+import io.github.jimbozoomer.jugcraft.kinetic.BeltPulleyBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.ElectricMotorBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.ElectricMotorBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.kinetic.ShaftBlock;
@@ -39,9 +42,6 @@ import net.minecraft.world.level.block.state.BlockState;
  * screenshots, so the looks can be checked from actual game renders rather than previews.
  */
 public class JugcraftClientGameTests implements FabricClientGameTest {
-	/** GLFW key code of F1 (hide the HUD). */
-	private static final int GLFW_KEY_F1 = 290;
-
 	@Override
 	public void runTest(ClientGameTestContext context) {
 		try (TestSingleplayerContext singleplayer = context.worldBuilder()
@@ -62,8 +62,9 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			server.runCommand("fill %d %d %d %d %d %d minecraft:air".formatted(x - 10, y, z - 10, x + 64, y + 14, z + 8));
 			server.runOnServer(minecraft -> buildShowroom(minecraft.overworld(), new BlockPos(x, y, z - 5)));
 
-			// Hide the HUD, hand and chat (F1) so the screenshots show only the machines.
-			context.getInput().pressKey(GLFW_KEY_F1);
+			// Hide the HUD, hand and chat so the screenshots show only the machines. In 26.3 this is the "toggle GUI"
+			// key mapping (F1 by default); pressing the raw F1 key code did not reach it.
+			context.getInput().pressKey(options -> options.keyToggleGui);
 
 			// One-block machines, facing the camera, in two halves.
 			server.runCommand("tp @p %d %d %d 180 25".formatted(x - 4, y, z - 2));
@@ -83,16 +84,20 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_kinetics");
 
-			// Multi-block machines.
-			// Two views: the multi-block row is about 40 blocks long, and the wind turbine is nine tall.
-			server.runCommand("tp @p %d %d %d 180 12".formatted(x + 28, y + 4, z + 12));
-			context.waitTicks(20);
+			// An electric motor driving a pulley, belted up to a second pulley that drives a crusher through a shaft.
+			server.runOnServer(minecraft -> buildBeltLine(minecraft.overworld(), new BlockPos(x + 12, y, z + 2)));
+			server.runCommand("tp @p %d %d %d 180 5".formatted(x + 14, y + 1, z + 7));
+			context.waitTicks(60);
 			singleplayer.getConnection().waitForChunksRender();
-			context.takeScreenshot("jugcraft_multiblocks");
-			server.runCommand("tp @p %d %d %d 180 12".formatted(x + 50, y + 4, z + 12));
-			context.waitTicks(20);
-			singleplayer.getConnection().waitForChunksRender();
-			context.takeScreenshot("jugcraft_multiblocks_2");
+			context.takeScreenshot("jugcraft_belts");
+
+			// Multi-block machines, ten blocks away, in three views along the row (the wind turbine is nine tall).
+			for (int view = 0; view < 3; view++) {
+				server.runCommand("tp @p %d %d %d 180 8".formatted(x + 24 + view * 12, y + 3, z + 5));
+				context.waitTicks(20);
+				singleplayer.getConnection().waitForChunksRender();
+				context.takeScreenshot("jugcraft_multiblocks_" + (view + 1));
+			}
 
 			// A machine screen: walk up to the crusher and use it.
 			BlockPos crusher = new BlockPos(x - 7 + singleIndex(MachineKind.CRUSHER), y, z - 5);
@@ -167,6 +172,26 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 		level.setBlock(gearbox.above(), JugcraftKinetics.HAND_CRANK.defaultBlockState().setValue(HandCrankBlock.FACING, Direction.DOWN), 3);
 		level.setBlock(gearbox.east(), JugcraftKinetics.DYNAMO.defaultBlockState().setValue(DynamoBlock.FACING, Direction.SOUTH), 3);
 		level.setBlock(gearbox.north(), JugcraftMachines.MACHINES.get(MachineKind.CRUSHER).defaultBlockState()
+				.setValue(MachineBlock.FACING, Direction.SOUTH), 3);
+	}
+
+	/**
+	 * A charged electric motor facing east into a pulley; that pulley is belted to one three blocks above it, which
+	 * drives a crusher through a shaft. All run along the x axis.
+	 */
+	private static void buildBeltLine(ServerLevel level, BlockPos start) {
+		level.setBlock(start, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST), 3);
+		if (level.getBlockEntity(start) instanceof ElectricMotorBlockEntity motor) {
+			motor.energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+		}
+		BlockState pulley = JugcraftKinetics.BELT_PULLEY.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.X);
+		BlockPos lower = start.east();
+		BlockPos upper = lower.above(3);
+		level.setBlock(lower, pulley, 3);
+		level.setBlock(upper, pulley, 3);
+		BeltPulleyBlockEntity.connect(level, lower, upper);
+		level.setBlock(upper.east(), JugcraftKinetics.IRON_SHAFT.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.X), 3);
+		level.setBlock(upper.east(2), JugcraftMachines.MACHINES.get(MachineKind.CRUSHER).defaultBlockState()
 				.setValue(MachineBlock.FACING, Direction.SOUTH), 3);
 	}
 

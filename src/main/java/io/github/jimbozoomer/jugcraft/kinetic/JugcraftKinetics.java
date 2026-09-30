@@ -33,6 +33,7 @@ public final class JugcraftKinetics {
 	public static Block BELT_PULLEY;
 	public static Block ELECTRIC_MOTOR;
 	public static Item BELT;
+	public static BlockEntityType<ShaftBlockEntity> SHAFT_ENTITY;
 	public static BlockEntityType<HandCrankBlockEntity> HAND_CRANK_ENTITY;
 	public static BlockEntityType<SteamEngineBlockEntity> STEAM_ENGINE_ENTITY;
 	public static BlockEntityType<DynamoBlockEntity> DYNAMO_ENTITY;
@@ -61,6 +62,8 @@ public final class JugcraftKinetics {
 		ELECTRIC_MOTOR = block("electric_motor", Blocks.IRON_BLOCK, ElectricMotorBlock::new);
 		ResourceKey<Item> beltKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("belt"));
 		BELT = Registry.register(BuiltInRegistries.ITEM, beltKey, new BeltItem(new Item.Properties().setId(beltKey)));
+		SHAFT_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("iron_shaft"),
+				FabricBlockEntityTypeBuilder.create(ShaftBlockEntity::new, IRON_SHAFT).build());
 		HAND_CRANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("hand_crank"),
 				FabricBlockEntityTypeBuilder.create(HandCrankBlockEntity::new, HAND_CRANK).build());
 		STEAM_ENGINE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("steam_engine"),

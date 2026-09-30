@@ -10,7 +10,7 @@ Primary specialty and supported player role: engineering
 - Turn a **Hand Crank** or fire a **Steam Engine**.
 - Run **Iron Shafts** and **Brass Gearboxes** to your machines; they run on the rotation directly, without cables.
 - Put a **Dynamo** on the line to feed the electric network.
-- Shafts and gearboxes animate while they turn.
+- Shafts, belt pulleys, the hand crank, the motor's output shaft and the steam engine's flywheel really spin while they turn (PR #37); the gearbox's face gears are animated.
 - Link two **Belt Pulleys** with a **Leather Belt** to carry rotation up to 16 blocks without a shaft between them.
 - An **Electric Motor** turns JE from cables into rotation.
 
@@ -50,7 +50,7 @@ A 2×2×2 steam engine, four times the small one: 256 KE/t out of a shaft at the
 - The "turning" look is a block state updated only when it changes (client-only updates). Shafts stop turning 10–20 ticks after their last push.
 
 ## Dependencies and assets
-Fabric API transfer API. Original models and textures, including animated shaft and gear textures (MIT).
+Fabric API transfer API. Original models and textures, including animated gear textures (MIT). Spinning parts are drawn by `client/KineticRotorRenderer` from `assets/jugcraft/kinetic_rotors.json`, which `tools/kinetic_rotors.py` exports from the same boxes as the block models.
 
 ## Verification
 - `tools/check_mod_data.py` passes. It now also checks animated texture strips.
@@ -61,7 +61,7 @@ Fabric API transfer API. Original models and textures, including animated shaft 
   - `electricMotorDrivesCrusher`
   - `beltCarriesRotation`
   - `beltRefusesBadPulleys`
-- The client screenshot `jugcraft_kinetics` shows a running line.
+- The client screenshots `jugcraft_kinetics` and `jugcraft_belts` show running lines.
 - Not run: client play, two players, performance with long lines.
 
 ## World and event applicability
@@ -69,5 +69,6 @@ Not applicable.
 
 ## Rollout and open questions
 - Belts and the electric motor are in (#36). Belts do not yet change speed or reverse direction; KE has no speed.
-- Shaft rotation is a texture animation, not a rotating model; a real rotating renderer could come in the polish pass.
+- Shafts placed before #37 have no block entity, so they do not spin until re-placed.
+- A spinning part is drawn up to 96 blocks away; further off, turning blocks show without it.
 - Speed/torque (RPM) is deliberately left out; KE per tick keeps it simple.

@@ -8,6 +8,10 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #37 Spinning shafts and closer screenshots
+- Shafts, belt pulleys, the hand crank, the electric motor's shaft and the steam engine's flywheel now really spin (a block entity renderer) instead of scrolling a texture. Shafts placed with earlier builds need re-placing to spin.
+- The client test photographs a belt-and-motor line and the multi-blocks from closer, in three views.
+
 ### #36 Belts and the Electric Motor
 - **Belt Pulley** and **Leather Belt:** link two pulleys up to 16 blocks apart to carry rotation; the belt is drawn between them.
 - **Electric Motor:** JE → KE at 75%, up to 96 KE/t.

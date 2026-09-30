@@ -3,6 +3,7 @@
   "textures": {
     "iron_shaft": "jugcraft:block/iron_shaft",
     "sp_brass": "jugcraft:block/sp_brass",
+    "sp_brass_plate": "jugcraft:block/sp_brass_plate",
     "particle": "jugcraft:block/sp_iron"
   },
   "elements": [
@@ -74,6 +75,38 @@
       "from": [
         5.5,
         5.5,
+        7.0
+      ],
+      "to": [
+        10.5,
+        10.5,
+        9.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass"
+        },
+        "south": {
+          "texture": "#sp_brass"
+        },
+        "east": {
+          "texture": "#sp_brass"
+        },
+        "west": {
+          "texture": "#sp_brass"
+        },
+        "up": {
+          "texture": "#sp_brass"
+        },
+        "down": {
+          "texture": "#sp_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        5.5,
         14.5
       ],
       "to": [
@@ -99,6 +132,38 @@
         },
         "down": {
           "texture": "#sp_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        10.5,
+        7.25
+      ],
+      "to": [
+        8.5,
+        11.0,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass_plate"
+        },
+        "south": {
+          "texture": "#sp_brass_plate"
+        },
+        "east": {
+          "texture": "#sp_brass_plate"
+        },
+        "west": {
+          "texture": "#sp_brass_plate"
+        },
+        "up": {
+          "texture": "#sp_brass_plate"
+        },
+        "down": {
+          "texture": "#sp_brass_plate"
         }
       }
     }

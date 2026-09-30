@@ -1,26 +1,28 @@
 """Models for kinetic-power blocks (style-independent), built from the steampunk helpers.
 
-Each model faces north. Blocks with a turning look swap one texture for an animated one (TURNING);
-the steam engine's fire door glows while it runs (LIT).
+Each model faces north. Parts that spin are listed separately as rotors: the block model shows them
+standing still, and while the block turns (or the steam engine runs) its "_active" model leaves them
+out and client/KineticRotorRenderer draws them spinning about the rotor axis. generate_material_data
+exports the rotors to assets/jugcraft/kinetic_rotors.json.
 """
 from steampunk_models import BRASS, BRASS_PLATE, COPPER, IRON, IRON_PLATE, box, cyl, dial, wheel
 
-# Texture swapped for its animated version while the block turns, and the lit steam engine's glow.
-TURNING = {"iron_shaft": ("iron_shaft", "iron_shaft_turning"),
-           "belt_pulley": ("iron_shaft", "iron_shaft_turning"),
-           "electric_motor": ("iron_shaft", "iron_shaft_turning"),
-           "brass_gearbox": ("brass_gearbox", "brass_gearbox_turning")}
+# Texture swapped for its animated version while the block turns (the gearbox has no rotor: its face gears are
+# animated), and the lit steam engine's glow.
+TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
-# Blocks with a "turning" block state (the hand crank has one but keeps a single model).
+# Blocks with a "turning" block state.
 STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor"}
 
 
 def iron_shaft():
-    """A 4-pixel iron shaft along z with brass couplings at both ends."""
-    m = [box((6, 6, 0), (10, 10, 16), "iron_shaft")]
-    for z0, z1 in ((0, 1.5), (14.5, 16)):
-        m.append(box((5.5, 5.5, z0), (10.5, 10.5, z1), BRASS))
-    return m
+    """A 4-pixel iron shaft along z with brass couplings at both ends and a brass collar in the middle, so its turning
+    shows. All of it spins."""
+    rotor = [box((6, 6, 0), (10, 10, 16), "iron_shaft")]
+    for z0, z1 in ((0, 1.5), (7, 9), (14.5, 16)):
+        rotor.append(box((5.5, 5.5, z0), (10.5, 10.5, z1), BRASS))
+    rotor.append(box((7.5, 10.5, 7.25), (8.5, 11, 8.75), BRASS_PLATE))
+    return [], rotor
 
 
 def brass_gearbox():
@@ -33,12 +35,12 @@ def brass_gearbox():
 
 
 def hand_crank():
-    """A hub against the driven block (north), an axle, a brass arm and a wooden handle."""
-    m = cyl("z", 8, 8, 3, 0, 1.5, IRON_PLATE, BRASS)
-    m += cyl("z", 8, 8, 1, 1.5, 7, IRON)
-    m.append(box((7, 7, 7), (9, 13.5, 8.5), BRASS))
-    m += cyl("z", 12, 12.5, 0.9, 8.5, 13, "sp_wood")
-    return m
+    """A hub plate against the driven block (north); the axle, brass arm and wooden handle spin."""
+    static = cyl("z", 8, 8, 3, 0, 1.5, IRON_PLATE, BRASS)
+    rotor = cyl("z", 8, 8, 1, 1.5, 7, IRON)
+    rotor.append(box((7, 7, 7), (9, 13.5, 8.5), BRASS))
+    rotor += cyl("z", 8, 12.5, 0.9, 8.5, 13, "sp_wood")
+    return static, rotor
 
 
 def steam_engine():
@@ -55,11 +57,11 @@ def steam_engine():
     # Piston cylinder and rod back to the flywheel crank.
     m += cyl("z", 3.5, 3.5, 1.75, 6, 12, BRASS, IRON)
     m.append(box((3, 3, 12), (4, 4, 14), IRON))
-    # Flywheel and the axle out of the back.
-    m += wheel("z", 8, 8, 6, 13, 14.5, IRON, BRASS)
-    m += cyl("z", 8, 8, 1.25, 11, 16, IRON)
     m.append(box((6, 1, 13.25), (10, 2.75, 14.25), IRON_PLATE))
-    return m
+    # Flywheel and the axle out of the back spin while the engine runs.
+    rotor = wheel("z", 8, 8, 6, 13, 14.5, IRON, BRASS)
+    rotor += cyl("z", 8, 8, 1.25, 11, 16, IRON)
+    return m, rotor
 
 
 def dynamo():
@@ -81,12 +83,15 @@ def dynamo():
 def belt_pulley():
     """A shaft along z carrying a grooved wooden wheel with brass rims; the belt (drawn by the client) runs in the
     groove."""
-    m = [box((6, 6, 0), (10, 10, 16), "iron_shaft")]
-    m += cyl("z", 8, 8, 5.75, 6, 10, "sp_wood", BRASS_PLATE)
+    rotor = [box((6, 6, 0), (10, 10, 16), "iron_shaft")]
+    rotor += cyl("z", 8, 8, 5.75, 6, 10, "sp_wood", BRASS_PLATE)
     for z0 in (5, 10):
-        m += cyl("z", 8, 8, 6.75, z0, z0 + 1, BRASS)
-    m += cyl("z", 8, 8, 2, 4.5, 11.5, IRON, BRASS_PLATE)
-    return m
+        rotor += cyl("z", 8, 8, 6.75, z0, z0 + 1, BRASS)
+    rotor += cyl("z", 8, 8, 2, 4.5, 11.5, IRON, BRASS_PLATE)
+    # Spokes painted on the wheel's faces, so its turning shows.
+    for z0, z1 in ((4.75, 5), (11, 11.25)):
+        rotor.append(box((7.5, 2.5, z0), (8.5, 13.5, z1), IRON))
+    return [], rotor
 
 
 def electric_motor():
@@ -96,14 +101,37 @@ def electric_motor():
     m += cyl("z", 8, 8.5, 5.5, 3.5, 14.5, "sp_coil", BRASS_PLATE)
     for z in (3, 14):
         m += cyl("z", 8, 8.5, 5.9, z, z + 1, IRON)
-    m.append(box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"))
     m.append(box((0.25, 6, 7), (2.5, 11, 11), {"*": BRASS, "west": BRASS_PLATE}))
     m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": BRASS, "east": BRASS_PLATE}))
     m.append(box((6, 14, 7), (10, 15.75, 11), {"*": BRASS, "up": BRASS_PLATE}))
     m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": BRASS, "south": BRASS_PLATE}))
-    return m
+    # The output shaft spins, with a coupling on it.
+    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), BRASS)]
+    return m, rotor
 
 
-MODELS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox(), "hand_crank": hand_crank(),
-          "steam_engine": steam_engine(), "dynamo": dynamo(), "belt_pulley": belt_pulley(),
-          "electric_motor": electric_motor()}
+def brass_gearbox_parts():
+    return brass_gearbox(), []
+
+
+def dynamo_parts():
+    return dynamo(), []
+
+
+PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "hand_crank": hand_crank(),
+         "steam_engine": steam_engine(), "dynamo": dynamo_parts(), "belt_pulley": belt_pulley(),
+         "electric_motor": electric_motor()}
+# Full models (rotor standing still) and the static parts shown while the rotor spins.
+MODELS = {block: static + rotor for block, (static, rotor) in PARTS.items()}
+STATIC = {block: static for block, (static, rotor) in PARTS.items()}
+# Rotor axis (in the north-facing model), the point it turns about (pixels, on the other two axes), the block state
+# property that sets it spinning, and its speed in degrees per tick.
+ROTORS = {
+    "iron_shaft": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 9},
+    "belt_pulley": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 9},
+    "electric_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 12},
+    "hand_crank": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 6},
+    "steam_engine": {"axis": "z", "center": (8, 8), "property": "lit", "speed": 9},
+}
+for _block in ROTORS:
+    ROTORS[_block]["elements"] = PARTS[_block][1]

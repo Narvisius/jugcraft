@@ -7,7 +7,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -15,8 +17,11 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** An iron shaft: carries rotation along its axis (see {@link KineticNetworks}). Placed like a log. */
-public class ShaftBlock extends RotatedPillarBlock {
+/**
+ * An iron shaft: carries rotation along its axis (see {@link KineticNetworks}). Placed like a log. Its
+ * block entity only lets the client draw it spinning while it turns.
+ */
+public class ShaftBlock extends RotatedPillarBlock implements EntityBlock {
 	/** Shown turning while a source drives it. */
 	public static final BooleanProperty TURNING = BooleanProperty.create("turning");
 	private static final VoxelShape X = Block.box(0, 6, 6, 16, 10, 10);
@@ -32,6 +37,11 @@ public class ShaftBlock extends RotatedPillarBlock {
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(TURNING);
+	}
+
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new ShaftBlockEntity(pos, state);
 	}
 
 	@Override

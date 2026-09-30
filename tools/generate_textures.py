@@ -1191,7 +1191,6 @@ def machines():
     save(belt_texture(), "block", "belt")
     save(belt_item(), "item", "belt")
     save(shaft_frame(0), "block", "iron_shaft")
-    save_animation([shaft_frame(-i) for i in range(8)], "iron_shaft_turning", frametime=1)
     save(gearbox_frame(0), "block", "brass_gearbox")
     save_animation([gearbox_frame(i * 11.25) for i in range(4)], "brass_gearbox_turning")
     arrow = [(5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (9, 7), (8, 6), (9, 9), (8, 10)]

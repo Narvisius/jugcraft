@@ -23,6 +23,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Draws a drive belt between two linked belt pulleys: the upper and lower runs, from groove to groove.
  * Only one pulley of each pair draws it (the one with the smaller position), so it is not drawn twice.
+ * It also draws the pulley itself spinning while it turns (see {@link KineticRotors}).
  */
 public class BeltRenderer implements BlockEntityRenderer<BeltPulleyBlockEntity, BeltRenderer.State> {
 	private static final RenderType BELT = RenderTypes.entitySolid(Jugcraft.id("textures/block/belt.png"));
@@ -33,6 +34,7 @@ public class BeltRenderer implements BlockEntityRenderer<BeltPulleyBlockEntity, 
 	public static final class State extends BlockEntityRenderState {
 		@Nullable BlockPos offset;
 		Direction.Axis axis = Direction.Axis.Y;
+		KineticRotors.@Nullable Spin spin;
 	}
 
 	public BeltRenderer(BlockEntityRendererProvider.Context context) {
@@ -51,10 +53,12 @@ public class BeltRenderer implements BlockEntityRenderer<BeltPulleyBlockEntity, 
 		BlockPos pos = pulley.getBlockPos();
 		state.offset = link != null && pos.asLong() < link.asLong() ? link.subtract(pos) : null;
 		state.axis = pulley.getBlockState().getValue(ShaftBlock.AXIS);
+		state.spin = KineticRotors.extract(pulley, partialTick);
 	}
 
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+		KineticRotors.submit(state.spin, pose, collector, state.lightCoords);
 		if (state.offset == null) {
 			return;
 		}

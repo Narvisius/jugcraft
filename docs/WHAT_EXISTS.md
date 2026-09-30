@@ -111,7 +111,7 @@ Other blocks:
 | `item_sorter` | `logistics/ItemSorterBlock(Entity)` | 9-slot filter into the inventory it faces |
 | `brass_wrench` (item) | `logistics/BrassWrenchItem` | rotate; sneak to dismantle |
 | `item_crate` | `storage/CrateBlock(Entity)`, `JugcraftStorage` | 32 stacks of one item; Fabric `SingleItemStorage` |
-| `iron_shaft`, `brass_gearbox` | `kinetic/ShaftBlock`, `GearboxBlock` | carry KE (along the axis / out of all sides); `turning` block state |
+| `iron_shaft`, `brass_gearbox` | `kinetic/ShaftBlock(Entity)`, `GearboxBlock` | carry KE (along the axis / out of all sides); `turning` block state |
 | `hand_crank`, `steam_engine` | `kinetic/HandCrankBlock(Entity)`, `SteamEngineBlock(Entity)` | KE sources: 16 KE/t cranked, 64 KE/t from fuel + water |
 | `dynamo` | `kinetic/DynamoBlock(Entity)` | KE → JE at 75%; any `MachineBlockEntity` also takes KE directly (`KineticConsumer`) |
 | `belt_pulley`, `belt` (item) | `kinetic/BeltPulleyBlock(Entity)`, `BeltItem` | a shaft whose BE saves `link`; `BeltPulleyBlockEntity.cannotLink`/`connect`; drawn by client `BeltRenderer` |
@@ -141,7 +141,7 @@ Other blocks:
 - **KE per tick**, carried by `ShaftBlock` (along its axis) and `GearboxBlock` (all sides). A source calls `KineticNetworks.push(level, pos, side, amount)`, which splits power evenly between the `KineticConsumer`s at the ends of the line.
 - **Consumers:** `MachineBlockEntity` (as JE, up to `kind.maxInput`, for any powered non-generator, non-battery kind, reached through any block of a multi-block) and `DynamoBlockEntity` (KE → JE at 75%).
 - **Caching:** networks are cached per (source, side) and level. Shafts, gearboxes, sources and the dynamo call `KineticNetworks.invalidate(level)` when placed, removed or their neighbors change. There are at most 256 parts per network.
-- **Turning look:** `ShaftBlock.TURNING`, set by the network with client-only updates and cleared by a scheduled tick 10–20 ticks after the last push.
+- **Turning look:** `ShaftBlock.TURNING`, set by the network with client-only updates and cleared by a scheduled tick 10–20 ticks after the last push. While it is set (or a steam engine is `lit`), the block's `_active` model leaves out its rotor and client `KineticRotorRenderer` (via `KineticRotors`) draws it spinning, from `assets/jugcraft/kinetic_rotors.json` (exported by `tools/kinetic_rotors.py` from `kinetic_models.ROTORS`). `ShaftBlockEntity` holds no data; it exists only for the renderer.
 
 ### Fluids (`fluid/`)
 
