@@ -11,13 +11,16 @@ from pathlib import Path
 
 from PIL import Image
 
-from materials import MOD, METALS, all_blocks, all_items
+from materials import MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, all_blocks, all_items, feature_of
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
 ASSETS = RES / "assets" / MOD
 DATA = RES / "data"
-JAVA = ROOT / "src" / "main" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "materials" / "JugcraftMaterials.java"
+JAVA_ROOT = ROOT / "src" / "main" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft"
+JAVA = JAVA_ROOT / "materials" / "JugcraftMaterials.java"
+CONFIG = JAVA_ROOT / "config" / "JugcraftConfig.java"
+WORLDGEN = JAVA_ROOT / "materials" / "JugcraftWorldgen.java"
 
 # Tags that Jugcraft reads but that vanilla/Fabric API define.
 EXTERNAL_TAGS = {"c:ingots/copper", "minecraft:stone_ore_replaceables", "minecraft:deepslate_ore_replaceables"}
@@ -102,11 +105,16 @@ def check_loot(registered):
 UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_blocks": 81}
 
 
+NON_METAL = set(MINERALS) | set(ITEMS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
+
+
 def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
     ns, path = split(ref.lstrip("#"))
     if ref.startswith("#"):
         form, _, metal = path.partition("/")
+        if metal in MINERALS:
+            return {}
         if form not in UNITS or not metal:
             err(f"Recipe uses unsupported tag {ref}")
             return {}
@@ -122,6 +130,11 @@ def item_units(ref):
             return {metal: table[path]}
     if path == "bronze_blend":
         return {"bronze": 9}
+    if path == "bauxite":
+        # Stand-in until an electrolysis machine exists: one block yields at most one nugget.
+        return {"aluminum": 1}
+    if path in NON_METAL:
+        return {}
     err(f"No metal content known for {ref}")
     return {}
 
@@ -133,8 +146,11 @@ def check_recipes(registered):
             continue
         name = path.stem
         conditions = recipe.get("fabric:load_conditions", [])
-        if not any(c.get("condition") == f"{MOD}:feature_enabled" for c in conditions):
+        features = [c.get("feature") for c in conditions if c.get("condition") == f"{MOD}:feature_enabled"]
+        if not features:
             err(f"{name}: missing feature switch condition")
+        elif split(recipe["result"]["id"])[1] in registered and features[0] != feature_of(split(recipe["result"]["id"])[1]):
+            err(f"{name}: gated by {features[0]} but its result belongs to {feature_of(split(recipe['result']['id'])[1])}")
 
         kind = recipe["type"]
         if kind == "minecraft:crafting_shaped":
@@ -193,9 +209,33 @@ def check_java():
     declared = {}
     for name, chain in re.findall(r'MetalFamily\.builder\("([a-z_]+)"\)([^;]*)\.build\(\)', source):
         declared[name] = {"mined": ".mined()" in chain, "extras": re.findall(r'extraItem\("([a-z_]+)"\)', chain)}
-    expected = {name: {"mined": info["mined"], "extras": info["extras"]} for name, info in METALS.items()}
+    expected = {name: {"mined": info["mined"], "extras": info.get("extras", [])} for name, info in METALS.items()}
     if declared != expected:
-        err(f"JugcraftMaterials.java declares {declared}, tools/materials.py expects {expected}")
+        err(f"JugcraftMaterials.java metals {declared} != tools/materials.py {expected}")
+
+    minerals = re.findall(r'MineralFamily\.register\("([a-z_]+)"\)', source)
+    if minerals != list(MINERALS):
+        err(f"JugcraftMaterials.java minerals {minerals} != {list(MINERALS)}")
+    rocks = re.findall(r'JugcraftRegistry\.block\("([a-z_]+)"', source)
+    if rocks != list(ROCKS):
+        err(f"JugcraftMaterials.java rocks {rocks} != {list(ROCKS)}")
+    items = re.findall(r'JugcraftRegistry\.item\("([a-z_]+)"\)', source)
+    if items != list(ITEMS):
+        err(f"JugcraftMaterials.java items {items} != {list(ITEMS)}")
+
+    features = re.findall(r'"([a-z_]+)"', CONFIG.read_text(encoding="utf-8").split("List.of(")[1].split(");")[0])
+    if features != FEATURES:
+        err(f"JugcraftConfig.FEATURES {features} != {FEATURES}")
+
+    worldgen = WORLDGEN.read_text(encoding="utf-8")
+    placed = sorted(p.stem[4:] for p in (DATA / MOD / "worldgen" / "placed_feature").glob("ore_*.json"))
+    in_java = sorted(set(re.findall(r'\{"([a-z_]+)", "[a-z_]+"\}', worldgen)) | set(re.findall(r'add\("([a-z_]+)"', worldgen)))
+    if placed != in_java:
+        err(f"JugcraftWorldgen adds {in_java}, data defines {placed}")
+    for name, feature in re.findall(r'\{"([a-z_]+)", "([a-z_]+)"\}', worldgen) + re.findall(r'add\("([a-z_]+)", "([a-z_]+)"', worldgen):
+        owner = feature_of(name if name in ROCKS else f"{name}_ore")
+        if feature != owner:
+            err(f"JugcraftWorldgen gates {name} by {feature}, expected {owner}")
 
 
 def main():

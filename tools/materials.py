@@ -1,48 +1,137 @@
 """Single source of truth for Jugcraft material data (IDs, recipes, tags, worldgen).
 
-Minecraft 26.3's data-generation run cannot execute in every contributor environment,
-so the JSON resources are produced by generate_material_data.py from this table and
-checked by check_mod_data.py. Keep it in sync with materials/JugcraftMaterials.java.
+generate_material_data.py writes the JSON resources from this table, and
+check_mod_data.py verifies them. Keep it in sync with materials/JugcraftMaterials.java.
+
+Real-world processing (electrolysis, arc furnaces, solvent extraction, oil refining)
+needs machines that do not exist yet. Until they do, the hard steps use the vanilla
+blast furnace as a clearly marked stand-in, and liquid crude oil is not added.
 """
 
 MOD = "jugcraft"
 
-# name -> (mined, extra items, display name, feature switch)
+# Feature switches (config/jugcraft.properties). Order is the config file order.
+FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "aluminum",
+            "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil"]
+
+# Metals use the vanilla form set. "mined" adds ore, deepslate ore, raw item and raw block.
+# cook: which vanilla cookers can smelt the ore/raw form. tool: minimum pickaxe tier.
 METALS = {
-    "tin": {"mined": True, "extras": [], "display": "Tin", "feature": "tin"},
-    "bronze": {"mined": False, "extras": ["bronze_blend"], "display": "Bronze", "feature": "tin"},
+    "tin": {"mined": True, "display": "Tin", "feature": "tin", "cook": ["smelting", "blasting"], "xp": 0.7,
+            "tool": "stone", "gen": {"size": 9, "count": 8, "min_y": -32, "max_y": 96}},
+    "zinc": {"mined": True, "display": "Zinc", "feature": "zinc", "cook": ["smelting", "blasting"], "xp": 0.7,
+             "tool": "stone", "gen": {"size": 9, "count": 7, "min_y": -16, "max_y": 80}},
+    "lead": {"mined": True, "display": "Lead", "feature": "lead", "cook": ["smelting", "blasting"], "xp": 0.7,
+             "tool": "stone", "gen": {"size": 9, "count": 6, "min_y": -48, "max_y": 64}},
+    "silver": {"mined": True, "display": "Silver", "feature": "silver", "cook": ["smelting", "blasting"], "xp": 1.0,
+               "tool": "iron", "gen": {"size": 6, "count": 3, "min_y": -64, "max_y": 32}},
+    "nickel": {"mined": True, "display": "Nickel", "feature": "nickel", "cook": ["blasting"], "xp": 0.7,
+               "tool": "iron", "gen": {"size": 7, "count": 4, "min_y": -64, "max_y": 16}},
+    "tungsten": {"mined": True, "display": "Tungsten", "feature": "tungsten", "cook": ["blasting"], "xp": 1.0,
+                 "tool": "iron", "gen": {"size": 5, "count": 2, "min_y": -64, "max_y": 0}},
+    "uranium": {"mined": True, "display": "Uranium", "feature": "uranium", "cook": ["blasting"], "xp": 1.0,
+                "tool": "iron", "gen": {"size": 4, "count": 1, "min_y": -64, "max_y": -16}},
+    "bronze": {"mined": False, "display": "Bronze", "feature": "tin", "extras": ["bronze_blend"]},
+    "aluminum": {"mined": False, "display": "Aluminum", "feature": "aluminum"},
+}
+
+# Non-metal ores: <name>_ore, deepslate_<name>_ore, item <name>, storage block <name>_block.
+MINERALS = {
+    "salt": {"display": "Salt", "ore_display": "Rock Salt", "feature": "salt", "drops": [2, 4], "tool": "stone",
+             "gen": {"size": 12, "count": 4, "min_y": 0, "max_y": 64}},
+    "phosphate": {"display": "Phosphate", "ore_display": "Phosphorite", "feature": "phosphate", "drops": [1, 3],
+                  "tool": "stone", "gen": {"size": 10, "count": 4, "min_y": -16, "max_y": 48}},
+    "lepidolite": {"display": "Lepidolite", "ore_display": "Lepidolite", "feature": "lithium", "drops": [1, 2],
+                   "tool": "iron", "gen": {"size": 7, "count": 3, "min_y": -48, "max_y": 32}},
+    "monazite": {"display": "Monazite", "ore_display": "Monazite", "feature": "rare_earths", "drops": [1, 1],
+                 "tool": "iron", "gen": {"size": 5, "count": 2, "min_y": -64, "max_y": 16}},
+}
+
+# Surface rocks with their own blocks. copy: vanilla block whose properties are copied.
+ROCKS = {
+    "bauxite": {"display": "Bauxite", "feature": "aluminum", "copy": "GRANITE", "tool": "pickaxe", "drop": None,
+                "gen": {"size": 33, "count": 4, "min_y": 50, "max_y": 100, "target": "minecraft:stone_ore_replaceables",
+                        "biomes": ["IS_JUNGLE", "IS_SAVANNA", "IS_BADLANDS"]}},
+    "oil_sand": {"display": "Oil Sand", "feature": "crude_oil", "copy": "SAND", "tool": "shovel",
+                 "drop": {"item": "bitumen", "min": 1, "max": 2},
+                 "gen": {"size": 24, "count": 3, "min_y": 50, "max_y": 90, "target": "minecraft:sand",
+                         "biomes": ["IS_DESERT", "IS_BADLANDS"]}},
+}
+
+# Plain items: display name, feature, optional c: tag path.
+ITEMS = {
+    "bitumen": {"display": "Bitumen", "feature": "crude_oil", "tag": None},
+    "sulfur_dust": {"display": "Sulfur Dust", "feature": "sulfur", "tag": "dusts/sulfur"},
+    "silicon": {"display": "Silicon", "feature": "silicon", "tag": "silicon"},
+    "lithium_carbonate": {"display": "Lithium Carbonate", "feature": "lithium", "tag": "dusts/lithium_carbonate"},
+    "rare_earth_oxide": {"display": "Rare Earth Oxide", "feature": "rare_earths", "tag": "dusts/rare_earth_oxide"},
 }
 
 EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
 
-# Ore generation targets from issue #2 (tunable; roughly half of vanilla copper).
-ORE_GEN = {
-    "tin": {"size": 9, "count": 8, "min_y": -32, "max_y": 96},
-}
+# Extra c: item tags for mineral items.
+MINERAL_TAGS = {"salt": "dusts/salt", "phosphate": "dusts/phosphate"}
+
+# Processing recipes beyond the standard metal/mineral set.
+# kind: shapeless | smelting | blasting. Blast-furnace entries marked stand_in replace
+# machines that do not exist yet (electrolysis, arc furnace, separation).
+PROCESSING = [
+    {"id": "bronze_blend", "kind": "shapeless", "feature": "tin",
+     "inputs": ["#c:ingots/copper", "#c:ingots/copper", "#c:ingots/copper", "#c:ingots/tin"], "result": "bronze_blend", "count": 4},
+    {"id": "bronze_ingot_from_smelting_bronze_blend", "kind": "smelting", "feature": "tin",
+     "input": "jugcraft:bronze_blend", "result": "bronze_ingot", "xp": 0.1},
+    {"id": "bronze_ingot_from_blasting_bronze_blend", "kind": "blasting", "feature": "tin",
+     "input": "jugcraft:bronze_blend", "result": "bronze_ingot", "xp": 0.1},
+    {"id": "aluminum_nugget_from_blasting_bauxite", "kind": "blasting", "feature": "aluminum", "stand_in": True,
+     "input": "jugcraft:bauxite", "result": "aluminum_nugget", "xp": 0.2},
+    {"id": "sulfur_dust", "kind": "shapeless", "feature": "sulfur",
+     "inputs": ["minecraft:sulfur"], "result": "sulfur_dust", "count": 4},
+    {"id": "silicon_from_blasting_quartz", "kind": "blasting", "feature": "silicon", "stand_in": True,
+     "input": "minecraft:quartz", "result": "silicon", "xp": 0.2},
+    {"id": "lithium_carbonate", "kind": "blasting", "feature": "lithium", "stand_in": True,
+     "input": "jugcraft:lepidolite", "result": "lithium_carbonate", "xp": 0.2},
+    {"id": "rare_earth_oxide", "kind": "blasting", "feature": "rare_earths", "stand_in": True,
+     "input": "jugcraft:monazite", "result": "rare_earth_oxide", "xp": 0.3},
+]
 
 
-def blocks(metal):
-    info = METALS[metal]
+def metal_blocks(metal):
     out = []
-    if info["mined"]:
+    if METALS[metal]["mined"]:
         out += [f"{metal}_ore", f"deepslate_{metal}_ore", f"raw_{metal}_block"]
     out.append(f"{metal}_block")
     return out
 
 
-def items(metal):
+def metal_items(metal):
     info = METALS[metal]
-    out = []
-    if info["mined"]:
-        out.append(f"raw_{metal}")
-    out += info["extras"]
+    out = [f"raw_{metal}"] if info["mined"] else []
+    out += info.get("extras", [])
     out += [f"{metal}_ingot", f"{metal}_nugget"]
     return out
 
 
+def mineral_blocks(mineral):
+    return [f"{mineral}_ore", f"deepslate_{mineral}_ore", f"{mineral}_block"]
+
+
 def all_blocks():
-    return [b for m in METALS for b in blocks(m)]
+    return ([b for m in METALS for b in metal_blocks(m)] + [b for m in MINERALS for b in mineral_blocks(m)]
+            + list(ROCKS))
 
 
 def all_items():
-    return [i for m in METALS for i in items(m)]
+    return [i for m in METALS for i in metal_items(m)] + list(MINERALS) + list(ITEMS)
+
+
+def feature_of(entry_id):
+    """The feature switch that owns a registered ID."""
+    for metal, info in METALS.items():
+        if entry_id in metal_blocks(metal) + metal_items(metal):
+            return info["feature"]
+    for mineral, info in MINERALS.items():
+        if entry_id == mineral or entry_id in mineral_blocks(mineral):
+            return info["feature"]
+    if entry_id in ROCKS:
+        return ROCKS[entry_id]["feature"]
+    return ITEMS[entry_id]["feature"]

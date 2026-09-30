@@ -1,18 +1,11 @@
 package io.github.jimbozoomer.jugcraft.materials;
 
-import io.github.jimbozoomer.jugcraft.Jugcraft;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -37,10 +30,10 @@ public final class MetalFamily {
 		this.name = builder.name;
 
 		if (builder.mined) {
-			this.ore = block(name + "_ore", Blocks.IRON_ORE);
-			this.deepslateOre = block("deepslate_" + name + "_ore", Blocks.DEEPSLATE_IRON_ORE);
-			this.rawBlock = block("raw_" + name + "_block", Blocks.RAW_IRON_BLOCK);
-			this.raw = item("raw_" + name);
+			this.ore = JugcraftRegistry.block(name + "_ore", Blocks.IRON_ORE);
+			this.deepslateOre = JugcraftRegistry.block("deepslate_" + name + "_ore", Blocks.DEEPSLATE_IRON_ORE);
+			this.rawBlock = JugcraftRegistry.block("raw_" + name + "_block", Blocks.RAW_IRON_BLOCK);
+			this.raw = JugcraftRegistry.item("raw_" + name);
 		} else {
 			this.ore = null;
 			this.deepslateOre = null;
@@ -50,34 +43,17 @@ public final class MetalFamily {
 
 		List<Item> extraList = new ArrayList<>();
 		for (String extra : builder.extraItems) {
-			extraList.add(item(extra));
+			extraList.add(JugcraftRegistry.item(extra));
 		}
 		this.extras = Collections.unmodifiableList(extraList);
 
-		this.storageBlock = block(name + "_block", Blocks.IRON_BLOCK);
-		this.ingot = item(name + "_ingot");
-		this.nugget = item(name + "_nugget");
+		this.storageBlock = JugcraftRegistry.block(name + "_block", Blocks.IRON_BLOCK);
+		this.ingot = JugcraftRegistry.item(name + "_ingot");
+		this.nugget = JugcraftRegistry.item(name + "_nugget");
 	}
 
 	public static Builder builder(String name) {
 		return new Builder(name);
-	}
-
-	private static Item item(String path) {
-		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Jugcraft.id(path));
-		Item item = Registry.register(BuiltInRegistries.ITEM, key, new Item(new Item.Properties().setId(key)));
-		return item;
-	}
-
-	private static Block block(String path, Block copyFrom) {
-		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id(path));
-		Block block = Registry.register(BuiltInRegistries.BLOCK, blockKey,
-				new Block(BlockBehaviour.Properties.ofFullCopy(copyFrom).setId(blockKey)));
-
-		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id(path));
-		Registry.register(BuiltInRegistries.ITEM, itemKey,
-				new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
-		return block;
 	}
 
 	public static final class Builder {

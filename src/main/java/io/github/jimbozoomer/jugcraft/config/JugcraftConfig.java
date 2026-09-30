@@ -6,31 +6,31 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import net.fabricmc.loader.api.FabricLoader;
 
 /**
- * Server-side feature switches, read once at startup from config/jugcraft.properties.
- * Switches disable acquisition (worldgen and recipes); they never unregister content.
+ * Server-side feature switches, read once at startup from config/jugcraft.properties
+ * as {@code <feature>.enabled}. A switch disables acquisition (worldgen and recipes);
+ * it never unregisters content, so saved blocks and items survive.
  */
 public final class JugcraftConfig {
-	private static final String FILE_NAME = "jugcraft.properties";
-	private static final String TIN_KEY = "tin.enabled";
+	/** Every feature switch. Keep in sync with FEATURES in tools/materials.py. */
+	public static final List<String> FEATURES = List.of(
+			"tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "aluminum",
+			"salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil");
 
-	private static boolean tinEnabled = true;
+	private static final String FILE_NAME = "jugcraft.properties";
+	private static final Map<String, Boolean> ENABLED = new LinkedHashMap<>();
 
 	private JugcraftConfig() {
 	}
 
-	public static boolean tinEnabled() {
-		return tinEnabled;
-	}
-
 	public static boolean isFeatureEnabled(String feature) {
-		return switch (feature) {
-			case "tin" -> tinEnabled;
-			default -> false;
-		};
+		return ENABLED.getOrDefault(feature, false);
 	}
 
 	public static void load() {
@@ -45,8 +45,12 @@ public final class JugcraftConfig {
 			}
 		}
 
-		tinEnabled = Boolean.parseBoolean(properties.getProperty(TIN_KEY, "true"));
-		properties.setProperty(TIN_KEY, Boolean.toString(tinEnabled));
+		for (String feature : FEATURES) {
+			String key = feature + ".enabled";
+			boolean enabled = Boolean.parseBoolean(properties.getProperty(key, "true"));
+			ENABLED.put(feature, enabled);
+			properties.setProperty(key, Boolean.toString(enabled));
+		}
 
 		try (Writer writer = Files.newBufferedWriter(path)) {
 			properties.store(writer, "Jugcraft feature switches. false stops new worldgen and recipes; existing items and blocks stay.");

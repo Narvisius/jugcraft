@@ -32,7 +32,7 @@ Use **Claude Opus 5.5** for AI-assisted feature implementation and review your o
 
 ## Building the mod
 
-The first content, tin and bronze, compiles in CI but has **not been played yet**. With JDK 25 installed:
+The first content, tin and bronze plus the base materials (zinc, lead, silver, nickel, tungsten, uranium, aluminum, salt, phosphate, lithium, rare earths, sulfur, silicon and oil sand; see [docs/features/base-materials.md](docs/features/base-materials.md)), has **not been played yet**. With JDK 25 installed:
 
 ```sh
 ./gradlew build          # Windows: gradlew.bat build

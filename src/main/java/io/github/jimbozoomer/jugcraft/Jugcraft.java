@@ -25,6 +25,6 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftMaterials.register();
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
-		LOGGER.info("Jugcraft loaded (tin enabled: {})", JugcraftConfig.tinEnabled());
+		LOGGER.info("Jugcraft loaded");
 	}
 }

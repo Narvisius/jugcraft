@@ -38,6 +38,12 @@ processResources {
 	}
 }
 
+test {
+	// src/test currently holds only compile-time guards (VanillaReferences), not runnable
+	// tests. Gradle 9 fails a test task that discovers none; remove this once real tests exist.
+	failOnNoDiscoveredTests = false
+}
+
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 25
 }
