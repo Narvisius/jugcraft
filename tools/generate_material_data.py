@@ -12,6 +12,7 @@ from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL
 
 from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS, UPGRADES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
+from party import party_lang
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -90,6 +91,7 @@ def assets():
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
         lang[f"item.{MOD}.{item}"] = item_name(item)
     machine_assets(lang)
+    party_lang(lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from party import PARTY_LANG
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS, WASHED_ORES,
                        all_blocks, all_items, feature_of)
 from machines import (MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, BYPRODUCT_SHARE,
@@ -295,6 +296,13 @@ def check_java():
     features = re.findall(r'"([a-z_]+)"', CONFIG.read_text(encoding="utf-8").split("List.of(")[1].split(");")[0])
     if features != FEATURES:
         err(f"JugcraftConfig.FEATURES {features} != {FEATURES}")
+
+    # Every party action result needs a chat message (party/PartyCommands.java shows them).
+    party_source = (JAVA_ROOT / "party" / "PartyManager.java").read_text(encoding="utf-8")
+    results = re.findall(r"\b([A-Z_]+)\b", re.search(r"enum Result \{([^}]*)\}", party_source).group(1))
+    for result in results:
+        if f"error.{result.lower()}" not in PARTY_LANG:
+            err(f"PartyManager.Result.{result} has no message in tools/party.py")
 
     worldgen = WORLDGEN.read_text(encoding="utf-8")
     placed = sorted(p.stem[4:] for p in (DATA / MOD / "worldgen" / "placed_feature").glob("ore_*.json"))
