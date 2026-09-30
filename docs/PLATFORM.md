@@ -1,8 +1,14 @@
 # Platform decision and bootstrap gate
 
+## Selected platform
+
+The owner has selected **Minecraft Java Edition 26.3 + Fabric** for Jugcraft. Build original systems from scratch; availability of third-party content mods does not determine this choice. Jugcraft remains one original mod with internal feature packages, using Fabric API where appropriate.
+
+Do not use a floating `latest` version or assume Minecraft's version number is the Java/JDK version. Do not automatically upgrade the project when Minecraft releases a new version.
+
 ## Current pins (compile-verified)
 
-The bootstrap scaffold targets **Minecraft Java Edition 26.3 + Fabric** with these pins in `gradle.properties`:
+The bootstrap scaffold pins these in `gradle.properties`:
 
 | Component | Pin | Source |
 | --- | --- | --- |
@@ -15,23 +21,19 @@ The bootstrap scaffold targets **Minecraft Java Edition 26.3 + Fabric** with the
 
 All pins resolved and the mod compiled in the Build workflow on 30 September 2026 (`./gradlew build` → BUILD SUCCESSFUL, Temurin JDK 25.0.4; PR #4). That proves compilation only: the client, dedicated server and two-client test have not been run yet.
 
-Status: pending dependency compatibility assessment. Minecraft Java Edition is the target. No game or loader versions are pinned yet; there is no Gradle build in this foundation.
+## Bootstrap status
 
-The earlier Fabric suggestion was a starting option. The emphasis on tech/magic integrations means the first approved external mods must inform the loader and Minecraft version. Evaluate Fabric and NeoForge against those actual dependencies rather than promising compatibility in advance.
+1. ~~Generate a Minecraft 26.3 Fabric project~~ Done in PR #4 (Loom project, `jugcraft` metadata, separate client source set).
+2. ~~Pin and verify the full toolchain~~ Done: see the table above. There is no mapping configuration, because 26.x is unobfuscated.
+3. ~~Add `jugcraft` metadata, client code and a minimal item/recipe~~ Done, and expanded by PRs #4–#7.
+4. Document tested Windows and Unix build, client launch, dedicated-server launch and game-test commands. **Partly done:** `./gradlew build` is verified in CI; `runClient`/`runServer` are documented but not yet run.
+5. ~~Replace the foundation-only source gate with actual compilation~~ Done: the Build workflow compiles the mod and runs the data checks. GameTests are not written yet. Requiring the Build check on `main` is a GitHub settings step for the owner.
+6. Run a dedicated server with two clients, test save/restart, and record exact versions and evidence. **Not done yet.**
+7. ~~Select the project license~~ Done: MIT (see [LICENSE_POLICY.md](../LICENSE_POLICY.md)). Publish accurate installation requirements with the first release.
 
-## Required bootstrap PR
+Next, establish shared material, recipe, resource, progression and persistence interfaces before accepting disconnected large systems. Follow the owner-directed [design](DESIGN.md) and [specialties](CONTENT_BRANCHES.md).
 
-1. List the initial required and optional external mods, official links, exact supported versions, and licenses. It is also valid to choose an original-content-only first milestone.
-2. Record a decision here for one Minecraft version, loader and exact version, Java major, build plugin, mappings, and Gradle wrapper version/checksum.
-3. Generate a project from that loader's official template; preserve its required notices and record provenance.
-4. Add `jugcraft` mod metadata, separated client code, and one minimal registered item/recipe.
-5. Document actual Windows and Unix build, client launch, server launch, and game-test commands after verifying them.
-6. Add CI compilation and applicable unit/game tests; require their stable check names on main. Do not treat repository checks as a mod build.
-7. Run a dedicated server with two clients, test save/restart, and record exact versions and evidence.
-8. Select the project license before accepting implementation/assets. Publish client/server installation manifests when needed.
-
-Only after this PR is reviewed and merged should feature implementation begin.
-
-Official references:
+Official references used for platform selection:
+- https://www.minecraft.net/en-us/article/minecraft-java-edition-26-3
+- https://www.fabricmc.net/2026/09/15/263.html
 - https://docs.fabricmc.net/develop/getting-started/creating-a-project
-- https://docs.neoforged.net/docs/gettingstarted/

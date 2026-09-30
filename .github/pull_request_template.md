@@ -4,7 +4,8 @@ Approved proposal: Closes #
 Feature record under docs/features/:
 
 ## Progression and integration
-Tier and reachable entry path:
+Primary specialty, tier and reachable entry path:
+Required vs optional connections; trade/solo routes:
 Existing input producer and output consumer:
 Technology/magic connections (or infrastructure/cosmetic applicability):
 Balance/automation/conversion effects:
@@ -19,6 +20,7 @@ Not-run checks and why:
 
 ## Compatibility and provenance
 Save migration and disable/rollback behavior:
+Worldgen, dimension-return, pet/boss containment and seasonal expiry behavior (where applicable):
 Dependencies, source/asset licenses and attribution:
 
 ## AI attribution

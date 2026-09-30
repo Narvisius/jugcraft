@@ -1,10 +1,17 @@
 # Contributing to Jugcraft
 
+## Owner-authorized development
+
+The owner authorized Claude to build the Minecraft 26.3 + Fabric bootstrap without a separate proposal issue or second maintainer. That bootstrap is done: the scaffold, pinned toolchain, Build workflow, base materials, machines and power were merged in PRs #4–#7 (see [docs/PLATFORM.md](docs/PLATFORM.md)). The project license is MIT (see [LICENSE_POLICY.md](LICENSE_POLICY.md)). Still outstanding: running the client and dedicated server, and the two-client playtest.
+
+Main requires a PR and passing checks, but zero independent approvals while there is one maintainer. The owner can merge their own PR after reviewing it. CODEOWNERS routes review; its approval is not mandatory. Keep no-force-push/no-deletion and CI protections. Restore independent review when the owner chooses to add maintainers.
+
+
 ## 1. Propose the idea first
 
-Open a Feature proposal or Existing mod integration issue using the Issues tab. Search existing issues first. Describe the player experience, progression tier, inputs, outputs, and connections to other systems. Small documentation corrections and bug fixes can go straight to a PR.
+Open a Feature proposal or Existing mod integration issue using the Issues tab. Search existing issues first. Describe the player experience, specialty, progression tier, inputs, outputs, and connections to other systems. Read docs/CONTENT_BRANCHES.md for the content scope. State which connections are required or optional, how trade/solo routes work, and why the specialty remains useful without mastering every branch. Small documentation corrections and bug fixes can go straight to a PR.
 
-Wait for a maintainer to approve the scope in the issue before starting substantial work. Maintainers should assign one lead contributor to avoid duplicate work. The project license is MIT (see LICENSE_POLICY.md). While the platform milestone is open, contribute proposals and documentation; implementation is gated on the verified platform bootstrap.
+Wait for a maintainer to approve the scope in the issue before starting substantial work. Maintainers should assign one lead contributor to avoid duplicate work. Community proposals remain welcome. The project license is MIT (see LICENSE_POLICY.md), and the platform bootstrap is merged, so implementation proposals can now build on it.
 
 ## 2. Fork, branch, commit
 

@@ -1,12 +1,12 @@
 # Jugcraft
 
-A community-built Minecraft Java experience where technology and magic advance together.
+A community-built Minecraft Java 26.3 + Fabric experience about factories, magical workshops, cozy homes, and dangerous frontiers.
 
-**Status: contribution foundation.** Feature proposals and documentation contributions are welcome. There is no playable mod, server, or Minecraft build yet. The first implementation milestone establishes the pinned platform and working mod before feature code is accepted.
+**Status: early development.** The Minecraft 26.3 + Fabric mod compiles in CI and contains the base materials, electricity and first machines, but it has not been play-tested yet. Feature proposals and documentation contributions are welcome.
 
 ## The vision
 
-Explore to discover arcane materials. Build machines to refine them. Use those materials in rituals that unlock better automation. Trade and cooperate with other players to build a connected world.
+Build factories and magical workshops, specialize in agriculture or a school of magic, and trade with other players. Settle in cozy biomes, brave dangerous caves and dungeons, raise friendly companions, find rare equipment, launch rockets to moons and planets, and open portals to magical realms. Halloween and Christmas-esque seasonal content should grow from these permanent systems. Branches stand on their own while supporting each other at meaningful milestones.
 
 Jugcraft's original gameplay ships as one mod, organized into internal feature packages. Third-party mods, if approved, remain separately installed dependencies in an accompanying pack. We do not copy their code or bundle their JARs into Jugcraft.
 
@@ -16,6 +16,7 @@ Jugcraft's original gameplay ships as one mod, organized into internal feature p
 - [Propose an existing mod integration](../../issues/new?template=integration.yml).
 - [Contribute code, art, or documentation](CONTRIBUTING.md).
 - [Read the connected gameplay design](docs/DESIGN.md).
+- [Explore specialties, magic schools, creatures and seasonal briefs](docs/CONTENT_BRANCHES.md).
 - [See architecture and integration rules](docs/ARCHITECTURE.md).
 - [Check the roadmap](docs/ROADMAP.md) and [platform decision](docs/PLATFORM.md).
 - [Maintainer setup and review guide](docs/MAINTAINERS.md).

@@ -10,6 +10,12 @@ Jugcraft is one original mod with internal feature packages. The following bound
 | technology | Machines, transport, work scheduling and power use |
 | magic | Rituals, essences, attunement and transformations |
 | integration | Bridges between Jugcraft systems and optional external mods |
+| agriculture | Crops, husbandry, cultivation conditions and shared harvest rules |
+| world | Coherent biomes, caves, structures and versioned world generation |
+| creatures | Wildlife, companions, enemies and bounded boss encounters |
+| travel | Rocket journeys, realm portals, destination access and safe returns |
+| loot | Weighted rewards, abilities, attunement and duplication prevention |
+| seasons | Server-configured event windows and persistent seasonal content |
 | client | Rendering, screens, sounds and visual feedback |
 
 Features call small shared interfaces rather than reaching into another feature's internals. Core must not depend on optional integration classes. Keep initialization explicit and deterministic. Agree shared API changes in the proposal before multiple contributors implement against them.
@@ -28,4 +34,4 @@ Optional adapters must not load absent APIs. Test with the dependency present an
 
 ## Platform changes
 
-Minecraft, loader, Java, Gradle, mappings, and dependencies are centrally pinned during bootstrap. Contributors cannot independently upgrade them. Support one platform first; porting to another loader is a separate project decision.
+Minecraft, loader, Java, Gradle, mappings, and dependencies are centrally pinned during bootstrap. Contributors cannot independently upgrade them. The selected platform is Minecraft Java Edition 26.3 + Fabric. Exact toolchain pins are established and tested in bootstrap; porting to another loader is a separate project decision.
