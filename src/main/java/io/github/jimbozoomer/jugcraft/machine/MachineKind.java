@@ -229,6 +229,21 @@ public enum MachineKind implements StringRepresentable {
 		return this == ALLOY_SMELTER ? new PowerPort(1, Direction.WEST) : null;
 	}
 
+	/** Machines with a real fire: they smoke and crackle while running (client-side effects only). */
+	public boolean burnsFuel() {
+		return this == COAL_GENERATOR || this == STEAM_GENERATOR || this == GEOTHERMAL_GENERATOR
+				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ARC_FURNACE;
+	}
+
+	/** Height of the machine in blocks (the tallest part plus one). */
+	public int height() {
+		int top = 0;
+		for (Vec3i offset : footprint().offsets()) {
+			top = Math.max(top, offset.getY());
+		}
+		return top + 1;
+	}
+
 	public boolean isLarge() {
 		return footprint().size() > 1;
 	}

@@ -251,6 +251,7 @@ def machine_assets(lang):
         lang[f"container.{MOD}.side.{face}"] = name
     for mode, name in (("input", "input"), ("output", "output"), ("both", "input and output"), ("none", "closed")):
         lang[f"container.{MOD}.mode.{mode}"] = name
+    lang[f"container.{MOD}.eject"] = "Eject"
     lang[f"container.{MOD}.eject.on"] = "Eject: on"
     lang[f"container.{MOD}.eject.off"] = "Eject: off"
     lang[f"container.{MOD}.eject.tooltip"] = "Push results out of output faces into pipes and inventories"

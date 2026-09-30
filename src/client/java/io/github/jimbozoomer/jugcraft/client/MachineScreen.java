@@ -87,12 +87,14 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 					Component.translatable("container.jugcraft.side." + face.name().toLowerCase()),
 					Component.translatable("container.jugcraft.mode." + mode.name().toLowerCase()))));
 		}
-		ejectButton.setMessage(Component.translatable(config.eject() ? "container.jugcraft.eject.on" : "container.jugcraft.eject.off"));
+		// "Eject" fits the button; green when on, gray when off, and the tooltip says which.
+		ejectButton.setMessage(Component.translatable("container.jugcraft.eject").withColor(config.eject() ? 0x70E070 : 0x9A9A9A));
 		SideConfig.Redstone redstone = config.redstone();
 		redstoneButton.setMessage(Component.literal("R").withColor(REDSTONE_COLORS[redstone.ordinal()]));
 		redstoneButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.redstone",
 				Component.translatable("container.jugcraft.redstone." + redstone.name().toLowerCase()))));
-		ejectButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.eject.tooltip")));
+		ejectButton.setTooltip(Tooltip.create(Component.translatable(config.eject() ? "container.jugcraft.eject.on" : "container.jugcraft.eject.off")
+				.append(". ").append(Component.translatable("container.jugcraft.eject.tooltip"))));
 	}
 
 	@Override
@@ -100,6 +102,32 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		extractBackground(graphics, mouseX, mouseY, delta);
 		super.extractRenderState(graphics, mouseX, mouseY, delta);
 		extractTooltip(graphics, mouseX, mouseY);
+		extractGaugeTooltip(graphics, mouseX, mouseY);
+	}
+
+	/** Exact numbers when hovering the energy bar or a tank gauge. */
+	private void extractGaugeTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+		int mx = mouseX - leftPos;
+		int my = mouseY - topPos;
+		MachineKind kind = menu.kind();
+		String line = null;
+		if (kind.usesPower() && mx >= BAR_X - 1 && mx <= BAR_X + BAR_WIDTH && my >= BAR_Y - 1 && my <= BAR_Y + BAR_HEIGHT) {
+			line = String.format("%,d / %,d JE", menu.energy(), menu.capacity());
+		} else if (kind.tankCapacity() > 0 && my >= BAR_Y - 1 && my <= BAR_Y + BAR_HEIGHT
+				&& (kind.isProcessor() ? mx >= 29 && mx < 37 : mx >= 149 && mx < 163)) {
+			line = String.format("%,d / %,d mB", menu.data(MachineBlockEntity.DATA_TANK), kind.tankCapacity());
+		}
+		if (line == null) {
+			return;
+		}
+		// A plain tooltip box drawn with fills, like vanilla's: dark body, purple-blue rim.
+		int width = font.width(line);
+		int x = mouseX + 10;
+		int y = mouseY - 12;
+		graphics.fill(x - 3, y - 3, x + width + 3, y + 11, 0xF0100010);
+		graphics.fill(x - 2, y - 2, x + width + 2, y - 1, 0x505000FF);
+		graphics.fill(x - 2, y + 9, x + width + 2, y + 10, 0x5028007F);
+		graphics.text(font, line, x, y, 0xFFFFFFFF, false);
 	}
 
 	@Override

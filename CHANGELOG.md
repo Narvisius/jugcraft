@@ -8,6 +8,12 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #32 Polish
+- Machines with a fire, and the steam engine, smoke and crackle while running.
+- Hovering the energy bar or a tank gauge shows exact JE or mB.
+- The eject button reads "Eject" (green on, gray off) instead of a cut-off "Eject: off".
+- The CI screenshots no longer show the chat log.
+
 ### #30 Auto-Crafter
 - **Auto-Crafter:** crafts any crafting-table recipe laid out in its 3×3 grid, one every 2 seconds.
   - Each grid slot keeps one item as the pattern, and pipes and hoppers only top up matching slots.

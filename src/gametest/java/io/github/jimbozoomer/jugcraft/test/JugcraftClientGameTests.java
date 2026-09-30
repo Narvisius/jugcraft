@@ -144,7 +144,7 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 
 	/**
 	 * Engine at {@code start} facing west (its back drives east), two shafts, a gearbox with a hand crank
-	 * on top, a dynamo beyond it and a crusher on the gearbox's south side (towards the camera).
+	 * on top, a dynamo beyond it and a crusher on the gearbox's north side (behind it, seen from the camera).
 	 */
 	private static void buildKineticLine(ServerLevel level, BlockPos start) {
 		level.setBlock(start.below(), Blocks.WATER.defaultBlockState(), 3);
@@ -161,7 +161,7 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 		level.setBlock(gearbox, JugcraftKinetics.BRASS_GEARBOX.defaultBlockState(), 3);
 		level.setBlock(gearbox.above(), JugcraftKinetics.HAND_CRANK.defaultBlockState().setValue(HandCrankBlock.FACING, Direction.DOWN), 3);
 		level.setBlock(gearbox.east(), JugcraftKinetics.DYNAMO.defaultBlockState().setValue(DynamoBlock.FACING, Direction.SOUTH), 3);
-		level.setBlock(gearbox.south(), JugcraftMachines.MACHINES.get(MachineKind.CRUSHER).defaultBlockState()
+		level.setBlock(gearbox.north(), JugcraftMachines.MACHINES.get(MachineKind.CRUSHER).defaultBlockState()
 				.setValue(MachineBlock.FACING, Direction.SOUTH), 3);
 	}
 
