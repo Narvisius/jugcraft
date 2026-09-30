@@ -205,6 +205,36 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 **Performance.** Pipe networks are found once by a bounded search and cached per dimension. They are rebuilt only after a pipe, tank, pump or machine is placed or removed, or a pipe's neighbor changes. A pump does two storage moves per tick at most, plus one per network endpoint.
 
+## Item logistics
+
+Item logistics moves finished goods around without hoppers everywhere. Like power and fluids, the pipes are passive; only *pushers* move items.
+
+![Pneumatic Extractor, Item Sorter and a Brass Item Pipe segment](images/logistics.png)
+
+*Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
+
+| Block / item | Does | Numbers | Built from |
+| --- | --- | --- | --- |
+| Brass Item Pipe | Joins pushers to every inventory it touches (chests, machines, other mods' storage) | 6-pixel core, up to 1,024 pipes per network; items arrive instantly | 2 brass plates + glass → 6 |
+| Pneumatic Extractor | Pulls from the inventory it faces and pushes out of its other five sides into pipes or inventories; a redstone signal pauses it | 16 items every 8 ticks | 4 brass plates, hopper, item pipe |
+| Item Sorter | Accepts items from pipes on any side but its front, and passes only items that match its 9-slot filter into the inventory it faces | An empty filter matches nothing | 5 brass plates, comparator, hopper, 2 item pipes |
+| Brass Wrench | Right-click turns a machine, extractor or sorter; sneak + right-click dismantles a Jugcraft block, dropping it and its contents | Multi-block machines cannot be turned | 4 brass ingots |
+
+**Routing.** A network offers each item first to a sorter whose filter matches it, then to the other inventories in turn (round-robin), so one chest does not fill before the rest. The inventory the items came from never receives them back. If nothing accepts an item, it stays where it was.
+
+**Side configuration.** Every processing machine's screen has six face buttons (F, B, L, R, T, D: front, back, left, right, top, bottom, with left and right as seen from the front). Each click cycles the face between:
+
+- **In** — hoppers and pipes may insert ingredients;
+- **Out** — hoppers and pipes may extract results;
+- **Both**;
+- **Off**.
+
+The defaults keep the old behavior: ingredients in from the top and sides, results out of the bottom. The configuration is saved with the machine and is relative to its front, so turning a machine with the wrench turns its sides too.
+
+**Eject.** The *Eject* button makes the machine push its results itself, 16 items every 8 ticks, out of every face set to Out or Both, into adjacent inventories or pipes. Multi-block machines eject from every block they occupy.
+
+**Code:** `logistics/` (`ItemNetworks`, `ItemPipeBlock`, `PneumaticExtractorBlock`, `ItemSorterBlock(Entity)`, `BrassWrenchItem`, `JugcraftLogistics`) and `machine/SideConfig.java`. Items move through Fabric's `ItemStorage.SIDED` lookup, so other mods' inventories take part automatically.
+
 ## Components
 
 | Component | Made by | Metals | Used for |
@@ -254,7 +284,10 @@ Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, 
 - a coal generator powering an electric furnace through cables;
 - a pump filling a tank through pipes;
 - the 2×2 alloy smelter placing, taking power only at its socket, and making bronze;
-- a multi-block machine disappearing whole when one block breaks.
+- a multi-block machine disappearing whole when one block breaks;
+- an extractor moving items through pipes into a chest;
+- a sorter routing matching items to its inventory and the rest elsewhere;
+- a machine ejecting its results into a chest below.
 
 To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests` that builds its setup and ends with `helper.succeed()` or `helper.succeedWhen(...)`.
 
@@ -272,5 +305,6 @@ To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests
 | Machines, machine recipes, crafting | `tools/machines.py` (plus the matching Java: `MachineKind`, `JugcraftComponents`) | `python3 tools/generate_material_data.py` |
 | Machine looks | `tools/steampunk_models.py` and `tools/steampunk_textures.py` (steampunk), `tools/large_machines.py` (classic multi-block models), `DEFAULT_STYLE` in `tools/model_writer.py` | `python3 tools/generate_textures.py`, then `python3 tools/generate_material_data.py` |
 | Fluid blocks and their numbers | `tools/machines.py` (`PIPES`, `FLUID_BLOCKS`, `FLUID_STATS`) plus the constants in `fluid/FluidPipeBlock`, `FluidTankBlockEntity` and `ElectricPumpBlockEntity` | `python3 tools/generate_material_data.py` |
+| Item logistics | `tools/machines.py` (`ITEM_PIPES`, `LOGISTICS_BLOCKS`, `TOOLS`), `tools/logistics_models.py`, plus the constants in `logistics/` | `python3 tools/generate_material_data.py` |
 | Textures | `tools/generate_textures.py` | `python3 tools/generate_textures.py` |
 | Verify | — | `python3 tools/check_mod_data.py` and `./gradlew build` |

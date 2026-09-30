@@ -3,6 +3,7 @@ package io.github.jimbozoomer.jugcraft;
 import io.github.jimbozoomer.jugcraft.config.FeatureEnabledCondition;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftComponents;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftMaterials;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftWorldgen;
@@ -33,6 +34,7 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftComponents.register();
 		JugcraftMachines.register();
 		JugcraftFluids.register();
+		JugcraftLogistics.register();
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
 		registerMachineStylePack();

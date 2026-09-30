@@ -4,6 +4,9 @@ import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.machine.MachineMenu;
+import io.github.jimbozoomer.jugcraft.machine.SideConfig;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -29,6 +32,14 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	private static final int LAVA = 0xFFE87010;
 	private static final int TEXT = 0xFF404040;
 
+	// Side configuration: a cross of face buttons (front in the middle) and an eject toggle, on the right.
+	private static final int[][] FACE_BUTTON_XY = {{150, 28}, {162, 40}, {138, 28}, {162, 28}, {150, 16}, {150, 40}};
+	private static final String[] FACE_LETTERS = {"F", "B", "L", "R", "T", "D"};
+	private static final int[] MODE_COLORS = {0x5AA0FF, 0xFFA040, 0x70E070, 0x9A9A9A};
+	private final Button[] faceButtons = new Button[6];
+	private Button ejectButton;
+	private int shownSides = -1;
+
 	public MachineScreen(MachineMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title);
 	}
@@ -37,6 +48,43 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	protected void init() {
 		super.init();
 		titleLabelX = (imageWidth - font.width(title)) / 2;
+		shownSides = -1;
+		if (!menu.kind().isProcessor()) {
+			return;
+		}
+		for (int face = 0; face < faceButtons.length; face++) {
+			int id = face;
+			faceButtons[face] = addRenderableWidget(Button.builder(Component.literal(FACE_LETTERS[face]), button -> click(id))
+					.bounds(leftPos + FACE_BUTTON_XY[face][0], topPos + FACE_BUTTON_XY[face][1], 11, 11).build());
+		}
+		ejectButton = addRenderableWidget(Button.builder(Component.empty(), button -> click(SideConfig.EJECT_BUTTON))
+				.bounds(leftPos + 138, topPos + 54, 35, 12).build());
+	}
+
+	private void click(int id) {
+		if (minecraft != null && minecraft.gameMode != null) {
+			minecraft.gameMode.handleInventoryButtonClick(menu.containerId, id);
+		}
+	}
+
+	/** Recolours the side buttons when the synced configuration changes. */
+	private void refreshSideButtons() {
+		int packed = menu.data(MachineBlockEntity.DATA_SIDES);
+		if (ejectButton == null || packed == shownSides) {
+			return;
+		}
+		shownSides = packed;
+		SideConfig config = SideConfig.of(packed);
+		for (SideConfig.Face face : SideConfig.Face.values()) {
+			SideConfig.Mode mode = config.mode(face);
+			Button button = faceButtons[face.ordinal()];
+			button.setMessage(Component.literal(FACE_LETTERS[face.ordinal()]).withColor(MODE_COLORS[mode.ordinal()]));
+			button.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.side",
+					Component.translatable("container.jugcraft.side." + face.name().toLowerCase()),
+					Component.translatable("container.jugcraft.mode." + mode.name().toLowerCase()))));
+		}
+		ejectButton.setMessage(Component.translatable(config.eject() ? "container.jugcraft.eject.on" : "container.jugcraft.eject.off"));
+		ejectButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.eject.tooltip")));
 	}
 
 	@Override
@@ -48,6 +96,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 
 	@Override
 	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+		refreshSideButtons();
 		int x = leftPos;
 		int y = topPos;
 		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0.0F, 0.0F, imageWidth, imageHeight, 256, 256);

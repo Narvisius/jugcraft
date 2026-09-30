@@ -32,6 +32,15 @@ PARTS = {
 # Cables: display name and JE per tick one push may send through the network.
 CABLES = {"copper_cable": {"display": "Copper Cable", "rate": 256}}
 
+# Item logistics (see docs/TECH_TREE.md#item-logistics). The tube is a 6-pixel transmitter; the
+# extractor and sorter face any of six directions. Models: tools/logistics_models.py.
+ITEM_PIPES = {"brass_item_pipe": {"display": "Brass Item Pipe", "size": 6}}
+LOGISTICS_BLOCKS = {
+    "pneumatic_extractor": {"display": "Pneumatic Extractor"},
+    "item_sorter": {"display": "Item Sorter"},
+}
+TOOLS = {"brass_wrench": "Brass Wrench"}
+
 # Fluid logistics (physical branch; see docs/TECH_TREE.md). Amounts are millibuckets (mB);
 # 1 bucket = 1000 mB = 81000 Fabric droplets. Pipes are passive: pumps push through them.
 PIPES = {"bronze_fluid_pipe": {"display": "Bronze Fluid Pipe", "rate": 250}}
@@ -129,6 +138,13 @@ CRAFTING = {
     "wind_turbine": (["AAA", "GMG", "BCB"],
                      {"A": "#c:plates/aluminum", "G": "#c:gears/bronze", "M": "jugcraft:machine_casing",
                       "B": "#c:plates/bronze", "C": "jugcraft:copper_cable"}, 1),
+    # Item logistics.
+    "brass_item_pipe": (["PGP"], {"P": "#c:plates/brass", "G": "minecraft:glass"}, 6),
+    "pneumatic_extractor": (["PHP", "PTP"], {"P": "#c:plates/brass", "H": "minecraft:hopper",
+                                             "T": "jugcraft:brass_item_pipe"}, 1),
+    "item_sorter": (["PCP", "THT", "PPP"], {"P": "#c:plates/brass", "C": "minecraft:comparator",
+                                           "T": "jugcraft:brass_item_pipe", "H": "minecraft:hopper"}, 1),
+    "brass_wrench": (["B B", " B ", " B "], {"B": "#c:ingots/brass"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -222,4 +238,10 @@ def machine_recipes():
 
 
 def machine_blocks():
-    return list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
+    return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
+            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS))
+
+
+def machine_items():
+    """Items of the machine feature that are not blocks (tools)."""
+    return list(TOOLS)

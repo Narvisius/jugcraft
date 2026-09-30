@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of)
 
-from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -114,23 +114,26 @@ def machine_assets(lang):
     model_writer.WRITERS[model_writer.DEFAULT_STYLE](ASSETS, MACHINES, PARTS, FLUID_BLOCKS)
     write_alternate_pack(lang)
 
-    for cable, info in {**CABLES, **PIPES}.items():
+    for cable, info in {**CABLES, **PIPES, **ITEM_PIPES}.items():
         lang[f"block.{MOD}.{cable}"] = info["display"]
         texture = rid(f"block/{cable}")
+        # Transmitters are `size` pixels thick (4 for cables and fluid pipes, 6 for item pipes).
+        lo = 8 - info.get("size", 4) // 2
+        hi = 16 - lo
         write(ASSETS / "models" / "block" / f"{cable}_core.json", {
             "textures": {"cable": texture, "particle": texture},
-            "elements": [{"from": [6, 6, 6], "to": [10, 10, 10], "faces": {
-                face: {"uv": [6, 6, 10, 10], "texture": "#cable"}
+            "elements": [{"from": [lo, lo, lo], "to": [hi, hi, hi], "faces": {
+                face: {"uv": [lo, lo, hi, hi], "texture": "#cable"}
                 for face in ("north", "east", "south", "west", "up", "down")}}],
         })
         write(ASSETS / "models" / "block" / f"{cable}_arm.json", {
             "textures": {"cable": texture, "particle": texture},
-            "elements": [{"from": [6, 6, 0], "to": [10, 10, 6], "faces": {
-                "north": {"uv": [6, 6, 10, 10], "texture": "#cable"},
-                "east": {"uv": [0, 6, 6, 10], "texture": "#cable"},
-                "west": {"uv": [0, 6, 6, 10], "texture": "#cable"},
-                "up": {"uv": [6, 0, 10, 6], "texture": "#cable"},
-                "down": {"uv": [6, 0, 10, 6], "texture": "#cable"},
+            "elements": [{"from": [lo, lo, 0], "to": [hi, hi, lo], "faces": {
+                "north": {"uv": [lo, lo, hi, hi], "texture": "#cable"},
+                "east": {"uv": [0, lo, lo, hi], "texture": "#cable"},
+                "west": {"uv": [0, lo, lo, hi], "texture": "#cable"},
+                "up": {"uv": [lo, 0, hi, lo], "texture": "#cable"},
+                "down": {"uv": [lo, 0, hi, lo], "texture": "#cable"},
             }}],
         })
         parts = [{"apply": {"model": rid(f"block/{cable}_core")}}]
@@ -141,16 +144,35 @@ def machine_assets(lang):
         write(ASSETS / "models" / "item" / f"{cable}.json", {
             "parent": "minecraft:block/block",
             "textures": {"cable": texture, "particle": texture},
-            "elements": [{"from": [6, 6, 0], "to": [10, 10, 16], "faces": {
-                "north": {"uv": [6, 6, 10, 10], "texture": "#cable"},
-                "south": {"uv": [6, 6, 10, 10], "texture": "#cable"},
-                "east": {"uv": [0, 6, 16, 10], "texture": "#cable"},
-                "west": {"uv": [0, 6, 16, 10], "texture": "#cable"},
-                "up": {"uv": [6, 0, 10, 16], "texture": "#cable"},
-                "down": {"uv": [6, 0, 10, 16], "texture": "#cable"},
+            "elements": [{"from": [lo, lo, 0], "to": [hi, hi, 16], "faces": {
+                "north": {"uv": [lo, lo, hi, hi], "texture": "#cable"},
+                "south": {"uv": [lo, lo, hi, hi], "texture": "#cable"},
+                "east": {"uv": [0, lo, 16, hi], "texture": "#cable"},
+                "west": {"uv": [0, lo, 16, hi], "texture": "#cable"},
+                "up": {"uv": [lo, 0, hi, 16], "texture": "#cable"},
+                "down": {"uv": [lo, 0, hi, 16], "texture": "#cable"},
             }}],
         })
         write(ASSETS / "items" / f"{cable}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{cable}")}})
+
+    # Item logistics blocks: one model each (same in both styles), turned to all six directions.
+    from logistics_models import MODELS as LOGISTICS_MODELS, FACING_ROTATION
+    for block, info in LOGISTICS_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = info["display"]
+        elements = LOGISTICS_MODELS[block]
+        textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+        textures["particle"] = rid("block/sp_brass")
+        write(ASSETS / "models" / "block" / f"{block}.json", {
+            "parent": "minecraft:block/block", "textures": textures,
+            "elements": model_writer.slice_model(block, elements, [(0, 0, 0)])[0]})
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": {
+            f"facing={facing}": {"model": rid(f"block/{block}"), **rotation} for facing, rotation in FACING_ROTATION.items()}})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    for tool, display in TOOLS.items():
+        lang[f"item.{MOD}.{tool}"] = display
+        write(ASSETS / "models" / "item" / f"{tool}.json",
+              {"parent": "minecraft:item/handheld", "textures": {"layer0": rid(f"item/{tool}")}})
+        write(ASSETS / "items" / f"{tool}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{tool}")}})
 
     lang[f"tooltip.{MOD}.energy"] = "%s / %s JE"
     lang[f"message.{MOD}.tank"] = "%s: %s / %s mB"
@@ -158,6 +180,17 @@ def machine_assets(lang):
     lang[f"message.{MOD}.pump"] = "Energy %s / %s JE, holding %s mB"
     lang[f"container.{MOD}.arc_furnace.incomplete"] = "Structure incomplete"
     lang[f"container.{MOD}.arc_furnace.formed"] = "Arc furnace formed"
+    lang[f"container.{MOD}.item_sorter"] = "Item Sorter"
+    lang[f"message.{MOD}.wrench.large"] = "Multi-block machines can't be turned; sneak to dismantle"
+    lang[f"container.{MOD}.side"] = "%s: %s"
+    for face, name in (("front", "Front"), ("back", "Back"), ("left", "Left"), ("right", "Right"),
+                       ("top", "Top"), ("bottom", "Bottom")):
+        lang[f"container.{MOD}.side.{face}"] = name
+    for mode, name in (("input", "input"), ("output", "output"), ("both", "input and output"), ("none", "closed")):
+        lang[f"container.{MOD}.mode.{mode}"] = name
+    lang[f"container.{MOD}.eject.on"] = "Eject: on"
+    lang[f"container.{MOD}.eject.off"] = "Eject: off"
+    lang[f"container.{MOD}.eject.tooltip"] = "Push results out of output faces into pipes and inventories"
     lang[f"container.{MOD}.wind_turbine.clear"] = "Rotor turning"
     lang[f"container.{MOD}.wind_turbine.blocked"] = "Rotor blocked: clear the blocks beside and above the top"
 

@@ -92,6 +92,12 @@ public class MachineMenu extends AbstractContainerMenu {
 		addDataSlots(data);
 	}
 
+	/** Side-configuration buttons (ids 0..5 cycle a face, 6 toggles ejecting); only the server applies them. */
+	@Override
+	public boolean clickMenuButton(Player player, int id) {
+		return container instanceof MachineBlockEntity machine && machine.clickSideButton(id);
+	}
+
 	public MachineKind kind() {
 		return kind;
 	}

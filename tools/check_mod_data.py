@@ -13,7 +13,7 @@ from PIL import Image
 
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS,
                        all_blocks, all_items, feature_of)
-from machines import MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, machine_blocks, machine_recipes
+from machines import MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, machine_blocks, machine_items, machine_recipes
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -112,7 +112,7 @@ UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_bloc
          **{f"{form}s": units for form, units in PART_UNITS.items()}}
 
 
-NON_METAL = set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
+NON_METAL = set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
 
 
 def item_units(ref):
@@ -401,7 +401,7 @@ def check_style_pack():
 
 
 def main():
-    registered = set(all_blocks()) | set(all_items()) | set(machine_blocks())
+    registered = set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
     check_assets(sorted(registered))
     check_loot(registered)
     check_recipes(registered)

@@ -418,6 +418,46 @@ def cable_texture():
     return _transmitter(RUBBER, node, [COPPER[0], COPPER[1], COPPER[1], COPPER[0]])
 
 
+def item_tube_texture():
+    """6-pixel brass pneumatic tube: bands at rows/columns 5-10 with a glass window down the middle,
+    a riveted junction node in the centre square and darker flanges at the ends."""
+    from steampunk_textures import BRASS as SP_BRASS
+    img = new()
+    band = {5: SP_BRASS[0], 6: SP_BRASS[3], 7: (170, 214, 226), 8: (120, 176, 204), 9: SP_BRASS[2], 10: SP_BRASS[0]}
+    for y in range(16):
+        for x in range(16):
+            in_x, in_y = 5 <= x <= 10, 5 <= y <= 10
+            if in_x and in_y:
+                edge = x in (5, 10) or y in (5, 10)
+                c = SP_BRASS[1] if edge else (SP_BRASS[4] if (x, y) in ((6, 6), (9, 6), (6, 9), (9, 9)) else SP_BRASS[3])
+            elif in_y:
+                c = SP_BRASS[0] if x in (0, 15) else band[y]
+            elif in_x:
+                c = SP_BRASS[0] if y in (0, 15) else band[x]
+            else:
+                c = SP_BRASS[2]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def wrench_item():
+    """Brass wrench lying diagonally, open jaw at the top right."""
+    from steampunk_textures import BRASS as SP_BRASS
+    img = new()
+    for i in range(3, 12):
+        x, y = i, 15 - i
+        for dx, dy, c in ((0, 0, SP_BRASS[3]), (1, 0, SP_BRASS[1]), (0, -1, SP_BRASS[4])):
+            img.putpixel((x + dx, y + dy), c + (255,))
+    jaw = [(11, 1), (12, 1), (13, 1), (14, 2), (14, 3), (14, 4), (13, 5), (12, 5), (10, 2), (10, 3), (11, 4)]
+    for x, y in jaw:
+        img.putpixel((x, y), SP_BRASS[2] + (255,))
+    for x, y in ((12, 2), (12, 3), (13, 3)):
+        img.putpixel((x, y), (0, 0, 0, 0))
+    img.putpixel((3, 12), SP_BRASS[0] + (255,))
+    img.putpixel((2, 13), SP_BRASS[1] + (255,))
+    return img
+
+
 def pipe_texture():
     """Bronze pipe with a riveted junction node and darker flanges at connections."""
     def node(x, y):
@@ -879,6 +919,8 @@ def machines():
     save(circuit(True), "item", "advanced_circuit")
     save(cable_texture(), "block", "copper_cable")
     save(pipe_texture(), "block", "bronze_fluid_pipe")
+    save(item_tube_texture(), "block", "brass_item_pipe")
+    save(wrench_item(), "item", "brass_wrench")
     save(hazard_plinth(530), "block", "geothermal_plinth")
     save(geothermal_front(531, False), "block", "geothermal_generator_front")
     save(geothermal_front(531, True), "block", "geothermal_generator_front_on")

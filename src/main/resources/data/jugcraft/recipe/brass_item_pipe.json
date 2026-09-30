@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/brass",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "id": "jugcraft:brass_item_pipe",
+    "count": 6
+  }
+}

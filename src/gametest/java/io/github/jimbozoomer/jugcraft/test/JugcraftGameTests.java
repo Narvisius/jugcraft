@@ -6,6 +6,9 @@ import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.logistics.ItemSorterBlockEntity;
+import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
+import io.github.jimbozoomer.jugcraft.logistics.PneumaticExtractorBlock;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
@@ -13,6 +16,7 @@ import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.machine.MachineRecipe;
 import io.github.jimbozoomer.jugcraft.machine.MachineRecipes;
+import io.github.jimbozoomer.jugcraft.machine.SideConfig;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +26,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -140,5 +145,76 @@ public class JugcraftGameTests {
 				helper.assertBlockNotPresent(block, base.above(y));
 			}
 		});
+	}
+
+	private static int count(ChestBlockEntity chest, Item item) {
+		int total = 0;
+		for (int slot = 0; slot < chest.getContainerSize(); slot++) {
+			ItemStack stack = chest.getItem(slot);
+			if (stack.is(item)) {
+				total += stack.getCount();
+			}
+		}
+		return total;
+	}
+
+	private static ChestBlockEntity chest(GameTestHelper helper, BlockPos pos) {
+		helper.setBlock(pos, Blocks.CHEST);
+		return helper.getBlockEntity(pos, ChestBlockEntity.class);
+	}
+
+	private static void extractor(GameTestHelper helper, BlockPos pos, Direction intake) {
+		helper.setBlock(pos, JugcraftLogistics.PNEUMATIC_EXTRACTOR.defaultBlockState().setValue(PneumaticExtractorBlock.FACING, intake));
+	}
+
+	/** Chest -> extractor -> brass item pipes -> chest. */
+	@GameTest(maxTicks = 200)
+	public void extractorMovesItemsThroughPipes(GameTestHelper helper) {
+		ChestBlockEntity source = chest(helper, new BlockPos(1, 1, 3));
+		source.setItem(0, new ItemStack(Items.IRON_INGOT, 5));
+		extractor(helper, new BlockPos(2, 1, 3), Direction.WEST);
+		for (int x = 3; x <= 4; x++) {
+			helper.setBlock(new BlockPos(x, 1, 3), JugcraftLogistics.BRASS_ITEM_PIPE);
+		}
+		ChestBlockEntity target = chest(helper, new BlockPos(5, 1, 3));
+		helper.succeedWhen(() -> helper.assertTrue(count(target, Items.IRON_INGOT) == 5,
+				"Target chest has " + count(target, Items.IRON_INGOT) + " iron"));
+	}
+
+	/** A sorter set to iron takes the iron; everything else goes to the plain chest on the same pipes. */
+	@GameTest(maxTicks = 300)
+	public void sorterRoutesMatchingItems(GameTestHelper helper) {
+		ChestBlockEntity source = chest(helper, new BlockPos(1, 1, 1));
+		source.setItem(0, new ItemStack(Items.IRON_INGOT, 4));
+		source.setItem(1, new ItemStack(Items.GOLD_INGOT, 4));
+		extractor(helper, new BlockPos(2, 1, 1), Direction.WEST);
+		for (int x = 3; x <= 5; x++) {
+			helper.setBlock(new BlockPos(x, 1, 1), JugcraftLogistics.BRASS_ITEM_PIPE);
+		}
+		BlockPos sorter = new BlockPos(4, 1, 2);
+		helper.setBlock(sorter, JugcraftLogistics.ITEM_SORTER.defaultBlockState().setValue(PneumaticExtractorBlock.FACING, Direction.SOUTH));
+		helper.getBlockEntity(sorter, ItemSorterBlockEntity.class).setItem(0, new ItemStack(Items.IRON_INGOT));
+		ChestBlockEntity sorted = chest(helper, new BlockPos(4, 1, 3));
+		ChestBlockEntity overflow = chest(helper, new BlockPos(6, 1, 1));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(count(sorted, Items.IRON_INGOT) == 4 && count(sorted, Items.GOLD_INGOT) == 0,
+					"Sorted chest: " + count(sorted, Items.IRON_INGOT) + " iron, " + count(sorted, Items.GOLD_INGOT) + " gold");
+			helper.assertTrue(count(overflow, Items.GOLD_INGOT) == 4 && count(overflow, Items.IRON_INGOT) == 0,
+					"Overflow chest: " + count(overflow, Items.GOLD_INGOT) + " gold, " + count(overflow, Items.IRON_INGOT) + " iron");
+		});
+	}
+
+	/** A crusher set to eject pushes its results into the chest below (its default output face). */
+	@GameTest(maxTicks = 400)
+	public void machineEjectsIntoChest(GameTestHelper helper) {
+		ChestBlockEntity below = chest(helper, new BlockPos(2, 1, 2));
+		BlockPos pos = new BlockPos(2, 2, 2);
+		helper.setBlock(pos, machine(MachineKind.CRUSHER));
+		charge(helper, pos, Direction.UP);
+		MachineBlockEntity crusher = helper.getBlockEntity(pos, MachineBlockEntity.class);
+		helper.assertTrue(crusher.clickSideButton(SideConfig.EJECT_BUTTON), "Eject button was refused");
+		crusher.setItem(0, new ItemStack(item("tin_ore")));
+		helper.succeedWhen(() -> helper.assertTrue(count(below, item("raw_tin")) == 2,
+				"Chest below has " + count(below, item("raw_tin")) + " raw tin"));
 	}
 }

@@ -164,7 +164,7 @@ def feature_of(entry_id):
         return ITEMS[entry_id]["feature"]
     if entry_id in part_items():
         return "machines"
-    from machines import machine_blocks, FEATURE
-    if entry_id in machine_blocks():
+    from machines import machine_blocks, machine_items, FEATURE
+    if entry_id in machine_blocks() or entry_id in machine_items():
         return FEATURE
     raise KeyError(entry_id)

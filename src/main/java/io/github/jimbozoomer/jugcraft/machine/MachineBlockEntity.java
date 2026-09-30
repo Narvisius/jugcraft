@@ -4,11 +4,16 @@ import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
+import io.github.jimbozoomer.jugcraft.logistics.ItemNetworks;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
@@ -58,7 +63,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_FORMED = 8;
 	/** mB in the machine's fluid tank (steam generator water, geothermal lava). */
 	public static final int DATA_TANK = 9;
-	public static final int DATA_COUNT = 10;
+	/** Processors' side configuration, packed (see {@link SideConfig#pack()}). */
+	public static final int DATA_SIDES = 10;
+	public static final int DATA_COUNT = 11;
+	/** Ticks between ejects, and items pushed out per eject. */
+	public static final int EJECT_INTERVAL = 8;
+	public static final int EJECT_ITEMS = 16;
 
 	/** Steam generator slots. */
 	public static final int SLOT_FUEL = 0;
@@ -85,6 +95,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private boolean formed;
 	/** mB in the machine's tank: water for the steam generator, lava for the geothermal generator. Saved as "water". */
 	private int tank;
+	/** Processors: which faces take input or give output, and whether results are pushed out. */
+	private final SideConfig sides = new SideConfig();
 	/** Wind turbine: whether the rotor check has run since loading. */
 	private boolean windChecked;
 
@@ -102,6 +114,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				case DATA_MAX_BURN -> maxBurn;
 				case DATA_FORMED -> formed ? 1 : 0;
 				case DATA_TANK -> tank;
+				case DATA_SIDES -> sides.pack();
 				default -> 0;
 			};
 		}
@@ -134,6 +147,19 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	public MachineKind kind() {
 		return kind;
+	}
+
+	public SideConfig sides() {
+		return sides;
+	}
+
+	/** A side-configuration button on the machine's screen (see {@link SideConfig#click}). */
+	public boolean clickSideButton(int button) {
+		if (!kind.isProcessor() || !sides.click(button)) {
+			return false;
+		}
+		setChanged();
+		return true;
 	}
 
 	/**
@@ -322,6 +348,38 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return rate > 0;
 	}
 
+	/**
+	 * Pushes results out of every face set to output (from every block of a multi-block machine),
+	 * into item pipes or straight into adjacent inventories.
+	 */
+	private void eject(ServerLevel level, BlockPos pos, BlockState state) {
+		if (items.get(kind.outputSlot()).isEmpty()) {
+			return;
+		}
+		Direction facing = state.getValue(MachineBlock.FACING);
+		Storage<ItemVariant> output = ContainerStorage.of(this, null).getSlot(kind.outputSlot());
+		Footprint footprint = kind.footprint();
+		// Never hand results back to this machine through a pipe that touches another of its blocks.
+		Set<BlockPos> self = new HashSet<>();
+		for (int part = 0; part < footprint.size(); part++) {
+			self.add(footprint.partPos(pos, facing, part).immutable());
+		}
+		long budget = EJECT_ITEMS;
+		for (int part = 0; part < footprint.size() && budget > 0; part++) {
+			BlockPos partPos = footprint.partPos(pos, facing, part);
+			for (Direction side : Direction.values()) {
+				BlockPos neighbor = partPos.relative(side);
+				if (!sides.mode(side, facing).output() || MachineBlock.machineAt(level, neighbor, level.getBlockState(neighbor)) == this) {
+					continue;
+				}
+				budget -= ItemNetworks.push(level, partPos, side, output, budget, self);
+				if (budget <= 0) {
+					return;
+				}
+			}
+		}
+	}
+
 	/** Generators that fill several blocks can feed cables touching any of their parts. */
 	private void pushFromAllParts(ServerLevel level, BlockPos pos, BlockState state) {
 		Footprint footprint = kind.footprint();
@@ -384,6 +442,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	private boolean tickProcessor(ServerLevel level, BlockPos pos, BlockState state) {
+		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
+			eject(level, pos, state);
+		}
 		if (kind == MachineKind.ARC_FURNACE && level.getGameTime() % 20 == 0) {
 			formed = ArcFurnaceStructure.isFormed(level, pos, state.getValue(MachineBlock.FACING),
 					JugcraftMachines.ARC_FURNACE_CASING);
@@ -525,18 +586,23 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (!kind.isProcessor()) {
 			return NO_SLOTS;
 		}
-		if (side == Direction.DOWN) {
-			return new int[] {kind.outputSlot()};
+		SideConfig.Mode mode = sides.mode(side, getBlockState().getValue(MachineBlock.FACING));
+		int inputs = mode.input() ? kind.outputSlot() : 0;
+		int[] slots = new int[inputs + (mode.output() ? 1 : 0)];
+		for (int slot = 0; slot < inputs; slot++) {
+			slots[slot] = slot;
 		}
-		int[] inputs = new int[kind.outputSlot()];
-		for (int slot = 0; slot < inputs.length; slot++) {
-			inputs[slot] = slot;
+		if (mode.output()) {
+			slots[inputs] = kind.outputSlot();
 		}
-		return inputs;
+		return slots;
 	}
 
 	@Override
 	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+		if (kind.isProcessor() && side != null && !sides.mode(side, getBlockState().getValue(MachineBlock.FACING)).input()) {
+			return false;
+		}
 		return canPlaceItem(slot, stack);
 	}
 
@@ -545,7 +611,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.STEAM_GENERATOR) {
 			return slot == SLOT_BUCKET_OUT;
 		}
-		return kind.isProcessor() && slot == kind.outputSlot();
+		return kind.isProcessor() && slot == kind.outputSlot()
+				&& sides.mode(side, getBlockState().getValue(MachineBlock.FACING)).output();
 	}
 
 	// ------------------------------------------------------------------ menu
@@ -573,6 +640,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		burn = input.getInt("burn").orElse(0);
 		maxBurn = input.getInt("max_burn").orElse(0);
 		tank = input.getInt("water").orElse(0);
+		sides.unpack(input.getInt("sides").orElse(SideConfig.defaults()));
 	}
 
 	@Override
@@ -585,5 +653,6 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		output.putInt("burn", burn);
 		output.putInt("max_burn", maxBurn);
 		output.putInt("water", tank);
+		output.putInt("sides", sides.pack());
 	}
 }
