@@ -27,6 +27,13 @@ public class MachineMenu extends AbstractContainerMenu {
 	public static int byproductX(int index) {
 		return 98 + index * 18;
 	}
+
+	/** Upgrade slots sit in a row below the output slot. */
+	public static final int UPGRADE_Y = 57;
+
+	public static int upgradeX(int index) {
+		return 98 + index * 18;
+	}
 	/** X positions of processor input slots, by number of inputs; they end just left of the progress arrow. */
 	private static final int[][] INPUT_LAYOUT = {{}, {56}, {38, 56}, {26, 44, 62}};
 
@@ -40,12 +47,12 @@ public class MachineMenu extends AbstractContainerMenu {
 
 	/** Client-side constructor: contents arrive through slot and data syncing. */
 	public MachineMenu(MenuType<?> type, MachineKind kind, int containerId, Inventory inventory) {
-		this(type, kind, containerId, inventory, new SimpleContainer(kind.slots), new SimpleContainerData(MachineBlockEntity.DATA_COUNT));
+		this(type, kind, containerId, inventory, new SimpleContainer(kind.containerSize()), new SimpleContainerData(MachineBlockEntity.DATA_COUNT));
 	}
 
 	public MachineMenu(MenuType<?> type, MachineKind kind, int containerId, Inventory inventory, Container container, ContainerData data) {
 		super(type, containerId);
-		checkContainerSize(container, kind.slots);
+		checkContainerSize(container, kind.containerSize());
 		checkContainerDataCount(data, MachineBlockEntity.DATA_COUNT);
 		this.kind = kind;
 		this.container = container;
@@ -101,6 +108,14 @@ public class MachineMenu extends AbstractContainerMenu {
 					}
 				});
 			}
+			for (int index = 0; index < kind.upgradeSlots(); index++) {
+				addSlot(new Slot(container, kind.slots + index, upgradeX(index), UPGRADE_Y) {
+					@Override
+					public boolean mayPlace(ItemStack stack) {
+						return MachineUpgrades.isUpgrade(stack);
+					}
+				});
+			}
 		}
 		addStandardInventorySlots(inventory, 8, 84);
 		addDataSlots(data);
@@ -120,8 +135,12 @@ public class MachineMenu extends AbstractContainerMenu {
 		return data.get(index);
 	}
 
+	/** Shift-click into the machine: upgrades only into upgrade slots, everything else only into the others. */
 	private boolean moveIntoMachine(ItemStack stack, int machineSlots) {
-		for (int slot = 0; slot < machineSlots; slot++) {
+		boolean upgrade = MachineUpgrades.isUpgrade(stack) && kind.upgradeSlots() > 0;
+		int from = upgrade ? kind.slots : 0;
+		int to = upgrade ? machineSlots : kind.slots;
+		for (int slot = from; slot < to; slot++) {
 			if (container.canPlaceItem(slot, stack) && moveItemStackTo(stack, slot, slot + 1, false)) {
 				return true;
 			}
@@ -149,7 +168,7 @@ public class MachineMenu extends AbstractContainerMenu {
 
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotIndex) {
-		int machineSlots = kind.slots;
+		int machineSlots = kind.containerSize();
 		int playerEnd = machineSlots + 36;
 		Slot slot = slots.get(slotIndex);
 		if (slot == null || !slot.hasItem()) {

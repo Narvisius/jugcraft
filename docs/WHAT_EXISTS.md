@@ -8,7 +8,7 @@ A map of everything built so far, written for AI agents and contributors who nee
 
 > **Status.** Everything here compiles and loads in CI. Where a feature has an automated game test, that test passes on a headless server. Nothing has been play-tested in a client or on a dedicated server with two players yet.
 >
-> This document describes `main` after PRs #4–#18. Update it whenever you add, rename or remove a system, so it stays the map other contributors rely on.
+> This document describes `main` after PRs #4–#19. Update it whenever you add, rename or remove a system, so it stays the map other contributors rely on.
 
 ## Quick facts
 
@@ -22,7 +22,7 @@ A map of everything built so far, written for AI agents and contributors who nee
 | Fluid unit | **mB** in Jugcraft numbers. Fabric counts droplets: `FluidNetworks.DROPLETS_PER_MB` = 81 |
 | Metal accounting | nugget units: nugget 1, ingot/raw/ore/dust/washed ore/plate 9, wire 3, gear 36, block 81 |
 | Authority | All logic runs on the server; screens only show synced `ContainerData` |
-| Registered IDs | 163 items/blocks under `jugcraft:` (the checker counts them) |
+| Registered IDs | 165 items/blocks under `jugcraft:` (the checker counts them) |
 
 ## Build, generate, check
 
@@ -62,7 +62,10 @@ Every Jugcraft metal and part carries `c:` convention tags (`c:ingots/tin`, `c:o
 
 ### Machines (`machine/MachineKind`)
 
-Every machine is one `MachineBlock` + `MachineBlockEntity` whose behavior comes from its `MachineKind`. Slot order is: inputs first, then the output, then any byproduct slots.
+Every machine is one `MachineBlock` + `MachineBlockEntity` whose behavior comes from its `MachineKind`.
+
+- **Slot order:** inputs, the output, any byproduct slots, then (powered processors only) two upgrade slots.
+- `kind.slots` ends before the upgrade slots, and `kind.containerSize()` includes them.
 
 | `MachineKind` | ID | Role | Energy (cap / in / out / use per tick) | Slots | Recipe type |
 | --- | --- | --- | --- | --- | --- |
@@ -99,6 +102,7 @@ Other blocks:
 | `pneumatic_extractor` | `logistics/PneumaticExtractorBlock` | pulls 16 items / 8 ticks from what it faces |
 | `item_sorter` | `logistics/ItemSorterBlock(Entity)` | 9-slot filter into the inventory it faces |
 | `brass_wrench` (item) | `logistics/BrassWrenchItem` | rotate; sneak to dismantle |
+| `speed_upgrade`, `efficiency_upgrade` (items) | `machine/MachineUpgrades` | upgrade slots of powered processors |
 
 ## Shared systems and how to plug in
 
@@ -131,12 +135,13 @@ Other blocks:
 - **Side configuration:** `machine/SideConfig` holds per-face `Mode` (INPUT, OUTPUT, BOTH, NONE), relative to the machine's front (`Face.of(side, facing)`), plus an `eject` flag.
   - It is packed into one synced int (`DATA_SIDES`). Menu buttons 0–5 cycle faces and 6 toggles eject (`MachineMenu.clickMenuButton` → `MachineBlockEntity.clickSideButton`).
   - When eject is on, a processor pushes all output and byproduct slots every 8 ticks (16 items).
+  - `SideConfig` also holds the **redstone mode** (`Redstone`: IGNORED, HIGH, LOW; button 7), packed into bits 13–14.
 
 ### Machines (`machine/`)
 
 - **`MachineKind`** is the single place for a machine's numbers and behavior switches:
   - `isProcessor()`, `isGenerator()`, `isMultiInput()`
-  - `recipeType()`, `outputSlot()`, `byproductSlots()`, `tankCapacity()`, `usesPower()`
+  - `recipeType()`, `outputSlot()`, `byproductSlots()`, `tankCapacity()`, `usesPower()`, `upgradeSlots()`, `containerSize()`
   - `footprint()`, `powerPort()`
 - **`MachineBlockEntity`** holds energy, items, progress, tank and side config. `serverTick` switches on the kind. Every processor uses `tickProcessor`: find a recipe → check the output and byproduct room (and water for the washer) → use energy → finish.
 - **Multi-block machines:** `Footprint` gives the offsets (facing north). `LargeMachineBlock` has a `PART` 0..3 property. Only the master block has the block entity.
@@ -145,6 +150,10 @@ Other blocks:
 - **Power ports:** `PowerPort(part, face)`. `MachineBlock.acceptsPower(state, side)` combines it with `usesPower()`, and both the energy lookup and the cable arms use that one check. Today only the alloy smelter has a port; the coke oven and steel foundry take no power at all.
 - **Screens:** `MachineMenu` (server/common) and `client/MachineScreen` (client only). Slot positions come from `MachineMenu` constants.
 - **Fuels:** `GeneratorFuels.burnTicks` and `steamBurnTicks`.
+- **Upgrades:** `MachineUpgrades` holds the SPEED and EFFICIENCY items.
+  - `effect(slots)` returns an `Effect` with `ticks(base)` and `use(base)`.
+  - `MachineBlockEntity.upgrades()` reads a machine's cards.
+- **Comparators:** `MachineBlockEntity.comparatorSignal()` returns energy for generators and batteries, and slot fullness for processors. It works from any part.
 
 ### Recipes (`machine/MachineRecipe*`, `data/jugcraft/recipe/<type>/`)
 
@@ -256,6 +265,6 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 - Chemistry branch: electrolysis, real refining, liquid crude oil. Blast-furnace stand-ins mark the recipes that will move there.
 - Recipe viewer plugin (EMI/JEI/REI).
-- Machine upgrades, redstone control on machines (only the extractor reacts to redstone), and higher cable or pipe tiers.
+- Higher cable or pipe tiers.
 - Any magic, farming, creature, travel or seasonal content from [CONTENT_BRANCHES.md](CONTENT_BRANCHES.md).
 - Client play-testing, two-client dedicated-server tests and performance measurements.

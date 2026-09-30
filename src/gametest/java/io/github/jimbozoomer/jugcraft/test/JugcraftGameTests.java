@@ -16,6 +16,7 @@ import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.machine.MachineRecipe;
 import io.github.jimbozoomer.jugcraft.machine.MachineRecipes;
+import io.github.jimbozoomer.jugcraft.machine.MachineUpgrades;
 import io.github.jimbozoomer.jugcraft.machine.SideConfig;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -357,6 +358,75 @@ public class JugcraftGameTests {
 				"A cable must not connect to the alloy smelter's front");
 		helper.assertTrue(helper.getBlockState(besideSocket).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.EAST)),
 				"A cable must connect to the alloy smelter's power socket");
+		helper.succeed();
+	}
+
+	// ------------------------------------------------------------------ machine control
+
+	/** Four speed upgrades make the crusher three times as fast (160 ticks -> 54). */
+	@GameTest(maxTicks = 120)
+	public void speedUpgradesShortenProcessing(GameTestHelper helper) {
+		MachineBlockEntity crusher = processing(helper, new BlockPos(2, 1, 2), MachineKind.CRUSHER, new ItemStack(item("tin_ore")));
+		crusher.setItem(MachineKind.CRUSHER.slots, new ItemStack(MachineUpgrades.SPEED, 4));
+		helper.runAtTickTime(80, () -> {
+			ItemStack output = crusher.getItem(MachineKind.CRUSHER.outputSlot());
+			helper.assertTrue(output.is(item("raw_tin")), "An upgraded crusher should be done by tick 80, output is " + output);
+			helper.succeed();
+		});
+	}
+
+	/** Four efficiency upgrades cut the energy one operation uses to about 41%. */
+	@GameTest(maxTicks = 400)
+	public void efficiencyUpgradesSaveEnergy(GameTestHelper helper) {
+		MachineBlockEntity crusher = processing(helper, new BlockPos(2, 1, 2), MachineKind.CRUSHER, new ItemStack(item("tin_ore")));
+		crusher.setItem(MachineKind.CRUSHER.slots + 1, new ItemStack(MachineUpgrades.EFFICIENCY, 4));
+		EnergyStorage energy = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 2)), Direction.UP);
+		long start = energy.getAmount();
+		helper.succeedWhen(() -> {
+			helper.assertTrue(!crusher.getItem(MachineKind.CRUSHER.outputSlot()).isEmpty(), "Not done yet");
+			long used = start - energy.getAmount();
+			// Unupgraded: 16 JE/t x 160 ticks = 2,560 JE. Upgraded: 7 JE/t x 160 = 1,120 JE.
+			helper.assertTrue(used <= 1_200, "Used " + used + " JE for one operation");
+		});
+	}
+
+	/** In "high" redstone mode a machine waits until it receives a signal. */
+	@GameTest(maxTicks = 500)
+	public void redstoneHighWaitsForSignal(GameTestHelper helper) {
+		BlockPos pos = new BlockPos(2, 1, 2);
+		MachineBlockEntity crusher = processing(helper, pos, MachineKind.CRUSHER, new ItemStack(item("tin_ore")));
+		crusher.clickSideButton(SideConfig.REDSTONE_BUTTON);
+		helper.assertTrue(crusher.sides().redstone() == SideConfig.Redstone.HIGH, "One click should select HIGH");
+		helper.runAtTickTime(200, () -> {
+			helper.assertTrue(crusher.getItem(MachineKind.CRUSHER.outputSlot()).isEmpty(), "Ran without a redstone signal");
+			helper.setBlock(pos.east(), Blocks.REDSTONE_BLOCK);
+		});
+		helper.succeedWhen(() -> {
+			ItemStack output = crusher.getItem(MachineKind.CRUSHER.outputSlot());
+			helper.assertTrue(output.is(item("raw_tin")), "Crusher output is " + output);
+		});
+	}
+
+	/** Comparators read a battery's charge; upgrade slots are never offered to hoppers or pipes. */
+	@GameTest
+	public void comparatorAndUpgradeSlots(GameTestHelper helper) {
+		BlockPos batteryPos = new BlockPos(1, 1, 1);
+		helper.setBlock(batteryPos, machine(MachineKind.BATTERY_BOX));
+		MachineBlockEntity battery = helper.getBlockEntity(batteryPos, MachineBlockEntity.class);
+		helper.assertTrue(battery.comparatorSignal() == 0, "Empty battery signal is " + battery.comparatorSignal());
+		charge(helper, batteryPos, null); // The battery box's sided storages are wrappers; the unsided one is the real battery.
+		helper.assertTrue(battery.comparatorSignal() == 15, "Full battery signal is " + battery.comparatorSignal());
+
+		BlockPos crusherPos = new BlockPos(3, 1, 3);
+		helper.setBlock(crusherPos, machine(MachineKind.CRUSHER));
+		MachineBlockEntity crusher = helper.getBlockEntity(crusherPos, MachineBlockEntity.class);
+		for (Direction side : Direction.values()) {
+			for (int slot : crusher.getSlotsForFace(side)) {
+				helper.assertTrue(slot < MachineKind.CRUSHER.slots, "Upgrade slot " + slot + " exposed on " + side);
+			}
+		}
+		helper.assertTrue(!crusher.canPlaceItem(MachineKind.CRUSHER.slots, new ItemStack(Items.COBBLESTONE)),
+				"Upgrade slots must only take upgrades");
 		helper.succeed();
 	}
 }

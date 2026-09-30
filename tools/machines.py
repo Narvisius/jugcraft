@@ -48,6 +48,9 @@ LOGISTICS_BLOCKS = {
     "item_sorter": {"display": "Item Sorter"},
 }
 TOOLS = {"brass_wrench": "Brass Wrench"}
+# Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
+# At most 4 of each kind count. Numbers are in machine/MachineUpgrades.java.
+UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency Upgrade"}
 
 # Fluid logistics (physical branch; see docs/TECH_TREE.md). Amounts are millibuckets (mB);
 # 1 bucket = 1000 mB = 81000 Fabric droplets. Pipes are passive: pumps push through them.
@@ -192,6 +195,11 @@ CRAFTING = {
     "coke_oven": (["KIK", "KFK", "KIK"], {"K": "minecraft:bricks", "I": "#c:ingots/iron", "F": "minecraft:furnace"}, 1),
     "steel_foundry": (["KHK", "PFP", "KKK"], {"K": "minecraft:bricks", "H": "minecraft:hopper", "P": "#c:plates/iron",
                                               "F": "minecraft:blast_furnace"}, 1),
+    # Upgrades: the first things built from steel.
+    "speed_upgrade": (["PRP", "GCG", "PRP"], {"P": "#c:plates/steel", "R": "minecraft:redstone", "G": "#c:gears/steel",
+                                              "C": "jugcraft:basic_circuit"}, 1),
+    "efficiency_upgrade": (["PWP", "WCW", "PWP"], {"P": "#c:plates/steel", "W": "#c:wires/copper",
+                                                   "C": "jugcraft:basic_circuit"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -371,5 +379,5 @@ def machine_blocks():
 
 
 def machine_items():
-    """Items of the machine feature that are not blocks (tools)."""
-    return list(TOOLS)
+    """Items of the machine feature that are not blocks (tools and upgrades)."""
+    return list(TOOLS) + list(UPGRADES)

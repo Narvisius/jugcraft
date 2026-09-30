@@ -36,8 +36,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	private static final int[][] FACE_BUTTON_XY = {{150, 28}, {162, 40}, {138, 28}, {162, 28}, {150, 16}, {150, 40}};
 	private static final String[] FACE_LETTERS = {"F", "B", "L", "R", "T", "D"};
 	private static final int[] MODE_COLORS = {0x5AA0FF, 0xFFA040, 0x70E070, 0x9A9A9A};
+	private static final int[] REDSTONE_COLORS = {0x9A9A9A, 0xFF4030, 0x802018};
 	private final Button[] faceButtons = new Button[6];
 	private Button ejectButton;
+	private Button redstoneButton;
 	private int shownSides = -1;
 
 	public MachineScreen(MachineMenu menu, Inventory inventory, Component title) {
@@ -59,6 +61,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		}
 		ejectButton = addRenderableWidget(Button.builder(Component.empty(), button -> click(SideConfig.EJECT_BUTTON))
 				.bounds(leftPos + 138, topPos + 54, 35, 12).build());
+		redstoneButton = addRenderableWidget(Button.builder(Component.literal("R"), button -> click(SideConfig.REDSTONE_BUTTON))
+				.bounds(leftPos + 162, topPos + 16, 11, 11).build());
 	}
 
 	private void click(int id) {
@@ -84,6 +88,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 					Component.translatable("container.jugcraft.mode." + mode.name().toLowerCase()))));
 		}
 		ejectButton.setMessage(Component.translatable(config.eject() ? "container.jugcraft.eject.on" : "container.jugcraft.eject.off"));
+		SideConfig.Redstone redstone = config.redstone();
+		redstoneButton.setMessage(Component.literal("R").withColor(REDSTONE_COLORS[redstone.ordinal()]));
+		redstoneButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.redstone",
+				Component.translatable("container.jugcraft.redstone." + redstone.name().toLowerCase()))));
 		ejectButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.eject.tooltip")));
 	}
 
@@ -139,6 +147,9 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			for (int index = 0; index < kind.byproductSlots(); index++) {
 				slotFrame(graphics, x + MachineMenu.byproductX(index), y + MachineMenu.BYPRODUCT_Y);
 			}
+			for (int index = 0; index < kind.upgradeSlots(); index++) {
+				slotFrame(graphics, x + MachineMenu.upgradeX(index), y + MachineMenu.UPGRADE_Y);
+			}
 			if (kind.tankCapacity() > 0) {
 				// Water gauge between the energy bar and the input slot.
 				graphics.fill(x + 29, y + BAR_Y - 1, x + 37, y + 53, DARK);
@@ -156,7 +167,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractLabels(graphics, mouseX, mouseY);
 		if (menu.kind().usesPower()) {
-			String energy = menu.energy() + " / " + menu.capacity() + " JE";
+			String energy = compact(menu.energy()) + " / " + compact(menu.capacity()) + " JE";
 			graphics.text(font, energy, 28, 60, TEXT);
 		}
 		if (menu.kind() == MachineKind.ARC_FURNACE) {
@@ -168,6 +179,18 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 					? "container.jugcraft.wind_turbine.clear" : "container.jugcraft.wind_turbine.blocked";
 			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
 		}
+	}
+
+	/** 950, 12.5k, 400k: short enough to fit beside the upgrade slots. */
+	private static String compact(long value) {
+		if (value < 1_000) {
+			return Long.toString(value);
+		}
+		if (value < 100_000) {
+			long tenths = value / 100;
+			return tenths % 10 == 0 ? tenths / 10 + "k" : tenths / 10 + "." + tenths % 10 + "k";
+		}
+		return value / 1_000 + "k";
 	}
 
 	private static void slotFrame(GuiGraphicsExtractor graphics, int slotX, int slotY) {

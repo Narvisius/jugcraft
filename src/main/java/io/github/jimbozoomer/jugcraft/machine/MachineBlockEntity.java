@@ -135,7 +135,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public MachineBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftMachines.MACHINE_ENTITY, pos, state);
 		this.kind = ((MachineBlock) state.getBlock()).kind();
-		this.items = NonNullList.withSize(kind.slots, ItemStack.EMPTY);
+		this.items = NonNullList.withSize(kind.containerSize(), ItemStack.EMPTY);
 		// Producers only give energy out; consumers only take it in; the battery box does both.
 		long insert = kind.isGenerator() ? 0 : kind.maxInput;
 		long extract = kind.isProcessor() ? 0 : kind.maxOutput;
@@ -480,11 +480,16 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return false;
 		}
 
-		maxProgress = result.get().ticks();
-		if (energy.getAmount() < kind.usePerTick) {
+		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false; // Keeps progress; resumes when the redstone condition is met.
+		}
+		MachineUpgrades.Effect upgrades = upgrades();
+		maxProgress = upgrades.ticks(result.get().ticks());
+		long use = upgrades.use(kind.usePerTick);
+		if (energy.getAmount() < use) {
 			return false; // Keeps progress; resumes when power returns.
 		}
-		energy.setAmount(energy.getAmount() - kind.usePerTick);
+		energy.setAmount(energy.getAmount() - use);
 		progress++;
 		if (progress >= maxProgress) {
 			progress = 0;
@@ -510,6 +515,51 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		setChanged();
 		return true;
+	}
+
+	/** The cards in this machine's upgrade slots. */
+	public MachineUpgrades.Effect upgrades() {
+		if (kind.upgradeSlots() == 0) {
+			return MachineUpgrades.Effect.NONE;
+		}
+		return MachineUpgrades.effect(items.subList(kind.slots, kind.containerSize()));
+	}
+
+	/** Whether any block of the machine receives a redstone signal. */
+	private boolean poweredByRedstone(ServerLevel level, BlockPos pos, BlockState state) {
+		Footprint footprint = kind.footprint();
+		Direction facing = state.getValue(MachineBlock.FACING);
+		for (int part = 0; part < footprint.size(); part++) {
+			if (level.hasNeighborSignal(footprint.partPos(pos, facing, part))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Comparator output: stored energy for generators and the battery box; for processors, how full
+	 * their input, output and byproduct slots are (as vanilla containers do). Upgrade slots don't count.
+	 */
+	public int comparatorSignal() {
+		if (!kind.isProcessor()) {
+			long capacity = energy.getCapacity();
+			if (capacity <= 0 || energy.getAmount() <= 0) {
+				return 0;
+			}
+			return 1 + (int) (energy.getAmount() * 14 / capacity);
+		}
+		float fill = 0;
+		for (int slot = 0; slot < kind.slots; slot++) {
+			ItemStack stack = items.get(slot);
+			if (!stack.isEmpty()) {
+				fill += stack.getCount() / (float) Math.min(getMaxStackSize(), stack.getMaxStackSize());
+			}
+		}
+		if (fill <= 0) {
+			return 0;
+		}
+		return 1 + (int) (fill / kind.slots * 14);
 	}
 
 	/**
@@ -634,6 +684,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return slot < kind.outputSlot() && (!(level instanceof ServerLevel server)
 					|| MachineRecipes.isMultiIngredient(server.getServer(), kind, stack));
 		}
+		if (slot >= kind.slots) {
+			return MachineUpgrades.isUpgrade(stack); // Upgrade slots: menus only; no face exposes them.
+		}
 		return kind.isProcessor() && slot < kind.outputSlot();
 	}
 
@@ -678,7 +731,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.STEAM_GENERATOR) {
 			return slot == SLOT_BUCKET_OUT;
 		}
-		return kind.isProcessor() && slot >= kind.outputSlot()
+		return kind.isProcessor() && slot >= kind.outputSlot() && slot < kind.slots
 				&& sides.mode(side, getBlockState().getValue(MachineBlock.FACING)).output();
 	}
 
@@ -699,7 +752,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		items = NonNullList.withSize(kind.slots, ItemStack.EMPTY);
+		items = NonNullList.withSize(kind.containerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, items);
 		energy.setAmount(input.getLong("energy").orElse(0L));
 		progress = input.getInt("progress").orElse(0);

@@ -13,7 +13,7 @@ Details and numbers: [TECH_TREE.md → Steel tier](../TECH_TREE.md#steel-tier).
 
 ## Connections
 - Existing input producer: vanilla coal and iron (smelted, crushed ×2 or pulverized/washed ×3), bricks, and iron plates from the metal press.
-- Existing output consumer: coke fuels the coal and steam generators; steel plates and gears feed the machine upgrades (PR after this) and later machines.
+- Existing output consumer: coke fuels the coal and steam generators; steel plates and gears feed the machine upgrades ([machine control](machine-control.md)) and later machines.
 - Technology connection: works with hoppers, item pipes, side configuration and eject.
 - Magic connection: none yet.
 - Reachable entry path: the coke oven needs only bricks, iron and a furnace. The foundry needs iron plates (metal press) and a blast furnace. Nothing here gates those.

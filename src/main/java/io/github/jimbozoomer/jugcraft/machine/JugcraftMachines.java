@@ -42,6 +42,7 @@ public final class JugcraftMachines {
 
 	public static void register() {
 		MachineRecipeTypes.register();
+		MachineUpgrades.register();
 		MachineRecipes.register();
 		COPPER_CABLE = block("copper_cable", new CableBlock(properties("copper_cable",
 				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.5F).sound(SoundType.COPPER).noOcclusion())));

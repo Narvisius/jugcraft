@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PRP",
+    "GCG",
+    "PRP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "R": "minecraft:redstone",
+    "G": "#c:gears/steel",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:speed_upgrade",
+    "count": 1
+  }
+}

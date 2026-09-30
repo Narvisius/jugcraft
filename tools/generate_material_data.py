@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
-from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS, UPGRADES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -174,6 +174,18 @@ def machine_assets(lang):
               {"parent": "minecraft:item/handheld", "textures": {"layer0": rid(f"item/{tool}")}})
         write(ASSETS / "items" / f"{tool}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{tool}")}})
 
+    for upgrade, display in UPGRADES.items():
+        lang[f"item.{MOD}.{upgrade}"] = display
+        write(ASSETS / "models" / "item" / f"{upgrade}.json",
+              {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{upgrade}")}})
+        write(ASSETS / "items" / f"{upgrade}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{upgrade}")}})
+    lang[f"tooltip.{MOD}.speed_upgrade"] = "Each: faster, uses more energy per item (up to 4 count)"
+    lang[f"tooltip.{MOD}.efficiency_upgrade"] = "Each: 20% less energy (up to 4 count)"
+    lang[f"container.{MOD}.redstone"] = "Redstone: %s"
+    lang[f"container.{MOD}.redstone.ignored"] = "ignored (always runs)"
+    lang[f"container.{MOD}.redstone.high"] = "runs only with a signal"
+    lang[f"container.{MOD}.redstone.low"] = "runs only without a signal"
+    lang[f"container.{MOD}.upgrades"] = "Upgrades: %s× speed, %s energy per tick"
     lang[f"tooltip.{MOD}.energy"] = "%s / %s JE"
     lang[f"message.{MOD}.tank"] = "%s: %s / %s mB"
     lang[f"message.{MOD}.tank.empty"] = "Empty (0 / %s mB)"

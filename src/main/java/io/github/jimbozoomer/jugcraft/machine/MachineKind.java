@@ -123,6 +123,16 @@ public enum MachineKind implements StringRepresentable {
 		};
 	}
 
+	/** Upgrade slots, after all other slots: powered processors have two (see {@link MachineUpgrades}). */
+	public int upgradeSlots() {
+		return isProcessor() && usesPower() ? 2 : 0;
+	}
+
+	/** Size of the machine's inventory: {@link #slots} (inputs, output, byproducts) plus upgrade slots. */
+	public int containerSize() {
+		return slots + upgradeSlots();
+	}
+
 	/** The output slot of a processor: after the inputs, before any byproduct slots. */
 	public int outputSlot() {
 		return slots - 1 - byproductSlots();

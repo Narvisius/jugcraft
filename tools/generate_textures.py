@@ -506,6 +506,24 @@ def wrench_item():
     return img
 
 
+def upgrade_card(accent, symbol):
+    """A brass-framed punch card with a colored accent and a small symbol (speed: arrow, efficiency: leaf)."""
+    from steampunk_textures import BRASS as SP_BRASS
+    img = new()
+    for y in range(3, 14):
+        for x in range(2, 14):
+            edge = x in (2, 13) or y in (3, 13)
+            c = SP_BRASS[1] if edge else (SP_BRASS[3] if (x + y) % 5 else SP_BRASS[4])
+            img.putpixel((x, y), c + (255,))
+    for x in range(4, 12):
+        img.putpixel((x, 5), accent[0] + (255,))
+    for x, y in symbol:
+        img.putpixel((x, y), accent[1] + (255,))
+    for x, y in ((4, 11), (6, 11), (8, 11), (10, 11)):
+        img.putpixel((x, y), (40, 30, 20, 255))
+    return img
+
+
 def pipe_texture():
     """Bronze pipe with a riveted junction node and darker flanges at connections."""
     def node(x, y):
@@ -1007,6 +1025,10 @@ def machines():
     save(pipe_texture(), "block", "bronze_fluid_pipe")
     save(item_tube_texture(), "block", "brass_item_pipe")
     save(wrench_item(), "item", "brass_wrench")
+    arrow = [(5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (9, 7), (8, 6), (9, 9), (8, 10)]
+    leaf = [(7, 7), (8, 7), (6, 8), (7, 8), (8, 8), (9, 8), (7, 9), (8, 9), (6, 10), (5, 10)]
+    save(upgrade_card([(160, 40, 30), (220, 70, 40)], arrow), "item", "speed_upgrade")
+    save(upgrade_card([(40, 120, 60), (70, 180, 90)], leaf), "item", "efficiency_upgrade")
     save(hazard_plinth(530), "block", "geothermal_plinth")
     save(geothermal_front(531, False), "block", "geothermal_generator_front")
     save(geothermal_front(531, True), "block", "geothermal_generator_front_on")

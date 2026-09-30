@@ -8,6 +8,16 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #19 Machine control
+- **Upgrades:** every powered processing machine gets two upgrade slots.
+  - **Speed Upgrade:** 4 cards make it 3× as fast for twice the energy per item.
+  - **Efficiency Upgrade:** 4 cards bring it to 41% of the energy.
+  - Both are made from steel.
+- **Redstone mode button:** ignored, run with a signal, or run without one.
+- **Comparators** read stored energy (generators, battery box) or how full a machine is, from any block of a multi-block.
+- Energy readouts are shortened (for example "12.5k / 20k JE") to fit the new slots.
+- Four new game tests.
+
 ### #18 Steel tier
 - **Coke Oven** (2 tall) bakes coal into **Coal Coke**. Coke is a 3,200-tick generator fuel and the carbon for steel.
 - **Steel Foundry** (3 tall) turns 1 iron ingot + 1 coke into 1 **steel ingot**.

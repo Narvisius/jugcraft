@@ -212,6 +212,35 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 **Performance.** Pipe networks are found once by a bounded search and cached per dimension. They are rebuilt only after a pipe, tank, pump or machine is placed or removed, or a pipe's neighbor changes. A pump does two storage moves per tick at most, plus one per network endpoint.
 
+## Machine control
+
+Every **powered processing machine** now has two **upgrade slots** (below the output) and a **redstone button** (the "R" above the face buttons). Comparators read every machine.
+
+**Upgrades** are the first things made from steel. Each slot holds up to 4 cards, and at most 4 of each kind count.
+
+| Upgrade | Per card | Four cards | Built from |
+| --- | --- | --- | --- |
+| Speed Upgrade | time ÷ (1 + 0.5 per card); energy per item +25% | 3× as fast, twice the energy per item | 4 steel plates, 2 redstone, 2 steel gears, basic circuit |
+| Efficiency Upgrade | energy use −20% (compounding) | 41% of the energy | 4 steel plates, 4 copper wire, basic circuit |
+
+- Speed and efficiency combine. Four of each gives 3× the speed at about 82% of the base energy per item.
+- The highest draw (four speed cards) stays within each machine's input rate, so an upgraded machine never outruns its own cable intake.
+- Upgrade slots are never offered to hoppers or pipes. Shift-click puts upgrades straight into them.
+
+**Redstone mode** (click "R" to cycle):
+
+- **Ignored** (gray): always runs.
+- **High** (red): runs only while any block of the machine receives a redstone signal.
+- **Low** (dark red): runs only without a signal.
+
+A paused machine keeps its progress. The mode is saved with the side configuration.
+
+**Comparators:**
+
+- **Generators and the battery box:** stored energy (0 empty, 15 full).
+- **Processing machines:** how full their input, output and byproduct slots are, like a chest.
+- A comparator works against any block of a multi-block machine.
+
 ## Steel tier
 
 Steel is the second material tier. It needs **no power** and no new ore, only iron, coal and two brick multi-blocks. Machines placed as one item fill several blocks and break together, like the other [multi-block machines](#multi-block-machines).
@@ -226,7 +255,7 @@ Steel is the second material tier. It needs **no power** and no new ore, only ir
 | Steel Foundry (3 tall) | 1 iron ingot + 1 coke → 1 **steel ingot** (either slot) | 400 ticks; no power | bricks, hopper, iron plates, blast furnace |
 
 - **Coal Coke** (`c:coal_coke`) burns twice as long as coal in the Coal and Steam Generators (3,200 ticks). It is the carbon for steel.
-- **Steel** has the usual ingot, nugget and block, plus a **steel plate** (Metal Press) and a **steel gear**. The first things built from steel are the machine upgrades (next PR).
+- **Steel** has the usual ingot, nugget and block, plus a **steel plate** (Metal Press) and a **steel gear**. The first things built from steel are the [machine upgrades](#machine-control).
 - **Metal accounting:** one iron ingot's metal becomes one steel ingot's. The coke is carbon, not metal, so nothing is gained.
 - **Unpowered machines** have no battery, and cables never connect to them. Their screens show no energy bar.
 - Both work with hoppers, pipes, side configuration and eject like any processing machine.
@@ -365,7 +394,8 @@ Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, 
 - the ore washer tripling ore with water from a source below, and waiting when it has none;
 - the sawmill and the sieve;
 - the coke oven and steel foundry working without power;
-- cables connecting only where power goes in (never to unpowered machines; only to the alloy smelter's socket).
+- cables connecting only where power goes in (never to unpowered machines; only to the alloy smelter's socket);
+- speed and efficiency upgrades, the "high" redstone mode, comparator output and upgrade-slot isolation.
 
 To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests` that builds its setup and ends with `helper.succeed()` or `helper.succeedWhen(...)`.
 
