@@ -14,7 +14,8 @@ public enum MachineKind implements StringRepresentable {
 	CRUSHER("crusher", 10_000, 128, 0, 16, 2),
 	ARC_FURNACE("arc_furnace_controller", 50_000, 512, 0, 64, 2),
 	SOLAR_PANEL("solar_panel", 4_000, 0, 32, 0, 0),
-	STEAM_GENERATOR("steam_generator", 40_000, 0, 128, 0, 3);
+	STEAM_GENERATOR("steam_generator", 40_000, 0, 128, 0, 3),
+	ALLOY_SMELTER("alloy_smelter", 10_000, 128, 0, 20, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -47,9 +48,14 @@ public enum MachineKind implements StringRepresentable {
 		this.slots = slots;
 	}
 
-	/** Processing machines have an input slot 0 and an output slot 1. */
+	/** Processing machines have input slots first and one output slot last. */
 	public boolean isProcessor() {
-		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE;
+		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER;
+	}
+
+	/** The output slot of a processor (its last slot). */
+	public int outputSlot() {
+		return slots - 1;
 	}
 
 	/** Generators only produce energy; they never accept it. */

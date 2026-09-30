@@ -60,6 +60,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private static final int[] NO_SLOTS = {};
 	private static final int[] INPUT = {0};
 	private static final int[] OUTPUT = {1};
+	private static final int[] ALLOY_INPUTS = {0, 1};
+	private static final int[] ALLOY_OUTPUT = {2};
 	private static final int[] STEAM_TOP = {SLOT_WATER_IN};
 	private static final int[] STEAM_SIDES = {SLOT_FUEL};
 	private static final int[] STEAM_BOTTOM = {SLOT_BUCKET_OUT};
@@ -166,7 +168,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
 			case BATTERY_BOX -> tickBattery(level, pos, state);
-			case ELECTRIC_FURNACE, CRUSHER, ARC_FURNACE -> tickProcessor(level, pos, state);
+			default -> tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
 			level.setBlock(pos, state.setValue(MachineBlock.LIT, active), 3);
@@ -268,8 +270,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return false;
 		}
 
-		ItemStack input = items.get(0);
-		Optional<Result> result = input.isEmpty() ? Optional.empty() : findResult(level, input);
+		Optional<Result> result = findResult(level);
 		if (result.isEmpty() || !canOutput(result.get().stack())) {
 			if (progress != 0) {
 				progress = 0;
@@ -286,32 +287,45 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		progress++;
 		if (progress >= maxProgress) {
 			progress = 0;
-			ItemStack output = items.get(1);
+			int out = kind.outputSlot();
+			ItemStack output = items.get(out);
 			if (output.isEmpty()) {
-				items.set(1, result.get().stack().copy());
+				items.set(out, result.get().stack().copy());
 			} else {
 				output.grow(result.get().stack().getCount());
 			}
-			input.shrink(1);
+			items.get(0).shrink(result.get().takeFromSlot0());
+			if (result.get().takeFromSlot1() > 0) {
+				items.get(1).shrink(result.get().takeFromSlot1());
+			}
 		}
 		setChanged();
 		return true;
 	}
 
-	private record Result(ItemStack stack, int ticks) {
+	/** A matched recipe: what it makes, how long it takes and how many items it takes from each input slot. */
+	private record Result(ItemStack stack, int ticks, int takeFromSlot0, int takeFromSlot1) {
 	}
 
-	private Optional<Result> findResult(ServerLevel level, ItemStack input) {
+	private Optional<Result> findResult(ServerLevel level) {
+		if (kind == MachineKind.ALLOY_SMELTER) {
+			return MachineRecipes.findAlloy(items.get(0), items.get(1)).map(match -> new Result(
+					match.recipe().output(), match.recipe().ticks(), match.takeFromSlot0(), match.takeFromSlot1()));
+		}
+		ItemStack input = items.get(0);
+		if (input.isEmpty()) {
+			return Optional.empty();
+		}
 		if (kind == MachineKind.ELECTRIC_FURNACE) {
 			SingleRecipeInput recipeInput = new SingleRecipeInput(input);
 			return SMELTING.getRecipeFor(recipeInput, level)
-					.map(holder -> new Result(holder.value().assemble(recipeInput), MachineKind.ELECTRIC_FURNACE_TICKS));
+					.map(holder -> new Result(holder.value().assemble(recipeInput), MachineKind.ELECTRIC_FURNACE_TICKS, 1, 0));
 		}
-		return MachineRecipes.find(kind, input).map(recipe -> new Result(recipe.output(), recipe.ticks()));
+		return MachineRecipes.find(kind, input).map(recipe -> new Result(recipe.output(), recipe.ticks(), 1, 0));
 	}
 
 	private boolean canOutput(ItemStack result) {
-		ItemStack output = items.get(1);
+		ItemStack output = items.get(kind.outputSlot());
 		if (output.isEmpty()) {
 			return true;
 		}
@@ -344,7 +358,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	@Override
 	public void setItem(int slot, ItemStack stack) {
 		// A different input restarts processing, so progress cannot carry over to another recipe.
-		if (kind.isProcessor() && slot == 0 && !ItemStack.isSameItemSameComponents(items.get(0), stack)) {
+		if (kind.isProcessor() && slot < kind.outputSlot() && !ItemStack.isSameItemSameComponents(items.get(slot), stack)) {
 			progress = 0;
 		}
 		super.setItem(slot, stack);
@@ -362,7 +376,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				default -> false;
 			};
 		}
-		return kind.isProcessor() && slot == 0;
+		if (kind == MachineKind.ALLOY_SMELTER) {
+			return slot < kind.outputSlot() && MachineRecipes.isAlloyIngredient(stack);
+		}
+		return kind.isProcessor() && slot < kind.outputSlot();
 	}
 
 	@Override
@@ -380,6 +397,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (!kind.isProcessor()) {
 			return NO_SLOTS;
 		}
+		if (kind == MachineKind.ALLOY_SMELTER) {
+			return side == Direction.DOWN ? ALLOY_OUTPUT : ALLOY_INPUTS;
+		}
 		return side == Direction.DOWN ? OUTPUT : INPUT;
 	}
 
@@ -393,7 +413,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.STEAM_GENERATOR) {
 			return slot == SLOT_BUCKET_OUT;
 		}
-		return kind.isProcessor() && slot == 1;
+		return kind.isProcessor() && slot == kind.outputSlot();
 	}
 
 	// ------------------------------------------------------------------ menu

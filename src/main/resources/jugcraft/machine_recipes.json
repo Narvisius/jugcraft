@@ -392,5 +392,84 @@
         "rare_earths"
       ]
     }
+  ],
+  "alloy_smelter": [
+    {
+      "inputs": [
+        [
+          "minecraft:copper_ingot",
+          3
+        ],
+        [
+          "jugcraft:tin_ingot",
+          1
+        ]
+      ],
+      "output": "jugcraft:bronze_ingot",
+      "count": 4,
+      "ticks": 200,
+      "features": [
+        "machines",
+        "tin"
+      ]
+    },
+    {
+      "inputs": [
+        [
+          "minecraft:copper_ingot",
+          3
+        ],
+        [
+          "jugcraft:zinc_ingot",
+          1
+        ]
+      ],
+      "output": "jugcraft:brass_ingot",
+      "count": 4,
+      "ticks": 200,
+      "features": [
+        "machines",
+        "zinc"
+      ]
+    },
+    {
+      "inputs": [
+        [
+          "minecraft:iron_ingot",
+          2
+        ],
+        [
+          "jugcraft:nickel_ingot",
+          1
+        ]
+      ],
+      "output": "jugcraft:invar_ingot",
+      "count": 3,
+      "ticks": 240,
+      "features": [
+        "machines",
+        "nickel"
+      ]
+    },
+    {
+      "inputs": [
+        [
+          "jugcraft:tin_ingot",
+          1
+        ],
+        [
+          "jugcraft:lead_ingot",
+          1
+        ]
+      ],
+      "output": "jugcraft:solder_ingot",
+      "count": 2,
+      "ticks": 120,
+      "features": [
+        "machines",
+        "tin",
+        "lead"
+      ]
+    }
   ]
 }

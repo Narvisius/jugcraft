@@ -25,6 +25,7 @@ The world now holds the raw materials later technology needs, found where they p
 | Rare earths | Monazite ore, rare, Y −64 to 16; iron pickaxe | Blast furnace: monazite → rare earth oxide (**stand-in**) | Monazite; real separation is solvent extraction |
 | Sulfur | **No new ore**: crafts from vanilla 26.2 sulfur (1 → 4 sulfur dust) | Sulfur dust | Reuses vanilla Sulfur Caves |
 | Silicon | **No new ore**: blast vanilla quartz → silicon (**stand-in**) | Silicon | Carbothermic reduction of quartz |
+| Brass, invar, solder | **Alloys only**, made in the alloy smelter (see machines-and-power.md) | Ingots, nuggets and blocks with `c:` tags | Brass = copper + zinc; invar = iron + nickel; solder = tin + lead |
 | Crude oil | Oil sand in desert and badlands sand, Y 50–90; shovel; drops 1–2 bitumen | Bitumen | Oil sands. **Liquid crude oil is not added yet**: it needs a shared fluid system (pipes, tanks, refining) |
 
 ## Connections

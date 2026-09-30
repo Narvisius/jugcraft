@@ -14,6 +14,7 @@ MACHINES = {
     "arc_furnace_controller": {"display": "Arc Furnace Controller", "lit": True},
     "solar_panel": {"display": "Solar Panel", "lit": False, "top": "solar_panel_top", "front": "machine_side"},
     "steam_generator": {"display": "Steam Generator", "lit": True},
+    "alloy_smelter": {"display": "Alloy Smelter", "lit": True},
 }
 
 # Plain crafting-component / structure blocks.
@@ -37,6 +38,7 @@ STATS = {
     # Boils 10 mB of water per tick; the tank holds 8 buckets and a water source below refills 20 mB/t.
     "steam_generator": {"capacity": 40_000, "output_per_tick": 128, "generation_per_tick": 64,
                         "water_per_tick": 10, "tank": 8_000},
+    "alloy_smelter": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 20},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -70,6 +72,9 @@ CRAFTING = {
     "steam_generator": (["BUB", "CGC", "BMB"],
                         {"B": "#c:ingots/bronze", "U": "minecraft:bucket", "C": "jugcraft:copper_cable",
                          "G": "jugcraft:coal_generator", "M": "jugcraft:machine_casing"}, 1),
+    "alloy_smelter": (["BCB", "FMF", "BRB"],
+                      {"B": "#c:ingots/bronze", "C": "jugcraft:copper_cable", "F": "minecraft:furnace",
+                       "M": "jugcraft:machine_casing", "R": "minecraft:redstone"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -123,8 +128,21 @@ ARC_FURNACE = [
 ]
 
 
+# Alloy smelter: two ingredient stacks (any order) -> alloy. Ratios conserve metal exactly.
+ALLOY_SMELTER = [
+    {"inputs": [["minecraft:copper_ingot", 3], ["jugcraft:tin_ingot", 1]], "output": "jugcraft:bronze_ingot",
+     "count": 4, "ticks": 200, "features": [FEATURE, "tin"]},
+    {"inputs": [["minecraft:copper_ingot", 3], ["jugcraft:zinc_ingot", 1]], "output": "jugcraft:brass_ingot",
+     "count": 4, "ticks": 200, "features": [FEATURE, "zinc"]},
+    {"inputs": [["minecraft:iron_ingot", 2], ["jugcraft:nickel_ingot", 1]], "output": "jugcraft:invar_ingot",
+     "count": 3, "ticks": 240, "features": [FEATURE, "nickel"]},
+    {"inputs": [["jugcraft:tin_ingot", 1], ["jugcraft:lead_ingot", 1]], "output": "jugcraft:solder_ingot",
+     "count": 2, "ticks": 120, "features": [FEATURE, "tin", "lead"]},
+]
+
+
 def machine_recipes():
-    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE}
+    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE, "alloy_smelter": ALLOY_SMELTER}
 
 
 def machine_blocks():

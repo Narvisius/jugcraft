@@ -8,7 +8,7 @@ Status: **proposals for discussion, not approved or implemented.** Every entry h
 | --- | --- |
 | Generation | Coal Generator (32 JE/t), Steam Generator (64 JE/t, needs water, burns coal or bitumen), Solar Panel (8 JE/t in daylight) |
 | Storage and transport | Battery Box (400k JE), Copper Cable (256 JE/t) |
-| Processing | Electric Furnace, Crusher (ore doubling), Arc Furnace multiblock |
+| Processing | Electric Furnace, Crusher (ore doubling), Arc Furnace multiblock, Alloy Smelter |
 
 ## Design rules for new machines
 1. **Each machine is a consumer for something that already exists.** Name the materials it uses, and what uses its output.
@@ -33,7 +33,7 @@ These unlock whole groups of machines, so they should be designed first.
 ### Tier 1: Workshops (current power levels)
 | Machine | Does | Uses | Feeds |
 | --- | --- | --- | --- |
-| **Alloy Smelter** | Two-input alloying: bronze, brass (copper + zinc), solder (tin + lead), invar (iron + nickel) | Existing metals | Machine casings, circuits, magic instruments (bell bronze, brass astrolabes) |
+| **Alloy Smelter** ✅ implemented | Two-input alloying: bronze, brass (copper + zinc), solder (tin + lead), invar (iron + nickel) | Existing metals | Machine casings, circuits, magic instruments (bell bronze, brass astrolabes) |
 | **Metal Press** | Ingots → plates; plates → gears | All metals | Casings, rocket hulls, better machine recipes |
 | **Wire Drawer** | Ingots → wire (copper, silver, aluminum) | Copper, silver, aluminum | Cables, circuits, motors |
 | **Water Pump** | Moves water into tanks and the steam generator | Fluid API | Steam, agriculture (irrigation), chemistry |
@@ -76,7 +76,7 @@ Each connection below works both ways, but no machine requires magic to work.
 - **Space:** the precision fabricator, refinery, lithium batteries and solar panels all feed rocketry and off-world bases.
 
 ## Suggested next steps, in order
-1. **Alloy Smelter:** uses only existing systems and gives bronze, zinc and lead a proper processing route.
+1. ~~**Alloy Smelter**~~ Done: bronze, brass, invar and solder.
 2. **Fluid API, with Water Pump and tanks:** the foundation for steam, chemistry and oil.
 3. **Electrolytic Cell and Chemical Reactor:** replace the remaining stand-ins; give salt, sulfur and phosphate real uses.
 4. **Metal Press, Wire Drawer and Circuit Assembler:** the parts economy for everything above tier 2.

@@ -33,6 +33,10 @@ METALS = {
                 "tool": "iron", "gen": {"size": 4, "count": 1, "min_y": -64, "max_y": -16}},
     "bronze": {"mined": False, "display": "Bronze", "feature": "tin", "extras": ["bronze_blend"]},
     "aluminum": {"mined": False, "display": "Aluminum", "feature": "aluminum"},
+    # Alloys made only in the alloy smelter (tools/machines.py ALLOY_SMELTER).
+    "brass": {"mined": False, "display": "Brass", "feature": "zinc"},
+    "invar": {"mined": False, "display": "Invar", "feature": "nickel"},
+    "solder": {"mined": False, "display": "Solder", "feature": "lead"},
 }
 
 # Non-metal ores: <name>_ore, deepslate_<name>_ore, item <name>, storage block <name>_block.

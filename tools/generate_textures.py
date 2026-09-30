@@ -227,6 +227,17 @@ METAL_COLORS = {
                  [(118, 124, 130), (166, 172, 178), (198, 202, 208), (220, 224, 228), (238, 240, 244)]),
 }
 
+# Alloys have their own seed range so adding them never changes existing textures.
+# Brass is bright yellow-gold, invar a cool pale gray, solder a dull lead-tin gray.
+ALLOY_COLORS = {
+    "brass": (None, None,
+              [(120, 88, 24), (176, 138, 40), (214, 180, 64), (236, 210, 108), (250, 236, 170)]),
+    "invar": (None, None,
+              [(84, 88, 92), (128, 132, 136), (166, 170, 172), (196, 198, 200), (222, 224, 226)]),
+    "solder": (None, None,
+               [(70, 72, 80), (104, 106, 114), (138, 140, 148), (166, 168, 176), (196, 198, 206)]),
+}
+
 # name: (ore specks, glint, item/block palette)
 MINERAL_COLORS = {
     "salt": ([(236, 228, 228), (246, 238, 240), (226, 196, 200)], (255, 255, 255),
@@ -271,6 +282,11 @@ def main_extra():
         save(ore(DEEPSLATE, seed + 1, streaks=True, specks=specks, glint=glint), "block", f"deepslate_{mineral}_ore")
         save(rock(palette, seed + 2), "block", f"{mineral}_block")
         save(pile(seed + 3, palette), "item", mineral)
+
+    for index, (metal, (_, _, palette)) in enumerate(ALLOY_COLORS.items()):
+        save(metal_block(palette, 700 + index), "block", f"{metal}_block")
+        save(from_mask(INGOT, palette), "item", f"{metal}_ingot")
+        save(from_mask(NUGGET, palette), "item", f"{metal}_nugget")
 
     save(speckled(BAUXITE, 300, [(214, 170, 130), (226, 190, 150)]), "block", "bauxite")
     save(speckled(OIL_SAND_BASE, 301, BITUMEN, count=40), "block", "oil_sand")
@@ -460,6 +476,22 @@ def boiler(seed, lit):
     return img
 
 
+def crucibles(seed, lit):
+    img = panel(seed)
+    for cx in (4, 9):
+        for y in range(5, 12):
+            for x in range(cx, cx + 4):
+                edge = x in (cx, cx + 3) or y == 11
+                if edge:
+                    c = STEEL[0]
+                elif lit and y >= 7:
+                    c = [(250, 150, 40), (255, 200, 80), (230, 110, 30)][(x + y) % 3]
+                else:
+                    c = (40, 36, 34)
+                img.putpixel((x, y), c + (255,))
+    return img
+
+
 def machines():
     (TEX / "gui").mkdir(parents=True, exist_ok=True)
     save(panel(500), "block", "machine_side")
@@ -478,6 +510,8 @@ def machines():
     save(solar_top(), "block", "solar_panel_top")
     save(boiler(509, False), "block", "steam_generator_front")
     save(boiler(509, True), "block", "steam_generator_front_on")
+    save(crucibles(510, False), "block", "alloy_smelter_front")
+    save(crucibles(510, True), "block", "alloy_smelter_front_on")
     save(cable_texture(), "block", "copper_cable")
     save(cable_item(), "item", "copper_cable")
     gui()

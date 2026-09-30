@@ -126,6 +126,10 @@ def item_units(ref):
             return {metal[4:]: 81}
         return {metal: UNITS[form]}
     if ns != MOD:
+        vanilla = {"copper_ingot": ("copper", 9), "iron_ingot": ("iron", 9), "gold_ingot": ("gold", 9)}
+        if ns == "minecraft" and path in vanilla:
+            metal, units = vanilla[path]
+            return {metal: units}
         return {}
     for metal in METALS:
         table = {f"{metal}_ingot": 9, f"{metal}_nugget": 1, f"{metal}_block": 81,
@@ -250,17 +254,18 @@ def check_machines(registered):
         err("jugcraft/machine_recipes.json is stale; run tools/generate_material_data.py")
     for machine, recipes in machine_recipes().items():
         for recipe in recipes:
-            label = f"{machine} {recipe['input']}"
-            for ref in (recipe["input"], recipe["output"]):
+            inputs = recipe.get("inputs") or [[recipe["input"], 1]]
+            label = f"{machine} {' + '.join(ref for ref, _ in inputs)}"
+            for ref in [ref for ref, _ in inputs] + [recipe["output"]]:
                 if split(ref)[0] == MOD and split(ref)[1] not in registered:
                     err(f"{label}: unknown item {ref}")
             for feature in recipe["features"]:
                 if feature not in FEATURES:
                     err(f"{label}: unknown feature {feature}")
-            units_in = sum(item_units(recipe["input"]).values())
+            units_in = sum(sum(item_units(ref).values()) * count for ref, count in inputs)
             units_out = sum(item_units(recipe["output"]).values()) * recipe["count"]
             allowed = units_in * (ORE_PROCESSING_MULTIPLIER if recipe.get("ore") else 1)
-            if recipe.get("ore") and not recipe["input"].endswith("_ore"):
+            if recipe.get("ore") and not all(ref.endswith("_ore") for ref, _ in inputs):
                 err(f"{label}: only ores get the ore-processing bonus")
             if units_out > allowed:
                 err(f"{label}: creates metal ({units_in} in, {units_out} out, {allowed} allowed)")

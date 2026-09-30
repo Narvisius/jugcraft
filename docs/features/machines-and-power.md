@@ -18,6 +18,7 @@ Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and st
 | Battery Box | Stores energy | Holds 400,000; charges from any side except the front, discharges 256/t out of the **front** |
 | Electric Furnace | Smelts anything the vanilla furnace can | 10/t, 100 ticks per item (twice the vanilla furnace's speed); holds 10,000 |
 | Crusher | Ore → 2 raw ore; mineral ores → extra minerals; sulfur → 6 sulfur dust; oil sand → 3 bitumen; cobblestone → gravel → sand | 16/t; holds 10,000 |
+| Alloy Smelter | Two ingredient slots, either order: 3 copper + 1 tin → 4 **bronze**; 3 copper + 1 zinc → 4 **brass**; 2 iron + 1 nickel → 3 **invar**; 1 tin + 1 lead → 2 **solder**. Every ratio conserves metal | 20/t; holds 10,000; 120–240 ticks per batch |
 | Arc Furnace (multiblock) | High-temperature processing: quartz → 2 silicon, bauxite → aluminum ingot, raw nickel/tungsten/uranium → ingots, lepidolite → 2 lithium carbonate, monazite → 2 rare earth oxide | 64/t; holds 50,000 |
 
 **Arc furnace structure:** a solid 3×3×3 cube of 26 Arc Furnace Casing blocks, with the Arc Furnace Controller in the center of one face, facing outward. Feed power into the controller's front. The screen shows whether the structure is formed; the structure is rechecked every second.
@@ -33,6 +34,7 @@ Hoppers work with every machine: they insert into the input (or fuel) slot from 
 - **Crusher:** flint, cable, a casing, bronze and redstone.
 - **Arc Furnace Casing:** bricks and nickel make 8.
 - **Arc Furnace Controller:** nickel, cable, redstone, a casing and a blast furnace.
+- **Alloy Smelter:** bronze, cable, two furnaces, a casing and redstone.
 - **Solar Panel:** glass, silicon, bronze and cable.
 - **Steam Generator:** bronze, a bucket, cable, a casing and a coal generator (an upgrade of it).
 

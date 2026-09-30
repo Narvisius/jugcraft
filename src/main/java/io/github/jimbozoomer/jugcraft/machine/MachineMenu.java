@@ -15,11 +15,14 @@ import net.minecraft.world.item.Items;
 /**
  * Shared menu for all machines. Coal generator: fuel (56,35). Processors: input (56,35), output (116,35).
  * Steam generator: fuel (56,53), water bucket (56,17), empty buckets (116,35).
+ * Alloy smelter: ingredients (34,35) and (56,35), output (116,35).
  */
 public class MachineMenu extends AbstractContainerMenu {
 	public static final int INPUT_X = 56;
 	public static final int OUTPUT_X = 116;
 	public static final int SLOT_Y = 35;
+	/** The alloy smelter's first ingredient slot; its second uses INPUT_X. */
+	public static final int ALLOY_INPUT_A_X = 34;
 
 	private final MachineKind kind;
 	private final Container container;
@@ -59,6 +62,25 @@ public class MachineMenu extends AbstractContainerMenu {
 				}
 			});
 			addSlot(new Slot(container, MachineBlockEntity.SLOT_BUCKET_OUT, OUTPUT_X, SLOT_Y) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return false;
+				}
+			});
+		} else if (kind == MachineKind.ALLOY_SMELTER) {
+			addSlot(new Slot(container, 0, ALLOY_INPUT_A_X, SLOT_Y) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return MachineRecipes.isAlloyIngredient(stack);
+				}
+			});
+			addSlot(new Slot(container, 1, INPUT_X, SLOT_Y) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return MachineRecipes.isAlloyIngredient(stack);
+				}
+			});
+			addSlot(new Slot(container, 2, OUTPUT_X, SLOT_Y) {
 				@Override
 				public boolean mayPlace(ItemStack stack) {
 					return false;
