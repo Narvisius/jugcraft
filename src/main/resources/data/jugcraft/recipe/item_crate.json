@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "W W",
+    "PWP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "W": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:item_crate",
+    "count": 1
+  }
+}

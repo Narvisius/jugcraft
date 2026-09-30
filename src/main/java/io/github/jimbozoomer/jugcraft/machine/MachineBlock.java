@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
 import io.github.jimbozoomer.jugcraft.energy.EnergyConnectable;
+import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlock;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
@@ -108,6 +109,14 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (kind == MachineKind.STEEL_TANK) {
+			// A tank has no screen: show what it holds, like the tinplate tank.
+			// LargeMachineBlock passes the master's position here.
+			if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MachineBlockEntity tank && tank.reservoir() != null) {
+				player.sendOverlayMessage(FluidTankBlock.describe(tank.reservoir()));
+			}
+			return InteractionResult.SUCCESS;
+		}
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MenuProvider provider) {
 			player.openMenu(provider);
 		}

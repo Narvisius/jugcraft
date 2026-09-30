@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
-from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS, UPGRADES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, TOOLS, UPGRADES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -168,6 +168,20 @@ def machine_assets(lang):
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {
             f"facing={facing}": {"model": rid(f"block/{block}"), **rotation} for facing, rotation in FACING_ROTATION.items()}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    # Storage blocks: one model each, no rotation.
+    from storage_models import MODELS as STORAGE_MODELS
+    for block, info in STORAGE_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = info["display"]
+        elements = STORAGE_MODELS[block]
+        textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+        textures["particle"] = rid("block/sp_wood")
+        write(ASSETS / "models" / "block" / f"{block}.json", {
+            "parent": "minecraft:block/block", "textures": textures,
+            "elements": model_writer.slice_model(block, elements, [(0, 0, 0)])[0]})
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    lang[f"message.{MOD}.crate"] = "%s × %s (holds up to %s)"
+    lang[f"message.{MOD}.crate.empty"] = "Empty crate: holds %s stacks of one item"
     for tool, display in TOOLS.items():
         lang[f"item.{MOD}.{tool}"] = display
         write(ASSETS / "models" / "item" / f"{tool}.json",

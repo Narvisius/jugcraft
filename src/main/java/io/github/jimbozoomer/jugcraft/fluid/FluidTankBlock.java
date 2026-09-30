@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.fluid;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,14 +46,18 @@ public class FluidTankBlock extends BaseEntityBlock implements FluidConnectable 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FluidTankBlockEntity tank) {
-			long capacity = FluidTankBlockEntity.CAPACITY / FluidNetworks.DROPLETS_PER_MB;
-			Component message = tank.storage.isResourceBlank()
-					? Component.translatable("message.jugcraft.tank.empty", capacity)
-					: Component.translatable("message.jugcraft.tank", FluidVariantAttributes.getName(tank.storage.variant),
-							tank.storage.amount / FluidNetworks.DROPLETS_PER_MB, capacity);
-			player.sendOverlayMessage(message);
+			player.sendOverlayMessage(describe(tank.storage));
 		}
 		return InteractionResult.SUCCESS;
+	}
+
+	/** "Water: 3000 / 16000 mB" (or "Empty"), for any single-fluid tank; shown when right-clicked with an empty hand. */
+	public static Component describe(SingleFluidStorage storage) {
+		long capacity = storage.getCapacity() / FluidNetworks.DROPLETS_PER_MB;
+		return storage.isResourceBlank()
+				? Component.translatable("message.jugcraft.tank.empty", capacity)
+				: Component.translatable("message.jugcraft.tank", FluidVariantAttributes.getName(storage.variant),
+						storage.amount / FluidNetworks.DROPLETS_PER_MB, capacity);
 	}
 
 	@Override

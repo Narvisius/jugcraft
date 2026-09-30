@@ -1060,6 +1060,8 @@ def machines():
     save(grate(952), "block", "coke_oven_front")
     save(grate(952, glow=ember), "block", "coke_oven_front_on")
     save(window(953, [(30, 26, 26), (44, 36, 34)]), "block", "steel_foundry_front")
+    save(battery_front(954), "block", "capacitor_bank_front")
+    save(tank_side(955), "block", "steel_tank_front")
     save(window(953, [(30, 26, 26)], glow=[(255, 200, 80), (255, 236, 150), (250, 150, 40)]), "block", "steel_foundry_front_on")
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")

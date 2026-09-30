@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PBP",
+    "BCB",
+    "PBP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "jugcraft:battery_box",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:capacitor_bank",
+    "count": 1
+  }
+}

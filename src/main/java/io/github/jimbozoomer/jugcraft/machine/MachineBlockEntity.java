@@ -13,10 +13,12 @@ import java.util.Optional;
 import java.util.Set;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -140,6 +142,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		long insert = kind.isGenerator() ? 0 : kind.maxInput;
 		long extract = kind.isProcessor() ? 0 : kind.maxOutput;
 		this.energy = new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
+		this.reservoir = kind == MachineKind.STEEL_TANK
+				? SingleFluidStorage.withFixedCapacity(MachineKind.STEEL_TANK_CAPACITY * FluidNetworks.DROPLETS_PER_MB, this::setChanged)
+				: null;
 		this.inlet = switch (kind) {
 			case STEAM_GENERATOR -> new TankInlet(Fluids.WATER, MachineKind.STEAM_TANK);
 			case GEOTHERMAL_GENERATOR -> new TankInlet(Fluids.LAVA, MachineKind.GEOTHERMAL_TANK);
@@ -170,7 +175,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * washer take water and the geothermal generator takes lava into their tanks. Other machines have none.
 	 */
 	public @Nullable Storage<FluidVariant> fluidFor(@Nullable Direction side) {
-		return inlet;
+		return reservoir != null ? reservoir : inlet;
 	}
 
 	/**
@@ -218,10 +223,16 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	private final @Nullable TankInlet inlet;
+	/** The steel tank's fluid: a full storage (pumps and buckets can also take it out). */
+	private final @Nullable SingleFluidStorage reservoir;
+
+	public @Nullable SingleFluidStorage reservoir() {
+		return reservoir;
+	}
 
 	/** The storage exposed on a side; the battery box only discharges through its front. */
 	public @Nullable EnergyStorage energyFor(@Nullable Direction side) {
-		if (kind != MachineKind.BATTERY_BOX || side == null) {
+		if (!kind.isBattery() || side == null) {
 			return energy;
 		}
 		boolean front = side == getBlockState().getValue(MachineBlock.FACING);
@@ -265,7 +276,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case COAL_GENERATOR -> tickGenerator(level, pos);
 			case SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
-			case BATTERY_BOX -> tickBattery(level, pos, state);
+			case BATTERY_BOX, CAPACITOR_BANK -> tickBattery(level, pos, state);
+			case STEEL_TANK -> false;
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
 			case WIND_TURBINE -> tickWind(level, pos, state);
 			default -> tickProcessor(level, pos, state);
@@ -445,10 +457,19 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 	}
 
+	/** Batteries give power out of their front face only; the capacitor bank out of the front of all four blocks. */
 	private boolean tickBattery(ServerLevel level, BlockPos pos, BlockState state) {
 		Direction front = state.getValue(MachineBlock.FACING);
-		EnergyNetworks.pushToNeighbors(level, pos, energy, kind.maxOutput, List.of(front));
+		Footprint footprint = kind.footprint();
+		long budget = kind.maxOutput;
+		for (int part = 0; part < footprint.size() && budget > 0; part++) {
+			budget -= EnergyNetworks.pushToNeighbors(level, footprint.partPos(pos, facing(state), part), energy, budget, List.of(front));
+		}
 		return false;
+	}
+
+	private static Direction facing(BlockState state) {
+		return state.getValue(MachineBlock.FACING);
 	}
 
 	private boolean tickProcessor(ServerLevel level, BlockPos pos, BlockState state) {
@@ -542,6 +563,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * their input, output and byproduct slots are (as vanilla containers do). Upgrade slots don't count.
 	 */
 	public int comparatorSignal() {
+		if (reservoir != null) {
+			return StorageUtil.getRedstoneSignal(reservoir);
+		}
 		if (!kind.isProcessor()) {
 			long capacity = energy.getCapacity();
 			if (capacity <= 0 || energy.getAmount() <= 0) {
@@ -761,6 +785,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		maxBurn = input.getInt("max_burn").orElse(0);
 		tank = input.getInt("water").orElse(0);
 		sides.unpack(input.getInt("sides").orElse(SideConfig.defaults()));
+		if (reservoir != null) {
+			reservoir.readValue(input);
+		}
 	}
 
 	@Override
@@ -774,5 +801,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		output.putInt("max_burn", maxBurn);
 		output.putInt("water", tank);
 		output.putInt("sides", sides.pack());
+		if (reservoir != null) {
+			reservoir.writeValue(output);
+		}
 	}
 }

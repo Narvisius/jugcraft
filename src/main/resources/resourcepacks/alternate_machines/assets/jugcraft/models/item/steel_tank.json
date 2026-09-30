@@ -1,0 +1,216 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "front": "jugcraft:block/steel_tank_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        3.75,
+        0.0
+      ],
+      "to": [
+        16.0,
+        4.25,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        4.25,
+        0.5
+      ],
+      "to": [
+        15.5,
+        11.25,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            15.0,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            15.0,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            15.0,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            15.0,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            15.0,
+            15.0
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            15.0,
+            15.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        11.25,
+        2.0
+      ],
+      "to": [
+        14.0,
+        12.25,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            12.0,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            12.0,
+            1.0
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            12.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            12.0,
+            1.0
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            12.0,
+            12.0
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            12.0,
+            12.0
+          ]
+        }
+      }
+    }
+  ]
+}

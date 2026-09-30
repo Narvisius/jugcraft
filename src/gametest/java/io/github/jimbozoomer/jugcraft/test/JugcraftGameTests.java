@@ -19,7 +19,16 @@ import io.github.jimbozoomer.jugcraft.machine.MachineRecipe;
 import io.github.jimbozoomer.jugcraft.machine.MachineRecipes;
 import io.github.jimbozoomer.jugcraft.machine.MachineUpgrades;
 import io.github.jimbozoomer.jugcraft.machine.SideConfig;
+import io.github.jimbozoomer.jugcraft.storage.JugcraftStorage;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +40,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 
 /**
  * In-game tests run by `./gradlew build` on a headless server (Fabric game test API).
@@ -472,5 +482,54 @@ public class JugcraftGameTests {
 			helper.assertTrue(moved >= 32, "High-pressure extractor moved " + moved + " by tick 10");
 			helper.succeed();
 		});
+	}
+
+	// ------------------------------------------------------------------ storage
+
+	/** The 2x2 capacitor bank holds 4,000,000 JE, takes power at its sides and gives it out of its front. */
+	@GameTest
+	public void capacitorBankOutputsFromItsFront(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 3);
+		large(helper, master, MachineKind.CAPACITOR_BANK);
+		EnergyStorage front = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.above()), Direction.NORTH);
+		EnergyStorage side = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.west()), Direction.WEST);
+		helper.assertTrue(front != null && front.supportsExtraction() && !front.supportsInsertion(), "Front must only give power");
+		helper.assertTrue(side != null && side.supportsInsertion() && !side.supportsExtraction(), "Sides must only take power");
+		helper.assertTrue(front.getCapacity() == 4_000_000, "Capacity is " + front.getCapacity());
+		helper.succeed();
+	}
+
+	/** The steel tank holds exactly 128 buckets of one fluid. */
+	@GameTest
+	public void steelTankHolds128Buckets(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 2);
+		large(helper, master, MachineKind.STEEL_TANK);
+		Storage<FluidVariant> tank = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.south()), Direction.UP);
+		helper.assertTrue(tank != null, "No fluid storage on the tank's back block");
+		try (Transaction transaction = Transaction.openOuter()) {
+			long inserted = tank.insert(FluidVariant.of(Fluids.WATER), 200 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(inserted == 128 * FluidConstants.BUCKET, "Inserted " + inserted / FluidConstants.BUCKET + " buckets");
+			long lava = tank.insert(FluidVariant.of(Fluids.LAVA), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(lava == 0, "A water tank accepted lava");
+			transaction.commit();
+		}
+		helper.succeed();
+	}
+
+	/** A crate holds 32 stacks of one item type, refuses others, and shows its fill on a comparator. */
+	@GameTest
+	public void crateHoldsOneItemType(GameTestHelper helper) {
+		BlockPos pos = new BlockPos(2, 1, 2);
+		helper.setBlock(pos, JugcraftStorage.ITEM_CRATE);
+		Storage<ItemVariant> crate = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long cobble = crate.insert(ItemVariant.of(Items.COBBLESTONE), 5_000, transaction);
+			long dirt = crate.insert(ItemVariant.of(Items.DIRT), 10, transaction);
+			helper.assertTrue(cobble == 32 * 64, "Crate took " + cobble + " cobblestone");
+			helper.assertTrue(dirt == 0, "Crate took a second item type");
+			transaction.commit();
+		}
+		helper.assertTrue(StorageUtil.getRedstoneSignal(crate) == 15, "A full crate should signal 15");
+		helper.succeed();
 	}
 }

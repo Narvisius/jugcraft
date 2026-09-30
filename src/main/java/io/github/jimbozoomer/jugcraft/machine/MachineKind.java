@@ -32,7 +32,10 @@ public enum MachineKind implements StringRepresentable {
 	SAWMILL("sawmill", 10_000, 128, 0, 12, 4),
 	// Steel tier: unpowered brick multi-blocks.
 	COKE_OVEN("coke_oven", 0, 0, 0, 0, 2),
-	STEEL_FOUNDRY("steel_foundry", 0, 0, 0, 0, 3);
+	STEEL_FOUNDRY("steel_foundry", 0, 0, 0, 0, 3),
+	// Storage: a 2x2 capacitor bank (outputs from its front, like the battery box) and a 2x2 steel tank.
+	CAPACITOR_BANK("capacitor_bank", 4_000_000, 4_096, 4_096, 0, 0),
+	STEEL_TANK("steel_tank", 0, 0, 0, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -58,6 +61,8 @@ public enum MachineKind implements StringRepresentable {
 	public static final int WIND_MAX_PER_TICK = 24;
 	/** Ticks between checks that the wind turbine's rotor has room to turn. */
 	public static final int WIND_CHECK_INTERVAL = 100;
+	/** Steel tank capacity (mB): 128 buckets. */
+	public static final int STEEL_TANK_CAPACITY = 128_000;
 	/** Ore washer water tank (mB). */
 	public static final int WASHER_TANK = 8_000;
 	/** Water (mB) the ore washer uses per operation, taken when the operation finishes. */
@@ -89,6 +94,11 @@ public enum MachineKind implements StringRepresentable {
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
 				|| this == COKE_OVEN || this == STEEL_FOUNDRY;
+	}
+
+	/** Stores energy and gives it out of its front face only. */
+	public boolean isBattery() {
+		return this == BATTERY_BOX || this == CAPACITOR_BANK;
 	}
 
 	/** Whether the machine runs on JE at all. Unpowered machines have no battery and cables never connect to them. */
@@ -169,6 +179,10 @@ public enum MachineKind implements StringRepresentable {
 			case WIND_TURBINE -> Footprint.tall(3);
 			case COKE_OVEN -> Footprint.tall(2);
 			case STEEL_FOUNDRY -> Footprint.tall(3);
+			// Two wide, two tall.
+			case CAPACITOR_BANK -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));
+			// Two wide, two deep, one tall (plus its dome).
+			case STEEL_TANK -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 0, 1), new Vec3i(-1, 0, 1));
 			// Two wide and two tall: furnace body, crucible tower on its right, hoppers above.
 			case ALLOY_SMELTER -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));
 			default -> Footprint.SINGLE;

@@ -1369,6 +1369,80 @@
       ]
     },
     {
+      "title": "Storage",
+      "icon": "jugcraft:item_crate",
+      "pages": [
+        {
+          "title": "Item Crate",
+          "icon": "jugcraft:item_crate",
+          "text": [
+            "Holds 32 stacks of one item. Right-click with an item to put it in, with an empty hand to take a stack out (sneak to just look). Works with pipes, hoppers and comparators."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:iron_plate",
+              "minecraft:oak_planks",
+              "jugcraft:iron_plate",
+              "minecraft:oak_planks",
+              null,
+              "minecraft:oak_planks",
+              "jugcraft:iron_plate",
+              "minecraft:oak_planks",
+              "jugcraft:iron_plate"
+            ],
+            "result": "jugcraft:item_crate",
+            "count": 1
+          }
+        },
+        {
+          "title": "Capacitor Bank",
+          "icon": "jugcraft:capacitor_bank",
+          "text": [
+            "A 2x2 bank of Leyden jars: 4,000,000 JE. It charges from any side and gives power out of the sockets on its front, 4,096 JE/t.",
+            "Holds 4,000,000 JE; 4096 JE/t in and out."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:battery_box",
+              "jugcraft:steel_plate",
+              "jugcraft:battery_box",
+              "jugcraft:advanced_circuit",
+              "jugcraft:battery_box",
+              "jugcraft:steel_plate",
+              "jugcraft:battery_box",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:capacitor_bank",
+            "count": 1
+          }
+        },
+        {
+          "title": "Steel Tank",
+          "icon": "jugcraft:steel_tank",
+          "text": [
+            "A 2x2 riveted tank: 128 buckets of one fluid. Buckets, pumps and pipes fill and empty it; right-click with an empty hand to read it.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:steel_tank",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
       "title": "Upgrades",
       "icon": "jugcraft:speed_upgrade",
       "pages": [

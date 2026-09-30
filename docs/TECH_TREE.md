@@ -164,7 +164,7 @@ Every powered block follows one of two rules, and a cable shows which by where i
 | **No power** | The Coke Oven and Steel Foundry | Cables never connect; the machines run on the heat of their charge. |
 | **Power socket only** | The Alloy Smelter | Its **copper socket in a brass frame** (a yellow-and-black frame in the classic look), on the outer side of its lower right block (seen from the front). Cables connect only there; a cable along any other face doesn't bend toward it. |
 
-The battery box is "any side" for charging. It gives power out only through its front, and a cable at the front still connects.
+The battery box and capacitor bank are "any side" for charging. It gives power out only through its front, and a cable at the front still connects.
 
 In code, one check decides both the drawn connection and the flow: `MachineBlock.acceptsPower(state, side)`, built from `MachineKind.usesPower()` and `MachineKind.powerPort()` (null means any side). The energy lookup and the cable's connection arms both use it. `tools/large_machines.py` (`POWER_PORTS`) places the socket in the model, and `check_mod_data.py` keeps the two in sync.
 
@@ -223,6 +223,18 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 5. **Units.** Jugcraft numbers are millibuckets (1 bucket = 1,000 mB). Internally Fabric counts droplets (1 bucket = 81,000), so 1 mB = 81 droplets.
 
 **Performance.** Pipe networks are found once by a bounded search and cached per dimension. They are rebuilt only after a pipe, tank, pump or machine is placed or removed, or a pipe's neighbor changes. A pump does two storage moves per tick at most, plus one per network endpoint.
+
+## Storage
+
+| Block | Holds | Details | Built from |
+| --- | --- | --- | --- |
+| Item Crate | 32 stacks of one item | Right-click with an item to put it in; with an empty hand to take a stack (sneak to just look). Pipes, extractors and hoppers use it; comparators read how full it is. Breaking it drops everything. | iron plates, planks |
+| Capacitor Bank (2 wide, 2 tall) | 4,000,000 JE | Charges from any side; gives power out of the copper sockets on its front, 4,096 JE/t (a job for aluminum cable). Comparators read its charge. | steel plates, 4 battery boxes, advanced circuit |
+| Steel Tank (2 wide, 2 deep) | 128 buckets of one fluid | Buckets, pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. Comparators read how full it is. | 8 steel plates, tinplate tank |
+
+![Capacitor Bank, Steel Tank and Item Crate](images/storage.png)
+
+*Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
 
 ## Machine control
 

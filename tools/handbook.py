@@ -8,7 +8,7 @@ Format: {"chapters": [{"title", "icon", "pages": [{"title", "icon", "text": [par
 "craft": {"grid": [9 item ids or null], "result", "count"}, "recipes": [{"in": [[id, count]], "out": [id, count]}]}]}]}
 """
 from materials import COMPONENTS, METALS, MINERALS, ingot_id, ore_ids
-from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS,
+from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, TOOLS,
                       UPGRADES, BYPRODUCTS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, machine_recipes)
 
 MOD = "jugcraft"
@@ -50,6 +50,12 @@ ABOUT = {
                     "as much as its slowest cable.",
     "aluminum_cable": "Steel-armored power line: 4,096 JE/t, for big batteries and the arc furnace.",
     "high_pressure_extractor": "A steel extractor: 32 items every 4 ticks, four times the brass one.",
+    "capacitor_bank": "A 2x2 bank of Leyden jars: 4,000,000 JE. It charges from any side and gives power out of the "
+                      "sockets on its front, 4,096 JE/t.",
+    "steel_tank": "A 2x2 riveted tank: 128 buckets of one fluid. Buckets, pumps and pipes fill and empty it; right-click "
+                  "with an empty hand to read it.",
+    "item_crate": "Holds 32 stacks of one item. Right-click with an item to put it in, with an empty hand to take a "
+                  "stack out (sneak to just look). Works with pipes, hoppers and comparators.",
     "bronze_fluid_pipe": "Carries fluid that a pump pushes into it to every tank and fluid machine it touches.",
     "fluid_tank": "Holds 16 buckets of one fluid. Fill or empty it with buckets; right-click with an empty hand to read it.",
     "electric_pump": "Pulls water or lava from the block below it and pushes it out of its top and sides.",
@@ -206,6 +212,9 @@ def build():
             block_page("item_sorter", LOGISTICS_BLOCKS["item_sorter"]["display"]),
             block_page("brass_wrench", TOOLS["brass_wrench"]),
         ]},
+        {"title": "Storage", "icon": f"{MOD}:item_crate", "pages":
+            [block_page("item_crate", STORAGE_BLOCKS["item_crate"]["display"])]
+            + [machine_page(m) for m in ("capacitor_bank", "steel_tank")]},
         {"title": "Upgrades", "icon": f"{MOD}:speed_upgrade", "pages":
             [block_page(u, UPGRADES[u]) for u in UPGRADES] + [
             {"title": "Comparators", "icon": "minecraft:comparator", "text": [

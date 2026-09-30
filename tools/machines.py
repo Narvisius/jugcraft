@@ -26,6 +26,9 @@ MACHINES = {
     # Steel tier: unpowered brick multi-blocks (tools/large_machines.py).
     "coke_oven": {"display": "Coke Oven", "lit": True},
     "steel_foundry": {"display": "Steel Foundry", "lit": True},
+    # Storage multi-blocks (2x2): a capacitor bank and a steel tank.
+    "capacitor_bank": {"display": "Capacitor Bank", "lit": False},
+    "steel_tank": {"display": "Steel Tank", "lit": False},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -53,6 +56,8 @@ LOGISTICS_BLOCKS = {
     "item_sorter": {"display": "Item Sorter"},
 }
 TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook"}
+# Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
+STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
 # Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
 # At most 4 of each kind count. Numbers are in machine/MachineUpgrades.java.
 UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency Upgrade"}
@@ -95,6 +100,10 @@ STATS = {
                    "tank": 8_000},
     "sieve": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 8},
     "sawmill": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 12},
+    # 2x2. Outputs from its front (all four blocks), charges from any other face.
+    "capacitor_bank": {"capacity": 4_000_000, "io_per_tick": 4_096},
+    # 2x2, one tall with a dome: 128 buckets of one fluid. No power.
+    "steel_tank": {"capacity": 0, "tank": 128_000},
     # Unpowered: heat comes from the charge itself. No battery, no cable connection.
     "coke_oven": {"capacity": 0, "use_per_tick": 0},
     "steel_foundry": {"capacity": 0, "use_per_tick": 0},
@@ -212,6 +221,11 @@ CRAFTING = {
                                               "C": "jugcraft:basic_circuit"}, 1),
     "efficiency_upgrade": (["PWP", "WCW", "PWP"], {"P": "#c:plates/steel", "W": "#c:wires/copper",
                                                    "C": "jugcraft:basic_circuit"}, 1),
+    # Storage.
+    "item_crate": (["PWP", "W W", "PWP"], {"P": "#c:plates/iron", "W": "#minecraft:planks"}, 1),
+    "capacitor_bank": (["PBP", "BCB", "PBP"], {"P": "#c:plates/steel", "B": "jugcraft:battery_box",
+                                               "C": "jugcraft:advanced_circuit"}, 1),
+    "steel_tank": (["PPP", "PTP", "PPP"], {"P": "#c:plates/steel", "T": "jugcraft:fluid_tank"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -387,7 +401,7 @@ def _arc_dusts():
 
 def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
-            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS))
+            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS))
 
 
 def machine_items():

@@ -26,6 +26,9 @@ FOOTPRINTS = {
     # Steel tier: a two-block brick oven and a three-block foundry stack.
     "coke_oven": [(0, 0, 0), (0, 1, 0)],
     "steel_foundry": [(0, 0, 0), (0, 1, 0), (0, 2, 0)],
+    # Storage: a 2x2 capacitor bank (two wide, two tall) and a squat 2x2 steel tank (two wide, two deep).
+    "capacitor_bank": [(0, 0, 0), (-1, 0, 0), (0, 1, 0), (-1, 1, 0)],
+    "steel_tank": [(0, 0, 0), (-1, 0, 0), (0, 0, 1), (-1, 0, 1)],
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -137,6 +140,19 @@ MODELS["steel_foundry"] = [
     ((4, 32, 4), (12, 36, 12), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
 ]
 
+MODELS["capacitor_bank"] = [
+    ((-16, 0, 0), (16, 2, 16), "heavy_plinth"),
+    ((-15, 2, 1), (15, 30, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-16, 30, 0), (16, 32, 16), "heavy_plinth"),
+    ((-14, 8, 0.5), (14, 9, 1), "power_port_frame"),
+]
+
+MODELS["steel_tank"] = [
+    ((-16, 0, 0), (16, 1, 32), "heavy_plinth"),
+    ((-15, 1, 1), (15, 15, 31), {"*": "fluid_tank_side", "north": "#front", "up": "fluid_tank_top"}),
+    ((-12, 15, 4), (12, 17, 28), "fluid_tank_top"),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -144,4 +160,6 @@ FRONTS = {
     "alloy_smelter": "alloy_smelter_front",
     "coke_oven": "coke_oven_front",
     "steel_foundry": "steel_foundry_front",
+    "capacitor_bank": "capacitor_bank_front",
+    "steel_tank": "steel_tank_front",
 }

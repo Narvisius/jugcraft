@@ -712,6 +712,63 @@ def steel_foundry():
     return m
 
 
+# ------------------------------------------------------------------ storage (multi-block)
+
+def capacitor_bank():
+    """Two-by-two accumulator: an open wooden cabinet of Leyden jars on iron shelves, copper bus bars, a charge
+    gauge, and a power socket on the front of each block (the bank gives power out of its front)."""
+    m = [box((-16, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((-15.5, 1, 8), (15.5, 31, 15.5), "sp_wood"))
+    m.append(box((-15.5, 1, 1), (-14, 31, 8), "sp_wood"))
+    m.append(box((14, 1, 1), (15.5, 31, 8), "sp_wood"))
+    for y in (1, 15.5):
+        m.append(box((-14, y, 1.5), (14, y + 1, 8), IRON))
+    m.append(box((-16, 31, 0), (16, 32, 16), BRASS_PLATE))
+    for x, z in ((-16, 0), (14.5, 0), (-16, 14.5), (14.5, 14.5)):
+        m.append(box((x, 1, z), (x + 1.5, 31, z + 1.5), BRASS))
+    for y0 in (2, 16.5):
+        for cx in (-12, -4, 4, 12):
+            m += cyl("y", cx, 5, 2.5, y0, y0 + 9, "sp_leyden_jar!", BRASS)
+            m.append(box((cx - 0.25, y0 + 9, 4.75), (cx + 0.25, y0 + 10.25, 5.25), COPPER))
+        m.append(box((-12.25, y0 + 10.25, 4.75), (12.25, y0 + 10.75, 5.25), COPPER))
+    # Charge gauge on a brass board under the top.
+    m.append(box((-4, 27.5, 1), (4, 30.75, 2), BRASS_PLATE))
+    m.append(dial("north", (0, 29.1, 0.5), 3))
+    # Power sockets, one on the front of each block.
+    for x in (-8, 8):
+        for y in (8, 24):
+            m.append(box((x - 2, y - 2, 0.25), (x + 2, y + 2, 1.5), {"*": BRASS, "north": "power_port!"}))
+    return m
+
+
+def steel_tank():
+    """A squat riveted storage tank on a two-by-two base: domed roof with a manhole, brass bands, a sight glass and
+    valve at the front, and flanged pipe stubs at the middle of every outer face."""
+    m = [box((-16, 0, 0), (16, 1, 32), IRON_PLATE)]
+    m += cyl("y", 0, 16, 15.25, 1, 15, IRON_PLATE, IRON_PLATE)
+    for y in (3.5, 11):
+        m += cyl("y", 0, 16, 15.6, y, y + 0.75, BRASS)
+    m += cyl("y", 0, 16, 12, 15, 17.5, "sp_tank", IRON_PLATE)
+    m += cyl("y", 0, 16, 7.5, 17.5, 19.5, IRON_PLATE)
+    m += cyl("y", 0, 16, 2.5, 19.5, 21, BRASS, BRASS_PLATE)
+    # Sight glass and drain valve on the front.
+    m.append(box((-1.25, 2.5, 0.25), (1.25, 13.5, 1), {"*": BRASS, "north": "sp_sight_glass!"}))
+    m += wheel("z", 4.5, 3, 1.75, 0.25, 0.75)
+    m.append(box((4, 2.5, 0.75), (5, 3.5, 2), IRON))
+    # Flanged stubs so pipes meet the tank at the middle of each outer face.
+    for x in (-8, 8):
+        m.append(pipe((x - 1.5, 6.5, 0), (x + 1.5, 9.5, 3.5)))
+        m.append(box((x - 2, 6, 0), (x + 2, 10, 0.75), BRASS))
+        m.append(pipe((x - 1.5, 6.5, 28.5), (x + 1.5, 9.5, 32)))
+        m.append(box((x - 2, 6, 31.25), (x + 2, 10, 32), BRASS))
+    for z in (8, 24):
+        m.append(pipe((12.5, 6.5, z - 1.5), (16, 9.5, z + 1.5)))
+        m.append(box((15.25, 6, z - 2), (16, 10, z + 2), BRASS))
+        m.append(pipe((-16, 6.5, z - 1.5), (-12.5, 9.5, z + 1.5)))
+        m.append(box((-16, 6, z - 2), (-15.25, 10, z + 2), BRASS))
+    return m
+
+
 MODELS = {
     "coal_generator": coal_generator(),
     "battery_box": battery_box(),
@@ -732,6 +789,8 @@ MODELS = {
     "wind_turbine": wind_turbine(),
     "coke_oven": coke_oven(),
     "steel_foundry": steel_foundry(),
+    "capacitor_bank": capacitor_bank(),
+    "steel_tank": steel_tank(),
     "electric_pump": electric_pump(),
     "fluid_tank": fluid_tank(),
 }

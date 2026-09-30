@@ -8,6 +8,13 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #24 Storage
+- **Capacitor Bank** (2×2): 4,000,000 JE. It charges from any side and gives power out of its front sockets at 4,096 JE/t.
+- **Steel Tank** (2×2 squat riveted tank): 128 buckets.
+- **Item Crate:** 32 stacks of one item, with right-click in and out and support for pipes, hoppers and comparators.
+- Steampunk models (Leyden-jar bank, domed tank, banded crate) and classic models.
+- Three game tests, a handbook "Storage" chapter, and a feature record.
+
 ### #22 Transmitter tiers
 - **Silver Cable** (1,024 JE/t) and **Aluminum Cable** (4,096 JE/t). All cable tiers join one network, which runs at its slowest cable.
 - **High-Pressure Extractor** (steel): 32 items every 4 ticks, four times the brass extractor.
