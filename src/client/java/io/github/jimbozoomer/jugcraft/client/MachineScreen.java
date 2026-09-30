@@ -75,10 +75,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			int water = menu.data(MachineBlockEntity.DATA_WATER) * BAR_HEIGHT / MachineKind.STEAM_TANK;
 			graphics.fill(x + 150, y + BAR_Y + BAR_HEIGHT - water, x + 162, y + BAR_Y + BAR_HEIGHT, WATER);
 		} else if (kind.isProcessor()) {
-			if (kind == MachineKind.ALLOY_SMELTER) {
-				slotFrame(graphics, x + MachineMenu.ALLOY_INPUT_A_X, y + MachineMenu.SLOT_Y);
+			int inputs = kind.outputSlot();
+			for (int slot = 0; slot < inputs; slot++) {
+				slotFrame(graphics, x + MachineMenu.inputX(inputs, slot), y + MachineMenu.SLOT_Y);
 			}
-			slotFrame(graphics, x + MachineMenu.INPUT_X, y + MachineMenu.SLOT_Y);
 			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
 			int maxProgress = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_PROGRESS));
 			int arrow = menu.data(MachineBlockEntity.DATA_PROGRESS) * 24 / maxProgress;

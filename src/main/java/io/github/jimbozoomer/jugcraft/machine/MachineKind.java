@@ -15,7 +15,10 @@ public enum MachineKind implements StringRepresentable {
 	ARC_FURNACE("arc_furnace_controller", 50_000, 512, 0, 64, 2),
 	SOLAR_PANEL("solar_panel", 4_000, 0, 32, 0, 0),
 	STEAM_GENERATOR("steam_generator", 40_000, 0, 128, 0, 3),
-	ALLOY_SMELTER("alloy_smelter", 10_000, 128, 0, 20, 3);
+	ALLOY_SMELTER("alloy_smelter", 10_000, 128, 0, 20, 3),
+	METAL_PRESS("metal_press", 10_000, 128, 0, 16, 2),
+	WIRE_DRAWER("wire_drawer", 10_000, 128, 0, 12, 2),
+	CIRCUIT_ASSEMBLER("circuit_assembler", 20_000, 256, 0, 32, 4);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -50,7 +53,26 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Processing machines have input slots first and one output slot last. */
 	public boolean isProcessor() {
-		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER;
+		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER
+				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER;
+	}
+
+	/** Processors whose recipes combine several ingredient stacks placed in any input slots. */
+	public boolean isMultiInput() {
+		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER;
+	}
+
+	/** Key of this machine's recipe list in jugcraft/machine_recipes.json (null for the electric furnace). */
+	public String recipeKey() {
+		return switch (this) {
+			case CRUSHER -> "crusher";
+			case ARC_FURNACE -> "arc_furnace";
+			case ALLOY_SMELTER -> "alloy_smelter";
+			case METAL_PRESS -> "metal_press";
+			case WIRE_DRAWER -> "wire_drawer";
+			case CIRCUIT_ASSEMBLER -> "circuit_assembler";
+			default -> null;
+		};
 	}
 
 	/** The output slot of a processor (its last slot). */

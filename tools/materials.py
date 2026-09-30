@@ -73,6 +73,28 @@ ITEMS = {
 
 EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
 
+# ---------------------------------------------------------------- mechanical parts
+# Physical components made by the metal press and wire drawer (mechanical branch).
+# Metal content per item in nugget units; the checker uses these to audit recipes.
+PART_UNITS = {"plate": 9, "gear": 36, "wire": 3}
+COMPONENTS = {
+    "plate": ["copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten"],
+    "gear": ["iron", "bronze", "brass", "invar"],
+    "wire": ["copper", "silver", "aluminum"],
+}
+# Assembled electronics (non-metal outputs; their metal is consumed).
+CIRCUITS = {"basic_circuit": "Basic Circuit", "advanced_circuit": "Advanced Circuit"}
+# Vanilla metals that get Jugcraft parts: nugget units per vanilla ingot.
+VANILLA_METALS = {"copper", "iron", "gold"}
+
+
+def part_items():
+    return [f"{metal}_{form}" for form, metals in COMPONENTS.items() for metal in metals] + list(CIRCUITS)
+
+
+def ingot_id(metal):
+    return f"minecraft:{metal}_ingot" if metal in VANILLA_METALS else f"{MOD}:{metal}_ingot"
+
 # Extra c: item tags for mineral items.
 MINERAL_TAGS = {"salt": "dusts/salt", "phosphate": "dusts/phosphate"}
 
@@ -125,7 +147,7 @@ def all_blocks():
 
 
 def all_items():
-    return [i for m in METALS for i in metal_items(m)] + list(MINERALS) + list(ITEMS)
+    return [i for m in METALS for i in metal_items(m)] + list(MINERALS) + list(ITEMS) + part_items()
 
 
 def feature_of(entry_id):
@@ -140,6 +162,8 @@ def feature_of(entry_id):
         return ROCKS[entry_id]["feature"]
     if entry_id in ITEMS:
         return ITEMS[entry_id]["feature"]
+    if entry_id in part_items():
+        return "machines"
     from machines import machine_blocks, FEATURE
     if entry_id in machine_blocks():
         return FEATURE

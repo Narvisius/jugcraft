@@ -11,7 +11,8 @@ from pathlib import Path
 
 from PIL import Image
 
-from materials import MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, all_blocks, all_items, feature_of
+from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS,
+                       all_blocks, all_items, feature_of)
 from machines import MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, machine_blocks, machine_recipes
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,10 +107,11 @@ def check_loot(registered):
 
 
 # Metal content in nugget units. Tags stand for the same forms from any mod.
-UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_blocks": 81}
+UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_blocks": 81,
+         **{f"{form}s": units for form, units in PART_UNITS.items()}}
 
 
-NON_METAL = set(MINERALS) | set(ITEMS) | set(machine_blocks()) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
+NON_METAL = set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
 
 
 def item_units(ref):
@@ -138,6 +140,10 @@ def item_units(ref):
             return {metal: table[path]}
     if path == "bronze_blend":
         return {"bronze": 9}
+    for form, metals in COMPONENTS.items():
+        for metal in metals:
+            if path == f"{metal}_{form}":
+                return {metal: PART_UNITS[form]}
     if path == "bauxite":
         # One bauxite holds one ingot of aluminum: the arc furnace recovers all of it,
         # the blast-furnace stand-in only a nugget.
@@ -231,6 +237,13 @@ def check_java():
     items = re.findall(r'JugcraftRegistry\.item\("([a-z_]+)"\)', source)
     if items != list(ITEMS):
         err(f"JugcraftMaterials.java items {items} != {list(ITEMS)}")
+
+    components = (JAVA_ROOT / "materials" / "JugcraftComponents.java").read_text(encoding="utf-8")
+    for name, expected_list in (("PLATES", COMPONENTS["plate"]), ("GEARS", COMPONENTS["gear"]),
+                                ("WIRES", COMPONENTS["wire"]), ("CIRCUITS", list(CIRCUITS))):
+        found = re.findall(r'"([a-z_]+)"', re.search(name + r' = \{([^}]*)\}', components).group(1))
+        if found != expected_list:
+            err(f"JugcraftComponents.{name} {found} != tools/materials.py {expected_list}")
 
     features = re.findall(r'"([a-z_]+)"', CONFIG.read_text(encoding="utf-8").split("List.of(")[1].split(");")[0])
     if features != FEATURES:

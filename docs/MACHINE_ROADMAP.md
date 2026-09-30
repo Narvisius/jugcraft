@@ -1,6 +1,6 @@
 # Machine roadmap
 
-Status: **proposals for discussion, not approved or implemented.** Every entry here needs its own issue and review. The implemented machines are listed in [machines-and-power.md](features/machines-and-power.md).
+Status: **proposals for discussion, not approved or implemented** unless marked ✅. How implemented things connect is documented in [TECH_TREE.md](TECH_TREE.md). Machines are grouped into branches: **Mechanical** (shape and mix of materials), **Fluids** (moving liquids) and the planned **Chemistry** branch ([branches/CHEMISTRY.md](branches/CHEMISTRY.md)).
 
 ## What exists now
 
@@ -34,16 +34,16 @@ These unlock whole groups of machines, so they should be designed first.
 | Machine | Does | Uses | Feeds |
 | --- | --- | --- | --- |
 | **Alloy Smelter** ✅ implemented | Two-input alloying: bronze, brass (copper + zinc), solder (tin + lead), invar (iron + nickel) | Existing metals | Machine casings, circuits, magic instruments (bell bronze, brass astrolabes) |
-| **Metal Press** | Ingots → plates; plates → gears | All metals | Casings, rocket hulls, better machine recipes |
-| **Wire Drawer** | Ingots → wire (copper, silver, aluminum) | Copper, silver, aluminum | Cables, circuits, motors |
+| **Metal Press** ✅ implemented | Ingots → plates (4 plates → gear by crafting) | All metals | Circuit assembler, casings, rocket hulls, better machine recipes |
+| **Wire Drawer** ✅ implemented | Ingots → wire (copper, silver, aluminum) | Copper, silver, aluminum | Circuits, cables, motors |
 | **Water Pump** | Moves water into tanks and the steam generator | Fluid API | Steam, agriculture (irrigation), chemistry |
 
 ### Tier 2: Specialization
 | Machine | Does | Uses | Feeds |
 | --- | --- | --- | --- |
-| **Electrolytic Cell** | Brine → lye + chlorine; alumina → aluminum (replaces the arc furnace shortcut) | Salt, bauxite, power | Aluminum, soap and glass chemistry, bleach, plastics |
-| **Chemical Reactor** | Sulfur + water → sulfuric acid; phosphate + acid → fertilizer; lithium carbonate → battery compounds | Sulfur, phosphate, lithium | Farming (fertilizer), batteries, ore leaching |
-| **Circuit Assembler** | Silicon + silver/copper wire + solder → circuits (basic, advanced) | Silicon, silver, solder | Every higher-tier machine, rockets, magic-tech bridges |
+| **Electrolytic Cell** (Chemistry branch) | Brine → lye + chlorine; alumina → aluminum (replaces the arc furnace shortcut) | Salt, bauxite, power | Aluminum, soap and glass chemistry, bleach, plastics |
+| **Chemical Reactor** (Chemistry branch) | Sulfur + water → sulfuric acid; phosphate + acid → fertilizer; lithium carbonate → battery compounds | Sulfur, phosphate, lithium | Farming (fertilizer), batteries, ore leaching |
+| **Circuit Assembler** ✅ implemented | Silicon + copper wire + solder → basic circuit; basic circuits + silver wire + invar plate → advanced circuit | Silicon, silver, solder | Every higher-tier machine, rockets, magic-tech bridges |
 | **Lithium Battery** | Small high-density battery block and a portable battery item | Lithium, aluminum | Portable tools, rovers, space |
 | **Geothermal Generator** | Lava → power | Fluid API | Nether and cave bases |
 | **Wind Turbine** (multiblock) | Height- and weather-scaled power | Aluminum, bronze gears | Remote and cozy off-grid bases |
@@ -78,8 +78,8 @@ Each connection below works both ways, but no machine requires magic to work.
 ## Suggested next steps, in order
 1. ~~**Alloy Smelter**~~ Done: bronze, brass, invar and solder.
 2. **Fluid API, with Water Pump and tanks:** the foundation for steam, chemistry and oil.
-3. **Electrolytic Cell and Chemical Reactor:** replace the remaining stand-ins; give salt, sulfur and phosphate real uses.
-4. **Metal Press, Wire Drawer and Circuit Assembler:** the parts economy for everything above tier 2.
+3. ~~**Metal Press, Wire Drawer and Circuit Assembler**~~ Done: the parts economy for everything above tier 2.
+4. **Chemistry branch** (planned; see [branches/CHEMISTRY.md](branches/CHEMISTRY.md)): Electrolytic Cell and Chemical Reactor replace the remaining stand-ins and give salt, sulfur and phosphate real uses.
 5. **Energy tiers and upgrades:** once demand justifies them.
 6. **Oil and refinery, and farm machines:** each tied to its pillar's own proposals.
 

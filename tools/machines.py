@@ -15,6 +15,9 @@ MACHINES = {
     "solar_panel": {"display": "Solar Panel", "lit": False, "top": "solar_panel_top", "front": "machine_side"},
     "steam_generator": {"display": "Steam Generator", "lit": True},
     "alloy_smelter": {"display": "Alloy Smelter", "lit": True},
+    "metal_press": {"display": "Metal Press", "lit": True},
+    "wire_drawer": {"display": "Wire Drawer", "lit": True},
+    "circuit_assembler": {"display": "Circuit Assembler", "lit": True},
 }
 
 # Plain crafting-component / structure blocks.
@@ -39,6 +42,9 @@ STATS = {
     "steam_generator": {"capacity": 40_000, "output_per_tick": 128, "generation_per_tick": 64,
                         "water_per_tick": 10, "tank": 8_000},
     "alloy_smelter": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 20},
+    "metal_press": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
+    "wire_drawer": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 12},
+    "circuit_assembler": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -75,6 +81,17 @@ CRAFTING = {
     "alloy_smelter": (["BCB", "FMF", "BRB"],
                       {"B": "#c:ingots/bronze", "C": "jugcraft:copper_cable", "F": "minecraft:furnace",
                        "M": "jugcraft:machine_casing", "R": "minecraft:redstone"}, 1),
+    # Mechanical branch. Order matters for progression: press and drawer need only a casing;
+    # the circuit assembler needs press-made plates and gears.
+    "metal_press": (["BPB", "CMC", "BAB"],
+                    {"B": "#c:ingots/bronze", "P": "minecraft:piston", "C": "jugcraft:copper_cable",
+                     "M": "jugcraft:machine_casing", "A": "minecraft:anvil"}, 1),
+    "wire_drawer": (["ZSZ", "CMC", "ZRZ"],
+                    {"Z": "#c:ingots/brass", "S": "minecraft:shears", "C": "jugcraft:copper_cable",
+                     "M": "jugcraft:machine_casing", "R": "minecraft:redstone"}, 1),
+    "circuit_assembler": (["PGP", "CMC", "PRP"],
+                          {"P": "#c:plates/tin", "G": "#c:gears/bronze", "C": "jugcraft:copper_cable",
+                           "M": "jugcraft:machine_casing", "R": "minecraft:redstone"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -141,8 +158,30 @@ ALLOY_SMELTER = [
 ]
 
 
+def _metal_press():
+    from materials import COMPONENTS, ingot_id
+    return [{"input": ingot_id(metal), "output": f"jugcraft:{metal}_plate", "count": 1, "ticks": 100,
+             "features": [FEATURE]} for metal in COMPONENTS["plate"]]
+
+
+def _wire_drawer():
+    from materials import COMPONENTS, ingot_id
+    return [{"input": ingot_id(metal), "output": f"jugcraft:{metal}_wire", "count": 3, "ticks": 100,
+             "features": [FEATURE]} for metal in COMPONENTS["wire"]]
+
+
+# Circuit assembler: up to three ingredient stacks, any slot order.
+CIRCUIT_ASSEMBLER = [
+    {"inputs": [["jugcraft:silicon", 1], ["jugcraft:copper_wire", 3], ["jugcraft:solder_ingot", 1]],
+     "output": "jugcraft:basic_circuit", "count": 1, "ticks": 200, "features": [FEATURE, "silicon", "lead"]},
+    {"inputs": [["jugcraft:basic_circuit", 2], ["jugcraft:silver_wire", 3], ["jugcraft:invar_plate", 1]],
+     "output": "jugcraft:advanced_circuit", "count": 1, "ticks": 300, "features": [FEATURE, "silver", "nickel"]},
+]
+
+
 def machine_recipes():
-    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE, "alloy_smelter": ALLOY_SMELTER}
+    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE, "alloy_smelter": ALLOY_SMELTER,
+            "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER}
 
 
 def machine_blocks():

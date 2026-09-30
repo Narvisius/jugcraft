@@ -7,7 +7,7 @@ import json
 import shutil
 from pathlib import Path
 
-from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING,
+from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of)
 
 from machines import MACHINES, PARTS, CABLES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
@@ -70,6 +70,8 @@ def item_name(item):
         return MINERALS[item]["display"]
     if item in ITEMS:
         return ITEMS[item]["display"]
+    if item in CIRCUITS:
+        return CIRCUITS[item]
     return title(item)
 
 
@@ -257,6 +259,11 @@ def recipes():
         write(out / f"{result}.json", recipe)
     write(RES / MOD / "machine_recipes.json", machine_recipes())
 
+    # Gears: four plates of one metal (36 nugget units in, 36 out).
+    for metal in COMPONENTS["gear"]:
+        write(out / f"{metal}_gear.json", shaped(MACHINE_FEATURE, [" P ", "P P", " P "],
+                                                 {"P": f"#c:plates/{metal}"}, f"{metal}_gear"))
+
     for recipe in PROCESSING:
         if recipe["kind"] == "shapeless":
             write(out / f"{recipe['id']}.json",
@@ -336,6 +343,11 @@ def tags():
 
     for block in machine_blocks():
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+
+    for form, metals in COMPONENTS.items():
+        for metal in metals:
+            tags.add("item", f"c:{form}s/{metal}", rid(f"{metal}_{form}"))
+            tags.add("item", f"c:{form}s", f"#c:{form}s/{metal}")
 
     for item, info in ITEMS.items():
         if info["tag"]:

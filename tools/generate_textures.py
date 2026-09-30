@@ -492,6 +492,116 @@ def crucibles(seed, lit):
     return img
 
 
+# Original palettes for the vanilla metals that get Jugcraft parts (not taken from vanilla textures).
+COPPER_METAL = [(110, 52, 30), (156, 78, 46), (196, 108, 66), (226, 142, 96), (244, 184, 140)]
+IRON_METAL = [(88, 88, 92), (130, 130, 136), (170, 170, 176), (204, 204, 208), (232, 232, 236)]
+
+
+def part_palette(metal):
+    fixed = {"copper": COPPER_METAL, "iron": IRON_METAL, "tin": TIN, "bronze": BRONZE}
+    if metal in fixed:
+        return fixed[metal]
+    if metal in METAL_COLORS:
+        return METAL_COLORS[metal][2]
+    return ALLOY_COLORS[metal][2]
+
+
+def plate(palette):
+    img = new()
+    for y in range(3, 13):
+        for x in range(2, 14):
+            if x == 2 or y == 3:
+                c = palette[4]
+            elif x == 13 or y == 12:
+                c = palette[0]
+            else:
+                c = palette[2 if (x + y) % 5 else 3]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def gear(palette):
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x - 7.5, y - 7.5
+            r2 = dx * dx + dy * dy
+            tooth = (abs(dx) < 1.6 or abs(dy) < 1.6 or abs(abs(dx) - abs(dy)) < 1.2)
+            if r2 <= 2.2:
+                continue  # axle hole
+            if r2 <= 22 or (r2 <= 49 and tooth):
+                shade = 4 if dx + dy < -4 else (0 if dx + dy > 5 else 2)
+                img.putpixel((x, y), palette[shade] + (255,))
+    return img
+
+
+def wire(palette):
+    img = new()
+    for i in range(4):
+        cy = 4 + i * 3
+        for x in range(3, 13):
+            y = cy + (1 if (x // 2) % 2 else 0)
+            img.putpixel((x, y), palette[3 if x % 3 else 4] + (255,))
+            img.putpixel((x, y + 1), palette[1] + (255,))
+    for y in range(3, 15):
+        img.putpixel((2, y), (96, 70, 44, 255))
+        img.putpixel((13, y), (96, 70, 44, 255))
+    return img
+
+
+def circuit(advanced):
+    img = new()
+    board = [(24, 96, 56), (30, 112, 64)] if not advanced else [(28, 60, 110), (34, 72, 128)]
+    trace = (212, 180, 80)
+    for y in range(2, 14):
+        for x in range(1, 15):
+            img.putpixel((x, y), board[(x + y) % 2] + (255,))
+    for x in range(2, 14):
+        img.putpixel((x, 4), trace + (255,))
+        img.putpixel((x, 11), trace + (255,))
+    for y in range(4, 12):
+        img.putpixel((3, y), trace + (255,))
+        img.putpixel((12, y), trace + (255,))
+    chips = [(5, 6), (9, 6)] if advanced else [(6, 6)]
+    for cx, cy in chips:
+        for y in range(cy, cy + 4):
+            for x in range(cx, cx + 3 if advanced else cx + 4):
+                img.putpixel((x, y), (30, 30, 34, 255))
+    return img
+
+
+def press_front(seed, lit):
+    img = window(seed, [(40, 40, 44), (50, 50, 56)])
+    head = STEEL[4] if lit else STEEL[3]
+    top = 6 if lit else 5
+    for x in range(5, 11):
+        for y in range(top, top + 2):
+            img.putpixel((x, y), head + (255,))
+    for x in range(5, 11):
+        img.putpixel((x, 10), (BRONZE[3] if lit else STEEL[2]) + (255,))
+    return img
+
+
+def drawer_front(seed, lit):
+    img = window(seed, [(40, 40, 44), (50, 50, 56)])
+    for cx in (6, 9):
+        for y in range(5, 11):
+            img.putpixel((cx, y), (STEEL[4] if (y % 2) else STEEL[2]) + (255,))
+    wire_color = COPPER_METAL[3] if lit else COPPER_METAL[1]
+    for x in range(4, 12):
+        img.putpixel((x, 8), wire_color + (255,))
+    return img
+
+
+def assembler_front(seed, lit):
+    img = window(seed, [(24, 60, 40), (28, 70, 46)])
+    for x in range(5, 11):
+        for y in range(5, 11):
+            if (x + y) % 3 == 0:
+                img.putpixel((x, y), ((230, 200, 90) if lit else (120, 110, 70)) + (255,))
+    return img
+
+
 def machines():
     (TEX / "gui").mkdir(parents=True, exist_ok=True)
     save(panel(500), "block", "machine_side")
@@ -512,6 +622,20 @@ def machines():
     save(boiler(509, True), "block", "steam_generator_front_on")
     save(crucibles(510, False), "block", "alloy_smelter_front")
     save(crucibles(510, True), "block", "alloy_smelter_front_on")
+    save(press_front(511, False), "block", "metal_press_front")
+    save(press_front(511, True), "block", "metal_press_front_on")
+    save(drawer_front(512, False), "block", "wire_drawer_front")
+    save(drawer_front(512, True), "block", "wire_drawer_front_on")
+    save(assembler_front(513, False), "block", "circuit_assembler_front")
+    save(assembler_front(513, True), "block", "circuit_assembler_front_on")
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from materials import COMPONENTS
+    for form, draw in (("plate", plate), ("gear", gear), ("wire", wire)):
+        for metal in COMPONENTS[form]:
+            save(draw(part_palette(metal)), "item", f"{metal}_{form}")
+    save(circuit(False), "item", "basic_circuit")
+    save(circuit(True), "item", "advanced_circuit")
     save(cable_texture(), "block", "copper_cable")
     save(cable_item(), "item", "copper_cable")
     gui()

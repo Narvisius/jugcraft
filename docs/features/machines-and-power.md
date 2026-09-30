@@ -19,6 +19,9 @@ Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and st
 | Electric Furnace | Smelts anything the vanilla furnace can | 10/t, 100 ticks per item (twice the vanilla furnace's speed); holds 10,000 |
 | Crusher | Ore → 2 raw ore; mineral ores → extra minerals; sulfur → 6 sulfur dust; oil sand → 3 bitumen; cobblestone → gravel → sand | 16/t; holds 10,000 |
 | Alloy Smelter | Two ingredient slots, either order: 3 copper + 1 tin → 4 **bronze**; 3 copper + 1 zinc → 4 **brass**; 2 iron + 1 nickel → 3 **invar**; 1 tin + 1 lead → 2 **solder**. Every ratio conserves metal | 20/t; holds 10,000; 120–240 ticks per batch |
+| Metal Press | Ingot → plate (copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten). Four plates craft a gear (iron, bronze, brass, invar) | 16/t; holds 10,000; 100 ticks |
+| Wire Drawer | Ingot → 3 wires (copper, silver, aluminum) | 12/t; holds 10,000; 100 ticks |
+| Circuit Assembler | Three ingredient slots, any order: silicon + 3 copper wire + solder → basic circuit; 2 basic circuits + 3 silver wire + invar plate → advanced circuit | 32/t; holds 20,000; 200–300 ticks |
 | Arc Furnace (multiblock) | High-temperature processing: quartz → 2 silicon, bauxite → aluminum ingot, raw nickel/tungsten/uranium → ingots, lepidolite → 2 lithium carbonate, monazite → 2 rare earth oxide | 64/t; holds 50,000 |
 
 **Arc furnace structure:** a solid 3×3×3 cube of 26 Arc Furnace Casing blocks, with the Arc Furnace Controller in the center of one face, facing outward. Feed power into the controller's front. The screen shows whether the structure is formed; the structure is rechecked every second.
@@ -35,12 +38,15 @@ Hoppers work with every machine: they insert into the input (or fuel) slot from 
 - **Arc Furnace Casing:** bricks and nickel make 8.
 - **Arc Furnace Controller:** nickel, cable, redstone, a casing and a blast furnace.
 - **Alloy Smelter:** bronze, cable, two furnaces, a casing and redstone.
+- **Metal Press:** bronze, a piston, cable, a casing and an anvil.
+- **Wire Drawer:** brass, shears, cable, a casing and redstone.
+- **Circuit Assembler:** tin plates, a bronze gear, cable, a casing and redstone.
 - **Solar Panel:** glass, silicon, bronze and cable.
 - **Steam Generator:** bronze, a bucket, cable, a casing and a coal generator (an upgrade of it).
 
 The first powered setup (generator, cable and electric furnace) needs only tin, zinc, copper, iron-tier tools and vanilla items. Nickel for the arc furnace is the step up.
 
-Future machines and the systems they need are proposed in [../MACHINE_ROADMAP.md](../MACHINE_ROADMAP.md).
+How everything connects is documented in [../TECH_TREE.md](../TECH_TREE.md); future machines are proposed in [../MACHINE_ROADMAP.md](../MACHINE_ROADMAP.md).
 
 ## Connections
 - Input producers: coal/charcoal; every Jugcraft ore and material.

@@ -22,9 +22,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
- * Crusher, arc furnace and alloy smelter recipes, generated into jugcraft/machine_recipes.json from
- * tools/machines.py (where they are audited). Recipes whose feature switches are off,
- * or whose items do not exist, are skipped. Loaded lazily after registries are frozen.
+ * Recipes for Jugcraft's own processors, generated into jugcraft/machine_recipes.json from
+ * tools/machines.py (where they are audited for metal conservation). Single-input machines
+ * map one item to one result; multi-input machines (alloy smelter, circuit assembler) match
+ * several ingredient stacks in any slot order. Recipes whose feature switches are off, or
+ * whose items do not exist, are skipped. Loaded lazily after registries are frozen.
  */
 public final class MachineRecipes {
 	public record Recipe(ItemStack output, int ticks) {
@@ -34,89 +36,118 @@ public final class MachineRecipes {
 		}
 	}
 
-	/** A two-ingredient alloy recipe; ingredients may sit in either input slot. */
-	public record AlloyRecipe(Item first, int firstCount, Item second, int secondCount, ItemStack output, int ticks) {
+	public record Ingredient(Item item, int count) {
+	}
+
+	public record MultiRecipe(List<Ingredient> ingredients, ItemStack output, int ticks) {
 		@Override
 		public ItemStack output() {
 			return output.copy();
 		}
 	}
 
-	/** An alloy recipe matched against the two input slots, with how much to take from each. */
-	public record AlloyMatch(AlloyRecipe recipe, int takeFromSlot0, int takeFromSlot1) {
+	/** A multi-input recipe matched against the input slots, with how many items to take from each slot. */
+	public record MultiMatch(MultiRecipe recipe, int[] take) {
 	}
 
-	private static Map<MachineKind, Map<Item, Recipe>> recipes;
-	private static List<AlloyRecipe> alloys;
+	private static Map<MachineKind, Map<Item, Recipe>> single;
+	private static Map<MachineKind, List<MultiRecipe>> multi;
 
 	private MachineRecipes() {
 	}
 
-	public static Optional<AlloyMatch> findAlloy(ItemStack slot0, ItemStack slot1) {
-		if (recipes == null) {
-			recipes = load();
-		}
-		for (AlloyRecipe alloy : alloys) {
-			if (covers(slot0, alloy.first(), alloy.firstCount()) && covers(slot1, alloy.second(), alloy.secondCount())) {
-				return Optional.of(new AlloyMatch(alloy, alloy.firstCount(), alloy.secondCount()));
-			}
-			if (covers(slot0, alloy.second(), alloy.secondCount()) && covers(slot1, alloy.first(), alloy.firstCount())) {
-				return Optional.of(new AlloyMatch(alloy, alloy.secondCount(), alloy.firstCount()));
+	public static Optional<Recipe> find(MachineKind kind, ItemStack input) {
+		ensureLoaded();
+		return Optional.ofNullable(single.getOrDefault(kind, Map.of()).get(input.getItem()));
+	}
+
+	/** Finds a multi-input recipe whose every ingredient sits (in enough quantity) in its own input slot; other slots must be empty. */
+	public static Optional<MultiMatch> findMulti(MachineKind kind, List<ItemStack> inputs) {
+		ensureLoaded();
+		for (MultiRecipe recipe : multi.getOrDefault(kind, List.of())) {
+			int[] take = new int[inputs.size()];
+			if (assign(recipe.ingredients(), 0, inputs, new boolean[inputs.size()], take)) {
+				boolean extras = false;
+				for (int slot = 0; slot < inputs.size(); slot++) {
+					extras |= take[slot] == 0 && !inputs.get(slot).isEmpty();
+				}
+				if (!extras) {
+					return Optional.of(new MultiMatch(recipe, take));
+				}
 			}
 		}
 		return Optional.empty();
 	}
 
-	/** Whether an item could be part of any alloy recipe (for slot and hopper filtering). */
-	public static boolean isAlloyIngredient(ItemStack stack) {
-		if (recipes == null) {
-			recipes = load();
-		}
-		for (AlloyRecipe alloy : alloys) {
-			if (stack.is(alloy.first()) || stack.is(alloy.second())) {
-				return true;
+	/** Whether an item appears in any of this machine's multi-input recipes (for slot and hopper filtering). */
+	public static boolean isMultiIngredient(MachineKind kind, ItemStack stack) {
+		ensureLoaded();
+		for (MultiRecipe recipe : multi.getOrDefault(kind, List.of())) {
+			for (Ingredient ingredient : recipe.ingredients()) {
+				if (stack.is(ingredient.item())) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
-	private static boolean covers(ItemStack stack, Item item, int count) {
-		return stack.is(item) && stack.getCount() >= count;
-	}
-
-	public static Optional<Recipe> find(MachineKind kind, ItemStack input) {
-		if (recipes == null) {
-			recipes = load();
+	/** Backtracking assignment of ingredients to distinct slots (at most a few slots, so this stays tiny). */
+	private static boolean assign(List<Ingredient> ingredients, int index, List<ItemStack> inputs, boolean[] used, int[] take) {
+		if (index == ingredients.size()) {
+			return true;
 		}
-		return Optional.ofNullable(recipes.getOrDefault(kind, Map.of()).get(input.getItem()));
+		Ingredient ingredient = ingredients.get(index);
+		for (int slot = 0; slot < inputs.size(); slot++) {
+			ItemStack stack = inputs.get(slot);
+			if (!used[slot] && stack.is(ingredient.item()) && stack.getCount() >= ingredient.count()) {
+				used[slot] = true;
+				take[slot] = ingredient.count();
+				if (assign(ingredients, index + 1, inputs, used, take)) {
+					return true;
+				}
+				used[slot] = false;
+				take[slot] = 0;
+			}
+		}
+		return false;
 	}
 
-	private static Map<MachineKind, Map<Item, Recipe>> load() {
-		Map<MachineKind, Map<Item, Recipe>> result = new EnumMap<>(MachineKind.class);
-		alloys = new ArrayList<>();
+	private static void ensureLoaded() {
+		if (single != null) {
+			return;
+		}
+		single = new EnumMap<>(MachineKind.class);
+		multi = new EnumMap<>(MachineKind.class);
 		try (InputStream stream = MachineRecipes.class.getResourceAsStream("/jugcraft/machine_recipes.json")) {
 			if (stream == null) {
 				Jugcraft.LOGGER.error("Missing jugcraft/machine_recipes.json");
-				return result;
+				return;
 			}
 			JsonObject root = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
-			result.put(MachineKind.CRUSHER, parse(root, "crusher"));
-			result.put(MachineKind.ARC_FURNACE, parse(root, "arc_furnace"));
-			alloys = parseAlloys(root);
+			for (MachineKind kind : MachineKind.values()) {
+				String key = kind.recipeKey();
+				if (key == null || !root.has(key)) {
+					continue;
+				}
+				if (kind.isMultiInput()) {
+					multi.put(kind, parseMulti(root.getAsJsonArray(key)));
+				} else {
+					single.put(kind, parseSingle(root.getAsJsonArray(key)));
+				}
+			}
 		} catch (Exception e) {
 			Jugcraft.LOGGER.error("Could not load machine recipes", e);
 		}
-		return result;
 	}
 
-	private static Map<Item, Recipe> parse(JsonObject root, String machine) {
+	private static Map<Item, Recipe> parseSingle(JsonArray recipes) {
 		Map<Item, Recipe> map = new HashMap<>();
-		for (JsonElement element : root.getAsJsonArray(machine)) {
+		for (JsonElement element : recipes) {
 			JsonObject recipe = element.getAsJsonObject();
-			boolean enabled = enabled(recipe);
 			Item input = item(recipe.get("input").getAsString());
 			Item output = item(recipe.get("output").getAsString());
-			if (!enabled || input == Items.AIR || output == Items.AIR) {
+			if (!enabled(recipe) || input == Items.AIR || output == Items.AIR) {
 				continue;
 			}
 			map.put(input, new Recipe(new ItemStack(output, recipe.get("count").getAsInt()), recipe.get("ticks").getAsInt()));
@@ -124,24 +155,27 @@ public final class MachineRecipes {
 		return map;
 	}
 
-	private static List<AlloyRecipe> parseAlloys(JsonObject root) {
-		List<AlloyRecipe> list = new ArrayList<>();
-		for (JsonElement element : root.getAsJsonArray("alloy_smelter")) {
+	private static List<MultiRecipe> parseMulti(JsonArray recipes) {
+		List<MultiRecipe> list = new ArrayList<>();
+		for (JsonElement element : recipes) {
 			JsonObject recipe = element.getAsJsonObject();
 			if (!enabled(recipe)) {
 				continue;
 			}
-			JsonArray inputs = recipe.getAsJsonArray("inputs");
-			JsonArray first = inputs.get(0).getAsJsonArray();
-			JsonArray second = inputs.get(1).getAsJsonArray();
-			Item a = item(first.get(0).getAsString());
-			Item b = item(second.get(0).getAsString());
+			List<Ingredient> ingredients = new ArrayList<>();
+			boolean valid = true;
+			for (JsonElement input : recipe.getAsJsonArray("inputs")) {
+				JsonArray pair = input.getAsJsonArray();
+				Item item = item(pair.get(0).getAsString());
+				valid &= item != Items.AIR;
+				ingredients.add(new Ingredient(item, pair.get(1).getAsInt()));
+			}
 			Item output = item(recipe.get("output").getAsString());
-			if (a == Items.AIR || b == Items.AIR || output == Items.AIR) {
+			if (!valid || output == Items.AIR) {
 				continue;
 			}
-			list.add(new AlloyRecipe(a, first.get(1).getAsInt(), b, second.get(1).getAsInt(),
-					new ItemStack(output, recipe.get("count").getAsInt()), recipe.get("ticks").getAsInt()));
+			list.add(new MultiRecipe(List.copyOf(ingredients), new ItemStack(output, recipe.get("count").getAsInt()),
+					recipe.get("ticks").getAsInt()));
 		}
 		return list;
 	}

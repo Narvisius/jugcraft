@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BPB",
+    "CMC",
+    "BAB"
+  ],
+  "key": {
+    "B": "#c:ingots/bronze",
+    "P": "minecraft:piston",
+    "C": "jugcraft:copper_cable",
+    "M": "jugcraft:machine_casing",
+    "A": "minecraft:anvil"
+  },
+  "result": {
+    "id": "jugcraft:metal_press",
+    "count": 1
+  }
+}

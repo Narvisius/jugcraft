@@ -15,14 +15,18 @@ import net.minecraft.world.item.Items;
 /**
  * Shared menu for all machines. Coal generator: fuel (56,35). Processors: input (56,35), output (116,35).
  * Steam generator: fuel (56,53), water bucket (56,17), empty buckets (116,35).
- * Alloy smelter: ingredients (34,35) and (56,35), output (116,35).
+ * Multi-input processors: inputs laid out by {@link #inputX}, output (116,35).
  */
 public class MachineMenu extends AbstractContainerMenu {
 	public static final int INPUT_X = 56;
 	public static final int OUTPUT_X = 116;
 	public static final int SLOT_Y = 35;
-	/** The alloy smelter's first ingredient slot; its second uses INPUT_X. */
-	public static final int ALLOY_INPUT_A_X = 34;
+	/** X positions of processor input slots, by number of inputs; they end just left of the progress arrow. */
+	private static final int[][] INPUT_LAYOUT = {{}, {56}, {38, 56}, {26, 44, 62}};
+
+	public static int inputX(int inputs, int slot) {
+		return INPUT_LAYOUT[inputs][slot];
+	}
 
 	private final MachineKind kind;
 	private final Container container;
@@ -67,28 +71,17 @@ public class MachineMenu extends AbstractContainerMenu {
 					return false;
 				}
 			});
-		} else if (kind == MachineKind.ALLOY_SMELTER) {
-			addSlot(new Slot(container, 0, ALLOY_INPUT_A_X, SLOT_Y) {
-				@Override
-				public boolean mayPlace(ItemStack stack) {
-					return MachineRecipes.isAlloyIngredient(stack);
-				}
-			});
-			addSlot(new Slot(container, 1, INPUT_X, SLOT_Y) {
-				@Override
-				public boolean mayPlace(ItemStack stack) {
-					return MachineRecipes.isAlloyIngredient(stack);
-				}
-			});
-			addSlot(new Slot(container, 2, OUTPUT_X, SLOT_Y) {
-				@Override
-				public boolean mayPlace(ItemStack stack) {
-					return false;
-				}
-			});
 		} else if (kind.isProcessor()) {
-			addSlot(new Slot(container, 0, INPUT_X, SLOT_Y));
-			addSlot(new Slot(container, 1, OUTPUT_X, SLOT_Y) {
+			int inputs = kind.outputSlot();
+			for (int slot = 0; slot < inputs; slot++) {
+				addSlot(new Slot(container, slot, inputX(inputs, slot), SLOT_Y) {
+					@Override
+					public boolean mayPlace(ItemStack stack) {
+						return container.canPlaceItem(getContainerSlot(), stack);
+					}
+				});
+			}
+			addSlot(new Slot(container, inputs, OUTPUT_X, SLOT_Y) {
 				@Override
 				public boolean mayPlace(ItemStack stack) {
 					return false;

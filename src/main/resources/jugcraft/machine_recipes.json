@@ -471,5 +471,176 @@
         "lead"
       ]
     }
+  ],
+  "metal_press": [
+    {
+      "input": "minecraft:copper_ingot",
+      "output": "jugcraft:copper_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "minecraft:iron_ingot",
+      "output": "jugcraft:iron_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:tin_ingot",
+      "output": "jugcraft:tin_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:bronze_ingot",
+      "output": "jugcraft:bronze_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:brass_ingot",
+      "output": "jugcraft:brass_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:invar_ingot",
+      "output": "jugcraft:invar_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:aluminum_ingot",
+      "output": "jugcraft:aluminum_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:nickel_ingot",
+      "output": "jugcraft:nickel_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:lead_ingot",
+      "output": "jugcraft:lead_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:tungsten_ingot",
+      "output": "jugcraft:tungsten_plate",
+      "count": 1,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    }
+  ],
+  "wire_drawer": [
+    {
+      "input": "minecraft:copper_ingot",
+      "output": "jugcraft:copper_wire",
+      "count": 3,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:silver_ingot",
+      "output": "jugcraft:silver_wire",
+      "count": 3,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    },
+    {
+      "input": "jugcraft:aluminum_ingot",
+      "output": "jugcraft:aluminum_wire",
+      "count": 3,
+      "ticks": 100,
+      "features": [
+        "machines"
+      ]
+    }
+  ],
+  "circuit_assembler": [
+    {
+      "inputs": [
+        [
+          "jugcraft:silicon",
+          1
+        ],
+        [
+          "jugcraft:copper_wire",
+          3
+        ],
+        [
+          "jugcraft:solder_ingot",
+          1
+        ]
+      ],
+      "output": "jugcraft:basic_circuit",
+      "count": 1,
+      "ticks": 200,
+      "features": [
+        "machines",
+        "silicon",
+        "lead"
+      ]
+    },
+    {
+      "inputs": [
+        [
+          "jugcraft:basic_circuit",
+          2
+        ],
+        [
+          "jugcraft:silver_wire",
+          3
+        ],
+        [
+          "jugcraft:invar_plate",
+          1
+        ]
+      ],
+      "output": "jugcraft:advanced_circuit",
+      "count": 1,
+      "ticks": 300,
+      "features": [
+        "machines",
+        "silver",
+        "nickel"
+      ]
+    }
   ]
 }

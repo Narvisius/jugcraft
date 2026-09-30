@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ZSZ",
+    "CMC",
+    "ZRZ"
+  ],
+  "key": {
+    "Z": "#c:ingots/brass",
+    "S": "minecraft:shears",
+    "C": "jugcraft:copper_cable",
+    "M": "jugcraft:machine_casing",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:wire_drawer",
+    "count": 1
+  }
+}

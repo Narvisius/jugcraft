@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft;
 
 import io.github.jimbozoomer.jugcraft.config.FeatureEnabledCondition;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
+import io.github.jimbozoomer.jugcraft.materials.JugcraftComponents;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftMaterials;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftWorldgen;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
@@ -24,6 +25,7 @@ public final class Jugcraft implements ModInitializer {
 		// Registration always happens, even when a feature is disabled, so saved
 		// blocks and items are never lost. The config only controls acquisition.
 		JugcraftMaterials.register();
+		JugcraftComponents.register();
 		JugcraftMachines.register();
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
