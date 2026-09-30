@@ -135,6 +135,15 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 				slotFrame(graphics, x + MachineMenu.inputX(inputs, slot), y + MachineMenu.SLOT_Y);
 			}
 			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
+			for (int index = 0; index < kind.byproductSlots(); index++) {
+				slotFrame(graphics, x + MachineMenu.byproductX(index), y + MachineMenu.BYPRODUCT_Y);
+			}
+			if (kind.tankCapacity() > 0) {
+				// Water gauge between the energy bar and the input slot.
+				graphics.fill(x + 29, y + BAR_Y - 1, x + 37, y + 53, DARK);
+				int water = menu.data(MachineBlockEntity.DATA_TANK) * (52 - BAR_Y) / kind.tankCapacity();
+				graphics.fill(x + 30, y + 52 - water, x + 36, y + 52, WATER);
+			}
 			int maxProgress = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_PROGRESS));
 			int arrow = menu.data(MachineBlockEntity.DATA_PROGRESS) * 24 / maxProgress;
 			graphics.fill(x + 80, y + 41, x + 104, y + 45, DARK);

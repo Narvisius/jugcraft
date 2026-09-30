@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PUP",
+    "GMG",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/invar",
+    "U": "minecraft:bucket",
+    "G": "#c:gears/bronze",
+    "M": "jugcraft:machine_casing",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:ore_washer",
+    "count": 1
+  }
+}

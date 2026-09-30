@@ -533,6 +533,123 @@ def alloy_smelter():
     return m
 
 
+# ------------------------------------------------------------------ ore processing
+
+def pulverizer():
+    """Ball mill: a banded grinding drum on iron cradles, feed hopper, bevel gear drive, motor and dust chute."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    for z in (2.5, 11.5):
+        m.append(box((1.75, 1, z), (14.25, 3.5, z + 2), IRON))
+    # Grinding drum along x with brass end plates, bands and bearing hubs.
+    m += cyl("x", 7, 8, 5, 2, 14, IRON_PLATE, BRASS_PLATE)
+    for x in (4.5, 10.5):
+        m += cyl("x", 7, 8, 5.4, x, x + 1, BRASS)
+    m += cyl("x", 7, 8, 1.25, 0.75, 2, BRASS)
+    # Flywheel on the left, bevel gear drive on the right.
+    m += wheel("x", 7, 8, 4, 0.25, 0.75, IRON, BRASS)
+    m += gear("x", 7, 8, 3.75, 14.25, 15.25)
+    # Motor on the back with a copper-wound body.
+    m += cyl("z", 8, 7, 2.75, 12.5, 15.25, "sp_coil", BRASS)
+    m += cyl("z", 8, 7, 1, 15.25, 16, COPPER)
+    # Feed hopper on top.
+    m.append(box((5, 11.5, 5), (11, 13, 11), {"*": IRON, "up": "sp_hopper_inside"}))
+    m.append(box((3.5, 13, 3.5), (12.5, 15.25, 12.5), {"*": "sp_wood", "up": "sp_hopper_inside"}))
+    for frm, to in (((3, 15.25, 3), (13, 16, 4)), ((3, 15.25, 12), (13, 16, 13)),
+                    ((3, 15.25, 4), (4, 16, 12)), ((12, 15.25, 4), (13, 16, 12))):
+        m.append(box(frm, to, IRON))
+    # Front: instrument plate with a gauge and lamp, dust chute below.
+    m.append(box((4.5, 4.5, 1.75), (11.5, 11, 3.5), BRASS_PLATE))
+    m.append(dial("north", (8, 8.25, 1.25), 3.5))
+    m.append(dial("north", (10.25, 5.5, 1.25), 1.25, texture="sp_lamp"))
+    m.append(box((5.5, 1, 0.5), (10.5, 3.75, 2), {"*": IRON, "north": "sp_hopper_inside"}))
+    return m
+
+
+def ore_washer():
+    """Washing tub: a banded wooden vat of water, agitator shaft and gear on a crossbeam, water wheel and inlet valve."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((1, 1, 1), (15, 10, 15), {"*": "sp_wood", "up": "sp_water"}))
+    for y in (3, 7.5):
+        m.append(box((0.5, y, 0.5), (15.5, y + 0.75, 15.5), IRON))
+    # Rim boards above the water line.
+    for frm, to in (((1, 10, 1), (15, 11.5, 2)), ((1, 10, 14), (15, 11.5, 15)),
+                    ((1, 10, 2), (2, 11.5, 14)), ((14, 10, 2), (15, 11.5, 14))):
+        m.append(box(frm, to, "sp_wood"))
+    # Crossbeam with posts, agitator shaft and drive gear.
+    for x in (1.25, 13.25):
+        m.append(box((x, 11.5, 7), (x + 1.5, 13, 9), IRON))
+    m.append(box((1, 13, 7), (15, 14.25, 9), BRASS_PLATE))
+    m += cyl("y", 8, 8, 0.75, 8, 13, IRON)
+    m += gear("y", 8, 8, 2.75, 14.25, 15)
+    m += cyl("y", 8, 8, 0.6, 15, 16, BRASS)
+    # Water wheel on the right side.
+    m += wheel("x", 6, 8, 4.5, 15.25, 16, IRON, BRASS)
+    # Water inlet from the back: copper pipe, brass flange and a red valve wheel on top.
+    m.append(pipe((7.25, 8.5, 14.5), (8.75, 10, 16)))
+    m.append(box((6.75, 8, 15.5), (9.25, 10.5, 16), BRASS))
+    m.append(pipe((7.5, 10, 14.75), (8.5, 12.25, 15.75)))
+    m += wheel("y", 8, 15.25, 1.75, 12.25, 12.75)
+    # Front: sight glass and lamp, washed-ore chute.
+    m.append(dial("north", (6, 6, 0.5), 3.5, texture="sp_sight_glass"))
+    m.append(dial("north", (11.5, 6, 0.5), 1.25, texture="sp_lamp"))
+    m.append(box((9.5, 1, 0.25), (13.5, 3, 1.25), {"*": IRON, "north": "sp_hopper_inside"}))
+    return m
+
+
+def sieve():
+    """Shaker sieve: a tilted brass mesh tray in an iron frame, feed hopper above, catch bin below, eccentric drive."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    for x in (1, 13.5):
+        for z in (1, 13.5):
+            m.append(box((x, 1, z), (x + 1.5, 12, z + 1.5), IRON))
+    for frm, to in (((1, 11, 2.5), (2.5, 12, 13.5)), ((13.5, 11, 2.5), (15, 12, 13.5)),
+                    ((2.5, 11, 1), (13.5, 12, 2.5)), ((2.5, 11, 13.5), (13.5, 12, 15))):
+        m.append(box(frm, to, BRASS))
+    # Catch bin and the tilted mesh tray.
+    m.append(box((2.5, 1, 2.5), (13.5, 5, 13.5), {"*": "sp_wood", "up": "sp_hopper_inside"}))
+    tilt = ("x", 22.5, (8, 8, 8))
+    m.append(box((2.75, 7.5, 2.75), (13.25, 8, 13.25), {"*": BRASS, "up": "sp_mesh", "down": "sp_mesh"}, rotation=tilt))
+    # Feed hopper.
+    m.append(box((5, 12, 5), (11, 13.5, 11), {"*": IRON, "up": "sp_hopper_inside"}))
+    m.append(box((3.5, 13.5, 3.5), (12.5, 16, 12.5), {"*": "sp_wood", "up": "sp_hopper_inside"}))
+    m.append(box((3.25, 14.75, 3.25), (12.75, 15.25, 12.75), IRON))
+    # Motor on the left, eccentric wheel on the right.
+    m += cyl("x", 7, 8, 2.5, 0.5, 2.5, "sp_coil", BRASS)
+    m += wheel("x", 7, 8, 3.5, 15, 15.75, IRON, BRASS)
+    # Front instrument plate and chute; back brace.
+    m.append(box((5.5, 5, 1.25), (10.5, 10.5, 2.5), BRASS_PLATE))
+    m.append(dial("north", (8, 8, 0.75), 3))
+    m.append(dial("north", (8, 5.75, 0.75), 1, texture="sp_lamp"))
+    m.append(box((5.5, 1, 0.75), (10.5, 4, 2.5), {"*": IRON, "north": "sp_hopper_inside"}))
+    m.append(box((5, 3, 13.5), (11, 10, 15.25), IRON_PLATE))
+    return m
+
+
+def sawmill():
+    """Steam sawmill: a wooden bench with an iron table, a toothed circular saw under a brass hood, fence rails and a flywheel."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((1, 1, 1), (15, 9, 15), "sp_wood"))
+    for y in (2, 7):
+        m.append(box((0.5, y, 0.5), (15.5, y + 0.75, 15.5), IRON))
+    m.append(box((0.5, 9, 0.5), (15.5, 10, 15.5), {"*": IRON, "up": IRON_PLATE}))
+    # Saw blade rising through the table, under a hood held from the back.
+    m += gear("x", 10, 8, 4.75, 7.75, 8.25, texture="sp_saw", hub=BRASS)
+    m.append(box((7, 13.5, 4.5), (9, 15.5, 11.5), BRASS_PLATE))
+    m.append(box((7.5, 10, 12.5), (8.5, 15, 13.5), IRON))
+    m.append(box((7.5, 14.5, 11.5), (8.5, 15, 12.5), IRON))
+    # Fence rails.
+    m.append(box((2, 10, 1), (3, 11, 15), BRASS))
+    m.append(box((13, 10, 1), (14, 11, 15), BRASS))
+    # Flywheel on the right, motor on the left.
+    m += wheel("x", 5, 8, 3.5, 15.25, 16, IRON, BRASS)
+    m += cyl("x", 5, 8, 2.25, 0.25, 1, "sp_coil", BRASS)
+    # Front: gauge, lamp and sawdust chute.
+    m.append(dial("north", (4, 5.5, 0.5), 3))
+    m.append(dial("north", (12, 5.5, 0.5), 1.25, texture="sp_lamp"))
+    m.append(box((6, 1.5, 0.25), (10, 4, 1.25), {"*": IRON, "north": "sp_hopper_inside"}))
+    return m
+
+
 MODELS = {
     "coal_generator": coal_generator(),
     "battery_box": battery_box(),
@@ -545,6 +662,10 @@ MODELS = {
     "metal_press": metal_press(),
     "wire_drawer": wire_drawer(),
     "circuit_assembler": circuit_assembler(),
+    "pulverizer": pulverizer(),
+    "ore_washer": ore_washer(),
+    "sieve": sieve(),
+    "sawmill": sawmill(),
     "geothermal_generator": geothermal_generator(),
     "wind_turbine": wind_turbine(),
     "electric_pump": electric_pump(),

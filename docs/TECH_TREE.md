@@ -58,7 +58,7 @@ flowchart LR
 
 ## Machines
 
-All machines hold their own internal battery and accept power from cables or directly from an adjacent generator or battery. Where power goes in is described in [Power connections](#power-connections). Hoppers insert into input slots from the top and sides and extract results from the bottom.
+All machines hold their own internal battery and accept power from cables or directly from an adjacent generator or battery. Where power goes in is described in [Power connections](#power-connections). By default hoppers insert into input slots from the top and sides and extract results from the bottom; each face can be changed on the machine's screen (see [Item logistics](#item-logistics)).
 
 | Machine | Branch | Does | Power | Built from |
 | --- | --- | --- | --- | --- |
@@ -72,6 +72,10 @@ All machines hold their own internal battery and accept power from cables or dir
 | Metal Press | Mechanical | Ingot → plate (1:1) | 16 JE/t | bronze, piston, cable, casing, anvil |
 | Wire Drawer | Mechanical | Ingot → 3 wires | 12 JE/t | brass, shears, cable, casing, redstone |
 | Circuit Assembler | Mechanical | Up to three ingredient stacks (any order) → circuits | 32 JE/t | tin plates, bronze gear, cable, casing, redstone |
+| Pulverizer | Mechanical | Ore → 2 dust + byproduct; washed ore, raw metal, ingot → dust ([Ore processing](#ore-processing)) | 20 JE/t | flint, iron gears, bronze plates, cable, casing |
+| Ore Washer | Mechanical | Ore + 500 mB water → 3 washed ore | 16 JE/t | invar plates, bucket, bronze gears, basic circuit, casing |
+| Sieve | Mechanical | Gravel → flint, soul sand → soul soil, with small finds | 8 JE/t | iron plates, iron bars, hopper, cable, casing |
+| Sawmill | Mechanical | Log → 6 planks + sawdust; planks → 3 sticks | 12 JE/t | iron, iron gear, iron plates, cable, casing |
 | Geothermal Generator (2 blocks wide) | Power | Lava → 64 JE/t (1 mB/t; a bucket lasts 1,000 ticks) | produces | invar plates, tinplate tank, bronze gears, casing, basic circuit |
 | Wind Turbine (3 blocks tall) | Power | 4–24 JE/t by height above sea level; more in rain and thunder; rotor needs clear air | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
 | Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
@@ -205,6 +209,46 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 **Performance.** Pipe networks are found once by a bounded search and cached per dimension. They are rebuilt only after a pipe, tank, pump or machine is placed or removed, or a pipe's neighbor changes. A pump does two storage moves per tick at most, plus one per network endpoint.
 
+## Ore processing
+
+Ore processing gives more metal per ore and turns everyday blocks into useful things, without chemistry. There are three routes for an ore, each needing more machines:
+
+| Route | Machines | Ingots per ore | Extras |
+| --- | --- | --- | --- |
+| Smelt it | furnace | 1 | — |
+| Crush or pulverize | Crusher → furnace, or Pulverizer → furnace | 2 | the Pulverizer rolls a byproduct |
+| Wash, then pulverize | Ore Washer (water) → Pulverizer → furnace | 3 | a byproduct roll for each washed ore |
+
+![Pulverizer, Ore Washer, Sieve, Sawmill, and the Ore Washer from behind](images/processing_machines.png)
+
+*Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
+
+| Machine | Does | Numbers | Built from |
+| --- | --- | --- | --- |
+| Pulverizer | Ore → 2 dust (+ byproduct); washed ore, raw metal or an ingot → 1 dust | 20 JE/t; ore takes 200 ticks, the rest 100 | flint, 2 iron gears, 2 bronze plates, cables, casing |
+| Ore Washer | Ore + 500 mB water → 3 washed ore | 16 JE/t, 200 ticks; 8,000 mB tank, filled by pipes, buckets or a water source block below (a spring, 20 mB/t) | invar plates, bucket, bronze gears, basic circuit, casing |
+| Sieve | Gravel → flint (12% iron nugget, 8% tin nugget); soul sand → soul soil (15% quartz, 8% gold nugget) | 8 JE/t, 100 ticks | iron plates, iron bars, hopper, cables, casing |
+| Sawmill | Log → 6 planks (bamboo block → 3), 50% sawdust; planks → 3 sticks | 12 JE/t, 100 ticks (sticks 60) | iron ingots, iron gear, iron plates, cables, casing |
+
+**Dusts** exist for copper, iron, gold, tin, zinc, lead, silver, nickel, tungsten and uranium, tagged `c:dusts/<metal>`. A dust smelts into one ingot wherever that metal's raw ore can be smelted. Nickel, tungsten and uranium dust melt in the Arc Furnace instead, like their raw ores. **Washed ores** (`washed_<metal>_ore`) are an intermediate: grind them, don't smelt them. Four **sawdust** make a sheet of paper.
+
+**Byproducts** (pulverizing ore or washed ore): copper → gold, iron → nickel, gold → silver, tin → tungsten (5%), zinc → lead, lead → silver, silver → lead, nickel → iron, tungsten → tin, uranium → lead, each 10% unless marked. The pairs follow ores that really occur together. A byproduct from a disabled feature switch is never made.
+
+**Byproduct slots.** The Pulverizer, Sieve and Sawmill have two byproduct slots above the output. A machine waits rather than lose a byproduct: it only finishes an operation when every byproduct it might roll has room. Hoppers, pipes and *Eject* take from the byproduct slots as well as the output.
+
+**Balance rules** (enforced by `tools/check_mod_data.py`):
+
+- Only ore blocks get a bonus: ×2 for crushing or pulverizing, ×3 for washing.
+- Byproducts may add at most 25% of the input's metal on average.
+- The Sieve's renewable finds (no metal in) average under one nugget per operation.
+
+**Recipe data.** A machine recipe may list byproducts:
+
+```json
+{"type": "jugcraft:pulverizing", "ingredient": "jugcraft:tin_ore", "result": {"id": "jugcraft:tin_dust", "count": 2}, "time": 200,
+ "byproducts": [{"result": {"id": "jugcraft:tungsten_dust", "count": 1}, "chance": 0.05, "feature": "tungsten"}]}
+```
+
 ## Item logistics
 
 Item logistics moves finished goods around without hoppers everywhere. Like power and fluids, the pipes are passive; only *pushers* move items.
@@ -259,6 +303,10 @@ Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, 
 | Wire Drawer | `jugcraft:wire_drawing` | `…/wire_drawing/` |
 | Alloy Smelter | `jugcraft:alloying` (several inputs) | `…/alloying/` |
 | Circuit Assembler | `jugcraft:circuit_assembly` (several inputs) | `…/circuit_assembly/` |
+| Pulverizer | `jugcraft:pulverizing` (byproducts) | `…/pulverizing/` |
+| Ore Washer | `jugcraft:ore_washing` (uses 500 mB water) | `…/ore_washing/` |
+| Sieve | `jugcraft:sifting` (byproducts) | `…/sifting/` |
+| Sawmill | `jugcraft:sawing` (byproducts) | `…/sawing/` |
 | Electric Furnace | vanilla `minecraft:smelting` | (vanilla furnace recipes) |
 
 ```json
@@ -287,7 +335,11 @@ Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, 
 - a multi-block machine disappearing whole when one block breaks;
 - an extractor moving items through pipes into a chest;
 - a sorter routing matching items to its inventory and the rest elsewhere;
-- a machine ejecting its results into a chest below.
+- a machine ejecting its results into a chest below;
+- recipe byproducts loading from data;
+- the pulverizer grinding ore into two dusts, and a dust smelting into an ingot;
+- the ore washer tripling ore with water from a source below, and waiting when it has none;
+- the sawmill and the sieve.
 
 To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests` that builds its setup and ends with `helper.succeed()` or `helper.succeedWhen(...)`.
 
@@ -305,6 +357,7 @@ To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests
 | Machines, machine recipes, crafting | `tools/machines.py` (plus the matching Java: `MachineKind`, `JugcraftComponents`) | `python3 tools/generate_material_data.py` |
 | Machine looks | `tools/steampunk_models.py` and `tools/steampunk_textures.py` (steampunk), `tools/large_machines.py` (classic multi-block models), `DEFAULT_STYLE` in `tools/model_writer.py` | `python3 tools/generate_textures.py`, then `python3 tools/generate_material_data.py` |
 | Fluid blocks and their numbers | `tools/machines.py` (`PIPES`, `FLUID_BLOCKS`, `FLUID_STATS`) plus the constants in `fluid/FluidPipeBlock`, `FluidTankBlockEntity` and `ElectricPumpBlockEntity` | `python3 tools/generate_material_data.py` |
+| Ore processing | `tools/machines.py` (`_pulverizer`, `_ore_washer`, `SIEVE`, `_sawmill`, `BYPRODUCTS`), `COMPONENTS["dust"]` and `WASHED_ORES` in `tools/materials.py`, plus `MachineKind` | `python3 tools/generate_material_data.py` |
 | Item logistics | `tools/machines.py` (`ITEM_PIPES`, `LOGISTICS_BLOCKS`, `TOOLS`), `tools/logistics_models.py`, plus the constants in `logistics/` | `python3 tools/generate_material_data.py` |
 | Textures | `tools/generate_textures.py` | `python3 tools/generate_textures.py` |
 | Verify | — | `python3 tools/check_mod_data.py` and `./gradlew build` |

@@ -11,9 +11,10 @@ from pathlib import Path
 
 from PIL import Image
 
-from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS,
+from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS, WASHED_ORES,
                        all_blocks, all_items, feature_of)
-from machines import MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, machine_blocks, machine_items, machine_recipes
+from machines import (MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, BYPRODUCT_SHARE,
+                      RENEWABLE_UNITS, WOODS, machine_blocks, machine_items, machine_recipes)
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -27,7 +28,9 @@ MACHINE_JAVA = JAVA_ROOT / "machine" / "MachineKind.java"
 STYLE_PACK = RES / "resourcepacks" / "alternate_machines"
 
 # Tags that Jugcraft reads but that vanilla/Fabric API define.
-EXTERNAL_TAGS = {"c:ingots/copper", "minecraft:stone_ore_replaceables", "minecraft:deepslate_ore_replaceables"}
+EXTERNAL_TAGS = ({"c:ingots/copper", "c:ingots/iron", "minecraft:stone_ore_replaceables",
+                  "minecraft:deepslate_ore_replaceables", "minecraft:planks"}
+                 | {f"minecraft:{tag}" for tag in WOODS.values()})
 
 errors = []
 
@@ -112,12 +115,14 @@ UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_bloc
          **{f"{form}s": units for form, units in PART_UNITS.items()}}
 
 
-NON_METAL = set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
+NON_METAL = {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"}
 
 
 def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
     ns, path = split(ref.lstrip("#"))
+    if ref.startswith("#") and ns == "minecraft":
+        return {}  # vanilla tags used here (logs, planks) hold no metal
     if ref.startswith("#"):
         form, _, metal = path.partition("/")
         if metal in MINERALS or path in {info["tag"] for info in ITEMS.values()}:
@@ -129,7 +134,10 @@ def item_units(ref):
             return {metal[4:]: 81}
         return {metal: UNITS[form]}
     if ns != MOD:
-        vanilla = {"copper_ingot": ("copper", 9), "iron_ingot": ("iron", 9), "gold_ingot": ("gold", 9)}
+        vanilla = {}
+        for metal in ("copper", "iron", "gold"):
+            vanilla.update({f"{metal}_ingot": (metal, 9), f"raw_{metal}": (metal, 9), f"{metal}_ore": (metal, 9),
+                            f"deepslate_{metal}_ore": (metal, 9), f"{metal}_nugget": (metal, 1)})
         if ns == "minecraft" and path in vanilla:
             metal, units = vanilla[path]
             return {metal: units}
@@ -139,6 +147,8 @@ def item_units(ref):
                  f"raw_{metal}": 9, f"raw_{metal}_block": 81, f"{metal}_ore": 9, f"deepslate_{metal}_ore": 9}
         if path in table:
             return {metal: table[path]}
+    if path.startswith("washed_") and path.endswith("_ore"):
+        return {path[len("washed_"):-len("_ore")]: 9}
     if path == "bronze_blend":
         return {"bronze": 9}
     for form, metals in COMPONENTS.items():
@@ -185,7 +195,7 @@ def check_recipes(registered):
                 err(f"{name}: unknown item {ref}")
 
         result = recipe["result"]["id"]
-        if split(result)[1] not in registered:
+        if split(result)[0] == MOD and split(result)[1] not in registered:
             err(f"{name}: unknown result {result}")
         count = recipe["result"].get("count", 1)
 
@@ -218,6 +228,7 @@ def check_machine_recipe_files(registered):
         if not recipe.get("fabric:load_conditions"):
             err(f"{label}: missing feature switch condition")
         refs = [part["ingredient"] for part in recipe.get("ingredients", [])] or [recipe.get("ingredient", "")]
+        refs += [entry["result"]["id"] for entry in recipe.get("byproducts", [])]
         for ref in refs + [recipe["result"]["id"]]:
             if ref.startswith("#"):
                 if not tag_exists("item", ref[1:]):
@@ -275,7 +286,8 @@ def check_java():
 
     components = (JAVA_ROOT / "materials" / "JugcraftComponents.java").read_text(encoding="utf-8")
     for name, expected_list in (("PLATES", COMPONENTS["plate"]), ("GEARS", COMPONENTS["gear"]),
-                                ("WIRES", COMPONENTS["wire"]), ("CIRCUITS", list(CIRCUITS))):
+                                ("WIRES", COMPONENTS["wire"]), ("CIRCUITS", list(CIRCUITS)),
+                                ("DUSTS", COMPONENTS["dust"]), ("WASHED_ORES", WASHED_ORES)):
         found = re.findall(r'"([a-z_]+)"', re.search(name + r' = \{([^}]*)\}', components).group(1))
         if found != expected_list:
             err(f"JugcraftComponents.{name} {found} != tools/materials.py {expected_list}")
@@ -309,11 +321,31 @@ def check_machines(registered):
                     err(f"{label}: unknown feature {feature}")
             units_in = sum(sum(item_units(ref).values()) * count for ref, count in inputs)
             units_out = sum(item_units(recipe["output"]).values()) * recipe["count"]
-            allowed = units_in * (ORE_PROCESSING_MULTIPLIER if recipe.get("ore") else 1)
-            if recipe.get("ore") and not all(ref.endswith("_ore") for ref, _ in inputs):
+            bonus = recipe.get("ore_bonus") or (ORE_PROCESSING_MULTIPLIER if recipe.get("ore") else 1)
+            allowed = units_in * bonus
+            is_ore = all(ref.endswith("_ore") and not split(ref)[1].startswith("washed_") for ref, _ in inputs)
+            if bonus > 1 and not is_ore:
                 err(f"{label}: only ores get the ore-processing bonus")
+            if bonus > ORE_WASHING_MULTIPLIER:
+                err(f"{label}: ore bonus {bonus} exceeds the washing route's {ORE_WASHING_MULTIPLIER}")
             if units_out > allowed:
                 err(f"{label}: creates metal ({units_in} in, {units_out} out, {allowed} allowed)")
+            # Byproducts: [item, count, chance, feature]. Expected metal stays a small share of the input,
+            # or, for renewable recipes (sieve), under a nugget per operation.
+            extra = 0.0
+            for item, count, chance, feature in recipe.get("byproducts", []):
+                if split(item)[0] == MOD and split(item)[1] not in registered:
+                    err(f"{label}: unknown byproduct {item}")
+                if not 0 < chance <= 1:
+                    err(f"{label}: byproduct chance {chance} outside (0, 1]")
+                if feature is not None and feature not in FEATURES:
+                    err(f"{label}: byproduct gated by unknown feature {feature}")
+                extra += sum(item_units(item).values()) * count * chance
+            limit = RENEWABLE_UNITS if recipe.get("renewable") else units_in * BYPRODUCT_SHARE
+            if extra > limit + 1e-9:
+                err(f"{label}: byproducts add {extra:.2f} metal units on average, {limit:.2f} allowed")
+            if recipe.get("renewable") and units_in:
+                err(f"{label}: renewable recipes must not consume metal")
 
     kinds = MACHINE_JAVA.read_text(encoding="utf-8")
     for machine, stats in STATS.items():

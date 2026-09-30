@@ -76,12 +76,18 @@ EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
 # ---------------------------------------------------------------- mechanical parts
 # Physical components made by the metal press and wire drawer (mechanical branch).
 # Metal content per item in nugget units; the checker uses these to audit recipes.
-PART_UNITS = {"plate": 9, "gear": 36, "wire": 3}
+PART_UNITS = {"plate": 9, "gear": 36, "wire": 3, "dust": 9}
 COMPONENTS = {
     "plate": ["copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten"],
     "gear": ["iron", "bronze", "brass", "invar"],
     "wire": ["copper", "silver", "aluminum"],
+    # Pulverizer output (see tools/machines.py); one dust smelts back into one ingot.
+    "dust": ["copper", "iron", "gold", "tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium"],
 }
+# Ore washer output: washed_<metal>_ore, one ingot's worth each; the pulverizer grinds it into dust.
+WASHED_ORES = list(COMPONENTS["dust"])
+# Sawmill byproduct.
+SAWDUST = "sawdust"
 # Assembled electronics (non-metal outputs; their metal is consumed).
 CIRCUITS = {"basic_circuit": "Basic Circuit", "advanced_circuit": "Advanced Circuit"}
 # Vanilla metals that get Jugcraft parts: nugget units per vanilla ingot.
@@ -89,7 +95,22 @@ VANILLA_METALS = {"copper", "iron", "gold"}
 
 
 def part_items():
-    return [f"{metal}_{form}" for form, metals in COMPONENTS.items() for metal in metals] + list(CIRCUITS)
+    return ([f"{metal}_{form}" for form, metals in COMPONENTS.items() for metal in metals] + list(CIRCUITS)
+            + [f"washed_{metal}_ore" for metal in WASHED_ORES] + [SAWDUST])
+
+
+def ore_ids(metal):
+    """The stone and deepslate ore blocks of a mined metal (vanilla ones for copper, iron and gold)."""
+    ns = "minecraft" if metal in VANILLA_METALS else MOD
+    return [f"{ns}:{metal}_ore", f"{ns}:deepslate_{metal}_ore"]
+
+
+def raw_id(metal):
+    return f"minecraft:raw_{metal}" if metal in VANILLA_METALS else f"{MOD}:raw_{metal}"
+
+
+def nugget_id(metal):
+    return f"minecraft:{metal}_nugget" if metal in ("iron", "gold") else f"{MOD}:{metal}_nugget"
 
 
 def ingot_id(metal):

@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    }
+  ],
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "#c:dusts/silver",
+  "result": {
+    "id": "jugcraft:silver_ingot"
+  },
+  "experience": 0.1,
+  "cookingtime": 100
+}

@@ -5,6 +5,7 @@ import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import io.github.jimbozoomer.jugcraft.logistics.ItemNetworks;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
@@ -61,7 +63,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_BURN = 6;
 	public static final int DATA_MAX_BURN = 7;
 	public static final int DATA_FORMED = 8;
-	/** mB in the machine's fluid tank (steam generator water, geothermal lava). */
+	/** mB in the machine's fluid tank (steam generator and ore washer water, geothermal lava). */
 	public static final int DATA_TANK = 9;
 	/** Processors' side configuration, packed (see {@link SideConfig#pack()}). */
 	public static final int DATA_SIDES = 10;
@@ -93,7 +95,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private int maxBurn;
 	/** Arc furnace: structure complete. Wind turbine: rotor has room to turn. */
 	private boolean formed;
-	/** mB in the machine's tank: water for the steam generator, lava for the geothermal generator. Saved as "water". */
+	/** mB in the machine's tank: water for the steam generator and ore washer, lava for the geothermal generator. Saved as "water". */
 	private int tank;
 	/** Processors: which faces take input or give output, and whether results are pushed out. */
 	private final SideConfig sides = new SideConfig();
@@ -141,6 +143,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		this.inlet = switch (kind) {
 			case STEAM_GENERATOR -> new TankInlet(Fluids.WATER, MachineKind.STEAM_TANK);
 			case GEOTHERMAL_GENERATOR -> new TankInlet(Fluids.LAVA, MachineKind.GEOTHERMAL_TANK);
+			case ORE_WASHER -> new TankInlet(Fluids.WATER, MachineKind.WASHER_TANK);
 			default -> null;
 		};
 	}
@@ -163,8 +166,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	/**
-	 * Fluid exposed on a side (the same on every side and every part): the steam generator takes
-	 * water and the geothermal generator takes lava into their tanks. Other machines have none.
+	 * Fluid exposed on a side (the same on every side and every part): the steam generator and ore
+	 * washer take water and the geothermal generator takes lava into their tanks. Other machines have none.
 	 */
 	public @Nullable Storage<FluidVariant> fluidFor(@Nullable Direction side) {
 		return inlet;
@@ -353,11 +356,18 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * into item pipes or straight into adjacent inventories.
 	 */
 	private void eject(ServerLevel level, BlockPos pos, BlockState state) {
-		if (items.get(kind.outputSlot()).isEmpty()) {
+		Direction facing = state.getValue(MachineBlock.FACING);
+		ContainerStorage inventory = ContainerStorage.of(this, null);
+		List<Storage<ItemVariant>> outputs = new ArrayList<>();
+		for (int slot = kind.outputSlot(); slot < kind.slots; slot++) {
+			if (!items.get(slot).isEmpty()) {
+				outputs.add(inventory.getSlot(slot));
+			}
+		}
+		if (outputs.isEmpty()) {
 			return;
 		}
-		Direction facing = state.getValue(MachineBlock.FACING);
-		Storage<ItemVariant> output = ContainerStorage.of(this, null).getSlot(kind.outputSlot());
+		Storage<ItemVariant> output = new CombinedStorage<>(outputs);
 		Footprint footprint = kind.footprint();
 		// Never hand results back to this machine through a pipe that touches another of its blocks.
 		Set<BlockPos> self = new HashSet<>();
@@ -445,6 +455,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
 			eject(level, pos, state);
 		}
+		if (kind == MachineKind.ORE_WASHER && tank < MachineKind.WASHER_TANK
+				&& level.getFluidState(pos.below()).isSourceOfType(Fluids.WATER)) {
+			// A water source below is a spring, as for the steam generator: it is never used up.
+			tank = Math.min(MachineKind.WASHER_TANK, tank + MachineKind.WASHER_SOURCE_REFILL);
+			setChanged();
+		}
 		if (kind == MachineKind.ARC_FURNACE && level.getGameTime() % 20 == 0) {
 			formed = ArcFurnaceStructure.isFormed(level, pos, state.getValue(MachineBlock.FACING),
 					JugcraftMachines.ARC_FURNACE_CASING);
@@ -455,7 +471,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 
 		Optional<Result> result = findResult(level);
-		if (result.isEmpty() || !canOutput(result.get().stack())) {
+		boolean water = kind != MachineKind.ORE_WASHER || tank >= MachineKind.WASHER_WATER_PER_OPERATION;
+		if (result.isEmpty() || !water || !canOutput(result.get().stack()) || !byproductsFit(result.get().byproducts())) {
 			if (progress != 0) {
 				progress = 0;
 				setChanged();
@@ -482,13 +499,27 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			for (int slot = 0; slot < take.length; slot++) {
 				items.get(slot).shrink(take[slot]);
 			}
+			for (MachineRecipe.Byproduct byproduct : result.get().byproducts()) {
+				if (byproduct.enabled() && level.getRandom().nextFloat() < byproduct.chance()) {
+					addByproduct(byproduct.result().create());
+				}
+			}
+			if (kind == MachineKind.ORE_WASHER) {
+				tank -= MachineKind.WASHER_WATER_PER_OPERATION;
+			}
 		}
 		setChanged();
 		return true;
 	}
 
-	/** A matched recipe: what it makes, how long it takes and how many items it takes from each input slot. */
-	private record Result(ItemStack stack, int ticks, int[] take) {
+	/**
+	 * A matched recipe: what it makes, how long it takes, how many items it takes from each input slot
+	 * and what else it may make.
+	 */
+	private record Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts) {
+		Result(ItemStack stack, int ticks, int[] take) {
+			this(stack, ticks, take, List.of());
+		}
 	}
 
 	private static final int[] TAKE_ONE = {1};
@@ -508,7 +539,42 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return SMELTING.getRecipeFor(recipeInput, level)
 					.map(holder -> new Result(holder.value().assemble(recipeInput), MachineKind.ELECTRIC_FURNACE_TICKS, TAKE_ONE));
 		}
-		return MachineRecipes.find(level, kind, input).map(recipe -> new Result(recipe.output().create(), recipe.time(), TAKE_ONE));
+		return MachineRecipes.find(level, kind, input)
+				.map(recipe -> new Result(recipe.output().create(), recipe.time(), TAKE_ONE, recipe.byproducts()));
+	}
+
+	/** Whether every byproduct this operation might make has room, so none is ever lost. */
+	private boolean byproductsFit(List<MachineRecipe.Byproduct> byproducts) {
+		for (MachineRecipe.Byproduct byproduct : byproducts) {
+			if (byproduct.enabled() && byproductSlotFor(byproduct.result().create()) < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** The first byproduct slot that can take all of {@code stack}, or -1. */
+	private int byproductSlotFor(ItemStack stack) {
+		for (int slot = kind.outputSlot() + 1; slot < kind.slots; slot++) {
+			ItemStack held = items.get(slot);
+			if (held.isEmpty() || (ItemStack.isSameItemSameComponents(held, stack)
+					&& held.getCount() + stack.getCount() <= Math.min(getMaxStackSize(), held.getMaxStackSize()))) {
+				return slot;
+			}
+		}
+		return -1;
+	}
+
+	private void addByproduct(ItemStack stack) {
+		int slot = byproductSlotFor(stack);
+		if (slot < 0) {
+			return; // Unreachable: byproductsFit checked before the operation finished.
+		}
+		if (items.get(slot).isEmpty()) {
+			items.set(slot, stack);
+		} else {
+			items.get(slot).grow(stack.getCount());
+		}
 	}
 
 	private boolean canOutput(ItemStack result) {
@@ -588,12 +654,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		SideConfig.Mode mode = sides.mode(side, getBlockState().getValue(MachineBlock.FACING));
 		int inputs = mode.input() ? kind.outputSlot() : 0;
-		int[] slots = new int[inputs + (mode.output() ? 1 : 0)];
+		int outputs = mode.output() ? kind.slots - kind.outputSlot() : 0;
+		int[] slots = new int[inputs + outputs];
 		for (int slot = 0; slot < inputs; slot++) {
 			slots[slot] = slot;
 		}
-		if (mode.output()) {
-			slots[inputs] = kind.outputSlot();
+		for (int i = 0; i < outputs; i++) {
+			slots[inputs + i] = kind.outputSlot() + i;
 		}
 		return slots;
 	}
@@ -611,7 +678,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.STEAM_GENERATOR) {
 			return slot == SLOT_BUCKET_OUT;
 		}
-		return kind.isProcessor() && slot == kind.outputSlot()
+		return kind.isProcessor() && slot >= kind.outputSlot()
 				&& sides.mode(side, getBlockState().getValue(MachineBlock.FACING)).output();
 	}
 

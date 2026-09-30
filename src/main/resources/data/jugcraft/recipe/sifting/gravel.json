@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:sifting",
+  "ingredient": "minecraft:gravel",
+  "result": {
+    "id": "minecraft:flint",
+    "count": 1
+  },
+  "time": 100,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:iron_nugget",
+        "count": 1
+      },
+      "chance": 0.12
+    },
+    {
+      "result": {
+        "id": "jugcraft:tin_nugget",
+        "count": 1
+      },
+      "chance": 0.08,
+      "feature": "tin"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "#c:dusts/lead",
+  "result": {
+    "id": "jugcraft:lead_ingot"
+  },
+  "experience": 0.1,
+  "cookingtime": 100
+}

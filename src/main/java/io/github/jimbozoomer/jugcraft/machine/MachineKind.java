@@ -24,7 +24,12 @@ public enum MachineKind implements StringRepresentable {
 	CIRCUIT_ASSEMBLER("circuit_assembler", 20_000, 256, 0, 32, 4),
 	// Multi-block machines (see Footprint and LargeMachineBlock).
 	GEOTHERMAL_GENERATOR("geothermal_generator", 30_000, 0, 128, 0, 0),
-	WIND_TURBINE("wind_turbine", 16_000, 0, 64, 0, 0);
+	WIND_TURBINE("wind_turbine", 16_000, 0, 64, 0, 0),
+	// Processing depth. Pulverizer, sieve and sawmill have an input, an output and two byproduct slots.
+	PULVERIZER("pulverizer", 10_000, 128, 0, 20, 4),
+	ORE_WASHER("ore_washer", 10_000, 128, 0, 16, 2),
+	SIEVE("sieve", 10_000, 128, 0, 8, 4),
+	SAWMILL("sawmill", 10_000, 128, 0, 12, 4);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -50,6 +55,12 @@ public enum MachineKind implements StringRepresentable {
 	public static final int WIND_MAX_PER_TICK = 24;
 	/** Ticks between checks that the wind turbine's rotor has room to turn. */
 	public static final int WIND_CHECK_INTERVAL = 100;
+	/** Ore washer water tank (mB). */
+	public static final int WASHER_TANK = 8_000;
+	/** Water (mB) the ore washer uses per operation, taken when the operation finishes. */
+	public static final int WASHER_WATER_PER_OPERATION = 500;
+	/** mB per tick drawn from a water source block directly beneath the ore washer. */
+	public static final int WASHER_SOURCE_REFILL = 20;
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -72,7 +83,8 @@ public enum MachineKind implements StringRepresentable {
 	/** Processing machines have input slots first and one output slot last. */
 	public boolean isProcessor() {
 		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER
-				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER;
+				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
+				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL;
 	}
 
 	/** Processors whose recipes combine several ingredient stacks placed in any input slots. */
@@ -92,13 +104,32 @@ public enum MachineKind implements StringRepresentable {
 			case METAL_PRESS -> "pressing";
 			case WIRE_DRAWER -> "wire_drawing";
 			case CIRCUIT_ASSEMBLER -> "circuit_assembly";
+			case PULVERIZER -> "pulverizing";
+			case ORE_WASHER -> "ore_washing";
+			case SIEVE -> "sifting";
+			case SAWMILL -> "sawing";
 			default -> null;
 		};
 	}
 
-	/** The output slot of a processor (its last slot). */
+	/** The output slot of a processor: after the inputs, before any byproduct slots. */
 	public int outputSlot() {
-		return slots - 1;
+		return slots - 1 - byproductSlots();
+	}
+
+	/** Slots after the output that collect recipe byproducts (see {@link MachineRecipe#byproducts()}). */
+	public int byproductSlots() {
+		return this == PULVERIZER || this == SIEVE || this == SAWMILL ? 2 : 0;
+	}
+
+	/** mB the machine's fluid tank holds, or 0 without one. */
+	public int tankCapacity() {
+		return switch (this) {
+			case STEAM_GENERATOR -> STEAM_TANK;
+			case GEOTHERMAL_GENERATOR -> GEOTHERMAL_TANK;
+			case ORE_WASHER -> WASHER_TANK;
+			default -> 0;
+		};
 	}
 
 	/** Generators only produce energy; they never accept it. */

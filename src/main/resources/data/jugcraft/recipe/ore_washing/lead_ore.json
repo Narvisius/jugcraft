@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "jugcraft:ore_washing",
+  "ingredient": "jugcraft:lead_ore",
+  "result": {
+    "id": "jugcraft:washed_lead_ore",
+    "count": 3
+  },
+  "time": 200
+}

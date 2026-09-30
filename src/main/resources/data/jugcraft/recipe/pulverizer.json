@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FGF",
+    "CMC",
+    "PGP"
+  ],
+  "key": {
+    "F": "minecraft:flint",
+    "G": "#c:gears/iron",
+    "C": "jugcraft:copper_cable",
+    "M": "jugcraft:machine_casing",
+    "P": "#c:plates/bronze"
+  },
+  "result": {
+    "id": "jugcraft:pulverizer",
+    "count": 1
+  }
+}

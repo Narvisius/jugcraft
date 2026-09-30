@@ -217,4 +217,88 @@ public class JugcraftGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(count(below, item("raw_tin")) == 2,
 				"Chest below has " + count(below, item("raw_tin")) + " raw tin"));
 	}
+
+	// ------------------------------------------------------------------ ore processing
+
+	/** A powered single-input machine processes one item; returns the machine for checking. */
+	private static MachineBlockEntity processing(GameTestHelper helper, BlockPos pos, MachineKind kind, ItemStack input) {
+		helper.setBlock(pos, machine(kind));
+		charge(helper, pos, Direction.UP);
+		MachineBlockEntity machine = helper.getBlockEntity(pos, MachineBlockEntity.class);
+		machine.setItem(0, input);
+		return machine;
+	}
+
+	/** Byproducts load from data: pulverizing tin ore sometimes yields tungsten dust. */
+	@GameTest
+	public void pulverizerByproductsLoad(GameTestHelper helper) {
+		MachineRecipe recipe = MachineRecipes.find(helper.getLevel(), MachineKind.PULVERIZER, new ItemStack(item("tin_ore")))
+				.orElseThrow(() -> helper.assertionException("No pulverizing recipe for tin ore"));
+		helper.assertTrue(recipe.byproducts().size() == 1, "Expected one byproduct, got " + recipe.byproducts());
+		MachineRecipe.Byproduct byproduct = recipe.byproducts().getFirst();
+		helper.assertTrue(byproduct.result().create().is(item("tungsten_dust")) && byproduct.chance() > 0.0F,
+				"Tin ore byproduct is " + byproduct);
+		helper.succeed();
+	}
+
+	/** The pulverizer grinds one ore into two dusts. */
+	@GameTest(maxTicks = 400)
+	public void pulverizerGrindsOre(GameTestHelper helper) {
+		MachineBlockEntity pulverizer = processing(helper, new BlockPos(2, 1, 2), MachineKind.PULVERIZER, new ItemStack(item("tin_ore")));
+		helper.succeedWhen(() -> {
+			ItemStack output = pulverizer.getItem(MachineKind.PULVERIZER.outputSlot());
+			helper.assertTrue(output.is(item("tin_dust")) && output.getCount() == 2, "Pulverizer output is " + output);
+		});
+	}
+
+	/** The ore washer, fed by a water source below, turns one ore into three washed ores. */
+	@GameTest(maxTicks = 500)
+	public void oreWasherTriplesOre(GameTestHelper helper) {
+		helper.setBlock(new BlockPos(2, 1, 2), Blocks.WATER);
+		MachineBlockEntity washer = processing(helper, new BlockPos(2, 2, 2), MachineKind.ORE_WASHER, new ItemStack(item("tin_ore")));
+		helper.succeedWhen(() -> {
+			ItemStack output = washer.getItem(MachineKind.ORE_WASHER.outputSlot());
+			helper.assertTrue(output.is(item("washed_tin_ore")) && output.getCount() == 3, "Ore washer output is " + output);
+		});
+	}
+
+	/** Without water the ore washer waits instead of washing. */
+	@GameTest(maxTicks = 300)
+	public void oreWasherNeedsWater(GameTestHelper helper) {
+		MachineBlockEntity washer = processing(helper, new BlockPos(2, 1, 2), MachineKind.ORE_WASHER, new ItemStack(item("tin_ore")));
+		helper.runAtTickTime(260, () -> {
+			helper.assertTrue(washer.getItem(MachineKind.ORE_WASHER.outputSlot()).isEmpty(), "A dry ore washer made something");
+			helper.succeed();
+		});
+	}
+
+	/** Dust smelts back into an ingot in the electric furnace. */
+	@GameTest(maxTicks = 300)
+	public void dustSmeltsIntoIngot(GameTestHelper helper) {
+		MachineBlockEntity furnace = processing(helper, new BlockPos(2, 1, 2), MachineKind.ELECTRIC_FURNACE, new ItemStack(item("tin_dust")));
+		helper.succeedWhen(() -> {
+			ItemStack output = furnace.getItem(MachineKind.ELECTRIC_FURNACE.outputSlot());
+			helper.assertTrue(output.is(item("tin_ingot")), "Electric furnace output is " + output);
+		});
+	}
+
+	/** The sawmill cuts a log into six planks. */
+	@GameTest(maxTicks = 300)
+	public void sawmillCutsLogs(GameTestHelper helper) {
+		MachineBlockEntity sawmill = processing(helper, new BlockPos(2, 1, 2), MachineKind.SAWMILL, new ItemStack(Items.OAK_LOG));
+		helper.succeedWhen(() -> {
+			ItemStack output = sawmill.getItem(MachineKind.SAWMILL.outputSlot());
+			helper.assertTrue(output.is(Items.OAK_PLANKS) && output.getCount() == 6, "Sawmill output is " + output);
+		});
+	}
+
+	/** The sieve sifts gravel into flint. */
+	@GameTest(maxTicks = 300)
+	public void sieveSiftsGravel(GameTestHelper helper) {
+		MachineBlockEntity sieve = processing(helper, new BlockPos(2, 1, 2), MachineKind.SIEVE, new ItemStack(Items.GRAVEL));
+		helper.succeedWhen(() -> {
+			ItemStack output = sieve.getItem(MachineKind.SIEVE.outputSlot());
+			helper.assertTrue(output.is(Items.FLINT), "Sieve output is " + output);
+		});
+	}
 }

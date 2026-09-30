@@ -365,6 +365,48 @@ def crusher_jaws(seed):
     return img
 
 
+def water(seed):
+    """Water surface seen from above: deep blue with pale ripple lines."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (38, 84, 168) if rng.random() < 0.75 else (46, 98, 186)
+            if (y * 3 + x // 4) % 7 == 0 and rng.random() < 0.7:
+                c = (126, 176, 226)
+            put(img, x, y, c)
+    return img
+
+
+def mesh(seed):
+    """Woven brass sieve mesh over a dark tray."""
+    img = new((22, 20, 18))
+    for y in range(16):
+        for x in range(16):
+            if x % 3 == 0 or y % 3 == 0:
+                put(img, x, y, BRASS[3] if (x + y) % 2 else BRASS[2])
+    for i in range(16):
+        put(img, i, 0, BRASS[1])
+        put(img, i, 15, BRASS[1])
+        put(img, 0, i, BRASS[1])
+        put(img, 15, i, BRASS[1])
+    return img
+
+
+def saw(seed):
+    """Polished saw steel with circular grinding marks."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            d = math.hypot(x - 7.5, y - 7.5)
+            c = (196, 200, 206) if int(d) % 2 else (168, 172, 180)
+            if rng.random() < 0.08:
+                c = (226, 230, 236)
+            put(img, x, y, c)
+    return img
+
+
 def casing(seed):
     """Machine casing: iron plate inside a riveted brass frame."""
     img = plate(seed, IRON, rivets=False)
@@ -511,6 +553,9 @@ def draw_all():
     save(tank(618), "sp_tank")
     save(crusher_jaws(619), "sp_crusher_jaws")
     save(casing(620), "sp_machine_casing")
+    save(water(624), "sp_water")
+    save(mesh(625), "sp_mesh")
+    save(saw(626), "sp_saw")
     save(strapped_bricks(621), "sp_arc_casing")
     save(belt(), "sp_belt")
     save(grate(), "sp_grate")

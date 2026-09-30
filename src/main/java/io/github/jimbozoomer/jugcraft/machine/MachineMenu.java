@@ -21,6 +21,12 @@ public class MachineMenu extends AbstractContainerMenu {
 	public static final int INPUT_X = 56;
 	public static final int OUTPUT_X = 116;
 	public static final int SLOT_Y = 35;
+	/** Byproduct slots sit in a row above the output slot. */
+	public static final int BYPRODUCT_Y = 13;
+
+	public static int byproductX(int index) {
+		return 98 + index * 18;
+	}
 	/** X positions of processor input slots, by number of inputs; they end just left of the progress arrow. */
 	private static final int[][] INPUT_LAYOUT = {{}, {56}, {38, 56}, {26, 44, 62}};
 
@@ -87,6 +93,14 @@ public class MachineMenu extends AbstractContainerMenu {
 					return false;
 				}
 			});
+			for (int index = 0; index < kind.byproductSlots(); index++) {
+				addSlot(new Slot(container, inputs + 1 + index, byproductX(index), BYPRODUCT_Y) {
+					@Override
+					public boolean mayPlace(ItemStack stack) {
+						return false;
+					}
+				});
+			}
 		}
 		addStandardInventorySlots(inventory, 8, 84);
 		addDataSlots(data);

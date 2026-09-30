@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "jugcraft:pulverizing",
+  "ingredient": "jugcraft:nickel_ore",
+  "result": {
+    "id": "jugcraft:nickel_dust",
+    "count": 2
+  },
+  "time": 200,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:iron_dust",
+        "count": 1
+      },
+      "chance": 0.1
+    }
+  ]
+}

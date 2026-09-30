@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "#c:dusts/nickel",
+  "result": {
+    "id": "jugcraft:nickel_ingot"
+  },
+  "experience": 0.1,
+  "cookingtime": 100
+}

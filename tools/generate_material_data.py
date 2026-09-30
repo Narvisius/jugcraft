@@ -8,7 +8,7 @@ import shutil
 from pathlib import Path
 
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
-                       metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of)
+                       metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
 from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, TOOLS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
@@ -198,7 +198,8 @@ def machine_assets(lang):
 # Machine recipe types (Java: machine/MachineRecipes.java). Each machine's list in tools/machines.py
 # becomes data/jugcraft/recipe/<type>/<name>.json, so data packs can add, replace or remove them.
 RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_smelter": "alloying",
-                "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly"}
+                "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly",
+                "pulverizer": "pulverizing", "ore_washer": "ore_washing", "sieve": "sifting", "sawmill": "sawing"}
 
 
 def machine_recipe_files(out):
@@ -216,6 +217,13 @@ def machine_recipe_files(out):
                 data["ingredient"] = recipe["input"]
             data["result"] = {"id": recipe["output"], "count": recipe["count"]}
             data["time"] = recipe["ticks"]
+            if recipe.get("byproducts"):
+                data["byproducts"] = []
+                for item, count, chance, feature in recipe["byproducts"]:
+                    entry = {"result": {"id": item, "count": count}, "chance": chance}
+                    if feature:
+                        entry["feature"] = feature
+                    data["byproducts"].append(entry)
             if name in names:
                 raise ValueError(f"Two {kind} recipes would both be named {name}")
             names.add(name)
@@ -321,11 +329,25 @@ def recipes():
     for result, (pattern, key, count) in CRAFTING.items():
         features = [MACHINE_FEATURE] + sorted({
             feature_of(f"{ref.split('/')[-1]}_ingot") for ref in key.values() if ref.startswith("#c:ingots/")
-            and ref.split("/")[-1] != "copper"} | ({"silicon"} if "#c:silicon" in key.values() else set()))
+            and ref.split("/")[-1] not in ("copper", "iron", "gold")} | ({"silicon"} if "#c:silicon" in key.values() else set()))
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
     machine_recipe_files(out)
+
+    # Dusts smelt back into ingots wherever the metal's ore could be smelted; the others use the arc furnace.
+    for metal in COMPONENTS["dust"]:
+        kinds = METALS[metal]["cook"] if metal in METALS else ["smelting", "blasting"]
+        feature = METALS[metal]["feature"] if metal in METALS else MACHINE_FEATURE
+        for kind in kinds:
+            recipe = cooking(feature, kind, f"#c:dusts/{metal}", f"{metal}_ingot", 0.1)
+            recipe["result"]["id"] = ingot_id(metal)
+            recipe["fabric:load_conditions"] = [c for f in sorted({MACHINE_FEATURE, feature}) for c in condition(f)]
+            write(out / f"{metal}_ingot_from_{kind}_{metal}_dust.json", recipe)
+    # Four sawdust press into a sheet of paper.
+    paper = shaped(MACHINE_FEATURE, ["SS", "SS"], {"S": rid("sawdust")}, "sawdust")
+    paper["result"] = {"id": "minecraft:paper", "count": 1}
+    write(out / "paper_from_sawdust.json", paper)
 
     # Gears: four plates of one metal (36 nugget units in, 36 out).
     for metal in COMPONENTS["gear"]:

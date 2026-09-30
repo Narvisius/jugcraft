@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "jugcraft:pulverizing",
+  "ingredient": "jugcraft:washed_lead_ore",
+  "result": {
+    "id": "jugcraft:lead_dust",
+    "count": 1
+  },
+  "time": 100,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:silver_dust",
+        "count": 1
+      },
+      "chance": 0.1,
+      "feature": "silver"
+    }
+  ]
+}

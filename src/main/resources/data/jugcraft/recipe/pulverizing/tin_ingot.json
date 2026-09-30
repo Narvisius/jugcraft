@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "jugcraft:pulverizing",
+  "ingredient": "jugcraft:tin_ingot",
+  "result": {
+    "id": "jugcraft:tin_dust",
+    "count": 1
+  },
+  "time": 100
+}

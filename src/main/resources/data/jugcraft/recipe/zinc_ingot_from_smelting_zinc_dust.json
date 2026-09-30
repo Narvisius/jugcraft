@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "#c:dusts/zinc",
+  "result": {
+    "id": "jugcraft:zinc_ingot"
+  },
+  "experience": 0.1,
+  "cookingtime": 200
+}

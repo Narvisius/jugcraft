@@ -18,6 +18,11 @@ MACHINES = {
     "metal_press": {"display": "Metal Press", "lit": True},
     "wire_drawer": {"display": "Wire Drawer", "lit": True},
     "circuit_assembler": {"display": "Circuit Assembler", "lit": True},
+    # Processing depth: dusts, washing, sifting and sawing (docs/TECH_TREE.md#ore-processing).
+    "pulverizer": {"display": "Pulverizer", "lit": True},
+    "ore_washer": {"display": "Ore Washer", "lit": True},
+    "sieve": {"display": "Sieve", "lit": True},
+    "sawmill": {"display": "Sawmill", "lit": True},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -73,6 +78,12 @@ STATS = {
     "metal_press": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
     "wire_drawer": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 12},
     "circuit_assembler": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32},
+    "pulverizer": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 20},
+    # Uses 500 mB of water per operation; the tank holds 8 buckets and a water source below refills 20 mB/t.
+    "ore_washer": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16, "water_per_operation": 500,
+                   "tank": 8_000},
+    "sieve": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 8},
+    "sawmill": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 12},
     # Two blocks wide. Burns 1 mB of lava per tick for 64 JE: a bucket lasts 1,000 ticks.
     "geothermal_generator": {"capacity": 30_000, "output_per_tick": 128, "generation_per_tick": 64,
                              "lava_per_tick": 1, "tank": 4_000},
@@ -87,6 +98,21 @@ STEAM_FUELS = {**GENERATOR_FUELS, "jugcraft:bitumen": 800}
 
 # One ore block yields this many raw items in the crusher (the central ore-processing bonus).
 ORE_PROCESSING_MULTIPLIER = 2
+# The ore washer's better route: one ore -> three washed ores -> three dusts -> three ingots.
+ORE_WASHING_MULTIPLIER = 3
+# Pulverizer byproducts: grinding ore (or washed ore) of the first metal sometimes yields dust of the
+# second, as the real ores occur together. Chance per operation.
+BYPRODUCTS = {"copper": ("gold", 0.1), "iron": ("nickel", 0.1), "gold": ("silver", 0.1), "tin": ("tungsten", 0.05),
+              "zinc": ("lead", 0.1), "lead": ("silver", 0.1), "silver": ("lead", 0.1), "nickel": ("iron", 0.1),
+              "tungsten": ("tin", 0.1), "uranium": ("lead", 0.1)}
+# Byproducts may not add more than this share of the input's metal (expected value), and a
+# renewable recipe (no metal in) at most this many nugget units per operation.
+BYPRODUCT_SHARE = 0.25
+RENEWABLE_UNITS = 1
+# Sawmill: log tag -> planks. Bamboo blocks make 2 planks by hand, logs 4.
+WOODS = {"oak": "oak_logs", "spruce": "spruce_logs", "birch": "birch_logs", "jungle": "jungle_logs",
+         "acacia": "acacia_logs", "dark_oak": "dark_oak_logs", "mangrove": "mangrove_logs", "cherry": "cherry_logs",
+         "pale_oak": "pale_oak_logs", "crimson": "crimson_stems", "warped": "warped_stems", "bamboo": "bamboo_blocks"}
 
 FEATURE = "machines"
 
@@ -145,6 +171,16 @@ CRAFTING = {
     "item_sorter": (["PCP", "THT", "PPP"], {"P": "#c:plates/brass", "C": "minecraft:comparator",
                                            "T": "jugcraft:brass_item_pipe", "H": "minecraft:hopper"}, 1),
     "brass_wrench": (["B B", " B ", " B "], {"B": "#c:ingots/brass"}, 1),
+    # Processing depth. The pulverizer follows the metal press (plates, gears); the ore washer needs
+    # invar and a circuit, so the three-fold route comes after the workshop tier.
+    "pulverizer": (["FGF", "CMC", "PGP"], {"F": "minecraft:flint", "G": "#c:gears/iron", "C": "jugcraft:copper_cable",
+                                           "M": "jugcraft:machine_casing", "P": "#c:plates/bronze"}, 1),
+    "ore_washer": (["PUP", "GMG", "PCP"], {"P": "#c:plates/invar", "U": "minecraft:bucket", "G": "#c:gears/bronze",
+                                           "M": "jugcraft:machine_casing", "C": "jugcraft:basic_circuit"}, 1),
+    "sieve": (["PBP", "CMC", "PHP"], {"P": "#c:plates/iron", "B": "minecraft:iron_bars", "C": "jugcraft:copper_cable",
+                                      "M": "jugcraft:machine_casing", "H": "minecraft:hopper"}, 1),
+    "sawmill": (["IGI", "CMC", "PPP"], {"I": "#c:ingots/iron", "G": "#c:gears/iron", "C": "jugcraft:copper_cable",
+                                        "M": "jugcraft:machine_casing", "P": "#c:plates/iron"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -232,9 +268,77 @@ CIRCUIT_ASSEMBLER = [
 ]
 
 
+def _metal_features(*metals):
+    from materials import METALS
+    return sorted({METALS[m]["feature"] for m in metals if m in METALS})
+
+
+def _byproduct(metal, washed=False):
+    """[item, count, chance, feature or None] for grinding this metal's ore."""
+    from materials import COMPONENTS, METALS
+    other, chance = BYPRODUCTS[metal]
+    assert other in COMPONENTS["dust"]
+    return [f"jugcraft:{other}_dust", 1, chance, METALS[other]["feature"] if other in METALS else None]
+
+
+def _pulverizer():
+    """Ore -> 2 dust (like the crusher, plus a byproduct); washed ore, raw metal and ingots -> 1 dust."""
+    from materials import COMPONENTS, METALS, ore_ids, raw_id, ingot_id
+    recipes = []
+    for metal in COMPONENTS["dust"]:
+        features = [FEATURE] + _metal_features(metal)
+        dust = f"jugcraft:{metal}_dust"
+        for ore in ore_ids(metal):
+            recipes.append({"input": ore, "output": dust, "count": ORE_PROCESSING_MULTIPLIER, "ticks": 200,
+                            "features": features, "ore": True, "byproducts": [_byproduct(metal)]})
+        recipes.append({"input": f"jugcraft:washed_{metal}_ore", "output": dust, "count": 1, "ticks": 100,
+                        "features": features, "byproducts": [_byproduct(metal)]})
+        recipes.append({"input": raw_id(metal), "output": dust, "count": 1, "ticks": 100, "features": features})
+        recipes.append({"input": ingot_id(metal), "output": dust, "count": 1, "ticks": 100, "features": features})
+    return recipes
+
+
+def _ore_washer():
+    """Ore + 500 mB water -> 3 washed ore."""
+    from materials import WASHED_ORES, ore_ids
+    return [{"input": ore, "output": f"jugcraft:washed_{metal}_ore", "count": ORE_WASHING_MULTIPLIER, "ticks": 200,
+             "features": [FEATURE] + _metal_features(metal), "ore_bonus": ORE_WASHING_MULTIPLIER}
+            for metal in WASHED_ORES for ore in ore_ids(metal)]
+
+
+# Sieve: gravel and soul sand, with small renewable finds.
+SIEVE = [
+    {"input": "minecraft:gravel", "output": "minecraft:flint", "count": 1, "ticks": 100, "features": [FEATURE],
+     "renewable": True, "byproducts": [["minecraft:iron_nugget", 1, 0.12, None], ["jugcraft:tin_nugget", 1, 0.08, "tin"]]},
+    {"input": "minecraft:soul_sand", "output": "minecraft:soul_soil", "count": 1, "ticks": 100, "features": [FEATURE],
+     "renewable": True, "byproducts": [["minecraft:quartz", 1, 0.15, None], ["minecraft:gold_nugget", 1, 0.08, None]]},
+]
+
+
+def _sawmill():
+    """Logs -> 6 planks (4 by hand) with sawdust; planks -> 3 sticks (2 by hand)."""
+    recipes = []
+    for wood, tag in WOODS.items():
+        planks = 3 if wood == "bamboo" else 6
+        recipes.append({"input": f"#minecraft:{tag}", "output": f"minecraft:{wood}_planks", "count": planks, "ticks": 100,
+                        "features": [FEATURE], "byproducts": [["jugcraft:sawdust", 1, 0.5, None]]})
+    recipes.append({"input": "#minecraft:planks", "output": "minecraft:stick", "count": 3, "ticks": 60,
+                    "features": [FEATURE]})
+    return recipes
+
+
 def machine_recipes():
-    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE, "alloy_smelter": ALLOY_SMELTER,
-            "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER}
+    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE + _arc_dusts(), "alloy_smelter": ALLOY_SMELTER,
+            "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
+            "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill()}
+
+
+def _arc_dusts():
+    """Dusts of metals a plain furnace cannot smelt (nickel, tungsten, uranium) melt in the arc furnace."""
+    from materials import METALS
+    return [{"input": f"jugcraft:{metal}_dust", "output": f"jugcraft:{metal}_ingot", "count": 1, "ticks": 80,
+             "features": [FEATURE, info["feature"]]}
+            for metal, info in METALS.items() if info["mined"] and "smelting" not in info["cook"]]
 
 
 def machine_blocks():

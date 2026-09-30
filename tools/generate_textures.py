@@ -357,6 +357,51 @@ def jaws(seed, active):
     return img
 
 
+def pulverizer_front(seed, active):
+    """Two grinding wheels side by side, dusted when running."""
+    img = window(seed, [(40, 40, 44), (50, 50, 56)])
+    for cx in (6, 9):
+        for y in range(5, 11):
+            img.putpixel((cx, y), (STEEL[4] if (y + (active and 1)) % 2 else STEEL[2]) + (255,))
+    if active:
+        for x, y in [(7, 9), (8, 10), (7, 6), (8, 5)]:
+            img.putpixel((x, y), (200, 190, 170, 255))
+    return img
+
+
+def washer_front(seed, active):
+    """A water drum window; the water ripples when running."""
+    water = [(40, 90, 170), (52, 110, 196)] if active else [(30, 60, 110), (36, 70, 124)]
+    img = window(seed, water)
+    for x in range(5, 11):
+        img.putpixel((x, 6 + (x % 2 if active else 0)), (150, 200, 240, 255))
+    return img
+
+
+def sieve_front(seed, active):
+    """A fine mesh; grains fall through when running."""
+    img = window(seed, [(34, 30, 28), (42, 38, 34)])
+    for y in range(5, 11):
+        for x in range(5, 11):
+            if (x + y) % 2 == 0:
+                img.putpixel((x, y), STEEL[2] + (255,))
+    if active:
+        for x, y in [(6, 7), (9, 9), (7, 10)]:
+            img.putpixel((x, y), (190, 170, 120, 255))
+    return img
+
+
+def sawmill_front(seed, active):
+    """A circular saw blade behind the window."""
+    img = window(seed, [(40, 36, 32), (48, 44, 40)])
+    teeth = STEEL[4] if active else STEEL[3]
+    for x, y in [(7, 5), (8, 5), (10, 7), (10, 8), (7, 10), (8, 10), (5, 7), (5, 8), (6, 6), (9, 6), (6, 9), (9, 9)]:
+        img.putpixel((x, y), teeth + (255,))
+    for x, y in [(7, 7), (8, 7), (7, 8), (8, 8)]:
+        img.putpixel((x, y), BRONZE[3] + (255,))
+    return img
+
+
 def battery_front(seed):
     img = panel(seed, palette=[(40, 44, 58), (64, 70, 86), (90, 96, 114), (116, 122, 140), (146, 152, 170)])
     red, black = (200, 40, 40), (30, 30, 34)
@@ -776,15 +821,38 @@ def crucibles(seed, lit):
 # Original palettes for the vanilla metals that get Jugcraft parts (not taken from vanilla textures).
 COPPER_METAL = [(110, 52, 30), (156, 78, 46), (196, 108, 66), (226, 142, 96), (244, 184, 140)]
 IRON_METAL = [(88, 88, 92), (130, 130, 136), (170, 170, 176), (204, 204, 208), (232, 232, 236)]
+GOLD_METAL = [(120, 84, 14), (186, 140, 28), (230, 190, 50), (248, 222, 100), (255, 246, 180)]
 
 
 def part_palette(metal):
-    fixed = {"copper": COPPER_METAL, "iron": IRON_METAL, "tin": TIN, "bronze": BRONZE}
+    fixed = {"copper": COPPER_METAL, "iron": IRON_METAL, "gold": GOLD_METAL, "tin": TIN, "bronze": BRONZE}
     if metal in fixed:
         return fixed[metal]
     if metal in METAL_COLORS:
         return METAL_COLORS[metal][2]
     return ALLOY_COLORS[metal][2]
+
+
+def dust(palette):
+    """A heap of metal powder: mid tones with dark grains, lighter on the lit top-left."""
+    rng = random.Random(sum(palette[2]))
+    img = new()
+    for y, row in enumerate(PILE):
+        for x, ch in enumerate(row):
+            if ch == "x":
+                shade = rng.choice([1, 2, 2, 3]) + (1 if x + y < 14 else 0)
+                if rng.random() < 0.12:
+                    shade = 0
+                img.putpixel((x, y), palette[min(4, shade)] + (255,))
+    return img
+
+
+def washed_ore(metal, seed):
+    """A clean chunk of ore in the metal's own colours, still wet: a few blue highlights."""
+    img = raw_chunk(seed, part_palette(metal)[1:4], (236, 246, 255))
+    for x, y in [(5, 9), (10, 7), (7, 11)]:
+        img.putpixel((x, y), (120, 190, 240, 255))
+    return img
 
 
 def plate(palette):
@@ -909,12 +977,20 @@ def machines():
     save(drawer_front(512, True), "block", "wire_drawer_front_on")
     save(assembler_front(513, False), "block", "circuit_assembler_front")
     save(assembler_front(513, True), "block", "circuit_assembler_front_on")
+    for index, (machine, draw) in enumerate((("pulverizer", pulverizer_front), ("ore_washer", washer_front),
+                                             ("sieve", sieve_front), ("sawmill", sawmill_front))):
+        save(draw(560 + index, False), "block", f"{machine}_front")
+        save(draw(560 + index, True), "block", f"{machine}_front_on")
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from materials import COMPONENTS
-    for form, draw in (("plate", plate), ("gear", gear), ("wire", wire)):
+    for form, draw in (("plate", plate), ("gear", gear), ("wire", wire), ("dust", dust)):
         for metal in COMPONENTS[form]:
             save(draw(part_palette(metal)), "item", f"{metal}_{form}")
+    from materials import WASHED_ORES
+    for index, metal in enumerate(WASHED_ORES):
+        save(washed_ore(metal, 900 + index), "item", f"washed_{metal}_ore")
+    save(pile(950, [(196, 160, 108), (214, 180, 126), (176, 140, 92), (230, 200, 150)]), "item", "sawdust")
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")
     save(cable_texture(), "block", "copper_cable")
