@@ -29,7 +29,10 @@ public enum MachineKind implements StringRepresentable {
 	PULVERIZER("pulverizer", 10_000, 128, 0, 20, 4),
 	ORE_WASHER("ore_washer", 10_000, 128, 0, 16, 2),
 	SIEVE("sieve", 10_000, 128, 0, 8, 4),
-	SAWMILL("sawmill", 10_000, 128, 0, 12, 4);
+	SAWMILL("sawmill", 10_000, 128, 0, 12, 4),
+	// Steel tier: unpowered brick multi-blocks.
+	COKE_OVEN("coke_oven", 0, 0, 0, 0, 2),
+	STEEL_FOUNDRY("steel_foundry", 0, 0, 0, 0, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -84,12 +87,18 @@ public enum MachineKind implements StringRepresentable {
 	public boolean isProcessor() {
 		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
-				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL;
+				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
+				|| this == COKE_OVEN || this == STEEL_FOUNDRY;
+	}
+
+	/** Whether the machine runs on JE at all. Unpowered machines have no battery and cables never connect to them. */
+	public boolean usesPower() {
+		return capacity > 0;
 	}
 
 	/** Processors whose recipes combine several ingredient stacks placed in any input slots. */
 	public boolean isMultiInput() {
-		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER;
+		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER || this == STEEL_FOUNDRY;
 	}
 
 	/**
@@ -108,6 +117,8 @@ public enum MachineKind implements StringRepresentable {
 			case ORE_WASHER -> "ore_washing";
 			case SIEVE -> "sifting";
 			case SAWMILL -> "sawing";
+			case COKE_OVEN -> "coking";
+			case STEEL_FOUNDRY -> "steelmaking";
 			default -> null;
 		};
 	}
@@ -146,6 +157,8 @@ public enum MachineKind implements StringRepresentable {
 		return switch (this) {
 			case GEOTHERMAL_GENERATOR -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0));
 			case WIND_TURBINE -> Footprint.tall(3);
+			case COKE_OVEN -> Footprint.tall(2);
+			case STEEL_FOUNDRY -> Footprint.tall(3);
 			// Two wide and two tall: furnace body, crucible tower on its right, hoppers above.
 			case ALLOY_SMELTER -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));
 			default -> Footprint.SINGLE;

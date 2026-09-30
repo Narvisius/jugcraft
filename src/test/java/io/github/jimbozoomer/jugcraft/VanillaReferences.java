@@ -17,7 +17,9 @@ final class VanillaReferences {
 			Items.GRAVEL, Items.FLINT, Items.SOUL_SAND, Items.SOUL_SOIL, Items.IRON_NUGGET, Items.GOLD_NUGGET,
 			Items.STICK, Items.PAPER, Items.IRON_BARS, Items.OAK_PLANKS, Items.SPRUCE_PLANKS, Items.BIRCH_PLANKS,
 			Items.JUNGLE_PLANKS, Items.ACACIA_PLANKS, Items.DARK_OAK_PLANKS, Items.MANGROVE_PLANKS, Items.CHERRY_PLANKS,
-			Items.PALE_OAK_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS, Items.BAMBOO_PLANKS};
+			Items.PALE_OAK_PLANKS, Items.CRIMSON_PLANKS, Items.WARPED_PLANKS, Items.BAMBOO_PLANKS,
+			// Steel tier.
+			Items.COAL, Items.BRICKS, Items.FURNACE, Items.BLAST_FURNACE, Items.HOPPER, Items.IRON_INGOT};
 
 	/** Vanilla item tags the sawmill recipes name (WOODS in tools/machines.py). */
 	static final List<TagKey<Item>> TAGS_USED_BY_RECIPES = List.of(ItemTags.PLANKS, ItemTags.OAK_LOGS, ItemTags.SPRUCE_LOGS,

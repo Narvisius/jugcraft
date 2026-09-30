@@ -76,6 +76,8 @@ All machines hold their own internal battery and accept power from cables or dir
 | Ore Washer | Mechanical | Ore + 500 mB water → 3 washed ore | 16 JE/t | invar plates, bucket, bronze gears, basic circuit, casing |
 | Sieve | Mechanical | Gravel → flint, soul sand → soul soil, with small finds | 8 JE/t | iron plates, iron bars, hopper, cable, casing |
 | Sawmill | Mechanical | Log → 6 planks + sawdust; planks → 3 sticks | 12 JE/t | iron, iron gear, iron plates, cable, casing |
+| Coke Oven (2 tall) | Steel | Coal → coke, 600 ticks ([Steel tier](#steel-tier)) | none | bricks, iron, furnace |
+| Steel Foundry (3 tall) | Steel | Iron ingot + coke → steel ingot, 400 ticks | none | bricks, hopper, iron plates, blast furnace |
 | Geothermal Generator (2 blocks wide) | Power | Lava → 64 JE/t (1 mB/t; a bucket lasts 1,000 ticks) | produces | invar plates, tinplate tank, bronze gears, casing, basic circuit |
 | Wind Turbine (3 blocks tall) | Power | 4–24 JE/t by height above sea level; more in rain and thunder; rotor needs clear air | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
 | Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
@@ -159,11 +161,12 @@ Every powered block follows one of two rules, and a cable shows which by where i
 | Rule | Machines | What you see |
 | --- | --- | --- |
 | **Any side** | Every one-block machine, generator and battery; the electric pump; the geothermal generator and wind turbine (any face of any of their blocks) | A cable next to any face bends to it and connects. A generator or battery placed directly against the machine also powers it. |
+| **No power** | The Coke Oven and Steel Foundry | Cables never connect; the machines run on the heat of their charge. |
 | **Power socket only** | The Alloy Smelter | Its **copper socket in a brass frame** (a yellow-and-black frame in the classic look), on the outer side of its lower right block (seen from the front). Cables connect only there; a cable along any other face doesn't bend toward it. |
 
 The battery box is "any side" for charging. It gives power out only through its front, and a cable at the front still connects.
 
-In code, one check decides both the drawn connection and the flow. `MachineKind.powerPort()` (null means any side) is read by the energy lookup, and cables connect only where that lookup answers. `tools/large_machines.py` (`POWER_PORTS`) places the socket in the model, and `check_mod_data.py` keeps the two in sync.
+In code, one check decides both the drawn connection and the flow: `MachineBlock.acceptsPower(state, side)`, built from `MachineKind.usesPower()` and `MachineKind.powerPort()` (null means any side). The energy lookup and the cable's connection arms both use it. `tools/large_machines.py` (`POWER_PORTS`) places the socket in the model, and `check_mod_data.py` keeps the two in sync.
 
 ## Cables and pipes
 
@@ -208,6 +211,25 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 5. **Units.** Jugcraft numbers are millibuckets (1 bucket = 1,000 mB). Internally Fabric counts droplets (1 bucket = 81,000), so 1 mB = 81 droplets.
 
 **Performance.** Pipe networks are found once by a bounded search and cached per dimension. They are rebuilt only after a pipe, tank, pump or machine is placed or removed, or a pipe's neighbor changes. A pump does two storage moves per tick at most, plus one per network endpoint.
+
+## Steel tier
+
+Steel is the second material tier. It needs **no power** and no new ore, only iron, coal and two brick multi-blocks. Machines placed as one item fill several blocks and break together, like the other [multi-block machines](#multi-block-machines).
+
+![Coke Oven (2 tall) and Steel Foundry (3 tall)](images/steel_tier.png)
+
+*Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
+
+| Block | Does | Numbers | Built from |
+| --- | --- | --- | --- |
+| Coke Oven (2 tall) | Bakes coal into **Coal Coke** | 600 ticks per coal; no power, no fuel | bricks, iron, furnace |
+| Steel Foundry (3 tall) | 1 iron ingot + 1 coke → 1 **steel ingot** (either slot) | 400 ticks; no power | bricks, hopper, iron plates, blast furnace |
+
+- **Coal Coke** (`c:coal_coke`) burns twice as long as coal in the Coal and Steam Generators (3,200 ticks). It is the carbon for steel.
+- **Steel** has the usual ingot, nugget and block, plus a **steel plate** (Metal Press) and a **steel gear**. The first things built from steel are the machine upgrades (next PR).
+- **Metal accounting:** one iron ingot's metal becomes one steel ingot's. The coke is carbon, not metal, so nothing is gained.
+- **Unpowered machines** have no battery, and cables never connect to them. Their screens show no energy bar.
+- Both work with hoppers, pipes, side configuration and eject like any processing machine.
 
 ## Ore processing
 
@@ -307,6 +329,8 @@ Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, 
 | Ore Washer | `jugcraft:ore_washing` (uses 500 mB water) | `…/ore_washing/` |
 | Sieve | `jugcraft:sifting` (byproducts) | `…/sifting/` |
 | Sawmill | `jugcraft:sawing` (byproducts) | `…/sawing/` |
+| Coke Oven | `jugcraft:coking` | `…/coking/` |
+| Steel Foundry | `jugcraft:steelmaking` (several inputs) | `…/steelmaking/` |
 | Electric Furnace | vanilla `minecraft:smelting` | (vanilla furnace recipes) |
 
 ```json
@@ -339,7 +363,9 @@ Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, 
 - recipe byproducts loading from data;
 - the pulverizer grinding ore into two dusts, and a dust smelting into an ingot;
 - the ore washer tripling ore with water from a source below, and waiting when it has none;
-- the sawmill and the sieve.
+- the sawmill and the sieve;
+- the coke oven and steel foundry working without power;
+- cables connecting only where power goes in (never to unpowered machines; only to the alloy smelter's socket).
 
 To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests` that builds its setup and ends with `helper.succeed()` or `helper.succeedWhen(...)`.
 

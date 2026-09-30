@@ -23,6 +23,9 @@ MACHINES = {
     "ore_washer": {"display": "Ore Washer", "lit": True},
     "sieve": {"display": "Sieve", "lit": True},
     "sawmill": {"display": "Sawmill", "lit": True},
+    # Steel tier: unpowered brick multi-blocks (tools/large_machines.py).
+    "coke_oven": {"display": "Coke Oven", "lit": True},
+    "steel_foundry": {"display": "Steel Foundry", "lit": True},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -84,6 +87,9 @@ STATS = {
                    "tank": 8_000},
     "sieve": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 8},
     "sawmill": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 12},
+    # Unpowered: heat comes from the charge itself. No battery, no cable connection.
+    "coke_oven": {"capacity": 0, "use_per_tick": 0},
+    "steel_foundry": {"capacity": 0, "use_per_tick": 0},
     # Two blocks wide. Burns 1 mB of lava per tick for 64 JE: a bucket lasts 1,000 ticks.
     "geothermal_generator": {"capacity": 30_000, "output_per_tick": 128, "generation_per_tick": 64,
                              "lava_per_tick": 1, "tank": 4_000},
@@ -92,7 +98,8 @@ STATS = {
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
-GENERATOR_FUELS = {"minecraft:coal": 1600, "minecraft:charcoal": 1600, "minecraft:coal_block": 16000}
+GENERATOR_FUELS = {"minecraft:coal": 1600, "minecraft:charcoal": 1600, "minecraft:coal_block": 16000,
+                   "jugcraft:coke": 3200}
 # The steam generator also burns bitumen from oil sand.
 STEAM_FUELS = {**GENERATOR_FUELS, "jugcraft:bitumen": 800}
 
@@ -181,6 +188,10 @@ CRAFTING = {
                                       "M": "jugcraft:machine_casing", "H": "minecraft:hopper"}, 1),
     "sawmill": (["IGI", "CMC", "PPP"], {"I": "#c:ingots/iron", "G": "#c:gears/iron", "C": "jugcraft:copper_cable",
                                         "M": "jugcraft:machine_casing", "P": "#c:plates/iron"}, 1),
+    # Steel tier: brick ovens that need no power, reachable right after the metal press.
+    "coke_oven": (["KIK", "KFK", "KIK"], {"K": "minecraft:bricks", "I": "#c:ingots/iron", "F": "minecraft:furnace"}, 1),
+    "steel_foundry": (["KHK", "PFP", "KKK"], {"K": "minecraft:bricks", "H": "minecraft:hopper", "P": "#c:plates/iron",
+                                              "F": "minecraft:blast_furnace"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -327,10 +338,23 @@ def _sawmill():
     return recipes
 
 
+# Coke oven: coal baked slowly into coke (no power, no fuel).
+COKE_OVEN = [
+    {"input": "minecraft:coal", "output": "jugcraft:coke", "count": 1, "ticks": 600, "features": [FEATURE]},
+]
+
+# Steel foundry: one iron ingot and one coke make one steel ingot (iron's metal is kept; coke is carbon).
+STEEL_FOUNDRY = [
+    {"inputs": [["#c:ingots/iron", 1], ["jugcraft:coke", 1]], "output": "jugcraft:steel_ingot", "count": 1,
+     "ticks": 400, "features": [FEATURE]},
+]
+
+
 def machine_recipes():
     return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE + _arc_dusts(), "alloy_smelter": ALLOY_SMELTER,
             "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
-            "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill()}
+            "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill(),
+            "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY}
 
 
 def _arc_dusts():

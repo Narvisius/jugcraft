@@ -1,0 +1,420 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "front": "jugcraft:block/coke_oven_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        4.0,
+        0.0,
+        4.0
+      ],
+      "to": [
+        12.0,
+        1.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        1.0,
+        4.5
+      ],
+      "to": [
+        11.5,
+        8.0,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5.0,
+        8.0,
+        5.0
+      ],
+      "to": [
+        11.0,
+        12.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.0,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.0,
+            4.0
+          ]
+        },
+        "east": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.0,
+            4.0
+          ]
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.0,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.0
+          ]
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        12.0,
+        6.0
+      ],
+      "to": [
+        10.0,
+        13.5,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            4.0,
+            1.5
+          ]
+        },
+        "south": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            4.0,
+            1.5
+          ]
+        },
+        "east": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            4.0,
+            1.5
+          ]
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            4.0,
+            1.5
+          ]
+        },
+        "up": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            4.0,
+            4.0
+          ]
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            4.0,
+            4.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.25,
+        7.0,
+        4.25
+      ],
+      "to": [
+        11.75,
+        7.5,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            7.5,
+            0.5
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            7.5,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            7.5,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            7.5,
+            0.5
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            7.5,
+            7.5
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            7.5,
+            7.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        13.5,
+        7.0
+      ],
+      "to": [
+        9.0,
+        16.0,
+        9.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.5
+          ]
+        },
+        "south": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        },
+        "down": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        }
+      }
+    }
+  ]
+}

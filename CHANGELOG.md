@@ -8,6 +8,14 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #18 Steel tier
+- **Coke Oven** (2 tall) bakes coal into **Coal Coke**. Coke is a 3,200-tick generator fuel and the carbon for steel.
+- **Steel Foundry** (3 tall) turns 1 iron ingot + 1 coke into 1 **steel ingot**.
+- Both are unpowered brick multi-blocks with steampunk and classic models.
+- New steel items: ingot, nugget, block, plate and gear.
+- **Fix:** cables drew a connection arm to every face of a machine, even where no power goes in (for example all around the alloy smelter). Now the arm and the energy flow use the same check.
+- Three new game tests, including one for the cable fix.
+
 ### Merged 30 September 2026: PRs #8–#17
 
 These were built as a stack, each on the one before, and merged in order (#8 first).

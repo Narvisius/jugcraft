@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KIK",
+    "KFK",
+    "KIK"
+  ],
+  "key": {
+    "K": "minecraft:bricks",
+    "I": "#c:ingots/iron",
+    "F": "minecraft:furnace"
+  },
+  "result": {
+    "id": "jugcraft:coke_oven",
+    "count": 1
+  }
+}

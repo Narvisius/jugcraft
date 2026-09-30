@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:steelmaking",
+  "ingredients": [
+    {
+      "ingredient": "#c:ingots/iron",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:steel_ingot",
+    "count": 1
+  },
+  "time": 400
+}

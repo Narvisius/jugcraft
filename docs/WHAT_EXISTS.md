@@ -8,7 +8,7 @@ A map of everything built so far, written for AI agents and contributors who nee
 
 > **Status.** Everything here compiles and loads in CI. Where a feature has an automated game test, that test passes on a headless server. Nothing has been play-tested in a client or on a dedicated server with two players yet.
 >
-> This document describes `main` after PRs #4–#17. Update it whenever you add, rename or remove a system, so it stays the map other contributors rely on.
+> This document describes `main` after PRs #4–#18. Update it whenever you add, rename or remove a system, so it stays the map other contributors rely on.
 
 ## Quick facts
 
@@ -22,7 +22,7 @@ A map of everything built so far, written for AI agents and contributors who nee
 | Fluid unit | **mB** in Jugcraft numbers. Fabric counts droplets: `FluidNetworks.DROPLETS_PER_MB` = 81 |
 | Metal accounting | nugget units: nugget 1, ingot/raw/ore/dust/washed ore/plate 9, wire 3, gear 36, block 81 |
 | Authority | All logic runs on the server; screens only show synced `ContainerData` |
-| Registered IDs | 155 items/blocks under `jugcraft:` (the checker counts them) |
+| Registered IDs | 163 items/blocks under `jugcraft:` (the checker counts them) |
 
 ## Build, generate, check
 
@@ -48,13 +48,14 @@ CI runs all of these and fails if generated files are out of date.
 | aluminum | ingot, nugget, block | bauxite (arc furnace; blast-furnace stand-in gives a nugget) | `aluminum` |
 | bronze | ingot, nugget, block, `bronze_blend` | 3 copper + 1 tin (hand blend or alloy smelter) | `tin` |
 | brass, invar, solder | ingot, nugget, block | alloy smelter only | `zinc`, `nickel`, `lead` |
+| steel | ingot, nugget, block; plate, gear | steel foundry (iron + coke) | `machines` |
 
 | Other | IDs | Notes |
 | --- | --- | --- |
 | Minerals | `salt`, `phosphate`, `lepidolite`, `monazite` (+ `_ore`, `deepslate_…_ore`, `…_block`) | ores drop several items |
 | Rocks | `bauxite` (block), `oil_sand` (block, drops `bitumen`) | biome-limited surface worldgen |
-| Items | `bitumen`, `sulfur_dust`, `silicon`, `lithium_carbonate`, `rare_earth_oxide` | several are chemistry stand-ins |
-| Components | `<metal>_plate` ×10, `<metal>_gear` ×4, `<metal>_wire` ×3, `basic_circuit`, `advanced_circuit` | `JugcraftComponents`; tags `c:plates/…`, `c:gears/…`, `c:wires/…` |
+| Items | `bitumen`, `sulfur_dust`, `silicon`, `lithium_carbonate`, `rare_earth_oxide`, `coke` (`c:coal_coke`) | several are chemistry stand-ins; coke is fuel and steel's carbon |
+| Components | `<metal>_plate` ×11, `<metal>_gear` ×5, `<metal>_wire` ×3, `basic_circuit`, `advanced_circuit` | `JugcraftComponents`; tags `c:plates/…`, `c:gears/…`, `c:wires/…` |
 | Ore processing | `<metal>_dust` ×10 (copper, iron, gold, tin, zinc, lead, silver, nickel, tungsten, uranium), `washed_<metal>_ore` ×10, `sawdust` | tags `c:dusts/<metal>` |
 
 Every Jugcraft metal and part carries `c:` convention tags (`c:ingots/tin`, `c:ores/tin`, `c:raw_materials/tin`, `c:storage_blocks/tin`, `c:nuggets/tin`, `c:dusts/tin`, …). **Use tags in recipes** so other mods' equivalents work.
@@ -82,6 +83,8 @@ Every machine is one `MachineBlock` + `MachineBlockEntity` whose behavior comes 
 | ORE_WASHER | ore_washer | ore + 500 mB water → 3 washed ore | 10k / 128 / 0 / 16 | in, out (water tank) | `jugcraft:ore_washing` |
 | SIEVE | sieve | gravel → flint + finds | 10k / 128 / 0 / 8 | in, out, 2 byproduct | `jugcraft:sifting` |
 | SAWMILL | sawmill | log → 6 planks + sawdust | 10k / 128 / 0 / 12 | in, out, 2 byproduct | `jugcraft:sawing` |
+| COKE_OVEN | coke_oven | **2 tall**, unpowered: coal → coke | none | in, out | `jugcraft:coking` |
+| STEEL_FOUNDRY | steel_foundry | **3 tall**, unpowered: iron + coke → steel | none | 2 in, out | `jugcraft:steelmaking` (multi) |
 
 Other blocks:
 
@@ -133,13 +136,13 @@ Other blocks:
 
 - **`MachineKind`** is the single place for a machine's numbers and behavior switches:
   - `isProcessor()`, `isGenerator()`, `isMultiInput()`
-  - `recipeType()`, `outputSlot()`, `byproductSlots()`, `tankCapacity()`
+  - `recipeType()`, `outputSlot()`, `byproductSlots()`, `tankCapacity()`, `usesPower()`
   - `footprint()`, `powerPort()`
 - **`MachineBlockEntity`** holds energy, items, progress, tank and side config. `serverTick` switches on the kind. Every processor uses `tickProcessor`: find a recipe → check the output and byproduct room (and water for the washer) → use energy → finish.
 - **Multi-block machines:** `Footprint` gives the offsets (facing north). `LargeMachineBlock` has a `PART` 0..3 property. Only the master block has the block entity.
   - Breaking any part removes the whole machine. `MachineBlock.machineAt(level, pos, state)` resolves any part to its master.
   - Each block renders its own slice of one big model, which the generator cuts up.
-- **Power ports:** `PowerPort(part, face)`. When present, the energy lookup returns null on every other face, so cables connect only at the port. Today only the alloy smelter has one.
+- **Power ports:** `PowerPort(part, face)`. `MachineBlock.acceptsPower(state, side)` combines it with `usesPower()`, and both the energy lookup and the cable arms use that one check. Today only the alloy smelter has a port; the coke oven and steel foundry take no power at all.
 - **Screens:** `MachineMenu` (server/common) and `client/MachineScreen` (client only). Slot positions come from `MachineMenu` constants.
 - **Fuels:** `GeneratorFuels.burnTicks` and `steamBurnTicks`.
 

@@ -650,6 +650,68 @@ def sawmill():
     return m
 
 
+# ------------------------------------------------------------------ steel tier (unpowered multi-blocks)
+
+def coke_oven():
+    """Beehive coke oven: a banded firebrick dome over two blocks, an iron fire door that glows, and a tall chimney."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m += cyl("y", 8, 8, 7.5, 1, 14, "sp_firebrick")
+    for y in (3, 10.5):
+        m += cyl("y", 8, 8, 7.8, y, y + 0.75, IRON)
+    m += cyl("y", 8, 8, 6.5, 14, 18, "sp_firebrick")
+    m += cyl("y", 8, 8, 5, 18, 21, "sp_firebrick")
+    m += cyl("y", 8, 8, 3.5, 21, 23.5, "sp_firebrick")
+    m += cyl("y", 8, 8, 6.8, 15, 15.75, IRON)
+    # Chimney with a brass crown.
+    m += cyl("y", 8, 8, 1.5, 23.5, 30, IRON, "sp_hopper_inside")
+    m += cyl("y", 8, 8, 2, 29.5, 31, BRASS, "sp_hopper_inside")
+    # Fire door in a brass frame, a thermometer and the running lamp.
+    m.append(box((4.5, 2, 0.25), (11.5, 8.5, 1.25), {"*": IRON, "north": "sp_firebox!"}))
+    m.append(box((4, 8.5, 0.1), (12, 9.25, 1.3), BRASS))
+    m.append(dial("north", (8, 12, 0.25), 2.5))
+    m.append(dial("north", (11.5, 12, 0.25), 1.25, texture="sp_lamp"))
+    # Coke chute on the right side.
+    m.append(box((14.5, 1, 6), (16, 4, 10), {"*": IRON, "east": "sp_hopper_inside"}))
+    return m
+
+
+def steel_foundry():
+    """Blast furnace: a firebrick hearth with a glowing tap hole, copper hot-blast ring and tuyeres, a tapering banded
+    shaft and a charging hopper with a railing on top (three blocks tall)."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((0.5, 1, 0.5), (15.5, 14, 15.5), "sp_firebrick"))
+    for y in (4, 11):
+        m.append(box((0.25, y, 0.25), (15.75, y + 0.75, 15.75), IRON))
+    # Tap hole and pouring spout.
+    m.append(box((5, 2, 0), (11, 7.5, 0.5), {"*": IRON, "north": "sp_window!"}))
+    m.append(box((7, 1.5, -1.5), (9, 2.5, 0), IRON))
+    # Hot-blast ring with a tuyere into each side.
+    for frm, to in (((0, 13, 0), (16, 14.5, 1)), ((0, 13, 15), (16, 14.5, 16)),
+                    ((0, 13, 1), (1, 14.5, 15)), ((15, 13, 1), (16, 14.5, 15))):
+        m.append(pipe(frm, to))
+    for frm, to in (((7.25, 9.5, 0), (8.75, 13, 0.75)), ((7.25, 9.5, 15.25), (8.75, 13, 16)),
+                    ((0, 9.5, 7.25), (0.75, 13, 8.75)), ((15.25, 9.5, 7.25), (16, 13, 8.75))):
+        m.append(pipe(frm, to))
+    m.append(dial("north", (12.5, 10, 0.25), 2))
+    m.append(dial("north", (3.5, 10, 0.25), 1.25, texture="sp_lamp"))
+    # Tapering shaft with iron bands.
+    m += cyl("y", 8, 8, 7, 14.5, 24, "sp_firebrick")
+    m += cyl("y", 8, 8, 6.25, 24, 34, "sp_firebrick")
+    m += cyl("y", 8, 8, 5.5, 34, 42, "sp_firebrick")
+    for y, r in ((18, 7.3), (28, 6.55), (37, 5.8)):
+        m += cyl("y", 8, 8, r, y, y + 0.75, IRON)
+    # Charging platform, hopper and railing.
+    m.append(box((2, 42, 2), (14, 43, 14), IRON_PLATE))
+    m.append(box((5, 43, 5), (11, 46.5, 11), {"*": IRON, "up": "sp_hopper_inside"}))
+    for x in (2, 13):
+        for z in (2, 13):
+            m.append(box((x, 43, z), (x + 1, 46, z + 1), BRASS))
+    for frm, to in (((2, 46, 2), (14, 46.5, 3)), ((2, 46, 13), (14, 46.5, 14)),
+                    ((2, 46, 3), (3, 46.5, 13)), ((13, 46, 3), (14, 46.5, 13))):
+        m.append(box(frm, to, BRASS))
+    return m
+
+
 MODELS = {
     "coal_generator": coal_generator(),
     "battery_box": battery_box(),
@@ -668,6 +730,8 @@ MODELS = {
     "sawmill": sawmill(),
     "geothermal_generator": geothermal_generator(),
     "wind_turbine": wind_turbine(),
+    "coke_oven": coke_oven(),
+    "steel_foundry": steel_foundry(),
     "electric_pump": electric_pump(),
     "fluid_tank": fluid_tank(),
 }

@@ -13,8 +13,8 @@ import net.minecraft.world.item.Item;
  * CIRCUITS and WASHED_ORES in tools/materials.py; the checker compares them.
  */
 public final class JugcraftComponents {
-	public static final String[] PLATES = {"copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten"};
-	public static final String[] GEARS = {"iron", "bronze", "brass", "invar"};
+	public static final String[] PLATES = {"copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten", "steel"};
+	public static final String[] GEARS = {"iron", "bronze", "brass", "invar", "steel"};
 	public static final String[] WIRES = {"copper", "silver", "aluminum"};
 	public static final String[] CIRCUITS = {"basic_circuit", "advanced_circuit"};
 	public static final String[] DUSTS = {"copper", "iron", "gold", "tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium"};

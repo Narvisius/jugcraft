@@ -19,6 +19,9 @@ public final class GeneratorFuels {
 		if (stack.is(Items.COAL_BLOCK)) {
 			return 16000;
 		}
+		if (JugcraftMaterials.COKE != null && stack.is(JugcraftMaterials.COKE)) {
+			return 3200;
+		}
 		return 0;
 	}
 

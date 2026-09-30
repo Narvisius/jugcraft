@@ -23,6 +23,9 @@ FOOTPRINTS = {
     "wind_turbine": [(0, 0, 0), (0, 1, 0), (0, 2, 0)],
     # Furnace body, crucible base to its right, hoppers above the body, crucible tower above the base.
     "alloy_smelter": [(0, 0, 0), (-1, 0, 0), (0, 1, 0), (-1, 1, 0)],
+    # Steel tier: a two-block brick oven and a three-block foundry stack.
+    "coke_oven": [(0, 0, 0), (0, 1, 0)],
+    "steel_foundry": [(0, 0, 0), (0, 1, 0), (0, 2, 0)],
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -111,9 +114,34 @@ MODELS["alloy_smelter"] = [
     ((-2, 17, 6), (3, 20, 10), PIPE),
 ]
 
+MODELS["coke_oven"] = [
+    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
+    # Brick oven body with the fire door (master), domed top in the block above.
+    ((1, 2, 1), (15, 16, 15), {"*": "alloy_smelter_brick", "north": "#front", "up": "alloy_smelter_brick"}),
+    ((2, 16, 2), (14, 24, 14), "alloy_smelter_brick"),
+    ((4, 24, 4), (12, 27, 12), "alloy_smelter_brick"),
+    ((0.5, 14, 0.5), (15.5, 15, 15.5), "heavy_plinth"),
+    # Chimney.
+    ((6, 27, 6), (10, 32, 10), "geothermal_stack"),
+]
+
+MODELS["steel_foundry"] = [
+    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
+    # Hearth with the tapping door (master), then a tapering brick shaft two blocks high.
+    ((0.5, 2, 0.5), (15.5, 16, 15.5), {"*": "alloy_smelter_brick", "north": "#front", "up": "alloy_smelter_brick"}),
+    ((1, 16, 1), (15, 30, 15), "alloy_smelter_brick"),
+    ((2, 30, 2), (14, 32, 14), "alloy_smelter_brick"),
+    ((0, 12, 0), (16, 13, 16), "heavy_plinth"),
+    ((0.5, 24, 0.5), (15.5, 25, 15.5), "heavy_plinth"),
+    # Charging hopper at the top.
+    ((4, 32, 4), (12, 36, 12), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
     "wind_turbine": "wind_turbine_front",
     "alloy_smelter": "alloy_smelter_front",
+    "coke_oven": "coke_oven_front",
+    "steel_foundry": "steel_foundry_front",
 }

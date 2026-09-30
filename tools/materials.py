@@ -37,6 +37,8 @@ METALS = {
     "brass": {"mined": False, "display": "Brass", "feature": "zinc"},
     "invar": {"mined": False, "display": "Invar", "feature": "nickel"},
     "solder": {"mined": False, "display": "Solder", "feature": "lead"},
+    # Iron refined with coke in the steel foundry (tools/machines.py STEEL_FOUNDRY): the second tier.
+    "steel": {"mined": False, "display": "Steel", "feature": "machines"},
 }
 
 # Non-metal ores: <name>_ore, deepslate_<name>_ore, item <name>, storage block <name>_block.
@@ -69,6 +71,8 @@ ITEMS = {
     "silicon": {"display": "Silicon", "feature": "silicon", "tag": "silicon"},
     "lithium_carbonate": {"display": "Lithium Carbonate", "feature": "lithium", "tag": "dusts/lithium_carbonate"},
     "rare_earth_oxide": {"display": "Rare Earth Oxide", "feature": "rare_earths", "tag": "dusts/rare_earth_oxide"},
+    # Coal baked in the coke oven: a hotter fuel and the carbon for steel.
+    "coke": {"display": "Coal Coke", "feature": "machines", "tag": "coal_coke"},
 }
 
 EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
@@ -78,8 +82,8 @@ EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
 # Metal content per item in nugget units; the checker uses these to audit recipes.
 PART_UNITS = {"plate": 9, "gear": 36, "wire": 3, "dust": 9}
 COMPONENTS = {
-    "plate": ["copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten"],
-    "gear": ["iron", "bronze", "brass", "invar"],
+    "plate": ["copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten", "steel"],
+    "gear": ["iron", "bronze", "brass", "invar", "steel"],
     "wire": ["copper", "silver", "aluminum"],
     # Pulverizer output (see tools/machines.py); one dust smelts back into one ingot.
     "dust": ["copper", "iron", "gold", "tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium"],

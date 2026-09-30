@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.energy;
 
+import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -89,6 +90,10 @@ public class CableBlock extends PipeBlock implements EnergyConnectable {
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
 	private static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+		if (neighbor.getBlock() instanceof MachineBlock machine) {
+			// Only faces that really take power: a machine's power socket, never an unpowered machine.
+			return machine.acceptsPower(neighbor, direction.getOpposite());
+		}
 		if (neighbor.getBlock() instanceof EnergyConnectable) {
 			return true;
 		}

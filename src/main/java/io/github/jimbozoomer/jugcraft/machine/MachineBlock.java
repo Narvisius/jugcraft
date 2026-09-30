@@ -66,6 +66,9 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 	 * machine has a {@link PowerPort}, in which case only that face of that part.
 	 */
 	public boolean acceptsPower(BlockState state, @Nullable Direction side) {
+		if (!kind.usesPower()) {
+			return false;
+		}
 		PowerPort port = kind.powerPort();
 		return port == null || port.allows(part(state), state.getValue(FACING), side);
 	}

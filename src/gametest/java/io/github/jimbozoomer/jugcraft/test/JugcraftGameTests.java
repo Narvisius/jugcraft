@@ -26,6 +26,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -300,5 +301,62 @@ public class JugcraftGameTests {
 			ItemStack output = sieve.getItem(MachineKind.SIEVE.outputSlot());
 			helper.assertTrue(output.is(Items.FLINT), "Sieve output is " + output);
 		});
+	}
+
+	// ------------------------------------------------------------------ steel tier
+
+	/** Places a multi-block machine facing north and builds all its parts, as a player placing it would. */
+	private static MachineBlockEntity large(GameTestHelper helper, BlockPos master, MachineKind kind) {
+		LargeMachineBlock block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(kind);
+		helper.setBlock(master, block.defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));
+		block.setPlacedBy(helper.getLevel(), helper.absolutePos(master), helper.getBlockState(master), null, ItemStack.EMPTY);
+		return helper.getBlockEntity(master, MachineBlockEntity.class);
+	}
+
+	/** The coke oven bakes coal into coke with no power at all. */
+	@GameTest(maxTicks = 800)
+	public void cokeOvenBakesCoke(GameTestHelper helper) {
+		MachineBlockEntity oven = large(helper, new BlockPos(2, 1, 2), MachineKind.COKE_OVEN);
+		oven.setItem(0, new ItemStack(Items.COAL));
+		helper.succeedWhen(() -> {
+			ItemStack output = oven.getItem(MachineKind.COKE_OVEN.outputSlot());
+			helper.assertTrue(output.is(item("coke")), "Coke oven output is " + output);
+		});
+	}
+
+	/** The steel foundry refines one iron ingot with one coke into one steel ingot, unpowered. */
+	@GameTest(maxTicks = 600)
+	public void steelFoundryMakesSteel(GameTestHelper helper) {
+		MachineBlockEntity foundry = large(helper, new BlockPos(2, 1, 2), MachineKind.STEEL_FOUNDRY);
+		foundry.setItem(0, new ItemStack(Items.IRON_INGOT));
+		foundry.setItem(1, new ItemStack(item("coke")));
+		helper.succeedWhen(() -> {
+			ItemStack output = foundry.getItem(MachineKind.STEEL_FOUNDRY.outputSlot());
+			helper.assertTrue(output.is(item("steel_ingot")), "Steel foundry output is " + output);
+		});
+	}
+
+	/** Cables draw a connection only where power really goes in: never to unpowered machines, only to a socket. */
+	@GameTest(maxTicks = 20)
+	public void cablesConnectOnlyWherePowerGoesIn(GameTestHelper helper) {
+		// Cables first, so placing the machines updates their connections.
+		BlockPos besideOven = new BlockPos(1, 1, 1);
+		BlockPos besideFront = new BlockPos(5, 1, 2);
+		BlockPos besideSocket = new BlockPos(3, 1, 3);
+		for (BlockPos cable : new BlockPos[] {besideOven, besideFront, besideSocket}) {
+			helper.setBlock(cable, JugcraftMachines.COPPER_CABLE);
+		}
+		large(helper, new BlockPos(2, 1, 1), MachineKind.COKE_OVEN);
+		// Alloy smelter at (5,1,3): its front faces north towards (5,1,2); its socket block is (4,1,3), socket facing west.
+		large(helper, new BlockPos(5, 1, 3), MachineKind.ALLOY_SMELTER);
+		helper.assertTrue(EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 1)), Direction.WEST) == null,
+				"An unpowered machine must not expose energy");
+		helper.assertTrue(!helper.getBlockState(besideOven).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.EAST)),
+				"A cable must not connect to the coke oven");
+		helper.assertTrue(!helper.getBlockState(besideFront).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.SOUTH)),
+				"A cable must not connect to the alloy smelter's front");
+		helper.assertTrue(helper.getBlockState(besideSocket).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.EAST)),
+				"A cable must connect to the alloy smelter's power socket");
+		helper.succeed();
 	}
 }

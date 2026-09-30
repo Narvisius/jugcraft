@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KHK",
+    "PFP",
+    "KKK"
+  ],
+  "key": {
+    "K": "minecraft:bricks",
+    "H": "minecraft:hopper",
+    "P": "#c:plates/iron",
+    "F": "minecraft:blast_furnace"
+  },
+  "result": {
+    "id": "jugcraft:steel_foundry",
+    "count": 1
+  }
+}

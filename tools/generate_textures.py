@@ -236,6 +236,9 @@ ALLOY_COLORS = {
               [(84, 88, 92), (128, 132, 136), (166, 170, 172), (196, 198, 200), (222, 224, 226)]),
     "solder": (None, None,
                [(70, 72, 80), (104, 106, 114), (138, 140, 148), (166, 168, 176), (196, 198, 206)]),
+    # Steel: a dark blue-gray, darker and cooler than iron.
+    "steel": (None, None,
+              [(44, 48, 56), (72, 78, 88), (102, 108, 120), (136, 142, 154), (176, 182, 194)]),
 }
 
 # name: (ore specks, glint, item/block palette)
@@ -991,6 +994,13 @@ def machines():
     for index, metal in enumerate(WASHED_ORES):
         save(washed_ore(metal, 900 + index), "item", f"washed_{metal}_ore")
     save(pile(950, [(196, 160, 108), (214, 180, 126), (176, 140, 92), (230, 200, 150)]), "item", "sawdust")
+    # Coke: porous gray-black lumps with a dull silver sheen.
+    save(raw_chunk(951, [(28, 28, 30), (48, 48, 52), (74, 74, 80)], (150, 150, 158)), "item", "coke")
+    ember = [(250, 140, 30), (255, 190, 60), (220, 80, 20)]
+    save(grate(952), "block", "coke_oven_front")
+    save(grate(952, glow=ember), "block", "coke_oven_front_on")
+    save(window(953, [(30, 26, 26), (44, 36, 34)]), "block", "steel_foundry_front")
+    save(window(953, [(30, 26, 26)], glow=[(255, 200, 80), (255, 236, 150), (250, 150, 40)]), "block", "steel_foundry_front_on")
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")
     save(cable_texture(), "block", "copper_cable")

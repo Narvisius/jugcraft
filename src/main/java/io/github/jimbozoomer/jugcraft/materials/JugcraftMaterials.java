@@ -26,6 +26,7 @@ public final class JugcraftMaterials {
 	public static MetalFamily BRASS;
 	public static MetalFamily INVAR;
 	public static MetalFamily SOLDER;
+	public static MetalFamily STEEL;
 
 	public static MineralFamily SALT;
 	public static MineralFamily PHOSPHATE;
@@ -40,6 +41,7 @@ public final class JugcraftMaterials {
 	public static Item SILICON;
 	public static Item LITHIUM_CARBONATE;
 	public static Item RARE_EARTH_OXIDE;
+	public static Item COKE;
 
 	private JugcraftMaterials() {
 	}
@@ -57,6 +59,7 @@ public final class JugcraftMaterials {
 		BRASS = MetalFamily.builder("brass").build();
 		INVAR = MetalFamily.builder("invar").build();
 		SOLDER = MetalFamily.builder("solder").build();
+		STEEL = MetalFamily.builder("steel").build();
 
 		SALT = MineralFamily.register("salt");
 		PHOSPHATE = MineralFamily.register("phosphate");
@@ -71,12 +74,13 @@ public final class JugcraftMaterials {
 		SILICON = JugcraftRegistry.item("silicon");
 		LITHIUM_CARBONATE = JugcraftRegistry.item("lithium_carbonate");
 		RARE_EARTH_OXIDE = JugcraftRegistry.item("rare_earth_oxide");
+		COKE = JugcraftRegistry.item("coke");
 
 		registerCreativeTabs();
 	}
 
 	private static void registerCreativeTabs() {
-		MetalFamily[] metals = {TIN, ZINC, LEAD, SILVER, NICKEL, TUNGSTEN, URANIUM, BRONZE, ALUMINUM, BRASS, INVAR, SOLDER};
+		MetalFamily[] metals = {TIN, ZINC, LEAD, SILVER, NICKEL, TUNGSTEN, URANIUM, BRONZE, ALUMINUM, BRASS, INVAR, SOLDER, STEEL};
 		MineralFamily[] minerals = {SALT, PHOSPHATE, LEPIDOLITE, MONAZITE};
 
 		List<ItemLike> natural = new ArrayList<>();
@@ -103,7 +107,7 @@ public final class JugcraftMaterials {
 		}
 		natural.add(BAUXITE);
 		natural.add(OIL_SAND);
-		ingredients.addAll(List.of(BITUMEN, SULFUR_DUST, SILICON, LITHIUM_CARBONATE, RARE_EARTH_OXIDE));
+		ingredients.addAll(List.of(BITUMEN, SULFUR_DUST, SILICON, LITHIUM_CARBONATE, RARE_EARTH_OXIDE, COKE));
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(output -> natural.forEach(output::accept));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> ingredients.forEach(output::accept));
