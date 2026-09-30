@@ -90,6 +90,10 @@ ABOUT = {
                     "source below refills it. It burns only while something takes the power.",
     "dynamo": "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge "
               "from a shaft line to the electric network.",
+    "auto_crafter": "Crafts the crafting recipe laid out in its 3x3 grid. Set the pattern by hand; each grid slot "
+                    "keeps its last item as the pattern, so it crafts while every filled slot holds two or more. Pipes "
+                    "and hoppers top up slots that already hold that item. Empty buckets and bottles go to the slot "
+                    "above the output.",
     "engineers_handbook": "This book. Craft it from a book and a copper ingot.",
 }
 
@@ -218,7 +222,7 @@ def build():
                                                                      "brass_gearbox", "dynamo")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
-                                       "circuit_assembler", "arc_furnace_controller")]},
+                                       "circuit_assembler", "arc_furnace_controller", "auto_crafter")]},
         {"title": "Ore Processing", "icon": f"{MOD}:pulverizer", "pages":
             [machine_page(m) for m in ("pulverizer", "ore_washer", "sieve", "sawmill")]},
         {"title": "Steel", "icon": f"{MOD}:steel_ingot", "pages":

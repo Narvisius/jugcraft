@@ -42,7 +42,9 @@ public enum MachineKind implements StringRepresentable {
 	// sapling and extras in two byproduct slots) and a 2-tall water wheel that generates from flowing water.
 	COBBLESTONE_GENERATOR("cobblestone_generator", 4_000, 64, 0, 4, 1),
 	TREE_FARM("tree_farm", 10_000, 128, 0, 16, 4),
-	WATER_WHEEL("water_wheel", 8_000, 0, 64, 0, 0);
+	WATER_WHEEL("water_wheel", 8_000, 0, 64, 0, 0),
+	// Auto-crafter: a 3x3 pattern grid (each slot keeps one item as the pattern), the result and a remainder slot.
+	AUTO_CRAFTER("auto_crafter", 10_000, 128, 0, 8, 11);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -89,6 +91,8 @@ public enum MachineKind implements StringRepresentable {
 	public static final int WATER_WHEEL_FALLING = 12;
 	/** Ticks between checks of the water at the wheel (and of the cobblestone generator's water and lava). */
 	public static final int SOURCE_CHECK_INTERVAL = 20;
+	/** Auto-crafter: ticks per craft (before speed upgrades). */
+	public static final int CRAFT_TICKS = 40;
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -114,7 +118,7 @@ public enum MachineKind implements StringRepresentable {
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
 				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL
-				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM;
+				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -173,6 +177,9 @@ public enum MachineKind implements StringRepresentable {
 	/** Slots after the output that collect recipe byproducts (see {@link MachineRecipe#byproducts()}). */
 	public int byproductSlots() {
 		// The ore drill has no inputs; its "byproduct" slots are just two more result slots.
+		if (this == AUTO_CRAFTER) {
+			return 1; // Container remainders, such as the empty bucket from a cake.
+		}
 		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == TREE_FARM ? 2 : 0;
 	}
 

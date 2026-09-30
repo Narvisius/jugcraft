@@ -707,4 +707,56 @@ public class JugcraftGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(dynamo.energy().getAmount() >= 100,
 				"The dynamo holds only " + dynamo.energy().getAmount() + " JE"));
 	}
+
+	// ------------------------------------------------------------------ auto-crafter
+
+	private static MachineBlockEntity autoCrafter(GameTestHelper helper, BlockPos pos) {
+		helper.setBlock(pos, machine(MachineKind.AUTO_CRAFTER));
+		charge(helper, pos, Direction.UP);
+		return helper.getBlockEntity(pos, MachineBlockEntity.class);
+	}
+
+	/** Planks laid out as a stick recipe craft until one plank is left in each slot as the pattern. */
+	@GameTest(maxTicks = 300)
+	public void autoCrafterKeepsItsPattern(GameTestHelper helper) {
+		MachineBlockEntity crafter = autoCrafter(helper, new BlockPos(2, 1, 2));
+		crafter.setItem(0, new ItemStack(Items.OAK_PLANKS, 3));
+		crafter.setItem(3, new ItemStack(Items.OAK_PLANKS, 3));
+		helper.succeedWhen(() -> {
+			ItemStack sticks = crafter.getItem(MachineKind.AUTO_CRAFTER.outputSlot());
+			helper.assertTrue(sticks.is(Items.STICK) && sticks.getCount() == 8, "Crafted " + sticks);
+			helper.assertTrue(crafter.getItem(0).getCount() == 1 && crafter.getItem(3).getCount() == 1,
+					"The pattern was not kept: " + crafter.getItem(0) + ", " + crafter.getItem(3));
+		});
+	}
+
+	/** Container remainders (the glass bottles from a honey block) go to the remainder slot. */
+	@GameTest(maxTicks = 200)
+	public void autoCrafterKeepsRemainders(GameTestHelper helper) {
+		MachineBlockEntity crafter = autoCrafter(helper, new BlockPos(2, 1, 2));
+		for (int slot : new int[] {0, 1, 3, 4}) {
+			crafter.setItem(slot, new ItemStack(Items.HONEY_BOTTLE, 2));
+		}
+		helper.succeedWhen(() -> {
+			helper.assertTrue(crafter.getItem(MachineKind.AUTO_CRAFTER.outputSlot()).is(Items.HONEY_BLOCK), "No honey block");
+			ItemStack bottles = crafter.getItem(MachineKind.AUTO_CRAFTER.outputSlot() + 1);
+			helper.assertTrue(bottles.is(Items.GLASS_BOTTLE) && bottles.getCount() == 4, "Remainder slot holds " + bottles);
+		});
+	}
+
+	/** Pipes and hoppers only top up grid slots that already hold that item; they never set the pattern. */
+	@GameTest
+	public void autoCrafterAutomationFollowsPattern(GameTestHelper helper) {
+		MachineBlockEntity crafter = autoCrafter(helper, new BlockPos(2, 1, 2));
+		crafter.setItem(4, new ItemStack(Items.OAK_PLANKS, 1));
+		Storage<ItemVariant> storage = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 2)), Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long planks = storage.insert(ItemVariant.of(Items.OAK_PLANKS), 10, transaction);
+			long cobble = storage.insert(ItemVariant.of(Items.COBBLESTONE), 10, transaction);
+			helper.assertTrue(planks == 10, "Accepted " + planks + " planks into the pattern slot");
+			helper.assertTrue(cobble == 0, "Accepted cobblestone into an empty grid slot");
+			transaction.abort();
+		}
+		helper.succeed();
+	}
 }

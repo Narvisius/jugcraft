@@ -141,7 +141,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		} else if (kind.isProcessor()) {
 			int inputs = kind.outputSlot();
 			for (int slot = 0; slot < inputs; slot++) {
-				slotFrame(graphics, x + MachineMenu.inputX(inputs, slot), y + MachineMenu.SLOT_Y);
+				slotFrame(graphics, x + MachineMenu.inputX(kind, slot), y + MachineMenu.inputY(kind, slot));
 			}
 			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
 			for (int index = 0; index < kind.byproductSlots(); index++) {
@@ -158,15 +158,17 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			}
 			int maxProgress = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_PROGRESS));
 			int arrow = menu.data(MachineBlockEntity.DATA_PROGRESS) * 24 / maxProgress;
-			graphics.fill(x + 80, y + 41, x + 104, y + 45, DARK);
-			graphics.fill(x + 80, y + 41, x + 80 + arrow, y + 45, PROGRESS);
+			int arrowX = x + MachineMenu.arrowX(kind);
+			graphics.fill(arrowX, y + 41, arrowX + 24, y + 45, DARK);
+			graphics.fill(arrowX, y + 41, arrowX + arrow, y + 45, PROGRESS);
 		}
 	}
 
 	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractLabels(graphics, mouseX, mouseY);
-		if (menu.kind().usesPower()) {
+		// The auto-crafter's grid covers the energy readout's place; its bar still shows the charge.
+		if (menu.kind().usesPower() && menu.kind() != MachineKind.AUTO_CRAFTER) {
 			String energy = compact(menu.energy()) + " / " + compact(menu.capacity()) + " JE";
 			graphics.text(font, energy, 28, 60, TEXT);
 		}

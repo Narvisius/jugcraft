@@ -908,6 +908,29 @@
               ]
             }
           ]
+        },
+        {
+          "title": "Auto-Crafter",
+          "icon": "jugcraft:auto_crafter",
+          "text": [
+            "Crafts the crafting recipe laid out in its 3x3 grid. Set the pattern by hand; each grid slot keeps its last item as the pattern, so it crafts while every filled slot holds two or more. Pipes and hoppers top up slots that already hold that item. Empty buckets and bottles go to the slot above the output.",
+            "Uses 8 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:brass_plate",
+              "minecraft:crafting_table",
+              "jugcraft:machine_casing",
+              "minecraft:crafting_table",
+              "jugcraft:brass_plate",
+              "minecraft:hopper",
+              "jugcraft:brass_plate"
+            ],
+            "result": "jugcraft:auto_crafter",
+            "count": 1
+          }
         }
       ]
     },

@@ -249,6 +249,14 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 **Code:** `prospecting/` (`OreSurvey`, `SurveyPayload`, `ProspectorItem`, `JugcraftProspecting`), `client/ProspectorScreen`, and `machine/OreDrilling` with `MachineKind.ORE_DRILL`.
 
+## Automation
+
+| Block | What it does | Details | Built from |
+| --- | --- | --- | --- |
+| Auto-Crafter | Crafts the recipe in its 3×3 grid, 40 ticks per craft, 8 JE/t | Each grid slot keeps one item as the pattern, so it crafts while every filled slot has two or more. Pipes and hoppers only top up slots that already hold that item. Remainders (empty buckets, bottles) go to the slot above the output. Any crafting-table recipe the server knows. Unstackable ingredients can't be automated yet. | brass plates, basic circuit, 2 crafting tables, casing, hopper |
+
+**Code:** `MachineKind.AUTO_CRAFTER` and `MachineBlockEntity.tickCrafter` (vanilla `RecipeType.CRAFTING`). The grid layout is in `MachineMenu.inputX/inputY(kind, slot)`.
+
 ## Kinetic power
 
 A second, mechanical power system measured in **KE** (kinetic energy) per tick. Shafts carry rotation along their length and gearboxes out of all six sides. Machines at the end of a line run straight off it (1 KE = 1 JE, no loss), and a dynamo bridges it into JE cables at 75%.

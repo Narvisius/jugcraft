@@ -8,6 +8,13 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #30 Auto-Crafter
+- **Auto-Crafter:** crafts any crafting-table recipe laid out in its 3×3 grid, one every 2 seconds.
+  - Each grid slot keeps one item as the pattern, and pipes and hoppers only top up matching slots.
+  - Remainders such as empty bottles get their own slot.
+- A powered processor with upgrades, sides, eject, redstone and kinetic power; a new grid layout on its screen.
+- Three game tests and a client screenshot of its screen.
+
 ### #29 Kinetic power
 - A mechanical power layer in **KE** per tick. **Iron Shafts** carry it along their axis and **Brass Gearboxes** out of all six sides; both animate while turning.
 - Sources:

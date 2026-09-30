@@ -35,6 +35,8 @@ MACHINES = {
     "cobblestone_generator": {"display": "Cobblestone Generator", "lit": True},
     "tree_farm": {"display": "Tree Farm", "lit": True},
     "water_wheel": {"display": "Water Wheel", "lit": False},
+    # Crafts the recipe laid out in its 3x3 grid, keeping one of each item as the pattern.
+    "auto_crafter": {"display": "Auto-Crafter", "lit": True},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -129,6 +131,8 @@ STATS = {
     "tree_farm": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
     # 2 tall. 8 JE/t per block of flowing water on its right (12 if falling), both blocks: up to 24 JE/t.
     "water_wheel": {"capacity": 8_000, "output_per_tick": 64, "generation_per_tick": 24},
+    # One craft per 40 ticks at 8 JE/t.
+    "auto_crafter": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 8, "ticks": 40},
     # Unpowered: heat comes from the charge itself. No battery, no cable connection.
     "coke_oven": {"capacity": 0, "use_per_tick": 0},
     "steel_foundry": {"capacity": 0, "use_per_tick": 0},
@@ -254,6 +258,10 @@ CRAFTING = {
     "capacitor_bank": (["PBP", "BCB", "PBP"], {"P": "#c:plates/steel", "B": "jugcraft:battery_box",
                                                "C": "jugcraft:advanced_circuit"}, 1),
     "steel_tank": (["PPP", "PTP", "PPP"], {"P": "#c:plates/steel", "T": "jugcraft:fluid_tank"}, 1),
+    # Automation: after the workshop tier (a circuit and brass plates).
+    "auto_crafter": (["PCP", "TMT", "PHP"], {"P": "#c:plates/brass", "C": "jugcraft:basic_circuit",
+                                           "T": "minecraft:crafting_table", "M": "jugcraft:machine_casing",
+                                           "H": "minecraft:hopper"}, 1),
     # Kinetic power: all bronze-age, so it can come before electricity.
     "iron_shaft": (["I", "I"], {"I": "#c:ingots/iron"}, 4),
     "brass_gearbox": (["PGP", "GSG", "PGP"], {"P": "#c:plates/brass", "G": "#c:gears/bronze", "S": "jugcraft:iron_shaft"}, 1),

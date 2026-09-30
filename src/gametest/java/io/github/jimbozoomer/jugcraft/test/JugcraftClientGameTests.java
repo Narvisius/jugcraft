@@ -11,6 +11,7 @@ import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
+import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import java.util.List;
@@ -97,6 +98,24 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.getInput().pressKey(options -> options.keyUse);
 			context.waitForScreen(MachineScreen.class);
 			context.takeScreenshot("jugcraft_machine_screen");
+			context.setScreen(() -> null);
+
+			// The auto-crafter's screen, with a stick pattern in its grid.
+			BlockPos crafter = new BlockPos(x - 7 + singleIndex(MachineKind.AUTO_CRAFTER), y, z - 5);
+			server.runOnServer(minecraft -> {
+				if (minecraft.overworld().getBlockEntity(crafter) instanceof MachineBlockEntity machine) {
+					machine.setItem(0, new ItemStack(Items.OAK_PLANKS, 12));
+					machine.setItem(3, new ItemStack(Items.OAK_PLANKS, 12));
+				}
+			});
+			server.runCommand("tp @p %d %d %d 180 30".formatted(crafter.getX(), y, z - 3));
+			context.waitTicks(10);
+			context.getInput().lookAt(crafter);
+			context.waitTick();
+			context.getInput().pressKey(options -> options.keyUse);
+			context.waitForScreen(MachineScreen.class);
+			context.waitTicks(20);
+			context.takeScreenshot("jugcraft_auto_crafter_screen");
 			context.setScreen(() -> null);
 
 			// The Engineer's Handbook: the first page and the crusher's page.

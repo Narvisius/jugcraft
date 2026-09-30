@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "TMT",
+    "PHP"
+  ],
+  "key": {
+    "P": "#c:plates/brass",
+    "C": "jugcraft:basic_circuit",
+    "T": "minecraft:crafting_table",
+    "M": "jugcraft:machine_casing",
+    "H": "minecraft:hopper"
+  },
+  "result": {
+    "id": "jugcraft:auto_crafter",
+    "count": 1
+  }
+}

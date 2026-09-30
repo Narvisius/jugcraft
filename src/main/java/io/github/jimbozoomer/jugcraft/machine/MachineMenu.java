@@ -41,6 +41,22 @@ public class MachineMenu extends AbstractContainerMenu {
 		return INPUT_LAYOUT[inputs][slot];
 	}
 
+	/** Input slot position for a kind: a row before the arrow, or the auto-crafter's 3x3 pattern grid. */
+	public static int inputX(MachineKind kind, int slot) {
+		return kind == MachineKind.AUTO_CRAFTER ? GRID_X + (slot % 3) * 18 : inputX(kind.outputSlot(), slot);
+	}
+
+	public static int inputY(MachineKind kind, int slot) {
+		return kind == MachineKind.AUTO_CRAFTER ? 17 + (slot / 3) * 18 : SLOT_Y;
+	}
+
+	/** Left edge of the auto-crafter's grid, and where its progress arrow starts (after the grid). */
+	public static final int GRID_X = 30;
+
+	public static int arrowX(MachineKind kind) {
+		return kind == MachineKind.AUTO_CRAFTER ? 88 : 80;
+	}
+
 	private final MachineKind kind;
 	private final Container container;
 	private final ContainerData data;
@@ -87,7 +103,7 @@ public class MachineMenu extends AbstractContainerMenu {
 		} else if (kind.isProcessor()) {
 			int inputs = kind.outputSlot();
 			for (int slot = 0; slot < inputs; slot++) {
-				addSlot(new Slot(container, slot, inputX(inputs, slot), SLOT_Y) {
+				addSlot(new Slot(container, slot, inputX(kind, slot), inputY(kind, slot)) {
 					@Override
 					public boolean mayPlace(ItemStack stack) {
 						return container.canPlaceItem(getContainerSlot(), stack);

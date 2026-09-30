@@ -846,6 +846,32 @@ def water_wheel():
     return m
 
 
+# ------------------------------------------------------------------ automation
+
+def auto_crafter():
+    """A plank workbench with a 3x3 grid of brass tiles on top, worked by a gantry arm with a brass gripper; the
+    finished item comes out of a glowing hatch at the front."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((1, 1, 1), (15, 9, 15), {"*": "sp_wood", "north": BRASS_PLATE}))
+    for y in (1.5, 8):
+        m.append(box((0.75, y, 0.75), (15.25, y + 0.75, 15.25), IRON))
+    for gx in (2.5, 6.5, 10.5):
+        for gz in (2.5, 6.5, 10.5):
+            m.append(box((gx, 9, gz), (gx + 3, 9.5, gz + 3), BRASS_PLATE))
+    # Gantry over the grid, with the arm and gripper.
+    for x in (1.5, 13.5):
+        m.append(box((x, 9, 13), (x + 1, 15, 14), IRON))
+    m.append(box((1.5, 15, 13), (14.5, 16, 14), IRON))
+    m.append(box((7.5, 14, 5), (8.5, 15, 13), BRASS))
+    m.append(box((7.5, 11.5, 5), (8.5, 14, 6), BRASS))
+    m.append(box((6.5, 10.5, 4.25), (9.5, 11.5, 6.75), IRON))
+    # Output hatch, gauge and lamp at the front.
+    m.append(box((5, 2.5, 0.25), (11, 7, 1.25), {"*": IRON, "north": "sp_window!"}))
+    m.append(dial("north", (13, 5, 0.5), 2))
+    m.append(dial("north", (3, 5, 0.5), 1.25, texture="sp_lamp"))
+    return m
+
+
 # ------------------------------------------------------------------ mining (multi-block)
 
 def ore_drill():
@@ -918,6 +944,7 @@ MODELS = {
     "cobblestone_generator": cobblestone_generator(),
     "tree_farm": tree_farm(),
     "water_wheel": water_wheel(),
+    "auto_crafter": auto_crafter(),
     "electric_pump": electric_pump(),
     "fluid_tank": fluid_tank(),
 }

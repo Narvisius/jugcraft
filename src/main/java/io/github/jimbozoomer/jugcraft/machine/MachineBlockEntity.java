@@ -38,6 +38,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -91,6 +94,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private static final int[] STEAM_BOTTOM = {SLOT_BUCKET_OUT};
 	private static final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> SMELTING =
 			RecipeManager.createCheck(RecipeType.SMELTING);
+	private static final RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> CRAFTING =
+			RecipeManager.createCheck(RecipeType.CRAFTING);
 
 	private final MachineKind kind;
 	private final SimpleEnergyStorage energy;
@@ -294,6 +299,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case ORE_DRILL -> tickDrill(level, pos, state);
 			case COBBLESTONE_GENERATOR -> tickCobble(level, pos, state);
 			case WATER_WHEEL -> tickWaterWheel(level, pos, state);
+			case AUTO_CRAFTER -> tickCrafter(level, pos, state);
 			default -> tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
@@ -676,6 +682,80 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return wheelRate > 0;
 	}
 
+	/**
+	 * The auto-crafter crafts the vanilla (or data pack) crafting recipe laid out in its 3x3 grid. Each grid
+	 * slot keeps its last item as the pattern, so it crafts only while every filled slot holds at least two.
+	 * The result goes to the output slot and container remainders (empty buckets, bottles) to the slot above.
+	 */
+	private boolean tickCrafter(ServerLevel level, BlockPos pos, BlockState state) {
+		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
+			eject(level, pos, state);
+		}
+		List<ItemStack> pattern = new ArrayList<>(GRID);
+		boolean any = false;
+		boolean stocked = true;
+		for (int slot = 0; slot < GRID; slot++) {
+			ItemStack stack = items.get(slot);
+			pattern.add(stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
+			any |= !stack.isEmpty();
+			stocked &= stack.isEmpty() || stack.getCount() >= 2;
+		}
+		if (!any || !stocked) {
+			return false; // Keeps progress: more ingredients may be on the way.
+		}
+		CraftingInput input = CraftingInput.of(3, 3, pattern);
+		Optional<RecipeHolder<CraftingRecipe>> recipe = CRAFTING.getRecipeFor(input, level);
+		if (recipe.isEmpty()) {
+			progress = 0;
+			return false;
+		}
+		ItemStack result = recipe.get().value().assemble(input);
+		ItemStack remainder = ItemStack.EMPTY;
+		for (ItemStack left : recipe.get().value().getRemainingItems(input)) {
+			if (left.isEmpty()) {
+				continue;
+			}
+			if (remainder.isEmpty()) {
+				remainder = left.copy();
+			} else if (ItemStack.isSameItemSameComponents(remainder, left)) {
+				remainder.grow(left.getCount());
+			} else {
+				return false; // Two kinds of remainder: not supported, and nothing is ever lost.
+			}
+		}
+		if (result.isEmpty() || !canOutput(result) || (!remainder.isEmpty() && byproductSlotFor(remainder) < 0)
+				|| !sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false;
+		}
+		MachineUpgrades.Effect upgrades = upgrades();
+		maxProgress = upgrades.ticks(MachineKind.CRAFT_TICKS);
+		long use = upgrades.use(kind.usePerTick);
+		if (energy.getAmount() < use) {
+			return false;
+		}
+		energy.setAmount(energy.getAmount() - use);
+		if (++progress >= maxProgress) {
+			progress = 0;
+			ItemStack output = items.get(kind.outputSlot());
+			if (output.isEmpty()) {
+				items.set(kind.outputSlot(), result.copy());
+			} else {
+				output.grow(result.getCount());
+			}
+			for (int slot = 0; slot < GRID; slot++) {
+				items.get(slot).shrink(1);
+			}
+			if (!remainder.isEmpty()) {
+				addByproduct(remainder);
+			}
+		}
+		setChanged();
+		return true;
+	}
+
+	/** Slots in the auto-crafter's pattern grid. */
+	public static final int GRID = 9;
+
 	/** The ore drill's first result slot (output, then the two extra slots) with room for {@code stack}, or -1. */
 	private int resultSlotFor(ItemStack stack) {
 		for (int slot = kind.outputSlot(); slot < kind.slots; slot++) {
@@ -914,6 +994,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
 		if (kind.isProcessor() && side != null && !sides.mode(side, getBlockState().getValue(MachineBlock.FACING)).input()) {
 			return false;
+		}
+		if (kind == MachineKind.AUTO_CRAFTER && slot < GRID) {
+			// Automation only tops up pattern slots already holding that item; players set the pattern by hand.
+			ItemStack held = items.get(slot);
+			return !held.isEmpty() && ItemStack.isSameItemSameComponents(held, stack);
 		}
 		return canPlaceItem(slot, stack);
 	}
