@@ -1,7 +1,9 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.StringRepresentable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Every Jugcraft machine and its balance numbers. Values mirror STATS in tools/machines.py.
@@ -110,8 +112,18 @@ public enum MachineKind implements StringRepresentable {
 		return switch (this) {
 			case GEOTHERMAL_GENERATOR -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0));
 			case WIND_TURBINE -> Footprint.tall(3);
+			// Two wide and two tall: furnace body, crucible tower on its right, hoppers above.
+			case ALLOY_SMELTER -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));
 			default -> Footprint.SINGLE;
 		};
+	}
+
+	/**
+	 * Where cables connect, or null when every face of every block takes power. The alloy
+	 * smelter's copper power socket is on the outer side of its lower right block.
+	 */
+	public @Nullable PowerPort powerPort() {
+		return this == ALLOY_SMELTER ? new PowerPort(1, Direction.WEST) : null;
 	}
 
 	public boolean isLarge() {

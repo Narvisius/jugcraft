@@ -67,7 +67,11 @@ public final class JugcraftMachines {
 		// Registered per block, not per block entity, so the dummy parts of multi-block machines answer too.
 		EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
 			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
-			return machine == null ? null : machine.energyFor(side);
+			// Machines with a power port only answer on that face, so cables only connect there.
+			if (machine == null || !((MachineBlock) state.getBlock()).acceptsPower(state, side)) {
+				return null;
+			}
+			return machine.energyFor(side);
 		}, MACHINES.values().toArray(Block[]::new));
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {

@@ -33,7 +33,7 @@ These unlock whole groups of machines, so they should be designed first.
 ### Tier 1: Workshops (current power levels)
 | Machine | Does | Uses | Feeds |
 | --- | --- | --- | --- |
-| **Alloy Smelter** ✅ implemented | Two-input alloying: bronze, brass (copper + zinc), solder (tin + lead), invar (iron + nickel) | Existing metals | Machine casings, circuits, magic instruments (bell bronze, brass astrolabes) |
+| **Alloy Smelter** ✅ implemented (2×2 multi-block with a power socket) | Two-input alloying: bronze, brass (copper + zinc), solder (tin + lead), invar (iron + nickel) | Existing metals | Machine casings, circuits, magic instruments (bell bronze, brass astrolabes) |
 | **Metal Press** ✅ implemented | Ingots → plates (4 plates → gear by crafting) | All metals | Circuit assembler, casings, rocket hulls, better machine recipes |
 | **Wire Drawer** ✅ implemented | Ingots → wire (copper, silver, aluminum) | Copper, silver, aluminum | Circuits, cables, motors |
 | **Water Pump** ✅ implemented as the Electric Pump (also pumps lava) | Moves water into tanks and the steam generator | Fluid API | Steam, agriculture (irrigation), chemistry |

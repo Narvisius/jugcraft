@@ -580,6 +580,78 @@ def turbine_front(seed):
     return img
 
 
+def firebrick(seed):
+    """Small red-brown refractory bricks."""
+    rng = random.Random(seed)
+    img = new()
+    brick = [(142, 62, 40), (158, 72, 46), (126, 54, 36)]
+    for y in range(16):
+        for x in range(16):
+            offset = 2 if (y // 3) % 2 else 0
+            if y % 3 == 2 or (x + offset) % 4 == 3:
+                c = (84, 72, 64)
+            else:
+                c = rng.choice(brick)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def crucible(seed):
+    """Dark cast iron with a glowing seam, for the alloy crucible."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = rng.choice([(46, 44, 46), (56, 54, 56), (38, 36, 38)])
+            if y in (4, 11) and 2 <= x <= 13:
+                c = (240, 130, 40) if x % 3 else (255, 190, 80)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def hopper_side(seed):
+    img = panel(seed)
+    for y in range(4, 12):
+        for x in range(4, 12):
+            img.putpixel((x, y), STEEL[0] + (255,))
+    return img
+
+
+def hopper_top():
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            rim = x in (0, 1, 14, 15) or y in (0, 1, 14, 15)
+            img.putpixel((x, y), (STEEL[2] if rim else (22, 22, 26)) + (255,))
+    return img
+
+
+def power_port():
+    """Copper socket face: three pins on dark insulation, so the cable entry is obvious."""
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (30, 28, 28)
+            if x in (0, 15) or y in (0, 15):
+                c = COPPER[0]
+            elif x in (4, 8, 11) and 4 <= y <= 11:
+                c = COPPER[2]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def power_port_frame():
+    """Yellow-and-black frame around the socket, like a warning plate."""
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (214, 170, 40) if (x + y) // 3 % 2 else (30, 28, 26)
+            if 3 <= x <= 12 and 3 <= y <= 12:
+                c = COPPER[1] if (x + y) % 2 else COPPER[0]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
 def gui():
     """Generic 176x166 machine screen: beveled panel and player inventory slots."""
     img = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
@@ -818,6 +890,13 @@ def machines():
     save(nacelle(537), "block", "wind_turbine_nacelle")
     save(blade(538), "block", "wind_turbine_blade")
     save(blade_tip(), "block", "wind_turbine_tip")
+    save(hazard_plinth(540), "block", "heavy_plinth")
+    save(firebrick(541), "block", "alloy_smelter_brick")
+    save(crucible(542), "block", "alloy_crucible")
+    save(hopper_side(543), "block", "alloy_hopper")
+    save(hopper_top(), "block", "alloy_hopper_top")
+    save(power_port(), "block", "power_port")
+    save(power_port_frame(), "block", "power_port_frame")
     save(tank_side(520), "block", "fluid_tank_side")
     save(tank_cap(521, True), "block", "fluid_tank_top")
     save(tank_cap(522, False), "block", "fluid_tank_bottom")

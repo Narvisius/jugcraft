@@ -1,95 +1,100 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
+    "alloy_crucible": "jugcraft:block/alloy_crucible",
+    "alloy_hopper": "jugcraft:block/alloy_hopper",
+    "alloy_hopper_top": "jugcraft:block/alloy_hopper_top",
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "bronze_block": "jugcraft:block/bronze_block",
     "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
-    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
-    "geothermal_plinth": "jugcraft:block/geothermal_plinth",
     "geothermal_stack": "jugcraft:block/geothermal_stack",
-    "geothermal_tank": "jugcraft:block/geothermal_tank",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
     "machine_side": "jugcraft:block/machine_side",
     "machine_top": "jugcraft:block/machine_top",
-    "front": "jugcraft:block/geothermal_generator_front",
+    "power_port": "jugcraft:block/power_port",
+    "power_port_frame": "jugcraft:block/power_port_frame",
+    "front": "jugcraft:block/alloy_smelter_front",
     "particle": "jugcraft:block/machine_side"
   },
   "elements": [
     {
       "from": [
-        8.0,
-        3.75,
-        4.0
+        0.2462,
+        0.1231,
+        4.0615
       ],
       "to": [
         16.0,
-        4.75,
-        12.0
+        1.1077,
+        11.9385
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#heavy_plinth",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            15.754,
+            0.985
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#heavy_plinth",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            15.754,
+            0.985
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#heavy_plinth",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            7.877,
+            0.985
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#heavy_plinth",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            7.877,
+            0.985
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#heavy_plinth",
           "uv": [
             0,
             0,
-            8.0,
-            8.0
+            15.754,
+            7.877
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#heavy_plinth",
           "uv": [
             0,
             0,
-            8.0,
-            8.0
+            15.754,
+            7.877
           ]
         }
       }
     },
     {
       "from": [
-        8.5,
-        4.75,
-        4.5
+        8.6154,
+        1.1077,
+        4.5538
       ],
       "to": [
-        15.5,
-        9.25,
-        11.5
+        15.5077,
+        7.0154,
+        11.4462
       ],
       "faces": {
         "north": {
@@ -97,8 +102,484 @@
           "uv": [
             0,
             0,
-            7.0,
-            4.5
+            6.892,
+            5.908
+          ]
+        },
+        "south": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.892,
+            5.908
+          ]
+        },
+        "east": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.892,
+            5.908
+          ]
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.892,
+            5.908
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            6.892,
+            6.892
+          ]
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick",
+          "uv": [
+            0,
+            0,
+            6.892,
+            6.892
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.3692,
+        1.1077,
+        4.3077
+      ],
+      "to": [
+        15.7538,
+        1.6,
+        11.6923
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "south": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "east": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "west": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "up": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            7.385
+          ]
+        },
+        "down": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            7.385
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.3692,
+        6.2769,
+        4.3077
+      ],
+      "to": [
+        15.7538,
+        6.7692,
+        11.6923
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "south": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "east": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "west": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            0.492
+          ]
+        },
+        "up": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            7.385
+          ]
+        },
+        "down": {
+          "texture": "#bronze_block",
+          "uv": [
+            0,
+            0,
+            7.385,
+            7.385
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.6154,
+        10.9538,
+        4.5538
+      ],
+      "to": [
+        12.0615,
+        13.9077,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "south": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "east": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "west": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "up": {
+          "texture": "#alloy_hopper_top",
+          "uv": [
+            0,
+            0,
+            3.446,
+            3.446
+          ]
+        },
+        "down": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            3.446
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        9.6,
+        7.0154,
+        5.5385
+      ],
+      "to": [
+        11.0769,
+        10.9538,
+        7.0154
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "south": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "east": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "west": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "up": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            1.477
+          ]
+        },
+        "down": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            1.477
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        12.0615,
+        10.9538,
+        8.0
+      ],
+      "to": [
+        15.5077,
+        13.9077,
+        11.4462
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "south": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "east": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "west": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            2.954
+          ]
+        },
+        "up": {
+          "texture": "#alloy_hopper_top",
+          "uv": [
+            0,
+            0,
+            3.446,
+            3.446
+          ]
+        },
+        "down": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            3.446,
+            3.446
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.0462,
+        7.0154,
+        8.9846
+      ],
+      "to": [
+        14.5231,
+        10.9538,
+        10.4615
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "south": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "east": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "west": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            3.938
+          ]
+        },
+        "up": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            1.477
+          ]
+        },
+        "down": {
+          "texture": "#alloy_hopper",
+          "uv": [
+            0,
+            0,
+            1.477,
+            1.477
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.7385,
+        1.1077,
+        4.5538
+      ],
+      "to": [
+        7.6308,
+        6.0308,
+        11.4462
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            6.892,
+            4.923
           ]
         },
         "south": {
@@ -106,8 +587,8 @@
           "uv": [
             0,
             0,
-            7.0,
-            4.5
+            6.892,
+            4.923
           ]
         },
         "east": {
@@ -115,8 +596,8 @@
           "uv": [
             0,
             0,
-            7.0,
-            4.5
+            6.892,
+            4.923
           ]
         },
         "west": {
@@ -124,8 +605,8 @@
           "uv": [
             0,
             0,
-            7.0,
-            4.5
+            6.892,
+            4.923
           ]
         },
         "up": {
@@ -133,8 +614,8 @@
           "uv": [
             0,
             0,
-            7.0,
-            7.0
+            6.892,
+            6.892
           ]
         },
         "down": {
@@ -142,484 +623,76 @@
           "uv": [
             0,
             0,
-            7.0,
-            7.0
+            6.892,
+            6.892
           ]
         }
       }
     },
     {
       "from": [
-        8.0,
-        9.25,
-        4.0
+        0.2462,
+        2.0923,
+        6.0308
       ],
       "to": [
-        16.0,
-        9.75,
-        12.0
+        0.7385,
+        6.0308,
+        9.9692
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port_frame",
           "uv": [
             0,
             0,
-            8.0,
-            0.5
+            0.492,
+            3.938
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port_frame",
           "uv": [
             0,
             0,
-            8.0,
-            0.5
+            0.492,
+            3.938
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port_frame",
           "uv": [
             0,
             0,
-            8.0,
-            0.5
+            3.938,
+            3.938
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port_frame",
           "uv": [
             0,
             0,
-            8.0,
-            0.5
+            3.938,
+            3.938
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port_frame",
           "uv": [
             0,
             0,
-            8.0,
-            8.0
+            0.492,
+            3.938
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port_frame",
           "uv": [
             0,
             0,
-            8.0,
-            8.0
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        9.0,
-        9.75,
-        5.0
-      ],
-      "to": [
-        15.0,
-        10.25,
-        11.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#machine_top",
-          "uv": [
-            0,
-            0,
-            6.0,
-            0.5
-          ]
-        },
-        "south": {
-          "texture": "#machine_top",
-          "uv": [
-            0,
-            0,
-            6.0,
-            0.5
-          ]
-        },
-        "east": {
-          "texture": "#machine_top",
-          "uv": [
-            0,
-            0,
-            6.0,
-            0.5
-          ]
-        },
-        "west": {
-          "texture": "#machine_top",
-          "uv": [
-            0,
-            0,
-            6.0,
-            0.5
-          ]
-        },
-        "up": {
-          "texture": "#machine_top",
-          "uv": [
-            0,
-            0,
-            6.0,
-            6.0
-          ]
-        },
-        "down": {
-          "texture": "#machine_top",
-          "uv": [
-            0,
-            0,
-            6.0,
-            6.0
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        12.5,
-        10.25,
-        8.5
-      ],
-      "to": [
-        14.5,
-        11.75,
-        10.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#geothermal_stack",
-          "uv": [
-            0,
-            0,
-            2.0,
-            1.5
-          ]
-        },
-        "south": {
-          "texture": "#geothermal_stack",
-          "uv": [
-            0,
-            0,
-            2.0,
-            1.5
-          ]
-        },
-        "east": {
-          "texture": "#geothermal_stack",
-          "uv": [
-            0,
-            0,
-            2.0,
-            1.5
-          ]
-        },
-        "west": {
-          "texture": "#geothermal_stack",
-          "uv": [
-            0,
-            0,
-            2.0,
-            1.5
-          ]
-        },
-        "up": {
-          "texture": "#geothermal_stack",
-          "uv": [
-            0,
-            0,
-            2.0,
-            2.0
-          ]
-        },
-        "down": {
-          "texture": "#geothermal_stack",
-          "uv": [
-            0,
-            0,
-            2.0,
-            2.0
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        12.25,
-        11.75,
-        8.25
-      ],
-      "to": [
-        14.75,
-        12.25,
-        10.75
-      ],
-      "faces": {
-        "north": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            2.5,
-            0.5
-          ]
-        },
-        "south": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            2.5,
-            0.5
-          ]
-        },
-        "east": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            2.5,
-            0.5
-          ]
-        },
-        "west": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            2.5,
-            0.5
-          ]
-        },
-        "up": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            2.5,
-            2.5
-          ]
-        },
-        "down": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            2.5,
-            2.5
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        9.5,
-        10.25,
-        5.5
-      ],
-      "to": [
-        11.0,
-        11.25,
-        7.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            1.5,
-            1.0
-          ]
-        },
-        "south": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            1.5,
-            1.0
-          ]
-        },
-        "east": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            1.5,
-            1.0
-          ]
-        },
-        "west": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            1.5,
-            1.0
-          ]
-        },
-        "up": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            1.5,
-            1.5
-          ]
-        },
-        "down": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            1.5,
-            1.5
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        6.0,
-        6.75,
-        6.5
-      ],
-      "to": [
-        8.5,
-        8.75,
-        8.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            2.5,
-            2.0
-          ]
-        },
-        "south": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            2.5,
-            2.0
-          ]
-        },
-        "east": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            2.0,
-            2.0
-          ]
-        },
-        "west": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            2.0,
-            2.0
-          ]
-        },
-        "up": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            2.5,
-            2.0
-          ]
-        },
-        "down": {
-          "texture": "#bronze_fluid_pipe",
-          "uv": [
-            0,
-            0,
-            2.5,
-            2.0
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        7.0,
-        6.25,
-        6.0
-      ],
-      "to": [
-        7.5,
-        9.25,
-        9.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            0.5,
-            3.0
-          ]
-        },
-        "south": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            0.5,
-            3.0
-          ]
-        },
-        "east": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            3.0
-          ]
-        },
-        "west": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            3.0
-          ]
-        },
-        "up": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            0.5,
-            3.0
-          ]
-        },
-        "down": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            0.5,
-            3.0
+            0.492,
+            3.938
           ]
         }
       }
@@ -627,543 +700,475 @@
     {
       "from": [
         0.0,
-        3.75,
-        4.0
+        3.3231,
+        7.2615
       ],
       "to": [
-        8.0,
-        4.75,
-        12.0
+        0.2462,
+        4.8,
+        8.7385
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            0.246,
+            1.477
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            0.246,
+            1.477
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            1.477,
+            1.477
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port",
           "uv": [
             0,
             0,
-            8.0,
-            1.0
+            1.477,
+            1.477
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port",
           "uv": [
             0,
             0,
-            8.0,
-            8.0
+            0.246,
+            1.477
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#power_port",
           "uv": [
             0,
             0,
-            8.0,
-            8.0
+            0.246,
+            1.477
           ]
         }
       }
     },
     {
       "from": [
-        1.0,
-        4.75,
-        6.0
+        1.2308,
+        6.0308,
+        6.0308
       ],
       "to": [
-        7.0,
-        11.25,
-        10.0
+        7.1385,
+        13.9077,
+        9.9692
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            6.0,
-            6.5
+            5.908,
+            7.877
           ]
         },
         "south": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            6.0,
-            6.5
+            5.908,
+            7.877
           ]
         },
         "east": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            4.0,
-            6.5
+            3.938,
+            7.877
           ]
         },
         "west": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            4.0,
-            6.5
+            3.938,
+            7.877
           ]
         },
         "up": {
-          "texture": "#fluid_tank_top",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            6.0,
-            4.0
+            5.908,
+            3.938
           ]
         },
         "down": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            6.0,
-            4.0
+            5.908,
+            3.938
           ]
         }
       }
     },
     {
       "from": [
-        2.0,
-        4.75,
-        5.0
+        2.2154,
+        6.0308,
+        5.0462
       ],
       "to": [
-        6.0,
-        11.2,
-        11.0
+        6.1538,
+        13.8585,
+        10.9538
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            4.0,
-            6.45
+            3.938,
+            7.828
           ]
         },
         "south": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            4.0,
-            6.45
+            3.938,
+            7.828
           ]
         },
         "east": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            6.0,
-            6.45
+            5.908,
+            7.828
           ]
         },
         "west": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            6.0,
-            6.45
+            5.908,
+            7.828
           ]
         },
         "up": {
-          "texture": "#fluid_tank_top",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            4.0,
-            6.0
+            3.938,
+            5.908
           ]
         },
         "down": {
-          "texture": "#geothermal_tank",
+          "texture": "#alloy_crucible",
           "uv": [
             0,
             0,
-            4.0,
-            6.0
+            3.938,
+            5.908
           ]
         }
       }
     },
     {
       "from": [
-        0.75,
-        5.75,
-        5.75
+        0.9846,
+        13.9077,
+        5.7846
       ],
       "to": [
-        7.25,
-        6.25,
-        10.25
+        7.3846,
+        14.4,
+        10.2154
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            6.5,
-            0.5
+            6.4,
+            0.492
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            6.5,
-            0.5
+            6.4,
+            0.492
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            4.5,
-            0.5
+            4.431,
+            0.492
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            4.5,
-            0.5
+            4.431,
+            0.492
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            6.5,
-            4.5
+            6.4,
+            4.431
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            6.5,
-            4.5
+            6.4,
+            4.431
           ]
         }
       }
     },
     {
       "from": [
-        1.75,
-        5.8,
-        4.75
+        1.9692,
+        13.9077,
+        4.8
       ],
       "to": [
-        6.25,
-        6.2,
-        11.25
+        6.4,
+        14.3508,
+        11.2
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            4.5,
-            0.4
+            4.431,
+            0.443
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            4.5,
-            0.4
+            4.431,
+            0.443
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            6.5,
-            0.4
+            6.4,
+            0.443
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            6.5,
-            0.4
+            6.4,
+            0.443
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            4.5,
-            6.5
+            4.431,
+            6.4
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_block",
           "uv": [
             0,
             0,
-            4.5,
-            6.5
+            4.431,
+            6.4
           ]
         }
       }
     },
     {
       "from": [
-        0.75,
-        9.75,
-        5.75
+        3.2,
+        14.4,
+        7.0154
       ],
       "to": [
-        7.25,
-        10.25,
-        10.25
+        5.1692,
+        15.8769,
+        8.9846
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#geothermal_stack",
           "uv": [
             0,
             0,
-            6.5,
-            0.5
+            1.969,
+            1.477
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#geothermal_stack",
           "uv": [
             0,
             0,
-            6.5,
-            0.5
+            1.969,
+            1.477
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#geothermal_stack",
           "uv": [
             0,
             0,
-            4.5,
-            0.5
+            1.969,
+            1.477
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#geothermal_stack",
           "uv": [
             0,
             0,
-            4.5,
-            0.5
+            1.969,
+            1.477
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#geothermal_stack",
           "uv": [
             0,
             0,
-            6.5,
-            4.5
+            1.969,
+            1.969
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#geothermal_stack",
           "uv": [
             0,
             0,
-            6.5,
-            4.5
+            1.969,
+            1.969
           ]
         }
       }
     },
     {
       "from": [
-        1.75,
-        9.8,
-        4.75
+        7.1385,
+        8.4923,
+        7.0154
       ],
       "to": [
-        6.25,
-        10.2,
-        11.25
+        9.6,
+        9.9692,
+        8.9846
       ],
       "faces": {
         "north": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_fluid_pipe",
           "uv": [
             0,
             0,
-            4.5,
-            0.4
+            2.462,
+            1.477
           ]
         },
         "south": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_fluid_pipe",
           "uv": [
             0,
             0,
-            4.5,
-            0.4
+            2.462,
+            1.477
           ]
         },
         "east": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_fluid_pipe",
           "uv": [
             0,
             0,
-            6.5,
-            0.4
+            1.969,
+            1.477
           ]
         },
         "west": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_fluid_pipe",
           "uv": [
             0,
             0,
-            6.5,
-            0.4
+            1.969,
+            1.477
           ]
         },
         "up": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_fluid_pipe",
           "uv": [
             0,
             0,
-            4.5,
-            6.5
+            2.462,
+            1.969
           ]
         },
         "down": {
-          "texture": "#geothermal_plinth",
+          "texture": "#bronze_fluid_pipe",
           "uv": [
             0,
             0,
-            4.5,
-            6.5
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        2.5,
-        11.25,
-        6.5
-      ],
-      "to": [
-        5.5,
-        11.75,
-        9.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            0.5
-          ]
-        },
-        "south": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            0.5
-          ]
-        },
-        "east": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            0.5
-          ]
-        },
-        "west": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            0.5
-          ]
-        },
-        "up": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            3.0
-          ]
-        },
-        "down": {
-          "texture": "#geothermal_plinth",
-          "uv": [
-            0,
-            0,
-            3.0,
-            3.0
+            2.462,
+            1.969
           ]
         }
       }

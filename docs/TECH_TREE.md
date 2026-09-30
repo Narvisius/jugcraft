@@ -58,7 +58,7 @@ flowchart LR
 
 ## Machines
 
-All machines hold their own internal battery and accept power from cables or directly from an adjacent generator or battery. Hoppers insert into input slots from the top and sides and extract results from the bottom.
+All machines hold their own internal battery and accept power from cables or directly from an adjacent generator or battery. Where power goes in is described in [Power connections](#power-connections). Hoppers insert into input slots from the top and sides and extract results from the bottom.
 
 | Machine | Branch | Does | Power | Built from |
 | --- | --- | --- | --- | --- |
@@ -68,7 +68,7 @@ All machines hold their own internal battery and accept power from cables or dir
 | Battery Box | Power | Stores 400,000 JE; outputs from its front | stores | lead, cable, redstone block, casing |
 | Electric Furnace | Mechanical | Any vanilla smelting recipe, 100 ticks | 10 JE/t | bronze, redstone, cable, furnace, casing |
 | Crusher | Mechanical | Ore → 2 raw; minerals, sulfur, oil sand, cobble → gravel → sand | 16 JE/t | flint, cable, casing, bronze, redstone |
-| Alloy Smelter | Mechanical | Two ingredients (any order) → bronze, brass, invar, solder | 20 JE/t | bronze, cable, 2 furnaces, casing, redstone |
+| Alloy Smelter (2×2 multi-block) | Mechanical | Two ingredients (any order) → bronze, brass, invar, solder. Power **only** through its copper socket | 20 JE/t | bronze, cable, 2 furnaces, casing, redstone |
 | Metal Press | Mechanical | Ingot → plate (1:1) | 16 JE/t | bronze, piston, cable, casing, anvil |
 | Wire Drawer | Mechanical | Ingot → 3 wires | 12 JE/t | brass, shears, cable, casing, redstone |
 | Circuit Assembler | Mechanical | Up to three ingredient stacks (any order) → circuits | 32 JE/t | tin plates, bronze gear, cable, casing, redstone |
@@ -80,9 +80,9 @@ All machines hold their own internal battery and accept power from cables or dir
 
 Most machines stay **simple one-block machines**. The ones where size is part of what they are (towers, tanks, big engines) are **multi-block machines**: you place one item and it fills two or three blocks with one detailed model. This works like Immersive Engineering's pump and sample drill; no Immersive Engineering code or art is used.
 
-| Geothermal Generator: body plus a lava tank to its right | Wind Turbine: base, mast and rotor |
-| --- | --- |
-| ![Geothermal generator](images/geothermal_generator.png) | ![Wind turbine](images/wind_turbine.png) |
+| Alloy Smelter: furnace, crucible tower, hoppers; cable in its socket | Geothermal Generator: body plus a lava tank to its right | Wind Turbine: base, mast and rotor |
+| --- | --- | --- |
+| ![Alloy smelter with a cable plugged into its power socket](images/alloy_smelter.png) | ![Geothermal generator](images/geothermal_generator.png) | ![Wind turbine](images/wind_turbine.png) |
 
 *Approximate renders made from the generated block models and textures, not game screenshots.*
 
@@ -94,6 +94,7 @@ Most machines stay **simple one-block machines**. The ones where size is part of
 - **Breaking:** breaking **any** part removes the whole machine and drops **one** item, so nothing is lost and nothing is duplicated. Pistons leave the parts alone (vanilla never pushes entity blocks; not yet checked in game).
 - **Using:**
   - Every part acts as the machine. Right-click any part to open the screen.
+  - Hoppers feed and empty it through any part: the top and sides fill the inputs, and the bottom takes the output.
   - Cables and pipes connect to any part, and comparators read the machine through any part.
   - Buckets fill its tank through any part.
 - **Server cost:**
@@ -109,6 +110,19 @@ Most machines stay **simple one-block machines**. The ones where size is part of
 4. `tools/check_mod_data.py` checks that the Python and Java footprints match and that no model leaves Minecraft's −16…32 limit.
 
 Code: `machine/Footprint.java` (offsets and rotation) and `machine/LargeMachineBlock.java` (placing, breaking, forwarding to the main block).
+
+## Power connections
+
+Every powered block follows one of two rules, and a cable shows which by where it connects:
+
+| Rule | Machines | What you see |
+| --- | --- | --- |
+| **Any side** | Every one-block machine, generator and battery; the electric pump; the geothermal generator and wind turbine (any face of any of their blocks) | A cable next to any face bends to it and connects. A generator or battery placed directly against the machine also powers it. |
+| **Power socket only** | The Alloy Smelter | Its **copper socket in a yellow-and-black frame**, on the outer side of its lower right block (seen from the front). Cables connect only there; a cable along any other face doesn't bend toward it. |
+
+The battery box is "any side" for charging. It gives power out only through its front, and a cable at the front still connects.
+
+In code, one check decides both the drawn connection and the flow. `MachineKind.powerPort()` (null means any side) is read by the energy lookup, and cables connect only where that lookup answers. `tools/large_machines.py` (`POWER_PORTS`) places the socket in the model, and `check_mod_data.py` keeps the two in sync.
 
 ## Cables and pipes
 

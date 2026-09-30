@@ -9,6 +9,9 @@ Engineering's split models): every element is clipped to each block it overlaps.
 reach outside the footprint (wind turbine blades, exhaust caps) are kept whole on the part that
 holds their center, so a part model may reach up to one block past its own space.
 
+Overlapping boxes must not share a visible face plane (it flickers in game): make one a
+hair shorter, as the octagonal tanks do.
+
 An element is (from, to, texture) where texture is one texture name for all faces or a dict
 {face: texture} with "*" as the default. Texture names are jugcraft block textures.
 """
@@ -18,6 +21,14 @@ FOOTPRINTS = {
     # The lava tank stands to the right of the generator body, seen from the front.
     "geothermal_generator": [(0, 0, 0), (-1, 0, 0)],
     "wind_turbine": [(0, 0, 0), (0, 1, 0), (0, 2, 0)],
+    # Furnace body, crucible base to its right, hoppers above the body, crucible tower above the base.
+    "alloy_smelter": [(0, 0, 0), (-1, 0, 0), (0, 1, 0), (-1, 1, 0)],
+}
+
+# Machines that take power at one marked socket only: (part, face) for a north-facing machine.
+# Keep in sync with MachineKind.powerPort(). Everything else takes power on any face.
+POWER_PORTS = {
+    "alloy_smelter": (1, "west"),
 }
 
 PIPE = "bronze_fluid_pipe"
@@ -40,11 +51,11 @@ MODELS = {
         # Lava tank (the block to the right, x -16..0), an octagonal column.
         ((-16, 0, 0), (0, 2, 16), "geothermal_plinth"),
         ((-14, 2, 4), (-2, 15, 12), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
-        ((-12, 2, 2), (-4, 15, 14), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
+        ((-12, 2, 2), (-4, 14.9, 14), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
         ((-14.5, 4, 3.5), (-1.5, 5, 12.5), "geothermal_plinth"),
-        ((-12.5, 4, 1.5), (-3.5, 5, 14.5), "geothermal_plinth"),
+        ((-12.5, 4.1, 1.5), (-3.5, 4.9, 14.5), "geothermal_plinth"),
         ((-14.5, 12, 3.5), (-1.5, 13, 12.5), "geothermal_plinth"),
-        ((-12.5, 12, 1.5), (-3.5, 13, 14.5), "geothermal_plinth"),
+        ((-12.5, 12.1, 1.5), (-3.5, 12.9, 14.5), "geothermal_plinth"),
         ((-11, 15, 5), (-5, 16, 11), "geothermal_plinth"),
     ],
     "wind_turbine": [
@@ -74,8 +85,35 @@ MODELS = {
     ],
 }
 
+MODELS["alloy_smelter"] = [
+    # Shared footing under both lower blocks.
+    ((-16, 0, 0), (16, 2, 16), "heavy_plinth"),
+    # Firebrick furnace body with the crucible window at the front (master block).
+    ((1, 2, 1), (15, 14, 15), {"*": "alloy_smelter_brick", "north": "#front", "up": TOP}),
+    ((0.5, 2, 0.5), (15.5, 3, 15.5), "bronze_block"),
+    ((0.5, 12.5, 0.5), (15.5, 13.5, 15.5), "bronze_block"),
+    # Two ingredient hoppers above the body, feeding down through spouts.
+    ((1, 22, 1), (8, 28, 8), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
+    ((3, 14, 3), (6, 22, 6), "alloy_hopper"),
+    ((8, 22, 8), (15, 28, 15), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
+    ((10, 14, 10), (13, 22, 13), "alloy_hopper"),
+    # Crucible base with the copper power socket on its outer side (lower right block).
+    ((-15, 2, 1), (-1, 12, 15), {"*": STEEL, "up": TOP}),
+    ((-16, 4, 4), (-15, 12, 12), "power_port_frame"),
+    ((-16.5, 6.5, 6.5), (-16, 9.5, 9.5), "power_port"),
+    # Crucible tower: octagonal pot with bronze rim and a short stack (upper right block).
+    ((-14, 12, 4), (-2, 28, 12), {"*": "alloy_crucible", "up": "alloy_crucible"}),
+    ((-12, 12, 2), (-4, 27.9, 14), {"*": "alloy_crucible", "up": "alloy_crucible"}),
+    ((-14.5, 28, 3.5), (-1.5, 29, 12.5), "bronze_block"),
+    ((-12.5, 28, 1.5), (-3.5, 28.9, 14.5), "bronze_block"),
+    ((-10, 29, 6), (-6, 32, 10), "geothermal_stack"),
+    # Pour trough from the crucible into the body.
+    ((-2, 17, 6), (3, 20, 10), PIPE),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
     "wind_turbine": "wind_turbine_front",
+    "alloy_smelter": "alloy_smelter_front",
 }

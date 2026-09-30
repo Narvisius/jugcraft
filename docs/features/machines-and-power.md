@@ -18,7 +18,7 @@ Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and st
 | Battery Box | Stores energy | Holds 400,000; charges from any side except the front, discharges 256/t out of the **front** |
 | Electric Furnace | Smelts anything the vanilla furnace can | 10/t, 100 ticks per item (twice the vanilla furnace's speed); holds 10,000 |
 | Crusher | Ore → 2 raw ore; mineral ores → extra minerals; sulfur → 6 sulfur dust; oil sand → 3 bitumen; cobblestone → gravel → sand | 16/t; holds 10,000 |
-| Alloy Smelter | Two ingredient slots, either order: 3 copper + 1 tin → 4 **bronze**; 3 copper + 1 zinc → 4 **brass**; 2 iron + 1 nickel → 3 **invar**; 1 tin + 1 lead → 2 **solder**. Every ratio conserves metal | 20/t; holds 10,000; 120–240 ticks per batch |
+| Alloy Smelter (2×2 multi-block; power only through its copper socket on the lower right side) | Two ingredient slots, either order: 3 copper + 1 tin → 4 **bronze**; 3 copper + 1 zinc → 4 **brass**; 2 iron + 1 nickel → 3 **invar**; 1 tin + 1 lead → 2 **solder**. Every ratio conserves metal | 20/t; holds 10,000; 120–240 ticks per batch |
 | Metal Press | Ingot → plate (copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten). Four plates craft a gear (iron, bronze, brass, invar) | 16/t; holds 10,000; 100 ticks |
 | Wire Drawer | Ingot → 3 wires (copper, silver, aluminum) | 12/t; holds 10,000; 100 ticks |
 | Circuit Assembler | Three ingredient slots, any order: silicon + 3 copper wire + solder → basic circuit; 2 basic circuits + 3 silver wire + invar plate → advanced circuit | 32/t; holds 20,000; 200–300 ticks |

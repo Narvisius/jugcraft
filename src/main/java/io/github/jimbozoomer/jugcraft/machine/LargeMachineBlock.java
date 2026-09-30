@@ -3,12 +3,15 @@ package io.github.jimbozoomer.jugcraft.machine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -35,9 +38,9 @@ import org.jspecify.annotations.Nullable;
  * {@code tools/generate_material_data.py} from the model in {@code tools/large_machines.py}.</li>
  * </ul>
  */
-public class LargeMachineBlock extends MachineBlock {
+public class LargeMachineBlock extends MachineBlock implements WorldlyContainerHolder {
 	/** Which block of the footprint this is; 0 is the master. */
-	public static final IntegerProperty PART = IntegerProperty.create("part", 0, 2);
+	public static final IntegerProperty PART = IntegerProperty.create("part", 0, 3);
 
 	public LargeMachineBlock(Properties properties, MachineKind kind) {
 		super(properties, kind);
@@ -51,6 +54,17 @@ public class LargeMachineBlock extends MachineBlock {
 	@Override
 	public BlockPos masterPos(BlockPos pos, BlockState state) {
 		return footprint().masterPos(pos, state.getValue(FACING), state.getValue(PART));
+	}
+
+	@Override
+	public int part(BlockState state) {
+		return state.getValue(PART);
+	}
+
+	/** Hoppers (and Fabric item transfer) reach the master's slots through any part. */
+	@Override
+	public @Nullable WorldlyContainer getContainer(BlockState state, LevelAccessor level, BlockPos pos) {
+		return level.getBlockEntity(masterPos(pos, state)) instanceof MachineBlockEntity machine ? machine : null;
 	}
 
 	@Override

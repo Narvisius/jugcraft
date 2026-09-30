@@ -316,6 +316,11 @@ def check_large_machines():
                     for part in re.split(r",\s*(?=new|Vec3i)", match.group(2))]
         if java != [tuple(offset) for offset in footprint]:
             err(f"{machine}: footprint {java} in Java, {footprint} in large_machines.py")
+    from large_machines import POWER_PORTS
+    java_ports = {kind.lower(): (int(part), face.lower()) for kind, part, face in
+                  re.findall(r"(\w+) \? new PowerPort\((\d+), Direction\.(\w+)\)", kinds)}
+    if java_ports != POWER_PORTS:
+        err(f"Power ports differ: {java_ports} in MachineKind.java, {POWER_PORTS} in large_machines.py")
     for path in sorted((ASSETS / "models").rglob("*.json")):
         for element in (load(path) or {}).get("elements", []):
             if min(element["from"] + element["to"]) < -16 or max(element["from"] + element["to"]) > 32:

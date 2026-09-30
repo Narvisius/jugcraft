@@ -56,6 +56,20 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 		return pos;
 	}
 
+	/** Which block of a multi-block machine this is; 0 (the master) for one-block machines. */
+	public int part(BlockState state) {
+		return 0;
+	}
+
+	/**
+	 * Whether a cable on {@code side} of this block may power the machine: any side, unless the
+	 * machine has a {@link PowerPort}, in which case only that face of that part.
+	 */
+	public boolean acceptsPower(BlockState state, @Nullable Direction side) {
+		PowerPort port = kind.powerPort();
+		return port == null || port.allows(part(state), state.getValue(FACING), side);
+	}
+
 	/** The machine a block belongs to, from any of its parts, or null. */
 	public static @Nullable MachineBlockEntity machineAt(Level level, BlockPos pos, BlockState state) {
 		if (!(state.getBlock() instanceof MachineBlock machine)) {

@@ -199,7 +199,7 @@ def large_machine_assets(machine, info):
     for facing, y in FACING_Y.items():
         rotation = {"y": y} if y else {}
         for lit in ("false", "true"):
-            for part in range(3):  # LargeMachineBlock.PART is 0..2
+            for part in range(4):  # LargeMachineBlock.PART is 0..3
                 if part < len(FOOTPRINTS[machine]):
                     on = "_on" if lit == "true" and info["lit"] else ""
                     model = rid(f"block/{machine}_part{part}{on}")
