@@ -7,10 +7,12 @@ from steampunk_models import BRASS, BRASS_PLATE, COPPER, IRON, IRON_PLATE, box, 
 
 # Texture swapped for its animated version while the block turns, and the lit steam engine's glow.
 TURNING = {"iron_shaft": ("iron_shaft", "iron_shaft_turning"),
+           "belt_pulley": ("iron_shaft", "iron_shaft_turning"),
+           "electric_motor": ("iron_shaft", "iron_shaft_turning"),
            "brass_gearbox": ("brass_gearbox", "brass_gearbox_turning")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
 # Blocks with a "turning" block state (the hand crank has one but keeps a single model).
-STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank"}
+STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor"}
 
 
 def iron_shaft():
@@ -76,5 +78,32 @@ def dynamo():
     return m
 
 
+def belt_pulley():
+    """A shaft along z carrying a grooved wooden wheel with brass rims; the belt (drawn by the client) runs in the
+    groove."""
+    m = [box((6, 6, 0), (10, 10, 16), "iron_shaft")]
+    m += cyl("z", 8, 8, 5.75, 6, 10, "sp_wood", BRASS_PLATE)
+    for z0 in (5, 10):
+        m += cyl("z", 8, 8, 6.75, z0, z0 + 1, BRASS)
+    m += cyl("z", 8, 8, 2, 4.5, 11.5, IRON, BRASS_PLATE)
+    return m
+
+
+def electric_motor():
+    """A copper-wound motor on iron feet; its shaft comes out of the front (north), with brass terminals where cables
+    meet it."""
+    m = [box((2, 0, 3), (14, 1.5, 15), IRON_PLATE)]
+    m += cyl("z", 8, 8.5, 5.5, 3.5, 14.5, "sp_coil", BRASS_PLATE)
+    for z in (3, 14):
+        m += cyl("z", 8, 8.5, 5.9, z, z + 1, IRON)
+    m.append(box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"))
+    m.append(box((0.25, 6, 7), (2.5, 11, 11), {"*": BRASS, "west": BRASS_PLATE}))
+    m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": BRASS, "east": BRASS_PLATE}))
+    m.append(box((6, 14, 7), (10, 15.75, 11), {"*": BRASS, "up": BRASS_PLATE}))
+    m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": BRASS, "south": BRASS_PLATE}))
+    return m
+
+
 MODELS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox(), "hand_crank": hand_crank(),
-          "steam_engine": steam_engine(), "dynamo": dynamo()}
+          "steam_engine": steam_engine(), "dynamo": dynamo(), "belt_pulley": belt_pulley(),
+          "electric_motor": electric_motor()}

@@ -67,7 +67,9 @@ LOGISTICS_BLOCKS = {
 }
 TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook",
          # Mining & prospecting: a vague 3x3-chunk ore survey (prospecting/OreSurvey).
-         "prospector": "Geo-Resonance Prospector"}
+         "prospector": "Geo-Resonance Prospector",
+         # Kinetic: links two belt pulleys.
+         "belt": "Leather Belt"}
 # Kinetic power (kinetic/): rotation in KE per tick, carried by shafts and gearboxes. Models: tools/kinetic_models.py.
 # "axis": placed like a log; "facing": six directions; "horizontal": four.
 KINETIC_BLOCKS = {
@@ -76,6 +78,10 @@ KINETIC_BLOCKS = {
     "hand_crank": {"display": "Hand Crank", "states": "facing"},
     "steam_engine": {"display": "Steam Engine", "states": "horizontal"},
     "dynamo": {"display": "Dynamo", "states": "horizontal"},
+    # A shaft with a grooved wheel; a belt links two of them (kinetic/BeltItem).
+    "belt_pulley": {"display": "Belt Pulley", "states": "axis"},
+    # JE -> KE at 75%; its shaft points the way the player looked when placing it.
+    "electric_motor": {"display": "Electric Motor", "states": "facing"},
 }
 # Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
 STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
@@ -275,6 +281,10 @@ CRAFTING = {
     "hand_crank": (["PS"], {"P": "#minecraft:planks", "S": "jugcraft:iron_shaft"}, 1),
     "steam_engine": (["BUB", "PFP", "BSB"], {"B": "#c:ingots/bronze", "U": "minecraft:bucket", "P": "minecraft:piston",
                                            "F": "minecraft:furnace", "S": "jugcraft:iron_shaft"}, 1),
+    "belt_pulley": (["PSP"], {"P": "#minecraft:planks", "S": "jugcraft:iron_shaft"}, 1),
+    "belt": (["LSL"], {"L": "minecraft:leather", "S": "minecraft:string"}, 1),
+    "electric_motor": (["PWP", "WSW", "PCP"], {"P": "#c:plates/iron", "W": "#c:wires/copper", "S": "jugcraft:iron_shaft",
+                                             "C": "jugcraft:copper_cable"}, 1),
     "dynamo": (["CRC", "RSR", "CRC"], {"C": "#c:ingots/copper", "R": "minecraft:redstone", "S": "jugcraft:iron_shaft"}, 1),
     # Renewables: the water wheel and cobblestone generator are early (bronze); the tree farm needs a circuit.
     "cobblestone_generator": (["BWB", "CMC", "BLB"], {"B": "#c:ingots/bronze", "W": "minecraft:water_bucket",

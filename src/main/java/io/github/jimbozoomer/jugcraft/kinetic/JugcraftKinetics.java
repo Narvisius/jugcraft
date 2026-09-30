@@ -21,7 +21,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
  * Kinetic power (see {@link KineticNetworks}): shafts and gearboxes carry rotation from the hand crank
- * and steam engine to machines, which run on it directly, or to a dynamo, which turns it into JE.
+ * and steam engine to machines, which run on it directly, or to a dynamo, which turns it into JE. Belts
+ * link pulleys at a distance, and the electric motor turns JE back into rotation.
  */
 public final class JugcraftKinetics {
 	public static Block IRON_SHAFT;
@@ -29,9 +30,14 @@ public final class JugcraftKinetics {
 	public static Block HAND_CRANK;
 	public static Block STEAM_ENGINE;
 	public static Block DYNAMO;
+	public static Block BELT_PULLEY;
+	public static Block ELECTRIC_MOTOR;
+	public static Item BELT;
 	public static BlockEntityType<HandCrankBlockEntity> HAND_CRANK_ENTITY;
 	public static BlockEntityType<SteamEngineBlockEntity> STEAM_ENGINE_ENTITY;
 	public static BlockEntityType<DynamoBlockEntity> DYNAMO_ENTITY;
+	public static BlockEntityType<BeltPulleyBlockEntity> BELT_PULLEY_ENTITY;
+	public static BlockEntityType<ElectricMotorBlockEntity> ELECTRIC_MOTOR_ENTITY;
 
 	private JugcraftKinetics() {
 	}
@@ -51,12 +57,21 @@ public final class JugcraftKinetics {
 		HAND_CRANK = block("hand_crank", Blocks.OAK_PLANKS, HandCrankBlock::new);
 		STEAM_ENGINE = block("steam_engine", Blocks.IRON_BLOCK, SteamEngineBlock::new);
 		DYNAMO = block("dynamo", Blocks.IRON_BLOCK, DynamoBlock::new);
+		BELT_PULLEY = block("belt_pulley", Blocks.OAK_PLANKS, BeltPulleyBlock::new);
+		ELECTRIC_MOTOR = block("electric_motor", Blocks.IRON_BLOCK, ElectricMotorBlock::new);
+		ResourceKey<Item> beltKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("belt"));
+		BELT = Registry.register(BuiltInRegistries.ITEM, beltKey, new BeltItem(new Item.Properties().setId(beltKey)));
 		HAND_CRANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("hand_crank"),
 				FabricBlockEntityTypeBuilder.create(HandCrankBlockEntity::new, HAND_CRANK).build());
 		STEAM_ENGINE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("steam_engine"),
 				FabricBlockEntityTypeBuilder.create(SteamEngineBlockEntity::new, STEAM_ENGINE).build());
 		DYNAMO_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("dynamo"),
 				FabricBlockEntityTypeBuilder.create(DynamoBlockEntity::new, DYNAMO).build());
+		BELT_PULLEY_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("belt_pulley"),
+				FabricBlockEntityTypeBuilder.create(BeltPulleyBlockEntity::new, BELT_PULLEY).build());
+		ELECTRIC_MOTOR_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("electric_motor"),
+				FabricBlockEntityTypeBuilder.create(ElectricMotorBlockEntity::new, ELECTRIC_MOTOR).build());
+		EnergyStorage.SIDED.registerForBlockEntity((motor, side) -> motor.energy, ELECTRIC_MOTOR_ENTITY);
 		ItemStorage.SIDED.registerForBlockEntity((engine, side) -> engine.fuel, STEAM_ENGINE_ENTITY);
 		FluidStorage.SIDED.registerForBlockEntity((engine, side) -> engine.waterInlet, STEAM_ENGINE_ENTITY);
 		EnergyStorage.SIDED.registerForBlockEntity((dynamo, side) -> dynamo.energy, DYNAMO_ENTITY);
@@ -66,6 +81,9 @@ public final class JugcraftKinetics {
 			output.accept(HAND_CRANK);
 			output.accept(STEAM_ENGINE);
 			output.accept(DYNAMO);
+			output.accept(BELT_PULLEY);
+			output.accept(BELT);
+			output.accept(ELECTRIC_MOTOR);
 		});
 	}
 }

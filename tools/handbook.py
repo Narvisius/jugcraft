@@ -92,6 +92,12 @@ ABOUT = {
     "large_steam_engine": "Two by two by two. Four times the small steam engine: 256 KE/t out of a shaft at the back of "
                           "its upper right block, using 40 mB of water per tick and fuel four times as fast. It has a "
                           "screen like the steam generator's, and a water source under it refills it.",
+    "belt_pulley": "A shaft with a grooved wheel. Use a Leather Belt on two pulleys with the same axis (level with each "
+                   "other along it, up to 16 blocks apart) and the second turns with the first: power jumps gaps and "
+                   "walls.",
+    "belt": "Links two belt pulleys: use it on one, then on the other. Breaking a pulley drops the belt.",
+    "electric_motor": "Turns JE from cables back into rotation at 75%, up to 96 KE/t out of its shaft, which points "
+                      "the way you looked when placing it. Motor and dynamo together always lose power.",
     "dynamo": "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge "
               "from a shaft line to the electric network.",
     "auto_crafter": "Crafts the crafting recipe laid out in its 3x3 grid. Set the pattern by hand; each grid slot "
@@ -224,7 +230,10 @@ def build():
             + [block_page(c, CABLES[c]["display"]) for c in CABLES]
             + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("steam_engine",)]
             + [machine_page("large_steam_engine")]
-            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("hand_crank", "iron_shaft", "brass_gearbox", "dynamo")]},
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("hand_crank", "iron_shaft", "brass_gearbox",
+                                                                     "belt_pulley")]
+            + [block_page("belt", TOOLS["belt"])]
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("dynamo", "electric_motor")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller", "auto_crafter")]},

@@ -621,6 +621,37 @@ def save_animation(frames, name, frametime=2):
         json.dumps({"animation": {"frametime": frametime}}, indent=2) + "\n", encoding="utf-8")
 
 
+def belt_texture():
+    """A dark leather belt: brown with a lighter stitch line along each edge (length runs down the texture)."""
+    rng = random.Random(970)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (74, 46, 28) if rng.random() < 0.7 else (86, 54, 32)
+            if x in (1, 14):
+                c = (168, 136, 96) if y % 3 else (74, 46, 28)
+            if x in (0, 15):
+                c = (52, 32, 20)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def belt_item():
+    """A coiled leather belt with a brass buckle."""
+    from steampunk_textures import BRASS as SP_BRASS
+    import math
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            r = math.hypot(x - 7.5, y - 8.5)
+            if 3 <= r <= 6.5:
+                shade = (86, 54, 32) if int(r) % 2 else (70, 44, 26)
+                img.putpixel((x, y), shade + (255,))
+    for x, y in ((12, 3), (13, 3), (14, 3), (12, 4), (14, 4), (12, 5), (13, 5), (14, 5)):
+        img.putpixel((x, y), SP_BRASS[3] + (255,))
+    return img
+
+
 def upgrade_card(accent, symbol):
     """A brass-framed punch card with a colored accent and a small symbol (speed: arrow, efficiency: leaf)."""
     from steampunk_textures import BRASS as SP_BRASS
@@ -1157,6 +1188,8 @@ def machines():
     save(wrench_item(), "item", "brass_wrench")
     save(handbook_item(), "item", "engineers_handbook")
     save(prospector_item(), "item", "prospector")
+    save(belt_texture(), "block", "belt")
+    save(belt_item(), "item", "belt")
     save(shaft_frame(0), "block", "iron_shaft")
     save_animation([shaft_frame(-i) for i in range(8)], "iron_shaft_turning", frametime=1)
     save(gearbox_frame(0), "block", "brass_gearbox")

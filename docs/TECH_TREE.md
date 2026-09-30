@@ -268,12 +268,15 @@ A second, mechanical power system measured in **KE** (kinetic energy) per tick. 
 | Iron Shaft | Carries rotation along its axis | Placed like a log; shows turning while driven. | 2 iron ingots → 4 |
 | Brass Gearbox | Passes rotation out of all six sides | Branches and turns lines; power is shared evenly. | brass plates, bronze gears, iron shaft |
 | Dynamo | KE → JE at 75%, 128/t | Pushes JE into cables on every side. | copper, redstone, iron shaft |
+| Belt Pulley | A shaft that can hold a belt | Carries rotation along its axis like a shaft, and to the pulley it is belted to. | planks, iron shaft |
+| Leather Belt | Links two pulleys | Use on one pulley, then another: same axis, level along it, up to 16 blocks apart. Breaking a pulley drops the belt. | leather, string |
+| Electric Motor | JE → KE at 75%, up to 96 KE/t | Takes JE from cables and drives the block it faces. | iron plates, copper wire, iron shaft, copper cable |
 
 ![Kinetic blocks](images/kinetic.png)
 
 *Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
 
-**Code:** `kinetic/` (`KineticNetworks`, `KineticConsumer`, `ShaftBlock`, `GearboxBlock`, `HandCrankBlock(Entity)`, `SteamEngineBlock(Entity)`, `DynamoBlock(Entity)`, `JugcraftKinetics`). `MachineBlockEntity` implements `KineticConsumer`.
+**Code:** `kinetic/` (`KineticNetworks`, `KineticConsumer`, `ShaftBlock`, `GearboxBlock`, `HandCrankBlock(Entity)`, `SteamEngineBlock(Entity)`, `DynamoBlock(Entity)`, `BeltPulleyBlock(Entity)`, `BeltItem`, `ElectricMotorBlock(Entity)`, `JugcraftKinetics`; client `BeltRenderer`). `MachineBlockEntity` implements `KineticConsumer`.
 
 ## Renewable resources
 

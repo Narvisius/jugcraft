@@ -7,7 +7,10 @@ import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.kinetic.BeltPulleyBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
+import io.github.jimbozoomer.jugcraft.kinetic.ElectricMotorBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.ElectricMotorBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
@@ -711,6 +714,56 @@ public class JugcraftGameTests {
 		DynamoBlockEntity dynamo = helper.getBlockEntity(dynamoPos, DynamoBlockEntity.class);
 		helper.succeedWhen(() -> helper.assertTrue(dynamo.energy().getAmount() >= 100,
 				"The dynamo holds only " + dynamo.energy().getAmount() + " JE"));
+	}
+
+	/** A charged electric motor facing a crusher runs it on rotation alone, using its own JE. */
+	@GameTest(maxTicks = 300)
+	public void electricMotorDrivesCrusher(GameTestHelper helper) {
+		BlockPos motorPos = new BlockPos(1, 1, 2);
+		helper.setBlock(motorPos, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
+		ElectricMotorBlockEntity motor = helper.getBlockEntity(motorPos, ElectricMotorBlockEntity.class);
+		motor.energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+		helper.setBlock(motorPos.east(), machine(MachineKind.CRUSHER));
+		MachineBlockEntity crusher = helper.getBlockEntity(motorPos.east(), MachineBlockEntity.class);
+		crusher.setItem(0, new ItemStack(item("tin_ore")));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(crusher.getItem(MachineKind.CRUSHER.outputSlot()).is(item("raw_tin")),
+					"Crusher output is " + crusher.getItem(MachineKind.CRUSHER.outputSlot()));
+			helper.assertTrue(motor.energy().getAmount() < ElectricMotorBlockEntity.CAPACITY, "The motor used no JE");
+		});
+	}
+
+	/** A belt between two pulleys carries a hand crank's rotation to a dynamo under the other pulley. */
+	@GameTest(maxTicks = 200)
+	public void beltCarriesRotation(GameTestHelper helper) {
+		BlockState pulley = JugcraftKinetics.BELT_PULLEY.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.Y);
+		BlockPos first = new BlockPos(1, 2, 2);
+		BlockPos second = new BlockPos(5, 2, 2);
+		helper.setBlock(first, pulley);
+		helper.setBlock(second, pulley);
+		helper.setBlock(second.below(), JugcraftKinetics.DYNAMO);
+		BlockPos a = helper.absolutePos(first);
+		BlockPos b = helper.absolutePos(second);
+		helper.assertTrue(BeltPulleyBlockEntity.cannotLink(helper.getLevel(), a, b) == null,
+				"The pulleys cannot link: " + BeltPulleyBlockEntity.cannotLink(helper.getLevel(), a, b));
+		BeltPulleyBlockEntity.connect(helper.getLevel(), a, b);
+		helper.setBlock(first.above(), JugcraftKinetics.HAND_CRANK.defaultBlockState().setValue(HandCrankBlock.FACING, Direction.DOWN));
+		helper.getBlockEntity(first.above(), HandCrankBlockEntity.class).addTurns(HandCrankBlockEntity.TICKS_PER_CRANK);
+		DynamoBlockEntity dynamo = helper.getBlockEntity(second.below(), DynamoBlockEntity.class);
+		helper.succeedWhen(() -> helper.assertTrue(dynamo.energy().getAmount() >= 100,
+				"The dynamo behind the belt holds only " + dynamo.energy().getAmount() + " JE"));
+	}
+
+	/** Pulleys on different levels of their axis, or too far apart, refuse a belt. */
+	@GameTest
+	public void beltRefusesBadPulleys(GameTestHelper helper) {
+		BlockState pulley = JugcraftKinetics.BELT_PULLEY.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.Y);
+		helper.setBlock(new BlockPos(1, 1, 1), pulley);
+		helper.setBlock(new BlockPos(3, 2, 1), pulley);
+		String reason = BeltPulleyBlockEntity.cannotLink(helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, 1)),
+				helper.absolutePos(new BlockPos(3, 2, 1)));
+		helper.assertTrue("axis".equals(reason), "Pulleys at different heights linked: " + reason);
+		helper.succeed();
 	}
 
 	// ------------------------------------------------------------------ auto-crafter

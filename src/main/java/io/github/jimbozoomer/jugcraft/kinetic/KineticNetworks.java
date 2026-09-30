@@ -20,7 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Kinetic power: rotation carried by shafts and gearboxes, measured in KE (kinetic energy) per tick.
  * <ul>
- * <li>A shaft passes rotation along its axis only; a gearbox passes it out of all six sides.</li>
+ * <li>A shaft passes rotation along its axis only; a gearbox passes it out of all six sides; a belt passes it
+ * from one pulley to the pulley it links.</li>
  * <li>A source (steam engine, hand crank) pushes KE out of one face. The network is every shaft and
  * gearbox reachable from that face and every {@link KineticConsumer} at its ends: machines take KE
  * as if it were JE, and the dynamo turns it into JE for cables.</li>
@@ -119,6 +120,19 @@ public final class KineticNetworks {
 				} else {
 					queue.add(pos.relative(direction));
 					travel.add(direction);
+					// A belt carries the rotation on to the linked pulley, which passes it both ways along its axis.
+					if (level.getBlockEntity(pos) instanceof BeltPulleyBlockEntity pulley && pulley.link() != null
+							&& seen.add(pulley.link())) {
+						BlockPos other = pulley.link();
+						parts.add(other);
+						Direction.Axis axis = level.getBlockState(other).getValue(ShaftBlock.AXIS);
+						for (Direction out : Direction.values()) {
+							if (out.getAxis() == axis) {
+								queue.add(other.relative(out));
+								travel.add(out);
+							}
+						}
+					}
 				}
 			} else if (!seen.contains(pos)) {
 				// Any block of a multi-block machine passes power to the machine's master block.

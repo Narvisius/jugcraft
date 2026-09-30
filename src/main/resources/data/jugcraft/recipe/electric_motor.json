@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "WSW",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "W": "#c:wires/copper",
+    "S": "jugcraft:iron_shaft",
+    "C": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:electric_motor",
+    "count": 1
+  }
+}

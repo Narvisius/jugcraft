@@ -8,6 +8,11 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #36 Belts and the Electric Motor
+- **Belt Pulley** and **Leather Belt:** link two pulleys up to 16 blocks apart to carry rotation; the belt is drawn between them.
+- **Electric Motor:** JE → KE at 75%, up to 96 KE/t.
+- Three game tests.
+
 ### #35 Bigger machines, a spinning wind turbine, the Large Steam Engine and JEI
 - Machines can now fill up to 64 blocks. Resized:
   - **Alloy Smelter:** 3×2×6, with a big copper crucible tank pouring into one funnel over the furnace.
