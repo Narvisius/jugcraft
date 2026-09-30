@@ -1,0 +1,73 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_base": "jugcraft:block/wind_turbine_base",
+    "wind_turbine_blade": "jugcraft:block/wind_turbine_blade",
+    "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
+    "wind_turbine_nacelle": "jugcraft:block/wind_turbine_nacelle",
+    "front": "jugcraft:block/wind_turbine_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_mast"
+        },
+        "south": {
+          "texture": "#wind_turbine_mast"
+        },
+        "east": {
+          "texture": "#wind_turbine_mast"
+        },
+        "west": {
+          "texture": "#wind_turbine_mast"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        1,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_base"
+        },
+        "south": {
+          "texture": "#wind_turbine_base"
+        },
+        "east": {
+          "texture": "#wind_turbine_base"
+        },
+        "west": {
+          "texture": "#wind_turbine_base"
+        },
+        "up": {
+          "texture": "#wind_turbine_base"
+        },
+        "down": {
+          "texture": "#wind_turbine_base"
+        }
+      }
+    }
+  ]
+}

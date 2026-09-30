@@ -37,6 +37,8 @@ MACHINES = {
     "water_wheel": {"display": "Water Wheel", "lit": False},
     # Crafts the recipe laid out in its 3x3 grid, keeping one of each item as the pattern.
     "auto_crafter": {"display": "Auto-Crafter", "lit": True},
+    # Kinetic: a 2x2x2 steam engine, four times the small one (kinetic/SteamEngineBlock).
+    "large_steam_engine": {"display": "Large Steam Engine", "lit": True},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -133,14 +135,17 @@ STATS = {
     "water_wheel": {"capacity": 8_000, "output_per_tick": 64, "generation_per_tick": 24},
     # One craft per 40 ticks at 8 JE/t.
     "auto_crafter": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 8, "ticks": 40},
+    # 2x2x2. 256 KE/t out of the back of its upper right block; 40 mB water per tick; no JE of its own.
+    "large_steam_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 256, "water_per_tick": 40, "tank": 16_000},
     # Unpowered: heat comes from the charge itself. No battery, no cable connection.
     "coke_oven": {"capacity": 0, "use_per_tick": 0},
     "steel_foundry": {"capacity": 0, "use_per_tick": 0},
     # Two blocks wide. Burns 1 mB of lava per tick for 64 JE: a bucket lasts 1,000 ticks.
     "geothermal_generator": {"capacity": 30_000, "output_per_tick": 128, "generation_per_tick": 64,
                              "lava_per_tick": 1, "tank": 4_000},
-    # Three blocks tall. 4 JE/t at sea level, +1 per 4 blocks higher, capped at 24; x1.5 rain, x2 thunder.
-    "wind_turbine": {"capacity": 16_000, "output_per_tick": 64, "generation_per_tick": 24},
+    # Nine blocks tall with a 7-block rotor. 12 JE/t at sea level, +1 per 2 blocks higher, capped at 72;
+    # x1.5 rain, x2 thunder. The 7x7 square the rotor sweeps must be clear.
+    "wind_turbine": {"capacity": 48_000, "output_per_tick": 192, "generation_per_tick": 72},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -262,6 +267,8 @@ CRAFTING = {
     "auto_crafter": (["PCP", "TMT", "PHP"], {"P": "#c:plates/brass", "C": "jugcraft:basic_circuit",
                                            "T": "minecraft:crafting_table", "M": "jugcraft:machine_casing",
                                            "H": "minecraft:hopper"}, 1),
+    "large_steam_engine": (["SPS", "PCP", "SPS"], {"S": "jugcraft:steam_engine", "P": "#c:plates/iron",
+                                                 "C": "jugcraft:machine_casing"}, 1),
     # Kinetic power: all bronze-age, so it can come before electricity.
     "iron_shaft": (["I", "I"], {"I": "#c:ingots/iron"}, 4),
     "brass_gearbox": (["PGP", "GSG", "PGP"], {"P": "#c:plates/brass", "G": "#c:gears/bronze", "S": "jugcraft:iron_shaft"}, 1),

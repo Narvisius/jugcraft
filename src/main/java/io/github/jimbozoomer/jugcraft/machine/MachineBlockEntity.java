@@ -5,6 +5,7 @@ import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import io.github.jimbozoomer.jugcraft.kinetic.KineticConsumer;
+import io.github.jimbozoomer.jugcraft.kinetic.KineticNetworks;
 import io.github.jimbozoomer.jugcraft.logistics.ItemNetworks;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -163,6 +164,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				: null;
 		this.inlet = switch (kind) {
 			case STEAM_GENERATOR -> new TankInlet(Fluids.WATER, MachineKind.STEAM_TANK);
+			case LARGE_STEAM_ENGINE -> new TankInlet(Fluids.WATER, MachineKind.LARGE_ENGINE_TANK);
 			case GEOTHERMAL_GENERATOR -> new TankInlet(Fluids.LAVA, MachineKind.GEOTHERMAL_TANK);
 			case ORE_WASHER -> new TankInlet(Fluids.WATER, MachineKind.WASHER_TANK);
 			default -> null;
@@ -292,6 +294,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case COAL_GENERATOR -> tickGenerator(level, pos);
 			case SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
+			case LARGE_STEAM_ENGINE -> tickLargeEngine(level, pos, state);
 			case BATTERY_BOX, CAPACITOR_BANK -> tickBattery(level, pos, state);
 			case STEEL_TANK -> false;
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
@@ -354,21 +357,21 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	/**
-	 * Output grows with height above sea level and with rain or thunder. The rotor needs the blocks
-	 * beside and above the top of the turbine clear; that is checked every few seconds, not every tick.
+	 * Output grows with height above sea level and with rain or thunder. The rotor turns in front of
+	 * the top block and sweeps a 7x7 square there, which must be clear (air); that is checked every
+	 * few seconds, not every tick. The rotor is drawn by the client (LIT means it is turning).
 	 */
 	private boolean tickWind(ServerLevel level, BlockPos pos, BlockState state) {
 		Direction facing = state.getValue(MachineBlock.FACING);
-		BlockPos top = kind.footprint().partPos(pos, facing, 2);
+		BlockPos top = kind.footprint().partPos(pos, facing, kind.footprint().size() - 1);
 		if (!checked || level.getGameTime() % MachineKind.WIND_CHECK_INTERVAL == 0) {
 			checked = true;
-			formed = level.isEmptyBlock(top.above()) && level.isEmptyBlock(top.relative(facing.getClockWise()))
-					&& level.isEmptyBlock(top.relative(facing.getCounterClockWise()));
+			formed = rotorClear(level, top.relative(facing), facing);
 		}
 		int rate = 0;
 		if (formed) {
 			int height = Math.max(0, top.getY() - level.getSeaLevel());
-			rate = Math.min(MachineKind.WIND_MAX_PER_TICK, MachineKind.WIND_BASE_PER_TICK + height / 4);
+			rate = Math.min(MachineKind.WIND_MAX_PER_TICK, MachineKind.WIND_BASE_PER_TICK + height / 2);
 			if (level.isThundering()) {
 				rate *= 2;
 			} else if (level.isRaining()) {
@@ -381,6 +384,20 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		pushFromAllParts(level, pos, state);
 		return rate > 0;
+	}
+
+	/** Whether the square the rotor sweeps, centered on {@code hub}, is all air. */
+	private static boolean rotorClear(ServerLevel level, BlockPos hub, Direction facing) {
+		Direction side = facing.getClockWise();
+		int reach = MachineKind.WIND_ROTOR_REACH;
+		for (int across = -reach; across <= reach; across++) {
+			for (int up = -reach; up <= reach; up++) {
+				if (!level.isEmptyBlock(hub.relative(side, across).above(up))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -457,15 +474,49 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return boiling;
 	}
 
+	/**
+	 * The large steam engine: like the steam generator, but it turns a shaft out of the back of its upper
+	 * right back block ({@link MachineKind#LARGE_ENGINE_OUTPUT} KE/t), burning fuel four times as fast. It
+	 * burns only while something on the shaft line takes the power.
+	 */
+	private boolean tickLargeEngine(ServerLevel level, BlockPos pos, BlockState state) {
+		refillWater(level, pos);
+		boolean hasWater = tank >= MachineKind.LARGE_ENGINE_WATER_PER_TICK;
+		if (burn <= 0 && hasWater) {
+			ItemStack fuel = items.get(SLOT_FUEL);
+			int ticks = GeneratorFuels.steamBurnTicks(fuel);
+			if (ticks > 0) {
+				fuel.shrink(1);
+				burn = ticks;
+				maxBurn = ticks;
+				setChanged();
+			}
+		}
+		if (burn <= 0 || !hasWater) {
+			return false;
+		}
+		Direction facing = facing(state);
+		BlockPos output = kind.footprint().partPos(pos, facing, MachineKind.LARGE_ENGINE_OUTPUT_PART);
+		long taken = KineticNetworks.push(level, output, facing.getOpposite(), MachineKind.LARGE_ENGINE_OUTPUT);
+		if (taken <= 0) {
+			return false;
+		}
+		burn = Math.max(0, burn - MachineKind.LARGE_ENGINE_BURN_PER_TICK);
+		tank -= MachineKind.LARGE_ENGINE_WATER_PER_TICK;
+		setChanged();
+		return true;
+	}
+
 	private void refillWater(ServerLevel level, BlockPos pos) {
-		if (tank < MachineKind.STEAM_TANK && level.getFluidState(pos.below()).isSourceOfType(Fluids.WATER)) {
-			tank = Math.min(MachineKind.STEAM_TANK, tank + MachineKind.STEAM_SOURCE_REFILL);
+		int capacity = kind.tankCapacity();
+		if (tank < capacity && level.getFluidState(pos.below()).isSourceOfType(Fluids.WATER)) {
+			tank = Math.min(capacity, tank + MachineKind.STEAM_SOURCE_REFILL);
 			setChanged();
 		}
 		ItemStack bucket = items.get(SLOT_WATER_IN);
 		ItemStack empties = items.get(SLOT_BUCKET_OUT);
 		boolean emptySpace = empties.isEmpty() || (empties.is(Items.BUCKET) && empties.getCount() < empties.getMaxStackSize());
-		if (bucket.is(Items.WATER_BUCKET) && tank <= MachineKind.STEAM_TANK - 1000 && emptySpace) {
+		if (bucket.is(Items.WATER_BUCKET) && tank <= capacity - 1000 && emptySpace) {
 			bucket.shrink(1);
 			if (empties.isEmpty()) {
 				items.set(SLOT_BUCKET_OUT, new ItemStack(Items.BUCKET));
@@ -944,7 +995,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.COAL_GENERATOR) {
 			return GeneratorFuels.burnTicks(stack) > 0;
 		}
-		if (kind == MachineKind.STEAM_GENERATOR) {
+		if (kind.isBoiler()) {
 			return switch (slot) {
 				case SLOT_FUEL -> GeneratorFuels.steamBurnTicks(stack) > 0;
 				case SLOT_WATER_IN -> stack.is(Items.WATER_BUCKET);
@@ -967,7 +1018,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.COAL_GENERATOR) {
 			return INPUT;
 		}
-		if (kind == MachineKind.STEAM_GENERATOR) {
+		if (kind.isBoiler()) {
 			return switch (side) {
 				case UP -> STEAM_TOP;
 				case DOWN -> STEAM_BOTTOM;
@@ -1005,7 +1056,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
-		if (kind == MachineKind.STEAM_GENERATOR) {
+		if (kind.isBoiler()) {
 			return slot == SLOT_BUCKET_OUT;
 		}
 		return kind.isProcessor() && slot >= kind.outputSlot() && slot < kind.slots

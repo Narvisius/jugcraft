@@ -436,100 +436,113 @@ def fluid_tank():
 
 
 def geothermal_generator():
-    """Lava boiler (right block) feeding a copper turbine and dynamo (left block)."""
-    m = [box((-16, 0, 0), (16, 1, 16), IRON_PLATE)]
-    # Turbine body (master): iron base with gauges, copper turbine casing on top, exhaust stack.
-    m.append(box((1, 1, 1), (15, 7, 15), IRON_PLATE))
-    m.append(dial("north", (4, 4, 0.5), 3))
-    m.append(dial("north", (12, 4, 0.5), 3))
-    m.append(dial("north", (8, 4, 0.5), 1.5, texture="sp_lamp"))
-    m += cyl("z", 8, 10.5, 3.75, 1.5, 14.5, COPPER, BRASS_PLATE)
-    for z in (4, 11):
-        m += cyl("z", 8, 10.5, 4.1, z, z + 1, BRASS)
-    m += cyl("y", 12.5, 12.5, 1.25, 12, 16, IRON, "sp_hopper_inside")
-    m += cyl("y", 12.5, 12.5, 1.75, 15, 16, BRASS)
-    m += wheel("z", 8, 10.5, 2.25, 0.75, 1.5, "sp_red_iron", BRASS)
-    # Lava boiler (right block, x -16..0).
-    m += cyl("y", -8, 8, 6.25, 1, 13, "sp_tank", IRON_PLATE)
-    for y in (3, 10):
-        m += cyl("y", -8, 8, 6.6, y, y + 1, BRASS)
-    m.append(box((-11, 4.5, 1.25), (-5, 10.5, 1.75), {"*": BRASS, "north": "sp_lava_window!"}))
-    m += cyl("y", -8, 8, 4.5, 13, 14.25, BRASS_PLATE)
-    m += cyl("y", -8, 8, 2.25, 14.25, 16, IRON_PLATE)
-    # Heat pipe from the boiler into the turbine body.
-    m.append(pipe((-2.25, 7.5, 7), (1, 9.5, 9)))
-    m += cyl("x", 8.5, 8, 1.6, -2.5, -1.75, BRASS)
-    m += cyl("x", 8.5, 8, 1.6, 0.5, 1, BRASS)
+    """Two by two by two: twin riveted lava boilers (right) feed a copper turbine and dynamo house (left, the master
+    column) through heat pipes; gauges, a lamp and a red valve at the front, an exhaust stack on top."""
+    m = [box((-16, 0, 0), (16, 1, 32), IRON_PLATE)]
+    # Turbine house (left column): iron base, front gauges and lamp, copper turbine casing, stack.
+    m.append(box((1, 1, 1), (15, 12, 31), IRON_PLATE))
+    m.append(box((0.5, 11, 0.5), (15.5, 12, 31.5), BRASS))
+    m.append(dial("north", (4, 5.5, 0.5), 4))
+    m.append(dial("north", (12, 5.5, 0.5), 4))
+    m.append(dial("north", (8, 9.5, 0.5), 2, texture="sp_lamp"))
+    m += cyl("z", 8, 19, 6.5, 2, 30, COPPER, BRASS_PLATE)
+    for z in (7, 15, 23):
+        m += cyl("z", 8, 19, 7, z, z + 1.5, BRASS)
+    m += wheel("z", 8, 19, 3.5, 1, 2, "sp_red_iron", BRASS)
+    m += cyl("y", 12, 27, 1.75, 25, 32, IRON, "sp_hopper_inside")
+    m += cyl("y", 12, 27, 2.25, 30, 31, BRASS)
+    # Twin lava boilers (right column, front and back) with bands, caps and a lava window at the front.
+    for cz in (8, 24):
+        m += cyl("y", -8, cz, 6.75, 1, 26, "sp_tank", IRON_PLATE)
+        for y in (5, 13, 21):
+            m += cyl("y", -8, cz, 7.1, y, y + 1, BRASS)
+        m += cyl("y", -8, cz, 5, 26, 27.5, BRASS_PLATE)
+        m += cyl("y", -8, cz, 2.5, 27.5, 29, IRON_PLATE)
+        m += cyl("y", -8, cz, 1, 29, 30.5, COPPER)
+        # Heat pipe into the turbine house.
+        m.append(pipe((-1.5, 14, cz - 1), (1, 16.5, cz + 1)))
+        m += cyl("x", 15.25, cz, 1.6, -1.75, -1, BRASS)
+    m.append(box((-11, 7, 1.25), (-5, 18, 1.75), {"*": BRASS, "north": "sp_lava_window!"}))
+    # Pipe joining the boiler tops.
+    m.append(pipe((-9, 30.5, 7), (-7, 32, 25)))
     return m
 
 
 def wind_turbine():
-    """Victorian windpump: brick footing and generator house, lattice tower, eight-vane wheel with a rim, tail vane."""
+    """A nine-block Victorian windpump tower: brick footing and generator house, a tapering braced lattice tower with a
+    service platform, and the nacelle with its tail vane on top. The big rotor is drawn and turned by the client
+    renderer (client/WindTurbineRenderer), in front of the hub."""
     m = [box((0, 0, 0), (16, 2, 16), "sp_firebrick")]
-    m.append(box((2, 2, 2), (14, 11, 14), {"*": IRON_PLATE, "north": BRASS_PLATE}))
-    m.append(box((5.5, 2, 1.5), (10.5, 9, 2), {"*": IRON, "north": "sp_wood"}))
-    m.append(dial("north", (12, 8.5, 1.5), 2))
-    m.append(box((1.5, 11, 1.5), (14.5, 12, 14.5), BRASS))
-    # Lattice tower: four legs with braces.
-    for x in (3.5, 11.5):
-        for z in (3.5, 11.5):
-            m.append(box((x, 12, z), (x + 1, 40, z + 1), IRON))
-    for y in (19.5, 27.5, 35.5):
-        m.append(box((3.5, y, 3.5), (12.5, y + 0.75, 4.5), IRON))
-        m.append(box((3.5, y, 11.5), (12.5, y + 0.75, 12.5), IRON))
-        m.append(box((3.5, y, 4.5), (4.5, y + 0.75, 11.5), IRON))
-        m.append(box((11.5, y, 4.5), (12.5, y + 0.75, 11.5), IRON))
-    for y0 in (12, 20.25, 28.25):
-        mid = y0 + 3.6
-        for z in (3.75, 11.75):  # X braces on the front and back faces
-            for frm, to in (((2.5, mid - 0.25, z), (13.5, mid + 0.25, z + 0.5)),):
-                m.append(box(frm, to, IRON, rotation=("z", 45, (8, mid, z + 0.25))))
-                m.append(box(frm, to, IRON, rotation=("z", -45, (8, mid, z + 0.25))))
-    # Gearbox, tail and wheel at the top.
-    m.append(box((4.5, 40, 3), (11.5, 45, 13), {"*": IRON_PLATE, "up": BRASS_PLATE}))
-    m.append(box((7.5, 41, 13), (8.5, 42, 18), IRON))
-    m.append(box((7.75, 38.5, 17), (8.25, 47, 24), "sp_vane"))
-    m += cyl("z", 8, 43, 1.5, 0.5, 3, BRASS, BRASS_PLATE)
-    for angle in (0, 45):
-        rotation = ("z", angle, (8, 43, 1.5)) if angle else None
-        m.append(box((-2.5, 41.5, 1.25), (18.5, 44.5, 1.75), "sp_vane", rotation=rotation))
-        m.append(box((6.5, 32.5, 1.25), (9.5, 53.5, 1.75), "sp_vane", rotation=rotation))
-    m += wheel("z", 8, 43, 10.75, 1, 1.5, IRON, BRASS, spokes=False)
+    m.append(box((1.5, 2, 1.5), (14.5, 13, 14.5), {"*": IRON_PLATE, "north": BRASS_PLATE}))
+    m.append(box((5.5, 2, 1), (10.5, 10, 1.5), {"*": IRON, "north": "sp_wood"}))
+    m.append(dial("north", (12, 10.5, 1), 2.5))
+    m.append(box((1, 13, 1), (15, 14, 15), BRASS))
+    # Lattice tower in three stages, narrowing, with horizontal braces every block.
+    stages = ((14, 60, 2), (60, 104, 3.5), (104, 132, 5))
+    for lo, hi, a in stages:
+        for x in (a, 15 - a):
+            for z in (a, 15 - a):
+                m.append(box((x, lo, z), (x + 1, hi, z + 1), IRON))
+        for y in range(int(lo) + 8, int(hi), 16):
+            m.append(box((a, y, a), (16 - a, y + 0.75, a + 1), IRON))
+            m.append(box((a, y, 15 - a), (16 - a, y + 0.75, 16 - a), IRON))
+            m.append(box((a, y, a + 1), (a + 1, y + 0.75, 15 - a), IRON))
+            m.append(box((15 - a, y, a + 1), (16 - a, y + 0.75, 15 - a), IRON))
+    for y, outer, inner in ((60, 2, 3.5), (104, 3.5, 5)):
+        m.append(box((outer, y, outer), (16 - outer, y + 1, 16 - outer), IRON_PLATE))
+    # Service platform with a railing under the nacelle.
+    m.append(box((1, 131, 1), (15, 132, 15), IRON_PLATE))
+    for x in (1, 14):
+        for z in (1, 14):
+            m.append(box((x, 132, z), (x + 1, 136, z + 1), BRASS))
+    # Nacelle (generator housing), the hub the rotor turns on, and the tail vane behind.
+    m.append(box((4, 132, 2), (12, 140, 16), {"*": IRON_PLATE, "up": BRASS_PLATE}))
+    m += cyl("z", 8, 136, 2, 0, 2, BRASS, BRASS_PLATE)
+    m.append(box((7.5, 134, 16), (8.5, 135, 26), IRON))
+    m.append(box((7.75, 130, 22), (8.25, 142, 30), "sp_vane"))
     return m
 
-
 def alloy_smelter():
-    """Brick furnace with a porthole door (master), copper hoppers above, iron crucible tower on the right with its power socket."""
-    m = [box((-16, 0, 0), (16, 1, 16), IRON_PLATE)]
-    # Furnace body (master).
-    m.append(box((1, 1, 1), (15, 13, 15), {"*": "sp_firebrick", "up": IRON_PLATE}))
-    for y in (2.5, 11):
-        m.append(box((0.5, y, 0.5), (15.5, y + 1, 15.5), BRASS))
-    m.append(box((3.5, 3.75, 0.25), (12.5, 10.75, 1), {"*": BRASS, "north": "sp_window!"}))
-    m.append(dial("north", (13.5, 7.25, 0.5), 1.5, texture="sp_lamp"))
-    # Two copper ingredient hoppers above the body (upper left block).
-    for cx in (4.75, 11.25):
-        m.append(box((cx - 3.25, 22, cx - 3.25), (cx + 3.25, 27, cx + 3.25), {"*": COPPER, "up": "sp_hopper_inside"}))
-        m.append(box((cx - 3.5, 27, cx - 3.5), (cx + 3.5, 27.75, cx + 3.5), {"*": BRASS, "up": "sp_hopper_inside"}))
-        m.append(box((cx - 2, 17, cx - 2), (cx + 2, 22, cx + 2), COPPER))
-        m.append(box((cx - 1, 13, cx - 1), (cx + 1, 17, cx + 1), IRON))
-    # Crucible base and tower (right blocks, x -16..0).
-    m.append(box((-15, 1, 1), (-1, 10, 15), {"*": "sp_firebrick", "up": IRON_PLATE}))
-    m.append(dial("north", (-12, 6, 0.5), 3))
-    m.append(dial("north", (-4, 6, 0.5), 3))
-    m += cyl("y", -8, 8, 5.5, 10, 25, IRON_PLATE)
-    for y in (13, 21):
-        m += cyl("y", -8, 8, 5.9, y, y + 1, BRASS)
-    m += cyl("y", -8, 8, 4, 25, 26.5, BRASS_PLATE)
-    m += cyl("y", -8, 8, 2, 26.5, 28, IRON)
-    m += cyl("y", -8, 8, 1.1, 28, 32, IRON, "sp_hopper_inside")
-    m += wheel("z", -8, 18, 2.5, 1.75, 2.5, "sp_red_iron", BRASS)
-    # Pour trough into the furnace.
-    m.append(pipe((-2.5, 17, 7), (3, 18.75, 9)))
-    m.append(pipe((1.25, 13, 7), (3, 17, 9)))
+    """Three wide, two deep, six tall: a big riveted crucible tank (2x2, right) on a firebrick hearth pours through a
+    copper pipe into a proper funnel on top of the smaller firebrick furnace (left, the master column), whose glowing
+    door is at the front. The copper power socket is on the tank hearth's outer side."""
+    m = [box((-32, 0, 0), (16, 1, 32), IRON_PLATE)]
+    # Furnace (left column, one wide, two deep).
+    m.append(box((1, 1, 1), (15, 26, 31), {"*": "sp_firebrick", "up": IRON_PLATE}))
+    for y in (4, 14, 24):
+        m.append(box((0.5, y, 0.5), (15.5, y + 1, 31.5), BRASS))
+    m.append(box((3, 5.5, 0.25), (13, 13, 1), {"*": BRASS, "north": "sp_window!"}))
+    m.append(dial("north", (5, 19.5, 0.5), 2, texture="sp_lamp"))
+    m.append(dial("north", (10.5, 19.5, 0.5), 3))
+    # A single wide funnel on top of the furnace, centered, stepping out to a brass rim.
+    m.append(box((5, 26, 13), (11, 29, 19), COPPER))
+    m.append(box((3, 29, 11), (13, 32, 21), COPPER))
+    m.append(box((1.5, 32, 9.5), (14.5, 36, 22.5), {"*": COPPER, "up": "sp_hopper_inside"}))
+    m.append(box((1, 36, 9), (15, 37, 23), {"*": BRASS, "up": "sp_hopper_inside"}))
+    # Tank hearth (2x2) with gauges and a drain valve at the front.
+    m.append(box((-31, 1, 1), (-1, 9, 31), {"*": "sp_firebrick", "up": IRON_PLATE}))
+    m.append(box((-31.5, 8, 0.5), (-0.5, 9, 31.5), BRASS))
+    m.append(dial("north", (-25, 4.5, 0.5), 3))
+    m.append(dial("north", (-7, 4.5, 0.5), 3))
+    m += wheel("z", -16, 4.5, 2.5, 0.25, 0.75)
+    # The big crucible tank: a riveted column with brass bands, a domed top and a vent stack.
+    m += cyl("y", -16, 16, 14, 9, 80, "sp_copper", BRASS_PLATE)
+    for y in (17, 33, 49, 65, 78):
+        m += cyl("y", -16, 16, 14.7, y, y + 2, BRASS)
+    m += cyl("y", -16, 16, 11, 80, 84, IRON_PLATE)
+    m += cyl("y", -16, 16, 7, 84, 87, IRON_PLATE)
+    m += cyl("y", -16, 16, 3, 87, 89, BRASS_PLATE)
+    m += cyl("y", -16, 16, 1.5, 89, 96, IRON, "sp_hopper_inside")
+    # Sight glass up the front of the tank.
+    m.append(box((-17.5, 20, 1.25), (-14.5, 64, 2.25), {"*": BRASS, "north": "sp_sight_glass!"}))
+    # Pour pipe from the tank over the funnel, with a flange and a spout.
+    m.append(pipe((-3, 40, 14), (8, 43, 18)))
+    m.append(box((-1.5, 39.5, 13.5), (-0.5, 43.5, 18.5), BRASS))
+    m.append(box((6.5, 37, 14.5), (9.5, 40, 17.5), COPPER))
+    m += wheel("y", 3, 16, 2, 43, 43.75)
     # Power socket: the only place cables connect (tools/large_machines.py POWER_PORTS).
-    m.append(box((-16, 4, 4), (-15, 12, 12), BRASS_PLATE))
-    m.append(box((-16.5, 6.5, 6.5), (-16, 9.5, 9.5), "power_port"))
+    m.append(box((-32, 3, 12), (-31, 11, 20), BRASS_PLATE))
+    m.append(box((-32.5, 5.5, 14.5), (-32, 8.5, 17.5), "power_port"))
     return m
 
 
@@ -653,66 +666,71 @@ def sawmill():
 # ------------------------------------------------------------------ steel tier (unpowered multi-blocks)
 
 def coke_oven():
-    """Beehive coke oven: a banded firebrick dome over two blocks, an iron fire door that glows, and a tall chimney."""
-    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
-    m += cyl("y", 8, 8, 7.5, 1, 14, "sp_firebrick")
-    for y in (3, 10.5):
-        m += cyl("y", 8, 8, 7.8, y, y + 0.75, IRON)
-    m += cyl("y", 8, 8, 6.5, 14, 18, "sp_firebrick")
-    m += cyl("y", 8, 8, 5, 18, 21, "sp_firebrick")
-    m += cyl("y", 8, 8, 3.5, 21, 23.5, "sp_firebrick")
-    m += cyl("y", 8, 8, 6.8, 15, 15.75, IRON)
-    # Chimney with a brass crown.
-    m += cyl("y", 8, 8, 1.5, 23.5, 30, IRON, "sp_hopper_inside")
-    m += cyl("y", 8, 8, 2, 29.5, 31, BRASS, "sp_hopper_inside")
+    """A two by two beehive coke oven: a banded firebrick dome over two blocks with an iron fire door that glows, and
+    its chimney standing in its own block on top, centered over the dome."""
+    m = [box((-16, 0, 0), (16, 1, 32), IRON_PLATE)]
+    m += cyl("y", 0, 16, 15, 1, 20, "sp_firebrick")
+    for y in (4, 12, 18.5):
+        m += cyl("y", 0, 16, 15.35, y, y + 1, IRON)
+    m += cyl("y", 0, 16, 13, 20, 25, "sp_firebrick")
+    m += cyl("y", 0, 16, 10, 25, 28.5, "sp_firebrick")
+    m += cyl("y", 0, 16, 6.5, 28.5, 31, "sp_firebrick")
+    m += cyl("y", 0, 16, 13.35, 21, 22, IRON)
     # Fire door in a brass frame, a thermometer and the running lamp.
-    m.append(box((4.5, 2, 0.25), (11.5, 8.5, 1.25), {"*": IRON, "north": "sp_firebox!"}))
-    m.append(box((4, 8.5, 0.1), (12, 9.25, 1.3), BRASS))
-    m.append(dial("north", (8, 12, 0.25), 2.5))
-    m.append(dial("north", (11.5, 12, 0.25), 1.25, texture="sp_lamp"))
-    # Coke chute on the right side.
-    m.append(box((14.5, 1, 6), (16, 4, 10), {"*": IRON, "east": "sp_hopper_inside"}))
+    # An iron front plate standing proud of the dome, with the fire door, a thermometer and the lamp on it.
+    m.append(box((-11, 1, -0.25), (11, 14, 2), IRON_PLATE))
+    m.append(box((-5, 2, -0.75), (5, 11, -0.25), {"*": IRON, "north": "sp_firebox!"}))
+    m.append(box((-5.5, 11, -1), (5.5, 12, -0.25), BRASS))
+    m.append(dial("north", (-8, 7.5, -0.5), 3))
+    m.append(dial("north", (8, 7.5, -0.5), 1.75, texture="sp_lamp"))
+    # Coke chutes on both sides.
+    for x0, x1, face in ((13.5, 16, "east"), (-16, -13.5, "west")):
+        m.append(box((x0, 1, 12), (x1, 5, 20), {"*": IRON, face: "sp_hopper_inside"}))
+    # The chimney (top block): an iron stack with bands and a brass crown.
+    m += cyl("y", 0, 16, 2.5, 31, 47, IRON, "sp_hopper_inside")
+    for y in (36, 42):
+        m += cyl("y", 0, 16, 2.9, y, y + 0.75, BRASS)
+    m += cyl("y", 0, 16, 3.25, 46, 48, BRASS, "sp_hopper_inside")
     return m
 
 
 def steel_foundry():
-    """Blast furnace: a firebrick hearth with a glowing tap hole, copper hot-blast ring and tuyeres, a tapering banded
-    shaft and a charging hopper with a railing on top (three blocks tall)."""
-    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
-    m.append(box((0.5, 1, 0.5), (15.5, 14, 15.5), "sp_firebrick"))
-    for y in (4, 11):
-        m.append(box((0.25, y, 0.25), (15.75, y + 0.75, 15.75), IRON))
-    # Tap hole and pouring spout.
-    m.append(box((5, 2, 0), (11, 7.5, 0.5), {"*": IRON, "north": "sp_window!"}))
-    m.append(box((7, 1.5, -1.5), (9, 2.5, 0), IRON))
-    # Hot-blast ring with a tuyere into each side.
-    for frm, to in (((0, 13, 0), (16, 14.5, 1)), ((0, 13, 15), (16, 14.5, 16)),
-                    ((0, 13, 1), (1, 14.5, 15)), ((15, 13, 1), (16, 14.5, 15))):
+    """Two by two by five blast furnace: a firebrick hearth with a glowing tap hole, a copper hot-blast ring with a
+    tuyere into each side, a tapering banded shaft and a charging deck with a hopper and railings on top."""
+    m = [box((-16, 0, 0), (16, 1, 32), IRON_PLATE)]
+    m.append(box((-15, 1, 1), (15, 26, 31), "sp_firebrick"))
+    for y in (6, 16, 25):
+        m.append(box((-15.5, y, 0.5), (15.5, y + 1.25, 31.5), IRON))
+    # Tap hole with a glowing window and a pouring spout, and gauges.
+    m.append(box((-5, 2.5, 0.25), (5, 11, 1), {"*": IRON, "north": "sp_window!"}))
+    m.append(box((-1.5, 1.5, -2.5), (1.5, 3, 0.25), IRON))
+    m.append(dial("north", (-10.5, 12, 0.5), 4))
+    m.append(dial("north", (10.5, 12, 0.5), 2, texture="sp_lamp"))
+    # Hot-blast ring and tuyeres.
+    for frm, to in (((-16, 27, -0.5), (16, 30, 1.5)), ((-16, 27, 30.5), (16, 30, 32.5)),
+                    ((-16.5, 27, 1.5), (-14.5, 30, 30.5)), ((14.5, 27, 1.5), (16.5, 30, 30.5))):
         m.append(pipe(frm, to))
-    for frm, to in (((7.25, 9.5, 0), (8.75, 13, 0.75)), ((7.25, 9.5, 15.25), (8.75, 13, 16)),
-                    ((0, 9.5, 7.25), (0.75, 13, 8.75)), ((15.25, 9.5, 7.25), (16, 13, 8.75))):
+    for frm, to in (((-1.5, 20, 0), (1.5, 27, 1.5)), ((-1.5, 20, 30.5), (1.5, 27, 32)),
+                    ((-16, 20, 14.5), (-14.5, 27, 17.5)), ((14.5, 20, 14.5), (16, 27, 17.5))):
         m.append(pipe(frm, to))
-    m.append(dial("north", (12.5, 10, 0.25), 2))
-    m.append(dial("north", (3.5, 10, 0.25), 1.25, texture="sp_lamp"))
     # Tapering shaft with iron bands.
-    m += cyl("y", 8, 8, 7, 14.5, 24, "sp_firebrick")
-    m += cyl("y", 8, 8, 6.25, 24, 34, "sp_firebrick")
-    m += cyl("y", 8, 8, 5.5, 34, 42, "sp_firebrick")
-    for y, r in ((18, 7.3), (28, 6.55), (37, 5.8)):
-        m += cyl("y", 8, 8, r, y, y + 0.75, IRON)
-    # Charging platform, hopper and railing.
-    m.append(box((2, 42, 2), (14, 43, 14), IRON_PLATE))
-    m.append(box((5, 43, 5), (11, 46.5, 11), {"*": IRON, "up": "sp_hopper_inside"}))
-    for x in (2, 13):
-        for z in (2, 13):
-            m.append(box((x, 43, z), (x + 1, 46, z + 1), BRASS))
-    for frm, to in (((2, 46, 2), (14, 46.5, 3)), ((2, 46, 13), (14, 46.5, 14)),
-                    ((2, 46, 3), (3, 46.5, 13)), ((13, 46, 3), (14, 46.5, 13))):
+    m += cyl("y", 0, 16, 14, 26, 46, "sp_firebrick")
+    m += cyl("y", 0, 16, 12.5, 46, 60, "sp_firebrick")
+    m += cyl("y", 0, 16, 11, 60, 70, "sp_firebrick")
+    for y, r in ((34, 14.4), (42, 14.4), (52, 12.9), (65, 11.4)):
+        m += cyl("y", 0, 16, r, y, y + 1, IRON)
+    # Charging deck, hopper and railing.
+    m.append(box((-12, 70, 4), (12, 71.5, 28), IRON_PLATE))
+    m.append(box((-5, 71.5, 11), (5, 77, 21), {"*": IRON, "up": "sp_hopper_inside"}))
+    m.append(box((-5.5, 77, 10.5), (5.5, 78, 21.5), {"*": BRASS, "up": "sp_hopper_inside"}))
+    for x in (-12, 11):
+        for z in (4, 27):
+            m.append(box((x, 71.5, z), (x + 1, 79, z + 1), BRASS))
+    for frm, to in (((-12, 79, 4), (12, 80, 5)), ((-12, 79, 27), (12, 80, 28)),
+                    ((-12, 79, 5), (-11, 80, 27)), ((11, 79, 5), (12, 80, 27))):
         m.append(box(frm, to, BRASS))
     return m
 
-
-# ------------------------------------------------------------------ storage (multi-block)
 
 def capacitor_bank():
     """Two-by-two accumulator: an open wooden cabinet of Leyden jars on iron shelves, copper bus bars, a charge
@@ -872,6 +890,47 @@ def auto_crafter():
     return m
 
 
+# ------------------------------------------------------------------ kinetic (multi-block)
+
+def large_steam_engine():
+    """Two by two by two mill engine: a firebrick firebox with a glowing door under a riveted horizontal boiler with a
+    steam dome and chimney (left column); a piston and connecting rod turning a big flywheel whose axle comes out of
+    the back of the upper right block for a shaft (right column)."""
+    m = [box((-16, 0, 0), (16, 1, 32), IRON_PLATE)]
+    # Firebox and boiler (left column).
+    m.append(box((1, 1, 1), (15, 12, 31), "sp_firebrick"))
+    for y in (4, 11):
+        m.append(box((0.5, y, 0.5), (15.5, y + 0.75, 31.5), IRON))
+    m.append(box((4, 2, 0.25), (12, 8.5, 1.25), {"*": IRON, "north": "sp_firebox!"}))
+    m.append(dial("north", (2.75, 6, 0.5), 2))
+    m.append(dial("north", (13.25, 6, 0.5), 1.25, texture="sp_lamp"))
+    m += cyl("z", 8, 19, 6.5, 1.5, 30.5, IRON_PLATE, BRASS_PLATE)
+    for z in (6, 14, 22):
+        m += cyl("z", 8, 19, 6.9, z, z + 1.5, BRASS)
+    m.append(dial("north", (8, 19, 1), 4))
+    m += cyl("y", 8, 16, 3, 24.5, 28, BRASS, BRASS_PLATE)
+    m += cyl("y", 8, 5, 1.75, 24, 32, IRON, "sp_hopper_inside")
+    m += cyl("y", 8, 5, 2.25, 30.5, 32, BRASS, "sp_hopper_inside")
+    # Engine bed, piston and crosshead (right column).
+    m.append(box((-15, 1, 1), (-1, 6, 31), IRON_PLATE))
+    m += cyl("z", -8, 10.5, 3.5, 2, 14, BRASS, IRON)
+    for z in (4, 11):
+        m += cyl("z", -8, 10.5, 3.8, z, z + 1, IRON)
+    m.append(box((-8.75, 9.75, 14), (-7.25, 11.25, 21), IRON))
+    m.append(box((-11, 6, 14), (-5, 7, 21), IRON_PLATE))
+    m.append(box((-8.75, 10.5, 20.5), (-7.25, 24, 22), BRASS))
+    # Steam pipe from the boiler to the piston.
+    m.append(pipe((-4.5, 12, 7), (1.5, 14, 9)))
+    m.append(pipe((-6.5, 12, 7), (-4.5, 14.5, 9)))
+    # Flywheel with its bearing pedestals, and the axle out of the back (the kinetic output).
+    m += wheel("z", -8, 24, 7.75, 22, 24, IRON, BRASS)
+    for x0 in (-14.5, -3.5):
+        m.append(box((x0, 6, 24.5), (x0 + 2, 25, 26.5), IRON_PLATE))
+    m += cyl("z", -8, 24, 1.25, 20, 32, IRON)
+    m.append(box((-10.5, 21.5, 30.5), (-5.5, 26.5, 32), BRASS))
+    return m
+
+
 # ------------------------------------------------------------------ mining (multi-block)
 
 def ore_drill():
@@ -945,6 +1004,7 @@ MODELS = {
     "tree_farm": tree_farm(),
     "water_wheel": water_wheel(),
     "auto_crafter": auto_crafter(),
+    "large_steam_engine": large_steam_engine(),
     "electric_pump": electric_pump(),
     "fluid_tank": fluid_tank(),
 }

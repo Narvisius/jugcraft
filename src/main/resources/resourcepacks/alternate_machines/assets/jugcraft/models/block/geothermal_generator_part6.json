@@ -1,0 +1,103 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "geothermal_plinth": "jugcraft:block/geothermal_plinth",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "geothermal_tank": "jugcraft:block/geothermal_tank",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/geothermal_generator_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        0
+      ],
+      "to": [
+        15,
+        6,
+        15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machine_side"
+        },
+        "east": {
+          "texture": "#machine_side"
+        },
+        "west": {
+          "texture": "#machine_side"
+        },
+        "up": {
+          "texture": "#machine_top"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        6,
+        0
+      ],
+      "to": [
+        16,
+        7,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#geothermal_plinth"
+        },
+        "east": {
+          "texture": "#geothermal_plinth"
+        },
+        "west": {
+          "texture": "#geothermal_plinth"
+        },
+        "up": {
+          "texture": "#geothermal_plinth"
+        },
+        "down": {
+          "texture": "#geothermal_plinth"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        7,
+        4
+      ],
+      "to": [
+        13,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_stack"
+        },
+        "south": {
+          "texture": "#geothermal_stack"
+        },
+        "east": {
+          "texture": "#geothermal_stack"
+        },
+        "west": {
+          "texture": "#geothermal_stack"
+        },
+        "up": {
+          "texture": "#geothermal_stack"
+        },
+        "down": {
+          "texture": "#geothermal_stack"
+        }
+      }
+    }
+  ]
+}

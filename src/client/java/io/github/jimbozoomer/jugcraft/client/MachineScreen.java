@@ -31,6 +31,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	private static final int WATER = 0xFF3060D0;
 	private static final int LAVA = 0xFFE87010;
 	private static final int TEXT = 0xFF404040;
+	/** Energy readout: amber like the energy bar, a shade darker so it reads on the gray panel; no shadow. */
+	private static final int READOUT = 0xFFB8740A;
 
 	// Side configuration: a cross of face buttons (front in the middle) and an eject toggle, on the right.
 	private static final int[][] FACE_BUTTON_XY = {{150, 28}, {162, 40}, {138, 28}, {162, 28}, {150, 16}, {150, 40}};
@@ -120,14 +122,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		if (line == null) {
 			return;
 		}
-		// A plain tooltip box drawn with fills, like vanilla's: dark body, purple-blue rim.
-		int width = font.width(line);
-		int x = mouseX + 10;
-		int y = mouseY - 12;
-		graphics.fill(x - 3, y - 3, x + width + 3, y + 11, 0xF0100010);
-		graphics.fill(x - 2, y - 2, x + width + 2, y - 1, 0x505000FF);
-		graphics.fill(x - 2, y + 9, x + width + 2, y + 10, 0x5028007F);
-		graphics.text(font, line, x, y, 0xFFFFFFFF, false);
+		graphics.setTooltipForNextFrame(font, Component.literal(line), mouseX, mouseY);
 	}
 
 	@Override
@@ -150,7 +145,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			int maxBurn = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_BURN));
 			int flame = menu.data(MachineBlockEntity.DATA_BURN) * 14 / maxBurn;
 			graphics.fill(x + 57, y + 20 + 14 - flame, x + 71, y + 34, FLAME);
-		} else if (kind == MachineKind.STEAM_GENERATOR) {
+		} else if (kind.isBoiler()) {
 			slotFrame(graphics, x + MachineMenu.INPUT_X, y + 17);
 			slotFrame(graphics, x + MachineMenu.INPUT_X, y + 53);
 			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
@@ -159,7 +154,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			graphics.fill(x + 57, y + 37 + 14 - flame, x + 71, y + 51, FLAME);
 			// Water tank gauge on the right.
 			graphics.fill(x + 149, y + BAR_Y - 1, x + 163, y + BAR_Y + BAR_HEIGHT + 1, DARK);
-			int water = menu.data(MachineBlockEntity.DATA_TANK) * BAR_HEIGHT / MachineKind.STEAM_TANK;
+			int water = menu.data(MachineBlockEntity.DATA_TANK) * BAR_HEIGHT / kind.tankCapacity();
 			graphics.fill(x + 150, y + BAR_Y + BAR_HEIGHT - water, x + 162, y + BAR_Y + BAR_HEIGHT, WATER);
 		} else if (kind == MachineKind.GEOTHERMAL_GENERATOR) {
 			// Lava tank gauge on the right.
@@ -198,20 +193,20 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		// The auto-crafter's grid covers the energy readout's place; its bar still shows the charge.
 		if (menu.kind().usesPower() && menu.kind() != MachineKind.AUTO_CRAFTER) {
 			String energy = compact(menu.energy()) + " / " + compact(menu.capacity()) + " JE";
-			graphics.text(font, energy, 28, 60, TEXT);
+			graphics.text(font, energy, 28, 60, READOUT, false);
 		}
 		if (menu.kind() == MachineKind.ARC_FURNACE) {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.arc_furnace.formed" : "container.jugcraft.arc_furnace.incomplete";
-			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
+			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT, false);
 		} else if (menu.kind() == MachineKind.WIND_TURBINE) {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.wind_turbine.clear" : "container.jugcraft.wind_turbine.blocked";
-			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
+			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT, false);
 } else if (menu.kind() == MachineKind.WATER_WHEEL) {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.water_wheel.turning" : "container.jugcraft.water_wheel.still";
-			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
+			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT, false);
 		}
 	}
 

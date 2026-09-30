@@ -1,0 +1,73 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "alloy_crucible": "jugcraft:block/alloy_crucible",
+    "alloy_hopper": "jugcraft:block/alloy_hopper",
+    "alloy_hopper_top": "jugcraft:block/alloy_hopper_top",
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "bronze_block": "jugcraft:block/bronze_block",
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "power_port_frame": "jugcraft:block/power_port_frame",
+    "front": "jugcraft:block/alloy_smelter_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        8,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        8,
+        8
+      ],
+      "faces": {
+        "south": {
+          "texture": "#bronze_block"
+        },
+        "west": {
+          "texture": "#bronze_block"
+        },
+        "up": {
+          "texture": "#bronze_block"
+        },
+        "down": {
+          "texture": "#bronze_block"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        8,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        2
+      ],
+      "faces": {
+        "south": {
+          "texture": "#geothermal_stack"
+        },
+        "west": {
+          "texture": "#geothermal_stack"
+        },
+        "up": {
+          "texture": "#geothermal_stack"
+        },
+        "down": {
+          "texture": "#geothermal_stack"
+        }
+      }
+    }
+  ]
+}

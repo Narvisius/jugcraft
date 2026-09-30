@@ -52,8 +52,8 @@ flowchart LR
 8. **Better power:**
    - **Steam Generator:** an upgraded coal generator that also burns bitumen.
    - **Solar Panel:** needs silicon.
-   - **Wind Turbine** (3 blocks tall, aluminum plates): free power that grows with height.
-   - **Geothermal Generator** (2 blocks wide, needs a basic circuit): runs on lava. An electric pump on lava feeds it through pipes.
+   - **Wind Turbine** (9 blocks tall with a 7-block rotor, aluminum plates): free power that grows with height.
+   - **Geothermal Generator** (2×2×2, needs a basic circuit): runs on lava. An electric pump on lava feeds it through pipes.
 9. **Fluids:** **Bronze Fluid Pipes** and the **Tinplate Tank** are crafted from press-made plates; the **Electric Pump** adds iron gears, a bucket and a casing. A pump on water, piped to a steam generator, keeps the boiler full without buckets.
 
 ## Machines
@@ -68,7 +68,7 @@ All machines hold their own internal battery and accept power from cables or dir
 | Battery Box | Power | Stores 400,000 JE; outputs from its front | stores | lead, cable, redstone block, casing |
 | Electric Furnace | Mechanical | Any vanilla smelting recipe, 100 ticks | 10 JE/t | bronze, redstone, cable, furnace, casing |
 | Crusher | Mechanical | Ore → 2 raw; minerals, sulfur, oil sand, cobble → gravel → sand | 16 JE/t | flint, cable, casing, bronze, redstone |
-| Alloy Smelter (2×2 multi-block) | Mechanical | Two ingredients (any order) → bronze, brass, invar, solder. Power **only** through its copper socket | 20 JE/t | bronze, cable, 2 furnaces, casing, redstone |
+| Alloy Smelter (3 wide, 2 deep, 6 tall) | Mechanical | Two ingredients (any order) → bronze, brass, invar, solder. Power **only** through its copper socket | 20 JE/t | bronze, cable, 2 furnaces, casing, redstone |
 | Metal Press | Mechanical | Ingot → plate (1:1) | 16 JE/t | bronze, piston, cable, casing, anvil |
 | Wire Drawer | Mechanical | Ingot → 3 wires | 12 JE/t | brass, shears, cable, casing, redstone |
 | Circuit Assembler | Mechanical | Up to three ingredient stacks (any order) → circuits | 32 JE/t | tin plates, bronze gear, cable, casing, redstone |
@@ -76,10 +76,10 @@ All machines hold their own internal battery and accept power from cables or dir
 | Ore Washer | Mechanical | Ore + 500 mB water → 3 washed ore | 16 JE/t | invar plates, bucket, bronze gears, basic circuit, casing |
 | Sieve | Mechanical | Gravel → flint, soul sand → soul soil, with small finds | 8 JE/t | iron plates, iron bars, hopper, cable, casing |
 | Sawmill | Mechanical | Log → 6 planks + sawdust; planks → 3 sticks | 12 JE/t | iron, iron gear, iron plates, cable, casing |
-| Coke Oven (2 tall) | Steel | Coal → coke, 600 ticks ([Steel tier](#steel-tier)) | none | bricks, iron, furnace |
-| Steel Foundry (3 tall) | Steel | Iron ingot + coke → steel ingot, 400 ticks | none | bricks, hopper, iron plates, blast furnace |
-| Geothermal Generator (2 blocks wide) | Power | Lava → 64 JE/t (1 mB/t; a bucket lasts 1,000 ticks) | produces | invar plates, tinplate tank, bronze gears, casing, basic circuit |
-| Wind Turbine (3 blocks tall) | Power | 4–24 JE/t by height above sea level; more in rain and thunder; rotor needs clear air | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
+| Coke Oven (2×2, 2 tall, chimney on top) | Steel | Coal → coke, 600 ticks ([Steel tier](#steel-tier)) | none | bricks, iron, furnace |
+| Steel Foundry (2×2, 5 tall) | Steel | Iron ingot + coke → steel ingot, 400 ticks | none | bricks, hopper, iron plates, blast furnace |
+| Geothermal Generator (2×2×2) | Power | Lava → 64 JE/t (1 mB/t; a bucket lasts 1,000 ticks) | produces | invar plates, tinplate tank, bronze gears, casing, basic circuit |
+| Wind Turbine (9 tall, 7-block rotor) | Power | 12–72 JE/t by height above sea level; ×1.5 in rain, ×2 in thunder; the rotor turns (drawn by the client) and needs a clear 7×7 square in front of the top | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
 | Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
 
 ## Machine looks: steampunk and classic
@@ -320,14 +320,14 @@ A paused machine keeps its progress. The mode is saved with the side configurati
 
 Steel is the second material tier. It needs **no power** and no new ore, only iron, coal and two brick multi-blocks. Machines placed as one item fill several blocks and break together, like the other [multi-block machines](#multi-block-machines).
 
-![Coke Oven (2 tall) and Steel Foundry (3 tall)](images/steel_tier.png)
+![Coke Oven and Steel Foundry (earlier sizes: the render predates the 2×2 versions)](images/steel_tier.png)
 
 *Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
 
 | Block | Does | Numbers | Built from |
 | --- | --- | --- | --- |
-| Coke Oven (2 tall) | Bakes coal into **Coal Coke** | 600 ticks per coal; no power, no fuel | bricks, iron, furnace |
-| Steel Foundry (3 tall) | 1 iron ingot + 1 coke → 1 **steel ingot** (either slot) | 400 ticks; no power | bricks, hopper, iron plates, blast furnace |
+| Coke Oven (2×2, 2 tall + chimney) | Bakes coal into **Coal Coke** | 600 ticks per coal; no power, no fuel | bricks, iron, furnace |
+| Steel Foundry (2×2, 5 tall) | 1 iron ingot + 1 coke → 1 **steel ingot** (either slot) | 400 ticks; no power | bricks, hopper, iron plates, blast furnace |
 
 - **Coal Coke** (`c:coal_coke`) burns twice as long as coal in the Coal and Steam Generators (3,200 ticks). It is the carbon for steel.
 - **Steel** has the usual ingot, nugget and block, plus a **steel plate** (Metal Press) and a **steel gear**. The first things built from steel are the [machine upgrades](#machine-control).
@@ -470,7 +470,7 @@ The content (`assets/jugcraft/handbook/en_us.json`) is **generated by `tools/han
 - the crusher doubling ore;
 - a coal generator powering an electric furnace through cables;
 - a pump filling a tank through pipes;
-- the 2×2 alloy smelter placing, taking power only at its socket, and making bronze;
+- the 3×2×6 alloy smelter placing all 36 blocks, taking power only at its socket, and making bronze;
 - a multi-block machine disappearing whole when one block breaks;
 - an extractor moving items through pipes into a chest;
 - a sorter routing matching items to its inventory and the rest elsewhere;

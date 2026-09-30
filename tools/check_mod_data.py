@@ -373,12 +373,15 @@ def check_large_machines():
     from large_machines import FOOTPRINTS
     kinds = MACHINE_JAVA.read_text(encoding="utf-8")
     for machine, footprint in FOOTPRINTS.items():
-        match = re.search(r"case " + machine.upper() + r" -> Footprint\.(tall|of)\((.*?)\);", kinds)
+        match = re.search(r"case " + machine.upper() + r" -> Footprint\.(tall|of|cuboid)\((.*?)\);", kinds, re.S)
         if not match:
             err(f"MachineKind.footprint() has no case for {machine}")
             continue
         if match.group(1) == "tall":
             java = [(0, y, 0) for y in range(int(match.group(2)))]
+        elif match.group(1) == "cuboid":
+            from large_machines import cuboid
+            java = cuboid(*(int(v) for v in match.group(2).split(",")))
         else:
             java = [(0, 0, 0) if part.strip() == "Vec3i.ZERO"
                     else tuple(int(v) for v in re.fullmatch(r"\s*new Vec3i\((-?\d+), (-?\d+), (-?\d+)\)\s*", part).groups())

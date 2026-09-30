@@ -81,7 +81,7 @@ public class MachineMenu extends AbstractContainerMenu {
 					return GeneratorFuels.burnTicks(stack) > 0;
 				}
 			});
-		} else if (kind == MachineKind.STEAM_GENERATOR) {
+		} else if (kind.isBoiler()) {
 			addSlot(new Slot(container, MachineBlockEntity.SLOT_FUEL, INPUT_X, 53) {
 				@Override
 				public boolean mayPlace(ItemStack stack) {

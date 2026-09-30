@@ -1,0 +1,42 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_blade": "jugcraft:block/wind_turbine_blade",
+    "front": "jugcraft:block/large_steam_engine_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        10,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side"
+        },
+        "east": {
+          "texture": "#fluid_tank_side"
+        },
+        "west": {
+          "texture": "#fluid_tank_side"
+        },
+        "up": {
+          "texture": "#fluid_tank_side"
+        }
+      }
+    }
+  ]
+}

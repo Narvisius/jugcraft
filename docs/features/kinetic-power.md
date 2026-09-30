@@ -22,6 +22,10 @@ Details: [TECH_TREE.md → Kinetic power](../TECH_TREE.md#kinetic-power).
 - Technology connection: a second power system alongside JE, with a one-way bridge (dynamo, 75%).
 - Magic connection: none yet.
 
+## Large Steam Engine
+
+A 2×2×2 steam engine, four times the small one: 256 KE/t out of a shaft at the back of its upper right block, 40 mB of water per tick, fuel four times as fast. It has a screen like the steam generator's (fuel, water bucket, empty bucket) and a water source under it refills it. It burns only while something on its shaft line takes the power. Built from four small steam engines, iron plates and a casing.
+
 ## Balance and automation
 - **Units:** KE per tick. A machine takes 1 KE as 1 JE, up to its normal input rate.
 - **Steam engine:** 64 KE/t for 10 mB water per tick, like the steam generator.

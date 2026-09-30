@@ -1140,6 +1140,8 @@ def machines():
     save(window(958, [(28, 44, 30), (36, 56, 38)]), "block", "tree_farm_front")
     save(window(958, [(28, 44, 30)], glow=[(120, 200, 90), (170, 230, 120), (90, 170, 70)]), "block", "tree_farm_front_on")
     save(tank_side(959), "block", "water_wheel_front")
+    save(boiler(961, False), "block", "large_steam_engine_front")
+    save(boiler(961, True), "block", "large_steam_engine_front_on")
     save(assembler_front(960, False), "block", "auto_crafter_front")
     save(assembler_front(960, True), "block", "auto_crafter_front_on")
     save(jaws(956, False), "block", "ore_drill_front")

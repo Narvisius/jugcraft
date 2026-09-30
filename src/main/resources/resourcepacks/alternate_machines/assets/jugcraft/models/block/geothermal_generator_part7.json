@@ -1,0 +1,45 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "geothermal_plinth": "jugcraft:block/geothermal_plinth",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "geothermal_tank": "jugcraft:block/geothermal_tank",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/geothermal_generator_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        14,
+        12,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_tank"
+        },
+        "south": {
+          "texture": "#geothermal_tank"
+        },
+        "east": {
+          "texture": "#geothermal_tank"
+        },
+        "west": {
+          "texture": "#geothermal_tank"
+        },
+        "up": {
+          "texture": "#fluid_tank_top"
+        }
+      }
+    }
+  ]
+}

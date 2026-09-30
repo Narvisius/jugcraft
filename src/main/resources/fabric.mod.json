@@ -14,7 +14,8 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": ["io.github.jimbozoomer.jugcraft.Jugcraft"],
-		"client": ["io.github.jimbozoomer.jugcraft.client.JugcraftClient"]
+		"client": ["io.github.jimbozoomer.jugcraft.client.JugcraftClient"],
+		"jei_mod_plugin": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJeiPlugin"]
 	},
 	"depends": {
 		"fabricloader": ">=0.19.3",

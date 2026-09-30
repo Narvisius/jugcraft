@@ -31,7 +31,7 @@ FACES = ("north", "south", "east", "west", "up", "down")
 FACE_AXES = {"north": (0, 1, 2, 0), "south": (0, 1, 2, 1), "east": (2, 1, 0, 1), "west": (2, 1, 0, 0),
              "up": (0, 2, 1, 1), "down": (0, 2, 1, 0)}
 # LargeMachineBlock.PART is 0..3.
-PART_STATES = 4
+PART_STATES = 64
 
 
 def alternate_style():

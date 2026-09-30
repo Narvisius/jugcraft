@@ -58,8 +58,8 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			server.runCommand("gamerule minecraft:send_command_feedback false");
 			server.runCommand("time set noon");
 			server.runCommand("weather clear");
-			server.runCommand("fill %d %d %d %d %d %d minecraft:smooth_stone".formatted(x - 10, y - 1, z - 10, x + 40, y - 1, z + 4));
-			server.runCommand("fill %d %d %d %d %d %d minecraft:air".formatted(x - 10, y, z - 10, x + 40, y + 6, z + 4));
+			server.runCommand("fill %d %d %d %d %d %d minecraft:smooth_stone".formatted(x - 10, y - 1, z - 10, x + 64, y - 1, z + 8));
+			server.runCommand("fill %d %d %d %d %d %d minecraft:air".formatted(x - 10, y, z - 10, x + 64, y + 14, z + 8));
 			server.runOnServer(minecraft -> buildShowroom(minecraft.overworld(), new BlockPos(x, y, z - 5)));
 
 			// Hide the HUD, hand and chat (F1) so the screenshots show only the machines.
@@ -77,17 +77,22 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 
 			// A running kinetic line: steam engine, shafts, a gearbox with a hand crank, a dynamo and a crusher.
 			// Its own row behind the multi-block camera (the showroom rows are at z - 5).
-			server.runOnServer(minecraft -> buildKineticLine(minecraft.overworld(), new BlockPos(x + 30, y, z + 2)));
-			server.runCommand("tp @p %d %d %d 180 35".formatted(x + 32, y + 2, z + 7));
+			server.runOnServer(minecraft -> buildKineticLine(minecraft.overworld(), new BlockPos(x, y, z + 2)));
+			server.runCommand("tp @p %d %d %d 180 35".formatted(x + 2, y + 2, z + 7));
 			context.waitTicks(60);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_kinetics");
 
 			// Multi-block machines.
-			server.runCommand("tp @p %d %d %d 180 0".formatted(x + 27, y, z + 1));
+			// Two views: the multi-block row is about 40 blocks long, and the wind turbine is nine tall.
+			server.runCommand("tp @p %d %d %d 180 12".formatted(x + 28, y + 4, z + 12));
 			context.waitTicks(20);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_multiblocks");
+			server.runCommand("tp @p %d %d %d 180 12".formatted(x + 50, y + 4, z + 12));
+			context.waitTicks(20);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_multiblocks_2");
 
 			// A machine screen: walk up to the crusher and use it.
 			BlockPos crusher = new BlockPos(x - 7 + singleIndex(MachineKind.CRUSHER), y, z - 5);
@@ -181,7 +186,7 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 
 	/**
 	 * One-block machines side by side (in MachineKind order, from x - 7), all facing south towards the
-	 * camera; multi-block machines in a second group 20 blocks east, three apart.
+	 * camera; multi-block machines in a second group 20 blocks east, four apart.
 	 */
 	private static void buildShowroom(ServerLevel level, BlockPos row) {
 		int large = 0;
@@ -189,7 +194,7 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			MachineBlock block = JugcraftMachines.MACHINES.get(kind);
 			BlockState state = block.defaultBlockState().setValue(MachineBlock.FACING, Direction.SOUTH);
 			if (kind.isLarge()) {
-				BlockPos pos = row.offset(20 + large * 3, 0, 0);
+				BlockPos pos = row.offset(20 + large * 4, 0, 0);
 				level.setBlock(pos, state, 3);
 				((LargeMachineBlock) block).setPlacedBy(level, pos, state, null, ItemStack.EMPTY);
 				large++;

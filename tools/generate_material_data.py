@@ -570,6 +570,8 @@ def main():
     assets()
     import handbook
     write(ASSETS / "handbook" / "en_us.json", handbook.build())
+    import recipe_view
+    write(ASSETS / "recipe_view.json", recipe_view.build())
     loot_tables()
     recipes()
     tags()

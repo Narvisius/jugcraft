@@ -16,16 +16,23 @@ An element is (from, to, texture) where texture is one texture name for all face
 {face: texture} with "*" as the default. Texture names are jugcraft block textures.
 """
 
+def cuboid(width, height, depth):
+    """Footprint.cuboid in Java: width blocks to the right (-x), height up, depth back (+z); bottom layer first,
+    front row first, right to left along each row. Part 0 is the front left bottom block."""
+    return [(-x, y, z) for y in range(height) for z in range(depth) for x in range(width)]
+
+
 # Offsets (x east, y up, z south) of each part; part 0 is the master. Keep in sync with Java.
 FOOTPRINTS = {
     # The lava tank stands to the right of the generator body, seen from the front.
-    "geothermal_generator": [(0, 0, 0), (-1, 0, 0)],
-    "wind_turbine": [(0, 0, 0), (0, 1, 0), (0, 2, 0)],
-    # Furnace body, crucible base to its right, hoppers above the body, crucible tower above the base.
-    "alloy_smelter": [(0, 0, 0), (-1, 0, 0), (0, 1, 0), (-1, 1, 0)],
+    "geothermal_generator": cuboid(2, 2, 2),
+    "wind_turbine": [(0, y, 0) for y in range(9)],
+    # Three wide, six tall, two deep: the furnace column (left) and a 2x2 crucible tank tower (right).
+    "alloy_smelter": cuboid(3, 6, 2),
     # Steel tier: a two-block brick oven and a three-block foundry stack.
-    "coke_oven": [(0, 0, 0), (0, 1, 0)],
-    "steel_foundry": [(0, 0, 0), (0, 1, 0), (0, 2, 0)],
+    # A 2x2 beehive two blocks high with its chimney in one block on top (part 8), and a 2x2x5 blast furnace.
+    "coke_oven": cuboid(2, 2, 2) + [(0, 2, 0)],
+    "steel_foundry": cuboid(2, 5, 2),
     # Storage: a 2x2 capacitor bank (two wide, two tall) and a squat 2x2 steel tank (two wide, two deep).
     "capacitor_bank": [(0, 0, 0), (-1, 0, 0), (0, 1, 0), (-1, 1, 0)],
     "steel_tank": [(0, 0, 0), (-1, 0, 0), (0, 0, 1), (-1, 0, 1)],
@@ -33,12 +40,14 @@ FOOTPRINTS = {
     "ore_drill": [(0, 0, 0), (0, 1, 0)],
     # Renewables: a two-block water wheel house (the wheel turns in the water column on its right).
     "water_wheel": [(0, 0, 0), (0, 1, 0)],
+    # Kinetic: a 2x2x2 steam engine; its shaft comes out of the back of part 7 (upper right back).
+    "large_steam_engine": cuboid(2, 2, 2),
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
 # Keep in sync with MachineKind.powerPort(). Everything else takes power on any face.
 POWER_PORTS = {
-    "alloy_smelter": (1, "west"),
+    "alloy_smelter": (2, "west"),
 }
 
 PIPE = "bronze_fluid_pipe"
@@ -47,101 +56,68 @@ TOP = "machine_top"
 
 MODELS = {
     "geothermal_generator": [
-        # Generator body (master block).
-        ((0, 0, 0), (16, 2, 16), "geothermal_plinth"),
-        ((1, 2, 1), (15, 11, 15), {"*": STEEL, "north": "#front", "up": TOP}),
-        ((0, 11, 0), (16, 12, 16), "geothermal_plinth"),
-        ((2, 12, 2), (14, 13, 14), TOP),
-        ((9, 13, 9), (13, 16, 13), "geothermal_stack"),
-        ((8.5, 16, 8.5), (13.5, 17, 13.5), "geothermal_plinth"),
-        ((3, 13, 3), (6, 15, 6), PIPE),
-        # Heat pipe from the tank into the body.
-        ((-4, 6, 5), (1, 10, 9), PIPE),
-        ((-2, 5, 4), (-1, 11, 10), "geothermal_plinth"),
-        # Lava tank (the block to the right, x -16..0), an octagonal column.
-        ((-16, 0, 0), (0, 2, 16), "geothermal_plinth"),
-        ((-14, 2, 4), (-2, 15, 12), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
-        ((-12, 2, 2), (-4, 14.9, 14), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
-        ((-14.5, 4, 3.5), (-1.5, 5, 12.5), "geothermal_plinth"),
-        ((-12.5, 4.1, 1.5), (-3.5, 4.9, 14.5), "geothermal_plinth"),
-        ((-14.5, 12, 3.5), (-1.5, 13, 12.5), "geothermal_plinth"),
-        ((-12.5, 12.1, 1.5), (-3.5, 12.9, 14.5), "geothermal_plinth"),
-        ((-11, 15, 5), (-5, 16, 11), "geothermal_plinth"),
+        # Generator house (left column, 2 deep, 2 tall) and twin lava tanks (right column).
+        ((-16, 0, 0), (16, 2, 32), "geothermal_plinth"),
+        ((1, 2, 1), (15, 22, 31), {"*": STEEL, "north": "#front", "up": TOP}),
+        ((0, 22, 0), (16, 23, 32), "geothermal_plinth"),
+        ((9, 23, 20), (13, 32, 24), "geothermal_stack"),
+        ((-4, 12, 6), (1, 16, 10), PIPE),
+        ((-4, 12, 22), (1, 16, 26), PIPE),
+        ((-14, 2, 3), (-2, 28, 13), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
+        ((-14, 2, 19), (-2, 28, 29), {"*": "geothermal_tank", "up": "fluid_tank_top"}),
     ],
     "wind_turbine": [
         # Base housing (master block).
         ((0, 0, 0), (16, 3, 16), "wind_turbine_base"),
         ((2, 3, 2), (14, 14, 14), {"*": STEEL, "north": "#front", "up": TOP}),
         ((3, 14, 3), (13, 16, 13), "wind_turbine_base"),
-        # Mast through the middle block and into the top one, with collars.
-        ((6, 16, 6), (10, 38, 10), "wind_turbine_mast"),
-        ((5, 16, 5), (11, 17, 11), "wind_turbine_base"),
-        ((5, 31, 5), (11, 32, 11), "wind_turbine_base"),
-        # Nacelle on top, hub at the front, tail fin behind.
-        ((4, 38, 3), (12, 44, 16), "wind_turbine_nacelle"),
-        ((5, 44, 6), (11, 45, 14), "wind_turbine_nacelle"),
-        ((7.5, 38, 16), (8.5, 46, 24), "wind_turbine_blade"),
-        ((6, 39, 1), (10, 43, 3), "wind_turbine_nacelle"),
-        ((7, 40, 0), (9, 42, 1), "wind_turbine_base"),
-        # Four blades in front of the hub (clear of the mast, which is at z 6..10), red-tipped.
-        ((7, 43, 1.5), (9, 60, 2.5), "wind_turbine_blade"),
-        ((7, 60, 1.5), (9, 64, 2.5), "wind_turbine_tip"),
-        ((7, 22, 1.5), (9, 39, 2.5), "wind_turbine_blade"),
-        ((7, 18, 1.5), (9, 22, 2.5), "wind_turbine_tip"),
-        ((10, 40, 1.5), (27, 42, 2.5), "wind_turbine_blade"),
-        ((27, 40, 1.5), (31, 42, 2.5), "wind_turbine_tip"),
-        ((-11, 40, 1.5), (6, 42, 2.5), "wind_turbine_blade"),
-        ((-15, 40, 1.5), (-11, 42, 2.5), "wind_turbine_tip"),
+        # A tall mast with collars every two blocks, and the nacelle and tail fin on top; the rotor is
+        # drawn by the client renderer.
+        ((6, 16, 6), (10, 132, 10), "wind_turbine_mast"),
+        ((5, 48, 5), (11, 49, 11), "wind_turbine_base"),
+        ((5, 80, 5), (11, 81, 11), "wind_turbine_base"),
+        ((5, 112, 5), (11, 113, 11), "wind_turbine_base"),
+        ((4, 132, 2), (12, 140, 16), "wind_turbine_nacelle"),
+        ((6, 134, 0), (10, 138, 2), "wind_turbine_nacelle"),
+        ((7.5, 130, 16), (8.5, 142, 26), "wind_turbine_blade"),
     ],
 }
 
 MODELS["alloy_smelter"] = [
-    # Shared footing under both lower blocks.
-    ((-16, 0, 0), (16, 2, 16), "heavy_plinth"),
-    # Firebrick furnace body with the crucible window at the front (master block).
-    ((1, 2, 1), (15, 14, 15), {"*": "alloy_smelter_brick", "north": "#front", "up": TOP}),
-    ((0.5, 2, 0.5), (15.5, 3, 15.5), "bronze_block"),
-    ((0.5, 12.5, 0.5), (15.5, 13.5, 15.5), "bronze_block"),
-    # Two ingredient hoppers above the body, feeding down through spouts.
-    ((1, 22, 1), (8, 28, 8), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
-    ((3, 14, 3), (6, 22, 6), "alloy_hopper"),
-    ((8, 22, 8), (15, 28, 15), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
-    ((10, 14, 10), (13, 22, 13), "alloy_hopper"),
-    # Crucible base with the copper power socket on its outer side (lower right block).
-    ((-15, 2, 1), (-1, 12, 15), {"*": STEEL, "up": TOP}),
-    ((-16, 4, 4), (-15, 12, 12), "power_port_frame"),
-    ((-16.5, 6.5, 6.5), (-16, 9.5, 9.5), "power_port"),
-    # Crucible tower: octagonal pot with bronze rim and a short stack (upper right block).
-    ((-14, 12, 4), (-2, 28, 12), {"*": "alloy_crucible", "up": "alloy_crucible"}),
-    ((-12, 12, 2), (-4, 27.9, 14), {"*": "alloy_crucible", "up": "alloy_crucible"}),
-    ((-14.5, 28, 3.5), (-1.5, 29, 12.5), "bronze_block"),
-    ((-12.5, 28, 1.5), (-3.5, 28.9, 14.5), "bronze_block"),
-    ((-10, 29, 6), (-6, 32, 10), "geothermal_stack"),
-    # Pour trough from the crucible into the body.
-    ((-2, 17, 6), (3, 20, 10), PIPE),
+    ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
+    # Firebrick furnace with the crucible window at the front (master column), a funnel on top.
+    ((1, 2, 1), (15, 26, 31), {"*": "alloy_smelter_brick", "north": "#front", "up": TOP}),
+    ((3, 26, 11), (13, 32, 21), "alloy_hopper"),
+    ((1, 32, 9), (15, 37, 23), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
+    # The crucible tank (2x2, right) on a base with the copper power socket on its outer side.
+    ((-31, 2, 1), (-1, 10, 31), {"*": STEEL, "up": TOP}),
+    ((-32, 3, 12), (-31, 11, 20), "power_port_frame"),
+    ((-32.5, 5.5, 14.5), (-32, 8.5, 17.5), "power_port"),
+    ((-29, 10, 5), (-3, 80, 27), {"*": "alloy_crucible", "up": "alloy_crucible"}),
+    ((-27, 10, 3), (-5, 79.9, 29), {"*": "alloy_crucible", "up": "alloy_crucible"}),
+    ((-24, 80, 8), (-8, 88, 24), "bronze_block"),
+    ((-18, 88, 14), (-14, 96, 18), "geothermal_stack"),
+    # Pour pipe into the funnel.
+    ((-4, 40, 14), (8, 43, 18), PIPE),
 ]
 
 MODELS["coke_oven"] = [
-    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
-    # Brick oven body with the fire door (master), domed top in the block above.
-    ((1, 2, 1), (15, 16, 15), {"*": "alloy_smelter_brick", "north": "#front", "up": "alloy_smelter_brick"}),
-    ((2, 16, 2), (14, 24, 14), "alloy_smelter_brick"),
-    ((4, 24, 4), (12, 27, 12), "alloy_smelter_brick"),
-    ((0.5, 14, 0.5), (15.5, 15, 15.5), "heavy_plinth"),
-    # Chimney.
-    ((6, 27, 6), (10, 32, 10), "geothermal_stack"),
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    # Brick oven body (2x2) with the fire door at the front, a stepped dome and the chimney block on top.
+    ((-15, 2, 1), (15, 20, 31), {"*": "alloy_smelter_brick", "north": "#front", "up": "alloy_smelter_brick"}),
+    ((-12, 20, 4), (12, 26, 28), "alloy_smelter_brick"),
+    ((-8, 26, 8), (8, 31, 24), "alloy_smelter_brick"),
+    ((-2.5, 31, 13.5), (2.5, 48, 18.5), "geothermal_stack"),
 ]
 
 MODELS["steel_foundry"] = [
-    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
-    # Hearth with the tapping door (master), then a tapering brick shaft two blocks high.
-    ((0.5, 2, 0.5), (15.5, 16, 15.5), {"*": "alloy_smelter_brick", "north": "#front", "up": "alloy_smelter_brick"}),
-    ((1, 16, 1), (15, 30, 15), "alloy_smelter_brick"),
-    ((2, 30, 2), (14, 32, 14), "alloy_smelter_brick"),
-    ((0, 12, 0), (16, 13, 16), "heavy_plinth"),
-    ((0.5, 24, 0.5), (15.5, 25, 15.5), "heavy_plinth"),
-    # Charging hopper at the top.
-    ((4, 32, 4), (12, 36, 12), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    # Hearth with the tapping door (2x2), then a tapering brick shaft three blocks high and a charging hopper.
+    ((-15, 2, 1), (15, 28, 31), {"*": "alloy_smelter_brick", "north": "#front", "up": "alloy_smelter_brick"}),
+    ((-13, 28, 3), (13, 50, 29), "alloy_smelter_brick"),
+    ((-11, 50, 5), (11, 70, 27), "alloy_smelter_brick"),
+    ((-16, 26, 0), (16, 27, 32), "heavy_plinth"),
+    ((-6, 70, 10), (6, 78, 22), {"*": "alloy_hopper", "up": "alloy_hopper_top"}),
 ]
 
 MODELS["capacitor_bank"] = [
@@ -170,6 +146,16 @@ MODELS["water_wheel"] = [
     ((-4, 4, -4), (-1, 28, 20), "wind_turbine_blade"),
 ]
 
+MODELS["large_steam_engine"] = [
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 14, 31), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((2, 14, 2), (14, 26, 30), "fluid_tank_side"),
+    ((-15, 2, 1), (-1, 7, 31), {"*": STEEL, "up": TOP}),
+    ((-12, 8, 3), (-4, 14, 15), "geothermal_stack"),
+    ((-15, 16, 21), (-1, 32, 23), "wind_turbine_blade"),
+    ((-9.5, 22.5, 16), (-6.5, 25.5, 32), PIPE),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -181,4 +167,5 @@ FRONTS = {
     "steel_tank": "steel_tank_front",
     "ore_drill": "ore_drill_front",
     "water_wheel": "water_wheel_front",
+    "large_steam_engine": "large_steam_engine_front",
 }

@@ -76,24 +76,25 @@ Every machine is one `MachineBlock` + `MachineBlockEntity` whose behavior comes 
 | ARC_FURNACE | arc_furnace_controller | 3×3×3 casing structure | 50k / 512 / 0 / 64 | in, out | `jugcraft:arc_smelting` |
 | SOLAR_PANEL | solar_panel | 8 JE/t in sun | 4k / 0 / 32 / – | – | – |
 | STEAM_GENERATOR | steam_generator | coal/bitumen + water → 64 JE/t | 40k / 0 / 128 / – | fuel, water bucket, empty bucket | – |
-| ALLOY_SMELTER | alloy_smelter | **2×2 multi-block**, power socket only | 10k / 128 / 0 / 20 | 2 in, out | `jugcraft:alloying` (multi) |
+| ALLOY_SMELTER | alloy_smelter | **3×2×6 multi-block (36 parts)**, power socket only | 10k / 128 / 0 / 20 | 2 in, out | `jugcraft:alloying` (multi) |
 | METAL_PRESS | metal_press | ingot → plate | 10k / 128 / 0 / 16 | in, out | `jugcraft:pressing` |
 | WIRE_DRAWER | wire_drawer | ingot → 3 wires | 10k / 128 / 0 / 12 | in, out | `jugcraft:wire_drawing` |
 | CIRCUIT_ASSEMBLER | circuit_assembler | circuits | 20k / 256 / 0 / 32 | 3 in, out | `jugcraft:circuit_assembly` (multi) |
-| GEOTHERMAL_GENERATOR | geothermal_generator | **2 wide**, lava → 64 JE/t | 30k / 0 / 128 / – | – (lava tank) | – |
-| WIND_TURBINE | wind_turbine | **3 tall**, 4–24 JE/t | 16k / 0 / 64 / – | – | – |
+| GEOTHERMAL_GENERATOR | geothermal_generator | **2×2×2**, lava → 64 JE/t | 30k / 0 / 128 / – | – (lava tank) | – |
+| WIND_TURBINE | wind_turbine | **9 tall**, 12–72 JE/t; rotor drawn by `client/WindTurbineRenderer` | 48k / 0 / 192 / – | – | – |
 | PULVERIZER | pulverizer | ore → 2 dust + byproduct | 10k / 128 / 0 / 20 | in, out, 2 byproduct | `jugcraft:pulverizing` |
 | ORE_WASHER | ore_washer | ore + 500 mB water → 3 washed ore | 10k / 128 / 0 / 16 | in, out (water tank) | `jugcraft:ore_washing` |
 | SIEVE | sieve | gravel → flint + finds | 10k / 128 / 0 / 8 | in, out, 2 byproduct | `jugcraft:sifting` |
 | SAWMILL | sawmill | log → 6 planks + sawdust | 10k / 128 / 0 / 12 | in, out, 2 byproduct | `jugcraft:sawing` |
 | CAPACITOR_BANK | capacitor_bank | **2×2** battery: charges any side, outputs from its front | 4M / 4,096 / 4,096 / – | – | – |
 | STEEL_TANK | steel_tank | **2×2** tank, 128 buckets, no power, no screen | none | – (fluid) | – |
-| COKE_OVEN | coke_oven | **2 tall**, unpowered: coal → coke | none | in, out | `jugcraft:coking` |
-| STEEL_FOUNDRY | steel_foundry | **3 tall**, unpowered: iron + coke → steel | none | 2 in, out | `jugcraft:steelmaking` (multi) |
+| COKE_OVEN | coke_oven | **2×2, 2 tall + chimney block (9 parts)**, unpowered: coal → coke | none | in, out | `jugcraft:coking` |
+| STEEL_FOUNDRY | steel_foundry | **2×2×5**, unpowered: iron + coke → steel | none | 2 in, out | `jugcraft:steelmaking` (multi) |
 | COBBLESTONE_GENERATOR | cobblestone_generator | water + lava beside it → cobblestone, 20 ticks | 4k / 64 / 0 / 4 | 1 result slot (no inputs) | – |
 | TREE_FARM | tree_farm | sapling → 6 logs, sapling back + extra | 10k / 128 / 0 / 16 | in, out, 2 byproduct | `jugcraft:tree_growing` |
 | WATER_WHEEL | water_wheel | **2 tall** generator: 8–12 JE/t per flowing-water block on its right | 8k / 0 / 64 / – | – | – |
 | AUTO_CRAFTER | auto_crafter | crafts the vanilla recipe in its 3×3 grid; each slot keeps one item as the pattern | 10k / 128 / 0 / 8 | 9 grid, out, 1 remainder | vanilla `crafting` |
+| LARGE_STEAM_ENGINE | large_steam_engine | **2×2×2**: fuel + water → 256 KE/t out of the back of part 7 | none | fuel, water bucket, empty bucket | – |
 | ORE_DRILL | ore_drill | **2 tall**: mines `c:ores` in a 9×9 column below, 40 ticks each (`OreDrilling`) | 20k / 256 / 0 / 32 | 3 result slots (no inputs) | – |
 
 Other blocks:

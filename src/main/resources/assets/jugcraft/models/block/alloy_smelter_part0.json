@@ -12,6 +12,7 @@
     "sp_iron_plate": "jugcraft:block/sp_iron_plate",
     "sp_lamp": "jugcraft:block/sp_lamp",
     "sp_red_iron": "jugcraft:block/sp_red_iron",
+    "sp_sight_glass": "jugcraft:block/sp_sight_glass",
     "sp_window": "jugcraft:block/sp_window",
     "particle": "jugcraft:block/sp_iron_plate"
   },
@@ -25,13 +26,10 @@
       "to": [
         16.0,
         1.0,
-        16.0
+        16
       ],
       "faces": {
         "north": {
-          "texture": "#sp_iron_plate"
-        },
-        "south": {
           "texture": "#sp_iron_plate"
         },
         "east": {
@@ -53,14 +51,11 @@
       ],
       "to": [
         15.0,
-        13.0,
-        15.0
+        16,
+        16
       ],
       "faces": {
         "north": {
-          "texture": "#sp_firebrick"
-        },
-        "south": {
           "texture": "#sp_firebrick"
         },
         "east": {
@@ -68,9 +63,6 @@
         },
         "west": {
           "texture": "#sp_firebrick"
-        },
-        "up": {
-          "texture": "#sp_iron_plate"
         },
         "down": {
           "texture": "#sp_firebrick"
@@ -80,19 +72,16 @@
     {
       "from": [
         0.5,
-        2.5,
+        4.0,
         0.5
       ],
       "to": [
         15.5,
-        3.5,
-        15.5
+        5.0,
+        16
       ],
       "faces": {
         "north": {
-          "texture": "#sp_brass"
-        },
-        "south": {
           "texture": "#sp_brass"
         },
         "east": {
@@ -112,19 +101,16 @@
     {
       "from": [
         0.5,
-        11.0,
+        14.0,
         0.5
       ],
       "to": [
         15.5,
-        12.0,
-        15.5
+        15.0,
+        16
       ],
       "faces": {
         "north": {
-          "texture": "#sp_brass"
-        },
-        "south": {
           "texture": "#sp_brass"
         },
         "east": {
@@ -143,13 +129,13 @@
     },
     {
       "from": [
-        3.5,
-        3.75,
+        3.0,
+        5.5,
         0.25
       ],
       "to": [
-        12.5,
-        10.75,
+        13.0,
+        13.0,
         1.0
       ],
       "faces": {
@@ -176,131 +162,6 @@
         },
         "down": {
           "texture": "#sp_brass"
-        }
-      }
-    },
-    {
-      "from": [
-        12.75,
-        6.5,
-        0.5
-      ],
-      "to": [
-        14.25,
-        8.0,
-        1.25
-      ],
-      "faces": {
-        "north": {
-          "texture": "#sp_lamp",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#sp_brass"
-        },
-        "east": {
-          "texture": "#sp_brass"
-        },
-        "west": {
-          "texture": "#sp_brass"
-        },
-        "up": {
-          "texture": "#sp_brass"
-        },
-        "down": {
-          "texture": "#sp_brass"
-        }
-      }
-    },
-    {
-      "from": [
-        3.75,
-        13.0,
-        3.75
-      ],
-      "to": [
-        5.75,
-        16,
-        5.75
-      ],
-      "faces": {
-        "north": {
-          "texture": "#sp_iron"
-        },
-        "south": {
-          "texture": "#sp_iron"
-        },
-        "east": {
-          "texture": "#sp_iron"
-        },
-        "west": {
-          "texture": "#sp_iron"
-        },
-        "down": {
-          "texture": "#sp_iron"
-        }
-      }
-    },
-    {
-      "from": [
-        10.25,
-        13.0,
-        10.25
-      ],
-      "to": [
-        12.25,
-        16,
-        12.25
-      ],
-      "faces": {
-        "north": {
-          "texture": "#sp_iron"
-        },
-        "south": {
-          "texture": "#sp_iron"
-        },
-        "east": {
-          "texture": "#sp_iron"
-        },
-        "west": {
-          "texture": "#sp_iron"
-        },
-        "down": {
-          "texture": "#sp_iron"
-        }
-      }
-    },
-    {
-      "from": [
-        1.25,
-        13.0,
-        7.0
-      ],
-      "to": [
-        3.0,
-        16,
-        9.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#sp_copper"
-        },
-        "south": {
-          "texture": "#sp_copper"
-        },
-        "east": {
-          "texture": "#sp_copper"
-        },
-        "west": {
-          "texture": "#sp_copper"
-        },
-        "down": {
-          "texture": "#sp_copper"
         }
       }
     }

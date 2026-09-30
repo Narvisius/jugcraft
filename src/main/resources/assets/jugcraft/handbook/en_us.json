@@ -228,8 +228,8 @@
           "title": "Wind Turbine",
           "icon": "jugcraft:wind_turbine",
           "text": [
-            "Three blocks tall. The higher it stands and the worse the weather, the more it makes. Keep the air around its top clear.",
-            "Makes up to 24 JE/t. Holds 16,000 JE."
+            "Nine blocks tall with a seven-block rotor. The higher it stands and the worse the weather, the more it makes, up to 72 JE/t (twice that in a thunderstorm). The rotor needs a clear 7x7 square in front of the top.",
+            "Makes up to 72 JE/t. Holds 48,000 JE."
           ],
           "craft": {
             "grid": [
@@ -355,6 +355,29 @@
               "jugcraft:bronze_ingot"
             ],
             "result": "jugcraft:steam_engine",
+            "count": 1
+          }
+        },
+        {
+          "title": "Large Steam Engine",
+          "icon": "jugcraft:large_steam_engine",
+          "text": [
+            "Two by two by two. Four times the small steam engine: 256 KE/t out of a shaft at the back of its upper right block, using 40 mB of water per tick and fuel four times as fast. It has a screen like the steam generator's, and a water source under it refills it.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steam_engine",
+              "jugcraft:iron_plate",
+              "jugcraft:steam_engine",
+              "jugcraft:iron_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:iron_plate",
+              "jugcraft:steam_engine",
+              "jugcraft:iron_plate",
+              "jugcraft:steam_engine"
+            ],
+            "result": "jugcraft:large_steam_engine",
             "count": 1
           }
         },

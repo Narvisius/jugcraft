@@ -1,0 +1,344 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "sp_brass": "jugcraft:block/sp_brass",
+    "sp_copper": "jugcraft:block/sp_copper",
+    "sp_firebrick": "jugcraft:block/sp_firebrick",
+    "sp_gauge": "jugcraft:block/sp_gauge",
+    "sp_hopper_inside": "jugcraft:block/sp_hopper_inside",
+    "sp_iron": "jugcraft:block/sp_iron",
+    "sp_iron_plate": "jugcraft:block/sp_iron_plate",
+    "sp_lamp": "jugcraft:block/sp_lamp",
+    "sp_window": "jugcraft:block/sp_window",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        11.0
+      ],
+      "to": [
+        11.0,
+        6.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_firebrick"
+        },
+        "east": {
+          "texture": "#sp_firebrick"
+        },
+        "up": {
+          "texture": "#sp_firebrick"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        7.25
+      ],
+      "to": [
+        9.75,
+        6.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_firebrick"
+        },
+        "south": {
+          "texture": "#sp_firebrick"
+        },
+        "east": {
+          "texture": "#sp_firebrick"
+        },
+        "up": {
+          "texture": "#sp_firebrick"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        5.0
+      ],
+      "to": [
+        6.5,
+        6.0,
+        7.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_firebrick"
+        },
+        "south": {
+          "texture": "#sp_firebrick"
+        },
+        "east": {
+          "texture": "#sp_firebrick"
+        },
+        "up": {
+          "texture": "#sp_firebrick"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.0,
+        10.75
+      ],
+      "to": [
+        11.5,
+        2.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_iron"
+        },
+        "east": {
+          "texture": "#sp_iron"
+        },
+        "up": {
+          "texture": "#sp_iron"
+        },
+        "down": {
+          "texture": "#sp_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.0,
+        7.0
+      ],
+      "to": [
+        10.25,
+        2.0,
+        10.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_iron"
+        },
+        "south": {
+          "texture": "#sp_iron"
+        },
+        "east": {
+          "texture": "#sp_iron"
+        },
+        "up": {
+          "texture": "#sp_iron"
+        },
+        "down": {
+          "texture": "#sp_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.0,
+        4.5
+      ],
+      "to": [
+        6.75,
+        2.0,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_iron"
+        },
+        "south": {
+          "texture": "#sp_iron"
+        },
+        "east": {
+          "texture": "#sp_iron"
+        },
+        "up": {
+          "texture": "#sp_iron"
+        },
+        "down": {
+          "texture": "#sp_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        6.0,
+        4.0
+      ],
+      "to": [
+        12.0,
+        7.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_iron_plate"
+        },
+        "east": {
+          "texture": "#sp_iron_plate"
+        },
+        "up": {
+          "texture": "#sp_iron_plate"
+        },
+        "down": {
+          "texture": "#sp_iron_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        7.5,
+        11.0
+      ],
+      "to": [
+        5.0,
+        13.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_iron"
+        },
+        "east": {
+          "texture": "#sp_iron"
+        },
+        "up": {
+          "texture": "#sp_hopper_inside"
+        },
+        "down": {
+          "texture": "#sp_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        13.0,
+        10.5
+      ],
+      "to": [
+        5.5,
+        14.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass"
+        },
+        "east": {
+          "texture": "#sp_brass"
+        },
+        "up": {
+          "texture": "#sp_hopper_inside"
+        },
+        "down": {
+          "texture": "#sp_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        11.0,
+        7.5,
+        4.0
+      ],
+      "to": [
+        12.0,
+        15.0,
+        5.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass"
+        },
+        "south": {
+          "texture": "#sp_brass"
+        },
+        "east": {
+          "texture": "#sp_brass"
+        },
+        "west": {
+          "texture": "#sp_brass"
+        },
+        "up": {
+          "texture": "#sp_brass"
+        },
+        "down": {
+          "texture": "#sp_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.0,
+        4.0
+      ],
+      "to": [
+        12.0,
+        16.0,
+        5.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass"
+        },
+        "south": {
+          "texture": "#sp_brass"
+        },
+        "east": {
+          "texture": "#sp_brass"
+        },
+        "up": {
+          "texture": "#sp_brass"
+        },
+        "down": {
+          "texture": "#sp_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        11.0,
+        15.0,
+        5.0
+      ],
+      "to": [
+        12.0,
+        16.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass"
+        },
+        "east": {
+          "texture": "#sp_brass"
+        },
+        "west": {
+          "texture": "#sp_brass"
+        },
+        "up": {
+          "texture": "#sp_brass"
+        },
+        "down": {
+          "texture": "#sp_brass"
+        }
+      }
+    }
+  ]
+}

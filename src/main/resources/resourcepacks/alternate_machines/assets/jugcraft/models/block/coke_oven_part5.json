@@ -1,0 +1,87 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "front": "jugcraft:block/coke_oven_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        16,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "up": {
+          "texture": "#alloy_smelter_brick"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4,
+        4
+      ],
+      "to": [
+        16,
+        10,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "up": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        10,
+        8
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "up": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick"
+        }
+      }
+    }
+  ]
+}

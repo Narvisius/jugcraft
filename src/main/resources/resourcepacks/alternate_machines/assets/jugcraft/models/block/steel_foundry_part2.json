@@ -11,33 +11,50 @@
   "elements": [
     {
       "from": [
-        4,
         0,
-        4
+        0,
+        0
       ],
       "to": [
-        12,
-        4,
-        12
+        16,
+        2,
+        16
       ],
       "faces": {
-        "north": {
-          "texture": "#alloy_hopper"
-        },
         "south": {
-          "texture": "#alloy_hopper"
+          "texture": "#heavy_plinth"
         },
         "east": {
-          "texture": "#alloy_hopper"
-        },
-        "west": {
-          "texture": "#alloy_hopper"
+          "texture": "#heavy_plinth"
         },
         "up": {
-          "texture": "#alloy_hopper_top"
+          "texture": "#heavy_plinth"
         },
         "down": {
-          "texture": "#alloy_hopper"
+          "texture": "#heavy_plinth"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "east": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick"
         }
       }
     }

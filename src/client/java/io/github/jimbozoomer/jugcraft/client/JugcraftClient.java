@@ -5,6 +5,7 @@ import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.SurveyPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -16,6 +17,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		for (MachineKind kind : MachineKind.values()) {
 			MenuScreens.register(JugcraftMachines.menuType(kind), MachineScreen::new);
 		}
+		BlockEntityRendererRegistry.register(JugcraftMachines.MACHINE_ENTITY, WindTurbineRenderer::new);
 		EngineersHandbookItem.openScreen = () -> Minecraft.getInstance().gui.setScreen(new HandbookScreen());
 		ClientPlayNetworking.registerGlobalReceiver(SurveyPayload.TYPE,
 				(payload, context) -> Minecraft.getInstance().gui.setScreen(new ProspectorScreen(payload.readings())));

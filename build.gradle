@@ -11,6 +11,14 @@ base {
 }
 
 repositories {
+	// JEI (optional recipe viewer integration, compile-time API only; see client/compat/JugcraftJeiPlugin).
+	maven {
+		name = "BlameJared"
+		url = "https://maven.blamejared.com"
+		content {
+			includeGroup "mezz.jei"
+		}
+	}
 }
 
 loom {
@@ -28,6 +36,9 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	// Only the API: Jugcraft runs without JEI; with it, JEI loads our plugin (entrypoint "jei_mod_plugin").
+	compileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
+	compileOnly "mezz.jei:jei-${project.minecraft_version}-fabric-api:${project.jei_version}"
 }
 
 processResources {

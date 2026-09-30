@@ -1,0 +1,62 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "alloy_hopper": "jugcraft:block/alloy_hopper",
+    "alloy_hopper_top": "jugcraft:block/alloy_hopper_top",
+    "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "front": "jugcraft:block/steel_foundry_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#heavy_plinth"
+        },
+        "west": {
+          "texture": "#heavy_plinth"
+        },
+        "up": {
+          "texture": "#heavy_plinth"
+        },
+        "down": {
+          "texture": "#heavy_plinth"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "west": {
+          "texture": "#alloy_smelter_brick"
+        },
+        "down": {
+          "texture": "#alloy_smelter_brick"
+        }
+      }
+    }
+  ]
+}

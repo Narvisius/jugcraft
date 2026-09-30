@@ -24,7 +24,7 @@ public enum MachineKind implements StringRepresentable {
 	CIRCUIT_ASSEMBLER("circuit_assembler", 20_000, 256, 0, 32, 4),
 	// Multi-block machines (see Footprint and LargeMachineBlock).
 	GEOTHERMAL_GENERATOR("geothermal_generator", 30_000, 0, 128, 0, 0),
-	WIND_TURBINE("wind_turbine", 16_000, 0, 64, 0, 0),
+	WIND_TURBINE("wind_turbine", 48_000, 0, 192, 0, 0),
 	// Processing depth. Pulverizer, sieve and sawmill have an input, an output and two byproduct slots.
 	PULVERIZER("pulverizer", 10_000, 128, 0, 20, 4),
 	ORE_WASHER("ore_washer", 10_000, 128, 0, 16, 2),
@@ -44,7 +44,9 @@ public enum MachineKind implements StringRepresentable {
 	TREE_FARM("tree_farm", 10_000, 128, 0, 16, 4),
 	WATER_WHEEL("water_wheel", 8_000, 0, 64, 0, 0),
 	// Auto-crafter: a 3x3 pattern grid (each slot keeps one item as the pattern), the result and a remainder slot.
-	AUTO_CRAFTER("auto_crafter", 10_000, 128, 0, 8, 11);
+	AUTO_CRAFTER("auto_crafter", 10_000, 128, 0, 8, 11),
+	// Kinetic: a 2x2x2 steam engine turning a shaft out of its back (fuel, water bucket, empty bucket).
+	LARGE_STEAM_ENGINE("large_steam_engine", 0, 0, 0, 0, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -64,10 +66,12 @@ public enum MachineKind implements StringRepresentable {
 	public static final int GEOTHERMAL_LAVA_PER_TICK = 1;
 	/** Geothermal generator lava tank (mB). */
 	public static final int GEOTHERMAL_TANK = 4_000;
-	/** Wind turbine JE per tick at or below sea level; one more per 4 blocks higher. */
-	public static final int WIND_BASE_PER_TICK = 4;
+	/** Wind turbine JE per tick with its rotor at sea level; one more per 2 blocks higher. */
+	public static final int WIND_BASE_PER_TICK = 12;
 	/** Wind turbine output cap before weather. */
-	public static final int WIND_MAX_PER_TICK = 24;
+	public static final int WIND_MAX_PER_TICK = 72;
+	/** The rotor's reach in blocks from the hub: the square it sweeps in front of the top block must be clear. */
+	public static final int WIND_ROTOR_REACH = 3;
 	/** Ticks between checks that the wind turbine's rotor has room to turn. */
 	public static final int WIND_CHECK_INTERVAL = 100;
 	/** Steel tank capacity (mB): 128 buckets. */
@@ -91,6 +95,13 @@ public enum MachineKind implements StringRepresentable {
 	public static final int WATER_WHEEL_FALLING = 12;
 	/** Ticks between checks of the water at the wheel (and of the cobblestone generator's water and lava). */
 	public static final int SOURCE_CHECK_INTERVAL = 20;
+	/** Large steam engine: KE per tick out of its back, water per tick, tank, and burn ticks used per tick. */
+	public static final int LARGE_ENGINE_OUTPUT = 256;
+	public static final int LARGE_ENGINE_WATER_PER_TICK = 40;
+	public static final int LARGE_ENGINE_TANK = 16_000;
+	public static final int LARGE_ENGINE_BURN_PER_TICK = 4;
+	/** The large steam engine's output: the upper right back block (part 7), through its back face. */
+	public static final int LARGE_ENGINE_OUTPUT_PART = 7;
 	/** Auto-crafter: ticks per craft (before speed upgrades). */
 	public static final int CRAFT_TICKS = 40;
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
@@ -187,6 +198,7 @@ public enum MachineKind implements StringRepresentable {
 	public int tankCapacity() {
 		return switch (this) {
 			case STEAM_GENERATOR -> STEAM_TANK;
+			case LARGE_STEAM_ENGINE -> LARGE_ENGINE_TANK;
 			case GEOTHERMAL_GENERATOR -> GEOTHERMAL_TANK;
 			case ORE_WASHER -> WASHER_TANK;
 			default -> 0;
@@ -205,18 +217,21 @@ public enum MachineKind implements StringRepresentable {
 	 */
 	public Footprint footprint() {
 		return switch (this) {
-			case GEOTHERMAL_GENERATOR -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0));
-			case WIND_TURBINE -> Footprint.tall(3);
-			case COKE_OVEN -> Footprint.tall(2);
+			case GEOTHERMAL_GENERATOR -> Footprint.cuboid(2, 2, 2);
+			case WIND_TURBINE -> Footprint.tall(9);
+			// A 2x2 beehive two blocks high, with its chimney in one block on top (part 8).
+			case COKE_OVEN -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 0, 1), new Vec3i(-1, 0, 1),
+					new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0), new Vec3i(0, 1, 1), new Vec3i(-1, 1, 1), new Vec3i(0, 2, 0));
 			case ORE_DRILL -> Footprint.tall(2);
+			case LARGE_STEAM_ENGINE -> Footprint.cuboid(2, 2, 2);
 			case WATER_WHEEL -> Footprint.tall(2);
-			case STEEL_FOUNDRY -> Footprint.tall(3);
+			case STEEL_FOUNDRY -> Footprint.cuboid(2, 5, 2);
 			// Two wide, two tall.
 			case CAPACITOR_BANK -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));
 			// Two wide, two deep, one tall (plus its dome).
 			case STEEL_TANK -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 0, 1), new Vec3i(-1, 0, 1));
-			// Two wide and two tall: furnace body, crucible tower on its right, hoppers above.
-			case ALLOY_SMELTER -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));
+			// Three wide, six tall, two deep: the furnace column (left) and a 2x2 crucible tank tower (right).
+			case ALLOY_SMELTER -> Footprint.cuboid(3, 6, 2);
 			default -> Footprint.SINGLE;
 		};
 	}
@@ -226,13 +241,18 @@ public enum MachineKind implements StringRepresentable {
 	 * smelter's copper power socket is on the outer side of its lower right block.
 	 */
 	public @Nullable PowerPort powerPort() {
-		return this == ALLOY_SMELTER ? new PowerPort(1, Direction.WEST) : null;
+		return this == ALLOY_SMELTER ? new PowerPort(2, Direction.WEST) : null;
+	}
+
+	/** Boilers: a fuel slot, a water-bucket slot and an empty-bucket slot, and a water tank. */
+	public boolean isBoiler() {
+		return this == STEAM_GENERATOR || this == LARGE_STEAM_ENGINE;
 	}
 
 	/** Machines with a real fire: they smoke and crackle while running (client-side effects only). */
 	public boolean burnsFuel() {
 		return this == COAL_GENERATOR || this == STEAM_GENERATOR || this == GEOTHERMAL_GENERATOR
-				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ARC_FURNACE;
+				|| this == LARGE_STEAM_ENGINE || this == COKE_OVEN || this == STEEL_FOUNDRY || this == ARC_FURNACE;
 	}
 
 	/** Height of the machine in blocks (the tallest part plus one). */

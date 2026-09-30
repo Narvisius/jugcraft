@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "PCP",
+    "SPS"
+  ],
+  "key": {
+    "S": "jugcraft:steam_engine",
+    "P": "#c:plates/iron",
+    "C": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:large_steam_engine",
+    "count": 1
+  }
+}

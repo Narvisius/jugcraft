@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -39,12 +43,30 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  */
 public class LargeMachineBlock extends MachineBlock implements WorldlyContainerHolder {
+	/** Most blocks one machine may fill (PART_STATES in tools/model_writer.py). */
+	public static final int MAX_PARTS = 64;
 	/** Which block of the footprint this is; 0 is the master. */
-	public static final IntegerProperty PART = IntegerProperty.create("part", 0, 3);
+	public static final IntegerProperty PART = IntegerProperty.create("part", 0, MAX_PARTS - 1);
 
 	public LargeMachineBlock(Properties properties, MachineKind kind) {
 		super(properties, kind);
 		this.registerDefaultState(this.defaultBlockState().setValue(PART, 0));
+	}
+
+	/** The coke oven's chimney block: only the pipe, which stands at the corner shared by the four blocks below. */
+	private static final int COKE_OVEN_CHIMNEY = 8;
+	private static final Map<Direction, VoxelShape> CHIMNEY = Map.of(
+			Direction.NORTH, Block.box(0, 0, 13, 3, 16, 16),
+			Direction.EAST, Block.box(0, 0, 0, 3, 16, 3),
+			Direction.SOUTH, Block.box(13, 0, 0, 16, 16, 3),
+			Direction.WEST, Block.box(13, 0, 13, 16, 16, 16));
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		if (kind() == MachineKind.COKE_OVEN && state.getValue(PART) == COKE_OVEN_CHIMNEY) {
+			return CHIMNEY.get(state.getValue(FACING));
+		}
+		return super.getShape(state, level, pos, context);
 	}
 
 	public Footprint footprint() {

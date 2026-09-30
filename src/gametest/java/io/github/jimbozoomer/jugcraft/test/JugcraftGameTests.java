@@ -16,6 +16,7 @@ import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ItemSorterBlockEntity;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.logistics.PneumaticExtractorBlock;
+import io.github.jimbozoomer.jugcraft.machine.Footprint;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
@@ -129,21 +130,23 @@ public class JugcraftGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(tankEntity.storage.amount > 0, "Tank is still empty"));
 	}
 
-	/** The 2x2 alloy smelter: places all four blocks, takes power only at its socket, makes bronze. */
+	/** The 3x2x6 alloy smelter: places all 36 blocks, takes power only at its socket, makes bronze. */
 	@GameTest(maxTicks = 400)
 	public void alloySmelterMakesBronze(GameTestHelper helper) {
-		BlockPos master = new BlockPos(4, 1, 3);
+		BlockPos master = new BlockPos(6, 1, 3);
 		LargeMachineBlock block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.ALLOY_SMELTER);
 		BlockState state = block.defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH);
 		helper.setBlock(master, state);
 		block.setPlacedBy(helper.getLevel(), helper.absolutePos(master), helper.getBlockState(master), null, ItemStack.EMPTY);
-		BlockPos right = master.west();
-		for (BlockPos part : new BlockPos[] {master, right, master.above(), right.above()}) {
-			helper.assertBlockPresent(block, part);
+		Footprint footprint = MachineKind.ALLOY_SMELTER.footprint();
+		for (int part = 0; part < footprint.size(); part++) {
+			BlockPos at = footprint.partPos(helper.absolutePos(master), Direction.NORTH, part);
+			helper.assertTrue(helper.getLevel().getBlockState(at).is(block), "Part " + part + " is missing");
 		}
 		helper.assertTrue(EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.NORTH) == null,
 				"The alloy smelter must not take power at its front");
-		charge(helper, right, Direction.WEST);
+		// The socket is on the outer (west) side of the lower right front block, two to the right of the master.
+		charge(helper, master.west(2), Direction.WEST);
 		MachineBlockEntity smelter = helper.getBlockEntity(master, MachineBlockEntity.class);
 		smelter.setItem(0, new ItemStack(Items.COPPER_INGOT, 3));
 		smelter.setItem(1, new ItemStack(item("tin_ingot")));
@@ -153,17 +156,17 @@ public class JugcraftGameTests {
 		});
 	}
 
-	/** Breaking any block of a multi-block machine removes the whole machine. */
+	/** Breaking any block of a multi-block machine removes the whole machine (here the nine-block wind turbine). */
 	@GameTest(maxTicks = 40)
 	public void breakingOnePartRemovesTheMachine(GameTestHelper helper) {
 		BlockPos base = new BlockPos(3, 1, 3);
 		LargeMachineBlock block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.WIND_TURBINE);
 		helper.setBlock(base, block.defaultBlockState());
 		block.setPlacedBy(helper.getLevel(), helper.absolutePos(base), helper.getBlockState(base), null, ItemStack.EMPTY);
-		helper.assertBlockPresent(block, base.above(2));
-		helper.destroyBlock(base.above(2));
+		helper.assertBlockPresent(block, base.above(8));
+		helper.destroyBlock(base.above(4));
 		helper.succeedWhen(() -> {
-			for (int y = 0; y < 3; y++) {
+			for (int y = 0; y < 9; y++) {
 				helper.assertBlockNotPresent(block, base.above(y));
 			}
 		});
@@ -361,18 +364,20 @@ public class JugcraftGameTests {
 	@GameTest(maxTicks = 20)
 	public void cablesConnectOnlyWherePowerGoesIn(GameTestHelper helper) {
 		// Cables first, so placing the machines updates their connections.
-		BlockPos besideOven = new BlockPos(1, 1, 1);
-		BlockPos besideFront = new BlockPos(5, 1, 2);
-		BlockPos besideSocket = new BlockPos(3, 1, 3);
+		BlockPos besideOven = new BlockPos(3, 1, 1);
+		BlockPos besideFront = new BlockPos(7, 1, 2);
+		BlockPos besideSocket = new BlockPos(4, 1, 3);
 		for (BlockPos cable : new BlockPos[] {besideOven, besideFront, besideSocket}) {
 			helper.setBlock(cable, JugcraftMachines.COPPER_CABLE);
 		}
+		// The 2x2 coke oven fills x 1..2, z 1..2 from its master at (2,1,1).
 		large(helper, new BlockPos(2, 1, 1), MachineKind.COKE_OVEN);
-		// Alloy smelter at (5,1,3): its front faces north towards (5,1,2); its socket block is (4,1,3), socket facing west.
-		large(helper, new BlockPos(5, 1, 3), MachineKind.ALLOY_SMELTER);
+		// Alloy smelter at (7,1,3), 3 wide to the west: its front faces north towards (7,1,2); its socket block is
+		// (5,1,3), with the socket facing west towards the cable at (4,1,3).
+		large(helper, new BlockPos(7, 1, 3), MachineKind.ALLOY_SMELTER);
 		helper.assertTrue(EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 1)), Direction.WEST) == null,
 				"An unpowered machine must not expose energy");
-		helper.assertTrue(!helper.getBlockState(besideOven).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.EAST)),
+		helper.assertTrue(!helper.getBlockState(besideOven).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.WEST)),
 				"A cable must not connect to the coke oven");
 		helper.assertTrue(!helper.getBlockState(besideFront).getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(Direction.SOUTH)),
 				"A cable must not connect to the alloy smelter's front");

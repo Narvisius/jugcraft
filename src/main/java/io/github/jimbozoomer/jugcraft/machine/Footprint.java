@@ -27,6 +27,25 @@ public record Footprint(List<Vec3i> offsets) {
 		return of(offsets);
 	}
 
+	/**
+	 * A box {@code width} blocks wide (extending to the machine's right, seen from the front, so -x),
+	 * {@code height} tall and {@code depth} deep (extending back, +z). Parts are numbered layer by layer
+	 * from the bottom, row by row from the front, right to left; the master is the front left bottom
+	 * block. Keep in sync with {@code cuboid()} in tools/large_machines.py.
+	 */
+	public static Footprint cuboid(int width, int height, int depth) {
+		Vec3i[] offsets = new Vec3i[width * height * depth];
+		int index = 0;
+		for (int y = 0; y < height; y++) {
+			for (int z = 0; z < depth; z++) {
+				for (int x = 0; x < width; x++) {
+					offsets[index++] = new Vec3i(-x, y, z);
+				}
+			}
+		}
+		return of(offsets);
+	}
+
 	public int size() {
 		return offsets.size();
 	}

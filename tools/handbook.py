@@ -36,8 +36,9 @@ ABOUT = {
     "wire_drawer": "Draws one ingot into three wires.",
     "circuit_assembler": "Assembles circuits from up to three ingredients, in any slots.",
     "geothermal_generator": "Two blocks wide. Burns lava from its tank (buckets, pumps or pipes): one bucket lasts 1,000 ticks.",
-    "wind_turbine": "Three blocks tall. The higher it stands and the worse the weather, the more it makes. Keep the air "
-                    "around its top clear.",
+    "wind_turbine": "Nine blocks tall with a seven-block rotor. The higher it stands and the worse the weather, the more it "
+                    "makes, up to 72 JE/t (twice that in a thunderstorm). The rotor needs a clear 7x7 square in front of "
+                    "the top.",
     "pulverizer": "Grinds ore into two dusts, with a chance of a second metal. Also grinds washed ore, raw metal and ingots.",
     "ore_washer": "Washes one ore into three washed ores, using 500 mB of water each time. Grind them in the pulverizer.",
     "sieve": "Sifts gravel into flint and soul sand into soul soil, with a small chance of nuggets or quartz.",
@@ -88,6 +89,9 @@ ABOUT = {
     "steam_engine": "Burns coal, charcoal, coke or bitumen and boils water to turn its flywheel: 64 KE/t out of its "
                     "back. Right-click with fuel or a water bucket, or feed it with hoppers, pipes and pumps; a water "
                     "source below refills it. It burns only while something takes the power.",
+    "large_steam_engine": "Two by two by two. Four times the small steam engine: 256 KE/t out of a shaft at the back of "
+                          "its upper right block, using 40 mB of water per tick and fuel four times as fast. It has a "
+                          "screen like the steam generator's, and a water source under it refills it.",
     "dynamo": "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge "
               "from a shaft line to the electric network.",
     "auto_crafter": "Crafts the crafting recipe laid out in its 3x3 grid. Set the pattern by hand; each grid slot "
@@ -218,8 +222,9 @@ def build():
             [machine_page(m) for m in ("coal_generator", "solar_panel", "steam_generator", "geothermal_generator",
                                        "wind_turbine", "battery_box")]
             + [block_page(c, CABLES[c]["display"]) for c in CABLES]
-            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("steam_engine", "hand_crank", "iron_shaft",
-                                                                     "brass_gearbox", "dynamo")]},
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("steam_engine",)]
+            + [machine_page("large_steam_engine")]
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("hand_crank", "iron_shaft", "brass_gearbox", "dynamo")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller", "auto_crafter")]},

@@ -8,6 +8,18 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #35 Bigger machines, a spinning wind turbine, the Large Steam Engine and JEI
+- Machines can now fill up to 64 blocks. Resized:
+  - **Alloy Smelter:** 3×2×6, with a big copper crucible tank pouring into one funnel over the furnace.
+  - **Geothermal Generator:** 2×2×2.
+  - **Steel Foundry:** 2×2×5.
+  - **Coke Oven:** 2×2×2, with its chimney in a block on top.
+  - **Wind Turbine:** 9 tall, with a 7-block rotor that spins (block entity renderer); 12–72 JE/t.
+- **Large Steam Engine** (2×2×2): 256 KE/t, four times the small one.
+- Machine screens: amber energy readout without a shadow; vanilla tooltips on gauges.
+- **JEI:** a recipe page per machine (optional; EMI has no 26.3 build yet).
+- Multi-blocks placed with earlier builds need re-placing.
+
 ### #32 Polish
 - Machines with a fire, and the steam engine, smoke and crackle while running.
 - Hovering the energy bar or a tank gauge shows exact JE or mB.
