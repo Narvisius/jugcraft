@@ -29,6 +29,22 @@ PARTS = {
 # Cables: display name and JE per tick one push may send through the network.
 CABLES = {"copper_cable": {"display": "Copper Cable", "rate": 256}}
 
+# Fluid logistics (physical branch; see docs/TECH_TREE.md). Amounts are millibuckets (mB);
+# 1 bucket = 1000 mB = 81000 Fabric droplets. Pipes are passive: pumps push through them.
+PIPES = {"bronze_fluid_pipe": {"display": "Bronze Fluid Pipe", "rate": 250}}
+# Fluid blocks with their own block entities. top/side/bottom name the textures.
+FLUID_BLOCKS = {
+    "fluid_tank": {"display": "Tinplate Tank"},
+    "electric_pump": {"display": "Electric Pump"},
+}
+FLUID_STATS = {
+    # Holds 16 buckets of one fluid; filled and emptied with buckets or by pumps.
+    "fluid_tank": {"capacity_mb": 16_000},
+    # Draws a water/lava source (or the tank) below it and pushes into pipes/storages on its other sides.
+    "electric_pump": {"energy_capacity": 4_000, "input_per_tick": 64, "use_per_tick": 8,
+                      "pump_per_tick": 100, "buffer_mb": 4_000},
+}
+
 # Balance numbers shared with the Java code (MachineStats.java). Keep in sync.
 STATS = {
     "coal_generator": {"capacity": 16_000, "output_per_tick": 64, "generation_per_tick": 32},
@@ -92,6 +108,12 @@ CRAFTING = {
     "circuit_assembler": (["PGP", "CMC", "PRP"],
                           {"P": "#c:plates/tin", "G": "#c:gears/bronze", "C": "jugcraft:copper_cable",
                            "M": "jugcraft:machine_casing", "R": "minecraft:redstone"}, 1),
+    # Fluid branch: pipes and tanks come from press-made plates; the pump adds gears and a casing.
+    "bronze_fluid_pipe": (["PGP"], {"P": "#c:plates/bronze", "G": "minecraft:glass"}, 4),
+    "fluid_tank": (["PPP", "PGP", "PPP"], {"P": "#c:plates/tin", "G": "minecraft:glass"}, 1),
+    "electric_pump": (["PUP", "GMG", "PCP"],
+                      {"P": "#c:plates/bronze", "U": "minecraft:bucket", "G": "#c:gears/iron",
+                       "M": "jugcraft:machine_casing", "C": "jugcraft:copper_cable"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",
@@ -185,4 +207,4 @@ def machine_recipes():
 
 
 def machine_blocks():
-    return list(MACHINES) + list(PARTS) + list(CABLES)
+    return list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)

@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.machine;
 
 import io.github.jimbozoomer.jugcraft.energy.EnergyConnectable;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
+import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -75,11 +76,13 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 	@Override
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
 		EnergyNetworks.invalidate(level);
+		FluidNetworks.invalidate(level);
 	}
 
 	@Override
 	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
 		EnergyNetworks.invalidate(level);
+		FluidNetworks.invalidate(level);
 		Containers.updateNeighboursAfterDestroy(state, level, pos);
 	}
 

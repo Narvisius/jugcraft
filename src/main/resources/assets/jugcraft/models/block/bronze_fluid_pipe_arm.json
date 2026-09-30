@@ -1,8 +1,7 @@
 {
-  "parent": "minecraft:block/block",
   "textures": {
-    "cable": "jugcraft:block/copper_cable",
-    "particle": "jugcraft:block/copper_cable"
+    "cable": "jugcraft:block/bronze_fluid_pipe",
+    "particle": "jugcraft:block/bronze_fluid_pipe"
   },
   "elements": [
     {
@@ -14,19 +13,10 @@
       "to": [
         10,
         10,
-        16
+        6
       ],
       "faces": {
         "north": {
-          "uv": [
-            6,
-            6,
-            10,
-            10
-          ],
-          "texture": "#cable"
-        },
-        "south": {
           "uv": [
             6,
             6,
@@ -39,7 +29,7 @@
           "uv": [
             0,
             6,
-            16,
+            6,
             10
           ],
           "texture": "#cable"
@@ -48,7 +38,7 @@
           "uv": [
             0,
             6,
-            16,
+            6,
             10
           ],
           "texture": "#cable"
@@ -58,7 +48,7 @@
             6,
             0,
             10,
-            16
+            6
           ],
           "texture": "#cable"
         },
@@ -67,7 +57,7 @@
             6,
             0,
             10,
-            16
+            6
           ],
           "texture": "#cable"
         }

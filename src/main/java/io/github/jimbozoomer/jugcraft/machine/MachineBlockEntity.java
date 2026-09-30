@@ -3,11 +3,17 @@ package io.github.jimbozoomer.jugcraft.machine;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
+import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -118,6 +124,49 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public MachineKind kind() {
 		return kind;
 	}
+
+	/** Fluid exposed on a side: only the steam generator takes fluid (water, into its boiler tank). */
+	public @Nullable Storage<FluidVariant> fluidFor(@Nullable Direction side) {
+		return kind == MachineKind.STEAM_GENERATOR ? waterInlet : null;
+	}
+
+	/**
+	 * Lets pumps and pipes fill the steam generator's water tank. The tank counts whole
+	 * millibuckets, so insertion is rounded down to multiples of {@link FluidNetworks#DROPLETS_PER_MB}.
+	 */
+	private final class WaterInlet extends SnapshotParticipant<Integer> implements InsertionOnlyStorage<FluidVariant> {
+		@Override
+		public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction) {
+			StoragePreconditions.notBlankNotNegative(resource, maxAmount);
+			if (!resource.isOf(Fluids.WATER)) {
+				return 0;
+			}
+			long millibuckets = Math.min(maxAmount / FluidNetworks.DROPLETS_PER_MB, MachineKind.STEAM_TANK - water);
+			if (millibuckets <= 0) {
+				return 0;
+			}
+			updateSnapshots(transaction);
+			water += (int) millibuckets;
+			return millibuckets * FluidNetworks.DROPLETS_PER_MB;
+		}
+
+		@Override
+		protected Integer createSnapshot() {
+			return water;
+		}
+
+		@Override
+		protected void readSnapshot(Integer snapshot) {
+			water = snapshot;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			setChanged();
+		}
+	}
+
+	private final WaterInlet waterInlet = new WaterInlet();
 
 	/** The storage exposed on a side; the battery box only discharges through its front. */
 	public @Nullable EnergyStorage energyFor(@Nullable Direction side) {

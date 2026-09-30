@@ -22,7 +22,7 @@ These unlock whole groups of machines, so they should be designed first.
 
 | System | Why | Unlocks |
 | --- | --- | --- |
-| **Fluid API and pipes/tanks** (transactional, like energy) | Crude oil, steam, acids, water and lava need to move | Refinery, chemical reactor, pump, geothermal, fluid steam input |
+| **Fluid API and pipes/tanks** ✅ implemented (Fabric Transfer API) | Crude oil, steam, acids, water and lava need to move | Refinery, chemical reactor, pump, geothermal, fluid steam input |
 | **Item pipes / conveyor** (optional; hoppers work today) | Factories larger than hopper chains | Automated multi-machine lines |
 | **Machine upgrades** (speed, efficiency, energy) | Progression without a new block each time | A use for rare earths, silver and lithium |
 | **Energy tiers** (low / medium / high voltage, transformers) | Stops one cable type carrying unlimited power; gives aluminum and silver cable a purpose | High-demand machines, the reactor |
@@ -36,7 +36,7 @@ These unlock whole groups of machines, so they should be designed first.
 | **Alloy Smelter** ✅ implemented | Two-input alloying: bronze, brass (copper + zinc), solder (tin + lead), invar (iron + nickel) | Existing metals | Machine casings, circuits, magic instruments (bell bronze, brass astrolabes) |
 | **Metal Press** ✅ implemented | Ingots → plates (4 plates → gear by crafting) | All metals | Circuit assembler, casings, rocket hulls, better machine recipes |
 | **Wire Drawer** ✅ implemented | Ingots → wire (copper, silver, aluminum) | Copper, silver, aluminum | Circuits, cables, motors |
-| **Water Pump** | Moves water into tanks and the steam generator | Fluid API | Steam, agriculture (irrigation), chemistry |
+| **Water Pump** ✅ implemented as the Electric Pump (also pumps lava) | Moves water into tanks and the steam generator | Fluid API | Steam, agriculture (irrigation), chemistry |
 
 ### Tier 2: Specialization
 | Machine | Does | Uses | Feeds |
@@ -77,7 +77,7 @@ Each connection below works both ways, but no machine requires magic to work.
 
 ## Suggested next steps, in order
 1. ~~**Alloy Smelter**~~ Done: bronze, brass, invar and solder.
-2. **Fluid API, with Water Pump and tanks:** the foundation for steam, chemistry and oil.
+2. ✅ **Fluid API, with Water Pump and tanks:** the foundation for steam, chemistry and oil.
 3. ~~**Metal Press, Wire Drawer and Circuit Assembler**~~ Done: the parts economy for everything above tier 2.
 4. **Chemistry branch** (planned; see [branches/CHEMISTRY.md](branches/CHEMISTRY.md)): Electrolytic Cell and Chemical Reactor replace the remaining stand-ins and give salt, sulfur and phosphate real uses.
 5. **Energy tiers and upgrades:** once demand justifies them.

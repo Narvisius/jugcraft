@@ -13,7 +13,7 @@ Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and st
 | --- | --- | --- |
 | Coal Generator | Burns coal/charcoal (1600 ticks) or coal blocks (16000 ticks) | Makes 32/t while burning, holds 16,000, outputs 64/t to every side. Stops burning when full, so fuel is never wasted |
 | Solar Panel | Generates under open sky in daylight; no fuel. Crafted with silicon (from the arc furnace) | 8/t in sun, 4/t in rain, 0 at night; holds 4,000; outputs 32/t |
-| Steam Generator | Boils water with coal, charcoal, coal blocks or **bitumen** (800 ticks) | 64/t while boiling (twice the coal generator per fuel); uses 10 mB water per tick from an 8-bucket tank; holds 40,000; outputs 128/t. Water comes from buckets (top slot) or a **water source block directly beneath** (20 mB/t); empty buckets come out the bottom |
+| Steam Generator | Boils water with coal, charcoal, coal blocks or **bitumen** (800 ticks) | 64/t while boiling (twice the coal generator per fuel); uses 10 mB water per tick from an 8-bucket tank; holds 40,000; outputs 128/t. Water comes from buckets (top slot), a **water source block directly beneath** (20 mB/t), or any pump or pipe on any side; empty buckets come out the bottom |
 | Copper Cable | Connects generators, batteries and machines; shows connections visually | Up to 256/t per push; energy is split evenly between receivers |
 | Battery Box | Stores energy | Holds 400,000; charges from any side except the front, discharges 256/t out of the **front** |
 | Electric Furnace | Smelts anything the vanilla furnace can | 10/t, 100 ticks per item (twice the vanilla furnace's speed); holds 10,000 |
@@ -22,6 +22,7 @@ Burn coal in a **Coal Generator**, run **Copper Cable** to your machines, and st
 | Metal Press | Ingot → plate (copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten). Four plates craft a gear (iron, bronze, brass, invar) | 16/t; holds 10,000; 100 ticks |
 | Wire Drawer | Ingot → 3 wires (copper, silver, aluminum) | 12/t; holds 10,000; 100 ticks |
 | Circuit Assembler | Three ingredient slots, any order: silicon + 3 copper wire + solder → basic circuit; 2 basic circuits + 3 silver wire + invar plate → advanced circuit | 32/t; holds 20,000; 200–300 ticks |
+| Electric Pump | Pulls 100 mB/t from a tank or water/lava source below; pushes out of its top and sides into pipes or storages (see [TECH_TREE.md](../TECH_TREE.md#fluids)) | 8/t while moving fluid; holds 4,000 |
 | Arc Furnace (multiblock) | High-temperature processing: quartz → 2 silicon, bauxite → aluminum ingot, raw nickel/tungsten/uranium → ingots, lepidolite → 2 lithium carbonate, monazite → 2 rare earth oxide | 64/t; holds 50,000 |
 
 **Arc furnace structure:** a solid 3×3×3 cube of 26 Arc Furnace Casing blocks, with the Arc Furnace Controller in the center of one face, facing outward. Feed power into the controller's front. The screen shows whether the structure is formed; the structure is rechecked every second.
@@ -41,6 +42,7 @@ Hoppers work with every machine: they insert into the input (or fuel) slot from 
 - **Metal Press:** bronze, a piston, cable, a casing and an anvil.
 - **Wire Drawer:** brass, shears, cable, a casing and redstone.
 - **Circuit Assembler:** tin plates, a bronze gear, cable, a casing and redstone.
+- **Bronze Fluid Pipe** (×4): two bronze plates and glass. **Tinplate Tank:** eight tin plates and glass. **Electric Pump:** bronze plates, a bucket, two iron gears, a casing and cable.
 - **Solar Panel:** glass, silicon, bronze and cable.
 - **Steam Generator:** bronze, a bucket, cable, a casing and a coal generator (an upgrade of it).
 
