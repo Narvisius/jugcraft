@@ -97,10 +97,11 @@ def machine_assets(lang):
         for suffix, front in (("", "front"), ("_on", "front_on")):
             if suffix and not info["lit"]:
                 continue
+            front_texture = info.get("front", f"{machine}_{front}")
             write(ASSETS / "models" / "block" / f"{machine}{suffix}.json", {
                 "parent": "minecraft:block/orientable",
-                "textures": {"top": rid("block/machine_top"), "side": rid("block/machine_side"),
-                             "front": rid(f"block/{machine}_{front}")},
+                "textures": {"top": rid(f"block/{info.get('top', 'machine_top')}"), "side": rid("block/machine_side"),
+                             "front": rid(f"block/{front_texture}")},
             })
         variants = {}
         for facing, y in FACING_Y.items():
@@ -250,7 +251,7 @@ def recipes():
     for result, (pattern, key, count) in CRAFTING.items():
         features = [MACHINE_FEATURE] + sorted({
             feature_of(f"{ref.split('/')[-1]}_ingot") for ref in key.values() if ref.startswith("#c:ingots/")
-            and ref.split("/")[-1] != "copper"})
+            and ref.split("/")[-1] != "copper"} | ({"silicon"} if "#c:silicon" in key.values() else set()))
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)

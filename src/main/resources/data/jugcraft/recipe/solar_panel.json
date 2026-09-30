@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "SSS",
+    "BCB"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "S": "#c:silicon",
+    "B": "#c:ingots/bronze",
+    "C": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:solar_panel",
+    "count": 1
+  }
+}

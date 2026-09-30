@@ -426,6 +426,40 @@ def gui():
     img.save(TEX / "gui" / "machine.png", optimize=True)
 
 
+def solar_top():
+    img = new()
+    cell = [(22, 34, 78), (28, 44, 96), (34, 54, 112)]
+    rng = random.Random(600)
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                c = BRONZE[1]
+            elif x in (5, 10) or y in (5, 10):
+                c = (176, 182, 190)
+            else:
+                c = rng.choice(cell)
+                if rng.random() < 0.06:
+                    c = (120, 150, 220)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def boiler(seed, lit):
+    img = panel(seed)
+    for y in range(3, 13):
+        for x in range(3, 13):
+            if (x - 7.5) ** 2 + (y - 7.5) ** 2 <= 20:
+                img.putpixel((x, y), BRONZE[2 if (x + y) % 3 else 3] + (255,))
+    gauge = (238, 238, 230)
+    for x, y in [(6, 5), (7, 5), (8, 5), (9, 5), (6, 6), (9, 6)]:
+        img.putpixel((x, y), gauge + (255,))
+    needle = (200, 40, 30) if lit else (60, 60, 60)
+    img.putpixel((8, 6) if lit else (7, 6), needle + (255,))
+    for x in range(5, 11):
+        img.putpixel((x, 11), ((250, 140, 30) if lit else (40, 34, 30)) + (255,))
+    return img
+
+
 def machines():
     (TEX / "gui").mkdir(parents=True, exist_ok=True)
     save(panel(500), "block", "machine_side")
@@ -441,6 +475,9 @@ def machines():
     save(window(506, [(28, 30, 40)], glow=[(170, 210, 255), (230, 240, 255), (120, 170, 255)]), "block", "arc_furnace_controller_front_on")
     save(panel(507, palette=BRONZE, trim=STEEL), "block", "machine_casing")
     save(bricks(508), "block", "arc_furnace_casing")
+    save(solar_top(), "block", "solar_panel_top")
+    save(boiler(509, False), "block", "steam_generator_front")
+    save(boiler(509, True), "block", "steam_generator_front_on")
     save(cable_texture(), "block", "copper_cable")
     save(cable_item(), "item", "copper_cable")
     gui()

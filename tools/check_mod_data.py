@@ -117,7 +117,7 @@ def item_units(ref):
     ns, path = split(ref.lstrip("#"))
     if ref.startswith("#"):
         form, _, metal = path.partition("/")
-        if metal in MINERALS:
+        if metal in MINERALS or path in {info["tag"] for info in ITEMS.values()}:
             return {}
         if form not in UNITS or not metal:
             err(f"Recipe uses unsupported tag {ref}")

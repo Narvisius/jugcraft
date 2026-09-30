@@ -10,8 +10,12 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-/** Shared menu for all machines. Slot layout: fuel at (56,35); input (56,35) and output (116,35) for processors. */
+/**
+ * Shared menu for all machines. Coal generator: fuel (56,35). Processors: input (56,35), output (116,35).
+ * Steam generator: fuel (56,53), water bucket (56,17), empty buckets (116,35).
+ */
 public class MachineMenu extends AbstractContainerMenu {
 	public static final int INPUT_X = 56;
 	public static final int OUTPUT_X = 116;
@@ -41,6 +45,25 @@ public class MachineMenu extends AbstractContainerMenu {
 					return GeneratorFuels.burnTicks(stack) > 0;
 				}
 			});
+		} else if (kind == MachineKind.STEAM_GENERATOR) {
+			addSlot(new Slot(container, MachineBlockEntity.SLOT_FUEL, INPUT_X, 53) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return GeneratorFuels.steamBurnTicks(stack) > 0;
+				}
+			});
+			addSlot(new Slot(container, MachineBlockEntity.SLOT_WATER_IN, INPUT_X, 17) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return stack.is(Items.WATER_BUCKET);
+				}
+			});
+			addSlot(new Slot(container, MachineBlockEntity.SLOT_BUCKET_OUT, OUTPUT_X, SLOT_Y) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return false;
+				}
+			});
 		} else if (kind.isProcessor()) {
 			addSlot(new Slot(container, 0, INPUT_X, SLOT_Y));
 			addSlot(new Slot(container, 1, OUTPUT_X, SLOT_Y) {
@@ -60,6 +83,15 @@ public class MachineMenu extends AbstractContainerMenu {
 
 	public int data(int index) {
 		return data.get(index);
+	}
+
+	private boolean moveIntoMachine(ItemStack stack, int machineSlots) {
+		for (int slot = 0; slot < machineSlots; slot++) {
+			if (container.canPlaceItem(slot, stack) && moveItemStackTo(stack, slot, slot + 1, false)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Energy stored, reassembled from the two synced 16-bit halves. */
@@ -94,7 +126,7 @@ public class MachineMenu extends AbstractContainerMenu {
 			if (!moveItemStackTo(stack, machineSlots, playerEnd, true)) {
 				return ItemStack.EMPTY;
 			}
-		} else if (machineSlots == 0 || !container.canPlaceItem(0, stack) || !moveItemStackTo(stack, 0, 1, false)) {
+		} else if (!moveIntoMachine(stack, machineSlots)) {
 			return ItemStack.EMPTY;
 		}
 		if (stack.isEmpty()) {

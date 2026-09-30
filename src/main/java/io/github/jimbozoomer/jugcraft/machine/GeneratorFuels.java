@@ -1,9 +1,13 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
+import io.github.jimbozoomer.jugcraft.materials.JugcraftMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-/** Coal generator fuels (GENERATOR_FUELS in tools/machines.py). Coal burns as long as in a vanilla furnace. */
+/**
+ * Generator fuels (GENERATOR_FUELS and STEAM_FUELS in tools/machines.py). Coal burns as long as
+ * in a vanilla furnace; the steam generator also accepts bitumen.
+ */
 public final class GeneratorFuels {
 	private GeneratorFuels() {
 	}
@@ -16,5 +20,12 @@ public final class GeneratorFuels {
 			return 16000;
 		}
 		return 0;
+	}
+
+	public static int steamBurnTicks(ItemStack stack) {
+		if (JugcraftMaterials.BITUMEN != null && stack.is(JugcraftMaterials.BITUMEN)) {
+			return 800;
+		}
+		return burnTicks(stack);
 	}
 }

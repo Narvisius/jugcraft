@@ -12,6 +12,8 @@ MACHINES = {
     "electric_furnace": {"display": "Electric Furnace", "lit": True},
     "crusher": {"display": "Crusher", "lit": True},
     "arc_furnace_controller": {"display": "Arc Furnace Controller", "lit": True},
+    "solar_panel": {"display": "Solar Panel", "lit": False, "top": "solar_panel_top", "front": "machine_side"},
+    "steam_generator": {"display": "Steam Generator", "lit": True},
 }
 
 # Plain crafting-component / structure blocks.
@@ -30,10 +32,17 @@ STATS = {
     "electric_furnace": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 10, "ticks": 100},
     "crusher": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
     "arc_furnace_controller": {"capacity": 50_000, "input_per_tick": 512, "use_per_tick": 64},
+    # Full sun under open sky; half in rain or thunder; nothing at night.
+    "solar_panel": {"capacity": 4_000, "output_per_tick": 32, "generation_per_tick": 8},
+    # Boils 10 mB of water per tick; the tank holds 8 buckets and a water source below refills 20 mB/t.
+    "steam_generator": {"capacity": 40_000, "output_per_tick": 128, "generation_per_tick": 64,
+                        "water_per_tick": 10, "tank": 8_000},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
 GENERATOR_FUELS = {"minecraft:coal": 1600, "minecraft:charcoal": 1600, "minecraft:coal_block": 16000}
+# The steam generator also burns bitumen from oil sand.
+STEAM_FUELS = {**GENERATOR_FUELS, "jugcraft:bitumen": 800}
 
 # One ore block yields this many raw items in the crusher (the central ore-processing bonus).
 ORE_PROCESSING_MULTIPLIER = 2
@@ -56,6 +65,11 @@ CRAFTING = {
     "crusher": (["FFF", "CMC", "BRB"],
                 {"F": "minecraft:flint", "C": "jugcraft:copper_cable", "M": "jugcraft:machine_casing",
                  "B": "#c:ingots/bronze", "R": "minecraft:redstone"}, 1),
+    "solar_panel": (["GGG", "SSS", "BCB"],
+                    {"G": "minecraft:glass", "S": "#c:silicon", "B": "#c:ingots/bronze", "C": "jugcraft:copper_cable"}, 1),
+    "steam_generator": (["BUB", "CGC", "BMB"],
+                        {"B": "#c:ingots/bronze", "U": "minecraft:bucket", "C": "jugcraft:copper_cable",
+                         "G": "jugcraft:coal_generator", "M": "jugcraft:machine_casing"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",

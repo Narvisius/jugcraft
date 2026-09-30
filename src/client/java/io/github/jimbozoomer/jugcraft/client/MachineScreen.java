@@ -25,6 +25,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 	private static final int ENERGY = 0xFFE0B020;
 	private static final int PROGRESS = 0xFF60A0E0;
 	private static final int FLAME = 0xFFE06020;
+	private static final int WATER = 0xFF3060D0;
 	private static final int TEXT = 0xFF404040;
 
 	public MachineScreen(MachineMenu menu, Inventory inventory, Component title) {
@@ -62,6 +63,17 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			int maxBurn = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_BURN));
 			int flame = menu.data(MachineBlockEntity.DATA_BURN) * 14 / maxBurn;
 			graphics.fill(x + 57, y + 20 + 14 - flame, x + 71, y + 34, FLAME);
+		} else if (kind == MachineKind.STEAM_GENERATOR) {
+			slotFrame(graphics, x + MachineMenu.INPUT_X, y + 17);
+			slotFrame(graphics, x + MachineMenu.INPUT_X, y + 53);
+			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
+			int maxBurn = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_BURN));
+			int flame = menu.data(MachineBlockEntity.DATA_BURN) * 14 / maxBurn;
+			graphics.fill(x + 57, y + 37 + 14 - flame, x + 71, y + 51, FLAME);
+			// Water tank gauge on the right.
+			graphics.fill(x + 149, y + BAR_Y - 1, x + 163, y + BAR_Y + BAR_HEIGHT + 1, DARK);
+			int water = menu.data(MachineBlockEntity.DATA_WATER) * BAR_HEIGHT / MachineKind.STEAM_TANK;
+			graphics.fill(x + 150, y + BAR_Y + BAR_HEIGHT - water, x + 162, y + BAR_Y + BAR_HEIGHT, WATER);
 		} else if (kind.isProcessor()) {
 			slotFrame(graphics, x + MachineMenu.INPUT_X, y + MachineMenu.SLOT_Y);
 			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);

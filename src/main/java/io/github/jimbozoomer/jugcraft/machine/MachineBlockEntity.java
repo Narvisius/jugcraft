@@ -20,12 +20,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
@@ -47,11 +49,20 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_BURN = 6;
 	public static final int DATA_MAX_BURN = 7;
 	public static final int DATA_FORMED = 8;
-	public static final int DATA_COUNT = 9;
+	public static final int DATA_WATER = 9;
+	public static final int DATA_COUNT = 10;
+
+	/** Steam generator slots. */
+	public static final int SLOT_FUEL = 0;
+	public static final int SLOT_WATER_IN = 1;
+	public static final int SLOT_BUCKET_OUT = 2;
 
 	private static final int[] NO_SLOTS = {};
 	private static final int[] INPUT = {0};
 	private static final int[] OUTPUT = {1};
+	private static final int[] STEAM_TOP = {SLOT_WATER_IN};
+	private static final int[] STEAM_SIDES = {SLOT_FUEL};
+	private static final int[] STEAM_BOTTOM = {SLOT_BUCKET_OUT};
 	private static final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> SMELTING =
 			RecipeManager.createCheck(RecipeType.SMELTING);
 
@@ -63,6 +74,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private int burn;
 	private int maxBurn;
 	private boolean formed;
+	private int water;
 
 	private final ContainerData data = new ContainerData() {
 		@Override
@@ -77,6 +89,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				case DATA_BURN -> burn;
 				case DATA_MAX_BURN -> maxBurn;
 				case DATA_FORMED -> formed ? 1 : 0;
+				case DATA_WATER -> water;
 				default -> 0;
 			};
 		}
@@ -97,7 +110,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		this.kind = ((MachineBlock) state.getBlock()).kind();
 		this.items = NonNullList.withSize(kind.slots, ItemStack.EMPTY);
 		// Producers only give energy out; consumers only take it in; the battery box does both.
-		long insert = kind == MachineKind.COAL_GENERATOR ? 0 : kind.maxInput;
+		long insert = kind.isGenerator() ? 0 : kind.maxInput;
 		long extract = kind.isProcessor() ? 0 : kind.maxOutput;
 		this.energy = new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
 	}
@@ -150,6 +163,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
 		boolean active = switch (kind) {
 			case COAL_GENERATOR -> tickGenerator(level, pos);
+			case SOLAR_PANEL -> tickSolar(level, pos);
+			case STEAM_GENERATOR -> tickSteam(level, pos);
 			case BATTERY_BOX -> tickBattery(level, pos, state);
 			case ELECTRIC_FURNACE, CRUSHER, ARC_FURNACE -> tickProcessor(level, pos, state);
 		};
@@ -178,6 +193,63 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		EnergyNetworks.pushToNeighbors(level, pos, energy, kind.maxOutput, EnumSet.allOf(Direction.class));
 		return burning;
+	}
+
+	private boolean tickSolar(ServerLevel level, BlockPos pos) {
+		// Checked every tick but only reads the sky and weather: no scanning.
+		boolean sunlit = level.isBrightOutside() && level.canSeeSky(pos.above());
+		if (sunlit && energy.getAmount() < energy.getCapacity()) {
+			int rate = level.isRaining() ? MachineKind.SOLAR_PER_TICK / 2 : MachineKind.SOLAR_PER_TICK;
+			energy.setAmount(energy.getAmount() + rate);
+			setChanged();
+		}
+		EnergyNetworks.pushToNeighbors(level, pos, energy, kind.maxOutput, EnumSet.allOf(Direction.class));
+		return false;
+	}
+
+	private boolean tickSteam(ServerLevel level, BlockPos pos) {
+		refillWater(level, pos);
+		boolean room = energy.getAmount() < energy.getCapacity();
+		boolean hasWater = water >= MachineKind.STEAM_WATER_PER_TICK;
+		if (burn <= 0 && room && hasWater) {
+			ItemStack fuel = items.get(SLOT_FUEL);
+			int ticks = GeneratorFuels.steamBurnTicks(fuel);
+			if (ticks > 0) {
+				fuel.shrink(1);
+				burn = ticks;
+				maxBurn = ticks;
+				setChanged();
+			}
+		}
+		boolean boiling = burn > 0 && room && hasWater;
+		if (boiling) {
+			burn--;
+			water -= MachineKind.STEAM_WATER_PER_TICK;
+			energy.setAmount(energy.getAmount() + MachineKind.STEAM_PER_TICK);
+			setChanged();
+		}
+		EnergyNetworks.pushToNeighbors(level, pos, energy, kind.maxOutput, EnumSet.allOf(Direction.class));
+		return boiling;
+	}
+
+	private void refillWater(ServerLevel level, BlockPos pos) {
+		if (water < MachineKind.STEAM_TANK && level.getFluidState(pos.below()).isSourceOfType(Fluids.WATER)) {
+			water = Math.min(MachineKind.STEAM_TANK, water + MachineKind.STEAM_SOURCE_REFILL);
+			setChanged();
+		}
+		ItemStack bucket = items.get(SLOT_WATER_IN);
+		ItemStack empties = items.get(SLOT_BUCKET_OUT);
+		boolean emptySpace = empties.isEmpty() || (empties.is(Items.BUCKET) && empties.getCount() < empties.getMaxStackSize());
+		if (bucket.is(Items.WATER_BUCKET) && water <= MachineKind.STEAM_TANK - 1000 && emptySpace) {
+			bucket.shrink(1);
+			if (empties.isEmpty()) {
+				items.set(SLOT_BUCKET_OUT, new ItemStack(Items.BUCKET));
+			} else {
+				empties.grow(1);
+			}
+			water += 1000;
+			setChanged();
+		}
 	}
 
 	private boolean tickBattery(ServerLevel level, BlockPos pos, BlockState state) {
@@ -283,6 +355,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (kind == MachineKind.COAL_GENERATOR) {
 			return GeneratorFuels.burnTicks(stack) > 0;
 		}
+		if (kind == MachineKind.STEAM_GENERATOR) {
+			return switch (slot) {
+				case SLOT_FUEL -> GeneratorFuels.steamBurnTicks(stack) > 0;
+				case SLOT_WATER_IN -> stack.is(Items.WATER_BUCKET);
+				default -> false;
+			};
+		}
 		return kind.isProcessor() && slot == 0;
 	}
 
@@ -290,6 +369,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public int[] getSlotsForFace(Direction side) {
 		if (kind == MachineKind.COAL_GENERATOR) {
 			return INPUT;
+		}
+		if (kind == MachineKind.STEAM_GENERATOR) {
+			return switch (side) {
+				case UP -> STEAM_TOP;
+				case DOWN -> STEAM_BOTTOM;
+				default -> STEAM_SIDES;
+			};
 		}
 		if (!kind.isProcessor()) {
 			return NO_SLOTS;
@@ -304,6 +390,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+		if (kind == MachineKind.STEAM_GENERATOR) {
+			return slot == SLOT_BUCKET_OUT;
+		}
 		return kind.isProcessor() && slot == 1;
 	}
 
@@ -331,6 +420,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		maxProgress = input.getInt("max_progress").orElse(0);
 		burn = input.getInt("burn").orElse(0);
 		maxBurn = input.getInt("max_burn").orElse(0);
+		water = input.getInt("water").orElse(0);
 	}
 
 	@Override
@@ -342,5 +432,6 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		output.putInt("max_progress", maxProgress);
 		output.putInt("burn", burn);
 		output.putInt("max_burn", maxBurn);
+		output.putInt("water", water);
 	}
 }
