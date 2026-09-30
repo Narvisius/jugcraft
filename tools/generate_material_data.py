@@ -219,6 +219,8 @@ def machine_assets(lang):
     lang[f"container.{MOD}.eject.tooltip"] = "Push results out of output faces into pipes and inventories"
     lang[f"container.{MOD}.wind_turbine.clear"] = "Rotor turning"
     lang[f"container.{MOD}.wind_turbine.blocked"] = "Rotor blocked: clear the blocks beside and above the top"
+    lang[f"container.{MOD}.water_wheel.turning"] = "Wheel turning"
+    lang[f"container.{MOD}.water_wheel.still"] = "Needs flowing water on its right side"
 
 
 # Machine recipe types (Java: machine/MachineRecipes.java). Each machine's list in tools/machines.py
@@ -226,7 +228,8 @@ def machine_assets(lang):
 RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_smelter": "alloying",
                 "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly",
                 "pulverizer": "pulverizing", "ore_washer": "ore_washing", "sieve": "sifting", "sawmill": "sawing",
-                "coke_oven": "coking", "steel_foundry": "steelmaking"}
+                "coke_oven": "coking", "steel_foundry": "steelmaking",
+                "tree_farm": "tree_growing"}
 
 
 def machine_recipe_files(out):

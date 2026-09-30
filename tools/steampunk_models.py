@@ -769,6 +769,83 @@ def steel_tank():
     return m
 
 
+# ------------------------------------------------------------------ renewables
+
+def cobblestone_generator():
+    """A water cistern and a lava crucible on an iron body, feeding a quench chamber with a glowing hatch at the front."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((1, 1, 1), (15, 8, 15), {"*": IRON_PLATE, "north": BRASS_PLATE, "up": IRON}))
+    for y in (2, 6.5):
+        m.append(box((0.75, y, 0.75), (15.25, y + 0.75, 15.25), IRON))
+    # Water cistern (left, seen from the front) and lava crucible (right).
+    m += cyl("y", 11.5, 9, 3, 8, 14, "sp_wood", "sp_water")
+    m += cyl("y", 11.5, 9, 3.3, 11, 11.75, BRASS)
+    m += cyl("y", 4.5, 9, 3, 8, 13, IRON, "sp_lava")
+    m += cyl("y", 4.5, 9, 3.3, 12.25, 13.25, "sp_firebrick")
+    # Pipes down into the quench chamber in the middle.
+    m.append(pipe((8.5, 9, 8.25), (9.5, 10, 9.75)))
+    m.append(pipe((6.5, 9, 8.25), (7.5, 10, 9.75)))
+    m.append(box((7, 8, 7.5), (9, 10.5, 10.5), BRASS_PLATE))
+    # Hatch where the cobblestone comes out, a gauge and the lamp.
+    m.append(box((5, 2, 0.25), (11, 6, 1.25), {"*": IRON, "north": "sp_window!"}))
+    m.append(dial("north", (13, 4, 0.5), 2))
+    m.append(dial("north", (3, 4, 0.5), 1.25, texture="sp_lamp"))
+    return m
+
+
+def tree_farm():
+    """An open brass-framed growth cabinet: a soil tray with a young tree under a hanging grow lamp."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((1, 1, 1), (15, 3.5, 15), {"*": "sp_wood", "up": "sp_soil"}))
+    # Brass rim around the tray, corner posts and an open roof frame with a crossbar for the lamp.
+    for frm, to in (((0.75, 3, 0.75), (15.25, 3.75, 2)), ((0.75, 3, 14), (15.25, 3.75, 15.25)),
+                    ((0.75, 3, 2), (2, 3.75, 14)), ((14, 3, 2), (15.25, 3.75, 14))):
+        m.append(box(frm, to, BRASS))
+    for x in (1, 13.5):
+        for z in (1, 13.5):
+            m.append(box((x, 3.75, z), (x + 1.5, 15, z + 1.5), BRASS))
+    for frm, to in (((1, 15, 1), (15, 16, 2.5)), ((1, 15, 13.5), (15, 16, 15)),
+                    ((1, 15, 2.5), (2.5, 16, 13.5)), ((13.5, 15, 2.5), (15, 16, 13.5)),
+                    ((7, 15.25, 2.5), (9, 16, 13.5))):
+        m.append(box(frm, to, BRASS_PLATE))
+    # The tree: trunk and a stepped canopy.
+    m.append(box((7, 3.5, 7), (9, 8.5, 9), "sp_bark"))
+    m.append(box((4, 8.5, 4), (12, 11.5, 12), "sp_leaves"))
+    m.append(box((5.5, 11.5, 5.5), (10.5, 13, 10.5), "sp_leaves"))
+    m.append(box((3.5, 9.25, 6), (4, 10.75, 10), "sp_leaves"))
+    # Grow lamp under the roof, glowing while it works.
+    m.append(box((5.5, 14, 6), (10.5, 15.25, 10), {"*": BRASS, "down": "sp_lamp!"}))
+    # Control box at the front right with a gauge.
+    m.append(box((10.5, 3.5, 1.25), (13.25, 7, 3), IRON_PLATE))
+    m.append(dial("north", (11.9, 5.25, 1), 2))
+    return m
+
+
+def water_wheel():
+    """A timber water wheel on the right (seen from the front) turning a coil dynamo in an iron house, two blocks
+    tall. The wheel stands in the column of water beside the machine."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    m.append(box((2, 1, 3), (14, 12, 15), {"*": "sp_wood", "north": IRON_PLATE, "up": IRON_PLATE}))
+    for y in (3, 10):
+        m.append(box((1.75, y, 2.75), (14.25, y + 0.75, 15.25), IRON))
+    m.append(dial("north", (8, 7, 2.75), 3))
+    # Cable junction boxes on the left and back.
+    m.append(box((14.25, 4, 6), (15.5, 9, 10), {"*": IRON_PLATE, "east": BRASS_PLATE}))
+    m.append(box((6, 4, 15), (10, 9, 15.75), {"*": IRON_PLATE, "south": BRASS_PLATE}))
+    # Dynamo on top of the house, driven by the axle.
+    m += cyl("x", 16, 8, 3.5, 5, 12, "sp_coil", BRASS)
+    m.append(box((0.5, 12, 5), (4, 20, 11), BRASS_PLATE))
+    m += cyl("x", 16, 8, 1.25, -1.5, 5, IRON)
+    # The wheel: rim and spokes, then eight paddles (four square, four turned 45 degrees).
+    m += wheel("x", 16, 8, 12.5, -4, -2, "sp_wood", IRON)
+    paddles = [((-5, 25.5, 6), (-1, 29.5, 10)), ((-5, 2.5, 6), (-1, 6.5, 10)),
+               ((-5, 14, -5.5), (-1, 18, -1.5)), ((-5, 14, 17.5), (-1, 18, 21.5))]
+    for frm, to in paddles:
+        m.append(box(frm, to, "sp_wood"))
+        m.append(box(frm, to, "sp_wood", rotation=("x", 45, (-3, 16, 8))))
+    return m
+
+
 # ------------------------------------------------------------------ mining (multi-block)
 
 def ore_drill():
@@ -838,6 +915,9 @@ MODELS = {
     "capacitor_bank": capacitor_bank(),
     "steel_tank": steel_tank(),
     "ore_drill": ore_drill(),
+    "cobblestone_generator": cobblestone_generator(),
+    "tree_farm": tree_farm(),
+    "water_wheel": water_wheel(),
     "electric_pump": electric_pump(),
     "fluid_tank": fluid_tank(),
 }

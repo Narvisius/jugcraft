@@ -29,6 +29,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -42,7 +43,9 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -95,7 +98,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private int maxProgress;
 	private int burn;
 	private int maxBurn;
-	/** Arc furnace: structure complete. Wind turbine: rotor has room to turn. */
+	/**
+	 * Arc furnace: structure complete. Wind turbine: rotor has room to turn. Water wheel: flowing water at the
+	 * wheel. Cobblestone generator: water and lava beside it.
+	 */
 	private boolean formed;
 	/** mB in the machine's tank: water for the steam generator and ore washer, lava for the geothermal generator. Saved as "water". */
 	private int tank;
@@ -103,8 +109,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private final SideConfig sides = new SideConfig();
 	/** Ore drill: the next block to check, counted from the top layer below the drill (see {@link OreDrilling}). */
 	private int cursor;
-	/** Wind turbine: whether the rotor check has run since loading. */
-	private boolean windChecked;
+	/** Wind turbine, water wheel, cobblestone generator: whether the surroundings check has run since loading. */
+	private boolean checked;
+	/** Water wheel: JE per tick from the water found at the last check. */
+	private int wheelRate;
 
 	private final ContainerData data = new ContainerData() {
 		@Override
@@ -283,6 +291,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
 			case WIND_TURBINE -> tickWind(level, pos, state);
 			case ORE_DRILL -> tickDrill(level, pos, state);
+			case COBBLESTONE_GENERATOR -> tickCobble(level, pos, state);
+			case WATER_WHEEL -> tickWaterWheel(level, pos, state);
 			default -> tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
@@ -343,8 +353,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private boolean tickWind(ServerLevel level, BlockPos pos, BlockState state) {
 		Direction facing = state.getValue(MachineBlock.FACING);
 		BlockPos top = kind.footprint().partPos(pos, facing, 2);
-		if (!windChecked || level.getGameTime() % MachineKind.WIND_CHECK_INTERVAL == 0) {
-			windChecked = true;
+		if (!checked || level.getGameTime() % MachineKind.WIND_CHECK_INTERVAL == 0) {
+			checked = true;
 			formed = level.isEmptyBlock(top.above()) && level.isEmptyBlock(top.relative(facing.getClockWise()))
 					&& level.isEmptyBlock(top.relative(facing.getCounterClockWise()));
 		}
@@ -592,6 +602,77 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		setChanged();
 		return true;
+	}
+
+	/**
+	 * The cobblestone generator: with water and lava touching it (checked every second; neither is used up), it
+	 * makes one cobblestone per {@link MachineKind#COBBLE_TICKS} powered ticks, like a vanilla cobblestone generator.
+	 */
+	private boolean tickCobble(ServerLevel level, BlockPos pos, BlockState state) {
+		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
+			eject(level, pos, state);
+		}
+		if (!checked || level.getGameTime() % MachineKind.SOURCE_CHECK_INTERVAL == 0) {
+			checked = true;
+			boolean water = false;
+			boolean lava = false;
+			for (Direction side : Direction.values()) {
+				FluidState fluid = level.getFluidState(pos.relative(side));
+				water |= fluid.is(FluidTags.WATER);
+				lava |= fluid.is(FluidTags.LAVA);
+			}
+			formed = water && lava;
+		}
+		ItemStack cobble = new ItemStack(Items.COBBLESTONE);
+		if (!formed || !canOutput(cobble) || !sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false;
+		}
+		MachineUpgrades.Effect upgrades = upgrades();
+		maxProgress = upgrades.ticks(MachineKind.COBBLE_TICKS);
+		long use = upgrades.use(kind.usePerTick);
+		if (energy.getAmount() < use) {
+			return false;
+		}
+		energy.setAmount(energy.getAmount() - use);
+		if (++progress >= maxProgress) {
+			progress = 0;
+			ItemStack output = items.get(kind.outputSlot());
+			if (output.isEmpty()) {
+				items.set(kind.outputSlot(), cobble);
+			} else {
+				output.grow(1);
+			}
+		}
+		setChanged();
+		return true;
+	}
+
+	/**
+	 * The water wheel turns in the column of blocks on its right (seen from the front), beside both of its
+	 * blocks. Each block of flowing water there gives {@link MachineKind#WATER_WHEEL_FLOWING} JE/t, falling
+	 * water {@link MachineKind#WATER_WHEEL_FALLING}; still (source) water does not turn it. Checked every second.
+	 */
+	private boolean tickWaterWheel(ServerLevel level, BlockPos pos, BlockState state) {
+		if (!checked || level.getGameTime() % MachineKind.SOURCE_CHECK_INTERVAL == 0) {
+			checked = true;
+			Direction wheelSide = facing(state).getCounterClockWise();
+			Footprint footprint = kind.footprint();
+			int rate = 0;
+			for (int part = 0; part < footprint.size(); part++) {
+				FluidState fluid = level.getFluidState(footprint.partPos(pos, facing(state), part).relative(wheelSide));
+				if (fluid.is(FluidTags.WATER) && !fluid.isSource()) {
+					rate += fluid.getValue(FlowingFluid.FALLING) ? MachineKind.WATER_WHEEL_FALLING : MachineKind.WATER_WHEEL_FLOWING;
+				}
+			}
+			wheelRate = rate;
+			formed = rate > 0;
+		}
+		if (wheelRate > 0 && energy.getAmount() < energy.getCapacity()) {
+			energy.setAmount(Math.min(energy.getCapacity(), energy.getAmount() + wheelRate));
+			setChanged();
+		}
+		pushFromAllParts(level, pos, state);
+		return wheelRate > 0;
 	}
 
 	/** The ore drill's first result slot (output, then the two extra slots) with room for {@code stack}, or -1. */

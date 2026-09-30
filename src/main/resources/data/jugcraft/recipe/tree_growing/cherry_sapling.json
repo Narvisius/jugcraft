@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:tree_growing",
+  "ingredient": "minecraft:cherry_sapling",
+  "result": {
+    "id": "minecraft:cherry_log",
+    "count": 6
+  },
+  "time": 400,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:cherry_sapling",
+        "count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "result": {
+        "id": "minecraft:pink_petals",
+        "count": 1
+      },
+      "chance": 0.1
+    }
+  ]
+}

@@ -1488,6 +1488,171 @@
       ]
     },
     {
+      "title": "Renewables",
+      "icon": "jugcraft:tree_farm",
+      "pages": [
+        {
+          "title": "Water Wheel",
+          "icon": "jugcraft:water_wheel",
+          "text": [
+            "Two blocks tall. The wheel on its right side turns in flowing water: 8 JE/t for each of its two blocks with flowing water beside it, 12 if the water is falling. Still water does not turn it.",
+            "Makes up to 24 JE/t. Holds 8,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:oak_planks",
+              "minecraft:stick",
+              "minecraft:oak_planks",
+              "minecraft:stick",
+              "jugcraft:bronze_gear",
+              "minecraft:stick",
+              "minecraft:oak_planks",
+              "jugcraft:copper_cable",
+              "minecraft:oak_planks"
+            ],
+            "result": "jugcraft:water_wheel",
+            "count": 1
+          }
+        },
+        {
+          "title": "Cobblestone Generator",
+          "icon": "jugcraft:cobblestone_generator",
+          "text": [
+            "Makes one cobblestone a second while water and lava touch it, on any sides. Neither is used up. Speed upgrades make it faster.",
+            "Uses 4 JE/t while working. Holds 4,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "minecraft:water_bucket",
+              "jugcraft:bronze_ingot",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "jugcraft:bronze_ingot",
+              "minecraft:lava_bucket",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:cobblestone_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Tree Farm",
+          "icon": "jugcraft:tree_farm",
+          "text": [
+            "Grows a sapling into six logs in 20 seconds and gives the sapling back, sometimes with an apple, cocoa beans or other extras. Feed the sapling back in with eject and a pipe for endless wood.",
+            "Uses 16 JE/t while working. Holds 10,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:glass",
+              "minecraft:glowstone",
+              "minecraft:glass",
+              "minecraft:dirt",
+              "jugcraft:machine_casing",
+              "minecraft:dirt",
+              "jugcraft:bronze_ingot",
+              "jugcraft:basic_circuit",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:tree_farm",
+            "count": 1
+          },
+          "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:oak_sapling",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:oak_log",
+                6
+              ],
+              "extra": [
+                [
+                  "minecraft:oak_sapling",
+                  1.0
+                ],
+                [
+                  "minecraft:apple",
+                  0.1
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:spruce_sapling",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:spruce_log",
+                6
+              ],
+              "extra": [
+                [
+                  "minecraft:spruce_sapling",
+                  1.0
+                ],
+                [
+                  "minecraft:stick",
+                  0.1
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:birch_sapling",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:birch_log",
+                6
+              ],
+              "extra": [
+                [
+                  "minecraft:birch_sapling",
+                  1.0
+                ],
+                [
+                  "minecraft:stick",
+                  0.1
+                ]
+              ]
+            },
+            {
+              "in": [
+                [
+                  "minecraft:jungle_sapling",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:jungle_log",
+                6
+              ],
+              "extra": [
+                [
+                  "minecraft:jungle_sapling",
+                  1.0
+                ],
+                [
+                  "minecraft:cocoa_beans",
+                  0.1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "Upgrades",
       "icon": "jugcraft:speed_upgrade",
       "pages": [

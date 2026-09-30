@@ -1,0 +1,217 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_blade": "jugcraft:block/wind_turbine_blade",
+    "front": "jugcraft:block/water_wheel_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        4.5714,
+        0.0,
+        3.4286
+      ],
+      "to": [
+        13.7143,
+        1.1429,
+        12.5714
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.143,
+            9.143
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.143,
+            9.143
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5.1429,
+        1.1429,
+        4.0
+      ],
+      "to": [
+        13.1429,
+        11.4286,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            8.0,
+            10.286
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            8.0,
+            10.286
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            8.0,
+            10.286
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            8.0,
+            10.286
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2.2857,
+        2.2857,
+        1.1429
+      ],
+      "to": [
+        4.0,
+        16.0,
+        14.8571
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.714,
+            13.714
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.714,
+            13.714
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            13.714,
+            13.714
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            13.714,
+            13.714
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.714,
+            13.714
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_blade",
+          "uv": [
+            0,
+            0,
+            1.714,
+            13.714
+          ]
+        }
+      }
+    }
+  ]
+}

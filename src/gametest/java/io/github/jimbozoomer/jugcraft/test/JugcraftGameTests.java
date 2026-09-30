@@ -585,4 +585,59 @@ public class JugcraftGameTests {
 			helper.assertTrue(ore == 1 && deep == 1, "Drill holds " + ore + " iron ore and " + deep + " deepslate iron ore");
 		});
 	}
+
+	// ------------------------------------------------------------------ renewables
+
+	/**
+	 * A cobblestone generator with water below it and lava above it (walled in so neither can spread) makes
+	 * cobblestone; one with only water makes none.
+	 */
+	@GameTest(maxTicks = 200)
+	public void cobblestoneGeneratorNeedsWaterAndLava(GameTestHelper helper) {
+		BlockPos both = new BlockPos(2, 1, 2);
+		BlockPos waterOnly = new BlockPos(6, 1, 2);
+		for (BlockPos pos : List.of(both, waterOnly)) {
+			helper.setBlock(pos, machine(MachineKind.COBBLESTONE_GENERATOR));
+			charge(helper, pos, Direction.NORTH);
+			helper.setBlock(pos.below(), Blocks.WATER);
+		}
+		for (Direction side : Direction.Plane.HORIZONTAL) {
+			helper.setBlock(both.above().relative(side), Blocks.GLASS);
+		}
+		helper.setBlock(both.above(2), Blocks.GLASS);
+		helper.setBlock(both.above(), Blocks.LAVA);
+		MachineBlockEntity generator = helper.getBlockEntity(both, MachineBlockEntity.class);
+		MachineBlockEntity idle = helper.getBlockEntity(waterOnly, MachineBlockEntity.class);
+		helper.runAtTickTime(150, () -> {
+			ItemStack made = generator.getItem(MachineKind.COBBLESTONE_GENERATOR.outputSlot());
+			helper.assertTrue(made.is(Items.COBBLESTONE) && made.getCount() >= 3, "Generator made " + made);
+			helper.assertTrue(idle.getItem(0).isEmpty(), "A generator without lava made " + idle.getItem(0));
+			helper.succeed();
+		});
+	}
+
+	/** The tree farm grows an oak sapling into six oak logs and gives the sapling back. */
+	@GameTest(maxTicks = 600)
+	public void treeFarmGrowsLogs(GameTestHelper helper) {
+		MachineBlockEntity farm = processing(helper, new BlockPos(2, 1, 2), MachineKind.TREE_FARM, new ItemStack(Items.OAK_SAPLING));
+		helper.succeedWhen(() -> {
+			ItemStack logs = farm.getItem(MachineKind.TREE_FARM.outputSlot());
+			helper.assertTrue(logs.is(Items.OAK_LOG) && logs.getCount() == 6, "Tree farm output is " + logs);
+			ItemStack sapling = farm.getItem(MachineKind.TREE_FARM.outputSlot() + 1);
+			helper.assertTrue(sapling.is(Items.OAK_SAPLING), "The sapling did not come back: " + sapling);
+		});
+	}
+
+	/** Water falling past the wheel side of a water wheel turns it; the wheel stores power. */
+	@GameTest(maxTicks = 200)
+	public void waterWheelTurnsInFlowingWater(GameTestHelper helper) {
+		BlockPos master = new BlockPos(3, 1, 2);
+		MachineBlockEntity wheel = large(helper, master, MachineKind.WATER_WHEEL);
+		// Facing north, the wheel is on the west side. A source above that column falls past both blocks.
+		helper.setBlock(master.west().above(2), Blocks.WATER);
+		helper.succeedWhen(() -> {
+			long stored = wheel.energyFor(null).getAmount();
+			helper.assertTrue(stored >= 1_000, "Water wheel stored only " + stored + " JE");
+		});
+	}
 }

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BWB",
+    "CMC",
+    "BLB"
+  ],
+  "key": {
+    "B": "#c:ingots/bronze",
+    "W": "minecraft:water_bucket",
+    "C": "jugcraft:copper_cable",
+    "M": "jugcraft:machine_casing",
+    "L": "minecraft:lava_bucket"
+  },
+  "result": {
+    "id": "jugcraft:cobblestone_generator",
+    "count": 1
+  }
+}

@@ -81,7 +81,7 @@ public class HandbookScreen extends Screen {
 		for (int i = 0; i < chapters.size(); i++) {
 			int index = i;
 			addRenderableWidget(Button.builder(Component.literal(chapters.get(i).get("title").getAsString()), button -> openChapter(index))
-					.bounds(left + 6, top + 10 + i * 18, CHAPTER_WIDTH - 12, 16).build());
+					.bounds(left + 6, top + 8 + i * 16, CHAPTER_WIDTH - 12, 15).build());
 		}
 		previous = addRenderableWidget(Button.builder(Component.literal("<"), button -> turn(-1))
 				.bounds(left + CHAPTER_WIDTH + 8, top + HEIGHT - 20, 16, 14).build());

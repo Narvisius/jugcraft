@@ -37,7 +37,12 @@ public enum MachineKind implements StringRepresentable {
 	CAPACITOR_BANK("capacitor_bank", 4_000_000, 4_096, 4_096, 0, 0),
 	STEEL_TANK("steel_tank", 0, 0, 0, 0, 0),
 	// Mining: a 2-tall derrick that mines the ores in a 9x9 column below it. No inputs; three result slots.
-	ORE_DRILL("ore_drill", 20_000, 256, 0, 32, 3);
+	ORE_DRILL("ore_drill", 20_000, 256, 0, 32, 3),
+	// Renewables: a cobblestone generator (no inputs, one result slot), a tree farm (sapling in; logs out, with the
+	// sapling and extras in two byproduct slots) and a 2-tall water wheel that generates from flowing water.
+	COBBLESTONE_GENERATOR("cobblestone_generator", 4_000, 64, 0, 4, 1),
+	TREE_FARM("tree_farm", 10_000, 128, 0, 16, 4),
+	WATER_WHEEL("water_wheel", 8_000, 0, 64, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -77,6 +82,13 @@ public enum MachineKind implements StringRepresentable {
 	public static final int DRILL_TICKS = 40;
 	/** Ore drill: blocks the drill head checks per tick while looking for the next ore (one layer). */
 	public static final int DRILL_SCAN_PER_TICK = (2 * DRILL_RADIUS + 1) * (2 * DRILL_RADIUS + 1);
+	/** Cobblestone generator: ticks per cobblestone (before speed upgrades), with water and lava beside it. */
+	public static final int COBBLE_TICKS = 20;
+	/** Water wheel: JE per tick for each block of flowing water at the wheel; falling water gives more. */
+	public static final int WATER_WHEEL_FLOWING = 8;
+	public static final int WATER_WHEEL_FALLING = 12;
+	/** Ticks between checks of the water at the wheel (and of the cobblestone generator's water and lava). */
+	public static final int SOURCE_CHECK_INTERVAL = 20;
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -101,7 +113,8 @@ public enum MachineKind implements StringRepresentable {
 		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
-				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL;
+				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL
+				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -137,6 +150,7 @@ public enum MachineKind implements StringRepresentable {
 			case SAWMILL -> "sawing";
 			case COKE_OVEN -> "coking";
 			case STEEL_FOUNDRY -> "steelmaking";
+			case TREE_FARM -> "tree_growing";
 			default -> null;
 		};
 	}
@@ -159,7 +173,7 @@ public enum MachineKind implements StringRepresentable {
 	/** Slots after the output that collect recipe byproducts (see {@link MachineRecipe#byproducts()}). */
 	public int byproductSlots() {
 		// The ore drill has no inputs; its "byproduct" slots are just two more result slots.
-		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL ? 2 : 0;
+		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == TREE_FARM ? 2 : 0;
 	}
 
 	/** mB the machine's fluid tank holds, or 0 without one. */
@@ -175,7 +189,7 @@ public enum MachineKind implements StringRepresentable {
 	/** Generators only produce energy; they never accept it. */
 	public boolean isGenerator() {
 		return this == COAL_GENERATOR || this == SOLAR_PANEL || this == STEAM_GENERATOR
-				|| this == GEOTHERMAL_GENERATOR || this == WIND_TURBINE;
+				|| this == GEOTHERMAL_GENERATOR || this == WIND_TURBINE || this == WATER_WHEEL;
 	}
 
 	/**
@@ -188,6 +202,7 @@ public enum MachineKind implements StringRepresentable {
 			case WIND_TURBINE -> Footprint.tall(3);
 			case COKE_OVEN -> Footprint.tall(2);
 			case ORE_DRILL -> Footprint.tall(2);
+			case WATER_WHEEL -> Footprint.tall(2);
 			case STEEL_FOUNDRY -> Footprint.tall(3);
 			// Two wide, two tall.
 			case CAPACITOR_BANK -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));

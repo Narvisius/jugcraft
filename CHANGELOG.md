@@ -8,6 +8,14 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #28 Renewable resources
+- **Water Wheel** (2 tall): up to 24 JE/t from flowing or falling water beside its wheel, with no fuel.
+- **Cobblestone Generator:** one cobblestone a second from water and lava touching it; neither is used up.
+- **Tree Farm:** grows a sapling into six logs and gives the sapling back, sometimes with an extra (apple, cocoa beans, …). Recipes are data for all nine vanilla trees.
+- Steampunk models (timber water wheel with a coil dynamo, cistern-and-crucible generator, open brass growth cabinet with a grow lamp) and classic models.
+- The handbook gains a "Renewables" chapter; its chapter buttons are packed tighter to fit 11 chapters.
+- Three game tests.
+
 ### #25 Mining and prospecting
 - **Geo-Resonance Prospector:** a hand tool that surveys the 3×3 chunks around you. It opens a steampunk-digital screen: a brass instrument with an amber CRT, valve-tube signal bars, a sweeping scan line and a resonance needle gauge.
   - Readings are deliberately vague: 1–5 bars and shallow, middle or deep for each ore family, never a chunk or block.

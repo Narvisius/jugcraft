@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "SGS",
+    "PCP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick",
+    "G": "#c:gears/bronze",
+    "C": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:water_wheel",
+    "count": 1
+  }
+}

@@ -522,6 +522,58 @@ def lava_crust(x, y, d, rng):
     return rng.choice([(60, 22, 14), (40, 18, 14), (90, 34, 16)])
 
 
+def leaves(seed):
+    """Dense leaf canopy: mid greens with dark gaps and a few sunlit tips."""
+    rng = random.Random(seed)
+    img = new()
+    greens = [(34, 78, 30), (48, 104, 38), (62, 128, 46), (92, 158, 62)]
+    for y in range(16):
+        for x in range(16):
+            r = rng.random()
+            put(img, x, y, greens[0] if r < 0.18 else greens[1] if r < 0.55 else greens[2] if r < 0.9 else greens[3])
+    return img
+
+
+def bark(seed):
+    """Vertical bark ridges in browns."""
+    rng = random.Random(seed)
+    img = new()
+    browns = [(56, 38, 22), (78, 54, 32), (98, 70, 42)]
+    ridges = [rng.choice([0, 1, 2]) for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            c = browns[ridges[x]]
+            if rng.random() < 0.12:
+                c = browns[max(0, ridges[x] - 1)]
+            put(img, x, y, c)
+    return img
+
+
+def soil(seed):
+    """Dark tilled soil with small lighter clods."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (58, 40, 26) if rng.random() < 0.7 else (74, 52, 34)
+            if y % 4 == 0 and rng.random() < 0.5:
+                c = (44, 30, 20)
+            put(img, x, y, c)
+    return img
+
+
+def lava(seed):
+    """Molten surface: orange-yellow with dark crust flecks."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            r = rng.random()
+            c = FIRE[2] if r < 0.35 else FIRE[1] if r < 0.75 else FIRE[3] if r < 0.88 else (120, 40, 12)
+            put(img, x, y, c)
+    return img
+
+
 def draw_all():
     save(plate(601, IRON), "sp_iron_plate")
     save(wrought_iron(602), "sp_iron")
@@ -554,6 +606,10 @@ def draw_all():
     save(crusher_jaws(619), "sp_crusher_jaws")
     save(casing(620), "sp_machine_casing")
     save(water(624), "sp_water")
+    save(leaves(640), "sp_leaves")
+    save(bark(641), "sp_bark")
+    save(soil(642), "sp_soil")
+    save(lava(643), "sp_lava")
     save(mesh(625), "sp_mesh")
     save(saw(626), "sp_saw")
     save(strapped_bricks(621), "sp_arc_casing")

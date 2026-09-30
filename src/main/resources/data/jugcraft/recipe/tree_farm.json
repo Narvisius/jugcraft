@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GLG",
+    "DMD",
+    "BCB"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "L": "minecraft:glowstone",
+    "D": "minecraft:dirt",
+    "M": "jugcraft:machine_casing",
+    "B": "#c:ingots/bronze",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:tree_farm",
+    "count": 1
+  }
+}

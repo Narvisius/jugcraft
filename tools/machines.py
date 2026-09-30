@@ -31,6 +31,10 @@ MACHINES = {
     "steel_tank": {"display": "Steel Tank", "lit": False},
     # Mining: a 2-tall powered derrick that mines ores in a 9x9 column below it.
     "ore_drill": {"display": "Ore Drill", "lit": True},
+    # Renewables: cobblestone from water and lava, wood from saplings, power from flowing water.
+    "cobblestone_generator": {"display": "Cobblestone Generator", "lit": True},
+    "tree_farm": {"display": "Tree Farm", "lit": True},
+    "water_wheel": {"display": "Water Wheel", "lit": False},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -110,6 +114,12 @@ STATS = {
     "steel_tank": {"capacity": 0, "tank": 128_000},
     # 2 tall. Mines one c:ores block per 40 ticks from a 9x9 column below it, down to the bottom of the world.
     "ore_drill": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "ticks": 40, "radius": 4},
+    # Needs water and lava touching it (neither is used): 1 cobblestone per 20 ticks.
+    "cobblestone_generator": {"capacity": 4_000, "input_per_tick": 64, "use_per_tick": 4, "ticks": 20},
+    # Sapling -> logs in 400 ticks; the sapling comes back.
+    "tree_farm": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
+    # 2 tall. 8 JE/t per block of flowing water on its right (12 if falling), both blocks: up to 24 JE/t.
+    "water_wheel": {"capacity": 8_000, "output_per_tick": 64, "generation_per_tick": 24},
     # Unpowered: heat comes from the charge itself. No battery, no cable connection.
     "coke_oven": {"capacity": 0, "use_per_tick": 0},
     "steel_foundry": {"capacity": 0, "use_per_tick": 0},
@@ -235,6 +245,15 @@ CRAFTING = {
     "capacitor_bank": (["PBP", "BCB", "PBP"], {"P": "#c:plates/steel", "B": "jugcraft:battery_box",
                                                "C": "jugcraft:advanced_circuit"}, 1),
     "steel_tank": (["PPP", "PTP", "PPP"], {"P": "#c:plates/steel", "T": "jugcraft:fluid_tank"}, 1),
+    # Renewables: the water wheel and cobblestone generator are early (bronze); the tree farm needs a circuit.
+    "cobblestone_generator": (["BWB", "CMC", "BLB"], {"B": "#c:ingots/bronze", "W": "minecraft:water_bucket",
+                                                   "C": "jugcraft:copper_cable", "M": "jugcraft:machine_casing",
+                                                   "L": "minecraft:lava_bucket"}, 1),
+    "water_wheel": (["PSP", "SGS", "PCP"], {"P": "#minecraft:planks", "S": "minecraft:stick", "G": "#c:gears/bronze",
+                                             "C": "jugcraft:copper_cable"}, 1),
+    "tree_farm": (["GLG", "DMD", "BCB"], {"G": "minecraft:glass", "L": "minecraft:glowstone", "D": "minecraft:dirt",
+                                         "M": "jugcraft:machine_casing", "B": "#c:ingots/bronze",
+                                         "C": "jugcraft:basic_circuit"}, 1),
     # Mining: steel frame, a pulverizer-grade drill head and a circuit; after the steel tier.
     "ore_drill": (["SGS", "CMC", "SDS"], {"S": "#c:plates/steel", "G": "#c:gears/steel", "C": "jugcraft:basic_circuit",
                                          "M": "jugcraft:machine_casing", "D": "minecraft:diamond_pickaxe"}, 1),
@@ -396,11 +415,26 @@ STEEL_FOUNDRY = [
 ]
 
 
+# Tree farm: a sapling grows into logs in 400 ticks and comes back, with a chance of the tree's extras.
+TREES = {"oak": ("oak_sapling", "minecraft:apple"), "spruce": ("spruce_sapling", "minecraft:stick"),
+         "birch": ("birch_sapling", "minecraft:stick"), "jungle": ("jungle_sapling", "minecraft:cocoa_beans"),
+         "acacia": ("acacia_sapling", "minecraft:stick"), "dark_oak": ("dark_oak_sapling", "minecraft:apple"),
+         "cherry": ("cherry_sapling", "minecraft:pink_petals"), "mangrove": ("mangrove_propagule", "minecraft:stick"),
+         "pale_oak": ("pale_oak_sapling", "minecraft:pale_moss_carpet")}
+
+
+def _tree_farm():
+    return [{"input": f"minecraft:{sapling}", "output": f"minecraft:{wood}_log", "count": 6, "ticks": 400,
+             "features": [FEATURE], "renewable": True,
+             "byproducts": [[f"minecraft:{sapling}", 1, 1.0, None], [extra, 1, 0.1, None]]}
+            for wood, (sapling, extra) in TREES.items()]
+
+
 def machine_recipes():
     return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE + _arc_dusts(), "alloy_smelter": ALLOY_SMELTER,
             "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
             "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill(),
-            "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY}
+            "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY, "tree_farm": _tree_farm()}
 
 
 def _arc_dusts():

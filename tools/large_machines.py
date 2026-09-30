@@ -31,6 +31,8 @@ FOOTPRINTS = {
     "steel_tank": [(0, 0, 0), (-1, 0, 0), (0, 0, 1), (-1, 0, 1)],
     # Mining: a two-block derrick over the drilled column.
     "ore_drill": [(0, 0, 0), (0, 1, 0)],
+    # Renewables: a two-block water wheel house (the wheel turns in the water column on its right).
+    "water_wheel": [(0, 0, 0), (0, 1, 0)],
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -162,6 +164,12 @@ MODELS["ore_drill"] = [
     ((6, 26, 6), (10, 32, 10), "geothermal_stack"),
 ]
 
+MODELS["water_wheel"] = [
+    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
+    ((1, 2, 1), (15, 20, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-4, 4, -4), (-1, 28, 20), "wind_turbine_blade"),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -172,4 +180,5 @@ FRONTS = {
     "capacitor_bank": "capacitor_bank_front",
     "steel_tank": "steel_tank_front",
     "ore_drill": "ore_drill_front",
+    "water_wheel": "water_wheel_front",
 }

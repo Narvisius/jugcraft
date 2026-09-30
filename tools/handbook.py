@@ -17,7 +17,7 @@ MOD = "jugcraft"
 RECIPE_LISTS = {"crusher": "crusher", "arc_furnace_controller": "arc_furnace", "alloy_smelter": "alloy_smelter",
                 "metal_press": "metal_press", "wire_drawer": "wire_drawer", "circuit_assembler": "circuit_assembler",
                 "pulverizer": "pulverizer", "ore_washer": "ore_washer", "sieve": "sieve", "sawmill": "sawmill",
-                "coke_oven": "coke_oven", "steel_foundry": "steel_foundry"}
+                "coke_oven": "coke_oven", "steel_foundry": "steel_foundry", "tree_farm": "tree_farm"}
 
 # What each block is for, in a sentence or two. Numbers are added from the tables below.
 ABOUT = {
@@ -73,10 +73,16 @@ ABOUT = {
     "ore_drill": "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom "
                  "of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come "
                  "out whole, ready for ore processing.",
+    "cobblestone_generator": "Makes one cobblestone a second while water and lava touch it, on any sides. Neither "
+                             "is used up. Speed upgrades make it faster.",
+    "tree_farm": "Grows a sapling into six logs in 20 seconds and gives the sapling back, sometimes with an apple, "
+                 "cocoa beans or other extras. Feed the sapling back in with eject and a pipe for endless wood.",
+    "water_wheel": "Two blocks tall. The wheel on its right side turns in flowing water: 8 JE/t for each of its two "
+                   "blocks with flowing water beside it, 12 if the water is falling. Still water does not turn it.",
     "engineers_handbook": "This book. Craft it from a book and a copper ingot.",
 }
 
-TAG_ITEMS = {"#c:silicon": "jugcraft:silicon", "#minecraft:planks": "minecraft:oak_planks",
+TAG_ITEMS = {"#c:silicon": "jugcraft:silicon", "#minecraft:planks": "minecraft:oak_planks", "#minecraft:logs": "minecraft:oak_log",
              "#minecraft:bamboo_blocks": "minecraft:bamboo_block", "#c:coal_coke": "jugcraft:coke"}
 
 
@@ -222,6 +228,8 @@ def build():
         {"title": "Storage", "icon": f"{MOD}:item_crate", "pages":
             [block_page("item_crate", STORAGE_BLOCKS["item_crate"]["display"])]
             + [machine_page(m) for m in ("capacitor_bank", "steel_tank")]},
+        {"title": "Renewables", "icon": f"{MOD}:tree_farm", "pages":
+            [machine_page(m) for m in ("water_wheel", "cobblestone_generator", "tree_farm")]},
         {"title": "Upgrades", "icon": f"{MOD}:speed_upgrade", "pages":
             [block_page(u, UPGRADES[u]) for u in UPGRADES] + [
             {"title": "Comparators", "icon": "minecraft:comparator", "text": [

@@ -178,6 +178,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.wind_turbine.clear" : "container.jugcraft.wind_turbine.blocked";
 			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
+} else if (menu.kind() == MachineKind.WATER_WHEEL) {
+			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
+					? "container.jugcraft.water_wheel.turning" : "container.jugcraft.water_wheel.still";
+			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT);
 		}
 	}
 
