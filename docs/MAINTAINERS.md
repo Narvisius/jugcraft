@@ -29,6 +29,8 @@ Suggested labels: proposal, integration, approved, needs-design, blocked-platfor
 
 Use a small trusted maintainer team for merge authority. Community participants use forks. Never give contributors server credentials merely to test a PR. Keep deployments and production world administration separate from contribution builds.
 
+The initial CODEOWNERS is @jimbozoomer-byte for all files. Viewer PRs need that owner's approval. Owner-authored PRs require another authorized code owner; add a second trusted maintainer before that workflow is needed. Self-approval is not an independent review.
+
 ## Initial setup tracking
 
 Track actual state in docs/SETUP_STATUS.md. Do not mark remote creation, branch protection, Actions success, or playable bootstrap complete until verified.
