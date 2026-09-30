@@ -571,6 +571,56 @@ def prospector_item():
     return img
 
 
+def shaft_frame(shift):
+    """Iron shaft with diagonal brass-and-dark bands; shifting the bands one pixel per frame makes it turn."""
+    from steampunk_textures import BRASS as SP_BRASS
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            phase = (x + y + shift) % 8
+            c = SP_BRASS[3] if phase == 0 else SP_BRASS[2] if phase == 1 else IRON_METAL[1] if phase < 5 else IRON_METAL[2]
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def gearbox_frame(angle):
+    """Brass plate with a riveted rim and an eight-toothed iron gear turned by `angle` degrees."""
+    import math
+    from steampunk_textures import BRASS as SP_BRASS
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            edge = x in (0, 15) or y in (0, 15)
+            img.putpixel((x, y), (SP_BRASS[1] if edge else SP_BRASS[3]) + (255,))
+    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14)):
+        img.putpixel((x, y), SP_BRASS[0] + (255,))
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x + 0.5 - 8, y + 0.5 - 8
+            r = math.hypot(dx, dy)
+            a = (math.degrees(math.atan2(dy, dx)) - angle) % 45
+            tooth = a < 18
+            if r <= 4.2 or (r <= 6.3 and tooth):
+                c = IRON_METAL[1] if r > 5 else IRON_METAL[2]
+                if r <= 1.5:
+                    c = SP_BRASS[4]
+                img.putpixel((x, y), c + (255,))
+    return img
+
+
+def save_animation(frames, name, frametime=2):
+    """A vertical strip of 16x16 frames plus its .mcmeta, so the texture animates in game."""
+    import json
+    strip = Image.new("RGBA", (16, 16 * len(frames)), (0, 0, 0, 0))
+    for index, frame in enumerate(frames):
+        strip.paste(frame, (0, 16 * index))
+    path = TEX / "block" / f"{name}.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    strip.save(path, optimize=True)
+    (TEX / "block" / f"{name}.png.mcmeta").write_text(
+        json.dumps({"animation": {"frametime": frametime}}, indent=2) + "\n", encoding="utf-8")
+
+
 def upgrade_card(accent, symbol):
     """A brass-framed punch card with a colored accent and a small symbol (speed: arrow, efficiency: leaf)."""
     from steampunk_textures import BRASS as SP_BRASS
@@ -1103,6 +1153,10 @@ def machines():
     save(wrench_item(), "item", "brass_wrench")
     save(handbook_item(), "item", "engineers_handbook")
     save(prospector_item(), "item", "prospector")
+    save(shaft_frame(0), "block", "iron_shaft")
+    save_animation([shaft_frame(-i) for i in range(8)], "iron_shaft_turning", frametime=1)
+    save(gearbox_frame(0), "block", "brass_gearbox")
+    save_animation([gearbox_frame(i * 11.25) for i in range(4)], "brass_gearbox_turning")
     arrow = [(5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (9, 7), (8, 6), (9, 9), (8, 10)]
     leaf = [(7, 7), (8, 7), (6, 8), (7, 8), (8, 8), (9, 8), (7, 9), (8, 9), (6, 10), (5, 10)]
     save(upgrade_card([(160, 40, 30), (220, 70, 40)], arrow), "item", "speed_upgrade")

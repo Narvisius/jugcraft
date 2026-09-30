@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CRC",
+    "RSR",
+    "CRC"
+  ],
+  "key": {
+    "C": "#c:ingots/copper",
+    "R": "minecraft:redstone",
+    "S": "jugcraft:iron_shaft"
+  },
+  "result": {
+    "id": "jugcraft:dynamo",
+    "count": 1
+  }
+}

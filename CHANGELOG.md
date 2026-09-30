@@ -8,6 +8,14 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #29 Kinetic power
+- A mechanical power layer in **KE** per tick. **Iron Shafts** carry it along their axis and **Brass Gearboxes** out of all six sides; both animate while turning.
+- Sources:
+  - **Hand Crank:** 16 KE/t while cranked.
+  - **Steam Engine:** 64 KE/t from fuel and water, burning only while something takes the power.
+- Every powered machine runs straight off a shaft (1 KE = 1 JE). The **Dynamo** bridges KE into JE cables at 75%.
+- Three game tests, a client screenshot of a running line, and handbook pages under Power.
+
 ### #28 Renewable resources
 - **Water Wheel** (2 tall): up to 24 JE/t from flowing or falling water beside its wheel, with no fuel.
 - **Cobblestone Generator:** one cobblestone a second from water and lava touching it; neither is used up.

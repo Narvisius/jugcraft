@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "GSG",
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/brass",
+    "G": "#c:gears/bronze",
+    "S": "jugcraft:iron_shaft"
+  },
+  "result": {
+    "id": "jugcraft:brass_gearbox",
+    "count": 1
+  }
+}

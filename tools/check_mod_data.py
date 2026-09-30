@@ -65,8 +65,13 @@ def texture(ref):
     if not png.is_file():
         err(f"Missing texture {ref}")
         return
+    animated = png.with_name(png.name + ".mcmeta").is_file()
     with Image.open(png) as img:
-        if img.size != (16, 16):
+        # Animated textures are a vertical strip of 16x16 frames with an .mcmeta beside them.
+        width, height = img.size
+        if animated and not (width == 16 and height % 16 == 0 and height > 16):
+            err(f"Animated texture {ref} is {img.size}, expected a 16-wide strip of 16x16 frames")
+        elif not animated and img.size != (16, 16):
             err(f"Texture {ref} is {img.size}, expected 16x16")
 
 

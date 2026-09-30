@@ -8,7 +8,7 @@ Format: {"chapters": [{"title", "icon", "pages": [{"title", "icon", "text": [par
 "craft": {"grid": [9 item ids or null], "result", "count"}, "recipes": [{"in": [[id, count]], "out": [id, count]}]}]}]}
 """
 from materials import COMPONENTS, METALS, MINERALS, ingot_id, ore_ids
-from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, TOOLS,
+from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS,
                       UPGRADES, BYPRODUCTS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, machine_recipes)
 
 MOD = "jugcraft"
@@ -79,6 +79,17 @@ ABOUT = {
                  "cocoa beans or other extras. Feed the sapling back in with eject and a pipe for endless wood.",
     "water_wheel": "Two blocks tall. The wheel on its right side turns in flowing water: 8 JE/t for each of its two "
                    "blocks with flowing water beside it, 12 if the water is falling. Still water does not turn it.",
+    "iron_shaft": "Carries rotation (KE, kinetic energy) along its length, placed like a log. Machines at the end of a "
+                  "shaft line run straight off it: 1 KE counts as 1 JE, with no cables.",
+    "brass_gearbox": "Passes rotation out of all six sides, to branch a shaft line or turn a corner. Power is shared "
+                     "evenly between everything on the line.",
+    "hand_crank": "Place it against a shaft, gearbox or machine and right-click: each crank turns it for 5 seconds "
+                  "(up to 20) at 16 KE/t. Cranking makes you a little hungry.",
+    "steam_engine": "Burns coal, charcoal, coke or bitumen and boils water to turn its flywheel: 64 KE/t out of its "
+                    "back. Right-click with fuel or a water bucket, or feed it with hoppers, pipes and pumps; a water "
+                    "source below refills it. It burns only while something takes the power.",
+    "dynamo": "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge "
+              "from a shaft line to the electric network.",
     "engineers_handbook": "This book. Craft it from a book and a copper ingot.",
 }
 
@@ -202,7 +213,9 @@ def build():
         {"title": "Power", "icon": f"{MOD}:coal_generator", "pages":
             [machine_page(m) for m in ("coal_generator", "solar_panel", "steam_generator", "geothermal_generator",
                                        "wind_turbine", "battery_box")]
-            + [block_page(c, CABLES[c]["display"]) for c in CABLES]},
+            + [block_page(c, CABLES[c]["display"]) for c in CABLES]
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("steam_engine", "hand_crank", "iron_shaft",
+                                                                     "brass_gearbox", "dynamo")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller")]},

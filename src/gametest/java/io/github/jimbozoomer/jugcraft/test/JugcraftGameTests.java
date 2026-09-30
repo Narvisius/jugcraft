@@ -7,6 +7,12 @@ import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
+import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity;
+import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
+import io.github.jimbozoomer.jugcraft.kinetic.ShaftBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ItemSorterBlockEntity;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.logistics.PneumaticExtractorBlock;
@@ -639,5 +645,66 @@ public class JugcraftGameTests {
 			long stored = wheel.energyFor(null).getAmount();
 			helper.assertTrue(stored >= 1_000, "Water wheel stored only " + stored + " JE");
 		});
+	}
+
+	// ------------------------------------------------------------------ kinetic power
+
+	/** A steam engine facing west (its back, the output, is east) with coal and a water source below it. */
+	private static BlockPos steamEngine(GameTestHelper helper, BlockPos pos) {
+		helper.setBlock(pos.below(), Blocks.WATER);
+		helper.setBlock(pos, JugcraftKinetics.STEAM_ENGINE.defaultBlockState().setValue(SteamEngineBlock.FACING, Direction.WEST));
+		Storage<ItemVariant> fuel = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
+		helper.assertTrue(fuel != null, "The steam engine takes no fuel");
+		try (Transaction transaction = Transaction.openOuter()) {
+			helper.assertTrue(fuel.insert(ItemVariant.of(Items.COAL), 4, transaction) == 4, "The steam engine refused coal");
+			transaction.commit();
+		}
+		return pos;
+	}
+
+	/** A steam engine turns a shaft line that runs a crusher with no JE at all; the shafts show as turning. */
+	@GameTest(maxTicks = 400)
+	public void steamEngineDrivesCrusherThroughShafts(GameTestHelper helper) {
+		BlockPos engine = steamEngine(helper, new BlockPos(1, 1, 2));
+		BlockState shaft = JugcraftKinetics.IRON_SHAFT.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.X);
+		helper.setBlock(engine.east(), shaft);
+		helper.setBlock(engine.east(2), shaft);
+		BlockPos crusherPos = engine.east(3);
+		helper.setBlock(crusherPos, machine(MachineKind.CRUSHER));
+		MachineBlockEntity crusher = helper.getBlockEntity(crusherPos, MachineBlockEntity.class);
+		crusher.setItem(0, new ItemStack(item("tin_ore")));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(helper.getBlockState(engine.east()).getValue(ShaftBlock.TURNING), "The shaft is not turning");
+			helper.assertTrue(crusher.getItem(MachineKind.CRUSHER.outputSlot()).is(item("raw_tin")),
+					"Crusher output is " + crusher.getItem(MachineKind.CRUSHER.outputSlot()));
+		});
+	}
+
+	/** A gearbox splits one engine between a dynamo (which makes JE) and a machine on another side. */
+	@GameTest(maxTicks = 200)
+	public void gearboxBranchesToDynamoAndMachine(GameTestHelper helper) {
+		BlockPos engine = steamEngine(helper, new BlockPos(1, 1, 2));
+		BlockPos gearbox = engine.east();
+		helper.setBlock(gearbox, JugcraftKinetics.BRASS_GEARBOX);
+		helper.setBlock(gearbox.east(), JugcraftKinetics.DYNAMO);
+		helper.setBlock(gearbox.south(), machine(MachineKind.ELECTRIC_FURNACE));
+		DynamoBlockEntity dynamo = helper.getBlockEntity(gearbox.east(), DynamoBlockEntity.class);
+		MachineBlockEntity furnace = helper.getBlockEntity(gearbox.south(), MachineBlockEntity.class);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(dynamo.energy().getAmount() > 0, "The dynamo made no JE");
+			helper.assertTrue(furnace.energyFor(null).getAmount() > 0, "The furnace got no power");
+		});
+	}
+
+	/** A hand crank on top of a dynamo charges it while it turns. */
+	@GameTest(maxTicks = 100)
+	public void handCrankChargesDynamo(GameTestHelper helper) {
+		BlockPos dynamoPos = new BlockPos(2, 1, 2);
+		helper.setBlock(dynamoPos, JugcraftKinetics.DYNAMO);
+		helper.setBlock(dynamoPos.above(), JugcraftKinetics.HAND_CRANK.defaultBlockState().setValue(HandCrankBlock.FACING, Direction.DOWN));
+		helper.getBlockEntity(dynamoPos.above(), HandCrankBlockEntity.class).addTurns(HandCrankBlockEntity.TICKS_PER_CRANK);
+		DynamoBlockEntity dynamo = helper.getBlockEntity(dynamoPos, DynamoBlockEntity.class);
+		helper.succeedWhen(() -> helper.assertTrue(dynamo.energy().getAmount() >= 100,
+				"The dynamo holds only " + dynamo.energy().getAmount() + " JE"));
 	}
 }

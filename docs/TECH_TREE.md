@@ -249,6 +249,24 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 **Code:** `prospecting/` (`OreSurvey`, `SurveyPayload`, `ProspectorItem`, `JugcraftProspecting`), `client/ProspectorScreen`, and `machine/OreDrilling` with `MachineKind.ORE_DRILL`.
 
+## Kinetic power
+
+A second, mechanical power system measured in **KE** (kinetic energy) per tick. Shafts carry rotation along their length and gearboxes out of all six sides. Machines at the end of a line run straight off it (1 KE = 1 JE, no loss), and a dynamo bridges it into JE cables at 75%.
+
+| Block | What it does | Details | Built from |
+| --- | --- | --- | --- |
+| Hand Crank | 16 KE/t into the block it faces | Each right-click turns it for 5 s (up to 20 s); costs a little food. | planks, iron shaft |
+| Steam Engine | 64 KE/t out of its back | Burns generator fuel and 10 mB water per tick, only while something takes the power. Loaded by right-click, hoppers, pipes and pumps, or a water source below. | bronze, bucket, 2 pistons, furnace, iron shaft |
+| Iron Shaft | Carries rotation along its axis | Placed like a log; shows turning while driven. | 2 iron ingots → 4 |
+| Brass Gearbox | Passes rotation out of all six sides | Branches and turns lines; power is shared evenly. | brass plates, bronze gears, iron shaft |
+| Dynamo | KE → JE at 75%, 128/t | Pushes JE into cables on every side. | copper, redstone, iron shaft |
+
+![Kinetic blocks](images/kinetic.png)
+
+*Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
+
+**Code:** `kinetic/` (`KineticNetworks`, `KineticConsumer`, `ShaftBlock`, `GearboxBlock`, `HandCrankBlock(Entity)`, `SteamEngineBlock(Entity)`, `DynamoBlock(Entity)`, `JugcraftKinetics`). `MachineBlockEntity` implements `KineticConsumer`.
+
 ## Renewable resources
 
 | Block | What it does | Details | Built from |

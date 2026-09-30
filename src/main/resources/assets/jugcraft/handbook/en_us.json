@@ -335,6 +335,116 @@
             "result": "jugcraft:aluminum_cable",
             "count": 3
           }
+        },
+        {
+          "title": "Steam Engine",
+          "icon": "jugcraft:steam_engine",
+          "text": [
+            "Burns coal, charcoal, coke or bitumen and boils water to turn its flywheel: 64 KE/t out of its back. Right-click with fuel or a water bucket, or feed it with hoppers, pipes and pumps; a water source below refills it. It burns only while something takes the power."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bronze_ingot",
+              "minecraft:bucket",
+              "jugcraft:bronze_ingot",
+              "minecraft:piston",
+              "minecraft:furnace",
+              "minecraft:piston",
+              "jugcraft:bronze_ingot",
+              "jugcraft:iron_shaft",
+              "jugcraft:bronze_ingot"
+            ],
+            "result": "jugcraft:steam_engine",
+            "count": 1
+          }
+        },
+        {
+          "title": "Hand Crank",
+          "icon": "jugcraft:hand_crank",
+          "text": [
+            "Place it against a shaft, gearbox or machine and right-click: each crank turns it for 5 seconds (up to 20) at 16 KE/t. Cranking makes you a little hungry."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:oak_planks",
+              "jugcraft:iron_shaft",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:hand_crank",
+            "count": 1
+          }
+        },
+        {
+          "title": "Iron Shaft",
+          "icon": "jugcraft:iron_shaft",
+          "text": [
+            "Carries rotation (KE, kinetic energy) along its length, placed like a log. Machines at the end of a shaft line run straight off it: 1 KE counts as 1 JE, with no cables."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:iron_ingot",
+              null,
+              null,
+              "minecraft:iron_ingot",
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:iron_shaft",
+            "count": 4
+          }
+        },
+        {
+          "title": "Brass Gearbox",
+          "icon": "jugcraft:brass_gearbox",
+          "text": [
+            "Passes rotation out of all six sides, to branch a shaft line or turn a corner. Power is shared evenly between everything on the line."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:brass_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:brass_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:iron_shaft",
+              "jugcraft:bronze_gear",
+              "jugcraft:brass_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:brass_plate"
+            ],
+            "result": "jugcraft:brass_gearbox",
+            "count": 1
+          }
+        },
+        {
+          "title": "Dynamo",
+          "icon": "jugcraft:dynamo",
+          "text": [
+            "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge from a shaft line to the electric network."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:copper_ingot",
+              "minecraft:redstone",
+              "minecraft:copper_ingot",
+              "minecraft:redstone",
+              "jugcraft:iron_shaft",
+              "minecraft:redstone",
+              "minecraft:copper_ingot",
+              "minecraft:redstone",
+              "minecraft:copper_ingot"
+            ],
+            "result": "jugcraft:dynamo",
+            "count": 1
+          }
         }
       ]
     },

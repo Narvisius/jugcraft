@@ -64,6 +64,15 @@ LOGISTICS_BLOCKS = {
 TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook",
          # Mining & prospecting: a vague 3x3-chunk ore survey (prospecting/OreSurvey).
          "prospector": "Geo-Resonance Prospector"}
+# Kinetic power (kinetic/): rotation in KE per tick, carried by shafts and gearboxes. Models: tools/kinetic_models.py.
+# "axis": placed like a log; "facing": six directions; "horizontal": four.
+KINETIC_BLOCKS = {
+    "iron_shaft": {"display": "Iron Shaft", "states": "axis"},
+    "brass_gearbox": {"display": "Brass Gearbox", "states": "none"},
+    "hand_crank": {"display": "Hand Crank", "states": "facing"},
+    "steam_engine": {"display": "Steam Engine", "states": "horizontal"},
+    "dynamo": {"display": "Dynamo", "states": "horizontal"},
+}
 # Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
 STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
 # Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
@@ -245,6 +254,13 @@ CRAFTING = {
     "capacitor_bank": (["PBP", "BCB", "PBP"], {"P": "#c:plates/steel", "B": "jugcraft:battery_box",
                                                "C": "jugcraft:advanced_circuit"}, 1),
     "steel_tank": (["PPP", "PTP", "PPP"], {"P": "#c:plates/steel", "T": "jugcraft:fluid_tank"}, 1),
+    # Kinetic power: all bronze-age, so it can come before electricity.
+    "iron_shaft": (["I", "I"], {"I": "#c:ingots/iron"}, 4),
+    "brass_gearbox": (["PGP", "GSG", "PGP"], {"P": "#c:plates/brass", "G": "#c:gears/bronze", "S": "jugcraft:iron_shaft"}, 1),
+    "hand_crank": (["PS"], {"P": "#minecraft:planks", "S": "jugcraft:iron_shaft"}, 1),
+    "steam_engine": (["BUB", "PFP", "BSB"], {"B": "#c:ingots/bronze", "U": "minecraft:bucket", "P": "minecraft:piston",
+                                           "F": "minecraft:furnace", "S": "jugcraft:iron_shaft"}, 1),
+    "dynamo": (["CRC", "RSR", "CRC"], {"C": "#c:ingots/copper", "R": "minecraft:redstone", "S": "jugcraft:iron_shaft"}, 1),
     # Renewables: the water wheel and cobblestone generator are early (bronze); the tree farm needs a circuit.
     "cobblestone_generator": (["BWB", "CMC", "BLB"], {"B": "#c:ingots/bronze", "W": "minecraft:water_bucket",
                                                    "C": "jugcraft:copper_cable", "M": "jugcraft:machine_casing",
@@ -447,7 +463,7 @@ def _arc_dusts():
 
 def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
-            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS))
+            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS))
 
 
 def machine_items():

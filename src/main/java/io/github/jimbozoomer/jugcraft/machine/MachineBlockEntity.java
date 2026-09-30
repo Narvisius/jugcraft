@@ -4,6 +4,7 @@ import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
+import io.github.jimbozoomer.jugcraft.kinetic.KineticConsumer;
 import io.github.jimbozoomer.jugcraft.logistics.ItemNetworks;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -56,7 +57,7 @@ import org.jspecify.annotations.Nullable;
  * battery ({@link #energy}); what it does each tick depends on its {@link MachineKind}.
  * All logic runs on the server; clients only see synced {@link ContainerData}.
  */
-public class MachineBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, ExtendedMenuProvider<BlockPos> {
+public class MachineBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, ExtendedMenuProvider<BlockPos>, KineticConsumer {
 	// Container data is synced to clients as 16-bit values, so energy and capacity (which exceed
 	// 32,767) are split into low and high halves; see MachineMenu#energy and #capacity.
 	public static final int DATA_ENERGY_LOW = 0;
@@ -685,6 +686,24 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Kinetic power from a shaft or gearbox counts as JE for machines that use power (not generators or
+	 * batteries), up to the machine's input rate. It reaches the machine through any of its blocks.
+	 */
+	@Override
+	public long acceptKinetic(Direction side, long maxAmount) {
+		if (!kind.usesPower() || kind.isGenerator() || kind.isBattery()) {
+			return 0;
+		}
+		long take = Math.min(Math.min(maxAmount, kind.maxInput), energy.getCapacity() - energy.getAmount());
+		if (take <= 0) {
+			return 0;
+		}
+		energy.setAmount(energy.getAmount() + take);
+		setChanged();
+		return take;
 	}
 
 	/** The cards in this machine's upgrade slots. */
