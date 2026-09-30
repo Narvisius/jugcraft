@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "jugcraft:arc_smelting",
+  "ingredient": "jugcraft:raw_tungsten",
+  "result": {
+    "id": "jugcraft:tungsten_ingot",
+    "count": 1
+  },
+  "time": 120
+}

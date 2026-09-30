@@ -435,8 +435,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private Optional<Result> findResult(ServerLevel level) {
 		if (kind.isMultiInput()) {
 			List<ItemStack> inputs = items.subList(0, kind.outputSlot());
-			return MachineRecipes.findMulti(kind, inputs).map(match -> new Result(
-					match.recipe().output(), match.recipe().ticks(), match.take()));
+			return MachineRecipes.findMulti(level, kind, inputs).map(match -> new Result(
+					match.recipe().output().create(), match.recipe().time(), match.take()));
 		}
 		ItemStack input = items.get(0);
 		if (input.isEmpty()) {
@@ -447,7 +447,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return SMELTING.getRecipeFor(recipeInput, level)
 					.map(holder -> new Result(holder.value().assemble(recipeInput), MachineKind.ELECTRIC_FURNACE_TICKS, TAKE_ONE));
 		}
-		return MachineRecipes.find(kind, input).map(recipe -> new Result(recipe.output(), recipe.ticks(), TAKE_ONE));
+		return MachineRecipes.find(level, kind, input).map(recipe -> new Result(recipe.output().create(), recipe.time(), TAKE_ONE));
 	}
 
 	private boolean canOutput(ItemStack result) {
@@ -503,7 +503,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			};
 		}
 		if (kind.isMultiInput()) {
-			return slot < kind.outputSlot() && MachineRecipes.isMultiIngredient(kind, stack);
+			// Only the server knows the recipes; on the client the menu's slots accept anything and the server decides.
+			return slot < kind.outputSlot() && (!(level instanceof ServerLevel server)
+					|| MachineRecipes.isMultiIngredient(server.getServer(), kind, stack));
 		}
 		return kind.isProcessor() && slot < kind.outputSlot();
 	}

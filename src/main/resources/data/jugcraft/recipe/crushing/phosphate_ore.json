@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:crushing",
+  "ingredient": "jugcraft:phosphate_ore",
+  "result": {
+    "id": "jugcraft:phosphate",
+    "count": 4
+  },
+  "time": 160
+}

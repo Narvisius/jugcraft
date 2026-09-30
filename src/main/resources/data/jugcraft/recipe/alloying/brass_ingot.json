@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "jugcraft:alloying",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:copper_ingot",
+      "count": 3
+    },
+    {
+      "ingredient": "jugcraft:zinc_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:brass_ingot",
+    "count": 4
+  },
+  "time": 200
+}

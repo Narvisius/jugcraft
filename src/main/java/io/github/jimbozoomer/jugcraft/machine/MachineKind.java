@@ -80,15 +80,18 @@ public enum MachineKind implements StringRepresentable {
 		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER;
 	}
 
-	/** Key of this machine's recipe list in jugcraft/machine_recipes.json (null for the electric furnace). */
-	public String recipeKey() {
+	/**
+	 * This machine's recipe type (jugcraft:&lt;name&gt;; see {@link MachineRecipeTypes}), or null for machines
+	 * without their own recipes (the electric furnace uses vanilla smelting).
+	 */
+	public String recipeType() {
 		return switch (this) {
-			case CRUSHER -> "crusher";
-			case ARC_FURNACE -> "arc_furnace";
-			case ALLOY_SMELTER -> "alloy_smelter";
-			case METAL_PRESS -> "metal_press";
-			case WIRE_DRAWER -> "wire_drawer";
-			case CIRCUIT_ASSEMBLER -> "circuit_assembler";
+			case CRUSHER -> "crushing";
+			case ARC_FURNACE -> "arc_smelting";
+			case ALLOY_SMELTER -> "alloying";
+			case METAL_PRESS -> "pressing";
+			case WIRE_DRAWER -> "wire_drawing";
+			case CIRCUIT_ASSEMBLER -> "circuit_assembly";
 			default -> null;
 		};
 	}

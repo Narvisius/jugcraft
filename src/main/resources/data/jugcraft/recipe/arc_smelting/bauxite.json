@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:arc_smelting",
+  "ingredient": "jugcraft:bauxite",
+  "result": {
+    "id": "jugcraft:aluminum_ingot",
+    "count": 1
+  },
+  "time": 200
+}

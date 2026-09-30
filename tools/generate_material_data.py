@@ -162,6 +162,33 @@ def machine_assets(lang):
     lang[f"container.{MOD}.wind_turbine.blocked"] = "Rotor blocked: clear the blocks beside and above the top"
 
 
+# Machine recipe types (Java: machine/MachineRecipes.java). Each machine's list in tools/machines.py
+# becomes data/jugcraft/recipe/<type>/<name>.json, so data packs can add, replace or remove them.
+RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_smelter": "alloying",
+                "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly"}
+
+
+def machine_recipe_files(out):
+    for machine, recipes in machine_recipes().items():
+        kind = RECIPE_TYPES[machine]
+        names = set()
+        for recipe in recipes:
+            data = {"fabric:load_conditions": [c for f in recipe["features"] for c in condition(f)],
+                    "type": rid(kind)}
+            if "inputs" in recipe:
+                name = recipe["output"].split(":")[1]
+                data["ingredients"] = [{"ingredient": item, "count": count} for item, count in recipe["inputs"]]
+            else:
+                name = recipe["input"].split(":")[1]
+                data["ingredient"] = recipe["input"]
+            data["result"] = {"id": recipe["output"], "count": recipe["count"]}
+            data["time"] = recipe["ticks"]
+            if name in names:
+                raise ValueError(f"Two {kind} recipes would both be named {name}")
+            names.add(name)
+            write(out / kind / f"{name}.json", data)
+
+
 # ---------------------------------------------------------------- loot tables
 
 SILK = {"condition": "minecraft:match_tool", "predicate": {"predicates": {
@@ -265,7 +292,7 @@ def recipes():
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
-    write(RES / MOD / "machine_recipes.json", machine_recipes())
+    machine_recipe_files(out)
 
     # Gears: four plates of one metal (36 nugget units in, 36 out).
     for metal in COMPONENTS["gear"]:
@@ -368,9 +395,10 @@ def tags():
 # ---------------------------------------------------------------- worldgen
 
 def ore_feature(name, size, targets):
-    write(DATA / MOD / "worldgen" / "configured_feature" / f"ore_{name}.json", {
+    # Minecraft 26.x: configured features live in worldgen/feature/ and have no "config" wrapper.
+    write(DATA / MOD / "worldgen" / "feature" / f"ore_{name}.json", {
         "type": "minecraft:ore",
-        "config": {"size": size, "discard_chance_on_air_exposure": 0.0, "targets": targets},
+        "size": size, "discard_chance_on_air_exposure": 0.0, "targets": targets,
     })
 
 
@@ -393,9 +421,9 @@ def placed_feature(name, gen):
 def layered_targets(ore, deep):
     return [
         {"target": {"predicate_type": "minecraft:tag_match", "tag": "minecraft:stone_ore_replaceables"},
-         "state": {"Name": rid(ore)}},
+         "state": rid(ore)},
         {"target": {"predicate_type": "minecraft:tag_match", "tag": "minecraft:deepslate_ore_replaceables"},
-         "state": {"Name": rid(deep)}},
+         "state": rid(deep)},
     ]
 
 
@@ -408,7 +436,7 @@ def worldgen():
     for rock, info in ROCKS.items():
         gen = info["gen"]
         ore_feature(rock, gen["size"], [{"target": {"predicate_type": "minecraft:tag_match", "tag": gen["target"]},
-                                         "state": {"Name": rid(rock)}}])
+                                         "state": rid(rock)}])
         placed_feature(rock, gen)
 
 

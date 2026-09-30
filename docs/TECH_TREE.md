@@ -217,6 +217,47 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 Every part carries `c:` convention tags (`c:plates/bronze`, `c:gears/iron`, `c:wires/copper` and so on), so other mods' parts can be used, and Jugcraft parts work in their recipes.
 
+## Machine recipes are data
+
+Every machine recipe is an ordinary Minecraft recipe file. A data pack can add, replace or remove recipes without code, and `/reload` applies the change.
+
+| Machine | Recipe type | Folder |
+| --- | --- | --- |
+| Crusher | `jugcraft:crushing` | `data/<namespace>/recipe/crushing/` |
+| Arc Furnace | `jugcraft:arc_smelting` | `…/arc_smelting/` |
+| Metal Press | `jugcraft:pressing` | `…/pressing/` |
+| Wire Drawer | `jugcraft:wire_drawing` | `…/wire_drawing/` |
+| Alloy Smelter | `jugcraft:alloying` (several inputs) | `…/alloying/` |
+| Circuit Assembler | `jugcraft:circuit_assembly` (several inputs) | `…/circuit_assembly/` |
+| Electric Furnace | vanilla `minecraft:smelting` | (vanilla furnace recipes) |
+
+```json
+{"type": "jugcraft:crushing", "ingredient": "#c:ores/tin", "result": {"id": "jugcraft:raw_tin", "count": 2}, "time": 160}
+{"type": "jugcraft:alloying",
+ "ingredients": [{"ingredient": "minecraft:copper_ingot", "count": 3}, {"ingredient": "jugcraft:tin_ingot", "count": 1}],
+ "result": {"id": "jugcraft:bronze_ingot", "count": 4}, "time": 200}
+```
+
+- `ingredient` accepts an item, a list or a `#tag`.
+- `time` is in ticks.
+- Multi-input ingredients can sit in any input slot, and every unused slot must be empty.
+- Jugcraft's own recipes are generated from `tools/machines.py`, where the metal audit runs. Edit them there, not in the JSON.
+- Code: `machine/MachineRecipe.java` and `MultiMachineRecipe.java` (formats), `MachineRecipeTypes.java` (registration), `MachineRecipes.java` (lookup).
+- **Recipe viewers:** recipe viewers (EMI, JEI, REI) show a new recipe type only through a small plugin. No viewer build for Minecraft 26.3 has been confirmed yet, so that plugin is a follow-up.
+
+## Automated game tests
+
+`src/gametest/` holds in-game tests that `./gradlew build` runs on a headless server (Fabric game test API), so CI checks them on every pull request. They cover:
+
+- crushing recipes loading from data;
+- the crusher doubling ore;
+- a coal generator powering an electric furnace through cables;
+- a pump filling a tank through pipes;
+- the 2×2 alloy smelter placing, taking power only at its socket, and making bronze;
+- a multi-block machine disappearing whole when one block breaks.
+
+To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests` that builds its setup and ends with `helper.succeed()` or `helper.succeedWhen(...)`.
+
 ## Rules that keep it balanced
 
 - **No free metal.** Every recipe keeps or loses metal: plates 1:1, 4 plates → 1 gear, 1 ingot → 3 wires, and alloys at exact ratios. The only gain is the crusher's ore doubling, defined once for all ores. `tools/check_mod_data.py` audits every recipe, including two- and three-input machine recipes.

@@ -39,9 +39,20 @@ processResources {
 }
 
 test {
-	// src/test currently holds only compile-time guards (VanillaReferences), not runnable
-	// tests. Gradle 9 fails a test task that discovers none; remove this once real tests exist.
+	// src/test holds only compile-time guards (VanillaReferences); the real tests are the game
+	// tests below. Gradle 9 fails a test task that discovers none.
 	failOnNoDiscoveredTests = false
+}
+
+// In-game tests (src/gametest): a headless server runs them as part of `./gradlew build`.
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "jugcraft-test"
+		enableGameTests = true
+		enableClientGameTests = false
+		eula = true // Accepts the Minecraft EULA for the test server only.
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {

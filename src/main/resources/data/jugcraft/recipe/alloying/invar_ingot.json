@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "jugcraft:alloying",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:iron_ingot",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:nickel_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:invar_ingot",
+    "count": 3
+  },
+  "time": 240
+}
