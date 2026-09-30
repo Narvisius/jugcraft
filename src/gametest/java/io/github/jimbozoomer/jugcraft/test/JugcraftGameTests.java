@@ -33,6 +33,12 @@ import io.github.jimbozoomer.jugcraft.machine.MachineUpgrades;
 import io.github.jimbozoomer.jugcraft.machine.SideConfig;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import io.github.jimbozoomer.jugcraft.storage.JugcraftStorage;
+import io.github.jimbozoomer.jugcraft.tools.Chargeable;
+import io.github.jimbozoomer.jugcraft.tools.ChargingStationBlock;
+import io.github.jimbozoomer.jugcraft.tools.ChargingStationBlockEntity;
+import io.github.jimbozoomer.jugcraft.tools.JugcraftTools;
+import io.github.jimbozoomer.jugcraft.tools.MiningDrillItem;
+import io.github.jimbozoomer.jugcraft.tools.RocketPackItem;
 import java.util.List;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -48,13 +54,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.Fluids;
 
 /**
@@ -839,6 +850,105 @@ public class JugcraftGameTests {
 						+ count(ahead, Items.COBBLESTONE) + " ahead, " + count(right, Items.COBBLESTONE) + " right");
 			}
 		});
+	}
+
+	// ------------------------------------------------------------------ powered tools
+
+	private static ItemStack charged(Item item) {
+		ItemStack stack = new ItemStack(item);
+		Chargeable.setEnergy(stack, ((Chargeable) item).capacity());
+		return stack;
+	}
+
+	/** A survival mock player at {@code pos}, facing south (+z), holding {@code tool}. */
+	private static ServerPlayer miner(GameTestHelper helper, ItemStack tool) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.SURVIVAL);
+		player.setYRot(0);
+		player.setXRot(0);
+		player.setItemInHand(InteractionHand.MAIN_HAND, tool);
+		return player;
+	}
+
+	/** A charging station on cables' power fills the tool on its cradle and lights up. */
+	@GameTest(maxTicks = 100)
+	public void chargingStationChargesTool(GameTestHelper helper) {
+		BlockPos lower = new BlockPos(2, 1, 2);
+		BlockState state = JugcraftTools.CHARGING_STATION.defaultBlockState();
+		helper.setBlock(lower, state);
+		helper.setBlock(lower.above(), state.setValue(ChargingStationBlock.HALF, DoubleBlockHalf.UPPER));
+		charge(helper, lower.above(), Direction.WEST);
+		ChargingStationBlockEntity station = helper.getBlockEntity(lower, ChargingStationBlockEntity.class);
+		station.setTool(new ItemStack(JugcraftTools.MINING_DRILL));
+		helper.succeedWhen(() -> {
+			long energy = Chargeable.energy(station.tool());
+			helper.assertTrue(energy >= ChargingStationBlockEntity.CHARGE_RATE * 10, "The drill holds only " + energy + " JE");
+			helper.assertTrue(helper.getBlockState(lower).getValue(ChargingStationBlock.LIT), "The station is not lit while charging");
+		});
+	}
+
+	/** An empty drill mines like a bare hand and gets no ore drops; a charged one is fast and correct. */
+	@GameTest
+	public void emptyDrillIsSlow(GameTestHelper helper) {
+		BlockState stone = Blocks.STONE.defaultBlockState();
+		ItemStack empty = new ItemStack(JugcraftTools.MINING_DRILL);
+		ItemStack full = charged(JugcraftTools.MINING_DRILL);
+		helper.assertTrue(empty.getDestroySpeed(stone) == 1.0F, "An empty drill mines at " + empty.getDestroySpeed(stone));
+		helper.assertTrue(!empty.isCorrectToolForDrops(Blocks.IRON_ORE.defaultBlockState()), "An empty drill gets ore drops");
+		helper.assertTrue(full.getDestroySpeed(stone) > 8.0F, "A charged drill mines at only " + full.getDestroySpeed(stone));
+		helper.assertTrue(full.isCorrectToolForDrops(Blocks.DIAMOND_ORE.defaultBlockState()), "A charged drill cannot mine diamond ore");
+		helper.succeed();
+	}
+
+	/** In 3x3 mode, breaking one block of a wall breaks the square around it, for the energy of nine blocks. */
+	@GameTest
+	public void drillMinesThreeByThree(GameTestHelper helper) {
+		for (int x = 1; x <= 3; x++) {
+			for (int y = 1; y <= 3; y++) {
+				helper.setBlock(new BlockPos(x, y, 3), Blocks.STONE);
+			}
+		}
+		ItemStack drill = charged(JugcraftTools.MINING_DRILL);
+		drill.set(JugcraftTools.DRILL_MODE, MiningDrillItem.AREA);
+		ServerPlayer player = miner(helper, drill);
+		helper.assertTrue(player.gameMode.destroyBlock(helper.absolutePos(new BlockPos(2, 2, 3))), "The drill broke nothing");
+		for (int x = 1; x <= 3; x++) {
+			for (int y = 1; y <= 3; y++) {
+				helper.assertBlockPresent(Blocks.AIR, new BlockPos(x, y, 3));
+			}
+		}
+		long used = JugcraftTools.DRILL_CAPACITY - Chargeable.energy(player.getMainHandItem());
+		helper.assertTrue(used == 9 * JugcraftTools.DRILL_ENERGY_PER_BLOCK, "The drill used " + used + " JE for nine blocks");
+		helper.succeed();
+	}
+
+	/** Cutting the bottom log with the chainsaw fells the whole tree, branches too. */
+	@GameTest
+	public void chainsawFellsTree(GameTestHelper helper) {
+		for (int y = 1; y <= 5; y++) {
+			helper.setBlock(new BlockPos(2, y, 2), Blocks.OAK_LOG);
+		}
+		helper.setBlock(new BlockPos(3, 4, 3), Blocks.OAK_LOG);
+		ServerPlayer player = miner(helper, charged(JugcraftTools.CHAINSAW));
+		player.gameMode.destroyBlock(helper.absolutePos(new BlockPos(2, 1, 2)));
+		for (int y = 1; y <= 5; y++) {
+			helper.assertBlockPresent(Blocks.AIR, new BlockPos(2, y, 2));
+		}
+		helper.assertBlockPresent(Blocks.AIR, new BlockPos(3, 4, 3));
+		helper.succeed();
+	}
+
+	/** A tick of rocket thrust costs its JE and cancels a fall. */
+	@GameTest
+	public void rocketPackThrustUsesEnergy(GameTestHelper helper) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setItemSlot(EquipmentSlot.CHEST, charged(JugcraftTools.ROCKET_PACK));
+		player.fallDistance = 10;
+		RocketPackItem.thrust(player);
+		long left = Chargeable.energy(player.getItemBySlot(EquipmentSlot.CHEST));
+		helper.assertTrue(left == RocketPackItem.CAPACITY - RocketPackItem.ENERGY_PER_TICK, "The pack holds " + left + " JE");
+		helper.assertTrue(player.fallDistance == 0, "The fall was not cancelled");
+		helper.succeed();
 	}
 
 	// ------------------------------------------------------------------ auto-crafter

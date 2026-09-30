@@ -20,6 +20,9 @@ import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
+import io.github.jimbozoomer.jugcraft.tools.ChargingStationBlock;
+import io.github.jimbozoomer.jugcraft.tools.ChargingStationBlockEntity;
+import io.github.jimbozoomer.jugcraft.tools.JugcraftTools;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
@@ -30,14 +33,17 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 /**
  * Client game tests: a real game client with real rendering (CI runs it with Mesa). It builds a
@@ -100,6 +106,31 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.waitTicks(10);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_conveyors");
+
+			// Powered tools: three charging stations holding the drill, the chainsaw and the rocket pack.
+			server.runOnServer(minecraft -> buildToolStations(minecraft.overworld(), new BlockPos(x - 8, y, z + 2)));
+			server.runCommand("tp @p %d %d %d 180 10".formatted(x - 6, y, z + 6));
+			context.waitTicks(20);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_charging_stations");
+
+			// The drill in hand (first person, with the hotbar showing the three tools), then the worn rocket pack
+			// from behind.
+			server.runCommand("item replace entity @p hotbar.0 with jugcraft:mining_drill");
+			server.runCommand("item replace entity @p hotbar.1 with jugcraft:chainsaw");
+			server.runCommand("item replace entity @p hotbar.2 with jugcraft:rocket_pack");
+			server.runCommand("item replace entity @p armor.chest with jugcraft:rocket_pack");
+			server.runCommand("tp @p %d %d %d 180 20".formatted(x - 6, y, z + 5));
+			// Show the HUD again (the first hotbar slot, the drill, is selected in a new world).
+			context.getInput().pressKey(options -> options.keyToggleGui);
+			context.waitTicks(20);
+			context.takeScreenshot("jugcraft_drill_in_hand");
+			context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+			context.waitTicks(20);
+			context.takeScreenshot("jugcraft_rocket_pack_worn");
+			context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+			context.getInput().pressKey(options -> options.keyToggleGui);
+			server.runCommand("clear @p");
 
 			// Multi-block machines, ten blocks away, in three views along the row (the wind turbine is nine tall).
 			for (int view = 0; view < 3; view++) {
@@ -229,6 +260,20 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 		level.setBlock(start, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST), 3);
 		if (level.getBlockEntity(start) instanceof ElectricMotorBlockEntity motor) {
 			motor.energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+		}
+	}
+
+	/** Three charging stations in a row, facing south, holding the mining drill, the chainsaw and the rocket pack. */
+	private static void buildToolStations(ServerLevel level, BlockPos start) {
+		Item[] tools = {JugcraftTools.MINING_DRILL, JugcraftTools.CHAINSAW, JugcraftTools.ROCKET_PACK};
+		for (int i = 0; i < tools.length; i++) {
+			BlockPos lower = start.east(i * 2);
+			BlockState state = JugcraftTools.CHARGING_STATION.defaultBlockState().setValue(ChargingStationBlock.FACING, Direction.SOUTH);
+			level.setBlock(lower, state, 3);
+			level.setBlock(lower.above(), state.setValue(ChargingStationBlock.HALF, DoubleBlockHalf.UPPER), 3);
+			if (level.getBlockEntity(lower) instanceof ChargingStationBlockEntity station) {
+				station.setTool(new ItemStack(tools[i]));
+			}
 		}
 	}
 

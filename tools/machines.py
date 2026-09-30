@@ -86,6 +86,11 @@ KINETIC_BLOCKS = {
     "conveyor": {"display": "Conveyor", "states": "horizontal"},
     "conveyor_splitter": {"display": "Conveyor Splitter", "states": "horizontal"},
 }
+# Powered tools (tools/), dieselpunk 3D item models in tools/tool_models.py: JE in an "energy" item component,
+# charged at the charging station.
+POWERED_TOOLS = {"mining_drill": "Mining Drill", "chainsaw": "Chainsaw", "rocket_pack": "Rocket Pack"}
+# Blocks of the powered-tools feature: the 2-tall charging station (lower and upper halves, one item).
+TOOL_BLOCKS = {"charging_station": {"display": "Charging Station"}}
 # Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
 STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
 # Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
@@ -291,6 +296,17 @@ CRAFTING = {
     # Conveyors: leather belts over iron plates and a shaft; the splitter adds bronze gears and a brass plate.
     "conveyor": (["BBB", "PSP"], {"B": "jugcraft:belt", "P": "#c:plates/iron", "S": "jugcraft:iron_shaft"}, 6),
     "conveyor_splitter": ([" R ", "GCG"], {"R": "#c:plates/brass", "G": "#c:gears/bronze", "C": "jugcraft:conveyor"}, 1),
+    # Powered tools (steel tier, dieselpunk): tungsten cutting edges, steel bodies, an advanced circuit each.
+    "mining_drill": ([" T ", "SGS", "ALS"], {"T": "#c:plates/tungsten", "S": "#c:plates/steel", "G": "#c:gears/steel",
+                                            "A": "jugcraft:advanced_circuit", "L": "#c:ingots/lead"}, 1),
+    "chainsaw": (["TTT", "SGS", "ALS"], {"T": "#c:plates/tungsten", "S": "#c:plates/steel", "G": "#c:gears/steel",
+                                        "A": "jugcraft:advanced_circuit", "L": "#c:ingots/lead"}, 1),
+    "rocket_pack": (["SAS", "FLF", "N N"], {"S": "#c:plates/steel", "A": "jugcraft:advanced_circuit",
+                                           "F": "jugcraft:fluid_tank", "L": "minecraft:leather",
+                                           "N": "#c:plates/tungsten"}, 1),
+    "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",
+                                                "W": "jugcraft:copper_cable", "A": "jugcraft:advanced_circuit",
+                                                "B": "jugcraft:battery_box"}, 1),
     "dynamo": (["CRC", "RSR", "CRC"], {"C": "#c:ingots/copper", "R": "minecraft:redstone", "S": "jugcraft:iron_shaft"}, 1),
     # Renewables: the water wheel and cobblestone generator are early (bronze); the tree farm needs a circuit.
     "cobblestone_generator": (["BWB", "CMC", "BLB"], {"B": "#c:ingots/bronze", "W": "minecraft:water_bucket",
@@ -494,9 +510,9 @@ def _arc_dusts():
 
 def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
-            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS))
+            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS))
 
 
 def machine_items():
     """Items of the machine feature that are not blocks (tools and upgrades)."""
-    return list(TOOLS) + list(UPGRADES)
+    return list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS)

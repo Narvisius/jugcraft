@@ -1434,6 +1434,94 @@
               ]
             }
           ]
+        },
+        {
+          "title": "Charging Station",
+          "icon": "jugcraft:charging_station",
+          "text": [
+            "Two blocks tall. Hang a drill, chainsaw or rocket pack on its cradle and it fills it from cables, 512 JE a tick; take it back with an empty hand. Its lamp lights while it charges."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:redstone_lamp",
+              "jugcraft:steel_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:advanced_circuit",
+              "jugcraft:copper_cable",
+              "jugcraft:steel_plate",
+              "jugcraft:battery_box",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:charging_station",
+            "count": 1
+          }
+        },
+        {
+          "title": "Mining Drill",
+          "icon": "jugcraft:mining_drill",
+          "text": [
+            "Runs on JE instead of wearing out: 60 JE a block, 100,000 JE when full. Mines everything a pickaxe or shovel does, faster than netherite. Sneak and use it to switch mode: one block, a 3x3 square, or a whole ore vein. Empty, it mines like a bare hand."
+          ],
+          "craft": {
+            "grid": [
+              null,
+              "jugcraft:tungsten_plate",
+              null,
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:lead_ingot",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:mining_drill",
+            "count": 1
+          }
+        },
+        {
+          "title": "Chainsaw",
+          "icon": "jugcraft:chainsaw",
+          "text": [
+            "A JE-powered axe that also cuts leaves: 40 JE a block. Cutting a log fells the whole tree above it; sneak to cut one log."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:tungsten_plate",
+              "jugcraft:tungsten_plate",
+              "jugcraft:tungsten_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:lead_ingot",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:chainsaw",
+            "count": 1
+          }
+        },
+        {
+          "title": "Rocket Pack",
+          "icon": "jugcraft:rocket_pack",
+          "text": [
+            "Wear it and hold jump in the air to fly, 50 JE a tick (200,000 JE when full). Landing is safe while it fires. On a dedicated server, set allow-flight=true or long hovers get you kicked."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "minecraft:leather",
+              "jugcraft:fluid_tank",
+              "jugcraft:tungsten_plate",
+              null,
+              "jugcraft:tungsten_plate"
+            ],
+            "result": "jugcraft:rocket_pack",
+            "count": 1
+          }
         }
       ]
     },

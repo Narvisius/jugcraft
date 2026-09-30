@@ -8,6 +8,15 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #40 Powered tools (the first dieselpunk gear)
+- **Mining Drill:** a JE pickaxe and shovel, faster than netherite; modes for one block, 3×3 or a whole ore vein.
+- **Chainsaw:** a JE axe that also cuts leaves and fells whole trees.
+- **Rocket Pack:** worn on the chest; hold jump in the air to fly.
+- **Charging Station:** a two-block-tall station that charges the tool on its cradle from cables.
+- The tools hold JE instead of wearing out; empty, they mine like a bare hand.
+- New dieselpunk textures and detailed 3D item models; [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md) records the rule that higher tiers look dieselpunk.
+- Five game tests and three client screenshots.
+
 ### #38 Conveyors
 - **Conveyor:** carries items (drawn riding on it) the way it faces, 2.5 blocks a second, while rotation drives it: 1 KE per conveyor per tick for a whole joined run. Pipes, hoppers, machines and dropped items load it; it unloads into the conveyor or inventory ahead, or onto the ground. It carries players and mobs too.
 - **Conveyor Splitter:** sends items left, straight on and right in turn.

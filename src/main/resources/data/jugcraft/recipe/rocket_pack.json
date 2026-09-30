@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SAS",
+    "FLF",
+    "N N"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "A": "jugcraft:advanced_circuit",
+    "F": "jugcraft:fluid_tank",
+    "L": "minecraft:leather",
+    "N": "#c:plates/tungsten"
+  },
+  "result": {
+    "id": "jugcraft:rocket_pack",
+    "count": 1
+  }
+}

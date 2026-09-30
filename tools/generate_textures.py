@@ -655,6 +655,48 @@ def conveyor_frame(shift):
     return img
 
 
+def rocket_pack_armor():
+    """The worn rocket pack, on the 64x32 humanoid armor layout: twin olive tanks with chrome caps, a hazard band and
+    sooty nozzles on the back of the body; rubber harness straps and a chrome buckle on the front, sides and top."""
+    from dieselpunk_textures import CHROME, GUNMETAL, HAZARD, OLIVE, RUBBER, SOOT
+    img = Image.new("RGBA", (64, 32), (0, 0, 0, 0))
+
+    def px(x, y, c):
+        img.putpixel((x, y), tuple(c) + (255,))
+    # Back of the body: x 32..39, y 20..31.
+    for y in range(20, 32):
+        for x in range(32, 40):
+            col = x - 32
+            if col in (3, 4):
+                c = GUNMETAL[2] if y % 3 else GUNMETAL[3]
+            else:
+                c = OLIVE[3] if col in (0, 5) else OLIVE[2]
+                if y in (20, 21):
+                    c = CHROME[3] if y == 20 else CHROME[2]
+                elif y == 26:
+                    c = HAZARD[0] if col % 2 == 0 else HAZARD[2]
+                elif y >= 30:
+                    c = SOOT[1] if y == 30 else SOOT[0]
+            px(x, y, c)
+    px(35, 24, CHROME[3])
+    px(36, 24, (90, 190, 90))
+    # Straps: down the front (x 20..27), over the shoulders (top, x 20..27, y 16..19) and down the sides.
+    for y in range(20, 32):
+        for x in (21, 26):
+            px(x, y, RUBBER[2] if y % 2 else RUBBER[1])
+    for x in range(21, 27):
+        px(x, 24, CHROME[2])
+    px(23, 24, CHROME[4])
+    px(24, 24, CHROME[4])
+    for y in range(16, 20):
+        for x in (21, 26):
+            px(x, y, RUBBER[1])
+    for y in range(20, 32):
+        px(17, y, RUBBER[1])
+        px(30, y, RUBBER[1])
+    return img
+
+
 def belt_item():
     """A coiled leather belt with a brass buckle."""
     from steampunk_textures import BRASS as SP_BRASS
@@ -1209,6 +1251,9 @@ def machines():
     save(prospector_item(), "item", "prospector")
     save(belt_texture(), "block", "belt")
     save(belt_item(), "item", "belt")
+    armor = TEX / "entity" / "equipment" / "humanoid"
+    armor.mkdir(parents=True, exist_ok=True)
+    rocket_pack_armor().save(armor / "rocket_pack.png", optimize=True)
     save(conveyor_frame(0), "block", "conveyor_belt")
     save_animation([conveyor_frame(2 * i) for i in range(4)], "conveyor_belt_moving", frametime=1)
     save(shaft_frame(0), "block", "iron_shaft")
@@ -1264,6 +1309,8 @@ def main():
     machines()
     import steampunk_textures
     steampunk_textures.draw_all()
+    import dieselpunk_textures
+    dieselpunk_textures.draw_all()
 
 
 if __name__ == "__main__":

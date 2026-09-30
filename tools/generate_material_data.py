@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
-from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -227,6 +227,7 @@ def machine_assets(lang):
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {k.rstrip(","): v for k, v in variants.items()}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
     write(ASSETS / "kinetic_rotors.json", kinetic_rotors.export(KINETIC_BLOCKS))
+    powered_tools(lang)
     lang[f"message.{MOD}.hand_crank"] = "Turning for %s more seconds"
     lang[f"message.{MOD}.steam_engine"] = "Steam engine: %s fuel, %s / %s mB water"
     lang[f"message.{MOD}.dynamo"] = "Dynamo: %s / %s JE"
@@ -349,6 +350,57 @@ def ore_drop(block, item, low=1, high=1):
     ]}])
 
 
+def powered_tools(lang):
+    """Dieselpunk powered tools (3D item models) and the 2-tall charging station (tools/tool_models.py)."""
+    import tool_models
+    for item, display in POWERED_TOOLS.items():
+        lang[f"item.{MOD}.{item}"] = display
+        elements = tool_models.ITEMS[item]
+        textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+        textures["particle"] = rid("block/dp_olive")
+        write(ASSETS / "models" / "item" / f"{item}.json", {
+            "textures": textures, "elements": model_writer.slice_model(item, elements, [(0, 0, 0)])[0],
+            "display": tool_models.DISPLAY[item]})
+        write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    for block, info in TOOL_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = info["display"]
+        elements = tool_models.BLOCKS[block]
+        textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+        textures["particle"] = rid("block/dp_olive")
+        halves = model_writer.slice_model(block, elements, [(0, 0, 0), (0, 1, 0)])
+        lit_from, lit_to = tool_models.LIT[block]
+        for half, part in zip(("lower", "upper"), halves):
+            write(ASSETS / "models" / "block" / f"{block}_{half}.json",
+                  {"parent": "minecraft:block/block", "textures": textures, "elements": part})
+            write(ASSETS / "models" / "block" / f"{block}_{half}_lit.json",
+                  {"parent": rid(f"block/{block}_{half}"), "textures": {lit_from: rid(f"block/{lit_to}")}})
+        variants = {}
+        for facing, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270)):
+            for half in ("lower", "upper"):
+                for lit in (False, True):
+                    variant = {"model": rid(f"block/{block}_{half}{'_lit' if lit else ''}")}
+                    if y:
+                        variant["y"] = y
+                    variants[f"facing={facing},half={half},lit={str(lit).lower()}"] = variant
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": variants})
+        write(ASSETS / "models" / "item" / f"{block}.json", {
+            "parent": "minecraft:block/block", "textures": textures,
+            "elements": model_writer.scaled_elements(elements)})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{block}")}})
+    # How the rocket pack looks when worn (textures/entity/equipment/humanoid/rocket_pack.png).
+    write(ASSETS / "equipment" / "rocket_pack.json", {"layers": {"humanoid": [{"texture": rid("rocket_pack")}]}})
+    lang[f"message.{MOD}.drill_mode"] = "Drill mode: %s"
+    lang[f"message.{MOD}.drill_mode.single"] = "one block"
+    lang[f"message.{MOD}.drill_mode.area"] = "3×3"
+    lang[f"message.{MOD}.drill_mode.vein"] = "whole ore vein"
+    lang[f"tooltip.{MOD}.energy"] = "%s / %s JE"
+    lang[f"tooltip.{MOD}.drill_mode"] = "Mode: %s (sneak + use to change)"
+    lang[f"tooltip.{MOD}.chainsaw"] = "Fells whole trees (sneak to cut one log)"
+    lang[f"tooltip.{MOD}.rocket_pack"] = "Hold jump in the air to fly"
+    lang[f"message.{MOD}.charging_station"] = "Charging station: %s / %s JE"
+    lang[f"message.{MOD}.charging_station.tool"] = "%s: %s / %s JE"
+
+
 def loot_tables():
     out = DATA / MOD / "loot_table" / "blocks"
     for metal, info in METALS.items():
@@ -362,6 +414,12 @@ def loot_tables():
             write(out / f"{block}.json", table)
     for block in machine_blocks():
         write(out / f"{block}.json", self_drop(block))
+    # The 2-tall charging station drops once, from its lower half.
+    for block in TOOL_BLOCKS:
+        table = self_drop(block)
+        table["pools"][0]["conditions"].append({"condition": "minecraft:block_state_property", "block": rid(block),
+                                                "properties": {"half": "lower"}})
+        write(out / f"{block}.json", table)
     for rock, info in ROCKS.items():
         drop = info["drop"]
         table = ore_drop(rock, drop["item"], drop["min"], drop["max"]) if drop else self_drop(rock)
@@ -522,6 +580,13 @@ def tags():
 
     for block in machine_blocks():
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+
+    # What the powered tools mine fast (tools/JugcraftTools): the drill is a pickaxe and shovel, the chainsaw an axe
+    # that also cuts leaves.
+    for tag in ("#minecraft:mineable/pickaxe", "#minecraft:mineable/shovel"):
+        tags.add("block", "jugcraft:mineable/drill", tag)
+    for tag in ("#minecraft:mineable/axe", "#minecraft:leaves"):
+        tags.add("block", "jugcraft:mineable/chainsaw", tag)
 
     for form, metals in COMPONENTS.items():
         for metal in metals:

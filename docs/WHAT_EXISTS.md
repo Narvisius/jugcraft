@@ -111,6 +111,9 @@ Other blocks:
 | `item_sorter` | `logistics/ItemSorterBlock(Entity)` | 9-slot filter into the inventory it faces |
 | `conveyor`, `conveyor_splitter` | `logistics/ConveyorBlock(Entity)` | KE-driven belts; 4 stacks each; `ConveyorBlockEntity.accept(stack, progress)`; insert-only `ItemStorage`; client `ConveyorRenderer` |
 | `brass_wrench` (item) | `logistics/BrassWrenchItem` | rotate; sneak to dismantle |
+| `mining_drill`, `chainsaw` (items) | `tools/MiningDrillItem`, `ChainsawItem` (`PoweredToolItem`) | JE in the `jugcraft:energy` component; unbreakable; extra blocks via `ServerPlayerGameMode.destroyBlock`; drill mode in `jugcraft:drill_mode` |
+| `rocket_pack` (item) | `tools/RocketPackItem`, `RocketThrustPayload`; client `RocketPackClient` | equippable chest; client thrust, server pays (one per tick) |
+| `charging_station` | `tools/ChargingStationBlock(Entity)`; client `ChargingStationRenderer` | 2-tall (`half`), `lit`; `EnergyStorage` on both halves; charges `Chargeable` items |
 | `item_crate` | `storage/CrateBlock(Entity)`, `JugcraftStorage` | 32 stacks of one item; Fabric `SingleItemStorage` |
 | `iron_shaft`, `brass_gearbox` | `kinetic/ShaftBlock(Entity)`, `GearboxBlock` | carry KE (along the axis / out of all sides); `turning` block state |
 | `hand_crank`, `steam_engine` | `kinetic/HandCrankBlock(Entity)`, `SteamEngineBlock(Entity)` | KE sources: 16 KE/t cranked, 64 KE/t from fuel + water |
