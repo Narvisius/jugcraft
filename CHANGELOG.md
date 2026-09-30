@@ -8,6 +8,17 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### Parties (draft PR; proposal #21)
+- **`/party` commands:** create, invite, accept, decline, leave, kick, leader and disband.
+  - Invites expire after 5 minutes, and each player can send 10 a minute.
+  - Parties hold up to 8 members.
+- **Shared API (`JugcraftParties`):**
+  - `sameParty`, `isLeader`, `partyMembers`, change listeners.
+  - `mayServe` with `UseMode` (Personal/Party), which every automated system will use.
+- **Saving:** parties are saved in the world folder (`jugcraft/parties.txt`).
+- **Feature switch:** `parties.enabled`.
+- **Tests:** seven new game tests, plus a checker rule that every party result has a chat message.
+
 ### #20 Engineer's Handbook and in-game screenshots
 - **Engineer's Handbook** (book + copper ingot): an in-game guide with 9 chapters and 36 pages. Each page gives what a block does, its power use, its crafting grid and example recipes, and you can hover over items.
 - The content is generated from the mod's own tables, so it can't go out of date.
