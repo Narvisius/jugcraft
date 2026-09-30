@@ -769,6 +769,52 @@ def steel_tank():
     return m
 
 
+# ------------------------------------------------------------------ mining (multi-block)
+
+def ore_drill():
+    """Drilling derrick: a stepped iron lattice tower with a crown pulley, the drill string running down through a
+    brass rotary table into the ground, a coil motor at the back and a control box with gauge and lamp at the front."""
+    m = [box((0, 0, 0), (16, 1, 16), IRON_PLATE)]
+    # Wellhead casing and the rotary table that turns the drill string.
+    m += cyl("y", 8, 8, 2.5, 1, 3, IRON, IRON_PLATE)
+    m += gear("y", 8, 8, 5, 3, 4.25)
+    m.append(box((6.5, 4.25, 6.5), (9.5, 6, 9.5), BRASS))
+    m += cyl("y", 8, 8, 1, 3.5, 30.5, IRON)
+    # Lattice tower in three stages, narrowing towards the top, with a frame at each step.
+    stages = ((1, 16.5, 1.5), (17.25, 26.5, 3.5), (27.25, 31, 5.5))
+    for lo, hi, a in stages:
+        for x in (a, 14 - a):
+            for z in (a, 14 - a):
+                m.append(box((x, lo, z), (x + 1, hi, z + 1), IRON))
+    for y, outer, inner in ((16.5, 1.5, 3.5), (26.5, 3.5, 5.5)):
+        width = inner + 1 - outer
+        far = 15 - outer
+        m.append(box((outer, y, outer), (far, y + 0.75, outer + width), IRON_PLATE))
+        m.append(box((outer, y, far - width), (far, y + 0.75, far), IRON_PLATE))
+        m.append(box((outer, y, outer + width), (outer + width, y + 0.75, far - width), IRON_PLATE))
+        m.append(box((far - width, y, outer + width), (far, y + 0.75, far - width), IRON_PLATE))
+    for y, a in ((9, 1.5), (22, 3.5)):  # Mid-stage brace bars on the front and back.
+        m.append(box((a + 1, y, a + 0.25), (14 - a, y + 0.5, a + 0.75), IRON))
+        m.append(box((a + 1, y, 14.25 - a), (14 - a, y + 0.5, 14.75 - a), IRON))
+    # Crown block with the pulley wheel.
+    m.append(box((5, 31, 5), (11, 32, 11), BRASS_PLATE))
+    m.append(box((5.75, 32, 7.5), (6.75, 35.5, 8.5), IRON))
+    m.append(box((9.25, 32, 7.5), (10.25, 35.5, 8.5), IRON))
+    m += wheel("x", 34.5, 8, 2.25, 7.25, 8.75, IRON, BRASS)
+    # Coil motor at the back, driving the table.
+    m += cyl("x", 5, 12.5, 2.75, 8.5, 14.5, "sp_coil", BRASS)
+    m.append(box((8.25, 3.5, 10), (9.25, 4.5, 12.5), BRASS))
+    # Control box at the front: pressure gauge and the running lamp.
+    m.append(box((2.75, 1, 0.75), (6.25, 8, 3.25), {"*": IRON_PLATE, "north": BRASS_PLATE}))
+    m.append(dial("north", (4.5, 5.75, 0.5), 2.5))
+    m.append(dial("north", (4.5, 2.75, 0.5), 1.25, texture="sp_lamp"))
+    # Cable junction boxes in the middle of the other sides.
+    m.append(box((0.25, 4, 6), (1.25, 9, 10), {"*": IRON_PLATE, "west": BRASS_PLATE}))
+    m.append(box((14.75, 4, 6), (15.75, 9, 10), {"*": IRON_PLATE, "east": BRASS_PLATE}))
+    m.append(box((5.5, 1, 14.75), (8, 6, 15.75), {"*": IRON_PLATE, "south": BRASS_PLATE}))
+    return m
+
+
 MODELS = {
     "coal_generator": coal_generator(),
     "battery_box": battery_box(),
@@ -791,6 +837,7 @@ MODELS = {
     "steel_foundry": steel_foundry(),
     "capacitor_bank": capacitor_bank(),
     "steel_tank": steel_tank(),
+    "ore_drill": ore_drill(),
     "electric_pump": electric_pump(),
     "fluid_tank": fluid_tank(),
 }

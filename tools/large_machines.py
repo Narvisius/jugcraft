@@ -29,6 +29,8 @@ FOOTPRINTS = {
     # Storage: a 2x2 capacitor bank (two wide, two tall) and a squat 2x2 steel tank (two wide, two deep).
     "capacitor_bank": [(0, 0, 0), (-1, 0, 0), (0, 1, 0), (-1, 1, 0)],
     "steel_tank": [(0, 0, 0), (-1, 0, 0), (0, 0, 1), (-1, 0, 1)],
+    # Mining: a two-block derrick over the drilled column.
+    "ore_drill": [(0, 0, 0), (0, 1, 0)],
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -153,6 +155,13 @@ MODELS["steel_tank"] = [
     ((-12, 15, 4), (12, 17, 28), "fluid_tank_top"),
 ]
 
+MODELS["ore_drill"] = [
+    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
+    ((1, 2, 1), (15, 12, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((3, 12, 3), (13, 26, 13), "wind_turbine_mast"),
+    ((6, 26, 6), (10, 32, 10), "geothermal_stack"),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -162,4 +171,5 @@ FRONTS = {
     "steel_foundry": "steel_foundry_front",
     "capacitor_bank": "capacitor_bank_front",
     "steel_tank": "steel_tank_front",
+    "ore_drill": "ore_drill_front",
 }

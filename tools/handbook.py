@@ -68,6 +68,11 @@ ABOUT = {
     "speed_upgrade": "In a machine's upgrade slot: each card makes it faster but uses more energy per item. Four cards: 3x as "
                      "fast for twice the energy.",
     "efficiency_upgrade": "In a machine's upgrade slot: each card cuts energy use by a fifth. Four cards: 41% of the energy.",
+    "prospector": "Right-click to survey the 3x3 chunks around you, from the bottom of the world to a little above you. "
+                  "It shows which ores resonate, how strongly (1 to 5 bars) and roughly how deep, never exactly where.",
+    "ore_drill": "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom "
+                 "of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come "
+                 "out whole, ready for ore processing.",
     "engineers_handbook": "This book. Craft it from a book and a copper ingot.",
 }
 
@@ -174,6 +179,8 @@ def build():
         ]},
         {"title": "Materials", "icon": f"{MOD}:bronze_ingot", "pages": [
             ores_page(),
+            block_page("prospector", TOOLS["prospector"]),
+            machine_page("ore_drill"),
             {"title": "Ore Processing", "icon": f"{MOD}:tin_dust", "text": [
                 "Smelting an ore gives one ingot.",
                 f"Crushing or pulverizing it first gives {ORE_PROCESSING_MULTIPLIER}.",

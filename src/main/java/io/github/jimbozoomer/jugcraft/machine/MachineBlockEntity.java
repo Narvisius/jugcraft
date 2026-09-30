@@ -101,6 +101,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private int tank;
 	/** Processors: which faces take input or give output, and whether results are pushed out. */
 	private final SideConfig sides = new SideConfig();
+	/** Ore drill: the next block to check, counted from the top layer below the drill (see {@link OreDrilling}). */
+	private int cursor;
 	/** Wind turbine: whether the rotor check has run since loading. */
 	private boolean windChecked;
 
@@ -280,6 +282,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case STEEL_TANK -> false;
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
 			case WIND_TURBINE -> tickWind(level, pos, state);
+			case ORE_DRILL -> tickDrill(level, pos, state);
 			default -> tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
@@ -538,6 +541,71 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return true;
 	}
 
+	/**
+	 * The ore drill: finds the next ore below it (one layer of the 9x9 column per tick), then mines it
+	 * over {@link MachineKind#DRILL_TICKS} powered ticks. The ore block goes into the first result slot
+	 * with room and the hole is filled with stone (see {@link OreDrilling}); a full drill waits.
+	 */
+	private boolean tickDrill(ServerLevel level, BlockPos pos, BlockState state) {
+		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
+			eject(level, pos, state);
+		}
+		BlockPos target = OreDrilling.target(pos, cursor, level.getMinY());
+		if (target == null) {
+			return false; // Past the bottom of the world: everything in reach is mined.
+		}
+		BlockState ore = level.getBlockState(target);
+		if (!OreDrilling.isOre(ore)) {
+			// Look further; mining has not started on this block.
+			for (int step = 0; step < MachineKind.DRILL_SCAN_PER_TICK; step++) {
+				cursor++;
+				target = OreDrilling.target(pos, cursor, level.getMinY());
+				if (target == null || OreDrilling.isOre(level.getBlockState(target))) {
+					break;
+				}
+			}
+			progress = 0;
+			setChanged();
+			return false;
+		}
+		ItemStack mined = new ItemStack(ore.getBlock().asItem());
+		if (resultSlotFor(mined) < 0 || !sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false;
+		}
+		MachineUpgrades.Effect upgrades = upgrades();
+		maxProgress = upgrades.ticks(MachineKind.DRILL_TICKS);
+		long use = upgrades.use(kind.usePerTick);
+		if (energy.getAmount() < use) {
+			return false;
+		}
+		energy.setAmount(energy.getAmount() - use);
+		if (++progress >= maxProgress) {
+			progress = 0;
+			int slot = resultSlotFor(mined);
+			if (items.get(slot).isEmpty()) {
+				items.set(slot, mined);
+			} else {
+				items.get(slot).grow(1);
+			}
+			level.setBlock(target, OreDrilling.filler(ore), 3);
+			cursor++;
+		}
+		setChanged();
+		return true;
+	}
+
+	/** The ore drill's first result slot (output, then the two extra slots) with room for {@code stack}, or -1. */
+	private int resultSlotFor(ItemStack stack) {
+		for (int slot = kind.outputSlot(); slot < kind.slots; slot++) {
+			ItemStack held = items.get(slot);
+			if (held.isEmpty() || (ItemStack.isSameItemSameComponents(held, stack)
+					&& held.getCount() + stack.getCount() <= Math.min(getMaxStackSize(), held.getMaxStackSize()))) {
+				return slot;
+			}
+		}
+		return -1;
+	}
+
 	/** The cards in this machine's upgrade slots. */
 	public MachineUpgrades.Effect upgrades() {
 		if (kind.upgradeSlots() == 0) {
@@ -785,6 +853,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		maxBurn = input.getInt("max_burn").orElse(0);
 		tank = input.getInt("water").orElse(0);
 		sides.unpack(input.getInt("sides").orElse(SideConfig.defaults()));
+		cursor = input.getInt("cursor").orElse(0);
 		if (reservoir != null) {
 			reservoir.readValue(input);
 		}
@@ -801,6 +870,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		output.putInt("max_burn", maxBurn);
 		output.putInt("water", tank);
 		output.putInt("sides", sides.pack());
+		if (kind == MachineKind.ORE_DRILL) {
+			output.putInt("cursor", cursor);
+		}
 		if (reservoir != null) {
 			reservoir.writeValue(output);
 		}

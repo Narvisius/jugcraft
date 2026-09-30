@@ -2,10 +2,14 @@ package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.client.HandbookScreen;
 import io.github.jimbozoomer.jugcraft.client.MachineScreen;
+import io.github.jimbozoomer.jugcraft.client.ProspectorScreen;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
+import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestServerContext;
@@ -79,6 +83,19 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.setScreen(() -> new HandbookScreen(3, 1));
 			context.waitTicks(2);
 			context.takeScreenshot("jugcraft_handbook_machine_page");
+			context.setScreen(() -> null);
+
+			// The prospector: a real survey of the superflat ground under the showroom (it is only a few
+			// blocks deep), with ores buried in its dirt so the screen has readings to show; wait for the valve-tube bars to warm up.
+			server.runCommand("fill %d %d %d %d %d %d minecraft:iron_ore".formatted(x - 12, y - 3, z - 12, x + 12, y - 3, z + 12));
+			server.runCommand("fill %d %d %d %d %d %d minecraft:copper_ore".formatted(x - 6, y - 2, z - 6, x + 6, y - 2, z + 6));
+			server.runCommand("setblock %d %d %d minecraft:diamond_ore".formatted(x + 1, y - 2, z + 1));
+			AtomicReference<List<OreSurvey.Reading>> readings = new AtomicReference<>(List.of());
+			server.runOnServer(minecraft -> readings.set(OreSurvey.survey(minecraft.overworld(), new BlockPos(x, y, z),
+					minecraft.overworld().getRandom())));
+			context.setScreen(() -> new ProspectorScreen(readings.get()));
+			context.waitTicks(60);
+			context.takeScreenshot("jugcraft_prospector");
 			context.setScreen(() -> null);
 		}
 	}

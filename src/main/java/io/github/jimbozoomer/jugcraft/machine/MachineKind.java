@@ -35,7 +35,9 @@ public enum MachineKind implements StringRepresentable {
 	STEEL_FOUNDRY("steel_foundry", 0, 0, 0, 0, 3),
 	// Storage: a 2x2 capacitor bank (outputs from its front, like the battery box) and a 2x2 steel tank.
 	CAPACITOR_BANK("capacitor_bank", 4_000_000, 4_096, 4_096, 0, 0),
-	STEEL_TANK("steel_tank", 0, 0, 0, 0, 0);
+	STEEL_TANK("steel_tank", 0, 0, 0, 0, 0),
+	// Mining: a 2-tall derrick that mines the ores in a 9x9 column below it. No inputs; three result slots.
+	ORE_DRILL("ore_drill", 20_000, 256, 0, 32, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -69,6 +71,12 @@ public enum MachineKind implements StringRepresentable {
 	public static final int WASHER_WATER_PER_OPERATION = 500;
 	/** mB per tick drawn from a water source block directly beneath the ore washer. */
 	public static final int WASHER_SOURCE_REFILL = 20;
+	/** Ore drill: blocks mined in each direction from the drill's column, so 4 means a 9x9 area. */
+	public static final int DRILL_RADIUS = 4;
+	/** Ore drill: ticks to mine one ore block (before speed upgrades). */
+	public static final int DRILL_TICKS = 40;
+	/** Ore drill: blocks the drill head checks per tick while looking for the next ore (one layer). */
+	public static final int DRILL_SCAN_PER_TICK = (2 * DRILL_RADIUS + 1) * (2 * DRILL_RADIUS + 1);
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -93,7 +101,7 @@ public enum MachineKind implements StringRepresentable {
 		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
-				|| this == COKE_OVEN || this == STEEL_FOUNDRY;
+				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -150,7 +158,8 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Slots after the output that collect recipe byproducts (see {@link MachineRecipe#byproducts()}). */
 	public int byproductSlots() {
-		return this == PULVERIZER || this == SIEVE || this == SAWMILL ? 2 : 0;
+		// The ore drill has no inputs; its "byproduct" slots are just two more result slots.
+		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL ? 2 : 0;
 	}
 
 	/** mB the machine's fluid tank holds, or 0 without one. */
@@ -178,6 +187,7 @@ public enum MachineKind implements StringRepresentable {
 			case GEOTHERMAL_GENERATOR -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0));
 			case WIND_TURBINE -> Footprint.tall(3);
 			case COKE_OVEN -> Footprint.tall(2);
+			case ORE_DRILL -> Footprint.tall(2);
 			case STEEL_FOUNDRY -> Footprint.tall(3);
 			// Two wide, two tall.
 			case CAPACITOR_BANK -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0));

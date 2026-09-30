@@ -9,6 +9,7 @@ import io.github.jimbozoomer.jugcraft.materials.JugcraftComponents;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftMaterials;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftWorldgen;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
+import io.github.jimbozoomer.jugcraft.prospecting.JugcraftProspecting;
 import io.github.jimbozoomer.jugcraft.storage.JugcraftStorage;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
@@ -38,6 +39,7 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftFluids.register();
 		JugcraftLogistics.register();
 		JugcraftStorage.register();
+		JugcraftProspecting.register();
 		JugcraftGuide.register();
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();

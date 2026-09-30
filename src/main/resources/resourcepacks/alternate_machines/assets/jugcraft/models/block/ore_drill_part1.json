@@ -1,0 +1,75 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
+    "front": "jugcraft:block/ore_drill_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        10,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_mast"
+        },
+        "south": {
+          "texture": "#wind_turbine_mast"
+        },
+        "east": {
+          "texture": "#wind_turbine_mast"
+        },
+        "west": {
+          "texture": "#wind_turbine_mast"
+        },
+        "up": {
+          "texture": "#wind_turbine_mast"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        10,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_stack"
+        },
+        "south": {
+          "texture": "#geothermal_stack"
+        },
+        "east": {
+          "texture": "#geothermal_stack"
+        },
+        "west": {
+          "texture": "#geothermal_stack"
+        },
+        "up": {
+          "texture": "#geothermal_stack"
+        },
+        "down": {
+          "texture": "#geothermal_stack"
+        }
+      }
+    }
+  ]
+}

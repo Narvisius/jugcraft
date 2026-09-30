@@ -236,6 +236,19 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 
 *Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
 
+## Mining and prospecting
+
+| Block or tool | What it does | Details | Built from |
+| --- | --- | --- | --- |
+| Geo-Resonance Prospector (hand tool) | Surveys the 3×3 chunks around you | Shows each ore family found as 1–5 bars with a rough depth (shallow Y ≥ 40, middle 0–39, deep below 0). Readings are deliberately vague: every second column is sampled, a quarter of readings are one bar off, and no positions are given. 3-second cooldown. | brass plates, copper wire, glass pane, basic circuit |
+| Ore Drill (2 tall) | Mines the ores in a 9×9 column below it | One `c:ores` block every 40 ticks at 32 JE/t, from the layer under it down to the bottom of the world. Ores come out whole (like silk touch) into three result slots, and each hole is refilled with stone, deepslate or netherrack. It has upgrades, side configuration, eject, redstone modes and comparator output. It stops when full. | steel plates, steel gear, 2 basic circuits, machine casing, diamond pickaxe |
+
+![Ore Drill](images/mining.png)
+
+*Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot. The prospector's screen appears in the CI client screenshots.*
+
+**Code:** `prospecting/` (`OreSurvey`, `SurveyPayload`, `ProspectorItem`, `JugcraftProspecting`), `client/ProspectorScreen`, and `machine/OreDrilling` with `MachineKind.ORE_DRILL`.
+
 ## Machine control
 
 Every **powered processing machine** now has two **upgrade slots** (below the output) and a **redstone button** (the "R" above the face buttons). Comparators read every machine.

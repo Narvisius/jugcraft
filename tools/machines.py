@@ -29,6 +29,8 @@ MACHINES = {
     # Storage multi-blocks (2x2): a capacitor bank and a steel tank.
     "capacitor_bank": {"display": "Capacitor Bank", "lit": False},
     "steel_tank": {"display": "Steel Tank", "lit": False},
+    # Mining: a 2-tall powered derrick that mines ores in a 9x9 column below it.
+    "ore_drill": {"display": "Ore Drill", "lit": True},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -55,7 +57,9 @@ LOGISTICS_BLOCKS = {
     "high_pressure_extractor": {"display": "High-Pressure Extractor"},
     "item_sorter": {"display": "Item Sorter"},
 }
-TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook"}
+TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook",
+         # Mining & prospecting: a vague 3x3-chunk ore survey (prospecting/OreSurvey).
+         "prospector": "Geo-Resonance Prospector"}
 # Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
 STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
 # Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
@@ -104,6 +108,8 @@ STATS = {
     "capacitor_bank": {"capacity": 4_000_000, "io_per_tick": 4_096},
     # 2x2, one tall with a dome: 128 buckets of one fluid. No power.
     "steel_tank": {"capacity": 0, "tank": 128_000},
+    # 2 tall. Mines one c:ores block per 40 ticks from a 9x9 column below it, down to the bottom of the world.
+    "ore_drill": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "ticks": 40, "radius": 4},
     # Unpowered: heat comes from the charge itself. No battery, no cable connection.
     "coke_oven": {"capacity": 0, "use_per_tick": 0},
     "steel_foundry": {"capacity": 0, "use_per_tick": 0},
@@ -202,6 +208,9 @@ CRAFTING = {
     "brass_wrench": (["B B", " B ", " B "], {"B": "#c:ingots/brass"}, 1),
     # The in-game guide (tools/handbook.py): available from the start.
     "engineers_handbook": (["BC"], {"B": "minecraft:book", "C": "#c:ingots/copper"}, 1),
+    # Prospecting: brass instrument with a glass screen; the circuit puts it after the workshop tier.
+    "prospector": ([" W ", "PGP", "PCP"], {"W": "#c:wires/copper", "P": "#c:plates/brass", "G": "minecraft:glass_pane",
+                                        "C": "jugcraft:basic_circuit"}, 1),
     # Processing depth. The pulverizer follows the metal press (plates, gears); the ore washer needs
     # invar and a circuit, so the three-fold route comes after the workshop tier.
     "pulverizer": (["FGF", "CMC", "PGP"], {"F": "minecraft:flint", "G": "#c:gears/iron", "C": "jugcraft:copper_cable",
@@ -226,6 +235,9 @@ CRAFTING = {
     "capacitor_bank": (["PBP", "BCB", "PBP"], {"P": "#c:plates/steel", "B": "jugcraft:battery_box",
                                                "C": "jugcraft:advanced_circuit"}, 1),
     "steel_tank": (["PPP", "PTP", "PPP"], {"P": "#c:plates/steel", "T": "jugcraft:fluid_tank"}, 1),
+    # Mining: steel frame, a pulverizer-grade drill head and a circuit; after the steel tier.
+    "ore_drill": (["SGS", "CMC", "SDS"], {"S": "#c:plates/steel", "G": "#c:gears/steel", "C": "jugcraft:basic_circuit",
+                                         "M": "jugcraft:machine_casing", "D": "minecraft:diamond_pickaxe"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),
     "arc_furnace_controller": (["NCN", "RMR", "NFN"],
                                {"N": "#c:ingots/nickel", "C": "jugcraft:copper_cable", "R": "minecraft:redstone",

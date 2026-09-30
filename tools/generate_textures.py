@@ -548,6 +548,29 @@ def handbook_item():
     return img
 
 
+def prospector_item():
+    """A brass hand instrument: amber screen with a signal trace, a knob and a copper aerial."""
+    from steampunk_textures import BRASS as SP_BRASS
+    img = new()
+    for y in range(5, 15):
+        for x in range(3, 13):
+            edge = x in (3, 12) or y in (5, 14)
+            img.putpixel((x, y), (SP_BRASS[1] if edge else SP_BRASS[3]) + (255,))
+    for y in range(7, 11):
+        for x in range(5, 11):
+            img.putpixel((x, y), (28, 20, 8, 255))
+    for x, y in ((5, 10), (6, 9), (7, 8), (8, 9), (9, 7), (10, 8)):
+        img.putpixel((x, y), (255, 179, 64, 255))
+    for x, y in ((5, 12), (6, 12), (10, 12)):
+        img.putpixel((x, y), SP_BRASS[0] + (255,))
+    img.putpixel((9, 12), (176, 32, 24, 255))
+    for i in range(0, 5):
+        img.putpixel((11 + i // 2, 4 - i), (184, 104, 60, 255))
+    img.putpixel((13, 0), (255, 179, 64, 255))
+    img.putpixel((3, 5), SP_BRASS[4] + (255,))
+    return img
+
+
 def upgrade_card(accent, symbol):
     """A brass-framed punch card with a colored accent and a small symbol (speed: arrow, efficiency: leaf)."""
     from steampunk_textures import BRASS as SP_BRASS
@@ -1062,6 +1085,8 @@ def machines():
     save(window(953, [(30, 26, 26), (44, 36, 34)]), "block", "steel_foundry_front")
     save(battery_front(954), "block", "capacitor_bank_front")
     save(tank_side(955), "block", "steel_tank_front")
+    save(jaws(956, False), "block", "ore_drill_front")
+    save(jaws(956, True), "block", "ore_drill_front_on")
     save(window(953, [(30, 26, 26)], glow=[(255, 200, 80), (255, 236, 150), (250, 150, 40)]), "block", "steel_foundry_front_on")
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")
@@ -1072,6 +1097,7 @@ def machines():
     save(item_tube_texture(), "block", "brass_item_pipe")
     save(wrench_item(), "item", "brass_wrench")
     save(handbook_item(), "item", "engineers_handbook")
+    save(prospector_item(), "item", "prospector")
     arrow = [(5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (9, 7), (8, 6), (9, 9), (8, 10)]
     leaf = [(7, 7), (8, 7), (6, 8), (7, 8), (8, 8), (9, 8), (7, 9), (8, 9), (6, 10), (5, 10)]
     save(upgrade_card([(160, 40, 30), (220, 70, 40)], arrow), "item", "speed_upgrade")

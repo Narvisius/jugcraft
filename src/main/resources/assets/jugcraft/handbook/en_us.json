@@ -62,6 +62,51 @@
           ]
         },
         {
+          "title": "Geo-Resonance Prospector",
+          "icon": "jugcraft:prospector",
+          "text": [
+            "Right-click to survey the 3x3 chunks around you, from the bottom of the world to a little above you. It shows which ores resonate, how strongly (1 to 5 bars) and roughly how deep, never exactly where."
+          ],
+          "craft": {
+            "grid": [
+              null,
+              "jugcraft:copper_wire",
+              null,
+              "jugcraft:brass_plate",
+              "minecraft:glass_pane",
+              "jugcraft:brass_plate",
+              "jugcraft:brass_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:brass_plate"
+            ],
+            "result": "jugcraft:prospector",
+            "count": 1
+          }
+        },
+        {
+          "title": "Ore Drill",
+          "icon": "jugcraft:ore_drill",
+          "text": [
+            "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come out whole, ready for ore processing.",
+            "Uses 32 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:machine_casing",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate",
+              "minecraft:diamond_pickaxe",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:ore_drill",
+            "count": 1
+          }
+        },
+        {
           "title": "Ore Processing",
           "icon": "jugcraft:tin_dust",
           "text": [
