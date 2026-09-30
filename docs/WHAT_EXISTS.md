@@ -183,16 +183,26 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 ### Feature switches (`config/`)
 
-- `config/jugcraft.properties` holds `<feature>.enabled`. The features are the `JugcraftConfig.FEATURES` list: 15 materials plus `machines`.
+- `config/jugcraft.properties` holds `<feature>.enabled`. The features are the `JugcraftConfig.FEATURES` list: 15 materials, `machines` and `parties`.
 - A switch disables **acquisition only** (worldgen, recipes, byproducts). It never unregisters items or blocks, so saves survive.
 - Check a switch with `JugcraftConfig.isFeatureEnabled(name)`.
+
+### Parties (`party/`)
+
+- **Shared team rule.** Call the static methods on `JugcraftParties`: `sameParty`, `isLeader`, `partyMembers`, `partyId`, `addListener`.
+- **`mayServe(systemOwner, systemMode, jobOwner, jobMode)`** with `UseMode.PERSONAL`/`PARTY` is the one rule for whether an automated system may work on another player's job. Use it; don't write your own.
+- **Logic and storage:**
+  - `PartyManager` holds the rules and has no Minecraft types.
+  - `PartyStore` saves `<world>/jugcraft/parties.txt`.
+  - `PartyCommands` provides `/party`.
+- Details: [features/parties.md](features/parties.md).
 
 ### Registration (`materials/`)
 
 - `JugcraftRegistry.item(path)` and `block(path, copyFrom)` register simple items and blocks.
 - `MetalFamily.builder(name).mined().extraItem(...).build()` registers a whole metal set. `MineralFamily.register(name)` does the same for minerals.
 - `JugcraftWorldgen` adds placed features to biomes. In 26.x, configured features live in `data/jugcraft/worldgen/feature/` (there is no `configured_feature` folder), with no `config` wrapper and with block states written as plain IDs.
-- Initialization order is in `Jugcraft.onInitialize()`: config → materials → components → machines → fluids → logistics → conditions → worldgen → style pack.
+- Initialization order is in `Jugcraft.onInitialize()`: config → materials → components → machines → fluids → logistics → guide → conditions → worldgen → parties → style pack.
 
 ### Looks (`tools/model_writer.py`, `tools/steampunk_*.py`)
 
