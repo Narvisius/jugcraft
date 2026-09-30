@@ -46,6 +46,10 @@ ABOUT = {
     "steel_foundry": "Three blocks tall, needs no power. Refines one iron ingot with one coke into one steel ingot.",
     "copper_cable": "Carries power between generators, batteries and machines. It connects by itself to anything that stores "
                     "or uses power on the touching face.",
+    "silver_cable": "A faster cable: 1,024 JE/t, four times copper. Cable tiers join into one network, which carries "
+                    "as much as its slowest cable.",
+    "aluminum_cable": "Steel-armored power line: 4,096 JE/t, for big batteries and the arc furnace.",
+    "high_pressure_extractor": "A steel extractor: 32 items every 4 ticks, four times the brass one.",
     "bronze_fluid_pipe": "Carries fluid that a pump pushes into it to every tank and fluid machine it touches.",
     "fluid_tank": "Holds 16 buckets of one fluid. Fill or empty it with buckets; right-click with an empty hand to read it.",
     "electric_pump": "Pulls water or lava from the block below it and pushes it out of its top and sides.",
@@ -179,7 +183,7 @@ def build():
         {"title": "Power", "icon": f"{MOD}:coal_generator", "pages":
             [machine_page(m) for m in ("coal_generator", "solar_panel", "steam_generator", "geothermal_generator",
                                        "wind_turbine", "battery_box")]
-            + [block_page("copper_cable", CABLES["copper_cable"]["display"])]},
+            + [block_page(c, CABLES[c]["display"]) for c in CABLES]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller")]},
@@ -198,6 +202,7 @@ def build():
                 "The R button sets how it reacts to redstone: always run, run with a signal, or run without one."]},
             block_page("brass_item_pipe", ITEM_PIPES["brass_item_pipe"]["display"]),
             block_page("pneumatic_extractor", LOGISTICS_BLOCKS["pneumatic_extractor"]["display"]),
+            block_page("high_pressure_extractor", LOGISTICS_BLOCKS["high_pressure_extractor"]["display"]),
             block_page("item_sorter", LOGISTICS_BLOCKS["item_sorter"]["display"]),
             block_page("brass_wrench", TOOLS["brass_wrench"]),
         ]},

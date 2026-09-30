@@ -466,6 +466,28 @@ def cable_texture():
     return _transmitter(RUBBER, node, [COPPER[0], COPPER[1], COPPER[1], COPPER[0]])
 
 
+def silver_cable_texture():
+    """Dark blue-gray insulation with a bright silver junction node."""
+    insulation = [(28, 32, 44), (42, 48, 64), (58, 66, 86), (80, 90, 112)]
+    silver = [(150, 154, 164), (200, 204, 212), (236, 238, 244)]
+    def node(x, y):
+        edge = x in (6, 9) or y in (6, 9)
+        return silver[0] if edge else silver[2 if (x + y) % 2 else 1]
+    return _transmitter(insulation, node, [silver[0], silver[1], silver[1], silver[0]])
+
+
+def aluminum_cable_texture():
+    """Armored power line: steel-gray sheath with a red high-power stripe and an aluminum node."""
+    sheath = [(52, 56, 62), (78, 84, 92), (104, 110, 118), (130, 136, 144)]
+    aluminum = [(170, 176, 182), (208, 212, 218), (236, 238, 242)]
+    def node(x, y):
+        edge = x in (6, 9) or y in (6, 9)
+        if edge:
+            return (170, 40, 30)
+        return aluminum[2 if (x + y) % 2 else 1]
+    return _transmitter(sheath, node, [(170, 40, 30), aluminum[1], aluminum[1], (170, 40, 30)])
+
+
 def item_tube_texture():
     """6-pixel brass pneumatic tube: bands at rows/columns 5-10 with a glass window down the middle,
     a riveted junction node in the centre square and darker flanges at the ends."""
@@ -1042,6 +1064,8 @@ def machines():
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")
     save(cable_texture(), "block", "copper_cable")
+    save(silver_cable_texture(), "block", "silver_cable")
+    save(aluminum_cable_texture(), "block", "aluminum_cable")
     save(pipe_texture(), "block", "bronze_fluid_pipe")
     save(item_tube_texture(), "block", "brass_item_pipe")
     save(wrench_item(), "item", "brass_wrench")

@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
@@ -428,5 +429,48 @@ public class JugcraftGameTests {
 		helper.assertTrue(!crusher.canPlaceItem(MachineKind.CRUSHER.slots, new ItemStack(Items.COBBLESTONE)),
 				"Upgrade slots must only take upgrades");
 		helper.succeed();
+	}
+
+	// ------------------------------------------------------------------ transmitter tiers
+
+	/** Pushes once from a large source through the given cables into an arc furnace; returns the JE moved. */
+	private static long pushThrough(GameTestHelper helper, int z, net.minecraft.world.level.block.Block... cables) {
+		for (int i = 0; i < cables.length; i++) {
+			helper.setBlock(new BlockPos(2 + i, 1, z), cables[i]);
+		}
+		BlockPos furnace = new BlockPos(2 + cables.length, 1, z);
+		helper.setBlock(furnace, machine(MachineKind.ARC_FURNACE));
+		SimpleEnergyStorage source = new SimpleEnergyStorage(100_000, 0, 100_000, () -> {
+		});
+		source.setAmount(100_000);
+		return EnergyNetworks.pushToNeighbors(helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, z)), source, 100_000,
+				java.util.List.of(Direction.EAST));
+	}
+
+	/** Silver cable carries 1,024 JE/t, copper 256; a mixed network runs at its slowest cable. */
+	@GameTest
+	public void cableTiersSetTheRate(GameTestHelper helper) {
+		long silver = pushThrough(helper, 1, JugcraftMachines.SILVER_CABLE, JugcraftMachines.SILVER_CABLE);
+		long copper = pushThrough(helper, 3, JugcraftMachines.COPPER_CABLE, JugcraftMachines.COPPER_CABLE);
+		long mixed = pushThrough(helper, 5, JugcraftMachines.SILVER_CABLE, JugcraftMachines.COPPER_CABLE);
+		helper.assertTrue(silver > 256 && silver <= 1_024, "Silver network moved " + silver);
+		helper.assertTrue(copper == 256, "Copper network moved " + copper);
+		helper.assertTrue(mixed == 256, "Mixed network moved " + mixed);
+		helper.succeed();
+	}
+
+	/** The high-pressure extractor moves 32 items every 4 ticks; by tick 10 the brass one could move at most 16. */
+	@GameTest(maxTicks = 40)
+	public void highPressureExtractorIsFaster(GameTestHelper helper) {
+		ChestBlockEntity source = chest(helper, new BlockPos(1, 1, 2));
+		source.setItem(0, new ItemStack(Items.COBBLESTONE, 64));
+		helper.setBlock(new BlockPos(2, 1, 2), JugcraftLogistics.HIGH_PRESSURE_EXTRACTOR.defaultBlockState()
+				.setValue(PneumaticExtractorBlock.FACING, Direction.WEST));
+		ChestBlockEntity target = chest(helper, new BlockPos(3, 1, 2));
+		helper.runAtTickTime(10, () -> {
+			int moved = count(target, Items.COBBLESTONE);
+			helper.assertTrue(moved >= 32, "High-pressure extractor moved " + moved + " by tick 10");
+			helper.succeed();
+		});
 	}
 }

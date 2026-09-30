@@ -38,13 +38,18 @@ PARTS = {
 }
 
 # Cables: display name and JE per tick one push may send through the network.
-CABLES = {"copper_cable": {"display": "Copper Cable", "rate": 256}}
+# Tiers connect to each other; a network carries as much as its slowest cable (energy/EnergyNetworks).
+CABLES = {"copper_cable": {"display": "Copper Cable", "rate": 256},
+          "silver_cable": {"display": "Silver Cable", "rate": 1_024},
+          "aluminum_cable": {"display": "Aluminum Cable", "rate": 4_096}}
 
 # Item logistics (see docs/TECH_TREE.md#item-logistics). The tube is a 6-pixel transmitter; the
 # extractor and sorter face any of six directions. Models: tools/logistics_models.py.
 ITEM_PIPES = {"brass_item_pipe": {"display": "Brass Item Pipe", "size": 6}}
 LOGISTICS_BLOCKS = {
     "pneumatic_extractor": {"display": "Pneumatic Extractor"},
+    # Steel tier: 32 items every 4 ticks (the brass one: 16 every 8).
+    "high_pressure_extractor": {"display": "High-Pressure Extractor"},
     "item_sorter": {"display": "Item Sorter"},
 }
 TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook"}
@@ -130,6 +135,9 @@ FEATURE = "machines"
 CRAFTING = {
     "machine_casing": (["BZB", "Z Z", "BZB"], {"B": "#c:ingots/bronze", "Z": "#c:ingots/zinc"}, 1),
     "copper_cable": (["CTC"], {"C": "#c:ingots/copper", "T": "#c:ingots/tin"}, 6),
+    # Faster cables: silver wire (wire drawer), then aluminum wire armored with steel.
+    "silver_cable": (["WWW", "RRR"], {"W": "#c:wires/silver", "R": "jugcraft:copper_cable"}, 3),
+    "aluminum_cable": (["WPW", "RRR"], {"W": "#c:wires/aluminum", "P": "#c:plates/steel", "R": "jugcraft:silver_cable"}, 3),
     "coal_generator": (["BCB", "BFB", "BMB"],
                        {"B": "#c:ingots/bronze", "C": "jugcraft:copper_cable", "F": "minecraft:furnace",
                         "M": "jugcraft:machine_casing"}, 1),
@@ -178,6 +186,8 @@ CRAFTING = {
     "brass_item_pipe": (["PGP"], {"P": "#c:plates/brass", "G": "minecraft:glass"}, 6),
     "pneumatic_extractor": (["PHP", "PTP"], {"P": "#c:plates/brass", "H": "minecraft:hopper",
                                              "T": "jugcraft:brass_item_pipe"}, 1),
+    "high_pressure_extractor": (["PKP", "PEP"], {"P": "#c:plates/steel", "K": "minecraft:piston",
+                                                 "E": "jugcraft:pneumatic_extractor"}, 1),
     "item_sorter": (["PCP", "THT", "PPP"], {"P": "#c:plates/brass", "C": "minecraft:comparator",
                                            "T": "jugcraft:brass_item_pipe", "H": "minecraft:hopper"}, 1),
     "brass_wrench": (["B B", " B ", " B "], {"B": "#c:ingots/brass"}, 1),

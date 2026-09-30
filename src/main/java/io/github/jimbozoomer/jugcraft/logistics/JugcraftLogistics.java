@@ -25,6 +25,7 @@ import net.minecraft.world.level.material.MapColor;
 public final class JugcraftLogistics {
 	public static Block BRASS_ITEM_PIPE;
 	public static Block PNEUMATIC_EXTRACTOR;
+	public static Block HIGH_PRESSURE_EXTRACTOR;
 	public static Block ITEM_SORTER;
 	public static Item BRASS_WRENCH;
 	public static BlockEntityType<ItemSorterBlockEntity> SORTER_ENTITY;
@@ -36,7 +37,11 @@ public final class JugcraftLogistics {
 		BRASS_ITEM_PIPE = block("brass_item_pipe", new ItemPipeBlock(properties("brass_item_pipe",
 				BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(1.0F).sound(SoundType.COPPER).noOcclusion())));
 		PNEUMATIC_EXTRACTOR = block("pneumatic_extractor", new PneumaticExtractorBlock(properties("pneumatic_extractor",
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion()),
+				PneumaticExtractorBlock.INTERVAL, PneumaticExtractorBlock.ITEMS_PER_PULL));
+		HIGH_PRESSURE_EXTRACTOR = block("high_pressure_extractor", new PneumaticExtractorBlock(properties("high_pressure_extractor",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.5F).noOcclusion()),
+				PneumaticExtractorBlock.HIGH_PRESSURE_INTERVAL, PneumaticExtractorBlock.HIGH_PRESSURE_ITEMS));
 		ITEM_SORTER = block("item_sorter", new ItemSorterBlock(properties("item_sorter",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
 
@@ -51,6 +56,7 @@ public final class JugcraftLogistics {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(BRASS_ITEM_PIPE);
 			output.accept(PNEUMATIC_EXTRACTOR);
+			output.accept(HIGH_PRESSURE_EXTRACTOR);
 			output.accept(ITEM_SORTER);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> output.accept(BRASS_WRENCH));

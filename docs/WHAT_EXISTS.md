@@ -8,7 +8,7 @@ A map of everything built so far, written for AI agents and contributors who nee
 
 > **Status.** Everything here compiles and loads in CI. Where a feature has an automated game test, that test passes on a headless server. Nothing has been play-tested in a client or on a dedicated server with two players yet.
 >
-> This document describes `main` after PRs #4–#20. Update it whenever you add, rename or remove a system, so it stays the map other contributors rely on.
+> This document describes `main` after PRs #4–#22. Update it whenever you add, rename or remove a system, so it stays the map other contributors rely on.
 
 ## Quick facts
 
@@ -22,7 +22,7 @@ A map of everything built so far, written for AI agents and contributors who nee
 | Fluid unit | **mB** in Jugcraft numbers. Fabric counts droplets: `FluidNetworks.DROPLETS_PER_MB` = 81 |
 | Metal accounting | nugget units: nugget 1, ingot/raw/ore/dust/washed ore/plate 9, wire 3, gear 36, block 81 |
 | Authority | All logic runs on the server; screens only show synced `ContainerData` |
-| Registered IDs | 166 items/blocks under `jugcraft:` (the checker counts them) |
+| Registered IDs | 169 items/blocks under `jugcraft:` (the checker counts them) |
 
 ## Build, generate, check
 
@@ -94,12 +94,12 @@ Other blocks:
 | ID | Class | What |
 | --- | --- | --- |
 | `machine_casing`, `arc_furnace_casing` | plain blocks | crafting part; arc furnace structure |
-| `copper_cable` | `energy/CableBlock` | 4 px energy transmitter, 256 JE/t per push |
+| `copper_cable`, `silver_cable`, `aluminum_cable` | `energy/CableBlock` | 4 px energy transmitters: 256 / 1,024 / 4,096 JE/t; a network runs at its slowest cable |
 | `bronze_fluid_pipe` | `fluid/FluidPipeBlock` | 4 px fluid transmitter, 250 mB per push |
 | `fluid_tank` | `fluid/FluidTankBlock(Entity)` | 16,000 mB, one fluid, comparator output |
 | `electric_pump` | `fluid/ElectricPumpBlock(Entity)` | pulls from below, 100 mB/t, 8 JE/t |
 | `brass_item_pipe` | `logistics/ItemPipeBlock` | 6 px item transmitter |
-| `pneumatic_extractor` | `logistics/PneumaticExtractorBlock` | pulls 16 items / 8 ticks from what it faces |
+| `pneumatic_extractor`, `high_pressure_extractor` | `logistics/PneumaticExtractorBlock` | pull 16 items / 8 ticks (brass) or 32 / 4 (steel) from what they face |
 | `item_sorter` | `logistics/ItemSorterBlock(Entity)` | 9-slot filter into the inventory it faces |
 | `brass_wrench` (item) | `logistics/BrassWrenchItem` | rotate; sneak to dismantle |
 | `speed_upgrade`, `efficiency_upgrade` (items) | `machine/MachineUpgrades` | upgrade slots of powered processors |
@@ -115,6 +115,7 @@ Other blocks:
 - **Base implementation:** `SimpleEnergyStorage(capacity, maxInsert, maxExtract, onChange)`, with `setAmount` for tests and loading.
 - **Pushing:** `EnergyNetworks.pushToNeighbors(level, pos, source, maxAmount, sides)` sends into adjacent storages and cable networks. `EnergyNetworks.move(from, to, max)` is transactional.
 - **Caching:** networks are cached per level. Call `EnergyNetworks.invalidate(level)` when cable layout changes. There are at most 2,048 cables per network.
+- **Tiers:** `CableBlock(properties, rate)`. A network's rate is the minimum `transferRate()` of its cables.
 - **Marker:** `EnergyConnectable` marks blocks cables always connect to (cables, generators, machines). Other blocks connect through the lookup alone.
 - **Rule:** use this one energy system. Don't add another power unit (CLAUDE.md: no incompatible power systems).
 
@@ -272,7 +273,7 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 - Chemistry branch: electrolysis, real refining, liquid crude oil. Blast-furnace stand-ins mark the recipes that will move there.
 - Recipe viewer plugin (EMI/JEI/REI).
-- Higher cable or pipe tiers.
+- A faster fluid pipe (pointless until pumps are faster).
 - Any magic, farming, creature, travel or seasonal content from [CONTENT_BRANCHES.md](CONTENT_BRANCHES.md).
 - Human play-testing, two-client dedicated-server tests and performance measurements (the client game tests render the game but do not play it).
 - Handbook translations (English only).

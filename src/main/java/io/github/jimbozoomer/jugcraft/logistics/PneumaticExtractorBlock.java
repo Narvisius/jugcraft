@@ -19,7 +19,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 /**
- * Pneumatic extractor: every {@link #INTERVAL} ticks it pulls up to {@link #ITEMS_PER_PULL} items
+ * Pneumatic extractor: every few ticks it pulls a batch of items (brass: 16 every 8 ticks; the
+ * high-pressure steel one: 32 every 4)
  * out of the inventory its intake faces and pushes them out of its other sides, into item pipes or
  * straight into an adjacent inventory. A redstone signal pauses it. It needs no power and has no
  * block entity: it runs on scheduled block ticks.
@@ -28,9 +29,16 @@ public class PneumaticExtractorBlock extends Block implements ItemConnectable {
 	public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
 	public static final int INTERVAL = 8;
 	public static final int ITEMS_PER_PULL = 16;
+	public static final int HIGH_PRESSURE_INTERVAL = 4;
+	public static final int HIGH_PRESSURE_ITEMS = 32;
 
-	public PneumaticExtractorBlock(Properties properties) {
+	private final int interval;
+	private final int itemsPerPull;
+
+	public PneumaticExtractorBlock(Properties properties, int interval, int itemsPerPull) {
 		super(properties);
+		this.interval = interval;
+		this.itemsPerPull = itemsPerPull;
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 
@@ -44,7 +52,7 @@ public class PneumaticExtractorBlock extends Block implements ItemConnectable {
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
 		ItemNetworks.invalidate(level);
 		if (!level.isClientSide()) {
-			level.scheduleTick(pos, this, INTERVAL);
+			level.scheduleTick(pos, this, interval);
 		}
 	}
 
@@ -55,7 +63,7 @@ public class PneumaticExtractorBlock extends Block implements ItemConnectable {
 
 	@Override
 	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		level.scheduleTick(pos, this, INTERVAL);
+		level.scheduleTick(pos, this, interval);
 		if (level.hasNeighborSignal(pos)) {
 			return;
 		}
@@ -68,7 +76,7 @@ public class PneumaticExtractorBlock extends Block implements ItemConnectable {
 		long moved = 0;
 		for (Direction side : Direction.values()) {
 			if (side != facing) {
-				moved += ItemNetworks.push(level, pos, side, source, ITEMS_PER_PULL - moved, Set.of(intake));
+				moved += ItemNetworks.push(level, pos, side, source, itemsPerPull - moved, Set.of(intake));
 			}
 		}
 	}

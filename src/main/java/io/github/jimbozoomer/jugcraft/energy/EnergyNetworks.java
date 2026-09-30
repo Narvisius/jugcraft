@@ -46,7 +46,8 @@ public final class EnergyNetworks {
 			}
 			BlockPos neighbor = pos.relative(side);
 			if (level.getBlockState(neighbor).getBlock() instanceof CableBlock cable) {
-				moved += network(level, neighbor).distribute(level, pos, source, Math.min(budget, cable.transferRate()));
+				Network network = network(level, neighbor);
+				moved += network.distribute(level, pos, source, Math.min(budget, network.rate));
 			} else {
 				EnergyStorage target = EnergyStorage.SIDED.find(level, neighbor, side.getOpposite());
 				if (target != null) {
@@ -97,6 +98,8 @@ public final class EnergyNetworks {
 	private static final class Network {
 		private final Set<BlockPos> cables = new HashSet<>();
 		private final List<Endpoint> endpoints = new ArrayList<>();
+		/** JE per push: the slowest cable tier in the network sets it. */
+		private long rate = Long.MAX_VALUE;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
@@ -106,6 +109,9 @@ public final class EnergyNetworks {
 
 			while (!queue.isEmpty() && network.cables.size() < MAX_CABLES) {
 				BlockPos cable = queue.poll();
+				if (level.getBlockState(cable).getBlock() instanceof CableBlock block) {
+					network.rate = Math.min(network.rate, block.transferRate());
+				}
 				for (Direction direction : Direction.values()) {
 					BlockPos next = cable.relative(direction).immutable();
 					if (level.getBlockState(next).getBlock() instanceof CableBlock) {

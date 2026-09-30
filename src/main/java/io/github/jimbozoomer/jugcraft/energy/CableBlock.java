@@ -24,11 +24,16 @@ import net.minecraft.world.level.redstone.Orientation;
  * refresh when its surroundings change.
  */
 public class CableBlock extends PipeBlock implements EnergyConnectable {
-	/** JE per tick one push may send through a copper cable network. */
+	/** JE per tick one push may send through a network of each cable tier (CABLES in tools/machines.py). */
 	public static final long COPPER_RATE = 256;
+	public static final long SILVER_RATE = 1_024;
+	public static final long ALUMINUM_RATE = 4_096;
 
-	public CableBlock(Properties properties) {
+	private final long rate;
+
+	public CableBlock(Properties properties, long rate) {
 		super(4.0F, properties);
+		this.rate = rate;
 		BlockState state = this.stateDefinition.any();
 		for (BooleanProperty property : PROPERTY_BY_DIRECTION.values()) {
 			state = state.setValue(property, false);
@@ -36,8 +41,9 @@ public class CableBlock extends PipeBlock implements EnergyConnectable {
 		this.registerDefaultState(state);
 	}
 
+	/** JE per tick through this cable; a network carries as much as its slowest cable. */
 	public long transferRate() {
-		return COPPER_RATE;
+		return rate;
 	}
 
 	@Override

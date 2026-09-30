@@ -246,6 +246,50 @@
             "result": "jugcraft:copper_cable",
             "count": 6
           }
+        },
+        {
+          "title": "Silver Cable",
+          "icon": "jugcraft:silver_cable",
+          "text": [
+            "A faster cable: 1,024 JE/t, four times copper. Cable tiers join into one network, which carries as much as its slowest cable."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:silver_wire",
+              "jugcraft:silver_wire",
+              "jugcraft:silver_wire",
+              "jugcraft:copper_cable",
+              "jugcraft:copper_cable",
+              "jugcraft:copper_cable",
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:silver_cable",
+            "count": 3
+          }
+        },
+        {
+          "title": "Aluminum Cable",
+          "icon": "jugcraft:aluminum_cable",
+          "text": [
+            "Steel-armored power line: 4,096 JE/t, for big batteries and the arc furnace."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:aluminum_wire",
+              "jugcraft:steel_plate",
+              "jugcraft:aluminum_wire",
+              "jugcraft:silver_cable",
+              "jugcraft:silver_cable",
+              "jugcraft:silver_cable",
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:aluminum_cable",
+            "count": 3
+          }
         }
       ]
     },
@@ -1253,6 +1297,28 @@
               null
             ],
             "result": "jugcraft:pneumatic_extractor",
+            "count": 1
+          }
+        },
+        {
+          "title": "High-Pressure Extractor",
+          "icon": "jugcraft:high_pressure_extractor",
+          "text": [
+            "A steel extractor: 32 items every 4 ticks, four times the brass one."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:piston",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:pneumatic_extractor",
+              "jugcraft:steel_plate",
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:high_pressure_extractor",
             "count": 1
           }
         },

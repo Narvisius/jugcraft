@@ -8,6 +8,12 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #22 Transmitter tiers
+- **Silver Cable** (1,024 JE/t) and **Aluminum Cable** (4,096 JE/t). All cable tiers join one network, which runs at its slowest cable.
+- **High-Pressure Extractor** (steel): 32 items every 4 ticks, four times the brass extractor.
+- There is no faster fluid pipe: pumps (100 mB/t) are the limit, not pipes.
+- Two game tests; handbook pages.
+
 ### #20 Engineer's Handbook and in-game screenshots
 - **Engineer's Handbook** (book + copper ingot): an in-game guide with 9 chapters and 36 pages. Each page gives what a block does, its power use, its crafting grid and example recipes, and you can hover over items.
 - The content is generated from the mod's own tables, so it can't go out of date.

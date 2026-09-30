@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PKP",
+    "PEP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "K": "minecraft:piston",
+    "E": "jugcraft:pneumatic_extractor"
+  },
+  "result": {
+    "id": "jugcraft:high_pressure_extractor",
+    "count": 1
+  }
+}

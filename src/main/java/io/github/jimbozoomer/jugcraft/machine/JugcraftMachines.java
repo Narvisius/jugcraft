@@ -27,6 +27,8 @@ import net.minecraft.world.level.material.MapColor;
 /** Registers the electricity system: cables, machine blocks, their block entity, menus and energy lookup. */
 public final class JugcraftMachines {
 	public static Block COPPER_CABLE;
+	public static Block SILVER_CABLE;
+	public static Block ALUMINUM_CABLE;
 	public static Block MACHINE_CASING;
 	public static Block ARC_FURNACE_CASING;
 	public static final Map<MachineKind, MachineBlock> MACHINES = new EnumMap<>(MachineKind.class);
@@ -44,8 +46,9 @@ public final class JugcraftMachines {
 		MachineRecipeTypes.register();
 		MachineUpgrades.register();
 		MachineRecipes.register();
-		COPPER_CABLE = block("copper_cable", new CableBlock(properties("copper_cable",
-				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.5F).sound(SoundType.COPPER).noOcclusion())));
+		COPPER_CABLE = cable("copper_cable", MapColor.COLOR_ORANGE, CableBlock.COPPER_RATE);
+		SILVER_CABLE = cable("silver_cable", MapColor.METAL, CableBlock.SILVER_RATE);
+		ALUMINUM_CABLE = cable("aluminum_cable", MapColor.COLOR_LIGHT_BLUE, CableBlock.ALUMINUM_RATE);
 		MACHINE_CASING = JugcraftRegistry.block("machine_casing", Blocks.IRON_BLOCK);
 		ARC_FURNACE_CASING = JugcraftRegistry.block("arc_furnace_casing", Blocks.BRICKS);
 
@@ -78,10 +81,17 @@ public final class JugcraftMachines {
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(COPPER_CABLE);
+			output.accept(SILVER_CABLE);
+			output.accept(ALUMINUM_CABLE);
 			output.accept(MACHINE_CASING);
 			MACHINES.values().forEach(output::accept);
 			output.accept(ARC_FURNACE_CASING);
 		});
+	}
+
+	private static Block cable(String path, MapColor color, long rate) {
+		return block(path, new CableBlock(properties(path,
+				BlockBehaviour.Properties.of().mapColor(color).strength(0.5F).sound(SoundType.COPPER).noOcclusion()), rate));
 	}
 
 	private static BlockBehaviour.Properties properties(String path, BlockBehaviour.Properties properties) {
