@@ -1,0 +1,25 @@
+name: Bug report
+description: Report a reproducible problem without sensitive information.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "For vulnerabilities use SECURITY.md. Never upload credentials, player data or production worlds."
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions and environment
+      description: Jugcraft commit/release, Minecraft, loader, Java, dependencies, client/server. For docs, link the affected page.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction, expected result and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence and impact
+      description: Logs/screenshots, frequency, affected players/saves and known workaround.

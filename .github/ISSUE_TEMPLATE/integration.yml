@@ -1,0 +1,38 @@
+name: Existing mod integration
+description: Propose an external mod and explain how it connects to Jugcraft.
+title: "[Integration] "
+body:
+  - type: input
+    id: mod
+    attributes:
+      label: Mod name and official project/source URL
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Versions, loader and dependencies
+      description: Exact supported versions, required vs optional status and evidence links. Do not assume cross-loader compatibility.
+    validations:
+      required: true
+  - type: textarea
+    id: loop
+    attributes:
+      label: Connected gameplay loop
+      description: Tier, upstream inputs, downstream uses, tech/magic bridge, overlapping features and proposed recipe changes.
+    validations:
+      required: true
+  - type: textarea
+    id: rights
+    attributes:
+      label: License and distribution
+      description: Link license and approved download source. Explain pack distribution permissions; do not upload its JAR here.
+    validations:
+      required: true
+  - type: textarea
+    id: testing
+    attributes:
+      label: Validation and maintenance plan
+      description: Two-client tests, present/absent behavior, performance, saves, upstream maintenance and who maintains the adapter.
+    validations:
+      required: true

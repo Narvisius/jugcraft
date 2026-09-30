@@ -1,0 +1,47 @@
+name: Feature proposal
+description: Propose a connected Jugcraft gameplay feature before coding.
+title: "[Proposal] "
+body:
+  - type: markdown
+    attributes:
+      value: "Describe the idea; no coding or AI subscription is needed. Wait for maintainer scope approval before substantial implementation."
+  - type: textarea
+    id: experience
+    attributes:
+      label: Player experience and purpose
+      description: What does the player do, and why does it belong in Jugcraft?
+    validations:
+      required: true
+  - type: textarea
+    id: connections
+    attributes:
+      label: Connections to existing technology and magic
+      description: Name the input producer, output consumer, tier and reachable entry path. Explain any non-gameplay exception.
+    validations:
+      required: true
+  - type: textarea
+    id: balance
+    attributes:
+      label: Balance, costs and automation
+      description: Include recipes, resource sinks, throughput, conversion risks and how existing systems stay useful.
+    validations:
+      required: true
+  - type: textarea
+    id: multiplayer
+    attributes:
+      label: Multiplayer, persistence and performance
+      description: Ownership, concurrent use, restart, disable behavior, and expected scale.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Small first version and test plan
+      description: State what is in/out of scope and how two players would verify the result.
+    validations:
+      required: true
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Dependencies, assets and open questions
+      description: Provide official sources and rights information, or say none.
