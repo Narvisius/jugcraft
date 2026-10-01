@@ -12,6 +12,7 @@ from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL
 
 from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
+from party import party_lang
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -92,6 +93,7 @@ def assets():
     machine_assets(lang)
     import advancements
     lang.update(advancements.generate(MOD)[1])
+    party_lang(lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 

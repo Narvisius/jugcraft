@@ -121,6 +121,16 @@ The first five commits of the dieselpunk Chemistry branch ([plan](docs/branches/
 - **High-Pressure Extractor** (steel): 32 items every 4 ticks, four times the brass extractor.
 - There is no faster fluid pipe: pumps (100 mB/t) are the limit, not pipes.
 - Two game tests; handbook pages.
+### Parties (draft PR; proposal #21)
+- **`/party` commands:** create, invite, accept, decline, leave, kick, leader and disband.
+  - Invites expire after 5 minutes, and each player can send 10 a minute.
+  - Parties hold up to 8 members.
+- **Shared API (`JugcraftParties`):**
+  - `sameParty`, `isLeader`, `partyMembers`, change listeners.
+  - `mayServe` with `UseMode` (Personal/Party), which every automated system will use.
+- **Saving:** parties are saved in the world folder (`jugcraft/parties.txt`).
+- **Feature switch:** `parties.enabled`.
+- **Tests:** seven new game tests, plus a checker rule that every party result has a chat message.
 
 ### #20 Engineer's Handbook and in-game screenshots
 - **Engineer's Handbook** (book + copper ingot): an in-game guide with 9 chapters and 36 pages. Each page gives what a block does, its power use, its crafting grid and example recipes, and you can hover over items.

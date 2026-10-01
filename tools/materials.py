@@ -12,7 +12,8 @@ MOD = "jugcraft"
 
 # Feature switches (config/jugcraft.properties). Order is the config file order.
 FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "aluminum",
-            "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil", "machines"]
+            "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil", "machines",
+            "parties"]
 
 # Metals use the vanilla form set. "mined" adds ore, deepslate ore, raw item and raw block.
 # cook: which vanilla cookers can smelt the ore/raw form. tool: minimum pickaxe tier.
