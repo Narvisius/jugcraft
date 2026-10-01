@@ -67,6 +67,9 @@ public class TowerGameTests {
 	@GameTest
 	public void guideBooks(GameTestHelper helper) {
 		net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		// Joining may already have handed the book over (the test world is creative): start from a clean slate.
+		player.removeTag(io.github.jimbozoomer.jugcraft.drone.GuideBooks.GIVEN_TAG);
+		player.getInventory().clearContent();
 		player.setGameMode(GameType.SURVIVAL);
 		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "no creative book in survival");
 		player.setGameMode(GameType.CREATIVE);
