@@ -381,6 +381,127 @@ def retro_keys(seed):
     return img
 
 
+WHITE = [(150, 156, 164), (186, 192, 198), (214, 218, 222), (232, 235, 238), (246, 248, 250)]
+
+
+def white(seed, border=True):
+    """White enamel panels, as on the owner's reference advanced solar panel: a faint brushed grain, a soft bevel and a
+    recessed groove two pixels in. Without border it tiles."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            put(img, x, y, _noise(rng, WHITE[3], WHITE[2], 0.15))
+    if border:
+        for i in range(16):
+            put(img, i, 0, WHITE[4])
+            put(img, 0, i, WHITE[4])
+            put(img, i, 15, WHITE[1])
+            put(img, 15, i, WHITE[1])
+        for i in range(2, 14):
+            put(img, i, 2, WHITE[1])
+            put(img, 2, i, WHITE[1])
+            put(img, i, 13, WHITE[4])
+            put(img, 13, i, WHITE[4])
+    return img
+
+
+def ribbed(seed):
+    """Light brushed steel with vertical ribs, as on the owner's reference engine's cylinder bank."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = WHITE[1] if rng.random() < 0.7 else WHITE[2]
+            if x % 4 == 0:
+                c = WHITE[0]
+            elif x % 4 == 1:
+                c = WHITE[3]
+            if y in (0, 15):
+                c = GRAPHITE[3]
+            put(img, x, y, c)
+    return img
+
+
+# Tanks (batch 10), after the owner's reference: light grey panels, yellow-and-black checker bands, dark rims.
+TANK = [(118, 122, 128), (150, 154, 160), (176, 180, 186), (198, 202, 207), (222, 225, 229)]
+
+
+def tank_body(seed):
+    """Light grey tank plating: two upright panels with a seam between them, a soft vertical sheen, and rivets."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = _noise(rng, TANK[2], TANK[3], 0.2)
+            if x in (2, 3) or x in (10, 11):
+                c = TANK[3] if x in (3, 11) else TANK[4]
+            if x in (0, 7, 8, 15):
+                c = TANK[1] if x in (7, 0) else TANK[0]
+            put(img, x, y, c)
+    for x, y in ((1, 2), (6, 2), (9, 2), (14, 2), (1, 13), (6, 13), (9, 13), (14, 13)):
+        put(img, x, y, TANK[4])
+    return img
+
+
+def tank_checker(seed):
+    """A checkered hazard band: two rows of yellow and black squares between thin dark edges."""
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            if y in (0, 15):
+                c = GRAPHITE[1]
+            else:
+                c = HAZARD[0] if ((x // 4) + (y // 8)) % 2 == 0 else HAZARD[1]
+                if c == HAZARD[0] and y in (1, 8):
+                    c = (240, 202, 70)
+            put(img, x, y, c)
+    return img
+
+
+def tank_rim(seed):
+    """Dark graphite trim for rims, necks and bases, with a light top edge."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = _noise(rng, GRAPHITE[1], GRAPHITE[2], 0.25)
+            if y == 0:
+                c = GRAPHITE[4]
+            put(img, x, y, c)
+    return img
+
+
+def tank_top(seed):
+    """The top of a tank: a dark hatch with a light rim and a cross of bolts."""
+    img = tank_rim(seed)
+    for i in range(16):
+        for j in (0, 15):
+            put(img, i, j, TANK[3])
+            put(img, j, i, TANK[3])
+    for x, y in ((4, 4), (11, 4), (4, 11), (11, 11)):
+        put(img, x, y, TANK[4])
+    for i in range(5, 11):
+        put(img, i, 7, GRAPHITE[0])
+        put(img, 7, i, GRAPHITE[0])
+    return img
+
+
+def solar_large(seed):
+    """Large-format solar cells: deep blue cells in a fine silver grid with a few sky glints."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (22, 48, 104) if rng.random() < 0.75 else (30, 62, 128)
+            if x % 4 == 3 or y % 4 == 3:
+                c = (78, 104, 150)
+            if (x + 2 * y) % 13 == 0 and x % 4 != 3 and y % 4 != 3:
+                c = (64, 110, 178)
+            put(img, x, y, c)
+    return img
+
+
 def hazard(seed):
     """Yellow-and-black warning stripes for high-voltage edges."""
     img = new()
@@ -441,6 +562,13 @@ def draw_all():
     save(hazard(740), "el_hazard")
     save(magnet(741), "el_magnet")
     # The electronics tier (cyan look) and the retro computer.
+    save(white(748), "el_white")
+    save(solar_large(749), "el_solar_large")
+    save(ribbed(750), "el_ribbed")
+    save(tank_body(751), "tk_body")
+    save(tank_checker(752), "tk_checker")
+    save(tank_rim(753), "tk_rim")
+    save(tank_top(754), "tk_top")
     save(dark(742), "el_dark")
     save(glass(False), "el_glass")
     save(glass(True), "el_glass_on")

@@ -143,7 +143,15 @@
           "text": [
             "Shut-Off Valve: Make a fluid valve.",
             "Strained Relations: Make a fluid filter.",
-            "King Cotton: Grow cotton.",
+            "Here Comes the Sun: Build an advanced solar panel.",
+            "Four on the Floor: Build an advanced combustion engine.",
+            "King Cotton: Grow cotton."
+          ]
+        },
+        {
+          "title": "Milestones (11)",
+          "icon": "jugcraft:sprinkler",
+          "text": [
             "Make It Rain: Build a sprinkler.",
             "Reaping What You Sow: Build a crop harvester."
           ]
@@ -379,6 +387,29 @@
               "jugcraft:lead_ingot"
             ],
             "result": "jugcraft:battery_box",
+            "count": 1
+          }
+        },
+        {
+          "title": "Advanced Solar Panel",
+          "icon": "jugcraft:advanced_solar_panel",
+          "text": [
+            "A white pedestal carrying a 3x3 array of solar cells on the layer above it: 64 JE/t in full sun (eight solar panels), half in rain, none at night. The cells need open sky. Cables meet the pedestal's foot.",
+            "Makes up to 64 JE/t. Holds 400,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:solar_panel",
+              "jugcraft:solar_panel",
+              "jugcraft:solar_panel",
+              "jugcraft:aluminum_plate",
+              "jugcraft:processor",
+              "jugcraft:aluminum_plate",
+              "jugcraft:aluminum_cable",
+              "jugcraft:titanium_ingot",
+              "jugcraft:aluminum_cable"
+            ],
+            "result": "jugcraft:advanced_solar_panel",
             "count": 1
           }
         },
@@ -2311,6 +2342,29 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:diesel_engine",
+            "count": 1
+          }
+        },
+        {
+          "title": "Advanced Combustion Engine",
+          "icon": "jugcraft:advanced_engine",
+          "text": [
+            "Two blocks long, four cylinders. Burns gasoline (448 KE a mB) or diesel (320) piped into its 8-bucket tank and turns a shaft out of the back of its right-hand block at up to 1,024 KE/t, burning only for what the line takes. Through a magnet dynamo it is the best use of either fuel.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:titanium_ingot",
+              "jugcraft:processor",
+              "jugcraft:titanium_ingot",
+              "jugcraft:neodymium_magnet",
+              "jugcraft:diesel_engine",
+              "jugcraft:neodymium_magnet",
+              "jugcraft:titanium_ingot",
+              "jugcraft:machine_casing",
+              "jugcraft:titanium_ingot"
+            ],
+            "result": "jugcraft:advanced_engine",
             "count": 1
           }
         },

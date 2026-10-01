@@ -22,6 +22,11 @@ public final class FluidFuels {
 	public static final int HYDROGEN = 128;
 	/** The gas turbine's lubricant upkeep: 1 mB for every this many ticks it runs (a bucket lasts 20,000 ticks). */
 	public static final int LUBRICANT_TICKS = 20;
+	/** The advanced combustion engine (KE per mB): turbocharged, it gets a quarter more from diesel than the diesel
+	 * engine, and burns gasoline. Through a magnet dynamo that is 304 and 426 JE per mB: the best use of each fuel, and
+	 * the fuel is still used up, so never a loop. */
+	public static final int ADVANCED_DIESEL = 320;
+	public static final int ADVANCED_GASOLINE = 448;
 
 	private FluidFuels() {
 	}
@@ -34,6 +39,8 @@ public final class FluidFuels {
 			case DIESEL_ENGINE -> fluid == PetroFluids.DIESEL.source() ? DIESEL
 					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
 			case FUEL_CELL -> fluid == PetroFluids.HYDROGEN.fluid() ? HYDROGEN : 0;
+			case ADVANCED_ENGINE -> fluid == PetroFluids.GASOLINE.source() ? ADVANCED_GASOLINE
+					: fluid == PetroFluids.DIESEL.source() ? ADVANCED_DIESEL : 0;
 			case GAS_TURBINE -> fluid == PetroFluids.GASOLINE.source() ? GASOLINE
 					: fluid == PetroFluids.REFINERY_GAS.fluid() ? REFINERY_GAS : 0;
 			default -> 0;

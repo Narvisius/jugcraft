@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -41,11 +42,16 @@ public final class JugcraftFluids {
 	public static BlockEntityType<FluidTankBlockEntity> TANK_ENTITY;
 	public static BlockEntityType<ElectricPumpBlockEntity> PUMP_ENTITY;
 	public static BlockEntityType<FluidFilterBlockEntity> FILTER_ENTITY;
+	/** The fluid a broken tank carries as an item (batch 10; see {@link StoredFluid}). */
+	public static DataComponentType<StoredFluid> STORED_FLUID;
 
 	private JugcraftFluids() {
 	}
 
 	public static void register() {
+		STORED_FLUID = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Jugcraft.id("stored_fluid"),
+				DataComponentType.<StoredFluid>builder().persistent(StoredFluid.CODEC)
+						.networkSynchronized(StoredFluid.STREAM_CODEC).build());
 		BRONZE_FLUID_PIPE = block("bronze_fluid_pipe", new FluidPipeBlock(properties("bronze_fluid_pipe",
 				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.0F).sound(SoundType.COPPER).noOcclusion()),
 				FluidPipeBlock.BRONZE_RATE_MB));

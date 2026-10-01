@@ -136,7 +136,8 @@ def check_petro():
             if fuel not in petro.FLUIDS and fuel not in petro.GASES:
                 err(f"{machine}: unknown fuel {fuel}")
             accessor = "fluid()" if fuel in petro.GASES else "source()"
-            if not re.search(rf"int {fuel.upper()} = {value};", fuels_java) or f"PetroFluids.{fuel.upper()}.{accessor}" not in fuels_java:
+            # A machine may have its own constant for a fuel, such as ADVANCED_DIESEL.
+            if not re.search(rf"int (\w+_)?{fuel.upper()} = {value};", fuels_java) or f"PetroFluids.{fuel.upper()}.{accessor}" not in fuels_java:
                 err(f"{machine}: {fuel} at {value} JE/mB in tools/petro.py does not match FluidFuels.java")
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for gas in petro.GASES:

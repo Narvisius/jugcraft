@@ -13,6 +13,8 @@ import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
+import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.fluid.StoredFluid;
 import io.github.jimbozoomer.jugcraft.kinetic.KineticConsumer;
 import io.github.jimbozoomer.jugcraft.kinetic.KineticNetworks;
 import io.github.jimbozoomer.jugcraft.logistics.ItemNetworks;
@@ -38,6 +40,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -207,7 +211,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return switch (kind) {
 			case FRACKING_RIG -> variant.isOf(PetroFluids.FRACKING_FLUID.source());
 			case DIESEL_GENERATOR -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
-			case DIESEL_ENGINE, FUEL_CELL -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
+			case DIESEL_ENGINE, FUEL_CELL, ADVANCED_ENGINE -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
 			case GAS_TURBINE -> tank == 0 ? FluidFuels.jePerMb(kind, variant.getFluid()) > 0
 					: variant.isOf(PetroFluids.LUBRICANT.source());
 			default -> FluidRecipes.usesFluid(server.getServer(), kind, tank, variant);
@@ -260,6 +264,25 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				setChanged();
 			}
 		};
+	}
+
+	/** A steel tank or gas holder drops with its fluid (see {@link StoredFluid}) and gets it back when placed again. */
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components) {
+		super.collectImplicitComponents(components);
+		StoredFluid stored = reservoir == null ? null : StoredFluid.of(reservoir);
+		if (stored != null) {
+			components.set(JugcraftFluids.STORED_FLUID, stored);
+		}
+	}
+
+	@Override
+	protected void applyImplicitComponents(DataComponentGetter components) {
+		super.applyImplicitComponents(components);
+		StoredFluid stored = components.get(JugcraftFluids.STORED_FLUID);
+		if (stored != null && reservoir != null) {
+			stored.restore(reservoir);
+		}
 	}
 
 	/** A fluid processor's tanks, or null for other machines. */
@@ -366,6 +389,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		boolean active = switch (kind) {
 			case COAL_GENERATOR -> tickGenerator(level, pos);
 			case SOLAR_PANEL -> tickSolar(level, pos);
+			case ADVANCED_SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
 			case LARGE_STEAM_ENGINE -> tickLargeEngine(level, pos, state);
 			case BATTERY_BOX, CAPACITOR_BANK, LITHIUM_BATTERY_BANK -> tickBattery(level, pos, state);
@@ -381,7 +405,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case FRACKING_RIG -> tickFrackingRig(level, pos, state);
 			case DIESEL_GENERATOR -> tickFluidGenerator(level, pos, state, MachineKind.DIESEL_OUTPUT);
 			case GAS_TURBINE -> tickFluidGenerator(level, pos, state, MachineKind.TURBINE_OUTPUT);
-			case DIESEL_ENGINE -> tickDieselEngine(level, pos, state);
+			case DIESEL_ENGINE, ADVANCED_ENGINE -> tickDieselEngine(level, pos, state);
 			case FUEL_CELL -> tickFluidGenerator(level, pos, state, MachineKind.FUEL_CELL_OUTPUT);
 			default -> kind.isFluidProcessor() ? tickFluidProcessor(level, pos, state) : tickProcessor(level, pos, state);
 		};
@@ -414,9 +438,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	private boolean tickSolar(ServerLevel level, BlockPos pos) {
 		// Checked every tick but only reads the sky and weather: no scanning.
-		boolean sunlit = level.isBrightOutside() && level.canSeeSky(pos.above());
+		// The advanced panel's cells are on the layer above its pedestal: the sky must be open above them.
+		boolean advanced = kind == MachineKind.ADVANCED_SOLAR_PANEL;
+		boolean sunlit = level.isBrightOutside() && level.canSeeSky(advanced ? pos.above(2) : pos.above());
 		if (sunlit && energy.getAmount() < energy.getCapacity()) {
-			int rate = level.isRaining() ? MachineKind.SOLAR_PER_TICK / 2 : MachineKind.SOLAR_PER_TICK;
+			int full = advanced ? MachineKind.ADVANCED_SOLAR_PER_TICK : MachineKind.SOLAR_PER_TICK;
+			int rate = level.isRaining() ? full / 2 : full;
 			energy.setAmount(energy.getAmount() + rate);
 			setChanged();
 		}
@@ -593,7 +620,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * upper right back block into a shaft line. Only what the line takes is spent, so an idle engine burns nothing.
 	 */
 	private boolean tickDieselEngine(ServerLevel level, BlockPos pos, BlockState state) {
-		int output = MachineKind.DIESEL_ENGINE_OUTPUT;
+		boolean advanced = kind == MachineKind.ADVANCED_ENGINE;
+		int output = advanced ? MachineKind.ADVANCED_ENGINE_OUTPUT : MachineKind.DIESEL_ENGINE_OUTPUT;
 		maxBurn = output;
 		maxProgress = output;
 		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
@@ -614,7 +642,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return false;
 		}
 		Direction facing = facing(state);
-		BlockPos shaft = kind.footprint().partPos(pos, facing, MachineKind.DIESEL_ENGINE_OUTPUT_PART);
+		BlockPos shaft = advanced ? pos : kind.footprint().partPos(pos, facing, MachineKind.DIESEL_ENGINE_OUTPUT_PART);
 		long taken = KineticNetworks.push(level, shaft, facing.getOpposite(), Math.min(burn, output));
 		if (taken <= 0) {
 			return false;

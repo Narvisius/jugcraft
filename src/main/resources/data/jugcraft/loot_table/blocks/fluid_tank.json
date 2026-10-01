@@ -6,7 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "jugcraft:fluid_tank"
+          "name": "jugcraft:fluid_tank",
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "source": "block_entity",
+            "include": [
+              "jugcraft:stored_fluid"
+            ]
+          }
         }
       ],
       "condition": {

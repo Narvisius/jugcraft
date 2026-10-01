@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:advanced_solar_panel"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.advanced_solar_panel.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.advanced_solar_panel.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:advanced_solar_panel"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:processor"
+}

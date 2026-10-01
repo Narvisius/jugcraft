@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TPT",
+    "MDM",
+    "TCT"
+  ],
+  "key": {
+    "T": "#c:ingots/titanium",
+    "P": "jugcraft:processor",
+    "M": "jugcraft:neodymium_magnet",
+    "D": "jugcraft:diesel_engine",
+    "C": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:advanced_engine",
+    "count": 1
+  }
+}

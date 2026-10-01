@@ -21,7 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 /**
  * The tinplate tank. Right-click with a bucket (or any fluid container item) to fill or
  * empty it, with an empty hand to read its contents. Comparators read how full it is.
- * Breaking the tank loses its contents.
+ * Breaking the tank keeps its contents: the item carries them ({@link StoredFluid}).
  */
 public class FluidTankBlock extends BaseEntityBlock implements FluidConnectable {
 	public FluidTankBlock(Properties properties) {

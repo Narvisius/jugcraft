@@ -10,6 +10,7 @@ Energy is in **JE** (Jugcraft Energy) and rotation in **KE**, both per tick (20 
 | Steam Generator | 64 JE/t | coal 102,400 · charcoal 76,800 · coke 204,800 | 10 mB water/t |
 | Geothermal Generator | 64 JE/t | 64,000 per lava bucket | 1 mB lava/t |
 | Solar Panel | 8 JE/t | free | full sun only; half in rain |
+| Advanced Solar Panel | 64 JE/t | free | full sun only; half in rain; costs three solar panels and a processor |
 | Water Wheel | up to 24 JE/t | free | flowing water at the wheel |
 | Wind Turbine | 12–72 JE/t | free | height and weather |
 | Steam Engine | 64 KE/t | coal 102,400 KE | burns only while something takes the power |
@@ -18,6 +19,7 @@ Energy is in **JE** (Jugcraft Energy) and rotation in **KE**, both per tick (20 
 | Diesel Generator | 256 JE/t | diesel 256,000 · heavy fuel oil 128,000 per bucket | stops burning when full |
 | Gas Turbine | 512 JE/t | gasoline 384,000 · refinery gas 192,000 per bucket | plus 1 mB lubricant per 20 ticks running (a bucket per 10,240,000 JE) |
 | Diesel Engine | up to 512 KE/t | diesel 256,000 KE · heavy fuel oil 128,000 KE per bucket | burns only for what the line takes |
+| Advanced Combustion Engine | up to 1,024 KE/t | gasoline 448,000 KE · diesel 320,000 KE per bucket | burns only for what the line takes |
 | Fuel Cell | 128 JE/t | hydrogen 128,000 per bucket | a bucket of hydrogen costs 204,800 JE of electrolysis |
 | Steam Generator, bitumen | 64 JE/t | 51,200 per bitumen | unchanged by the oil line |
 
@@ -79,7 +81,7 @@ Burnt in the best generator for each (diesel generator, gas turbine), that is 13
 
 - Instead of cracking, the vacuum unit turns 250 mB of heavy fuel oil into 100 mB lubricant and ½ asphalt binder (the turbine's upkeep and 4 asphalt).
 - Refinery gas has two uses: 192,000 JE a bucket in the turbine, or 4 plastic pellets (4 sheets).
-- KE: the diesel engine gives the same per mB as the generator; through a dynamo that is 192 JE/mB, so the generator stays the better JE source. Even through a magnet dynamo it is 243 JE/mB, under the generator's 256.
+- KE: the diesel engine gives the same per mB as the generator; through a dynamo that is 192 JE/mB, so the generator stays the better JE source. Even through a magnet dynamo it is 243 JE/mB, under the generator's 256. The advanced combustion engine is the exception: through a magnet dynamo it gives 426 JE per mB of gasoline and 304 per mB of diesel, the best use of either fuel, paid for in titanium, magnets and a processor.
 
 ## Electronics
 

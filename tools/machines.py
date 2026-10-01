@@ -78,6 +78,10 @@ MACHINES = {
     "lithography_station": {"display": "Lithography Station", "lit": True},
     # Fluid logistics (batch 8): a Horton sphere for gases.
     "gas_holder": {"display": "Gas Holder", "lit": False},
+    # Power (batch 10): a pedestal carrying a 3x3 array of solar cells.
+    "advanced_solar_panel": {"display": "Advanced Solar Panel", "lit": False},
+    # A two-block four-cylinder engine: gasoline or diesel into a shaft at up to 1,024 KE/t.
+    "advanced_engine": {"display": "Advanced Combustion Engine", "lit": True},
     # Farming (batch 9): harvests and replants ripe crops in the 9x9 field in front of it.
     "crop_harvester": {"display": "Crop Harvester", "lit": True},
     # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
@@ -216,6 +220,10 @@ STATS = {
     "steel_tank": {"capacity": 0, "tank": 128_000},
     # 3x3x3 sphere on legs: 1,024 buckets of one gas, and only gases. No power.
     "gas_holder": {"capacity": 0, "tank": 1_024_000},
+    # A pedestal and a 3x3 layer of cells above it: 64 JE/t in full sun (eight solar panels), half in rain.
+    "advanced_solar_panel": {"capacity": 400_000, "output_per_tick": 512, "generation_per_tick": 64},
+    # 2x1x1. Gasoline 448 KE/mB, diesel 320; up to 1,024 KE/t out of the back of its master block. No JE.
+    "advanced_engine": {"capacity": 0, "tank": 8_000},
     # 2 tall. One ripe crop per 20 ticks from the 9x9 field in front of it; replants with one of the seeds.
     "crop_harvester": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 24, "ticks": 20, "radius": 4},
     # 2 tall. Mines one c:ores block per 40 ticks from a 9x9 column below it, down to the bottom of the world.
@@ -404,6 +412,12 @@ CRAFTING = {
                                             "S": "jugcraft:steel_fluid_pipe", "R": "minecraft:redstone"}, 2),
     "fluid_filter": ([" P ", "ISI", " P "], {"P": "#c:plates/steel", "I": "minecraft:iron_bars",
                                              "S": "jugcraft:steel_fluid_pipe"}, 1),
+    "advanced_engine": (["TPT", "MDM", "TCT"], {"T": "#c:ingots/titanium", "P": "jugcraft:processor",
+                                                "M": "jugcraft:neodymium_magnet", "D": "jugcraft:diesel_engine",
+                                                "C": "jugcraft:machine_casing"}, 1),
+    "advanced_solar_panel": (["SSS", "ACA", "PTP"], {"S": "jugcraft:solar_panel", "A": "#c:plates/aluminum",
+                                                     "C": "jugcraft:processor", "P": "jugcraft:aluminum_cable",
+                                                     "T": "#c:ingots/titanium"}, 1),
     "crop_harvester": (["GSG", "HMH", "PCP"], {"G": "#c:gears/steel", "S": "minecraft:shears",
                                                "H": "minecraft:hopper", "M": "jugcraft:machine_casing",
                                                "P": "#c:plates/steel", "C": "jugcraft:basic_circuit"}, 1),

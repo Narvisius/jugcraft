@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.client;
 
+import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.fluid.StoredFluid;
 import io.github.jimbozoomer.jugcraft.guide.EngineersHandbookItem;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
@@ -7,6 +9,7 @@ import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.SurveyPayload;
 import io.github.jimbozoomer.jugcraft.tools.JugcraftTools;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.api.ClientModInitializer;
@@ -31,6 +34,12 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftKinetics.HAND_CRANK_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.ELECTRIC_MOTOR_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.STEAM_ENGINE_ENTITY, KineticRotorRenderer::new);
+		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+			StoredFluid stored = stack.get(JugcraftFluids.STORED_FLUID);
+			if (stored != null) {
+				lines.add(stored.describe());
+			}
+		});
 		EngineersHandbookItem.openScreen = () -> Minecraft.getInstance().gui.setScreen(new HandbookScreen());
 		ClientPlayNetworking.registerGlobalReceiver(SurveyPayload.TYPE,
 				(payload, context) -> Minecraft.getInstance().gui.setScreen(new ProspectorScreen(payload.readings())));

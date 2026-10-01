@@ -6,11 +6,30 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "jugcraft:steel_tank"
+          "name": "jugcraft:steel_tank",
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "source": "block_entity",
+            "include": [
+              "jugcraft:stored_fluid"
+            ]
+          }
         }
       ],
       "condition": {
-        "type": "minecraft:survives_explosion"
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:steel_tank",
+            "state": {
+              "part": "0"
+            }
+          }
+        ]
       }
     }
   ],

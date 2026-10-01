@@ -12,6 +12,7 @@ import io.github.jimbozoomer.jugcraft.fluid.FluidFilterBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidValveBlock;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.fluid.StoredFluid;
 import io.github.jimbozoomer.jugcraft.kinetic.BeltPulleyBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.ElectricMotorBlock;
@@ -376,6 +377,66 @@ public class JugcraftGameTests {
 			helper.assertTrue(salt >= 2 && salt <= 4, "Salt ore dropped " + salt + " salt");
 		}
 		helper.succeed();
+	}
+
+	/**
+	 * A broken tank drops with its fluid and a placed one takes it back: a tinplate tank with five buckets of water
+	 * and a steel tank broken from any of its blocks both keep what they held, and an empty tank's item carries nothing.
+	 */
+	@GameTest(maxTicks = 40)
+	public void tanksKeepTheirFluidWhenBroken(GameTestHelper helper) {
+		BlockPos tank = new BlockPos(1, 1, 1);
+		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity tankEntity = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
+		List<ItemStack> empty = Block.getDrops(helper.getBlockState(tank), helper.getLevel(), helper.absolutePos(tank), tankEntity);
+		helper.assertTrue(empty.size() == 1 && !empty.get(0).has(JugcraftFluids.STORED_FLUID), "An empty tank dropped with fluid");
+		try (Transaction transaction = Transaction.openOuter()) {
+			tankEntity.storage.insert(FluidVariant.of(Fluids.WATER), 5 * FluidConstants.BUCKET, transaction);
+			transaction.commit();
+		}
+		List<ItemStack> drops = Block.getDrops(helper.getBlockState(tank), helper.getLevel(), helper.absolutePos(tank), tankEntity);
+		helper.assertTrue(drops.size() == 1, "The tank dropped " + drops.size() + " stacks");
+		StoredFluid stored = drops.get(0).get(JugcraftFluids.STORED_FLUID);
+		helper.assertTrue(stored != null && stored.variant().isOf(Fluids.WATER) && stored.amount() == 5 * FluidConstants.BUCKET,
+				"The tank's item does not carry its water: " + stored);
+		BlockPos placed = new BlockPos(3, 1, 1);
+		helper.setBlock(placed, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity placedEntity = helper.getBlockEntity(placed, FluidTankBlockEntity.class);
+		placedEntity.applyComponentsFromItemStack(drops.get(0));
+		helper.assertTrue(placedEntity.storage.variant.isOf(Fluids.WATER) && placedEntity.storage.amount == 5 * FluidConstants.BUCKET,
+				"The placed tank did not take back its water");
+
+		BlockPos base = new BlockPos(5, 1, 1);
+		LargeMachineBlock steel = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.STEEL_TANK);
+		helper.setBlock(base, steel.defaultBlockState());
+		steel.setPlacedBy(helper.getLevel(), helper.absolutePos(base), helper.getBlockState(base), null, ItemStack.EMPTY);
+		MachineBlockEntity steelEntity = helper.getBlockEntity(base, MachineBlockEntity.class);
+		try (Transaction transaction = Transaction.openOuter()) {
+			steelEntity.reservoir().insert(FluidVariant.of(Fluids.LAVA), 20 * FluidConstants.BUCKET, transaction);
+			transaction.commit();
+		}
+		List<ItemStack> steelDrops = Block.getDrops(helper.getBlockState(base), helper.getLevel(), helper.absolutePos(base), steelEntity);
+		StoredFluid lava = steelDrops.isEmpty() ? null : steelDrops.get(0).get(JugcraftFluids.STORED_FLUID);
+		helper.assertTrue(steelDrops.size() == 1 && lava != null && lava.variant().isOf(Fluids.LAVA) && lava.amount() == 20 * FluidConstants.BUCKET,
+				"The steel tank's item does not carry its lava: " + steelDrops);
+		// Break another block of the 2x2 tank (not the master, which holds the fluid): the whole tank drops once.
+		BlockPos other = null;
+		for (BlockPos near : BlockPos.betweenClosed(base.offset(-1, 0, -1), base.offset(1, 0, 1))) {
+			if (!near.equals(base) && helper.getBlockState(near).is(steel)) {
+				other = near.immutable();
+			}
+		}
+		helper.assertTrue(other != null, "The steel tank did not form");
+		BlockPos broken = other;
+		helper.destroyBlock(broken);
+		helper.succeedWhen(() -> {
+			helper.assertBlockNotPresent(steel, base);
+			helper.assertBlockNotPresent(steel, broken);
+			int tanks = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+					new net.minecraft.world.phys.AABB(helper.absolutePos(base)).inflate(3),
+					item -> item.getItem().has(JugcraftFluids.STORED_FLUID) && item.getItem().get(JugcraftFluids.STORED_FLUID).amount() == 20 * FluidConstants.BUCKET).size();
+			helper.assertTrue(tanks == 1, "Breaking the steel tank's top dropped " + tanks + " full tanks");
+		});
 	}
 
 	/** Breaking any block of a multi-block machine removes the whole machine (here the nine-block wind turbine). */

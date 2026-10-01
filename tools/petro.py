@@ -161,6 +161,8 @@ FLUID_MACHINES = {
                           "recipe_type": "electrolysis"},
     # Burns hydrogen (128 JE/mB) at 128 JE/t; one block, electric look (batch 5).
     "fuel_cell": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
+    # Burns gasoline (448 KE/mB) or diesel (320) to turn a shaft at up to 1,024 KE/t (batch 10).
+    "advanced_engine": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
     # Sulfur + water -> sulfuric acid; bauxite + lye -> alumina; phosphate + acid -> fertilizer (batch 5). 96 JE/t.
     "chemical_reactor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 1,
                          "recipe_type": "chemical_reaction"},
@@ -178,6 +180,7 @@ FLUID_FUELS = {
     "gas_turbine": {"gasoline": 384, "refinery_gas": 192},
     "diesel_engine": {"diesel": 256, "heavy_fuel_oil": 128},
     "fuel_cell": {"hydrogen": 128},
+    "advanced_engine": {"gasoline": 448, "diesel": 320},
 }
 
 # Fluid recipes per machine. Each: name, item ingredients [(item or #tag, count)], fluids in [(fluid, mB)],

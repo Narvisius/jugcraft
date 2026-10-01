@@ -178,6 +178,75 @@ def lithium_battery_bank():
     return m
 
 
+def advanced_solar_panel():
+    """The owner's reference: a white pedestal on a graphite foot with a green-lit ring and power ports, a dark stripe
+    up the front of the column, a white yoke on top carrying the axle, and two large wings of deep blue cells in
+    graphite frames spread over the 3x3 layer above, tilted towards the sun."""
+    white = "el_white"
+    m = [box((1, 0, 1), (15, 1.5, 15), FRAME)]
+    m.append(box((2.5, 1.5, 2.5), (13.5, 3.5, 13.5), CASING))
+    m.append(box((2.25, 2.25, 2.25), (13.75, 2.75, 13.75), GLOW))
+    # Ports where cables meet the foot.
+    for frm, to, face in (((0.25, 1, 6), (2.5, 4, 10), "west"), ((13.5, 1, 6), (15.75, 4, 10), "east"),
+                          ((6, 1, 0.25), (10, 4, 2.5), "north"), ((6, 1, 13.5), (10, 4, 15.75), "south")):
+        m.append(box(frm, to, {"*": FRAME, face: PORT + "!"}))
+    # The column with its dark stripe, and the yoke.
+    m.append(box((5, 3.5, 5), (11, 20, 11), white))
+    m.append(box((7, 4, 4.75), (9, 19, 5), FRAME))
+    m.append(box((7.25, 4.5, 4.6), (8.75, 18.5, 4.75), GLOW))
+    m.append(box((3.5, 18, 5.5), (12.5, 21, 10.5), white))
+    for x0 in (3, 11.5):
+        m.append(box((x0, 21, 6.5), (x0 + 1.5, 24.5, 9.5), white))
+    # The axle and the two wings of cells, tilted together about it.
+    m += cyl("x", 23, 8, 0.9, -15.5, 31.5, FRAME)
+    tilt = ("x", 22.5, (8, 23, 8))
+    for x0, x1 in ((-15.5, 2.5), (13.5, 31.5)):
+        # Each wing in tiles no larger than a block, so the cells keep their size instead of stretching.
+        xs = (x0, (x0 + x1) / 2, x1)
+        zs = (-14, -14 + 44 / 3, -14 + 88 / 3, 30)
+        for i in range(2):
+            for j in range(3):
+                m.append(box((xs[i], 24, zs[j]), (xs[i + 1], 25.25, zs[j + 1]),
+                             {"*": FRAME, "up": "el_solar_large", "down": CASING}, rotation=tilt))
+        m.append(box((x0 + 0.5, 23.25, -13), (x1 - 0.5, 24, 29), CASING, rotation=tilt))
+    return m
+
+
+def advanced_engine():
+    """The owner's reference engine: two blocks long, graphite. A plinth with a row of recessed squares, a block with
+    a sloping cylinder bank in ribbed steel carrying four cylinder heads with white caps, tall side pylons with slit vents and a port,
+    two front ports with an orange and a cyan indicator, and the output shaft out of the back of its right block."""
+    dark = "el_dark"
+    m = [box((-16, 0, 0.5), (16, 2, 16), FRAME)]
+    for x in range(-15, 15, 4):
+        m.append(box((x + 0.5, 0.5, 0.25), (x + 3, 1.5, 0.5), dark))
+    # Engine block and the cylinder bank, sloping up from the front, in light ribbed steel.
+    m.append(box((-13, 2, 2), (13, 9, 14.5), {"*": CASING, "north": SEAMS}))
+    m.append(box((-12.5, 8.5, 3.5), (12.5, 11.5, 13.5), {"*": "el_ribbed", "east": CASING, "west": CASING},
+                 rotation=("x", -22.5, (0, 10, 8.5))))
+    m.append(box((-12.5, 9, 9), (12.5, 13, 14.5), {"*": CASING, "up": SEAMS}))
+    for x in (-9.5, -3.2, 3.2, 9.5):
+        m += cyl("y", x, 8.5, 1.4, 11.5, 15.5, dark, FRAME)
+        m.append(box((x - 2.4, 13.25, 6.25), (x + 2.4, 14.25, 10.75), {"*": "el_white", "down": CASING}))
+    # Side pylons with slit vents, louvres and a port.
+    for x0, x1, out, face in ((-15.5, -13, (-16, -15.5), "west"), (13, 15.5, (15.5, 16), "east")):
+        m.append(box((x0, 2, 1), (x1, 15.5, 15), CASING))
+        m.append(box((x0 + 0.5, 15.5, 1.5), (x1 - 0.5, 16, 14.5), FRAME))
+        m.append(box((x0 + 0.75, 5, 0.75), (x1 - 0.75, 13, 1), dark))
+        m.append(box((x0 + 0.25, 2.25, 0.75), (x1 - 0.25, 4.5, 1), {"*": FRAME, "north": VENT + "!"}))
+        m.append(box((out[0], 6, 5.5), (out[1], 11, 10.5), {"*": FRAME, face: PORT + "!"}))
+    # Front ports with indicators.
+    for x, lamp in ((-7, "dp_lamp_on"), (5, "el_glow_cyan")):
+        m.append(box((x - 2.5, 2.5, 1.25), (x + 2.5, 8.5, 2), {"*": FRAME, "north": CASING}))
+        m.append(box((x - 1.25, 3.25, 1), (x + 1.25, 6, 1.25), dark))
+        m.append(dial("north", (x, 7.25, 1), 1.25, texture=lamp, body=FRAME))
+    # The output shaft out of the back of the master (right-hand) block.
+    m.append(box((5.5, 5.5, 14.5), (10.5, 10.5, 15.25), FRAME))
+    m.append(box((6, 6, 15.25), (10, 10, 16), "iron_shaft"))
+    return m
+
+
 MODELS = {"battery_box": battery_box(), "capacitor_bank": capacitor_bank(), "solar_panel": solar_panel(),
           "electric_pump": electric_pump(), "fuel_cell": fuel_cell(),
-          "lithium_battery_bank": lithium_battery_bank()}
+          "lithium_battery_bank": lithium_battery_bank(), "advanced_solar_panel": advanced_solar_panel(),
+          "advanced_engine": advanced_engine()}

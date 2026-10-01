@@ -89,6 +89,10 @@ public enum MachineKind implements StringRepresentable {
 	LITHOGRAPHY_STATION("lithography_station", 60_000, 1_024, 0, 192, 3),
 	// Fluid logistics (batch 8): a 3x3x3 Horton sphere holding 1,024 buckets of one gas. No power.
 	GAS_HOLDER("gas_holder", 0, 0, 0, 0, 0),
+	// Power (batch 10, the electric look): a pedestal carrying a 3x3 array of solar cells on the layer above.
+	ADVANCED_SOLAR_PANEL("advanced_solar_panel", 400_000, 0, 512, 0, 0),
+	// A 2x1x1 four-cylinder engine (electric look): burns gasoline or diesel and turns a shaft out of its back.
+	ADVANCED_ENGINE("advanced_engine", 0, 0, 0, 0, 0),
 	// Farming (batch 9): a two-block gantry that harvests and replants ripe crops in the 9x9 field in front of it.
 	// No inputs; three result slots.
 	CROP_HARVESTER("crop_harvester", 20_000, 256, 0, 24, 3);
@@ -97,6 +101,8 @@ public enum MachineKind implements StringRepresentable {
 	public static final int GENERATION_PER_TICK = 32;
 	/** JE per tick from a solar panel in full sun; halved in rain. */
 	public static final int SOLAR_PER_TICK = 8;
+	/** JE per tick from an advanced solar panel in full sun (eight solar panels' worth); halved in rain. */
+	public static final int ADVANCED_SOLAR_PER_TICK = 64;
 	/** JE per tick while the steam generator boils water. */
 	public static final int STEAM_PER_TICK = 64;
 	/** Water (mB) the steam generator boils per tick of generation. */
@@ -203,6 +209,9 @@ public enum MachineKind implements StringRepresentable {
 	public static final int DIESEL_ENGINE_OUTPUT = 512;
 	public static final int DIESEL_ENGINE_TANK = 8_000;
 	public static final int DIESEL_ENGINE_OUTPUT_PART = 11;
+	/** Advanced combustion engine: KE per tick at most, out of the back of its master block. */
+	public static final int ADVANCED_ENGINE_OUTPUT = 1_024;
+	public static final int ADVANCED_ENGINE_TANK = 8_000;
 	/** Electrolytic cell: each tank, and the layers its outputs leave from (chlorine top, hydrogen middle, lye base). */
 	public static final int CELL_TANK = 8_000;
 	private static final int[] CELL_DRAW_OFFS = {2, 1, 0};
@@ -326,6 +335,7 @@ public enum MachineKind implements StringRepresentable {
 			case GAS_TURBINE -> new FluidMachineSpec(List.of(TURBINE_TANK, TURBINE_LUBRICANT_TANK), List.of(), 0, 0);
 			case POLYMERIZATION_REACTOR -> new FluidMachineSpec(List.of(REACTOR_TANK), List.of(), 0, 1);
 			case DIESEL_ENGINE -> new FluidMachineSpec(List.of(DIESEL_ENGINE_TANK), List.of(), 0, 0);
+			case ADVANCED_ENGINE -> new FluidMachineSpec(List.of(ADVANCED_ENGINE_TANK), List.of(), 0, 0);
 			case ELECTROLYTIC_CELL -> new FluidMachineSpec(List.of(CELL_TANK), List.of(CELL_TANK, CELL_TANK, CELL_TANK), 2, 1);
 			case CHEMICAL_REACTOR -> new FluidMachineSpec(List.of(CHEM_REACTOR_TANK), List.of(CHEM_REACTOR_TANK), 2, 1);
 			case LITHOGRAPHY_STATION -> new FluidMachineSpec(List.of(LITHOGRAPHY_TANK), List.of(), 2, 1);
@@ -387,7 +397,7 @@ public enum MachineKind implements StringRepresentable {
 	public boolean isGenerator() {
 		return this == COAL_GENERATOR || this == SOLAR_PANEL || this == STEAM_GENERATOR
 				|| this == GEOTHERMAL_GENERATOR || this == WIND_TURBINE || this == WATER_WHEEL || this == DIESEL_GENERATOR
-				|| this == GAS_TURBINE || this == FUEL_CELL;
+				|| this == GAS_TURBINE || this == FUEL_CELL || this == ADVANCED_SOLAR_PANEL;
 	}
 
 	/**
@@ -426,6 +436,7 @@ public enum MachineKind implements StringRepresentable {
 			case GAS_TURBINE -> Footprint.cuboid(4, 2, 2);
 			case POLYMERIZATION_REACTOR -> Footprint.cuboid(2, 3, 2);
 			case DIESEL_ENGINE -> Footprint.cuboid(2, 2, 3);
+			case ADVANCED_ENGINE -> Footprint.cuboid(2, 1, 1);
 			case ELECTROLYTIC_CELL -> Footprint.cuboid(3, 3, 2);
 			case CHEMICAL_REACTOR -> Footprint.cuboid(2, 2, 2);
 			// Three wide, two tall, one deep, so every block's front is a power socket.
@@ -436,6 +447,10 @@ public enum MachineKind implements StringRepresentable {
 			case LITHOGRAPHY_STATION -> Footprint.cuboid(3, 2, 2);
 			// A sphere on legs, three blocks every way.
 			case GAS_HOLDER -> Footprint.cuboid(3, 3, 3);
+			// The pedestal (the master) and the 3x3 array of cells on the layer above it, centred over it.
+			case ADVANCED_SOLAR_PANEL -> Footprint.of(Vec3i.ZERO, new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0), new Vec3i(1, 1, 0),
+					new Vec3i(0, 1, -1), new Vec3i(0, 1, 1), new Vec3i(-1, 1, -1), new Vec3i(1, 1, -1), new Vec3i(-1, 1, 1),
+					new Vec3i(1, 1, 1));
 			default -> Footprint.SINGLE;
 		};
 	}
@@ -448,6 +463,14 @@ public enum MachineKind implements StringRepresentable {
 		return this == ALLOY_SMELTER ? new PowerPort(2, Direction.WEST) : null;
 	}
 
+	/**
+	 * Tanks that keep their fluid when broken. Only their master block has the block entity, so only it drops the item
+	 * (with the fluid on it): breaking any other block of one breaks the master too (see LargeMachineBlock).
+	 */
+	public boolean keepsContents() {
+		return this == STEEL_TANK || this == GAS_HOLDER;
+	}
+
 	/** Boilers: a fuel slot, a water-bucket slot and an empty-bucket slot, and a water tank. */
 	public boolean isBoiler() {
 		return this == STEAM_GENERATOR || this == LARGE_STEAM_ENGINE;
@@ -457,7 +480,7 @@ public enum MachineKind implements StringRepresentable {
 	public boolean burnsFuel() {
 		return this == COAL_GENERATOR || this == STEAM_GENERATOR || this == GEOTHERMAL_GENERATOR
 				|| this == LARGE_STEAM_ENGINE || this == COKE_OVEN || this == STEEL_FOUNDRY || this == ARC_FURNACE
-				|| this == DIESEL_GENERATOR || this == GAS_TURBINE || this == DIESEL_ENGINE;
+				|| this == DIESEL_GENERATOR || this == GAS_TURBINE || this == DIESEL_ENGINE || this == ADVANCED_ENGINE;
 	}
 
 	/** Height of the machine in blocks (the tallest part plus one). */

@@ -1022,3 +1022,6 @@ MODELS.update(_ELECTRIC)
 # The electronics tier has the cyan look: tools/hightech_models.py.
 from hightech_models import MODELS as _HIGHTECH  # noqa: E402
 MODELS.update(_HIGHTECH)
+# Tanks in the owner's reference look (batch 10): tools/tank_models.py.
+from tank_models import MODELS as _TANKS  # noqa: E402
+MODELS.update(_TANKS)

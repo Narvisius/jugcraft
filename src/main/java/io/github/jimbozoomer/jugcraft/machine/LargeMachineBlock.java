@@ -133,9 +133,14 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 		if (level.getBlockState(pos).is(this)) {
 			return; // Only a state change (such as LIT), not a removal.
 		}
-		// Remove the other parts without drops: the part that was broken already dropped the item.
+		// Remove the other parts without drops: the part that was broken already dropped the item. A tank that keeps
+		// its fluid drops from its master instead (its other parts drop nothing), so the master is broken with drops.
 		Direction facing = state.getValue(FACING);
 		BlockPos master = masterPos(pos, state);
+		if (kind().keepsContents() && state.getValue(PART) != 0 && level.getBlockState(master).is(this)) {
+			level.destroyBlock(master, true);
+			return;
+		}
 		for (int part = 0; part < footprint().size(); part++) {
 			BlockPos partPos = footprint().partPos(master, facing, part);
 			BlockState other = level.getBlockState(partPos);

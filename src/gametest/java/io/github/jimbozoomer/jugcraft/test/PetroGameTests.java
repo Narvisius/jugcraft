@@ -444,6 +444,48 @@ public class PetroGameTests {
 		});
 	}
 
+	/**
+	 * The advanced combustion engine burns gasoline into a magnet dynamo behind its master block, only as fast as the
+	 * dynamo takes it, and refuses heavy fuel oil.
+	 */
+	@GameTest(maxTicks = 100)
+	public void advancedEngineTurnsAMagnetDynamo(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 1);
+		BlockPos dynamoPos = master.south();
+		helper.setBlock(dynamoPos, JugcraftKinetics.MAGNET_DYNAMO);
+		DynamoBlockEntity dynamo = helper.getBlockEntity(dynamoPos, DynamoBlockEntity.class);
+		MachineBlockEntity engine = placeUnpowered(helper, MachineKind.ADVANCED_ENGINE, master);
+		helper.assertTrue(FluidFuels.jePerMb(MachineKind.ADVANCED_ENGINE, PetroFluids.HEAVY_FUEL_OIL.source()) == 0,
+				"The advanced engine burns heavy fuel oil");
+		engine.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 1000);
+		helper.runAfterDelay(40, () -> {
+			helper.assertTrue(dynamo.energy().getAmount() > 0, "The dynamo made no JE");
+			int burnt = 1000 - engine.tanks().input(0).millibuckets();
+			// The magnet dynamo takes at most 512 KE/t: about 46 mB of gasoline in 40 ticks, plus what the engine holds.
+			long most = 40L * DynamoBlockEntity.MAGNET.rate() / FluidFuels.ADVANCED_GASOLINE + 4;
+			helper.assertTrue(burnt > 0 && burnt <= most, "Gasoline burnt in 40 ticks: " + burnt + " mB (at most " + most + ")");
+			helper.succeed();
+		});
+	}
+
+	/** The advanced solar panel places its pedestal and the 3x3 layer of cells above it, and holds 400,000 JE. */
+	@GameTest
+	public void advancedSolarPanelFormsAndStores(GameTestHelper helper) {
+		BlockPos master = new BlockPos(3, 1, 3);
+		MachineBlockEntity panel = placeUnpowered(helper, MachineKind.ADVANCED_SOLAR_PANEL, master);
+		MachineBlock block = JugcraftMachines.MACHINES.get(MachineKind.ADVANCED_SOLAR_PANEL);
+		for (int x = -1; x <= 1; x++) {
+			for (int z = -1; z <= 1; z++) {
+				helper.assertTrue(helper.getBlockState(master.offset(x, 1, z)).is(block), "No cells at " + x + ", " + z);
+			}
+		}
+		EnergyStorage storage = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.NORTH);
+		helper.assertTrue(storage != null && storage.supportsExtraction() && !storage.supportsInsertion(),
+				"The pedestal must only give power");
+		helper.assertTrue(storage.getCapacity() == 400_000, "Capacity is " + storage.getCapacity());
+		helper.succeed();
+	}
+
 	/** The chemical mixer dissolves two salt in a bucket of water to make a bucket of brine. */
 	@GameTest(maxTicks = 200)
 	public void mixerMakesBrine(GameTestHelper helper) {

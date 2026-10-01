@@ -163,6 +163,12 @@ ABOUT = {
     "lithium_battery_bank": "Three wide, two tall, one deep: six lithium battery modules holding 32,000,000 JE, eight "
                             "capacitor banks. It charges from any side and gives power out of the sockets on its "
                             "front, 16,384 JE/t.",
+    "advanced_solar_panel": "A white pedestal carrying a 3x3 array of solar cells on the layer above it: 64 JE/t in full "
+                            "sun (eight solar panels), half in rain, none at night. The cells need open sky. Cables meet "
+                            "the pedestal's foot.",
+    "advanced_engine": "Two blocks long, four cylinders. Burns gasoline (448 KE a mB) or diesel (320) piped into its "
+                       "8-bucket tank and turns a shaft out of the back of its right-hand block at up to 1,024 KE/t, "
+                       "burning only for what the line takes. Through a magnet dynamo it is the best use of either fuel.",
     "fuel_cell": "One block. Combines hydrogen with the air: 128 JE/t, burning a millibucket of hydrogen a tick (128,000 "
                  "JE a bucket). Pipe hydrogen from the electrolytic cell into it. Its screen lights while it runs.",
     "diesel_engine": "Two wide, two tall and three long. Burns diesel (256 KE a mB) or heavy fuel oil (128) piped into "
@@ -348,7 +354,7 @@ def build():
         ]},
         {"title": "Power", "icon": f"{MOD}:coal_generator", "pages":
             [machine_page(m) for m in ("coal_generator", "solar_panel", "steam_generator", "geothermal_generator",
-                                       "wind_turbine", "battery_box")]
+                                       "wind_turbine", "battery_box", "advanced_solar_panel")]
             + [block_page(c, CABLES[c]["display"]) for c in CABLES]
             + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("steam_engine",)]
             + [machine_page("large_steam_engine")]
@@ -396,6 +402,7 @@ def build():
             machine_page("gas_turbine"),
             machine_page("polymerization_reactor"),
             machine_page("diesel_engine"),
+            machine_page("advanced_engine"),
             {"title": "Asphalt", "icon": f"{MOD}:asphalt", "text": [
                 "Eight gravel around an asphalt binder (from the vacuum distillation unit) make eight asphalt.",
                 "Walking on asphalt, its slabs or road line is 1.3 times as fast. Three asphalt make six slabs.",

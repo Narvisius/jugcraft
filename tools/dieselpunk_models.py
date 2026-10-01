@@ -748,7 +748,7 @@ def chemical_reactor():
     return m
 
 
-def gas_holder():
+def gas_holder(body=OLIVE, band=STENCIL, stripes=HAZARD, frame=GUNMETAL):
     """A Horton sphere: an olive steel ball three blocks across, stencilled round its equator between hazard bands, on
     six gunmetal legs braced to concrete-grey pads, with a chrome ladder up the side, a relief valve and gauge on
     top, and a flanged inlet at the foot of the front and back for pipes."""
@@ -759,9 +759,9 @@ def gas_holder():
     for i in range(6):
         angle = math.radians(30 + 60 * i)
         x, z = cx + 15 * math.cos(angle), cz + 15 * math.sin(angle)
-        m.append(box((x - 2.5, 0, z - 2.5), (x + 2.5, 1.5, z + 2.5), GUNMETAL))
-        m.append(box((x - 1.25, 1.5, z - 1.25), (x + 1.25, 22, z + 1.25), GUNMETAL))
-    m += cyl("y", cx, cz, 16.25, 9, 10, GUNMETAL)
+        m.append(box((x - 2.5, 0, z - 2.5), (x + 2.5, 1.5, z + 2.5), frame))
+        m.append(box((x - 1.25, 1.5, z - 1.25), (x + 1.25, 22, z + 1.25), frame))
+    m += cyl("y", cx, cz, 16.25, 9, 10, frame)
     # The sphere, in slices.
     step = 2.5
     y = cy - radius
@@ -770,11 +770,11 @@ def gas_holder():
         mid = (y + top) / 2
         r = math.sqrt(max(0.0, radius * radius - (mid - cy) ** 2))
         if r > 1.6:
-            texture = STENCIL if abs(mid - cy) < 2 else OLIVE
-            m += cyl("y", cx, cz, r, y, top, texture, OLIVE)
+            texture = band if abs(mid - cy) < 2 else body
+            m += cyl("y", cx, cz, r, y, top, texture, body)
         y = top
-    for band in (cy - 3.5, cy + 2.5):
-        m += cyl("y", cx, cz, radius + 0.3, band, band + 1, HAZARD)
+    for height in (cy - 3.5, cy + 2.5):
+        m += cyl("y", cx, cz, radius + 0.3, height, height + 1, stripes)
     # Relief valve and gauge on top.
     m += cyl("y", cx, cz, 2.5, cy + radius - 0.5, cy + radius + 1.5, CHROME, GUNMETAL)
     m += cyl("y", cx, cz, 1.25, cy + radius + 1.5, 47.5, GUNMETAL, CHROME)

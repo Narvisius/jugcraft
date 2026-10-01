@@ -1,0 +1,35 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "solar_panel_top": "jugcraft:block/solar_panel_top",
+    "front": "jugcraft:block/advanced_solar_panel_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        4,
+        0
+      ],
+      "to": [
+        16,
+        6,
+        16
+      ],
+      "faces": {
+        "west": {
+          "texture": "#heavy_plinth"
+        },
+        "up": {
+          "texture": "#solar_panel_top"
+        },
+        "down": {
+          "texture": "#heavy_plinth"
+        }
+      }
+    }
+  ]
+}

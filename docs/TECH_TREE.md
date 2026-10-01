@@ -65,6 +65,7 @@ All machines hold their own internal battery and accept power from cables or dir
 | Coal Generator | Power | Burns coal, charcoal (¾ as long), coal blocks or coke → 32 JE/t | produces | bronze, cable, furnace, casing |
 | Steam Generator | Power | Boils water with coal or bitumen → 64 JE/t | produces | coal generator, bronze, bucket, cable, casing |
 | Solar Panel | Power | Daylight under open sky → 8 JE/t (4 in rain) | produces | glass, silicon, bronze, cable |
+| Advanced Solar Panel (pedestal + 3×3 array) | Power | A white pedestal carrying nine blocks of cells: 64 JE/t in full sun (half in rain), 400,000 JE buffer, 512 JE/t out of the pedestal | produces | 3 solar panels, aluminum plates, processor, aluminum cable, titanium |
 | Battery Box | Power | Stores 400,000 JE; outputs from its front | stores | lead, cable, redstone block, casing |
 | Electric Furnace | Mechanical | Any vanilla smelting recipe, 100 ticks | 10 JE/t | bronze, redstone, cable, furnace, casing |
 | Crusher | Mechanical | Ore → 2 raw; minerals, sulfur, oil sand, cobble → gravel → sand | 16 JE/t | flint, cable, casing, bronze, redstone |
@@ -240,6 +241,8 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 | Gas Holder (3×3×3) | 1,024 buckets of one gas, only gases | A Horton sphere on legs. Pumps and pipes fill and empty it from any face; right-click to read it; comparators read how full it is. | steel plates, 4 steel tanks, steel pipe |
 | Steel Tank (2 wide, 2 deep) | 128 buckets of one fluid | Buckets, pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. Comparators read how full it is. | 8 steel plates, tinplate tank |
 
+**Tanks keep their fluid.** Break a tinplate tank, steel tank or gas holder and it drops as one item carrying its fluid (the tooltip shows which and how much); place it again and the fluid is back. Empty tanks still stack.
+
 ![Capacitor Bank, Steel Tank and Item Crate](images/storage.png)
 
 *Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*
@@ -282,6 +285,7 @@ A second, mechanical power system measured in **KE** (kinetic energy) per tick. 
 | Magnet Dynamo | KE → JE at 95%, 512/t | The dynamo with rare-earth magnets; pushes JE into cables on every side. Cyan-banded. | aluminum plates, 4 neodymium magnets, dynamo, aluminum cable |
 | Magnet Motor | JE → KE at 95%, up to 384 KE/t | Takes up to 1,024 JE/t and drives the block it faces. With a magnet dynamo it still loses a tenth each round. | aluminum plates, 4 neodymium magnets, electric motor, aluminum cable |
 | Diesel Engine (2×2×3) | Up to 512 KE/t out of the back of its upper right back block | Burns diesel or heavy fuel oil ([Oil](#oil)), only for what the line takes. | steel plates, plastic sheets, steel gears, casing |
+| Advanced Combustion Engine (2 long) | Up to 1,024 KE/t out of the back of its right-hand block | Four cylinders; burns gasoline (448 KE/mB) or diesel (320), only for what the line takes. 8-bucket tank. | titanium, processor, 2 neodymium magnets, diesel engine, casing |
 
 ![Kinetic blocks](images/kinetic.png)
 

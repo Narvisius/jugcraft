@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "ACA",
+    "PTP"
+  ],
+  "key": {
+    "S": "jugcraft:solar_panel",
+    "A": "#c:plates/aluminum",
+    "C": "jugcraft:processor",
+    "P": "jugcraft:aluminum_cable",
+    "T": "#c:ingots/titanium"
+  },
+  "result": {
+    "id": "jugcraft:advanced_solar_panel",
+    "count": 1
+  }
+}

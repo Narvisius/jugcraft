@@ -1,0 +1,216 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "solar_panel_top": "jugcraft:block/solar_panel_top",
+    "front": "jugcraft:block/advanced_solar_panel_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        5.8182,
+        4.0,
+        5.8182
+      ],
+      "to": [
+        10.1818,
+        4.7273,
+        10.1818
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.364,
+            0.727
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.364,
+            0.727
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.364,
+            0.727
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.364,
+            0.727
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.364,
+            4.364
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.364,
+            4.364
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.9091,
+        4.7273,
+        6.9091
+      ],
+      "to": [
+        9.0909,
+        11.2727,
+        9.0909
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            2.182,
+            6.545
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.182,
+            6.545
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.182,
+            6.545
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.182,
+            6.545
+          ]
+        },
+        "up": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.182,
+            2.182
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.182,
+            2.182
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        11.2727,
+        0.0
+      ],
+      "to": [
+        16.0,
+        12.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.727
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.727
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.727
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.727
+          ]
+        },
+        "up": {
+          "texture": "#solar_panel_top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -6,11 +6,30 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "jugcraft:gas_holder"
+          "name": "jugcraft:gas_holder",
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "source": "block_entity",
+            "include": [
+              "jugcraft:stored_fluid"
+            ]
+          }
         }
       ],
       "condition": {
-        "type": "minecraft:survives_explosion"
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:gas_holder",
+            "state": {
+              "part": "0"
+            }
+          }
+        ]
       }
     }
   ],
