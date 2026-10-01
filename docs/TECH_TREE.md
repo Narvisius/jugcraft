@@ -62,7 +62,7 @@ All machines hold their own internal battery and accept power from cables or dir
 
 | Machine | Branch | Does | Power | Built from |
 | --- | --- | --- | --- | --- |
-| Coal Generator | Power | Burns coal, charcoal or coal blocks → 32 JE/t | produces | bronze, cable, furnace, casing |
+| Coal Generator | Power | Burns coal, charcoal (¾ as long), coal blocks or coke → 32 JE/t | produces | bronze, cable, furnace, casing |
 | Steam Generator | Power | Boils water with coal or bitumen → 64 JE/t | produces | coal generator, bronze, bucket, cable, casing |
 | Solar Panel | Power | Daylight under open sky → 8 JE/t (4 in rain) | produces | glass, silicon, bronze, cable |
 | Battery Box | Power | Stores 400,000 JE; outputs from its front | stores | lead, cable, redstone block, casing |
@@ -522,6 +522,8 @@ These are real game renders, but they are not play-testing: nobody is steering t
 To add a test, write a public method annotated `@GameTest` in `JugcraftGameTests` that builds its setup and ends with `helper.succeed()` or `helper.succeedWhen(...)`.
 
 ## Rules that keep it balanced
+
+Full numbers, conversion losses and the loops that were checked: [BALANCE.md](BALANCE.md).
 
 - **No free metal.** Every recipe keeps or loses metal: plates 1:1, 4 plates → 1 gear, 1 ingot → 3 wires, and alloys at exact ratios. The only gain is the crusher's ore doubling, defined once for all ores. `tools/check_mod_data.py` audits every recipe, including two- and three-input machine recipes.
 - **Nothing is hand-only or machine-only without reason.** Bronze has a hand route; plates, wires and circuits need their machines, because processing is what those machines are for.

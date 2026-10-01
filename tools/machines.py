@@ -174,7 +174,9 @@ STATS = {
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
-GENERATOR_FUELS = {"minecraft:coal": 1600, "minecraft:charcoal": 1600, "minecraft:coal_block": 16000,
+# Charcoal burns three quarters as long as coal here (vanilla furnaces are unchanged): tree farm charcoal is wood
+# power, kept on purpose but a little weaker (owner decision, 1 October 2026; see docs/BALANCE.md).
+GENERATOR_FUELS = {"minecraft:coal": 1600, "minecraft:charcoal": 1200, "minecraft:coal_block": 16000,
                    "jugcraft:coke": 3200}
 # The steam generator also burns bitumen from oil sand.
 STEAM_FUELS = {**GENERATOR_FUELS, "jugcraft:bitumen": 800}

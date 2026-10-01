@@ -8,6 +8,10 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #46 Balance review
+- New [docs/BALANCE.md](docs/BALANCE.md): every generator, conversion, store and cost in one place, with the loops that were checked.
+- Charcoal burns three quarters as long as coal in Jugcraft's generators and engines. This makes tree-farm wood power slightly weaker (net about +545 JE/t per tree farm, down from +737), as the owner chose. Vanilla furnaces are unchanged.
+
 ### #44 Conveyor slopes
 - **Conveyor Slope:** carries items one block up or down; use it with an empty hand to switch. Slopes join conveyor runs, and items climb and descend them visibly.
 - A game test and a client screenshot.

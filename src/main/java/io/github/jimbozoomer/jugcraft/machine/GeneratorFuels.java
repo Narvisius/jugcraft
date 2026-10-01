@@ -6,15 +6,19 @@ import net.minecraft.world.item.Items;
 
 /**
  * Generator fuels (GENERATOR_FUELS and STEAM_FUELS in tools/machines.py). Coal burns as long as
- * in a vanilla furnace; the steam generator also accepts bitumen.
+ * in a vanilla furnace; charcoal three quarters as long, so tree farm charcoal is a little weaker wood
+ * power (docs/BALANCE.md). The steam generator also accepts bitumen.
  */
 public final class GeneratorFuels {
 	private GeneratorFuels() {
 	}
 
 	public static int burnTicks(ItemStack stack) {
-		if (stack.is(Items.COAL) || stack.is(Items.CHARCOAL)) {
+		if (stack.is(Items.COAL)) {
 			return 1600;
+		}
+		if (stack.is(Items.CHARCOAL)) {
+			return 1200;
 		}
 		if (stack.is(Items.COAL_BLOCK)) {
 			return 16000;

@@ -21,7 +21,8 @@ RECIPE_LISTS = {"crusher": "crusher", "arc_furnace_controller": "arc_furnace", "
 
 # What each block is for, in a sentence or two. Numbers are added from the tables below.
 ABOUT = {
-    "coal_generator": "Burns coal, charcoal, coal blocks or coke to make power. It stops burning when full, so fuel is never wasted.",
+    "coal_generator": "Burns coal, charcoal, coal blocks or coke to make power. Coke lasts twice as long as coal, and "
+                      "charcoal three quarters as long. It stops burning when full, so fuel is never wasted.",
     "battery_box": "Stores power. It charges from every side and gives power out of its front only.",
     "electric_furnace": "Smelts anything a vanilla furnace can, twice as fast.",
     "crusher": "Crushes one ore into two raw ores, minerals into extra minerals, cobblestone into gravel and gravel into sand.",

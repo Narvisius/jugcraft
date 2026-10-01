@@ -23,6 +23,7 @@ import io.github.jimbozoomer.jugcraft.logistics.ItemSorterBlockEntity;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.logistics.PneumaticExtractorBlock;
 import io.github.jimbozoomer.jugcraft.machine.Footprint;
+import io.github.jimbozoomer.jugcraft.machine.GeneratorFuels;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
@@ -1035,6 +1036,15 @@ public class JugcraftGameTests {
 		helper.assertTrue(Math.abs(ratio - 1.5F) < 0.01F, "Overclocked speed ratio " + ratio);
 		helper.assertTrue(((MiningDrillItem) fast.getItem()).energyPerBlock(fast) == 2 * JugcraftTools.DRILL_ENERGY_PER_BLOCK,
 				"Overclocked JE per block " + ((MiningDrillItem) fast.getItem()).energyPerBlock(fast));
+		helper.succeed();
+	}
+
+	/** Charcoal burns three quarters as long as coal in generators (tree farm wood power, slightly weakened). */
+	@GameTest
+	public void charcoalBurnsShorterThanCoal(GameTestHelper helper) {
+		int coal = GeneratorFuels.burnTicks(new ItemStack(Items.COAL));
+		int charcoal = GeneratorFuels.burnTicks(new ItemStack(Items.CHARCOAL));
+		helper.assertTrue(coal == 1600 && charcoal == 1200, "Coal burns " + coal + " ticks and charcoal " + charcoal);
 		helper.succeed();
 	}
 
