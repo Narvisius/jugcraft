@@ -20,6 +20,8 @@ ALUMINUM = [(132, 138, 146), (190, 196, 202), (236, 238, 242)]
 HAZARD = [(222, 176, 34), (24, 24, 24)]
 # The high-tech (electronics) tier: near-black casings, cyan glass and screens, violet conduits.
 DARK = [(14, 16, 20), (22, 25, 31), (32, 36, 44), (44, 49, 59), (62, 68, 80), (92, 100, 116)]
+# The flow battery's vanadium electrolyte, seen through its sight glasses.
+VANADIUM = [(22, 30, 92), (36, 54, 150), (64, 96, 214), (140, 170, 250), (214, 226, 255)]
 VIOLET = [(58, 24, 96), (98, 44, 160), (146, 82, 222), (196, 150, 250), (236, 218, 255)]
 GLASS = [(8, 34, 42), (12, 52, 62), (20, 80, 92), (60, 150, 164), (170, 236, 244)]
 SILICON = [(70, 78, 92), (104, 114, 130), (140, 150, 166), (190, 198, 212), (232, 236, 244)]
@@ -573,6 +575,7 @@ def draw_all():
     save(glass(False), "el_glass")
     save(glass(True), "el_glass_on")
     save(glow(VIOLET), "el_glow_violet")
+    save(glow(VANADIUM), "el_glow_blue")
     save(conduit(743), "el_conduit")
     save(boule(744), "el_boule")
     save(cyan_screen(False), "el_screen_cyan")

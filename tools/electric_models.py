@@ -246,7 +246,44 @@ def advanced_engine():
     return m
 
 
+def flow_battery():
+    """Three wide, three tall, two deep: a vanadium redox flow battery. Two tall electrolyte tanks on the left and
+    right, each with a glowing blue sight glass up its front, feed the cell stack between them through pipes over the
+    top; the stack is a column of graphite cell plates with a power socket on each of its three front blocks (the
+    battery gives power out of its front), under a header with a status screen and lamps. Vented sides with ports
+    where cables meet them."""
+    blue = "el_glow_blue"
+    m = [box((-32, 0, 0), (16, 1.5, 32), FRAME)]
+    # The two electrolyte tanks (the left one the anolyte, the right one the catholyte), round, on squat feet.
+    for cx in (-24, 8):
+        m += cyl("y", cx, 16, 7.5, 3, 42, "tk_body", "tk_top")
+        m.append(box((cx - 8, 1.5, 8), (cx + 8, 3, 24), FRAME))
+        m.append(box((cx - 1, 6, 8.1), (cx + 1, 40, 8.5), {"*": FRAME, "north": blue + "!"}))
+        m.append(box((cx - 7.5, 42, 9), (cx + 7.5, 43.5, 23), {"*": FRAME, "up": SEAMS}))
+    # The cell stack between the tanks: plates across its depth, with a socket in front of each block.
+    m.append(box((-15, 1.5, 3), (-1, 38, 29), SEAMS))
+    for y in range(4, 36, 4):
+        m.append(box((-15.5, y, 2.5), (-0.5, y + 1, 29.5), FRAME))
+    for y0 in (2, 18, 30):
+        m.append(box((-12, y0 + 3, 2), (-4, y0 + 9, 2.5), {"*": FRAME, "north": CASING}))
+        m.append(box((-10, y0 + 4, 1.5), (-6, y0 + 8, 2), {"*": FRAME, "north": PORT + "!"}))
+    # Header with a status screen, two lamps and a hazard edge.
+    m.append(box((-16, 38, 2), (0, 46, 30), {"*": FRAME, "up": SEAMS}))
+    m.append(box((-14, 39.5, 1.5), (-2, 45, 2), {"*": FRAME, "north": SCREEN + "!"}))
+    for x in (-15, -1):
+        m.append(dial("north", (x, 44.5, 1.5), 0.6, texture=LAMP, body=FRAME))
+    m.append(box((-15.5, 37.5, 1.75), (-0.5, 38, 2.5), {"*": FRAME, "north": HAZARD}))
+    # Pipes from each tank top into the header.
+    for x0, x1 in ((-20, -16), (0, 4)):
+        m.append(box((x0, 40, 13), (x1, 43, 19), {"*": FRAME, "up": GLOW + "!"}))
+    # Ports where cables meet the sides.
+    m.append(box((-32, 14, 12), (-31.25, 20, 20), {"*": FRAME, "west": PORT + "!"}))
+    m.append(box((15.25, 14, 12), (16, 20, 20), {"*": FRAME, "east": PORT + "!"}))
+    m.append(box((-12, 14, 29.25), (-4, 20, 30), {"*": FRAME, "south": PORT + "!"}))
+    return m
+
+
 MODELS = {"battery_box": battery_box(), "capacitor_bank": capacitor_bank(), "solar_panel": solar_panel(),
           "electric_pump": electric_pump(), "fuel_cell": fuel_cell(),
           "lithium_battery_bank": lithium_battery_bank(), "advanced_solar_panel": advanced_solar_panel(),
-          "advanced_engine": advanced_engine()}
+          "advanced_engine": advanced_engine(), "flow_battery": flow_battery()}

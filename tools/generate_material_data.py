@@ -621,7 +621,7 @@ def petro_assets(lang):
 # Tanks that keep their fluid when broken (batch 10): the drop copies the block entity's jugcraft:stored_fluid. The
 # multi-block ones drop only from their master block (part 0), which holds the block entity; breaking any other part
 # breaks the master too (machine/LargeMachineBlock).
-TANKS = {"fluid_tank": False, "steel_tank": True, "gas_holder": True}
+TANKS = {"fluid_tank": False, "steel_tank": True, "gas_holder": True, "flow_battery": True}
 
 
 def tank_drop(block):

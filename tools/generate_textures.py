@@ -1242,6 +1242,7 @@ def machines():
     save(window(953, [(30, 26, 26), (44, 36, 34)]), "block", "steel_foundry_front")
     save(battery_front(954), "block", "capacitor_bank_front")
     save(battery_front(978), "block", "lithium_battery_bank_front")
+    save(battery_front(985), "block", "flow_battery_front")
     save(window(979, [(40, 46, 50), (52, 60, 64)]), "block", "crystal_grower_front")
     save(window(979, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "crystal_grower_front_on")
     save(window(980, [(40, 46, 50), (52, 60, 64)]), "block", "lithography_station_front")

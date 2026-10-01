@@ -101,7 +101,10 @@ public enum MachineKind implements StringRepresentable {
 	ADVANCED_ENGINE("advanced_engine", 0, 0, 0, 0, 0),
 	// Farming (batch 9): a two-block gantry that harvests and replants ripe crops in the 9x9 field in front of it.
 	// No inputs; three result slots.
-	CROP_HARVESTER("crop_harvester", 20_000, 256, 0, 24, 3);
+	CROP_HARVESTER("crop_harvester", 20_000, 256, 0, 24, 3),
+	// Chemistry (batch 17, the electric look): a 3x3x2 vanadium redox flow battery. Its charge is capped by the
+	// electrolyte in its tanks (FLOW_BATTERY_JE_PER_MB a millibucket); it gives power out of its front.
+	FLOW_BATTERY("flow_battery", 64_000_000, 8_192, 8_192, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -135,6 +138,10 @@ public enum MachineKind implements StringRepresentable {
 	public static final int STEEL_TANK_CAPACITY = 128_000;
 	/** Gas holder: 1,024 buckets (mB) of one gas, and only gases. */
 	public static final int GAS_HOLDER_CAPACITY = 1_024_000;
+	/** Flow battery electrolyte tanks (mB): 64 buckets, filling them gives the full 64,000,000 JE. */
+	public static final int FLOW_BATTERY_TANK = 64_000;
+	/** JE the flow battery can hold for each millibucket of vanadium electrolyte in it. */
+	public static final long FLOW_BATTERY_JE_PER_MB = 1_000;
 	/** Ore washer water tank (mB). */
 	public static final int WASHER_TANK = 8_000;
 	/** Water (mB) the ore washer uses per operation, taken when the operation finishes. */
@@ -284,7 +291,7 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Stores energy and gives it out of its front face only. */
 	public boolean isBattery() {
-		return this == BATTERY_BOX || this == CAPACITOR_BANK || this == LITHIUM_BATTERY_BANK;
+		return this == BATTERY_BOX || this == CAPACITOR_BANK || this == LITHIUM_BATTERY_BANK || this == FLOW_BATTERY;
 	}
 
 	/** Whether the machine runs on JE at all. Unpowered machines have no battery and cables never connect to them. */
@@ -507,6 +514,8 @@ public enum MachineKind implements StringRepresentable {
 			case LITHOGRAPHY_STATION -> Footprint.cuboid(3, 2, 2);
 			// A sphere on legs, three blocks every way.
 			case GAS_HOLDER -> Footprint.cuboid(3, 3, 3);
+			// Two electrolyte tanks either side of the cell stack, three wide, three tall and two deep.
+			case FLOW_BATTERY -> Footprint.cuboid(3, 3, 2);
 			// The pedestal (the master) and the 3x3 array of cells on the layer above it, centred over it.
 			case ADVANCED_SOLAR_PANEL -> Footprint.of(Vec3i.ZERO, new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0), new Vec3i(1, 1, 0),
 					new Vec3i(0, 1, -1), new Vec3i(0, 1, 1), new Vec3i(-1, 1, -1), new Vec3i(1, 1, -1), new Vec3i(-1, 1, 1),
@@ -528,7 +537,7 @@ public enum MachineKind implements StringRepresentable {
 	 * (with the fluid on it): breaking any other block of one breaks the master too (see LargeMachineBlock).
 	 */
 	public boolean keepsContents() {
-		return this == STEEL_TANK || this == GAS_HOLDER;
+		return this == STEEL_TANK || this == GAS_HOLDER || this == FLOW_BATTERY;
 	}
 
 	/** Boilers: a fuel slot, a water-bucket slot and an empty-bucket slot, and a water tank. */

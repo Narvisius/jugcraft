@@ -78,6 +78,8 @@ MACHINES = {
     "fuel_cell": {"display": "Fuel Cell", "lit": True},
     # Storage (batch 6): a 3x2 lithium battery bank in the electric look.
     "lithium_battery_bank": {"display": "Lithium Battery Bank", "lit": False},
+    # Chemistry (batch 17): a 3x3x2 vanadium redox flow battery in the electric look.
+    "flow_battery": {"display": "Flow Battery", "lit": False},
     # Electronics (batch 7, the cyan look).
     "crystal_grower": {"display": "Crystal Grower", "lit": True},
     "lithography_station": {"display": "Lithography Station", "lit": True},
@@ -294,6 +296,9 @@ STATS = {
     "fuel_cell": {"capacity": 40_000, "output_per_tick": 512, "generation_per_tick": 128, "tank": 8_000},
     # 3x2, one deep. Outputs from its front (all six blocks), charges from any other face.
     "lithium_battery_bank": {"capacity": 32_000_000, "io_per_tick": 16_384},
+    # 3x3x2. Holds 1,000 JE per mB of vanadium electrolyte in its 64,000 mB tank, so 64,000,000 JE when full.
+    # Outputs from its front, charges from any other face.
+    "flow_battery": {"capacity": 64_000_000, "io_per_tick": 8_192, "tank": 64_000, "je_per_mb": 1_000},
     # 2 tall. 4 silicon + 1 phosphate (the dopant) -> a silicon boule.
     "crystal_grower": {"capacity": 60_000, "input_per_tick": 512, "use_per_tick": 128, "boost": "argon",
                        "boost_per_tick": 1, "boost_tank": 8_000},
@@ -550,6 +555,10 @@ CRAFTING = {
                                              "W": "#c:wires/copper"}, 2),
     "lithium_battery_bank": (["TCT", "CBC", "TCT"], {"T": "#c:ingots/titanium", "C": "jugcraft:lithium_cell",
                                                      "B": "jugcraft:capacitor_bank"}, 1),
+    # Two electrolyte tanks of borosilicate glass and steel either side of a cell stack (batch 17).
+    "flow_battery": (["GXG", "TBT", "GPG"], {"G": "jugcraft:borosilicate_glass", "X": "jugcraft:processor",
+                                             "T": "jugcraft:steel_tank", "B": "jugcraft:capacitor_bank",
+                                             "P": "#c:plates/steel"}, 1),
     "diesel_engine": (["PXP", "GCG", "PXP"], {"P": "#c:plates/steel", "X": "jugcraft:plastic_sheet",
                                               "G": "#c:gears/steel", "C": "jugcraft:machine_casing"}, 1),
     "polymerization_reactor": (["PCP", "TGT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:cracking_catalyst",

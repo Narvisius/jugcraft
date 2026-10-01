@@ -175,6 +175,11 @@ ABOUT = {
     "lithium_battery_bank": "Three wide, two tall, one deep: six lithium battery modules holding 32,000,000 JE, eight "
                             "capacitor banks. It charges from any side and gives power out of the sockets on its "
                             "front, 16,384 JE/t.",
+    "flow_battery": "Three wide, three tall, two deep: a vanadium redox flow battery. It holds 1,000 JE for every mB "
+                    "of vanadium electrolyte in its tank, so 64,000,000 JE with all 64 buckets in. Fill it by pipe or "
+                    "bucket; the electrolyte stays in it (also when broken). It charges from any side and gives power "
+                    "out of its front, 8,192 JE/t. Make the electrolyte in the chemical reactor from two asphalt "
+                    "binder and a bucket of sulfuric acid.",
     "advanced_solar_panel": "A white pedestal carrying a 3x3 array of solar cells on the layer above it: 64 JE/t in full "
                             "sun (eight solar panels), half in rain, none at night. The cells need open sky. Cables meet "
                             "the pedestal's foot.",
@@ -485,6 +490,7 @@ def build():
                 "The alloy smelter melts a rare earth oxide with an iron ingot into a neodymium magnet, for the "
                 "magnet dynamo and magnet motor."]},
             machine_page("lithium_battery_bank"),
+            machine_page("flow_battery"),
             {"title": "Fertilizer", "icon": f"{MOD}:fertilizer", "text": [
                 "Two phosphate and 250 mB of sulfuric acid in the chemical reactor make four fertilizer.",
                 "Use one on the ground or a crop: every crop in the 5x5 area around it (a block up or down too) gets "

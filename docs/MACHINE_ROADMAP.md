@@ -78,7 +78,7 @@ Ideas Claude suggested after batch 10 (advanced power and tanks). The owner aske
 | **Glass chemistry** ✅ batch 16 (tincal, borax, borosilicate glass, optical fibre, ferroboron; glass tanks with the tank gauges) | Borosilicate glass from borax → lab glassware and glass tanks; optical fibre for a data network | New mineral (borax) | Fits the owner's earlier glass stasis-tank reference |
 | **Pharmaceuticals** | A chemistry bench making status potions industrially (antidote, haste, night-vision tonic) | Chemistry outputs, magic bridge | Needs hazard and balance limits |
 | **Waste and pollution loop** | Acid waste and slag must be neutralized (lime, flowback treatment) | Flowback treatment unit | Gives a chemical plant a clean-up cost rather than free disposal |
-| **Flow batteries** | Two big tanks of vanadium electrolyte as grid storage | Tanks that keep their fluid (batch 10), vanadium | Ties fluid storage directly into the power grid |
+| **Flow batteries** ✅ batch 17 (vanadium electrolyte from asphalt binder; 64,000,000 JE) | Two big tanks of vanadium electrolyte as grid storage | Tanks that keep their fluid (batch 10), vanadium | Ties fluid storage directly into the power grid |
 
 ### Power, tanks and engines
 | Idea | What it adds | Notes |

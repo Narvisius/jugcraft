@@ -476,6 +476,44 @@ public class PetroGameTests {
 		});
 	}
 
+	/**
+	 * Flow battery (batch 17): it holds 1,000 JE for each mB of vanadium electrolyte in it, takes nothing else into its
+	 * tank and lets none out; the chemical reactor makes the electrolyte from asphalt binder and sulfuric acid.
+	 */
+	@GameTest(maxTicks = 300)
+	public void flowBatteryHoldsWhatItsElectrolyteAllows(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 1);
+		MachineBlockEntity battery = placeUnpowered(helper, MachineKind.FLOW_BATTERY, master);
+		EnergyStorage energy = battery.energyFor(null);
+		helper.assertTrue(energy.getCapacity() == 0, "An empty flow battery holds " + energy.getCapacity());
+		Storage<FluidVariant> tank = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long water = tank.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction);
+			long electrolyte = tank.insert(FluidVariant.of(PetroFluids.VANADIUM_ELECTROLYTE.source()), FluidConstants.BUCKET,
+					transaction);
+			helper.assertTrue(water == 0, "The flow battery took " + water / 81 + " mB of water");
+			helper.assertTrue(electrolyte == FluidConstants.BUCKET, "The flow battery took " + electrolyte / 81 + " mB");
+			transaction.commit();
+		}
+		helper.assertTrue(energy.getCapacity() == 1_000 * MachineKind.FLOW_BATTERY_JE_PER_MB,
+				"A bucket of electrolyte gave " + energy.getCapacity() + " JE of room");
+		try (Transaction transaction = Transaction.openOuter()) {
+			long taken = tank.extract(FluidVariant.of(PetroFluids.VANADIUM_ELECTROLYTE.source()), FluidConstants.BUCKET,
+					transaction);
+			helper.assertTrue(taken == 0, "The electrolyte could be pumped out: " + taken / 81 + " mB");
+		}
+		((SimpleEnergyStorage) energy).setAmount(Long.MAX_VALUE);
+		helper.assertTrue(energy.getAmount() == 1_000_000, "The battery was charged to " + energy.getAmount());
+		helper.assertTrue(battery.reservoir().amount == FluidConstants.BUCKET, "The electrolyte is gone");
+
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 4));
+		reactor.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 1_000);
+		reactor.setItem(0, new ItemStack(PetroItems.ASPHALT_BINDER, 2));
+		helper.succeedWhen(() -> helper.assertTrue(
+				reactor.tanks().output(0).has(PetroFluids.VANADIUM_ELECTROLYTE.source(), 1_000),
+				"Electrolyte: " + reactor.tanks().output(0).millibuckets()));
+	}
+
 	/** All three asphalt blocks speed up walking, and need a pickaxe. */
 	@GameTest
 	public void asphaltIsFasterToWalkOn(GameTestHelper helper) {

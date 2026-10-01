@@ -117,56 +117,63 @@
         },
         {
           "title": "Milestones (8)",
-          "icon": "jugcraft:asphalt",
+          "icon": "jugcraft:flow_battery",
           "text": [
+            "Going with the Flow: Build a flow battery.",
             "Hit the Road: Lay asphalt, and walk faster on it.",
             "Split Decision: Build an electrolytic cell.",
             "Oil of Vitriol: Make sulfuric acid.",
-            "Green Revolution: Make fertilizer.",
-            "The Bayer Way: Digest bauxite into alumina."
+            "Green Revolution: Make fertilizer."
           ]
         },
         {
           "title": "Milestones (9)",
-          "icon": "jugcraft:fuel_cell",
+          "icon": "jugcraft:alumina",
           "text": [
+            "The Bayer Way: Digest bauxite into alumina.",
             "Clean Burn: Build a hydrogen fuel cell.",
             "Thin Air: Build an air separation unit.",
             "Bread from Air: Build a synthesis converter, to make ammonia from air.",
-            "Aqua Fortis: Make nitric acid.",
-            "Kroll Call: Chlorinate titanium and melt the sponge."
+            "Aqua Fortis: Make nitric acid."
           ]
         },
         {
           "title": "Milestones (10)",
-          "icon": "jugcraft:lithium_battery_bank",
+          "icon": "jugcraft:titanium_ingot",
           "text": [
+            "Kroll Call: Chlorinate titanium and melt the sponge.",
             "Power Wall: Build a lithium battery bank.",
             "Strong Attraction: Make a neodymium magnet.",
             "Lossless (Almost): Build a magnet dynamo or magnet motor.",
-            "Pulling Strings: Grow a silicon boule in the crystal grower.",
-            "Etched in Light: Etch microchips in the lithography station."
+            "Pulling Strings: Grow a silicon boule in the crystal grower."
           ]
         },
         {
           "title": "Milestones (11)",
-          "icon": "jugcraft:processor",
+          "icon": "jugcraft:microchip",
           "text": [
+            "Etched in Light: Etch microchips in the lithography station.",
             "Central Processing: Assemble a processor.",
             "Hello, World: Build a network terminal.",
             "Under Pressure: Build a gas holder.",
-            "Shut-Off Valve: Make a fluid valve.",
-            "Strained Relations: Make a fluid filter."
+            "Shut-Off Valve: Make a fluid valve."
           ]
         },
         {
           "title": "Milestones (12)",
-          "icon": "jugcraft:advanced_solar_panel",
+          "icon": "jugcraft:fluid_filter",
           "text": [
+            "Strained Relations: Make a fluid filter.",
             "Here Comes the Sun: Build an advanced solar panel.",
             "Four on the Floor: Build an advanced combustion engine.",
             "King Cotton: Grow cotton.",
-            "Make It Rain: Build a sprinkler.",
+            "Make It Rain: Build a sprinkler."
+          ]
+        },
+        {
+          "title": "Milestones (13)",
+          "icon": "jugcraft:crop_harvester",
+          "text": [
             "Reaping What You Sow: Build a crop harvester."
           ]
         }
@@ -2708,6 +2715,29 @@
               "jugcraft:titanium_ingot"
             ],
             "result": "jugcraft:lithium_battery_bank",
+            "count": 1
+          }
+        },
+        {
+          "title": "Flow Battery",
+          "icon": "jugcraft:flow_battery",
+          "text": [
+            "Three wide, three tall, two deep: a vanadium redox flow battery. It holds 1,000 JE for every mB of vanadium electrolyte in its tank, so 64,000,000 JE with all 64 buckets in. Fill it by pipe or bucket; the electrolyte stays in it (also when broken). It charges from any side and gives power out of its front, 8,192 JE/t. Make the electrolyte in the chemical reactor from two asphalt binder and a bucket of sulfuric acid.",
+            "Holds 64,000,000 JE; 8192 JE/t in and out."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:borosilicate_glass",
+              "jugcraft:processor",
+              "jugcraft:borosilicate_glass",
+              "jugcraft:steel_tank",
+              "jugcraft:capacitor_bank",
+              "jugcraft:steel_tank",
+              "jugcraft:borosilicate_glass",
+              "jugcraft:steel_plate",
+              "jugcraft:borosilicate_glass"
+            ],
+            "result": "jugcraft:flow_battery",
             "count": 1
           }
         },

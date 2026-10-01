@@ -65,6 +65,8 @@ FOOTPRINTS = {
     "synthesis_converter": cuboid(3, 4, 2),
     # Storage: a lithium battery bank three wide, two tall and one deep.
     "lithium_battery_bank": cuboid(3, 2, 1),
+    # Chemistry: the flow battery, three wide, three tall and two deep.
+    "flow_battery": cuboid(3, 3, 2),
     # Electronics: a two-block crystal grower.
     "crystal_grower": [(0, 0, 0), (0, 1, 0)],
     "lithography_station": cuboid(3, 2, 2),
@@ -346,6 +348,11 @@ MODELS["lithium_battery_bank"] = [
     ((-30, 8, 0.5), (14, 9, 1), "power_port_frame"),
 ]
 
+MODELS["flow_battery"] = [
+    ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((-31, 2, 1), (15, 46, 31), {"*": STEEL, "north": "#front", "up": TOP}),
+]
+
 MODELS["crystal_grower"] = [
     ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
     ((1, 2, 1), (15, 14, 15), {"*": STEEL, "north": "#front", "up": TOP}),
@@ -414,6 +421,7 @@ FRONTS = {
     "air_separation_unit": "air_separation_unit_front",
     "synthesis_converter": "synthesis_converter_front",
     "lithium_battery_bank": "lithium_battery_bank_front",
+    "flow_battery": "flow_battery_front",
     "crystal_grower": "crystal_grower_front",
     "lithography_station": "lithography_station_front",
     "gas_holder": "gas_holder_front",

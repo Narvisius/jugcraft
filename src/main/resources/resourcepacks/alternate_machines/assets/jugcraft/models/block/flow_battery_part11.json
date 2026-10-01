@@ -1,0 +1,32 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/flow_battery_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machine_side"
+        },
+        "west": {
+          "texture": "#machine_side"
+        }
+      }
+    }
+  ]
+}

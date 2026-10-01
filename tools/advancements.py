@@ -45,6 +45,8 @@ TREE = {
     "pvc": ("plastic", "pvc_resin", "Vinyl Revival", "Make PVC resin from chlorine", "task"),
     "soap": ("electrolytic_cell", "soap", "Squeaky Clean", "Boil soap from lye", "task"),
     "optical_fibre": ("processor", "optical_fibre", "Light Speed", "Draw borosilicate glass into optical fibre", "task"),
+    # Flow batteries (batch 17).
+    "flow_battery": ("lithium_battery_bank", "flow_battery", "Going with the Flow", "Build a flow battery", "goal"),
     "asphalt": ("distillation_tower", "asphalt", "Hit the Road", "Lay asphalt, and walk faster on it", "task"),
     # Industrial chemistry (batch 5).
     "electrolytic_cell": ("steel", "electrolytic_cell", "Split Decision", "Build an electrolytic cell", "goal"),

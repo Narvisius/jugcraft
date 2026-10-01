@@ -191,10 +191,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		// Producers only give energy out; consumers only take it in; the battery box does both.
 		long insert = kind.isGenerator() ? 0 : kind.maxInput;
 		long extract = kind.isProcessor() ? 0 : kind.maxOutput;
-		this.energy = new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
+		this.energy = kind == MachineKind.FLOW_BATTERY
+				? new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged, this::electrolyteCeiling)
+				: new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
 		this.reservoir = switch (kind) {
 			case STEEL_TANK -> SingleFluidStorage.withFixedCapacity(MachineKind.STEEL_TANK_CAPACITY * FluidNetworks.DROPLETS_PER_MB, this::setChanged);
 			case GAS_HOLDER -> gasReservoir(MachineKind.GAS_HOLDER_CAPACITY * FluidNetworks.DROPLETS_PER_MB);
+			case FLOW_BATTERY -> electrolyteReservoir(MachineKind.FLOW_BATTERY_TANK * FluidNetworks.DROPLETS_PER_MB);
 			default -> null;
 		};
 		this.inlet = switch (kind) {
@@ -274,6 +277,39 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				setChanged();
 			}
 		};
+	}
+
+	/**
+	 * The flow battery's electrolyte tanks: vanadium electrolyte only, and it cannot be pumped back out (it stays in the
+	 * battery, and goes with it when broken).
+	 */
+	private SingleFluidStorage electrolyteReservoir(long capacity) {
+		return new SingleFluidStorage() {
+			@Override
+			protected long getCapacity(FluidVariant variant) {
+				return capacity;
+			}
+
+			@Override
+			protected boolean canInsert(FluidVariant variant) {
+				return variant.isOf(PetroFluids.VANADIUM_ELECTROLYTE.source());
+			}
+
+			@Override
+			protected boolean canExtract(FluidVariant variant) {
+				return false;
+			}
+
+			@Override
+			protected void onFinalCommit() {
+				setChanged();
+			}
+		};
+	}
+
+	/** The flow battery holds {@link MachineKind#FLOW_BATTERY_JE_PER_MB} JE for each millibucket of electrolyte. */
+	private long electrolyteCeiling() {
+		return reservoir == null ? 0 : reservoir.amount / FluidNetworks.DROPLETS_PER_MB * MachineKind.FLOW_BATTERY_JE_PER_MB;
 	}
 
 	/** A steel tank or gas holder drops with its fluid (see {@link StoredFluid}) and gets it back when placed again. */
@@ -402,7 +438,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case ADVANCED_SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
 			case LARGE_STEAM_ENGINE -> tickLargeEngine(level, pos, state);
-			case BATTERY_BOX, CAPACITOR_BANK, LITHIUM_BATTERY_BANK -> tickBattery(level, pos, state);
+			case BATTERY_BOX, CAPACITOR_BANK, LITHIUM_BATTERY_BANK, FLOW_BATTERY -> tickBattery(level, pos, state);
 			case STEEL_TANK, GAS_HOLDER -> false;
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
 			case WIND_TURBINE -> tickWind(level, pos, state);
@@ -1717,7 +1753,6 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		super.loadAdditional(input);
 		items = NonNullList.withSize(kind.containerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, items);
-		energy.setAmount(input.getLong("energy").orElse(0L));
 		progress = input.getInt("progress").orElse(0);
 		maxProgress = input.getInt("max_progress").orElse(0);
 		burn = input.getInt("burn").orElse(0);
@@ -1728,6 +1763,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (reservoir != null) {
 			reservoir.readValue(input);
 		}
+		// After the reservoir: the flow battery's charge is capped by its electrolyte.
+		energy.setAmount(input.getLong("energy").orElse(0L));
 		if (tanks != null) {
 			tanks.load(input);
 		}

@@ -128,6 +128,8 @@ public final class PetroFluids {
 	public static Gas VINYL_CHLORIDE;
 	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
 	public static Entry NITRIC_ACID;
+	/** Vanadium leached into sulfuric acid (batch 17): the flow battery's electrolyte. */
+	public static Entry VANADIUM_ELECTROLYTE;
 
 	private PetroFluids() {
 	}
@@ -178,6 +180,7 @@ public final class PetroFluids {
 		BUTADIENE = gas("butadiene", 0xFFC8D0AA);
 		VINYL_CHLORIDE = gas("vinyl_chloride", 0xFFD6DEB6);
 		NITRIC_ACID = fluid("nitric_acid", 5, 4, 1, 0xFFE2D48C, MapColor.COLOR_YELLOW);
+		VANADIUM_ELECTROLYTE = fluid("vanadium_electrolyte", 6, 4, 1, 0xFF2C3E96, MapColor.COLOR_BLUE);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {
