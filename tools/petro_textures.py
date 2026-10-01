@@ -401,7 +401,75 @@ def soap():
     return img
 
 
+def guncotton():
+    """Guncotton: a fluffy tuft of nitrated cotton, off-white with a faint straw tint and soft grey shadows."""
+    rng = random.Random(964)
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for cx, cy, r in ((6, 8, 4), (10, 7, 3.5), (8, 11, 3.5), (5, 11, 2.5), (11, 10, 2.5)):
+        for y in range(16):
+            for x in range(16):
+                d = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+                if d <= r and rng.random() > 0.08:
+                    c = (226, 220, 196) if d > r - 1 else rng.choice([(246, 242, 222), (236, 230, 206), (250, 248, 234)])
+                    if y > cy + r / 3:
+                        c = tuple(v - 22 for v in c)
+                    img.putpixel((x, y), c + (255,))
+    return img
+
+
+def grenade():
+    """Grenade: an olive-drab steel body with a ribbed waist, a steel fuse head, a spoon down its side and a ring pin."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    olive = [(46, 54, 30), (70, 82, 44), (96, 110, 62), (128, 142, 86)]
+    for y in range(6, 15):
+        for x in range(4, 12):
+            d = ((x - 7.5) / 4) ** 2 + ((y - 10) / 4.5) ** 2
+            if d > 1:
+                continue
+            c = olive[3] if d < 0.25 and x < 7 and y < 10 else olive[2] if x < 8 else olive[1]
+            if y in (9, 11) or x in (4, 11):
+                c = olive[0]
+            img.putpixel((x, y), c + (255,))
+    for y in range(3, 6):  # Fuse head.
+        for x in range(6, 10):
+            img.putpixel((x, y), ((176, 180, 186) if x < 8 else (128, 132, 140)) + (255,))
+    for y in range(4, 12):  # The spoon down the right side.
+        img.putpixel((11 if y > 5 else 10, y), (150, 154, 160, 255))
+    for x, y in ((3, 2), (4, 1), (5, 1), (3, 3), (4, 4), (5, 4), (6, 3)):  # Ring pin.
+        img.putpixel((x, y), (200, 204, 210, 255))
+    return img
+
+
+def grenade_launcher():
+    """Grenade launcher, held like a tool: a stubby wide steel barrel, a drum, a rubber grip and a stock."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    steel = [(44, 46, 52), (78, 82, 90), (120, 126, 136), (170, 176, 186)]
+    for i in range(7):  # The barrel, diagonally up to the top right.
+        x, y = 8 + i, 7 - i
+        for dx, dy, c in ((0, 0, steel[3]), (-1, 0, steel[2]), (0, 1, steel[2]), (-1, 1, steel[1]), (1, 1, steel[1]),
+                          (0, 2, steel[0])):
+            if 0 <= x + dx < 16 and 0 <= y + dy < 16:
+                img.putpixel((x + dx, y + dy), c + (255,))
+    img.putpixel((14, 1), (20, 20, 22, 255))
+    for y in range(7, 12):  # The drum.
+        for x in range(5, 10):
+            if (x, y) in ((5, 7), (9, 7), (5, 11), (9, 11)):
+                continue
+            img.putpixel((x, y), (steel[2] if y < 9 else steel[1]) + (255,))
+    for x, y in ((7, 8), (6, 10), (8, 10)):
+        img.putpixel((x, y), steel[0] + (255,))
+    for i in range(4):  # Rubber grip and stock down to the bottom left.
+        for dx in (0, 1):
+            img.putpixel((4 - i + dx, 11 + i), (30, 30, 32) + (255,) if dx else (52, 52, 56, 255))
+    for x, y in ((0, 14), (1, 14), (0, 15), (1, 15), (2, 15)):
+        img.putpixel((x, y), steel[1] + (255,))
+    return img
+
+
 def draw_all(save, save_animation):
+    save(guncotton(), "item", "guncotton")
+    save(grenade(), "item", "grenade")
+    save(grenade_launcher(), "item", "grenade_launcher")
     save(microchip(), "item", "microchip")
     save(silicon_boule(), "item", "silicon_boule")
     save(silicon_wafer(), "item", "silicon_wafer")

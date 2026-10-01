@@ -472,6 +472,13 @@ def build():
                 "Nitric acid etches microchips with half as much acid as sulfuric."]},
             machine_page("air_separation_unit"),
             machine_page("synthesis_converter"),
+            {"title": "Grenades", "icon": f"{MOD}:grenade", "text": [
+                "Two cotton in 250 mB of nitric acid in the chemical reactor make two guncotton.",
+                "Two steel plates, a guncotton and an iron nugget make four grenades. Throw one with right-click; it "
+                "goes off where it hits.",
+                "The blast hurts living things within 4 blocks, up to eight hearts at the centre, and walls shield "
+                "from it. It never breaks a block.",
+                "The grenade launcher fires grenades from your inventory much further."]},
             {"title": "Aluminum, the Real Way", "icon": f"{MOD}:alumina", "text": [
                 "Digest a bauxite in 250 mB of lye in the chemical reactor: two alumina.",
                 "Smelt two alumina with a coal coke anode in the electrolytic cell: two aluminum ingots, every 8 "

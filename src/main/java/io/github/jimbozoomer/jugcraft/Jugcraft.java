@@ -19,6 +19,7 @@ import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.prospecting.JugcraftProspecting;
 import io.github.jimbozoomer.jugcraft.storage.JugcraftStorage;
 import io.github.jimbozoomer.jugcraft.tools.JugcraftTools;
+import io.github.jimbozoomer.jugcraft.weapons.JugcraftWeapons;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
@@ -48,6 +49,7 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftFluids.register();
 		PetroFluids.register();
 		PetroItems.register();
+		JugcraftWeapons.register();
 		PetroBlocks.register();
 		JugcraftLogistics.register();
 		JugcraftStorage.register();

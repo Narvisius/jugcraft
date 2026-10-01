@@ -588,9 +588,12 @@ def petro_assets(lang):
         write(ASSETS / "items" / f"{bucket}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{bucket}")}})
     for item, display in petro.ITEMS.items():
         lang[f"item.{MOD}.{item}"] = display
+        parent = "minecraft:item/handheld" if item == "grenade_launcher" else "minecraft:item/generated"
         write(ASSETS / "models" / "item" / f"{item}.json",
-              {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
+              {"parent": parent, "textures": {"layer0": rid(f"item/{item}")}})
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    lang["message.jugcraft.grenade_launcher.empty"] = "No grenades to fire"
+    lang["entity.jugcraft.grenade"] = "Grenade"
     for block, info in petro.BLOCKS.items():
         lang[f"block.{MOD}.{block}"] = info["display"]
         models = ASSETS / "models" / "block"
@@ -763,6 +766,19 @@ def recipes():
             ("asphalt_road_line", shapeless(MACHINE_FEATURE, [rid("asphalt")] * 4 + ["minecraft:yellow_dye"],
                                             "asphalt_road_line", 4, "building"))):
         recipe["fabric:load_conditions"] = oil
+        write(out / f"{name}.json", recipe)
+
+    # Explosive weapons (batch 18): grenades and the launcher, behind the explosives switch.
+    boom = [c for f in (MACHINE_FEATURE, "explosives") for c in condition(f)]
+    for name, recipe in (
+            ("grenade", shaped(MACHINE_FEATURE, [" N ", "PGP", " P "],
+                               {"N": "minecraft:iron_nugget", "P": "#c:plates/steel", "G": rid("guncotton")},
+                               "grenade", 4, "equipment")),
+            ("grenade_launcher", shaped(MACHINE_FEATURE, ["PPG", "RCS"],
+                                        {"P": "#c:plates/steel", "G": "#c:gears/steel", "R": rid("rubber"),
+                                         "C": rid("basic_circuit"), "S": "#c:ingots/steel"},
+                                        "grenade_launcher", 1, "equipment"))):
+        recipe["fabric:load_conditions"] = boom
         write(out / f"{name}.json", recipe)
 
     # Dusts smelt back into ingots wherever the metal's ore could be smelted; the others use the arc furnace.

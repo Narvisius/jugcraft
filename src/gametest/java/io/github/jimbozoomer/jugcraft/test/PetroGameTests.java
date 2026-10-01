@@ -23,6 +23,12 @@ import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import java.util.List;
+import io.github.jimbozoomer.jugcraft.weapons.Blast;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.Vec3;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -512,6 +518,42 @@ public class PetroGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(
 				reactor.tanks().output(0).has(PetroFluids.VANADIUM_ELECTROLYTE.source(), 1_000),
 				"Electrolyte: " + reactor.tanks().output(0).millibuckets()));
+	}
+
+	/**
+	 * Explosive weapons (batch 18): a grenade's blast hurts a zombie in the open, but not one behind a stone wall, and
+	 * breaks no block, armor stand or dropped item; cotton and nitric acid make guncotton.
+	 */
+	@GameTest(maxTicks = 300)
+	public void grenadeBlastHurtsButBreaksNothing(GameTestHelper helper) {
+		helper.setBlock(new BlockPos(5, 1, 3), Blocks.GLASS);
+		helper.setBlock(new BlockPos(3, 1, 3), Blocks.GRASS_BLOCK);
+		for (int y = 1; y <= 3; y++) {
+			for (int z = 2; z <= 6; z++) {
+				helper.setBlock(new BlockPos(6, y, z), Blocks.STONE);
+			}
+		}
+		Mob exposed = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 6));
+		Mob sheltered = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(7, 1, 4));
+		Entity stand = helper.spawn(EntityTypes.ARMOR_STAND, new BlockPos(2, 1, 4));
+		ItemEntity diamond = helper.spawnItem(Items.DIAMOND, 4.5F, 1.2F, 3.5F);
+		float full = exposed.getHealth();
+		int hurt = Blast.detonate(helper.getLevel(), helper.absoluteVec(new Vec3(4.5, 1.5, 4.5)), null, null);
+		helper.assertTrue(exposed.getHealth() < full, "The zombie in the open was not hurt: " + exposed.getHealth());
+		helper.assertTrue(sheltered.getHealth() == sheltered.getMaxHealth(), "The wall did not shield: " + sheltered.getHealth());
+		helper.assertTrue(hurt == 1, "The blast hurt " + hurt + " things");
+		helper.assertTrue(stand.isAlive() && diamond.isAlive(), "The blast broke the armor stand or the dropped item");
+		helper.assertBlockPresent(Blocks.GLASS, new BlockPos(5, 1, 3));
+		helper.assertBlockPresent(Blocks.GRASS_BLOCK, new BlockPos(3, 1, 3));
+		helper.assertBlockPresent(Blocks.STONE, new BlockPos(6, 1, 4));
+
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(2, 1, 1));
+		reactor.tanks().input(0).fill(PetroFluids.NITRIC_ACID.source(), 250);
+		reactor.setItem(0, new ItemStack(JugcraftFarming.COTTON, 2));
+		helper.succeedWhen(() -> {
+			ItemStack guncotton = reactor.getItem(reactor.kind().outputSlot());
+			helper.assertTrue(guncotton.is(PetroItems.GUNCOTTON) && guncotton.getCount() == 2, "Guncotton: " + guncotton);
+		});
 	}
 
 	/** All three asphalt blocks speed up walking, and need a pickaxe. */

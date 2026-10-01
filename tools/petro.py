@@ -115,6 +115,11 @@ ITEMS = {
     # Chlor-alkali (batch 15): PVC resin (pressed into plastic sheets) and soap (washes off status effects).
     "pvc_resin": "PVC Resin",
     "soap": "Soap",
+    # Explosive weapons (batch 18): cotton nitrated into guncotton, packed into grenades that hurt living things but
+    # never break blocks; the grenade launcher throws them further (weapons/).
+    "guncotton": "Guncotton",
+    "grenade": "Grenade",
+    "grenade_launcher": "Grenade Launcher",
 }
 
 
@@ -318,6 +323,9 @@ FLUID_RECIPES = {
          "results": [("jugcraft:lithium_carbonate", 2)], "ticks": 100, "features": ["lithium", "sulfur"]},
         {"name": "rare_earth_oxide", "items": [("jugcraft:monazite", 1)], "fluids": [("jugcraft:sulfuric_acid", 250)],
          "results": [("jugcraft:rare_earth_oxide", 2)], "ticks": 140, "features": ["rare_earths", "sulfur"]},
+        # Guncotton (batch 18): cotton nitrated in nitric acid (nitrocellulose), the grenade's charge.
+        {"name": "guncotton", "items": [("jugcraft:cotton", 2)], "fluids": [("jugcraft:nitric_acid", 250)],
+         "results": [("jugcraft:guncotton", 2)], "ticks": 100, "features": ["machines", "explosives"]},
         # Vanadium electrolyte (batch 17): the vanadium in heavy oil residue leached into sulfuric acid, for the flow
         # battery. As much electrolyte as acid goes in.
         {"name": "vanadium_electrolyte", "items": [("jugcraft:asphalt_binder", 2)],

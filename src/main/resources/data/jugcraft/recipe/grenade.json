@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "explosives"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " N ",
+    "PGP",
+    " P "
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "P": "#c:plates/steel",
+    "G": "jugcraft:guncotton"
+  },
+  "result": {
+    "id": "jugcraft:grenade",
+    "count": 4
+  }
+}
