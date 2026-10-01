@@ -145,6 +145,8 @@ def assets():
     blueprints.write_all()
     import drone_sounds
     lang.update(drone_sounds.LANG)
+    import guide_books
+    guide_books.write_assets(write, rid, ASSETS, DATA, lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 

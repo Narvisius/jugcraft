@@ -48,6 +48,11 @@ Primary specialty: logistics / building. Supports builders and anyone running a 
 | 8 | Uranium Citadel | 116 | 1 / 9 / 450 / 10 |
 | 9 | Graphene Spire | 133 | 347 / 22 / 7 / 98 |
 
+## Guide books
+- **Drone Tower Field Manual:** crafted from a book and a tier 1 drone. A written book that walks through a survival tower: picking the spot with the foundation blueprint, the plinth, the core, loading modules, tier 1, power at the Energy Exchange Port, building blocks at the Cargo Exchange Port, linking drones and growing the tower.
+- **Creative Quick Start:** given once to every player who joins a world in creative mode (a player tag remembers it). It covers the creative setup: plinth and core, where the modules go (right-click the core with them), tier 1, the Creative Energy Cell against the Energy Exchange Port, the Creative Supply Crate within 48 blocks of the terminal, drones and the next tiers.
+- Both are ordinary written books with translatable pages (`drone/GuideBooks.java`, text in `tools/guide_books.py`); both are in the Tools tab.
+
 ## Hangar pads and doors
 - Every hangar floor is one joined-up pad, the way the ground landing pads are: each Hangar Pad plate the tower lays shows its own piece (a hazard-striped rim, a cyan edge light, white corner brackets, touchdown markings and a glowing charger). There is one design per hangar size: a ringed charger for small bays, a long dashed box with two chargers for medium bays, and a dashed circle with arrows in for large bays (`tower/HangarPadBlock` part numbers, art from `tools/tower_art.py`). A Hangar Pad placed by hand is a loose plate.
 - The roll-up bay doors are drawn in the tower's steel: interlocking slats that ride up with the door into the drum under the lintel, over a hazard-striped bottom rail with a rubber seal.

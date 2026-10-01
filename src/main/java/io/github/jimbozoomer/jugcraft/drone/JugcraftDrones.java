@@ -122,6 +122,7 @@ public final class JugcraftDrones {
 		DroneDepots.register();
 		TerminalModePayload.register();
 		DroneDevCommands.register();
+		GuideBooks.register();
 	}
 
 	private static BlockBehaviour.Properties properties(String path, BlockBehaviour.Properties properties) {

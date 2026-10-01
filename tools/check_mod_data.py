@@ -619,6 +619,20 @@ def check_advancements(registered):
         parent = data.get("parent")
         if parent and split(parent)[1] not in names:
             err(f"advancement {path.stem}: missing parent {parent}")
+def check_guide_books():
+    """drone/GuideBooks.java's page counts match tools/guide_books.py, and every page has text."""
+    import guide_books
+    java = (JAVA_ROOT / "drone" / "GuideBooks.java").read_text(encoding="utf-8")
+    for item, const in (("drone_tower_manual", "MANUAL_PAGES"), ("creative_tower_guide", "CREATIVE_PAGES")):
+        m = re.search(const + r" = (\d+);", java)
+        if not m or int(m.group(1)) != guide_books.PAGE_COUNTS[item]:
+            err(f"GuideBooks.{const} must be {guide_books.PAGE_COUNTS[item]} (pages in tools/guide_books.py)")
+        for _, pages in [guide_books.BOOKS[item]]:
+            for i, page in enumerate(pages):
+                if len(page) > 256:
+                    err(f"{item} page {i + 1} is {len(page)} characters; keep pages short enough to fit")
+
+
 def check_tower():
     """tower/JugcraftTower.java registers what tools/tower.py describes, and the tower data is generated."""
     import tower
@@ -778,6 +792,7 @@ def main():
     check_style_pack()
     check_drones()
     check_tower()
+    check_guide_books()
     check_handbook(registered)
     check_advancements(registered)
     for path in RES.rglob("*.json"):

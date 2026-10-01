@@ -63,6 +63,24 @@ public class TowerGameTests {
 		helper.succeed();
 	}
 
+	/** A creative player gets the Creative Quick Start once; a survival player does not; the Field Manual has its pages. */
+	@GameTest
+	public void guideBooks(GameTestHelper helper) {
+		net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.SURVIVAL);
+		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "no creative book in survival");
+		player.setGameMode(GameType.CREATIVE);
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "a creative player gets the book");
+		helper.assertTrue(player.getInventory().contains(new ItemStack(io.github.jimbozoomer.jugcraft.drone.GuideBooks.CREATIVE_GUIDE)),
+				"the book is in the inventory");
+		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "only once");
+		var manual = new ItemStack(io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL)
+				.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
+		helper.assertTrue(manual != null && manual.pages().size() == io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL_PAGES,
+				"the Field Manual is a written book with every page");
+		helper.succeed();
+	}
+
 	/** Every hangar floor of the finished tower is a whole joined-up pad, with nothing standing on or over it. */
 	@GameTest
 	public void hangarPadsAreWholeAndClear(GameTestHelper helper) {
