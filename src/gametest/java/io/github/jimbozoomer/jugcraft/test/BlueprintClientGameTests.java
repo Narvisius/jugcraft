@@ -34,6 +34,9 @@ public class BlueprintClientGameTests implements FabricClientGameTest {
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		if (GuideScreenshotGameTests.active()) {
+			return;
+		}
 		try (TestSingleplayerContext singleplayer = context.worldBuilder()
 				.adjustSettings(creator -> creator.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE)).create()) {
 			singleplayer.getConnection().waitForChunksRender();

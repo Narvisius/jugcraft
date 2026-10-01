@@ -75,10 +75,8 @@ public class TowerGameTests {
 		helper.assertTrue(player.getInventory().contains(new ItemStack(io.github.jimbozoomer.jugcraft.drone.GuideBooks.CREATIVE_GUIDE)),
 				"the book is in the inventory");
 		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player, GameType.CREATIVE), "only once");
-		var manual = new ItemStack(io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL)
-				.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
-		helper.assertTrue(manual != null && manual.pages().size() == io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL_PAGES,
-				"the Field Manual is a written book with every page");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL instanceof io.github.jimbozoomer.jugcraft.drone.GuideBooks.Book book
+				&& book.bookId().equals("drone_tower_manual"), "the Field Manual is a guide book that opens its own pages");
 		helper.succeed();
 	}
 

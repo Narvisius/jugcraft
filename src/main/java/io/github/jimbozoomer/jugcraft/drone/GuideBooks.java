@@ -1,38 +1,37 @@
 package io.github.jimbozoomer.jugcraft.drone;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
-import java.util.ArrayList;
-import java.util.List;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.Filterable;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.WrittenBookItem;
-import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.level.GameType;
 
 /**
  * The Drone Tower's two guide books: the <b>Field Manual</b> (crafted from a book and a tier 1 drone) walks
  * through building a tower in survival; the <b>Creative Quick Start</b> is handed once to every player who joins
  * a world in creative mode, and covers the creative shortcuts (Creative Energy Cell, Creative Supply Crate, where
- * the modules go). Both are ordinary written books with translatable pages (text in tools/guide_books.py).
+ * the modules go). Right-click to read: client/GuideBookScreen shows each page's heading, a screenshot from the game
+ * and a paragraph (pages and text from tools/guide_books.py).
  */
 public final class GuideBooks {
 	/** Page counts; keep in step with tools/guide_books.py (check_mod_data.py checks the lang has them). */
-	public static final int MANUAL_PAGES = 11;
+	public static final int MANUAL_PAGES = 10;
 	public static final int CREATIVE_PAGES = 8;
 	/** Tag on a player who has had the creative book, so it is only given once. */
 	public static final String GIVEN_TAG = "jugcraft.creative_guide";
+
+	/** Opens a book's screen on the client (set by the client entrypoint); does nothing on a dedicated server. */
+	public static java.util.function.Consumer<String> openScreen = book -> {
+	};
 
 	public static Item MANUAL;
 	public static Item CREATIVE_GUIDE;
@@ -70,13 +69,30 @@ public final class GuideBooks {
 	}
 
 	private static Item book(String id, String title, int pages) {
-		List<Filterable<Component>> text = new ArrayList<>();
-		for (int i = 1; i <= pages; i++) {
-			text.add(Filterable.passThrough(Component.translatable("book.jugcraft." + id + ".page." + i)));
-		}
-		WrittenBookContent content = new WrittenBookContent(Filterable.passThrough(title), "Jugcraft", 0, text, true);
 		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Jugcraft.id(id));
-		return Registry.register(BuiltInRegistries.ITEM, key, new WrittenBookItem(new Item.Properties().setId(key).stacksTo(1)
-				.rarity(Rarity.UNCOMMON).component(DataComponents.WRITTEN_BOOK_CONTENT, content)));
+		return Registry.register(BuiltInRegistries.ITEM, key, new Book(id, new Item.Properties().setId(key).stacksTo(1).rarity(Rarity.UNCOMMON)));
+	}
+
+	/** A guide book: right-click to read it. */
+	public static class Book extends Item {
+		private final String id;
+
+		Book(String id, Properties properties) {
+			super(properties);
+			this.id = id;
+		}
+
+		public String bookId() {
+			return id;
+		}
+
+		@Override
+		public net.minecraft.world.InteractionResult use(net.minecraft.world.level.Level level, net.minecraft.world.entity.player.Player player,
+				net.minecraft.world.InteractionHand hand) {
+			if (level.isClientSide()) {
+				openScreen.accept(id);
+			}
+			return net.minecraft.world.InteractionResult.SUCCESS;
+		}
 	}
 }

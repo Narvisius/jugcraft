@@ -24,6 +24,9 @@ import net.minecraft.world.level.block.Blocks;
 public class TowerClientGameTests implements FabricClientGameTest {
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		if (GuideScreenshotGameTests.active()) {
+			return;
+		}
 		try (TestSingleplayerContext singleplayer = context.worldBuilder()
 				.adjustSettings(creator -> creator.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE)).create()) {
 			singleplayer.getConnection().waitForChunksRender();

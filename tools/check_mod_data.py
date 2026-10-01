@@ -620,17 +620,24 @@ def check_advancements(registered):
         if parent and split(parent)[1] not in names:
             err(f"advancement {path.stem}: missing parent {parent}")
 def check_guide_books():
-    """drone/GuideBooks.java's page counts match tools/guide_books.py, and every page has text."""
+    """drone/GuideBooks.java's page counts match tools/guide_books.py; every page's screenshot exists at 512x288."""
     import guide_books
     java = (JAVA_ROOT / "drone" / "GuideBooks.java").read_text(encoding="utf-8")
     for item, const in (("drone_tower_manual", "MANUAL_PAGES"), ("creative_tower_guide", "CREATIVE_PAGES")):
         m = re.search(const + r" = (\d+);", java)
         if not m or int(m.group(1)) != guide_books.PAGE_COUNTS[item]:
             err(f"GuideBooks.{const} must be {guide_books.PAGE_COUNTS[item]} (pages in tools/guide_books.py)")
-        for _, pages in [guide_books.BOOKS[item]]:
-            for i, page in enumerate(pages):
-                if len(page) > 256:
-                    err(f"{item} page {i + 1} is {len(page)} characters; keep pages short enough to fit")
+        for i, (heading, body, _) in enumerate(guide_books.BOOKS[item][1]):
+            if len(body) > 300:
+                err(f"{item} page {i + 1} is {len(body)} characters; keep it under 300 so it fits under its picture")
+    for shot in guide_books.SCREENSHOTS:
+        png = guide_books.SHOTS / f"{shot}.png"
+        if not png.is_file():
+            err(f"guide screenshot {png.relative_to(ROOT)} is missing")
+        else:
+            with Image.open(png) as img:
+                if img.size != (512, 288):
+                    err(f"guide screenshot {shot}.png is {img.size}, expected 512x288")
 
 
 def check_tower():

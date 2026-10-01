@@ -49,9 +49,10 @@ Primary specialty: logistics / building. Supports builders and anyone running a 
 | 9 | Graphene Spire | 133 | 347 / 22 / 7 / 98 |
 
 ## Guide books
-- **Drone Tower Field Manual:** crafted from a book and a tier 1 drone. A written book that walks through a survival tower: picking the spot with the foundation blueprint, the plinth, the core, loading modules, tier 1, power at the Energy Exchange Port, building blocks at the Cargo Exchange Port, linking drones and growing the tower.
+- **Drone Tower Field Manual:** crafted from a book and a tier 1 drone. A book that walks through a survival tower: picking the spot with the foundation blueprint, the plinth, the core, loading modules, tier 1, power at the Energy Exchange Port, building blocks at the Cargo Exchange Port, linking drones and growing the tower.
 - **Creative Quick Start:** given once to every player who joins a world in creative mode (a player tag remembers it). It covers the creative setup: plinth and core, where the modules go (right-click the core with them), tier 1, the Creative Energy Cell against the Energy Exchange Port, the Creative Supply Crate within 48 blocks of the terminal, drones and the next tiers.
-- Both are ordinary written books with translatable pages (`drone/GuideBooks.java`, text in `tools/guide_books.py`); both are in the Tools tab.
+- Both open an illustrated book screen (`client/GuideBookScreen.java`): one page at a time with a heading, a screenshot from the game and a short paragraph in dark ink on light paper; the picture shrinks on short windows so the page always fits. Items and hand-out in `drone/GuideBooks.java`; text, page list and recipe in `tools/guide_books.py`; both are in the Tools tab.
+- The screenshots (`textures/gui/guide/`) come from the `GuideScreenshotGameTests` client test, run with `JUGCRAFT_GUIDE_SHOTS=1` (the other client tests skip then), and are cropped to 512x288 by `tools/guide_shots.py <screenshot folder>`.
 
 ## Hangar pads and doors
 - Every hangar floor is one joined-up pad, the way the ground landing pads are: each Hangar Pad plate the tower lays shows its own piece (a hazard-striped rim, a cyan edge light, white corner brackets, touchdown markings and a glowing charger). There is one design per hangar size: a ringed charger for small bays, a long dashed box with two chargers for medium bays, and a dashed circle with arrows in for large bays (`tower/HangarPadBlock` part numbers, art from `tools/tower_art.py`). A Hangar Pad placed by hand is a loose plate.
