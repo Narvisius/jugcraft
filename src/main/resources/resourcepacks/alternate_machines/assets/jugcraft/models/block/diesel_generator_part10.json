@@ -1,0 +1,37 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/diesel_generator_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        4,
+        10
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machine_side"
+        },
+        "east": {
+          "texture": "#machine_side"
+        },
+        "up": {
+          "texture": "#machine_side"
+        }
+      }
+    }
+  ]
+}

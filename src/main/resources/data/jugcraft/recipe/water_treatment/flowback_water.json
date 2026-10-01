@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:water_treatment",
+  "fluids": [
+    {
+      "fluid": "jugcraft:flowback_water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 750
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:salt",
+      "count": 1
+    }
+  ],
+  "time": 80
+}

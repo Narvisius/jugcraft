@@ -123,6 +123,16 @@ def check_petro():
     gases = re.findall(r'= gas\("([a-z_]+)"', java)
     if gases != list(petro.GASES):
         err(f"PetroFluids.java gases {gases} != tools/petro.py {list(petro.GASES)}")
+    fuels_java = (JAVA_ROOT / "chemistry" / "FluidFuels.java").read_text(encoding="utf-8")
+    for machine, fuels in petro.FLUID_FUELS.items():
+        if f"case {machine.upper()} ->" not in fuels_java:
+            err(f"FluidFuels.java has no case for {machine}")
+        for fuel, value in fuels.items():
+            if fuel not in petro.FLUIDS and fuel not in petro.GASES:
+                err(f"{machine}: unknown fuel {fuel}")
+            accessor = "fluid()" if fuel in petro.GASES else "source()"
+            if not re.search(rf"int {fuel.upper()} = {value};", fuels_java) or f"PetroFluids.{fuel.upper()}.{accessor}" not in fuels_java:
+                err(f"{machine}: {fuel} at {value} JE/mB in tools/petro.py does not match FluidFuels.java")
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for gas in petro.GASES:
         if f"block.{MOD}.{gas}" not in lang:

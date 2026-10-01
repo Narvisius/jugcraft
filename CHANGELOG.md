@@ -8,6 +8,15 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #50 Oil line, batch 3: fracking and diesel power
+- New fluids: **fracking fluid** and **flowback water** (with buckets).
+- **Chemical mixer** (2×2×2): water + sand + dried kelp → fracking fluid.
+- **Fracking rig** (3×3×5): over shale oil, pumps fracking fluid down and brings up crude oil, refinery gas and flowback water.
+- **Flowback treatment unit** (3×1×2): flowback water → clean water (a quarter lost) + salt.
+- **Diesel generator** (3×2×2): 256 JE/t from diesel (256 JE/mB) or heavy fuel oil (128 JE/mB).
+- **Gas turbine** (4×2×2): 512 JE/t from gasoline (384 JE/mB) or refinery gas (192 JE/mB), with lubricant upkeep.
+- Game tests for each.
+
 ### #49 Oil line, batch 2: refining
 - **Steel fluid pipes** (1,000 mB/t) and the **heavy pump** (1,000 mB/t); a pipe line now carries as much as its slowest pipe.
 - New fluids: **naphtha, diesel, heavy fuel oil, lubricant, gasoline** (with buckets) and **refinery gas** (a gas: tanks and pipes only).

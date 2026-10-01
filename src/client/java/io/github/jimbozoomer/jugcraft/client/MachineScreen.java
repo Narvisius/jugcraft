@@ -251,6 +251,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.wind_turbine.clear" : "container.jugcraft.wind_turbine.blocked";
 			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT, false);
+		} else if (menu.kind() == MachineKind.FRACKING_RIG) {
+			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
+					? "container.jugcraft.fracking_rig.shale" : "container.jugcraft.fracking_rig.none";
+			graphics.text(font, Component.translatable(key).getString(), 28, 18, TEXT, false);
 		} else if (menu.kind() == MachineKind.PUMPJACK) {
 			String key = menu.data(MachineBlockEntity.DATA_FORMED) == 1
 					? "container.jugcraft.pumpjack.oil" : "container.jugcraft.pumpjack.dry";

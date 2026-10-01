@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.chemistry.FluidFuels;
 import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
@@ -281,6 +282,105 @@ public class PetroGameTests {
 		helper.succeedWhen(() -> {
 			helper.assertTrue(reformer.tanks().output(0).has(PetroFluids.GASOLINE.source(), 900), "No gasoline");
 			helper.assertTrue(reformer.tanks().output(1).has(PetroFluids.REFINERY_GAS.fluid(), 100), "No refinery gas");
+		});
+	}
+
+	/** The chemical mixer stirs two sand and a dried kelp into a bucket of water to make a bucket of fracking fluid. */
+	@GameTest(maxTicks = 200)
+	public void mixerMakesFrackingFluid(GameTestHelper helper) {
+		MachineBlockEntity mixer = place(helper, MachineKind.CHEMICAL_MIXER, new BlockPos(4, 1, 2));
+		mixer.tanks().input(0).fill(Fluids.WATER, 1000);
+		mixer.setItem(0, new ItemStack(Items.SAND, 2));
+		mixer.setItem(1, new ItemStack(Items.DRIED_KELP));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(mixer.tanks().output(0).has(PetroFluids.FRACKING_FLUID.source(), 1000), "No fracking fluid");
+			helper.assertTrue(mixer.getItem(0).isEmpty() && mixer.getItem(1).isEmpty(), "The mixer kept its sand or kelp");
+		});
+	}
+
+	/**
+	 * A powered fracking rig over shale pumps fracking fluid down and brings up crude oil, refinery gas and flowback
+	 * water, taking the oil from the shale reservoir. (Tests share chunks, so this only checks that it flows.)
+	 */
+	@GameTest(maxTicks = 200)
+	public void frackingRigFreesShaleOil(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 1);
+		ChunkPos chunk = ChunkPos.containing(helper.absolutePos(master));
+		OilReservoirs.overrideForTest(chunk, OilReservoirs.Kind.SHALE, 400_000);
+		MachineBlockEntity rig = place(helper, MachineKind.FRACKING_RIG, master);
+		Storage<FluidVariant> tanks = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.NORTH);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long accepted = tanks.insert(FluidVariant.of(PetroFluids.FRACKING_FLUID.source()), 2 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(accepted == 2 * FluidConstants.BUCKET, "The rig took " + accepted / 81 + " mB of fracking fluid");
+			transaction.commit();
+		}
+		long before = OilReservoirs.get(helper.getLevel(), chunk).remaining();
+		helper.succeedWhen(() -> {
+			int oil = rig.tanks().output(0).millibuckets();
+			helper.assertTrue(oil >= 30 && rig.tanks().output(0).variant.isOf(PetroFluids.CRUDE_OIL.source()), "Crude oil: " + oil);
+			helper.assertTrue(rig.tanks().output(1).variant.isOf(PetroFluids.REFINERY_GAS.fluid()), "No refinery gas");
+			helper.assertTrue(rig.tanks().output(2).millibuckets() >= 15, "Flowback: " + rig.tanks().output(2).millibuckets());
+			helper.assertTrue(OilReservoirs.get(helper.getLevel(), chunk).remaining() <= before - 40, "The shale gave nothing");
+		});
+	}
+
+	/** The flowback treatment unit turns a bucket of flowback water into 750 mB of clean water and a salt. */
+	@GameTest(maxTicks = 200)
+	public void treatmentCleansFlowback(GameTestHelper helper) {
+		MachineBlockEntity unit = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
+		unit.tanks().input(0).fill(PetroFluids.FLOWBACK_WATER.source(), 1000);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(unit.tanks().output(0).has(Fluids.WATER, 750), "Water: " + unit.tanks().output(0).millibuckets());
+			helper.assertTrue(unit.getItem(0).is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt"))), "No salt: " + unit.getItem(0));
+		});
+	}
+
+	/** The diesel generator burns 1 mB of diesel a tick for 256 JE, and refuses crude oil. */
+	@GameTest(maxTicks = 200)
+	public void dieselGeneratorBurnsDiesel(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 2);
+		MachineBlockEntity generator = place(helper, MachineKind.DIESEL_GENERATOR, master);
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		energy.setAmount(0);
+		Storage<FluidVariant> tanks = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.NORTH);
+		helper.assertTrue(tanks != null, "The generator has no fluid storage");
+		try (Transaction transaction = Transaction.openOuter()) {
+			long oil = tanks.insert(FluidVariant.of(PetroFluids.CRUDE_OIL.source()), FluidConstants.BUCKET, transaction);
+			long diesel = tanks.insert(FluidVariant.of(PetroFluids.DIESEL.source()), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(oil == 0, "The generator took " + oil + " droplets of crude oil");
+			helper.assertTrue(diesel == FluidConstants.BUCKET, "The generator took " + diesel + " droplets of diesel");
+			transaction.commit();
+		}
+		helper.runAfterDelay(40, () -> {
+			int left = generator.tanks().input(0).millibuckets();
+			helper.assertTrue(left < 1000 && left >= 950, "Diesel left: " + left);
+			helper.assertTrue(energy.getAmount() == (1000L - left) * FluidFuels.DIESEL, "Energy " + energy.getAmount() + " for " + (1000 - left) + " mB");
+			helper.succeed();
+		});
+	}
+
+	/** The gas turbine will not run without lubricant; with it, it burns gasoline at 384 JE/mB. */
+	@GameTest(maxTicks = 200)
+	public void gasTurbineNeedsLubricant(GameTestHelper helper) {
+		BlockPos master = new BlockPos(5, 1, 2);
+		MachineBlockEntity turbine = place(helper, MachineKind.GAS_TURBINE, master);
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		energy.setAmount(0);
+		turbine.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 1000);
+		helper.runAfterDelay(20, () -> {
+			helper.assertTrue(energy.getAmount() == 0, "Ran dry of lubricant: " + energy.getAmount() + " JE");
+			helper.assertTrue(turbine.tanks().input(0).millibuckets() == 1000, "Burnt gasoline without lubricant");
+			turbine.tanks().input(1).fill(PetroFluids.LUBRICANT.source(), 100);
+			helper.runAfterDelay(60, () -> {
+				int burnt = 1000 - turbine.tanks().input(0).millibuckets();
+				helper.assertTrue(burnt > 0, "Burnt no gasoline");
+				long expected = (long) burnt * FluidFuels.GASOLINE;
+				helper.assertTrue(energy.getAmount() <= expected && energy.getAmount() > expected - MachineKind.TURBINE_OUTPUT,
+						"Energy " + energy.getAmount() + " for " + burnt + " mB of gasoline");
+				int lubricant = turbine.tanks().input(1).millibuckets();
+				helper.assertTrue(lubricant < 100 && lubricant >= 95, "Lubricant left: " + lubricant);
+				helper.succeed();
+			});
 		});
 	}
 }

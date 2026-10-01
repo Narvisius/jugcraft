@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PFP",
+    "TST",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "F": "minecraft:iron_bars",
+    "T": "jugcraft:fluid_tank",
+    "S": "jugcraft:sieve",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:flowback_treatment_unit",
+    "count": 1
+  }
+}

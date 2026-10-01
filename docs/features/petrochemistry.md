@@ -75,6 +75,48 @@ The base every oil machine is built on; on its own it adds nothing a player can 
 - **1,000 mB of naphtha → 900 mB of gasoline + 100 mB of refinery gas**, every 120 ticks at 120 JE/t (14,400 JE a bucket). Gasoline comes out of the bottom row and refinery gas out of the top row.
 - Recipe: steel plates, an advanced circuit, two tinplate tanks, a blast furnace and a machine casing.
 
+### Chemical mixer and fracking fluid (batch 3, commit 11)
+- **Fracking fluid**: a cloudy grey fluid with a bucket. It is water carrying sand, which props the rock's cracks open, and a gelling agent, which carries the sand. Dried kelp stands in for guar gum.
+- The **chemical mixer** is a 2×2×2 stirred vessel: an olive tank with a sight glass, an agitator motor on the lid, a sand hopper, a kelp chute and a control panel. It is general-purpose: later chemistry can add recipes.
+- **1,000 mB water + 2 sand (first slot) + 1 dried kelp (second slot) → 1,000 mB fracking fluid**, every 80 ticks at 64 JE/t.
+- Recipe: steel plates, an electric motor, two tinplate tanks, a machine casing and a hopper.
+
+### Fracking rig (batch 3, commit 12)
+- **Flowback water**: a murky brown fluid with a bucket. It comes back up a fracked well and needs treating (commit 13).
+- The **fracking rig** is a 3×3 derrick five blocks tall:
+  - on the ground, a frac pump and diesel engine with twin exhaust stacks, the wellhead with its frac tree, and a control panel;
+  - above, a grated drill floor with a crew doghouse;
+  - a lattice derrick narrowing in three stages to a hazard-striped crown block, with the travelling block and kelly down the middle.
+- **Place it with its front left block over shale oil** (the prospector's "Shale oil" reading). Each powered tick, at 256 JE/t, it:
+  - pumps **4 mB of fracking fluid** down;
+  - frees **8 mB of oil** from the shale (6 mB crude oil and 2 mB refinery gas);
+  - brings up **3 mB of flowback water**. The other quarter of the fluid stays in the rock.
+- At that rate a shale reservoir (200–800 buckets) lasts about 21 minutes to 1 hour 25 minutes, four times the pumpjack's rate. Its screen says "Fracking shale" or "No shale oil here".
+- Draw-offs: crude oil at the base, flowback water one block up and refinery gas at the top. Its tank takes only fracking fluid.
+- Recipe: steel plates, an ore drill, two heavy pumps, an advanced circuit and a machine casing.
+
+### Flowback treatment (batch 3, commit 13)
+- The **flowback treatment unit** is three wide, one tall and two deep: a filter press with a red-handled screw beside two open settling basins with hazard-striped rims, murky in the first and clearing in the second.
+- **1,000 mB of flowback water → 750 mB of clean water + 1 salt**, every 80 ticks at 48 JE/t.
+- Pipe the water back to the chemical mixer. A quarter is lost each time round (sludge), so fracking still needs a water supply: 4 mB of fracking fluid down gives 3 mB of flowback, which gives 2.25 mB of water back.
+- The salt is the same salt as rock salt ore, ready for the planned brine electrolysis.
+- Recipe: steel plates, iron bars, two tinplate tanks, a sieve and a machine casing.
+
+### Diesel generator (batch 3, commit 14)
+- The **diesel generator** is three wide, two tall and two deep: an inline six on a hazard-striped skid, with chrome rocker covers, an exhaust manifold feeding two sooty stacks, a grilled radiator, an alternator drum behind the control panel and a day tank at the back.
+- It burns fuel piped into its 8-bucket tank and makes **256 JE/t**: **diesel gives 256 JE/mB** (1 mB a tick, 256,000 JE a bucket) and **heavy fuel oil 128 JE/mB** (2 mB a tick). Its tank refuses crude oil and every other fluid.
+- Fuel values live in `chemistry/FluidFuels` and `tools/petro.py` (`FLUID_FUELS`); `check_mod_data` checks they match.
+- It stops when its 60,000 JE buffer is full, follows its redstone mode, and pushes up to 1,024 JE/t into cables from every part, like the other generators.
+- Balance: a bucket of crude oil refined to diesel and gasoline costs about 16,000 JE to pump and 23,880 JE to refine, and its 525 mB of diesel alone give 134,400 JE here, so oil is a strong net gain; that is the point of the tier. Burning heavy fuel oil straight is worth 128,000 JE a bucket but skips the diesel and naphtha cracking would give. The whole chain is audited in BALANCE.md in commit 19.
+- Recipe: steel plates, an electric motor, two tinplate tanks, a machine casing and a steel gear.
+
+### Gas turbine (batch 3, commit 15)
+- The **gas turbine** is four wide, two tall and two deep: a grilled air-intake filter house, a long gunmetal turbine casing with chrome bands and burner cans, an exhaust stack over the hot section, an alternator drum behind the control panel and a lubricant tank with a golden sight glass at the back.
+- It makes **512 JE/t** from its 16-bucket fuel tank: **gasoline gives 384 JE/mB** (384,000 JE a bucket) and **refinery gas 192 JE/mB**. Refinery gas, which every refining step gives off, is now worth burning.
+- Its second tank takes **lubricant** from the vacuum distillation unit: it will not run without any, and running uses 1 mB every 20 game ticks (a bucket lasts about 17 minutes). This is upkeep, not fuel: a bucket of lubricant keeps it running for 10,240,000 JE.
+- 120,000 JE buffer, up to 2,048 JE/t out of every part. Recipe: steel plates, iron bars, two diesel generators, an advanced circuit and a steel gear.
+- Balance: the gasoline and gas from one bucket of crude oil (293 mB and 183 mB) give about 147,700 JE here, on top of the diesel's 134,400 JE. Audited in BALANCE.md in commit 19.
+
 ### What refining gives (batch 2 summary)
 From one bucket of crude oil, with every byproduct refined:
 
@@ -116,6 +158,11 @@ Fabric API's fluid rendering registry draws the fluid. Textures are original, dr
 - Game test `crackerCracksHeavyFuelOil` (heavy fuel oil, water and one catalyst become 500/300/200 mB of diesel, naphtha and gas).
 - Game test `vacuumUnitMakesLubricantAndAsphalt` (a bucket of heavy fuel oil becomes 400 mB of lubricant and two asphalt binder).
 - Game test `reformerMakesGasoline` (a bucket of naphtha becomes 900 mB of gasoline and 100 mB of refinery gas).
+- Game test `mixerMakesFrackingFluid`.
+- Game test `frackingRigFreesShaleOil` (it takes fracking fluid through Fabric's fluid API, brings up crude oil, gas and flowback, and draws on the shale).
+- Game test `treatmentCleansFlowback`.
+- Game test `gasTurbineNeedsLubricant` (no energy and no gasoline burnt without lubricant; with it, 384 JE per mB of gasoline and a little lubricant used).
+- Game test `dieselGeneratorBurnsDiesel` (its tank refuses crude oil through Fabric's fluid API, and each mB of diesel burnt adds exactly 256 JE).
 - Game test `pumpjackPumpsOil`: a powered pumpjack over pumpable oil fills its tank with crude oil and the reservoir goes down by as much.
 - Game tests `extractorTanksOnlyTakeWhatTheyUse` (its tanks take water but not lava or crude oil, through Fabric's fluid API) and `extractorWashesOilFromOilSand` (a block of oil sand and water become 500 mB of crude oil and sand, using 250 mB of water).
 - Not run: client play-testing of how the fluid looks and flows.

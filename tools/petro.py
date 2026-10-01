@@ -28,6 +28,13 @@ FLUIDS = {
     "gasoline": {"display": "Gasoline", "feature": "crude_oil",
                  "colors": [(150, 60, 40), (200, 100, 70), (230, 150, 110), (250, 212, 184)],
                  "tick_delay": 4, "slope": 4, "drop_off": 1},
+    # Batch 3: fracking.
+    "fracking_fluid": {"display": "Fracking Fluid", "feature": "crude_oil",
+                       "colors": [(90, 110, 120), (130, 150, 160), (170, 185, 190), (212, 222, 226)],
+                       "tick_delay": 6, "slope": 3, "drop_off": 1},
+    "flowback_water": {"display": "Flowback Water", "feature": "crude_oil",
+                       "colors": [(70, 64, 50), (100, 92, 72), (130, 120, 96), (172, 162, 132)],
+                       "tick_delay": 5, "slope": 4, "drop_off": 1},
 }
 
 # Gases: fluids that only live in tanks and pipes (no block, no bucket). Gauge colour in Java (PetroFluids.gas).
@@ -83,6 +90,27 @@ FLUID_MACHINES = {
     # Naphtha -> gasoline (base) + refinery gas (top). 120 JE/t.
     "catalytic_reformer": {"inputs": [8_000], "outputs": [8_000, 8_000], "item_inputs": 0, "item_outputs": 0,
                            "recipe_type": "reforming"},
+    # Over shale (no recipes): 4 mB/t fracking fluid down; 8 mB/t freed (6 crude, 2 gas) and 3 mB/t flowback up.
+    # 256 JE/t. Draw-offs: crude at the base, flowback one block up, gas at the top (MachineKind.outputLayer).
+    "fracking_rig": {"inputs": [16_000], "outputs": [16_000, 8_000, 16_000], "item_inputs": 0, "item_outputs": 0,
+                     "recipe_type": None},
+    # Flowback water -> clean water + salt. 48 JE/t.
+    "flowback_treatment_unit": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 0, "item_outputs": 1,
+                                "recipe_type": "water_treatment"},
+    # Water + two powders/solids -> a mixture. 64 JE/t.
+    "chemical_mixer": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 0,
+                       "recipe_type": "chemical_mixing"},
+    # Burns diesel (256 JE/mB) or heavy fuel oil (128 JE/mB) from its tank at 256 JE/t (FLUID_FUELS).
+    "diesel_generator": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
+    # Burns gasoline (384 JE/mB) or refinery gas (192 JE/mB) at 512 JE/t; the second tank takes lubricant,
+    # 1 mB every 20 ticks of running (FluidFuels.LUBRICANT_TICKS), and it will not run without it.
+    "gas_turbine": {"inputs": [16_000, 4_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
+}
+
+# JE per mB each fluid-burning generator gets from each fuel (Java: chemistry/FluidFuels).
+FLUID_FUELS = {
+    "diesel_generator": {"diesel": 256, "heavy_fuel_oil": 128},
+    "gas_turbine": {"gasoline": 384, "refinery_gas": 192},
 }
 
 # Fluid recipes per machine. Each: name, item ingredients [(item or #tag, count)], fluids in [(fluid, mB)],
@@ -118,6 +146,20 @@ FLUID_RECIPES = {
          "features": ["crude_oil"]},
     ],
     # Reforming rearranges naphtha into high-octane gasoline, giving off a little gas.
+    # Fracking fluid: water carrying sand (to prop the cracks open) and a gelling agent (dried kelp, standing in for
+    # guar gum) to carry the sand.
+    "chemical_mixer": [
+        {"name": "fracking_fluid", "items": [("minecraft:sand", 2), ("minecraft:dried_kelp", 1)],
+         "fluids": [("minecraft:water", 1000)], "fluid_results": [("jugcraft:fracking_fluid", 1000)], "source": 0,
+         "ticks": 80, "features": ["crude_oil"]},
+    ],
+    # Flowback water settles and is filtered: most of it comes back as clean water; the brine leaves salt. A quarter
+    # is lost (sludge), so fracking water is never free.
+    "flowback_treatment_unit": [
+        {"name": "flowback_water", "fluids": [("jugcraft:flowback_water", 1000)],
+         "fluid_results": [("minecraft:water", 750)], "results": [("jugcraft:salt", 1)], "ticks": 80,
+         "features": ["crude_oil"]},
+    ],
     "catalytic_reformer": [
         {"name": "naphtha", "fluids": [("jugcraft:naphtha", 1000)],
          "fluid_results": [("jugcraft:gasoline", 900), ("jugcraft:refinery_gas", 100)], "ticks": 120,

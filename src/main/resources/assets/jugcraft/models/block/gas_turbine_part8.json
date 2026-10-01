@@ -1,0 +1,104 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_exhaust": "jugcraft:block/dp_exhaust",
+    "dp_gauge": "jugcraft:block/dp_gauge",
+    "dp_grille": "jugcraft:block/dp_grille",
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "dp_hazard": "jugcraft:block/dp_hazard",
+    "dp_lamp": "jugcraft:block/dp_lamp",
+    "dp_olive": "jugcraft:block/dp_olive",
+    "dp_olive_stencil": "jugcraft:block/dp_olive_stencil",
+    "dp_rubber": "jugcraft:block/dp_rubber",
+    "lubricant_still": "jugcraft:block/lubricant_still",
+    "sp_red_iron": "jugcraft:block/sp_red_iron",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        2.0,
+        0,
+        14.5
+      ],
+      "to": [
+        15.0,
+        5.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_olive"
+        },
+        "east": {
+          "texture": "#dp_gunmetal"
+        },
+        "west": {
+          "texture": "#dp_gunmetal"
+        },
+        "up": {
+          "texture": "#dp_olive"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        0,
+        11.5
+      ],
+      "to": [
+        15.0,
+        4.25,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_olive"
+        },
+        "south": {
+          "texture": "#dp_olive"
+        },
+        "east": {
+          "texture": "#dp_gunmetal"
+        },
+        "west": {
+          "texture": "#dp_gunmetal"
+        },
+        "up": {
+          "texture": "#dp_olive"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        0,
+        10.0
+      ],
+      "to": [
+        15.0,
+        1.75,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_olive"
+        },
+        "south": {
+          "texture": "#dp_olive"
+        },
+        "east": {
+          "texture": "#dp_gunmetal"
+        },
+        "west": {
+          "texture": "#dp_gunmetal"
+        },
+        "up": {
+          "texture": "#dp_olive"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PEP",
+    "TMT",
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "E": "jugcraft:electric_motor",
+    "T": "jugcraft:fluid_tank",
+    "M": "jugcraft:machine_casing",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:diesel_generator",
+    "count": 1
+  }
+}

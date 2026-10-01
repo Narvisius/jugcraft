@@ -1,0 +1,123 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_exhaust": "jugcraft:block/dp_exhaust",
+    "dp_gauge": "jugcraft:block/dp_gauge",
+    "dp_grille": "jugcraft:block/dp_grille",
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "dp_hazard": "jugcraft:block/dp_hazard",
+    "dp_lamp": "jugcraft:block/dp_lamp",
+    "dp_olive": "jugcraft:block/dp_olive",
+    "dp_olive_stencil": "jugcraft:block/dp_olive_stencil",
+    "dp_rubber": "jugcraft:block/dp_rubber",
+    "sp_red_iron": "jugcraft:block/sp_red_iron",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16,
+        2.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_hazard"
+        },
+        "up": {
+          "texture": "#dp_gunmetal"
+        },
+        "down": {
+          "texture": "#dp_gunmetal"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.0,
+        11.0
+      ],
+      "to": [
+        16.0,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_olive"
+        },
+        "east": {
+          "texture": "#dp_olive"
+        },
+        "down": {
+          "texture": "#dp_olive"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12.0,
+        9.0
+      ],
+      "to": [
+        15.0,
+        15.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_exhaust"
+        },
+        "south": {
+          "texture": "#dp_exhaust"
+        },
+        "east": {
+          "texture": "#dp_exhaust"
+        },
+        "up": {
+          "texture": "#dp_exhaust"
+        },
+        "down": {
+          "texture": "#dp_exhaust"
+        }
+      }
+    },
+    {
+      "from": [
+        8.0,
+        15.0,
+        8.5
+      ],
+      "to": [
+        10.0,
+        16,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_exhaust"
+        },
+        "south": {
+          "texture": "#dp_exhaust"
+        },
+        "east": {
+          "texture": "#dp_exhaust"
+        },
+        "west": {
+          "texture": "#dp_exhaust"
+        },
+        "down": {
+          "texture": "#dp_exhaust"
+        }
+      }
+    }
+  ]
+}

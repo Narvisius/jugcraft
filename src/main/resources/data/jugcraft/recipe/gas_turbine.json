@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PBP",
+    "DCD",
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "minecraft:iron_bars",
+    "D": "jugcraft:diesel_generator",
+    "C": "jugcraft:advanced_circuit",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:gas_turbine",
+    "count": 1
+  }
+}

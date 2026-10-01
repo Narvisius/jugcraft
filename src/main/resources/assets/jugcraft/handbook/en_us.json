@@ -1956,6 +1956,121 @@
           }
         },
         {
+          "title": "Chemical Mixer",
+          "icon": "jugcraft:chemical_mixer",
+          "text": [
+            "Two by two by two. Stirs powders into water: two sand (first slot) and a dried kelp (second slot) with a bucket of water make a bucket of fracking fluid, every 4 seconds.",
+            "Uses 64 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:machine_casing",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "minecraft:hopper",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:chemical_mixer",
+            "count": 1
+          }
+        },
+        {
+          "title": "Fracking Rig",
+          "icon": "jugcraft:fracking_rig",
+          "text": [
+            "Three by three and five blocks tall. Place it with its front left block over shale oil (the prospector's Shale oil reading). Each powered tick it pumps 4 mB of fracking fluid down the well and brings up 6 mB of crude oil (out at the base), 2 mB of refinery gas (out at the top) and 3 mB of flowback water (out one block up), until the shale is spent.",
+            "Uses 256 JE/t while working. Holds 80,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:ore_drill",
+              "jugcraft:steel_plate",
+              "jugcraft:heavy_pump",
+              "jugcraft:advanced_circuit",
+              "jugcraft:heavy_pump",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:fracking_rig",
+            "count": 1
+          }
+        },
+        {
+          "title": "Flowback Treatment Unit",
+          "icon": "jugcraft:flowback_treatment_unit",
+          "text": [
+            "Three wide, one tall and two deep. Settles and filters the flowback water from a fracking rig: each bucket gives 750 mB of clean water and a salt, every 4 seconds. Pipe the water back to the chemical mixer; a quarter is lost each time round.",
+            "Uses 48 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:iron_bars",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:sieve",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:flowback_treatment_unit",
+            "count": 1
+          }
+        },
+        {
+          "title": "Diesel Generator",
+          "icon": "jugcraft:diesel_generator",
+          "text": [
+            "Three wide, two tall and two deep. Burns diesel or heavy fuel oil piped into its 8-bucket tank: 256 JE/t, a bucket of diesel every 1,000 ticks (256,000 JE) or heavy fuel oil twice as fast (128,000 JE a bucket). It refuses crude oil and other fluids.",
+            "Makes up to 256 JE/t. Holds 60,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:machine_casing",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:diesel_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Gas Turbine",
+          "icon": "jugcraft:gas_turbine",
+          "text": [
+            "Four wide, two tall and two deep. Burns gasoline or refinery gas from its 16-bucket tank: 512 JE/t, 384,000 JE a bucket of gasoline or 192,000 JE a bucket of gas. Its second tank takes lubricant from the vacuum distillation unit: 1 mB every second of running, and it stops when it runs dry.",
+            "Makes up to 512 JE/t. Holds 120,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:iron_bars",
+              "jugcraft:steel_plate",
+              "jugcraft:diesel_generator",
+              "jugcraft:advanced_circuit",
+              "jugcraft:diesel_generator",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:gas_turbine",
+            "count": 1
+          }
+        },
+        {
           "title": "Cracking Catalyst",
           "icon": "jugcraft:cracking_catalyst",
           "text": [

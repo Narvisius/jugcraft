@@ -49,6 +49,11 @@ FOOTPRINTS = {
     "catalytic_cracker": cuboid(2, 4, 2),
     "vacuum_distillation_unit": cuboid(2, 3, 2),
     "catalytic_reformer": cuboid(3, 2, 2),
+    "chemical_mixer": cuboid(2, 2, 2),
+    "fracking_rig": cuboid(3, 5, 3),
+    "flowback_treatment_unit": cuboid(3, 1, 2),
+    "diesel_generator": cuboid(3, 2, 2),
+    "gas_turbine": cuboid(4, 2, 2),
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -222,6 +227,47 @@ MODELS["catalytic_reformer"] = [
     ((-29, 21, 0), (-23, 25, 5), PIPE),
 ]
 
+MODELS["chemical_mixer"] = [
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 14, 9), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-12, 2, 6), (10, 24, 28), "fluid_tank_side"),
+    ((-12, 24, 6), (10, 26, 28), "fluid_tank_top"),
+    ((-5, 26, 13), (3, 31, 21), {"*": STEEL, "up": TOP}),
+]
+
+MODELS["fracking_rig"] = [
+    ((-32, 0, 0), (16, 2, 48), "heavy_plinth"),
+    ((2, 2, 1), (14, 12, 6), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-28, 14, 4), (12, 16, 44), "heavy_plinth"),
+    ((-24, 16, 8), (8, 40, 40), "wind_turbine_mast"),
+    ((-18, 40, 14), (2, 70, 34), "wind_turbine_mast"),
+    ((-12, 70, 20), (-4, 78, 28), "geothermal_stack"),
+    ((-11, 2, 22), (-5, 14, 26), PIPE),
+]
+
+MODELS["flowback_treatment_unit"] = [
+    ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-31, 2, 2), (-1, 10, 30), {"*": STEEL, "up": "fluid_tank_top"}),
+    ((1, 2, 12), (15, 14, 30), "fluid_tank_side"),
+]
+
+MODELS["diesel_generator"] = [
+    ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-24, 2, 10), (0, 20, 26), STEEL),
+    ((-31, 2, 4), (-26, 26, 28), "fluid_tank_side"),
+    ((-20, 20, 14), (-16, 30, 18), "geothermal_stack"),
+]
+
+MODELS["gas_turbine"] = [
+    ((-48, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-36, 4, 8), (0, 22, 26), STEEL),
+    ((-47, 2, 2), (-37, 30, 30), "fluid_tank_side"),
+    ((-10, 22, 14), (-4, 32, 20), "geothermal_stack"),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -240,4 +286,9 @@ FRONTS = {
     "catalytic_cracker": "catalytic_cracker_front",
     "vacuum_distillation_unit": "vacuum_distillation_unit_front",
     "catalytic_reformer": "catalytic_reformer_front",
+    "chemical_mixer": "chemical_mixer_front",
+    "fracking_rig": "fracking_rig_front",
+    "flowback_treatment_unit": "flowback_treatment_unit_front",
+    "diesel_generator": "diesel_generator_front",
+    "gas_turbine": "gas_turbine_front",
 }

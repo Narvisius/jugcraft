@@ -1,0 +1,491 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
+    "front": "jugcraft:block/fracking_rig_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        3.0769,
+        0.0,
+        3.0769
+      ],
+      "to": [
+        12.9231,
+        0.4103,
+        12.9231
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.846,
+            0.41
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.846,
+            0.41
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.846,
+            0.41
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.846,
+            0.41
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.846,
+            9.846
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            9.846,
+            9.846
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        10.0513,
+        0.4103,
+        3.2821
+      ],
+      "to": [
+        12.5128,
+        2.4615,
+        4.3077
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            2.462,
+            2.051
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.462,
+            2.051
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.026,
+            2.051
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.026,
+            2.051
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            2.462,
+            1.026
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.462,
+            1.026
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.8974,
+        2.8718,
+        3.8974
+      ],
+      "to": [
+        12.1026,
+        3.2821,
+        12.1026
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.205,
+            0.41
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.205,
+            0.41
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.205,
+            0.41
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.205,
+            0.41
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.205,
+            8.205
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.205,
+            8.205
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.7179,
+        3.2821,
+        4.7179
+      ],
+      "to": [
+        11.2821,
+        8.2051,
+        11.2821
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            6.564,
+            4.923
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            6.564,
+            4.923
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            6.564,
+            4.923
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            6.564,
+            4.923
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            6.564,
+            6.564
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            6.564,
+            6.564
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5.9487,
+        8.2051,
+        5.9487
+      ],
+      "to": [
+        10.0513,
+        14.359,
+        10.0513
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            4.103,
+            6.154
+          ]
+        },
+        "south": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            4.103,
+            6.154
+          ]
+        },
+        "east": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            4.103,
+            6.154
+          ]
+        },
+        "west": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            4.103,
+            6.154
+          ]
+        },
+        "up": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            4.103,
+            4.103
+          ]
+        },
+        "down": {
+          "texture": "#wind_turbine_mast",
+          "uv": [
+            0,
+            0,
+            4.103,
+            4.103
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.1795,
+        14.359,
+        7.1795
+      ],
+      "to": [
+        8.8205,
+        16.0,
+        8.8205
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            1.641,
+            1.641
+          ]
+        },
+        "south": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            1.641,
+            1.641
+          ]
+        },
+        "east": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            1.641,
+            1.641
+          ]
+        },
+        "west": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            1.641,
+            1.641
+          ]
+        },
+        "up": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            1.641,
+            1.641
+          ]
+        },
+        "down": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            1.641,
+            1.641
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.3846,
+        0.4103,
+        7.5897
+      ],
+      "to": [
+        8.6154,
+        2.8718,
+        8.4103
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.231,
+            2.462
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.231,
+            2.462
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.821,
+            2.462
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.821,
+            2.462
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.231,
+            0.821
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.231,
+            0.821
+          ]
+        }
+      }
+    }
+  ]
+}

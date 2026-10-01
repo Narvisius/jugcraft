@@ -51,7 +51,7 @@ Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_
 | 4 | Pumpjack | A 3-block-long, 3-tall dieselpunk pumpjack (nodding donkey) that pumps a chunk's conventional reservoir dry, slowly, on JE. |
 | 5 | Oil sand extractor | Hot-water extraction: oil sand + water → crude oil + sand. A route to crude anywhere oil sand is found, for players with no reservoir nearby. |
 
-### Batch 2: refining (#49)
+### Batch 2: refining (done, #49)
 
 | # | Commit | What it adds |
 | --- | --- | --- |
@@ -61,12 +61,12 @@ Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_
 | 9 | Vacuum distillation | Heavy fuel oil → lubricant and asphalt binder. |
 | 10 | Reformer | Naphtha → high-octane gasoline. |
 
-### Batch 3: fracking and diesel power
+### Batch 3: fracking and diesel power (#50)
 
 | # | Commit | What it adds |
 | --- | --- | --- |
 | 11 | Chemical mixer and fracking fluid | Water + sand + a gelling agent → fracking fluid. |
-| 12 | Fracking rig | A big derrick that pumps fracking fluid into a shale reservoir and brings up crude oil, natural gas and flowback water. |
+| 12 | Fracking rig | A big derrick that pumps fracking fluid into a shale reservoir and brings up crude oil, refinery gas and flowback water. |
 | 13 | Flowback treatment | Flowback water → clean water (with losses) and salt, so fracking water is not free. |
 | 14 | Diesel generator | A big engine that burns diesel (or heavy fuel oil, less well) for high JE output. |
 | 15 | Gas turbine | Burns refinery gas or gasoline for the highest output, with lubricant upkeep. |

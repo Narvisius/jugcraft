@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SDS",
+    "UCU",
+    "SMS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "D": "jugcraft:ore_drill",
+    "U": "jugcraft:heavy_pump",
+    "C": "jugcraft:advanced_circuit",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:fracking_rig",
+    "count": 1
+  }
+}

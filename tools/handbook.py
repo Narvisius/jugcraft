@@ -118,6 +118,21 @@ ABOUT = {
     "catalytic_reformer": "Three wide, two tall and two deep. Reforms naphtha into high-octane gasoline: each bucket of "
                           "naphtha gives 900 mB of gasoline (out of the bottom row) and 100 mB of refinery gas (out of "
                           "the top row), every 6 seconds.",
+    "chemical_mixer": "Two by two by two. Stirs powders into water: two sand (first slot) and a dried kelp (second "
+                      "slot) with a bucket of water make a bucket of fracking fluid, every 4 seconds.",
+    "fracking_rig": "Three by three and five blocks tall. Place it with its front left block over shale oil (the "
+                    "prospector's Shale oil reading). Each powered tick it pumps 4 mB of fracking fluid down the well "
+                    "and brings up 6 mB of crude oil (out at the base), 2 mB of refinery gas (out at the top) and 3 mB "
+                    "of flowback water (out one block up), until the shale is spent.",
+    "flowback_treatment_unit": "Three wide, one tall and two deep. Settles and filters the flowback water from a "
+                               "fracking rig: each bucket gives 750 mB of clean water and a salt, every 4 seconds. "
+                               "Pipe the water back to the chemical mixer; a quarter is lost each time round.",
+    "diesel_generator": "Three wide, two tall and two deep. Burns diesel or heavy fuel oil piped into its 8-bucket tank: "
+                        "256 JE/t, a bucket of diesel every 1,000 ticks (256,000 JE) or heavy fuel oil twice as fast "
+                        "(128,000 JE a bucket). It refuses crude oil and other fluids.",
+    "gas_turbine": "Four wide, two tall and two deep. Burns gasoline or refinery gas from its 16-bucket tank: 512 JE/t, "
+                   "384,000 JE a bucket of gasoline or 192,000 JE a bucket of gas. Its second tank takes lubricant "
+                   "from the vacuum distillation unit: 1 mB every second of running, and it stops when it runs dry.",
     "ore_drill": "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom "
                  "of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come "
                  "out whole, ready for ore processing.",
@@ -321,6 +336,11 @@ def build():
             machine_page("catalytic_cracker"),
             machine_page("vacuum_distillation_unit"),
             machine_page("catalytic_reformer"),
+            machine_page("chemical_mixer"),
+            machine_page("fracking_rig"),
+            machine_page("flowback_treatment_unit"),
+            machine_page("diesel_generator"),
+            machine_page("gas_turbine"),
             {"title": "Cracking Catalyst", "icon": f"{MOD}:cracking_catalyst", "text": [
                 "Bauxite (alumina) and sand (silica) with a nickel ingot make four. The catalytic cracker uses one for "
                 "each bucket of heavy fuel oil it cracks."], "craft": craft("cracking_catalyst")},

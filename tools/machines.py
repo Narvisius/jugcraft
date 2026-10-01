@@ -53,6 +53,16 @@ MACHINES = {
     "vacuum_distillation_unit": {"display": "Vacuum Distillation Unit", "lit": True},
     # A 3x2x2 row of reactors: naphtha -> gasoline + refinery gas.
     "catalytic_reformer": {"display": "Catalytic Reformer", "lit": True},
+    # A 2x2x2 stirred mixing vessel: water + sand + dried kelp -> fracking fluid.
+    "chemical_mixer": {"display": "Chemical Mixer", "lit": True},
+    # A 3x3x5 derrick over shale oil: fracking fluid down; crude oil, refinery gas and flowback water up.
+    "fracking_rig": {"display": "Fracking Rig", "lit": True},
+    # 3x1x2 settling basins and a filter press: flowback water -> water + salt.
+    "flowback_treatment_unit": {"display": "Flowback Treatment Unit", "lit": True},
+    # A 3x2x2 inline six on a skid: burns diesel or heavy fuel oil from its tank.
+    "diesel_generator": {"display": "Diesel Generator", "lit": True},
+    # A 4x2x2 gas turbine: burns gasoline or refinery gas, with a lubricant tank.
+    "gas_turbine": {"display": "Gas Turbine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
 }
 
@@ -201,6 +211,17 @@ STATS = {
     "vacuum_distillation_unit": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
     # 3x2x2. 120 JE/t; a bucket of naphtha per 120 ticks.
     "catalytic_reformer": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 120, "tank": 8_000},
+    # 2x2x2. 64 JE/t; a bucket of mixture per 80 ticks.
+    "chemical_mixer": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 64, "tank": 8_000},
+    # 3x3x5. 256 JE/t; 4 mB/t fracking fluid down, 8 mB/t oil freed, 3 mB/t flowback.
+    "fracking_rig": {"capacity": 80_000, "input_per_tick": 1_024, "use_per_tick": 256, "tank": 16_000},
+    # 3x1x2. 48 JE/t; a bucket of flowback water per 80 ticks.
+    "flowback_treatment_unit": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 48, "tank": 8_000},
+    # 3x2x2. 256 JE/t: 1 mB of diesel a tick (256 JE/mB) or 2 mB of heavy fuel oil (128 JE/mB).
+    "diesel_generator": {"capacity": 60_000, "output_per_tick": 1_024, "generation_per_tick": 256, "tank": 8_000},
+    # 4x2x2. 512 JE/t: 1.33 mB of gasoline a tick (384 JE/mB) or 2.67 mB of refinery gas (192 JE/mB);
+    # 1 mB of lubricant every 20 ticks.
+    "gas_turbine": {"capacity": 120_000, "output_per_tick": 2_048, "generation_per_tick": 512, "tank": 16_000},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -379,6 +400,21 @@ CRAFTING = {
     "catalytic_reformer": (["PCP", "TFT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
                                                    "T": "jugcraft:fluid_tank", "F": "minecraft:blast_furnace",
                                                    "M": "jugcraft:machine_casing"}, 1),
+    "chemical_mixer": (["PMP", "TCT", "PHP"], {"P": "#c:plates/steel", "M": "jugcraft:electric_motor",
+                                               "T": "jugcraft:fluid_tank", "C": "jugcraft:machine_casing",
+                                               "H": "minecraft:hopper"}, 1),
+    "fracking_rig": (["SDS", "UCU", "SMS"], {"S": "#c:plates/steel", "D": "jugcraft:ore_drill",
+                                             "U": "jugcraft:heavy_pump", "C": "jugcraft:advanced_circuit",
+                                             "M": "jugcraft:machine_casing"}, 1),
+    "flowback_treatment_unit": (["PFP", "TST", "PMP"], {"P": "#c:plates/steel", "F": "minecraft:iron_bars",
+                                                        "T": "jugcraft:fluid_tank", "S": "jugcraft:sieve",
+                                                        "M": "jugcraft:machine_casing"}, 1),
+    "diesel_generator": (["PEP", "TMT", "PGP"], {"P": "#c:plates/steel", "E": "jugcraft:electric_motor",
+                                                 "T": "jugcraft:fluid_tank", "M": "jugcraft:machine_casing",
+                                                 "G": "#c:gears/steel"}, 1),
+    "gas_turbine": (["PBP", "DCD", "PGP"], {"P": "#c:plates/steel", "B": "minecraft:iron_bars",
+                                            "D": "jugcraft:diesel_generator", "C": "jugcraft:advanced_circuit",
+                                            "G": "#c:gears/steel"}, 1),
     "cracking_catalyst": (["BSB", "SNS", "BSB"], {"B": "jugcraft:bauxite", "S": "minecraft:sand",
                                                   "N": "#c:ingots/nickel"}, 4),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",

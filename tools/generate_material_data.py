@@ -289,6 +289,8 @@ def machine_assets(lang):
     lang[f"prospector.{MOD}.oil"] = "Oil"
     lang[f"container.{MOD}.pumpjack.oil"] = "Pumping oil"
     lang[f"container.{MOD}.pumpjack.dry"] = "No pumpable oil here"
+    lang[f"container.{MOD}.fracking_rig.shale"] = "Fracking shale"
+    lang[f"container.{MOD}.fracking_rig.none"] = "No shale oil here"
     lang[f"prospector.{MOD}.shale_oil"] = "Shale oil"
     lang[f"container.{MOD}.redstone"] = "Redstone: %s"
     lang[f"container.{MOD}.redstone.ignored"] = "ignored (always runs)"
