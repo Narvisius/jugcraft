@@ -8,7 +8,7 @@ Format: {"chapters": [{"title", "icon", "pages": [{"title", "icon", "text": [par
 "craft": {"grid": [9 item ids or null], "result", "count"}, "recipes": [{"in": [[id, count]], "out": [id, count]}]}]}]}
 """
 from materials import COMPONENTS, METALS, MINERALS, ingot_id, ore_ids
-from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES,
+from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS,
                       UPGRADES, BYPRODUCTS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, machine_recipes)
 
 MOD = "jugcraft"
@@ -80,6 +80,9 @@ ABOUT = {
                 "gearbox or motor on any side drives every conveyor joined to it, for 1 KE per conveyor per tick. Pipes, "
                 "hoppers and machines load it, and so do items dropped on it; at the end items go into the conveyor or "
                 "inventory ahead, or onto the ground. It carries you too; sneak to stand still.",
+    "conveyor_slope": "Carries items one block up, onto the top of the block in front, or down from a conveyor one "
+                      "block higher behind it. Use it with an empty hand to switch between up and down. It joins and "
+                      "runs with the conveyors around it.",
     "conveyor_splitter": "A conveyor that sends items left, straight on and right in turn, skipping any way that is "
                          "blocked.",
     "brass_wrench": "Right-click turns a machine. Sneak and right-click to pick a Jugcraft block up, with everything inside.",
@@ -291,6 +294,7 @@ def build():
             block_page("item_sorter", LOGISTICS_BLOCKS["item_sorter"]["display"]),
             block_page("conveyor", KINETIC_BLOCKS["conveyor"]["display"]),
             block_page("conveyor_splitter", KINETIC_BLOCKS["conveyor_splitter"]["display"]),
+            block_page("conveyor_slope", SLOPE_BLOCKS["conveyor_slope"]["display"]),
             block_page("brass_wrench", TOOLS["brass_wrench"]),
         ]},
         {"title": "Storage", "icon": f"{MOD}:item_crate", "pages":

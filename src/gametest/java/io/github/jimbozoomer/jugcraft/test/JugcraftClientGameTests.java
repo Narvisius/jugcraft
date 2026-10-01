@@ -13,6 +13,7 @@ import io.github.jimbozoomer.jugcraft.kinetic.ShaftBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlockEntity;
+import io.github.jimbozoomer.jugcraft.logistics.ConveyorSlopeBlock;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
@@ -106,6 +107,13 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.waitTicks(10);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_conveyors");
+
+			// Conveyor slopes: items climb onto a raised conveyor and come back down.
+			server.runOnServer(minecraft -> buildSlopeLine(minecraft.overworld(), new BlockPos(x + 5, y, z + 4)));
+			server.runCommand("tp @p %d %d %d 150 25".formatted(x + 11, y + 2, z + 8));
+			context.waitTicks(12);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_conveyor_slopes");
 
 			// Powered tools: three charging stations holding the drill, the chainsaw and the rocket pack.
 			server.runOnServer(minecraft -> buildToolStations(minecraft.overworld(), new BlockPos(x - 8, y, z + 2)));
@@ -256,6 +264,32 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 		BlockPos splitter = start.east(4);
 		for (BlockPos chest : new BlockPos[] {splitter.north(), splitter.east(), splitter.south()}) {
 			level.setBlock(chest, Blocks.CHEST.defaultBlockState(), 3);
+		}
+		level.setBlock(start, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST), 3);
+		if (level.getBlockEntity(start) instanceof ElectricMotorBlockEntity motor) {
+			motor.energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+		}
+	}
+
+	/**
+	 * A motor driving a conveyor east into an up slope, a raised conveyor, a down slope and a chest, with items on the
+	 * first conveyor and both slopes.
+	 */
+	private static void buildSlopeLine(ServerLevel level, BlockPos start) {
+		BlockState flat = JugcraftLogistics.CONVEYOR.defaultBlockState().setValue(ConveyorBlock.FACING, Direction.EAST);
+		BlockState slope = JugcraftLogistics.CONVEYOR_SLOPE.defaultBlockState().setValue(ConveyorBlock.FACING, Direction.EAST);
+		level.setBlock(start.east(1), flat, 3);
+		level.setBlock(start.east(2), slope.setValue(ConveyorSlopeBlock.ASCENDING, true), 3);
+		level.setBlock(start.east(3).above(), flat, 3);
+		level.setBlock(start.east(4), slope.setValue(ConveyorSlopeBlock.ASCENDING, false), 3);
+		level.setBlock(start.east(5), Blocks.CHEST.defaultBlockState(), 3);
+		ItemStack[] cargo = {new ItemStack(Items.IRON_INGOT), new ItemStack(Items.OAK_LOG), new ItemStack(Items.COAL)};
+		for (BlockPos pos : new BlockPos[] {start.east(1), start.east(2), start.east(3).above(), start.east(4)}) {
+			if (level.getBlockEntity(pos) instanceof ConveyorBlockEntity conveyor) {
+				for (int i = 0; i < 2; i++) {
+					conveyor.accept(cargo[(pos.getX() + i) % cargo.length].copy(), 0.1F + i * 0.45F);
+				}
+			}
 		}
 		level.setBlock(start, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST), 3);
 		if (level.getBlockEntity(start) instanceof ElectricMotorBlockEntity motor) {

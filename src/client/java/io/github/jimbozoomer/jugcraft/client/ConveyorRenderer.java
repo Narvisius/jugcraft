@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-/** Draws the stacks riding a conveyor, upright like dropped items, gliding between ticks. */
+/** Draws the stacks riding a conveyor, upright like dropped items, gliding between ticks (and climbing on slopes). */
 public class ConveyorRenderer implements BlockEntityRenderer<ConveyorBlockEntity, ConveyorRenderer.State> {
 	/** Height of the belt surface (blocks). */
 	private static final float BELT_TOP = 5 / 16.0F;
@@ -31,6 +31,7 @@ public class ConveyorRenderer implements BlockEntityRenderer<ConveyorBlockEntity
 	public static final class State extends BlockEntityRenderState {
 		final List<ItemStackRenderState> items = new ArrayList<>();
 		final List<Float> progress = new ArrayList<>();
+		final List<Float> rise = new ArrayList<>();
 		Direction facing = Direction.NORTH;
 	}
 
@@ -50,12 +51,15 @@ public class ConveyorRenderer implements BlockEntityRenderer<ConveyorBlockEntity
 		state.facing = conveyor.getBlockState().getValue(ConveyorBlock.FACING);
 		state.items.clear();
 		state.progress.clear();
+		state.rise.clear();
 		int seed = (int) conveyor.getBlockPos().asLong();
 		for (ConveyorBlockEntity.Entry entry : conveyor.items()) {
 			ItemStackRenderState item = new ItemStackRenderState();
 			itemModels.updateForTopItem(item, entry.stack, ItemDisplayContext.GROUND, conveyor.getLevel(), null, seed++);
 			state.items.add(item);
-			state.progress.add(Mth.lerp(partialTick, entry.previous, entry.progress));
+			float progress = Mth.lerp(partialTick, entry.previous, entry.progress);
+			state.progress.add(progress);
+			state.rise.add(conveyor.riseAt(progress));
 		}
 	}
 
@@ -68,7 +72,7 @@ public class ConveyorRenderer implements BlockEntityRenderer<ConveyorBlockEntity
 			}
 			float along = state.progress.get(i) - 0.5F;
 			pose.pushPose();
-			pose.translate(0.5F + along * state.facing.getStepX(), BELT_TOP, 0.5F + along * state.facing.getStepZ());
+			pose.translate(0.5F + along * state.facing.getStepX(), BELT_TOP + state.rise.get(i), 0.5F + along * state.facing.getStepZ());
 			pose.rotateDegrees(Axis.YP, -state.facing.toYRot());
 			item.submit(pose, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 			pose.popPose();

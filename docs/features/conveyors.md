@@ -13,6 +13,7 @@ Primary specialty and supported player role: engineering, logistics
 - At the end, items go into the conveyor or inventory ahead, or fall onto the ground.
 - A **Conveyor Splitter** sends items left, straight on and right in turn, skipping any way that is blocked.
 - A running conveyor carries players and mobs along; sneaking stands still.
+- A **Conveyor Slope** carries items one block up or down (PR #44). Use it with an empty hand to switch direction. An up slope hands items to the block in front, one higher. A down slope takes them from a conveyor one block higher behind it.
 
 Details: [TECH_TREE.md → Item logistics](../TECH_TREE.md#item-logistics).
 
@@ -45,6 +46,7 @@ Fabric API transfer API. Original models and textures, including the animated be
   - `conveyorNeedsRotation`
   - `conveyorPicksUpDroppedItems`
   - `splitterTakesTurns`
+  - `conveyorSlopesGoUpAndDown`
 - The client screenshot `jugcraft_conveyors` shows a running line.
 - Not run: client play, two players, performance with long or many lines, carrying players.
 
@@ -52,6 +54,6 @@ Fabric API transfer API. Original models and textures, including the animated be
 Not applicable.
 
 ## Rollout and open questions
-- No slopes or vertical conveyors yet; items change height only through inventories.
+- Slopes change height one block at a time. There are no vertical lifts, and slopes do not carry players up.
 - No filters on splitters; the item sorter does filtering.
 - Moving entities on a belt is a simple push; it has not been tried with a player in a client.

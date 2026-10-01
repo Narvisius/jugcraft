@@ -139,19 +139,61 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 			ConveyorBlockEntity conveyor = queue.poll();
 			run.add(conveyor);
 			BlockPos pos = conveyor.worldPosition;
+			// Neighbours beside it, and one up or down for slopes.
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				BlockPos next = pos.relative(direction);
-				if (seen.contains(next) || !(level.getBlockEntity(next) instanceof ConveyorBlockEntity other)) {
-					continue;
-				}
-				// Joined if either feeds the other.
-				if (direction == conveyor.facing() || other.facing() == direction.getOpposite()) {
-					seen.add(next);
-					queue.add(other);
+				for (int dy = -1; dy <= 1; dy++) {
+					BlockPos next = pos.relative(direction).above(dy);
+					if (seen.contains(next) || !(level.getBlockEntity(next) instanceof ConveyorBlockEntity other)) {
+						continue;
+					}
+					// Joined if either feeds the other.
+					if (conveyor.feeds(other) || other.feeds(conveyor)) {
+						seen.add(next);
+						queue.add(other);
+					}
 				}
 			}
 		}
 		return run;
+	}
+
+	/** Whether this is a slope running up (items leave one block higher) or down (items arrive from one block higher). */
+	private boolean ascending() {
+		BlockState state = getBlockState();
+		return state.getBlock() instanceof ConveyorSlopeBlock && state.getValue(ConveyorSlopeBlock.ASCENDING);
+	}
+
+	private boolean descending() {
+		BlockState state = getBlockState();
+		return state.getBlock() instanceof ConveyorSlopeBlock && !state.getValue(ConveyorSlopeBlock.ASCENDING);
+	}
+
+	/** Where items leave this conveyor straight ahead: the block in front, one higher at the top of an up slope. */
+	private BlockPos outputPos() {
+		BlockPos ahead = worldPosition.relative(facing());
+		return ascending() ? ahead.above() : ahead;
+	}
+
+	/** Whether items leaving this conveyor (straight on or, for a splitter, to the side) land on {@code other}. */
+	private boolean feeds(ConveyorBlockEntity other) {
+		BlockPos base = ascending() ? worldPosition.above() : worldPosition;
+		for (Direction out : Direction.Plane.HORIZONTAL) {
+			BlockPos target = base.relative(out);
+			boolean output = out == facing() || getBlockState().getBlock() instanceof ConveyorBlock block && block.isSplitter()
+					&& out != facing().getOpposite();
+			if (!output || other.facing() == out.getOpposite()) {
+				continue;
+			}
+			if (target.equals(other.worldPosition) || other.descending() && other.facing() == out && target.equals(other.worldPosition.above())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** How high an item at {@code progress} rides above the conveyor's block (blocks): slopes climb or fall one block. */
+	public float riseAt(float progress) {
+		return ascending() ? progress : descending() ? 1 - progress : 0;
 	}
 
 	// ------------------------------------------------------------------ ticking
@@ -215,13 +257,15 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 	private ItemStack handOff(ServerLevel level, BlockPos pos, BlockState state, ItemStack stack) {
 		Direction facing = state.getValue(ConveyorBlock.FACING);
 		boolean splitter = state.getBlock() instanceof ConveyorBlock block && block.isSplitter();
+		// The top of an up slope is one block higher.
+		BlockPos base = ascending() ? pos.above() : pos;
 		Direction[] outputs = splitter
 				? new Direction[] {facing.getCounterClockWise(), facing, facing.getClockWise()}
 				: new Direction[] {facing};
 		for (int attempt = 0; attempt < outputs.length; attempt++) {
 			int index = (nextOutput + attempt) % outputs.length;
 			Direction out = outputs[index];
-			ItemStack left = offer(level, pos.relative(out), out, stack);
+			ItemStack left = offer(level, base.relative(out), out, stack);
 			if (left.getCount() != stack.getCount()) {
 				if (splitter) {
 					nextOutput = (index + 1) % outputs.length;
@@ -230,9 +274,9 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 			}
 		}
 		// Nothing takes it: off the front end, if nothing is in the way.
-		BlockPos ahead = pos.relative(facing);
+		BlockPos ahead = outputPos();
 		if (level.getBlockState(ahead).getCollisionShape(level, ahead).isEmpty()) {
-			Vec3 at = Vec3.atCenterOf(pos).add(facing.getStepX() * 0.6, -0.1, facing.getStepZ() * 0.6);
+			Vec3 at = Vec3.atCenterOf(base).add(facing.getStepX() * 0.6, -0.1, facing.getStepZ() * 0.6);
 			ItemEntity dropped = new ItemEntity(level, at.x, at.y, at.z, stack,
 					facing.getStepX() * SPEED, 0, facing.getStepZ() * SPEED);
 			dropped.setDefaultPickUpDelay();
@@ -254,6 +298,10 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 		}
 		Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, target, travel.getOpposite());
 		if (storage == null) {
+			// Onto the top of a down slope just below, running the same way.
+			if (level.getBlockEntity(target.below()) instanceof ConveyorBlockEntity below && below.descending() && below.facing() == travel) {
+				return below.accept(stack, 0) ? ItemStack.EMPTY : stack;
+			}
 			return stack;
 		}
 		try (Transaction transaction = Transaction.openOuter()) {

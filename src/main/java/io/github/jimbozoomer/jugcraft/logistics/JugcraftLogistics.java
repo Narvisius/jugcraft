@@ -30,6 +30,7 @@ public final class JugcraftLogistics {
 	public static Item BRASS_WRENCH;
 	public static Block CONVEYOR;
 	public static Block CONVEYOR_SPLITTER;
+	public static Block CONVEYOR_SLOPE;
 	public static BlockEntityType<ItemSorterBlockEntity> SORTER_ENTITY;
 	public static BlockEntityType<ConveyorBlockEntity> CONVEYOR_ENTITY;
 
@@ -51,6 +52,8 @@ public final class JugcraftLogistics {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F).noOcclusion()), false));
 		CONVEYOR_SPLITTER = block("conveyor_splitter", new ConveyorBlock(properties("conveyor_splitter",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F).noOcclusion()), true));
+		CONVEYOR_SLOPE = block("conveyor_slope", new ConveyorSlopeBlock(properties("conveyor_slope",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F).noOcclusion())));
 
 		ResourceKey<Item> wrenchKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("brass_wrench"));
 		BRASS_WRENCH = Registry.register(BuiltInRegistries.ITEM, wrenchKey,
@@ -60,7 +63,7 @@ public final class JugcraftLogistics {
 				FabricBlockEntityTypeBuilder.create(ItemSorterBlockEntity::new, ITEM_SORTER).build());
 		ItemStorage.SIDED.registerForBlockEntity(ItemSorterBlockEntity::itemsFor, SORTER_ENTITY);
 		CONVEYOR_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("conveyor"),
-				FabricBlockEntityTypeBuilder.create(ConveyorBlockEntity::new, CONVEYOR, CONVEYOR_SPLITTER).build());
+				FabricBlockEntityTypeBuilder.create(ConveyorBlockEntity::new, CONVEYOR, CONVEYOR_SPLITTER, CONVEYOR_SLOPE).build());
 		ItemStorage.SIDED.registerForBlockEntity((conveyor, side) -> conveyor.storage(), CONVEYOR_ENTITY);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
@@ -70,6 +73,7 @@ public final class JugcraftLogistics {
 			output.accept(ITEM_SORTER);
 			output.accept(CONVEYOR);
 			output.accept(CONVEYOR_SPLITTER);
+			output.accept(CONVEYOR_SLOPE);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> output.accept(BRASS_WRENCH));
 	}

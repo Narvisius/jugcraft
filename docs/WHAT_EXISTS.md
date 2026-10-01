@@ -109,6 +109,7 @@ Other blocks:
 | `brass_item_pipe` | `logistics/ItemPipeBlock` | 6 px item transmitter |
 | `pneumatic_extractor`, `high_pressure_extractor` | `logistics/PneumaticExtractorBlock` | pull 16 items / 8 ticks (brass) or 32 / 4 (steel) from what they face |
 | `item_sorter` | `logistics/ItemSorterBlock(Entity)` | 9-slot filter into the inventory it faces |
+| `conveyor_slope` | `logistics/ConveyorSlopeBlock` (`ascending`) | up slopes hand items to the block in front one higher; down slopes take them from one higher behind |
 | `conveyor`, `conveyor_splitter` | `logistics/ConveyorBlock(Entity)` | KE-driven belts; 4 stacks each; `ConveyorBlockEntity.accept(stack, progress)`; insert-only `ItemStorage`; client `ConveyorRenderer` |
 | `brass_wrench` (item) | `logistics/BrassWrenchItem` | rotate; sneak to dismantle |
 | `mining_drill`, `chainsaw` (items) | `tools/MiningDrillItem`, `ChainsawItem` (`PoweredToolItem`) | JE in the `jugcraft:energy` component; unbreakable; extra blocks via `ServerPlayerGameMode.destroyBlock`; drill mode in `jugcraft:drill_mode` |

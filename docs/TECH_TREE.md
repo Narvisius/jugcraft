@@ -412,6 +412,7 @@ Item logistics moves finished goods around without hoppers everywhere. Like powe
 | High-Pressure Extractor | The same, four times as fast (steel tier) | 32 items every 4 ticks | 4 steel plates, piston, pneumatic extractor |
 | Item Sorter | Accepts items from pipes on any side but its front, and passes only items that match its 9-slot filter into the inventory it faces | An empty filter matches nothing | 5 brass plates, comparator, hopper, 2 item pipes |
 | Conveyor | Carries items the way it faces while rotation drives it; loaded by pipes, hoppers, machines or dropped items; unloads into the conveyor or inventory ahead, or onto the ground | 2.5 blocks/s, 4 stacks per conveyor; 1 KE per conveyor per tick for the whole joined run (up to 64) | 3 leather belts, 2 iron plates, iron shaft → 6 |
+| Conveyor Slope | Carries items one block up or down; use with an empty hand to switch | As the conveyor | 2 conveyors, iron plate → 2 |
 | Conveyor Splitter | A conveyor that sends items left, straight on and right in turn | As the conveyor | conveyor, 2 bronze gears, brass plate |
 | Brass Wrench | Right-click turns a machine, extractor or sorter; sneak + right-click dismantles a Jugcraft block, dropping it and its contents | Multi-block machines cannot be turned | 4 brass ingots |
 

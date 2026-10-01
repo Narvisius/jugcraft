@@ -86,6 +86,8 @@ KINETIC_BLOCKS = {
     "conveyor": {"display": "Conveyor", "states": "horizontal"},
     "conveyor_splitter": {"display": "Conveyor Splitter", "states": "horizontal"},
 }
+# Conveyor slopes (logistics/ConveyorSlopeBlock): carry items one block up or down; use with an empty hand to flip.
+SLOPE_BLOCKS = {"conveyor_slope": {"display": "Conveyor Slope"}}
 # Powered tools (tools/), dieselpunk 3D item models in tools/tool_models.py: JE in an "energy" item component,
 # charged at the charging station.
 POWERED_TOOLS = {"mining_drill": "Mining Drill", "chainsaw": "Chainsaw", "rocket_pack": "Rocket Pack"}
@@ -304,6 +306,7 @@ CRAFTING = {
                                              "C": "jugcraft:copper_cable"}, 1),
     # Conveyors: leather belts over iron plates and a shaft; the splitter adds bronze gears and a brass plate.
     "conveyor": (["BBB", "PSP"], {"B": "jugcraft:belt", "P": "#c:plates/iron", "S": "jugcraft:iron_shaft"}, 6),
+    "conveyor_slope": ([" C", "CP"], {"C": "jugcraft:conveyor", "P": "#c:plates/iron"}, 2),
     "conveyor_splitter": ([" R ", "GCG"], {"R": "#c:plates/brass", "G": "#c:gears/bronze", "C": "jugcraft:conveyor"}, 1),
     # Powered tools (steel tier, dieselpunk): tungsten cutting edges, steel bodies, an advanced circuit each.
     "mining_drill": ([" T ", "SGS", "ALS"], {"T": "#c:plates/tungsten", "S": "#c:plates/steel", "G": "#c:gears/steel",
@@ -530,7 +533,8 @@ def _arc_dusts():
 
 def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
-            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS))
+            + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS)
+            + list(SLOPE_BLOCKS))
 
 
 def machine_items():

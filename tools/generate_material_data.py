@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
-from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -229,6 +229,32 @@ def machine_assets(lang):
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {k.rstrip(","): v for k, v in variants.items()}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
     write(ASSETS / "kinetic_rotors.json", kinetic_rotors.export(KINETIC_BLOCKS))
+    # Conveyor slopes: an ascending and a descending model, each with a moving-belt version, turned to face the way
+    # items travel.
+    for block, info in SLOPE_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = info["display"]
+        variants = {}
+        for ascending, name in ((True, block), (False, f"{block}_down")):
+            elements = kinetic_models.SLOPES[name]
+            textures = {tex: rid(f"block/{tex}") for tex in model_writer.texture_names(elements)}
+            textures["particle"] = rid("block/sp_iron")
+            write(ASSETS / "models" / "block" / f"{name}.json", {
+                "parent": "minecraft:block/block", "textures": textures,
+                "elements": model_writer.slice_model(name, elements, [(0, 0, 0)])[0]})
+            write(ASSETS / "models" / "block" / f"{name}_active.json", {
+                "parent": rid(f"block/{name}"), "textures": {"conveyor_belt": rid("block/conveyor_belt_moving")}})
+            for facing, rotation in FACING_ROTATION.items():
+                if facing in ("up", "down"):
+                    continue
+                for turning in (False, True):
+                    model = rid(f"block/{name}_active" if turning else f"block/{name}")
+                    key = f"ascending={str(ascending).lower()},facing={facing},turning={str(turning).lower()}"
+                    variants[key] = {"model": model, **rotation}
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": variants})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    lang[f"message.{MOD}.conveyor_slope"] = "Conveyor slope: %s"
+    lang[f"message.{MOD}.conveyor_slope.up"] = "up"
+    lang[f"message.{MOD}.conveyor_slope.down"] = "down"
     powered_tools(lang)
     lang[f"message.{MOD}.hand_crank"] = "Turning for %s more seconds"
     lang[f"message.{MOD}.steam_engine"] = "Steam engine: %s fuel, %s / %s mB water"

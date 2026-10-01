@@ -18,6 +18,7 @@ import io.github.jimbozoomer.jugcraft.kinetic.ShaftBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.SteamEngineBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ConveyorBlockEntity;
+import io.github.jimbozoomer.jugcraft.logistics.ConveyorSlopeBlock;
 import io.github.jimbozoomer.jugcraft.logistics.ItemSorterBlockEntity;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.logistics.PneumaticExtractorBlock;
@@ -851,6 +852,22 @@ public class JugcraftGameTests {
 						+ count(ahead, Items.COBBLESTONE) + " ahead, " + count(right, Items.COBBLESTONE) + " right");
 			}
 		});
+	}
+
+	/** Items climb an up slope onto a raised conveyor, come down a down slope and land in a chest. */
+	@GameTest(maxTicks = 300)
+	public void conveyorSlopesGoUpAndDown(GameTestHelper helper) {
+		conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
+		helper.setBlock(new BlockPos(3, 1, 2), JugcraftLogistics.CONVEYOR_SLOPE.defaultBlockState()
+				.setValue(ConveyorBlock.FACING, Direction.EAST).setValue(ConveyorSlopeBlock.ASCENDING, true));
+		conveyor(helper, new BlockPos(4, 2, 2), Direction.EAST, false);
+		helper.setBlock(new BlockPos(5, 1, 2), JugcraftLogistics.CONVEYOR_SLOPE.defaultBlockState()
+				.setValue(ConveyorBlock.FACING, Direction.EAST).setValue(ConveyorSlopeBlock.ASCENDING, false));
+		ChestBlockEntity chest = chest(helper, new BlockPos(6, 1, 2));
+		motorFacingEast(helper, new BlockPos(1, 1, 2));
+		helper.getBlockEntity(new BlockPos(2, 1, 2), ConveyorBlockEntity.class).accept(new ItemStack(Items.COBBLESTONE, 8), 0);
+		helper.succeedWhen(() -> helper.assertTrue(count(chest, Items.COBBLESTONE) == 8,
+				"The chest holds " + count(chest, Items.COBBLESTONE) + " cobblestone"));
 	}
 
 	// ------------------------------------------------------------------ powered tools

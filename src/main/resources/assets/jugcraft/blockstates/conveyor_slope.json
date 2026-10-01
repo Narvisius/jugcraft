@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "ascending=true,facing=north,turning=false": {
+      "model": "jugcraft:block/conveyor_slope"
+    },
+    "ascending=true,facing=north,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_active"
+    },
+    "ascending=true,facing=east,turning=false": {
+      "model": "jugcraft:block/conveyor_slope",
+      "y": 90
+    },
+    "ascending=true,facing=east,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_active",
+      "y": 90
+    },
+    "ascending=true,facing=south,turning=false": {
+      "model": "jugcraft:block/conveyor_slope",
+      "y": 180
+    },
+    "ascending=true,facing=south,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_active",
+      "y": 180
+    },
+    "ascending=true,facing=west,turning=false": {
+      "model": "jugcraft:block/conveyor_slope",
+      "y": 270
+    },
+    "ascending=true,facing=west,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_active",
+      "y": 270
+    },
+    "ascending=false,facing=north,turning=false": {
+      "model": "jugcraft:block/conveyor_slope_down"
+    },
+    "ascending=false,facing=north,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_down_active"
+    },
+    "ascending=false,facing=east,turning=false": {
+      "model": "jugcraft:block/conveyor_slope_down",
+      "y": 90
+    },
+    "ascending=false,facing=east,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_down_active",
+      "y": 90
+    },
+    "ascending=false,facing=south,turning=false": {
+      "model": "jugcraft:block/conveyor_slope_down",
+      "y": 180
+    },
+    "ascending=false,facing=south,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_down_active",
+      "y": 180
+    },
+    "ascending=false,facing=west,turning=false": {
+      "model": "jugcraft:block/conveyor_slope_down",
+      "y": 270
+    },
+    "ascending=false,facing=west,turning=true": {
+      "model": "jugcraft:block/conveyor_slope_down_active",
+      "y": 270
+    }
+  }
+}

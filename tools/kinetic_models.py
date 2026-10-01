@@ -141,6 +141,23 @@ def conveyor_splitter():
     return m
 
 
+def conveyor_slope(ascending):
+    """A conveyor ramp, one block up (ascending: rising towards the front, north) or down: the belt and its side rails
+    tilted 45 degrees across the block's diagonal, on iron legs. Items ride it the same way as a flat conveyor."""
+    angle = 45 if ascending else -45
+    tilt = ("x", angle, (8, 8, 8), True)
+    m = [box((2, 6.5, 0.25), (14, 8.5, 15.75), {"*": "belt", "up": "conveyor_belt"}, rotation=tilt)]
+    for x0, x1 in ((0.5, 2), (14, 15.5)):
+        m.append(box((x0, 6.25, 0), (x1, 9.5, 16), {"*": IRON_PLATE, "up": IRON}, rotation=tilt))
+    # Legs: tall at the high end, short in the middle.
+    high, mid = (1, 3) if ascending else (13, 15), (7, 9)
+    for x0, x1 in ((0.5, 2), (14, 15.5)):
+        m.append(box((x0, 0, high[0]), (x1, 12, high[1]), IRON))
+        m.append(box((x0, 0, mid[0]), (x1, 5, mid[1]), IRON))
+    m.append(box((2, 0, high[0]), (14, 1.5, high[1]), IRON_PLATE))
+    return m
+
+
 def brass_gearbox_parts():
     return brass_gearbox(), []
 
@@ -153,6 +170,8 @@ PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "ha
          "steam_engine": steam_engine(), "dynamo": dynamo_parts(), "belt_pulley": belt_pulley(),
          "electric_motor": electric_motor(), "conveyor": (conveyor(), []),
          "conveyor_splitter": (conveyor_splitter(), [])}
+# Conveyor slopes: one block (conveyor_slope, logistics/ConveyorSlopeBlock) with an ascending and a descending model.
+SLOPES = {"conveyor_slope": conveyor_slope(True), "conveyor_slope_down": conveyor_slope(False)}
 # Full models (rotor standing still) and the static parts shown while the rotor spins.
 MODELS = {block: static + rotor for block, (static, rotor) in PARTS.items()}
 STATIC = {block: static for block, (static, rotor) in PARTS.items()}
