@@ -1,0 +1,44 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "jugcraft:circuit_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:microchip",
+      "count": 4
+    },
+    {
+      "ingredient": "jugcraft:advanced_circuit",
+      "count": 1
+    },
+    {
+      "ingredient": "minecraft:gold_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:processor",
+    "count": 1
+  },
+  "time": 400
+}

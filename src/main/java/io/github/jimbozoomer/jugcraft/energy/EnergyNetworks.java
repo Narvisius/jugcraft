@@ -81,6 +81,19 @@ public final class EnergyNetworks {
 		}
 	}
 
+	/**
+	 * The network through this cable as a terminal reads it: how many cables, the rate its slowest cable sets, and
+	 * every face of a storage that touches it (one storage may touch it at several faces).
+	 */
+	public static View view(Level level, BlockPos cablePos) {
+		Network network = network(level, cablePos);
+		return new View(network.cables.size(), network.rate, List.copyOf(network.endpoints));
+	}
+
+	/** See {@link #view}. */
+	public record View(int cables, long rate, List<Endpoint> endpoints) {
+	}
+
 	private static Network network(Level level, BlockPos cablePos) {
 		Map<BlockPos, Network> networks = CACHE.computeIfAbsent(level, l -> new HashMap<>());
 		Network cached = networks.get(cablePos);
@@ -155,6 +168,7 @@ public final class EnergyNetworks {
 		}
 	}
 
-	private record Endpoint(BlockPos pos, Direction side) {
+	/** A storage's face touching a cable network: the storage's block and the side the cable meets. */
+	public record Endpoint(BlockPos pos, Direction side) {
 	}
 }

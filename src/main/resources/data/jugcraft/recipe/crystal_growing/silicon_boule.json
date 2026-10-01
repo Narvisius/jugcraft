@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:crystal_growing",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:silicon",
+      "count": 4
+    },
+    {
+      "ingredient": "jugcraft:phosphate",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:silicon_boule",
+    "count": 1
+  },
+  "time": 400
+}

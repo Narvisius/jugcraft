@@ -79,6 +79,17 @@ Burnt in the best generator for each (diesel generator, gas turbine), that is 13
 - Refinery gas has two uses: 192,000 JE a bucket in the turbine, or 4 plastic pellets (4 sheets).
 - KE: the diesel engine gives the same per mB as the generator; through a dynamo that is 192 JE/mB, so the generator stays the better JE source. Even through a magnet dynamo it is 243 JE/mB, under the generator's 256.
 
+## Electronics
+
+| Step | Cost |
+| --- | --- |
+| Silicon boule (crystal grower) | 4 silicon, 1 phosphate, 51,200 JE |
+| 8 wafers (sawmill) | 1 boule, 200 ticks |
+| 4 microchips (lithography station) | 1 wafer, 2 copper wire, 100 mB sulfuric acid, 38,400 JE |
+| Processor (circuit assembler) | 4 microchips, 1 advanced circuit, 1 gold ingot, 12,800 JE |
+
+A processor costs about 64,000 JE of crystal growing and etching (two wafers' worth of chips), plus 2 silicon, 4 copper wire and 100 mB of acid. Nothing in this tier makes power or turns back into its inputs.
+
 ## Loops and renewables checked
 
 - **Motor ↔ dynamo:** loses 44% per round trip; magnet motor ↔ magnet dynamo loses 9.75% (game test `magnetMotorAndDynamoLoopLosesPower`).

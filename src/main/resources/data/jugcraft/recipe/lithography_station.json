@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GSG",
+    "TCT",
+    "PMP"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "S": "minecraft:redstone_lamp",
+    "T": "#c:ingots/titanium",
+    "C": "jugcraft:advanced_circuit",
+    "P": "#c:plates/aluminum",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:lithography_station",
+    "count": 1
+  }
+}

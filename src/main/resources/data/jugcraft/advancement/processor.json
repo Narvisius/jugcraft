@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:processor"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.processor.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.processor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:processor"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:microchip"
+}

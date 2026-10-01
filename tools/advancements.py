@@ -52,6 +52,11 @@ TREE = {
     "neodymium_magnet": ("sulfuric_acid", "neodymium_magnet", "Strong Attraction", "Make a neodymium magnet", "task"),
     "magnet_dynamo": ("neodymium_magnet", ["magnet_dynamo", "magnet_motor"], "Lossless (Almost)",
                       "Build a magnet dynamo or magnet motor", "goal"),
+    # Electronics (batch 7).
+    "silicon_boule": ("titanium", "silicon_boule", "Pulling Strings", "Grow a silicon boule in the crystal grower", "goal"),
+    "microchip": ("silicon_boule", "microchip", "Etched in Light", "Etch microchips in the lithography station", "task"),
+    "processor": ("microchip", "processor", "Central Processing", "Assemble a processor", "task"),
+    "network_terminal": ("processor", "network_terminal", "Hello, World", "Build a network terminal", "goal"),
 }
 # Background of the tab (a block texture), shown behind the tree.
 BACKGROUND = "jugcraft:block/dp_gunmetal"

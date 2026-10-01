@@ -1,0 +1,37 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/lithography_station_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        4
+      ],
+      "to": [
+        16,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side"
+        },
+        "west": {
+          "texture": "#fluid_tank_side"
+        },
+        "up": {
+          "texture": "#fluid_tank_top"
+        }
+      }
+    }
+  ]
+}

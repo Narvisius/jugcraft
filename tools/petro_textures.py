@@ -292,7 +292,57 @@ def neodymium_magnet():
     return img
 
 
+def silicon_boule():
+    """A silicon boule: a long grey-blue single crystal, lying diagonally, with a cone at the seed end and glints."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    body = [(70, 78, 92), (104, 114, 130), (140, 150, 166), (190, 198, 212), (232, 236, 244)]
+    for y in range(16):
+        for x in range(16):
+            along, across = (x + y) / 2, (x - y)
+            width = 3.2 if 3 <= along <= 13 else 3.2 - (3 - along) * 1.2 if along < 3 else 3.2 - (along - 13) * 2
+            if width <= 0 or abs(across) > width or along < 1 or along > 14.5:
+                continue
+            shade = 4 if across < -width + 1.2 else 3 if across < 0 else 2 if across < width - 1.2 else 0
+            img.putpixel((x, y), body[shade] + (255,))
+    return img
+
+
+def silicon_wafer():
+    """A silicon wafer: a thin mirror-grey disc with a flat edge, catching a cyan-violet sheen."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(16):
+        for x in range(16):
+            d = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+            if d > 6.6 or y > 13:
+                continue
+            c = (120, 128, 146) if d > 5.8 else (176, 184, 200)
+            if abs((x - y) - 2) <= 1 and d < 5.8:
+                c = (150, 210, 228)
+            elif abs((x - y) + 3) <= 0 and d < 5.8:
+                c = (180, 150, 230)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def microchip():
+    """A microchip: a black package with silver pins down both sides and a cyan die mark."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(3, 13):
+        for x in range(4, 12):
+            c = (30, 32, 38) if (x, y) != (5, 4) else (90, 96, 110)
+            if 6 <= x <= 9 and 6 <= y <= 9:
+                c = (40, 120, 140) if (x + y) % 2 else (56, 170, 190)
+            img.putpixel((x, y), c + (255,))
+        if y % 2:
+            for x in (2, 3, 12, 13):
+                img.putpixel((x, y), (190, 196, 206, 255) if x in (3, 12) else (140, 146, 156, 255))
+    return img
+
+
 def draw_all(save, save_animation):
+    save(microchip(), "item", "microchip")
+    save(silicon_boule(), "item", "silicon_boule")
+    save(silicon_wafer(), "item", "silicon_wafer")
     save(neodymium_magnet(), "item", "neodymium_magnet")
     save(lithium_cell(), "item", "lithium_cell")
     save(titanium_sponge(), "item", "titanium_sponge")

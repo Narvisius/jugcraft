@@ -125,6 +125,16 @@
             "Strong Attraction: Make a neodymium magnet.",
             "Lossless (Almost): Build a magnet dynamo or magnet motor."
           ]
+        },
+        {
+          "title": "Milestones (9)",
+          "icon": "jugcraft:silicon_boule",
+          "text": [
+            "Pulling Strings: Grow a silicon boule in the crystal grower.",
+            "Etched in Light: Etch microchips in the lithography station.",
+            "Central Processing: Assemble a processor.",
+            "Hello, World: Build a network terminal."
+          ]
         }
       ]
     },
@@ -1054,6 +1064,26 @@
               ],
               "out": [
                 "jugcraft:advanced_circuit",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:microchip",
+                  4
+                ],
+                [
+                  "jugcraft:advanced_circuit",
+                  1
+                ],
+                [
+                  "minecraft:gold_ingot",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:processor",
                 1
               ]
             }
@@ -2392,6 +2422,95 @@
             "Two phosphate and 250 mB of sulfuric acid in the chemical reactor make four fertilizer.",
             "Use one on the ground or a crop: every crop in the 5x5 area around it (a block up or down too) gets two doses of bone meal. Grass and saplings are left alone."
           ]
+        }
+      ]
+    },
+    {
+      "title": "Electronics",
+      "icon": "jugcraft:silicon_wafer",
+      "pages": [
+        {
+          "title": "From Sand to Silicon",
+          "icon": "jugcraft:silicon_boule",
+          "text": [
+            "The electronics tier turns silicon into chips. It has the cyan look: dark casings, cyan glass and screens, violet conduits.",
+            "Grow a silicon boule from 4 silicon and a phosphate in the crystal grower, then saw it into 8 silicon wafers in the sawmill."
+          ]
+        },
+        {
+          "title": "Crystal Grower",
+          "icon": "jugcraft:crystal_grower",
+          "text": [
+            "Two blocks tall. Melts 4 silicon with a phosphate (the dopant) and slowly pulls a single crystal out of the melt: a silicon boule, every 20 seconds at 128 JE/t. Saw the boule into 8 wafers in the sawmill.",
+            "Uses 128 JE/t while working. Holds 60,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:glass",
+              "jugcraft:titanium_ingot",
+              "minecraft:glass",
+              "minecraft:glass",
+              "jugcraft:arc_furnace_casing",
+              "minecraft:glass",
+              "jugcraft:aluminum_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:aluminum_plate"
+            ],
+            "result": "jugcraft:crystal_grower",
+            "count": 1
+          }
+        },
+        {
+          "title": "Lithography Station",
+          "icon": "jugcraft:lithography_station",
+          "text": [
+            "Three wide, two tall and two deep: a cleanroom and an operator's desk with a monitor bank. A silicon wafer, two copper wire and 100 mB of sulfuric acid make four microchips, every 10 seconds at 192 JE/t. Pipe the acid into its tank.",
+            "Uses 192 JE/t while working. Holds 60,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:glass",
+              "minecraft:redstone_lamp",
+              "minecraft:glass",
+              "jugcraft:titanium_ingot",
+              "jugcraft:advanced_circuit",
+              "jugcraft:titanium_ingot",
+              "jugcraft:aluminum_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:aluminum_plate"
+            ],
+            "result": "jugcraft:lithography_station",
+            "count": 1
+          }
+        },
+        {
+          "title": "Processors",
+          "icon": "jugcraft:processor",
+          "text": [
+            "Four microchips, an advanced circuit and a gold ingot make a processor in the circuit assembler: the third circuit tier."
+          ]
+        },
+        {
+          "title": "Network Terminal",
+          "icon": "jugcraft:network_terminal",
+          "text": [
+            "A beige retro computer. Cable it into a power network and right-click it: it shows the network's cables, the rate its slowest cable sets, how many devices it reaches and the energy they hold. It uses no power."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:glass_pane",
+              "jugcraft:processor",
+              "minecraft:glass_pane",
+              "jugcraft:plastic_sheet",
+              "minecraft:redstone",
+              "jugcraft:plastic_sheet",
+              "jugcraft:copper_cable",
+              "minecraft:stone_button",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:network_terminal",
+            "count": 1
+          }
         }
       ]
     },

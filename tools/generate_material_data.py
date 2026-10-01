@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
-from machines import MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import ELECTRONICS_BLOCKS, MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -226,6 +226,20 @@ def machine_assets(lang):
             "elements": model_writer.slice_model(block, elements, [(0, 0, 0)])[0]})
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    # Electronics blocks (cyan look): one model each, turned to the four horizontal directions.
+    import hightech_models
+    for block, info in ELECTRONICS_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = info["display"]
+        elements = hightech_models.BLOCKS[block]
+        textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+        textures["particle"] = rid("block/rt_beige")
+        write(ASSETS / "models" / "block" / f"{block}.json", {
+            "parent": "minecraft:block/block", "textures": textures,
+            "elements": model_writer.slice_model(block, elements, [(0, 0, 0)])[0]})
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": {
+            f"facing={facing}": {"model": rid(f"block/{block}"), **rotation}
+            for facing, rotation in FACING_ROTATION.items() if facing not in ("up", "down")}})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
     # Kinetic blocks: one model each, a turning or lit variant where they have one, and rotations.
     import kinetic_models
     import kinetic_rotors
@@ -305,6 +319,8 @@ def machine_assets(lang):
     lang[f"message.{MOD}.steam_engine"] = "Steam engine: %s fuel, %s / %s mB water"
     lang[f"message.{MOD}.dynamo"] = "Dynamo: %s / %s JE"
     lang[f"message.{MOD}.electric_motor"] = "Electric motor: %s / %s JE"
+    lang[f"message.{MOD}.network_terminal"] = "Network: %s cables at %s JE/t, %s devices holding %s / %s JE (%s%%)"
+    lang[f"message.{MOD}.network_terminal.none"] = "No cable connected"
     lang[f"message.{MOD}.belt.first"] = "Now use the belt on the second pulley"
     lang[f"message.{MOD}.belt.linked"] = "Belt fitted"
     lang[f"message.{MOD}.belt.same"] = "Pick a different pulley"
@@ -369,7 +385,7 @@ RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_sme
                 "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly",
                 "pulverizer": "pulverizing", "ore_washer": "ore_washing", "sieve": "sifting", "sawmill": "sawing",
                 "coke_oven": "coking", "steel_foundry": "steelmaking",
-                "tree_farm": "tree_growing"}
+                "tree_farm": "tree_growing", "crystal_grower": "crystal_growing"}
 
 
 def machine_recipe_files(out):

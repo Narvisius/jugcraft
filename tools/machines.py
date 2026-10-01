@@ -73,6 +73,9 @@ MACHINES = {
     "fuel_cell": {"display": "Fuel Cell", "lit": True},
     # Storage (batch 6): a 3x2 lithium battery bank in the electric look.
     "lithium_battery_bank": {"display": "Lithium Battery Bank", "lit": False},
+    # Electronics (batch 7, the cyan look).
+    "crystal_grower": {"display": "Crystal Grower", "lit": True},
+    "lithography_station": {"display": "Lithography Station", "lit": True},
     # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
     "diesel_engine": {"display": "Diesel Engine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -101,6 +104,8 @@ LOGISTICS_BLOCKS = {
     "high_pressure_extractor": {"display": "High-Pressure Extractor"},
     "item_sorter": {"display": "Item Sorter"},
 }
+# Electronics (batch 7): a beige retro computer that reads out its power network (electronics/NetworkTerminalBlock).
+ELECTRONICS_BLOCKS = {"network_terminal": {"display": "Network Terminal"}}
 TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handbook",
          # Mining & prospecting: a vague 3x3-chunk ore survey (prospecting/OreSurvey).
          "prospector": "Geo-Resonance Prospector",
@@ -249,6 +254,10 @@ STATS = {
     "fuel_cell": {"capacity": 40_000, "output_per_tick": 512, "generation_per_tick": 128, "tank": 8_000},
     # 3x2, one deep. Outputs from its front (all six blocks), charges from any other face.
     "lithium_battery_bank": {"capacity": 32_000_000, "io_per_tick": 16_384},
+    # 2 tall. 4 silicon + 1 phosphate (the dopant) -> a silicon boule.
+    "crystal_grower": {"capacity": 60_000, "input_per_tick": 512, "use_per_tick": 128},
+    # 3x2x2. Wafer + 2 copper wire + 100 mB sulfuric acid -> 4 microchips.
+    "lithography_station": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 192, "tank": 4_000},
     # 2x2x3. Up to 512 KE/t: 2 mB of diesel a tick (256 KE/mB) or 4 mB of heavy fuel oil, only for what it delivers.
     "diesel_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 512, "tank": 8_000},
 }
@@ -457,6 +466,15 @@ CRAFTING = {
     "fuel_cell": (["PWP", "SCS", "PTP"], {"P": "#c:plates/aluminum", "W": "jugcraft:aluminum_cable",
                                           "S": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
                                           "T": "jugcraft:fluid_tank"}, 1),
+    "crystal_grower": (["GTG", "GHG", "PCP"], {"G": "minecraft:glass", "T": "#c:ingots/titanium",
+                                               "H": "jugcraft:arc_furnace_casing", "P": "#c:plates/aluminum",
+                                               "C": "jugcraft:advanced_circuit"}, 1),
+    "lithography_station": (["GSG", "TCT", "PMP"], {"G": "minecraft:glass", "S": "minecraft:redstone_lamp",
+                                                    "T": "#c:ingots/titanium", "C": "jugcraft:advanced_circuit",
+                                                    "P": "#c:plates/aluminum", "M": "jugcraft:machine_casing"}, 1),
+    "network_terminal": (["GSG", "PXP", "WKW"], {"G": "minecraft:glass_pane", "S": "jugcraft:processor",
+                                                 "P": "jugcraft:plastic_sheet", "X": "minecraft:redstone",
+                                                 "W": "jugcraft:copper_cable", "K": "minecraft:stone_button"}, 1),
     "lithium_cell": (["PLP", "LWL", "PLP"], {"P": "#c:plates/aluminum", "L": "jugcraft:lithium_carbonate",
                                              "W": "#c:wires/copper"}, 2),
     "lithium_battery_bank": (["TCT", "CBC", "TCT"], {"T": "#c:ingots/titanium", "C": "jugcraft:lithium_cell",
@@ -577,6 +595,9 @@ CIRCUIT_ASSEMBLER = [
      "output": "jugcraft:basic_circuit", "count": 1, "ticks": 200, "features": [FEATURE, "silicon", "lead"]},
     {"inputs": [["jugcraft:basic_circuit", 2], ["jugcraft:silver_wire", 3], ["jugcraft:invar_plate", 1]],
      "output": "jugcraft:advanced_circuit", "count": 1, "ticks": 300, "features": [FEATURE, "silver", "nickel"]},
+    # Electronics (batch 7): four microchips bonded to an advanced circuit with gold.
+    {"inputs": [["jugcraft:microchip", 4], ["jugcraft:advanced_circuit", 1], ["minecraft:gold_ingot", 1]],
+     "output": "jugcraft:processor", "count": 1, "ticks": 400, "features": [FEATURE, "silicon", "sulfur", "silver", "nickel"]},
 ]
 
 
@@ -636,7 +657,17 @@ def _sawmill():
                         "features": [FEATURE], "byproducts": [["jugcraft:sawdust", 1, 0.5, None]]})
     recipes.append({"input": "#minecraft:planks", "output": "minecraft:stick", "count": 3, "ticks": 60,
                     "features": [FEATURE]})
+    # Electronics (batch 7): a wire saw slices a silicon boule into wafers.
+    recipes.append({"input": "jugcraft:silicon_boule", "output": "jugcraft:silicon_wafer", "count": 8, "ticks": 200,
+                    "features": [FEATURE, "silicon"]})
     return recipes
+
+
+# Crystal grower (batch 7): polysilicon melted with a phosphorus dopant and pulled into a single crystal.
+CRYSTAL_GROWER = [
+    {"inputs": [["jugcraft:silicon", 4], ["jugcraft:phosphate", 1]], "output": "jugcraft:silicon_boule",
+     "count": 1, "ticks": 400, "features": [FEATURE, "silicon", "phosphate"]},
+]
 
 
 # Coke oven: coal baked slowly into coke (no power, no fuel).
@@ -670,7 +701,8 @@ def machine_recipes():
     return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE + _arc_dusts(), "alloy_smelter": ALLOY_SMELTER,
             "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
             "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill(),
-            "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY, "tree_farm": _tree_farm()}
+            "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY, "tree_farm": _tree_farm(),
+            "crystal_grower": CRYSTAL_GROWER}
 
 
 def _arc_dusts():
@@ -686,7 +718,7 @@ def _arc_dusts():
 def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
             + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS)
-            + list(SLOPE_BLOCKS))
+            + list(SLOPE_BLOCKS) + list(ELECTRONICS_BLOCKS))
 
 
 def machine_items():

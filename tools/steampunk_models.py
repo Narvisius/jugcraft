@@ -23,6 +23,8 @@ GLOW = {
     "sp_lamp": "sp_lamp_on",
     "dp_lamp": "dp_lamp_on",
     "el_screen": "el_screen_on",
+    "el_screen_cyan": "el_screen_cyan_on",
+    "el_glass": "el_glass_on",
 }
 # Full-cube parts keep cube models; only their texture changes.
 CUBES = {"machine_casing": "sp_machine_casing", "arc_furnace_casing": "sp_arc_casing"}
@@ -1017,3 +1019,6 @@ MODELS.update(_DIESELPUNK)
 # Power gear has the electric look (graphite and green glow): tools/electric_models.py replaces those.
 from electric_models import MODELS as _ELECTRIC  # noqa: E402
 MODELS.update(_ELECTRIC)
+# The electronics tier has the cyan look: tools/hightech_models.py.
+from hightech_models import MODELS as _HIGHTECH  # noqa: E402
+MODELS.update(_HIGHTECH)

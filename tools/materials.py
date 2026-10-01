@@ -97,7 +97,7 @@ WASHED_ORES = list(COMPONENTS["dust"])
 # Sawmill byproduct.
 SAWDUST = "sawdust"
 # Assembled electronics (non-metal outputs; their metal is consumed).
-CIRCUITS = {"basic_circuit": "Basic Circuit", "advanced_circuit": "Advanced Circuit"}
+CIRCUITS = {"basic_circuit": "Basic Circuit", "advanced_circuit": "Advanced Circuit", "processor": "Processor"}
 # Vanilla metals that get Jugcraft parts: nugget units per vanilla ingot.
 VANILLA_METALS = {"copper", "iron", "gold"}
 

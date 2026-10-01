@@ -18,6 +18,13 @@ COPPER = [(110, 54, 30), (168, 92, 52), (214, 140, 88)]
 SILVER = [(120, 126, 136), (176, 182, 190), (230, 234, 240)]
 ALUMINUM = [(132, 138, 146), (190, 196, 202), (236, 238, 242)]
 HAZARD = [(222, 176, 34), (24, 24, 24)]
+# The high-tech (electronics) tier: near-black casings, cyan glass and screens, violet conduits.
+DARK = [(14, 16, 20), (22, 25, 31), (32, 36, 44), (44, 49, 59), (62, 68, 80), (92, 100, 116)]
+VIOLET = [(58, 24, 96), (98, 44, 160), (146, 82, 222), (196, 150, 250), (236, 218, 255)]
+GLASS = [(8, 34, 42), (12, 52, 62), (20, 80, 92), (60, 150, 164), (170, 236, 244)]
+SILICON = [(70, 78, 92), (104, 114, 130), (140, 150, 166), (190, 198, 212), (232, 236, 244)]
+# A beige retro computer (one of the owner's references).
+BEIGE = [(132, 120, 96), (168, 156, 128), (196, 186, 158), (218, 210, 184), (236, 230, 208)]
 
 
 def _noise(rng, a, b, rate=0.18):
@@ -235,6 +242,145 @@ def magnet(seed):
     return img
 
 
+def dark(seed):
+    """A near-black sci-fi casing panel: a fine bevel, a recessed groove and a thin cyan trace along the groove's top
+    and left edges, like the lit seams of a high-tech machine."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            put(img, x, y, _noise(rng, DARK[2], DARK[3], 0.15))
+    for i in range(16):
+        put(img, i, 0, DARK[4])
+        put(img, 0, i, DARK[4])
+        put(img, i, 15, DARK[0])
+        put(img, 15, i, DARK[0])
+    for i in range(2, 14):
+        put(img, i, 2, CYAN[1])
+        put(img, 2, i, CYAN[1])
+        put(img, i, 13, DARK[4])
+        put(img, 13, i, DARK[4])
+    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14)):
+        put(img, x, y, DARK[5])
+    return img
+
+
+def glass(lit):
+    """Cyan-tinted glass, drawn opaque: dark teal with two diagonal highlight streaks and a thin rim. Lit, the
+    inside glows with a brighter cyan haze."""
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                c = DARK[1]
+            else:
+                c = GLASS[2] if lit else GLASS[1]
+                if lit and 4 <= x <= 11 and 4 <= y <= 11:
+                    c = GLASS[3]
+                d = (x + y) % 16
+                if d in (5, 6) or d == 11:
+                    c = GLASS[4] if d == 5 else GLASS[3] if not lit else GLASS[4]
+            put(img, x, y, c)
+    return img
+
+
+def conduit(seed):
+    """A violet conduit: a dark sheath with a glowing violet line along it (rows 7-8), like the cables' core."""
+    img = new(DARK[2])
+    band = {4: DARK[4], 5: DARK[3], 6: VIOLET[1], 7: VIOLET[3], 8: VIOLET[2], 9: VIOLET[1], 10: DARK[1], 11: DARK[0]}
+    for y in range(16):
+        for x in range(16):
+            c = band.get(y, DARK[2])
+            if x % 8 == 0 and y in (4, 5, 10, 11):
+                c = DARK[5]
+            put(img, x, y, c)
+    return img
+
+
+def boule(seed):
+    """A silicon crystal: bright grey-blue with long vertical facets and a few glints."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            facet = (x // 3) % 3
+            c = SILICON[1 + facet]
+            if rng.random() < 0.06:
+                c = SILICON[4]
+            if x % 3 == 0:
+                c = SILICON[0]
+            put(img, x, y, c)
+    return img
+
+
+def cyan_screen(lit):
+    """A cyan monitor: a dark bezel around black glass with cyan graph lines and readouts."""
+    rng = random.Random(721)
+    img = new()
+    lines = [CYAN[2], CYAN[3]] if lit else [CYAN[0], CYAN[1]]
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                c = DARK[1]
+            else:
+                c = (6, 18, 24) if lit else (4, 10, 14)
+                if y in (3, 5) and 2 <= x <= 2 + rng.randrange(5, 12):
+                    c = lines[1] if rng.random() < 0.3 else lines[0]
+                if y >= 8 and y == 13 - ((x * 7) % 5):
+                    c = lines[1]
+            put(img, x, y, c)
+    return img
+
+
+def beige(seed):
+    """Beige plastic of a retro computer case: smooth with a faint grain and a soft moulded edge."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = _noise(rng, BEIGE[3], BEIGE[2], 0.12)
+            if x == 0 or y == 0:
+                c = BEIGE[4]
+            elif x == 15 or y == 15:
+                c = BEIGE[1]
+            put(img, x, y, c)
+    return img
+
+
+def floppy(seed):
+    """The front of a retro computer case: beige with two drive bays (dark slots with eject buttons), a vent grille
+    and a green power lamp."""
+    img = beige(seed)
+    for top in (2, 6):
+        for y in range(top, top + 3):
+            for x in range(2, 14):
+                put(img, x, y, BEIGE[1] if y == top else BEIGE[2])
+        for x in range(4, 11):
+            put(img, x, top + 1, (30, 30, 32))
+        put(img, 12, top + 1, BEIGE[0])
+    for y in (11, 13):
+        for x in range(2, 9):
+            put(img, x, y, BEIGE[0])
+    put(img, 12, 12, GLOW[3])
+    put(img, 13, 12, GLOW[2])
+    return img
+
+
+def retro_keys(seed):
+    """A beige keyboard: rows of cream keys with darker function keys along the top."""
+    rng = random.Random(seed)
+    img = new(BEIGE[1])
+    for y in range(1, 16, 3):
+        for x in range(1, 15):
+            if x % 2:
+                key = BEIGE[4] if rng.random() < 0.85 else BEIGE[3]
+                if y == 1:
+                    key = (120, 112, 100)
+                put(img, x, y, key)
+                put(img, x, y + 1, BEIGE[2])
+    return img
+
+
 def hazard(seed):
     """Yellow-and-black warning stripes for high-voltage edges."""
     img = new()
@@ -294,3 +440,15 @@ def draw_all():
     save(cell(739, GLOW), "el_cell")
     save(hazard(740), "el_hazard")
     save(magnet(741), "el_magnet")
+    # The electronics tier (cyan look) and the retro computer.
+    save(dark(742), "el_dark")
+    save(glass(False), "el_glass")
+    save(glass(True), "el_glass_on")
+    save(glow(VIOLET), "el_glow_violet")
+    save(conduit(743), "el_conduit")
+    save(boule(744), "el_boule")
+    save(cyan_screen(False), "el_screen_cyan")
+    save(cyan_screen(True), "el_screen_cyan_on")
+    save(beige(745), "rt_beige")
+    save(floppy(746), "rt_floppy")
+    save(retro_keys(747), "rt_keys")

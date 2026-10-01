@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GTG",
+    "GHG",
+    "PCP"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "T": "#c:ingots/titanium",
+    "H": "jugcraft:arc_furnace_casing",
+    "P": "#c:plates/aluminum",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:crystal_grower",
+    "count": 1
+  }
+}

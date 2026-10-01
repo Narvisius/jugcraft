@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:network_terminal"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.network_terminal.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.network_terminal.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:network_terminal"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:processor"
+}

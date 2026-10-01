@@ -506,6 +506,20 @@ public class PetroGameTests {
 		});
 	}
 
+	/** The lithography station etches a wafer and two copper wire with 100 mB of sulfuric acid into four microchips. */
+	@GameTest(maxTicks = 400)
+	public void lithographyMakesMicrochips(GameTestHelper helper) {
+		MachineBlockEntity station = place(helper, MachineKind.LITHOGRAPHY_STATION, new BlockPos(5, 1, 2));
+		station.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 1_000);
+		station.setItem(0, new ItemStack(PetroItems.SILICON_WAFER));
+		station.setItem(1, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("copper_wire")), 2));
+		helper.succeedWhen(() -> {
+			ItemStack out = station.getItem(station.kind().outputSlot());
+			helper.assertTrue(out.is(PetroItems.MICROCHIP) && out.getCount() == 4, "Microchips: " + out);
+			helper.assertTrue(station.tanks().input(0).millibuckets() == 900, "Acid left: " + station.tanks().input(0).millibuckets());
+		});
+	}
+
 	/** Fertilizer grows every crop in the 5x5 area around where it is used. */
 	@GameTest
 	public void fertilizerGrowsTheCropsAround(GameTestHelper helper) {

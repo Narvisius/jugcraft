@@ -116,7 +116,7 @@ def _face_texture(texture, face):
 
 # Textures that glow (electric look): an element drawn only with these is lit at full brightness in the dark
 # (Minecraft's per-element "light_emission"; it lights the element itself, not the blocks around it).
-EMISSIVE = {"el_glow", "el_glow_cyan"}
+EMISSIVE = {"el_glow", "el_glow_cyan", "el_glow_violet"}
 
 
 def element(frm, to, texture, uv=False, skip=(), rotation=None):

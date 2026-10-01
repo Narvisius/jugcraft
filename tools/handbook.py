@@ -8,7 +8,7 @@ Format: {"chapters": [{"title", "icon", "pages": [{"title", "icon", "text": [par
 "craft": {"grid": [9 item ids or null], "result", "count"}, "recipes": [{"in": [[id, count]], "out": [id, count]}]}]}]}
 """
 from materials import COMPONENTS, METALS, MINERALS, ingot_id, ore_ids
-from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS,
+from machines import (ELECTRONICS_BLOCKS, CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS,
                       UPGRADES, BYPRODUCTS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, machine_recipes)
 
 MOD = "jugcraft"
@@ -136,6 +136,15 @@ ABOUT = {
                          "and a bucket of water.",
     "chemical_reactor": "Two by two by two, lined with lead against the acid. Burns sulfur and absorbs it in water: two "
                         "sulfur dust and a bucket of water make a bucket of sulfuric acid, every 5 seconds.",
+    "crystal_grower": "Two blocks tall. Melts 4 silicon with a phosphate (the dopant) and slowly pulls a single "
+                      "crystal out of the melt: a silicon boule, every 20 seconds at 128 JE/t. Saw the boule into 8 "
+                      "wafers in the sawmill.",
+    "network_terminal": "A beige retro computer. Cable it into a power network and right-click it: it shows the "
+                        "network's cables, the rate its slowest cable sets, how many devices it reaches and the "
+                        "energy they hold. It uses no power.",
+    "lithography_station": "Three wide, two tall and two deep: a cleanroom and an operator's desk with a monitor bank. "
+                           "A silicon wafer, two copper wire and 100 mB of sulfuric acid make four microchips, every "
+                           "10 seconds at 192 JE/t. Pipe the acid into its tank.",
     "lithium_battery_bank": "Three wide, two tall, one deep: six lithium battery modules holding 32,000,000 JE, eight "
                             "capacitor banks. It charges from any side and gives power out of the sockets on its "
                             "front, 16,384 JE/t.",
@@ -412,6 +421,19 @@ def build():
                 "Two phosphate and 250 mB of sulfuric acid in the chemical reactor make four fertilizer.",
                 "Use one on the ground or a crop: every crop in the 5x5 area around it (a block up or down too) gets "
                 "two doses of bone meal. Grass and saplings are left alone."]},
+        ]},
+        {"title": "Electronics", "icon": f"{MOD}:silicon_wafer", "pages": [
+            {"title": "From Sand to Silicon", "icon": f"{MOD}:silicon_boule", "text": [
+                "The electronics tier turns silicon into chips. It has the cyan look: dark casings, cyan glass and "
+                "screens, violet conduits.",
+                "Grow a silicon boule from 4 silicon and a phosphate in the crystal grower, then saw it into 8 silicon "
+                "wafers in the sawmill."]},
+            machine_page("crystal_grower"),
+            machine_page("lithography_station"),
+            {"title": "Processors", "icon": f"{MOD}:processor", "text": [
+                "Four microchips, an advanced circuit and a gold ingot make a processor in the circuit assembler: the "
+                "third circuit tier."]},
+            block_page("network_terminal", ELECTRONICS_BLOCKS["network_terminal"]["display"]),
         ]},
         {"title": "Logistics", "icon": f"{MOD}:brass_item_pipe", "pages": [
             {"title": "Machine Sides", "icon": f"{MOD}:crusher", "text": [

@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    }
+  ],
+  "type": "jugcraft:lithography",
+  "items": [
+    {
+      "ingredient": "jugcraft:silicon_wafer",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:copper_wire",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:sulfuric_acid",
+      "amount": 100
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:microchip",
+      "count": 4
+    }
+  ],
+  "time": 200
+}

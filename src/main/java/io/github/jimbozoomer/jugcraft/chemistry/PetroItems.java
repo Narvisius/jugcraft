@@ -25,6 +25,11 @@ public final class PetroItems {
 	public static Item LITHIUM_CELL;
 	/** Rare earths alloyed with iron in the alloy smelter: for the magnet dynamo and magnet motor. */
 	public static Item NEODYMIUM_MAGNET;
+	/** Electronics (batch 7): a doped silicon crystal from the crystal grower, sawn into wafers. */
+	public static Item SILICON_BOULE;
+	public static Item SILICON_WAFER;
+	/** Wafers etched in the lithography station: four chips each. */
+	public static Item MICROCHIP;
 
 	private PetroItems() {
 	}
@@ -39,6 +44,9 @@ public final class PetroItems {
 		TITANIUM_SPONGE = JugcraftRegistry.item("titanium_sponge");
 		LITHIUM_CELL = JugcraftRegistry.item("lithium_cell");
 		NEODYMIUM_MAGNET = JugcraftRegistry.item("neodymium_magnet");
+		SILICON_BOULE = JugcraftRegistry.item("silicon_boule");
+		SILICON_WAFER = JugcraftRegistry.item("silicon_wafer");
+		MICROCHIP = JugcraftRegistry.item("microchip");
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(CRACKING_CATALYST);
@@ -50,6 +58,9 @@ public final class PetroItems {
 			output.accept(TITANIUM_SPONGE);
 			output.accept(LITHIUM_CELL);
 			output.accept(NEODYMIUM_MAGNET);
+			output.accept(SILICON_BOULE);
+			output.accept(SILICON_WAFER);
+			output.accept(MICROCHIP);
 		});
 	}
 }

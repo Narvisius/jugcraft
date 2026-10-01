@@ -82,7 +82,11 @@ public enum MachineKind implements StringRepresentable {
 	// A one-block hydrogen fuel cell (electric look): hydrogen in, JE out.
 	FUEL_CELL("fuel_cell", 40_000, 0, 512, 0, 0),
 	// Storage (batch 6): a 3x2 lithium battery bank, one deep, giving power out of its front like the capacitor bank.
-	LITHIUM_BATTERY_BANK("lithium_battery_bank", 32_000_000, 16_384, 16_384, 0, 0);
+	LITHIUM_BATTERY_BANK("lithium_battery_bank", 32_000_000, 16_384, 16_384, 0, 0),
+	// Electronics (batch 7, the cyan look): a two-block crystal grower pulling doped silicon boules.
+	CRYSTAL_GROWER("crystal_grower", 60_000, 512, 0, 128, 3),
+	// A 3x2x2 cleanroom with a monitor bank: wafers etched with sulfuric acid into microchips.
+	LITHOGRAPHY_STATION("lithography_station", 60_000, 1_024, 0, 192, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -196,6 +200,8 @@ public enum MachineKind implements StringRepresentable {
 	public static final int CHEM_REACTOR_TANK = 8_000;
 	/** Polymerization reactor: its refinery gas tank. */
 	public static final int REACTOR_TANK = 8_000;
+	/** Lithography station: its sulfuric acid (etchant) tank. */
+	public static final int LITHOGRAPHY_TANK = 4_000;
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -221,7 +227,7 @@ public enum MachineKind implements StringRepresentable {
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
 				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL
-				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER;
+				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER || this == CRYSTAL_GROWER;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -236,7 +242,7 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Processors whose recipes combine several ingredient stacks placed in any input slots. */
 	public boolean isMultiInput() {
-		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER || this == STEEL_FOUNDRY;
+		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER || this == STEEL_FOUNDRY || this == CRYSTAL_GROWER;
 	}
 
 	/**
@@ -268,6 +274,8 @@ public enum MachineKind implements StringRepresentable {
 			case POLYMERIZATION_REACTOR -> "polymerization";
 			case ELECTROLYTIC_CELL -> "electrolysis";
 			case CHEMICAL_REACTOR -> "chemical_reaction";
+			case CRYSTAL_GROWER -> "crystal_growing";
+			case LITHOGRAPHY_STATION -> "lithography";
 			default -> null;
 		};
 	}
@@ -306,6 +314,7 @@ public enum MachineKind implements StringRepresentable {
 			case DIESEL_ENGINE -> new FluidMachineSpec(List.of(DIESEL_ENGINE_TANK), List.of(), 0, 0);
 			case ELECTROLYTIC_CELL -> new FluidMachineSpec(List.of(CELL_TANK), List.of(CELL_TANK, CELL_TANK, CELL_TANK), 2, 1);
 			case CHEMICAL_REACTOR -> new FluidMachineSpec(List.of(CHEM_REACTOR_TANK), List.of(CHEM_REACTOR_TANK), 2, 1);
+			case LITHOGRAPHY_STATION -> new FluidMachineSpec(List.of(LITHOGRAPHY_TANK), List.of(), 2, 1);
 			case FUEL_CELL -> new FluidMachineSpec(List.of(FUEL_CELL_TANK), List.of(), 0, 0);
 			default -> null;
 		};
@@ -405,6 +414,10 @@ public enum MachineKind implements StringRepresentable {
 			case CHEMICAL_REACTOR -> Footprint.cuboid(2, 2, 2);
 			// Three wide, two tall, one deep, so every block's front is a power socket.
 			case LITHIUM_BATTERY_BANK -> Footprint.cuboid(3, 2, 1);
+			// A control cabinet with the growth chamber and pull head above it.
+			case CRYSTAL_GROWER -> Footprint.tall(2);
+			// The cleanroom (left) and the operator's desk with its monitor bank (right), two deep.
+			case LITHOGRAPHY_STATION -> Footprint.cuboid(3, 2, 2);
 			default -> Footprint.SINGLE;
 		};
 	}

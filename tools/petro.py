@@ -79,6 +79,11 @@ ITEMS = {
     "lithium_cell": "Lithium Cell",
     # Neodymium magnets (batch 6): the alloy smelter makes them; the magnet dynamo and motor use them.
     "neodymium_magnet": "Neodymium Magnet",
+    # Electronics (batch 7): the crystal grower pulls doped silicon boules; the sawmill cuts them into wafers.
+    "silicon_boule": "Silicon Boule",
+    "silicon_wafer": "Silicon Wafer",
+    # Etched in the lithography station (batch 7).
+    "microchip": "Microchip",
 }
 
 
@@ -159,6 +164,9 @@ FLUID_MACHINES = {
     # Sulfur + water -> sulfuric acid; bauxite + lye -> alumina; phosphate + acid -> fertilizer (batch 5). 96 JE/t.
     "chemical_reactor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 1,
                          "recipe_type": "chemical_reaction"},
+    # Electronics (batch 7): a wafer and copper wire etched with sulfuric acid into microchips. 192 JE/t.
+    "lithography_station": {"inputs": [4_000], "outputs": [], "item_inputs": 2, "item_outputs": 1,
+                            "recipe_type": "lithography"},
     # Refinery gas -> plastic pellets. 96 JE/t.
     "polymerization_reactor": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 1,
                                "recipe_type": "polymerization"},
@@ -251,6 +259,12 @@ FLUID_RECIPES = {
          "results": [("jugcraft:lithium_carbonate", 2)], "ticks": 100, "features": ["lithium", "sulfur"]},
         {"name": "rare_earth_oxide", "items": [("jugcraft:monazite", 1)], "fluids": [("jugcraft:sulfuric_acid", 250)],
          "results": [("jugcraft:rare_earth_oxide", 2)], "ticks": 140, "features": ["rare_earths", "sulfur"]},
+    ],
+    # Photolithography (batch 7): a wafer patterned and etched with sulfuric acid, with copper wire for the bonds.
+    "lithography_station": [
+        {"name": "microchip", "items": [("jugcraft:silicon_wafer", 1), ("jugcraft:copper_wire", 2)],
+         "fluids": [("jugcraft:sulfuric_acid", 100)], "results": [("jugcraft:microchip", 4)], "ticks": 200,
+         "features": ["silicon", "sulfur"]},
     ],
     # Flowback water settles and is filtered: most of it comes back as clean water; the brine leaves salt. A quarter
     # is lost (sludge), so fracking water is never free.

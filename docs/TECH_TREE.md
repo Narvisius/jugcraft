@@ -413,6 +413,18 @@ Salt, sulfur, phosphate and bauxite get their real reactions ([feature record](f
 
 **Fluid processing machines** (the pumpjack and extractor are the first): input tanks take only fluids the machine's recipes use; output tanks push into neighbouring tanks and pipes; the screen shows a gauge per tank. Recipes are data in `data/jugcraft/recipe/<type>/` (see [petrochemistry.md](features/petrochemistry.md)).
 
+### Electronics
+
+The tier after oil and chemistry, in the **cyan look**: near-black casings with lit cyan seams, cyan glass that glows while a machine works, cyan screens, violet conduits, and a beige retro computer (the owner's references). See [electronics.md](features/electronics.md).
+
+| Thing | What it is | Recipe or use | Built from |
+| --- | --- | --- | --- |
+| Crystal Grower | 2 tall; pulls doped silicon crystals | 4 silicon + 1 phosphate → 1 silicon boule; 400 ticks at 128 JE/t | glass, titanium ingot, arc furnace casing, aluminum plates, advanced circuit |
+| Silicon Wafer | Thin slices of a boule | 1 silicon boule → 8 wafers (sawmill, 200 ticks) | – |
+| Lithography Station | 3×2×2 cleanroom with a monitor bank | 1 wafer + 2 copper wire + 100 mB sulfuric acid → 4 microchips; 200 ticks at 192 JE/t; 4-bucket acid tank | glass, redstone lamp, titanium ingots, advanced circuit, aluminum plates, casing |
+| Processor | The third circuit tier | 4 microchips + 1 advanced circuit + 1 gold ingot (circuit assembler, 400 ticks) | – |
+| Network Terminal | A beige retro computer | Right-click: the cabled network's cables, rate, devices and stored energy. Uses no power. | glass panes, processor, plastic sheets, redstone, copper cables, button |
+
 ## Ore processing
 
 Ore processing gives more metal per ore and turns everyday blocks into useful things, without chemistry. There are three routes for an ore, each needing more machines:

@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:silicon_boule"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.silicon_boule.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.silicon_boule.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:silicon_boule"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:titanium"
+}

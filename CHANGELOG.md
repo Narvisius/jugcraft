@@ -8,6 +8,14 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #56 Electronics, batch 7: silicon, chips and the cyan look
+- **The cyan look** for the electronics tier, following the owner's references: near-black casings with cyan seams, cyan glass that glows while working, cyan screens, violet conduits, and a beige retro computer.
+- **Crystal grower** (1×2): 4 silicon + a phosphate dopant → a silicon boule; the sawmill cuts it into 8 **silicon wafers**.
+- **Lithography station** (3×2×2, a cleanroom with a monitor bank): wafer + copper wire + sulfuric acid → 4 **microchips**.
+- **Processors:** the third circuit tier (circuit assembler).
+- **Network terminal:** a beige retro computer that reads out the power network it is cabled to.
+- Four advancements, an Electronics handbook chapter and game tests for each.
+
 ### #54 Chemistry, batch 6: advanced materials
 - **Titanium:** a new mined metal (deep ore, iron pickaxe, `titanium.enabled`). No furnace smelts it.
 - **The Kroll process:** raw titanium + coke + 250 mB chlorine → titanium sponge (chemical reactor); the arc furnace melts it into ingots. Chlorine's first use.

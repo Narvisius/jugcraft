@@ -993,6 +993,28 @@
           ],
           "extra": [],
           "ticks": 300
+        },
+        {
+          "in": [
+            [
+              "jugcraft:microchip",
+              4
+            ],
+            [
+              "jugcraft:advanced_circuit",
+              1
+            ],
+            [
+              "minecraft:gold_ingot",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:processor",
+            1
+          ],
+          "extra": [],
+          "ticks": 400
         }
       ]
     },
@@ -2481,6 +2503,20 @@
           ],
           "extra": [],
           "ticks": 60
+        },
+        {
+          "in": [
+            [
+              "jugcraft:silicon_boule",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:silicon_wafer",
+            8
+          ],
+          "extra": [],
+          "ticks": 200
         }
       ]
     },
@@ -3187,6 +3223,38 @@
             ]
           ],
           "ticks": 140
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:lithography_station",
+      "type": "lithography",
+      "recipes": [
+        {
+          "items": [
+            [
+              "jugcraft:silicon_wafer",
+              1
+            ],
+            [
+              "jugcraft:copper_wire",
+              2
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:sulfuric_acid",
+              100
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:microchip",
+              4
+            ]
+          ],
+          "ticks": 200
         }
       ]
     },

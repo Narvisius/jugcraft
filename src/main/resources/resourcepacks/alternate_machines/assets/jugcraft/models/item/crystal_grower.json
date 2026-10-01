@@ -1,0 +1,286 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "geothermal_stack": "jugcraft:block/geothermal_stack",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/crystal_grower_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        4.0,
+        0.0,
+        4.0
+      ],
+      "to": [
+        12.0,
+        1.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            1.0
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        1.0,
+        4.5
+      ],
+      "to": [
+        11.5,
+        7.0,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            7.0,
+            6.0
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            7.0,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            7.0,
+            6.0
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            7.0,
+            6.0
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            7.0,
+            7.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        7.0,
+        5.5
+      ],
+      "to": [
+        10.5,
+        14.0,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            5.0,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            5.0,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            5.0,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            5.0,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            5.0,
+            5.0
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            5.0,
+            5.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        14.0,
+        7.0
+      ],
+      "to": [
+        9.0,
+        16.0,
+        9.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        },
+        "up": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        },
+        "down": {
+          "texture": "#geothermal_stack",
+          "uv": [
+            0,
+            0,
+            2.0,
+            2.0
+          ]
+        }
+      }
+    }
+  ]
+}

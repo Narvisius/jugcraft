@@ -1142,6 +1142,25 @@ def circuit(advanced):
     return img
 
 
+def processor():
+    """A processor: a square black package with a cyan die window, on a dark green board with gold pins all round."""
+    img = new()
+    gold = (226, 188, 72)
+    for y in range(1, 15):
+        for x in range(1, 15):
+            img.putpixel((x, y), ((22, 60, 46) if (x + y) % 2 else (26, 70, 52)) + (255,))
+    for i in range(3, 13, 2):
+        for x, y in ((i, 2), (i, 13), (2, i), (13, i)):
+            img.putpixel((x, y), gold + (255,))
+    for y in range(4, 12):
+        for x in range(4, 12):
+            c = (34, 36, 42) if x in (4, 11) or y in (4, 11) else (24, 26, 30)
+            if 6 <= x <= 9 and 6 <= y <= 9:
+                c = (56, 200, 218) if (x, y) in ((6, 6), (7, 6), (6, 7)) else (28, 128, 148)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
 def press_front(seed, lit):
     img = window(seed, [(40, 40, 44), (50, 50, 56)])
     head = STEEL[4] if lit else STEEL[3]
@@ -1222,6 +1241,10 @@ def machines():
     save(window(953, [(30, 26, 26), (44, 36, 34)]), "block", "steel_foundry_front")
     save(battery_front(954), "block", "capacitor_bank_front")
     save(battery_front(978), "block", "lithium_battery_bank_front")
+    save(window(979, [(40, 46, 50), (52, 60, 64)]), "block", "crystal_grower_front")
+    save(window(979, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "crystal_grower_front_on")
+    save(window(980, [(40, 46, 50), (52, 60, 64)]), "block", "lithography_station_front")
+    save(window(980, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "lithography_station_front_on")
     save(tank_side(955), "block", "steel_tank_front")
     save(grate(957), "block", "cobblestone_generator_front")
     save(grate(957, glow=[(250, 140, 30), (255, 190, 60), (220, 80, 20)]), "block", "cobblestone_generator_front_on")
@@ -1269,6 +1292,7 @@ def machines():
     save(window(953, [(30, 26, 26)], glow=[(255, 200, 80), (255, 236, 150), (250, 150, 40)]), "block", "steel_foundry_front_on")
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")
+    save(processor(), "item", "processor")
     save(electric_textures.cable(electric_textures.COPPER), "block", "copper_cable")
     save(electric_textures.cable(electric_textures.SILVER), "block", "silver_cable")
     save(electric_textures.cable(electric_textures.ALUMINUM), "block", "aluminum_cable")
