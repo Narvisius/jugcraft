@@ -1,0 +1,203 @@
+package io.github.jimbozoomer.jugcraft.chemistry;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.jimbozoomer.jugcraft.machine.MachineInput;
+import io.github.jimbozoomer.jugcraft.machine.MachineKind;
+import java.util.List;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+
+/**
+ * A fluid processing recipe: items and fluids in, fluids and items out. Data-driven, for example
+ * {@code {"type": "jugcraft:oil_sand_extraction", "items": [{"ingredient": "jugcraft:oil_sand"}],
+ * "fluids": [{"fluid": "minecraft:water", "amount": 500}], "fluid_results": [{"fluid": "jugcraft:crude_oil", "amount": 400}],
+ * "results": [{"id": "minecraft:sand"}], "time": 200}}.
+ *
+ * <p>Positions matter: the n-th item ingredient goes in the n-th item input slot, the n-th fluid in the n-th input
+ * tank; results go to the output slots and tanks in order. Amounts are millibuckets.
+ */
+public class FluidRecipe implements Recipe<MachineInput> {
+	/** An item ingredient and how many are used per operation. */
+	public record ItemPart(Ingredient ingredient, int count) {
+		static final Codec<ItemPart> CODEC = RecordCodecBuilder.create(i -> i.group(
+				Ingredient.CODEC.fieldOf("ingredient").forGetter(ItemPart::ingredient),
+				ExtraCodecs.POSITIVE_INT.optionalFieldOf("count", 1).forGetter(ItemPart::count)
+		).apply(i, ItemPart::new));
+		static final StreamCodec<RegistryFriendlyByteBuf, ItemPart> STREAM_CODEC = StreamCodec.composite(
+				Ingredient.CONTENTS_STREAM_CODEC, ItemPart::ingredient, ByteBufCodecs.VAR_INT, ItemPart::count, ItemPart::new);
+	}
+
+	/** A fluid and an amount in millibuckets. */
+	public record FluidAmount(Fluid fluid, int amount) {
+		static final Codec<FluidAmount> CODEC = RecordCodecBuilder.create(i -> i.group(
+				BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidAmount::fluid),
+				ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(FluidAmount::amount)
+		).apply(i, FluidAmount::new));
+		static final StreamCodec<RegistryFriendlyByteBuf, FluidAmount> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.registry(Registries.FLUID), FluidAmount::fluid, ByteBufCodecs.VAR_INT, FluidAmount::amount, FluidAmount::new);
+	}
+
+	private final MachineKind machine;
+	private final Recipe.CommonInfo commonInfo;
+	private final List<ItemPart> items;
+	private final List<FluidAmount> fluids;
+	private final List<FluidAmount> fluidResults;
+	private final List<ItemStackTemplate> results;
+	private final int time;
+
+	public FluidRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, List<ItemPart> items, List<FluidAmount> fluids,
+			List<FluidAmount> fluidResults, List<ItemStackTemplate> results, int time) {
+		this.machine = machine;
+		this.commonInfo = commonInfo;
+		this.items = List.copyOf(items);
+		this.fluids = List.copyOf(fluids);
+		this.fluidResults = List.copyOf(fluidResults);
+		this.results = List.copyOf(results);
+		this.time = time;
+	}
+
+	public MachineKind machine() {
+		return machine;
+	}
+
+	public List<ItemPart> items() {
+		return items;
+	}
+
+	public List<FluidAmount> fluids() {
+		return fluids;
+	}
+
+	public List<FluidAmount> fluidResults() {
+		return fluidResults;
+	}
+
+	public List<ItemStackTemplate> results() {
+		return results;
+	}
+
+	public int time() {
+		return time;
+	}
+
+	/** Whether the item inputs hold this recipe's ingredients, each in its own slot, in order. */
+	public boolean itemsMatch(List<ItemStack> inputs) {
+		for (int slot = 0; slot < inputs.size(); slot++) {
+			ItemStack stack = inputs.get(slot);
+			if (slot < items.size()) {
+				ItemPart part = items.get(slot);
+				if (!part.ingredient().test(stack) || stack.getCount() < part.count()) {
+					return false;
+				}
+			} else if (!stack.isEmpty()) {
+				return false;
+			}
+		}
+		return items.size() <= inputs.size();
+	}
+
+	/** Whether the input tanks hold this recipe's fluids, in order. */
+	public boolean fluidsMatch(FluidTanks tanks) {
+		if (fluids.size() > tanks.spec().inputTanks().size()) {
+			return false;
+		}
+		for (int i = 0; i < fluids.size(); i++) {
+			if (!tanks.input(i).has(fluids.get(i).fluid(), fluids.get(i).amount())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** Whether every fluid result has room in its output tank. */
+	public boolean fluidResultsFit(FluidTanks tanks) {
+		if (fluidResults.size() > tanks.spec().outputTanks().size()) {
+			return false;
+		}
+		for (int i = 0; i < fluidResults.size(); i++) {
+			if (!tanks.output(i).fits(fluidResults.get(i).fluid(), fluidResults.get(i).amount())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean matches(MachineInput input, Level level) {
+		return itemsMatch(input.stacks());
+	}
+
+	@Override
+	public ItemStack assemble(MachineInput input) {
+		return results.isEmpty() ? ItemStack.EMPTY : results.getFirst().create();
+	}
+
+	@Override
+	public boolean showNotification() {
+		return commonInfo.showNotification();
+	}
+
+	@Override
+	public String group() {
+		return "";
+	}
+
+	@Override
+	public RecipeSerializer<FluidRecipe> getSerializer() {
+		return FluidRecipes.serializer(machine);
+	}
+
+	@Override
+	public RecipeType<FluidRecipe> getType() {
+		return FluidRecipes.type(machine);
+	}
+
+	@Override
+	public PlacementInfo placementInfo() {
+		return PlacementInfo.NOT_PLACEABLE;
+	}
+
+	@Override
+	public RecipeBookCategory recipeBookCategory() {
+		return RecipeBookCategories.CRAFTING_MISC;
+	}
+
+	static RecipeSerializer<FluidRecipe> serializer(MachineKind machine) {
+		MapCodec<FluidRecipe> codec = RecordCodecBuilder.mapCodec(i -> i.group(
+				Recipe.CommonInfo.MAP_CODEC.forGetter(recipe -> recipe.commonInfo),
+				ItemPart.CODEC.listOf().optionalFieldOf("items", List.of()).forGetter(FluidRecipe::items),
+				FluidAmount.CODEC.listOf().optionalFieldOf("fluids", List.of()).forGetter(FluidRecipe::fluids),
+				FluidAmount.CODEC.listOf().optionalFieldOf("fluid_results", List.of()).forGetter(FluidRecipe::fluidResults),
+				ItemStackTemplate.CODEC.listOf().optionalFieldOf("results", List.of()).forGetter(FluidRecipe::results),
+				ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(FluidRecipe::time)
+		).apply(i, (info, items, fluids, fluidResults, results, time) ->
+				new FluidRecipe(machine, info, items, fluids, fluidResults, results, time)));
+		StreamCodec<RegistryFriendlyByteBuf, FluidRecipe> stream = StreamCodec.composite(
+				Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
+				ItemPart.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::items,
+				FluidAmount.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::fluids,
+				FluidAmount.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::fluidResults,
+				ItemStackTemplate.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::results,
+				ByteBufCodecs.VAR_INT, FluidRecipe::time,
+				(info, items, fluids, fluidResults, results, time) ->
+						new FluidRecipe(machine, info, items, fluids, fluidResults, results, time));
+		return new RecipeSerializer<>(codec, stream);
+	}
+}

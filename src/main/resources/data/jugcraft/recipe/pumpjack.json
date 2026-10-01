@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "GUG",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "U": "jugcraft:electric_pump",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:pumpjack",
+    "count": 1
+  }
+}

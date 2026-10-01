@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft;
 
+import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.config.FeatureEnabledCondition;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
@@ -39,6 +40,7 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftComponents.register();
 		JugcraftMachines.register();
 		JugcraftFluids.register();
+		PetroFluids.register();
 		JugcraftLogistics.register();
 		JugcraftStorage.register();
 		JugcraftProspecting.register();

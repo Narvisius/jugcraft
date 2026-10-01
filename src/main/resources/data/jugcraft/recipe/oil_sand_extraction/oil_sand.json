@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:oil_sand_extraction",
+  "items": [
+    {
+      "ingredient": "jugcraft:oil_sand",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:crude_oil",
+      "amount": 500
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:sand",
+      "count": 1
+    }
+  ],
+  "time": 160
+}

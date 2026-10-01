@@ -92,6 +92,14 @@ ABOUT = {
     "efficiency_upgrade": "In a machine's upgrade slot: each card cuts energy use by a fifth. Four cards: 41% of the energy.",
     "prospector": "Right-click to survey the 3x3 chunks around you, from the bottom of the world to a little above you. "
                   "It shows which ores resonate, how strongly (1 to 5 bars) and roughly how deep, never exactly where.",
+    "pumpjack": "One block wide, three tall and three long; place it with the wellhead where you want the well. If "
+                "the chunk under the wellhead holds pumpable oil (the prospector's Oil reading), it pumps 2 mB of crude "
+                "oil a tick into its 16-bucket tank and pushes it into pipes and tanks touching it. A reservoir runs dry "
+                "for good after 50 to 250 buckets; shale oil needs a fracking rig instead.",
+    "oil_sand_extractor": "Two by two by two. Washes crude oil out of oil sand with hot water: a block of oil sand "
+                          "(mined with silk touch) and 250 mB of water give 500 mB of crude oil and a block of sand; a "
+                          "piece of bitumen and 100 mB of water give 150 mB. Pipe water in; it pushes the oil out into "
+                          "pipes and tanks touching it.",
     "ore_drill": "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom "
                  "of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come "
                  "out whole, ready for ore processing.",
@@ -283,6 +291,15 @@ def build():
         {"title": "Fluids", "icon": f"{MOD}:fluid_tank", "pages":
             [block_page("bronze_fluid_pipe", PIPES["bronze_fluid_pipe"]["display"])]
             + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump")]},
+        {"title": "Oil", "icon": f"{MOD}:crude_oil_bucket", "pages": [
+            {"title": "Crude Oil", "icon": f"{MOD}:crude_oil_bucket", "text": [
+                "Crude oil lies in hidden reservoirs under some Overworld chunks. The prospector reports Oil (pumpable) "
+                "and Shale oil (needs fracking) under the 3x3 chunks around you.",
+                "It is a thick, slow fluid that never makes new sources, so every reservoir runs dry in the end.",
+                "Pipes, pumps and tanks carry it like water; refineries turn it into fuels."]},
+            machine_page("pumpjack"),
+            machine_page("oil_sand_extractor"),
+        ]},
         {"title": "Logistics", "icon": f"{MOD}:brass_item_pipe", "pages": [
             {"title": "Machine Sides", "icon": f"{MOD}:crusher", "text": [
                 "Every processing machine's screen has six face buttons: front, back, left, right, top and bottom.",

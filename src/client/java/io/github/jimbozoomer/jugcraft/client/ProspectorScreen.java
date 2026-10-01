@@ -115,7 +115,8 @@ public class ProspectorScreen extends Screen {
 			int y = sy + 20 + (i % ROWS) * 20;
 			ItemStack icon = new ItemStack(BuiltInRegistries.ITEM.getValue(reading.icon()));
 			graphics.item(icon, x, y);
-			String name = icon.getHoverName().getString().replace(" Ore", "").toUpperCase(Locale.ROOT);
+			String name = (reading.label().isEmpty() ? icon.getHoverName().getString().replace(" Ore", "")
+					: Component.translatable(reading.label()).getString()).toUpperCase(Locale.ROOT);
 			graphics.text(font, font.plainSubstrByWidth(name, COLUMN_WIDTH - 24), x + 19, y, text, false);
 			// Valve-tube bars warm up one after another as the screen opens.
 			float warm = Math.max(0.0F, t * 4.0F - i * 0.35F);

@@ -41,6 +41,10 @@ MACHINES = {
     "large_steam_engine": {"display": "Large Steam Engine", "lit": True},
     # Multi-block machines: models and footprints live in tools/large_machines.py.
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
+    # Petrochemistry (tools/petro.py): a 1x3x3 pumpjack over a conventional oil reservoir.
+    "pumpjack": {"display": "Pumpjack", "lit": True},
+    # A 2x2x2 hot-water extraction plant: oil sand or bitumen + water -> crude oil (+ sand).
+    "oil_sand_extractor": {"display": "Oil Sand Extractor", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
 }
 
@@ -171,6 +175,10 @@ STATS = {
     # Nine blocks tall with a 7-block rotor. 12 JE/t at sea level, +1 per 2 blocks higher, capped at 72;
     # x1.5 rain, x2 thunder. The 7x7 square the rotor sweeps must be clear.
     "wind_turbine": {"capacity": 48_000, "output_per_tick": 192, "generation_per_tick": 72},
+    # 1x3x3. Pumps 2 mB of crude oil a tick (a bucket every 25 s) from the conventional reservoir under its chunk.
+    "pumpjack": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "pump_per_tick": 2, "tank": 16_000},
+    # 2x2x2. Recipes in tools/petro.py; 8,000 mB water tank and 8,000 mB crude oil tank.
+    "oil_sand_extractor": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "tank": 8_000},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -329,6 +337,12 @@ CRAFTING = {
                                                 "A": "jugcraft:advanced_circuit"}, 1),
     "fortune_module": (["SLS", "GAG", "SLS"], {"S": "#c:plates/steel", "L": "minecraft:lapis_block",
                                              "G": "minecraft:gold_ingot", "A": "jugcraft:advanced_circuit"}, 1),
+    # Petrochemistry: steel frame and gears around an electric pump; after the steel tier.
+    "pumpjack": (["PPP", "GUG", "PMP"], {"P": "#c:plates/steel", "G": "#c:gears/steel", "U": "jugcraft:electric_pump",
+                                         "M": "jugcraft:machine_casing"}, 1),
+    "oil_sand_extractor": (["PHP", "TMT", "PGP"], {"P": "#c:plates/steel", "H": "minecraft:hopper",
+                                                   "T": "jugcraft:fluid_tank", "M": "jugcraft:machine_casing",
+                                                   "G": "#c:gears/steel"}, 1),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",
                                                 "W": "jugcraft:copper_cable", "A": "jugcraft:advanced_circuit",
                                                 "B": "jugcraft:battery_box"}, 1),

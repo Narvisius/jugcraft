@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.prospecting;
 
 import java.util.ArrayList;
+import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -9,6 +10,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -38,9 +40,18 @@ public final class OreSurvey {
 	public record Family(String name, TagKey<Block> tag, Identifier icon) {
 	}
 
-	/** One reading: the ore family's icon, a signal of 1 (traces) to 5 (rich), and a depth band (0 shallow, 1 middle, 2 deep). */
-	public record Reading(Identifier icon, int signal, int depth) {
+	/**
+	 * One reading: the ore family's icon, a signal of 1 (traces) to 5 (rich), a depth band (0 shallow, 1 middle, 2 deep),
+	 * and a translation key for its name, or "" to name it after the icon.
+	 */
+	public record Reading(Identifier icon, int signal, int depth, String label) {
+		public Reading(Identifier icon, int signal, int depth) {
+			this(icon, signal, depth, "");
+		}
 	}
+
+	/** Oil readings use the crude oil bucket as their icon. */
+	public static final Identifier OIL_ICON = Identifier.fromNamespaceAndPath("jugcraft", "crude_oil_bucket");
 
 	private OreSurvey() {
 	}
@@ -85,8 +96,44 @@ public final class OreSurvey {
 				readings.add(new Reading(FAMILIES.get(i).icon(), signal(counts[i], random), average >= 40 ? 0 : average >= 0 ? 1 : 2));
 			}
 		}
+		oil(level, middleX, middleZ, random, readings);
 		readings.sort((a, b) -> Integer.compare(b.signal(), a.signal()));
 		return readings;
+	}
+
+	/**
+	 * Oil reservoirs under the surveyed chunks (see {@link OilReservoirs}): one reading for pumpable oil (middle depth)
+	 * and one for shale oil (deep), from how much is left, as vaguely as the ores.
+	 */
+	private static void oil(ServerLevel level, int middleX, int middleZ, RandomSource random, List<Reading> readings) {
+		long conventional = 0;
+		long shale = 0;
+		for (int cx = middleX - RADIUS; cx <= middleX + RADIUS; cx++) {
+			for (int cz = middleZ - RADIUS; cz <= middleZ + RADIUS; cz++) {
+				OilReservoirs.Reservoir reservoir = OilReservoirs.get(level, new ChunkPos(cx, cz));
+				switch (reservoir.kind()) {
+					case CONVENTIONAL -> conventional += reservoir.remaining();
+					case SHALE -> shale += reservoir.remaining();
+					default -> {
+					}
+				}
+			}
+		}
+		if (conventional > 0) {
+			readings.add(new Reading(OIL_ICON, oilSignal(conventional, random), 1, "prospector.jugcraft.oil"));
+		}
+		if (shale > 0) {
+			readings.add(new Reading(OIL_ICON, oilSignal(shale, random), 2, "prospector.jugcraft.shale_oil"));
+		}
+	}
+
+	/** Millibuckets left to a vague 1-5 signal, nudged like the ores' signals. */
+	static int oilSignal(long mb, RandomSource random) {
+		int signal = mb < 50_000 ? 1 : mb < 150_000 ? 2 : mb < 400_000 ? 3 : mb < 1_000_000 ? 4 : 5;
+		if (random.nextInt(4) == 0) {
+			signal += random.nextBoolean() ? 1 : -1;
+		}
+		return Math.max(1, Math.min(5, signal));
 	}
 
 	/** Sample count to a vague 1-5 signal, nudged one step either way a quarter of the time. */

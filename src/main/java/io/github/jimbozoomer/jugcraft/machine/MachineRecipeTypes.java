@@ -26,8 +26,8 @@ public final class MachineRecipeTypes {
 	public static void register() {
 		for (MachineKind kind : MachineKind.values()) {
 			String name = kind.recipeType();
-			if (name == null) {
-				continue;
+			if (name == null || kind.isFluidProcessor()) {
+				continue; // Fluid processors have their own recipe class (chemistry/FluidRecipes).
 			}
 			if (kind.isMultiInput()) {
 				MULTI.put(kind, type(name));

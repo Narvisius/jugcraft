@@ -42,6 +42,9 @@ FOOTPRINTS = {
     "water_wheel": [(0, 0, 0), (0, 1, 0)],
     # Kinetic: a 2x2x2 steam engine; its shaft comes out of the back of part 7 (upper right back).
     "large_steam_engine": cuboid(2, 2, 2),
+    # Petrochemistry: a pumpjack one wide, three tall, three long (wellhead at the front).
+    "pumpjack": cuboid(1, 3, 3),
+    "oil_sand_extractor": cuboid(2, 2, 2),
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -156,6 +159,24 @@ MODELS["large_steam_engine"] = [
     ((-9.5, 22.5, 16), (-6.5, 25.5, 32), PIPE),
 ]
 
+MODELS["pumpjack"] = [
+    ((0, 0, 0), (16, 2, 48), "heavy_plinth"),
+    ((3, 2, 2), (13, 12, 14), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((3, 2, 18), (13, 34, 30), "wind_turbine_mast"),
+    ((5, 34, 2), (11, 40, 44), "geothermal_stack"),
+    ((3, 2, 33), (13, 22, 46), {"*": STEEL, "up": TOP}),
+    ((7, 12, 6), (9, 34, 8), PIPE),
+]
+
+MODELS["oil_sand_extractor"] = [
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((-12, 2, 4), (12, 26, 28), "fluid_tank_side"),
+    ((-12, 26, 4), (12, 28, 28), "fluid_tank_top"),
+    ((-13, 2, 1), (-3, 12, 3), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-15, 2, 25), (-5, 14, 31), {"*": STEEL, "up": TOP}),
+    ((-9.5, 14, 27), (-6.5, 30, 30), "geothermal_stack"),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -168,4 +189,6 @@ FRONTS = {
     "ore_drill": "ore_drill_front",
     "water_wheel": "water_wheel_front",
     "large_steam_engine": "large_steam_engine_front",
+    "pumpjack": "pumpjack_front",
+    "oil_sand_extractor": "oil_sand_extractor_front",
 }

@@ -1,5 +1,12 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
+import io.github.jimbozoomer.jugcraft.chemistry.FluidMachineSpec;
+import io.github.jimbozoomer.jugcraft.chemistry.FluidRecipe;
+import io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes;
+import io.github.jimbozoomer.jugcraft.chemistry.FluidTank;
+import io.github.jimbozoomer.jugcraft.chemistry.FluidTanks;
+import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
+import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
@@ -46,6 +53,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -77,7 +85,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_TANK = 9;
 	/** Processors' side configuration, packed (see {@link SideConfig#pack()}). */
 	public static final int DATA_SIDES = 10;
-	public static final int DATA_COUNT = 11;
+	/** Fluid processors: two values per tank from here (see {@link FluidTanks#data}): the fluid's id, then mB. */
+	public static final int DATA_TANKS = 11;
+	public static final int DATA_COUNT = DATA_TANKS + 2 * FluidMachineSpec.MAX_TANKS;
+	/** Fluid processors push their output tanks into pipes and neighbouring tanks every this many ticks... */
+	public static final int FLUID_PUSH_INTERVAL = 4;
+	/** ...up to this many mB from each output tank. */
+	public static final int FLUID_PUSH_MB = 1_000;
 	/** Ticks between ejects, and items pushed out per eject. */
 	public static final int EJECT_INTERVAL = 8;
 	public static final int EJECT_ITEMS = 16;
@@ -136,7 +150,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				case DATA_FORMED -> formed ? 1 : 0;
 				case DATA_TANK -> tank;
 				case DATA_SIDES -> sides.pack();
-				default -> 0;
+				default -> tanks != null && index >= DATA_TANKS && index < DATA_TANKS + 2 * tanks.size()
+						? tanks.data(index - DATA_TANKS) : 0;
 			};
 		}
 
@@ -169,6 +184,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case ORE_WASHER -> new TankInlet(Fluids.WATER, MachineKind.WASHER_TANK);
 			default -> null;
 		};
+		FluidMachineSpec spec = kind.fluidSpec();
+		// Input tanks only take fluids this machine's recipes use in that tank (only the server knows the recipes).
+		this.tanks = spec == null ? null : new FluidTanks(spec, (tank, variant) -> level instanceof ServerLevel server
+				&& FluidRecipes.usesFluid(server.getServer(), kind, tank, variant), this::setChanged);
 	}
 
 	public MachineKind kind() {
@@ -193,7 +212,15 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * washer take water and the geothermal generator takes lava into their tanks. Other machines have none.
 	 */
 	public @Nullable Storage<FluidVariant> fluidFor(@Nullable Direction side) {
+		if (tanks != null) {
+			return tanks.exposed();
+		}
 		return reservoir != null ? reservoir : inlet;
+	}
+
+	/** A fluid processor's tanks, or null for other machines. */
+	public @Nullable FluidTanks tanks() {
+		return tanks;
 	}
 
 	/**
@@ -241,6 +268,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	private final @Nullable TankInlet inlet;
+	/** Fluid processors' input and output tanks (see {@link MachineKind#fluidSpec()}). */
+	private final @Nullable FluidTanks tanks;
 	/** The steel tank's fluid: a full storage (pumps and buckets can also take it out). */
 	private final @Nullable SingleFluidStorage reservoir;
 
@@ -303,7 +332,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case COBBLESTONE_GENERATOR -> tickCobble(level, pos, state);
 			case WATER_WHEEL -> tickWaterWheel(level, pos, state);
 			case AUTO_CRAFTER -> tickCrafter(level, pos, state);
-			default -> tickProcessor(level, pos, state);
+			case PUMPJACK -> tickPumpjack(level, pos, state);
+			default -> kind.isFluidProcessor() ? tickFluidProcessor(level, pos, state) : tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
 			level.setBlock(pos, state.setValue(MachineBlock.LIT, active), 3);
@@ -610,6 +640,138 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	/**
+	 * A fluid processor: runs the first {@link FluidRecipe} whose items and fluids are present and whose results have
+	 * room, at {@link MachineKind#usePerTick} JE a tick, and pushes its output tanks out of its outer faces.
+	 */
+	private boolean tickFluidProcessor(ServerLevel level, BlockPos pos, BlockState state) {
+		pushFluids(level, pos, state);
+		List<ItemStack> inputs = items.subList(0, kind.outputSlot());
+		Optional<FluidRecipe> found = FluidRecipes.find(level.getServer(), kind, inputs, tanks);
+		if (found.isEmpty() || !found.get().fluidResultsFit(tanks) || !itemResultsFit(found.get())) {
+			if (progress != 0) {
+				progress = 0;
+				setChanged();
+			}
+			return false;
+		}
+		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false;
+		}
+		FluidRecipe recipe = found.get();
+		maxProgress = recipe.time();
+		if (energy.getAmount() < kind.usePerTick) {
+			return false; // Keeps progress; resumes when power returns.
+		}
+		energy.setAmount(energy.getAmount() - kind.usePerTick);
+		if (++progress >= maxProgress) {
+			progress = 0;
+			for (int slot = 0; slot < recipe.items().size(); slot++) {
+				items.get(slot).shrink(recipe.items().get(slot).count());
+			}
+			for (int i = 0; i < recipe.fluids().size(); i++) {
+				tanks.input(i).drain(recipe.fluids().get(i).amount());
+			}
+			for (int i = 0; i < recipe.fluidResults().size(); i++) {
+				tanks.output(i).fill(recipe.fluidResults().get(i).fluid(), recipe.fluidResults().get(i).amount());
+			}
+			for (int i = 0; i < recipe.results().size(); i++) {
+				ItemStack result = recipe.results().get(i).create();
+				ItemStack held = items.get(kind.outputSlot() + i);
+				if (held.isEmpty()) {
+					items.set(kind.outputSlot() + i, result);
+				} else {
+					held.grow(result.getCount());
+				}
+			}
+		}
+		setChanged();
+		return true;
+	}
+
+	/**
+	 * The pumpjack: while the chunk under its wellhead (the master block) holds conventional oil, it pumps
+	 * {@link MachineKind#PUMPJACK_RATE} mB of crude oil a tick into its tank, at its JE per tick. {@link #formed} says
+	 * whether there is oil to pump (checked once a second); the progress arrow shows the pump's stroke.
+	 */
+	private boolean tickPumpjack(ServerLevel level, BlockPos pos, BlockState state) {
+		pushFluids(level, pos, state);
+		ChunkPos chunk = ChunkPos.containing(pos);
+		if (!checked || level.getGameTime() % MachineKind.SOURCE_CHECK_INTERVAL == 0) {
+			checked = true;
+			OilReservoirs.Reservoir reservoir = OilReservoirs.get(level, chunk);
+			boolean oil = reservoir.kind() == OilReservoirs.Kind.CONVENTIONAL && !reservoir.isDry();
+			if (oil != formed) {
+				formed = oil;
+				setChanged();
+			}
+		}
+		FluidTank tank = tanks.output(0);
+		if (!formed || !tank.fits(PetroFluids.CRUDE_OIL.source(), MachineKind.PUMPJACK_RATE)
+				|| !sides.redstone().allows(poweredByRedstone(level, pos, state)) || energy.getAmount() < kind.usePerTick) {
+			return false;
+		}
+		int pumped = OilReservoirs.extract(level, chunk, OilReservoirs.Kind.CONVENTIONAL, MachineKind.PUMPJACK_RATE);
+		if (pumped <= 0) {
+			formed = false;
+			setChanged();
+			return false;
+		}
+		energy.setAmount(energy.getAmount() - kind.usePerTick);
+		tank.fill(PetroFluids.CRUDE_OIL.source(), pumped);
+		maxProgress = PUMPJACK_STROKE;
+		progress = (progress + 1) % PUMPJACK_STROKE;
+		setChanged();
+		return true;
+	}
+
+	/** Ticks per stroke of the pumpjack, for its screen's progress arrow. */
+	private static final int PUMPJACK_STROKE = 40;
+
+	/** Whether every item result of the recipe fits its output slot. */
+	private boolean itemResultsFit(FluidRecipe recipe) {
+		FluidMachineSpec spec = kind.fluidSpec();
+		if (recipe.results().size() > spec.itemOutputs()) {
+			return false;
+		}
+		for (int i = 0; i < recipe.results().size(); i++) {
+			ItemStack result = recipe.results().get(i).create();
+			ItemStack held = items.get(kind.outputSlot() + i);
+			if (!held.isEmpty() && !(ItemStack.isSameItemSameComponents(held, result)
+					&& held.getCount() + result.getCount() <= Math.min(getMaxStackSize(), held.getMaxStackSize()))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** Every {@link #FLUID_PUSH_INTERVAL} ticks, pushes the output tanks out of the machine's outer faces. */
+	private void pushFluids(ServerLevel level, BlockPos pos, BlockState state) {
+		if (tanks == null || level.getGameTime() % FLUID_PUSH_INTERVAL != 0) {
+			return;
+		}
+		Footprint footprint = kind.footprint();
+		Direction facing = facing(state);
+		List<BlockPos> parts = new ArrayList<>();
+		for (int part = 0; part < footprint.size(); part++) {
+			parts.add(footprint.partPos(pos, facing, part));
+		}
+		Set<BlockPos> inside = new HashSet<>(parts);
+		List<FluidTanks.Port> ports = new ArrayList<>();
+		for (BlockPos part : parts) {
+			List<Direction> outer = new ArrayList<>();
+			for (Direction side : Direction.values()) {
+				if (!inside.contains(part.relative(side))) {
+					outer.add(side);
+				}
+			}
+			ports.add(new FluidTanks.Port(part, outer));
+		}
+		if (tanks.pushOutputs(level, ports, FLUID_PUSH_MB * FluidNetworks.DROPLETS_PER_MB)) {
+			setChanged();
+		}
+	}
+
+	/**
 	 * The ore drill: finds the next ore below it (one layer of the 9x9 column per tick), then mines it
 	 * over {@link MachineKind#DRILL_TICKS} powered ticks. The ore block goes into the first result slot
 	 * with room and the hole is filled with stone (see {@link OreDrilling}); a full drill waits.
@@ -862,6 +1024,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * their input, output and byproduct slots are (as vanilla containers do). Upgrade slots don't count.
 	 */
 	public int comparatorSignal() {
+		if (tanks != null) {
+			return tanks.comparatorSignal();
+		}
 		if (reservoir != null) {
 			return StorageUtil.getRedstoneSignal(reservoir);
 		}
@@ -984,7 +1149,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	@Override
 	public void setItem(int slot, ItemStack stack) {
 		// A different input restarts processing, so progress cannot carry over to another recipe.
-		if (kind.isProcessor() && slot < kind.outputSlot() && !ItemStack.isSameItemSameComponents(items.get(slot), stack)) {
+		if ((kind.isProcessor() || kind.isFluidProcessor()) && slot < kind.outputSlot()
+				&& !ItemStack.isSameItemSameComponents(items.get(slot), stack)) {
 			progress = 0;
 		}
 		super.setItem(slot, stack);
@@ -992,6 +1158,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if (kind.isFluidProcessor()) {
+			// Only the server knows the recipes; on the client the menu's slots accept anything and the server decides.
+			return slot < kind.outputSlot() && (!(level instanceof ServerLevel server)
+					|| FluidRecipes.usesItem(server.getServer(), kind, slot, stack));
+		}
 		if (kind == MachineKind.COAL_GENERATOR) {
 			return GeneratorFuels.burnTicks(stack) > 0;
 		}
@@ -1015,6 +1186,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public int[] getSlotsForFace(Direction side) {
+		if (kind.isFluidProcessor()) {
+			int[] all = new int[kind.slots];
+			for (int slot = 0; slot < all.length; slot++) {
+				all[slot] = slot;
+			}
+			return all;
+		}
 		if (kind == MachineKind.COAL_GENERATOR) {
 			return INPUT;
 		}
@@ -1056,6 +1234,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+		if (kind.isFluidProcessor()) {
+			return slot >= kind.outputSlot() && slot < kind.slots;
+		}
 		if (kind.isBoiler()) {
 			return slot == SLOT_BUCKET_OUT;
 		}
@@ -1093,6 +1274,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		if (reservoir != null) {
 			reservoir.readValue(input);
 		}
+		if (tanks != null) {
+			tanks.load(input);
+		}
 	}
 
 	@Override
@@ -1111,6 +1295,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		if (reservoir != null) {
 			reservoir.writeValue(output);
+		}
+		if (tanks != null) {
+			tanks.save(output);
 		}
 	}
 }

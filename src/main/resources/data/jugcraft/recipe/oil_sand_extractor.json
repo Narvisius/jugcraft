@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PHP",
+    "TMT",
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "H": "minecraft:hopper",
+    "T": "jugcraft:fluid_tank",
+    "M": "jugcraft:machine_casing",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:oil_sand_extractor",
+    "count": 1
+  }
+}

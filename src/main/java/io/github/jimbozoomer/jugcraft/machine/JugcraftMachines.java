@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes;
 import io.github.jimbozoomer.jugcraft.energy.CableBlock;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftRegistry;
@@ -44,6 +45,7 @@ public final class JugcraftMachines {
 
 	public static void register() {
 		MachineRecipeTypes.register();
+		FluidRecipes.register();
 		MachineUpgrades.register();
 		MachineRecipes.register();
 		COPPER_CABLE = cable("copper_cable", MapColor.COLOR_ORANGE, CableBlock.COPPER_RATE);

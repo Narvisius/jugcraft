@@ -68,8 +68,8 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			server.runCommand("gamerule minecraft:send_command_feedback false");
 			server.runCommand("time set noon");
 			server.runCommand("weather clear");
-			server.runCommand("fill %d %d %d %d %d %d minecraft:smooth_stone".formatted(x - 10, y - 1, z - 10, x + 64, y - 1, z + 8));
-			server.runCommand("fill %d %d %d %d %d %d minecraft:air".formatted(x - 10, y, z - 10, x + 64, y + 14, z + 8));
+			server.runCommand("fill %d %d %d %d %d %d minecraft:smooth_stone".formatted(x - 10, y - 1, z - 10, x + 76, y - 1, z + 8));
+			server.runCommand("fill %d %d %d %d %d %d minecraft:air".formatted(x - 10, y, z - 10, x + 76, y + 14, z + 8));
 			server.runOnServer(minecraft -> buildShowroom(minecraft.overworld(), new BlockPos(x, y, z - 5)));
 
 			// Hide the HUD, hand and chat so the screenshots show only the machines. In 26.3 this is the "toggle GUI"
@@ -140,8 +140,9 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.getInput().pressKey(options -> options.keyToggleGui);
 			server.runCommand("clear @p");
 
-			// Multi-block machines, ten blocks away, in three views along the row (the wind turbine is nine tall).
-			for (int view = 0; view < 3; view++) {
+			// Multi-block machines, ten blocks away, in four views along the row (the wind turbine is nine tall; the
+			// pumpjack and oil sand extractor are at the far end).
+			for (int view = 0; view < 4; view++) {
 				server.runCommand("tp @p %d %d %d 180 8".formatted(x + 24 + view * 12, y + 3, z + 5));
 				context.waitTicks(20);
 				singleplayer.getConnection().waitForChunksRender();

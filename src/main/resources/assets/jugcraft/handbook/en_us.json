@@ -1761,6 +1761,67 @@
       ]
     },
     {
+      "title": "Oil",
+      "icon": "jugcraft:crude_oil_bucket",
+      "pages": [
+        {
+          "title": "Crude Oil",
+          "icon": "jugcraft:crude_oil_bucket",
+          "text": [
+            "Crude oil lies in hidden reservoirs under some Overworld chunks. The prospector reports Oil (pumpable) and Shale oil (needs fracking) under the 3x3 chunks around you.",
+            "It is a thick, slow fluid that never makes new sources, so every reservoir runs dry in the end.",
+            "Pipes, pumps and tanks carry it like water; refineries turn it into fuels."
+          ]
+        },
+        {
+          "title": "Pumpjack",
+          "icon": "jugcraft:pumpjack",
+          "text": [
+            "One block wide, three tall and three long; place it with the wellhead where you want the well. If the chunk under the wellhead holds pumpable oil (the prospector's Oil reading), it pumps 2 mB of crude oil a tick into its 16-bucket tank and pushes it into pipes and tanks touching it. A reservoir runs dry for good after 50 to 250 buckets; shale oil needs a fracking rig instead.",
+            "Uses 32 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:electric_pump",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:pumpjack",
+            "count": 1
+          }
+        },
+        {
+          "title": "Oil Sand Extractor",
+          "icon": "jugcraft:oil_sand_extractor",
+          "text": [
+            "Two by two by two. Washes crude oil out of oil sand with hot water: a block of oil sand (mined with silk touch) and 250 mB of water give 500 mB of crude oil and a block of sand; a piece of bitumen and 100 mB of water give 150 mB. Pipe water in; it pushes the oil out into pipes and tanks touching it.",
+            "Uses 32 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:hopper",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:machine_casing",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:oil_sand_extractor",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
       "title": "Logistics",
       "icon": "jugcraft:brass_item_pipe",
       "pages": [

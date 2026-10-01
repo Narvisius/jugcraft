@@ -162,5 +162,104 @@ def ore_drill():
     return m
 
 
+def pumpjack():
+    """A nodding-donkey pumpjack, one block wide, three tall and three long (front = the wellhead, -z). A hazard-
+    striped skid carries the wellhead with its valve tree and polished rod, an A-frame samson post, an olive walking
+    beam with a curved horse head over the well and its bridle lines, and at the back a gear reducer with crank arms,
+    two heavy counterweights, pitman arms up to the equalizer bar, and the diesel motor with its belt guard and
+    exhaust stack. A control box with a phosphor gauge and a caged lamp stands by the wellhead."""
+    m = [box((1, 0, 0), (15, 2, 48), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    for z in (0.5, 46.5):
+        m.append(box((0.5, 0, z), (15.5, 2.5, z + 1), HAZARD))
+    # Wellhead: casing flange, valve tree with a red-handled valve, stuffing box and the polished rod.
+    m += cyl("y", 8, 6, 3, 2, 3.5, GUNMETAL, CHROME)
+    m += cyl("y", 8, 6, 1.75, 3.5, 9, GUNMETAL)
+    m.append(box((4, 5.5, 5), (12, 7, 7), GUNMETAL))
+    m += cyl("x", 6.25, 6, 1.25, 2.5, 4, CHROME)
+    m += cyl("x", 6.25, 6, 1.25, 12, 13.5, CHROME)
+    m += wheel("x", 6.25, 6, 2, 1.5, 2.5, "sp_red_iron", CHROME, spokes=False)
+    m += cyl("y", 8, 6, 2.25, 9, 10.5, CHROME)
+    m.append(box((7.5, 10.5, 5.5), (8.5, 27, 6.5), CHROME))
+    # Carrier bar hung from the horse head by two bridle lines.
+    m.append(box((5, 27, 5), (11, 28, 7), GUNMETAL))
+    for x in (5.5, 9.75):
+        m.append(box((x, 28, 5.6), (x + 0.75, 33.5, 6.4), RUBBER))
+    # Horse head: a curved plate stepped round the front of the beam, hazard-striped face.
+    for y0, y1, z0 in ((33.5, 35, 4), (35, 37, 2.5), (37, 41, 1.5), (41, 43, 2.5), (43, 44.5, 4)):
+        m.append(box((5, y0, z0), (11, y1, 9), {"*": OLIVE, "north": HAZARD}))
+    # Walking beam: an olive girder with gunmetal flanges along the top of the machine.
+    m.append(box((6, 38, 9), (10, 42, 42), {"*": OLIVE, "east": STENCIL, "west": STENCIL}))
+    m.append(box((5.5, 42, 9), (10.5, 42.75, 42), GUNMETAL))
+    m.append(box((5.5, 37.25, 9), (10.5, 38, 42), GUNMETAL))
+    # Samson post: an A-frame of four legs with hazard braces and the saddle bearing at the top.
+    for x in (2.5, 12.5):
+        for z0, z1 in ((17, 19), (29, 31)):
+            m.append(box((x, 2, z0), (x + 1, 34, z1), GUNMETAL))
+        m.append(box((x, 12, 19), (x + 1, 13, 29), HAZARD))
+        m.append(box((x, 24, 19), (x + 1, 25, 29), HAZARD))
+    m.append(box((3.5, 34, 17), (12.5, 35, 31), GUNMETAL))
+    m.append(box((5, 35, 21), (11, 37.25, 27), CHROME))
+    m += cyl("x", 36, 24, 1.5, 3.5, 12.5, GUNMETAL, CHROME)
+    # Gear reducer and crank shaft at the back.
+    m.append(box((4, 2, 33), (12, 15, 43), {"*": OLIVE, "up": STENCIL, "south": GRILLE}))
+    m += cyl("x", 11, 38, 2, 1, 15, CHROME)
+    for x0, x1 in ((1.5, 3.5), (12.5, 14.5)):
+        # Crank arm and its counterweight (a heavy gunmetal block with hazard edges).
+        m.append(box((x0, 9, 36.5), (x1, 24, 39.5), GUNMETAL))
+        m.append(box((x0 - 0.5, 17, 33.5), (x1 + 0.5, 25, 44.5), {"*": GUNMETAL, "up": HAZARD, "down": HAZARD}))
+        # Pitman arm from the crank pin up to the equalizer bar.
+        m.append(box((x0 + 0.5, 25, 37.5), (x1 - 0.5, 37, 38.5), CHROME))
+    m.append(box((1.5, 37, 36.5), (14.5, 38, 40), GUNMETAL))
+    # Diesel motor with a belt guard and an exhaust stack.
+    m.append(box((3.5, 2, 43.5), (12.5, 9, 47.5), {"*": OLIVE, "east": GRILLE, "west": GRILLE, "up": STENCIL}))
+    m.append(box((12.5, 3, 40), (14.5, 12, 46), {"*": GUNMETAL, "east": HAZARD}))
+    m += cyl("y", 5.5, 45.5, 0.9, 9, 22, EXHAUST, "sp_hopper_inside")
+    # Control box by the wellhead: gauge and the running lamp, with its conduit.
+    m.append(box((11.5, 2, 10), (14.5, 10, 14), {"*": OLIVE, "north": GUNMETAL}))
+    m.append(dial("north", (13, 7.5, 9.75), 2.25, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (13, 4, 9.75), 1.75, texture=LAMP, body=GUNMETAL))
+    m.append(box((12.5, 2, 14), (13.5, 3, 34), RUBBER))
+    return m
+
+
+def oil_sand_extractor():
+    """Two by two by two hot-water extraction plant. A hazard-striped skid under a big olive separation vessel with a
+    stepped cone bottom on gunmetal legs; oil sand rides up a short belt into a hopper on the rim, and the froth of
+    crude oil shows in the open top inside a chrome launder. At the back a gunmetal water heater with an exhaust stack
+    feeds the vessel through rubber hoses; a control panel with a phosphor gauge and a caged lamp faces the front."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Legs and the cone bottom.
+    for x in (-10, 8):
+        for z in (6, 24):
+            m.append(box((x, 2, z), (x + 2, 9, z + 2), GUNMETAL))
+    m += cyl("y", 0, 16, 5, 2, 4, GUNMETAL, CHROME)
+    m += cyl("y", 0, 16, 8, 4, 6.5, OLIVE)
+    m += cyl("y", 0, 16, 10.5, 6.5, 9, OLIVE)
+    # The vessel: olive shell with gunmetal and hazard bands, open at the top with the oil froth showing.
+    m += cyl("y", 0, 16, 12, 9, 27, OLIVE, GUNMETAL)
+    for y, texture in ((13, GUNMETAL), (20, HAZARD), (25.5, GUNMETAL)):
+        m += cyl("y", 0, 16, 12.4, y, y + 1, texture)
+    m += cyl("y", 0, 16, 12.75, 27, 28.5, CHROME, GUNMETAL)
+    m += cyl("y", 0, 16, 11, 28.5, 28.75, "crude_oil_still")
+    # Froth outlet: a chrome pipe from the rim down the right side.
+    m.append(box((-14.5, 10, 14.5), (-12.5, 28, 17.5), CHROME))
+    # Feed hopper on the rim and the belt that carries oil sand up to it.
+    m.append(box((4, 28.5, 10), (11, 31.5, 16), {"*": GUNMETAL, "up": "oil_sand"}))
+    m.append(box((10, 2, 1), (15, 4, 12), {"*": GUNMETAL, "up": "oil_sand"}))
+    m.append(box((11, 4, 3), (14, 28.5, 5), {"*": RUBBER, "north": "oil_sand"}))
+    m.append(box((11, 26, 5), (14, 28.5, 11), {"*": RUBBER, "up": "oil_sand"}))
+    # Water heater at the back left with its exhaust stack, and hoses into the vessel.
+    m.append(box((-15, 2, 25), (-5, 14, 31), {"*": GUNMETAL, "south": GRILLE, "up": STENCIL}))
+    m += cyl("y", -8, 28, 1.25, 14, 31, EXHAUST, "sp_hopper_inside")
+    for y in (6, 10):
+        m.append(box((-6, y, 22), (-4.5, y + 1.25, 25), RUBBER))
+    # Control panel at the front: gauge and the running lamp.
+    m.append(box((-12, 2, 0.5), (-4, 13, 3.5), {"*": OLIVE, "north": GUNMETAL}))
+    m.append(dial("north", (-8, 9.5, 0.25), 3.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (-8, 5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    return m
+
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
-          "ore_drill": ore_drill()}
+          "ore_drill": ore_drill(), "pumpjack": pumpjack(),
+          "oil_sand_extractor": oil_sand_extractor()}

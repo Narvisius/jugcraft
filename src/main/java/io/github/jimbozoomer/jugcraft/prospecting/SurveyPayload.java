@@ -15,6 +15,7 @@ public record SurveyPayload(List<OreSurvey.Reading> readings) implements CustomP
 			Identifier.STREAM_CODEC, OreSurvey.Reading::icon,
 			ByteBufCodecs.VAR_INT, OreSurvey.Reading::signal,
 			ByteBufCodecs.VAR_INT, OreSurvey.Reading::depth,
+			ByteBufCodecs.STRING_UTF8, OreSurvey.Reading::label,
 			OreSurvey.Reading::new);
 	public static final StreamCodec<RegistryFriendlyByteBuf, SurveyPayload> CODEC = StreamCodec.composite(
 			READING.apply(ByteBufCodecs.list(64)), SurveyPayload::readings,

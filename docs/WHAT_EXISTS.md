@@ -160,6 +160,14 @@ Other blocks:
   - Kinds with a tank: steam generator (water), geothermal generator (lava), ore washer (water). Capacity is `MachineKind.tankCapacity()`.
   - A water source block directly below the steam generator or ore washer is a spring: 20 mB/t, never used up.
 
+### Oil and fluid processing (`chemistry/`, `tools/petro.py`)
+
+- **Petroleum fluids** (`PetroFluids`): `Entry` per fluid with source, flowing, `LiquidBlock` and bucket; `OilFluid` never makes new sources. Client: `PetroFluidsClient` registers the still/flow textures. Fluid tags `c:<fluid>`.
+- **Fluid processing machines:** a `MachineKind` with a `fluidSpec()` (`FluidMachineSpec`: input and output tank capacities, item inputs and outputs). `MachineBlockEntity.tanks()` is a `FluidTanks`; `fluidFor(side)` exposes all tanks as one storage (inputs insert-only and filtered by recipes, outputs extract-only). Output tanks push out of every outer face every 4 ticks.
+- **Fluid recipes** (`FluidRecipe`, `FluidRecipes`): one recipe type per machine (`MachineKind.recipeType()`), JSON keys `items`, `fluids`, `fluid_results`, `results`, `time`. Written from `tools/petro.py`; `check_mod_data.py` audits them and forbids fluid from nothing (`source` declares fluid released from items).
+- **Oil reservoirs** (`OilReservoirs`): seeded per chunk, `get(level, chunk)` and `extract(level, chunk, kind, mb)`; depletion is `SavedData` (`jugcraft:oil_reservoirs`). `overrideForTest` is for game tests only.
+- **Machines:** `PUMPJACK` (custom tick), `OIL_SAND_EXTRACTOR` (`jugcraft:oil_sand_extraction`).
+
 ### Items (`logistics/`)
 
 - Uses **Fabric's** `ItemStorage.SIDED`. Machines expose their slots via `WorldlyContainer`, following the side configuration.
@@ -303,7 +311,7 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 ## Not built yet
 
-- Chemistry branch: electrolysis, real refining, liquid crude oil. Blast-furnace stand-ins mark the recipes that will move there.
+- Chemistry branch: electrolysis and refining. Crude oil, reservoirs, the pumpjack and the oil sand extractor exist (see below); refining, fracking and diesel power are planned. Blast-furnace stand-ins mark the recipes that will move there.
 - Recipe viewer plugin (EMI/JEI/REI).
 - A faster fluid pipe (pointless until pumps are faster).
 - Any magic, farming, creature, travel or seasonal content from [CONTENT_BRANCHES.md](CONTENT_BRANCHES.md).
