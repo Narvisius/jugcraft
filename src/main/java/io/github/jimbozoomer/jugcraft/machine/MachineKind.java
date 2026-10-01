@@ -80,7 +80,9 @@ public enum MachineKind implements StringRepresentable {
 	// A 2x2x2 acid-proof reactor: sulfur + water -> sulfuric acid; later bauxite digestion and fertilizer.
 	CHEMICAL_REACTOR("chemical_reactor", 30_000, 512, 0, 96, 3),
 	// A one-block hydrogen fuel cell (electric look): hydrogen in, JE out.
-	FUEL_CELL("fuel_cell", 40_000, 0, 512, 0, 0);
+	FUEL_CELL("fuel_cell", 40_000, 0, 512, 0, 0),
+	// Storage (batch 6): a 3x2 lithium battery bank, one deep, giving power out of its front like the capacitor bank.
+	LITHIUM_BATTERY_BANK("lithium_battery_bank", 32_000_000, 16_384, 16_384, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -224,7 +226,7 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Stores energy and gives it out of its front face only. */
 	public boolean isBattery() {
-		return this == BATTERY_BOX || this == CAPACITOR_BANK;
+		return this == BATTERY_BOX || this == CAPACITOR_BANK || this == LITHIUM_BATTERY_BANK;
 	}
 
 	/** Whether the machine runs on JE at all. Unpowered machines have no battery and cables never connect to them. */
@@ -401,6 +403,8 @@ public enum MachineKind implements StringRepresentable {
 			case DIESEL_ENGINE -> Footprint.cuboid(2, 2, 3);
 			case ELECTROLYTIC_CELL -> Footprint.cuboid(3, 3, 2);
 			case CHEMICAL_REACTOR -> Footprint.cuboid(2, 2, 2);
+			// Three wide, two tall, one deep, so every block's front is a power socket.
+			case LITHIUM_BATTERY_BANK -> Footprint.cuboid(3, 2, 1);
 			default -> Footprint.SINGLE;
 		};
 	}

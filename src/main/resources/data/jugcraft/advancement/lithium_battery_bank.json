@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:lithium_battery_bank"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.lithium_battery_bank.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.lithium_battery_bank.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:lithium_battery_bank"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:titanium"
+}

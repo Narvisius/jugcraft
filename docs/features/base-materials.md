@@ -18,6 +18,7 @@ The world now holds the raw materials later technology needs, found where they p
 | Nickel | Nickel ore, Y −64 to 16; iron pickaxe; **blast furnace only** | Nickel ingots | Pentlandite (bronze-yellow) |
 | Tungsten | Tungsten ore, rare, Y −64 to 0; iron pickaxe; **blast furnace only** | Tungsten ingots | Wolframite; too refractory for a plain furnace |
 | Uranium | Uranium ore, very rare, Y −64 to −16; iron pickaxe; **blast furnace only** | Uranium ingots | Pitch-black uraninite with yellow-green crust |
+| Titanium | Titanium ore (rutile), rare, Y −64 to −8; iron pickaxe; **no furnace smelts it** | Titanium via the Kroll process (chlorine, coke) in the chemical reactor: see [industrial-chemistry.md](industrial-chemistry.md) | Rutile (reddish-brown to black); titanium is made with chlorine, not smelted |
 | Bauxite / aluminum | Bauxite rock near the surface (Y 50–100) in jungle, savanna and badlands | Blast furnace: 1 bauxite → 1 aluminum nugget (**stand-in**) | Tropical weathering; real refining needs electrolysis |
 | Salt | Rock salt ore, Y 0–64; drops 2–4 salt | Salt, salt blocks | Halite beds |
 | Phosphate | Phosphorite ore, Y −16 to 48; drops 1–3 | Phosphate | Sedimentary phosphorite with apatite |

@@ -26,7 +26,7 @@ public final class JugcraftWorldgen {
 		// Metal and mineral ores: placed feature name, feature switch.
 		String[][] ores = {
 				{"tin", "tin"}, {"zinc", "zinc"}, {"lead", "lead"}, {"silver", "silver"},
-				{"nickel", "nickel"}, {"tungsten", "tungsten"}, {"uranium", "uranium"},
+				{"nickel", "nickel"}, {"tungsten", "tungsten"}, {"uranium", "uranium"}, {"titanium", "titanium"},
 				{"salt", "salt"}, {"phosphate", "phosphate"}, {"lepidolite", "lithium"}, {"monazite", "rare_earths"},
 		};
 		for (String[] ore : ores) {

@@ -19,6 +19,12 @@ public final class PetroItems {
 	public static Item ALUMINA;
 	/** Superphosphate: ripens the crops in a 5x5 area ({@link FertilizerItem}). */
 	public static Item FERTILIZER;
+	/** The Kroll process: raw titanium chlorinated with coke and reduced, a porous sponge the arc furnace melts. */
+	public static Item TITANIUM_SPONGE;
+	/** A lithium cell in an aluminum can: crafted from lithium carbonate, built into the lithium battery bank. */
+	public static Item LITHIUM_CELL;
+	/** Rare earths alloyed with iron in the alloy smelter: for the magnet dynamo and magnet motor. */
+	public static Item NEODYMIUM_MAGNET;
 
 	private PetroItems() {
 	}
@@ -30,6 +36,9 @@ public final class PetroItems {
 		PLASTIC_SHEET = JugcraftRegistry.item("plastic_sheet");
 		ALUMINA = JugcraftRegistry.item("alumina");
 		FERTILIZER = JugcraftRegistry.item("fertilizer", FertilizerItem::new);
+		TITANIUM_SPONGE = JugcraftRegistry.item("titanium_sponge");
+		LITHIUM_CELL = JugcraftRegistry.item("lithium_cell");
+		NEODYMIUM_MAGNET = JugcraftRegistry.item("neodymium_magnet");
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(CRACKING_CATALYST);
@@ -38,6 +47,9 @@ public final class PetroItems {
 			output.accept(PLASTIC_SHEET);
 			output.accept(ALUMINA);
 			output.accept(FERTILIZER);
+			output.accept(TITANIUM_SPONGE);
+			output.accept(LITHIUM_CELL);
+			output.accept(NEODYMIUM_MAGNET);
 		});
 	}
 }

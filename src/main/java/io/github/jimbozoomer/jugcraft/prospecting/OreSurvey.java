@@ -28,7 +28,7 @@ public final class OreSurvey {
 			family("diamond", "minecraft:diamond_ore"), family("emerald", "minecraft:emerald_ore"),
 			family("tin", "jugcraft:tin_ore"), family("zinc", "jugcraft:zinc_ore"), family("lead", "jugcraft:lead_ore"),
 			family("silver", "jugcraft:silver_ore"), family("nickel", "jugcraft:nickel_ore"), family("tungsten", "jugcraft:tungsten_ore"),
-			family("uranium", "jugcraft:uranium_ore"), family("salt", "jugcraft:salt_ore"), family("phosphate", "jugcraft:phosphate_ore"),
+			family("uranium", "jugcraft:uranium_ore"), family("titanium", "jugcraft:titanium_ore"), family("salt", "jugcraft:salt_ore"), family("phosphate", "jugcraft:phosphate_ore"),
 			family("lepidolite", "jugcraft:lepidolite_ore"), family("monazite", "jugcraft:monazite_ore"));
 	/** Surveyed chunks in each direction from the player's chunk: 1 means 3x3. */
 	public static final int RADIUS = 1;

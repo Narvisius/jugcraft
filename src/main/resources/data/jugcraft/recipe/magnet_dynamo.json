@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PMP",
+    "MDM",
+    "PWP"
+  ],
+  "key": {
+    "P": "#c:plates/aluminum",
+    "M": "jugcraft:neodymium_magnet",
+    "D": "jugcraft:dynamo",
+    "W": "jugcraft:aluminum_cable"
+  },
+  "result": {
+    "id": "jugcraft:magnet_dynamo",
+    "count": 1
+  }
+}

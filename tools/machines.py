@@ -71,6 +71,8 @@ MACHINES = {
     "chemical_reactor": {"display": "Chemical Reactor", "lit": True},
     # A one-block hydrogen fuel cell in the electric look: hydrogen -> JE.
     "fuel_cell": {"display": "Fuel Cell", "lit": True},
+    # Storage (batch 6): a 3x2 lithium battery bank in the electric look.
+    "lithium_battery_bank": {"display": "Lithium Battery Bank", "lit": False},
     # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
     "diesel_engine": {"display": "Diesel Engine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -116,6 +118,9 @@ KINETIC_BLOCKS = {
     "belt_pulley": {"display": "Belt Pulley", "states": "axis"},
     # JE -> KE at 75%; its shaft points the way the player looked when placing it.
     "electric_motor": {"display": "Electric Motor", "states": "facing"},
+    # Rare-earth magnet versions (batch 6): faster and far less lossy.
+    "magnet_dynamo": {"display": "Magnet Dynamo", "states": "horizontal"},
+    "magnet_motor": {"display": "Magnet Motor", "states": "facing"},
     # Item conveyors (logistics/ConveyorBlock): driven by rotation, facing the way items travel.
     "conveyor": {"display": "Conveyor", "states": "horizontal"},
     "conveyor_splitter": {"display": "Conveyor Splitter", "states": "horizontal"},
@@ -242,6 +247,8 @@ STATS = {
     "chemical_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
     # One block. 128 JE/t from 1 mB of hydrogen a tick (128 JE/mB).
     "fuel_cell": {"capacity": 40_000, "output_per_tick": 512, "generation_per_tick": 128, "tank": 8_000},
+    # 3x2, one deep. Outputs from its front (all six blocks), charges from any other face.
+    "lithium_battery_bank": {"capacity": 32_000_000, "io_per_tick": 16_384},
     # 2x2x3. Up to 512 KE/t: 2 mB of diesel a tick (256 KE/mB) or 4 mB of heavy fuel oil, only for what it delivers.
     "diesel_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 512, "tank": 8_000},
 }
@@ -382,6 +389,10 @@ CRAFTING = {
     "belt": (["LSL"], {"L": "minecraft:leather", "S": "minecraft:string"}, 1),
     "electric_motor": (["PWP", "WSW", "PCP"], {"P": "#c:plates/iron", "W": "#c:wires/copper", "S": "jugcraft:iron_shaft",
                                              "C": "jugcraft:copper_cable"}, 1),
+    "magnet_dynamo": (["PMP", "MDM", "PWP"], {"P": "#c:plates/aluminum", "M": "jugcraft:neodymium_magnet",
+                                              "D": "jugcraft:dynamo", "W": "jugcraft:aluminum_cable"}, 1),
+    "magnet_motor": (["PMP", "MEM", "PWP"], {"P": "#c:plates/aluminum", "M": "jugcraft:neodymium_magnet",
+                                             "E": "jugcraft:electric_motor", "W": "jugcraft:aluminum_cable"}, 1),
     # Conveyors: leather belts over iron plates and a shaft; the splitter adds bronze gears and a brass plate.
     "conveyor": (["BBB", "PSP"], {"B": "jugcraft:belt", "P": "#c:plates/iron", "S": "jugcraft:iron_shaft"}, 6),
     "conveyor_slope": ([" C", "CP"], {"C": "jugcraft:conveyor", "P": "#c:plates/iron"}, 2),
@@ -446,6 +457,10 @@ CRAFTING = {
     "fuel_cell": (["PWP", "SCS", "PTP"], {"P": "#c:plates/aluminum", "W": "jugcraft:aluminum_cable",
                                           "S": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
                                           "T": "jugcraft:fluid_tank"}, 1),
+    "lithium_cell": (["PLP", "LWL", "PLP"], {"P": "#c:plates/aluminum", "L": "jugcraft:lithium_carbonate",
+                                             "W": "#c:wires/copper"}, 2),
+    "lithium_battery_bank": (["TCT", "CBC", "TCT"], {"T": "#c:ingots/titanium", "C": "jugcraft:lithium_cell",
+                                                     "B": "jugcraft:capacitor_bank"}, 1),
     "diesel_engine": (["PXP", "GCG", "PXP"], {"P": "#c:plates/steel", "X": "jugcraft:plastic_sheet",
                                               "G": "#c:gears/steel", "C": "jugcraft:machine_casing"}, 1),
     "polymerization_reactor": (["PCP", "TGT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:cracking_catalyst",
@@ -515,6 +530,9 @@ ARC_FURNACE = [
      "features": [FEATURE, "nickel"]},
     {"input": "jugcraft:raw_uranium", "output": "jugcraft:uranium_ingot", "count": 1, "ticks": 120,
      "features": [FEATURE, "uranium"]},
+    # Kroll-process titanium sponge (chemical reactor) melts into ingots; raw titanium itself never does.
+    {"input": "jugcraft:titanium_sponge", "output": "jugcraft:titanium_ingot", "count": 1, "ticks": 160,
+     "features": [FEATURE, "titanium"]},
     {"input": "jugcraft:lepidolite", "output": "jugcraft:lithium_carbonate", "count": 2, "ticks": 160,
      "features": [FEATURE, "lithium"]},
     {"input": "jugcraft:monazite", "output": "jugcraft:rare_earth_oxide", "count": 2, "ticks": 200,
@@ -532,6 +550,9 @@ ALLOY_SMELTER = [
      "count": 3, "ticks": 240, "features": [FEATURE, "nickel"]},
     {"inputs": [["jugcraft:tin_ingot", 1], ["jugcraft:lead_ingot", 1]], "output": "jugcraft:solder_ingot",
      "count": 2, "ticks": 120, "features": [FEATURE, "tin", "lead"]},
+    # Batch 6: rare earths alloyed with iron (and boron, left out) make neodymium magnets.
+    {"inputs": [["jugcraft:rare_earth_oxide", 1], ["minecraft:iron_ingot", 1]], "output": "jugcraft:neodymium_magnet",
+     "count": 1, "ticks": 200, "features": [FEATURE, "rare_earths"]},
 ]
 
 
@@ -653,11 +674,13 @@ def machine_recipes():
 
 
 def _arc_dusts():
-    """Dusts of metals a plain furnace cannot smelt (nickel, tungsten, uranium) melt in the arc furnace."""
-    from materials import METALS
+    """Dusts of metals a plain furnace cannot smelt (nickel, tungsten, uranium) melt in the arc furnace. (Titanium has
+    no dust: only the Kroll process frees it.)"""
+    from materials import COMPONENTS, METALS
     return [{"input": f"jugcraft:{metal}_dust", "output": f"jugcraft:{metal}_ingot", "count": 1, "ticks": 80,
              "features": [FEATURE, info["feature"]]}
-            for metal, info in METALS.items() if info["mined"] and "smelting" not in info["cook"]]
+            for metal, info in METALS.items()
+            if info["mined"] and "smelting" not in info["cook"] and metal in COMPONENTS["dust"]]
 
 
 def machine_blocks():

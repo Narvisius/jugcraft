@@ -203,6 +203,34 @@
         {
           "in": [
             [
+              "jugcraft:titanium_ore",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:raw_titanium",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
+              "jugcraft:deepslate_titanium_ore",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:raw_titanium",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
               "minecraft:iron_ore",
               1
             ]
@@ -503,6 +531,20 @@
         {
           "in": [
             [
+              "jugcraft:titanium_sponge",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:titanium_ingot",
+            1
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
               "jugcraft:lepidolite",
               1
             ]
@@ -647,6 +689,24 @@
           ],
           "extra": [],
           "ticks": 120
+        },
+        {
+          "in": [
+            [
+              "jugcraft:rare_earth_oxide",
+              1
+            ],
+            [
+              "minecraft:iron_ingot",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:neodymium_magnet",
+            1
+          ],
+          "extra": [],
+          "ticks": 200
         }
       ]
     },
@@ -803,6 +863,20 @@
           ],
           "out": [
             "jugcraft:steel_plate",
+            1
+          ],
+          "extra": [],
+          "ticks": 100
+        },
+        {
+          "in": [
+            [
+              "jugcraft:titanium_ingot",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:titanium_plate",
             1
           ],
           "extra": [],
@@ -3043,6 +3117,76 @@
             ]
           ],
           "ticks": 80
+        },
+        {
+          "items": [
+            [
+              "jugcraft:raw_titanium",
+              1
+            ],
+            [
+              "jugcraft:coke",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:chlorine",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:titanium_sponge",
+              1
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:lepidolite",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:sulfuric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:lithium_carbonate",
+              2
+            ]
+          ],
+          "ticks": 100
+        },
+        {
+          "items": [
+            [
+              "jugcraft:monazite",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:sulfuric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:rare_earth_oxide",
+              2
+            ]
+          ],
+          "ticks": 140
         }
       ]
     },

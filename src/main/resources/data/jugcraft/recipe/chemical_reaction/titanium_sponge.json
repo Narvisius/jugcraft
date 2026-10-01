@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:raw_titanium",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:titanium_sponge",
+      "count": 1
+    }
+  ],
+  "time": 160
+}

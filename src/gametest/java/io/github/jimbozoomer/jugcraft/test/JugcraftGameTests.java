@@ -532,6 +532,21 @@ public class JugcraftGameTests {
 		helper.succeed();
 	}
 
+	/** The 3x2 lithium battery bank holds 32,000,000 JE and gives up to 16,384 JE/t out of all six front sockets. */
+	@GameTest
+	public void lithiumBatteryBankOutputsFromItsFront(GameTestHelper helper) {
+		BlockPos master = new BlockPos(5, 1, 3);
+		large(helper, master, MachineKind.LITHIUM_BATTERY_BANK);
+		EnergyStorage front = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.west().above()), Direction.NORTH);
+		EnergyStorage side = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.west(2)), Direction.WEST);
+		EnergyStorage back = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.above()), Direction.SOUTH);
+		helper.assertTrue(front != null && front.supportsExtraction() && !front.supportsInsertion(), "Front must only give power");
+		helper.assertTrue(side != null && side.supportsInsertion() && !side.supportsExtraction(), "Sides must only take power");
+		helper.assertTrue(back != null && back.supportsInsertion(), "The back must take power");
+		helper.assertTrue(front.getCapacity() == 32_000_000, "Capacity is " + front.getCapacity());
+		helper.succeed();
+	}
+
 	/** The steel tank holds exactly 128 buckets of one fluid. */
 	@GameTest
 	public void steelTankHolds128Buckets(GameTestHelper helper) {
@@ -746,6 +761,30 @@ public class JugcraftGameTests {
 			helper.assertTrue(crusher.getItem(MachineKind.CRUSHER.outputSlot()).is(item("raw_tin")),
 					"Crusher output is " + crusher.getItem(MachineKind.CRUSHER.outputSlot()));
 			helper.assertTrue(motor.energy().getAmount() < ElectricMotorBlockEntity.CAPACITY, "The motor used no JE");
+		});
+	}
+
+	/**
+	 * A magnet motor driving a magnet dynamo, which feeds the motor back: both run at the magnet rates, but at 95%
+	 * each way the pair loses power every round and never gains any.
+	 */
+	@GameTest(maxTicks = 200)
+	public void magnetMotorAndDynamoLoopLosesPower(GameTestHelper helper) {
+		BlockPos motorPos = new BlockPos(1, 1, 2);
+		helper.setBlock(motorPos, JugcraftKinetics.MAGNET_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
+		helper.setBlock(motorPos.east(), JugcraftKinetics.MAGNET_DYNAMO);
+		ElectricMotorBlockEntity motor = helper.getBlockEntity(motorPos, ElectricMotorBlockEntity.class);
+		DynamoBlockEntity dynamo = helper.getBlockEntity(motorPos.east(), DynamoBlockEntity.class);
+		helper.assertTrue(motor.stats() == ElectricMotorBlockEntity.MAGNET, "The magnet motor has copper stats");
+		helper.assertTrue(dynamo.stats() == DynamoBlockEntity.MAGNET, "The magnet dynamo has copper stats");
+		long start = ElectricMotorBlockEntity.MAGNET.capacity();
+		motor.energy().setAmount(start);
+		helper.runAfterDelay(100, () -> {
+			long total = motor.energy().getAmount() + dynamo.energy().getAmount();
+			helper.assertTrue(total < start, "The pair holds " + total + " JE of " + start);
+			// At least 100 ticks of the motor's full 384 KE/t went round, losing about a tenth of each pass.
+			helper.assertTrue(start - total >= 100L * 384 * 5 / 100, "Only " + (start - total) + " JE was lost");
+			helper.succeed();
 		});
 	}
 

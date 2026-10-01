@@ -140,5 +140,44 @@ def fuel_cell():
     return m
 
 
+def lithium_battery_bank():
+    """Three wide, two tall, one deep: a graphite rack of six battery modules, one in front of each block, each with
+    a column of glowing charge bars either side of a power socket (the bank gives power out of its front). Trim posts
+    at the corners and dividers between the modules, a header with a status screen, lamps and a hazard edge, vented
+    side panels with glowing strips and ports where cables meet them, and vents on the back."""
+    m = [box((-32, 0, 0), (16, 1.5, 16), FRAME)]
+    m.append(box((-31, 1.5, 6), (15, 30, 15), SEAMS))
+    for x, z in ((-32, 0), (14, 0), (-32, 14), (14, 14)):
+        m.append(box((x, 1.5, z), (x + 2, 30, z + 2), FRAME))
+    for x in (-17, -1):
+        m.append(box((x, 1.5, 0.5), (x + 2, 30, 6), FRAME))
+    m.append(box((-30, 15, 0.75), (14, 16.5, 6), FRAME))
+    # Six modules, one in front of each block: charge bars either side of a socket.
+    for x0 in (-30, -14, 2):
+        x1 = x0 + 12
+        for y0, y1 in ((2, 14.5), (17, 29.5)):
+            m.append(box((x0, y0, 1.5), (x1, y1, 6), {"*": FRAME, "north": CASING}))
+            for bx in (x0 + 0.75, x1 - 3.5):
+                m.append(box((bx, y0 + 1.5, 1.1), (bx + 2.75, y1 - 1.5, 1.5), {"*": FRAME, "north": LIGHT_BARS + "!"}))
+            cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+            m.append(box((cx - 2, cy - 2, 0.75), (cx + 2, cy + 2, 1.5), {"*": FRAME, "north": PORT + "!"}))
+    # Header with a status screen, two lamps and a hazard edge.
+    m.append(box((-32, 30, 0.5), (16, 32, 16), {"*": FRAME, "up": SEAMS}))
+    m.append(box((-14, 30.25, 0.25), (-2, 31.75, 0.5), {"*": FRAME, "north": SCREEN + "!"}))
+    for x in (-24, 8):
+        m.append(dial("north", (x, 31, 0.25), 0.75, texture=LAMP, body=FRAME))
+    m.append(box((-30, 29.6, 0.5), (14, 30, 1.5), {"*": FRAME, "north": HAZARD}))
+    # Vented side panels with a glowing strip and a port where cables meet them.
+    for x0, x1, face, out in ((-31.5, -30, "west", (-32, -31.5)), (14, 15.5, "east", (15.5, 16))):
+        m.append(box((x0, 1.5, 2), (x1, 30, 14), {"*": FRAME, face: VENT}))
+        m.append(box((out[0], 27, 3), (out[1], 27.5, 13), GLOW))
+        m.append(box((out[0], 13, 6), (out[1], 19, 10), {"*": FRAME, face: PORT + "!"}))
+    # Vents on the back.
+    for y in (4, 18):
+        m.append(box((-24, y, 15), (8, y + 8, 15.75), {"*": FRAME, "south": VENT}))
+    return m
+
+
 MODELS = {"battery_box": battery_box(), "capacitor_bank": capacitor_bank(), "solar_panel": solar_panel(),
-          "electric_pump": electric_pump(), "fuel_cell": fuel_cell()}
+          "electric_pump": electric_pump(), "fuel_cell": fuel_cell(),
+          "lithium_battery_bank": lithium_battery_bank()}

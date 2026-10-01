@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:magnet_dynamo"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.magnet_dynamo.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.magnet_dynamo.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:magnet_dynamo",
+              "jugcraft:magnet_motor"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:neodymium_magnet"
+}

@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "facing=north,turning=false": {
+      "model": "jugcraft:block/magnet_motor"
+    },
+    "facing=east,turning=false": {
+      "model": "jugcraft:block/magnet_motor",
+      "y": 90
+    },
+    "facing=south,turning=false": {
+      "model": "jugcraft:block/magnet_motor",
+      "y": 180
+    },
+    "facing=west,turning=false": {
+      "model": "jugcraft:block/magnet_motor",
+      "y": 270
+    },
+    "facing=up,turning=false": {
+      "model": "jugcraft:block/magnet_motor",
+      "x": 270
+    },
+    "facing=down,turning=false": {
+      "model": "jugcraft:block/magnet_motor",
+      "x": 90
+    },
+    "facing=north,turning=true": {
+      "model": "jugcraft:block/magnet_motor_active"
+    },
+    "facing=east,turning=true": {
+      "model": "jugcraft:block/magnet_motor_active",
+      "y": 90
+    },
+    "facing=south,turning=true": {
+      "model": "jugcraft:block/magnet_motor_active",
+      "y": 180
+    },
+    "facing=west,turning=true": {
+      "model": "jugcraft:block/magnet_motor_active",
+      "y": 270
+    },
+    "facing=up,turning=true": {
+      "model": "jugcraft:block/magnet_motor_active",
+      "x": 270
+    },
+    "facing=down,turning=true": {
+      "model": "jugcraft:block/magnet_motor_active",
+      "x": 90
+    }
+  }
+}

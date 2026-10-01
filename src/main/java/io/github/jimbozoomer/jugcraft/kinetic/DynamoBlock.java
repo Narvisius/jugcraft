@@ -25,14 +25,25 @@ import org.jspecify.annotations.Nullable;
 /**
  * The dynamo: the bridge from kinetic power to JE. Rotation reaching any of its faces is turned into
  * JE at {@link DynamoBlockEntity#EFFICIENCY_PERCENT}%, which it pushes into cables on every side.
- * (Machines can also run straight off a shaft, with no loss.)
+ * (Machines can also run straight off a shaft, with no loss.) The magnet dynamo is the same block with
+ * {@link DynamoBlockEntity#MAGNET} stats.
  */
 public class DynamoBlock extends BaseEntityBlock implements EnergyConnectable {
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+	private final DynamoBlockEntity.Stats stats;
 
 	public DynamoBlock(Properties properties) {
+		this(properties, DynamoBlockEntity.COPPER);
+	}
+
+	public DynamoBlock(Properties properties, DynamoBlockEntity.Stats stats) {
 		super(properties);
+		this.stats = stats;
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+	}
+
+	public DynamoBlockEntity.Stats stats() {
+		return stats;
 	}
 
 	@Override

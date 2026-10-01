@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    }
+  ],
+  "type": "jugcraft:alloying",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:rare_earth_oxide",
+      "count": 1
+    },
+    {
+      "ingredient": "minecraft:iron_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:neodymium_magnet",
+    "count": 1
+  },
+  "time": 200
+}

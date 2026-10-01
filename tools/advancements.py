@@ -46,6 +46,12 @@ TREE = {
     "fertilizer": ("sulfuric_acid", "fertilizer", "Green Revolution", "Make fertilizer", "task"),
     "alumina": ("electrolytic_cell", "alumina", "The Bayer Way", "Digest bauxite into alumina", "task"),
     "fuel_cell": ("electrolytic_cell", "fuel_cell", "Clean Burn", "Build a hydrogen fuel cell", "goal"),
+    # Advanced materials (batch 6).
+    "titanium": ("electrolytic_cell", "titanium_ingot", "Kroll Call", "Chlorinate titanium and melt the sponge", "task"),
+    "lithium_battery_bank": ("titanium", "lithium_battery_bank", "Power Wall", "Build a lithium battery bank", "goal"),
+    "neodymium_magnet": ("sulfuric_acid", "neodymium_magnet", "Strong Attraction", "Make a neodymium magnet", "task"),
+    "magnet_dynamo": ("neodymium_magnet", ["magnet_dynamo", "magnet_motor"], "Lossless (Almost)",
+                      "Build a magnet dynamo or magnet motor", "goal"),
 }
 # Background of the tab (a block texture), shown behind the tree.
 BACKGROUND = "jugcraft:block/dp_gunmetal"

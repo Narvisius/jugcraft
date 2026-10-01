@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PMP",
+    "MEM",
+    "PWP"
+  ],
+  "key": {
+    "P": "#c:plates/aluminum",
+    "M": "jugcraft:neodymium_magnet",
+    "E": "jugcraft:electric_motor",
+    "W": "jugcraft:aluminum_cable"
+  },
+  "result": {
+    "id": "jugcraft:magnet_motor",
+    "count": 1
+  }
+}

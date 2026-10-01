@@ -215,6 +215,26 @@ def cell(seed, palette):
     return img
 
 
+def magnet(seed):
+    """Nickel-plated magnet segments: bright plating with vertical seams between segments every four pixels and a
+    faint cyan reflection, for the rare-earth magnet tier."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = SILVER[1] if rng.random() < 0.8 else SILVER[2]
+            if y in (0, 15):
+                c = SILVER[0]
+            elif x % 4 == 0:
+                c = GRAPHITE[1]
+            elif x % 4 == 1:
+                c = SILVER[2]
+            elif y in (4, 5) and x % 4 == 2:
+                c = CYAN[3]
+            put(img, x, y, c)
+    return img
+
+
 def hazard(seed):
     """Yellow-and-black warning stripes for high-voltage edges."""
     img = new()
@@ -273,3 +293,4 @@ def draw_all():
     save(solar(738), "el_solar")
     save(cell(739, GLOW), "el_cell")
     save(hazard(740), "el_hazard")
+    save(magnet(741), "el_magnet")

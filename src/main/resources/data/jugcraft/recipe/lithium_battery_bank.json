@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TCT",
+    "CBC",
+    "TCT"
+  ],
+  "key": {
+    "T": "#c:ingots/titanium",
+    "C": "jugcraft:lithium_cell",
+    "B": "jugcraft:capacitor_bank"
+  },
+  "result": {
+    "id": "jugcraft:lithium_battery_bank",
+    "count": 1
+  }
+}

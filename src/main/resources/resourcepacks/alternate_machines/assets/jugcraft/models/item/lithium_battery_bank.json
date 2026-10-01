@@ -1,0 +1,285 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "power_port_frame": "jugcraft:block/power_port_frame",
+    "front": "jugcraft:block/lithium_battery_bank_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        2.6667,
+        5.3333
+      ],
+      "to": [
+        16.0,
+        3.3333,
+        10.6667
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.667
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.667
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            5.333,
+            0.667
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            5.333,
+            0.667
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            5.333
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            5.333
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.3333,
+        3.3333,
+        5.6667
+      ],
+      "to": [
+        15.6667,
+        12.6667,
+        10.3333
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            15.333,
+            9.333
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            15.333,
+            9.333
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            4.667,
+            9.333
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            4.667,
+            9.333
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            15.333,
+            4.667
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            15.333,
+            4.667
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        12.6667,
+        5.3333
+      ],
+      "to": [
+        16.0,
+        13.3333,
+        10.6667
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.667
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            0.667
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            5.333,
+            0.667
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            5.333,
+            0.667
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            5.333
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            16,
+            5.333
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.6667,
+        5.3333,
+        5.5
+      ],
+      "to": [
+        15.3333,
+        5.6667,
+        5.6667
+      ],
+      "faces": {
+        "north": {
+          "texture": "#power_port_frame",
+          "uv": [
+            0,
+            0,
+            14.667,
+            0.333
+          ]
+        },
+        "south": {
+          "texture": "#power_port_frame",
+          "uv": [
+            0,
+            0,
+            14.667,
+            0.333
+          ]
+        },
+        "east": {
+          "texture": "#power_port_frame",
+          "uv": [
+            0,
+            0,
+            0.167,
+            0.333
+          ]
+        },
+        "west": {
+          "texture": "#power_port_frame",
+          "uv": [
+            0,
+            0,
+            0.167,
+            0.333
+          ]
+        },
+        "up": {
+          "texture": "#power_port_frame",
+          "uv": [
+            0,
+            0,
+            14.667,
+            0.167
+          ]
+        },
+        "down": {
+          "texture": "#power_port_frame",
+          "uv": [
+            0,
+            0,
+            14.667,
+            0.167
+          ]
+        }
+      }
+    }
+  ]
+}

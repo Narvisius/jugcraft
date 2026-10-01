@@ -136,6 +136,9 @@ ABOUT = {
                          "and a bucket of water.",
     "chemical_reactor": "Two by two by two, lined with lead against the acid. Burns sulfur and absorbs it in water: two "
                         "sulfur dust and a bucket of water make a bucket of sulfuric acid, every 5 seconds.",
+    "lithium_battery_bank": "Three wide, two tall, one deep: six lithium battery modules holding 32,000,000 JE, eight "
+                            "capacitor banks. It charges from any side and gives power out of the sockets on its "
+                            "front, 16,384 JE/t.",
     "fuel_cell": "One block. Combines hydrogen with the air: 128 JE/t, burning a millibucket of hydrogen a tick (128,000 "
                  "JE a bucket). Pipe hydrogen from the electrolytic cell into it. Its screen lights while it runs.",
     "diesel_engine": "Two wide, two tall and three long. Burns diesel (256 KE a mB) or heavy fuel oil (128) piped into "
@@ -174,6 +177,10 @@ ABOUT = {
     "belt": "Links two belt pulleys: use it on one, then on the other. Breaking a pulley drops the belt.",
     "electric_motor": "Turns JE from cables back into rotation at 75%, up to 96 KE/t out of its shaft, which points "
                       "the way you looked when placing it. Motor and dynamo together always lose power.",
+    "magnet_dynamo": "A dynamo wound round rare-earth magnets: 512 KE/t into JE at 95%, against the copper "
+                     "dynamo's 128 at 75%. It pushes the JE into cables on every side.",
+    "magnet_motor": "An electric motor with rare-earth magnets: takes 1,024 JE/t and turns it into up to 384 KE/t at "
+                    "95%. Paired with a magnet dynamo it still loses a tenth every round.",
     "dynamo": "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge "
               "from a shaft line to the electric network.",
     "auto_crafter": "Crafts the crafting recipe laid out in its 3x3 grid. Set the pattern by hand; each grid slot "
@@ -324,7 +331,8 @@ def build():
             + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("hand_crank", "iron_shaft", "brass_gearbox",
                                                                      "belt_pulley")]
             + [block_page("belt", TOOLS["belt"])]
-            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("dynamo", "electric_motor")]},
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("dynamo", "electric_motor", "magnet_dynamo",
+                                                                     "magnet_motor")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller", "auto_crafter")]},
@@ -388,6 +396,18 @@ def build():
                 "seconds.",
                 "That is two ingots from each bauxite, twice what the arc furnace gets and far more than the blast "
                 "furnace's nugget."]},
+            {"title": "Titanium", "icon": f"{MOD}:titanium_ingot", "text": [
+                "No furnace can smelt titanium. Chlorinate it instead: a raw titanium, a coal coke and 250 mB of "
+                "chlorine in the chemical reactor make a titanium sponge.",
+                "The arc furnace melts the sponge into a titanium ingot. Titanium frames the lithium battery bank."]},
+            {"title": "Leaching", "icon": f"{MOD}:lithium_carbonate", "text": [
+                "Dissolve ores in sulfuric acid in the chemical reactor: a lepidolite and 250 mB of acid give two "
+                "lithium carbonate, a monazite two rare earth oxide.",
+                "That is twice what the blast furnace gets.",
+                "Two lithium carbonate, four aluminum plates and a copper wire make two lithium cells.",
+                "The alloy smelter melts a rare earth oxide with an iron ingot into a neodymium magnet, for the "
+                "magnet dynamo and magnet motor."]},
+            machine_page("lithium_battery_bank"),
             {"title": "Fertilizer", "icon": f"{MOD}:fertilizer", "text": [
                 "Two phosphate and 250 mB of sulfuric acid in the chemical reactor make four fertilizer.",
                 "Use one on the ground or a crop: every crop in the 5x5 area around it (a block up or down too) gets "

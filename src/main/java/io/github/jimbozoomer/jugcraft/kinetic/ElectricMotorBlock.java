@@ -26,14 +26,25 @@ import org.jspecify.annotations.Nullable;
  * The electric motor: the bridge from JE back to rotation. Cables charge it on any side; its shaft
  * (facing the way the player looked when placing it) drives what it faces at
  * {@link ElectricMotorBlockEntity#EFFICIENCY_PERCENT}% of the JE it uses. With the dynamo also at 75%,
- * a motor-dynamo loop always loses power.
+ * a motor-dynamo loop always loses power. The magnet motor is the same block with
+ * {@link ElectricMotorBlockEntity#MAGNET} stats (95% each way: a loop still loses a tenth).
  */
 public class ElectricMotorBlock extends BaseEntityBlock implements EnergyConnectable {
 	public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
+	private final ElectricMotorBlockEntity.Stats stats;
 
 	public ElectricMotorBlock(Properties properties) {
+		this(properties, ElectricMotorBlockEntity.COPPER);
+	}
+
+	public ElectricMotorBlock(Properties properties, ElectricMotorBlockEntity.Stats stats) {
 		super(properties);
+		this.stats = stats;
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(ShaftBlock.TURNING, false));
+	}
+
+	public ElectricMotorBlockEntity.Stats stats() {
+		return stats;
 	}
 
 	@Override

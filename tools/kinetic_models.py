@@ -14,7 +14,7 @@ TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning"),
            "conveyor_splitter": ("conveyor_belt", "conveyor_belt_moving")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
 # Blocks with a "turning" block state.
-STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "conveyor",
+STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "magnet_motor", "conveyor",
                   "conveyor_splitter"}
 
 
@@ -85,6 +85,24 @@ def dynamo():
     return m
 
 
+def magnet_dynamo():
+    """The dynamo's housing and axle with rare-earth magnets: a ring of nickel-plated magnet segments round the middle
+    between cyan bands (the higher-tech colour), on the same base with the same ports."""
+    m = [box((1, 0, 1), (15, 1.5, 15), "el_frame")]
+    m += cyl("z", 8, 8.5, 5.25, 2, 14, "el_casing", "el_frame")
+    for z in (4, 11.5):
+        m += cyl("z", 8, 8.5, 5.5, z, z + 0.5, "el_glow_cyan")
+    m += cyl("z", 8, 8.5, 5.75, 6, 10, "el_magnet")
+    for z in (2, 13.25):
+        m.append(box((2, 1.5, z), (14, 14.5, z + 0.75), "el_frame"))
+    m += cyl("z", 8, 8.5, 1.25, 0, 16, IRON)
+    m.append(box((0.25, 6, 6.5), (2, 10, 9.5), {"*": "el_frame", "west": "el_port!"}))
+    m.append(box((14, 6, 6.5), (15.75, 10, 9.5), {"*": "el_frame", "east": "el_port!"}))
+    m.append(box((6.5, 14.25, 6.5), (9.5, 15.75, 9.5), {"*": "el_frame", "up": "el_vent!"}))
+    m.append(box((5, 1.5, 5), (11, 3, 11), "el_casing"))
+    return m
+
+
 def belt_pulley():
     """A shaft along z carrying a grooved wooden wheel with brass rims; the belt (drawn by the client) runs in the
     groove."""
@@ -113,6 +131,24 @@ def electric_motor():
     m.append(box((6, 14, 7), (10, 15.75, 11), {"*": "el_frame", "up": "el_vent!"}))
     m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": "el_frame", "south": "el_port!"}))
     # The output shaft spins, with a coupling on it.
+    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
+    return m, rotor
+
+
+def magnet_motor():
+    """The electric motor with rare-earth magnets: a ring of nickel-plated magnet segments round its middle between
+    cyan bands, on the same feet with the same ports and output shaft."""
+    m = [box((2, 0, 3), (14, 1.5, 15), "el_frame")]
+    m += cyl("z", 8, 8.5, 5.5, 3.5, 14.5, "el_casing", "el_frame")
+    for z in (3, 14):
+        m += cyl("z", 8, 8.5, 5.9, z, z + 1, "el_frame")
+    for z in (5.5, 11.5):
+        m += cyl("z", 8, 8.5, 5.75, z, z + 0.5, "el_glow_cyan")
+    m += cyl("z", 8, 8.5, 6, 7, 10.5, "el_magnet")
+    m.append(box((0.25, 6, 7), (2.5, 11, 11), {"*": "el_frame", "west": "el_port!"}))
+    m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": "el_frame", "east": "el_port!"}))
+    m.append(box((6, 14.5, 4), (10, 15.75, 6.5), {"*": "el_frame", "up": "el_vent!"}))
+    m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": "el_frame", "south": "el_port!"}))
     rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
     return m, rotor
 
@@ -180,7 +216,8 @@ def dynamo_parts():
 
 PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "hand_crank": hand_crank(),
          "steam_engine": steam_engine(), "dynamo": dynamo_parts(), "belt_pulley": belt_pulley(),
-         "electric_motor": electric_motor(), "conveyor": (conveyor(), []),
+         "electric_motor": electric_motor(), "magnet_dynamo": (magnet_dynamo(), []), "magnet_motor": magnet_motor(),
+         "conveyor": (conveyor(), []),
          "conveyor_splitter": (conveyor_splitter(), [])}
 # Conveyor slopes: one block (conveyor_slope, logistics/ConveyorSlopeBlock) with an ascending and a descending model.
 SLOPES = {"conveyor_slope": conveyor_slope(True), "conveyor_slope_down": conveyor_slope(False)}
@@ -193,6 +230,7 @@ ROTORS = {
     "iron_shaft": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 9},
     "belt_pulley": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 9},
     "electric_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 12},
+    "magnet_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 18},
     "hand_crank": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 6},
     "steam_engine": {"axis": "z", "center": (8, 8), "property": "lit", "speed": 9},
 }

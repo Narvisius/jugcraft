@@ -225,6 +225,9 @@ METAL_COLORS = {
                  [(38, 40, 44), (64, 68, 74), (92, 96, 104), (120, 124, 132), (156, 160, 168)]),
     "uranium": ([(24, 24, 20), (40, 40, 30), (186, 208, 58)], (232, 242, 122),
                 [(66, 70, 60), (106, 112, 96), (146, 152, 132), (184, 190, 168), (214, 220, 196)]),
+    # Rutile: reddish-brown to black needles in the stone; the metal a cool blue-grey.
+    "titanium": ([(70, 30, 20), (120, 54, 30), (168, 86, 44)], (226, 150, 92),
+                 [(58, 62, 72), (96, 102, 116), (138, 144, 158), (178, 184, 196), (214, 218, 228)]),
     "aluminum": (None, None,
                  [(118, 124, 130), (166, 172, 178), (198, 202, 208), (220, 224, 228), (238, 240, 244)]),
 }
@@ -1218,6 +1221,7 @@ def machines():
     save(grate(952, glow=ember), "block", "coke_oven_front_on")
     save(window(953, [(30, 26, 26), (44, 36, 34)]), "block", "steel_foundry_front")
     save(battery_front(954), "block", "capacitor_bank_front")
+    save(battery_front(978), "block", "lithium_battery_bank_front")
     save(tank_side(955), "block", "steel_tank_front")
     save(grate(957), "block", "cobblestone_generator_front")
     save(grate(957, glow=[(250, 140, 30), (255, 190, 60), (220, 80, 20)]), "block", "cobblestone_generator_front_on")

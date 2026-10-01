@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:neodymium_magnet"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.neodymium_magnet.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.neodymium_magnet.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:neodymium_magnet"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:sulfuric_acid"
+}

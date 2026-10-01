@@ -213,6 +213,9 @@ def item_units(ref):
         # One bauxite holds two ingots of aluminum (it is about half alumina): the Bayer route (chemical reactor and
         # electrolytic cell) recovers all of it, the arc furnace stand-in half, the blast-furnace stand-in a nugget.
         return {"aluminum": 18}
+    if path == "titanium_sponge":
+        # Kroll-process sponge: one ingot of titanium each, melted in the arc furnace.
+        return {"titanium": 9}
     if path == "alumina":
         # Bayer-process alumina: one ingot of aluminum each, smelted out in the electrolytic cell.
         return {"aluminum": 9}

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PLP",
+    "LWL",
+    "PLP"
+  ],
+  "key": {
+    "P": "#c:plates/aluminum",
+    "L": "jugcraft:lithium_carbonate",
+    "W": "#c:wires/copper"
+  },
+  "result": {
+    "id": "jugcraft:lithium_cell",
+    "count": 2
+  }
+}

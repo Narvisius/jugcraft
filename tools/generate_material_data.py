@@ -625,8 +625,11 @@ def recipes():
 
     for result, (pattern, key, count) in CRAFTING.items():
         features = [MACHINE_FEATURE] + sorted({
-            feature_of(f"{ref.split('/')[-1]}_ingot") for ref in key.values() if ref.startswith("#c:ingots/")
-            and ref.split("/")[-1] not in ("copper", "iron", "gold")} | ({"silicon"} if "#c:silicon" in key.values() else set()))
+            feature_of(f"{ref.split('/')[-1]}_ingot") for ref in key.values()
+            if ref.startswith("#c:ingots/") and ref.split("/")[-1] not in ("copper", "iron", "gold")}
+            | {ITEMS[ref.split(":")[1]]["feature"] for ref in key.values() if ref.startswith(f"{MOD}:")
+               and ref.split(":")[1] in ITEMS}
+            | ({"silicon"} if "#c:silicon" in key.values() else set()))
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)

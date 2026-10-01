@@ -1,6 +1,6 @@
 # Industrial chemistry: electrochemistry and acids
 
-Status: implemented (batch 5 of the Chemistry branch, #52)
+Status: implemented (batch 5 of the Chemistry branch, #52; batch 6, advanced materials, #54)
 Proposal issue: owner request, 1 October 2026 ("merge it and start the next batch immediately"); plan in [CHEMISTRY.md](../branches/CHEMISTRY.md#industrial-chemistry-electrochemistry-and-acids)
 Owner: jimbozoomer-byte
 Target milestone and tier: steel tier, after the oil line
@@ -43,12 +43,43 @@ Salt, sulfur, phosphate and bauxite have been in the world since the first ores,
 - Making a bucket of hydrogen takes four buckets of brine in the electrolytic cell (204,800 JE), so the fuel cell pays back part of the cell's power and is never a loop.
 - Recipe: aluminum plates, two aluminum cables, steel plates, an advanced circuit and a tinplate tank.
 
+### Titanium ore (batch 6, commit 26)
+- **Titanium** is a new mined metal: rutile-bearing titanium ore (and deepslate ore), rare, Y −64 to −8, iron pickaxe. Raw titanium, ingots, nuggets, blocks and plates, all tagged `c:`.
+- **No furnace smelts it**, not even the arc furnace: titanium is made with chlorine (commit 27). The crusher still doubles the ore. The prospector reports it.
+- A new feature switch, `titanium.enabled`.
+
+### The Kroll process (batch 6, commit 27)
+- **1 raw titanium + 1 coal coke + 250 mB of chlorine → 1 titanium sponge** in the chemical reactor, 160 ticks. Chlorine's first real use (it is used up).
+- The **arc furnace** melts a titanium sponge into a titanium ingot (160 ticks). Nothing else turns raw titanium into metal.
+- Each titanium costs a quarter bucket of chlorine: a bucket of brine in the electrolytic cell (51,200 JE) makes enough for one.
+- The metal audit counts a sponge as one ingot of titanium.
+
+### Lithium and rare earths (batch 6, commit 28)
+- **Acid leaching** in the chemical reactor: **1 lepidolite + 250 mB sulfuric acid → 2 lithium carbonate** (100 ticks); **1 monazite + 250 mB sulfuric acid → 2 rare earth oxide** (140 ticks).
+- Twice the blast-furnace stand-ins, which stay as the simple route. Lithium goes to the battery bank (commit 29), rare earths to magnets (commit 30).
+
+### Lithium battery bank (batch 6, commit 29)
+- **Lithium cell** (an item): 2 lithium carbonate, 4 aluminum plates and a copper wire make 2.
+- **Lithium battery bank** (three wide, two tall, one deep, the electric look): six graphite battery modules, each with glowing charge bars either side of a power socket, a header with a status screen, lamps and a hazard edge, and vented side panels with ports.
+- **32,000,000 JE**, eight capacitor banks, giving out **16,384 JE/t** from the front of all six blocks and charging from any other face. Comparators read its charge, as with the other batteries.
+- Recipe: titanium ingots, 4 lithium cells and a capacitor bank (so it needs both the Kroll process and acid leaching).
+- One deep so every block's front is a socket: power never pushes from one of its blocks into another.
+- It only stores power; it makes none.
+
+### Rare-earth magnets (batch 6, commit 30)
+- **Neodymium magnet** (an item): **1 rare earth oxide + 1 iron ingot → 1**, in the alloy smelter (200 ticks).
+- **Magnet dynamo**: KE → JE at **95%**, up to **512 KE/t** (the copper dynamo: 75%, 128). 32,000 JE buffer. Pushes JE into cables on every side.
+- **Magnet motor**: JE → KE at **95%**, up to **384 KE/t** out of its shaft (the electric motor: 75%, 96), taking up to 1,024 JE/t. 32,000 JE buffer.
+- Both are the copper-wound blocks with magnet stats (`DynamoBlockEntity.MAGNET`, `ElectricMotorBlockEntity.MAGNET`), in the electric look with a ring of nickel-plated magnet segments between **cyan** bands: cyan is the colour kept for the higher-tech tiers.
+- Recipes: aluminum plates, 4 neodymium magnets, the copper-wound dynamo or motor, and an aluminum cable.
+- A magnet motor driving a magnet dynamo returns 90.25% of the JE: still a loss every round. Through a magnet dynamo, the diesel engine gives 243 JE per mB of diesel, still under the diesel generator's 256.
+
 ### Advancements
-Split Decision (electrolytic cell), Oil of Vitriol (sulfuric acid), Green Revolution (fertilizer), The Bayer Way (alumina) and Clean Burn (fuel cell), under Forged in Coke.
+Split Decision (electrolytic cell), Oil of Vitriol (sulfuric acid), Green Revolution (fertilizer), The Bayer Way (alumina) and Clean Burn (fuel cell), under Forged in Coke. Batch 6 adds Kroll Call (titanium), Power Wall (lithium battery bank), Strong Attraction (neodymium magnet) and Lossless (Almost) (a magnet dynamo or motor).
 
 ## Connections
 - Existing input producer: rock salt ore and the flowback treatment unit (salt); crushed sulfur (sulfur dust); water pumps.
-- Existing output consumer: lye goes to bauxite digestion, sulfuric acid to fertilizer, fertilizer to vanilla crops, hydrogen to the fuel cell (commit 25), chlorine to later chemistry.
+- Existing output consumer: lye goes to bauxite digestion, sulfuric acid to fertilizer and leaching, fertilizer to vanilla crops, hydrogen to the fuel cell, chlorine to the Kroll process (titanium), lithium carbonate to lithium cells, rare earth oxide to neodymium magnets.
 - Technology connection: the oil line's fluid machines and the chemical mixer.
 - Magic connection: none.
 - Reachable entry path: salt is mined from the start; the mixer and cell need only steel-tier parts. No circular unlock.
@@ -58,20 +89,22 @@ Split Decision (electrolytic cell), Oil of Vitriol (sulfuric acid), Green Revolu
 ## Balance and automation
 - Volume is conserved: a bucket of brine gives 1,000 mB of products in all.
 - Salt comes only from mining and fracking flowback; the cell costs 51,200 JE a bucket of brine. Its 250 mB of hydrogen give 32,000 JE in the fuel cell, so electrolysis is never a power loop.
+- Magnets: the magnet motor and dynamo are 95% each way, so a pair loses 9.75% a round (game test).
+- Storage: the lithium battery bank only stores power.
 - Metal: the fluid recipe audit (`check_mod_data`) holds every recipe to the metal its items carry.
 
 ## Multiplayer and persistence
 Server-side machines like the oil line's; tanks and inventories save with the block entity. No new persistent state.
 
 ## Dependencies and assets
-No new dependencies. Textures and models are original (`tools/petro_textures.py`, `tools/dieselpunk_models.py`).
+No new dependencies. Textures and models are original (`tools/petro_textures.py`, `tools/dieselpunk_models.py`, `tools/electric_models.py`).
 
 ## Verification
 - `tools/check_mod_data.py` audits the new fluids, gases and recipes like the oil line's.
-- Game tests `mixerMakesBrine`, `cellSplitsBrine`, `reactorMakesSulfuricAcid` `bayerRouteMakesAluminum`, `reactorMakesFertilizer`, `fertilizerGrowsTheCropsAround` and `fuelCellBurnsHydrogen` (PetroGameTests).
+- Game tests `mixerMakesBrine`, `cellSplitsBrine`, `reactorMakesSulfuricAcid` `bayerRouteMakesAluminum`, `reactorMakesFertilizer`, `fertilizerGrowsTheCropsAround` `fuelCellBurnsHydrogen` `reactorMakesTitaniumSponge` and `reactorLeachesLithium` (PetroGameTests); `lithiumBatteryBankOutputsFromItsFront` and `magnetMotorAndDynamoLoopLosesPower` (JugcraftGameTests).
 
 ## World and event applicability
-Not applicable: no worldgen, mobs or dimensions.
+Titanium ore generates in the Overworld (Y −64 to −8), behind the `titanium.enabled` switch. No mobs or dimensions.
 
 ## Rollout and open questions
-- Chlorine has no consumer yet; PVC, bleach and titanium refining are candidates for a later batch.
+- Chlorine's consumer is the Kroll process (titanium); PVC and bleach remain candidates.

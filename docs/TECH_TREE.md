@@ -80,7 +80,7 @@ All machines hold their own internal battery and accept power from cables or dir
 | Steel Foundry (2×2, 5 tall) | Steel | Iron ingot + coke → steel ingot, 400 ticks | none | bricks, hopper, iron plates, blast furnace |
 | Geothermal Generator (2×2×2) | Power | Lava → 64 JE/t (1 mB/t; a bucket lasts 1,000 ticks) | produces | invar plates, tinplate tank, bronze gears, casing, basic circuit |
 | Wind Turbine (9 tall, 7-block rotor) | Power | 12–72 JE/t by height above sea level; ×1.5 in rain, ×2 in thunder; the rotor turns (drawn by the client) and needs a clear 7×7 square in front of the top | produces | aluminum plates, bronze gears, casing, bronze plates, cable |
-| Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
+| Arc Furnace (3×3×3 multiblock) | Mechanical (with chemistry stand-ins) | Quartz → 2 silicon; raw nickel, tungsten or uranium → ingot; titanium sponge → titanium ingot; bauxite, lepidolite and monazite stand-ins | 64 JE/t | 26 arc furnace casings (bricks + nickel) + controller |
 
 ## Machine looks: steampunk and classic
 
@@ -234,6 +234,7 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 | --- | --- | --- | --- |
 | Item Crate | 32 stacks of one item | Right-click with an item to put it in; with an empty hand to take a stack (sneak to just look). Pipes, extractors and hoppers use it; comparators read how full it is. Breaking it drops everything. | iron plates, planks |
 | Capacitor Bank (2 wide, 2 tall) | 4,000,000 JE | Charges from any side; gives power out of the copper sockets on its front, 4,096 JE/t (a job for aluminum cable). Comparators read its charge. | steel plates, 4 battery boxes, advanced circuit |
+| Lithium Battery Bank (3 wide, 2 tall, 1 deep) | 32,000,000 JE | Charges from any side; gives power out of the six sockets on its front, 16,384 JE/t (four aluminum cables' worth). Comparators read its charge. Electric look. | titanium ingots, 4 lithium cells, a capacitor bank |
 | Steel Tank (2 wide, 2 deep) | 128 buckets of one fluid | Buckets, pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. Comparators read how full it is. | 8 steel plates, tinplate tank |
 
 ![Capacitor Bank, Steel Tank and Item Crate](images/storage.png)
@@ -275,6 +276,8 @@ A second, mechanical power system measured in **KE** (kinetic energy) per tick. 
 | Belt Pulley | A shaft that can hold a belt | Carries rotation along its axis like a shaft, and to the pulley it is belted to. | planks, iron shaft |
 | Leather Belt | Links two pulleys | Use on one pulley, then another: same axis, level along it, up to 16 blocks apart. Breaking a pulley drops the belt. | leather, string |
 | Electric Motor | JE → KE at 75%, up to 96 KE/t | Takes JE from cables and drives the block it faces. | iron plates, copper wire, iron shaft, copper cable |
+| Magnet Dynamo | KE → JE at 95%, 512/t | The dynamo with rare-earth magnets; pushes JE into cables on every side. Cyan-banded. | aluminum plates, 4 neodymium magnets, dynamo, aluminum cable |
+| Magnet Motor | JE → KE at 95%, up to 384 KE/t | Takes up to 1,024 JE/t and drives the block it faces. With a magnet dynamo it still loses a tenth each round. | aluminum plates, 4 neodymium magnets, electric motor, aluminum cable |
 | Diesel Engine (2×2×3) | Up to 512 KE/t out of the back of its upper right back block | Burns diesel or heavy fuel oil ([Oil](#oil)), only for what the line takes. | steel plates, plastic sheets, steel gears, casing |
 
 ![Kinetic blocks](images/kinetic.png)
@@ -399,8 +402,12 @@ Salt, sulfur, phosphate and bauxite get their real reactions ([feature record](f
 | Chlorine, Hydrogen | Gases: tanks and pipes only | `c:chlorine`, `c:hydrogen` | electrolytic cell |
 | Electrolytic Cell | 3 wide, 3 tall, 2 deep; splits brine | 1,000 mB brine → 250 chlorine (top row), 250 hydrogen (middle row), 500 lye (bottom row); 200 ticks at 256 JE/t | 4 steel plates, 2 aluminum cables, 2 steel tanks, advanced circuit, casing |
 | Sulfuric Acid | A fluid with a bucket | `c:sulfuric_acid` | chemical reactor |
+| Titanium | A metal mined as rutile-bearing ore (Y −64 to −8, iron pickaxe); no furnace smelts it | raw titanium + coke + 250 mB chlorine → titanium sponge (chemical reactor); sponge → ingot (arc furnace) | – |
+| Leaching | Lepidolite or monazite dissolved in sulfuric acid | 1 lepidolite + 250 mB acid → 2 lithium carbonate; 1 monazite + 250 mB acid → 2 rare earth oxide (chemical reactor) | – |
+| Lithium Cell, Lithium Battery Bank | Cells of lithium carbonate in aluminum cans; a 3×2×1 electric-look battery | 2 lithium carbonate + 4 aluminum plates + copper wire → 2 cells; the bank holds 32,000,000 JE, 16,384 JE/t out of its front (see Storage) | cells: as left; bank: 4 titanium ingots, 4 cells, capacitor bank |
 | Alumina | Bauxite digested in lye | 1 bauxite + 250 mB lye → 2 alumina (chemical reactor); 2 alumina + 1 coal coke → 2 aluminum ingots (electrolytic cell): two ingots per bauxite, twice the arc furnace | – |
 | Fuel Cell | One block, electric look; hydrogen → JE | 128 JE/t, 1 mB hydrogen a tick (128 JE/mB); 8-bucket tank | 4 aluminum plates, 2 aluminum cables, 2 steel plates, advanced circuit, tinplate tank |
+| Neodymium Magnet | Rare earths alloyed with iron | 1 rare earth oxide + 1 iron ingot → 1 (alloy smelter, 200 ticks) | – |
 | Fertilizer | Superphosphate: two doses of bone meal on every crop in a 5×5 area | 2 phosphate + 250 mB sulfuric acid → 4 (chemical reactor) | – |
 | Chemical Reactor | 2×2×2 acid plant | 2 sulfur dust + 1,000 mB water → 1,000 mB sulfuric acid; 100 ticks at 96 JE/t | 4 steel plates, glass, 2 tinplate tanks, casing, lead ingot |
 
