@@ -656,30 +656,17 @@ def conveyor_frame(shift):
 
 
 def rocket_pack_armor():
-    """The worn rocket pack, on the 64x32 humanoid armor layout: twin olive tanks with chrome caps, a hazard band and
-    sooty nozzles on the back of the body; rubber harness straps and a chrome buckle on the front, sides and top."""
-    from dieselpunk_textures import CHROME, GUNMETAL, HAZARD, OLIVE, RUBBER, SOOT
+    """The worn rocket pack's harness, on the 64x32 humanoid armor layout: rubber straps and a chrome buckle on the
+    front, back, sides and top (the tanks are a 3D model on the back, drawn by client/RocketPackLayer)."""
+    from dieselpunk_textures import CHROME, RUBBER
     img = Image.new("RGBA", (64, 32), (0, 0, 0, 0))
 
     def px(x, y, c):
         img.putpixel((x, y), tuple(c) + (255,))
-    # Back of the body: x 32..39, y 20..31.
+    # Straps down the back (the pack itself is drawn in 3D by client/RocketPackLayer).
     for y in range(20, 32):
-        for x in range(32, 40):
-            col = x - 32
-            if col in (3, 4):
-                c = GUNMETAL[2] if y % 3 else GUNMETAL[3]
-            else:
-                c = OLIVE[3] if col in (0, 5) else OLIVE[2]
-                if y in (20, 21):
-                    c = CHROME[3] if y == 20 else CHROME[2]
-                elif y == 26:
-                    c = HAZARD[0] if col % 2 == 0 else HAZARD[2]
-                elif y >= 30:
-                    c = SOOT[1] if y == 30 else SOOT[0]
-            px(x, y, c)
-    px(35, 24, CHROME[3])
-    px(36, 24, (90, 190, 90))
+        for x in (33, 38):
+            px(x, y, RUBBER[2] if y % 2 else RUBBER[1])
     # Straps: down the front (x 20..27), over the shoulders (top, x 20..27, y 16..19) and down the sides.
     for y in range(20, 32):
         for x in (21, 26):
@@ -728,6 +715,28 @@ def upgrade_card(accent, symbol):
         img.putpixel((x, y), accent[1] + (255,))
     for x, y in ((4, 11), (6, 11), (8, 11), (10, 11)):
         img.putpixel((x, y), (40, 30, 20, 255))
+    return img
+
+
+def module_card(lamp, glyph):
+    """A dieselpunk upgrade module: a gunmetal cartridge with a chrome rim and a hazard-striped grip, a green
+    circuit window showing a glyph for what it does, and an indicator lamp."""
+    from dieselpunk_textures import CHROME, GUNMETAL, HAZARD, PHOSPHOR
+    img = new()
+    for y in range(2, 15):
+        for x in range(3, 13):
+            rim = x in (3, 12) or y in (2, 14)
+            c = CHROME[2] if rim else GUNMETAL[2] if (x + y) % 4 else GUNMETAL[3]
+            if y in (12, 13) and not rim:
+                c = HAZARD[0] if (x + y) % 4 < 2 else HAZARD[2]
+            img.putpixel((x, y), c + (255,))
+    for y in range(4, 11):
+        for x in range(5, 11):
+            img.putpixel((x, y), PHOSPHOR[0] + (255,))
+    for x, y in glyph:
+        img.putpixel((x, y), PHOSPHOR[3] + (255,))
+    img.putpixel((11, 3), lamp + (255,))
+    img.putpixel((4, 3), CHROME[4] + (255,))
     return img
 
 
@@ -1261,6 +1270,16 @@ def machines():
     save_animation([gearbox_frame(i * 11.25) for i in range(4)], "brass_gearbox_turning")
     arrow = [(5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (9, 7), (8, 6), (9, 9), (8, 10)]
     leaf = [(7, 7), (8, 7), (6, 8), (7, 8), (8, 8), (9, 8), (7, 9), (8, 9), (6, 10), (5, 10)]
+    glyphs = {
+        "overclock_module": ((255, 90, 40), [(8, 4), (7, 5), (6, 6), (7, 6), (8, 6), (9, 6), (8, 7), (7, 8), (6, 9)]),
+        "range_module": ((80, 170, 255), [(x, y) for x in (6, 8, 10) for y in (5, 7, 9) if (x, y) != (8, 7)] + [(8, 7)]),
+        "capacity_module": ((255, 200, 60), [(7, 4), (8, 4)] + [(x, y) for y in range(5, 11) for x in (6, 9)]
+                            + [(7, 10), (8, 10), (7, 8), (8, 8), (7, 9), (8, 9)]),
+        "silk_touch_module": ((120, 240, 200), [(8, 4), (7, 5), (9, 5), (6, 6), (10, 6), (6, 7), (10, 7), (7, 8), (9, 8), (8, 9)]),
+        "fortune_module": ((80, 220, 90), [(7, 5), (8, 5), (6, 6), (9, 6), (7, 7), (8, 7), (5, 8), (10, 8), (8, 8), (8, 9), (8, 10)]),
+    }
+    for module, (lamp, glyph) in glyphs.items():
+        save(module_card(lamp, glyph), "item", module)
     save(upgrade_card([(160, 40, 30), (220, 70, 40)], arrow), "item", "speed_upgrade")
     save(upgrade_card([(40, 120, 60), (70, 180, 90)], leaf), "item", "efficiency_upgrade")
     save(hazard_plinth(530), "block", "geothermal_plinth")

@@ -89,6 +89,15 @@ KINETIC_BLOCKS = {
 # Powered tools (tools/), dieselpunk 3D item models in tools/tool_models.py: JE in an "energy" item component,
 # charged at the charging station.
 POWERED_TOOLS = {"mining_drill": "Mining Drill", "chainsaw": "Chainsaw", "rocket_pack": "Rocket Pack"}
+# Upgrade modules for the powered tools, fitted at the charging station (tools/ToolUpgrades): display name, short
+# name for tooltips, and what it does.
+UPGRADE_MODULES = {
+    "overclock_module": ("Overclock Module", "Overclock", "Mines 50% faster for twice the JE a block (up to 2)"),
+    "range_module": ("Range Module", "Range", "The drill's area mode mines 5×5 (drill only)"),
+    "capacity_module": ("Capacity Module", "Capacity", "Holds its base charge again (up to 2)"),
+    "silk_touch_module": ("Silk Touch Module", "Silk Touch", "Blocks drop themselves (drill or chainsaw; not with fortune)"),
+    "fortune_module": ("Fortune Module", "Fortune", "More ore drops, up to Fortune III (drill only; not with silk touch)"),
+}
 # Blocks of the powered-tools feature: the 2-tall charging station (lower and upper halves, one item).
 TOOL_BLOCKS = {"charging_station": {"display": "Charging Station"}}
 # Plain storage blocks with their own block entity (storage/). Models: tools/storage_models.py.
@@ -304,6 +313,17 @@ CRAFTING = {
     "rocket_pack": (["SAS", "FLF", "N N"], {"S": "#c:plates/steel", "A": "jugcraft:advanced_circuit",
                                            "F": "jugcraft:fluid_tank", "L": "minecraft:leather",
                                            "N": "#c:plates/tungsten"}, 1),
+    # Upgrade modules: an advanced circuit on a steel card, with what the upgrade is about.
+    "overclock_module": (["SRS", "RAR", "SRS"], {"S": "#c:plates/steel", "R": "minecraft:redstone_block",
+                                               "A": "jugcraft:advanced_circuit"}, 1),
+    "range_module": (["STS", "TAT", "STS"], {"S": "#c:plates/steel", "T": "#c:plates/tungsten",
+                                           "A": "jugcraft:advanced_circuit"}, 1),
+    "capacity_module": (["SLS", "LAL", "SLS"], {"S": "#c:plates/steel", "L": "#c:ingots/lead",
+                                              "A": "jugcraft:advanced_circuit"}, 1),
+    "silk_touch_module": (["SES", "EAE", "SES"], {"S": "#c:plates/steel", "E": "minecraft:emerald",
+                                                "A": "jugcraft:advanced_circuit"}, 1),
+    "fortune_module": (["SLS", "GAG", "SLS"], {"S": "#c:plates/steel", "L": "minecraft:lapis_block",
+                                             "G": "minecraft:gold_ingot", "A": "jugcraft:advanced_circuit"}, 1),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",
                                                 "W": "jugcraft:copper_cable", "A": "jugcraft:advanced_circuit",
                                                 "B": "jugcraft:battery_box"}, 1),
@@ -515,4 +535,4 @@ def machine_blocks():
 
 def machine_items():
     """Items of the machine feature that are not blocks (tools and upgrades)."""
-    return list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS)
+    return list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS) + list(UPGRADE_MODULES)

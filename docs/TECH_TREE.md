@@ -351,7 +351,9 @@ The first dieselpunk gear (see [ART_DIRECTION.md](ART_DIRECTION.md)). The tools 
 | Rocket Pack | Chest slot: hold jump in the air to fly | 200,000 JE, 50 JE a tick; no fall damage while firing; dedicated servers need `allow-flight=true` | 2 steel plates, advanced circuit, 2 fluid tanks, leather, 2 tungsten plates |
 | Charging Station | Two blocks tall; charges the tool on its cradle from cables | 50,000 JE buffer, 1,024 JE/t in, 512 JE/t into the tool; lamp lights while charging | 4 steel plates, redstone lamp, 2 copper cables, advanced circuit, battery box |
 
-Empty tools mine like a bare hand and get no drops. See [powered tools](features/powered-tools.md).
+Empty tools mine like a bare hand and get no drops.
+
+**Upgrade modules** fit at the charging station (use one on a station holding the tool): Overclock (+50% speed, +100% JE a block; up to 2), Range (drill area mode 5×5), Capacity (base charge again; up to 2), Silk Touch (drill, chainsaw), Fortune (drill, up to III; not with Silk Touch). See [powered tools](features/powered-tools.md).
 
 **Code:** `tools/` (`JugcraftTools`, `Chargeable`, `PoweredToolItem`, `MiningDrillItem`, `ChainsawItem`, `RocketPackItem`, `RocketThrustPayload`, `ChargingStationBlock(Entity)`); client `ChargingStationRenderer`, `RocketPackClient`.
 

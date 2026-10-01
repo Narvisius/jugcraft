@@ -8,17 +8,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
@@ -39,11 +33,8 @@ public final class KineticRotors {
 	private KineticRotors() {
 	}
 
-	record Quad(float[] normal, float[][] vertices) {
-	}
-
 	record Rotor(char axis, float[] center, String property, float speed, @Nullable String variantProperty,
-			Map<String, float[]> variants, Map<RenderType, List<Quad>> quads) {
+			Map<String, float[]> variants, QuadModel quads) {
 	}
 
 	/** A rotor to draw this frame: its block-state rotation (degrees about x, then y) and its spin angle. */
@@ -83,18 +74,7 @@ public final class KineticRotors {
 			default -> Axis.ZP;
 		}, spin.angle());
 		pose.translate(-c[0], -c[1], -c[2]);
-		for (Map.Entry<RenderType, List<Quad>> entry : rotor.quads().entrySet()) {
-			List<Quad> quads = entry.getValue();
-			collector.submitCustomGeometry(pose, entry.getKey(), (matrix, buffer) -> {
-				for (Quad quad : quads) {
-					for (float[] v : quad.vertices()) {
-						buffer.addVertex(matrix, v[0], v[1], v[2]).setColor(0xFFFFFFFF).setUv(v[3], v[4])
-								.setOverlay(OverlayTexture.NO_OVERLAY).setLight(light)
-								.setNormal(matrix, quad.normal()[0], quad.normal()[1], quad.normal()[2]);
-					}
-				}
-			});
-		}
+		rotor.quads().submit(pose, collector, light);
 		pose.popPose();
 	}
 
@@ -145,21 +125,7 @@ public final class KineticRotors {
 					JsonArray turn = variant.getValue().getAsJsonArray();
 					variants.put(variant.getKey(), new float[] {turn.get(0).getAsFloat(), turn.get(1).getAsFloat()});
 				}
-				Map<RenderType, List<Quad>> quads = new LinkedHashMap<>();
-				for (JsonElement element : data.getAsJsonArray("quads")) {
-					JsonObject quad = element.getAsJsonObject();
-					RenderType type = RenderTypes.entitySolid(Jugcraft.id("textures/block/" + quad.get("texture").getAsString() + ".png"));
-					JsonArray n = quad.getAsJsonArray("normal");
-					float[][] vertices = new float[4][];
-					JsonArray list = quad.getAsJsonArray("vertices");
-					for (int i = 0; i < 4; i++) {
-						JsonArray v = list.get(i).getAsJsonArray();
-						vertices[i] = new float[] {v.get(0).getAsFloat() / 16, v.get(1).getAsFloat() / 16, v.get(2).getAsFloat() / 16,
-								v.get(3).getAsFloat(), v.get(4).getAsFloat()};
-					}
-					quads.computeIfAbsent(type, t -> new ArrayList<>())
-							.add(new Quad(new float[] {n.get(0).getAsFloat(), n.get(1).getAsFloat(), n.get(2).getAsFloat()}, vertices));
-				}
+				QuadModel quads = QuadModel.parse(data.getAsJsonArray("quads"));
 				JsonElement variantProperty = data.get("variant_property");
 				out.put(entry.getKey(), new Rotor(axis, center, data.get("property").getAsString(), data.get("speed").getAsFloat(),
 						variantProperty == null || variantProperty.isJsonNull() ? null : variantProperty.getAsString(), variants, quads));

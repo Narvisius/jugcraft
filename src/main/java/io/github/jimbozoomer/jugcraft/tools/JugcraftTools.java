@@ -3,6 +3,8 @@ package io.github.jimbozoomer.jugcraft.tools;
 import com.mojang.serialization.Codec;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -56,6 +58,11 @@ public final class JugcraftTools {
 
 	public static DataComponentType<Long> ENERGY;
 	public static DataComponentType<Integer> DRILL_MODE;
+	/** Upgrade modules fitted, by kind (see {@link ToolUpgrades}). */
+	public static DataComponentType<Integer> OVERCLOCK;
+	public static DataComponentType<Integer> RANGE;
+	public static DataComponentType<Integer> CAPACITY;
+	public static final Map<ToolUpgrades.Kind, Item> MODULES = new EnumMap<>(ToolUpgrades.Kind.class);
 	public static Item MINING_DRILL;
 	public static Item CHAINSAW;
 	public static Item ROCKET_PACK;
@@ -68,8 +75,13 @@ public final class JugcraftTools {
 	public static void register() {
 		ENERGY = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Jugcraft.id("energy"),
 				DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
-		DRILL_MODE = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Jugcraft.id("drill_mode"),
-				DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+		DRILL_MODE = intComponent("drill_mode");
+		OVERCLOCK = intComponent("overclock");
+		RANGE = intComponent("range");
+		CAPACITY = intComponent("capacity");
+		for (ToolUpgrades.Kind kind : ToolUpgrades.Kind.values()) {
+			MODULES.put(kind, item(kind.id + "_module", properties -> new UpgradeModuleItem(properties.stacksTo(16), kind)));
+		}
 
 		MINING_DRILL = item("mining_drill", properties -> new MiningDrillItem(powered(properties)
 				.tool(POWERED, MINEABLE_WITH_DRILL, 3.0F, -2.8F, 0.0F).component(DRILL_MODE, MiningDrillItem.SINGLE),
@@ -103,11 +115,17 @@ public final class JugcraftTools {
 			for (Item item : new Item[] {MINING_DRILL, CHAINSAW, ROCKET_PACK}) {
 				output.accept(item);
 				ItemStack full = new ItemStack(item);
-				Chargeable.setEnergy(full, ((Chargeable) item).capacity());
+				Chargeable.setEnergy(full, Chargeable.capacity(full));
 				output.accept(full);
 			}
+			MODULES.values().forEach(output::accept);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> output.accept(CHARGING_STATION));
+	}
+
+	private static DataComponentType<Integer> intComponent(String name) {
+		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Jugcraft.id(name),
+				DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
 	}
 
 	/** One of a kind, unbreakable (they run on JE, not durability), starting empty. */

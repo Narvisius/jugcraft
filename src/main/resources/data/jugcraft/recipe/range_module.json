@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "STS",
+    "TAT",
+    "STS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "T": "#c:plates/tungsten",
+    "A": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:range_module",
+    "count": 1
+  }
+}

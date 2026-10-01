@@ -33,7 +33,7 @@ public class RocketPackItem extends Item implements Chargeable {
 	}
 
 	@Override
-	public long capacity() {
+	public long baseCapacity() {
 		return CAPACITY;
 	}
 
@@ -66,7 +66,7 @@ public class RocketPackItem extends Item implements Chargeable {
 
 	@Override
 	public int getBarWidth(ItemStack stack) {
-		return PoweredToolItem.barWidth(stack, CAPACITY);
+		return PoweredToolItem.barWidth(stack);
 	}
 
 	@Override
@@ -77,7 +77,8 @@ public class RocketPackItem extends Item implements Chargeable {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip,
 			TooltipFlag flag) {
-		tooltip.accept(PoweredToolItem.energyLine(stack, CAPACITY));
+		tooltip.accept(PoweredToolItem.energyLine(stack));
+		ToolUpgrades.appendTooltip(stack, tooltip);
 		tooltip.accept(Component.translatable("tooltip.jugcraft.rocket_pack").withStyle(ChatFormatting.GRAY));
 	}
 }

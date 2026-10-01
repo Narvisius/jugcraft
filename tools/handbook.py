@@ -8,7 +8,7 @@ Format: {"chapters": [{"title", "icon", "pages": [{"title", "icon", "text": [par
 "craft": {"grid": [9 item ids or null], "result", "count"}, "recipes": [{"in": [[id, count]], "out": [id, count]}]}]}]}
 """
 from materials import COMPONENTS, METALS, MINERALS, ingot_id, ore_ids
-from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS,
+from machines import (CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES,
                       UPGRADES, BYPRODUCTS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, machine_recipes)
 
 MOD = "jugcraft"
@@ -74,6 +74,8 @@ ABOUT = {
                    "it fires. On a dedicated server, set allow-flight=true or long hovers get you kicked.",
     "charging_station": "Two blocks tall. Hang a drill, chainsaw or rocket pack on its cradle and it fills it from "
                         "cables, 512 JE a tick; take it back with an empty hand. Its lamp lights while it charges.",
+    **{module: f"{about}. Fit it by using it on a charging station holding the tool; it is used up and stays in "
+                 "the tool." for module, (_, _, about) in UPGRADE_MODULES.items()},
     "conveyor": "Carries items the way you faced when placing it, 2.5 blocks a second, while rotation drives it. A shaft, "
                 "gearbox or motor on any side drives every conveyor joined to it, for 1 KE per conveyor per tick. Pipes, "
                 "hoppers and machines load it, and so do items dropped on it; at the end items go into the conveyor or "
@@ -257,7 +259,8 @@ def build():
         {"title": "Steel", "icon": f"{MOD}:steel_ingot", "pages":
             [machine_page(m) for m in ("coke_oven", "steel_foundry")]
             + [block_page(b, TOOL_BLOCKS[b]["display"]) for b in TOOL_BLOCKS]
-            + [block_page(t, POWERED_TOOLS[t]) for t in POWERED_TOOLS]},
+            + [block_page(t, POWERED_TOOLS[t]) for t in POWERED_TOOLS]
+            + [block_page(m, UPGRADE_MODULES[m][0]) for m in UPGRADE_MODULES]},
         {"title": "Fluids", "icon": f"{MOD}:fluid_tank", "pages":
             [block_page("bronze_fluid_pipe", PIPES["bronze_fluid_pipe"]["display"])]
             + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump")]},

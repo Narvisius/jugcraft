@@ -34,21 +34,27 @@ public class PoweredToolItem extends Item implements Chargeable {
 	}
 
 	@Override
-	public long capacity() {
+	public long baseCapacity() {
 		return capacity;
 	}
 
-	public long energyPerBlock() {
-		return energyPerBlock;
+	/** JE per block: doubled, then tripled, by overclock modules. */
+	public long energyPerBlock(ItemStack stack) {
+		return energyPerBlock * (1 + ToolUpgrades.level(stack, ToolUpgrades.Kind.OVERCLOCK));
 	}
 
 	protected boolean charged(ItemStack stack) {
-		return Chargeable.energy(stack) >= energyPerBlock;
+		return Chargeable.energy(stack) >= energyPerBlock(stack);
 	}
 
+	/** Each overclock module adds half the base speed again. */
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
-		return charged(stack) ? super.getDestroySpeed(stack, state) : 1.0F;
+		if (!charged(stack)) {
+			return 1.0F;
+		}
+		float speed = super.getDestroySpeed(stack, state);
+		return speed > 1.0F ? speed * (1 + 0.5F * ToolUpgrades.level(stack, ToolUpgrades.Kind.OVERCLOCK)) : speed;
 	}
 
 	@Override
@@ -59,7 +65,7 @@ public class PoweredToolItem extends Item implements Chargeable {
 	@Override
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner) {
 		if (level instanceof ServerLevel serverLevel && state.getDestroySpeed(level, pos) != 0.0F) {
-			boolean paid = Chargeable.drain(stack, energyPerBlock);
+			boolean paid = Chargeable.drain(stack, energyPerBlock(stack));
 			if (paid && !breakingExtra && miner instanceof ServerPlayer player) {
 				breakingExtra = true;
 				try {
@@ -92,7 +98,7 @@ public class PoweredToolItem extends Item implements Chargeable {
 
 	@Override
 	public int getBarWidth(ItemStack stack) {
-		return barWidth(stack, capacity);
+		return barWidth(stack);
 	}
 
 	@Override
@@ -103,18 +109,19 @@ public class PoweredToolItem extends Item implements Chargeable {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip,
 			TooltipFlag flag) {
-		tooltip.accept(energyLine(stack, capacity));
+		tooltip.accept(energyLine(stack));
+		ToolUpgrades.appendTooltip(stack, tooltip);
 	}
 
 	/** Amber, like the machines' energy bars. */
 	static final int BAR_COLOR = 0xFFB8740A;
 
-	static int barWidth(ItemStack stack, long capacity) {
-		return (int) Math.round(13.0 * Chargeable.energy(stack) / capacity);
+	static int barWidth(ItemStack stack) {
+		return (int) Math.round(13.0 * Chargeable.energy(stack) / Math.max(1, Chargeable.capacity(stack)));
 	}
 
-	static Component energyLine(ItemStack stack, long capacity) {
+	static Component energyLine(ItemStack stack) {
 		return Component.translatable("tooltip.jugcraft.energy", String.format("%,d", Chargeable.energy(stack)),
-				String.format("%,d", capacity)).withStyle(ChatFormatting.GOLD);
+				String.format("%,d", Chargeable.capacity(stack))).withStyle(ChatFormatting.GOLD);
 	}
 }

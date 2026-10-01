@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SES",
+    "EAE",
+    "SES"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "E": "minecraft:emerald",
+    "A": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:silk_touch_module",
+    "count": 1
+  }
+}

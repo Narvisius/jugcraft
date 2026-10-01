@@ -16,6 +16,20 @@ Primary specialty and supported player role: engineering, mining, exploration
 - **Charging Station:** two blocks tall. Hang a tool on its cradle and it fills the tool from cables. Take the tool back with an empty hand. Its lamp lights while it charges.
 - The tools never wear out. Empty, the drill and chainsaw mine like a bare hand and get no drops, and the rocket pack does nothing.
 
+## Upgrade modules (PR #42)
+
+Fitted at the charging station: use a module on a station holding the tool. The module is used up and stays in the tool; it cannot be taken out.
+
+| Module | Effect | Fits | Most |
+| --- | --- | --- | --- |
+| Overclock | +50% mining speed, +100% JE per block, each | drill, chainsaw | 2 |
+| Range | area mode mines 5×5 instead of 3×3 | drill | 1 |
+| Capacity | holds its base charge again, each | drill, chainsaw, rocket pack | 2 |
+| Silk Touch | the vanilla enchantment | drill, chainsaw | 1 (not with Fortune) |
+| Fortune | the vanilla enchantment, up to III | drill | 3 (not with Silk Touch) |
+
+Each module is an advanced circuit on steel plates with its own material: redstone blocks, tungsten plates, lead, emeralds, or lapis blocks and gold.
+
 ## Connections
 - Input producer: JE from any generator, through cables into the charging station.
 - Output consumer: mining, logging and travel; the drill's ore drops feed ore processing.
@@ -51,6 +65,10 @@ Fabric networking and lookup APIs. Original 3D item models and dieselpunk textur
   - `drillMinesThreeByThree`
   - `chainsawFellsTree`
   - `rocketPackThrustUsesEnergy`
+  - `capacityModulesAddCharge`
+  - `modulesFitTheRightTools`
+  - `rangeModuleMinesFiveByFive`
+  - `overclockModuleSpeedsUp`
 - Client screenshots:
   - `jugcraft_charging_stations`
   - `jugcraft_drill_in_hand`
@@ -61,6 +79,5 @@ Fabric networking and lookup APIs. Original 3D item models and dieselpunk textur
 Not applicable.
 
 ## Rollout and open questions
-- The worn rocket pack could get a 3D model (a render layer) instead of the armor texture.
-- No speed upgrades or tiers for the tools yet.
+- The worn rocket pack is drawn in 3D on the back (client `RocketPackLayer`, from the same boxes as the item), with the harness straps as its armor layer (#42). It shows on any humanoid wearing it.
 - Existing steel-tier machines could move to the dieselpunk look.

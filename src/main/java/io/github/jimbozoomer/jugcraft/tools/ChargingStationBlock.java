@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.tools;
 
 import io.github.jimbozoomer.jugcraft.energy.EnergyConnectable;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
+import java.util.Locale;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -99,6 +100,9 @@ public class ChargingStationBlock extends BaseEntityBlock implements EnergyConne
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 			InteractionHand hand, BlockHitResult hit) {
+		if (stack.getItem() instanceof UpgradeModuleItem module) {
+			return fitModule(stack, module, state, level, pos, player);
+		}
 		if (!(stack.getItem() instanceof Chargeable)) {
 			return InteractionResult.TRY_WITH_EMPTY_HAND;
 		}
@@ -107,6 +111,26 @@ public class ChargingStationBlock extends BaseEntityBlock implements EnergyConne
 		}
 		if (!level.isClientSide()) {
 			station.setTool(stack.split(1));
+		}
+		return InteractionResult.SUCCESS;
+	}
+
+	/** Fits an upgrade module into the tool on the cradle (see {@link ToolUpgrades}). */
+	private static InteractionResult fitModule(ItemStack stack, UpgradeModuleItem module, BlockState state, Level level, BlockPos pos,
+			Player player) {
+		if (!(level.getBlockEntity(lowerPos(state, pos)) instanceof ChargingStationBlockEntity station) || station.tool().isEmpty()) {
+			return InteractionResult.TRY_WITH_EMPTY_HAND;
+		}
+		if (!level.isClientSide()) {
+			ItemStack tool = station.tool().copy();
+			Component moduleName = stack.getHoverName();
+			ToolUpgrades.Result result = ToolUpgrades.fit(level, tool, module.kind());
+			if (result == ToolUpgrades.Result.FITTED) {
+				station.setTool(tool);
+				stack.consume(1, player);
+			}
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.module." + result.name().toLowerCase(Locale.ROOT),
+					moduleName, tool.getHoverName()));
 		}
 		return InteractionResult.SUCCESS;
 	}
@@ -120,7 +144,7 @@ public class ChargingStationBlock extends BaseEntityBlock implements EnergyConne
 			ItemStack tool = station.tool();
 			if (!tool.isEmpty()) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.charging_station.tool", tool.getHoverName(),
-						String.format("%,d", Chargeable.energy(tool)), String.format("%,d", ((Chargeable) tool.getItem()).capacity())));
+						String.format("%,d", Chargeable.energy(tool)), String.format("%,d", Chargeable.capacity(tool))));
 				station.setTool(ItemStack.EMPTY);
 				if (!player.getInventory().add(tool)) {
 					Block.popResource(level, pos, tool);

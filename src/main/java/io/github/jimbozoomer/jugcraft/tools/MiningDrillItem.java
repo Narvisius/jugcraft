@@ -25,8 +25,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * The mining drill: a JE-powered pickaxe and shovel in one. Sneak and use it to switch between three
- * modes: one block, a 3×3 square facing the way you mine, or a whole ore vein (every touching block
- * of the same ore, up to {@link #VEIN_LIMIT}).
+ * modes: one block, a 3×3 square facing the way you mine (5×5 with a range module), or a whole ore
+ * vein (every touching block of the same ore, up to {@link #VEIN_LIMIT}).
  */
 public class MiningDrillItem extends PoweredToolItem {
 	public static final int SINGLE = 0;
@@ -64,8 +64,9 @@ public class MiningDrillItem extends PoweredToolItem {
 		switch (mode(stack)) {
 			case AREA -> {
 				Direction.Axis facing = miningAxis(player);
-				for (int a = -1; a <= 1; a++) {
-					for (int b = -1; b <= 1; b++) {
+				int reach = areaReach(stack);
+				for (int a = -reach; a <= reach; a++) {
+					for (int b = -reach; b <= reach; b++) {
 						if (a != 0 || b != 0) {
 							breakExtra(stack, level, offset(pos, facing, a, b), player);
 						}
@@ -80,6 +81,11 @@ public class MiningDrillItem extends PoweredToolItem {
 			default -> {
 			}
 		}
+	}
+
+	/** Blocks mined each way from the centre in area mode: 1 (3×3), or 2 (5×5) with a range module. */
+	public static int areaReach(ItemStack stack) {
+		return 1 + ToolUpgrades.level(stack, ToolUpgrades.Kind.RANGE);
 	}
 
 	/** The axis the player mines along: vertical when looking steeply up or down, else the way they face. */

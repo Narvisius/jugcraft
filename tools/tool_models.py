@@ -104,8 +104,8 @@ HANDHELD = {
     # In the hand, +z is forward: tip the upright tool forward so the bit or bar points away from the player.
     "thirdperson_righthand": {"rotation": [70, 0, 0], "translation": [0, 1, 2], "scale": [0.55, 0.55, 0.55]},
     "thirdperson_lefthand": {"rotation": [70, 0, 0], "translation": [0, 1, 2], "scale": [0.55, 0.55, 0.55]},
-    "firstperson_righthand": {"rotation": [80, -10, 0], "translation": [1, 2, 1], "scale": [0.5, 0.5, 0.5]},
-    "firstperson_lefthand": {"rotation": [80, 10, 0], "translation": [-1, 2, 1], "scale": [0.5, 0.5, 0.5]},
+    "firstperson_righthand": {"rotation": [80, -10, 0], "translation": [-1.5, 4.5, 1], "scale": [0.5, 0.5, 0.5]},
+    "firstperson_lefthand": {"rotation": [80, 10, 0], "translation": [1.5, 4.5, 1], "scale": [0.5, 0.5, 0.5]},
     "gui": {"rotation": [20, 30, -40], "translation": [0, -2, 0], "scale": [0.55, 0.55, 0.55]},
     "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.35, 0.35, 0.35]},
     "fixed": {"rotation": [0, 0, 0], "translation": [0, -2, 0], "scale": [0.55, 0.55, 0.55]},

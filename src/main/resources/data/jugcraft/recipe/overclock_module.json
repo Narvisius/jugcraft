@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SRS",
+    "RAR",
+    "SRS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "R": "minecraft:redstone_block",
+    "A": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:overclock_module",
+    "count": 1
+  }
+}
