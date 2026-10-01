@@ -1,0 +1,45 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    "GNG",
+    " P "
+  ],
+  "key": {
+    "R": "jugcraft:aluminum_rotor_assembly",
+    "G": "#c:gears/steel",
+    "N": "jugcraft:neodymium_drone_motor",
+    "P": "#c:plates/aluminum"
+  },
+  "result": {
+    "id": "jugcraft:tilt_rotor_nacelle",
+    "count": 1
+  }
+}

@@ -251,9 +251,36 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 ### Feature switches (`config/`)
 
-- `config/jugcraft.properties` holds `<feature>.enabled`. The features are the `JugcraftConfig.FEATURES` list: 16 materials plus `machines` and `deposits` (surface deposit worldgen).
+- `config/jugcraft.properties` holds `<feature>.enabled`. The features are the `JugcraftConfig.FEATURES` list: 16 materials plus `machines`, `deposits` (surface deposit worldgen), `explosives`, `parties` and `drones`.
 - A switch disables **acquisition only** (worldgen, recipes, byproducts). It never unregisters items or blocks, so saves survive.
 - Check a switch with `JugcraftConfig.isFeatureEnabled(name)`.
+
+### Parties (`party/`)
+
+- **Shared team rule.** Call the static methods on `JugcraftParties`: `sameParty`, `isLeader`, `partyMembers`, `partyId`, `addListener`.
+- **`mayServe(systemOwner, systemMode, jobOwner, jobMode)`** with `UseMode.PERSONAL`/`PARTY` is the one rule for whether an automated system may work on another player's job. Use it; don't write your own.
+- **Logic and storage:**
+  - `PartyManager` holds the rules and has no Minecraft types.
+  - `PartyStore` saves `<world>/jugcraft/parties.txt`.
+  - `PartyCommands` provides `/party`.
+- Details: [features/parties.md](features/parties.md).
+
+### Drones (`drone/`)
+
+- **`BuildJobs`** is the build-job interface. A `Source` offers open positions; depots reserve them, fly the materials there and call `fill`. Blueprints (#23) will be a source. `SimpleBuildJobs` is a minimal one, used by tests and the development-only `/dronetest` command.
+- **Pure logic (no Minecraft types), testable on its own:**
+  - `PlatformLayout` scans the platform the Drone Tower places: separated 5x5 pads and 3x3 supply pickups. A terminal without a tower flies no drones (`allowTiersWithoutTower` is for tests and `/dronetest` only).
+  - `DroneFleet` holds the roster and the cached pooled power; `DockLayout` places docked drones round the pads.
+  - `FlightScheduler` runs the timed flights; `FlightPath` is each flight's shape and timing (shared by server and client).
+- **World side:**
+  - `DroneTerminalBlockEntity` does power, dispatch and delivery, forms pads and pickups, and sends clients a `DepotView`.
+  - `DroneRoutes` picks each leg's cruise height over the terrain.
+  - `DroneDepots` is the registry of loaded terminals.
+  - `LandingPadBlock`, `SupplyPickupBlock`, `ControlScreenBlock` and `HoloTableBlock` are the combining plates, panels and table sections; `DepotDisplayBlockEntity` links a formed screen or table to the nearest terminal.
+- **Client side:** `DroneDepotRenderer` and `DroneModel` draw the drones (all nine tiers) and the pickup lift; `ControlScreenRenderer` draws the wall display; `HoloMapRenderer` draws the hologram map; `DroneTerminalScreen` is the terminal screen.
+- Tier numbers live in `DroneTier` and `tools/drones.py`; the checker keeps them in sync.
+- Details: [features/drone-depot.md](features/drone-depot.md).
+- **Drone Tower (`tower/`):** `JugcraftTower` registers the building blocks, furniture (`FurnitureBlock`), the Tower Core (`TowerCoreBlock`, `TowerCoreBlockEntity`) and modules. `TowerData` loads `data/jugcraft/drone_tower/tower.json.gz` (made by `tools/drone_tower.py`). `TowerBuildJobs` is the `BuildJobs.Source` for tiers 2–9. `TowerUpgradePayload` is the screen's upgrade request, and `TowerScreen` is the client screen. The terminal links to the core, and the tower gives it hangars, pickups, capacity and the drone tier cap. Details: [features/drone-tower.md](features/drone-tower.md).
 
 ### Registration (`materials/`)
 
@@ -261,7 +288,7 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 - `MetalFamily.builder(name).mined().extraItem(...).build()` registers a whole metal set. `MineralFamily.register(name)` does the same for minerals.
 - `JugcraftWorldgen` adds placed features to biomes. In 26.x, configured features live in `data/jugcraft/worldgen/feature/` (there is no `configured_feature` folder), with no `config` wrapper and with block states written as plain IDs.
 - Surface deposits (`deposit/`): `JugcraftDeposits` registers the `DepositBlock`s (mirrors `tools/deposits.py`); `Deposits` keeps how much each touched deposit block has given (`SavedData`, `jugcraft_deposits.dat`) and turns an empty one to stone. `JugcraftWorldgen.addDeposit` adds their disk features to the stony hill biomes at `LOCAL_MODIFICATIONS`.
-- Initialization order is in `Jugcraft.onInitialize()`: config → materials → components → machines → fluids → logistics → conditions → worldgen → style pack.
+- Initialization order is in `Jugcraft.onInitialize()`: config → materials → components → machines → fluids → logistics → guide → conditions → worldgen → parties → style pack (drones, the tower and blueprints register right after the guide).
 
 ### Looks (`tools/model_writer.py`, `tools/steampunk_*.py`)
 

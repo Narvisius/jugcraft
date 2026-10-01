@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "Y",
+    "S",
+    "S"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:survey_stake",
+    "count": 2
+  }
+}

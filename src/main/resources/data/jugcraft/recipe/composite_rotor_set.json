@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    " T ",
+    "S S"
+  ],
+  "key": {
+    "S": "jugcraft:plastic_sheet",
+    "T": "#c:plates/titanium"
+  },
+  "result": {
+    "id": "jugcraft:composite_rotor_set",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P P",
+    "P P",
+    " P "
+  ],
+  "key": {
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:intake_funnel",
+    "count": 2
+  }
+}

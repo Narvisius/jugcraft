@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GCG",
+    "PPP",
+    "P P"
+  ],
+  "key": {
+    "G": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:console_desk",
+    "count": 1
+  }
+}

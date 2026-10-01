@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "KPK",
+    "PKP",
+    "KPK"
+  ],
+  "key": {
+    "K": "jugcraft:coke",
+    "P": "jugcraft:plastic_sheet"
+  },
+  "result": {
+    "id": "jugcraft:carbon_composite_panel",
+    "count": 4
+  }
+}

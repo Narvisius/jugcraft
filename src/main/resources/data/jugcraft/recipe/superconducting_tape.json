@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RCR",
+    "WWW"
+  ],
+  "key": {
+    "R": "jugcraft:rare_earth_oxide",
+    "C": "#c:dusts/copper",
+    "W": "#c:wires/silver"
+  },
+  "result": {
+    "id": "jugcraft:superconducting_tape",
+    "count": 3
+  }
+}

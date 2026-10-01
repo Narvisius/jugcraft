@@ -1,0 +1,50 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TMT",
+    "TCT",
+    "PXP"
+  ],
+  "key": {
+    "T": "jugcraft:superconducting_tape",
+    "M": "jugcraft:neodymium_magnet",
+    "C": "jugcraft:stirling_cryocooler",
+    "P": "#c:plates/titanium",
+    "X": "jugcraft:processor"
+  },
+  "result": {
+    "id": "jugcraft:superconducting_motor",
+    "count": 1
+  }
+}

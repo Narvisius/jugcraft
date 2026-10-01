@@ -1,0 +1,74 @@
+{
+  "textures": {
+    "chrome": "jugcraft:block/furniture_chrome",
+    "light_panel": "jugcraft:block/furniture_light_panel",
+    "particle": "jugcraft:block/furniture_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        14.5,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#chrome"
+        },
+        "south": {
+          "texture": "#chrome"
+        },
+        "east": {
+          "texture": "#chrome"
+        },
+        "west": {
+          "texture": "#chrome"
+        },
+        "up": {
+          "texture": "#chrome"
+        },
+        "down": {
+          "texture": "#chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14.4,
+        2
+      ],
+      "to": [
+        14,
+        14.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#light_panel"
+        },
+        "south": {
+          "texture": "#light_panel"
+        },
+        "east": {
+          "texture": "#light_panel"
+        },
+        "west": {
+          "texture": "#light_panel"
+        },
+        "up": {
+          "texture": "#light_panel"
+        },
+        "down": {
+          "texture": "#light_panel"
+        }
+      },
+      "light_emission": 12
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "G",
+    "L",
+    "P"
+  ],
+  "key": {
+    "G": "minecraft:red_stained_glass",
+    "L": "minecraft:redstone_lamp",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:warning_light",
+    "count": 2
+  }
+}

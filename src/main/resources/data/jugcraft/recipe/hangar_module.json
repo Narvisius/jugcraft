@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "DPD",
+    "PMP",
+    "DPD"
+  ],
+  "key": {
+    "D": "jugcraft:hangar_bay_door",
+    "P": "#c:plates/steel",
+    "M": "jugcraft:drone_motor"
+  },
+  "result": {
+    "id": "jugcraft:hangar_module",
+    "count": 1
+  }
+}

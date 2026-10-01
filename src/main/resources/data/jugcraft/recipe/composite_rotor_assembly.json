@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B",
+    "M",
+    "G"
+  ],
+  "key": {
+    "B": "jugcraft:composite_rotor_set",
+    "M": "jugcraft:neodymium_drone_motor",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:composite_rotor_assembly",
+    "count": 1
+  }
+}

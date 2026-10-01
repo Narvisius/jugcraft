@@ -825,12 +825,18 @@ def _arc_dusts():
 
 
 def machine_blocks():
+    from drones import drone_blocks
+    from tower import tower_blocks
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
             + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS)
-            + list(SLOPE_BLOCKS) + list(ELECTRONICS_BLOCKS) + list(FARMING_BLOCKS) + list(CROPS))
+            + list(SLOPE_BLOCKS) + list(ELECTRONICS_BLOCKS) + list(FARMING_BLOCKS) + list(CROPS)
+            + drone_blocks() + tower_blocks() + list(__import__('blueprints').STAKE))
 
 
 def machine_items():
     """Items of the machine feature that are not blocks (tools and upgrades)."""
+    from drones import drone_items
+    from tower import tower_items
     return (list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS) + list(UPGRADE_MODULES)
-            + [info[key] for info in CROPS.values() for key in ("seeds", "product")])
+            + [info[key] for info in CROPS.values() for key in ("seeds", "product")]
+            + drone_items() + tower_items() + list(__import__('blueprints').ITEMS))

@@ -33,7 +33,10 @@ public final class QuadModel {
 		QuadModel model = new QuadModel();
 		for (JsonElement element : list) {
 			JsonObject quad = element.getAsJsonObject();
-			RenderType type = RenderTypes.entitySolid(Jugcraft.id("textures/block/" + quad.get("texture").getAsString() + ".png"));
+			String texture = quad.get("texture").getAsString();
+			// Plain names are block textures; "item/..." and other paths are taken from textures/ directly.
+			String path = texture.contains("/") ? "textures/" + texture + ".png" : "textures/block/" + texture + ".png";
+			RenderType type = RenderTypes.entitySolid(Jugcraft.id(path));
 			JsonArray n = quad.getAsJsonArray("normal");
 			JsonArray corners = quad.getAsJsonArray("vertices");
 			float[][] vertices = new float[4][];

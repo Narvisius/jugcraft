@@ -12,6 +12,8 @@ from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL
 
 from machines import CROPS, ELECTRONICS_BLOCKS, FARMING_BLOCKS, MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, ALT_CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
+from party import party_lang
+import drones
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -134,7 +136,210 @@ def assets():
     deposits.write_all(write, ASSETS, DATA / MOD, lang)
     import advancements
     lang.update(advancements.generate(MOD)[1])
+    party_lang(lang)
+    drone_assets(lang)
+    import tower
+    tower.write_assets(write, rid, ASSETS, lang)
+    import blueprints
+    blueprints.write_assets(write, rid, ASSETS, lang)
+    blueprints.write_all()
+    import drone_sounds
+    lang.update(drone_sounds.LANG)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
+
+
+def drone_assets(lang):
+    """Drone Depot blocks, drones and parts (tools/drones.py): simple cube models in the sci-fi palette."""
+    for block, info in drones.DRONE_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = info["display"]
+        if info["faces"] in ("pad", "pickup"):
+            write_pad_models(block, drones.PAD_SIZE if info["faces"] == "pad" else drones.PICKUP_SIZE)
+            continue
+        if info["faces"] == "screen":
+            write_screen_models(block)
+            continue
+        if info["faces"] == "holo":
+            write_holo_models(block)
+            continue
+        if info["faces"] == "furniture":
+            continue
+        if info["faces"] == "glass":
+            # See-through: the texture has translucent glass in a solid frame.
+            model = {"parent": "minecraft:block/cube_all", "textures": {
+                "all": {"force_translucent": True, "sprite": rid(f"block/{block}")}}}
+            write(ASSETS / "models" / "block" / f"{block}.json", model)
+            write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
+            write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+            continue
+        if info["faces"] == "all":
+            model = {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{block}")}}
+        else:
+            model = {"parent": "minecraft:block/cube_bottom_top", "textures": {
+                "side": rid(f"block/{block}_side"), "top": rid(f"block/{block}_top"), "bottom": rid(f"block/{block}_bottom")}}
+        write(ASSETS / "models" / "block" / f"{block}.json", model)
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    items = dict(drones.DRONE_PARTS)
+    items.update({tier["id"]: tier["display"] for tier in drones.DRONE_TIERS.values()})
+    for item, display in items.items():
+        lang[f"item.{MOD}.{item}"] = display
+        write(ASSETS / "models" / "item" / f"{item}.json",
+              {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
+        write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    lang.update(drones.DRONE_LANG)
+
+
+def write_pad_models(block, size):
+    """Landing pad and supply pickup plates: a thin plate model; loose plates (part=0) use their own
+    top, and the plates of a formed pad (5x5) or pickup (3x3) each show one tile of the combined
+    picture (the pad with its charger port, the pickup with its lift hatch)."""
+    height = drones.PAD_PLATE_HEIGHT
+    side_uv = [0, 16 - height, 16, 16]
+    write(ASSETS / "models" / "block" / "pad_plate.json", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": "#side"},
+        "elements": [{"from": [0, 0, 0], "to": [16, height, 16], "faces": {
+            "up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+            "down": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "down"},
+            "north": {"uv": side_uv, "texture": "#side", "cullface": "north"},
+            "south": {"uv": side_uv, "texture": "#side", "cullface": "south"},
+            "west": {"uv": side_uv, "texture": "#side", "cullface": "west"},
+            "east": {"uv": side_uv, "texture": "#side", "cullface": "east"}}}]})
+    side = rid(f"block/{block}_side")
+    write(ASSETS / "models" / "block" / f"{block}.json",
+          {"parent": rid("block/pad_plate"), "textures": {"top": rid(f"block/{block}"), "side": side}})
+    variants = {"part=0": {"model": rid(f"block/{block}")}}
+    for part in range(1, size * size + 1):
+        name = f"{block}_formed_{part}"
+        write(ASSETS / "models" / "block" / f"{name}.json",
+              {"parent": rid("block/pad_plate"), "textures": {"top": rid(f"block/{name}"), "side": side}})
+        variants[f"part={part}"] = {"model": rid(f"block/{name}")}
+    write(ASSETS / "blockstates" / f"{block}.json", {"variants": variants})
+    write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+
+
+def write_holo_models(block):
+    """Hologram table sections: a 13-pixel table (dark glass top, panelled sides). Loose sections show
+    their own top; the nine of a formed 3x3 table each show one tile of the combined top with the
+    projector in the middle."""
+    h = drones.HOLO_HEIGHT
+    side_uv = [0, 16 - h, 16, 16]
+    write(ASSETS / "models" / "block" / "holo_table_base.json", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": "#side"},
+        "elements": [{"from": [0, 0, 0], "to": [16, h, 16], "faces": {
+            "up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+            "down": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "down"},
+            "north": {"uv": side_uv, "texture": "#side", "cullface": "north"},
+            "south": {"uv": side_uv, "texture": "#side", "cullface": "south"},
+            "west": {"uv": side_uv, "texture": "#side", "cullface": "west"},
+            "east": {"uv": side_uv, "texture": "#side", "cullface": "east"}}}]})
+    side = rid(f"block/{block}_side")
+    variants = {}
+    for part in range(0, drones.HOLO_SIZE * drones.HOLO_SIZE + 1):
+        name = block if part == 0 else f"{block}_formed_{part}"
+        write(ASSETS / "models" / "block" / f"{name}.json",
+              {"parent": rid("block/holo_table_base"), "textures": {"top": rid(f"block/{name}"), "side": side}})
+        variants[f"part={part}"] = {"model": rid(f"block/{name}")}
+    write(ASSETS / "blockstates" / f"{block}.json", {"variants": variants})
+    write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+
+
+def write_screen_models(block):
+    """Control screen panels: a thin panel against the wall behind it (modelled facing north and
+    rotated for the other facings). Loose panels show a standby pattern; the six panels of a formed
+    3x2 screen each show one tile of the combined, animated display."""
+    t = drones.SCREEN_THICKNESS
+    write(ASSETS / "models" / "block" / "screen_panel.json", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": "#side"},
+        "elements": [{"from": [0, 0, 16 - t], "to": [16, 16, 16], "faces": {
+            "north": {"uv": [0, 0, 16, 16], "texture": "#front"},
+            "south": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "south"},
+            "up": {"uv": [0, 16 - t, 16, 16], "texture": "#side", "cullface": "up"},
+            "down": {"uv": [0, 16 - t, 16, 16], "texture": "#side", "cullface": "down"},
+            "west": {"uv": [16 - t, 0, 16, 16], "texture": "#side", "cullface": "west"},
+            "east": {"uv": [0, 0, t, 16], "texture": "#side", "cullface": "east"}}}]})
+    side = rid(f"block/{block}_side")
+    names = {0: block}
+    for part in range(1, drones.SCREEN_WIDTH * drones.SCREEN_HEIGHT + 1):
+        names[part] = f"{block}_formed_{part}"
+    for part, name in names.items():
+        write(ASSETS / "models" / "block" / f"{name}.json",
+              {"parent": rid("block/screen_panel"), "textures": {"front": rid(f"block/{name}"), "side": side}})
+    variants = {}
+    for facing, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270)):
+        for part, name in names.items():
+            variant = {"model": rid(f"block/{name}")}
+            if y:
+                variant["y"] = y
+            variants[f"facing={facing},part={part}"] = variant
+    write(ASSETS / "blockstates" / f"{block}.json", {"variants": variants})
+    write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+
+
+def drone_recipes(out):
+    """Shaped recipes (automatable with the vanilla Crafter), gated by the machines and drones switches,
+    the switch of every Jugcraft metal they use, and the switches behind the items they're made from
+    (drones.ITEM_FEATURES; drone parts pass theirs on). Plus the drone fluid recipes (hydrogen lift cell)."""
+    memo = {}
+
+    def features_of(result):
+        if result in memo:
+            return memo[result]
+        memo[result] = set()
+        pattern, key, count = drones.DRONE_CRAFTING[result]
+        found = set()
+        for ref in key.values():
+            if ref.startswith(("#c:plates/", "#c:ingots/", "#c:gears/", "#c:wires/", "#c:dusts/")):
+                metal = ref.split("/")[-1]
+                if metal not in ("copper", "iron", "gold"):
+                    found.add(feature_of(f"{metal}_ingot"))
+            elif ref.startswith(f"{MOD}:"):
+                name = ref.split(":")[1]
+                found.update(drones.ITEM_FEATURES.get(name, []))
+                if name in drones.DRONE_CRAFTING:
+                    found |= features_of(name)
+        memo[result] = found - {MACHINE_FEATURE, drones.FEATURE}
+        return memo[result]
+
+    import tower
+    import blueprints
+    for result, (pattern, key, count) in blueprints.CRAFTING.items():
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "misc")
+        write(out / f"{result}.json", recipe)
+    for result, (pattern, key, count) in {**tower.CRAFTING, **tower.variant_recipes()}.items():
+        found = set()
+        for ref in key.values():
+            if ref.startswith(("#c:plates/", "#c:ingots/", "#c:gears/", "#c:wires/", "#c:dusts/")):
+                metal = ref.split("/")[-1]
+                if metal not in ("copper", "iron", "gold"):
+                    found.add(feature_of(f"{metal}_ingot"))
+            elif ref.startswith(f"{MOD}:"):
+                name = ref.split(":")[1]
+                found.update(tower.ITEM_FEATURES.get(name, []) + drones.ITEM_FEATURES.get(name, []))
+                if name in drones.DRONE_CRAFTING:
+                    found |= features_of(name)
+        features = [MACHINE_FEATURE, drones.FEATURE] + sorted(found - {MACHINE_FEATURE, drones.FEATURE})
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    for result, (pattern, key, count) in drones.DRONE_CRAFTING.items():
+        features = [MACHINE_FEATURE, drones.FEATURE] + sorted(features_of(result))
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    import petro
+    for machine, recipes in drones.DRONE_FLUID_RECIPES.items():
+        kind = petro.FLUID_MACHINES[machine]["recipe_type"]
+        for r in recipes:
+            data = {"fabric:load_conditions": [c for f in [MACHINE_FEATURE] + r["features"] for c in condition(f)],
+                    "type": f"jugcraft:{kind}",
+                    "items": [{"ingredient": i, "count": n} for i, n in r["items"]],
+                    "fluids": [{"fluid": f, "amount": mb} for f, mb in r["fluids"]],
+                    "results": [{"id": i, "count": n} for i, n in r["results"]],
+                    "time": r["ticks"]}
+            write(out / kind / f"{r['name']}.json", data)
 
 
 def write_alternate_pack(lang):
@@ -671,6 +876,10 @@ def loot_tables():
         else:
             table = self_drop(block)
         write(out / f"{block}.json", table)
+    import tower
+    tower.write_loot(write, rid, out, self_drop)
+    import blueprints
+    blueprints.write_loot(write, rid, out, self_drop)
     # The 2-tall charging station drops once, from its lower half.
     for block in TOOL_BLOCKS:
         table = self_drop(block)
@@ -767,6 +976,7 @@ def recipes():
                                             "asphalt_road_line", 4, "building"))):
         recipe["fabric:load_conditions"] = oil
         write(out / f"{name}.json", recipe)
+    drone_recipes(out)
 
     # Explosive weapons (batch 18): grenades and the launcher, behind the explosives switch.
     boom = [c for f in (MACHINE_FEATURE, "explosives") for c in condition(f)]

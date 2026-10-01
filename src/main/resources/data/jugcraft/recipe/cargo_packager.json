@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PHP",
+    "CMC",
+    "PWP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "H": "minecraft:hopper",
+    "C": "minecraft:chest",
+    "M": "jugcraft:machine_casing",
+    "W": "jugcraft:cargo_winch"
+  },
+  "result": {
+    "id": "jugcraft:cargo_packager",
+    "count": 1
+  }
+}

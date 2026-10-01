@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GSG",
+    "G G",
+    "GSG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "S": "jugcraft:plastic_sheet"
+  },
+  "result": {
+    "id": "jugcraft:blast_glass",
+    "count": 6
+  }
+}
