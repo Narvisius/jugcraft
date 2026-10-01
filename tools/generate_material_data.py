@@ -10,7 +10,7 @@ from pathlib import Path
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
                        metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
 
-from machines import CROPS, ELECTRONICS_BLOCKS, FARMING_BLOCKS, MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
+from machines import CROPS, ELECTRONICS_BLOCKS, FARMING_BLOCKS, MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, ALT_CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -740,6 +740,10 @@ def recipes():
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
+    for name, (result, pattern, key, count) in ALT_CRAFTING.items():
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
+        recipe["fabric:load_conditions"] = condition(MACHINE_FEATURE) + condition("crude_oil")
+        write(out / f"{name}.json", recipe)
     machine_recipe_files(out)
     import petro
     for kind, name, data in petro.fluid_recipe_files(condition):

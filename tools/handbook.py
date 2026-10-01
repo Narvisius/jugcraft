@@ -440,6 +440,12 @@ def build():
             machine_page("electrolytic_cell"),
             machine_page("chemical_reactor"),
             machine_page("fuel_cell"),
+            {"title": "Rubber", "icon": f"{MOD}:rubber", "text": [
+                "Crack a bucket of naphtha in the chemical reactor: 500 mB of butadiene. The polymerization reactor "
+                "turns 500 mB of butadiene into four synthetic rubber.",
+                "Rubber and string make two belts. A steel plate faced with rubber cuts into four gaskets, and "
+                "gasketed steel pipe comes four to a steel plate pair, without a bronze pipe."],
+             "craft": craft("gasket")},
             {"title": "Nitrogen Chemistry", "icon": f"{MOD}:nitric_acid_bucket", "text": [
                 "Air is four parts nitrogen to one of oxygen. The air separation unit splits it; hydrogen comes from "
                 "the electrolytic cell.",

@@ -71,6 +71,9 @@ GASES = {
     # Batch 13: the scarce third part of air, a shielding gas.
     "argon": {"display": "Argon", "feature": "machines",
               "colors": [(170, 120, 200), (190, 150, 220), (212, 182, 236), (234, 216, 248)]},
+    # Batch 14: cracked out of naphtha, polymerized into synthetic rubber.
+    "butadiene": {"display": "Butadiene", "feature": "crude_oil",
+                  "colors": [(150, 160, 120), (176, 186, 144), (200, 208, 170), (226, 232, 204)]},
 }
 
 
@@ -98,6 +101,9 @@ ITEMS = {
     "silicon_wafer": "Silicon Wafer",
     # Etched in the lithography station (batch 7).
     "microchip": "Microchip",
+    # Rubber and polymers (batch 14): synthetic rubber, and gaskets pressed from it with steel.
+    "rubber": "Synthetic Rubber",
+    "gasket": "Gasket",
 }
 
 
@@ -242,6 +248,9 @@ FLUID_RECIPES = {
     "polymerization_reactor": [
         {"name": "refinery_gas", "fluids": [("jugcraft:refinery_gas", 1000)], "fluid_results": [],
          "results": [("jugcraft:plastic_pellets", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
+        # Synthetic rubber (batch 14): butadiene polymerized into crumbs of rubber.
+        {"name": "butadiene", "fluids": [("jugcraft:butadiene", 500)], "fluid_results": [],
+         "results": [("jugcraft:rubber", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
     ],
     # Fracking fluid: water carrying sand (to prop the cracks open) and a gelling agent (dried kelp, standing in for
     # guar gum) to carry the sand.
@@ -274,6 +283,10 @@ FLUID_RECIPES = {
         # Superphosphate: phosphate rock treated with sulfuric acid becomes a soluble fertilizer.
         {"name": "fertilizer", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:sulfuric_acid", 250)],
          "results": [("jugcraft:fertilizer", 4)], "ticks": 80, "features": ["phosphate", "sulfur"]},
+        # Steam cracking (batch 14): naphtha broken down at high heat; the butadiene is kept, the rest is lost as
+        # fuel for the cracking furnace.
+        {"name": "butadiene", "fluids": [("jugcraft:naphtha", 1000)], "fluid_results": [("jugcraft:butadiene", 500)],
+         "ticks": 100, "features": ["crude_oil"]},
         # Ammonium phosphate (batch 12): phosphate rock with ammonia, a richer fertilizer than superphosphate.
         {"name": "ammonium_phosphate", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:ammonia", 250)],
          "results": [("jugcraft:fertilizer", 6)], "ticks": 80, "features": ["phosphate", "salt", "machines"]},

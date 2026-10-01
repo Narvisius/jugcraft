@@ -30,6 +30,8 @@ public final class PetroItems {
 	public static Item SILICON_WAFER;
 	/** Wafers etched in the lithography station: four chips each. */
 	public static Item MICROCHIP;
+	public static Item RUBBER;
+	public static Item GASKET;
 
 	private PetroItems() {
 	}
@@ -47,6 +49,8 @@ public final class PetroItems {
 		SILICON_BOULE = JugcraftRegistry.item("silicon_boule");
 		SILICON_WAFER = JugcraftRegistry.item("silicon_wafer");
 		MICROCHIP = JugcraftRegistry.item("microchip");
+		RUBBER = JugcraftRegistry.item("rubber");
+		GASKET = JugcraftRegistry.item("gasket");
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(CRACKING_CATALYST);

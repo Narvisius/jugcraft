@@ -332,6 +332,13 @@ WOODS = {"oak": "oak_logs", "spruce": "spruce_logs", "birch": "birch_logs", "jun
 FEATURE = "machines"
 
 # Shaped crafting recipes: id -> (pattern, key, result count). Result id equals the recipe id.
+# Second recipes for items that already have one in CRAFTING: file name -> (result, pattern, key, count).
+ALT_CRAFTING = {
+    # Rubber (batch 14): belts from rubber instead of leather, and steel pipes sealed with gaskets.
+    "belt_from_rubber": ("belt", ["RSR"], {"R": "jugcraft:rubber", "S": "minecraft:string"}, 2),
+    "steel_fluid_pipe_from_gaskets": ("steel_fluid_pipe", ["PKP"], {"P": "#c:plates/steel", "K": "jugcraft:gasket"}, 4),
+}
+
 CRAFTING = {
     "machine_casing": (["BZB", "Z Z", "BZB"], {"B": "#c:ingots/bronze", "Z": "#c:ingots/zinc"}, 1),
     "copper_cable": (["CTC"], {"C": "#c:ingots/copper", "T": "#c:ingots/tin"}, 6),
@@ -548,6 +555,8 @@ CRAFTING = {
     "polymerization_reactor": (["PCP", "TGT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:cracking_catalyst",
                                                        "T": "jugcraft:steel_tank", "G": "minecraft:glass",
                                                        "M": "jugcraft:machine_casing"}, 1),
+    # A steel plate faced with rubber, cut into four gaskets (batch 14).
+    "gasket": (["RPR"], {"R": "jugcraft:rubber", "P": "#c:plates/steel"}, 4),
     "cracking_catalyst": (["BSB", "SNS", "BSB"], {"B": "jugcraft:bauxite", "S": "minecraft:sand",
                                                   "N": "#c:ingots/nickel"}, 4),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",

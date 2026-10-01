@@ -415,6 +415,24 @@ public class PetroGameTests {
 		});
 	}
 
+	/**
+	 * Synthetic rubber (batch 14): the chemical reactor cracks a bucket of naphtha into 500 mB of butadiene, and the
+	 * polymerization reactor turns 500 mB of butadiene into four rubber.
+	 */
+	@GameTest(maxTicks = 300)
+	public void naphthaBecomesRubber(GameTestHelper helper) {
+		MachineBlockEntity cracker = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(2, 1, 1));
+		cracker.tanks().input(0).fill(PetroFluids.NAPHTHA.source(), 1000);
+		MachineBlockEntity polymerizer = place(helper, MachineKind.POLYMERIZATION_REACTOR, new BlockPos(5, 1, 4));
+		polymerizer.tanks().input(0).fill(PetroFluids.BUTADIENE.fluid(), 500);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(cracker.tanks().output(0).has(PetroFluids.BUTADIENE.fluid(), 500),
+					"Butadiene: " + cracker.tanks().output(0).millibuckets());
+			ItemStack rubber = polymerizer.getItem(0);
+			helper.assertTrue(rubber.is(PetroItems.RUBBER) && rubber.getCount() == 4, "Rubber: " + rubber);
+		});
+	}
+
 	/** All three asphalt blocks speed up walking, and need a pickaxe. */
 	@GameTest
 	public void asphaltIsFasterToWalkOn(GameTestHelper helper) {

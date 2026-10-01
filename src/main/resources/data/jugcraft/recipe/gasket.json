@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RPR"
+  ],
+  "key": {
+    "R": "jugcraft:rubber",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:gasket",
+    "count": 4
+  }
+}

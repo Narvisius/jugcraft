@@ -339,6 +339,35 @@ def microchip():
     return img
 
 
+def rubber():
+    """Synthetic rubber: a dark grey-black bale with a soft sheen and a pressed seam."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(4, 14):
+        for x in range(2, 14):
+            edge = x in (2, 13) or y in (4, 13)
+            c = (24, 24, 26) if edge else (58, 58, 62) if y < 7 and x < 9 else (40, 40, 44)
+            if y == 9 and 3 <= x <= 12:
+                c = (30, 30, 33)
+            img.putpixel((x, y), c + (255,))
+    for x, y in ((4, 5), (5, 5), (6, 6)):
+        img.putpixel((x, y), (92, 92, 98, 255))
+    return img
+
+
+def gasket():
+    """Gasket: a flat black rubber ring round a steel face, seen from above."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(16):
+        for x in range(16):
+            d = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+            if 3 <= d <= 6.5:
+                c = (36, 36, 40) if d > 5.5 else (150, 154, 160) if d < 4 else (60, 60, 66)
+                if d < 4 and x < 8 and y < 8:
+                    c = (196, 200, 206)
+                img.putpixel((x, y), c + (255,))
+    return img
+
+
 def draw_all(save, save_animation):
     save(microchip(), "item", "microchip")
     save(silicon_boule(), "item", "silicon_boule")
@@ -353,6 +382,8 @@ def draw_all(save, save_animation):
     save(plastic_pellets(), "item", "plastic_pellets")
     save(plastic_sheet(), "item", "plastic_sheet")
     save(catalyst(), "item", "cracking_catalyst")
+    save(rubber(), "item", "rubber")
+    save(gasket(), "item", "gasket")
     save(asphalt_binder(), "item", "asphalt_binder")
     for index, (fluid, info) in enumerate(FLUIDS.items()):
         save_animation(still(info["colors"], 800 + index), f"{fluid}_still", frametime=3)

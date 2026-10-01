@@ -109,60 +109,61 @@
           "icon": "jugcraft:plastic_sheet",
           "text": [
             "Fantastic Plastic: Press a plastic sheet.",
+            "Bouncing Back: Make synthetic rubber.",
             "Hit the Road: Lay asphalt, and walk faster on it.",
             "Split Decision: Build an electrolytic cell.",
-            "Oil of Vitriol: Make sulfuric acid.",
-            "Green Revolution: Make fertilizer."
+            "Oil of Vitriol: Make sulfuric acid."
           ]
         },
         {
           "title": "Milestones (8)",
-          "icon": "jugcraft:alumina",
+          "icon": "jugcraft:fertilizer",
           "text": [
+            "Green Revolution: Make fertilizer.",
             "The Bayer Way: Digest bauxite into alumina.",
             "Clean Burn: Build a hydrogen fuel cell.",
             "Thin Air: Build an air separation unit.",
-            "Bread from Air: Build a synthesis converter, to make ammonia from air.",
-            "Aqua Fortis: Make nitric acid."
+            "Bread from Air: Build a synthesis converter, to make ammonia from air."
           ]
         },
         {
           "title": "Milestones (9)",
-          "icon": "jugcraft:titanium_ingot",
+          "icon": "jugcraft:nitric_acid_bucket",
           "text": [
+            "Aqua Fortis: Make nitric acid.",
             "Kroll Call: Chlorinate titanium and melt the sponge.",
             "Power Wall: Build a lithium battery bank.",
             "Strong Attraction: Make a neodymium magnet.",
-            "Lossless (Almost): Build a magnet dynamo or magnet motor.",
-            "Pulling Strings: Grow a silicon boule in the crystal grower."
+            "Lossless (Almost): Build a magnet dynamo or magnet motor."
           ]
         },
         {
           "title": "Milestones (10)",
-          "icon": "jugcraft:microchip",
+          "icon": "jugcraft:silicon_boule",
           "text": [
+            "Pulling Strings: Grow a silicon boule in the crystal grower.",
             "Etched in Light: Etch microchips in the lithography station.",
             "Central Processing: Assemble a processor.",
             "Hello, World: Build a network terminal.",
-            "Under Pressure: Build a gas holder.",
-            "Shut-Off Valve: Make a fluid valve."
+            "Under Pressure: Build a gas holder."
           ]
         },
         {
           "title": "Milestones (11)",
-          "icon": "jugcraft:fluid_filter",
+          "icon": "jugcraft:fluid_valve",
           "text": [
+            "Shut-Off Valve: Make a fluid valve.",
             "Strained Relations: Make a fluid filter.",
             "Here Comes the Sun: Build an advanced solar panel.",
             "Four on the Floor: Build an advanced combustion engine.",
-            "King Cotton: Grow cotton.",
-            "Make It Rain: Build a sprinkler."
+            "King Cotton: Grow cotton."
           ]
         },
         {
           "title": "Milestones (12)",
-          "icon": "jugcraft:crop_harvester",
+          "icon": "jugcraft:sprinkler",
           "text": [
+            "Make It Rain: Build a sprinkler.",
             "Reaping What You Sow: Build a crop harvester."
           ]
         }
@@ -2528,6 +2529,29 @@
             ],
             "result": "jugcraft:fuel_cell",
             "count": 1
+          }
+        },
+        {
+          "title": "Rubber",
+          "icon": "jugcraft:rubber",
+          "text": [
+            "Crack a bucket of naphtha in the chemical reactor: 500 mB of butadiene. The polymerization reactor turns 500 mB of butadiene into four synthetic rubber.",
+            "Rubber and string make two belts. A steel plate faced with rubber cuts into four gaskets, and gasketed steel pipe comes four to a steel plate pair, without a bronze pipe."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:rubber",
+              "jugcraft:steel_plate",
+              "jugcraft:rubber",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:gasket",
+            "count": 4
           }
         },
         {

@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:rubber"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.rubber.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.rubber.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:rubber"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:plastic"
+}

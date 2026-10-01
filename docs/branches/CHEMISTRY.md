@@ -123,6 +123,12 @@ The first batch from the owner's saved idea backlog ([MACHINE_ROADMAP.md](../MAC
 | --- | --- |
 | 34 | The air separation unit also gives argon (1 mB every 2 ticks, from the middle of the column). Item machines can take a **boost gas**: oxygen blown into the steel foundry and argon round the crystal grower's melt double their speed, burning the gas each tick they are boosted. |
 
+### Batch 14: rubber and polymers
+
+| # | What it adds |
+| --- | --- |
+| 35 | Butadiene gas from naphtha (chemical reactor), synthetic rubber from butadiene (polymerization reactor), gaskets. Rubber belts and gasketed steel pipe. Feature record: [rubber.md](../features/rubber.md). |
+
 ### Rules for the oil line
 
 - **Oil is finite.** Reservoirs run dry and oil sand is an ore; nothing turns power back into crude. Every fuel's JE per bucket is set so refining pays off over burning raw bitumen, and the full chain is audited in BALANCE.md (commit 19).

@@ -8,7 +8,12 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
-### Unmerged: Oxygen-blown steel and argon, batch 13
+### Unmerged: Rubber and polymers, batch 14
+- **Butadiene** from naphtha (chemical reactor) and **synthetic rubber** from butadiene (polymerization reactor).
+- **Gaskets** (rubber + steel plate); rubber belts; gasketed steel pipe, four for two plates.
+- An advancement, a handbook page and a game test.
+
+### #68 Oxygen-blown steel and argon, batch 13
 - The air separation unit also makes **argon**.
 - **Boost gases:** oxygen piped into the steel foundry, or argon into the crystal grower, doubles its speed.
 

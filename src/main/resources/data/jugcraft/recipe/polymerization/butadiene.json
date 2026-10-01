@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:polymerization",
+  "fluids": [
+    {
+      "fluid": "jugcraft:butadiene",
+      "amount": 500
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:rubber",
+      "count": 4
+    }
+  ],
+  "time": 100
+}

@@ -122,6 +122,8 @@ public final class PetroFluids {
 	public static Gas AMMONIA;
 	/** The scarce third part of air (batch 13): a shielding gas. */
 	public static Gas ARGON;
+	/** Cracked out of naphtha and polymerized into synthetic rubber (batch 14). */
+	public static Gas BUTADIENE;
 	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
 	public static Entry NITRIC_ACID;
 
@@ -171,6 +173,7 @@ public final class PetroFluids {
 		OXYGEN = gas("oxygen", 0xFF78B4E0);
 		AMMONIA = gas("ammonia", 0xFFB096D4);
 		ARGON = gas("argon", 0xFFC8A0E6);
+		BUTADIENE = gas("butadiene", 0xFFC8D0AA);
 		NITRIC_ACID = fluid("nitric_acid", 5, 4, 1, 0xFFE2D48C, MapColor.COLOR_YELLOW);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
