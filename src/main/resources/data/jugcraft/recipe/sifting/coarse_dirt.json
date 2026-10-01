@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:sifting",
+  "ingredient": "minecraft:coarse_dirt",
+  "result": {
+    "id": "minecraft:dirt",
+    "count": 1
+  },
+  "time": 100,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:cotton_seeds",
+        "count": 1
+      },
+      "chance": 0.15
+    },
+    {
+      "result": {
+        "id": "minecraft:wheat_seeds",
+        "count": 1
+      },
+      "chance": 0.1
+    }
+  ]
+}

@@ -8,7 +8,7 @@ Format: {"chapters": [{"title", "icon", "pages": [{"title", "icon", "text": [par
 "craft": {"grid": [9 item ids or null], "result", "count"}, "recipes": [{"in": [[id, count]], "out": [id, count]}]}]}]}
 """
 from materials import COMPONENTS, METALS, MINERALS, ingot_id, ore_ids
-from machines import (ELECTRONICS_BLOCKS, CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS,
+from machines import (ELECTRONICS_BLOCKS, FARMING_BLOCKS, CRAFTING, MACHINES, STATS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS,
                       UPGRADES, BYPRODUCTS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, machine_recipes)
 
 MOD = "jugcraft"
@@ -54,6 +54,12 @@ ABOUT = {
     "high_pressure_extractor": "A steel extractor: 32 items every 4 ticks, four times the brass one.",
     "capacitor_bank": "A 2x2 bank of Leyden jars: 4,000,000 JE. It charges from any side and gives power out of the "
                       "sockets on its front, 4,096 JE/t.",
+    "sprinkler": "Pipe water in (or use a water bucket) and it sprays the crops within 4 blocks, at its height and one "
+                 "below: every 5 seconds it uses 50 mB and gives each growing crop an extra growth tick. Load up to 16 "
+                 "fertilizer (by hand or hopper) and every 30 seconds it spreads one over the 5x5 crops around it.",
+    "crop_harvester": "Two blocks tall. Harvests the ripe crops in the 9x9 field in front of it, starting the block in "
+                      "front: one crop a second at 24 JE/t. It keeps the drops and plants one of the seeds again, and "
+                      "waits when its three result slots are full. Crops on farmland sit at its own height.",
     "gas_holder": "A 3x3x3 sphere on legs: 1,024 buckets of one gas, and nothing but gases (liquids go in the steel "
                   "tank). Pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. "
                   "Comparators read how full it is.",
@@ -465,6 +471,15 @@ def build():
             + [machine_page(m) for m in ("capacitor_bank", "steel_tank", "gas_holder")]},
         {"title": "Renewables", "icon": f"{MOD}:tree_farm", "pages":
             [machine_page(m) for m in ("water_wheel", "cobblestone_generator", "tree_farm")]},
+        {"title": "Farming", "icon": f"{MOD}:crop_harvester", "pages": [
+            machine_page("crop_harvester"),
+            block_page("sprinkler", FARMING_BLOCKS["sprinkler"]["display"]),
+            {"title": "Cotton", "icon": f"{MOD}:cotton", "text": [
+                "Sift coarse dirt in the sieve: now and then it turns up cotton seeds (and wheat seeds).",
+                "Plant them on farmland like wheat. A ripe plant gives one to three cotton and more seeds; the harvester, "
+                "sprinkler and fertilizer all work on it.",
+                "One cotton spins into one string."]},
+        ]},
         {"title": "Upgrades", "icon": f"{MOD}:speed_upgrade", "pages":
             [block_page(u, UPGRADES[u]) for u in UPGRADES] + [
             {"title": "Comparators", "icon": "minecraft:comparator", "text": [

@@ -14,7 +14,7 @@ from PIL import Image
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS, WASHED_ORES,
                        all_blocks, all_items, feature_of)
 import petro
-from machines import (MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, BYPRODUCT_SHARE,
+from machines import (CROPS, MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, BYPRODUCT_SHARE,
                       RENEWABLE_UNITS, WOODS, machine_blocks, machine_items, machine_recipes)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -102,6 +102,8 @@ def check_assets(registered):
         if not (DATA / MOD / "loot_table" / "blocks" / f"{block}.json").is_file():
             err(f"Missing loot table for {block}")
     for item in registered:
+        if item in CROPS:
+            continue  # A crop block has no item of its own: its seeds plant it.
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             model(definition["model"]["model"])
@@ -156,9 +158,25 @@ def rid_of(path):
     return f"{MOD}:{path}"
 
 
+# Keys of the pre-26.x loot format: Minecraft 26.x ignores them without a warning, so a table that used them would lose
+# its conditions and functions (counts, Fortune, which half of a block drops) silently.
+OLD_LOOT_KEYS = {"conditions", "functions", "function"}
+
+
+def old_loot_keys(node):
+    if isinstance(node, dict):
+        return (OLD_LOOT_KEYS & set(node)) | {key for value in node.values() for key in old_loot_keys(value)}
+    if isinstance(node, list):
+        return {key for value in node for key in old_loot_keys(value)}
+    return set()
+
+
 def check_loot(registered):
     for path in sorted((DATA / MOD / "loot_table").rglob("*.json")):
         text = path.read_text(encoding="utf-8")
+        stale = old_loot_keys(load(path))
+        if stale:
+            err(f"{path.name}: uses the pre-26.x loot keys {sorted(stale)}; use \"condition\" and \"modifier\"")
         for name in re.findall(r'"name": "jugcraft:([a-z_]+)"', text):
             if name not in registered:
                 err(f"{path.name} drops unknown item {name}")
@@ -381,7 +399,9 @@ def check_tags():
             elif registry == "fluid":
                 if split(value)[1] not in petro.fluid_ids():
                     err(f"{path.relative_to(ROOT)}: unknown fluid {value}")
-            elif split(value)[0] == MOD and split(value)[1] not in all_blocks() + all_items() + machine_blocks() + petro.petro_blocks():
+            elif split(value)[0] == MOD and split(value)[1] not in (all_blocks() + all_items() + machine_blocks()
+                                                                    + machine_items() + petro.petro_blocks()
+                                                                    + petro.petro_items()):
                 err(f"{path.relative_to(ROOT)}: unknown entry {value}")
 
 

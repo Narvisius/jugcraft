@@ -47,6 +47,7 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -57,6 +58,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -369,6 +373,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
 			case WIND_TURBINE -> tickWind(level, pos, state);
 			case ORE_DRILL -> tickDrill(level, pos, state);
+			case CROP_HARVESTER -> tickHarvester(level, pos, state);
 			case COBBLESTONE_GENERATOR -> tickCobble(level, pos, state);
 			case WATER_WHEEL -> tickWaterWheel(level, pos, state);
 			case AUTO_CRAFTER -> tickCrafter(level, pos, state);
@@ -999,6 +1004,116 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	}
 
 	/**
+	 * The crop harvester: works through the 9x9 field in front of it (at its own height, where crops on farmland sit),
+	 * and each ripe crop it finds takes {@link MachineKind#HARVEST_TICKS} powered ticks to harvest. The crop's drops go
+	 * into the result slots, less one seed, which it plants again; when the drops would not all fit, it waits.
+	 */
+	private boolean tickHarvester(ServerLevel level, BlockPos pos, BlockState state) {
+		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
+			eject(level, pos, state);
+		}
+		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false;
+		}
+		BlockPos target = null;
+		for (int step = 0; step < MachineKind.HARVEST_SCAN_PER_TICK; step++) {
+			BlockPos at = harvestTarget(pos, facing(state), cursor);
+			if (level.isLoaded(at) && isRipe(level.getBlockState(at))) {
+				target = at;
+				break;
+			}
+			cursor = (cursor + 1) % HARVEST_AREA;
+		}
+		if (target == null) {
+			if (progress != 0) {
+				progress = 0;
+				setChanged();
+			}
+			return false;
+		}
+		MachineUpgrades.Effect upgrades = upgrades();
+		maxProgress = upgrades.ticks(MachineKind.HARVEST_TICKS);
+		long use = upgrades.use(kind.usePerTick);
+		if (progress < maxProgress) {
+			if (energy.getAmount() < use) {
+				return false;
+			}
+			energy.setAmount(energy.getAmount() - use);
+			progress++;
+		}
+		if (progress >= maxProgress) {
+			BlockState crop = level.getBlockState(target);
+			List<ItemStack> drops = new ArrayList<>(Block.getDrops(crop, level, target, null));
+			Item seed = crop.getBlock().asItem();
+			boolean replant = false;
+			for (ItemStack drop : drops) {
+				if (!replant && drop.is(seed)) {
+					drop.shrink(1);
+					replant = true;
+				}
+			}
+			if (!storeAll(drops)) {
+				setChanged();
+				return false; // Full: wait with the harvest ready.
+			}
+			level.setBlock(target, replant && crop.getBlock() instanceof CropBlock block ? block.getStateForAge(0)
+					: Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+			progress = 0;
+			cursor = (cursor + 1) % HARVEST_AREA;
+		}
+		setChanged();
+		return true;
+	}
+
+	private static final int HARVEST_AREA = (2 * MachineKind.HARVEST_RADIUS + 1) * (2 * MachineKind.HARVEST_RADIUS + 1);
+
+	/** Field block {@code index} of a harvester at {@code pos} facing {@code front}: the 9x9 square starting in front. */
+	static BlockPos harvestTarget(BlockPos pos, Direction front, int index) {
+		int side = 2 * MachineKind.HARVEST_RADIUS + 1;
+		int across = index % side - MachineKind.HARVEST_RADIUS;
+		int forward = index / side + 1;
+		return pos.relative(front, forward).relative(front.getClockWise(), across);
+	}
+
+	private static boolean isRipe(BlockState state) {
+		return state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state);
+	}
+
+	/** Puts every stack into the result slots, or changes nothing and returns false if they would not all fit. */
+	private boolean storeAll(List<ItemStack> stacks) {
+		int first = kind.outputSlot();
+		List<ItemStack> slots = new ArrayList<>();
+		for (int slot = first; slot < kind.slots; slot++) {
+			slots.add(items.get(slot).copy());
+		}
+		for (ItemStack stack : stacks) {
+			ItemStack left = stack.copy();
+			for (int i = 0; i < slots.size() && !left.isEmpty(); i++) {
+				ItemStack held = slots.get(i);
+				int limit = Math.min(getMaxStackSize(), left.getMaxStackSize());
+				if (held.isEmpty()) {
+					int moved = Math.min(limit, left.getCount());
+					slots.set(i, left.copyWithCount(moved));
+					left.shrink(moved);
+				} else if (ItemStack.isSameItemSameComponents(held, left)) {
+					int moved = Math.min(limit - held.getCount(), left.getCount());
+					if (moved > 0) {
+						held.grow(moved);
+						left.shrink(moved);
+					}
+				}
+			}
+			if (!left.isEmpty()) {
+				return false;
+			}
+		}
+		for (int i = 0; i < slots.size(); i++) {
+			items.set(first + i, slots.get(i));
+		}
+		return true;
+	}
+
+	/**
 	 * The cobblestone generator: with water and lava touching it (checked every second; neither is used up), it
 	 * makes one cobblestone per {@link MachineKind#COBBLE_TICKS} powered ticks, like a vanilla cobblestone generator.
 	 */
@@ -1464,7 +1579,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		output.putInt("max_burn", maxBurn);
 		output.putInt("water", tank);
 		output.putInt("sides", sides.pack());
-		if (kind == MachineKind.ORE_DRILL) {
+		if (kind == MachineKind.ORE_DRILL || kind == MachineKind.CROP_HARVESTER) {
 			output.putInt("cursor", cursor);
 		}
 		if (reservoir != null) {

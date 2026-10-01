@@ -297,6 +297,16 @@ A second, mechanical power system measured in **KE** (kinetic energy) per tick. 
 | Cobblestone Generator | 1 cobblestone per 20 ticks, 4 JE/t | Needs water and lava touching any sides; neither is used up. | bronze, water bucket, lava bucket, cable, casing |
 | Tree Farm | Sapling → 6 logs in 400 ticks, 16 JE/t | The sapling comes back (byproduct slot) with a 10% chance of the tree's extra (apple, cocoa beans, pink petals, pale moss carpet or a stick). Recipes are data (`jugcraft:tree_growing`) for all nine vanilla trees. | glass, glowstone, dirt, bronze, casing, basic circuit |
 
+### Farming
+
+See [farming.md](features/farming.md).
+
+| Block or item | What it does | Details | Built from |
+| --- | --- | --- | --- |
+| Crop Harvester (2 tall) | Harvests and replants ripe crops in the 9×9 field in front of it | One crop per 20 ticks at 24 JE/t; keeps the drops less one seed, which it replants; waits when its three result slots are full | steel gears, shears, 2 hoppers, casing, steel plates, basic circuit |
+| Sprinkler | Waters the crops within 4 blocks | Every 5 s uses 50 mB of water and gives each growing crop an extra growth tick; with fertilizer loaded, spreads one every 30 s over the 5×5 around it. 4-bucket tank, 16 fertilizer. | bronze pipe, steel plates, tinplate tank, hopper |
+| Cotton | A crop like wheat | Seeds from sifting coarse dirt (15%); a ripe plant gives 1–3 cotton and seeds; 1 cotton → 1 string | – |
+
 ![Cobblestone Generator, Tree Farm and Water Wheel](images/renewables.png)
 
 *Approximate isometric render made from the mod's own textures and model boxes, not a game screenshot.*

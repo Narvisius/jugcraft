@@ -9,6 +9,8 @@ import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
+import io.github.jimbozoomer.jugcraft.farming.JugcraftFarming;
+import io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
@@ -539,6 +541,27 @@ public class PetroGameTests {
 			transaction.commit();
 		}
 		helper.succeed();
+	}
+
+	/** A sprinkler with water and fertilizer uses its water a pulse at a time and spreads fertilizer on the crop beside it. */
+	@GameTest(maxTicks = 800)
+	public void sprinklerWatersAndFertilizes(GameTestHelper helper) {
+		BlockPos crop = new BlockPos(2, 1, 2);
+		helper.setBlock(crop.below(), Blocks.FARMLAND);
+		helper.setBlock(crop, Blocks.WHEAT);
+		BlockPos pos = crop.east();
+		helper.setBlock(pos, JugcraftFarming.SPRINKLER);
+		SprinklerBlockEntity sprinkler = helper.getBlockEntity(pos, SprinklerBlockEntity.class);
+		sprinkler.water().variant = FluidVariant.of(Fluids.WATER);
+		sprinkler.water().amount = 1_000 * FluidConstants.BUCKET / 1_000;
+		helper.assertTrue(sprinkler.addFertilizer(3) == 3, "The sprinkler did not take fertilizer");
+		helper.succeedWhen(() -> {
+			helper.assertTrue(sprinkler.fertilizer() == 2, "Fertilizer left: " + sprinkler.fertilizer());
+			helper.assertTrue(((CropBlock) Blocks.WHEAT).getAge(helper.getBlockState(crop)) > 0, "The wheat did not grow");
+			long used = 1_000 - sprinkler.water().amount * 1_000 / FluidConstants.BUCKET;
+			helper.assertTrue(used >= SprinklerBlockEntity.FERTILIZE_PULSES * SprinklerBlockEntity.WATER_PER_PULSE,
+					"Water used: " + used + " mB");
+		});
 	}
 
 	/** Fertilizer grows every crop in the 5x5 area around where it is used. */

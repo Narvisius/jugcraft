@@ -1,0 +1,75 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "sp_red_iron": "jugcraft:block/sp_red_iron",
+    "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
+    "front": "jugcraft:block/crop_harvester_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        12,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind_turbine_mast"
+        },
+        "south": {
+          "texture": "#wind_turbine_mast"
+        },
+        "east": {
+          "texture": "#wind_turbine_mast"
+        },
+        "west": {
+          "texture": "#wind_turbine_mast"
+        },
+        "up": {
+          "texture": "#wind_turbine_mast"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        6,
+        1
+      ],
+      "to": [
+        16,
+        10,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_red_iron"
+        },
+        "south": {
+          "texture": "#sp_red_iron"
+        },
+        "east": {
+          "texture": "#sp_red_iron"
+        },
+        "west": {
+          "texture": "#sp_red_iron"
+        },
+        "up": {
+          "texture": "#sp_red_iron"
+        },
+        "down": {
+          "texture": "#sp_red_iron"
+        }
+      }
+    }
+  ]
+}

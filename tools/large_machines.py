@@ -65,6 +65,8 @@ FOOTPRINTS = {
     "lithography_station": cuboid(3, 2, 2),
     # Fluid logistics: a 3x3x3 gas holder.
     "gas_holder": cuboid(3, 3, 3),
+    # Farming: a two-block crop harvester.
+    "crop_harvester": [(0, 0, 0), (0, 1, 0)],
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -333,6 +335,13 @@ MODELS["gas_holder"] = [
     ((-30, 2, 2), (14, 46, 46), {"*": "fluid_tank_side", "north": "#front", "up": "fluid_tank_top"}),
 ]
 
+MODELS["crop_harvester"] = [
+    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
+    ((1, 2, 1), (15, 14, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((3, 14, 3), (13, 28, 13), "wind_turbine_mast"),
+    ((0, 22, 1), (16, 26, 5), "sp_red_iron"),
+]
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -364,4 +373,5 @@ FRONTS = {
     "crystal_grower": "crystal_grower_front",
     "lithography_station": "lithography_station_front",
     "gas_holder": "gas_holder_front",
+    "crop_harvester": "crop_harvester_front",
 }

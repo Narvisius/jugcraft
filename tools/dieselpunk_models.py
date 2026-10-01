@@ -793,6 +793,36 @@ def gas_holder():
     return m
 
 
+def crop_harvester():
+    """Two blocks tall: an olive engine cabinet with a grain hopper on its back, a caged work lamp and a phosphor gauge
+    on the front, and a gunmetal mast carrying a cross boom with a red reel of bats across the front, the cutter bar
+    under it, and a beacon lamp on top."""
+    m = [box((0, 0, 0), (16, 1.5, 16), {"*": GUNMETAL, "north": HAZARD})]
+    # Engine cabinet and grain hopper.
+    m.append(box((1, 1.5, 3), (15, 13, 15), {"*": OLIVE, "north": STENCIL}))
+    m.append(box((0.5, 13, 2.5), (15.5, 14, 15.5), GUNMETAL))
+    m.append(box((4, 14, 10), (12, 18, 15), {"*": OLIVE, "up": GRILLE}))
+    m.append(box((1.5, 2.5, 2), (6.5, 7.5, 3), {"*": GUNMETAL, "north": GRILLE}))
+    m.append(dial("north", (11, 8, 2.75), 2.25, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 4, 2.75), 1.25, texture=LAMP, body=GUNMETAL))
+    # Mast and cross boom.
+    for x in (2, 12.5):
+        m.append(box((x, 14, 5), (x + 1.5, 29, 6.5), GUNMETAL))
+    m.append(box((0.5, 26, 4.5), (15.5, 27.5, 7), {"*": GUNMETAL, "north": HAZARD}))
+    # The reel: a shaft with bats on it, across the front of the boom.
+    m += cyl("x", 23, 3, 0.75, 0.25, 15.75, CHROME)
+    for angle_y, angle_z in ((20.5, 3), (25.5, 3), (23, 0.5), (23, 5.5)):
+        m.append(box((1, angle_y - 0.5, angle_z - 0.5), (15, angle_y + 0.5, angle_z + 0.5), "sp_red_iron"))
+    for x in (0.5, 15):
+        m.append(box((x, 19.5, 2), (x + 0.5, 26.5, 4.5), GUNMETAL))
+    # Cutter bar under the reel.
+    m.append(box((0.5, 17.5, 0.25), (15.5, 18.25, 4), {"*": CHROME, "north": HAZARD}))
+    # Beacon on top.
+    m.append(box((6.5, 29, 4.75), (9.5, 29.5, 6.75), GUNMETAL))
+    m.append(dial("up", (8, 30.25, 5.75), 1.5, texture=LAMP, body=GUNMETAL))
+    return m
+
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
           "ore_drill": ore_drill(), "pumpjack": pumpjack(),
           "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
@@ -804,4 +834,5 @@ MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), 
           "polymerization_reactor": polymerization_reactor(),
           "diesel_engine": diesel_engine(),
           "electrolytic_cell": electrolytic_cell(),
-          "chemical_reactor": chemical_reactor(), "gas_holder": gas_holder()}
+          "chemical_reactor": chemical_reactor(), "gas_holder": gas_holder(),
+          "crop_harvester": crop_harvester()}

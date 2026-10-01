@@ -61,6 +61,10 @@ TREE = {
     "gas_holder": ("electrolytic_cell", "gas_holder", "Under Pressure", "Build a gas holder", "goal"),
     "fluid_valve": ("crude_oil", "fluid_valve", "Shut-Off Valve", "Make a fluid valve", "task"),
     "fluid_filter": ("fluid_valve", "fluid_filter", "Strained Relations", "Make a fluid filter", "task"),
+    # Farming (batch 9).
+    "cotton": ("bronze", "cotton", "King Cotton", "Grow cotton", "task"),
+    "sprinkler": ("cotton", "sprinkler", "Make It Rain", "Build a sprinkler", "task"),
+    "crop_harvester": ("steel", "crop_harvester", "Reaping What You Sow", "Build a crop harvester", "goal"),
 }
 # Background of the tab (a block texture), shown behind the tree.
 BACKGROUND = "jugcraft:block/dp_gunmetal"

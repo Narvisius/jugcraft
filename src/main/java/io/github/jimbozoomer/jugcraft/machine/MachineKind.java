@@ -88,7 +88,10 @@ public enum MachineKind implements StringRepresentable {
 	// A 3x2x2 cleanroom with a monitor bank: wafers etched with sulfuric acid into microchips.
 	LITHOGRAPHY_STATION("lithography_station", 60_000, 1_024, 0, 192, 3),
 	// Fluid logistics (batch 8): a 3x3x3 Horton sphere holding 1,024 buckets of one gas. No power.
-	GAS_HOLDER("gas_holder", 0, 0, 0, 0, 0);
+	GAS_HOLDER("gas_holder", 0, 0, 0, 0, 0),
+	// Farming (batch 9): a two-block gantry that harvests and replants ripe crops in the 9x9 field in front of it.
+	// No inputs; three result slots.
+	CROP_HARVESTER("crop_harvester", 20_000, 256, 0, 24, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -130,6 +133,12 @@ public enum MachineKind implements StringRepresentable {
 	public static final int DRILL_RADIUS = 4;
 	/** Ore drill: ticks to mine one ore block (before speed upgrades). */
 	public static final int DRILL_TICKS = 40;
+	/** Crop harvester: powered ticks per crop harvested. */
+	public static final int HARVEST_TICKS = 20;
+	/** Crop harvester: blocks either side of the middle of its field; the field is 9x9, starting the block in front. */
+	public static final int HARVEST_RADIUS = 4;
+	/** Crop harvester: field blocks checked per tick while looking for a ripe crop. */
+	public static final int HARVEST_SCAN_PER_TICK = 9;
 	/** Ore drill: blocks the drill head checks per tick while looking for the next ore (one layer). */
 	public static final int DRILL_SCAN_PER_TICK = (2 * DRILL_RADIUS + 1) * (2 * DRILL_RADIUS + 1);
 	/** Cobblestone generator: ticks per cobblestone (before speed upgrades), with water and lava beside it. */
@@ -231,7 +240,8 @@ public enum MachineKind implements StringRepresentable {
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
 				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL
-				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER || this == CRYSTAL_GROWER;
+				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER || this == CRYSTAL_GROWER
+				|| this == CROP_HARVESTER;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -358,7 +368,8 @@ public enum MachineKind implements StringRepresentable {
 		if (this == AUTO_CRAFTER) {
 			return 1; // Container remainders, such as the empty bucket from a cake.
 		}
-		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == TREE_FARM ? 2 : 0;
+		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == TREE_FARM
+				|| this == CROP_HARVESTER ? 2 : 0;
 	}
 
 	/** mB the machine's fluid tank holds, or 0 without one. */
@@ -391,6 +402,7 @@ public enum MachineKind implements StringRepresentable {
 			case COKE_OVEN -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 0, 1), new Vec3i(-1, 0, 1),
 					new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0), new Vec3i(0, 1, 1), new Vec3i(-1, 1, 1), new Vec3i(0, 2, 0));
 			case ORE_DRILL -> Footprint.tall(2);
+			case CROP_HARVESTER -> Footprint.tall(2);
 			case LARGE_STEAM_ENGINE -> Footprint.cuboid(2, 2, 2);
 			case WATER_WHEEL -> Footprint.tall(2);
 			case STEEL_FOUNDRY -> Footprint.cuboid(2, 5, 2);

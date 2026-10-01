@@ -142,7 +142,10 @@
           "icon": "jugcraft:fluid_valve",
           "text": [
             "Shut-Off Valve: Make a fluid valve.",
-            "Strained Relations: Make a fluid filter."
+            "Strained Relations: Make a fluid filter.",
+            "King Cotton: Grow cotton.",
+            "Make It Rain: Build a sprinkler.",
+            "Reaping What You Sow: Build a crop harvester."
           ]
         }
       ]
@@ -1381,6 +1384,28 @@
             "count": 1
           },
           "recipes": [
+            {
+              "in": [
+                [
+                  "minecraft:coarse_dirt",
+                  1
+                ]
+              ],
+              "out": [
+                "minecraft:dirt",
+                1
+              ],
+              "extra": [
+                [
+                  "jugcraft:cotton_seeds",
+                  0.15
+                ],
+                [
+                  "minecraft:wheat_seeds",
+                  0.1
+                ]
+              ]
+            },
             {
               "in": [
                 [
@@ -3017,6 +3042,66 @@
                 ]
               ]
             }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Farming",
+      "icon": "jugcraft:crop_harvester",
+      "pages": [
+        {
+          "title": "Crop Harvester",
+          "icon": "jugcraft:crop_harvester",
+          "text": [
+            "Two blocks tall. Harvests the ripe crops in the 9x9 field in front of it, starting the block in front: one crop a second at 24 JE/t. It keeps the drops and plants one of the seeds again, and waits when its three result slots are full. Crops on farmland sit at its own height.",
+            "Uses 24 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_gear",
+              "minecraft:shears",
+              "jugcraft:steel_gear",
+              "minecraft:hopper",
+              "jugcraft:machine_casing",
+              "minecraft:hopper",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:crop_harvester",
+            "count": 1
+          }
+        },
+        {
+          "title": "Sprinkler",
+          "icon": "jugcraft:sprinkler",
+          "text": [
+            "Pipe water in (or use a water bucket) and it sprays the crops within 4 blocks, at its height and one below: every 5 seconds it uses 50 mB and gives each growing crop an extra growth tick. Load up to 16 fertilizer (by hand or hopper) and every 30 seconds it spreads one over the 5x5 crops around it."
+          ],
+          "craft": {
+            "grid": [
+              null,
+              "jugcraft:bronze_fluid_pipe",
+              null,
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              null,
+              "minecraft:hopper",
+              null
+            ],
+            "result": "jugcraft:sprinkler",
+            "count": 1
+          }
+        },
+        {
+          "title": "Cotton",
+          "icon": "jugcraft:cotton",
+          "text": [
+            "Sift coarse dirt in the sieve: now and then it turns up cotton seeds (and wheat seeds).",
+            "Plant them on farmland like wheat. A ripe plant gives one to three cotton and more seeds; the harvester, sprinkler and fertilizer all work on it.",
+            "One cotton spins into one string."
           ]
         }
       ]

@@ -2,38 +2,33 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "jugcraft:asphalt_slab",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
-              "count": 2.0,
+              "type": "minecraft:set_count",
+              "count": 2,
               "add": false,
-              "conditions": [
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "jugcraft:asphalt_slab",
-                  "properties": {
-                    "type": "double"
-                  }
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:asphalt_slab",
+                "state": {
+                  "type": "double"
                 }
-              ]
+              }
             },
             {
-              "function": "minecraft:explosion_decay"
+              "type": "minecraft:explosion_decay"
             }
           ]
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ],
   "random_sequence": "jugcraft:blocks/asphalt_slab"
