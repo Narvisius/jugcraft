@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PXP",
+    "GCG",
+    "PXP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "X": "jugcraft:plastic_sheet",
+    "G": "#c:gears/steel",
+    "C": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:diesel_engine",
+    "count": 1
+  }
+}

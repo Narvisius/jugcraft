@@ -8,6 +8,15 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #51 Oil line, batch 4: industry, and the electric look
+- **Polymerization reactor** (2×2×3): refinery gas → plastic pellets; the metal press makes **plastic sheets**.
+- **Asphalt**, **asphalt slab** and **asphalt road line**: walking on them is 1.3× as fast.
+- **Diesel engine** (2×2×3): up to 512 KE/t into a shaft line from diesel or heavy fuel oil, burning only for what is used.
+- Nine oil **advancements**, a **Fuel Values** handbook page, JEI categories for every **fluid machine**, and the oil audit in [docs/BALANCE.md](docs/BALANCE.md#oil).
+- **Electric look** (owner request): cables are 6 px graphite with a glowing green core (emissive), with copper, silver or aluminum collars; the battery box, capacitor bank, charging station, solar panel, electric pump, electric motor and dynamo are restyled in graphite and green light.
+- Fix: a dynamo took up to twice its 128 KE/t on a strong shaft line; it is now capped per tick.
+- Screenshots: a power-gear scene, and the multi-block showroom spaced to fit the oil machines.
+
 ### #50 Oil line, batch 3: fracking and diesel power
 - New fluids: **fracking fluid** and **flowback water** (with buckets).
 - **Chemical mixer** (2×2×2): water + sand + dried kelp → fracking fluid.

@@ -200,6 +200,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return switch (kind) {
 			case FRACKING_RIG -> variant.isOf(PetroFluids.FRACKING_FLUID.source());
 			case DIESEL_GENERATOR -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
+			case DIESEL_ENGINE -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
 			case GAS_TURBINE -> tank == 0 ? FluidFuels.jePerMb(kind, variant.getFluid()) > 0
 					: variant.isOf(PetroFluids.LUBRICANT.source());
 			default -> FluidRecipes.usesFluid(server.getServer(), kind, tank, variant);
@@ -352,6 +353,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case FRACKING_RIG -> tickFrackingRig(level, pos, state);
 			case DIESEL_GENERATOR -> tickFluidGenerator(level, pos, state, MachineKind.DIESEL_OUTPUT);
 			case GAS_TURBINE -> tickFluidGenerator(level, pos, state, MachineKind.TURBINE_OUTPUT);
+			case DIESEL_ENGINE -> tickDieselEngine(level, pos, state);
 			default -> kind.isFluidProcessor() ? tickFluidProcessor(level, pos, state) : tickProcessor(level, pos, state);
 		};
 		if (state.getValue(MachineBlock.LIT) != active) {
@@ -552,6 +554,43 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		burn = Math.max(0, burn - MachineKind.LARGE_ENGINE_BURN_PER_TICK);
 		tank -= MachineKind.LARGE_ENGINE_WATER_PER_TICK;
+		setChanged();
+		return true;
+	}
+
+	/**
+	 * The diesel engine: keeps up to {@link MachineKind#DIESEL_ENGINE_OUTPUT} KE in hand ({@link #burn}) by burning
+	 * fuel from its tank a millibucket at a time ({@link FluidFuels#jePerMb}), and pushes it out of the back of its
+	 * upper right back block into a shaft line. Only what the line takes is spent, so an idle engine burns nothing.
+	 */
+	private boolean tickDieselEngine(ServerLevel level, BlockPos pos, BlockState state) {
+		int output = MachineKind.DIESEL_ENGINE_OUTPUT;
+		maxBurn = output;
+		maxProgress = output;
+		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+			return false;
+		}
+		FluidTank fuel = tanks.input(0);
+		while (burn < output && fuel.millibuckets() > 0) {
+			int value = FluidFuels.jePerMb(kind, fuel.variant.getFluid());
+			if (value <= 0) {
+				break;
+			}
+			fuel.drain(1);
+			burn += value;
+			setChanged();
+		}
+		progress = Math.min(burn, output);
+		if (burn <= 0) {
+			return false;
+		}
+		Direction facing = facing(state);
+		BlockPos shaft = kind.footprint().partPos(pos, facing, MachineKind.DIESEL_ENGINE_OUTPUT_PART);
+		long taken = KineticNetworks.push(level, shaft, facing.getOpposite(), Math.min(burn, output));
+		if (taken <= 0) {
+			return false;
+		}
+		burn -= (int) taken;
 		setChanged();
 		return true;
 	}

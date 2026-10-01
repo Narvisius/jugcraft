@@ -87,7 +87,28 @@
           "icon": "jugcraft:overclock_module",
           "text": [
             "Tinkerer: Make an upgrade module for a powered tool.",
-            "Rocketeer: Make a rocket pack and take to the air."
+            "Rocketeer: Make a rocket pack and take to the air.",
+            "Black Gold: Fill a bucket with crude oil.",
+            "Nodding Donkey: Build a pumpjack over an oil reservoir.",
+            "Fractional Thinking: Build a distillation tower."
+          ]
+        },
+        {
+          "title": "Milestones (6)",
+          "icon": "jugcraft:fracking_rig",
+          "text": [
+            "Tight Spot: Build a fracking rig for shale oil.",
+            "Diesel Power: Build a diesel generator.",
+            "Spool Up: Build a gas turbine.",
+            "Eight Cylinders: Build a diesel engine.",
+            "Fantastic Plastic: Press a plastic sheet."
+          ]
+        },
+        {
+          "title": "Milestones (7)",
+          "icon": "jugcraft:asphalt",
+          "text": [
+            "Hit the Road: Lay asphalt, and walk faster on it."
           ]
         }
       ]
@@ -2025,6 +2046,15 @@
           }
         },
         {
+          "title": "Fuel Values",
+          "icon": "jugcraft:diesel_bucket",
+          "text": [
+            "What a bucket is worth: diesel 256,000 JE (diesel generator) or KE (diesel engine); heavy fuel oil 128,000; gasoline 384,000 and refinery gas 192,000 (gas turbine).",
+            "Refined all the way, a bucket of crude oil gives about 525 mB of diesel, 293 mB of gasoline and 183 mB of gas: about 282,000 JE, for about 40,000 JE of pumping and refining.",
+            "Oil never comes back: every reservoir runs dry."
+          ]
+        },
+        {
           "title": "Diesel Generator",
           "icon": "jugcraft:diesel_generator",
           "text": [
@@ -2068,6 +2098,76 @@
             ],
             "result": "jugcraft:gas_turbine",
             "count": 1
+          }
+        },
+        {
+          "title": "Polymerization Reactor",
+          "icon": "jugcraft:polymerization_reactor",
+          "text": [
+            "Two by two and three blocks tall. Polymerizes refinery gas into plastic: a bucket of gas gives four plastic pellets, every 5 seconds. The metal press flattens each pellet into a plastic sheet.",
+            "Uses 96 JE/t while working. Holds 30,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:cracking_catalyst",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "minecraft:glass",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:polymerization_reactor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Diesel Engine",
+          "icon": "jugcraft:diesel_engine",
+          "text": [
+            "Two wide, two tall and three long. Burns diesel (256 KE a mB) or heavy fuel oil (128) piped into its 8-bucket tank and turns a shaft out of the back of its upper right back block: up to 512 KE/t, twice the large steam engine. It burns only for the rotation the line takes.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:plastic_sheet",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:plastic_sheet",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:diesel_engine",
+            "count": 1
+          }
+        },
+        {
+          "title": "Asphalt",
+          "icon": "jugcraft:asphalt",
+          "text": [
+            "Eight gravel around an asphalt binder (from the vacuum distillation unit) make eight asphalt.",
+            "Walking on asphalt, its slabs or road line is 1.3 times as fast. Three asphalt make six slabs.",
+            "Four asphalt and a yellow dye make four road line blocks; the dashed line points the way you face when you place it."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:gravel",
+              "minecraft:gravel",
+              "minecraft:gravel",
+              "minecraft:gravel",
+              "jugcraft:asphalt_binder",
+              "minecraft:gravel",
+              "minecraft:gravel",
+              "minecraft:gravel",
+              "minecraft:gravel"
+            ],
+            "result": "jugcraft:asphalt",
+            "count": 8
           }
         },
         {

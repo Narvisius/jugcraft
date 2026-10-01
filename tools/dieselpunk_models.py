@@ -618,6 +618,71 @@ def gas_turbine():
     return m
 
 
+def polymerization_reactor():
+    """Two by two and three tall: a jacketed olive reactor vessel with gunmetal heating bands, a domed head carrying
+    the agitator drive, a gas feed line with a red valve, a chrome sight glass showing the hot gas, and a pellet
+    extruder at the base dropping cream pellets into a hopper beside the control panel (the master block)."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Control panel at the front left (the master block).
+    m.append(box((1, 2, 0.5), (15, 12, 6), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(dial("north", (5, 8.5, 0.25), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 8.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    # Skirt and the reactor vessel with its heating jacket bands.
+    m += cyl("y", -1, 18, 9, 2, 8, GUNMETAL)
+    m += cyl("y", -1, 18, 11, 8, 38, OLIVE, GUNMETAL)
+    for y in (12, 20, 28, 35):
+        m += cyl("y", -1, 18, 11.4, y, y + 1.5, GUNMETAL)
+    m.append(box((-3, 22, 6.5), (1, 32, 7), {"*": CHROME, "north": "lubricant_still"}))
+    # Domed head and agitator drive.
+    m += cyl("y", -1, 18, 8, 38, 41, GUNMETAL, CHROME)
+    m += cyl("y", -1, 18, 4, 41, 44, OLIVE)
+    m.append(box((-4, 44, 15), (2, 48, 21), {"*": OLIVE, "east": GRILLE, "west": GRILLE}))
+    # Gas feed line down the right side with its valve.
+    m.append(box((-15, 2, 16), (-12, 34, 19), CHROME))
+    m.append(box((-13, 32, 16), (-11, 34, 19), CHROME))
+    m += wheel("x", 24, 17.5, 1.5, -15.75, -15, "sp_red_iron", CHROME, spokes=False)
+    # Pellet extruder and catch hopper at the front.
+    m.append(box((3, 12, 8), (9, 16, 14), GUNMETAL))
+    m.append(box((4, 12.5, 6.5), (8, 15.5, 8), CHROME))
+    m.append(box((3.5, 14, 14), (8.5, 18, 17), RUBBER))
+    return m
+
+
+def diesel_engine():
+    """Two wide, two tall and three long: a V8 diesel engine on a hazard-striped skid. Gunmetal crankcase, two olive
+    cylinder banks with chrome rocker covers and a gunmetal intake manifold between them, four short sooty exhaust
+    stacks, a grilled radiator and the control panel (the master block) at the front, a day tank down the left, and
+    a flywheel housing at the back with the chrome output shaft leaving the upper right back block."""
+    m = [box((-16, 0, 0), (16, 2, 48), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Control panel (master block, front left) and radiator (front right).
+    m.append(box((1, 2, 0.5), (15, 12, 6), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(dial("north", (5, 8.5, 0.25), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 8.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    m.append(box((-15, 2, 1), (-1, 24, 6), {"*": GUNMETAL, "north": GRILLE, "south": GRILLE}))
+    m.append(box((-15.5, 24, 0.5), (-0.5, 25, 6.5), HAZARD))
+    m.append(box((-9, 8, 6), (-6, 11, 9), RUBBER))
+    # Crankcase and the two cylinder banks.
+    m.append(box((-12, 2, 8), (12, 12, 41), {"*": GUNMETAL, "up": OLIVE}))
+    for x0, x1 in ((2, 12), (-12, -2)):
+        m.append(box((x0, 12, 10), (x1, 21, 39), OLIVE))
+        m.append(box((x0 + 1, 21, 11), (x1 - 1, 23, 38), CHROME))
+        for z in (14, 22, 30):
+            m.append(box((x0 + 2, 23, z), (x1 - 2, 23.5, z + 4), GUNMETAL))
+    m.append(box((-2, 12, 12), (2, 20, 37), GUNMETAL))
+    # Exhaust stacks off the outer side of each bank.
+    for x in (13.5, -13.5):
+        for z in (16, 32):
+            m.append(box((x - 1.5, 14, z - 1.5), (x + 1.5, 17, z + 1.5), EXHAUST))
+            m += cyl("y", x, z, 1.25, 17, 31, EXHAUST)
+    # Day tank down the left side, below the stacks.
+    m.append(box((12, 2, 20), (15.5, 11, 28), {"*": OLIVE, "up": STENCIL}))
+    # Flywheel housing at the back and the output shaft (centre of the upper right back block's back face).
+    m += cyl("z", -8, 22, 7.5, 41, 46, GUNMETAL, CHROME)
+    m.append(box((-12, 2, 41), (12, 12, 46), GUNMETAL))
+    m += cyl("z", -8, 24, 2, 46, 48, CHROME)
+    return m
+
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
           "ore_drill": ore_drill(), "pumpjack": pumpjack(),
           "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
@@ -625,4 +690,6 @@ MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), 
           "vacuum_distillation_unit": vacuum_distillation_unit(), "catalytic_reformer": catalytic_reformer(),
           "chemical_mixer": chemical_mixer(), "fracking_rig": fracking_rig(),
           "flowback_treatment_unit": flowback_treatment_unit(), "diesel_generator": diesel_generator(),
-          "gas_turbine": gas_turbine()}
+          "gas_turbine": gas_turbine(),
+          "polymerization_reactor": polymerization_reactor(),
+          "diesel_engine": diesel_engine()}

@@ -32,7 +32,7 @@ public class CableBlock extends PipeBlock implements EnergyConnectable {
 	private final long rate;
 
 	public CableBlock(Properties properties, long rate) {
-		super(4.0F, properties);
+		super(6.0F, properties);
 		this.rate = rate;
 		BlockState state = this.stateDefinition.any();
 		for (BooleanProperty property : PROPERTY_BY_DIRECTION.values()) {

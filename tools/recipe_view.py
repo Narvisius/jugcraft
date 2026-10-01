@@ -7,6 +7,10 @@ Data packs that change machine recipes are not reflected here.
 Format: {"machines": [{"block": id, "type": recipe type, "recipes": [
   {"in": [[ref, count]], "out": [id, count], "extra": [[id, count, chance]], "ticks": n}]}]}
 Input refs may be tags ("#c:ingots/tin"); the plugin shows every item in the tag.
+
+Fluid machines (tools/petro.py) are listed under "fluid_machines": {"block", "type", "recipes": [
+  {"items": [[ref, count]], "fluids": [[fluid, mB]], "fluid_results": [[fluid, mB]], "results": [[id, count]],
+   "ticks": n}]}.
 """
 from machines import MACHINES, machine_recipes
 
@@ -34,4 +38,14 @@ def build():
                 "ticks": recipe["ticks"],
             })
         machines.append({"block": f"{MOD}:{block}", "type": kind, "recipes": rows})
-    return {"machines": machines}
+    import petro
+    fluid_machines = []
+    for block, recipes in petro.FLUID_RECIPES.items():
+        rows = [{"items": [[ref, count] for ref, count in recipe.get("items", [])],
+                 "fluids": [[fluid, mb] for fluid, mb in recipe.get("fluids", [])],
+                 "fluid_results": [[fluid, mb] for fluid, mb in recipe.get("fluid_results", [])],
+                 "results": [[item, count] for item, count in recipe.get("results", [])],
+                 "ticks": recipe["ticks"]} for recipe in recipes]
+        fluid_machines.append({"block": f"{MOD}:{block}", "type": petro.FLUID_MACHINES[block]["recipe_type"],
+                               "recipes": rows})
+    return {"machines": machines, "fluid_machines": fluid_machines}

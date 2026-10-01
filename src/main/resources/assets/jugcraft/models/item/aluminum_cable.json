@@ -2,74 +2,315 @@
   "parent": "minecraft:block/block",
   "textures": {
     "cable": "jugcraft:block/aluminum_cable",
-    "particle": "jugcraft:block/aluminum_cable"
+    "particle": "jugcraft:block/aluminum_cable",
+    "glow": "jugcraft:block/el_glow"
   },
   "elements": [
     {
       "from": [
-        6,
-        6,
+        5,
+        5,
         0
       ],
       "to": [
-        10,
-        10,
+        11,
+        11,
         16
       ],
       "faces": {
         "north": {
           "uv": [
-            6,
-            6,
-            10,
-            10
+            5,
+            5,
+            11,
+            11
           ],
           "texture": "#cable"
         },
         "south": {
           "uv": [
-            6,
-            6,
-            10,
-            10
+            5,
+            5,
+            11,
+            11
           ],
           "texture": "#cable"
         },
         "east": {
           "uv": [
             0,
-            6,
+            5,
             16,
-            10
+            11
           ],
           "texture": "#cable"
         },
         "west": {
           "uv": [
             0,
-            6,
+            5,
             16,
-            10
+            11
           ],
           "texture": "#cable"
         },
         "up": {
           "uv": [
-            6,
+            5,
             0,
-            10,
+            11,
             16
           ],
           "texture": "#cable"
         },
         "down": {
           "uv": [
-            6,
+            5,
             0,
-            10,
+            11,
             16
           ],
           "texture": "#cable"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        11,
+        1
+      ],
+      "to": [
+        9,
+        11.1,
+        15
+      ],
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        4.9,
+        1
+      ],
+      "to": [
+        9,
+        5,
+        15
+      ],
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        7,
+        1
+      ],
+      "to": [
+        11.1,
+        9,
+        15
+      ],
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        }
+      }
+    },
+    {
+      "from": [
+        4.9,
+        7,
+        1
+      ],
+      "to": [
+        5,
+        9,
+        15
+      ],
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
         }
       }
     }

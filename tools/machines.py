@@ -63,6 +63,10 @@ MACHINES = {
     "diesel_generator": {"display": "Diesel Generator", "lit": True},
     # A 4x2x2 gas turbine: burns gasoline or refinery gas, with a lubricant tank.
     "gas_turbine": {"display": "Gas Turbine", "lit": True},
+    # A 2x2x3 jacketed reactor: refinery gas -> plastic pellets.
+    "polymerization_reactor": {"display": "Polymerization Reactor", "lit": True},
+    # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
+    "diesel_engine": {"display": "Diesel Engine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
 }
 
@@ -74,9 +78,11 @@ PARTS = {
 
 # Cables: display name and JE per tick one push may send through the network.
 # Tiers connect to each other; a network carries as much as its slowest cable (energy/EnergyNetworks).
-CABLES = {"copper_cable": {"display": "Copper Cable", "rate": 256},
-          "silver_cable": {"display": "Silver Cable", "rate": 1_024},
-          "aluminum_cable": {"display": "Aluminum Cable", "rate": 4_096}}
+# Electric look (tools/electric_textures.py): 6 pixels thick, graphite with a glowing green core; the collars at the
+# ends show the tier's metal.
+CABLES = {"copper_cable": {"display": "Copper Cable", "rate": 256, "size": 6},
+          "silver_cable": {"display": "Silver Cable", "rate": 1_024, "size": 6},
+          "aluminum_cable": {"display": "Aluminum Cable", "rate": 4_096, "size": 6}}
 
 # Item logistics (see docs/TECH_TREE.md#item-logistics). The tube is a 6-pixel transmitter; the
 # extractor and sorter face any of six directions. Models: tools/logistics_models.py.
@@ -222,6 +228,10 @@ STATS = {
     # 4x2x2. 512 JE/t: 1.33 mB of gasoline a tick (384 JE/mB) or 2.67 mB of refinery gas (192 JE/mB);
     # 1 mB of lubricant every 20 ticks.
     "gas_turbine": {"capacity": 120_000, "output_per_tick": 2_048, "generation_per_tick": 512, "tank": 16_000},
+    # 2x2x3. 96 JE/t; a bucket of refinery gas per 100 ticks.
+    "polymerization_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
+    # 2x2x3. Up to 512 KE/t: 2 mB of diesel a tick (256 KE/mB) or 4 mB of heavy fuel oil, only for what it delivers.
+    "diesel_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 512, "tank": 8_000},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -415,6 +425,11 @@ CRAFTING = {
     "gas_turbine": (["PBP", "DCD", "PGP"], {"P": "#c:plates/steel", "B": "minecraft:iron_bars",
                                             "D": "jugcraft:diesel_generator", "C": "jugcraft:advanced_circuit",
                                             "G": "#c:gears/steel"}, 1),
+    "diesel_engine": (["PXP", "GCG", "PXP"], {"P": "#c:plates/steel", "X": "jugcraft:plastic_sheet",
+                                              "G": "#c:gears/steel", "C": "jugcraft:machine_casing"}, 1),
+    "polymerization_reactor": (["PCP", "TGT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:cracking_catalyst",
+                                                       "T": "jugcraft:steel_tank", "G": "minecraft:glass",
+                                                       "M": "jugcraft:machine_casing"}, 1),
     "cracking_catalyst": (["BSB", "SNS", "BSB"], {"B": "jugcraft:bauxite", "S": "minecraft:sand",
                                                   "N": "#c:ingots/nickel"}, 4),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",
@@ -502,7 +517,10 @@ ALLOY_SMELTER = [
 def _metal_press():
     from materials import COMPONENTS, ingot_id
     return [{"input": ingot_id(metal), "output": f"jugcraft:{metal}_plate", "count": 1, "ticks": 100,
-             "features": [FEATURE]} for metal in COMPONENTS["plate"]]
+             "features": [FEATURE]} for metal in COMPONENTS["plate"]] + [
+        # Petrochemistry: plastic pellets from the polymerization reactor are pressed into sheets.
+        {"input": "jugcraft:plastic_pellets", "output": "jugcraft:plastic_sheet", "count": 1, "ticks": 60,
+         "features": [FEATURE, "crude_oil"]}]
 
 
 def _wire_drawer():

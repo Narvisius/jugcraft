@@ -117,6 +117,27 @@ The base every oil machine is built on; on its own it adds nothing a player can 
 - 120,000 JE buffer, up to 2,048 JE/t out of every part. Recipe: steel plates, iron bars, two diesel generators, an advanced circuit and a steel gear.
 - Balance: the gasoline and gas from one bucket of crude oil (293 mB and 183 mB) give about 147,700 JE here, on top of the diesel's 134,400 JE. Audited in BALANCE.md in commit 19.
 
+### Plastics (batch 4, commit 16)
+- The **polymerization reactor** is two by two and three tall: a jacketed olive vessel with heating bands, a domed head with the agitator drive, a valved gas feed line, a sight glass and a pellet extruder by the control panel.
+- **1,000 mB of refinery gas → 4 plastic pellets**, every 100 ticks at 96 JE/t. The **metal press** flattens a pellet into a **plastic sheet** (60 ticks).
+- Plastic sheets go into later machines and parts; the first is the diesel engine (commit 18).
+- Refinery gas now has two uses: burning it in the gas turbine (192,000 JE a bucket) or making four plastic sheets.
+- Recipe: steel plates, a cracking catalyst, two steel tanks, glass and a machine casing.
+
+### Asphalt (batch 4, commit 17)
+- **Asphalt:** 8 gravel around 1 asphalt binder → 8 asphalt. Dark grey with pale and rust-brown aggregate.
+- **Asphalt Slab:** 3 asphalt → 6 slabs. **Asphalt Road Line:** 4 asphalt + yellow dye → 4, with a dashed yellow centre line that points the way the player faced when placing it.
+- Walking on any of them is **1.3 times as fast** (vanilla block speed factor; soul sand is 0.4). Stone-hard, mined with a pickaxe.
+- A bucket of heavy fuel oil gives 2 binder, so 16 asphalt: the vacuum unit's residue now has a use.
+- Code: `chemistry/PetroBlocks` (`BLOCKS` in `tools/petro.py`).
+
+### Diesel engine (batch 4, commit 18)
+- The **diesel engine** is two wide, two tall and three long: a V8 with olive cylinder banks under chrome rocker covers, four exhaust stacks, a radiator and control panel at the front, a day tank and a flywheel housing at the back.
+- It turns a shaft out of the back of its **upper right back block** at up to **512 KE/t**, twice the large steam engine. Diesel gives 256 KE/mB and heavy fuel oil 128 KE/mB, the same values as the diesel generator (`FluidFuels`).
+- It burns fuel only for the rotation the shaft line actually takes, so an idle or lightly loaded engine saves fuel.
+- Through a dynamo (75%) a millibucket of diesel gives 192 JE, less than the diesel generator's 256: the generator stays the better way to make JE, the engine the way to drive machines, conveyors and belts directly.
+- Recipe: four steel plates, two plastic sheets (the first use of plastic), two steel gears and a machine casing.
+
 ### What refining gives (batch 2 summary)
 From one bucket of crude oil, with every byproduct refined:
 
@@ -127,6 +148,12 @@ From one bucket of crude oil, with every byproduct refined:
 | Reforming all the naphtha | 325 naphtha | 292.5 gasoline, 32.5 gas |
 
 So a bucket of crude oil cracked all the way gives about 525 mB of diesel, 293 mB of gasoline and 183 mB of refinery gas, for about 12,800 + 6,400 + 4,680 = 23,880 JE of refining. What those fuels are worth in generators is set in batch 3 (diesel generator, gas turbine) and audited in BALANCE.md (commit 19).
+
+### Handbook, advancements, recipe viewer and balance (batch 4, commit 19)
+- **Advancements:** Black Gold (crude oil bucket), Nodding Donkey, Fractional Thinking, Tight Spot, Diesel Power, Spool Up, Eight Cylinders, Fantastic Plastic and Hit the Road, under Forged in Coke.
+- **Handbook:** a Fuel Values page in the Oil chapter, plus pages for every machine.
+- **JEI:** each fluid machine has a category showing its item and fluid inputs and outputs (`recipe_view.json` → `fluid_machines`).
+- **Balance:** the whole chain, per bucket of crude, is in [BALANCE.md](../BALANCE.md#oil).
 
 ## Connections
 - Existing input producer: oil reservoirs (commit 3) through the pumpjack; oil sand and bitumen (existing rock and item) through the extractor; water from pumps.
@@ -161,6 +188,9 @@ Fabric API's fluid rendering registry draws the fluid. Textures are original, dr
 - Game test `mixerMakesFrackingFluid`.
 - Game test `frackingRigFreesShaleOil` (it takes fracking fluid through Fabric's fluid API, brings up crude oil, gas and flowback, and draws on the shale).
 - Game test `treatmentCleansFlowback`.
+- Game test `reactorMakesPlasticPellets`.
+- Game test `dieselEngineTurnsADynamo` (a dynamo behind the output block makes JE, and the engine burns only about what the dynamo takes).
+- Game test `asphaltIsFasterToWalkOn` (all three blocks have the 1.3 speed factor and need a pickaxe).
 - Game test `gasTurbineNeedsLubricant` (no energy and no gasoline burnt without lubricant; with it, 384 JE per mB of gasoline and a little lubricant used).
 - Game test `dieselGeneratorBurnsDiesel` (its tank refuses crude oil through Fabric's fluid API, and each mB of diesel burnt adds exactly 256 JE).
 - Game test `pumpjackPumpsOil`: a powered pumpjack over pumpable oil fills its tank with crude oil and the reservoir goes down by as much.

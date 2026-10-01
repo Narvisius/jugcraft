@@ -10,6 +10,8 @@ from pathlib import Path
 
 from PIL import Image
 
+import electric_textures
+
 ROOT = Path(__file__).resolve().parents[1]
 TEX = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures"
 
@@ -456,36 +458,6 @@ def _transmitter(palette, node, ring):
 
 
 RUBBER = [(22, 20, 20), (36, 34, 33), (52, 50, 48), (74, 72, 70)]
-
-
-def cable_texture():
-    """Black rubber insulation with a copper junction node."""
-    def node(x, y):
-        edge = x in (6, 9) or y in (6, 9)
-        return COPPER[0] if edge else COPPER[2 if (x + y) % 2 else 1]
-    return _transmitter(RUBBER, node, [COPPER[0], COPPER[1], COPPER[1], COPPER[0]])
-
-
-def silver_cable_texture():
-    """Dark blue-gray insulation with a bright silver junction node."""
-    insulation = [(28, 32, 44), (42, 48, 64), (58, 66, 86), (80, 90, 112)]
-    silver = [(150, 154, 164), (200, 204, 212), (236, 238, 244)]
-    def node(x, y):
-        edge = x in (6, 9) or y in (6, 9)
-        return silver[0] if edge else silver[2 if (x + y) % 2 else 1]
-    return _transmitter(insulation, node, [silver[0], silver[1], silver[1], silver[0]])
-
-
-def aluminum_cable_texture():
-    """Armored power line: steel-gray sheath with a red high-power stripe and an aluminum node."""
-    sheath = [(52, 56, 62), (78, 84, 92), (104, 110, 118), (130, 136, 144)]
-    aluminum = [(170, 176, 182), (208, 212, 218), (236, 238, 242)]
-    def node(x, y):
-        edge = x in (6, 9) or y in (6, 9)
-        if edge:
-            return (170, 40, 30)
-        return aluminum[2 if (x + y) % 2 else 1]
-    return _transmitter(sheath, node, [(170, 40, 30), aluminum[1], aluminum[1], (170, 40, 30)])
 
 
 def item_tube_texture():
@@ -1278,14 +1250,18 @@ def machines():
     save(window(971, [(36, 40, 30)], glow=[(255, 170, 40), (255, 214, 110), (230, 140, 30)]), "block", "diesel_generator_front_on")
     save(window(972, [(34, 38, 44), (46, 52, 60)]), "block", "gas_turbine_front")
     save(window(972, [(34, 38, 44)], glow=[(255, 170, 40), (255, 214, 110), (230, 140, 30)]), "block", "gas_turbine_front_on")
+    save(window(973, [(44, 46, 40), (58, 60, 52)]), "block", "polymerization_reactor_front")
+    save(window(973, [(44, 46, 40)], glow=[(255, 170, 40), (255, 214, 110), (230, 140, 30)]), "block", "polymerization_reactor_front_on")
+    save(window(974, [(36, 40, 30), (48, 54, 40)]), "block", "diesel_engine_front")
+    save(window(974, [(36, 40, 30)], glow=[(255, 170, 40), (255, 214, 110), (230, 140, 30)]), "block", "diesel_engine_front_on")
     save(jaws(956, False), "block", "ore_drill_front")
     save(jaws(956, True), "block", "ore_drill_front_on")
     save(window(953, [(30, 26, 26)], glow=[(255, 200, 80), (255, 236, 150), (250, 150, 40)]), "block", "steel_foundry_front_on")
     save(circuit(False), "item", "basic_circuit")
     save(circuit(True), "item", "advanced_circuit")
-    save(cable_texture(), "block", "copper_cable")
-    save(silver_cable_texture(), "block", "silver_cable")
-    save(aluminum_cable_texture(), "block", "aluminum_cable")
+    save(electric_textures.cable(electric_textures.COPPER), "block", "copper_cable")
+    save(electric_textures.cable(electric_textures.SILVER), "block", "silver_cable")
+    save(electric_textures.cable(electric_textures.ALUMINUM), "block", "aluminum_cable")
     save(pipe_texture(), "block", "bronze_fluid_pipe")
     save(steel_pipe_texture(), "block", "steel_fluid_pipe")
     save(item_tube_texture(), "block", "brass_item_pipe")
@@ -1367,6 +1343,7 @@ def main():
     steampunk_textures.draw_all()
     import dieselpunk_textures
     dieselpunk_textures.draw_all()
+    electric_textures.draw_all()
     import petro_textures
     petro_textures.draw_all(save, save_animation)
 

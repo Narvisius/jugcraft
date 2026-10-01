@@ -193,6 +193,6 @@ def feature_of(entry_id):
     if entry_id in machine_blocks() or entry_id in machine_items():
         return FEATURE
     import petro
-    if entry_id in petro.petro_items():
+    if entry_id in petro.petro_items() or entry_id in petro.petro_blocks():
         return FEATURE
     raise KeyError(entry_id)

@@ -3,6 +3,8 @@ package io.github.jimbozoomer.jugcraft.test;
 import io.github.jimbozoomer.jugcraft.client.HandbookScreen;
 import io.github.jimbozoomer.jugcraft.client.MachineScreen;
 import io.github.jimbozoomer.jugcraft.client.ProspectorScreen;
+import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
+import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.kinetic.BeltPulleyBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.ElectricMotorBlock;
@@ -42,6 +44,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -68,8 +71,11 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			server.runCommand("gamerule minecraft:send_command_feedback false");
 			server.runCommand("time set noon");
 			server.runCommand("weather clear");
-			server.runCommand("fill %d %d %d %d %d %d minecraft:smooth_stone".formatted(x - 10, y - 1, z - 10, x + 92, y - 1, z + 8));
-			server.runCommand("fill %d %d %d %d %d %d minecraft:air".formatted(x - 10, y, z - 10, x + 92, y + 14, z + 8));
+			// A floor under the showroom and the scenes, with the air above it cleared. Set block by block on the
+			// server: a fill command cannot reach chunks that are not loaded yet, and the multi-block row runs far
+			// beyond the player.
+			int end = x + 20 + largeRowLength() + 8;
+			server.runOnServer(minecraft -> clearFloor(minecraft.overworld(), new BlockPos(x - 26, y, z - 10), new BlockPos(end, y + 14, z + 12)));
 			server.runOnServer(minecraft -> buildShowroom(minecraft.overworld(), new BlockPos(x, y, z - 5)));
 
 			// Hide the HUD, hand and chat so the screenshots show only the machines. In 26.3 this is the "toggle GUI"
@@ -140,9 +146,18 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.getInput().pressKey(options -> options.keyToggleGui);
 			server.runCommand("clear @p");
 
-			// Multi-block machines, ten blocks away, in five views along the row (the wind turbine is nine tall; the
-			// oil machines are at the far end).
-			for (int view = 0; view < 5; view++) {
+			// Power gear in the electric look: a line of glowing cables from a solar panel through a battery box, a
+			// capacitor bank and a charging station to an electric motor turning a dynamo, and an electric pump.
+			server.runOnServer(minecraft -> buildPowerGear(minecraft.overworld(), new BlockPos(x - 24, y, z + 2)));
+			server.runCommand("tp @p %d %d %d 180 18".formatted(x - 17, y + 2, z + 9));
+			context.waitTicks(40);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_power_gear");
+
+			// Multi-block machines, ten blocks away, in views twelve blocks apart along the row (the wind turbine is
+			// nine tall; the oil machines are at the far end).
+			int views = (largeRowLength() + 11) / 12;
+			for (int view = 0; view < views; view++) {
 				server.runCommand("tp @p %d %d %d 180 8".formatted(x + 24 + view * 12, y + 3, z + 5));
 				context.waitTicks(20);
 				singleplayer.getConnection().waitForChunksRender();
@@ -326,20 +341,107 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 		throw new IllegalArgumentException(target.id);
 	}
 
+	/** Smooth stone one below {@code from}'s level across the area, and air from there up to {@code to}. */
+	private static void clearFloor(ServerLevel level, BlockPos from, BlockPos to) {
+		BlockState floor = Blocks.SMOOTH_STONE.defaultBlockState();
+		BlockState air = Blocks.AIR.defaultBlockState();
+		for (int bx = from.getX(); bx <= to.getX(); bx++) {
+			for (int bz = from.getZ(); bz <= to.getZ(); bz++) {
+				level.setBlock(new BlockPos(bx, from.getY() - 1, bz), floor, 2);
+				for (int by = from.getY(); by <= to.getY(); by++) {
+					BlockPos pos = new BlockPos(bx, by, bz);
+					if (!level.getBlockState(pos).isAir()) {
+						level.setBlock(pos, air, 2);
+					}
+				}
+			}
+		}
+	}
+
+	/** Blocks a multi-block machine takes across its front (it extends to its right, +x when facing south). */
+	private static int width(MachineKind kind) {
+		return 1 + kind.footprint().offsets().stream().mapToInt(offset -> Math.abs(offset.getX())).max().orElse(0);
+	}
+
+	/** Length of the multi-block row: each machine's width plus a two-block gap. */
+	private static int largeRowLength() {
+		int length = 0;
+		for (MachineKind kind : MachineKind.values()) {
+			if (kind.isLarge()) {
+				length += width(kind) + 2;
+			}
+		}
+		return length;
+	}
+
+	/**
+	 * Power gear in the electric look, along x from {@code start}: a solar panel, a charged battery box, a capacitor
+	 * bank and a charging station holding a drill, joined by copper, silver and aluminum cables (one rising over the
+	 * bank), then a charged electric motor turning a shaft into a dynamo, and an electric pump. All face south.
+	 */
+	private static void buildPowerGear(ServerLevel level, BlockPos start) {
+		level.setBlock(start, JugcraftMachines.MACHINES.get(MachineKind.SOLAR_PANEL).defaultBlockState()
+				.setValue(MachineBlock.FACING, Direction.SOUTH), 3);
+		BlockPos battery = start.east(2);
+		level.setBlock(battery, JugcraftMachines.MACHINES.get(MachineKind.BATTERY_BOX).defaultBlockState()
+				.setValue(MachineBlock.FACING, Direction.SOUTH), 3);
+		if (level.getBlockEntity(battery) instanceof MachineBlockEntity box && box.energyFor(null) instanceof SimpleEnergyStorage energy) {
+			energy.setAmount(energy.getCapacity());
+		}
+		BlockPos bank = start.east(4);
+		MachineBlock bankBlock = JugcraftMachines.MACHINES.get(MachineKind.CAPACITOR_BANK);
+		BlockState bankState = bankBlock.defaultBlockState().setValue(MachineBlock.FACING, Direction.SOUTH);
+		level.setBlock(bank, bankState, 3);
+		((LargeMachineBlock) bankBlock).setPlacedBy(level, bank, bankState, null, ItemStack.EMPTY);
+		BlockPos station = start.east(7);
+		BlockState stationState = JugcraftTools.CHARGING_STATION.defaultBlockState().setValue(ChargingStationBlock.FACING, Direction.SOUTH);
+		level.setBlock(station, stationState, 3);
+		level.setBlock(station.above(), stationState.setValue(ChargingStationBlock.HALF, DoubleBlockHalf.UPPER), 3);
+		if (level.getBlockEntity(station) instanceof ChargingStationBlockEntity holder) {
+			holder.setTool(new ItemStack(JugcraftTools.MINING_DRILL));
+		}
+		BlockPos motor = start.east(9);
+		level.setBlock(motor, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST), 3);
+		if (level.getBlockEntity(motor) instanceof ElectricMotorBlockEntity motorEntity) {
+			motorEntity.energy().setAmount(ElectricMotorBlockEntity.CAPACITY);
+		}
+		level.setBlock(motor.east(), JugcraftKinetics.IRON_SHAFT.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.X), 3);
+		level.setBlock(motor.east(2), JugcraftKinetics.DYNAMO.defaultBlockState().setValue(DynamoBlock.FACING, Direction.SOUTH), 3);
+		level.setBlock(start.east(13), JugcraftFluids.ELECTRIC_PUMP.defaultBlockState(), 3);
+		// Cables last: copper over the battery, silver across the top of the bank, aluminum to the rest.
+		List<BlockPos> copper = List.of(start.east(), start.east(3), start.east(3).above(), start.east(3).above(2));
+		List<BlockPos> silver = List.of(start.east(4).above(2), start.east(5).above(2), start.east(6).above(2), start.east(6).above());
+		List<BlockPos> aluminum = List.of(start.east(6), start.east(8), start.east(12));
+		placeCables(level, JugcraftMachines.COPPER_CABLE, copper);
+		placeCables(level, JugcraftMachines.SILVER_CABLE, silver);
+		placeCables(level, JugcraftMachines.ALUMINUM_CABLE, aluminum);
+		for (List<BlockPos> line : List.of(copper, silver, aluminum)) {
+			for (BlockPos pos : line) {
+				level.setBlock(pos, Block.updateFromNeighbourShapes(level.getBlockState(pos), level, pos), 3);
+			}
+		}
+	}
+
+	private static void placeCables(ServerLevel level, Block cable, List<BlockPos> positions) {
+		for (BlockPos pos : positions) {
+			level.setBlock(pos, cable.defaultBlockState(), 3);
+		}
+	}
+
 	/**
 	 * One-block machines side by side (in MachineKind order, from x - 7), all facing south towards the
-	 * camera; multi-block machines in a second group 20 blocks east, four apart.
+	 * camera; multi-block machines in a second group 20 blocks east, each its own width plus two apart.
 	 */
 	private static void buildShowroom(ServerLevel level, BlockPos row) {
-		int large = 0;
+		int large = 20;
 		for (MachineKind kind : MachineKind.values()) {
 			MachineBlock block = JugcraftMachines.MACHINES.get(kind);
 			BlockState state = block.defaultBlockState().setValue(MachineBlock.FACING, Direction.SOUTH);
 			if (kind.isLarge()) {
-				BlockPos pos = row.offset(20 + large * 4, 0, 0);
+				BlockPos pos = row.offset(large, 0, 0);
 				level.setBlock(pos, state, 3);
 				((LargeMachineBlock) block).setPlacedBy(level, pos, state, null, ItemStack.EMPTY);
-				large++;
+				large += width(kind) + 2;
 			} else {
 				level.setBlock(row.offset(-7 + singleIndex(kind), 0, 0), state, 3);
 			}

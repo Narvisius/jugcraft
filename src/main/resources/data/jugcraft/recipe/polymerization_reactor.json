@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "TGT",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:cracking_catalyst",
+    "T": "jugcraft:steel_tank",
+    "G": "minecraft:glass",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:polymerization_reactor",
+    "count": 1
+  }
+}

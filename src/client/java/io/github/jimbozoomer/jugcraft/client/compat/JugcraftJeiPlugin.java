@@ -33,6 +33,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 
 /**
  * JEI integration (optional: loaded by JEI through the "jei_mod_plugin" entrypoint, never otherwise).
@@ -51,7 +52,21 @@ public class JugcraftJeiPlugin implements IModPlugin {
 	private record Machine(Item block, IRecipeType<ViewRecipe> type, List<ViewRecipe> recipes) {
 	}
 
+	/** A fluid machine's recipe (FLUID_RECIPES in tools/petro.py): items and fluids in, fluids and items out, in mB. */
+	public record FluidViewRecipe(List<List<ItemStack>> items, List<FluidAmount> fluids, List<FluidAmount> fluidResults,
+			List<ItemStack> results, int ticks) {
+	}
+
+	public record FluidAmount(Fluid fluid, int mb) {
+	}
+
+	private record FluidMachine(Item block, IRecipeType<FluidViewRecipe> type, List<FluidViewRecipe> recipes) {
+	}
+
 	private List<Machine> machines;
+	private List<FluidMachine> fluidMachines = new ArrayList<>();
+	/** JEI's fluid amount for one bucket on this platform (81,000 droplets on Fabric). */
+	private static long bucketVolume = 1000;
 
 	@Override
 	public Identifier getPluginUid() {
@@ -68,9 +83,14 @@ public class JugcraftJeiPlugin implements IModPlugin {
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		machines = load(); // Fresh on every JEI reload, so recipes and categories use the same types.
+		fluidMachines = loadFluidMachines();
+		bucketVolume = registration.getJeiHelpers().getPlatformFluidHelper().bucketVolume();
 		IGuiHelper gui = registration.getJeiHelpers().getGuiHelper();
 		for (Machine machine : machines) {
 			registration.addRecipeCategories(new MachineCategory(gui, machine));
+		}
+		for (FluidMachine machine : fluidMachines) {
+			registration.addRecipeCategories(new FluidMachineCategory(gui, machine));
 		}
 	}
 
@@ -79,11 +99,17 @@ public class JugcraftJeiPlugin implements IModPlugin {
 		for (Machine machine : machines()) {
 			registration.addRecipes(machine.type(), machine.recipes());
 		}
+		for (FluidMachine machine : fluidMachines) {
+			registration.addRecipes(machine.type(), machine.recipes());
+		}
 	}
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		for (Machine machine : machines()) {
+			registration.addCraftingStation(machine.type(), machine.block());
+		}
+		for (FluidMachine machine : fluidMachines) {
 			registration.addCraftingStation(machine.type(), machine.block());
 		}
 	}
@@ -109,6 +135,55 @@ public class JugcraftJeiPlugin implements IModPlugin {
 			Jugcraft.LOGGER.warn("Could not read Jugcraft's recipe list for JEI", e);
 		}
 		return result;
+	}
+
+	private static List<FluidMachine> loadFluidMachines() {
+		List<FluidMachine> result = new ArrayList<>();
+		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(DATA);
+		if (resource.isEmpty()) {
+			return result;
+		}
+		try (Reader reader = resource.get().openAsReader()) {
+			JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
+			if (!root.has("fluid_machines")) {
+				return result;
+			}
+			for (JsonElement element : root.getAsJsonArray("fluid_machines")) {
+				JsonObject machine = element.getAsJsonObject();
+				Item block = item(machine.get("block").getAsString());
+				IRecipeType<FluidViewRecipe> type = IRecipeType.create(Jugcraft.id(machine.get("type").getAsString()), FluidViewRecipe.class);
+				List<FluidViewRecipe> recipes = new ArrayList<>();
+				for (JsonElement row : machine.getAsJsonArray("recipes")) {
+					JsonObject recipe = row.getAsJsonObject();
+					List<List<ItemStack>> items = new ArrayList<>();
+					for (JsonElement input : recipe.getAsJsonArray("items")) {
+						JsonArray pair = input.getAsJsonArray();
+						items.add(stacks(pair.get(0).getAsString(), pair.get(1).getAsInt()));
+					}
+					List<ItemStack> results = new ArrayList<>();
+					for (JsonElement output : recipe.getAsJsonArray("results")) {
+						JsonArray pair = output.getAsJsonArray();
+						results.add(new ItemStack(item(pair.get(0).getAsString()), pair.get(1).getAsInt()));
+					}
+					recipes.add(new FluidViewRecipe(items, fluids(recipe.getAsJsonArray("fluids")),
+							fluids(recipe.getAsJsonArray("fluid_results")), results, recipe.get("ticks").getAsInt()));
+				}
+				result.add(new FluidMachine(block, type, recipes));
+			}
+		} catch (Exception e) {
+			Jugcraft.LOGGER.warn("Could not read Jugcraft's fluid recipe list for JEI", e);
+		}
+		return result;
+	}
+
+	private static List<FluidAmount> fluids(JsonArray array) {
+		List<FluidAmount> amounts = new ArrayList<>();
+		for (JsonElement entry : array) {
+			JsonArray pair = entry.getAsJsonArray();
+			amounts.add(new FluidAmount(BuiltInRegistries.FLUID.getValue(Identifier.parse(pair.get(0).getAsString())),
+					pair.get(1).getAsInt()));
+		}
+		return amounts;
 	}
 
 	private static ViewRecipe recipe(JsonObject row) {
@@ -209,6 +284,76 @@ public class JugcraftJeiPlugin implements IModPlugin {
 				String chance = Math.round(recipe.chances().get(i) * 100) + "%";
 				graphics.text(font, chance, 118 + i * 24 + 9 - font.width(chance) / 2, 28, TEXT, false);
 			}
+		}
+	}
+
+	/** A fluid machine's recipes: items, then fluids in; a progress arrow; fluids, then items out. */
+	private static final class FluidMachineCategory implements IRecipeCategory<FluidViewRecipe> {
+		private static final int SLOT_Y = 6;
+		private final FluidMachine machine;
+		private final IDrawable icon;
+
+		FluidMachineCategory(IGuiHelper gui, FluidMachine machine) {
+			this.machine = machine;
+			this.icon = gui.createDrawableItemLike(machine.block());
+		}
+
+		@Override
+		public IRecipeType<FluidViewRecipe> getRecipeType() {
+			return machine.type();
+		}
+
+		@Override
+		public Component getTitle() {
+			return new ItemStack(machine.block()).getHoverName();
+		}
+
+		@Override
+		public int getWidth() {
+			return 164;
+		}
+
+		@Override
+		public int getHeight() {
+			return 38;
+		}
+
+		@Override
+		public IDrawable getIcon() {
+			return icon;
+		}
+
+		@Override
+		public void setRecipe(IRecipeLayoutBuilder builder, FluidViewRecipe recipe, IFocusGroup focuses) {
+			int x = 0;
+			for (List<ItemStack> input : recipe.items()) {
+				builder.addInputSlot(x, SLOT_Y).setStandardSlotBackground().addItemStacks(input);
+				x += 18;
+			}
+			for (FluidAmount fluid : recipe.fluids()) {
+				builder.addInputSlot(x, SLOT_Y).setStandardSlotBackground().add(fluid.fluid(), fluid.mb() * bucketVolume / 1000);
+				x += 18;
+			}
+			x = 92;
+			for (FluidAmount fluid : recipe.fluidResults()) {
+				builder.addOutputSlot(x, SLOT_Y).setOutputSlotBackground().add(fluid.fluid(), fluid.mb() * bucketVolume / 1000);
+				x += 18;
+			}
+			for (ItemStack result : recipe.results()) {
+				builder.addOutputSlot(x, SLOT_Y).setOutputSlotBackground().add(result);
+				x += 18;
+			}
+		}
+
+		@Override
+		public void createRecipeExtras(IRecipeExtrasBuilder builder, FluidViewRecipe recipe, IFocusGroup focuses) {
+			builder.addAnimatedRecipeArrow(recipe.ticks()).setPosition(60, SLOT_Y + 1);
+		}
+
+		@Override
+		public void draw(FluidViewRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+			var font = Minecraft.getInstance().font;
+			graphics.text(font, String.format(Locale.ROOT, "%.1f s", recipe.ticks() / 20.0), 0, 28, TEXT, false);
 		}
 	}
 }

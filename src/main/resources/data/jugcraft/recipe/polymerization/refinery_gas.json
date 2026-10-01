@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:polymerization",
+  "fluids": [
+    {
+      "fluid": "jugcraft:refinery_gas",
+      "amount": 1000
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:plastic_pellets",
+      "count": 4
+    }
+  ],
+  "time": 100
+}

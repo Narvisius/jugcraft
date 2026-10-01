@@ -61,7 +61,7 @@ Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_
 | 9 | Vacuum distillation | Heavy fuel oil → lubricant and asphalt binder. |
 | 10 | Reformer | Naphtha → high-octane gasoline. |
 
-### Batch 3: fracking and diesel power (#50)
+### Batch 3: fracking and diesel power (done, #50)
 
 | # | Commit | What it adds |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_
 | 14 | Diesel generator | A big engine that burns diesel (or heavy fuel oil, less well) for high JE output. |
 | 15 | Gas turbine | Burns refinery gas or gasoline for the highest output, with lubricant upkeep. |
 
-### Batch 4: industry
+### Batch 4: industry (#51)
 
 | # | Commit | What it adds |
 | --- | --- | --- |
@@ -79,7 +79,7 @@ Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_
 | 17 | Asphalt | Asphalt binder + gravel → asphalt road blocks that are quicker to walk on. |
 | 18 | Diesel engine | A kinetic engine that turns shafts on diesel. |
 | 19 | Handbook, advancements and JEI | The oil chapter, advancements, recipe viewer categories and the oil energy audit in [BALANCE.md](../BALANCE.md). |
-| 20 | Visual polish | Animated pumpjack and rig, flare stacks, and screenshots. |
+| 20 | Visual polish | In-game screenshots of the oil machines and a power-gear scene. The owner's restyle of the cables and power gear (the electric look, [ART_DIRECTION.md](../ART_DIRECTION.md#electric-power-gear-and-the-high-tech-tiers)) rode along in this batch. The animated pumpjack and rig and flare stacks were not done: they need a block-entity renderer like the kinetic rotors, and are left for a later polish pass. |
 
 ### Rules for the oil line
 

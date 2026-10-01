@@ -8,7 +8,7 @@ import random
 
 from PIL import Image
 
-from petro import FLUIDS
+from petro import FLUIDS, GASES
 
 FRAMES = 16
 
@@ -132,10 +132,74 @@ def asphalt_binder():
     return img
 
 
+def plastic_pellets():
+    """Plastic pellets: a little pile of glossy off-white nurdles, each with a bright highlight."""
+    rng = random.Random(962)
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    centres = [(rng.uniform(3, 13), rng.uniform(6 + abs(8 - x) * 0.35, 14)) for x in range(18)]
+    for cx, cy in sorted(centres, key=lambda c: c[1]):
+        for y in range(16):
+            for x in range(16):
+                d = (x - cx) ** 2 + (y - cy) ** 2
+                if d <= 2.4:
+                    c = (232, 230, 220) if d < 0.8 and x <= cx else (204, 202, 190) if y <= cy else (168, 166, 156)
+                    img.putpixel((x, y), c + (255,))
+    return img
+
+
+def plastic_sheet():
+    """Plastic sheet: a thin, slightly translucent-looking cream panel seen at an angle, with a moulded edge."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(3, 14):
+        shift = (13 - y) // 3
+        for x in range(2 + shift, 13 + shift):
+            edge = y in (3, 13) or x in (2 + shift, 12 + shift)
+            c = (150, 146, 132) if edge else (226, 222, 204) if (x + 2 * y) % 9 else (240, 238, 224)
+            if not edge and x - shift < 6 and y < 7:
+                c = (246, 244, 234)
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def asphalt(seed=963):
+    """Asphalt: dark grey-black binder with pale and rust-brown aggregate chips, worn a little lighter in patches.
+    Tiles seamlessly (no edge treatment)."""
+    rng = random.Random(seed)
+    img = Image.new("RGBA", (16, 16))
+    for y in range(16):
+        for x in range(16):
+            base = 46 + rng.randint(-5, 5) + (6 if (x * 7 + y * 3) % 11 == 0 else 0)
+            img.putpixel((x, y), (base, base, base + 2, 255))
+    for _ in range(26):
+        x, y = rng.randrange(16), rng.randrange(16)
+        chip = rng.choice([(96, 94, 90), (118, 114, 106), (84, 70, 60), (70, 70, 72)])
+        img.putpixel((x, y), chip + (255,))
+    return img
+
+
+def asphalt_road_line():
+    """The top of a road-line block: asphalt with a dashed yellow centre line running north to south (the
+    blockstate turns it to the direction the player faced)."""
+    img = asphalt(964)
+    for y in range(16):
+        if y % 8 in (1, 2, 3, 4, 5):
+            for x in (7, 8):
+                shade = (226, 184, 40) if (x + y) % 5 else (196, 158, 34)
+                img.putpixel((x, y), shade + (255,))
+    return img
+
+
 def draw_all(save, save_animation):
+    save(asphalt(), "block", "asphalt")
+    save(asphalt_road_line(), "block", "asphalt_road_line")
+    save(plastic_pellets(), "item", "plastic_pellets")
+    save(plastic_sheet(), "item", "plastic_sheet")
     save(catalyst(), "item", "cracking_catalyst")
     save(asphalt_binder(), "item", "asphalt_binder")
     for index, (fluid, info) in enumerate(FLUIDS.items()):
         save_animation(still(info["colors"], 800 + index), f"{fluid}_still", frametime=3)
         save_animation(flowing(info["colors"], 850 + index), f"{fluid}_flow", frametime=2)
         save(bucket(info["colors"], 900 + index), "item", f"{fluid}_bucket")
+    # Gases: a still swirl only, for recipe viewers (they have no block, so nothing flows in the world).
+    for index, (gas, info) in enumerate(GASES.items()):
+        save_animation(still(info["colors"], 880 + index), f"{gas}_still", frametime=4)

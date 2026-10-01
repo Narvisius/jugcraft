@@ -4,7 +4,7 @@ import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import net.minecraft.world.level.material.Fluid;
 
 /**
- * What each fluid-burning generator burns, in JE per millibucket (FLUID_FUELS in tools/petro.py). A generator makes
+ * What each fluid-burning generator burns, in JE per millibucket (KE for the diesel engine) (FLUID_FUELS in tools/petro.py). A generator makes
  * its fixed output every tick and burns as much fuel as that takes, so a fuel with half the JE per mB lasts half as
  * long. Kept in one place so every fuel's value can be audited together (docs/BALANCE.md).
  */
@@ -27,6 +27,8 @@ public final class FluidFuels {
 	public static int jePerMb(MachineKind kind, Fluid fluid) {
 		return switch (kind) {
 			case DIESEL_GENERATOR -> fluid == PetroFluids.DIESEL.source() ? DIESEL
+					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
+			case DIESEL_ENGINE -> fluid == PetroFluids.DIESEL.source() ? DIESEL
 					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
 			case GAS_TURBINE -> fluid == PetroFluids.GASOLINE.source() ? GASOLINE
 					: fluid == PetroFluids.REFINERY_GAS.fluid() ? REFINERY_GAS : 0;

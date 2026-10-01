@@ -1,4 +1,5 @@
-"""Dieselpunk models for the powered tools (3D item models) and the charging station (a 2-tall block).
+"""Dieselpunk models for the powered tools (3D item models), and the charging station (a 2-tall block) in the
+electric look of the power gear (electric_textures, names "el_*").
 
 Built from the same box helpers as the machines (steampunk_models), with the dieselpunk textures
 (dieselpunk_textures, names "dp_*"): olive paint, gunmetal, chrome, hazard stripes, bakelite grips.
@@ -73,32 +74,39 @@ def rocket_pack():
 
 
 def charging_station():
-    """A two-block-tall charging station: a gunmetal plinth with hazard edging, an olive cabinet with vent grilles, a
-    charge gauge and a warning lamp, a chrome cradle that holds the tool at chest height, and a rubber conduit up
-    its side. Faces north (the tool hangs on the z = 0 side)."""
-    m = [box((0, 0, 0), (16, 2, 16), {"*": GUNMETAL, "north": HAZARD}),
-         box((2, 2, 9), (14, 29, 15), {"*": OLIVE, "east": GRILLE, "west": GRILLE, "north": STENCIL}),
-         box((1, 29, 7.5), (15, 31.5, 15.5), {"*": GUNMETAL, "north": HAZARD}),
-         dial("north", (8, 11, 8.25), 5, texture="dp_gauge", body=CHROME),
-         dial("north", (8, 25.5, 8.25), 3, texture="dp_lamp", body=GUNMETAL),
-         # Cradle: two chrome arms and a rubber-padded rest.
-         box((4, 17, 3.5), (5, 18.5, 9), CHROME),
-         box((11, 17, 3.5), (12, 18.5, 9), CHROME),
-         box((3.5, 16, 3), (12.5, 17, 4.5), RIBBED),
+    """A two-block-tall charging station in the electric look: a graphite plinth edged with high-voltage stripes, a
+    graphite cabinet with vented sides, a status screen that lights while it charges, a glowing charge column down the
+    front, a cradle that holds the tool at chest height with contacts above it, and power ports in the middle of the
+    lower block's other sides for cables. Faces north (the tool hangs on the z = 0 side)."""
+    m = [box((0, 0, 0), (16, 2, 16), {"*": "el_frame", "north": "el_hazard"}),
+         box((2, 2, 9), (14, 29, 15), {"*": "el_casing", "east": "el_vent", "west": "el_vent"}),
+         box((1, 29, 7.5), (15, 31.5, 15.5), {"*": "el_frame", "up": "el_seams"}),
+         # Status screen (lit while charging), and the glowing charge column under it.
+         box((4, 22.5, 8.5), (12, 27.5, 9), {"*": "el_frame", "north": "el_screen!"}),
+         box((7.25, 4, 8.6), (8.75, 15, 9), "el_glow"),
+         box((3.5, 4, 8.6), (5, 6, 9), "el_glow"),
+         box((11, 4, 8.6), (12.5, 6, 9), "el_glow"),
+         # Cradle: two graphite arms and a rest with a glowing edge.
+         box((4, 17, 3.5), (5, 18.5, 9), "el_frame"),
+         box((11, 17, 3.5), (12, 18.5, 9), "el_frame"),
+         box((3.5, 16, 3), (12.5, 17, 4.5), "el_casing"),
+         box((3.5, 17, 3), (12.5, 17.25, 3.5), "el_glow"),
          # Charging contacts above the cradle.
-         box((6.5, 21, 7.75), (9.5, 22.5, 9), CHROME)]
-    m += cyl("y", 14.75, 12.5, 1, 2, 29, RUBBER)
-    # Terminals where cables meet the lower block (middle of each side).
-    m.append(box((0.25, 5, 6), (2, 11, 10), {"*": GUNMETAL, "west": CHROME}))
-    m.append(box((14, 5, 6), (15.75, 11, 10), {"*": GUNMETAL, "east": CHROME}))
-    m.append(box((6, 5, 15), (10, 11, 15.75), {"*": GUNMETAL, "south": CHROME}))
+         box((6.5, 20.25, 7.75), (9.5, 21.75, 9), {"*": "el_frame", "north": "el_port!"})]
+    # Corner posts up the cabinet's back edges.
+    for x in (1.5, 13):
+        m.append(box((x, 2, 13.5), (x + 1.5, 29, 15.5), "el_frame"))
+    # Ports where cables meet the lower block (middle of each side).
+    m.append(box((0.25, 5, 6), (2, 11, 10), {"*": "el_frame", "west": "el_port!"}))
+    m.append(box((14, 5, 6), (15.75, 11, 10), {"*": "el_frame", "east": "el_port!"}))
+    m.append(box((6, 5, 15), (10, 11, 15.75), {"*": "el_frame", "south": "el_port!"}))
     return m
 
 
 ITEMS = {"mining_drill": mining_drill(), "chainsaw": chainsaw(), "rocket_pack": rocket_pack()}
 BLOCKS = {"charging_station": charging_station()}
-# The lamp lights while the station charges something.
-LIT = {"charging_station": ("dp_lamp", "dp_lamp_on")}
+# The screen lights while the station charges something.
+LIT = {"charging_station": ("el_screen", "el_screen_on")}
 
 HANDHELD = {
     # In the hand, +z is forward: tip the upright tool forward so the bit or bar points away from the player.

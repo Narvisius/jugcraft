@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "jugcraft:asphalt",
+    "jugcraft:asphalt",
+    "jugcraft:asphalt",
+    "jugcraft:asphalt",
+    "minecraft:yellow_dye"
+  ],
+  "result": {
+    "id": "jugcraft:asphalt_road_line",
+    "count": 4
+  }
+}

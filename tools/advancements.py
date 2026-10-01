@@ -29,6 +29,17 @@ TREE = {
     "upgrade": ("mining_drill", ["overclock_module", "range_module", "capacity_module", "silk_touch_module",
                                  "fortune_module"], "Tinkerer", "Make an upgrade module for a powered tool", "task"),
     "rocket_pack": ("charging_station", "rocket_pack", "Rocketeer", "Make a rocket pack and take to the air", "challenge"),
+    # The oil line (Chemistry branch).
+    "crude_oil": ("steel", "crude_oil_bucket", "Black Gold", "Fill a bucket with crude oil", "task"),
+    "pumpjack": ("crude_oil", "pumpjack", "Nodding Donkey", "Build a pumpjack over an oil reservoir", "task"),
+    "distillation_tower": ("crude_oil", "distillation_tower", "Fractional Thinking",
+                           "Build a distillation tower", "goal"),
+    "fracking_rig": ("distillation_tower", "fracking_rig", "Tight Spot", "Build a fracking rig for shale oil", "goal"),
+    "diesel_generator": ("distillation_tower", "diesel_generator", "Diesel Power", "Build a diesel generator", "task"),
+    "gas_turbine": ("diesel_generator", "gas_turbine", "Spool Up", "Build a gas turbine", "goal"),
+    "diesel_engine": ("diesel_generator", "diesel_engine", "Eight Cylinders", "Build a diesel engine", "goal"),
+    "plastic": ("distillation_tower", "plastic_sheet", "Fantastic Plastic", "Press a plastic sheet", "task"),
+    "asphalt": ("distillation_tower", "asphalt", "Hit the Road", "Lay asphalt, and walk faster on it", "task"),
 }
 # Background of the tab (a block texture), shown behind the tree.
 BACKGROUND = "jugcraft:block/dp_gunmetal"

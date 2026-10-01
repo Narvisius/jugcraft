@@ -6,7 +6,10 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
 
-/** How petroleum fluids look in the world: their own animated still and flowing textures, untinted. */
+/**
+ * How petroleum fluids look: their own animated still and flowing textures, untinted. Gases are never placed, but
+ * get a still texture too so recipe viewers and other mods can draw them.
+ */
 public final class PetroFluidsClient {
 	private PetroFluidsClient() {
 	}
@@ -18,6 +21,10 @@ public final class PetroFluidsClient {
 					new Material(Jugcraft.id("block/" + entry.id() + "_flow")),
 					null,
 					null));
+		}
+		for (PetroFluids.Gas gas : PetroFluids.GASES.values()) {
+			Material still = new Material(Jugcraft.id("block/" + gas.id() + "_still"));
+			FluidRenderingRegistry.register(gas.fluid(), new FluidModel.Unbaked(still, still, null, null));
 		}
 	}
 }

@@ -22,6 +22,10 @@ public class DynamoBlockEntity extends BlockEntity implements KineticConsumer {
 	final SimpleEnergyStorage energy = new SimpleEnergyStorage(CAPACITY, 0, RATE, this::setChanged);
 	/** Hundredths of a JE carried over between ticks, so small inputs are not rounded away. */
 	private int remainder;
+	/** KE taken so far in game tick {@link #takenTick}: a network may offer power twice a tick (an even share, then
+	 * what is left), and several sources may drive one dynamo, but it takes at most {@link #RATE} a tick in all. */
+	private long takenThisTick;
+	private long takenTick = -1;
 
 	public DynamoBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftKinetics.DYNAMO_ENTITY, pos, state);
@@ -33,11 +37,17 @@ public class DynamoBlockEntity extends BlockEntity implements KineticConsumer {
 
 	@Override
 	public long acceptKinetic(Direction side, long maxAmount) {
+		long now = level == null ? 0 : level.getGameTime();
+		if (now != takenTick) {
+			takenTick = now;
+			takenThisTick = 0;
+		}
 		long room = energy.getCapacity() - energy.getAmount();
-		long take = Math.min(Math.min(maxAmount, RATE), room * 100 / EFFICIENCY_PERCENT);
+		long take = Math.min(Math.min(maxAmount, RATE - takenThisTick), room * 100 / EFFICIENCY_PERCENT);
 		if (take <= 0) {
 			return 0;
 		}
+		takenThisTick += take;
 		long hundredths = take * EFFICIENCY_PERCENT + remainder;
 		energy.setAmount(Math.min(energy.getCapacity(), energy.getAmount() + hundredths / 100));
 		remainder = (int) (hundredths % 100);

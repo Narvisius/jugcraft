@@ -68,18 +68,20 @@ def steam_engine():
 
 
 def dynamo():
-    """A copper-wound coil on an iron frame, with an axle through it for shafts at the front and back, and brass
-    terminals where cables meet it."""
-    m = [box((1, 0, 1), (15, 1.5, 15), IRON_PLATE)]
-    m += cyl("z", 8, 8.5, 5.25, 2, 14, "sp_coil", BRASS)
+    """In the electric look of the power gear: a graphite generator housing with glowing bands on a trim base, an axle
+    through it for shafts at the front and back, a vented top and power ports where cables meet it."""
+    m = [box((1, 0, 1), (15, 1.5, 15), "el_frame")]
+    m += cyl("z", 8, 8.5, 5.25, 2, 14, "el_casing", "el_frame")
+    for z in (4.5, 11):
+        m += cyl("z", 8, 8.5, 5.5, z, z + 0.5, "el_glow")
     for z in (2, 13.25):
-        m.append(box((2, 1.5, z), (14, 14.5, z + 0.75), IRON))
+        m.append(box((2, 1.5, z), (14, 14.5, z + 0.75), "el_frame"))
     m += cyl("z", 8, 8.5, 1.25, 0, 16, IRON)
-    # Terminals in the middle of the other faces so cables meet the dynamo.
-    m.append(box((0.25, 6, 6.5), (2, 10, 9.5), {"*": BRASS, "west": BRASS_PLATE}))
-    m.append(box((14, 6, 6.5), (15.75, 10, 9.5), {"*": BRASS, "east": BRASS_PLATE}))
-    m.append(box((6.5, 13.75, 6.5), (9.5, 15.75, 9.5), {"*": BRASS, "up": BRASS_PLATE}))
-    m.append(box((5, 1.5, 5), (11, 3, 11), COPPER))
+    # Ports in the middle of the other faces so cables meet the dynamo.
+    m.append(box((0.25, 6, 6.5), (2, 10, 9.5), {"*": "el_frame", "west": "el_port!"}))
+    m.append(box((14, 6, 6.5), (15.75, 10, 9.5), {"*": "el_frame", "east": "el_port!"}))
+    m.append(box((6.5, 13.75, 6.5), (9.5, 15.75, 9.5), {"*": "el_frame", "up": "el_vent!"}))
+    m.append(box((5, 1.5, 5), (11, 3, 11), "el_casing"))
     return m
 
 
@@ -98,18 +100,20 @@ def belt_pulley():
 
 
 def electric_motor():
-    """A copper-wound motor on iron feet; its shaft comes out of the front (north), with brass terminals where cables
-    meet it."""
-    m = [box((2, 0, 3), (14, 1.5, 15), IRON_PLATE)]
-    m += cyl("z", 8, 8.5, 5.5, 3.5, 14.5, "sp_coil", BRASS_PLATE)
+    """In the electric look of the power gear: a graphite motor housing with glowing bands and end rings on trim feet;
+    its shaft comes out of the front (north), with power ports where cables meet it."""
+    m = [box((2, 0, 3), (14, 1.5, 15), "el_frame")]
+    m += cyl("z", 8, 8.5, 5.5, 3.5, 14.5, "el_casing", "el_frame")
     for z in (3, 14):
-        m += cyl("z", 8, 8.5, 5.9, z, z + 1, IRON)
-    m.append(box((0.25, 6, 7), (2.5, 11, 11), {"*": BRASS, "west": BRASS_PLATE}))
-    m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": BRASS, "east": BRASS_PLATE}))
-    m.append(box((6, 14, 7), (10, 15.75, 11), {"*": BRASS, "up": BRASS_PLATE}))
-    m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": BRASS, "south": BRASS_PLATE}))
+        m += cyl("z", 8, 8.5, 5.9, z, z + 1, "el_frame")
+    for z in (6.5, 10.5):
+        m += cyl("z", 8, 8.5, 5.75, z, z + 0.5, "el_glow")
+    m.append(box((0.25, 6, 7), (2.5, 11, 11), {"*": "el_frame", "west": "el_port!"}))
+    m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": "el_frame", "east": "el_port!"}))
+    m.append(box((6, 14, 7), (10, 15.75, 11), {"*": "el_frame", "up": "el_vent!"}))
+    m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": "el_frame", "south": "el_port!"}))
     # The output shaft spins, with a coupling on it.
-    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), BRASS)]
+    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
     return m, rotor
 
 

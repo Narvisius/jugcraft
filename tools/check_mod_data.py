@@ -90,7 +90,7 @@ def model(ref):
 
 def check_assets(registered):
     lang = load(ASSETS / "lang" / "en_us.json") or {}
-    for block in all_blocks() + machine_blocks():
+    for block in all_blocks() + machine_blocks() + petro.petro_blocks():
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
             for variant in state.get("variants", {}).values():
@@ -105,7 +105,7 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             model(definition["model"]["model"])
-        if item not in all_blocks() + machine_blocks() and f"item.{MOD}.{item}" not in lang:
+        if item not in all_blocks() + machine_blocks() + petro.petro_blocks() and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
 
@@ -120,6 +120,9 @@ def check_petro():
                             (JAVA_ROOT / "chemistry" / "PetroItems.java").read_text(encoding="utf-8"))
     if items_java != list(petro.ITEMS):
         err(f"PetroItems.java items {items_java} != tools/petro.py {list(petro.ITEMS)}")
+    blocks_java = re.findall(r'= register\("([a-z_]+)"', (JAVA_ROOT / "chemistry" / "PetroBlocks.java").read_text(encoding="utf-8"))
+    if blocks_java != list(petro.BLOCKS):
+        err(f"PetroBlocks.java blocks {blocks_java} != tools/petro.py {list(petro.BLOCKS)}")
     gases = re.findall(r'= gas\("([a-z_]+)"', java)
     if gases != list(petro.GASES):
         err(f"PetroFluids.java gases {gases} != tools/petro.py {list(petro.GASES)}")
@@ -166,7 +169,7 @@ UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_bloc
          **{f"{form}s": units for form, units in PART_UNITS.items()}}
 
 
-NON_METAL = {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items())
+NON_METAL = {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items()) | set(petro.petro_blocks())
 
 
 def item_units(ref):
@@ -361,7 +364,7 @@ def check_tags():
             elif registry == "fluid":
                 if split(value)[1] not in petro.fluid_ids():
                     err(f"{path.relative_to(ROOT)}: unknown fluid {value}")
-            elif split(value)[0] == MOD and split(value)[1] not in all_blocks() + all_items() + machine_blocks():
+            elif split(value)[0] == MOD and split(value)[1] not in all_blocks() + all_items() + machine_blocks() + petro.petro_blocks():
                 err(f"{path.relative_to(ROOT)}: unknown entry {value}")
 
 
@@ -593,7 +596,7 @@ def check_style_pack():
 
 def main():
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
-                  | set(petro.petro_items()))
+                  | set(petro.petro_items()) | set(petro.petro_blocks()))
     check_assets(sorted(registered))
     check_petro()
     check_loot(registered)

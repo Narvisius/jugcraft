@@ -1,0 +1,118 @@
+"""Electric-look models for the power gear (see docs/ART_DIRECTION.md), replacing their steampunk and dieselpunk
+looks: the battery box, capacitor bank, solar panel and electric pump. (The charging station is in tool_models.py,
+the electric motor and dynamo in kinetic_models.py; cables are built in generate_material_data.py.)
+
+Dark graphite casings with bevelled panels, trim posts and vents, lit by glowing mint-green strips (emissive, see
+model_writer.EMISSIVE), with green-on-black screens, status lamps and power ports. Same footprints, ports and
+connection points as before: a cable or pipe still meets each machine near the middle of each side.
+steampunk_models.MODELS takes these in place of its own; the classic style pack is unchanged.
+"""
+from steampunk_models import box, cyl, dial
+
+CASING, SEAMS, FRAME, GLOW = "el_casing", "el_seams", "el_frame", "el_glow"
+VENT, PORT, CELL, SOLAR, HAZARD = "el_vent", "el_port", "el_cell", "el_solar", "el_hazard"
+SCREEN, LAMP, LIGHT_BARS = "el_screen_on", "el_lamp_on", "el_light_bars"
+
+
+def battery_box():
+    """A compact power cell: a graphite cabinet on a trim plinth with four corner posts, two panels of glowing charge
+    bars either side of the output port on the front (the box gives power out of its front), a glowing strip under the top edge
+    of every side, a vented cap with a status lamp, and ports in the middle of the other sides for cables."""
+    m = [box((0, 0, 0), (16, 1.5, 16), FRAME)]
+    m.append(box((1.5, 1.5, 1.5), (14.5, 13.5, 14.5), CASING))
+    for x, z in ((0.75, 0.75), (13.25, 0.75), (0.75, 13.25), (13.25, 13.25)):
+        m.append(box((x, 1.5, z), (x + 2, 14.5, z + 2), FRAME))
+    # Front: two charge panels of glowing bars and the output port between them.
+    for x in (2.5, 10):
+        m.append(box((x, 2.5, 1), (x + 3.5, 12, 1.5), {"*": FRAME, "north": LIGHT_BARS + "!"}))
+    m.append(box((6.75, 4.5, 0.75), (9.25, 7, 1.5), {"*": FRAME, "north": PORT + "!"}))
+    m.append(dial("north", (8, 9.75, 1), 1.75, texture=LAMP, body=FRAME))
+    # A glowing strip under the top edge of each side.
+    m.append(box((2.75, 12.5, 1.1), (13.25, 13, 1.5), GLOW))
+    m.append(box((2.75, 12.5, 14.5), (13.25, 13, 14.9), GLOW))
+    m.append(box((1.1, 12.5, 2.75), (1.5, 13, 13.25), GLOW))
+    m.append(box((14.5, 12.5, 2.75), (14.9, 13, 13.25), GLOW))
+    # Vented cap.
+    m.append(box((1, 13.5, 1), (15, 15, 15), {"*": FRAME, "up": SEAMS}))
+    m.append(box((4, 15, 4), (12, 15.75, 12), {"*": FRAME, "up": VENT + "!"}))
+    # Ports where cables meet the other sides.
+    m.append(box((0.25, 5.5, 6), (1.5, 10.5, 10), {"*": FRAME, "west": PORT + "!"}))
+    m.append(box((14.5, 5.5, 6), (15.75, 10.5, 10), {"*": FRAME, "east": PORT + "!"}))
+    m.append(box((6, 5.5, 14.5), (10, 10.5, 15.75), {"*": FRAME, "south": PORT + "!"}))
+    return m
+
+
+def capacitor_bank():
+    """Two wide and two tall: a graphite rack holding four capacitor modules, each with a glowing charge column down
+    both sides and a power socket in the middle (the bank gives power out of its front), trim posts at the corners,
+    a header with a status screen and lamp, and vented side panels."""
+    m = [box((-16, 0, 0), (16, 1, 16), FRAME)]
+    m.append(box((-15, 1, 5), (15, 31, 15), SEAMS))
+    for x, z in ((-16, 0), (14, 0), (-16, 14), (14, 14)):
+        m.append(box((x, 1, z), (x + 2, 31, z + 2), FRAME))
+    m.append(box((-15.5, 1, 2), (-14, 29.5, 14), {"*": FRAME, "west": VENT}))
+    m.append(box((14, 1, 2), (15.5, 29.5, 14), {"*": FRAME, "east": VENT}))
+    # Four modules, one in front of each block, with glowing charge columns and a socket in the middle.
+    for x0 in (-14, 1.5):
+        for y0 in (1.5, 15.5):
+            x1, y1 = x0 + 12.5, y0 + 13
+            m.append(box((x0, y0, 1.5), (x1, y1, 5), {"*": FRAME, "north": CASING}))
+            for gx in (x0 + 1.25, x1 - 2.25):
+                m.append(box((gx, y0 + 1.5, 1.1), (gx + 1, y1 - 1.5, 1.5), GLOW))
+    for x in (-8, 8):
+        for y in (8, 22):
+            m.append(box((x - 2, y - 2, 0.25), (x + 2, y + 2, 1.5), {"*": FRAME, "north": PORT + "!"}))
+    # Header with a status screen and lamp.
+    m.append(box((-16, 29, 0.5), (16, 32, 16), {"*": FRAME, "up": SEAMS}))
+    m.append(box((-7, 29.5, 0.25), (5, 31.5, 0.5), {"*": FRAME, "north": SCREEN + "!"}))
+    m.append(dial("north", (8, 30.5, 0.25), 1.75, texture=LAMP, body=FRAME))
+    m.append(box((-15, 28.5, 0.5), (15, 29, 1.5), GLOW))
+    return m
+
+
+def solar_panel():
+    """A tracking solar collector: a graphite pedestal on a trim base with ports out to each side for cables, a
+    glowing ring round the column, and a tilted panel of dark cells in a graphite frame with a green status edge."""
+    m = [box((2, 0, 2), (14, 1.5, 14), FRAME)]
+    m += cyl("y", 8, 8, 4, 1.5, 2.5, CASING)
+    m += cyl("y", 8, 8, 1.75, 2.5, 7, FRAME)
+    m += cyl("y", 8, 8, 2, 4, 4.5, GLOW)
+    m.append(box((5, 6.5, 5), (11, 9, 11), CASING))
+    # Arms out to each side, with ports where cables meet them.
+    for frm, to in (((0.75, 7.25, 7), (5, 8.75, 9)), ((11, 7.25, 7), (15.25, 8.75, 9)),
+                    ((7, 7.25, 0.75), (9, 8.75, 5)), ((7, 7.25, 11), (9, 8.75, 15.25))):
+        m.append(box(frm, to, FRAME))
+    for frm, to, face in (((0, 6.75, 6.5), (0.75, 9.25, 9.5), "west"), ((15.25, 6.75, 6.5), (16, 9.25, 9.5), "east"),
+                          ((6.5, 6.75, 0), (9.5, 9.25, 0.75), "north"), ((6.5, 6.75, 15.25), (9.5, 9.25, 16), "south")):
+        m.append(box(frm, to, {"*": FRAME, face: PORT + "!"}))
+    tilt = ("x", 22.5, (8, 10, 8))
+    m.append(box((1, 9.5, 1), (15, 10.5, 15), {"*": FRAME, "up": SOLAR, "down": CASING}, rotation=tilt))
+    m.append(box((0.5, 9.25, 0.5), (15.5, 9.5, 15.5), FRAME, rotation=tilt))
+    m.append(box((1.5, 10.5, 14), (14.5, 10.75, 14.5), GLOW, rotation=tilt))
+    return m
+
+
+def electric_pump():
+    """A sealed graphite pump: a round motor housing with glowing bands on a trim plinth, a vented head, a small
+    status screen, and flanged outlets in the middle of every side and the top where pipes meet it."""
+    m = [box((1, 0, 1), (15, 1.5, 15), FRAME)]
+    m += cyl("y", 8, 8, 4.25, 1.5, 12, CASING, FRAME)
+    for y in (3, 9.5):
+        m += cyl("y", 8, 8, 4.5, y, y + 0.75, GLOW)
+    m += cyl("y", 8, 8, 3.25, 12, 13.5, FRAME)
+    m.append(box((4.25, 13.5, 4.25), (11.75, 14.5, 11.75), {"*": FRAME, "up": VENT + "!"}))
+    m += cyl("y", 8, 8, 1.5, 14.5, 15.25, CASING)
+    m += cyl("y", 8, 8, 2.5, 15.25, 16, FRAME)
+    # Outlet pipes and flanges where pipes connect (the pump pushes out of its top and sides).
+    for frm, to in (((0.75, 6.5, 6.5), (4, 9.5, 9.5)), ((12, 6.5, 6.5), (15.25, 9.5, 9.5)),
+                    ((6.5, 6.5, 0.75), (9.5, 9.5, 4)), ((6.5, 6.5, 12), (9.5, 9.5, 15.25))):
+        m.append(box(frm, to, CASING))
+    for frm, to in (((0, 5.5, 5.5), (0.75, 10.5, 10.5)), ((15.25, 5.5, 5.5), (16, 10.5, 10.5)),
+                    ((5.5, 5.5, 0), (10.5, 10.5, 0.75)), ((5.5, 5.5, 15.25), (10.5, 10.5, 16))):
+        m.append(box(frm, to, FRAME))
+    m.append(box((10.5, 10, 2.75), (13.5, 12.5, 3.75), {"*": FRAME, "north": SCREEN + "!"}))
+    return m
+
+
+MODELS = {"battery_box": battery_box(), "capacitor_bank": capacitor_bank(), "solar_panel": solar_panel(),
+          "electric_pump": electric_pump()}

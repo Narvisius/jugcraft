@@ -22,6 +22,7 @@ GLOW = {
     "sp_lava_window": "sp_lava_window_on",
     "sp_lamp": "sp_lamp_on",
     "dp_lamp": "dp_lamp_on",
+    "el_screen": "el_screen_on",
 }
 # Full-cube parts keep cube models; only their texture changes.
 CUBES = {"machine_casing": "sp_machine_casing", "arc_furnace_casing": "sp_arc_casing"}
@@ -1013,3 +1014,6 @@ MODELS = {
 # Steel-tier machines look dieselpunk (docs/ART_DIRECTION.md): tools/dieselpunk_models.py replaces their models.
 from dieselpunk_models import MODELS as _DIESELPUNK  # noqa: E402  (needs the helpers above)
 MODELS.update(_DIESELPUNK)
+# Power gear has the electric look (graphite and green glow): tools/electric_models.py replaces those.
+from electric_models import MODELS as _ELECTRIC  # noqa: E402
+MODELS.update(_ELECTRIC)

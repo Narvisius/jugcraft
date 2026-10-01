@@ -114,9 +114,15 @@ def _face_texture(texture, face):
     return tex
 
 
+# Textures that glow (electric look): an element drawn only with these is lit at full brightness in the dark
+# (Minecraft's per-element "light_emission"; it lights the element itself, not the blocks around it).
+EMISSIVE = {"el_glow", "el_glow_cyan"}
+
+
 def element(frm, to, texture, uv=False, skip=(), rotation=None):
     """One model element; uv=True gives explicit UVs for elements outside 0..16 or scaled ones."""
     faces = {}
+    names = {v.rstrip("!") for v in (texture.values() if isinstance(texture, dict) else [texture]) if v is not None}
     for face in FACES:
         if face in skip:
             continue
@@ -136,6 +142,8 @@ def element(frm, to, texture, uv=False, skip=(), rotation=None):
             entry["uv"] = [0, 0, round(width, 3), round(height, 3)]
         faces[face] = entry
     out = {"from": [round(v, 4) for v in frm], "to": [round(v, 4) for v in to], "faces": faces}
+    if names and names <= EMISSIVE:
+        out["light_emission"] = 15
     if rotation:
         axis, angle, origin = rotation[:3]
         out["rotation"] = {"origin": [round(v, 4) for v in origin], "axis": axis, "angle": angle}
