@@ -52,7 +52,12 @@ public final class GuideBooks {
 
 	/** Gives the Creative Quick Start to a creative player who has not had it yet. */
 	public static boolean giveCreativeGuide(ServerPlayer player) {
-		if (player.gameMode() != GameType.CREATIVE || player.entityTags().contains(GIVEN_TAG)) {
+		return giveCreativeGuide(player, player.gameMode());
+	}
+
+	/** As {@link #giveCreativeGuide(ServerPlayer)}, for a player in game mode {@code mode} (tests pass it). */
+	public static boolean giveCreativeGuide(ServerPlayer player, GameType mode) {
+		if (mode != GameType.CREATIVE || player.entityTags().contains(GIVEN_TAG)) {
 			return false;
 		}
 		player.addTag(GIVEN_TAG);

@@ -70,13 +70,11 @@ public class TowerGameTests {
 		// Joining may already have handed the book over (the test world is creative): start from a clean slate.
 		player.removeTag(io.github.jimbozoomer.jugcraft.drone.GuideBooks.GIVEN_TAG);
 		player.getInventory().clearContent();
-		player.setGameMode(GameType.SURVIVAL);
-		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "no creative book in survival");
-		player.setGameMode(GameType.CREATIVE);
-		helper.assertTrue(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "a creative player gets the book");
+		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player, GameType.SURVIVAL), "no creative book in survival");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player, GameType.CREATIVE), "a creative player gets the book");
 		helper.assertTrue(player.getInventory().contains(new ItemStack(io.github.jimbozoomer.jugcraft.drone.GuideBooks.CREATIVE_GUIDE)),
 				"the book is in the inventory");
-		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player), "only once");
+		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player, GameType.CREATIVE), "only once");
 		var manual = new ItemStack(io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL)
 				.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
 		helper.assertTrue(manual != null && manual.pages().size() == io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL_PAGES,
