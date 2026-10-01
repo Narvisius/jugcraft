@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.chemistry.FertilizerItem;
 import io.github.jimbozoomer.jugcraft.chemistry.FluidFuels;
 import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroBlocks;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.material.Fluids;
 
 /**
@@ -436,6 +438,114 @@ public class PetroGameTests {
 			// 20 mB in 40 ticks plus the 2 mB the engine holds in hand, far below the 80 mB of full output.
 			long most = 40L * DynamoBlockEntity.RATE / FluidFuels.DIESEL + 3;
 			helper.assertTrue(burnt > 0 && burnt <= most, "Diesel burnt in 40 ticks: " + burnt + " mB (at most " + most + ")");
+			helper.succeed();
+		});
+	}
+
+	/** The chemical mixer dissolves two salt in a bucket of water to make a bucket of brine. */
+	@GameTest(maxTicks = 200)
+	public void mixerMakesBrine(GameTestHelper helper) {
+		MachineBlockEntity mixer = place(helper, MachineKind.CHEMICAL_MIXER, new BlockPos(4, 1, 2));
+		mixer.tanks().input(0).fill(Fluids.WATER, 1000);
+		mixer.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt")), 2));
+		helper.succeedWhen(() -> helper.assertTrue(mixer.tanks().output(0).has(PetroFluids.BRINE.source(), 1000), "No brine"));
+	}
+
+	/** The electrolytic cell splits a bucket of brine into 250 mB of chlorine, 250 mB of hydrogen and 500 mB of lye. */
+	@GameTest(maxTicks = 400)
+	public void cellSplitsBrine(GameTestHelper helper) {
+		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, new BlockPos(4, 1, 2));
+		cell.tanks().input(0).fill(PetroFluids.BRINE.source(), 1000);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(cell.tanks().output(0).has(PetroFluids.CHLORINE.fluid(), 250), "Chlorine: " + cell.tanks().output(0).millibuckets());
+			helper.assertTrue(cell.tanks().output(1).has(PetroFluids.HYDROGEN.fluid(), 250), "Hydrogen: " + cell.tanks().output(1).millibuckets());
+			helper.assertTrue(cell.tanks().output(2).has(PetroFluids.LYE.source(), 500), "Lye: " + cell.tanks().output(2).millibuckets());
+		});
+	}
+
+	/** The chemical reactor turns two sulfur dust and a bucket of water into a bucket of sulfuric acid. */
+	@GameTest(maxTicks = 300)
+	public void reactorMakesSulfuricAcid(GameTestHelper helper) {
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
+		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("sulfur_dust")), 2));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(reactor.tanks().output(0).has(PetroFluids.SULFURIC_ACID.source(), 1000), "No sulfuric acid");
+			helper.assertTrue(reactor.getItem(0).isEmpty(), "The reactor kept its sulfur");
+		});
+	}
+
+	/** The Bayer route: a bauxite digested in 250 mB of lye gives two alumina, and the electrolytic cell smelts two
+	 * alumina with a coke anode into two aluminum ingots. */
+	@GameTest(maxTicks = 400)
+	public void bayerRouteMakesAluminum(GameTestHelper helper) {
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(2, 1, 1));
+		reactor.tanks().input(0).fill(PetroFluids.LYE.source(), 250);
+		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("bauxite"))));
+		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, new BlockPos(5, 1, 4));
+		cell.setItem(0, new ItemStack(PetroItems.ALUMINA, 2));
+		cell.setItem(1, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("coke"))));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(reactor.getItem(reactor.kind().outputSlot()).is(PetroItems.ALUMINA)
+					&& reactor.getItem(reactor.kind().outputSlot()).getCount() == 2, "Alumina: " + reactor.getItem(reactor.kind().outputSlot()));
+			ItemStack ingots = cell.getItem(cell.kind().outputSlot());
+			helper.assertTrue(ingots.is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("aluminum_ingot"))) && ingots.getCount() == 2,
+					"Aluminum: " + ingots);
+		});
+	}
+
+	/** The chemical reactor treats two phosphate with 250 mB of sulfuric acid to make four fertilizer. */
+	@GameTest(maxTicks = 300)
+	public void reactorMakesFertilizer(GameTestHelper helper) {
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 250);
+		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("phosphate")), 2));
+		helper.succeedWhen(() -> {
+			ItemStack out = reactor.getItem(reactor.kind().outputSlot());
+			helper.assertTrue(out.is(PetroItems.FERTILIZER) && out.getCount() == 4, "Fertilizer: " + out);
+		});
+	}
+
+	/** Fertilizer grows every crop in the 5x5 area around where it is used. */
+	@GameTest
+	public void fertilizerGrowsTheCropsAround(GameTestHelper helper) {
+		List<BlockPos> crops = new java.util.ArrayList<>();
+		for (int x = 0; x < 3; x++) {
+			for (int z = 0; z < 3; z++) {
+				BlockPos soil = new BlockPos(1 + x * 2, 1, 1 + z * 2);
+				helper.setBlock(soil, Blocks.FARMLAND);
+				helper.setBlock(soil.above(), Blocks.WHEAT);
+				crops.add(soil.above());
+			}
+		}
+		// The centre crop is at (3, 2, 3); the corners are two blocks out, inside the 5x5 area.
+		int grown = FertilizerItem.fertilize(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 3)));
+		helper.assertTrue(grown == crops.size(), "Grew " + grown + " of " + crops.size());
+		for (BlockPos crop : crops) {
+			helper.assertTrue(((CropBlock) Blocks.WHEAT).getAge(helper.getBlockState(crop)) > 0, "Did not grow at " + crop);
+		}
+		helper.succeed();
+	}
+
+	/** The fuel cell turns each millibucket of hydrogen into 128 JE and refuses other fluids. */
+	@GameTest(maxTicks = 200)
+	public void fuelCellBurnsHydrogen(GameTestHelper helper) {
+		BlockPos pos = new BlockPos(2, 1, 2);
+		helper.setBlock(pos, JugcraftMachines.MACHINES.get(MachineKind.FUEL_CELL).defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));
+		MachineBlockEntity cell = helper.getBlockEntity(pos, MachineBlockEntity.class);
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
+		Storage<FluidVariant> tanks = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.NORTH);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long diesel = tanks.insert(FluidVariant.of(PetroFluids.DIESEL.source()), FluidConstants.BUCKET, transaction);
+			long hydrogen = tanks.insert(FluidVariant.of(PetroFluids.HYDROGEN.fluid()), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(diesel == 0, "The fuel cell took diesel");
+			helper.assertTrue(hydrogen == FluidConstants.BUCKET, "The fuel cell took " + hydrogen + " droplets of hydrogen");
+			transaction.commit();
+		}
+		helper.runAfterDelay(40, () -> {
+			int burnt = 1000 - cell.tanks().input(0).millibuckets();
+			helper.assertTrue(burnt > 0, "Burnt no hydrogen");
+			helper.assertTrue(energy.getAmount() == (long) burnt * FluidFuels.HYDROGEN, "Energy " + energy.getAmount() + " for " + burnt + " mB");
 			helper.succeed();
 		});
 	}

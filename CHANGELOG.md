@@ -8,6 +8,14 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #52 Chemistry, batch 5: electrochemistry and acids
+- **Brine** (chemical mixer: salt + water) and the **electrolytic cell** (3×3×2): brine → **chlorine**, **hydrogen** (gases) and **lye**, each out of its own row.
+- **Chemical reactor** (2×2×2): sulfur dust + water → **sulfuric acid**.
+- **Alumina and real aluminum:** bauxite + lye → 2 alumina; 2 alumina + coke → 2 aluminum ingots in the cell. Two ingots per bauxite, twice the arc furnace.
+- **Fertilizer:** phosphate + sulfuric acid; ripens every crop in a 5×5 area.
+- **Fuel cell** (one block, electric look): hydrogen → 128 JE/t.
+- Five advancements, a Chemistry chapter in the handbook, and a metal audit for fluid recipes.
+
 ### #51 Oil line, batch 4: industry, and the electric look
 - **Polymerization reactor** (2×2×3): refinery gas → plastic pellets; the metal press makes **plastic sheets**.
 - **Asphalt**, **asphalt slab** and **asphalt road line**: walking on them is 1.3× as fast.

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:electrolysis",
+  "items": [
+    {
+      "ingredient": "jugcraft:alumina",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:aluminum_ingot",
+      "count": 2
+    }
+  ],
+  "time": 160
+}

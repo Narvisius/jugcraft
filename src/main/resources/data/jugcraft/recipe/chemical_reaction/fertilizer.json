@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:phosphate",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:sulfuric_acid",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:fertilizer",
+      "count": 4
+    }
+  ],
+  "time": 80
+}

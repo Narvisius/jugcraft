@@ -1,5 +1,6 @@
 """Electric-look models for the power gear (see docs/ART_DIRECTION.md), replacing their steampunk and dieselpunk
-looks: the battery box, capacitor bank, solar panel and electric pump. (The charging station is in tool_models.py,
+looks: the battery box, capacitor bank, solar panel and electric pump; and the hydrogen fuel cell, the first new
+machine built in this look. (The charging station is in tool_models.py,
 the electric motor and dynamo in kinetic_models.py; cables are built in generate_material_data.py.)
 
 Dark graphite casings with bevelled panels, trim posts and vents, lit by glowing mint-green strips (emissive, see
@@ -114,5 +115,30 @@ def electric_pump():
     return m
 
 
+def fuel_cell():
+    """A hydrogen fuel cell: a stack of graphite cell plates between trim end plates, with glowing seams between the
+    plates, a hydrogen inlet on top, a status screen on the front that lights while it runs, and power ports in the
+    middle of the other sides for cables."""
+    m = [box((0, 0, 0), (16, 1.5, 16), FRAME)]
+    # End plates and the stack of cells between them, with a glowing seam between each pair.
+    m.append(box((1, 1.5, 1.5), (15, 13, 3.5), FRAME))
+    m.append(box((1, 1.5, 12.5), (15, 13, 14.5), FRAME))
+    for z in range(4, 12, 2):
+        m.append(box((1.5, 2, z), (14.5, 12.5, z + 1.5), CASING))
+        m.append(box((1.75, 2.5, z + 1.5), (14.25, 12, z + 2), GLOW))
+    # Tie rods along the stack.
+    for x, y in ((2, 3), (14, 3), (2, 11.5), (14, 11.5)):
+        m.append(box((x - 0.75, y - 0.75, 0.75), (x + 0.75, y + 0.75, 15.25), FRAME))
+    # Hydrogen inlet on top, status screen on the front.
+    m.append(box((4, 13, 5), (12, 14, 11), {"*": FRAME, "up": VENT + "!"}))
+    m.append(box((6.5, 14, 6.5), (9.5, 16, 9.5), {"*": CASING, "up": PORT + "!"}))
+    m.append(box((4, 4, 0.75), (12, 10, 1.5), {"*": FRAME, "north": "el_screen!"}))
+    # Ports where cables meet it.
+    m.append(box((0.25, 5.5, 6), (1, 10.5, 10), {"*": FRAME, "west": PORT + "!"}))
+    m.append(box((15, 5.5, 6), (15.75, 10.5, 10), {"*": FRAME, "east": PORT + "!"}))
+    m.append(box((6, 5.5, 14.5), (10, 10.5, 15.75), {"*": FRAME, "south": PORT + "!"}))
+    return m
+
+
 MODELS = {"battery_box": battery_box(), "capacitor_bank": capacitor_bank(), "solar_panel": solar_panel(),
-          "electric_pump": electric_pump()}
+          "electric_pump": electric_pump(), "fuel_cell": fuel_cell()}

@@ -116,7 +116,7 @@ def check_petro():
     expected = [(f, str(i["tick_delay"]), str(i["slope"]), str(i["drop_off"])) for f, i in petro.FLUIDS.items()]
     if declared != expected:
         err(f"PetroFluids.java fluids {declared} != tools/petro.py {expected}")
-    items_java = re.findall(r'JugcraftRegistry\.item\("([a-z_]+)"\)',
+    items_java = re.findall(r'JugcraftRegistry\.item\("([a-z_]+)"[,)]',
                             (JAVA_ROOT / "chemistry" / "PetroItems.java").read_text(encoding="utf-8"))
     if items_java != list(petro.ITEMS):
         err(f"PetroItems.java items {items_java} != tools/petro.py {list(petro.ITEMS)}")
@@ -210,8 +210,11 @@ def item_units(ref):
             if path == f"{metal}_{form}":
                 return {metal: PART_UNITS[form]}
     if path == "bauxite":
-        # One bauxite holds one ingot of aluminum: the arc furnace recovers all of it,
-        # the blast-furnace stand-in only a nugget.
+        # One bauxite holds two ingots of aluminum (it is about half alumina): the Bayer route (chemical reactor and
+        # electrolytic cell) recovers all of it, the arc furnace stand-in half, the blast-furnace stand-in a nugget.
+        return {"aluminum": 18}
+    if path == "alumina":
+        # Bayer-process alumina: one ingot of aluminum each, smelted out in the electrolytic cell.
         return {"aluminum": 9}
     if path in NON_METAL:
         return {}
@@ -340,6 +343,17 @@ def check_fluid_recipes(registered):
                     err(f"{label}: unknown fluid {fluid}")
                 if mb > spec["outputs"][i]:
                     err(f"{label}: makes {mb} mB of {fluid} but its tank holds {spec['outputs'][i]}")
+            # Metal is conserved like in the item machines: no recipe gives out more than its items hold.
+            metal_in, metal_out = {}, {}
+            for ref, count in recipe.get("items", []):
+                for metal, units in item_units(ref).items():
+                    metal_in[metal] = metal_in.get(metal, 0) + units * count
+            for ref, count in recipe.get("results", []):
+                for metal, units in item_units(ref).items():
+                    metal_out[metal] = metal_out.get(metal, 0) + units * count
+            for metal, units in metal_out.items():
+                if units > metal_in.get(metal, 0):
+                    err(f"{label}: gives {units} {metal} units from {metal_in.get(metal, 0)}")
             for ref, _ in recipe.get("items", []) + recipe.get("results", []):
                 if ref.startswith("#"):
                     if not tag_exists("item", ref[1:]):

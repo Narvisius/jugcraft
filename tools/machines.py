@@ -65,6 +65,12 @@ MACHINES = {
     "gas_turbine": {"display": "Gas Turbine", "lit": True},
     # A 2x2x3 jacketed reactor: refinery gas -> plastic pellets.
     "polymerization_reactor": {"display": "Polymerization Reactor", "lit": True},
+    # Industrial chemistry: a 3x3x2 electrolysis house (brine -> chlorine, hydrogen, lye; alumina -> aluminum).
+    "electrolytic_cell": {"display": "Electrolytic Cell", "lit": True},
+    # A 2x2x2 acid-proof reactor: sulfur + water -> sulfuric acid, and later digestion and fertilizer.
+    "chemical_reactor": {"display": "Chemical Reactor", "lit": True},
+    # A one-block hydrogen fuel cell in the electric look: hydrogen -> JE.
+    "fuel_cell": {"display": "Fuel Cell", "lit": True},
     # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
     "diesel_engine": {"display": "Diesel Engine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -230,6 +236,12 @@ STATS = {
     "gas_turbine": {"capacity": 120_000, "output_per_tick": 2_048, "generation_per_tick": 512, "tank": 16_000},
     # 2x2x3. 96 JE/t; a bucket of refinery gas per 100 ticks.
     "polymerization_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
+    # 3x3x2. 256 JE/t; a bucket of brine per 200 ticks (51,200 JE).
+    "electrolytic_cell": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 256, "tank": 8_000},
+    # 2x2x2. 96 JE/t; a bucket of sulfuric acid per 100 ticks.
+    "chemical_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
+    # One block. 128 JE/t from 1 mB of hydrogen a tick (128 JE/mB).
+    "fuel_cell": {"capacity": 40_000, "output_per_tick": 512, "generation_per_tick": 128, "tank": 8_000},
     # 2x2x3. Up to 512 KE/t: 2 mB of diesel a tick (256 KE/mB) or 4 mB of heavy fuel oil, only for what it delivers.
     "diesel_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 512, "tank": 8_000},
 }
@@ -425,6 +437,15 @@ CRAFTING = {
     "gas_turbine": (["PBP", "DCD", "PGP"], {"P": "#c:plates/steel", "B": "minecraft:iron_bars",
                                             "D": "jugcraft:diesel_generator", "C": "jugcraft:advanced_circuit",
                                             "G": "#c:gears/steel"}, 1),
+    "electrolytic_cell": (["PWP", "TCT", "PMP"], {"P": "#c:plates/steel", "W": "jugcraft:aluminum_cable",
+                                                  "T": "jugcraft:steel_tank", "C": "jugcraft:advanced_circuit",
+                                                  "M": "jugcraft:machine_casing"}, 1),
+    "chemical_reactor": (["PGP", "TCT", "PLP"], {"P": "#c:plates/steel", "G": "minecraft:glass",
+                                                 "T": "jugcraft:fluid_tank", "C": "jugcraft:machine_casing",
+                                                 "L": "#c:ingots/lead"}, 1),
+    "fuel_cell": (["PWP", "SCS", "PTP"], {"P": "#c:plates/aluminum", "W": "jugcraft:aluminum_cable",
+                                          "S": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
+                                          "T": "jugcraft:fluid_tank"}, 1),
     "diesel_engine": (["PXP", "GCG", "PXP"], {"P": "#c:plates/steel", "X": "jugcraft:plastic_sheet",
                                               "G": "#c:gears/steel", "C": "jugcraft:machine_casing"}, 1),
     "polymerization_reactor": (["PCP", "TGT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:cracking_catalyst",

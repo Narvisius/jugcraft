@@ -35,6 +35,16 @@ FLUIDS = {
     "flowback_water": {"display": "Flowback Water", "feature": "crude_oil",
                        "colors": [(70, 64, 50), (100, 92, 72), (130, 120, 96), (172, 162, 132)],
                        "tick_delay": 5, "slope": 4, "drop_off": 1},
+    # Industrial chemistry (batch 5): salt brine for the electrolytic cell, and the lye it makes.
+    "brine": {"display": "Brine", "feature": "salt",
+              "colors": [(110, 140, 160), (150, 178, 194), (190, 210, 220), (232, 240, 244)],
+              "tick_delay": 5, "slope": 4, "drop_off": 1},
+    "lye": {"display": "Lye", "feature": "salt",
+            "colors": [(170, 170, 140), (200, 200, 170), (224, 224, 198), (246, 246, 228)],
+            "tick_delay": 6, "slope": 4, "drop_off": 1},
+    "sulfuric_acid": {"display": "Sulfuric Acid", "feature": "sulfur",
+                      "colors": [(150, 140, 40), (190, 180, 70), (214, 206, 104), (240, 236, 170)],
+                      "tick_delay": 6, "slope": 4, "drop_off": 1},
 }
 
 # Gases: fluids that only live in tanks and pipes (no block, no bucket). Gauge colour in Java (PetroFluids.gas).
@@ -42,6 +52,11 @@ GASES = {
     # colors: the swirl drawn for recipe viewers and tank gauges (gases are never placed in the world).
     "refinery_gas": {"display": "Refinery Gas", "feature": "crude_oil",
                      "colors": [(150, 160, 172), (176, 188, 200), (200, 210, 220), (226, 232, 238)]},
+    # From brine electrolysis (batch 5).
+    "chlorine": {"display": "Chlorine", "feature": "salt",
+                 "colors": [(130, 160, 60), (160, 190, 80), (186, 214, 104), (214, 236, 150)]},
+    "hydrogen": {"display": "Hydrogen", "feature": "salt",
+                 "colors": [(190, 200, 214), (210, 220, 232), (228, 236, 244), (246, 250, 254)]},
 }
 
 
@@ -54,6 +69,10 @@ ITEMS = {
     # Polymerized refinery gas; the metal press flattens each into a plastic sheet.
     "plastic_pellets": "Plastic Pellets",
     "plastic_sheet": "Plastic Sheet",
+    # Bayer-process alumina (batch 5): the electrolytic cell smelts it into aluminum.
+    "alumina": "Alumina",
+    # Superphosphate fertilizer (batch 5): ripens crops in a 5x5 area (chemistry/FertilizerItem).
+    "fertilizer": "Fertilizer",
 }
 
 
@@ -126,6 +145,14 @@ FLUID_MACHINES = {
     "gas_turbine": {"inputs": [16_000, 4_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
     # Burns diesel or heavy fuel oil (FLUID_FUELS, KE per mB) to turn a shaft at up to 512 KE/t.
     "diesel_engine": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
+    # Brine -> chlorine (top), hydrogen (middle) and lye (base); alumina + coke -> aluminum (batch 5). 256 JE/t.
+    "electrolytic_cell": {"inputs": [8_000], "outputs": [8_000, 8_000, 8_000], "item_inputs": 2, "item_outputs": 1,
+                          "recipe_type": "electrolysis"},
+    # Burns hydrogen (128 JE/mB) at 128 JE/t; one block, electric look (batch 5).
+    "fuel_cell": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
+    # Sulfur + water -> sulfuric acid; bauxite + lye -> alumina; phosphate + acid -> fertilizer (batch 5). 96 JE/t.
+    "chemical_reactor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 1,
+                         "recipe_type": "chemical_reaction"},
     # Refinery gas -> plastic pellets. 96 JE/t.
     "polymerization_reactor": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 1,
                                "recipe_type": "polymerization"},
@@ -136,6 +163,7 @@ FLUID_FUELS = {
     "diesel_generator": {"diesel": 256, "heavy_fuel_oil": 128},
     "gas_turbine": {"gasoline": 384, "refinery_gas": 192},
     "diesel_engine": {"diesel": 256, "heavy_fuel_oil": 128},
+    "fuel_cell": {"hydrogen": 128},
 }
 
 # Fluid recipes per machine. Each: name, item ingredients [(item or #tag, count)], fluids in [(fluid, mB)],
@@ -181,6 +209,31 @@ FLUID_RECIPES = {
         {"name": "fracking_fluid", "items": [("minecraft:sand", 2), ("minecraft:dried_kelp", 1)],
          "fluids": [("minecraft:water", 1000)], "fluid_results": [("jugcraft:fracking_fluid", 1000)], "source": 0,
          "ticks": 80, "features": ["crude_oil"]},
+        # Brine for the electrolytic cell: two salt dissolved in a bucket of water.
+        {"name": "brine", "items": [("jugcraft:salt", 2)], "fluids": [("minecraft:water", 1000)],
+         "fluid_results": [("jugcraft:brine", 1000)], "source": 0, "ticks": 60, "features": ["salt"]},
+    ],
+    # The chlor-alkali process: a bucket of brine splits into chlorine at the anode, hydrogen at the cathode and lye
+    # left in the cell. Electricity-hungry: 256 JE/t for 200 ticks.
+    "electrolytic_cell": [
+        {"name": "brine", "fluids": [("jugcraft:brine", 1000)],
+         "fluid_results": [("jugcraft:chlorine", 250), ("jugcraft:hydrogen", 250), ("jugcraft:lye", 500)],
+         "ticks": 200, "features": ["salt"]},
+        # The Hall-Heroult process: alumina dissolved in molten salt and split with a coke anode, which burns away.
+        {"name": "aluminum", "items": [("jugcraft:alumina", 2), ("jugcraft:coke", 1)],
+         "results": [("jugcraft:aluminum_ingot", 2)], "ticks": 160, "features": ["aluminum"]},
+    ],
+    # Sulfur burnt to sulfur trioxide and absorbed in water (the contact process, simplified): two sulfur dust and a
+    # bucket of water make a bucket of sulfuric acid.
+    "chemical_reactor": [
+        {"name": "sulfuric_acid", "items": [("jugcraft:sulfur_dust", 2)], "fluids": [("minecraft:water", 1000)],
+         "fluid_results": [("jugcraft:sulfuric_acid", 1000)], "source": 0, "ticks": 100, "features": ["sulfur"]},
+        # The Bayer process: bauxite digested in hot lye leaves alumina (each bauxite holds two ingots' worth).
+        {"name": "alumina", "items": [("jugcraft:bauxite", 1)], "fluids": [("jugcraft:lye", 250)],
+         "results": [("jugcraft:alumina", 2)], "ticks": 120, "features": ["aluminum", "salt"]},
+        # Superphosphate: phosphate rock treated with sulfuric acid becomes a soluble fertilizer.
+        {"name": "fertilizer", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:sulfuric_acid", 250)],
+         "results": [("jugcraft:fertilizer", 4)], "ticks": 80, "features": ["phosphate", "sulfur"]},
     ],
     # Flowback water settles and is filtered: most of it comes back as clean water; the brine leaves salt. A quarter
     # is lost (sludge), so fracking water is never free.

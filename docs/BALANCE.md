@@ -18,6 +18,7 @@ Energy is in **JE** (Jugcraft Energy) and rotation in **KE**, both per tick (20 
 | Diesel Generator | 256 JE/t | diesel 256,000 · heavy fuel oil 128,000 per bucket | stops burning when full |
 | Gas Turbine | 512 JE/t | gasoline 384,000 · refinery gas 192,000 per bucket | plus 1 mB lubricant per 20 ticks running (a bucket per 10,240,000 JE) |
 | Diesel Engine | up to 512 KE/t | diesel 256,000 KE · heavy fuel oil 128,000 KE per bucket | burns only for what the line takes |
+| Fuel Cell | 128 JE/t | hydrogen 128,000 per bucket | a bucket of hydrogen costs 204,800 JE of electrolysis |
 | Steam Generator, bitumen | 64 JE/t | 51,200 per bitumen | unchanged by the oil line |
 
 Charcoal burns three quarters as long as coal in Jugcraft's generators and engines. Vanilla furnaces are unchanged.
@@ -78,6 +79,8 @@ Burnt in the best generator for each (diesel generator, gas turbine), that is 13
 ## Loops and renewables checked
 
 - **Motor ↔ dynamo:** loses 44% per round trip.
+- **Electrolysis and the fuel cell:** a bucket of brine costs 51,200 JE and gives 250 mB of hydrogen, worth 32,000 JE in the fuel cell: a 37.5% return, never a loop.
+- **Aluminum:** the Bayer route gets two ingots per bauxite for about 35,000 JE an ingot; the arc furnace gets one for 12,800 JE. More metal for more power, not more of both.
 - **Oil:** no loop. Fracking water returns at 75% (flowback treatment), so a fracking rig needs a water supply; the water is not counted as gain. Diesel engine → dynamo → electric motor loses at every step.
 - **Coke:** a coke oven turns 1 coal into 1 coke, which burns twice as long. That doubles the power from coal, but uses the coal up: an upgrade path, not a loop.
 - **Sieve:** cobblestone → gravel → sieve gives a small trickle of iron and tin nuggets (12% and 8%). This is a deliberate renewable, marked `renewable` in the recipe data and exempt from the metal-conservation audit.

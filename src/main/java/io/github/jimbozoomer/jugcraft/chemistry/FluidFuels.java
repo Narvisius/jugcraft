@@ -17,6 +17,9 @@ public final class FluidFuels {
 	public static final int GASOLINE = 384;
 	/** Refinery gas in the gas turbine: half gasoline's value, so the distillation tower's gas is worth burning. */
 	public static final int REFINERY_GAS = 192;
+	/** Hydrogen in the fuel cell: 128,000 JE a bucket, less than the 204,800 JE the electrolytic cell spends making
+	 * a bucket of it (four buckets of brine), so electrolysis and the fuel cell are never a power loop. */
+	public static final int HYDROGEN = 128;
 	/** The gas turbine's lubricant upkeep: 1 mB for every this many ticks it runs (a bucket lasts 20,000 ticks). */
 	public static final int LUBRICANT_TICKS = 20;
 
@@ -30,6 +33,7 @@ public final class FluidFuels {
 					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
 			case DIESEL_ENGINE -> fluid == PetroFluids.DIESEL.source() ? DIESEL
 					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
+			case FUEL_CELL -> fluid == PetroFluids.HYDROGEN.fluid() ? HYDROGEN : 0;
 			case GAS_TURBINE -> fluid == PetroFluids.GASOLINE.source() ? GASOLINE
 					: fluid == PetroFluids.REFINERY_GAS.fluid() ? REFINERY_GAS : 0;
 			default -> 0;

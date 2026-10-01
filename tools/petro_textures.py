@@ -189,7 +189,47 @@ def asphalt_road_line():
     return img
 
 
+def alumina():
+    """Alumina: a small heap of fine white powder with grey shading and a few glinting grains."""
+    rng = random.Random(965)
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(6, 15):
+        half = (y - 5) * 0.75 + 1
+        for x in range(16):
+            if abs(x - 7.5) <= half:
+                c = (236, 236, 232) if rng.random() < 0.6 else (212, 214, 214)
+                if x > 7.5 + half - 1.5 or y == 14:
+                    c = (182, 184, 188)
+                if rng.random() < 0.04:
+                    c = (252, 252, 255)
+                img.putpixel((x, y), c + (255,))
+    return img
+
+
+def fertilizer():
+    """Fertilizer: a tied burlap sack with a green leaf stencilled on it and a few grey-white granules spilt."""
+    rng = random.Random(966)
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(3, 15):
+        half = 4 + (1 if 6 <= y <= 12 else 0) - (1 if y < 5 else 0)
+        for x in range(16):
+            if abs(x - 7.5) <= half:
+                c = (176, 146, 96) if rng.random() < 0.7 else (150, 122, 78)
+                if x > 7.5 + half - 1 or y == 14:
+                    c = (120, 96, 60)
+                img.putpixel((x, y), c + (255,))
+    for x in range(6, 10):
+        img.putpixel((x, 4), (96, 76, 44, 255))
+    for x, y in ((7, 8), (8, 8), (6, 9), (7, 9), (8, 9), (9, 9), (7, 10), (8, 10), (7, 11)):
+        img.putpixel((x, y), (60, 140, 50, 255))
+    for x, y in ((2, 14), (3, 15), (13, 15), (12, 14)):
+        img.putpixel((x, y), (214, 218, 210, 255))
+    return img
+
+
 def draw_all(save, save_animation):
+    save(fertilizer(), "item", "fertilizer")
+    save(alumina(), "item", "alumina")
     save(asphalt(), "block", "asphalt")
     save(asphalt_road_line(), "block", "asphalt_road_line")
     save(plastic_pellets(), "item", "plastic_pellets")

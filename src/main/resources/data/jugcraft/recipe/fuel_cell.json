@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "SCS",
+    "PTP"
+  ],
+  "key": {
+    "P": "#c:plates/aluminum",
+    "W": "jugcraft:aluminum_cable",
+    "S": "#c:plates/steel",
+    "C": "jugcraft:advanced_circuit",
+    "T": "jugcraft:fluid_tank"
+  },
+  "result": {
+    "id": "jugcraft:fuel_cell",
+    "count": 1
+  }
+}

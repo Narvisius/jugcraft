@@ -107,6 +107,15 @@ public final class PetroFluids {
 	public static Entry LUBRICANT;
 	/** The lightest fraction: refinery gas (fuel gas, and later plastics). */
 	public static Gas REFINERY_GAS;
+	/** Salt dissolved in water, for the electrolytic cell. */
+	public static Entry BRINE;
+	/** Sodium hydroxide solution from brine electrolysis: the base for digesting bauxite. */
+	public static Entry LYE;
+	/** Gases from brine electrolysis: chlorine (at the anode) and hydrogen (at the cathode). */
+	public static Gas CHLORINE;
+	public static Gas HYDROGEN;
+	/** Sulfur burnt and absorbed in water: the acid for fertilizer and leaching. */
+	public static Entry SULFURIC_ACID;
 
 	private PetroFluids() {
 	}
@@ -145,6 +154,11 @@ public final class PetroFluids {
 		FRACKING_FLUID = fluid("fracking_fluid", 6, 3, 1, 0xFF8296A0, MapColor.COLOR_LIGHT_GRAY);
 		FLOWBACK_WATER = fluid("flowback_water", 5, 4, 1, 0xFF645C48, MapColor.COLOR_BROWN);
 		REFINERY_GAS = gas("refinery_gas", 0xFFB8C4D0);
+		BRINE = fluid("brine", 5, 4, 1, 0xFFB4C8D2, MapColor.COLOR_LIGHT_BLUE);
+		LYE = fluid("lye", 6, 4, 1, 0xFFDCDCC0, MapColor.SNOW);
+		CHLORINE = gas("chlorine", 0xFFB4D25A);
+		HYDROGEN = gas("hydrogen", 0xFFDCE6F0);
+		SULFURIC_ACID = fluid("sulfuric_acid", 6, 4, 1, 0xFFD2C850, MapColor.COLOR_YELLOW);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {

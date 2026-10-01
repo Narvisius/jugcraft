@@ -15,6 +15,10 @@ public final class PetroItems {
 	public static Item PLASTIC_PELLETS;
 	/** Pressed plastic, for parts of later machines (first used in the diesel engine). */
 	public static Item PLASTIC_SHEET;
+	/** Bauxite digested in hot lye (the Bayer process): smelted into aluminum in the electrolytic cell. */
+	public static Item ALUMINA;
+	/** Superphosphate: ripens the crops in a 5x5 area ({@link FertilizerItem}). */
+	public static Item FERTILIZER;
 
 	private PetroItems() {
 	}
@@ -24,12 +28,16 @@ public final class PetroItems {
 		ASPHALT_BINDER = JugcraftRegistry.item("asphalt_binder");
 		PLASTIC_PELLETS = JugcraftRegistry.item("plastic_pellets");
 		PLASTIC_SHEET = JugcraftRegistry.item("plastic_sheet");
+		ALUMINA = JugcraftRegistry.item("alumina");
+		FERTILIZER = JugcraftRegistry.item("fertilizer", FertilizerItem::new);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(CRACKING_CATALYST);
 			output.accept(ASPHALT_BINDER);
 			output.accept(PLASTIC_PELLETS);
 			output.accept(PLASTIC_SHEET);
+			output.accept(ALUMINA);
+			output.accept(FERTILIZER);
 		});
 	}
 }

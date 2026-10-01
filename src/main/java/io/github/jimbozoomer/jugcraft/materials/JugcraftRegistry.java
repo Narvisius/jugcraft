@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.materials;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import java.util.function.Function;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -16,8 +17,13 @@ public final class JugcraftRegistry {
 	}
 
 	public static Item item(String path) {
+		return item(path, Item::new);
+	}
+
+	/** Registers an item of a custom class, built from its properties (with the registry key already set). */
+	public static Item item(String path, Function<Item.Properties, Item> factory) {
 		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Jugcraft.id(path));
-		return Registry.register(BuiltInRegistries.ITEM, key, new Item(new Item.Properties().setId(key)));
+		return Registry.register(BuiltInRegistries.ITEM, key, factory.apply(new Item.Properties().setId(key)));
 	}
 
 	/** Registers a full cube block that copies another block's properties (hardness, sound, tool rule). */

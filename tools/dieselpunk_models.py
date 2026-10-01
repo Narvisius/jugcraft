@@ -683,6 +683,71 @@ def diesel_engine():
     return m
 
 
+def electrolytic_cell():
+    """Three wide, three tall and two deep: an electrolysis house. Three olive cells in a row on a hazard-striped
+    skid, each with a chrome lid, rubber-gasketed electrode posts and a sight glass, fed by heavy copper bus bars from a
+    rectifier cabinet at the front left (the master block, gauge and caged lamp). Gas headers run the length of the
+    back: pale green chlorine at the top, white hydrogen in the middle row, and the lye main along the base, each with
+    a red valve where it leaves."""
+    m = [box((-32, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Rectifier cabinet (master block) with its gauge, lamp and vents.
+    m.append(box((1, 2, 0.5), (15, 28, 14), {"*": OLIVE, "north": GUNMETAL, "east": GRILLE, "up": STENCIL}))
+    m.append(dial("north", (5, 22, 0.25), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 22, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    m.append(box((3, 4, 0.25), (13, 14, 0.5), GRILLE))
+    # Three cells in a row, each with a lid, electrode posts and a sight glass of brine.
+    for x0 in (-31, -21, -11):
+        x1 = x0 + 9
+        m.append(box((x0, 2, 3), (x1, 20, 22), {"*": OLIVE, "up": GUNMETAL}))
+        m.append(box((x0 - 0.5, 20, 2.5), (x1 + 0.5, 22, 22.5), CHROME))
+        m.append(box((x0 + 2.5, 6, 2.75), (x0 + 6.5, 16, 3), {"*": CHROME, "north": "brine_still"}))
+        for px in (x0 + 1.5, x0 + 6):
+            m.append(box((px, 22, 9), (px + 1.5, 26, 10.5), RUBBER))
+            m.append(box((px - 0.25, 26, 8.75), (px + 1.75, 27, 10.75), "sp_copper"))
+    # Copper bus bars from the rectifier over the cells.
+    m.append(box((-31, 27, 9), (1, 28.5, 11), "sp_copper"))
+    m.append(box((-31, 27, 13), (1, 28.5, 15), "sp_copper"))
+    # Headers along the back: chlorine at the top, hydrogen in the middle, lye at the base.
+    for y, cap in ((40, "chlorine_still"), (24, "hydrogen_still"), (8, "lye_still")):
+        m.append(box((-31.5, y - 2, 24), (15, y + 2, 28), {"*": CHROME, "east": cap, "west": cap}))
+        m += wheel("z", 9, y, 1.5, 28, 28.75, "sp_red_iron", CHROME, spokes=False)
+    for x in (-27.5, -17.5, -7.5):
+        m.append(box((x, 20, 22), (x + 2, 38, 24), RUBBER))
+    # A gunmetal rack at the back carries the headers: three posts, a crown beam and hazard caps.
+    for x in (-31.5, -9, 13):
+        m.append(box((x, 2, 28), (x + 2.5, 44, 31), GUNMETAL))
+        m.append(box((x - 0.25, 44, 27.75), (x + 2.75, 45, 31.25), HAZARD))
+    m.append(box((-29, 42, 28.5), (13, 44, 30.5), GUNMETAL))
+    return m
+
+
+def chemical_reactor():
+    """Two by two by two: an acid plant. A squat lead-grey reactor vessel with gunmetal bands and a yellow acid sight
+    glass, a sulfur burner (a firebrick box with a hopper on top) beside it feeding hot gas through a chrome duct, a
+    slim absorption tower at the back with a red valve, and the control panel (the master block) at the front left."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    m.append(box((1, 2, 0.5), (15, 12, 6), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(dial("north", (5, 8.5, 0.25), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 8.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    # Reactor vessel (lead-lined: gunmetal shell) with bands and a sight glass of acid.
+    m += cyl("y", -2, 19, 10, 2, 22, GUNMETAL, CHROME)
+    for y in (6, 13, 20):
+        m += cyl("y", -2, 19, 10.4, y, y + 1, OLIVE)
+    m.append(box((-4, 8, 8.75), (0, 18, 9.25), {"*": CHROME, "north": "sulfuric_acid_still"}))
+    m += cyl("y", -2, 19, 6, 22, 24, GUNMETAL, CHROME)
+    # Sulfur burner on the right with its hopper, and the duct into the vessel.
+    m.append(box((-15, 2, 2), (-7, 12, 10), {"*": "sp_firebrick", "north": "sp_firebox!"}))
+    m.append(box((-14, 12, 3), (-8, 16, 9), {"*": GUNMETAL, "up": "sp_hopper_inside"}))
+    m.append(box((-12, 16, 5), (-10, 26, 7), CHROME))
+    m.append(box((-12, 24, 7), (-10, 26, 14), CHROME))
+    # Absorption tower at the back.
+    m += cyl("y", 9, 27, 3, 2, 30, OLIVE, GUNMETAL)
+    m.append(box((7, 30, 25), (11, 31, 29), HAZARD))
+    m.append(box((4, 14, 25), (6, 16, 27), CHROME))
+    m += wheel("x", 15, 26, 1.5, 3.25, 4, "sp_red_iron", CHROME, spokes=False)
+    return m
+
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
           "ore_drill": ore_drill(), "pumpjack": pumpjack(),
           "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
@@ -692,4 +757,6 @@ MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), 
           "flowback_treatment_unit": flowback_treatment_unit(), "diesel_generator": diesel_generator(),
           "gas_turbine": gas_turbine(),
           "polymerization_reactor": polymerization_reactor(),
-          "diesel_engine": diesel_engine()}
+          "diesel_engine": diesel_engine(),
+          "electrolytic_cell": electrolytic_cell(),
+          "chemical_reactor": chemical_reactor()}

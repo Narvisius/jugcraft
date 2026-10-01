@@ -130,6 +130,14 @@ ABOUT = {
     "diesel_generator": "Three wide, two tall and two deep. Burns diesel or heavy fuel oil piped into its 8-bucket tank: "
                         "256 JE/t, a bucket of diesel every 1,000 ticks (256,000 JE) or heavy fuel oil twice as fast "
                         "(128,000 JE a bucket). It refuses crude oil and other fluids.",
+    "electrolytic_cell": "Three wide, three tall and two deep. Splits brine with electricity: a bucket gives 250 mB of "
+                         "chlorine (out of the top row), 250 mB of hydrogen (the middle row) and 500 mB of lye (the "
+                         "bottom row), every 10 seconds at 256 JE/t. Make brine in the chemical mixer from two salt "
+                         "and a bucket of water.",
+    "chemical_reactor": "Two by two by two, lined with lead against the acid. Burns sulfur and absorbs it in water: two "
+                        "sulfur dust and a bucket of water make a bucket of sulfuric acid, every 5 seconds.",
+    "fuel_cell": "One block. Combines hydrogen with the air: 128 JE/t, burning a millibucket of hydrogen a tick (128,000 "
+                 "JE a bucket). Pipe hydrogen from the electrolytic cell into it. Its screen lights while it runs.",
     "diesel_engine": "Two wide, two tall and three long. Burns diesel (256 KE a mB) or heavy fuel oil (128) piped into "
                      "its 8-bucket tank and turns a shaft out of the back of its upper right back block: up to "
                      "512 KE/t, twice the large steam engine. It burns only for the rotation the line takes.",
@@ -365,6 +373,25 @@ def build():
             {"title": "Cracking Catalyst", "icon": f"{MOD}:cracking_catalyst", "text": [
                 "Bauxite (alumina) and sand (silica) with a nickel ingot make four. The catalytic cracker uses one for "
                 "each bucket of heavy fuel oil it cracks."], "craft": craft("cracking_catalyst")},
+        ]},
+        {"title": "Chemistry", "icon": f"{MOD}:brine_bucket", "pages": [
+            {"title": "Industrial Chemistry", "icon": f"{MOD}:salt", "text": [
+                "Salt, sulfur, phosphate and bauxite get their real uses here.",
+                "Dissolve salt in water to make brine (chemical mixer), then split it in the electrolytic cell into "
+                "chlorine, hydrogen and lye. Gases live only in tanks and pipes."]},
+            machine_page("electrolytic_cell"),
+            machine_page("chemical_reactor"),
+            machine_page("fuel_cell"),
+            {"title": "Aluminum, the Real Way", "icon": f"{MOD}:alumina", "text": [
+                "Digest a bauxite in 250 mB of lye in the chemical reactor: two alumina.",
+                "Smelt two alumina with a coal coke anode in the electrolytic cell: two aluminum ingots, every 8 "
+                "seconds.",
+                "That is two ingots from each bauxite, twice what the arc furnace gets and far more than the blast "
+                "furnace's nugget."]},
+            {"title": "Fertilizer", "icon": f"{MOD}:fertilizer", "text": [
+                "Two phosphate and 250 mB of sulfuric acid in the chemical reactor make four fertilizer.",
+                "Use one on the ground or a crop: every crop in the 5x5 area around it (a block up or down too) gets "
+                "two doses of bone meal. Grass and saplings are left alone."]},
         ]},
         {"title": "Logistics", "icon": f"{MOD}:brass_item_pipe", "pages": [
             {"title": "Machine Sides", "icon": f"{MOD}:crusher", "text": [

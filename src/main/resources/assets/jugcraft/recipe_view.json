@@ -2897,6 +2897,152 @@
           ],
           "results": [],
           "ticks": 80
+        },
+        {
+          "items": [
+            [
+              "jugcraft:salt",
+              2
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:brine",
+              1000
+            ]
+          ],
+          "results": [],
+          "ticks": 60
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:electrolytic_cell",
+      "type": "electrolysis",
+      "recipes": [
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:brine",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:chlorine",
+              250
+            ],
+            [
+              "jugcraft:hydrogen",
+              250
+            ],
+            [
+              "jugcraft:lye",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 200
+        },
+        {
+          "items": [
+            [
+              "jugcraft:alumina",
+              2
+            ],
+            [
+              "jugcraft:coke",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:aluminum_ingot",
+              2
+            ]
+          ],
+          "ticks": 160
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:chemical_reactor",
+      "type": "chemical_reaction",
+      "recipes": [
+        {
+          "items": [
+            [
+              "jugcraft:sulfur_dust",
+              2
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:sulfuric_acid",
+              1000
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        },
+        {
+          "items": [
+            [
+              "jugcraft:bauxite",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:lye",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:alumina",
+              2
+            ]
+          ],
+          "ticks": 120
+        },
+        {
+          "items": [
+            [
+              "jugcraft:phosphate",
+              2
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:sulfuric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:fertilizer",
+              4
+            ]
+          ],
+          "ticks": 80
         }
       ]
     },
