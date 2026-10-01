@@ -1021,6 +1021,25 @@ public class JugcraftGameTests {
 		helper.succeed();
 	}
 
+	// ------------------------------------------------------------------ advancements
+
+	/** The quest line loads: its first and last steps exist, and the rocket pack step leads back to the root. */
+	@GameTest
+	public void advancementTreeLoads(GameTestHelper helper) {
+		var advancements = helper.getLevel().getServer().getAdvancements();
+		for (String id : List.of("root", "bronze", "steel", "charging_station", "upgrade", "rocket_pack")) {
+			helper.assertTrue(advancements.get(Jugcraft.id(id)) != null, "Advancement jugcraft:" + id + " did not load");
+		}
+		var step = advancements.get(Jugcraft.id("rocket_pack"));
+		int depth = 0;
+		while (step != null && step.value().parent().isPresent() && depth < 20) {
+			step = advancements.get(step.value().parent().get());
+			depth++;
+		}
+		helper.assertTrue(step != null && step.id().equals(Jugcraft.id("root")), "The rocket pack step does not lead back to the root");
+		helper.succeed();
+	}
+
 	// ------------------------------------------------------------------ auto-crafter
 
 	private static MachineBlockEntity autoCrafter(GameTestHelper helper, BlockPos pos) {

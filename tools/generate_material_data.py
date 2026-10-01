@@ -20,7 +20,7 @@ DATA = RES / "data"
 PACKS = RES / "resourcepacks"
 
 GENERATED_DIRS = [
-    ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang", ASSETS / "handbook",
+    DATA / MOD / "advancement", ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang", ASSETS / "handbook",
     DATA / MOD / "loot_table", DATA / MOD / "recipe", DATA / MOD / "worldgen",
     DATA / "c" / "tags", DATA / "minecraft" / "tags", RES / MOD, PACKS,
 ]
@@ -90,6 +90,8 @@ def assets():
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
         lang[f"item.{MOD}.{item}"] = item_name(item)
     machine_assets(lang)
+    import advancements
+    lang.update(advancements.generate(MOD)[1])
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 
@@ -678,6 +680,9 @@ def main():
     recipes()
     tags()
     worldgen()
+    import advancements
+    for key, advancement in advancements.generate(MOD)[0].items():
+        write(DATA / MOD / "advancement" / f"{key}.json", advancement)
 
 
 if __name__ == "__main__":

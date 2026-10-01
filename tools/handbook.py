@@ -183,6 +183,21 @@ def power_line(block):
     return f"Holds {stats['capacity']:,} JE; {stats['io_per_tick']} JE/t in and out."
 
 
+def milestone_pages():
+    """The advancement quest line (tools/advancements.py), in order, a few steps to a page."""
+    from advancements import TREE
+    steps = [(title, description, items if isinstance(items, str) else items[0])
+             for _, (_, items, title, description, _) in TREE.items()]
+    pages = []
+    for start in range(0, len(steps), 5):
+        chunk = steps[start:start + 5]
+        pages.append({"title": "Milestones" if start == 0 else f"Milestones ({start // 5 + 1})",
+                      "icon": f"{MOD}:{chunk[0][2]}",
+                      "text": (["Your advancements (key L) track these steps."] if start == 0 else [])
+                      + [f"{title}: {description}." for title, description, _ in chunk]})
+    return pages
+
+
 def block_page(block, display):
     page = {"title": display, "icon": f"{MOD}:{block}", "text": [ABOUT[block]]}
     if block in MACHINES:
@@ -224,7 +239,7 @@ def build():
                 "Furnace. Run cable from the generator to the furnace, or place them side by side.",
                 "Every machine holds its own charge, so it keeps working for a while after the power stops."],
              "craft": craft("machine_casing")},
-        ]},
+        ] + milestone_pages()},
         {"title": "Materials", "icon": f"{MOD}:bronze_ingot", "pages": [
             ores_page(),
             block_page("prospector", TOOLS["prospector"]),

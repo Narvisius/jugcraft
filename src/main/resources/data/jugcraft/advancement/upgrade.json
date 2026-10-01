@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:overclock_module"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.upgrade.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.upgrade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:overclock_module",
+              "jugcraft:range_module",
+              "jugcraft:capacity_module",
+              "jugcraft:silk_touch_module",
+              "jugcraft:fortune_module"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:mining_drill"
+}

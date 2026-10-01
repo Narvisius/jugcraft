@@ -421,6 +421,24 @@ def check_handbook(registered):
             err(f"handbook: unknown item {ref}")
 
 
+def check_advancements(registered):
+    """Every advancement names real Jugcraft items, a translated title and a parent that exists."""
+    lang = load(ASSETS / "lang" / "en_us.json") or {}
+    folder = DATA / MOD / "advancement"
+    names = {path.stem for path in folder.glob("*.json")}
+    for path in sorted(folder.glob("*.json")):
+        data = load(path)
+        text = path.read_text(encoding="utf-8")
+        for name in re.findall(r'"jugcraft:([a-z_]+)"', text):
+            if name not in registered and name not in names and not name.startswith("block/"):
+                err(f"advancement {path.stem}: unknown item jugcraft:{name}")
+        if data["display"]["title"]["translate"] not in lang:
+            err(f"advancement {path.stem}: untranslated title")
+        parent = data.get("parent")
+        if parent and split(parent)[1] not in names:
+            err(f"advancement {path.stem}: missing parent {parent}")
+
+
 def check_style_pack():
     """Both machine styles must cover every machine completely, and everything they reference must exist."""
     from machines import PARTS, FLUID_BLOCKS
@@ -475,6 +493,7 @@ def main():
     check_large_machines()
     check_style_pack()
     check_handbook(registered)
+    check_advancements(registered)
     for path in RES.rglob("*.json"):
         load(path)
     if errors:
