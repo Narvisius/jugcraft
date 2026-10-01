@@ -53,7 +53,15 @@ public enum MachineKind implements StringRepresentable {
 	// conventional oil reservoir under its chunk into its output tank.
 	PUMPJACK("pumpjack", 20_000, 256, 0, 32, 0),
 	// A 2x2x2 hot-water extraction plant: oil sand or bitumen and water in, crude oil and sand out.
-	OIL_SAND_EXTRACTOR("oil_sand_extractor", 20_000, 256, 0, 32, 2);
+	OIL_SAND_EXTRACTOR("oil_sand_extractor", 20_000, 256, 0, 32, 2),
+	// A 2x2 column seven blocks tall: crude oil in, four fractions out, each drawn off at its own height.
+	DISTILLATION_TOWER("distillation_tower", 40_000, 512, 0, 128, 0),
+	// A 2x2x4 fluid catalytic cracker: heavy fuel oil, water (steam) and catalyst in; diesel, naphtha and gas out.
+	CATALYTIC_CRACKER("catalytic_cracker", 40_000, 512, 0, 160, 1),
+	// A 2x2x3 vacuum distillation unit: heavy fuel oil in; lubricant and asphalt binder out.
+	VACUUM_DISTILLATION_UNIT("vacuum_distillation_unit", 30_000, 512, 0, 96, 1),
+	// A 3x2x2 catalytic reformer: naphtha in; gasoline (base) and refinery gas (top) out.
+	CATALYTIC_REFORMER("catalytic_reformer", 30_000, 512, 0, 120, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -116,6 +124,19 @@ public enum MachineKind implements StringRepresentable {
 	public static final int PUMPJACK_TANK = 16_000;
 	/** Oil sand extractor: its water tank and its crude oil tank. */
 	public static final int EXTRACTOR_TANK = 8_000;
+	/** Distillation tower: its crude oil tank and each fraction's tank. */
+	public static final int TOWER_INPUT_TANK = 16_000;
+	public static final int TOWER_OUTPUT_TANK = 8_000;
+	/** Distillation tower: the height (block layer) each fraction is drawn off at: gas at the top, heavy oil at the base. */
+	private static final int[] TOWER_DRAW_OFFS = {6, 4, 2, 0};
+	/** Catalytic cracker: each tank's capacity, and the layer each product is drawn off at (diesel, naphtha, gas). */
+	public static final int CRACKER_TANK = 8_000;
+	private static final int[] CRACKER_DRAW_OFFS = {0, 2, 3};
+	/** Vacuum distillation unit: its heavy fuel oil tank and its lubricant tank. */
+	public static final int VACUUM_TANK = 8_000;
+	/** Catalytic reformer: each tank, and the layer each product is drawn off at (gasoline, refinery gas). */
+	public static final int REFORMER_TANK = 8_000;
+	private static final int[] REFORMER_DRAW_OFFS = {0, 1};
 	/** Ticks the electric furnace needs per item (the vanilla furnace needs 200). */
 	public static final int ELECTRIC_FURNACE_TICKS = 100;
 
@@ -179,6 +200,10 @@ public enum MachineKind implements StringRepresentable {
 			case STEEL_FOUNDRY -> "steelmaking";
 			case TREE_FARM -> "tree_growing";
 			case OIL_SAND_EXTRACTOR -> "oil_sand_extraction";
+			case DISTILLATION_TOWER -> "distillation";
+			case CATALYTIC_CRACKER -> "catalytic_cracking";
+			case VACUUM_DISTILLATION_UNIT -> "vacuum_distillation";
+			case CATALYTIC_REFORMER -> "reforming";
 			default -> null;
 		};
 	}
@@ -201,7 +226,26 @@ public enum MachineKind implements StringRepresentable {
 		return switch (this) {
 			case PUMPJACK -> new FluidMachineSpec(List.of(), List.of(PUMPJACK_TANK), 0, 0);
 			case OIL_SAND_EXTRACTOR -> new FluidMachineSpec(List.of(EXTRACTOR_TANK), List.of(EXTRACTOR_TANK), 1, 1);
+			case DISTILLATION_TOWER -> new FluidMachineSpec(List.of(TOWER_INPUT_TANK),
+					List.of(TOWER_OUTPUT_TANK, TOWER_OUTPUT_TANK, TOWER_OUTPUT_TANK, TOWER_OUTPUT_TANK), 0, 0);
+			case CATALYTIC_CRACKER -> new FluidMachineSpec(List.of(CRACKER_TANK, CRACKER_TANK),
+					List.of(CRACKER_TANK, CRACKER_TANK, CRACKER_TANK), 1, 0);
+			case VACUUM_DISTILLATION_UNIT -> new FluidMachineSpec(List.of(VACUUM_TANK), List.of(VACUUM_TANK), 0, 1);
+			case CATALYTIC_REFORMER -> new FluidMachineSpec(List.of(REFORMER_TANK), List.of(REFORMER_TANK, REFORMER_TANK), 0, 0);
 			default -> null;
+		};
+	}
+
+	/**
+	 * The block layer (height above the master) that output tank {@code tank} is pushed from, or -1 for every outer
+	 * face of the machine.
+	 */
+	public int outputLayer(int tank) {
+		return switch (this) {
+			case DISTILLATION_TOWER -> TOWER_DRAW_OFFS[tank];
+			case CATALYTIC_CRACKER -> CRACKER_DRAW_OFFS[tank];
+			case CATALYTIC_REFORMER -> REFORMER_DRAW_OFFS[tank];
+			default -> -1;
 		};
 	}
 
@@ -268,6 +312,10 @@ public enum MachineKind implements StringRepresentable {
 			// One wide, three tall, three long: wellhead at the front (the master), samson post, then crank and motor.
 			case PUMPJACK -> Footprint.cuboid(1, 3, 3);
 			case OIL_SAND_EXTRACTOR -> Footprint.cuboid(2, 2, 2);
+			case DISTILLATION_TOWER -> Footprint.cuboid(2, 7, 2);
+			case CATALYTIC_CRACKER -> Footprint.cuboid(2, 4, 2);
+			case VACUUM_DISTILLATION_UNIT -> Footprint.cuboid(2, 3, 2);
+			case CATALYTIC_REFORMER -> Footprint.cuboid(3, 2, 2);
 			default -> Footprint.SINGLE;
 		};
 	}

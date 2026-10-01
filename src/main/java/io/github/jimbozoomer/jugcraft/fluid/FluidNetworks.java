@@ -51,8 +51,9 @@ public final class FluidNetworks {
 				break;
 			}
 			BlockPos neighbor = pos.relative(side);
-			if (level.getBlockState(neighbor).getBlock() instanceof FluidPipeBlock pipe) {
-				moved += network(level, neighbor).distribute(level, pos, source, Math.min(budget, pipe.transferRate()));
+			if (level.getBlockState(neighbor).getBlock() instanceof FluidPipeBlock) {
+				Network network = network(level, neighbor);
+				moved += network.distribute(level, pos, source, Math.min(budget, network.rate));
 			} else {
 				Storage<FluidVariant> target = FluidStorage.SIDED.find(level, neighbor, side.getOpposite());
 				if (target != null) {
@@ -80,9 +81,14 @@ public final class FluidNetworks {
 	private static final class Network {
 		private final Set<BlockPos> pipes = new HashSet<>();
 		private final List<Endpoint> endpoints = new ArrayList<>();
+		/** Droplets one push may send: the slowest pipe's rate, so bronze pipes limit a steel line like cables do. */
+		private long rate = Long.MAX_VALUE;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
+			if (level.getBlockState(start).getBlock() instanceof FluidPipeBlock first) {
+				network.rate = first.transferRate();
+			}
 			ArrayDeque<BlockPos> queue = new ArrayDeque<>();
 			queue.add(start.immutable());
 			network.pipes.add(start.immutable());
@@ -91,9 +97,10 @@ public final class FluidNetworks {
 				BlockPos pipe = queue.poll();
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
-					if (level.getBlockState(next).getBlock() instanceof FluidPipeBlock) {
+					if (level.getBlockState(next).getBlock() instanceof FluidPipeBlock nextPipe) {
 						if (network.pipes.add(next)) {
 							queue.add(next);
+							network.rate = Math.min(network.rate, nextPipe.transferRate());
 						}
 					} else if (FluidStorage.SIDED.find(level, next, direction.getOpposite()) != null) {
 						network.endpoints.add(new Endpoint(next, direction.getOpposite()));

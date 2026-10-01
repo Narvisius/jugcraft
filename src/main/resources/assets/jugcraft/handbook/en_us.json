@@ -1715,6 +1715,28 @@
           }
         },
         {
+          "title": "Steel Fluid Pipe",
+          "icon": "jugcraft:steel_fluid_pipe",
+          "text": [
+            "Like the bronze pipe, but carries 1,000 mB a tick for refinery flows. A pipe line carries as much as its slowest pipe, so one bronze pipe holds a steel line back to 250 mB."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:bronze_fluid_pipe",
+              "jugcraft:steel_plate",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "result": "jugcraft:steel_fluid_pipe",
+            "count": 3
+          }
+        },
+        {
           "title": "Tinplate Tank",
           "icon": "jugcraft:fluid_tank",
           "text": [
@@ -1755,6 +1777,28 @@
               "jugcraft:bronze_plate"
             ],
             "result": "jugcraft:electric_pump",
+            "count": 1
+          }
+        },
+        {
+          "title": "Heavy Pump",
+          "icon": "jugcraft:heavy_pump",
+          "text": [
+            "A steel-tier pump: 1,000 mB a tick from below (water, lava or a tank) out of its top and sides, at 40 JE a tick, with a 16-bucket buffer."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:silver_cable",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:electric_pump",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:heavy_pump",
             "count": 1
           }
         }
@@ -1817,6 +1861,120 @@
             ],
             "result": "jugcraft:oil_sand_extractor",
             "count": 1
+          }
+        },
+        {
+          "title": "Distillation Tower",
+          "icon": "jugcraft:distillation_tower",
+          "text": [
+            "Two by two and seven blocks tall. Heats crude oil and splits each bucket into 100 mB of refinery gas, 250 mB of naphtha, 400 mB of diesel and 250 mB of heavy fuel oil, a bucket every 5 seconds. Each fraction comes out at its own height: heavy fuel oil at the base, diesel two blocks up, naphtha four up, and refinery gas at the top. Give each its own pipe or tank.",
+            "Uses 128 JE/t while working. Holds 40,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "minecraft:blast_furnace",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:distillation_tower",
+            "count": 1
+          }
+        },
+        {
+          "title": "Catalytic Cracker",
+          "icon": "jugcraft:catalytic_cracker",
+          "text": [
+            "Two by two and four blocks tall. Cracks heavy fuel oil into lighter fuels with steam and a catalyst: 1,000 mB of heavy fuel oil, 250 mB of water and a cracking catalyst give 500 mB of diesel (out at the base), 300 mB of naphtha (two blocks up) and 200 mB of refinery gas (at the top), every 8 seconds.",
+            "Uses 160 JE/t while working. Holds 40,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:arc_furnace_casing",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:catalytic_cracker",
+            "count": 1
+          }
+        },
+        {
+          "title": "Vacuum Distillation Unit",
+          "icon": "jugcraft:vacuum_distillation_unit",
+          "text": [
+            "Two by two and three blocks tall. Boils heavy fuel oil under vacuum: each bucket gives 400 mB of lubricant and two asphalt binder, every 6 seconds. Lubricant keeps the gas turbine running; asphalt binder makes roads.",
+            "Uses 96 JE/t while working. Holds 30,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:heavy_pump",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:advanced_circuit",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:vacuum_distillation_unit",
+            "count": 1
+          }
+        },
+        {
+          "title": "Catalytic Reformer",
+          "icon": "jugcraft:catalytic_reformer",
+          "text": [
+            "Three wide, two tall and two deep. Reforms naphtha into high-octane gasoline: each bucket of naphtha gives 900 mB of gasoline (out of the bottom row) and 100 mB of refinery gas (out of the top row), every 6 seconds.",
+            "Uses 120 JE/t while working. Holds 30,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "minecraft:blast_furnace",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:catalytic_reformer",
+            "count": 1
+          }
+        },
+        {
+          "title": "Cracking Catalyst",
+          "icon": "jugcraft:cracking_catalyst",
+          "text": [
+            "Bauxite (alumina) and sand (silica) with a nickel ingot make four. The catalytic cracker uses one for each bucket of heavy fuel oil it cracks."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:bauxite",
+              "minecraft:sand",
+              "jugcraft:bauxite",
+              "minecraft:sand",
+              "jugcraft:nickel_ingot",
+              "minecraft:sand",
+              "jugcraft:bauxite",
+              "minecraft:sand",
+              "jugcraft:bauxite"
+            ],
+            "result": "jugcraft:cracking_catalyst",
+            "count": 4
           }
         }
       ]

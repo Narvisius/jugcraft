@@ -291,8 +291,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		if (fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA) {
 			return LAVA;
 		}
-		PetroFluids.Entry entry = PetroFluids.of(fluid);
-		return entry != null ? entry.color() : 0xFF8090A8;
+		int color = PetroFluids.gaugeColor(fluid);
+		return color != 0 ? color : 0xFF8090A8;
 	}
 
 	private static void slotFrame(GuiGraphicsExtractor graphics, int slotX, int slotY) {

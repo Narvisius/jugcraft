@@ -44,8 +44,63 @@ def rid(path):
 
 
 def write(path, obj):
+    if isinstance(obj, dict) and obj.get("elements"):
+        separate_coplanar(obj["elements"])
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
+
+
+# Faces as (axis, sign) of the direction they face.
+_FACE_DIR = {"north": (2, -1), "south": (2, 1), "west": (0, -1), "east": (0, 1), "down": (1, -1), "up": (1, 1)}
+# How far a face is pushed out to stop it sharing a plane with another (pixels): invisible, but enough for the
+# depth buffer.
+COPLANAR_NUDGE = 0.02
+
+
+def _face_look(element, face):
+    entry = element["faces"][face]
+    return entry.get("texture"), tuple(entry.get("uv", ()))
+
+
+def separate_coplanar(elements):
+    """Stops z-fighting: where two elements have faces on the same plane, facing the same way, overlapping and
+    drawn differently, the GPU flickers between them (most often a band, dial or trim laid flush on a body). The
+    smaller face (the detail) is pushed out by COPLANAR_NUDGE so it always draws in front. Rotated elements are left
+    alone; faces that look the same (same texture, automatic UVs) do not flicker and are left too."""
+    plain = [e for e in elements if "rotation" not in e and e.get("faces")]
+    for _ in range(3):  # A nudge can rarely line a face up with a third element; a few passes settle it.
+        moved = False
+        planes = {}
+        for e in plain:
+            for face in e["faces"]:
+                axis, sign = _FACE_DIR[face]
+                plane = round(e["to"][axis] if sign > 0 else e["from"][axis], 4)
+                planes.setdefault((face, plane), []).append(e)
+        for (face, _plane), group in planes.items():
+            if len(group) < 2:
+                continue
+            axis, sign = _FACE_DIR[face]
+            others = [i for i in range(3) if i != axis]
+            for i, first in enumerate(group):
+                for second in group[i + 1:]:
+                    area = 1.0
+                    for j in others:
+                        overlap = min(first["to"][j], second["to"][j]) - max(first["from"][j], second["from"][j])
+                        area *= max(0.0, overlap)
+                    if area <= 1e-6:
+                        continue
+                    if _face_look(first, face) == _face_look(second, face) and not _face_look(first, face)[1]:
+                        continue
+                    def size(e):
+                        return (e["to"][others[0]] - e["from"][others[0]]) * (e["to"][others[1]] - e["from"][others[1]])
+                    detail = second if size(second) <= size(first) else first
+                    if sign > 0:
+                        detail["to"][axis] = round(detail["to"][axis] + COPLANAR_NUDGE, 4)
+                    else:
+                        detail["from"][axis] = round(detail["from"][axis] - COPLANAR_NUDGE, 4)
+                    moved = True
+        if not moved:
+            break
 
 
 def unpack(element):

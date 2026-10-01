@@ -18,8 +18,15 @@ import org.jspecify.annotations.Nullable;
 
 /** The electric pump block: cables power it, pipes carry its output. Right-click shows its status. */
 public class ElectricPumpBlock extends BaseEntityBlock implements EnergyConnectable, FluidConnectable {
-	public ElectricPumpBlock(Properties properties) {
+	private final ElectricPumpBlockEntity.Tier tier;
+
+	public ElectricPumpBlock(Properties properties, ElectricPumpBlockEntity.Tier tier) {
 		super(properties);
+		this.tier = tier;
+	}
+
+	public ElectricPumpBlockEntity.Tier tier() {
+		return tier;
 	}
 
 	@Override

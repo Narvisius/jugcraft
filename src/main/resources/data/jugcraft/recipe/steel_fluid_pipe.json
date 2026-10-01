@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "jugcraft:bronze_fluid_pipe"
+  },
+  "result": {
+    "id": "jugcraft:steel_fluid_pipe",
+    "count": 3
+  }
+}

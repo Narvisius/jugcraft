@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:catalytic_cracking",
+  "items": [
+    {
+      "ingredient": "jugcraft:cracking_catalyst",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:heavy_fuel_oil",
+      "amount": 1000
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:diesel",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:naphtha",
+      "amount": 300
+    },
+    {
+      "fluid": "jugcraft:refinery_gas",
+      "amount": 200
+    }
+  ],
+  "time": 160
+}

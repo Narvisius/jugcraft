@@ -209,6 +209,8 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 | Bronze Fluid Pipe | Carries fluid pushed into it by a pump to every fluid storage it touches | 250 mB/t per push, up to 1,024 pipes per network | 2 bronze plates + glass → 4 |
 | Tinplate Tank | Stores one fluid; fill or empty with buckets, right-click with an empty hand to read it, comparators show how full it is | 16,000 mB (16 buckets); contents are lost if broken | 8 tin plates + glass |
 | Electric Pump | Pulls from below, pushes out of its top and four sides | 100 mB/t, 8 JE per tick it moves fluid, 4,000 JE battery, 4,000 mB buffer | bronze plates, bucket, 2 iron gears, casing, cable |
+| Steel Fluid Pipe | Like the bronze pipe, for refinery flows | 1,000 mB/t per push; a network carries as much as its slowest pipe | 2 steel plates + bronze pipe → 3 |
+| Heavy Pump | The steel-tier pump | 1,000 mB/t, 40 JE per tick it moves fluid, 32,000 JE battery, 16,000 mB buffer | steel plates, silver cable, 2 steel gears, electric pump, casing |
 
 **How the pieces work together**
 
@@ -359,14 +361,21 @@ Empty tools mine like a bare hand and get no drops.
 
 ## Oil
 
-The first part of the Chemistry branch: the dieselpunk oil line ([plan](branches/CHEMISTRY.md#petrochemistry-the-dieselpunk-oil-line), [feature record](features/petrochemistry.md)). Refining, fracking and diesel power are still to come.
+The first part of the Chemistry branch: the dieselpunk oil line ([plan](branches/CHEMISTRY.md#petrochemistry-the-dieselpunk-oil-line), [feature record](features/petrochemistry.md)). Fracking and diesel power are still to come.
 
 | Thing | What it does | Details | Built from |
 | --- | --- | --- | --- |
 | Crude Oil | A thick black fluid with a bucket; flows slowly and never makes new sources | `c:crude_oil` | reservoirs, oil sand |
+| Naphtha, Diesel, Heavy Fuel Oil, Lubricant, Gasoline | Refined liquids with buckets, tagged `c:<name>` | runny / amber / thick / golden / thin red-orange | distillation tower, cracker, vacuum unit, reformer |
+| Refinery Gas | A gas: tanks and pipes only, no block or bucket | `c:refinery_gas` | distillation tower |
 | Oil reservoirs | Hidden under Overworld chunks, fixed by the seed: conventional (about 1 chunk in 12, 50–250 buckets) or shale (about 1 in 4 of the rest, 200–800 buckets, fracking only) | finite; the prospector reports Oil and Shale oil | – |
 | Pumpjack | 1 wide, 3 tall, 3 long; pumps the conventional reservoir under its wellhead | 2 mB/t at 32 JE/t, 16-bucket tank, pushes into pipes | 4 steel plates, 2 steel gears, electric pump, casing |
 | Oil Sand Extractor | 2×2×2 hot-water extraction | oil sand + 250 mB water → 500 mB crude oil + sand (160 ticks); bitumen + 100 mB water → 150 mB (80 ticks); 32 JE/t | 4 steel plates, hopper, 2 tinplate tanks, casing, steel gear |
+| Distillation Tower | 2×2, seven tall; splits crude oil into fractions, each drawn off at its own height | 1,000 mB crude → 100 refinery gas (top), 250 naphtha (layer 4), 400 diesel (layer 2), 250 heavy fuel oil (base); 100 ticks at 128 JE/t | 6 steel plates, steel tank, advanced circuit, blast furnace |
+| Catalytic Cracker | 2×2, four tall; cracks heavy fuel oil into lighter fuels | 1,000 mB heavy fuel oil + 250 mB water + 1 catalyst → 500 diesel (base), 300 naphtha (layer 2), 200 refinery gas (top); 160 ticks at 160 JE/t | steel plates, advanced circuit, 2 steel tanks, arc furnace casing, casing |
+| Cracking Catalyst | Used up by the cracker, one per bucket | – | 4 bauxite, 4 sand, nickel ingot → 4 |
+| Vacuum Distillation Unit | 2×2, three tall; boils heavy fuel oil under vacuum | 1,000 mB heavy fuel oil → 400 mB lubricant + 2 asphalt binder; 120 ticks at 96 JE/t | steel plates, heavy pump, 2 tinplate tanks, advanced circuit, casing |
+| Catalytic Reformer | 3 wide, 2 tall, 2 deep; reforms naphtha | 1,000 mB naphtha → 900 gasoline (bottom row) + 100 refinery gas (top row); 120 ticks at 120 JE/t | steel plates, advanced circuit, 2 tinplate tanks, blast furnace, casing |
 
 **Fluid processing machines** (the pumpjack and extractor are the first): input tanks take only fluids the machine's recipes use; output tanks push into neighbouring tanks and pipes; the screen shows a gauge per tank. Recipes are data in `data/jugcraft/recipe/<type>/` (see [petrochemistry.md](features/petrochemistry.md)).
 

@@ -141,19 +141,27 @@ def conveyor_splitter():
     return m
 
 
+# How far the slope's tilted belt and rails sit above the block's centre line (pixels): without it the belt's top
+# met the block's low edge at 1 pixel, below the flat conveyor's 5, and the two did not join.
+SLOPE_LIFT = 4
+
+
 def conveyor_slope(ascending):
     """A conveyor ramp, one block up (ascending: rising towards the front, north) or down: the belt and its side rails
     tilted 45 degrees across the block's diagonal, on iron legs. Items ride it the same way as a flat conveyor."""
     angle = 45 if ascending else -45
-    tilt = ("x", angle, (8, 8, 8), True)
-    m = [box((2, 6.5, 0.25), (14, 8.5, 15.75), {"*": "belt", "up": "conveyor_belt"}, rotation=tilt)]
+    # Raised by SLOPE_LIFT so the belt's top meets the flat conveyors' (5 pixels up) at both ends: 5 at the low edge,
+    # 21 (one block plus 5) at the high edge. Items ride at the same heights (ConveyorBlockEntity.riseAt).
+    lift = SLOPE_LIFT
+    tilt = ("x", angle, (8, 8 + lift, 8), True)
+    m = [box((2, 6.5 + lift, 0.25), (14, 8.5 + lift, 15.75), {"*": "belt", "up": "conveyor_belt"}, rotation=tilt)]
     for x0, x1 in ((0.5, 2), (14, 15.5)):
-        m.append(box((x0, 6.25, 0), (x1, 9.5, 16), {"*": IRON_PLATE, "up": IRON}, rotation=tilt))
-    # Legs: tall at the high end, short in the middle.
+        m.append(box((x0, 6.25 + lift, 0), (x1, 9.5 + lift, 16), {"*": IRON_PLATE, "up": IRON}, rotation=tilt))
+    # Legs up to the underside of the rails: tall at the high end, short in the middle.
     high, mid = (1, 3) if ascending else (13, 15), (7, 9)
     for x0, x1 in ((0.5, 2), (14, 15.5)):
-        m.append(box((x0, 0, high[0]), (x1, 12, high[1]), IRON))
-        m.append(box((x0, 0, mid[0]), (x1, 5, mid[1]), IRON))
+        m.append(box((x0, 0, high[0]), (x1, 15, high[1]), IRON))
+        m.append(box((x0, 0, mid[0]), (x1, 8.5, mid[1]), IRON))
     m.append(box((2, 0, high[0]), (14, 1.5, high[1]), IRON_PLATE))
     return m
 

@@ -8,6 +8,15 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #49 Oil line, batch 2: refining
+- **Steel fluid pipes** (1,000 mB/t) and the **heavy pump** (1,000 mB/t); a pipe line now carries as much as its slowest pipe.
+- New fluids: **naphtha, diesel, heavy fuel oil, lubricant, gasoline** (with buckets) and **refinery gas** (a gas: tanks and pipes only).
+- **Distillation tower** (2×2×7): crude oil → gas, naphtha, diesel and heavy fuel oil, each drawn off at its own height.
+- **Catalytic cracker** (2×2×4): heavy fuel oil + steam + catalyst → diesel, naphtha and gas. **Cracking catalyst** from bauxite, sand and nickel.
+- **Vacuum distillation unit** (2×2×3): heavy fuel oil → lubricant + asphalt binder.
+- **Catalytic reformer** (3×2×2): naphtha → gasoline + gas.
+- Game tests for each.
+
 ### #47 Oil line, batch 1: oil in the world
 The first five commits of the dieselpunk Chemistry branch ([plan](docs/branches/CHEMISTRY.md#petrochemistry-the-dieselpunk-oil-line)).
 - **Crude oil:** a real fluid with a bucket; slow, thick, never makes new sources; works in every tank and pipe.

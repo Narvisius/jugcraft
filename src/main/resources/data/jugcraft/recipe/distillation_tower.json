@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "PCP",
+    "PFP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_tank",
+    "C": "jugcraft:advanced_circuit",
+    "F": "minecraft:blast_furnace"
+  },
+  "result": {
+    "id": "jugcraft:distillation_tower",
+    "count": 1
+  }
+}

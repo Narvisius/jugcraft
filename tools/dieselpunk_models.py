@@ -260,6 +260,182 @@ def oil_sand_extractor():
     return m
 
 
+def heavy_pump():
+    """Heavy pump: a gunmetal skid under an olive pump casing with a ribbed rubber-sealed volute, a chrome motor bell
+    on top with an exhaust vent, hazard-striped corner guards and thick chrome flanges on its top and four sides."""
+    m = [box((0.5, 0, 0.5), (15.5, 1.5, 15.5), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD, "east": HAZARD,
+                                                  "west": HAZARD})]
+    m += cyl("y", 8, 8, 5.5, 1.5, 9.5, OLIVE, GUNMETAL)
+    for y in (3, 6.5):
+        m += cyl("y", 8, 8, 5.9, y, y + 0.75, RUBBER)
+    m += cyl("y", 8, 8, 3.75, 9.5, 13, CHROME, GRILLE)
+    m += cyl("y", 8, 8, 2, 13, 14.5, GUNMETAL)
+    m += cyl("y", 8, 8, 2.75, 14.5, 16, CHROME)
+    for frm, to in (((0, 5.5, 5.5), (2.5, 10.5, 10.5)), ((13.5, 5.5, 5.5), (16, 10.5, 10.5)),
+                    ((5.5, 5.5, 0), (10.5, 10.5, 2.5)), ((5.5, 5.5, 13.5), (10.5, 10.5, 16))):
+        m.append(box(frm, to, GUNMETAL))
+    for frm, to in (((0, 5, 5), (0.75, 11, 11)), ((15.25, 5, 5), (16, 11, 11)),
+                    ((5, 5, 0), (11, 11, 0.75)), ((5, 5, 15.25), (11, 11, 16))):
+        m.append(box(frm, to, CHROME))
+    for x, z in ((1, 1), (12.5, 1), (1, 12.5), (12.5, 12.5)):
+        m.append(box((x, 1.5, z), (x + 2.5, 5, z + 2.5), HAZARD))
+    m.append(dial("north", (8, 12, 4), 2.25, texture=GAUGE, body=CHROME))
+    return m
+
+
+def distillation_tower():
+    """A two by two fractionating column seven blocks tall. A hazard-striped skid carries the fired reboiler (glowing
+    firebox window, gauge, caged lamp, exhaust stack) at the foot of a banded olive-and-gunmetal column. Grated
+    platforms with hazard rails ring it at three heights, a ladder climbs the back, and a chrome draw-off pipe with a
+    red valve comes out of the front at each fraction's height: heavy fuel oil at the base, then diesel, naphtha and
+    refinery gas at the top, under a domed cap with a vent."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Reboiler at the foot, front left (seen from the front): firebox, gauge and lamp, and its stack.
+    m.append(box((1, 2, 0.5), (15, 14, 9), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(box((4, 3, 0.25), (12, 9, 0.5), {"*": GUNMETAL, "north": "sp_window!"}))
+    m.append(dial("north", (5, 11.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 11.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    m += cyl("y", 12.5, 5, 1, 14, 26, EXHAUST, "sp_hopper_inside")
+    # The column: olive sections between gunmetal flanges, hazard bands at the platforms.
+    for y0, y1, texture in ((2, 30, OLIVE), (30, 34, GUNMETAL), (34, 62, OLIVE), (62, 66, GUNMETAL),
+                            (66, 94, OLIVE), (94, 98, GUNMETAL), (98, 106, OLIVE)):
+        m += cyl("y", 0, 16, 10, y0, y1, texture)
+    for y in (16, 48, 80):
+        m += cyl("y", 0, 16, 10.4, y, y + 1, HAZARD)
+    # Domed cap and vent.
+    m += cyl("y", 0, 16, 8, 106, 108, GUNMETAL)
+    m += cyl("y", 0, 16, 5, 108, 110, CHROME)
+    m += cyl("y", 0, 16, 1, 110, 116, EXHAUST, "sp_hopper_inside")
+    # Platforms: grated decks with hazard rails on the front and sides.
+    for y in (31, 63, 95):
+        m.append(box((-15.5, y, 0.5), (15.5, y + 1, 31.5), {"*": GUNMETAL, "up": GRILLE, "down": GRILLE}))
+        for x in (-15.5, 14.5):
+            m.append(box((x, y + 1, 0.5), (x + 1, y + 7, 1.5), GUNMETAL))
+            m.append(box((x, y + 1, 30.5), (x + 1, y + 7, 31.5), GUNMETAL))
+        m.append(box((-15.5, y + 6, 0.5), (15.5, y + 7, 1.25), HAZARD))
+        m.append(box((-15.5, y + 6, 1.25), (-14.75, y + 7, 30.75), HAZARD))
+        m.append(box((14.75, y + 6, 1.25), (15.5, y + 7, 30.75), HAZARD))
+    # Ladder up the back.
+    for x in (-3, 2):
+        m.append(box((x, 2, 29.5), (x + 1, 102, 30.5), GUNMETAL))
+    for y in range(6, 102, 4):
+        m.append(box((-2, y, 29.75), (2, y + 0.75, 30.25), CHROME))
+    # Draw-offs out of the front at each fraction's height (block layers 0, 2, 4 and 6), each with a red valve.
+    for y in (9, 40, 72, 104):
+        m.append(box((-12, y - 2, 0.5), (-8, y + 2, 6.5), CHROME))
+        m.append(box((-13, y - 3, 0), (-7, y + 3, 0.5), GUNMETAL))
+        m += wheel("z", -10, y + 4.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
+    return m
+
+
+def catalytic_cracker():
+    """A two by two fluid catalytic cracker four blocks tall: the slim riser-reactor (front left) and the fat
+    regenerator vessel (right), both olive with gunmetal and hazard bands, joined at the top by a chrome crossover
+    with cyclone caps. A catalyst hopper and a steam line feed the reactor; the firebox and control panel sit at its
+    foot; chrome draw-offs with red valves at the base, two blocks up and at the top give diesel, naphtha and gas."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Feed heater at the foot of the reactor: firebox window, gauge and lamp.
+    m.append(box((1, 2, 0.5), (15, 14, 9), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(box((4, 3, 0.25), (12, 9, 0.5), {"*": GUNMETAL, "north": "sp_window!"}))
+    m.append(dial("north", (5, 11.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 11.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    # Riser-reactor: a slim column behind the heater.
+    m += cyl("y", 8, 18, 6, 2, 56, OLIVE, GUNMETAL)
+    for y in (14, 30, 46):
+        m += cyl("y", 8, 18, 6.4, y, y + 1, HAZARD)
+    m += cyl("y", 8, 18, 4, 56, 60, CHROME)
+    # Regenerator: a fat vessel on legs on the right.
+    for x, z in ((-14, 4), (-4, 4), (-14, 27), (-4, 27)):
+        m.append(box((x, 2, z), (x + 2, 10, z + 2), GUNMETAL))
+    m += cyl("y", -8, 17, 9, 10, 46, OLIVE, GUNMETAL)
+    for y in (20, 36):
+        m += cyl("y", -8, 17, 9.4, y, y + 1, HAZARD)
+    m += cyl("y", -8, 17, 6, 46, 50, GUNMETAL)
+    # Crossover duct between the tops, and two cyclone caps on the regenerator.
+    m.append(box((-6, 50, 15.5), (8, 54, 20.5), CHROME))
+    m.append(box((-7, 46, 15.5), (-3, 54, 20.5), CHROME))
+    for x in (-12, -5):
+        m += cyl("y", x, 22, 2, 50, 56, GUNMETAL, CHROME)
+    # Catalyst hopper and the steam line into the reactor.
+    m.append(box((10, 30, 26), (15, 36, 31), {"*": GUNMETAL, "up": "sp_hopper_inside"}))
+    m.append(box((11.5, 24, 22), (13.5, 30, 28), RUBBER))
+    m.append(box((14, 14, 16), (15.5, 40, 18), RUBBER))
+    # Draw-offs out of the front at the base, two blocks up and at the top (layers 0, 2 and 3), with red valves.
+    for y in (9, 40, 57):
+        m.append(box((-12, y - 2, 0.5), (-8, y + 2, 6.5), CHROME))
+        m.append(box((-13, y - 3, 0), (-7, y + 3, 0.5), GUNMETAL))
+        m += wheel("z", -10, y + 4.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
+    return m
+
+
+def vacuum_distillation_unit():
+    """A two by two vacuum distillation unit three blocks tall: a squat olive column, wide at the base and stepping in
+    towards the top, under a nest of chrome steam ejectors and a condenser drum that keep it under vacuum. A fired
+    heater with a glowing window, gauge and lamp stands at its foot, a residue chute drops asphalt binder at the back,
+    and a chrome draw-off with a red valve gives lubricant out of the front."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    m.append(box((1, 2, 0.5), (15, 14, 9), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(box((4, 3, 0.25), (12, 9, 0.5), {"*": GUNMETAL, "north": "sp_window!"}))
+    m.append(dial("north", (5, 11.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 11.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    # The column: wide below, stepping in.
+    m += cyl("y", -2, 18, 12, 2, 18, OLIVE, GUNMETAL)
+    m += cyl("y", -2, 18, 12.4, 10, 11, HAZARD)
+    m += cyl("y", -2, 18, 10, 18, 30, OLIVE, GUNMETAL)
+    m += cyl("y", -2, 18, 10.4, 24, 25, GUNMETAL)
+    m += cyl("y", -2, 18, 7, 30, 38, OLIVE, GUNMETAL)
+    m += cyl("y", -2, 18, 4, 38, 41, CHROME)
+    # Steam ejectors: three chrome nozzles on top, feeding a condenser drum lying across the back.
+    for x in (-7, -2, 3):
+        m.append(box((x - 0.75, 41, 17), (x + 0.75, 46, 19), CHROME))
+        m.append(box((x - 1.25, 44, 19), (x + 1.25, 45.5, 26), CHROME))
+    m += cyl("x", 44, 27, 3, -12, 8, GUNMETAL, CHROME)
+    # Residue chute at the back: asphalt binder drops out here.
+    m.append(box((-6, 2, 29), (2, 8, 32), {"*": GUNMETAL, "south": "sp_hopper_inside"}))
+    # Lubricant draw-off on the front with its red valve.
+    m.append(box((-12, 7, 0.5), (-8, 11, 6.5), CHROME))
+    m.append(box((-13, 6, 0), (-7, 12, 0.5), GUNMETAL))
+    m += wheel("z", -10, 13.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
+    return m
+
+
+def catalytic_reformer():
+    """Three wide, two tall and two deep: three olive reactor drums in a row, hazard-banded under domed chrome caps,
+    joined across the top by a gunmetal header, with a fired heater (glowing window, gauge, lamp, exhaust stack) at
+    the front left. Chrome draw-offs with red valves on the front right give gasoline (bottom row) and refinery gas
+    (top row)."""
+    m = [box((-32, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Fired heater at the front left (the master block).
+    m.append(box((1, 2, 0.5), (15, 14, 9), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(box((4, 3, 0.25), (12, 9, 0.5), {"*": GUNMETAL, "north": "sp_window!"}))
+    m.append(dial("north", (5, 11.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 11.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    m += cyl("y", 12.5, 5, 1, 14, 28, EXHAUST, "sp_hopper_inside")
+    # Three reactor drums, front to back across the row (centres at x = 8, -8, -24).
+    for x in (8, -8, -24):
+        y0 = 14 if x == 8 else 2
+        m += cyl("y", x, 20, 6, y0, 24, OLIVE, GUNMETAL)
+        m += cyl("y", x, 20, 6.4, 18, 19, HAZARD)
+        m += cyl("y", x, 20, 4.5, 24, 26, CHROME)
+        m += cyl("y", x, 20, 2.5, 26, 27.5, CHROME)
+    # The first drum stands on the heater's plinth behind it.
+    m.append(box((2, 2, 12), (14, 14, 28), GUNMETAL))
+    # Header across the tops, with risers into each drum.
+    m.append(box((-27, 28, 18.5), (11, 30.5, 21.5), GUNMETAL))
+    for x in (8, -8, -24):
+        m.append(box((x - 1, 27.5, 19), (x + 1, 28, 21), CHROME))
+    # Draw-offs on the front right, off a product manifold in front of the last drum: gasoline at the bottom,
+    # refinery gas in the top row.
+    m.append(box((-29.5, 2, 6.5), (-22.5, 27, 14.5), {"*": GUNMETAL, "north": STENCIL}))
+    for y in (9, 23):
+        m.append(box((-28, y - 2, 0.5), (-24, y + 2, 6.5), CHROME))
+        m.append(box((-29, y - 3, 0), (-23, y + 3, 0.5), GUNMETAL))
+        m += wheel("z", -26, y + 4.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
+    return m
+
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
           "ore_drill": ore_drill(), "pumpjack": pumpjack(),
-          "oil_sand_extractor": oil_sand_extractor()}
+          "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
+          "distillation_tower": distillation_tower(), "catalytic_cracker": catalytic_cracker(),
+          "vacuum_distillation_unit": vacuum_distillation_unit(), "catalytic_reformer": catalytic_reformer()}

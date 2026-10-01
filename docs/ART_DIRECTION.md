@@ -5,7 +5,7 @@ Jugcraft's look changes with its tiers, the way real technology did: the early g
 ## Rules for everything
 - Detailed models built from boxes (see `tools/steampunk_models.py`): round prisms, gears, gauges, rivets, pipes. No flat cubes where a real machine would have shape.
 - **Things that are big in real life are big in the world.** A turbine, a foundry or a charging station takes several blocks; a hand tool stays in the hand.
-- Overlapping boxes never share a visible face plane (that flickers).
+- Overlapping boxes never share a visible face plane (that flickers, z-fighting). The generators enforce it: `model_writer.separate_coplanar` runs on every model they write and pushes the smaller of two flush, differently drawn faces out by 0.02 pixels, so a band, dial or trim always draws in front of the body it sits on.
 - Textures are 16×16, deterministic (seeded), and opaque on blocks.
 
 ## Steampunk: stone, bronze and early steel tiers

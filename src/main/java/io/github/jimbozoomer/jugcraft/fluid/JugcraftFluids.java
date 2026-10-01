@@ -30,6 +30,8 @@ import net.minecraft.world.level.material.MapColor;
  */
 public final class JugcraftFluids {
 	public static Block BRONZE_FLUID_PIPE;
+	public static Block STEEL_FLUID_PIPE;
+	public static Block HEAVY_PUMP;
 	public static Block FLUID_TANK;
 	public static Block ELECTRIC_PUMP;
 	public static BlockEntityType<FluidTankBlockEntity> TANK_ENTITY;
@@ -40,16 +42,22 @@ public final class JugcraftFluids {
 
 	public static void register() {
 		BRONZE_FLUID_PIPE = block("bronze_fluid_pipe", new FluidPipeBlock(properties("bronze_fluid_pipe",
-				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.0F).sound(SoundType.COPPER).noOcclusion())));
+				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.0F).sound(SoundType.COPPER).noOcclusion()),
+				FluidPipeBlock.BRONZE_RATE_MB));
+		STEEL_FLUID_PIPE = block("steel_fluid_pipe", new FluidPipeBlock(properties("steel_fluid_pipe",
+				BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5F).sound(SoundType.METAL).noOcclusion()),
+				FluidPipeBlock.STEEL_RATE_MB));
 		FLUID_TANK = block("fluid_tank", new FluidTankBlock(properties("fluid_tank",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
 		ELECTRIC_PUMP = block("electric_pump", new ElectricPumpBlock(properties("electric_pump",
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion())));
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.ELECTRIC));
+		HEAVY_PUMP = block("heavy_pump", new ElectricPumpBlock(properties("heavy_pump",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(4.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.HEAVY));
 
 		TANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_tank"),
 				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK).build());
 		PUMP_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("electric_pump"),
-				FabricBlockEntityTypeBuilder.create(ElectricPumpBlockEntity::new, ELECTRIC_PUMP).build());
+				FabricBlockEntityTypeBuilder.create(ElectricPumpBlockEntity::new, ELECTRIC_PUMP, HEAVY_PUMP).build());
 
 		FluidStorage.SIDED.registerForBlockEntity((tank, side) -> tank.storage, TANK_ENTITY);
 		FluidStorage.SIDED.registerForBlockEntity(ElectricPumpBlockEntity::fluidFor, PUMP_ENTITY);
@@ -61,8 +69,10 @@ public final class JugcraftFluids {
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(BRONZE_FLUID_PIPE);
+			output.accept(STEEL_FLUID_PIPE);
 			output.accept(FLUID_TANK);
 			output.accept(ELECTRIC_PUMP);
+			output.accept(HEAVY_PUMP);
 		});
 	}
 

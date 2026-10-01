@@ -3,8 +3,10 @@ package io.github.jimbozoomer.jugcraft.test;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
+import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
+import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
@@ -176,6 +178,109 @@ public class PetroGameTests {
 					"The extractor holds " + oil + " mB of oil");
 			helper.assertTrue(extractor.tanks().input(0).millibuckets() == 750, "Water left: " + extractor.tanks().input(0).millibuckets());
 			helper.assertTrue(extractor.getItem(1).is(Items.SAND), "Output slot holds " + extractor.getItem(1));
+		});
+	}
+
+	/**
+	 * A heavy pump on water pushes 1,000 mB a tick through steel pipes: five buckets in well under the time a bronze
+	 * line (250 mB a tick) would need.
+	 */
+	@GameTest(maxTicks = 12)
+	public void heavyPumpFillsFastThroughSteelPipes(GameTestHelper helper) {
+		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
+		BlockPos pump = new BlockPos(1, 2, 3);
+		helper.setBlock(pump, JugcraftFluids.HEAVY_PUMP);
+		ElectricPumpBlockEntity entity = helper.getBlockEntity(pump, ElectricPumpBlockEntity.class);
+		entity.energy().setAmount(entity.energy().getCapacity());
+		for (int x = 2; x <= 3; x++) {
+			helper.setBlock(new BlockPos(x, 2, 3), JugcraftFluids.STEEL_FLUID_PIPE);
+		}
+		BlockPos tank = new BlockPos(4, 2, 3);
+		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity tankEntity = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
+		helper.succeedWhen(() -> helper.assertTrue(tankEntity.storage.amount >= 5 * FluidConstants.BUCKET,
+				"The tank holds only " + tankEntity.storage.amount / 81 + " mB"));
+	}
+
+	/** A pipe line carries as much as its slowest pipe: one bronze pipe in a steel line holds it to 250 mB a tick. */
+	@GameTest(maxTicks = 12)
+	public void bronzePipeLimitsASteelLine(GameTestHelper helper) {
+		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
+		BlockPos pump = new BlockPos(1, 2, 3);
+		helper.setBlock(pump, JugcraftFluids.HEAVY_PUMP);
+		ElectricPumpBlockEntity entity = helper.getBlockEntity(pump, ElectricPumpBlockEntity.class);
+		entity.energy().setAmount(entity.energy().getCapacity());
+		helper.setBlock(new BlockPos(2, 2, 3), JugcraftFluids.STEEL_FLUID_PIPE);
+		helper.setBlock(new BlockPos(3, 2, 3), JugcraftFluids.BRONZE_FLUID_PIPE);
+		BlockPos tank = new BlockPos(4, 2, 3);
+		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity tankEntity = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
+		helper.runAfterDelay(10, () -> {
+			long mb = tankEntity.storage.amount / 81;
+			helper.assertTrue(mb > 0 && mb <= 10 * 250, "The tank got " + mb + " mB in 10 ticks through a bronze pipe");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * The distillation tower splits a bucket of crude oil into its four fractions, and each comes out only at its own
+	 * height: a tank against the front two blocks up (the diesel draw-off) fills with diesel and nothing else.
+	 */
+	@GameTest(maxTicks = 300)
+	public void distillationTowerSplitsCrude(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 2);
+		MachineBlockEntity tower = place(helper, MachineKind.DISTILLATION_TOWER, master);
+		BlockPos tank = master.above(2).north();
+		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity diesel = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
+		tower.tanks().input(0).fill(PetroFluids.CRUDE_OIL.source(), 1000);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(tower.tanks().output(0).has(PetroFluids.REFINERY_GAS.fluid(), 100), "No refinery gas");
+			helper.assertTrue(tower.tanks().output(1).has(PetroFluids.NAPHTHA.source(), 250), "No naphtha");
+			helper.assertTrue(tower.tanks().output(3).has(PetroFluids.HEAVY_FUEL_OIL.source(), 250), "No heavy fuel oil");
+			helper.assertTrue(diesel.storage.variant.isOf(PetroFluids.DIESEL.source()) && diesel.storage.amount == 400 * 81,
+					"The tank at the diesel draw-off holds " + diesel.storage.amount / 81 + " mB of " + diesel.storage.variant);
+			helper.assertTrue(tower.tanks().output(2).isResourceBlank(), "Diesel stayed in the tower");
+		});
+	}
+
+	/** The catalytic cracker turns heavy fuel oil, water and one catalyst into diesel, naphtha and refinery gas. */
+	@GameTest(maxTicks = 300)
+	public void crackerCracksHeavyFuelOil(GameTestHelper helper) {
+		MachineBlockEntity cracker = place(helper, MachineKind.CATALYTIC_CRACKER, new BlockPos(4, 1, 2));
+		cracker.tanks().input(0).fill(PetroFluids.HEAVY_FUEL_OIL.source(), 1000);
+		cracker.tanks().input(1).fill(Fluids.WATER, 1000);
+		cracker.setItem(0, new ItemStack(PetroItems.CRACKING_CATALYST, 2));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(cracker.tanks().output(0).has(PetroFluids.DIESEL.source(), 500), "No diesel");
+			helper.assertTrue(cracker.tanks().output(1).has(PetroFluids.NAPHTHA.source(), 300), "No naphtha");
+			helper.assertTrue(cracker.tanks().output(2).has(PetroFluids.REFINERY_GAS.fluid(), 200), "No refinery gas");
+			helper.assertTrue(cracker.getItem(0).getCount() == 1, "The cracker used " + (2 - cracker.getItem(0).getCount()) + " catalysts");
+			helper.assertTrue(cracker.tanks().input(1).millibuckets() == 750, "Water left: " + cracker.tanks().input(1).millibuckets());
+		});
+	}
+
+	/** The vacuum distillation unit turns a bucket of heavy fuel oil into 400 mB of lubricant and two asphalt binder. */
+	@GameTest(maxTicks = 300)
+	public void vacuumUnitMakesLubricantAndAsphalt(GameTestHelper helper) {
+		MachineBlockEntity unit = place(helper, MachineKind.VACUUM_DISTILLATION_UNIT, new BlockPos(4, 1, 2));
+		unit.tanks().input(0).fill(PetroFluids.HEAVY_FUEL_OIL.source(), 1000);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(unit.tanks().output(0).has(PetroFluids.LUBRICANT.source(), 400), "No lubricant");
+			helper.assertTrue(unit.getItem(0).is(PetroItems.ASPHALT_BINDER) && unit.getItem(0).getCount() == 2,
+					"The unit holds " + unit.getItem(0));
+			helper.assertTrue(unit.tanks().input(0).isResourceBlank(), "Heavy fuel oil left over");
+		});
+	}
+
+	/** The catalytic reformer turns a bucket of naphtha into 900 mB of gasoline and 100 mB of refinery gas. */
+	@GameTest(maxTicks = 300)
+	public void reformerMakesGasoline(GameTestHelper helper) {
+		MachineBlockEntity reformer = place(helper, MachineKind.CATALYTIC_REFORMER, new BlockPos(4, 1, 2));
+		reformer.tanks().input(0).fill(PetroFluids.NAPHTHA.source(), 1000);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(reformer.tanks().output(0).has(PetroFluids.GASOLINE.source(), 900), "No gasoline");
+			helper.assertTrue(reformer.tanks().output(1).has(PetroFluids.REFINERY_GAS.fluid(), 100), "No refinery gas");
 		});
 	}
 }

@@ -19,16 +19,21 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.redstone.Orientation;
 
 /**
- * A bronze fluid pipe segment. Like a cable it has no block entity and does no per-tick
+ * A fluid pipe segment (bronze or steel). Like a cable it has no block entity and does no per-tick
  * work: pumps push fluid through it via {@link FluidNetworks}, and it only tells the
  * network cache to refresh when its surroundings change.
  */
 public class FluidPipeBlock extends PipeBlock implements FluidConnectable {
 	/** Millibuckets per tick one push may send through a bronze pipe network. */
 	public static final long BRONZE_RATE_MB = 250;
+	/** Millibuckets per tick one push may send through a steel pipe network (refinery flows). */
+	public static final long STEEL_RATE_MB = 1_000;
 
-	public FluidPipeBlock(Properties properties) {
+	private final long rateMb;
+
+	public FluidPipeBlock(Properties properties, long rateMb) {
 		super(4.0F, properties);
+		this.rateMb = rateMb;
 		BlockState state = this.stateDefinition.any();
 		for (BooleanProperty property : PROPERTY_BY_DIRECTION.values()) {
 			state = state.setValue(property, false);
@@ -36,9 +41,9 @@ public class FluidPipeBlock extends PipeBlock implements FluidConnectable {
 		this.registerDefaultState(state);
 	}
 
-	/** Droplets per tick one push may send through this pipe's network. */
+	/** Droplets per tick one push may send through this pipe; a network carries as much as its slowest pipe. */
 	public long transferRate() {
-		return BRONZE_RATE_MB * FluidNetworks.DROPLETS_PER_MB;
+		return rateMb * FluidNetworks.DROPLETS_PER_MB;
 	}
 
 	@Override

@@ -61,6 +61,10 @@ ABOUT = {
     "bronze_fluid_pipe": "Carries fluid that a pump pushes into it to every tank and fluid machine it touches.",
     "fluid_tank": "Holds 16 buckets of one fluid. Fill or empty it with buckets; right-click with an empty hand to read it.",
     "electric_pump": "Pulls water or lava from the block below it and pushes it out of its top and sides.",
+    "steel_fluid_pipe": "Like the bronze pipe, but carries 1,000 mB a tick for refinery flows. A pipe line carries as much "
+                        "as its slowest pipe, so one bronze pipe holds a steel line back to 250 mB.",
+    "heavy_pump": "A steel-tier pump: 1,000 mB a tick from below (water, lava or a tank) out of its top and sides, at "
+                  "40 JE a tick, with a 16-bucket buffer.",
     "brass_item_pipe": "Joins inventories into a network. Items go to matching sorters first, then take turns between the "
                        "other inventories.",
     "pneumatic_extractor": "Pulls 16 items every 8 ticks from what it faces and pushes them out of its other sides. A "
@@ -100,6 +104,20 @@ ABOUT = {
                           "(mined with silk touch) and 250 mB of water give 500 mB of crude oil and a block of sand; a "
                           "piece of bitumen and 100 mB of water give 150 mB. Pipe water in; it pushes the oil out into "
                           "pipes and tanks touching it.",
+    "distillation_tower": "Two by two and seven blocks tall. Heats crude oil and splits each bucket into 100 mB of "
+                          "refinery gas, 250 mB of naphtha, 400 mB of diesel and 250 mB of heavy fuel oil, a bucket every "
+                          "5 seconds. Each fraction comes out at its own height: heavy fuel oil at the base, diesel two "
+                          "blocks up, naphtha four up, and refinery gas at the top. Give each its own pipe or tank.",
+    "catalytic_cracker": "Two by two and four blocks tall. Cracks heavy fuel oil into lighter fuels with steam and a "
+                         "catalyst: 1,000 mB of heavy fuel oil, 250 mB of water and a cracking catalyst give 500 mB of "
+                         "diesel (out at the base), 300 mB of naphtha (two blocks up) and 200 mB of refinery gas (at the "
+                         "top), every 8 seconds.",
+    "vacuum_distillation_unit": "Two by two and three blocks tall. Boils heavy fuel oil under vacuum: each bucket gives "
+                                "400 mB of lubricant and two asphalt binder, every 6 seconds. Lubricant keeps the gas "
+                                "turbine running; asphalt binder makes roads.",
+    "catalytic_reformer": "Three wide, two tall and two deep. Reforms naphtha into high-octane gasoline: each bucket of "
+                          "naphtha gives 900 mB of gasoline (out of the bottom row) and 100 mB of refinery gas (out of "
+                          "the top row), every 6 seconds.",
     "ore_drill": "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom "
                  "of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come "
                  "out whole, ready for ore processing.",
@@ -289,8 +307,8 @@ def build():
             + [block_page(t, POWERED_TOOLS[t]) for t in POWERED_TOOLS]
             + [block_page(m, UPGRADE_MODULES[m][0]) for m in UPGRADE_MODULES]},
         {"title": "Fluids", "icon": f"{MOD}:fluid_tank", "pages":
-            [block_page("bronze_fluid_pipe", PIPES["bronze_fluid_pipe"]["display"])]
-            + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump")]},
+            [block_page(p, PIPES[p]["display"]) for p in ("bronze_fluid_pipe", "steel_fluid_pipe")]
+            + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump", "heavy_pump")]},
         {"title": "Oil", "icon": f"{MOD}:crude_oil_bucket", "pages": [
             {"title": "Crude Oil", "icon": f"{MOD}:crude_oil_bucket", "text": [
                 "Crude oil lies in hidden reservoirs under some Overworld chunks. The prospector reports Oil (pumpable) "
@@ -299,6 +317,13 @@ def build():
                 "Pipes, pumps and tanks carry it like water; refineries turn it into fuels."]},
             machine_page("pumpjack"),
             machine_page("oil_sand_extractor"),
+            machine_page("distillation_tower"),
+            machine_page("catalytic_cracker"),
+            machine_page("vacuum_distillation_unit"),
+            machine_page("catalytic_reformer"),
+            {"title": "Cracking Catalyst", "icon": f"{MOD}:cracking_catalyst", "text": [
+                "Bauxite (alumina) and sand (silica) with a nickel ingot make four. The catalytic cracker uses one for "
+                "each bucket of heavy fuel oil it cracks."], "craft": craft("cracking_catalyst")},
         ]},
         {"title": "Logistics", "icon": f"{MOD}:brass_item_pipe", "pages": [
             {"title": "Machine Sides", "icon": f"{MOD}:crusher", "text": [

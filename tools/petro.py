@@ -12,7 +12,42 @@ FLUIDS = {
     "crude_oil": {"display": "Crude Oil", "feature": "crude_oil",
                   "colors": [(14, 11, 9), (30, 23, 17), (48, 38, 28), (70, 62, 84)],
                   "tick_delay": 20, "slope": 2, "drop_off": 2},
+    # Distillation fractions (batch 2).
+    "naphtha": {"display": "Naphtha", "feature": "crude_oil",
+                "colors": [(150, 130, 70), (190, 170, 100), (220, 205, 140), (244, 236, 196)],
+                "tick_delay": 5, "slope": 4, "drop_off": 1},
+    "diesel": {"display": "Diesel", "feature": "crude_oil",
+               "colors": [(120, 70, 10), (170, 110, 25), (210, 150, 50), (242, 204, 112)],
+               "tick_delay": 8, "slope": 3, "drop_off": 1},
+    "heavy_fuel_oil": {"display": "Heavy Fuel Oil", "feature": "crude_oil",
+                       "colors": [(20, 16, 10), (38, 30, 18), (58, 46, 28), (96, 84, 62)],
+                       "tick_delay": 30, "slope": 2, "drop_off": 2},
+    "lubricant": {"display": "Lubricant", "feature": "crude_oil",
+                  "colors": [(90, 80, 20), (140, 125, 40), (180, 165, 70), (222, 212, 134)],
+                  "tick_delay": 25, "slope": 2, "drop_off": 2},
+    "gasoline": {"display": "Gasoline", "feature": "crude_oil",
+                 "colors": [(150, 60, 40), (200, 100, 70), (230, 150, 110), (250, 212, 184)],
+                 "tick_delay": 4, "slope": 4, "drop_off": 1},
 }
+
+# Gases: fluids that only live in tanks and pipes (no block, no bucket). Gauge colour in Java (PetroFluids.gas).
+GASES = {
+    "refinery_gas": {"display": "Refinery Gas", "feature": "crude_oil"},
+}
+
+
+# Plain items (chemistry/PetroItems.java): display name.
+ITEMS = {
+    # Bauxite (alumina) and sand (silica) with a little nickel: used up, one per bucket of heavy fuel oil cracked.
+    "cracking_catalyst": "Cracking Catalyst",
+    # The residue of vacuum distillation; asphalt roads come in batch 4.
+    "asphalt_binder": "Asphalt Binder",
+}
+
+
+def fluid_ids():
+    """Every fluid id this line registers (sources, flowing forms and gases), for tags and recipe checks."""
+    return [f for fluid in FLUIDS for f in (fluid, f"flowing_{fluid}")] + list(GASES)
 
 
 def fluid_blocks():
@@ -25,7 +60,7 @@ def buckets():
 
 def petro_items():
     """Items of the petrochemistry line that are not blocks."""
-    return buckets()
+    return buckets() + list(ITEMS)
 
 
 # Fluid processing machines (MachineKind.fluidSpec() in Java mirrors this): input and output tank capacities in mB,
@@ -36,6 +71,18 @@ FLUID_MACHINES = {
     # Hot-water extraction: oil sand or bitumen + water -> crude oil (+ sand). 32 JE/t.
     "oil_sand_extractor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 1, "item_outputs": 1,
                            "recipe_type": "oil_sand_extraction"},
+    # Crude oil -> four fractions, each drawn off at its own height (Java: MachineKind.outputLayer). 128 JE/t.
+    "distillation_tower": {"inputs": [16_000], "outputs": [8_000, 8_000, 8_000, 8_000], "item_inputs": 0,
+                           "item_outputs": 0, "recipe_type": "distillation"},
+    # Heavy fuel oil + water (steam) + catalyst -> diesel (base), naphtha (layer 2), refinery gas (top). 160 JE/t.
+    "catalytic_cracker": {"inputs": [8_000, 8_000], "outputs": [8_000, 8_000, 8_000], "item_inputs": 1,
+                          "item_outputs": 0, "recipe_type": "catalytic_cracking"},
+    # Heavy fuel oil -> lubricant + asphalt binder. 96 JE/t.
+    "vacuum_distillation_unit": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 0, "item_outputs": 1,
+                                 "recipe_type": "vacuum_distillation"},
+    # Naphtha -> gasoline (base) + refinery gas (top). 120 JE/t.
+    "catalytic_reformer": {"inputs": [8_000], "outputs": [8_000, 8_000], "item_inputs": 0, "item_outputs": 0,
+                           "recipe_type": "reforming"},
 }
 
 # Fluid recipes per machine. Each: name, item ingredients [(item or #tag, count)], fluids in [(fluid, mB)],
@@ -50,6 +97,31 @@ FLUID_RECIPES = {
         # Bitumen (what oil sand drops, or crushes into, three to a block) gives less per block.
         {"name": "bitumen", "items": [("jugcraft:bitumen", 1)], "fluids": [("minecraft:water", 100)],
          "fluid_results": [("jugcraft:crude_oil", 150)], "source": 150, "ticks": 80, "features": ["crude_oil"]},
+    ],
+    # One bucket of crude oil splits into fractions that add up to one bucket, in the tower's output tank order.
+    "distillation_tower": [
+        {"name": "crude_oil", "fluids": [("jugcraft:crude_oil", 1000)],
+         "fluid_results": [("jugcraft:refinery_gas", 100), ("jugcraft:naphtha", 250), ("jugcraft:diesel", 400),
+                           ("jugcraft:heavy_fuel_oil", 250)], "ticks": 100, "features": ["crude_oil"]},
+    ],
+    # Cracking breaks heavy oil into lighter fuels; the steam's water is not counted as product.
+    "catalytic_cracker": [
+        {"name": "heavy_fuel_oil", "items": [("jugcraft:cracking_catalyst", 1)],
+         "fluids": [("jugcraft:heavy_fuel_oil", 1000), ("minecraft:water", 250)],
+         "fluid_results": [("jugcraft:diesel", 500), ("jugcraft:naphtha", 300), ("jugcraft:refinery_gas", 200)],
+         "source": 0, "ticks": 160, "features": ["crude_oil"]},
+    ],
+    # The heaviest part of heavy fuel oil, boiled under vacuum: lubricant, and a residue of asphalt binder.
+    "vacuum_distillation_unit": [
+        {"name": "heavy_fuel_oil", "fluids": [("jugcraft:heavy_fuel_oil", 1000)],
+         "fluid_results": [("jugcraft:lubricant", 400)], "results": [("jugcraft:asphalt_binder", 2)], "ticks": 120,
+         "features": ["crude_oil"]},
+    ],
+    # Reforming rearranges naphtha into high-octane gasoline, giving off a little gas.
+    "catalytic_reformer": [
+        {"name": "naphtha", "fluids": [("jugcraft:naphtha", 1000)],
+         "fluid_results": [("jugcraft:gasoline", 900), ("jugcraft:refinery_gas", 100)], "ticks": 120,
+         "features": ["crude_oil"]},
     ],
 }
 

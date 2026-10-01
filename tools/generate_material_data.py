@@ -30,6 +30,8 @@ CABLE_ROTATION = {"north": {}, "east": {"y": 90}, "south": {"y": 180}, "west": {
 
 
 def write(path, obj):
+    if isinstance(obj, dict) and obj.get("elements"):
+        model_writer.separate_coplanar(obj["elements"])
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
 
@@ -464,6 +466,14 @@ def petro_assets(lang):
         write(ASSETS / "models" / "item" / f"{bucket}.json",
               {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{bucket}")}})
         write(ASSETS / "items" / f"{bucket}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{bucket}")}})
+    for item, display in petro.ITEMS.items():
+        lang[f"item.{MOD}.{item}"] = display
+        write(ASSETS / "models" / "item" / f"{item}.json",
+              {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
+        write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    # Gases have no block, so Fabric names them from this key.
+    for gas, info in petro.GASES.items():
+        lang[f"block.{MOD}.{gas}"] = info["display"]
 
 
 def loot_tables():
@@ -672,6 +682,8 @@ def tags():
     for fluid in petro.FLUIDS:
         tags.add("fluid", f"c:{fluid}", rid(fluid))
         tags.add("fluid", f"c:{fluid}", rid(f"flowing_{fluid}"))
+    for gas in petro.GASES:
+        tags.add("fluid", f"c:{gas}", rid(gas))
     tags.write()
 
 

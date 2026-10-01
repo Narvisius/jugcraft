@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:reforming",
+  "fluids": [
+    {
+      "fluid": "jugcraft:naphtha",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:gasoline",
+      "amount": 900
+    },
+    {
+      "fluid": "jugcraft:refinery_gas",
+      "amount": 100
+    }
+  ],
+  "time": 120
+}

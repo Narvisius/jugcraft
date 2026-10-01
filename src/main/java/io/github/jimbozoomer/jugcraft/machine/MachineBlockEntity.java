@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.IntFunction;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
@@ -766,7 +767,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			}
 			ports.add(new FluidTanks.Port(part, outer));
 		}
-		if (tanks.pushOutputs(level, ports, FLUID_PUSH_MB * FluidNetworks.DROPLETS_PER_MB)) {
+		// Some machines give each output from its own height only (the distillation tower's draw-offs).
+		IntFunction<List<FluidTanks.Port>> portsFor = tank -> {
+			int layer = kind.outputLayer(tank);
+			return layer < 0 ? ports : ports.stream().filter(port -> port.pos().getY() - pos.getY() == layer).toList();
+		};
+		if (tanks.pushOutputs(level, portsFor, FLUID_PUSH_MB * FluidNetworks.DROPLETS_PER_MB)) {
 			setChanged();
 		}
 	}

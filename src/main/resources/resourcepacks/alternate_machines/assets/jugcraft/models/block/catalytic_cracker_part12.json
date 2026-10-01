@@ -1,0 +1,69 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/catalytic_cracker_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        10
+      ],
+      "to": [
+        14,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side"
+        },
+        "east": {
+          "texture": "#fluid_tank_side"
+        },
+        "west": {
+          "texture": "#fluid_tank_side"
+        },
+        "up": {
+          "texture": "#fluid_tank_side"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        9.98
+      ],
+      "to": [
+        8,
+        4,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe"
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe"
+        }
+      }
+    }
+  ]
+}

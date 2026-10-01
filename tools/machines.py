@@ -45,6 +45,14 @@ MACHINES = {
     "pumpjack": {"display": "Pumpjack", "lit": True},
     # A 2x2x2 hot-water extraction plant: oil sand or bitumen + water -> crude oil (+ sand).
     "oil_sand_extractor": {"display": "Oil Sand Extractor", "lit": True},
+    # A 2x2 column seven blocks tall: crude oil -> refinery gas, naphtha, diesel and heavy fuel oil.
+    "distillation_tower": {"display": "Distillation Tower", "lit": True},
+    # A 2x2x4 fluid catalytic cracker: heavy fuel oil + steam + catalyst -> diesel, naphtha, refinery gas.
+    "catalytic_cracker": {"display": "Catalytic Cracker", "lit": True},
+    # A 2x2x3 vacuum column: heavy fuel oil -> lubricant + asphalt binder.
+    "vacuum_distillation_unit": {"display": "Vacuum Distillation Unit", "lit": True},
+    # A 3x2x2 row of reactors: naphtha -> gasoline + refinery gas.
+    "catalytic_reformer": {"display": "Catalytic Reformer", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
 }
 
@@ -114,11 +122,14 @@ UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency 
 
 # Fluid logistics (physical branch; see docs/TECH_TREE.md). Amounts are millibuckets (mB);
 # 1 bucket = 1000 mB = 81000 Fabric droplets. Pipes are passive: pumps push through them.
-PIPES = {"bronze_fluid_pipe": {"display": "Bronze Fluid Pipe", "rate": 250}}
+PIPES = {"bronze_fluid_pipe": {"display": "Bronze Fluid Pipe", "rate": 250},
+         # Steel tier, for refinery flows; a network carries as much as its slowest pipe.
+         "steel_fluid_pipe": {"display": "Steel Fluid Pipe", "rate": 1_000}}
 # Fluid blocks with their own block entities. top/side/bottom name the textures.
 FLUID_BLOCKS = {
     "fluid_tank": {"display": "Tinplate Tank"},
     "electric_pump": {"display": "Electric Pump"},
+    "heavy_pump": {"display": "Heavy Pump"},
 }
 FLUID_STATS = {
     # Holds 16 buckets of one fluid; filled and emptied with buckets or by pumps.
@@ -126,6 +137,9 @@ FLUID_STATS = {
     # Draws a water/lava source (or the tank) below it and pushes into pipes/storages on its other sides.
     "electric_pump": {"energy_capacity": 4_000, "input_per_tick": 64, "use_per_tick": 8,
                       "pump_per_tick": 100, "buffer_mb": 4_000},
+    # Steel tier: ten times the pump, for refineries.
+    "heavy_pump": {"energy_capacity": 32_000, "input_per_tick": 512, "use_per_tick": 40,
+                   "pump_per_tick": 1_000, "buffer_mb": 16_000},
 }
 
 # Balance numbers shared with the Java code (MachineStats.java). Keep in sync.
@@ -179,6 +193,14 @@ STATS = {
     "pumpjack": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "pump_per_tick": 2, "tank": 16_000},
     # 2x2x2. Recipes in tools/petro.py; 8,000 mB water tank and 8,000 mB crude oil tank.
     "oil_sand_extractor": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "tank": 8_000},
+    # 2x2x7. 128 JE/t heats the reboiler; a bucket of crude oil per 100 ticks.
+    "distillation_tower": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 128, "tank": 16_000},
+    # 2x2x4. 160 JE/t; a bucket of heavy fuel oil per 160 ticks.
+    "catalytic_cracker": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 160, "tank": 8_000},
+    # 2x2x3. 96 JE/t; a bucket of heavy fuel oil per 120 ticks.
+    "vacuum_distillation_unit": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
+    # 3x2x2. 120 JE/t; a bucket of naphtha per 120 ticks.
+    "catalytic_reformer": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 120, "tank": 8_000},
 }
 
 # Fuel for the coal generator: burn ticks per item (coal matches the vanilla furnace's 1600).
@@ -250,6 +272,9 @@ CRAFTING = {
     # Fluid branch: pipes and tanks come from press-made plates; the pump adds gears and a casing.
     "bronze_fluid_pipe": (["PGP"], {"P": "#c:plates/bronze", "G": "minecraft:glass"}, 4),
     "fluid_tank": (["PPP", "PGP", "PPP"], {"P": "#c:plates/tin", "G": "minecraft:glass"}, 1),
+    "steel_fluid_pipe": (["PGP"], {"P": "#c:plates/steel", "G": "jugcraft:bronze_fluid_pipe"}, 3),
+    "heavy_pump": (["PCP", "GUG", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:silver_cable", "G": "#c:gears/steel",
+                                          "U": "jugcraft:electric_pump", "M": "jugcraft:machine_casing"}, 1),
     "electric_pump": (["PUP", "GMG", "PCP"],
                       {"P": "#c:plates/bronze", "U": "minecraft:bucket", "G": "#c:gears/iron",
                        "M": "jugcraft:machine_casing", "C": "jugcraft:copper_cable"}, 1),
@@ -343,6 +368,19 @@ CRAFTING = {
     "oil_sand_extractor": (["PHP", "TMT", "PGP"], {"P": "#c:plates/steel", "H": "minecraft:hopper",
                                                    "T": "jugcraft:fluid_tank", "M": "jugcraft:machine_casing",
                                                    "G": "#c:gears/steel"}, 1),
+    "distillation_tower": (["PTP", "PCP", "PFP"], {"P": "#c:plates/steel", "T": "jugcraft:steel_tank",
+                                                   "C": "jugcraft:advanced_circuit", "F": "minecraft:blast_furnace"}, 1),
+    "catalytic_cracker": (["PCP", "TAT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
+                                                  "T": "jugcraft:steel_tank", "A": "jugcraft:arc_furnace_casing",
+                                                  "M": "jugcraft:machine_casing"}, 1),
+    "vacuum_distillation_unit": (["PEP", "TCT", "PMP"], {"P": "#c:plates/steel", "E": "jugcraft:heavy_pump",
+                                                         "T": "jugcraft:fluid_tank", "C": "jugcraft:advanced_circuit",
+                                                         "M": "jugcraft:machine_casing"}, 1),
+    "catalytic_reformer": (["PCP", "TFT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
+                                                   "T": "jugcraft:fluid_tank", "F": "minecraft:blast_furnace",
+                                                   "M": "jugcraft:machine_casing"}, 1),
+    "cracking_catalyst": (["BSB", "SNS", "BSB"], {"B": "jugcraft:bauxite", "S": "minecraft:sand",
+                                                  "N": "#c:ingots/nickel"}, 4),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",
                                                 "W": "jugcraft:copper_cable", "A": "jugcraft:advanced_circuit",
                                                 "B": "jugcraft:battery_box"}, 1),

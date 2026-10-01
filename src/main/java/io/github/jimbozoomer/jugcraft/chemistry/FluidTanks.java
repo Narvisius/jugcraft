@@ -4,6 +4,7 @@ import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.IntFunction;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
@@ -64,14 +65,14 @@ public class FluidTanks {
 	}
 
 	/**
-	 * Pushes each output tank's fluid out of the machine's outer faces: into neighbouring fluid storages, or through
-	 * pipes like a pump does. Returns whether anything moved.
+	 * Pushes each output tank's fluid out of the machine's outer faces ({@code portsFor} gives them per output tank):
+	 * into neighbouring fluid storages, or through pipes like a pump does. Returns whether anything moved.
 	 */
-	public boolean pushOutputs(Level level, List<Port> ports, long maxDroplets) {
+	public boolean pushOutputs(Level level, IntFunction<List<Port>> portsFor, long maxDroplets) {
 		boolean moved = false;
 		for (int i = 0; i < spec.outputTanks().size(); i++) {
 			FluidTank tank = output(i);
-			for (Port port : ports) {
+			for (Port port : portsFor.apply(i)) {
 				if (tank.amount <= 0) {
 					break;
 				}

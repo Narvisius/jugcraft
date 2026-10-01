@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "TFT",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:advanced_circuit",
+    "T": "jugcraft:fluid_tank",
+    "F": "minecraft:blast_furnace",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:catalytic_reformer",
+    "count": 1
+  }
+}

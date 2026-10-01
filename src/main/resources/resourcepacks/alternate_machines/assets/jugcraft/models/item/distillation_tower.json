@@ -1,0 +1,559 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/distillation_tower_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        5.6296,
+        0.0,
+        5.6296
+      ],
+      "to": [
+        10.3704,
+        0.2963,
+        10.3704
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.741,
+            0.296
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.741,
+            0.296
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.741,
+            0.296
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.741,
+            0.296
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.741,
+            4.741
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            4.741,
+            4.741
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.1481,
+        0.2763,
+        5.7778
+      ],
+      "to": [
+        10.2222,
+        2.0741,
+        6.963
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            2.074,
+            1.778
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.074,
+            1.778
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.185,
+            1.778
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.185,
+            1.778
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            2.074,
+            1.185
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.074,
+            1.185
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.3704,
+        0.2963,
+        6.3704
+      ],
+      "to": [
+        9.6296,
+        15.7037,
+        9.6296
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            3.259,
+            15.407
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            3.259,
+            15.407
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            3.259,
+            15.407
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            3.259,
+            15.407
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            3.259,
+            3.259
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            3.259,
+            3.259
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.3704,
+        15.7037,
+        6.3704
+      ],
+      "to": [
+        9.6296,
+        16.0,
+        9.6296
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            3.259,
+            0.296
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            3.259,
+            0.296
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            3.259,
+            0.296
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            3.259,
+            0.296
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            3.259,
+            3.259
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            3.259,
+            3.259
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.0741,
+        1.037,
+        5.6296
+      ],
+      "to": [
+        6.963,
+        1.6296,
+        6.3704
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.0741,
+        5.6296,
+        5.6296
+      ],
+      "to": [
+        6.963,
+        6.2222,
+        6.3704
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.0741,
+        10.3704,
+        5.6296
+      ],
+      "to": [
+        6.963,
+        10.963,
+        6.3704
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.0741,
+        15.1111,
+        5.6296
+      ],
+      "to": [
+        6.963,
+        15.7037,
+        6.3704
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.593
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.741,
+            0.593
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.889,
+            0.741
+          ]
+        }
+      }
+    }
+  ]
+}

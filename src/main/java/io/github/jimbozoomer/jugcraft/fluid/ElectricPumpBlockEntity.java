@@ -35,24 +35,44 @@ import net.minecraft.world.level.storage.ValueOutput;
  * others but not filled from outside, so fluid only ever flows upward through it.
  */
 public class ElectricPumpBlockEntity extends BlockEntity {
-	public static final long ENERGY_CAPACITY = 4_000;
-	public static final long ENERGY_INPUT = 64;
-	public static final long ENERGY_PER_TICK = 8;
-	public static final long PUMP_MB_PER_TICK = 100;
-	public static final long BUFFER = 4 * FluidConstants.BUCKET;
+	/** A pump's numbers: JE capacity, input and use per tick, mB pumped per tick, and its buffer in buckets. */
+	public record Tier(long energyCapacity, long energyInput, long energyPerTick, long pumpMbPerTick, long bufferBuckets) {
+		/** The bronze-age electric pump. */
+		public static final Tier ELECTRIC = new Tier(4_000, 64, 8, 100, 4);
+		/** The steel-tier heavy pump, for refinery flows. */
+		public static final Tier HEAVY = new Tier(32_000, 512, 40, 1_000, 16);
+	}
+
+	public static final long ENERGY_CAPACITY = Tier.ELECTRIC.energyCapacity();
+	public static final long ENERGY_INPUT = Tier.ELECTRIC.energyInput();
+	public static final long ENERGY_PER_TICK = Tier.ELECTRIC.energyPerTick();
+	public static final long PUMP_MB_PER_TICK = Tier.ELECTRIC.pumpMbPerTick();
+	public static final long BUFFER = Tier.ELECTRIC.bufferBuckets() * FluidConstants.BUCKET;
 	/** Ticks between lava source pulls: lava sources are consumed, one bucket each. */
 	public static final int LAVA_COOLDOWN = 20;
 
-	private static final long PUMP_RATE = PUMP_MB_PER_TICK * FluidNetworks.DROPLETS_PER_MB;
 	private static final Set<Direction> OUTPUTS = EnumSet.complementOf(EnumSet.of(Direction.DOWN));
 
-	final SimpleEnergyStorage energy = new SimpleEnergyStorage(ENERGY_CAPACITY, ENERGY_INPUT, 0, this::setChanged);
-	final SingleFluidStorage buffer = SingleFluidStorage.withFixedCapacity(BUFFER, this::setChanged);
-	private final Storage<FluidVariant> exposed = FilteringStorage.extractOnlyOf(buffer);
+	private final Tier tier;
+	private final long pumpRate;
+	private final long bufferCapacity;
+	final SimpleEnergyStorage energy;
+	final SingleFluidStorage buffer;
+	private final Storage<FluidVariant> exposed;
 	private int lavaCooldown;
 
 	public ElectricPumpBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftFluids.PUMP_ENTITY, pos, state);
+		this.tier = state.getBlock() instanceof ElectricPumpBlock pump ? pump.tier() : Tier.ELECTRIC;
+		this.pumpRate = tier.pumpMbPerTick() * FluidNetworks.DROPLETS_PER_MB;
+		this.bufferCapacity = tier.bufferBuckets() * FluidConstants.BUCKET;
+		this.energy = new SimpleEnergyStorage(tier.energyCapacity(), tier.energyInput(), 0, this::setChanged);
+		this.buffer = SingleFluidStorage.withFixedCapacity(bufferCapacity, this::setChanged);
+		this.exposed = FilteringStorage.extractOnlyOf(buffer);
+	}
+
+	public Tier tier() {
+		return tier;
 	}
 
 	public Storage<FluidVariant> fluidFor(Direction side) {
@@ -71,28 +91,28 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 		if (lavaCooldown > 0) {
 			lavaCooldown--;
 		}
-		if (energy.getAmount() < ENERGY_PER_TICK) {
+		if (energy.getAmount() < tier.energyPerTick()) {
 			return;
 		}
 		long moved = pull(level, pos.below());
 		if (buffer.amount > 0) {
-			moved += FluidNetworks.pushToNeighbors(level, pos, buffer, PUMP_RATE, OUTPUTS);
+			moved += FluidNetworks.pushToNeighbors(level, pos, buffer, pumpRate, OUTPUTS);
 		}
 		if (moved > 0) {
-			energy.setAmount(energy.getAmount() - ENERGY_PER_TICK);
+			energy.setAmount(energy.getAmount() - tier.energyPerTick());
 			setChanged();
 		}
 	}
 
 	/** Fills the buffer from below; returns droplets taken. */
 	private long pull(ServerLevel level, BlockPos below) {
-		long room = BUFFER - buffer.amount;
+		long room = bufferCapacity - buffer.amount;
 		if (room <= 0) {
 			return 0;
 		}
 		Storage<FluidVariant> storage = FluidStorage.SIDED.find(level, below, Direction.UP);
 		if (storage != null) {
-			return StorageUtil.move(storage, buffer, variant -> true, Math.min(room, PUMP_RATE), null);
+			return StorageUtil.move(storage, buffer, variant -> true, Math.min(room, pumpRate), null);
 		}
 
 		BlockState state = level.getBlockState(below);
@@ -102,7 +122,7 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 		}
 		if (fluid.getType() == Fluids.WATER) {
 			// Water is treated as a spring: the source block is not removed, matching the steam generator.
-			return insert(Fluids.WATER, Math.min(room, PUMP_RATE));
+			return insert(Fluids.WATER, Math.min(room, pumpRate));
 		}
 		if (fluid.getType() == Fluids.LAVA && lavaCooldown == 0 && room >= FluidConstants.BUCKET) {
 			long taken = insert(Fluids.LAVA, FluidConstants.BUCKET);

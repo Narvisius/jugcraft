@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:distillation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:crude_oil",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:refinery_gas",
+      "amount": 100
+    },
+    {
+      "fluid": "jugcraft:naphtha",
+      "amount": 250
+    },
+    {
+      "fluid": "jugcraft:diesel",
+      "amount": 400
+    },
+    {
+      "fluid": "jugcraft:heavy_fuel_oil",
+      "amount": 250
+    }
+  ],
+  "time": 100
+}

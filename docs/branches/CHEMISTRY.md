@@ -41,7 +41,7 @@ The owner asked on 1 October 2026 for "the Diesel Punk Chemistry branch of the s
 
 Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_DIRECTION.md): dieselpunk, detailed, and as big as the real thing (pumpjacks, towers and rigs are multi-block). Fluids move in the existing pipes and tanks. Amounts are millibuckets (mB).
 
-### Batch 1: oil in the world
+### Batch 1: oil in the world (done, #47)
 
 | # | Commit | What it adds |
 | --- | --- | --- |
@@ -51,7 +51,7 @@ Every machine here is steel tier or later and follows [ART_DIRECTION.md](../ART_
 | 4 | Pumpjack | A 3-block-long, 3-tall dieselpunk pumpjack (nodding donkey) that pumps a chunk's conventional reservoir dry, slowly, on JE. |
 | 5 | Oil sand extractor | Hot-water extraction: oil sand + water → crude oil + sand. A route to crude anywhere oil sand is found, for players with no reservoir nearby. |
 
-### Batch 2: refining
+### Batch 2: refining (#49)
 
 | # | Commit | What it adds |
 | --- | --- | --- |

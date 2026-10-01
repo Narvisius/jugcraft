@@ -1,0 +1,355 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/vacuum_distillation_unit_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2.4348,
+        0.0,
+        2.4348
+      ],
+      "to": [
+        13.5652,
+        0.6957,
+        13.5652
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            11.13,
+            0.696
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            11.13,
+            0.696
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            11.13,
+            0.696
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            11.13,
+            0.696
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            11.13,
+            11.13
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            11.13,
+            11.13
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.3478,
+        0.6757,
+        2.7826
+      ],
+      "to": [
+        13.2174,
+        4.8696,
+        5.5652
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            4.87,
+            4.174
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            4.87,
+            4.174
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.783,
+            4.174
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.783,
+            4.174
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            4.87,
+            2.783
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            4.87,
+            2.783
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.1304,
+        0.6957,
+        4.5217
+      ],
+      "to": [
+        11.4783,
+        13.913,
+        12.8696
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            8.348,
+            13.217
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            8.348,
+            13.217
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            8.348,
+            13.217
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            8.348,
+            13.217
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            8.348,
+            8.348
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            8.348,
+            8.348
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5217,
+        13.913,
+        5.913
+      ],
+      "to": [
+        10.087,
+        16.0,
+        11.4783
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            5.565,
+            2.087
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            5.565,
+            2.087
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            5.565,
+            2.087
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            5.565,
+            2.087
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            5.565,
+            5.565
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            5.565,
+            5.565
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.4783,
+        2.4348,
+        2.4348
+      ],
+      "to": [
+        5.5652,
+        3.8261,
+        4.1739
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            2.087,
+            1.391
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            2.087,
+            1.391
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.739,
+            1.391
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.739,
+            1.391
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            2.087,
+            1.739
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            2.087,
+            1.739
+          ]
+        }
+      }
+    }
+  ]
+}

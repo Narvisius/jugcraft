@@ -43,6 +43,49 @@ The base every oil machine is built on; on its own it adds nothing a player can 
 - This is the route to crude oil for anyone without a reservoir nearby: oil sand is a surface rock in its biomes.
 - Recipe: steel plates, a hopper, two tinplate tanks, a machine casing and a steel gear. Steel tier.
 
+### Steel pipes and the heavy pump (batch 2, commit 6)
+- **Steel Fluid Pipe:** a gunmetal pipe with hazard-striped junctions that carries **1,000 mB a tick**, four times the bronze pipe, for refinery flows. Three are made from two steel plates and a bronze pipe.
+- **A pipe line now carries as much as its slowest pipe** (like cables): one bronze pipe in a steel line holds it to 250 mB a tick. Before, the rate came from whichever pipe the pump touched.
+- **Heavy Pump:** a steel-tier pump with an olive volute, a chrome motor bell and hazard-striped guards. It pumps **1,000 mB a tick** from below (water as a spring, lava sources, or a tank) out of its top and sides, at **40 JE a tick**, with a 32,000 JE battery and a 16-bucket buffer. Made from steel plates, silver cable, steel gears, an electric pump and a machine casing.
+
+### Distillation tower and the refined fluids (batch 2, commit 7)
+- Four new fluids: **naphtha** (pale, runny), **diesel** (amber), **heavy fuel oil** (black and thick), each with a bucket and original textures, and **refinery gas**, a gas: it only lives in tanks and pipes, with no block and no bucket.
+- The **distillation tower** is a 2×2 dieselpunk column seven blocks tall: a fired reboiler with a glowing firebox at its foot, olive sections between gunmetal flanges, three grated platforms with hazard rails, a ladder up the back and a domed cap with a vent.
+- It turns **1,000 mB of crude oil into 100 mB of refinery gas, 250 mB of naphtha, 400 mB of diesel and 250 mB of heavy fuel oil** every 100 ticks, at 128 JE/t (12,800 JE a bucket). Volume is conserved.
+- **Each fraction comes out at its own height**, at a chrome draw-off with a red valve on the front: heavy fuel oil at the base (layer 0), diesel two blocks up, naphtha four up and refinery gas at the top (layer 6). It pushes each only from the faces of its own layer, so one pipe or tank per draw-off keeps them apart. Crude oil goes in at any face.
+- Recipe: steel plates, a steel tank, an advanced circuit and a blast furnace.
+
+### Catalytic cracker (batch 2, commit 8)
+- A **2×2 fluid catalytic cracker four blocks tall**: a slim riser-reactor and a fat regenerator vessel, olive with hazard bands, joined at the top by a chrome crossover with cyclone caps, with a catalyst hopper, a steam line, and a feed heater with a glowing firebox at the foot.
+- **1,000 mB of heavy fuel oil + 250 mB of water + 1 cracking catalyst → 500 mB of diesel, 300 mB of naphtha and 200 mB of refinery gas**, every 160 ticks at 160 JE/t (25,600 JE a bucket). The water is the steam; it is used up.
+- Draw-offs: diesel at the base, naphtha two blocks up, refinery gas at the top (layer 3).
+- **Cracking Catalyst:** four from bauxite, sand and a nickel ingot; one is used per bucket of heavy fuel oil. It ties the cracker to the bauxite and nickel the earlier tiers already mine.
+- Recipe: steel plates, an advanced circuit, two steel tanks, an arc furnace casing and a machine casing.
+
+### Vacuum distillation (batch 2, commit 9)
+- **Lubricant**: a thick golden fluid with a bucket. It is for machine upkeep (the gas turbine in batch 3 needs it).
+- **Asphalt Binder**: a black lump of tar, the residue. Asphalt roads come in batch 4.
+- The **vacuum distillation unit** is 2×2 and three blocks tall: a squat olive column stepping in towards the top, chrome steam ejectors and a condenser drum that keep it under vacuum, a fired heater at its foot and a residue chute at the back.
+- **1,000 mB of heavy fuel oil → 400 mB of lubricant + 2 asphalt binder**, every 120 ticks at 96 JE/t (11,520 JE a bucket). The binder comes out of its item slot (hoppers and pipes can take it); the lubricant is pushed out of every face.
+- Recipe: steel plates, a heavy pump, two tinplate tanks, an advanced circuit and a machine casing.
+
+### Catalytic reformer (batch 2, commit 10)
+- **Gasoline**: a thin, red-orange fluid with a bucket.
+- The **catalytic reformer** is three wide, two tall and two deep: three olive reactor drums under chrome caps joined by a header, a fired heater with an exhaust stack, and a product manifold with two draw-offs.
+- **1,000 mB of naphtha → 900 mB of gasoline + 100 mB of refinery gas**, every 120 ticks at 120 JE/t (14,400 JE a bucket). Gasoline comes out of the bottom row and refinery gas out of the top row.
+- Recipe: steel plates, an advanced circuit, two tinplate tanks, a blast furnace and a machine casing.
+
+### What refining gives (batch 2 summary)
+From one bucket of crude oil, with every byproduct refined:
+
+| Step | In | Out |
+| --- | --- | --- |
+| Distillation | 1,000 crude | 100 gas, 250 naphtha, 400 diesel, 250 heavy fuel oil |
+| Cracking (or vacuum) the heavy fuel oil | 250 heavy + 62.5 water + ¼ catalyst | 125 diesel, 75 naphtha, 50 gas (or 100 lubricant + ½ asphalt binder) |
+| Reforming all the naphtha | 325 naphtha | 292.5 gasoline, 32.5 gas |
+
+So a bucket of crude oil cracked all the way gives about 525 mB of diesel, 293 mB of gasoline and 183 mB of refinery gas, for about 12,800 + 6,400 + 4,680 = 23,880 JE of refining. What those fuels are worth in generators is set in batch 3 (diesel generator, gas turbine) and audited in BALANCE.md (commit 19).
+
 ## Connections
 - Existing input producer: oil reservoirs (commit 3) through the pumpjack; oil sand and bitumen (existing rock and item) through the extractor; water from pumps.
 - Existing output consumer: the fluid system (tanks, steel tank, pumps, pipes); refining comes in batch 2.
@@ -69,6 +112,10 @@ Fabric API's fluid rendering registry draws the fluid. Textures are original, dr
 - `tools/check_mod_data.py` audits fluid recipes (`tools/petro.py`): every item and fluid resolves, recipes fit the machine's slots and tank sizes, and no recipe gives out more fluid than it takes in (a recipe that releases fluid from an item, such as oil sand, must state how much as its `source`).
 - Game tests (`PetroGameTests`): `crudeOilFillsTanks` (a tinplate tank stores a bucket of crude oil) and `crudeOilMakesNoNewSources` (two sources with a gap leave flowing oil, not a new source).
 - Game tests: `oilReservoirsAreSeededAndFinite` (1,600 far-away chunks read the same twice, about one in twelve holds pumpable oil, a reservoir gives exactly what it holds and then nothing, and shale can't be taken as pumpable oil) and `surveyFindsOil`.
+- Game tests `heavyPumpFillsFastThroughSteelPipes`, `bronzePipeLimitsASteelLine`, and `distillationTowerSplitsCrude` (a bucket of crude oil becomes 100/250/400/250 mB, and a tank at the diesel draw-off gets only the diesel).
+- Game test `crackerCracksHeavyFuelOil` (heavy fuel oil, water and one catalyst become 500/300/200 mB of diesel, naphtha and gas).
+- Game test `vacuumUnitMakesLubricantAndAsphalt` (a bucket of heavy fuel oil becomes 400 mB of lubricant and two asphalt binder).
+- Game test `reformerMakesGasoline` (a bucket of naphtha becomes 900 mB of gasoline and 100 mB of refinery gas).
 - Game test `pumpjackPumpsOil`: a powered pumpjack over pumpable oil fills its tank with crude oil and the reservoir goes down by as much.
 - Game tests `extractorTanksOnlyTakeWhatTheyUse` (its tanks take water but not lava or crude oil, through Fabric's fluid API) and `extractorWashesOilFromOilSand` (a block of oil sand and water become 500 mB of crude oil and sand, using 250 mB of water).
 - Not run: client play-testing of how the fluid looks and flows.
