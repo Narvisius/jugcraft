@@ -1660,7 +1660,7 @@
           "title": "Steel Foundry",
           "icon": "jugcraft:steel_foundry",
           "text": [
-            "Three blocks tall, needs no power. Refines one iron ingot with one coke into one steel ingot.",
+            "Two by two and five tall, needs no power. Refines one iron ingot with one coke into one steel ingot. Pipe oxygen into it (from the air separation unit) and it blows the charge: twice as fast, for 2 mB of oxygen a tick.",
             "Needs no power."
           ],
           "craft": {
@@ -2543,7 +2543,7 @@
           "title": "Air Separation Unit",
           "icon": "jugcraft:air_separation_unit",
           "text": [
-            "Two by two and six tall: a cold box and its distillation column. It needs no input: it liquefies air and splits it, 8 mB of nitrogen a tick out of the top row and 2 mB of oxygen out of the bottom row, at 64 JE/t. Pipe the gases to the synthesis converter or a gas holder; it stops while either tank is full.",
+            "Two by two and six tall: a cold box and its distillation column. It needs no input: it liquefies air and splits it, 8 mB of nitrogen a tick out of the top row, 2 mB of oxygen out of the bottom row and a little argon (1 mB every 2 ticks) out of the middle, at 64 JE/t. Pipe the gases to the synthesis converter, the steel foundry, the crystal grower or a gas holder; it stops while any tank is full.",
             "Uses 64 JE/t while working. Holds 40,000 JE."
           ],
           "craft": {
@@ -2661,7 +2661,7 @@
           "title": "Crystal Grower",
           "icon": "jugcraft:crystal_grower",
           "text": [
-            "Two blocks tall. Melts 4 silicon with a phosphate (the dopant) and slowly pulls a single crystal out of the melt: a silicon boule, every 20 seconds at 128 JE/t. Saw the boule into 8 wafers in the sawmill.",
+            "Two blocks tall. Melts 4 silicon with a phosphate (the dopant) and slowly pulls a single crystal out of the melt: a silicon boule, every 20 seconds at 128 JE/t. Saw the boule into 8 wafers in the sawmill. Pipe argon in to shield the melt and it grows twice as fast, for 1 mB of argon a tick.",
             "Uses 128 JE/t while working. Holds 60,000 JE."
           ],
           "craft": {

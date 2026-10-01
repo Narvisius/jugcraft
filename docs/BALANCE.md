@@ -114,7 +114,9 @@ A processor costs about 64,000 JE of crystal growing and etching (two wafers' wo
 
 | Step | Cost | Notes |
 | --- | --- | --- |
-| Air separation | 64 JE/t for 8 mB nitrogen + 2 mB oxygen | from the air; no input, like a pumpjack's reservoir |
+| Air separation | 64 JE/t for 8 mB nitrogen + 2 mB oxygen + 0.5 mB argon | from the air; no input, like a pumpjack's reservoir |
+| Oxygen-blown steel (batch 13) | 2 mB oxygen a tick | the steel foundry runs twice as fast; one air separation unit keeps one foundry blown |
+| Argon-shielded crystals (batch 13) | 1 mB argon a tick | the crystal grower runs twice as fast; one unit's argon keeps half a grower shielded |
 | Ammonia (Haber–Bosch) | 300 mB hydrogen + 100 mB nitrogen → 200 mB, 5,120 JE | the hydrogen is 1.2 buckets of brine of electrolysis |
 | Nitric acid (Ostwald) | 100 mB ammonia + 200 mB oxygen + 100 mB water → 200 mB, 5,120 JE | |
 | Ammonium phosphate | 2 phosphate + 250 mB ammonia → 6 fertilizer | against 4 with sulfuric acid; phosphate stays the limit |

@@ -120,6 +120,8 @@ public final class PetroFluids {
 	public static Gas NITROGEN;
 	public static Gas OXYGEN;
 	public static Gas AMMONIA;
+	/** The scarce third part of air (batch 13): a shielding gas. */
+	public static Gas ARGON;
 	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
 	public static Entry NITRIC_ACID;
 
@@ -168,6 +170,7 @@ public final class PetroFluids {
 		NITROGEN = gas("nitrogen", 0xFF96A8D6);
 		OXYGEN = gas("oxygen", 0xFF78B4E0);
 		AMMONIA = gas("ammonia", 0xFFB096D4);
+		ARGON = gas("argon", 0xFFC8A0E6);
 		NITRIC_ACID = fluid("nitric_acid", 5, 4, 1, 0xFFE2D48C, MapColor.COLOR_YELLOW);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {

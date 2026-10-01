@@ -356,7 +356,7 @@ Steel is the second material tier. It needs **no power** and no new ore, only ir
 | Block | Does | Numbers | Built from |
 | --- | --- | --- | --- |
 | Coke Oven (2×2, 2 tall + chimney) | Bakes coal into **Coal Coke** | 600 ticks per coal; no power, no fuel | bricks, iron, furnace |
-| Steel Foundry (2×2, 5 tall) | 1 iron ingot + 1 coke → 1 **steel ingot** (either slot) | 400 ticks; no power | bricks, hopper, iron plates, blast furnace |
+| Steel Foundry (2×2, 5 tall) | 1 iron ingot + 1 coke → 1 **steel ingot** (either slot) | 400 ticks; no power. Oxygen piped in (2 mB/t) doubles its speed (batch 13) | bricks, hopper, iron plates, blast furnace |
 
 - **Coal Coke** (`c:coal_coke`) burns twice as long as coal in the Coal and Steam Generators (3,200 ticks). It is the carbon for steel.
 - **Steel** has the usual ingot, nugget and block, plus a **steel plate** (Metal Press) and a **steel gear**. The first things built from steel are the [machine upgrades](#machine-control).
@@ -428,7 +428,7 @@ Salt, sulfur, phosphate and bauxite get their real reactions ([feature record](f
 | Neodymium Magnet | Rare earths alloyed with iron | 1 rare earth oxide + 1 iron ingot → 1 (alloy smelter, 200 ticks) | – |
 | Fertilizer | Superphosphate: two doses of bone meal on every crop in a 5×5 area | 2 phosphate + 250 mB sulfuric acid → 4, or 2 phosphate + 250 mB ammonia → 6 (ammonium phosphate; chemical reactor) | – |
 | Chemical Reactor | 2×2×2 acid plant | 2 sulfur dust + 1,000 mB water → 1,000 mB sulfuric acid; 100 ticks at 96 JE/t | 4 steel plates, glass, 2 tinplate tanks, casing, lead ingot |
-| Air Separation Unit | 2×2×6 cold box and column (batch 12) | From the air, needing only power: 8 mB/t nitrogen out of the top row and 2 mB/t oxygen out of the bottom row at 64 JE/t; 16-bucket tanks | 4 steel plates, 2 steel pipes, 2 tinplate tanks, casing, 2 electric motors, advanced circuit |
+| Air Separation Unit | 2×2×6 cold box and column (batch 12) | From the air, needing only power: 8 mB/t nitrogen out of the top row, 2 mB/t oxygen out of the bottom row and 1 mB of argon every 2 ticks out of the middle at 64 JE/t; 16-bucket tanks | 4 steel plates, 2 steel pipes, 2 tinplate tanks, casing, 2 electric motors, advanced circuit |
 | Synthesis Converter | 3×4×2 high-pressure loop (batch 12) | Haber–Bosch: 300 mB hydrogen + 100 mB nitrogen → 200 mB ammonia. Ostwald: 100 mB ammonia + 200 mB oxygen + 100 mB water → 200 mB nitric acid. 40 ticks at 128 JE/t | 4 steel plates, 2 titanium ingots, 2 steel pipes, casing, advanced circuit |
 
 **Fluid processing machines** (the pumpjack and extractor are the first): input tanks take only fluids the machine's recipes use; output tanks push into neighbouring tanks and pipes; the screen shows a gauge per tank. Recipes are data in `data/jugcraft/recipe/<type>/` (see [petrochemistry.md](features/petrochemistry.md)).
@@ -439,7 +439,7 @@ The tier after oil and chemistry, in the **cyan look**: near-black casings with 
 
 | Thing | What it is | Recipe or use | Built from |
 | --- | --- | --- | --- |
-| Crystal Grower | 2 tall; pulls doped silicon crystals | 4 silicon + 1 phosphate → 1 silicon boule; 400 ticks at 128 JE/t | glass, titanium ingot, arc furnace casing, aluminum plates, advanced circuit |
+| Crystal Grower | 2 tall; pulls doped silicon crystals | 4 silicon + 1 phosphate → 1 silicon boule; 400 ticks at 128 JE/t; argon piped in (1 mB/t) doubles its speed (batch 13) | glass, titanium ingot, arc furnace casing, aluminum plates, advanced circuit |
 | Silicon Wafer | Thin slices of a boule | 1 silicon boule → 8 wafers (sawmill, 200 ticks) | – |
 | Lithography Station | 3×2×2 cleanroom with a monitor bank | 1 wafer + 2 copper wire + 100 mB sulfuric acid (or 50 mB nitric acid) → 4 microchips; 200 ticks at 192 JE/t; 4-bucket acid tank | glass, redstone lamp, titanium ingots, advanced circuit, aluminum plates, casing |
 | Processor | The third circuit tier | 4 microchips + 1 advanced circuit + 1 gold ingot (circuit assembler, 400 ticks) | – |

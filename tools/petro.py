@@ -68,6 +68,9 @@ GASES = {
                "colors": [(90, 150, 200), (120, 180, 224), (160, 206, 238), (204, 232, 250)]},
     "ammonia": {"display": "Ammonia", "feature": "machines",
                 "colors": [(150, 120, 190), (176, 150, 212), (202, 182, 230), (228, 216, 244)]},
+    # Batch 13: the scarce third part of air, a shielding gas.
+    "argon": {"display": "Argon", "feature": "machines",
+              "colors": [(170, 120, 200), (190, 150, 220), (212, 182, 236), (234, 216, 248)]},
 }
 
 
@@ -181,8 +184,9 @@ FLUID_MACHINES = {
     "lithography_station": {"inputs": [4_000], "outputs": [], "item_inputs": 2, "item_outputs": 1,
                             "recipe_type": "lithography"},
     # Nitrogen chemistry (batch 12). Air separation (no recipes): from the air alone, 8 mB/t nitrogen drawn off the
-    # top and 2 mB/t oxygen off the base (Java: MachineKind.outputLayer) at 64 JE/t, like the pumpjack's oil.
-    "air_separation_unit": {"inputs": [], "outputs": [16_000, 16_000], "item_inputs": 0, "item_outputs": 0,
+    # top, 2 mB/t oxygen off the base and (batch 13) 1 mB of argon every 2 ticks off the middle (Java:
+    # MachineKind.outputLayer) at 64 JE/t, like the pumpjack's oil.
+    "air_separation_unit": {"inputs": [], "outputs": [16_000, 16_000, 16_000], "item_inputs": 0, "item_outputs": 0,
                             "recipe_type": None},
     # A high-pressure catalytic converter: hydrogen + nitrogen -> ammonia (Haber-Bosch); ammonia + oxygen + water
     # -> nitric acid (Ostwald). 128 JE/t.

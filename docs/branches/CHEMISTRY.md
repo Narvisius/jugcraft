@@ -117,6 +117,12 @@ The first batch from the owner's saved idea backlog ([MACHINE_ROADMAP.md](../MAC
 | 32 | Synthesis converter: a 3×4×2 high-pressure loop. Haber–Bosch (hydrogen + nitrogen → ammonia) and Ostwald (ammonia + oxygen + water → nitric acid). Nitric acid fluid. |
 | 33 | Uses: ammonia + phosphate → ammonium phosphate fertilizer (6 for 2 phosphate); nitric acid etches microchips with half the acid. Handbook, advancements and docs. |
 
+### Batch 13: oxygen-blown steel and argon
+
+| # | What it adds |
+| --- | --- |
+| 34 | The air separation unit also gives argon (1 mB every 2 ticks, from the middle of the column). Item machines can take a **boost gas**: oxygen blown into the steel foundry and argon round the crystal grower's melt double their speed, burning the gas each tick they are boosted. |
+
 ### Rules for the oil line
 
 - **Oil is finite.** Reservoirs run dry and oil sand is an ore; nothing turns power back into crude. Every fuel's JE per bucket is set so refining pays off over burning raw bitumen, and the full chain is audited in BALANCE.md (commit 19).

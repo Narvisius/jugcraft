@@ -18,6 +18,10 @@ Primary specialty and supported player role: chemistry
   - **Microchips:** nitric acid etches them in the lithography station with **50 mB** where sulfuric acid takes 100.
 - Nitrogen, oxygen and ammonia are gases: they live in tanks, pipes and gas holders. Nitric acid is a liquid with a bucket.
 
+### Batch 13: oxygen-blown steel and argon
+- The air separation unit also draws off **argon**, the scarce third part of air: 1 mB every 2 ticks from its middle row, into a third tank.
+- **Boost gases:** pipe **oxygen** into the steel foundry and it blows the charge (basic oxygen steelmaking); pipe **argon** into the crystal grower and it shields the melt. Either runs **twice as fast** while it has gas, burning 2 mB of oxygen or 1 mB of argon a tick. Without gas they work as before.
+
 ## Connections
 - Existing input producer: hydrogen from the electrolytic cell (brine); water; power.
 - Existing output consumer: the chemical reactor (fertilizer, for the farming branch and the sprinkler), the lithography station (microchips), gas holders.
@@ -49,6 +53,7 @@ No new dependencies. Models (`tools/dieselpunk_models.py`), front textures and f
   - the fluids and gases against `PetroFluids.java`;
   - the fluid specs and recipe types against `MachineKind`;
   - that no recipe makes fluid from nothing.
+- Game tests (`PetroGameTests`), batch 13: `oxygenSpeedsUpTheSteelFoundry`, `argonSpeedsUpTheCrystalGrower`, and the air separation test now checks argon.
 - Game tests (`PetroGameTests`):
   - `airSeparationMakesNitrogenAndOxygen`
   - `converterMakesAmmoniaAndNitricAcid`

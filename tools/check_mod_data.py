@@ -518,6 +518,15 @@ def check_machines(registered):
         expected_use = stats.get("use_per_tick", 0)
         if use != expected_use:
             err(f"{machine}: use {use} in Java, {expected_use} in machines.py")
+        if "boost" in stats:
+            if f'case {machine.upper()} -> "{stats["boost"]}";' not in kinds:
+                err(f"{machine}: MachineKind.boostGas() is not {stats['boost']}")
+            if stats["boost"] not in petro.GASES:
+                err(f"{machine}: boost gas {stats['boost']} is not a gas in tools/petro.py")
+            per_tick = re.search(r"case " + machine.upper() + r" -> (\w+);\s*(?:case|default)", kinds.split("public int boostPerTick()")[1])
+            constants = dict(re.findall(r"public static final int (\w+) = ([\d_]+);", kinds))
+            if not per_tick or int(constants.get(per_tick.group(1), "-1").replace("_", "")) != stats["boost_per_tick"]:
+                err(f"{machine}: MachineKind.boostPerTick() does not give {stats['boost_per_tick']}")
     if set(MACHINES) != set(re.findall(r'\("([a-z_]+)", [\d_]+,', kinds)):
         err("MachineKind.java and tools/machines.py list different machines")
 

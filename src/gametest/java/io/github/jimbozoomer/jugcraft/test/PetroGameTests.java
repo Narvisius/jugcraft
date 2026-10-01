@@ -42,6 +42,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.material.Fluid;
+import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import net.minecraft.world.level.material.Fluids;
 
 /**
@@ -579,6 +581,51 @@ public class PetroGameTests {
 			helper.assertTrue(unit.tanks().output(0).has(PetroFluids.NITROGEN.fluid(), 400), "Nitrogen: " + nitrogen);
 			helper.assertTrue(unit.tanks().output(1).has(PetroFluids.OXYGEN.fluid(), 100), "Oxygen: " + oxygen);
 			helper.assertTrue(nitrogen == 4 * oxygen, nitrogen + " mB nitrogen to " + oxygen + " mB oxygen");
+			int argon = unit.tanks().output(2).millibuckets();
+			helper.assertTrue(unit.tanks().output(2).has(PetroFluids.ARGON.fluid(), 1) && argon * 2 <= oxygen / 2 + 1,
+					"Argon: " + argon + " mB to " + oxygen + " mB oxygen");
+		});
+	}
+
+	/** Pipes the boost gas into a machine through the fluid API, as a pipe would. */
+	private static void feedGas(GameTestHelper helper, BlockPos pos, Fluid gas, int mb) {
+		Storage<FluidVariant> storage = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
+		helper.assertTrue(storage != null, "No fluid storage at " + pos);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long in = storage.insert(FluidVariant.of(gas), mb * FluidNetworks.DROPLETS_PER_MB, transaction);
+			helper.assertTrue(in == mb * FluidNetworks.DROPLETS_PER_MB, "Only " + in + " droplets of gas went in");
+			transaction.commit();
+		}
+	}
+
+	/**
+	 * Oxygen blown into the steel foundry doubles its speed: with oxygen, a steel ingot comes out well before the 400
+	 * ticks the foundry takes without, and some of the oxygen is used.
+	 */
+	@GameTest(maxTicks = 300)
+	public void oxygenSpeedsUpTheSteelFoundry(GameTestHelper helper) {
+		BlockPos master = new BlockPos(2, 1, 2);
+		MachineBlockEntity foundry = placeUnpowered(helper, MachineKind.STEEL_FOUNDRY, master);
+		foundry.setItem(0, new ItemStack(Items.IRON_INGOT));
+		foundry.setItem(1, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("coke"))));
+		feedGas(helper, master, PetroFluids.OXYGEN.fluid(), 1_000);
+		helper.succeedWhen(() -> {
+			ItemStack output = foundry.getItem(MachineKind.STEEL_FOUNDRY.outputSlot());
+			helper.assertTrue(output.is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("steel_ingot"))), "Foundry output: " + output);
+		});
+	}
+
+	/** Argon around the crystal grower's melt doubles its speed too. */
+	@GameTest(maxTicks = 300)
+	public void argonSpeedsUpTheCrystalGrower(GameTestHelper helper) {
+		BlockPos master = new BlockPos(2, 1, 2);
+		MachineBlockEntity grower = place(helper, MachineKind.CRYSTAL_GROWER, master);
+		grower.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("silicon")), 4));
+		grower.setItem(1, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("phosphate"))));
+		feedGas(helper, master, PetroFluids.ARGON.fluid(), 1_000);
+		helper.succeedWhen(() -> {
+			ItemStack output = grower.getItem(MachineKind.CRYSTAL_GROWER.outputSlot());
+			helper.assertTrue(output.is(PetroItems.SILICON_BOULE), "Grower output: " + output);
 		});
 	}
 

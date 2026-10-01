@@ -8,7 +8,11 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
-### Unmerged: Nitrogen chemistry, batch 12
+### Unmerged: Oxygen-blown steel and argon, batch 13
+- The air separation unit also makes **argon**.
+- **Boost gases:** oxygen piped into the steel foundry, or argon into the crystal grower, doubles its speed.
+
+### #65 Nitrogen chemistry, batch 12: air separation, ammonia and nitric acid
 - **Air separation unit** (2×2, six tall): splits air into nitrogen and oxygen, four to one, needing only power.
 - **Synthesis converter** (3×4×2): Haber–Bosch ammonia (hydrogen + nitrogen) and Ostwald nitric acid (ammonia + oxygen + water).
 - New gases nitrogen, oxygen and ammonia; nitric acid with a bucket.

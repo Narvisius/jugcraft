@@ -71,7 +71,7 @@ Ideas Claude suggested after batch 10 (advanced power and tanks). The owner aske
 | Idea | What it adds | Builds on | Notes |
 | --- | --- | --- | --- |
 | **Haber–Bosch ammonia** ✅ batch 12 (synthesis converter) | Hydrogen + nitrogen → ammonia | Electrolytic cell (hydrogen), air separation (nitrogen) | Leads to better fertilizer and nitric acid |
-| **Air separation unit** ✅ batch 12 (nitrogen and oxygen; argon later) | A tall cryogenic column: air → oxygen, nitrogen, argon | Gas holders, pipes | Oxygen speeds up the steel foundry; argon is a shielding gas for titanium work |
+| **Air separation unit** ✅ batch 12 (nitrogen and oxygen), argon and the oxygen/argon boosts ✅ batch 13 | A tall cryogenic column: air → oxygen, nitrogen, argon | Gas holders, pipes | Oxygen speeds up the steel foundry; argon is a shielding gas for titanium work |
 | **Chlor-alkali uses** | Real uses for sodium hydroxide (soap, aluminum digestion, scrubbing); chlorine + ethylene → PVC, a second plastic | Electrolytic cell, cracker | Gives chlorine and lye steady consumers |
 | **Explosives line** | Nitric acid → nitroglycerin → dynamite and mining charges for the ore drill | Ammonia, nitric acid | Can grief: needs a server config switch and a hazard design first |
 | **Polymer tiers** | Synthetic rubber from butadiene (off the cracker) → hoses, gaskets, tires | Catalytic cracker | Rubber could gate high-pressure pipes and an engine turbocharger |

@@ -249,7 +249,7 @@ STATS = {
     "large_steam_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 256, "water_per_tick": 40, "tank": 16_000},
     # Unpowered: heat comes from the charge itself. No battery, no cable connection.
     "coke_oven": {"capacity": 0, "use_per_tick": 0},
-    "steel_foundry": {"capacity": 0, "use_per_tick": 0},
+    "steel_foundry": {"capacity": 0, "use_per_tick": 0, "boost": "oxygen", "boost_per_tick": 2, "boost_tank": 8_000},
     # Two blocks wide. Burns 1 mB of lava per tick for 64 JE: a bucket lasts 1,000 ticks.
     "geothermal_generator": {"capacity": 30_000, "output_per_tick": 128, "generation_per_tick": 64,
                              "lava_per_tick": 1, "tank": 4_000},
@@ -287,7 +287,7 @@ STATS = {
     "chemical_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
     # 2x2x6. From the air alone: 8 mB/t nitrogen (top) and 2 mB/t oxygen (base) at 64 JE/t.
     "air_separation_unit": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 64, "tank": 16_000,
-                            "nitrogen_per_tick": 8, "oxygen_per_tick": 2},
+                            "nitrogen_per_tick": 8, "oxygen_per_tick": 2, "argon_interval": 2},
     # 3x4x2. Three input tanks and one output: ammonia (Haber-Bosch) and nitric acid (Ostwald). 128 JE/t.
     "synthesis_converter": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 128, "tank": 8_000},
     # One block. 128 JE/t from 1 mB of hydrogen a tick (128 JE/mB).
@@ -295,7 +295,8 @@ STATS = {
     # 3x2, one deep. Outputs from its front (all six blocks), charges from any other face.
     "lithium_battery_bank": {"capacity": 32_000_000, "io_per_tick": 16_384},
     # 2 tall. 4 silicon + 1 phosphate (the dopant) -> a silicon boule.
-    "crystal_grower": {"capacity": 60_000, "input_per_tick": 512, "use_per_tick": 128},
+    "crystal_grower": {"capacity": 60_000, "input_per_tick": 512, "use_per_tick": 128, "boost": "argon",
+                       "boost_per_tick": 1, "boost_tank": 8_000},
     # 3x2x2. Wafer + 2 copper wire + 100 mB sulfuric acid -> 4 microchips.
     "lithography_station": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 192, "tank": 4_000},
     # 2x2x3. Up to 512 KE/t: 2 mB of diesel a tick (256 KE/mB) or 4 mB of heavy fuel oil, only for what it delivers.
