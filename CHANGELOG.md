@@ -8,6 +8,12 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### #57 Fluid logistics, batch 8: gas holders, valves and filters
+- **Gas holder** (3×3×3 Horton sphere): 1,024 buckets of one gas, and only gases.
+- **Fluid valve:** a steel pipe segment that a redstone signal closes, splitting the line in two.
+- **Fluid filter:** a steel pipe segment whose neighbouring tanks and machines only receive its chosen fluid; set it with a bucket or from a tank beside it (for gases).
+- Three advancements, handbook pages and a game test for each.
+
 ### #56 Electronics, batch 7: silicon, chips and the cyan look
 - **The cyan look** for the electronics tier, following the owner's references: near-black casings with cyan seams, cyan glass that glows while working, cyan screens, violet conduits, and a beige retro computer.
 - **Crystal grower** (1×2): 4 silicon + a phosphate dopant → a silicon boule; the sawmill cuts it into 8 **silicon wafers**.

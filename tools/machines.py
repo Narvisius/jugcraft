@@ -76,6 +76,8 @@ MACHINES = {
     # Electronics (batch 7, the cyan look).
     "crystal_grower": {"display": "Crystal Grower", "lit": True},
     "lithography_station": {"display": "Lithography Station", "lit": True},
+    # Fluid logistics (batch 8): a Horton sphere for gases.
+    "gas_holder": {"display": "Gas Holder", "lit": False},
     # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
     "diesel_engine": {"display": "Diesel Engine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -156,7 +158,11 @@ UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency 
 # 1 bucket = 1000 mB = 81000 Fabric droplets. Pipes are passive: pumps push through them.
 PIPES = {"bronze_fluid_pipe": {"display": "Bronze Fluid Pipe", "rate": 250},
          # Steel tier, for refinery flows; a network carries as much as its slowest pipe.
-         "steel_fluid_pipe": {"display": "Steel Fluid Pipe", "rate": 1_000}}
+         "steel_fluid_pipe": {"display": "Steel Fluid Pipe", "rate": 1_000},
+         # Fluid logistics (batch 8): a steel pipe segment that redstone closes (tools/pipe_models.py draws its body).
+         "fluid_valve": {"display": "Fluid Valve", "rate": 1_000, "texture": "steel_fluid_pipe"},
+         # Lets only its chosen fluid out into the tanks and machines it touches (fluid/FluidFilterBlock).
+         "fluid_filter": {"display": "Fluid Filter", "rate": 1_000, "texture": "steel_fluid_pipe"}}
 # Fluid blocks with their own block entities. top/side/bottom name the textures.
 FLUID_BLOCKS = {
     "fluid_tank": {"display": "Tinplate Tank"},
@@ -200,6 +206,8 @@ STATS = {
     "capacitor_bank": {"capacity": 4_000_000, "io_per_tick": 4_096},
     # 2x2, one tall with a dome: 128 buckets of one fluid. No power.
     "steel_tank": {"capacity": 0, "tank": 128_000},
+    # 3x3x3 sphere on legs: 1,024 buckets of one gas, and only gases. No power.
+    "gas_holder": {"capacity": 0, "tank": 1_024_000},
     # 2 tall. Mines one c:ores block per 40 ticks from a 9x9 column below it, down to the bottom of the world.
     "ore_drill": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "ticks": 40, "radius": 4},
     # Needs water and lava touching it (neither is used): 1 cobblestone per 20 ticks.
@@ -382,6 +390,12 @@ CRAFTING = {
     "capacitor_bank": (["PBP", "BCB", "PBP"], {"P": "#c:plates/steel", "B": "jugcraft:battery_box",
                                                "C": "jugcraft:advanced_circuit"}, 1),
     "steel_tank": (["PPP", "PTP", "PPP"], {"P": "#c:plates/steel", "T": "jugcraft:fluid_tank"}, 1),
+    "fluid_valve": ([" W ", "PSP", " R "], {"W": "minecraft:lever", "P": "#c:plates/steel",
+                                            "S": "jugcraft:steel_fluid_pipe", "R": "minecraft:redstone"}, 2),
+    "fluid_filter": ([" P ", "ISI", " P "], {"P": "#c:plates/steel", "I": "minecraft:iron_bars",
+                                             "S": "jugcraft:steel_fluid_pipe"}, 1),
+    "gas_holder": (["PTP", "TVT", "PTP"], {"P": "#c:plates/steel", "T": "jugcraft:steel_tank",
+                                           "V": "jugcraft:steel_fluid_pipe"}, 1),
     # Automation: after the workshop tier (a circuit and brass plates).
     "auto_crafter": (["PCP", "TMT", "PHP"], {"P": "#c:plates/brass", "C": "jugcraft:basic_circuit",
                                            "T": "minecraft:crafting_table", "M": "jugcraft:machine_casing",

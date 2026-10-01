@@ -156,9 +156,11 @@ def machine_assets(lang):
     model_writer.WRITERS[model_writer.DEFAULT_STYLE](ASSETS, MACHINES, PARTS, FLUID_BLOCKS)
     write_alternate_pack(lang)
 
+    import pipe_models
     for cable, info in {**CABLES, **PIPES, **ITEM_PIPES}.items():
         lang[f"block.{MOD}.{cable}"] = info["display"]
-        texture = rid(f"block/{cable}")
+        # A valve or filter uses the pipe texture of the pipe it is built from.
+        texture = rid(f"block/{info.get('texture', cable)}")
         # Transmitters are `size` pixels thick (4 for cables and fluid pipes, 6 for item pipes).
         lo = 8 - info.get("size", 4) // 2
         hi = 16 - lo
@@ -185,12 +187,23 @@ def machine_assets(lang):
         parts = [{"apply": {"model": rid(f"block/{cable}_core")}}]
         for direction, rotation in CABLE_ROTATION.items():
             parts.append({"when": {direction: "true"}, "apply": {"model": rid(f"block/{cable}_arm"), **rotation}})
+        # Valve and filter bodies over the core (tools/pipe_models.py).
+        body_elements = {}
+        for body, when in pipe_models.BODIES.get(cable, []):
+            elements = pipe_models.MODELS[body]
+            body_textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+            body_textures["particle"] = texture
+            body_elements[body] = (model_writer.slice_model(body, elements, [(0, 0, 0)])[0], body_textures)
+            write(ASSETS / "models" / "block" / f"{body}.json", {
+                "parent": "minecraft:block/block", "textures": body_textures, "elements": body_elements[body][0]})
+            parts.append({**({"when": when} if when else {}), "apply": {"model": rid(f"block/{body}")}})
         write(ASSETS / "blockstates" / f"{cable}.json", {"multipart": parts})
         # A 3D straight segment in hand and inventory, like other tech mods' transmitters.
+        item_body, item_textures = body_elements.get(pipe_models.ITEM_BODY.get(cable), ([], {}))
         write(ASSETS / "models" / "item" / f"{cable}.json", {
             "parent": "minecraft:block/block",
-            "textures": textures,
-            "elements": [{"from": [lo, lo, 0], "to": [hi, hi, 16], "faces": {
+            "textures": {**item_textures, **textures},
+            "elements": item_body + [{"from": [lo, lo, 0], "to": [hi, hi, 16], "faces": {
                 "north": {"uv": [lo, lo, hi, hi], "texture": "#cable"},
                 "south": {"uv": [lo, lo, hi, hi], "texture": "#cable"},
                 "east": {"uv": [0, lo, 16, hi], "texture": "#cable"},
@@ -321,6 +334,9 @@ def machine_assets(lang):
     lang[f"message.{MOD}.electric_motor"] = "Electric motor: %s / %s JE"
     lang[f"message.{MOD}.network_terminal"] = "Network: %s cables at %s JE/t, %s devices holding %s / %s JE (%s%%)"
     lang[f"message.{MOD}.network_terminal.none"] = "No cable connected"
+    lang[f"message.{MOD}.fluid_filter"] = "Filter: only %s"
+    lang[f"message.{MOD}.fluid_filter.none"] = ("Filter: not set, lets nothing out. Use a filled bucket on it, or "
+                                                "right-click it beside a tank of the fluid")
     lang[f"message.{MOD}.belt.first"] = "Now use the belt on the second pulley"
     lang[f"message.{MOD}.belt.linked"] = "Belt fitted"
     lang[f"message.{MOD}.belt.same"] = "Pick a different pulley"

@@ -54,6 +54,9 @@ ABOUT = {
     "high_pressure_extractor": "A steel extractor: 32 items every 4 ticks, four times the brass one.",
     "capacitor_bank": "A 2x2 bank of Leyden jars: 4,000,000 JE. It charges from any side and gives power out of the "
                       "sockets on its front, 4,096 JE/t.",
+    "gas_holder": "A 3x3x3 sphere on legs: 1,024 buckets of one gas, and nothing but gases (liquids go in the steel "
+                  "tank). Pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. "
+                  "Comparators read how full it is.",
     "steel_tank": "A 2x2 riveted tank: 128 buckets of one fluid. Buckets, pumps and pipes fill and empty it; right-click "
                   "with an empty hand to read it.",
     "item_crate": "Holds 32 stacks of one item. Right-click with an item to put it in, with an empty hand to take a "
@@ -61,6 +64,12 @@ ABOUT = {
     "bronze_fluid_pipe": "Carries fluid that a pump pushes into it to every tank and fluid machine it touches.",
     "fluid_tank": "Holds 16 buckets of one fluid. Fill or empty it with buckets; right-click with an empty hand to read it.",
     "electric_pump": "Pulls water or lava from the block below it and pushes it out of its top and sides.",
+    "fluid_valve": "A steel pipe segment with a valve. Open, it carries fluid like a steel pipe; a redstone signal "
+                   "closes it, and the pipes on either side become separate lines. Its lamp is green while open and "
+                   "amber while closed.",
+    "fluid_filter": "A steel pipe segment with a strainer. Fluid passes along it, but the tanks and machines it touches "
+                    "only get its chosen fluid (nothing until one is chosen). Use a filled bucket on it, or right-click "
+                    "it beside a tank holding the fluid (the way to choose a gas); sneak and right-click to clear it.",
     "steel_fluid_pipe": "Like the bronze pipe, but carries 1,000 mB a tick for refinery flows. A pipe line carries as much "
                         "as its slowest pipe, so one bronze pipe holds a steel line back to 250 mB.",
     "heavy_pump": "A steel-tier pump: 1,000 mB a tick from below (water, lava or a tank) out of its top and sides, at "
@@ -353,7 +362,8 @@ def build():
             + [block_page(t, POWERED_TOOLS[t]) for t in POWERED_TOOLS]
             + [block_page(m, UPGRADE_MODULES[m][0]) for m in UPGRADE_MODULES]},
         {"title": "Fluids", "icon": f"{MOD}:fluid_tank", "pages":
-            [block_page(p, PIPES[p]["display"]) for p in ("bronze_fluid_pipe", "steel_fluid_pipe")]
+            [block_page(p, PIPES[p]["display"]) for p in ("bronze_fluid_pipe", "steel_fluid_pipe", "fluid_valve",
+                                                          "fluid_filter")]
             + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump", "heavy_pump")]},
         {"title": "Oil", "icon": f"{MOD}:crude_oil_bucket", "pages": [
             {"title": "Crude Oil", "icon": f"{MOD}:crude_oil_bucket", "text": [
@@ -452,7 +462,7 @@ def build():
         ]},
         {"title": "Storage", "icon": f"{MOD}:item_crate", "pages":
             [block_page("item_crate", STORAGE_BLOCKS["item_crate"]["display"])]
-            + [machine_page(m) for m in ("capacitor_bank", "steel_tank")]},
+            + [machine_page(m) for m in ("capacitor_bank", "steel_tank", "gas_holder")]},
         {"title": "Renewables", "icon": f"{MOD}:tree_farm", "pages":
             [machine_page(m) for m in ("water_wheel", "cobblestone_generator", "tree_farm")]},
         {"title": "Upgrades", "icon": f"{MOD}:speed_upgrade", "pages":

@@ -57,6 +57,10 @@ TREE = {
     "microchip": ("silicon_boule", "microchip", "Etched in Light", "Etch microchips in the lithography station", "task"),
     "processor": ("microchip", "processor", "Central Processing", "Assemble a processor", "task"),
     "network_terminal": ("processor", "network_terminal", "Hello, World", "Build a network terminal", "goal"),
+    # Fluid logistics (batch 8).
+    "gas_holder": ("electrolytic_cell", "gas_holder", "Under Pressure", "Build a gas holder", "goal"),
+    "fluid_valve": ("crude_oil", "fluid_valve", "Shut-Off Valve", "Make a fluid valve", "task"),
+    "fluid_filter": ("fluid_valve", "fluid_filter", "Strained Relations", "Make a fluid filter", "task"),
 }
 # Background of the tab (a block texture), shown behind the tree.
 BACKGROUND = "jugcraft:block/dp_gunmetal"

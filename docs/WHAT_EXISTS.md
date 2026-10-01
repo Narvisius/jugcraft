@@ -90,6 +90,7 @@ Every machine is one `MachineBlock` + `MachineBlockEntity` whose behavior comes 
 | LITHIUM_BATTERY_BANK | lithium_battery_bank | **3×2×1** battery (electric look): charges any side, outputs from all six front faces | 32M / 16,384 / 16,384 / – | – | – |
 | CRYSTAL_GROWER | crystal_grower | **1×2** (cyan look): 4 silicon + phosphate → silicon boule | 60k / 512 / 0 / 128 | 2 in, out | `jugcraft:crystal_growing` (multi) |
 | LITHOGRAPHY_STATION | lithography_station | **3×2×2** fluid processor (cyan look): wafer + 2 copper wire + 100 mB acid → 4 microchips | 60k / 1,024 / 0 / 192 | 2 in, out, 4,000 mB tank | `jugcraft:lithography` |
+| GAS_HOLDER | gas_holder | **3×3×3** tank, 1,024 buckets of one gas (`GasFluid` only), no power, no screen | none | – (gas) | – |
 | STEEL_TANK | steel_tank | **2×2** tank, 128 buckets, no power, no screen | none | – (fluid) | – |
 | COKE_OVEN | coke_oven | **2×2, 2 tall + chimney block (9 parts)**, unpowered: coal → coke | none | in, out | `jugcraft:coking` |
 | STEEL_FOUNDRY | steel_foundry | **2×2×5**, unpowered: iron + coke → steel | none | 2 in, out | `jugcraft:steelmaking` (multi) |
@@ -108,6 +109,8 @@ Other blocks:
 | `copper_cable`, `silver_cable`, `aluminum_cable` | `energy/CableBlock` | 6 px energy transmitters (glowing green core, emissive strips): 256 / 1,024 / 4,096 JE/t; a network runs at its slowest cable |
 | `bronze_fluid_pipe` | `fluid/FluidPipeBlock` | 4 px fluid transmitter, 250 mB per push |
 | `fluid_tank` | `fluid/FluidTankBlock(Entity)` | 16,000 mB, one fluid, comparator output |
+| `fluid_valve` | `fluid/FluidValveBlock` | a steel pipe; `carries(state)` is false while `powered`, so `FluidNetworks` stops there |
+| `fluid_filter` | `fluid/FluidFilterBlock(Entity)` | a steel pipe whose touching storages only take its saved `FluidVariant`; `FluidNetworks` endpoints remember their pipe |
 | `electric_pump` | `fluid/ElectricPumpBlock(Entity)` | pulls from below, 100 mB/t, 8 JE/t |
 | `brass_item_pipe` | `logistics/ItemPipeBlock` | 6 px item transmitter |
 | `pneumatic_extractor`, `high_pressure_extractor` | `logistics/PneumaticExtractorBlock` | pull 16 items / 8 ticks (brass) or 32 / 4 (steel) from what they face |
@@ -322,7 +325,7 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 ## Not built yet
 
-- Chemistry branch: PVC, bleach, enrichment and gas storage (the oil line, electrochemistry and advanced materials exist). Blast-furnace stand-ins remain as the simple routes.
+- Chemistry branch: PVC, bleach and enrichment (the oil line, electrochemistry, advanced materials and gas storage exist). Blast-furnace stand-ins remain as the simple routes.
 - Electronics beyond processors: a monitor-bank multi-block, computers that control machines, and uses for processors in the tiers above.
 - EMI and REI plugins (JEI has one).
 - A faster fluid pipe (pointless until pumps are faster).

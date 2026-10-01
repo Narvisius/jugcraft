@@ -520,6 +520,27 @@ public class PetroGameTests {
 		});
 	}
 
+	/** The 3x3x3 gas holder holds 1,024 buckets of one gas, through any of its blocks, and refuses liquids. */
+	@GameTest
+	public void gasHolderHoldsOnlyGas(GameTestHelper helper) {
+		BlockPos master = new BlockPos(5, 1, 1);
+		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
+		// The top back corner block, two blocks from the master each way.
+		Storage<FluidVariant> holder = FluidStorage.SIDED.find(helper.getLevel(),
+				helper.absolutePos(master.west(2).above(2).south(2)), Direction.UP);
+		helper.assertTrue(holder != null, "No fluid storage on the gas holder's far corner");
+		try (Transaction transaction = Transaction.openOuter()) {
+			long water = holder.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(water == 0, "The gas holder took water");
+			long hydrogen = holder.insert(FluidVariant.of(PetroFluids.HYDROGEN.fluid()), 2_000 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(hydrogen == 1_024 * FluidConstants.BUCKET, "Took " + hydrogen / FluidConstants.BUCKET + " buckets");
+			long chlorine = holder.insert(FluidVariant.of(PetroFluids.CHLORINE.fluid()), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(chlorine == 0, "A hydrogen holder took chlorine");
+			transaction.commit();
+		}
+		helper.succeed();
+	}
+
 	/** Fertilizer grows every crop in the 5x5 area around where it is used. */
 	@GameTest
 	public void fertilizerGrowsTheCropsAround(GameTestHelper helper) {

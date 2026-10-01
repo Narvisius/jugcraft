@@ -1246,6 +1246,7 @@ def machines():
     save(window(980, [(40, 46, 50), (52, 60, 64)]), "block", "lithography_station_front")
     save(window(980, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "lithography_station_front_on")
     save(tank_side(955), "block", "steel_tank_front")
+    save(tank_side(981), "block", "gas_holder_front")
     save(grate(957), "block", "cobblestone_generator_front")
     save(grate(957, glow=[(250, 140, 30), (255, 190, 60), (220, 80, 20)]), "block", "cobblestone_generator_front_on")
     save(window(958, [(28, 44, 30), (36, 56, 38)]), "block", "tree_farm_front")

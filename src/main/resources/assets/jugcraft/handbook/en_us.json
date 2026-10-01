@@ -133,7 +133,16 @@
             "Pulling Strings: Grow a silicon boule in the crystal grower.",
             "Etched in Light: Etch microchips in the lithography station.",
             "Central Processing: Assemble a processor.",
-            "Hello, World: Build a network terminal."
+            "Hello, World: Build a network terminal.",
+            "Under Pressure: Build a gas holder."
+          ]
+        },
+        {
+          "title": "Milestones (10)",
+          "icon": "jugcraft:fluid_valve",
+          "text": [
+            "Shut-Off Valve: Make a fluid valve.",
+            "Strained Relations: Make a fluid filter."
           ]
         }
       ]
@@ -1848,6 +1857,50 @@
           }
         },
         {
+          "title": "Fluid Valve",
+          "icon": "jugcraft:fluid_valve",
+          "text": [
+            "A steel pipe segment with a valve. Open, it carries fluid like a steel pipe; a redstone signal closes it, and the pipes on either side become separate lines. Its lamp is green while open and amber while closed."
+          ],
+          "craft": {
+            "grid": [
+              null,
+              "minecraft:lever",
+              null,
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              null,
+              "minecraft:redstone",
+              null
+            ],
+            "result": "jugcraft:fluid_valve",
+            "count": 2
+          }
+        },
+        {
+          "title": "Fluid Filter",
+          "icon": "jugcraft:fluid_filter",
+          "text": [
+            "A steel pipe segment with a strainer. Fluid passes along it, but the tanks and machines it touches only get its chosen fluid (nothing until one is chosen). Use a filled bucket on it, or right-click it beside a tank holding the fluid (the way to choose a gas); sneak and right-click to clear it."
+          ],
+          "craft": {
+            "grid": [
+              null,
+              "jugcraft:steel_plate",
+              null,
+              "minecraft:iron_bars",
+              "jugcraft:steel_fluid_pipe",
+              "minecraft:iron_bars",
+              null,
+              "jugcraft:steel_plate",
+              null
+            ],
+            "result": "jugcraft:fluid_filter",
+            "count": 1
+          }
+        },
+        {
           "title": "Tinplate Tank",
           "icon": "jugcraft:fluid_tank",
           "text": [
@@ -2775,6 +2828,29 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:steel_tank",
+            "count": 1
+          }
+        },
+        {
+          "title": "Gas Holder",
+          "icon": "jugcraft:gas_holder",
+          "text": [
+            "A 3x3x3 sphere on legs: 1,024 buckets of one gas, and nothing but gases (liquids go in the steel tank). Pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. Comparators read how full it is.",
+            "Needs no power."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:gas_holder",
             "count": 1
           }
         }

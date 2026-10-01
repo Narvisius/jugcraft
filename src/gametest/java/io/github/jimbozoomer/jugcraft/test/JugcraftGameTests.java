@@ -7,7 +7,9 @@ import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
+import io.github.jimbozoomer.jugcraft.fluid.FluidFilterBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
+import io.github.jimbozoomer.jugcraft.fluid.FluidValveBlock;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.kinetic.BeltPulleyBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
@@ -149,6 +151,72 @@ public class JugcraftGameTests {
 		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
 		FluidTankBlockEntity tankEntity = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
 		helper.succeedWhen(() -> helper.assertTrue(tankEntity.storage.amount > 0, "Tank is still empty"));
+	}
+
+	/** A powered fluid valve stops a pump's water short of the tank; once the signal goes, the water gets through. */
+	@GameTest(maxTicks = 300)
+	public void fluidValveClosesOnRedstone(GameTestHelper helper) {
+		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
+		BlockPos pump = new BlockPos(1, 2, 3);
+		helper.setBlock(pump, JugcraftFluids.ELECTRIC_PUMP);
+		helper.getBlockEntity(pump, ElectricPumpBlockEntity.class).energy().setAmount(ElectricPumpBlockEntity.ENERGY_CAPACITY);
+		helper.setBlock(new BlockPos(2, 2, 3), JugcraftFluids.STEEL_FLUID_PIPE);
+		BlockPos valve = new BlockPos(3, 2, 3);
+		helper.setBlock(valve, JugcraftFluids.FLUID_VALVE);
+		BlockPos signal = valve.above();
+		helper.setBlock(signal, Blocks.REDSTONE_BLOCK);
+		helper.setBlock(new BlockPos(4, 2, 3), JugcraftFluids.STEEL_FLUID_PIPE);
+		BlockPos tank = new BlockPos(5, 2, 3);
+		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity tankEntity = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
+		java.util.concurrent.atomic.AtomicBoolean opened = new java.util.concurrent.atomic.AtomicBoolean();
+		helper.runAfterDelay(60, () -> {
+			helper.assertTrue(helper.getBlockState(valve).getValue(FluidValveBlock.POWERED), "The valve is not closed");
+			helper.assertTrue(tankEntity.storage.amount == 0, "Water got past the closed valve");
+			helper.setBlock(signal, Blocks.AIR);
+			opened.set(true);
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(opened.get(), "The valve has not been opened yet");
+			helper.assertTrue(tankEntity.storage.amount > 0, "The tank is still empty with the valve open");
+		});
+	}
+
+	/**
+	 * A fluid filter lets nothing into the tank it touches until it is set, and then only its fluid; a tank on an
+	 * ordinary pipe of the same line fills all along.
+	 */
+	@GameTest(maxTicks = 300)
+	public void fluidFilterLetsOnlyItsFluidOut(GameTestHelper helper) {
+		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
+		BlockPos pump = new BlockPos(1, 2, 3);
+		helper.setBlock(pump, JugcraftFluids.ELECTRIC_PUMP);
+		helper.getBlockEntity(pump, ElectricPumpBlockEntity.class).energy().setAmount(ElectricPumpBlockEntity.ENERGY_CAPACITY);
+		helper.setBlock(new BlockPos(2, 2, 3), JugcraftFluids.STEEL_FLUID_PIPE);
+		BlockPos filter = new BlockPos(3, 2, 3);
+		helper.setBlock(filter, JugcraftFluids.FLUID_FILTER);
+		BlockPos open = new BlockPos(2, 2, 2);
+		BlockPos filtered = new BlockPos(4, 2, 3);
+		helper.setBlock(open, JugcraftFluids.FLUID_TANK);
+		helper.setBlock(filtered, JugcraftFluids.FLUID_TANK);
+		FluidTankBlockEntity openTank = helper.getBlockEntity(open, FluidTankBlockEntity.class);
+		FluidTankBlockEntity filteredTank = helper.getBlockEntity(filtered, FluidTankBlockEntity.class);
+		FluidFilterBlockEntity filterEntity = helper.getBlockEntity(filter, FluidFilterBlockEntity.class);
+		java.util.concurrent.atomic.AtomicBoolean set = new java.util.concurrent.atomic.AtomicBoolean();
+		helper.runAfterDelay(40, () -> {
+			helper.assertTrue(openTank.storage.amount > 0, "The tank on the ordinary pipe is empty");
+			helper.assertTrue(filteredTank.storage.amount == 0, "An unset filter let water out");
+			filterEntity.setFilter(FluidVariant.of(Fluids.LAVA));
+		});
+		helper.runAfterDelay(80, () -> {
+			helper.assertTrue(filteredTank.storage.amount == 0, "A lava filter let water out");
+			filterEntity.setFilter(FluidVariant.of(Fluids.WATER));
+			set.set(true);
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(set.get(), "The filter is not set to water yet");
+			helper.assertTrue(filteredTank.storage.amount > 0, "A water filter let no water out");
+		});
 	}
 
 	/** The 3x2x6 alloy smelter: places all 36 blocks, takes power only at its socket, makes bronze. */

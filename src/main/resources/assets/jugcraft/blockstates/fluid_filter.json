@@ -1,0 +1,78 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_core"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_arm"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_arm",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_arm",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_arm",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "set": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_set"
+      }
+    },
+    {
+      "when": {
+        "set": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/fluid_filter_unset"
+      }
+    }
+  ]
+}

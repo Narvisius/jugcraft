@@ -134,7 +134,7 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-		if (kind == MachineKind.STEEL_TANK) {
+		if (kind == MachineKind.STEEL_TANK || kind == MachineKind.GAS_HOLDER) {
 			// A tank has no screen: show what it holds, like the tinplate tank.
 			// LargeMachineBlock passes the master's position here.
 			if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MachineBlockEntity tank && tank.reservoir() != null) {

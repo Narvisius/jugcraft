@@ -86,7 +86,9 @@ public enum MachineKind implements StringRepresentable {
 	// Electronics (batch 7, the cyan look): a two-block crystal grower pulling doped silicon boules.
 	CRYSTAL_GROWER("crystal_grower", 60_000, 512, 0, 128, 3),
 	// A 3x2x2 cleanroom with a monitor bank: wafers etched with sulfuric acid into microchips.
-	LITHOGRAPHY_STATION("lithography_station", 60_000, 1_024, 0, 192, 3);
+	LITHOGRAPHY_STATION("lithography_station", 60_000, 1_024, 0, 192, 3),
+	// Fluid logistics (batch 8): a 3x3x3 Horton sphere holding 1,024 buckets of one gas. No power.
+	GAS_HOLDER("gas_holder", 0, 0, 0, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -116,6 +118,8 @@ public enum MachineKind implements StringRepresentable {
 	public static final int WIND_CHECK_INTERVAL = 100;
 	/** Steel tank capacity (mB): 128 buckets. */
 	public static final int STEEL_TANK_CAPACITY = 128_000;
+	/** Gas holder: 1,024 buckets (mB) of one gas, and only gases. */
+	public static final int GAS_HOLDER_CAPACITY = 1_024_000;
 	/** Ore washer water tank (mB). */
 	public static final int WASHER_TANK = 8_000;
 	/** Water (mB) the ore washer uses per operation, taken when the operation finishes. */
@@ -418,6 +422,8 @@ public enum MachineKind implements StringRepresentable {
 			case CRYSTAL_GROWER -> Footprint.tall(2);
 			// The cleanroom (left) and the operator's desk with its monitor bank (right), two deep.
 			case LITHOGRAPHY_STATION -> Footprint.cuboid(3, 2, 2);
+			// A sphere on legs, three blocks every way.
+			case GAS_HOLDER -> Footprint.cuboid(3, 3, 3);
 			default -> Footprint.SINGLE;
 		};
 	}

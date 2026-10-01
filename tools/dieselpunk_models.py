@@ -748,6 +748,51 @@ def chemical_reactor():
     return m
 
 
+def gas_holder():
+    """A Horton sphere: an olive steel ball three blocks across, stencilled round its equator between hazard bands, on
+    six gunmetal legs braced to concrete-grey pads, with a chrome ladder up the side, a relief valve and gauge on
+    top, and a flanged inlet at the foot of the front and back for pipes."""
+    import math
+    cx, cz, cy, radius = -8, 24, 26, 20
+    m = []
+    # Legs on pads, braced in a ring under the sphere.
+    for i in range(6):
+        angle = math.radians(30 + 60 * i)
+        x, z = cx + 15 * math.cos(angle), cz + 15 * math.sin(angle)
+        m.append(box((x - 2.5, 0, z - 2.5), (x + 2.5, 1.5, z + 2.5), GUNMETAL))
+        m.append(box((x - 1.25, 1.5, z - 1.25), (x + 1.25, 22, z + 1.25), GUNMETAL))
+    m += cyl("y", cx, cz, 16.25, 9, 10, GUNMETAL)
+    # The sphere, in slices.
+    step = 2.5
+    y = cy - radius
+    while y < cy + radius - 0.01:
+        top = min(y + step, cy + radius)
+        mid = (y + top) / 2
+        r = math.sqrt(max(0.0, radius * radius - (mid - cy) ** 2))
+        if r > 1.6:
+            texture = STENCIL if abs(mid - cy) < 2 else OLIVE
+            m += cyl("y", cx, cz, r, y, top, texture, OLIVE)
+        y = top
+    for band in (cy - 3.5, cy + 2.5):
+        m += cyl("y", cx, cz, radius + 0.3, band, band + 1, HAZARD)
+    # Relief valve and gauge on top.
+    m += cyl("y", cx, cz, 2.5, cy + radius - 0.5, cy + radius + 1.5, CHROME, GUNMETAL)
+    m += cyl("y", cx, cz, 1.25, cy + radius + 1.5, 47.5, GUNMETAL, CHROME)
+    m.append(dial("north", (cx, 44, cz - 3), 2, texture=GAUGE, body=CHROME))
+    m.append(box((cx - 0.5, 41.5, cz - 3), (cx + 0.5, 44, cz - 2), CHROME))
+    # A ladder up the east side.
+    for z in (21, 27):
+        m.append(box((14.5, 0, z), (15.25, 36, z + 0.75), CHROME))
+    for y in range(3, 36, 3):
+        m.append(box((14.25, y, 21), (14.5, y + 0.5, 27.75), CHROME))
+    # Inlets where pipes meet it, at the foot of the front and back.
+    for z0, z1, plate in ((0, 6, (0, 0.75)), (42, 48, (47.25, 48))):
+        m.append(pipe((cx - 2, 4, z0), (cx + 2, 8, z1), GUNMETAL))
+        m.append(box((cx - 2.75, 3.25, plate[0]), (cx + 2.75, 8.75, plate[1]), CHROME))
+    m.append(pipe((cx - 1.5, 8, 4.5), (cx + 1.5, 11, 7.5), GUNMETAL))
+    return m
+
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
           "ore_drill": ore_drill(), "pumpjack": pumpjack(),
           "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
@@ -759,4 +804,4 @@ MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), 
           "polymerization_reactor": polymerization_reactor(),
           "diesel_engine": diesel_engine(),
           "electrolytic_cell": electrolytic_cell(),
-          "chemical_reactor": chemical_reactor()}
+          "chemical_reactor": chemical_reactor(), "gas_holder": gas_holder()}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "PSP",
+    " R "
+  ],
+  "key": {
+    "W": "minecraft:lever",
+    "P": "#c:plates/steel",
+    "S": "jugcraft:steel_fluid_pipe",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:fluid_valve",
+    "count": 2
+  }
+}

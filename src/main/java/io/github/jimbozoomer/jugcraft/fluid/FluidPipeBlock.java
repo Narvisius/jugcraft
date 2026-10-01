@@ -46,6 +46,11 @@ public class FluidPipeBlock extends PipeBlock implements FluidConnectable {
 		return rateMb * FluidNetworks.DROPLETS_PER_MB;
 	}
 
+	/** Whether fluid passes through this pipe in this state (a closed valve does not; see {@link FluidValveBlock}). */
+	public boolean carries(BlockState state) {
+		return true;
+	}
+
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);

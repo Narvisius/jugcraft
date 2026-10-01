@@ -210,6 +210,8 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 | Tinplate Tank | Stores one fluid; fill or empty with buckets, right-click with an empty hand to read it, comparators show how full it is | 16,000 mB (16 buckets); contents are lost if broken | 8 tin plates + glass |
 | Electric Pump | Pulls from below, pushes out of its top and four sides | 100 mB/t, 8 JE per tick it moves fluid, 4,000 JE battery, 4,000 mB buffer | bronze plates, bucket, 2 iron gears, casing, cable |
 | Steel Fluid Pipe | Like the bronze pipe, for refinery flows | 1,000 mB/t per push; a network carries as much as its slowest pipe | 2 steel plates + bronze pipe → 3 |
+| Fluid Valve | A steel pipe segment that redstone closes | Open: a steel pipe. Powered: closed, and the pipes on either side become separate lines. Lamp green open, amber closed. | lever, 2 steel plates, steel pipe, redstone → 2 |
+| Fluid Filter | A steel pipe segment that sorts fluids | Carries anything, but the tanks and machines it touches only get its chosen fluid (nothing until set). Set with a filled bucket, or by right-clicking beside a tank of the fluid (for gases); sneak to clear. | 2 steel plates, 2 iron bars, steel pipe |
 | Heavy Pump | The steel-tier pump | 1,000 mB/t, 40 JE per tick it moves fluid, 32,000 JE battery, 16,000 mB buffer | steel plates, silver cable, 2 steel gears, electric pump, casing |
 
 **How the pieces work together**
@@ -235,6 +237,7 @@ The fluid branch moves liquids around. It never changes what a liquid *is*: that
 | Item Crate | 32 stacks of one item | Right-click with an item to put it in; with an empty hand to take a stack (sneak to just look). Pipes, extractors and hoppers use it; comparators read how full it is. Breaking it drops everything. | iron plates, planks |
 | Capacitor Bank (2 wide, 2 tall) | 4,000,000 JE | Charges from any side; gives power out of the copper sockets on its front, 4,096 JE/t (a job for aluminum cable). Comparators read its charge. | steel plates, 4 battery boxes, advanced circuit |
 | Lithium Battery Bank (3 wide, 2 tall, 1 deep) | 32,000,000 JE | Charges from any side; gives power out of the six sockets on its front, 16,384 JE/t (four aluminum cables' worth). Comparators read its charge. Electric look. | titanium ingots, 4 lithium cells, a capacitor bank |
+| Gas Holder (3×3×3) | 1,024 buckets of one gas, only gases | A Horton sphere on legs. Pumps and pipes fill and empty it from any face; right-click to read it; comparators read how full it is. | steel plates, 4 steel tanks, steel pipe |
 | Steel Tank (2 wide, 2 deep) | 128 buckets of one fluid | Buckets, pumps and pipes fill and empty it from any face; right-click with an empty hand to read it. Comparators read how full it is. | 8 steel plates, tinplate tank |
 
 ![Capacitor Bank, Steel Tank and Item Crate](images/storage.png)

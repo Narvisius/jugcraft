@@ -42,6 +42,8 @@ A motor driving a dynamo returns 56% of the JE: no loop. The magnet pair returns
 | Battery Box | 400,000 JE | 256 |
 | Capacitor Bank | 4,000,000 JE | 4,096 |
 | Lithium Battery Bank | 32,000,000 JE | 16,384 |
+| Steel Tank | 128 buckets of one fluid | by pump |
+| Gas Holder | 1,024 buckets of one gas | by pump |
 | Copper / Silver / Aluminum Cable | — | 256 / 1,024 / 4,096 |
 | Charging Station | 50,000 JE | 1,024 in, 512 into the tool |
 
