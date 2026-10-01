@@ -144,6 +144,17 @@ public final class SideConfig {
 		return config;
 	}
 
+	/**
+	 * Every face gives results out and the machine pushes them into whatever inventory or pipe touches it: for
+	 * machines with no inputs, such as the deposit drill, so a chest beside one fills without any setup.
+	 */
+	public static SideConfig allOutputs() {
+		SideConfig config = new SideConfig();
+		java.util.Arrays.fill(config.modes, Mode.OUTPUT);
+		config.eject = true;
+		return config;
+	}
+
 	/** The default config packed, for saves written before side configuration existed. */
 	public static int defaults() {
 		return new SideConfig().pack();

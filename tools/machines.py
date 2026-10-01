@@ -31,6 +31,8 @@ MACHINES = {
     "steel_tank": {"display": "Steel Tank", "lit": False},
     # Mining: a 2-tall powered derrick that mines ores in a 9x9 column below it.
     "ore_drill": {"display": "Ore Drill", "lit": True},
+    # A 3x3x2 rig that works the surface deposit blocks under and around it (tools/deposits.py).
+    "deposit_drill": {"display": "Deposit Drill", "lit": True},
     # Renewables: cobblestone from water and lava, wood from saplings, power from flowing water.
     "cobblestone_generator": {"display": "Cobblestone Generator", "lit": True},
     "tree_farm": {"display": "Tree Farm", "lit": True},
@@ -228,6 +230,10 @@ STATS = {
     "crop_harvester": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 24, "ticks": 20, "radius": 4},
     # 2 tall. Mines one c:ores block per 40 ticks from a 9x9 column below it, down to the bottom of the world.
     "ore_drill": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "ticks": 40, "radius": 4},
+    # 3x3x2. Every 300 ticks (15 s) takes 1 unit (item) from each kind of deposit under its base and 1 block round
+    # it, 3 deep: a drill over coal and iron gives 1 coal and 1 raw iron.
+    "deposit_drill": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 16, "ticks": 300, "units": 1,
+                      "reach": 1, "depth": 3},
     # Needs water and lava touching it (neither is used): 1 cobblestone per 20 ticks.
     "cobblestone_generator": {"capacity": 4_000, "input_per_tick": 64, "use_per_tick": 4, "ticks": 20},
     # Sapling -> logs in 400 ticks; the sapling comes back.
@@ -543,6 +549,10 @@ CRAFTING = {
                                          "M": "jugcraft:machine_casing", "B": "#c:ingots/bronze",
                                          "C": "jugcraft:basic_circuit"}, 1),
     # Mining: steel frame, a pulverizer-grade drill head and a circuit; after the steel tier.
+    # Early: iron and bronze, a basic circuit and two iron pickaxes for the drill heads.
+    "deposit_drill": (["PGP", "KMK", "PCP"], {"P": "#c:plates/iron", "G": "#c:gears/bronze",
+                                              "K": "minecraft:iron_pickaxe", "M": "jugcraft:machine_casing",
+                                              "C": "jugcraft:basic_circuit"}, 1),
     "ore_drill": (["SGS", "CMC", "SDS"], {"S": "#c:plates/steel", "G": "#c:gears/steel", "C": "jugcraft:basic_circuit",
                                          "M": "jugcraft:machine_casing", "D": "minecraft:diamond_pickaxe"}, 1),
     "arc_furnace_casing": (["KNK", "N N", "KNK"], {"K": "minecraft:bricks", "N": "#c:ingots/nickel"}, 8),

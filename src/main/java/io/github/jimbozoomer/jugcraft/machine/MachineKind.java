@@ -40,6 +40,8 @@ public enum MachineKind implements StringRepresentable {
 	STEEL_TANK("steel_tank", 0, 0, 0, 0, 0),
 	// Mining: a 2-tall derrick that mines the ores in a 9x9 column below it. No inputs; three result slots.
 	ORE_DRILL("ore_drill", 20_000, 256, 0, 32, 3),
+	// A 3x3x2 rig over a surface deposit: every 15 s, one unit from each kind of deposit under and around it.
+	DEPOSIT_DRILL("deposit_drill", 20_000, 256, 0, 16, 3),
 	// Renewables: a cobblestone generator (no inputs, one result slot), a tree farm (sapling in; logs out, with the
 	// sapling and extras in two byproduct slots) and a 2-tall water wheel that generates from flowing water.
 	COBBLESTONE_GENERATOR("cobblestone_generator", 4_000, 64, 0, 4, 1),
@@ -147,6 +149,15 @@ public enum MachineKind implements StringRepresentable {
 	public static final int HARVEST_SCAN_PER_TICK = 9;
 	/** Ore drill: blocks the drill head checks per tick while looking for the next ore (one layer). */
 	public static final int DRILL_SCAN_PER_TICK = (2 * DRILL_RADIUS + 1) * (2 * DRILL_RADIUS + 1);
+	/**
+	 * Deposit drill: ticks per cycle (15 seconds, before speed upgrades), and the units (items) each cycle takes from
+	 * each kind of deposit in reach.
+	 */
+	public static final int DEPOSIT_TICKS = 300;
+	public static final int DEPOSIT_UNITS = 1;
+	/** Deposit drill: how far past its own 3x3 it reaches on each side, and how many layers down. */
+	public static final int DEPOSIT_REACH = 1;
+	public static final int DEPOSIT_DEPTH = 3;
 	/** Cobblestone generator: ticks per cobblestone (before speed upgrades), with water and lava beside it. */
 	public static final int COBBLE_TICKS = 20;
 	/** Water wheel: JE per tick for each block of flowing water at the wheel; falling water gives more. */
@@ -248,7 +259,7 @@ public enum MachineKind implements StringRepresentable {
 		return this == ELECTRIC_FURNACE || this == CRUSHER || this == ARC_FURNACE || this == ALLOY_SMELTER
 				|| this == METAL_PRESS || this == WIRE_DRAWER || this == CIRCUIT_ASSEMBLER
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
-				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL
+				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL || this == DEPOSIT_DRILL
 				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER || this == CRYSTAL_GROWER
 				|| this == CROP_HARVESTER;
 	}
@@ -378,8 +389,8 @@ public enum MachineKind implements StringRepresentable {
 		if (this == AUTO_CRAFTER) {
 			return 1; // Container remainders, such as the empty bucket from a cake.
 		}
-		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == TREE_FARM
-				|| this == CROP_HARVESTER ? 2 : 0;
+		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == DEPOSIT_DRILL
+				|| this == TREE_FARM || this == CROP_HARVESTER ? 2 : 0;
 	}
 
 	/** mB the machine's fluid tank holds, or 0 without one. */
@@ -412,6 +423,8 @@ public enum MachineKind implements StringRepresentable {
 			case COKE_OVEN -> Footprint.of(Vec3i.ZERO, new Vec3i(-1, 0, 0), new Vec3i(0, 0, 1), new Vec3i(-1, 0, 1),
 					new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0), new Vec3i(0, 1, 1), new Vec3i(-1, 1, 1), new Vec3i(0, 2, 0));
 			case ORE_DRILL -> Footprint.tall(2);
+			// Three wide, two tall, three deep, standing on the deposit.
+			case DEPOSIT_DRILL -> Footprint.cuboid(3, 2, 3);
 			case CROP_HARVESTER -> Footprint.tall(2);
 			case LARGE_STEAM_ENGINE -> Footprint.cuboid(2, 2, 2);
 			case WATER_WHEEL -> Footprint.tall(2);

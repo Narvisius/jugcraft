@@ -130,6 +130,8 @@ def assets():
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
         lang[f"item.{MOD}.{item}"] = item_name(item)
     machine_assets(lang)
+    import deposits
+    deposits.write_all(write, ASSETS, DATA / MOD, lang)
     import advancements
     lang.update(advancements.generate(MOD)[1])
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
@@ -888,6 +890,10 @@ def tags():
     for gas in petro.GASES:
         tags.add("fluid", f"c:{gas}", rid(gas))
     for block in petro.BLOCKS:
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    # Deposits break (slowly, for nothing) with a pickaxe; only a deposit drill gets their ore.
+    import deposits
+    for block in deposits.DEPOSITS:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
     tags.write()
 

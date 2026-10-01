@@ -14,6 +14,7 @@ from PIL import Image
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS, WASHED_ORES,
                        all_blocks, all_items, feature_of)
 import petro
+import deposits
 from machines import (CROPS, MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, BYPRODUCT_SHARE,
                       RENEWABLE_UNITS, WOODS, machine_blocks, machine_items, machine_recipes)
 
@@ -90,7 +91,7 @@ def model(ref):
 
 def check_assets(registered):
     lang = load(ASSETS / "lang" / "en_us.json") or {}
-    for block in all_blocks() + machine_blocks() + petro.petro_blocks():
+    for block in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS):
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
             for variant in state.get("variants", {}).values():
@@ -107,7 +108,7 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             model(definition["model"]["model"])
-        if item not in all_blocks() + machine_blocks() + petro.petro_blocks() and f"item.{MOD}.{item}" not in lang:
+        if item not in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
 
@@ -402,7 +403,7 @@ def check_tags():
                     err(f"{path.relative_to(ROOT)}: unknown fluid {value}")
             elif split(value)[0] == MOD and split(value)[1] not in (all_blocks() + all_items() + machine_blocks()
                                                                     + machine_items() + petro.petro_blocks()
-                                                                    + petro.petro_items()):
+                                                                    + petro.petro_items() + list(deposits.DEPOSITS)):
                 err(f"{path.relative_to(ROOT)}: unknown entry {value}")
 
 
@@ -632,9 +633,39 @@ def check_style_pack():
             err(f"{block}: the two styles cover different block states")
 
 
+def check_deposits():
+    """Surface deposits: Java registration, worldgen and capacity match tools/deposits.py."""
+    java = (JAVA_ROOT / "deposit" / "JugcraftDeposits.java").read_text(encoding="utf-8")
+    found = dict(re.findall(r'DEPOSITS\.put\("([a-z_]+)", [^;]*?"([a-z_]+)"\)\);', java))
+    expected = {name: info["yield"].split(":")[1] for name, info in deposits.DEPOSITS.items()}
+    if found != expected:
+        err(f"JugcraftDeposits.java deposits {found} != tools/deposits.py {expected}")
+    if f"CAPACITY = {deposits.CAPACITY:_}" not in (JAVA_ROOT / "deposit" / "Deposits.java").read_text(encoding="utf-8"):
+        err(f"Deposits.CAPACITY is not {deposits.CAPACITY:_} as in tools/deposits.py")
+    worldgen = WORLDGEN.read_text(encoding="utf-8")
+    for name, info in deposits.DEPOSITS.items():
+        call = "addDeposit(stonyHills, " + ", ".join(f'"{v}"' for v in [name] + info["features"]) + ");"
+        if call not in worldgen:
+            err(f"JugcraftWorldgen does not add {name} with features {info['features']}")
+        for feature in info["features"]:
+            if feature not in FEATURES:
+                err(f"{name}: unknown feature {feature}")
+        if not (DATA / MOD / "worldgen" / "placed_feature" / f"{name}.json").is_file():
+            err(f"{name}: no placed feature")
+    for item in (info["yield"] for info in deposits.DEPOSITS.values()):
+        if split(item)[0] == MOD and split(item)[1] not in all_items():
+            err(f"Deposit yield {item} is not a Jugcraft item")
+    stats = STATS["deposit_drill"]
+    kinds = MACHINE_JAVA.read_text(encoding="utf-8")
+    for key, constant in (("ticks", "DEPOSIT_TICKS"), ("units", "DEPOSIT_UNITS"), ("reach", "DEPOSIT_REACH"),
+                          ("depth", "DEPOSIT_DEPTH")):
+        if f"int {constant} = {stats[key]};" not in kinds:
+            err(f"MachineKind.{constant} is not {stats[key]} as in tools/machines.py")
+
+
 def main():
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
-                  | set(petro.petro_items()) | set(petro.petro_blocks()))
+                  | set(petro.petro_items()) | set(petro.petro_blocks()) | set(deposits.DEPOSITS))
     check_assets(sorted(registered))
     check_petro()
     check_loot(registered)
@@ -644,6 +675,7 @@ def main():
     check_tags()
     check_worldgen()
     check_java()
+    check_deposits()
     check_machines(registered)
     check_large_machines()
     check_style_pack()

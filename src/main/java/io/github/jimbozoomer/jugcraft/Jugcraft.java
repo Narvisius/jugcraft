@@ -5,6 +5,7 @@ import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.config.FeatureEnabledCondition;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
+import io.github.jimbozoomer.jugcraft.deposit.JugcraftDeposits;
 import io.github.jimbozoomer.jugcraft.electronics.JugcraftElectronics;
 import io.github.jimbozoomer.jugcraft.farming.JugcraftFarming;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
@@ -42,6 +43,7 @@ public final class Jugcraft implements ModInitializer {
 		// blocks and items are never lost. The config only controls acquisition.
 		JugcraftMaterials.register();
 		JugcraftComponents.register();
+		JugcraftDeposits.register();
 		JugcraftMachines.register();
 		JugcraftFluids.register();
 		PetroFluids.register();

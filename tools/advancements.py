@@ -14,6 +14,8 @@ TREE = {
     "pulverizer": ("crusher", "pulverizer", "Down to Dust", "Build a pulverizer for byproducts", "task"),
     "battery_box": ("coal_generator", "battery_box", "Stored Lightning", "Build a battery box", "task"),
     "auto_crafter": ("coal_generator", "auto_crafter", "Hands Off", "Build an auto-crafter", "task"),
+    "deposit_drill": ("coal_generator", "deposit_drill", "Strike It Rich", "Build a deposit drill on a surface deposit",
+                      "goal"),
     "hand_crank": ("bronze", "hand_crank", "Elbow Grease", "Make a hand crank: power by hand", "task"),
     "steam_engine": ("hand_crank", "steam_engine", "Full Steam Ahead", "Build a steam engine to turn your shafts", "task"),
     "large_steam_engine": ("steam_engine", "large_steam_engine", "Iron Horse", "Build the large steam engine", "goal"),

@@ -38,6 +38,8 @@ FOOTPRINTS = {
     "steel_tank": [(0, 0, 0), (-1, 0, 0), (0, 0, 1), (-1, 0, 1)],
     # Mining: a two-block derrick over the drilled column.
     "ore_drill": [(0, 0, 0), (0, 1, 0)],
+    # A 3x3 rig two blocks tall, standing on the deposit it works.
+    "deposit_drill": cuboid(3, 2, 3),
     # Renewables: a two-block water wheel house (the wheel turns in the water column on its right).
     "water_wheel": [(0, 0, 0), (0, 1, 0)],
     # Kinetic: a 2x2x2 steam engine; its shaft comes out of the back of part 7 (upper right back).
@@ -167,6 +169,13 @@ MODELS["ore_drill"] = [
     ((1, 2, 1), (15, 12, 15), {"*": STEEL, "north": "#front", "up": TOP}),
     ((3, 12, 3), (13, 26, 13), "wind_turbine_mast"),
     ((6, 26, 6), (10, 32, 10), "geothermal_stack"),
+]
+
+MODELS["deposit_drill"] = [
+    ((-32, 0, 0), (16, 2, 48), "heavy_plinth"),
+    ((-15, 2, 1), (15, 14, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-12, 2, 18), (12, 28, 42), STEEL),
+    ((-4, 28, 26), (4, 32, 34), "geothermal_stack"),
 ]
 
 MODELS["water_wheel"] = [
@@ -380,6 +389,7 @@ FRONTS = {
     "fracking_rig": "fracking_rig_front",
     "flowback_treatment_unit": "flowback_treatment_unit_front",
     "diesel_generator": "diesel_generator_front",
+    "deposit_drill": "deposit_drill_front",
     "gas_turbine": "gas_turbine_front",
     "polymerization_reactor": "polymerization_reactor_front",
     "diesel_engine": "diesel_engine_front",

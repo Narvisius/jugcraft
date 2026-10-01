@@ -1293,6 +1293,8 @@ def machines():
     save(window(976, [(52, 50, 30)], glow=[(255, 170, 40), (255, 214, 110), (230, 140, 30)]), "block", "chemical_reactor_front_on")
     save(window(977, [(40, 46, 50), (52, 60, 64)]), "block", "fuel_cell_front")
     save(window(977, [(40, 46, 50)], glow=[(90, 230, 140), (160, 255, 190), (60, 200, 120)]), "block", "fuel_cell_front_on")
+    save(jaws(978, False), "block", "deposit_drill_front")
+    save(jaws(978, True), "block", "deposit_drill_front_on")
     save(jaws(956, False), "block", "ore_drill_front")
     save(jaws(956, True), "block", "ore_drill_front_on")
     save(window(953, [(30, 26, 26)], glow=[(255, 200, 80), (255, 236, 150), (250, 150, 40)]), "block", "steel_foundry_front_on")
@@ -1388,6 +1390,8 @@ def main():
     petro_textures.draw_all(save, save_animation)
     import crop_textures
     crop_textures.draw_all(save)
+    import deposits
+    deposits.draw_all(save)
 
 
 if __name__ == "__main__":

@@ -56,102 +56,103 @@
             "Down to Dust: Build a pulverizer for byproducts.",
             "Stored Lightning: Build a battery box.",
             "Hands Off: Build an auto-crafter.",
-            "Elbow Grease: Make a hand crank: power by hand.",
-            "Full Steam Ahead: Build a steam engine to turn your shafts."
+            "Strike It Rich: Build a deposit drill on a surface deposit.",
+            "Elbow Grease: Make a hand crank: power by hand."
           ]
         },
         {
           "title": "Milestones (3)",
-          "icon": "jugcraft:large_steam_engine",
+          "icon": "jugcraft:steam_engine",
           "text": [
+            "Full Steam Ahead: Build a steam engine to turn your shafts.",
             "Iron Horse: Build the large steam engine.",
             "Belt Drive: Carry rotation across a gap with belt pulleys.",
             "Assembly Line: Build a conveyor.",
-            "Sorting It Out: Split a conveyor line three ways.",
-            "Forged in Coke: Make steel."
+            "Sorting It Out: Split a conveyor line three ways."
           ]
         },
         {
           "title": "Milestones (4)",
-          "icon": "jugcraft:steel_foundry",
+          "icon": "jugcraft:steel_ingot",
           "text": [
+            "Forged in Coke: Make steel.",
             "Blast Furnace: Build the steel foundry.",
             "Capacitance: Build a capacitor bank.",
             "Plugged In: Build a charging station.",
-            "Power Drill: Make a mining drill.",
-            "Timber!: Make a chainsaw."
+            "Power Drill: Make a mining drill."
           ]
         },
         {
           "title": "Milestones (5)",
-          "icon": "jugcraft:overclock_module",
+          "icon": "jugcraft:chainsaw",
           "text": [
+            "Timber!: Make a chainsaw.",
             "Tinkerer: Make an upgrade module for a powered tool.",
             "Rocketeer: Make a rocket pack and take to the air.",
             "Black Gold: Fill a bucket with crude oil.",
-            "Nodding Donkey: Build a pumpjack over an oil reservoir.",
-            "Fractional Thinking: Build a distillation tower."
+            "Nodding Donkey: Build a pumpjack over an oil reservoir."
           ]
         },
         {
           "title": "Milestones (6)",
-          "icon": "jugcraft:fracking_rig",
+          "icon": "jugcraft:distillation_tower",
           "text": [
+            "Fractional Thinking: Build a distillation tower.",
             "Tight Spot: Build a fracking rig for shale oil.",
             "Diesel Power: Build a diesel generator.",
             "Spool Up: Build a gas turbine.",
-            "Eight Cylinders: Build a diesel engine.",
-            "Fantastic Plastic: Press a plastic sheet."
+            "Eight Cylinders: Build a diesel engine."
           ]
         },
         {
           "title": "Milestones (7)",
-          "icon": "jugcraft:asphalt",
+          "icon": "jugcraft:plastic_sheet",
           "text": [
+            "Fantastic Plastic: Press a plastic sheet.",
             "Hit the Road: Lay asphalt, and walk faster on it.",
             "Split Decision: Build an electrolytic cell.",
             "Oil of Vitriol: Make sulfuric acid.",
-            "Green Revolution: Make fertilizer.",
-            "The Bayer Way: Digest bauxite into alumina."
+            "Green Revolution: Make fertilizer."
           ]
         },
         {
           "title": "Milestones (8)",
-          "icon": "jugcraft:fuel_cell",
+          "icon": "jugcraft:alumina",
           "text": [
+            "The Bayer Way: Digest bauxite into alumina.",
             "Clean Burn: Build a hydrogen fuel cell.",
             "Kroll Call: Chlorinate titanium and melt the sponge.",
             "Power Wall: Build a lithium battery bank.",
-            "Strong Attraction: Make a neodymium magnet.",
-            "Lossless (Almost): Build a magnet dynamo or magnet motor."
+            "Strong Attraction: Make a neodymium magnet."
           ]
         },
         {
           "title": "Milestones (9)",
-          "icon": "jugcraft:silicon_boule",
+          "icon": "jugcraft:magnet_dynamo",
           "text": [
+            "Lossless (Almost): Build a magnet dynamo or magnet motor.",
             "Pulling Strings: Grow a silicon boule in the crystal grower.",
             "Etched in Light: Etch microchips in the lithography station.",
             "Central Processing: Assemble a processor.",
-            "Hello, World: Build a network terminal.",
-            "Under Pressure: Build a gas holder."
+            "Hello, World: Build a network terminal."
           ]
         },
         {
           "title": "Milestones (10)",
-          "icon": "jugcraft:fluid_valve",
+          "icon": "jugcraft:gas_holder",
           "text": [
+            "Under Pressure: Build a gas holder.",
             "Shut-Off Valve: Make a fluid valve.",
             "Strained Relations: Make a fluid filter.",
             "Here Comes the Sun: Build an advanced solar panel.",
-            "Four on the Floor: Build an advanced combustion engine.",
-            "King Cotton: Grow cotton."
+            "Four on the Floor: Build an advanced combustion engine."
           ]
         },
         {
           "title": "Milestones (11)",
-          "icon": "jugcraft:sprinkler",
+          "icon": "jugcraft:cotton",
           "text": [
+            "King Cotton: Grow cotton.",
             "Make It Rain: Build a sprinkler.",
             "Reaping What You Sow: Build a crop harvester."
           ]
@@ -200,6 +201,29 @@
               "jugcraft:brass_plate"
             ],
             "result": "jugcraft:prospector",
+            "count": 1
+          }
+        },
+        {
+          "title": "Deposit Drill",
+          "icon": "jugcraft:deposit_drill",
+          "text": [
+            "Three blocks square and two tall. Build it on a surface deposit (coal, iron, copper or tin, on stony hills): every 15 seconds it takes one coal or raw ore from each kind of deposit under it or one block round it, down to 3 blocks deep, using 16 JE/t. It pushes what it mines out of every side into a chest, item pipe, conveyor or machine beside it. Each deposit block holds 1,000 and then turns to stone; right-click one to see how much is left. Picks only break deposits, for nothing.",
+            "Uses 16 JE/t while working. Holds 20,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:iron_plate",
+              "jugcraft:bronze_gear",
+              "jugcraft:iron_plate",
+              "minecraft:iron_pickaxe",
+              "jugcraft:machine_casing",
+              "minecraft:iron_pickaxe",
+              "jugcraft:iron_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:iron_plate"
+            ],
+            "result": "jugcraft:deposit_drill",
             "count": 1
           }
         },

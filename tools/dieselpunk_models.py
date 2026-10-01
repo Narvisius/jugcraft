@@ -823,8 +823,68 @@ def crop_harvester():
     return m
 
 
+def deposit_drill():
+    """A surface mining rig on a 3x3 skid, standing on the deposit it works (Factorio-style drill, dieselpunk dress).
+    A hazard-edged gunmetal deck with four braced corner pylons and a hazard-striped top frame; in the middle a wide
+    chrome drill turret with a grille top, the gearbox and an upright olive motor with chrome bands above it, and a
+    sooty exhaust stack at the back. Ore leaves down a chrome chute at the front, beside a control box with a phosphor
+    gauge and a caged lamp that lights while it runs."""
+    cx, cz = -8, 24  # Centre of the 3x3 footprint.
+    m = [box((-32, 0, 0), (16, 1.5, 48), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Four corner pylons with chrome caps.
+    for x in (-31, 12.5):
+        for z in (1, 43.5):
+            m.append(box((x, 1.5, z), (x + 3.5, 23, z + 3.5), GUNMETAL))
+            m.append(box((x - 0.25, 23, z - 0.25), (x + 3.75, 24, z + 3.75), CHROME))
+    # Top frame between the pylons: hazard beams front and back, gunmetal at the sides.
+    m.append(box((-27.5, 20.5, 1.5), (12.5, 22.5, 4), HAZARD))
+    m.append(box((-27.5, 20.5, 44), (12.5, 22.5, 46.5), HAZARD))
+    m.append(box((-30.5, 20.5, 4.5), (-28, 22.5, 43.5), GUNMETAL))
+    m.append(box((13, 20.5, 4.5), (15.5, 22.5, 43.5), GUNMETAL))
+    # Diagonal-looking braces: low rails between the pylons on every side.
+    m.append(box((-27.5, 8, 2), (12.5, 9, 3), CHROME))
+    m.append(box((-27.5, 8, 45), (12.5, 9, 46), CHROME))
+    m.append(box((-30, 8, 4.5), (-29, 9, 43.5), CHROME))
+    m.append(box((14, 8, 4.5), (15, 9, 43.5), CHROME))
+    # Side skirts between the pylons, olive with grilles, up to the brace rails.
+    m.append(box((-31, 1.5, 4.5), (-30.5, 8, 43.5), {"*": OLIVE, "west": GRILLE}))
+    m.append(box((15, 1.5, 4.5), (15.5, 8, 43.5), {"*": OLIVE, "east": GRILLE}))
+    # Drill turret: a wide olive drum on the deck with chrome bands and a grille top.
+    m += cyl("y", cx, cz, 11, 1.5, 3.5, GUNMETAL)
+    m += cyl("y", cx, cz, 10, 3.5, 12, OLIVE, GRILLE)
+    for y in (5, 9.5):
+        m += cyl("y", cx, cz, 10.25, y, y + 1, CHROME)
+    # Four augers round the drum, where the drill heads bite into the deposit.
+    for dx, dz in ((-12.5, 0), (12.5, 0), (0, -12.5), (0, 12.5)):
+        m += cyl("y", cx + dx, cz + dz, 1.5, 1.5, 7, "dp_drill_bit")
+        m.append(box((cx + dx - 2, 7, cz + dz - 2), (cx + dx + 2, 9, cz + dz + 2), GUNMETAL))
+    # Gantry over the turret: cross beams from the top frame carry the motor.
+    m.append(box((-28, 21, cz - 1.5), (13, 23, cz + 1.5), GUNMETAL))
+    m.append(box((cx - 1.5, 21, 4), (cx + 1.5, 23, 44), GUNMETAL))
+    # Gearbox and the upright motor with chrome bands, through the gantry, with a cap on top.
+    m.append(box((cx - 6, 12, cz - 6), (cx + 6, 16, cz + 6), {"*": GUNMETAL, "up": STENCIL}))
+    m += cyl("y", cx, cz, 4.5, 16, 30, OLIVE, CHROME)
+    for y in (18, 25.5):
+        m += cyl("y", cx, cz, 4.75, y, y + 1, CHROME)
+    m += cyl("y", cx, cz, 3, 30, 31.5, GUNMETAL, GRILLE)
+    # Exhaust stack at the back right.
+    m += cyl("y", 4, 38, 1.5, 1.5, 30, EXHAUST, "sp_hopper_inside")
+    m.append(box((2, 1.5, 36), (6, 6, 40), OLIVE))
+    # Output chute at the front: a short chrome trough sloping down from the turret to the front edge.
+    m.append(box((cx - 3, 5, 3), (cx + 3, 6, 13), CHROME, rotation=("x", -22.5, (cx, 5.5, 8))))
+    m.append(box((cx - 3.5, 5.5, 3.5), (cx - 3, 8, 12.5), CHROME, rotation=("x", -22.5, (cx, 5.5, 8))))
+    m.append(box((cx + 3, 5.5, 3.5), (cx + 3.5, 8, 12.5), CHROME, rotation=("x", -22.5, (cx, 5.5, 8))))
+    # Control box at the front right (the master block): gauge and running lamp.
+    m.append(box((4, 1.5, 1), (11, 11, 4.5), {"*": OLIVE, "north": GUNMETAL}))
+    m.append(dial("north", (7.5, 8, 0.75), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (7.5, 4, 0.75), 2, texture=LAMP, body=GUNMETAL))
+    # Hose from the control box to the motor.
+    m.append(box((7, 11, 2.5), (8, 12, 20), RUBBER))
+    m.append(box((-3, 11, 19), (8, 12, 20), RUBBER))
+    return m
+
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
-          "ore_drill": ore_drill(), "pumpjack": pumpjack(),
+          "ore_drill": ore_drill(), "deposit_drill": deposit_drill(), "pumpjack": pumpjack(),
           "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
           "distillation_tower": distillation_tower(), "catalytic_cracker": catalytic_cracker(),
           "vacuum_distillation_unit": vacuum_distillation_unit(), "catalytic_reformer": catalytic_reformer(),

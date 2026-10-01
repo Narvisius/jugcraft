@@ -1,6 +1,8 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.deposit.Deposits;
+import io.github.jimbozoomer.jugcraft.deposit.JugcraftDeposits;
 import io.github.jimbozoomer.jugcraft.electronics.JugcraftElectronics;
 import io.github.jimbozoomer.jugcraft.electronics.NetworkTerminalBlock;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
@@ -63,6 +65,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -78,6 +81,10 @@ import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.material.Fluids;
 
 /**
@@ -893,6 +900,93 @@ public class JugcraftGameTests {
 			}
 			helper.assertTrue(ore == 1 && deep == 1, "Drill holds " + ore + " iron ore and " + deep + " deepslate iron ore");
 		});
+	}
+
+	/**
+	 * A deposit drill standing on surface deposits takes one of each kind per cycle from those under it and one block
+	 * round it, into a chest beside it, and leaves stone where each ran out; a deposit outside its reach stays full.
+	 * Two cycles empty an iron and a coal deposit with 2 left each; mining them one after the other would take four,
+	 * longer than the test allows. Picks get nothing from a deposit block.
+	 */
+	@GameTest(maxTicks = 1000)
+	public void depositDrillEmptiesDepositsIntoAChest(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos master = new BlockPos(4, 2, 4);
+		// The drill covers x 2..4, z 4..6 (it faces north); it reaches x 1..5, z 3..7, at y 1 and below.
+		BlockPos iron = new BlockPos(3, 1, 5);
+		BlockPos coal = new BlockPos(5, 1, 7);
+		BlockPos outside = new BlockPos(0, 1, 5);
+		helper.setBlock(iron, JugcraftDeposits.BLOCKS.get("iron_deposit"));
+		helper.setBlock(coal, JugcraftDeposits.BLOCKS.get("coal_deposit"));
+		helper.setBlock(outside, JugcraftDeposits.BLOCKS.get("iron_deposit"));
+		helper.assertTrue(Block.getDrops(helper.getBlockState(iron), level, helper.absolutePos(iron), null).isEmpty(),
+				"A deposit block drops something when broken");
+		// Run the two deposits nearly dry so the test finishes quickly: 2 iron and 2 coal left.
+		helper.assertTrue(Deposits.extract(level, helper.absolutePos(iron), Deposits.CAPACITY - 2) == Deposits.CAPACITY - 2,
+				"Could not draw down the iron deposit");
+		Deposits.extract(level, helper.absolutePos(coal), Deposits.CAPACITY - 2);
+		helper.assertTrue(Deposits.remaining(level, helper.absolutePos(coal)) == 2, "The coal deposit does not hold 2");
+		helper.setBlock(new BlockPos(4, 2, 3), Blocks.CHEST);
+		large(helper, master, MachineKind.DEPOSIT_DRILL);
+		charge(helper, master, Direction.EAST);
+		helper.succeedWhen(() -> {
+			helper.assertBlockPresent(Blocks.STONE, iron);
+			helper.assertBlockPresent(Blocks.STONE, coal);
+			helper.assertBlockPresent(JugcraftDeposits.BLOCKS.get("iron_deposit"), outside);
+			helper.assertTrue(Deposits.remaining(level, helper.absolutePos(outside)) == Deposits.CAPACITY,
+					"The deposit out of reach was drawn on");
+			ChestBlockEntity chest = helper.getBlockEntity(new BlockPos(4, 2, 3), ChestBlockEntity.class);
+			int rawIron = count(chest, Items.RAW_IRON);
+			int coalItems = count(chest, Items.COAL);
+			helper.assertTrue(rawIron == 2 && coalItems == 2, "The chest holds " + rawIron + " raw iron and " + coalItems + " coal");
+		});
+	}
+
+	/**
+	 * The iron deposit's worldgen feature, placed on a two-layer stone floor as the surface heightmap would place it
+	 * (on the first air block), turns a disk of the top layer into iron deposit and leaves the layer below as stone.
+	 */
+	@GameTest
+	public void depositFeatureReplacesTheTopLayer(GameTestHelper helper) {
+		for (int x = 0; x < 8; x++) {
+			for (int z = 0; z < 8; z++) {
+				helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+				helper.setBlock(new BlockPos(x, 2, z), Blocks.STONE);
+			}
+		}
+		ServerLevel level = helper.getLevel();
+		PlacedFeature placed = level.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE)
+				.getOrThrow(ResourceKey.create(Registries.PLACED_FEATURE, Jugcraft.id("iron_deposit"))).value();
+		// Without its placement rules (rarity, heightmap, biome), the feature goes exactly where it is put.
+		new PlacedFeature(placed.feature(), List.of()).place(level, level.getChunkSource().getGenerator(),
+				RandomSource.create(42), helper.absolutePos(new BlockPos(4, 3, 4)));
+		Block deposit = JugcraftDeposits.BLOCKS.get("iron_deposit");
+		helper.assertBlockPresent(deposit, new BlockPos(4, 2, 4));
+		helper.assertBlockPresent(Blocks.STONE, new BlockPos(4, 1, 4));
+		int top = 0;
+		for (int x = 0; x < 8; x++) {
+			for (int z = 0; z < 8; z++) {
+				top += helper.getBlockState(new BlockPos(x, 2, z)).is(deposit) ? 1 : 0;
+				helper.assertBlockNotPresent(deposit, new BlockPos(x, 1, z));
+			}
+		}
+		helper.assertTrue(top >= 9, "Only " + top + " deposit blocks were placed");
+		helper.succeed();
+	}
+
+	/** Breaking a deposit forgets what was taken from it, so a deposit placed there again is full. */
+	@GameTest
+	public void brokenDepositIsForgotten(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos pos = new BlockPos(1, 1, 1);
+		helper.setBlock(pos, JugcraftDeposits.BLOCKS.get("tin_deposit"));
+		Deposits.extract(level, helper.absolutePos(pos), 400);
+		helper.assertTrue(Deposits.remaining(level, helper.absolutePos(pos)) == Deposits.CAPACITY - 400, "Nothing was taken");
+		helper.setBlock(pos, Blocks.AIR);
+		helper.setBlock(pos, JugcraftDeposits.BLOCKS.get("tin_deposit"));
+		helper.assertTrue(Deposits.remaining(level, helper.absolutePos(pos)) == Deposits.CAPACITY,
+				"A new deposit block starts with " + Deposits.remaining(level, helper.absolutePos(pos)));
+		helper.succeed();
 	}
 
 	// ------------------------------------------------------------------ renewables

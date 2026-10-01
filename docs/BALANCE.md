@@ -58,6 +58,7 @@ A charging station on copper cable fills at 256 JE/t; silver cable or better let
 | Most processing machines | 8–32 JE/t while working |
 | Arc Furnace | 64 JE/t |
 | Ore Drill (machine) | 32 JE/t, 40 ticks per ore: 1,280 JE an ore |
+| Deposit Drill | 16 JE/t, one item of each deposit kind in reach per 300 ticks (15 s): 4,800 JE a cycle; each deposit block gives 1,000 then is stone |
 | Conveyor | 1 KE per conveyor per tick, for a whole run of up to 64 |
 | Mining Drill | 60 JE a block (×2 / ×3 with overclock modules); 100,000 JE full |
 | Chainsaw | 40 JE a block; 100,000 JE full |
