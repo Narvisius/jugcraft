@@ -38,12 +38,17 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.material.Fluid;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.material.Fluids;
 
 /**
@@ -430,6 +435,44 @@ public class PetroGameTests {
 					"Butadiene: " + cracker.tanks().output(0).millibuckets());
 			ItemStack rubber = polymerizer.getItem(0);
 			helper.assertTrue(rubber.is(PetroItems.RUBBER) && rubber.getCount() == 4, "Rubber: " + rubber);
+		});
+	}
+
+	/**
+	 * PVC (batch 15): the synthesis converter joins 250 mB of refinery gas and 250 mB of chlorine into 250 mB of vinyl
+	 * chloride, and the polymerization reactor turns 500 mB of it into four PVC resin.
+	 */
+	@GameTest(maxTicks = 300)
+	public void chlorineBecomesPvc(GameTestHelper helper) {
+		MachineBlockEntity converter = place(helper, MachineKind.SYNTHESIS_CONVERTER, new BlockPos(5, 1, 1));
+		converter.tanks().input(0).fill(PetroFluids.REFINERY_GAS.fluid(), 250);
+		converter.tanks().input(1).fill(PetroFluids.CHLORINE.fluid(), 250);
+		MachineBlockEntity polymerizer = place(helper, MachineKind.POLYMERIZATION_REACTOR, new BlockPos(5, 1, 4));
+		polymerizer.tanks().input(0).fill(PetroFluids.VINYL_CHLORIDE.fluid(), 500);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(converter.tanks().output(0).has(PetroFluids.VINYL_CHLORIDE.fluid(), 250),
+					"Vinyl chloride: " + converter.tanks().output(0).millibuckets());
+			ItemStack resin = polymerizer.getItem(0);
+			helper.assertTrue(resin.is(PetroItems.PVC_RESIN) && resin.getCount() == 4, "PVC: " + resin);
+		});
+	}
+
+	/** Soap (batch 15): two rotten flesh boiled in 250 mB of lye make four soap; a bar washes a player's effects off. */
+	@GameTest(maxTicks = 300)
+	public void lyeMakesSoapThatWashesEffectsOff(GameTestHelper helper) {
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(PetroFluids.LYE.source(), 250);
+		reactor.setItem(0, new ItemStack(Items.ROTTEN_FLESH, 2));
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.SURVIVAL); // A creative player's items are never used up.
+		player.addEffect(new MobEffectInstance(MobEffects.POISON, 600));
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(PetroItems.SOAP, 2));
+		PetroItems.SOAP.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+		helper.assertTrue(player.getActiveEffects().isEmpty(), "The soap left " + player.getActiveEffects());
+		helper.assertTrue(player.getMainHandItem().getCount() == 1, "The soap was not used up: " + player.getMainHandItem());
+		helper.succeedWhen(() -> {
+			ItemStack soap = reactor.getItem(reactor.kind().outputSlot());
+			helper.assertTrue(soap.is(PetroItems.SOAP) && soap.getCount() == 4, "Soap: " + soap);
 		});
 	}
 

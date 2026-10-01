@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:pressing",
+  "ingredient": "jugcraft:pvc_resin",
+  "result": {
+    "id": "jugcraft:plastic_sheet",
+    "count": 2
+  },
+  "time": 60
+}

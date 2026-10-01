@@ -32,6 +32,8 @@ public final class PetroItems {
 	public static Item MICROCHIP;
 	public static Item RUBBER;
 	public static Item GASKET;
+	public static Item PVC_RESIN;
+	public static Item SOAP;
 
 	private PetroItems() {
 	}
@@ -51,6 +53,8 @@ public final class PetroItems {
 		MICROCHIP = JugcraftRegistry.item("microchip");
 		RUBBER = JugcraftRegistry.item("rubber");
 		GASKET = JugcraftRegistry.item("gasket");
+		PVC_RESIN = JugcraftRegistry.item("pvc_resin");
+		SOAP = JugcraftRegistry.item("soap", SoapItem::new);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(CRACKING_CATALYST);

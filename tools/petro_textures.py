@@ -368,6 +368,39 @@ def gasket():
     return img
 
 
+def pvc_resin():
+    """PVC resin: a little heap of chalk-white powder with grey shading."""
+    rng = random.Random(963)
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(6, 15):
+        half = int((y - 5) * 0.8) + 1
+        for x in range(8 - half, 8 + half):
+            if 0 <= x < 16:
+                c = rng.choice([(236, 236, 230), (220, 220, 214), (204, 204, 198)])
+                if x > 8 + half // 2:
+                    c = (186, 186, 180)
+                img.putpixel((x, y), c + (255,))
+    return img
+
+
+def soap():
+    """Soap: a rounded pale green bar with a pressed mark and a few bubbles."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(6, 13):
+        for x in range(2, 14):
+            corner = (x in (2, 13)) and (y in (6, 12))
+            if corner:
+                continue
+            edge = x in (2, 13) or y in (6, 12)
+            c = (126, 170, 130) if edge else (176, 214, 170) if y < 9 else (154, 198, 150)
+            img.putpixel((x, y), c + (255,))
+    for x in range(5, 11):
+        img.putpixel((x, 9), (132, 180, 134, 255))
+    for x, y in ((11, 3), (12, 4), (4, 4), (13, 2)):
+        img.putpixel((x, y), (226, 240, 246, 255))
+    return img
+
+
 def draw_all(save, save_animation):
     save(microchip(), "item", "microchip")
     save(silicon_boule(), "item", "silicon_boule")
@@ -384,6 +417,8 @@ def draw_all(save, save_animation):
     save(catalyst(), "item", "cracking_catalyst")
     save(rubber(), "item", "rubber")
     save(gasket(), "item", "gasket")
+    save(pvc_resin(), "item", "pvc_resin")
+    save(soap(), "item", "soap")
     save(asphalt_binder(), "item", "asphalt_binder")
     for index, (fluid, info) in enumerate(FLUIDS.items()):
         save_animation(still(info["colors"], 800 + index), f"{fluid}_still", frametime=3)

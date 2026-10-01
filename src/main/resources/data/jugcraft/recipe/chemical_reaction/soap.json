@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "minecraft:rotten_flesh",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:soap",
+      "count": 4
+    }
+  ],
+  "time": 80
+}

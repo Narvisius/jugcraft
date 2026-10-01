@@ -446,6 +446,12 @@ def build():
                 "Rubber and string make two belts. A steel plate faced with rubber cuts into four gaskets, and "
                 "gasketed steel pipe comes four to a steel plate pair, without a bronze pipe."],
              "craft": craft("gasket")},
+            {"title": "Chlorine and Lye", "icon": f"{MOD}:pvc_resin", "text": [
+                "PVC: the synthesis converter joins 250 mB of refinery gas and 250 mB of chlorine into 250 mB of vinyl "
+                "chloride; the polymerization reactor turns 500 mB of it into four PVC resin, and the metal press "
+                "makes two plastic sheets from each.",
+                "Soap: boil two rotten flesh in 250 mB of lye in the chemical reactor for four bars. Use a bar to "
+                "wash every status effect off, as milk does."]},
             {"title": "Nitrogen Chemistry", "icon": f"{MOD}:nitric_acid_bucket", "text": [
                 "Air is four parts nitrogen to one of oxygen. The air separation unit splits it; hydrogen comes from "
                 "the electrolytic cell.",

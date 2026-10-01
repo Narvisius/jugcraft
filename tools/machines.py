@@ -657,7 +657,10 @@ def _metal_press():
              "features": [FEATURE]} for metal in COMPONENTS["plate"]] + [
         # Petrochemistry: plastic pellets from the polymerization reactor are pressed into sheets.
         {"input": "jugcraft:plastic_pellets", "output": "jugcraft:plastic_sheet", "count": 1, "ticks": 60,
-         "features": [FEATURE, "crude_oil"]}]
+         "features": [FEATURE, "crude_oil"]},
+        # PVC resin (batch 15) presses into two sheets: chlorine stretches the plastic.
+        {"input": "jugcraft:pvc_resin", "output": "jugcraft:plastic_sheet", "count": 2, "ticks": 60,
+         "features": [FEATURE, "crude_oil", "salt"]}]
 
 
 def _wire_drawer():

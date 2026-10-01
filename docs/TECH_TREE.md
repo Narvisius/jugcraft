@@ -410,6 +410,7 @@ The first part of the Chemistry branch: the dieselpunk oil line ([plan](branches
 | Asphalt, Asphalt Slab, Asphalt Road Line | Road blocks; walking on them is 1.3× as fast | 8 gravel + asphalt binder → 8; 3 asphalt → 6 slabs; 4 asphalt + yellow dye → 4 road line (faces the placer) | – |
 | Plastic Pellets, Plastic Sheet | Pellets from the reactor; the metal press makes a sheet from each (60 ticks) | for later machines (first: the diesel engine) | – |
 | Synthetic Rubber, Gasket (batch 14) | Naphtha cracked to butadiene (chemical reactor, 1,000 mB → 500 mB), polymerized to rubber (polymerization reactor, 500 mB → 4 rubber); rubber + steel plate → 4 gaskets | rubber + string → 2 belts; 2 steel plates + gasket → 4 steel fluid pipes | – |
+| PVC Resin, Soap (batch 15) | Refinery gas + chlorine → vinyl chloride (synthesis converter, 250 + 250 mB → 250 mB) → 4 PVC resin per 500 mB (polymerization reactor); 2 rotten flesh + 250 mB lye → 4 soap (chemical reactor) | PVC resin → 2 plastic sheets (metal press); soap washes off every status effect | – |
 
 ### Industrial chemistry
 

@@ -124,6 +124,8 @@ public final class PetroFluids {
 	public static Gas ARGON;
 	/** Cracked out of naphtha and polymerized into synthetic rubber (batch 14). */
 	public static Gas BUTADIENE;
+	/** Chlorine joined to refinery gas, polymerized into PVC (batch 15). */
+	public static Gas VINYL_CHLORIDE;
 	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
 	public static Entry NITRIC_ACID;
 
@@ -174,6 +176,7 @@ public final class PetroFluids {
 		AMMONIA = gas("ammonia", 0xFFB096D4);
 		ARGON = gas("argon", 0xFFC8A0E6);
 		BUTADIENE = gas("butadiene", 0xFFC8D0AA);
+		VINYL_CHLORIDE = gas("vinyl_chloride", 0xFFD6DEB6);
 		NITRIC_ACID = fluid("nitric_acid", 5, 4, 1, 0xFFE2D48C, MapColor.COLOR_YELLOW);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {

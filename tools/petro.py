@@ -74,6 +74,9 @@ GASES = {
     # Batch 14: cracked out of naphtha, polymerized into synthetic rubber.
     "butadiene": {"display": "Butadiene", "feature": "crude_oil",
                   "colors": [(150, 160, 120), (176, 186, 144), (200, 208, 170), (226, 232, 204)]},
+    # Batch 15: chlorine joined to refinery gas (standing in for ethylene), polymerized into PVC.
+    "vinyl_chloride": {"display": "Vinyl Chloride", "feature": "salt",
+                       "colors": [(170, 180, 130), (194, 204, 156), (214, 222, 182), (236, 240, 214)]},
 }
 
 
@@ -104,6 +107,9 @@ ITEMS = {
     # Rubber and polymers (batch 14): synthetic rubber, and gaskets pressed from it with steel.
     "rubber": "Synthetic Rubber",
     "gasket": "Gasket",
+    # Chlor-alkali (batch 15): PVC resin (pressed into plastic sheets) and soap (washes off status effects).
+    "pvc_resin": "PVC Resin",
+    "soap": "Soap",
 }
 
 
@@ -248,6 +254,9 @@ FLUID_RECIPES = {
     "polymerization_reactor": [
         {"name": "refinery_gas", "fluids": [("jugcraft:refinery_gas", 1000)], "fluid_results": [],
          "results": [("jugcraft:plastic_pellets", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
+        # PVC (batch 15): vinyl chloride polymerized into resin.
+        {"name": "vinyl_chloride", "fluids": [("jugcraft:vinyl_chloride", 500)], "fluid_results": [],
+         "results": [("jugcraft:pvc_resin", 4)], "source": 0, "ticks": 100, "features": ["crude_oil", "salt"]},
         # Synthetic rubber (batch 14): butadiene polymerized into crumbs of rubber.
         {"name": "butadiene", "fluids": [("jugcraft:butadiene", 500)], "fluid_results": [],
          "results": [("jugcraft:rubber", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
@@ -283,6 +292,9 @@ FLUID_RECIPES = {
         # Superphosphate: phosphate rock treated with sulfuric acid becomes a soluble fertilizer.
         {"name": "fertilizer", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:sulfuric_acid", 250)],
          "results": [("jugcraft:fertilizer", 4)], "ticks": 80, "features": ["phosphate", "sulfur"]},
+        # Saponification (batch 15): fat (rotten flesh, rendered) boiled in lye sets into soap.
+        {"name": "soap", "items": [("minecraft:rotten_flesh", 2)], "fluids": [("jugcraft:lye", 250)],
+         "results": [("jugcraft:soap", 4)], "ticks": 80, "features": ["salt"]},
         # Steam cracking (batch 14): naphtha broken down at high heat; the butadiene is kept, the rest is lost as
         # fuel for the cracking furnace.
         {"name": "butadiene", "fluids": [("jugcraft:naphtha", 1000)], "fluid_results": [("jugcraft:butadiene", 500)],
@@ -318,6 +330,9 @@ FLUID_RECIPES = {
         # Haber-Bosch: three parts hydrogen to one of nitrogen over an iron catalyst at high pressure.
         {"name": "ammonia", "fluids": [("jugcraft:hydrogen", 300), ("jugcraft:nitrogen", 100)],
          "fluid_results": [("jugcraft:ammonia", 200)], "ticks": 40, "features": ["salt", "machines"]},
+        # Vinyl chloride (batch 15): chlorine added to refinery gas (its ethylene), at heat over a catalyst.
+        {"name": "vinyl_chloride", "fluids": [("jugcraft:refinery_gas", 250), ("jugcraft:chlorine", 250)],
+         "fluid_results": [("jugcraft:vinyl_chloride", 250)], "ticks": 40, "features": ["crude_oil", "salt"]},
         # Ostwald: ammonia burnt over platinum gauze in oxygen, the gases absorbed in water.
         {"name": "nitric_acid", "fluids": [("jugcraft:ammonia", 100), ("jugcraft:oxygen", 200),
                                            ("minecraft:water", 100)],

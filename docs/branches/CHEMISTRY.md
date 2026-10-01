@@ -129,6 +129,12 @@ The first batch from the owner's saved idea backlog ([MACHINE_ROADMAP.md](../MAC
 | --- | --- |
 | 35 | Butadiene gas from naphtha (chemical reactor), synthetic rubber from butadiene (polymerization reactor), gaskets. Rubber belts and gasketed steel pipe. Feature record: [rubber.md](../features/rubber.md). |
 
+### Batch 15: chlorine and lye
+
+| # | What it adds |
+| --- | --- |
+| 36 | Vinyl chloride (refinery gas + chlorine, synthesis converter) → PVC resin (polymerization reactor) → two plastic sheets each (metal press). Soap from lye and rotten flesh (chemical reactor), which washes off status effects. Feature record: [chlor-alkali.md](../features/chlor-alkali.md). |
+
 ### Rules for the oil line
 
 - **Oil is finite.** Reservoirs run dry and oil sand is an ore; nothing turns power back into crude. Every fuel's JE per bucket is set so refining pays off over burning raw bitumen, and the full chain is audited in BALANCE.md (commit 19).

@@ -42,6 +42,8 @@ TREE = {
     "diesel_engine": ("diesel_generator", "diesel_engine", "Eight Cylinders", "Build a diesel engine", "goal"),
     "plastic": ("distillation_tower", "plastic_sheet", "Fantastic Plastic", "Press a plastic sheet", "task"),
     "rubber": ("plastic", "rubber", "Bouncing Back", "Make synthetic rubber", "task"),
+    "pvc": ("plastic", "pvc_resin", "Vinyl Revival", "Make PVC resin from chlorine", "task"),
+    "soap": ("electrolytic_cell", "soap", "Squeaky Clean", "Boil soap from lye", "task"),
     "asphalt": ("distillation_tower", "asphalt", "Hit the Road", "Lay asphalt, and walk faster on it", "task"),
     # Industrial chemistry (batch 5).
     "electrolytic_cell": ("steel", "electrolytic_cell", "Split Decision", "Build an electrolytic cell", "goal"),
