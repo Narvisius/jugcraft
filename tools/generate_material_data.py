@@ -442,7 +442,13 @@ def machine_recipe_files(out):
         for recipe in recipes:
             data = {"fabric:load_conditions": [c for f in recipe["features"] for c in condition(f)],
                     "type": rid(kind)}
-            if "inputs" in recipe:
+            if "name" in recipe:
+                name = recipe["name"]
+                if "inputs" in recipe:
+                    data["ingredients"] = [{"ingredient": item, "count": count} for item, count in recipe["inputs"]]
+                else:
+                    data["ingredient"] = recipe["input"]
+            elif "inputs" in recipe:
                 name = recipe["output"].split(":")[1]
                 data["ingredients"] = [{"ingredient": item, "count": count} for item, count in recipe["inputs"]]
             else:

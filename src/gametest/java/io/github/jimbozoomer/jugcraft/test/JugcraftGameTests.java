@@ -309,6 +309,42 @@ public class JugcraftGameTests {
 		});
 	}
 
+	/**
+	 * Glass chemistry (batch 16): tincal drops 1-3 borax; sand and borax melt into borosilicate glass, drawn into
+	 * optical fibre; iron and borax make ferroboron, which doubles the magnets a rare earth oxide gives; fibre can stand
+	 * in for gold in a processor.
+	 */
+	@GameTest
+	public void glassChemistryRecipes(GameTestHelper helper) {
+		BlockPos pos = helper.absolutePos(new BlockPos(1, 1, 1));
+		BlockState tincal = BuiltInRegistries.BLOCK.getValue(Jugcraft.id("tincal")).defaultBlockState();
+		for (int i = 0; i < 8; i++) {
+			int borax = Block.getDrops(tincal, helper.getLevel(), pos, null).stream().filter(s -> s.is(item("borax")))
+					.mapToInt(ItemStack::getCount).sum();
+			helper.assertTrue(borax >= 1 && borax <= 3, "Tincal dropped " + borax + " borax");
+		}
+		assertMulti(helper, MachineKind.ALLOY_SMELTER, List.of(new ItemStack(Items.SAND, 2), new ItemStack(item("borax"))),
+				item("borosilicate_glass"), 2);
+		assertMulti(helper, MachineKind.ALLOY_SMELTER, List.of(new ItemStack(Items.IRON_INGOT), new ItemStack(item("borax"))),
+				item("ferroboron"), 1);
+		assertMulti(helper, MachineKind.ALLOY_SMELTER, List.of(new ItemStack(item("rare_earth_oxide")),
+				new ItemStack(item("ferroboron"))), item("neodymium_magnet"), 2);
+		MachineRecipe fibre = MachineRecipes.find(helper.getLevel(), MachineKind.WIRE_DRAWER, new ItemStack(item("borosilicate_glass")))
+				.orElseThrow(() -> helper.assertionException("No drawing recipe for borosilicate glass"));
+		ItemStack drawn = fibre.output().create();
+		helper.assertTrue(drawn.is(item("optical_fibre")) && drawn.getCount() == 4, "Glass draws into " + drawn);
+		assertMulti(helper, MachineKind.CIRCUIT_ASSEMBLER, List.of(new ItemStack(item("microchip"), 4),
+				new ItemStack(item("advanced_circuit")), new ItemStack(item("optical_fibre"), 2)), item("processor"), 1);
+		helper.succeed();
+	}
+
+	private static void assertMulti(GameTestHelper helper, MachineKind kind, List<ItemStack> inputs, Item result, int count) {
+		ItemStack out = MachineRecipes.findMulti(helper.getLevel(), kind, inputs)
+				.orElseThrow(() -> helper.assertionException("No " + kind.id + " recipe for " + inputs))
+				.recipe().output().create();
+		helper.assertTrue(out.is(result) && out.getCount() == count, kind.id + " makes " + out + " from " + inputs);
+	}
+
 	/** The two-block crystal grower pulls a silicon boule from 4 silicon and a phosphate; the sawmill cuts it into 8 wafers. */
 	@GameTest(maxTicks = 600)
 	public void crystalGrowerPullsABoule(GameTestHelper helper) {

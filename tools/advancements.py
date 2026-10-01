@@ -44,6 +44,7 @@ TREE = {
     "rubber": ("plastic", "rubber", "Bouncing Back", "Make synthetic rubber", "task"),
     "pvc": ("plastic", "pvc_resin", "Vinyl Revival", "Make PVC resin from chlorine", "task"),
     "soap": ("electrolytic_cell", "soap", "Squeaky Clean", "Boil soap from lye", "task"),
+    "optical_fibre": ("processor", "optical_fibre", "Light Speed", "Draw borosilicate glass into optical fibre", "task"),
     "asphalt": ("distillation_tower", "asphalt", "Hit the Road", "Lay asphalt, and walk faster on it", "task"),
     # Industrial chemistry (batch 5).
     "electrolytic_cell": ("steel", "electrolytic_cell", "Split Decision", "Build an electrolytic cell", "goal"),

@@ -8,7 +8,13 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
-### Unmerged: Chlorine and lye, batch 15
+### Unmerged: Glass chemistry, batch 16
+- **Tincal**, natural borax, in desert and badlands sand; **borax**.
+- **Borosilicate glass** (2 sand + borax, alloy smelter) drawn into **optical fibre**, which can replace gold in processors.
+- **Ferroboron** (iron + borax): with a rare earth oxide it makes **two** neodymium magnets.
+- Multi-input recipes now try the one with the most ingredients first.
+
+### #70 Chlorine and lye, batch 15
 - **PVC:** refinery gas + chlorine → vinyl chloride (synthesis converter) → PVC resin (polymerization reactor) → two plastic sheets each (metal press).
 - **Soap** from lye and rotten flesh; a bar washes off every status effect.
 - Two advancements, a handbook page and game tests.

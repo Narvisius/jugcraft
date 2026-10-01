@@ -112,57 +112,58 @@
             "Bouncing Back: Make synthetic rubber.",
             "Vinyl Revival: Make PVC resin from chlorine.",
             "Squeaky Clean: Boil soap from lye.",
-            "Hit the Road: Lay asphalt, and walk faster on it."
+            "Light Speed: Draw borosilicate glass into optical fibre."
           ]
         },
         {
           "title": "Milestones (8)",
-          "icon": "jugcraft:electrolytic_cell",
+          "icon": "jugcraft:asphalt",
           "text": [
+            "Hit the Road: Lay asphalt, and walk faster on it.",
             "Split Decision: Build an electrolytic cell.",
             "Oil of Vitriol: Make sulfuric acid.",
             "Green Revolution: Make fertilizer.",
-            "The Bayer Way: Digest bauxite into alumina.",
-            "Clean Burn: Build a hydrogen fuel cell."
+            "The Bayer Way: Digest bauxite into alumina."
           ]
         },
         {
           "title": "Milestones (9)",
-          "icon": "jugcraft:air_separation_unit",
+          "icon": "jugcraft:fuel_cell",
           "text": [
+            "Clean Burn: Build a hydrogen fuel cell.",
             "Thin Air: Build an air separation unit.",
             "Bread from Air: Build a synthesis converter, to make ammonia from air.",
             "Aqua Fortis: Make nitric acid.",
-            "Kroll Call: Chlorinate titanium and melt the sponge.",
-            "Power Wall: Build a lithium battery bank."
+            "Kroll Call: Chlorinate titanium and melt the sponge."
           ]
         },
         {
           "title": "Milestones (10)",
-          "icon": "jugcraft:neodymium_magnet",
+          "icon": "jugcraft:lithium_battery_bank",
           "text": [
+            "Power Wall: Build a lithium battery bank.",
             "Strong Attraction: Make a neodymium magnet.",
             "Lossless (Almost): Build a magnet dynamo or magnet motor.",
             "Pulling Strings: Grow a silicon boule in the crystal grower.",
-            "Etched in Light: Etch microchips in the lithography station.",
-            "Central Processing: Assemble a processor."
+            "Etched in Light: Etch microchips in the lithography station."
           ]
         },
         {
           "title": "Milestones (11)",
-          "icon": "jugcraft:network_terminal",
+          "icon": "jugcraft:processor",
           "text": [
+            "Central Processing: Assemble a processor.",
             "Hello, World: Build a network terminal.",
             "Under Pressure: Build a gas holder.",
             "Shut-Off Valve: Make a fluid valve.",
-            "Strained Relations: Make a fluid filter.",
-            "Here Comes the Sun: Build an advanced solar panel."
+            "Strained Relations: Make a fluid filter."
           ]
         },
         {
           "title": "Milestones (12)",
-          "icon": "jugcraft:advanced_engine",
+          "icon": "jugcraft:advanced_solar_panel",
           "text": [
+            "Here Comes the Sun: Build an advanced solar panel.",
             "Four on the Floor: Build an advanced combustion engine.",
             "King Cotton: Grow cotton.",
             "Make It Rain: Build a sprinkler.",
@@ -1080,6 +1081,18 @@
                 "jugcraft:aluminum_wire",
                 3
               ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:borosilicate_glass",
+                  1
+                ]
+              ],
+              "out": [
+                "jugcraft:optical_fibre",
+                4
+              ]
             }
           ]
         },
@@ -1159,6 +1172,26 @@
                 [
                   "minecraft:gold_ingot",
                   1
+                ]
+              ],
+              "out": [
+                "jugcraft:processor",
+                1
+              ]
+            },
+            {
+              "in": [
+                [
+                  "jugcraft:microchip",
+                  4
+                ],
+                [
+                  "jugcraft:advanced_circuit",
+                  1
+                ],
+                [
+                  "jugcraft:optical_fibre",
+                  2
                 ]
               ],
               "out": [
@@ -2555,6 +2588,15 @@
             "result": "jugcraft:gasket",
             "count": 4
           }
+        },
+        {
+          "title": "Glass Chemistry",
+          "icon": "jugcraft:borosilicate_glass",
+          "text": [
+            "Tincal, natural borax, crusts the sand of deserts and badlands; mine it for 1-3 borax.",
+            "Two sand and a borax melt into two borosilicate glass in the alloy smelter; the wire drawer pulls each into four optical fibre, which can carry a processor's signals instead of gold.",
+            "Iron and borax make ferroboron; a rare earth oxide with ferroboron gives two neodymium magnets, twice the old recipe."
+          ]
         },
         {
           "title": "Chlorine and Lye",

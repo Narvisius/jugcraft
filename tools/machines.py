@@ -648,6 +648,16 @@ ALLOY_SMELTER = [
     # Batch 6: rare earths alloyed with iron (and boron, left out) make neodymium magnets.
     {"inputs": [["jugcraft:rare_earth_oxide", 1], ["minecraft:iron_ingot", 1]], "output": "jugcraft:neodymium_magnet",
      "count": 1, "ticks": 200, "features": [FEATURE, "rare_earths"]},
+    # Batch 16: with the boron put back, NdFeB magnets come two to a rare earth. Iron and borax first make
+    # ferroboron, the real master alloy.
+    {"inputs": [["minecraft:iron_ingot", 1], ["jugcraft:borax", 1]], "output": "jugcraft:ferroboron",
+     "count": 1, "ticks": 160, "features": [FEATURE, "silicon"]},
+    {"name": "neodymium_magnet_from_ferroboron",
+     "inputs": [["jugcraft:rare_earth_oxide", 1], ["jugcraft:ferroboron", 1]],
+     "output": "jugcraft:neodymium_magnet", "count": 2, "ticks": 200, "features": [FEATURE, "rare_earths", "silicon"]},
+    # Borosilicate glass: sand melted with borax, tougher than plain glass and clear for optics.
+    {"inputs": [["minecraft:sand", 2], ["jugcraft:borax", 1]], "output": "jugcraft:borosilicate_glass",
+     "count": 2, "ticks": 160, "features": [FEATURE, "silicon"]},
 ]
 
 
@@ -666,7 +676,10 @@ def _metal_press():
 def _wire_drawer():
     from materials import COMPONENTS, ingot_id
     return [{"input": ingot_id(metal), "output": f"jugcraft:{metal}_wire", "count": 3, "ticks": 100,
-             "features": [FEATURE]} for metal in COMPONENTS["wire"]]
+             "features": [FEATURE]} for metal in COMPONENTS["wire"]] + [
+        # Glass chemistry (batch 16): borosilicate glass drawn into fibre.
+        {"input": "jugcraft:borosilicate_glass", "output": "jugcraft:optical_fibre", "count": 4, "ticks": 100,
+         "features": [FEATURE, "silicon"]}]
 
 
 # Circuit assembler: up to three ingredient stacks, any slot order.
@@ -677,6 +690,10 @@ CIRCUIT_ASSEMBLER = [
      "output": "jugcraft:advanced_circuit", "count": 1, "ticks": 300, "features": [FEATURE, "silver", "nickel"]},
     # Electronics (batch 7): four microchips bonded to an advanced circuit with gold.
     {"inputs": [["jugcraft:microchip", 4], ["jugcraft:advanced_circuit", 1], ["minecraft:gold_ingot", 1]],
+     "output": "jugcraft:processor", "count": 1, "ticks": 400, "features": [FEATURE, "silicon", "sulfur", "silver", "nickel"]},
+    # Batch 16: optical fibre carries the signals instead of gold bond wires.
+    {"name": "processor_with_fibre",
+     "inputs": [["jugcraft:microchip", 4], ["jugcraft:advanced_circuit", 1], ["jugcraft:optical_fibre", 2]],
      "output": "jugcraft:processor", "count": 1, "ticks": 400, "features": [FEATURE, "silicon", "sulfur", "silver", "nickel"]},
 ]
 

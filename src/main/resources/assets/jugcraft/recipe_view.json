@@ -707,6 +707,60 @@
           ],
           "extra": [],
           "ticks": 200
+        },
+        {
+          "in": [
+            [
+              "minecraft:iron_ingot",
+              1
+            ],
+            [
+              "jugcraft:borax",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:ferroboron",
+            1
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
+              "jugcraft:rare_earth_oxide",
+              1
+            ],
+            [
+              "jugcraft:ferroboron",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:neodymium_magnet",
+            2
+          ],
+          "extra": [],
+          "ticks": 200
+        },
+        {
+          "in": [
+            [
+              "minecraft:sand",
+              2
+            ],
+            [
+              "jugcraft:borax",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:borosilicate_glass",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
         }
       ]
     },
@@ -957,6 +1011,20 @@
           ],
           "extra": [],
           "ticks": 100
+        },
+        {
+          "in": [
+            [
+              "jugcraft:borosilicate_glass",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:optical_fibre",
+            4
+          ],
+          "extra": [],
+          "ticks": 100
         }
       ]
     },
@@ -1021,6 +1089,28 @@
             [
               "minecraft:gold_ingot",
               1
+            ]
+          ],
+          "out": [
+            "jugcraft:processor",
+            1
+          ],
+          "extra": [],
+          "ticks": 400
+        },
+        {
+          "in": [
+            [
+              "jugcraft:microchip",
+              4
+            ],
+            [
+              "jugcraft:advanced_circuit",
+              1
+            ],
+            [
+              "jugcraft:optical_fibre",
+              2
             ]
           ],
           "out": [

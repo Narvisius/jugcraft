@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "jugcraft:alloying",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:sand",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:borax",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:borosilicate_glass",
+    "count": 2
+  },
+  "time": 160
+}

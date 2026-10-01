@@ -135,6 +135,12 @@ The first batch from the owner's saved idea backlog ([MACHINE_ROADMAP.md](../MAC
 | --- | --- |
 | 36 | Vinyl chloride (refinery gas + chlorine, synthesis converter) → PVC resin (polymerization reactor) → two plastic sheets each (metal press). Soap from lye and rotten flesh (chemical reactor), which washes off status effects. Feature record: [chlor-alkali.md](../features/chlor-alkali.md). |
 
+### Batch 16: glass chemistry
+
+| # | What it adds |
+| --- | --- |
+| 37 | Tincal (desert borax crust), borax, borosilicate glass, optical fibre and ferroboron. Fibre stands in for gold in processors; ferroboron doubles neodymium magnets. Multi-input recipes now try the one with the most ingredients first. Feature record: [glass-chemistry.md](../features/glass-chemistry.md). |
+
 ### Rules for the oil line
 
 - **Oil is finite.** Reservoirs run dry and oil sand is an ore; nothing turns power back into crude. Every fuel's JE per bucket is set so refining pays off over burning raw bitumen, and the full chain is audited in BALANCE.md (commit 19).

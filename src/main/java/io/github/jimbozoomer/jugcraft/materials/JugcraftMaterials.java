@@ -36,8 +36,14 @@ public final class JugcraftMaterials {
 
 	public static Block BAUXITE;
 	public static Block OIL_SAND;
+	public static Block TINCAL;
 
 	public static Item BITUMEN;
+	/** Glass chemistry (batch 16). */
+	public static Item BORAX;
+	public static Item BOROSILICATE_GLASS;
+	public static Item OPTICAL_FIBRE;
+	public static Item FERROBORON;
 	public static Item SULFUR_DUST;
 	public static Item SILICON;
 	public static Item LITHIUM_CARBONATE;
@@ -70,6 +76,7 @@ public final class JugcraftMaterials {
 
 		BAUXITE = JugcraftRegistry.block("bauxite", Blocks.GRANITE);
 		OIL_SAND = JugcraftRegistry.block("oil_sand", Blocks.SAND);
+		TINCAL = JugcraftRegistry.block("tincal", Blocks.SANDSTONE);
 
 		BITUMEN = JugcraftRegistry.item("bitumen");
 		SULFUR_DUST = JugcraftRegistry.item("sulfur_dust");
@@ -77,6 +84,10 @@ public final class JugcraftMaterials {
 		LITHIUM_CARBONATE = JugcraftRegistry.item("lithium_carbonate");
 		RARE_EARTH_OXIDE = JugcraftRegistry.item("rare_earth_oxide");
 		COKE = JugcraftRegistry.item("coke");
+		BORAX = JugcraftRegistry.item("borax");
+		BOROSILICATE_GLASS = JugcraftRegistry.item("borosilicate_glass");
+		OPTICAL_FIBRE = JugcraftRegistry.item("optical_fibre");
+		FERROBORON = JugcraftRegistry.item("ferroboron");
 
 		registerCreativeTabs();
 	}
@@ -109,7 +120,9 @@ public final class JugcraftMaterials {
 		}
 		natural.add(BAUXITE);
 		natural.add(OIL_SAND);
-		ingredients.addAll(List.of(BITUMEN, SULFUR_DUST, SILICON, LITHIUM_CARBONATE, RARE_EARTH_OXIDE, COKE));
+		natural.add(TINCAL);
+		ingredients.addAll(List.of(BITUMEN, SULFUR_DUST, SILICON, LITHIUM_CARBONATE, RARE_EARTH_OXIDE, COKE, BORAX,
+				BOROSILICATE_GLASS, OPTICAL_FIBRE, FERROBORON));
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(output -> natural.forEach(output::accept));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> ingredients.forEach(output::accept));

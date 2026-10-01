@@ -446,6 +446,12 @@ def build():
                 "Rubber and string make two belts. A steel plate faced with rubber cuts into four gaskets, and "
                 "gasketed steel pipe comes four to a steel plate pair, without a bronze pipe."],
              "craft": craft("gasket")},
+            {"title": "Glass Chemistry", "icon": f"{MOD}:borosilicate_glass", "text": [
+                "Tincal, natural borax, crusts the sand of deserts and badlands; mine it for 1-3 borax.",
+                "Two sand and a borax melt into two borosilicate glass in the alloy smelter; the wire drawer pulls "
+                "each into four optical fibre, which can carry a processor's signals instead of gold.",
+                "Iron and borax make ferroboron; a rare earth oxide with ferroboron gives two neodymium magnets, "
+                "twice the old recipe."]},
             {"title": "Chlorine and Lye", "icon": f"{MOD}:pvc_resin", "text": [
                 "PVC: the synthesis converter joins 250 mB of refinery gas and 250 mB of chlorine into 250 mB of vinyl "
                 "chloride; the polymerization reactor turns 500 mB of it into four PVC resin, and the metal press "

@@ -75,6 +75,9 @@ public final class MachineRecipes {
 					list.add(recipe);
 				}
 			}
+			// The recipe with more ingredients wins: magnets with borax before magnets without it, whatever order the
+			// recipes loaded in.
+			list.sort(java.util.Comparator.comparingInt((MultiMachineRecipe recipe) -> recipe.parts().size()).reversed());
 			return List.copyOf(list);
 		});
 	}

@@ -40,6 +40,9 @@ public final class JugcraftWorldgen {
 				.or(BiomeSelectors.tag(ConventionalBiomeTags.IS_BADLANDS)));
 		add("oil_sand", "crude_oil", BiomeSelectors.tag(ConventionalBiomeTags.IS_DESERT)
 				.or(BiomeSelectors.tag(ConventionalBiomeTags.IS_BADLANDS)));
+		// Tincal (natural borax) crusts the sand where desert lakes dried out.
+		add("tincal", "silicon", BiomeSelectors.tag(ConventionalBiomeTags.IS_DESERT)
+				.or(BiomeSelectors.tag(ConventionalBiomeTags.IS_BADLANDS)));
 
 		// Surface resource deposits on stony hills: the windswept hills, stony peaks and stony shores, where bare rock
 		// shows (docs/features/resource-deposits.md).
