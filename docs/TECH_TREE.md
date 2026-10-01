@@ -86,6 +86,8 @@ All machines hold their own internal battery and accept power from cables or dir
 
 Machines are drawn in a **steampunk** style by default: brass, copper and riveted iron, with gauges, gears, valve wheels, glowing fireboxes and portholes. The look is purely visual. Blocks, recipes, footprints, screens and power connections are the same in both styles.
 
+From the steel tier up, machines are **dieselpunk** instead: gunmetal and olive paint, hazard stripes, chrome, phosphor gauges and caged lamps (see [ART_DIRECTION.md](ART_DIRECTION.md)). The steel foundry, capacitor bank, steel tank, ore drill and high-pressure extractor already use it; the renders below predate that.
+
 ![Steampunk machines, each shown from the front-left and front-right](images/steampunk_machines.png)
 
 ![Steampunk multi-block machines, from both sides](images/steampunk_large_machines.png)

@@ -17,4 +17,4 @@ As the tech gets higher tier, it becomes more dieselpunk and less steampunk. The
 - **Details:** green phosphor gauges, caged amber warning lamps, stencilled serials, heavy bolts rather than decorative rivets.
 - Textures start with `dp_` (`tools/dieselpunk_textures.py`); models for tools and stations are in `tools/tool_models.py`.
 
-Existing steel-tier machines (steel foundry, capacitor bank, steel tank, high-pressure extractor) still look steampunk. Moving them to the dieselpunk look is a possible follow-up.
+The steel-tier machines went dieselpunk in #41: the steel foundry, capacitor bank, steel tank, ore drill and high-pressure extractor (`tools/dieselpunk_models.py`, which replaces their entries in `steampunk_models.MODELS`). Their footprints, ports and running lights are unchanged, and the classic style pack keeps their plain look. The coke oven stays brick: it is the bridge into steel.
