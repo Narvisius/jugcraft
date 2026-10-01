@@ -81,6 +81,10 @@ public enum MachineKind implements StringRepresentable {
 	ELECTROLYTIC_CELL("electrolytic_cell", 60_000, 1_024, 0, 256, 3),
 	// A 2x2x2 acid-proof reactor: sulfur + water -> sulfuric acid; later bauxite digestion and fertilizer.
 	CHEMICAL_REACTOR("chemical_reactor", 30_000, 512, 0, 96, 3),
+	// Nitrogen chemistry (batch 12): a 2x2x6 cold box drawing nitrogen and oxygen out of the air (no recipes), and a
+	// 3x4x2 high-pressure converter making ammonia (Haber-Bosch) and nitric acid (Ostwald).
+	AIR_SEPARATION_UNIT("air_separation_unit", 40_000, 512, 0, 64, 0),
+	SYNTHESIS_CONVERTER("synthesis_converter", 60_000, 1_024, 0, 128, 0),
 	// A one-block hydrogen fuel cell (electric look): hydrogen in, JE out.
 	FUEL_CELL("fuel_cell", 40_000, 0, 512, 0, 0),
 	// Storage (batch 6): a 3x2 lithium battery bank, one deep, giving power out of its front like the capacitor bank.
@@ -226,6 +230,14 @@ public enum MachineKind implements StringRepresentable {
 	/** Electrolytic cell: each tank, and the layers its outputs leave from (chlorine top, hydrogen middle, lye base). */
 	public static final int CELL_TANK = 8_000;
 	private static final int[] CELL_DRAW_OFFS = {2, 1, 0};
+	/** Air separation unit: nitrogen and oxygen per powered tick, its tanks, and where each is drawn off (nitrogen
+	 * boils off the top of the column, liquid oxygen collects at the base). */
+	public static final int ASU_NITROGEN_PER_TICK = 8;
+	public static final int ASU_OXYGEN_PER_TICK = 2;
+	public static final int ASU_TANK = 16_000;
+	private static final int[] ASU_DRAW_OFFS = {5, 0};
+	/** Synthesis converter: each input tank and the output tank. */
+	public static final int CONVERTER_TANK = 8_000;
 	/** Fuel cell: JE per tick while running, and its hydrogen tank. Fuel value: chemistry/FluidFuels. */
 	public static final int FUEL_CELL_OUTPUT = 128;
 	public static final int FUEL_CELL_TANK = 8_000;
@@ -307,6 +319,7 @@ public enum MachineKind implements StringRepresentable {
 			case FLOWBACK_TREATMENT_UNIT -> "water_treatment";
 			case POLYMERIZATION_REACTOR -> "polymerization";
 			case ELECTROLYTIC_CELL -> "electrolysis";
+			case SYNTHESIS_CONVERTER -> "gas_synthesis";
 			case CHEMICAL_REACTOR -> "chemical_reaction";
 			case CRYSTAL_GROWER -> "crystal_growing";
 			case LITHOGRAPHY_STATION -> "lithography";
@@ -348,6 +361,9 @@ public enum MachineKind implements StringRepresentable {
 			case DIESEL_ENGINE -> new FluidMachineSpec(List.of(DIESEL_ENGINE_TANK), List.of(), 0, 0);
 			case ADVANCED_ENGINE -> new FluidMachineSpec(List.of(ADVANCED_ENGINE_TANK), List.of(), 0, 0);
 			case ELECTROLYTIC_CELL -> new FluidMachineSpec(List.of(CELL_TANK), List.of(CELL_TANK, CELL_TANK, CELL_TANK), 2, 1);
+			case AIR_SEPARATION_UNIT -> new FluidMachineSpec(List.of(), List.of(ASU_TANK, ASU_TANK), 0, 0);
+			case SYNTHESIS_CONVERTER -> new FluidMachineSpec(List.of(CONVERTER_TANK, CONVERTER_TANK, CONVERTER_TANK),
+					List.of(CONVERTER_TANK), 0, 0);
 			case CHEMICAL_REACTOR -> new FluidMachineSpec(List.of(CHEM_REACTOR_TANK), List.of(CHEM_REACTOR_TANK), 2, 1);
 			case LITHOGRAPHY_STATION -> new FluidMachineSpec(List.of(LITHOGRAPHY_TANK), List.of(), 2, 1);
 			case FUEL_CELL -> new FluidMachineSpec(List.of(FUEL_CELL_TANK), List.of(), 0, 0);
@@ -366,6 +382,7 @@ public enum MachineKind implements StringRepresentable {
 			case CATALYTIC_REFORMER -> REFORMER_DRAW_OFFS[tank];
 			case FRACKING_RIG -> FRACK_DRAW_OFFS[tank];
 			case ELECTROLYTIC_CELL -> CELL_DRAW_OFFS[tank];
+			case AIR_SEPARATION_UNIT -> ASU_DRAW_OFFS[tank];
 			default -> -1;
 		};
 	}
@@ -451,6 +468,9 @@ public enum MachineKind implements StringRepresentable {
 			case DIESEL_ENGINE -> Footprint.cuboid(2, 2, 3);
 			case ADVANCED_ENGINE -> Footprint.cuboid(2, 1, 1);
 			case ELECTROLYTIC_CELL -> Footprint.cuboid(3, 3, 2);
+			// A two by two cold box six blocks tall, and a three-wide, four-tall converter train.
+			case AIR_SEPARATION_UNIT -> Footprint.cuboid(2, 6, 2);
+			case SYNTHESIS_CONVERTER -> Footprint.cuboid(3, 4, 2);
 			case CHEMICAL_REACTOR -> Footprint.cuboid(2, 2, 2);
 			// Three wide, two tall, one deep, so every block's front is a power socket.
 			case LITHIUM_BATTERY_BANK -> Footprint.cuboid(3, 2, 1);

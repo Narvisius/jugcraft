@@ -151,6 +151,14 @@ ABOUT = {
                          "and a bucket of water.",
     "chemical_reactor": "Two by two by two, lined with lead against the acid. Burns sulfur and absorbs it in water: two "
                         "sulfur dust and a bucket of water make a bucket of sulfuric acid, every 5 seconds.",
+    "air_separation_unit": "Two by two and six tall: a cold box and its distillation column. It needs no input: it "
+                           "liquefies air and splits it, 8 mB of nitrogen a tick out of the top row and 2 mB of oxygen "
+                           "out of the bottom row, at 64 JE/t. Pipe the gases to the synthesis converter or a gas "
+                           "holder; it stops while either tank is full.",
+    "synthesis_converter": "Three wide, four tall and two deep: a high-pressure catalytic converter. Haber-Bosch: 300 mB "
+                           "of hydrogen and 100 mB of nitrogen make 200 mB of ammonia. Ostwald: 100 mB of ammonia, 200 "
+                           "mB of oxygen and 100 mB of water make 200 mB of nitric acid. Each takes 2 seconds at 128 "
+                           "JE/t.",
     "crystal_grower": "Two blocks tall. Melts 4 silicon with a phosphate (the dopant) and slowly pulls a single "
                       "crystal out of the melt: a silicon boule, every 20 seconds at 128 JE/t. Saw the boule into 8 "
                       "wafers in the sawmill.",
@@ -428,6 +436,15 @@ def build():
             machine_page("electrolytic_cell"),
             machine_page("chemical_reactor"),
             machine_page("fuel_cell"),
+            {"title": "Nitrogen Chemistry", "icon": f"{MOD}:nitric_acid_bucket", "text": [
+                "Air is four parts nitrogen to one of oxygen. The air separation unit splits it; hydrogen comes from "
+                "the electrolytic cell.",
+                "The synthesis converter joins hydrogen and nitrogen into ammonia, and burns ammonia in oxygen over "
+                "water into nitric acid.",
+                "Ammonia and phosphate make fertilizer (six for two phosphate, against four with sulfuric acid). "
+                "Nitric acid etches microchips with half as much acid as sulfuric."]},
+            machine_page("air_separation_unit"),
+            machine_page("synthesis_converter"),
             {"title": "Aluminum, the Real Way", "icon": f"{MOD}:alumina", "text": [
                 "Digest a bauxite in 250 mB of lye in the chemical reactor: two alumina.",
                 "Smelt two alumina with a coal coke anode in the electrolytic cell: two aluminum ingots, every 8 "

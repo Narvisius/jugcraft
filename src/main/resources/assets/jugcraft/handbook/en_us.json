@@ -121,39 +121,48 @@
           "text": [
             "The Bayer Way: Digest bauxite into alumina.",
             "Clean Burn: Build a hydrogen fuel cell.",
-            "Kroll Call: Chlorinate titanium and melt the sponge.",
-            "Power Wall: Build a lithium battery bank.",
-            "Strong Attraction: Make a neodymium magnet."
+            "Thin Air: Build an air separation unit.",
+            "Bread from Air: Build a synthesis converter, to make ammonia from air.",
+            "Aqua Fortis: Make nitric acid."
           ]
         },
         {
           "title": "Milestones (9)",
-          "icon": "jugcraft:magnet_dynamo",
+          "icon": "jugcraft:titanium_ingot",
           "text": [
+            "Kroll Call: Chlorinate titanium and melt the sponge.",
+            "Power Wall: Build a lithium battery bank.",
+            "Strong Attraction: Make a neodymium magnet.",
             "Lossless (Almost): Build a magnet dynamo or magnet motor.",
-            "Pulling Strings: Grow a silicon boule in the crystal grower.",
-            "Etched in Light: Etch microchips in the lithography station.",
-            "Central Processing: Assemble a processor.",
-            "Hello, World: Build a network terminal."
+            "Pulling Strings: Grow a silicon boule in the crystal grower."
           ]
         },
         {
           "title": "Milestones (10)",
-          "icon": "jugcraft:gas_holder",
+          "icon": "jugcraft:microchip",
           "text": [
+            "Etched in Light: Etch microchips in the lithography station.",
+            "Central Processing: Assemble a processor.",
+            "Hello, World: Build a network terminal.",
             "Under Pressure: Build a gas holder.",
-            "Shut-Off Valve: Make a fluid valve.",
-            "Strained Relations: Make a fluid filter.",
-            "Here Comes the Sun: Build an advanced solar panel.",
-            "Four on the Floor: Build an advanced combustion engine."
+            "Shut-Off Valve: Make a fluid valve."
           ]
         },
         {
           "title": "Milestones (11)",
-          "icon": "jugcraft:cotton",
+          "icon": "jugcraft:fluid_filter",
           "text": [
+            "Strained Relations: Make a fluid filter.",
+            "Here Comes the Sun: Build an advanced solar panel.",
+            "Four on the Floor: Build an advanced combustion engine.",
             "King Cotton: Grow cotton.",
-            "Make It Rain: Build a sprinkler.",
+            "Make It Rain: Build a sprinkler."
+          ]
+        },
+        {
+          "title": "Milestones (12)",
+          "icon": "jugcraft:crop_harvester",
+          "text": [
             "Reaping What You Sow: Build a crop harvester."
           ]
         }
@@ -2518,6 +2527,61 @@
               "jugcraft:aluminum_plate"
             ],
             "result": "jugcraft:fuel_cell",
+            "count": 1
+          }
+        },
+        {
+          "title": "Nitrogen Chemistry",
+          "icon": "jugcraft:nitric_acid_bucket",
+          "text": [
+            "Air is four parts nitrogen to one of oxygen. The air separation unit splits it; hydrogen comes from the electrolytic cell.",
+            "The synthesis converter joins hydrogen and nitrogen into ammonia, and burns ammonia in oxygen over water into nitric acid.",
+            "Ammonia and phosphate make fertilizer (six for two phosphate, against four with sulfuric acid). Nitric acid etches microchips with half as much acid as sulfuric."
+          ]
+        },
+        {
+          "title": "Air Separation Unit",
+          "icon": "jugcraft:air_separation_unit",
+          "text": [
+            "Two by two and six tall: a cold box and its distillation column. It needs no input: it liquefies air and splits it, 8 mB of nitrogen a tick out of the top row and 2 mB of oxygen out of the bottom row, at 64 JE/t. Pipe the gases to the synthesis converter or a gas holder; it stops while either tank is full.",
+            "Uses 64 JE/t while working. Holds 40,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:machine_casing",
+              "jugcraft:fluid_tank",
+              "jugcraft:electric_motor",
+              "jugcraft:advanced_circuit",
+              "jugcraft:electric_motor"
+            ],
+            "result": "jugcraft:air_separation_unit",
+            "count": 1
+          }
+        },
+        {
+          "title": "Synthesis Converter",
+          "icon": "jugcraft:synthesis_converter",
+          "text": [
+            "Three wide, four tall and two deep: a high-pressure catalytic converter. Haber-Bosch: 300 mB of hydrogen and 100 mB of nitrogen make 200 mB of ammonia. Ostwald: 100 mB of ammonia, 200 mB of oxygen and 100 mB of water make 200 mB of nitric acid. Each takes 2 seconds at 128 JE/t.",
+            "Uses 128 JE/t while working. Holds 60,000 JE."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:titanium_ingot",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:synthesis_converter",
             "count": 1
           }
         },

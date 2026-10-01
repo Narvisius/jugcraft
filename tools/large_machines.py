@@ -60,6 +60,9 @@ FOOTPRINTS = {
     "diesel_engine": cuboid(2, 2, 3),
     "electrolytic_cell": cuboid(3, 3, 2),
     "chemical_reactor": cuboid(2, 2, 2),
+    # Nitrogen chemistry: a 2x2 cold box six tall, and a 3x4x2 converter train.
+    "air_separation_unit": cuboid(2, 6, 2),
+    "synthesis_converter": cuboid(3, 4, 2),
     # Storage: a lithium battery bank three wide, two tall and one deep.
     "lithium_battery_bank": cuboid(3, 2, 1),
     # Electronics: a two-block crystal grower.
@@ -317,6 +320,19 @@ MODELS["electrolytic_cell"] = [
     ((-31, 22, 24), (15, 26, 28), PIPE),
 ]
 
+MODELS["air_separation_unit"] = [
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((-15, 2, 1), (15, 14, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-14, 2, 16), (14, 96, 30), "fluid_tank_side"),
+]
+
+MODELS["synthesis_converter"] = [
+    ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 14, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-24, 2, 8), (-8, 62, 24), "fluid_tank_side"),
+    ((-31, 2, 18), (-26, 40, 30), "fluid_tank_side"),
+]
+
 MODELS["chemical_reactor"] = [
     ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
     ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
@@ -395,6 +411,8 @@ FRONTS = {
     "diesel_engine": "diesel_engine_front",
     "electrolytic_cell": "electrolytic_cell_front",
     "chemical_reactor": "chemical_reactor_front",
+    "air_separation_unit": "air_separation_unit_front",
+    "synthesis_converter": "synthesis_converter_front",
     "lithium_battery_bank": "lithium_battery_bank_front",
     "crystal_grower": "crystal_grower_front",
     "lithography_station": "lithography_station_front",

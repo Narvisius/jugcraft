@@ -109,3 +109,15 @@ A processor costs about 64,000 JE of crystal growing and etching (two wafers' wo
 
 - No new positive-gain loops (CLAUDE.md). An exception needs the owner's decision and a line in the list above.
 - Conversion losses are documented here and in each feature record.
+
+## Nitrogen chemistry (batch 12)
+
+| Step | Cost | Notes |
+| --- | --- | --- |
+| Air separation | 64 JE/t for 8 mB nitrogen + 2 mB oxygen | from the air; no input, like a pumpjack's reservoir |
+| Ammonia (Haber–Bosch) | 300 mB hydrogen + 100 mB nitrogen → 200 mB, 5,120 JE | the hydrogen is 1.2 buckets of brine of electrolysis |
+| Nitric acid (Ostwald) | 100 mB ammonia + 200 mB oxygen + 100 mB water → 200 mB, 5,120 JE | |
+| Ammonium phosphate | 2 phosphate + 250 mB ammonia → 6 fertilizer | against 4 with sulfuric acid; phosphate stays the limit |
+| Microchips with nitric acid | 50 mB per 4 chips | against 100 mB of sulfuric acid |
+
+No converter recipe gives out more fluid than it takes in (400 mB → 200 mB each), so there is no fluid loop.

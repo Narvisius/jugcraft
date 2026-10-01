@@ -116,6 +116,12 @@ public final class PetroFluids {
 	public static Gas HYDROGEN;
 	/** Sulfur burnt and absorbed in water: the acid for fertilizer and leaching. */
 	public static Entry SULFURIC_ACID;
+	/** Nitrogen chemistry (batch 12): air separated into nitrogen and oxygen; ammonia from them and hydrogen. */
+	public static Gas NITROGEN;
+	public static Gas OXYGEN;
+	public static Gas AMMONIA;
+	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
+	public static Entry NITRIC_ACID;
 
 	private PetroFluids() {
 	}
@@ -159,6 +165,10 @@ public final class PetroFluids {
 		CHLORINE = gas("chlorine", 0xFFB4D25A);
 		HYDROGEN = gas("hydrogen", 0xFFDCE6F0);
 		SULFURIC_ACID = fluid("sulfuric_acid", 6, 4, 1, 0xFFD2C850, MapColor.COLOR_YELLOW);
+		NITROGEN = gas("nitrogen", 0xFF96A8D6);
+		OXYGEN = gas("oxygen", 0xFF78B4E0);
+		AMMONIA = gas("ammonia", 0xFFB096D4);
+		NITRIC_ACID = fluid("nitric_acid", 5, 4, 1, 0xFFE2D48C, MapColor.COLOR_YELLOW);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {

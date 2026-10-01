@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:synthesis_converter"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.synthesis_converter.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.synthesis_converter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:synthesis_converter"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:air_separation_unit"
+}

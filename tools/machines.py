@@ -71,6 +71,9 @@ MACHINES = {
     "electrolytic_cell": {"display": "Electrolytic Cell", "lit": True},
     # A 2x2x2 acid-proof reactor: sulfur + water -> sulfuric acid, and later digestion and fertilizer.
     "chemical_reactor": {"display": "Chemical Reactor", "lit": True},
+    # Nitrogen chemistry (batch 12): a cold box splitting air, and the high-pressure synthesis converter.
+    "air_separation_unit": {"display": "Air Separation Unit", "lit": True},
+    "synthesis_converter": {"display": "Synthesis Converter", "lit": True},
     # A one-block hydrogen fuel cell in the electric look: hydrogen -> JE.
     "fuel_cell": {"display": "Fuel Cell", "lit": True},
     # Storage (batch 6): a 3x2 lithium battery bank in the electric look.
@@ -282,6 +285,11 @@ STATS = {
     "electrolytic_cell": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 256, "tank": 8_000},
     # 2x2x2. 96 JE/t; a bucket of sulfuric acid per 100 ticks.
     "chemical_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
+    # 2x2x6. From the air alone: 8 mB/t nitrogen (top) and 2 mB/t oxygen (base) at 64 JE/t.
+    "air_separation_unit": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 64, "tank": 16_000,
+                            "nitrogen_per_tick": 8, "oxygen_per_tick": 2},
+    # 3x4x2. Three input tanks and one output: ammonia (Haber-Bosch) and nitric acid (Ostwald). 128 JE/t.
+    "synthesis_converter": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 128, "tank": 8_000},
     # One block. 128 JE/t from 1 mB of hydrogen a tick (128 JE/mB).
     "fuel_cell": {"capacity": 40_000, "output_per_tick": 512, "generation_per_tick": 128, "tank": 8_000},
     # 3x2, one deep. Outputs from its front (all six blocks), charges from any other face.
@@ -509,6 +517,12 @@ CRAFTING = {
     "electrolytic_cell": (["PWP", "TCT", "PMP"], {"P": "#c:plates/steel", "W": "jugcraft:aluminum_cable",
                                                   "T": "jugcraft:steel_tank", "C": "jugcraft:advanced_circuit",
                                                   "M": "jugcraft:machine_casing"}, 1),
+    "air_separation_unit": (["SPS", "TMT", "ECE"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe",
+                                                    "T": "jugcraft:fluid_tank", "M": "jugcraft:machine_casing",
+                                                    "E": "jugcraft:electric_motor", "C": "jugcraft:advanced_circuit"}, 1),
+    "synthesis_converter": (["STS", "PMP", "SCS"], {"S": "#c:plates/steel", "T": "#c:ingots/titanium",
+                                                    "P": "jugcraft:steel_fluid_pipe", "M": "jugcraft:machine_casing",
+                                                    "C": "jugcraft:advanced_circuit"}, 1),
     "chemical_reactor": (["PGP", "TCT", "PLP"], {"P": "#c:plates/steel", "G": "minecraft:glass",
                                                  "T": "jugcraft:fluid_tank", "C": "jugcraft:machine_casing",
                                                  "L": "#c:ingots/lead"}, 1),

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "STS",
+    "PMP",
+    "SCS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "T": "#c:ingots/titanium",
+    "P": "jugcraft:steel_fluid_pipe",
+    "M": "jugcraft:machine_casing",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:synthesis_converter",
+    "count": 1
+  }
+}

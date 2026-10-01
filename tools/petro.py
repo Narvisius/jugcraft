@@ -45,6 +45,10 @@ FLUIDS = {
     "sulfuric_acid": {"display": "Sulfuric Acid", "feature": "sulfur",
                       "colors": [(150, 140, 40), (190, 180, 70), (214, 206, 104), (240, 236, 170)],
                       "tick_delay": 6, "slope": 4, "drop_off": 1},
+    # Nitrogen chemistry (batch 12): the Ostwald process's acid, a fuming pale yellow.
+    "nitric_acid": {"display": "Nitric Acid", "feature": "machines",
+                    "colors": [(170, 150, 70), (204, 186, 104), (226, 212, 140), (246, 238, 196)],
+                    "tick_delay": 5, "slope": 4, "drop_off": 1},
 }
 
 # Gases: fluids that only live in tanks and pipes (no block, no bucket). Gauge colour in Java (PetroFluids.gas).
@@ -57,6 +61,13 @@ GASES = {
                  "colors": [(130, 160, 60), (160, 190, 80), (186, 214, 104), (214, 236, 150)]},
     "hydrogen": {"display": "Hydrogen", "feature": "salt",
                  "colors": [(190, 200, 214), (210, 220, 232), (228, 236, 244), (246, 250, 254)]},
+    # Nitrogen chemistry (batch 12): air separated into nitrogen and oxygen; ammonia from Haber-Bosch.
+    "nitrogen": {"display": "Nitrogen", "feature": "machines",
+                 "colors": [(120, 140, 190), (150, 168, 214), (182, 196, 232), (214, 224, 246)]},
+    "oxygen": {"display": "Oxygen", "feature": "machines",
+               "colors": [(90, 150, 200), (120, 180, 224), (160, 206, 238), (204, 232, 250)]},
+    "ammonia": {"display": "Ammonia", "feature": "machines",
+                "colors": [(150, 120, 190), (176, 150, 212), (202, 182, 230), (228, 216, 244)]},
 }
 
 
@@ -169,6 +180,14 @@ FLUID_MACHINES = {
     # Electronics (batch 7): a wafer and copper wire etched with sulfuric acid into microchips. 192 JE/t.
     "lithography_station": {"inputs": [4_000], "outputs": [], "item_inputs": 2, "item_outputs": 1,
                             "recipe_type": "lithography"},
+    # Nitrogen chemistry (batch 12). Air separation (no recipes): from the air alone, 8 mB/t nitrogen drawn off the
+    # top and 2 mB/t oxygen off the base (Java: MachineKind.outputLayer) at 64 JE/t, like the pumpjack's oil.
+    "air_separation_unit": {"inputs": [], "outputs": [16_000, 16_000], "item_inputs": 0, "item_outputs": 0,
+                            "recipe_type": None},
+    # A high-pressure catalytic converter: hydrogen + nitrogen -> ammonia (Haber-Bosch); ammonia + oxygen + water
+    # -> nitric acid (Ostwald). 128 JE/t.
+    "synthesis_converter": {"inputs": [8_000, 8_000, 8_000], "outputs": [8_000], "item_inputs": 0,
+                            "item_outputs": 0, "recipe_type": "gas_synthesis"},
     # Refinery gas -> plastic pellets. 96 JE/t.
     "polymerization_reactor": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 1,
                                "recipe_type": "polymerization"},
@@ -251,6 +270,9 @@ FLUID_RECIPES = {
         # Superphosphate: phosphate rock treated with sulfuric acid becomes a soluble fertilizer.
         {"name": "fertilizer", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:sulfuric_acid", 250)],
          "results": [("jugcraft:fertilizer", 4)], "ticks": 80, "features": ["phosphate", "sulfur"]},
+        # Ammonium phosphate (batch 12): phosphate rock with ammonia, a richer fertilizer than superphosphate.
+        {"name": "ammonium_phosphate", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:ammonia", 250)],
+         "results": [("jugcraft:fertilizer", 6)], "ticks": 80, "features": ["phosphate", "salt", "machines"]},
         # The Kroll process, in one step: rutile chlorinated over hot coke to titanium tetrachloride, then reduced to
         # a porous titanium sponge. The chlorine is used up.
         {"name": "titanium_sponge", "items": [("jugcraft:raw_titanium", 1), ("jugcraft:coke", 1)],
@@ -268,6 +290,21 @@ FLUID_RECIPES = {
         {"name": "microchip", "items": [("jugcraft:silicon_wafer", 1), ("jugcraft:copper_wire", 2)],
          "fluids": [("jugcraft:sulfuric_acid", 100)], "results": [("jugcraft:microchip", 4)], "ticks": 200,
          "features": ["silicon", "sulfur"]},
+        # Nitric acid etches as well, and twice as far (batch 12).
+        {"name": "microchip_nitric", "items": [("jugcraft:silicon_wafer", 1), ("jugcraft:copper_wire", 2)],
+         "fluids": [("jugcraft:nitric_acid", 50)], "results": [("jugcraft:microchip", 4)], "ticks": 200,
+         "features": ["silicon", "machines"]},
+    ],
+    # Nitrogen chemistry (batch 12). Fluid volumes shrink: 400 mB of gas in gives 200 of ammonia, so no recipe
+    # makes fluid from nothing.
+    "synthesis_converter": [
+        # Haber-Bosch: three parts hydrogen to one of nitrogen over an iron catalyst at high pressure.
+        {"name": "ammonia", "fluids": [("jugcraft:hydrogen", 300), ("jugcraft:nitrogen", 100)],
+         "fluid_results": [("jugcraft:ammonia", 200)], "ticks": 40, "features": ["salt", "machines"]},
+        # Ostwald: ammonia burnt over platinum gauze in oxygen, the gases absorbed in water.
+        {"name": "nitric_acid", "fluids": [("jugcraft:ammonia", 100), ("jugcraft:oxygen", 200),
+                                           ("minecraft:water", 100)],
+         "fluid_results": [("jugcraft:nitric_acid", 200)], "ticks": 40, "features": ["salt", "machines"]},
     ],
     # Flowback water settles and is filtered: most of it comes back as clean water; the brine leaves salt. A quarter
     # is lost (sludge), so fracking water is never free.

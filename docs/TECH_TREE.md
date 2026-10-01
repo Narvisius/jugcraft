@@ -426,8 +426,10 @@ Salt, sulfur, phosphate and bauxite get their real reactions ([feature record](f
 | Alumina | Bauxite digested in lye | 1 bauxite + 250 mB lye → 2 alumina (chemical reactor); 2 alumina + 1 coal coke → 2 aluminum ingots (electrolytic cell): two ingots per bauxite, twice the arc furnace | – |
 | Fuel Cell | One block, electric look; hydrogen → JE | 128 JE/t, 1 mB hydrogen a tick (128 JE/mB); 8-bucket tank | 4 aluminum plates, 2 aluminum cables, 2 steel plates, advanced circuit, tinplate tank |
 | Neodymium Magnet | Rare earths alloyed with iron | 1 rare earth oxide + 1 iron ingot → 1 (alloy smelter, 200 ticks) | – |
-| Fertilizer | Superphosphate: two doses of bone meal on every crop in a 5×5 area | 2 phosphate + 250 mB sulfuric acid → 4 (chemical reactor) | – |
+| Fertilizer | Superphosphate: two doses of bone meal on every crop in a 5×5 area | 2 phosphate + 250 mB sulfuric acid → 4, or 2 phosphate + 250 mB ammonia → 6 (ammonium phosphate; chemical reactor) | – |
 | Chemical Reactor | 2×2×2 acid plant | 2 sulfur dust + 1,000 mB water → 1,000 mB sulfuric acid; 100 ticks at 96 JE/t | 4 steel plates, glass, 2 tinplate tanks, casing, lead ingot |
+| Air Separation Unit | 2×2×6 cold box and column (batch 12) | From the air, needing only power: 8 mB/t nitrogen out of the top row and 2 mB/t oxygen out of the bottom row at 64 JE/t; 16-bucket tanks | 4 steel plates, 2 steel pipes, 2 tinplate tanks, casing, 2 electric motors, advanced circuit |
+| Synthesis Converter | 3×4×2 high-pressure loop (batch 12) | Haber–Bosch: 300 mB hydrogen + 100 mB nitrogen → 200 mB ammonia. Ostwald: 100 mB ammonia + 200 mB oxygen + 100 mB water → 200 mB nitric acid. 40 ticks at 128 JE/t | 4 steel plates, 2 titanium ingots, 2 steel pipes, casing, advanced circuit |
 
 **Fluid processing machines** (the pumpjack and extractor are the first): input tanks take only fluids the machine's recipes use; output tanks push into neighbouring tanks and pipes; the screen shows a gauge per tank. Recipes are data in `data/jugcraft/recipe/<type>/` (see [petrochemistry.md](features/petrochemistry.md)).
 
@@ -439,7 +441,7 @@ The tier after oil and chemistry, in the **cyan look**: near-black casings with 
 | --- | --- | --- | --- |
 | Crystal Grower | 2 tall; pulls doped silicon crystals | 4 silicon + 1 phosphate → 1 silicon boule; 400 ticks at 128 JE/t | glass, titanium ingot, arc furnace casing, aluminum plates, advanced circuit |
 | Silicon Wafer | Thin slices of a boule | 1 silicon boule → 8 wafers (sawmill, 200 ticks) | – |
-| Lithography Station | 3×2×2 cleanroom with a monitor bank | 1 wafer + 2 copper wire + 100 mB sulfuric acid → 4 microchips; 200 ticks at 192 JE/t; 4-bucket acid tank | glass, redstone lamp, titanium ingots, advanced circuit, aluminum plates, casing |
+| Lithography Station | 3×2×2 cleanroom with a monitor bank | 1 wafer + 2 copper wire + 100 mB sulfuric acid (or 50 mB nitric acid) → 4 microchips; 200 ticks at 192 JE/t; 4-bucket acid tank | glass, redstone lamp, titanium ingots, advanced circuit, aluminum plates, casing |
 | Processor | The third circuit tier | 4 microchips + 1 advanced circuit + 1 gold ingot (circuit assembler, 400 ticks) | – |
 | Network Terminal | A beige retro computer | Right-click: the cabled network's cables, rate, devices and stored energy. Uses no power. | glass panes, processor, plastic sheets, redstone, copper cables, button |
 

@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:phosphate",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:ammonia",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:fertilizer",
+      "count": 6
+    }
+  ],
+  "time": 80
+}

@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "fluids": [
+    {
+      "fluid": "jugcraft:ammonia",
+      "amount": 100
+    },
+    {
+      "fluid": "jugcraft:oxygen",
+      "amount": 200
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 100
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:nitric_acid",
+      "amount": 200
+    }
+  ],
+  "time": 40
+}

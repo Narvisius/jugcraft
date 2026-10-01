@@ -48,6 +48,12 @@ TREE = {
     "fertilizer": ("sulfuric_acid", "fertilizer", "Green Revolution", "Make fertilizer", "task"),
     "alumina": ("electrolytic_cell", "alumina", "The Bayer Way", "Digest bauxite into alumina", "task"),
     "fuel_cell": ("electrolytic_cell", "fuel_cell", "Clean Burn", "Build a hydrogen fuel cell", "goal"),
+    # Nitrogen chemistry (batch 12).
+    "air_separation_unit": ("electrolytic_cell", "air_separation_unit", "Thin Air",
+                            "Build an air separation unit", "goal"),
+    "synthesis_converter": ("air_separation_unit", "synthesis_converter", "Bread from Air",
+                            "Build a synthesis converter, to make ammonia from air", "goal"),
+    "nitric_acid": ("synthesis_converter", "nitric_acid_bucket", "Aqua Fortis", "Make nitric acid", "task"),
     # Advanced materials (batch 6).
     "titanium": ("electrolytic_cell", "titanium_ingot", "Kroll Call", "Chlorinate titanium and melt the sponge", "task"),
     "lithium_battery_bank": ("titanium", "lithium_battery_bank", "Power Wall", "Build a lithium battery bank", "goal"),

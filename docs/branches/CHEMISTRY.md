@@ -107,6 +107,16 @@ Owner request, 1 October 2026: "start the next batch with 1 and 2" (chlorine and
 | 29 | Lithium battery bank | Lithium cells and a big electric-look battery bank, far above the capacitor bank. |
 | 30 | Rare-earth magnets | Neodymium magnets; a magnet dynamo and a magnet motor that lose far less than the copper-wound ones; docs and advancements. |
 
+### Batch 12: nitrogen chemistry
+
+The first batch from the owner's saved idea backlog ([MACHINE_ROADMAP.md](../MACHINE_ROADMAP.md#idea-backlog-saved-by-the-owner-1-october-2026)). Feature record: [nitrogen-chemistry.md](../features/nitrogen-chemistry.md).
+
+| # | What it adds |
+| --- | --- |
+| 31 | Air separation unit: a 2×2×6 cold box that splits air into nitrogen (top) and oxygen (base), four parts to one, needing only power. Nitrogen, oxygen and ammonia gases. |
+| 32 | Synthesis converter: a 3×4×2 high-pressure loop. Haber–Bosch (hydrogen + nitrogen → ammonia) and Ostwald (ammonia + oxygen + water → nitric acid). Nitric acid fluid. |
+| 33 | Uses: ammonia + phosphate → ammonium phosphate fertilizer (6 for 2 phosphate); nitric acid etches microchips with half the acid. Handbook, advancements and docs. |
+
 ### Rules for the oil line
 
 - **Oil is finite.** Reservoirs run dry and oil sand is an ore; nothing turns power back into crude. Every fuel's JE per bucket is set so refining pays off over burning raw bitumen, and the full chain is audited in BALANCE.md (commit 19).

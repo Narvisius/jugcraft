@@ -410,6 +410,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			case WATER_WHEEL -> tickWaterWheel(level, pos, state);
 			case AUTO_CRAFTER -> tickCrafter(level, pos, state);
 			case PUMPJACK -> tickPumpjack(level, pos, state);
+			case AIR_SEPARATION_UNIT -> tickAirSeparation(level, pos, state);
 			case FRACKING_RIG -> tickFrackingRig(level, pos, state);
 			case DIESEL_GENERATOR -> tickFluidGenerator(level, pos, state, MachineKind.DIESEL_OUTPUT);
 			case GAS_TURBINE -> tickFluidGenerator(level, pos, state, MachineKind.TURBINE_OUTPUT);
@@ -841,6 +842,31 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		energy.setAmount(energy.getAmount() - kind.usePerTick);
 		tank.fill(PetroFluids.CRUDE_OIL.source(), pumped);
+		maxProgress = PUMPJACK_STROKE;
+		progress = (progress + 1) % PUMPJACK_STROKE;
+		setChanged();
+		return true;
+	}
+
+	/**
+	 * The air separation unit: each powered tick it liquefies air and splits it, filling its first tank with
+	 * {@link MachineKind#ASU_NITROGEN_PER_TICK} mB of nitrogen (drawn off the top of the column) and its second with
+	 * {@link MachineKind#ASU_OXYGEN_PER_TICK} mB of oxygen (drawn off the base). Air is everywhere, so it needs no
+	 * input; it stops while either tank is full.
+	 */
+	private boolean tickAirSeparation(ServerLevel level, BlockPos pos, BlockState state) {
+		pushFluids(level, pos, state);
+		FluidTank nitrogen = tanks.output(0);
+		FluidTank oxygen = tanks.output(1);
+		Fluid n2 = PetroFluids.NITROGEN.fluid();
+		Fluid o2 = PetroFluids.OXYGEN.fluid();
+		if (!nitrogen.fits(n2, MachineKind.ASU_NITROGEN_PER_TICK) || !oxygen.fits(o2, MachineKind.ASU_OXYGEN_PER_TICK)
+				|| !sides.redstone().allows(poweredByRedstone(level, pos, state)) || energy.getAmount() < kind.usePerTick) {
+			return false;
+		}
+		energy.setAmount(energy.getAmount() - kind.usePerTick);
+		nitrogen.fill(n2, MachineKind.ASU_NITROGEN_PER_TICK);
+		oxygen.fill(o2, MachineKind.ASU_OXYGEN_PER_TICK);
 		maxProgress = PUMPJACK_STROKE;
 		progress = (progress + 1) % PUMPJACK_STROKE;
 		setChanged();

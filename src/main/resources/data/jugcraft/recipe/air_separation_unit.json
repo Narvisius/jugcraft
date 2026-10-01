@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "TMT",
+    "ECE"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "P": "jugcraft:steel_fluid_pipe",
+    "T": "jugcraft:fluid_tank",
+    "M": "jugcraft:machine_casing",
+    "E": "jugcraft:electric_motor",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:air_separation_unit",
+    "count": 1
+  }
+}
