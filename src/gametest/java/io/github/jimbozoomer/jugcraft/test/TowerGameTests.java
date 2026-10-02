@@ -199,6 +199,34 @@ public class TowerGameTests {
 	}
 
 	/** Tier 1 builds both exchanges; their ports feed the depot (power into the terminal, items into the packager). */
+	/** A module used on the terminal goes into the tower and is handled there: it never falls through to the screen. */
+	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
+	public void modulesOnTheTerminalLoadTheTower(GameTestHelper helper) {
+		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
+		TowerCoreBlockEntity core = placeCore(helper);
+		core.setOwner(owner.getUUID());
+		core.buildInstantly(helper.getLevel(), 1);
+		BlockPos terminal = core.terminalPos();
+		ItemStack stack = new ItemStack(JugcraftTower.MODULE_ITEMS.get("structural_module"), 5);
+		owner.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+		int before = core.modules(0);
+		var hit = new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(terminal), net.minecraft.core.Direction.UP, terminal, false);
+		var result = helper.getLevel().getBlockState(terminal).useItemOn(stack, helper.getLevel(), owner, net.minecraft.world.InteractionHand.MAIN_HAND, hit);
+		helper.assertTrue(result instanceof net.minecraft.world.InteractionResult.Success,
+				"using a module on the terminal is handled there (no fall-through to opening the screen): " + result);
+		helper.assertTrue(core.modules(0) > before, "the modules went into the core: " + before + " -> " + core.modules(0));
+		helper.succeed();
+	}
+
+	/** The instant-build and test commands exist in every build, for operators. */
+	@GameTest
+	public void droneTestCommandIsRegistered(GameTestHelper helper) {
+		var node = helper.getLevel().getServer().getCommands().getDispatcher().getRoot().getChild("dronetest");
+		helper.assertTrue(node != null && node.getChild("build") != null && node.getChild("modules") != null,
+				"/dronetest build and /dronetest modules are registered");
+		helper.succeed();
+	}
+
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void exchangePortsFeedTheDepot(GameTestHelper helper) {
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
