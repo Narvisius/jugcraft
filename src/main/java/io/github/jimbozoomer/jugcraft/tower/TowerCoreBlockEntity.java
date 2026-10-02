@@ -54,6 +54,9 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	public static final int BUILD_RADIUS_CHUNKS = 50;
 	/** The tower itself (its 39x39 field, exchanges and pads) lies within this many blocks of the core. */
 	public static final int FOOTPRINT = 24;
+	public static final net.minecraft.server.level.TicketType CHUNK_TICKET = new net.minecraft.server.level.TicketType(0,
+			net.minecraft.server.level.TicketType.FLAG_PERSIST | net.minecraft.server.level.TicketType.FLAG_LOADING
+			| net.minecraft.server.level.TicketType.FLAG_SIMULATION | net.minecraft.server.level.TicketType.FLAG_KEEP_DIMENSION_ACTIVE);
 
 	/** Distance between two chunks, counted in chunks along the longer axis (a square radius). */
 	public static int chunkDistance(net.minecraft.world.level.ChunkPos a, net.minecraft.world.level.ChunkPos b) {
@@ -70,7 +73,12 @@ public class TowerCoreBlockEntity extends BlockEntity {
 		net.minecraft.world.level.ChunkPos max = net.minecraft.world.level.ChunkPos.containing(core.offset(FOOTPRINT, 0, FOOTPRINT));
 		for (int x = min.x(); x <= max.x(); x++) {
 			for (int z = min.z(); z <= max.z(); z++) {
-				level.setChunkForced(x, z, loaded);
+				var chunk = new net.minecraft.world.level.ChunkPos(x, z);
+				if (loaded) {
+					level.getChunkSource().addTicketWithRadius(CHUNK_TICKET, chunk, 2);
+				} else if (!TowerRegistry.get(level).needsChunk(chunk, core)) {
+					level.getChunkSource().removeTicketWithRadius(CHUNK_TICKET, chunk, 2);
+				}
 			}
 		}
 	}

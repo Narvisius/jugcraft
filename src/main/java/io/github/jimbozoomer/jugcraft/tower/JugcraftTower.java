@@ -56,6 +56,7 @@ public final class JugcraftTower {
 	}
 
 	public static void register() {
+		Registry.register(BuiltInRegistries.TICKET_TYPE, Jugcraft.id("drone_tower"), TowerCoreBlockEntity.CHUNK_TICKET);
 		for (String[] entry : BUILDING) {
 			String id = entry[0];
 			String kind = entry[1];

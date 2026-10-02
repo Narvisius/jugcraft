@@ -27,6 +27,19 @@ import net.minecraft.world.phys.Vec3;
  * drones flying the next tier's tiles in from the tower's modules.
  */
 public class TowerGameTests {
+	@GameTest
+	public void towerDoesNotClearExternalChunkLoads(GameTestHelper helper) {
+		BlockPos core = helper.absolutePos(BlockPos.ZERO);
+		var chunk = net.minecraft.world.level.ChunkPos.containing(core);
+		ServerLevel level = helper.getLevel();
+		boolean wasForced = level.getChunkSource().getForceLoadedChunks().contains(chunk.pack());
+		level.setChunkForced(chunk.x(), chunk.z(), true);
+		TowerCoreBlockEntity.keepLoaded(level, core, true);
+		TowerCoreBlockEntity.keepLoaded(level, core, false);
+		helper.assertTrue(level.getChunkSource().getForceLoadedChunks().contains(chunk.pack()), "Tower removal preserves external forced chunks");
+		if (!wasForced) level.setChunkForced(chunk.x(), chunk.z(), false);
+		helper.succeed();
+	}
 	private static final String ARENA = "jugcraft-test:drone_tower";
 	private static final String FULL = "jugcraft-test:drone_tower_full";
 	/** The core's position in the small arena (the tower's field is 39x39 round it). */
