@@ -154,8 +154,8 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 	}
 
 	/**
-	 * The Drone Tower as a hologram: the whole finished tower, with what is built solid, the tier being built filling
-	 * in (amber) as it goes, and the tiers still to come faint.
+	 * The Drone Tower as a hologram, as it really stands: the finished tiers solid, and the tier being built
+	 * growing in (amber) tile by tile as the drones put them in. Nothing that isn't built yet is shown.
 	 */
 	private static void tower(State state, Level level, BlockPos core, Mapper map) {
 		if (!(level.getBlockEntity(core) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity entity)) {
@@ -163,82 +163,78 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 		}
 		int tier = entity.tier();
 		int building = entity.building();
-		int bucket = Math.round(entity.buildProgress() * 20);
-		String key = core.asLong() + "/" + tier + "/" + building + "/" + bucket;
+		java.util.BitSet filled = entity.filledTiles();
+		int bucket = Math.round(entity.buildProgress() * 200);
+		String key = core.asLong() + "/" + tier + "/" + building + "/" + bucket + "/" + filled.hashCode();
 		if (!key.equals(towerKey)) {
 			towerKey = key;
-			towerCells = towerCells(tier, building, bucket / 20f);
+			towerCells = towerCells(tier, building, entity.buildProgress(), filled);
 		}
 		if (towerCells.isEmpty()) {
 			return;
 		}
-		// The tower is far taller than wide: squash it so the finished tower (spire tip and all) fits between the
-		// table and the command room's ceiling. The scale stays the same as it grows.
+		// The tower is far taller than wide: squash it so the finished tower (spire tip and all) would fit between
+		// the table and the command room's ceiling. The scale stays the same as it grows.
 		int top = io.github.jimbozoomer.jugcraft.tower.TowerData.get().tier(io.github.jimbozoomer.jugcraft.tower.TowerData.TIERS).top;
 		double vertical = Math.min(map.scale(), TOWER_MAX_HEIGHT / top);
-		java.util.Set<Long> occupied = new java.util.HashSet<>();
 		for (int[] c : towerCells) {
-			occupied.add(BlockPos.asLong(c[0], c[1], c[2]));
-		}
-		for (int[] c : towerCells) {
-			if (c[3] == 2) {
-				// Planned: only the outer shell, as a faint wireframe-like skin, so it reads as a plan.
-				boolean shell = false;
-				for (int[] d : new int[][] {{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}}) {
-					if (!occupied.contains(BlockPos.asLong(c[0] + d[0], c[1] + d[1], c[2] + d[2]))) {
-						shell = true;
-						break;
-					}
-				}
-				if (!shell) {
-					continue;
-				}
-			}
 			double wx0 = core.getX() + c[0] * TOWER_CELL, wz0 = core.getZ() + c[2] * TOWER_CELL;
 			double y0 = map.floor() + 0.02 + c[1] * TOWER_CELL * vertical;
 			add(state, map.x(wx0) + 0.002, y0, map.z(wz0) + 0.002, map.x(wx0 + TOWER_CELL) - 0.002,
-					y0 + TOWER_CELL * vertical - 0.002, map.z(wz0 + TOWER_CELL) - 0.002, c[3] == 1 ? TOWER_BUILDING : c[3] == 2 ? TOWER_PLANNED : TOWER);
+					y0 + TOWER_CELL * vertical - 0.002, map.z(wz0 + TOWER_CELL) - 0.002, c[3] == 1 ? TOWER_BUILDING : TOWER);
 		}
 	}
 
 	private static final int TOWER_CELL = 3;
 	/** Table top to the command room's ceiling panels, less a hair: the spire's tip may just touch them. */
 	private static final double TOWER_MAX_HEIGHT = 7.2;
-	/** Tiers not built yet: a faint outline of what is still to come. */
-	private static final int TOWER_PLANNED = 0x0EE05A48;
 	private static final int TOWER = 0x46E05A48;
 	private static final int TOWER_BUILDING = 0x66FFC04A;
 	private static String towerKey = "";
 	private static List<int[]> towerCells = List.of();
 
-	/** Occupied 3x3x3 cells {cx, cy, cz, building?} of the tower built up to {@code tier}, plus {@code progress} of {@code building}. */
-	private static List<int[]> towerCells(int tier, int building, float progress) {
+	/**
+	 * Occupied 3x3x3 cells {cx, cy, cz, building?} of the tower as built: every tier up to {@code tier}, plus what is
+	 * in of {@code building} (tier 1 by the core's own progress, higher tiers by the tiles the drones have filled).
+	 */
+	static List<int[]> towerCells(int tier, int building, float progress, java.util.BitSet filled) {
 		var data = io.github.jimbozoomer.jugcraft.tower.TowerData.get();
-		java.util.Map<Long, Integer> cells = new java.util.HashMap<>();
 		java.util.Set<Long> solid = new java.util.HashSet<>();
+		java.util.Set<Long> fresh = new java.util.HashSet<>();
 		for (int t = 1; t <= io.github.jimbozoomer.jugcraft.tower.TowerData.TIERS; t++) {
+			if (t > tier && t != building) {
+				continue;
+			}
 			var td = data.tier(t);
 			for (int[] c : td.clear) {
 				long key = BlockPos.asLong(c[0], c[1], c[2]);
 				solid.remove(key);
-				cells.remove(key);
+				fresh.remove(key);
 			}
-			int built = td.place.length;
-			if (t == building) {
-				built = Math.round(td.place.length * Math.max(0, Math.min(1, progress)));
-			} else if (t > tier) {
-				built = 0;
+			boolean[] built = new boolean[td.place.length];
+			if (t <= tier) {
+				java.util.Arrays.fill(built, true);
+			} else if (t == 1) {
+				int n = Math.round(td.place.length * Math.max(0, Math.min(1, progress)));
+				java.util.Arrays.fill(built, 0, Math.min(n, built.length), true);
+			} else {
+				for (int i = filled.nextSetBit(0); i >= 0 && i < td.tiles.size(); i = filled.nextSetBit(i + 1)) {
+					for (int index : td.tiles.get(i).blocks()) {
+						built[index] = true;
+					}
+				}
 			}
 			for (int i = 0; i < td.place.length; i++) {
+				if (!built[i]) {
+					continue;
+				}
 				int[] b = td.place[i];
 				long key = BlockPos.asLong(b[0], b[1], b[2]);
 				solid.add(key);
-				if (i >= built) {
-					cells.put(key, 2); // still to come
-				} else if (t == building) {
-					cells.put(key, 1);
+				if (t == building && t > tier) {
+					fresh.add(key);
 				} else {
-					cells.remove(key);
+					fresh.remove(key);
 				}
 			}
 		}
@@ -246,13 +242,9 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 		for (long key : solid) {
 			BlockPos p = BlockPos.of(key);
 			int cx = Math.floorDiv(p.getX(), TOWER_CELL), cy = Math.floorDiv(p.getY(), TOWER_CELL), cz = Math.floorDiv(p.getZ(), TOWER_CELL);
-			long cell = BlockPos.asLong(cx, cy, cz);
-			int[] existing = out.get(cell);
-			int flag = cells.getOrDefault(key, 0);
-			if (existing == null) {
-				out.put(cell, new int[] {cx, cy, cz, flag});
-			} else if (existing[3] == 2 && flag != 2 || existing[3] == 0 && flag == 1) {
-				existing[3] = flag; // a cell shows as built if any of it is
+			int[] cell = out.computeIfAbsent(BlockPos.asLong(cx, cy, cz), k -> new int[] {cx, cy, cz, 0});
+			if (fresh.contains(key)) {
+				cell[3] = 1; // a cell shows amber if any of it went in this build
 			}
 		}
 		return new ArrayList<>(out.values());

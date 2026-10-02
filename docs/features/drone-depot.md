@@ -63,7 +63,7 @@ Tiers 5–9 have items and models but no recipe yet, because they need materials
   - steel gears and plates (#18) and the Speed Upgrade (#19);
   - basic and advanced circuits, lithium carbonate and sulfur dust;
   - power over cables, and building blocks over item pipes (#15).
-- **Output consumer:** build jobs through `BuildJobs`. The Blueprint System (#23) is the intended source. Until it exists, the development-only `/dronetest fill <from> <to> <block> [party]` command creates test jobs (it is registered only in `runClient`/`runServer`).
+- **Output consumer:** build jobs through `BuildJobs`. The Blueprint System (#23) is the intended source. Until it exists, the operator-only `/dronetest fill <from> <to> <block> [party]` command creates test jobs (op level 2, or cheats on in single player).
 - **Required vs optional:** nothing requires drones. Building by hand always works.
 - **Party rule:** Personal/Party is decided by `JugcraftParties.mayServe`. Job sources check it when they offer jobs, and again on arrival.
 

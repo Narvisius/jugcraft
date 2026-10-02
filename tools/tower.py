@@ -506,6 +506,7 @@ LANG = {
     "message.jugcraft.tower.missing": "Needs %s more %s",
     "message.jugcraft.tower.started": "Building tier %s: %s",
     "message.jugcraft.tower.deposited": "Modules loaded into the Tower Core",
+    "message.jugcraft.tower.no_tower": "This terminal isn't part of a Drone Tower: put modules into a Tower Core",
     "screen.jugcraft.tower.title": "DRONE TOWER",
     "screen.jugcraft.tower.tier": "TIER %s · %s",
     "screen.jugcraft.tower.unlocked": "Drones up to T%s · %s drones",

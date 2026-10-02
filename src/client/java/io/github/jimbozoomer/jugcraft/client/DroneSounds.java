@@ -111,7 +111,7 @@ public final class DroneSounds {
 
 	/** One drone's rotor loop: follows the drone, fades in and out, and pitches up a little while it climbs. */
 	private static final class DroneSound extends AbstractTickableSoundInstance {
-		private static final float FADE = 0.08F;
+		private static final float FADE = 0.016F;
 		private final long key;
 		private final float loudness;
 		private final float basePitch;
@@ -123,11 +123,11 @@ public final class DroneSounds {
 			this.looping = true;
 			this.delay = 0;
 			this.attenuation = Attenuation.LINEAR;
-			this.loudness = (tier >= 5 && tier <= 9 ? 1.0F : 0.55F + tier * 0.08F) * 0.5F; // half the first version (play-test feedback)
+			this.loudness = (tier >= 5 && tier <= 9 ? 1.0F : 0.55F + tier * 0.08F) * 0.1F; // a tenth of the first version: halved, then cut by another 80% (play-test feedback)
 			// Smaller drones spin faster; every drone is slightly different so a swarm does not phase.
 			this.basePitch = (tier == 10 ? 1.3F : tier >= 5 ? 1.15F - (tier - 5) * 0.07F : 1.2F - (tier - 1) * 0.08F) + (float) ((key % 7) * 0.012);
 			this.pitch = basePitch;
-			this.volume = 0.01F;
+			this.volume = 0.002F;
 			this.x = x;
 			this.y = y;
 			this.z = z;

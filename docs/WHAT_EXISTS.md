@@ -271,7 +271,7 @@ Each machine recipe is a normal Minecraft recipe file, so a data pack can add, r
 
 ### Drones (`drone/`)
 
-- **`BuildJobs`** is the build-job interface. A `Source` offers open positions; depots reserve them, fly the materials there and call `fill`. Blueprints (#23) will be a source. `SimpleBuildJobs` is a minimal one, used by tests and the development-only `/dronetest` command.
+- **`BuildJobs`** is the build-job interface. A `Source` offers open positions; depots reserve them, fly the materials there and call `fill`. Blueprints (#23) will be a source. `SimpleBuildJobs` is a minimal one, used by tests and the operator-only `/dronetest` command.
 - **Pure logic (no Minecraft types), testable on its own:**
   - `PlatformLayout` scans the platform the Drone Tower places: separated 5x5 pads and 3x3 supply pickups. A terminal without a tower flies no drones (`allowTiersWithoutTower` is for tests and `/dronetest` only).
   - `DroneFleet` holds the roster and the cached pooled power; `DockLayout` places docked drones round the pads.

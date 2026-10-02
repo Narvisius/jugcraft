@@ -114,10 +114,14 @@ public class DroneTerminalBlock extends BaseEntityBlock implements EnergyConnect
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 			net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
 		// Tower modules handed to the terminal go into its Drone Tower's core (it sits under the plotting table).
+		// A module in hand never opens the terminal screen, on either side, whatever happens to it.
 		if (io.github.jimbozoomer.jugcraft.tower.JugcraftTower.MODULE_ITEMS.containsValue(stack.getItem())
-				&& level.getBlockEntity(pos) instanceof DroneTerminalBlockEntity terminal && terminal.towerPos() != null) {
-			if (!level.isClientSide() && level.getBlockEntity(terminal.towerPos()) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core) {
-				if (!core.mayUse(player)) {
+				&& level.getBlockEntity(pos) instanceof DroneTerminalBlockEntity terminal) {
+			if (!level.isClientSide()) {
+				if (terminal.towerPos() == null
+						|| !(level.getBlockEntity(terminal.towerPos()) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core)) {
+					player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.no_tower"));
+				} else if (!core.mayUse(player)) {
 					player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.not_owner"));
 				} else if (core.deposit(stack)) {
 					player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.deposited"));
