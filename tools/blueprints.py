@@ -192,8 +192,8 @@ def stake_texture():
     return img
 
 
-# Blueprint colours by kind (Blueprint.Kind): the whole build of a mod structure is blue, one part of a larger
-# build (a single cooling tower) green, a player's import red. (sheet, grid lines)
+# The blueprint item's colour in the inventory (Blueprint.Kind): a complete build (one structure or a whole
+# collection) is blue, one part of a larger build (a single cooling tower) green, a player's import red.
 KIND_COLOURS = {"complete": ((40, 90, 180), (210, 228, 255)), "part": ((34, 128, 64), (206, 246, 214)),
                 "imported": ((168, 44, 36), (255, 214, 206))}
 

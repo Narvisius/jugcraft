@@ -41,7 +41,7 @@ public class BlueprintItem extends Item {
 			tag.putString("name", name);
 		}
 		CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
-		// The item's colour follows the blueprint's kind (blue complete, green part, red imported).
+		// The item's colour in the inventory: blue complete build, green part of a larger build, red import.
 		Blueprint blueprint = Blueprint.get(blueprintId, false);
 		Blueprint.Kind kind = blueprint != null ? blueprint.kind : Blueprint.Kind.COMPLETE;
 		stack.set(DataComponents.CUSTOM_MODEL_DATA, new net.minecraft.world.item.component.CustomModelData(

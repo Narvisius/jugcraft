@@ -24,15 +24,14 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * While a Blueprint is held, shows where it would go (up to five chunks away): every block of the structure as
- * a faint ghost in the blueprint's colour (blue complete, green part, red imported), orange where something is in
- * the way, and the stake's spot marked. Right-click places it there.
+ * a faint ghost, red where something is in the way, and the stake's spot marked. Right-click places it there.
  * Shift+scroll on a blueprint with growth stages ({@link BlueprintStages}) also shows, in amber, the space the
  * finished build will take.
  */
 public final class BlueprintPlacementPreview {
 	private static final RenderType RENDER_TYPE = RenderTypes.entityTranslucentEmissive(Jugcraft.id("textures/misc/blueprint_ghost.png"));
-	/** Cells in the way: orange, so they stand out on every blueprint colour (red is now imported blueprints). */
-	private static final int BLOCKED = 0xB0FF8C1E;
+	private static final int CLEAR = 0x405AB4FF;
+	private static final int BLOCKED = 0x90FF4030;
 	private static final int STAKE = 0xC0FFC04A;
 	/** The finished build's space (a later stage): tops a little brighter than sides. */
 	private static final int STAGE_TOP = 0x50FFB84A;
@@ -65,7 +64,7 @@ public final class BlueprintPlacementPreview {
 			for (Blueprint.Cell cell : blueprint.cells(target.rotation())) {
 				at.setWithOffset(stake, cell.offset());
 				boolean clear = level.getBlockState(at).canBeReplaced() || level.getBlockState(at).is(cell.state().getBlock());
-				boxes.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(clear ? blueprint.kind.argb(0x40) : BLOCKED)});
+				boxes.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(clear ? CLEAR : BLOCKED)});
 			}
 			// A later growth stage (shift+scroll): the space the finished build takes, measured from its anchor block.
 			String id = BlueprintItem.idOf(held);

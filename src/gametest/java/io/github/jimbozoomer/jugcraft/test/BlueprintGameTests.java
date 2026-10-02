@@ -56,17 +56,20 @@ public class BlueprintGameTests {
 		helper.succeed();
 	}
 
-	/** Blueprint colours: built-in whole builds blue, parts of a larger build green, imports red (item and hologram). */
+	/** Blueprint item colours (complete blue, part green, import red) and table categories (set, individual, partial). */
 	@GameTest
 	public void blueprintKinds(GameTestHelper helper) {
 		String hut = "{\"format\": 1, \"name\": \"Kind Test\", \"palette\": {\"S\": \"minecraft:stone_bricks\"},"
 				+ " \"layers\": [[\"SSS\"]], \"anchor\": [1, 0, 2]}";
 		try {
-			helper.assertTrue(Blueprint.get("small_church", false).kind == Blueprint.Kind.COMPLETE, "a built-in build is complete (blue)");
-			helper.assertTrue(Blueprint.parse("t/part", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"part\""), "built in").kind
-					== Blueprint.Kind.PART, "a built-in part is green");
-			helper.assertTrue(Blueprint.parse("t/imp", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"complete\""), "imported").kind
-					== Blueprint.Kind.IMPORTED, "an import is red whatever its file says");
+			Blueprint church = Blueprint.get("small_church", false);
+			helper.assertTrue(church.kind == Blueprint.Kind.COMPLETE && church.category == Blueprint.Category.INDIVIDUAL, "a standalone building is blue, an individual structure");
+			Blueprint plant = Blueprint.parse("t/col", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"set\""), "built in");
+			helper.assertTrue(plant.kind == Blueprint.Kind.COMPLETE && plant.category == Blueprint.Category.SET, "a set is blue, under STRUCTURE SET");
+			Blueprint tower = Blueprint.parse("t/part", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"part\""), "built in");
+			helper.assertTrue(tower.kind == Blueprint.Kind.PART && tower.category == Blueprint.Category.PARTIAL, "a part of a set is green, a partial structure");
+			Blueprint imported = Blueprint.parse("t/imp", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"set\""), "imported");
+			helper.assertTrue(imported.kind == Blueprint.Kind.IMPORTED, "an import is red whatever its file says");
 		} catch (Blueprint.Invalid e) {
 			throw new AssertionError("a valid blueprint was refused: " + e.getMessage());
 		}
