@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "TBT",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_fluid_pipe",
+    "B": "minecraft:blast_furnace",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:solar_receiver",
+    "count": 1
+  }
+}

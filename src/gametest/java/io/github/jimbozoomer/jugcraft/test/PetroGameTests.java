@@ -26,6 +26,8 @@ import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import java.util.List;
+import io.github.jimbozoomer.jugcraft.solar.JugcraftSolar;
+import io.github.jimbozoomer.jugcraft.solar.SolarReceiverBlockEntity;
 import io.github.jimbozoomer.jugcraft.weapons.Blast;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -695,6 +697,41 @@ public class PetroGameTests {
 			// 30 of 48 buckets: five eighths.
 			int level = helper.getBlockState(gauge).getValue(TankGaugeBlock.LEVEL);
 			helper.assertTrue(level == 5, "The gauge shows " + level + " eighths");
+		});
+	}
+
+	/**
+	 * Solar thermal (batch 21): a receiver counts the heliostats under open sky in the field below it (not one that is
+	 * roofed over), makes nothing without water, and with water makes 12 JE/t a heliostat in daylight (half in rain),
+	 * boiling water for it. The test world's time and weather are not fixed, so daylight is read from the level.
+	 */
+	@GameTest(maxTicks = 200)
+	public void heliostatsHeatASolarReceiver(GameTestHelper helper) {
+		BlockPos receiverPos = new BlockPos(4, 5, 4);
+		helper.setBlock(receiverPos, JugcraftSolar.SOLAR_RECEIVER);
+		for (BlockPos mirror : List.of(new BlockPos(2, 1, 2), new BlockPos(6, 1, 6), new BlockPos(1, 2, 6), new BlockPos(6, 1, 1))) {
+			helper.setBlock(mirror, JugcraftSolar.HELIOSTAT);
+		}
+		helper.setBlock(new BlockPos(6, 2, 1), Blocks.STONE);
+		BlockPos absolute = helper.absolutePos(receiverPos);
+		SolarReceiverBlockEntity receiver = helper.getBlockEntity(receiverPos, SolarReceiverBlockEntity.class);
+		// Sky light (what "open sky" reads) catches up with the new roof a few ticks after it is placed.
+		helper.runAfterDelay(20, () -> {
+			int count = SolarReceiverBlockEntity.countHeliostats(helper.getLevel(), absolute);
+			helper.assertTrue(count == 3, "The receiver counted " + count + " heliostats under open sky");
+			helper.assertTrue(receiver.lastOutput() == 0 && receiver.energy().getAmount() == 0, "It made power without water");
+			receiver.water().variant = FluidVariant.of(Fluids.WATER);
+			receiver.water().amount = 4 * FluidConstants.BUCKET;
+			helper.runAfterDelay(5, () -> {
+				ServerLevel level = helper.getLevel();
+				boolean sun = level.isBrightOutside() && level.canSeeSky(absolute.above());
+				int expected = sun ? (level.isRaining() ? 18 : 36) : 0;
+				helper.assertTrue(receiver.lastOutput() == expected,
+						"The receiver made " + receiver.lastOutput() + " JE/t, expected " + expected);
+				helper.assertTrue((expected > 0) == (receiver.water().amount < 4 * FluidConstants.BUCKET),
+						"Water boiled " + (4 * FluidConstants.BUCKET - receiver.water().amount) / 81 + " mB at " + expected + " JE/t");
+				helper.succeed();
+			});
 		});
 	}
 

@@ -33,8 +33,13 @@ public final class KineticRotors {
 	private KineticRotors() {
 	}
 
+	/**
+	 * {@code sun}: instead of spinning, the rotor tilts about its axis with the time of day, from {@code speed}
+	 * degrees towards the east at sunrise to as far towards the west at sunset, and lies level at night (solar
+	 * trackers and heliostats).
+	 */
 	record Rotor(char axis, float[] center, String property, float speed, @Nullable String variantProperty,
-			Map<String, float[]> variants, QuadModel quads) {
+			Map<String, float[]> variants, QuadModel quads, boolean sun) {
 	}
 
 	/** A rotor to draw this frame: its block-state rotation (degrees about x, then y) and its spin angle. */
@@ -49,8 +54,14 @@ public final class KineticRotors {
 			return null;
 		}
 		float[] turn = rotor.variantProperty() == null ? null : rotor.variants().get(value(state, rotor.variantProperty()));
-		long time = entity.getLevel().getGameTime();
-		float angle = ((time % 7200) + partialTick) * rotor.speed() % 360;
+		float angle;
+		if (rotor.sun()) {
+			long day = entity.getLevel().getOverworldClockTime() % 24_000L;
+			angle = day < 12_000L ? (day - 6_000L) / 6_000F * rotor.speed() : 0;
+		} else {
+			long time = entity.getLevel().getGameTime();
+			angle = ((time % 7200) + partialTick) * rotor.speed() % 360;
+		}
 		return new Spin(rotor, turn == null ? 0 : turn[0], turn == null ? 0 : turn[1], angle);
 	}
 
@@ -128,7 +139,8 @@ public final class KineticRotors {
 				QuadModel quads = QuadModel.parse(data.getAsJsonArray("quads"));
 				JsonElement variantProperty = data.get("variant_property");
 				out.put(entry.getKey(), new Rotor(axis, center, data.get("property").getAsString(), data.get("speed").getAsFloat(),
-						variantProperty == null || variantProperty.isJsonNull() ? null : variantProperty.getAsString(), variants, quads));
+						variantProperty == null || variantProperty.isJsonNull() ? null : variantProperty.getAsString(), variants, quads,
+						data.has("mode") && "sun".equals(data.get("mode").getAsString())));
 			}
 		} catch (Exception e) {
 			Jugcraft.LOGGER.warn("Could not read {}", FILE, e);

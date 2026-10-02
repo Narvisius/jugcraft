@@ -81,6 +81,7 @@ TREE = {
     "advanced_solar_panel": ("processor", "advanced_solar_panel", "Here Comes the Sun",
                              "Build an advanced solar panel", "goal"),
     "tank_gauge": ("crude_oil", "tank_gauge", "Full of It", "Make a tank gauge", "task"),
+    "solar_receiver": ("advanced_solar_panel", "solar_receiver", "Concentrate", "Build a solar receiver for a heliostat field", "goal"),
     "turbocharger": ("advanced_engine", "turbocharger", "Spool Up", "Make a turbocharger for the advanced engine", "task"),
     "flywheel": ("steam_engine", "flywheel", "Keep It Spinning", "Build a flywheel", "task"),
     "advanced_engine": ("diesel_engine", "advanced_engine", "Four on the Floor",

@@ -364,6 +364,7 @@ def machine_assets(lang):
     lang[f"message.{MOD}.dynamo"] = "Dynamo: %s / %s JE"
     lang[f"message.{MOD}.electric_motor"] = "Electric motor: %s / %s JE"
     lang[f"message.{MOD}.flywheel"] = "Flywheel: %s / %s KE"
+    lang[f"message.{MOD}.solar_receiver"] = "Solar receiver: %s heliostats in the field, %s JE/t, %s mB of water"
     lang[f"message.{MOD}.network_terminal"] = "Network: %s cables at %s JE/t, %s devices holding %s / %s JE (%s%%)"
     lang[f"message.{MOD}.network_terminal.none"] = "No cable connected"
     lang[f"tooltip.{MOD}.stored_fluid"] = "%s: %s mB"

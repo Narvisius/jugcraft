@@ -8,6 +8,10 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### Unmerged: Solar tracker and heliostats, batch 21
+- **Solar tracker:** a panel that tilts after the sun, 20 JE/t in one block.
+- **Heliostats** and a **solar receiver**: 12 JE/t per heliostat under open sky in the field below the receiver (up to 48), boiling water.
+
 ### Unmerged: Joined tanks, glass tanks and gauges, batch 20
 - Tinplate and glass tanks touching each other join into one tank (up to 64), filling from the bottom.
 - **Glass tank** shows its fluid; **tank gauge** shows any tank's or machine's level in eighths.

@@ -14,7 +14,7 @@ TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning"),
            "conveyor_splitter": ("conveyor_belt", "conveyor_belt_moving")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
 # Blocks with a "turning" block state.
-STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "magnet_motor", "flywheel", "conveyor",
+STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "magnet_motor", "flywheel", "solar_tracker", "heliostat", "conveyor",
                   "conveyor_splitter"}
 
 
@@ -170,6 +170,37 @@ def flywheel():
     return m, rotor
 
 
+def solar_tracker():
+    """A solar panel on a motorised mount (the electric look): a graphite post with glowing trim and a cable port on
+    a trim plinth, carrying a 14-pixel panel of cells on a pivot running north to south. The panel (with its pivot
+    and frame) tilts with the sun ("sun" rotor)."""
+    m = [box((3, 0, 3), (13, 1.5, 13), "el_frame")]
+    m.append(box((6, 1.5, 6), (10, 7, 10), {"*": "el_casing", "north": "el_port!"}))
+    m.append(box((5.5, 4, 5.5), (10.5, 4.5, 10.5), "el_glow"))
+    m.append(box((7, 7, 2), (9, 7.5, 14), "el_frame"))
+    rotor = [box((1, 8.5, 1), (15, 9.5, 15), {"*": "el_frame", "up": "el_solar"}),
+             box((7, 7.5, 1.5), (9, 8.5, 14.5), "iron_shaft")]
+    return m, rotor
+
+
+def heliostat():
+    """A heliostat: a slim post on a small footing with a square mirror on a pivot that tilts after the sun ("sun"
+    rotor, half as far as a tracker, as a mirror aiming at a fixed receiver turns half the sun's angle)."""
+    m = [box((5, 0, 5), (11, 1, 11), "el_frame"), box((7, 1, 7), (9, 9, 9), "el_casing")]
+    rotor = [box((2, 9, 2), (14, 10, 14), {"*": "el_frame", "up": "el_mirror"}),
+             box((7, 8, 2.5), (9, 9, 13.5), "iron_shaft")]
+    return m, rotor
+
+
+def solar_receiver():
+    """The solar receiver: a block-sized absorber, its four sides walls of orange-hot tubes, under a graphite cap with
+    a vent and on a graphite base with power and water ports."""
+    m = [box((0.5, 0, 0.5), (15.5, 2, 15.5), {"*": "el_frame", "north": "el_port!"})]
+    m.append(box((1.5, 2, 1.5), (14.5, 13, 14.5), {"*": "el_receiver!", "up": "el_casing", "down": "el_casing"}))
+    m.append(box((0.5, 13, 0.5), (15.5, 16, 15.5), {"*": "el_frame", "up": "el_vent!"}))
+    return m
+
+
 def conveyor():
     """A low conveyor: a rubber belt (items ride on it at 5 pixels, heading north) between riveted iron side rails,
     over rollers at both ends, with brass drive hubs on the rails where a shaft or motor meets it."""
@@ -235,6 +266,7 @@ PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "ha
          "steam_engine": steam_engine(), "dynamo": dynamo_parts(), "belt_pulley": belt_pulley(),
          "electric_motor": electric_motor(), "magnet_dynamo": (magnet_dynamo(), []), "magnet_motor": magnet_motor(),
          "flywheel": flywheel(),
+         "solar_tracker": solar_tracker(), "heliostat": heliostat(), "solar_receiver": (solar_receiver(), []),
          "conveyor": (conveyor(), []),
          "conveyor_splitter": (conveyor_splitter(), [])}
 # Conveyor slopes: one block (conveyor_slope, logistics/ConveyorSlopeBlock) with an ascending and a descending model.
@@ -250,6 +282,9 @@ ROTORS = {
     "electric_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 12},
     "magnet_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 18},
     "flywheel": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 4},
+    # Sun rotors tilt with the time of day, "speed" degrees each way (client/KineticRotors).
+    "solar_tracker": {"axis": "z", "center": (8, 9), "property": "turning", "speed": 60, "mode": "sun"},
+    "heliostat": {"axis": "z", "center": (8, 9.5), "property": "turning", "speed": 30, "mode": "sun"},
     "hand_crank": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 6},
     "steam_engine": {"axis": "z", "center": (8, 8), "property": "lit", "speed": 9},
 }

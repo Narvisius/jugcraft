@@ -8,6 +8,7 @@ import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.SurveyPayload;
+import io.github.jimbozoomer.jugcraft.solar.JugcraftSolar;
 import io.github.jimbozoomer.jugcraft.tools.JugcraftTools;
 import io.github.jimbozoomer.jugcraft.weapons.JugcraftWeapons;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -39,6 +40,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftKinetics.ELECTRIC_MOTOR_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.FLYWHEEL_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftFluids.TANK_ENTITY, GlassTankRenderer::new);
+		BlockEntityRendererRegistry.register(JugcraftSolar.SOLAR_TRACKER_ENTITY, KineticRotorRenderer::new);
+		BlockEntityRendererRegistry.register(JugcraftSolar.HELIOSTAT_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.STEAM_ENGINE_ENTITY, KineticRotorRenderer::new);
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
 			StoredFluid stored = stack.get(JugcraftFluids.STORED_FLUID);

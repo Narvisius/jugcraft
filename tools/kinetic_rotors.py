@@ -97,4 +97,6 @@ def export(kinetic_blocks):
             "variants": {value: [r.get("x", 0), r.get("y", 0)] for value, r in table.items()},
             "quads": quads(rotor["elements"]),
         }
+        if rotor.get("mode"):
+            rotors[block]["mode"] = rotor["mode"]
     return rotors

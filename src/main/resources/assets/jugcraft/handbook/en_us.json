@@ -167,17 +167,24 @@
             "Strained Relations: Make a fluid filter.",
             "Here Comes the Sun: Build an advanced solar panel.",
             "Full of It: Make a tank gauge.",
-            "Spool Up: Make a turbocharger for the advanced engine."
+            "Concentrate: Build a solar receiver for a heliostat field."
           ]
         },
         {
           "title": "Milestones (13)",
-          "icon": "jugcraft:flywheel",
+          "icon": "jugcraft:turbocharger",
           "text": [
+            "Spool Up: Make a turbocharger for the advanced engine.",
             "Keep It Spinning: Build a flywheel.",
             "Four on the Floor: Build an advanced combustion engine.",
             "King Cotton: Grow cotton.",
-            "Make It Rain: Build a sprinkler.",
+            "Make It Rain: Build a sprinkler."
+          ]
+        },
+        {
+          "title": "Milestones (14)",
+          "icon": "jugcraft:crop_harvester",
+          "text": [
             "Reaping What You Sow: Build a crop harvester."
           ]
         }
@@ -789,6 +796,72 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:flywheel",
+            "count": 1
+          }
+        },
+        {
+          "title": "Solar Tracker",
+          "icon": "jugcraft:solar_tracker",
+          "text": [
+            "A solar panel on a motorised mount that follows the sun from east to west: 20 JE/t all day in full sun (two and a half solar panels), half in rain, none at night. Cables take power from any side."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:solar_panel",
+              "jugcraft:solar_panel",
+              "jugcraft:solar_panel",
+              "jugcraft:copper_cable",
+              "jugcraft:electric_motor",
+              "jugcraft:copper_cable",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:solar_tracker",
+            "count": 1
+          }
+        },
+        {
+          "title": "Heliostat",
+          "icon": "jugcraft:heliostat",
+          "text": [
+            "A mirror on a post that follows the sun to keep its light on a solar receiver above it. It does nothing on its own."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:glass_pane",
+              "minecraft:glass_pane",
+              "minecraft:glass_pane",
+              null,
+              "jugcraft:electric_motor",
+              null,
+              null,
+              "jugcraft:steel_plate",
+              null
+            ],
+            "result": "jugcraft:heliostat",
+            "count": 2
+          }
+        },
+        {
+          "title": "Solar Receiver",
+          "icon": "jugcraft:solar_receiver",
+          "text": [
+            "Put it on a tower over a field of heliostats: it counts those under open sky within 8 blocks across and 16 below, and makes 12 JE/t for each (up to 48, 576 JE/t) in daylight, boiling a mB of water for every 32 JE. Pipe water into it; cables take power from any side. Right-click it to read its field."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "minecraft:blast_furnace",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:solar_receiver",
             "count": 1
           }
         }

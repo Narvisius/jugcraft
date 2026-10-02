@@ -233,6 +233,15 @@ ABOUT = {
                       "the way you looked when placing it. Motor and dynamo together always lose power.",
     "magnet_dynamo": "A dynamo wound round rare-earth magnets: 512 KE/t into JE at 95%, against the copper "
                      "dynamo's 128 at 75%. It pushes the JE into cables on every side.",
+    "solar_tracker": "A solar panel on a motorised mount that follows the sun from east to west: 20 JE/t all day in "
+                     "full sun (two and a half solar panels), half in rain, none at night. Cables take power from "
+                     "any side.",
+    "heliostat": "A mirror on a post that follows the sun to keep its light on a solar receiver above it. It does "
+                 "nothing on its own.",
+    "solar_receiver": "Put it on a tower over a field of heliostats: it counts those under open sky within 8 blocks "
+                      "across and 16 below, and makes 12 JE/t for each (up to 48, 576 JE/t) in daylight, boiling a "
+                      "mB of water for every 32 JE. Pipe water into it; cables take power from any side. Right-click "
+                      "it to read its field.",
     "flywheel": "Stores rotation: a steel wheel that holds up to 2,000,000 KE. Shafts into any face but its front spin it "
                 "up, 2,048 KE/t at most; its front shaft drives what it faces from the store at up to 2,048 KE/t. "
                 "Friction takes a ten-thousandth of what it holds each tick, so it runs down when left alone. "
@@ -391,7 +400,8 @@ def build():
                                                                      "belt_pulley")]
             + [block_page("belt", TOOLS["belt"])]
             + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("dynamo", "electric_motor", "magnet_dynamo",
-                                                                     "magnet_motor", "flywheel")]},
+                                                                     "magnet_motor", "flywheel")]
+            + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("solar_tracker", "heliostat", "solar_receiver")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller", "auto_crafter")]},
