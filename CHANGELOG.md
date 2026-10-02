@@ -8,6 +8,10 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### Unmerged: Machine screens redesigned, batch 22
+- Every machine screen has a themed look: dieselpunk amber, electric green or lab teal, after the machine's model.
+- A control terminal says what the machine is for, what it is doing, its progress, power and power rate, and holds the side controls.
+
 ### Unmerged: Solar tracker and heliostats, batch 21
 - **Solar tracker:** a panel that tilts after the sun, 20 JE/t in one block.
 - **Heliostats** and a **solar receiver**: 12 JE/t per heliostat under open sky in the field below the receiver (up to 48), boiling water.

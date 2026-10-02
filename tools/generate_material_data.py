@@ -134,6 +134,8 @@ def assets():
     deposits.write_all(write, ASSETS, DATA / MOD, lang)
     import tank_display
     tank_display.write_all(write, ASSETS, DATA / MOD, lang, model_writer)
+    import gui_textures
+    gui_textures.write_all(write, ASSETS, lang, MACHINES)
     import advancements
     lang.update(advancements.generate(MOD)[1])
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
