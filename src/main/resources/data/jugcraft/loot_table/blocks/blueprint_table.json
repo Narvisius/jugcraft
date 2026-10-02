@@ -6,7 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "jugcraft:blueprint_table"
+          "name": "jugcraft:blueprint_table",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:blueprint_table",
+            "state": {
+              "part": "main"
+            }
+          }
         }
       ],
       "condition": {

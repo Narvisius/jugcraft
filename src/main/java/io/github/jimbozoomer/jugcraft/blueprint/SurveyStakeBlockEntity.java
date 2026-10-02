@@ -74,15 +74,12 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		sync();
 	}
 
-	/** Pulls the stake up and gives the blueprint back. */
-	public void removeAndReturn(Player player) {
+	/** Pulls the stake up; the blueprint is not given back (it was used up when placed). */
+	public void remove(Player player) {
 		if (level == null) {
 			return;
 		}
-		ItemStack stack = BlueprintItem.stack(blueprintId, blueprint() == null ? blueprintId : blueprint().name);
-		if (!player.getInventory().add(stack)) {
-			net.minecraft.world.Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), stack);
-		}
+		// The blueprint was used up when it was placed: taking the stake down gives nothing back.
 		blueprintId = "";
 		level.removeBlock(getBlockPos(), false);
 	}
@@ -231,7 +228,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		if (owner != null && server.getServer().getPlayerList().getPlayer(owner) instanceof Player player && blueprint != null) {
 			player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.complete", blueprint.name));
 		}
-		Block.popResource(server, pos, BlueprintItem.stack(blueprintId, blueprint == null ? blueprintId : blueprint.name));
+		// The blueprint was used up when it was placed: the stake just goes, nothing drops.
 		server.removeBlock(pos, false);
 	}
 

@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "jugcraft:block/blueprint_table"
+    "facing=north,part=main": {
+      "model": "jugcraft:block/blueprint_table_main"
     },
-    "facing=east": {
-      "model": "jugcraft:block/blueprint_table",
+    "facing=north,part=side": {
+      "model": "jugcraft:block/blueprint_table_side"
+    },
+    "facing=east,part=main": {
+      "model": "jugcraft:block/blueprint_table_main",
       "y": 90
     },
-    "facing=south": {
-      "model": "jugcraft:block/blueprint_table",
+    "facing=east,part=side": {
+      "model": "jugcraft:block/blueprint_table_side",
+      "y": 90
+    },
+    "facing=south,part=main": {
+      "model": "jugcraft:block/blueprint_table_main",
       "y": 180
     },
-    "facing=west": {
-      "model": "jugcraft:block/blueprint_table",
+    "facing=south,part=side": {
+      "model": "jugcraft:block/blueprint_table_side",
+      "y": 180
+    },
+    "facing=west,part=main": {
+      "model": "jugcraft:block/blueprint_table_main",
+      "y": 270
+    },
+    "facing=west,part=side": {
+      "model": "jugcraft:block/blueprint_table_side",
       "y": 270
     }
   }

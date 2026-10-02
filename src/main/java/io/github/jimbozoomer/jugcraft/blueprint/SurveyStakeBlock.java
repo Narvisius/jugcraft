@@ -70,11 +70,4 @@ public class SurveyStakeBlock extends BaseEntityBlock {
 		return InteractionResult.SUCCESS;
 	}
 
-	@Override
-	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof SurveyStakeBlockEntity stake && !stake.blueprintId().isEmpty()) {
-			Block.popResource(level, pos, BlueprintItem.stack(stake.blueprintId(), stake.blueprint() == null ? "" : stake.blueprint().name));
-		}
-		return super.playerWillDestroy(level, pos, state, player);
-	}
 }
