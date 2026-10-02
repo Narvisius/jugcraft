@@ -18,8 +18,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
-      - name: Install Pillow for data checks
-        run: python3 -m pip install --quiet pillow
+      - name: Install data-generation dependencies
+        run: python3 -m pip install --quiet pillow numpy
       - name: Check generated JSON is up to date
         run: |
           python3 tools/generate_material_data.py
