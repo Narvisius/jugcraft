@@ -13,14 +13,19 @@ Owner: Narvisius
   - **IMPORT:** paste the text of a blueprint (`.jugbp.json`, for example one an AI designed for you) and press IMPORT.
     - The server checks it and explains any problem in plain words: unknown block, too big, forbidden block, bad JSON.
     - If it passes, it is saved with the world and appears in every player's LIBRARY.
+- **Colours:** a blueprint's item and hologram show what it is.
+  - **Blue:** a whole build of the mod's own, such as the Small Church or a whole plant.
+  - **Green:** one part of a larger build, such as a single cooling tower. The file says `"kind": "part"`.
+  - **Red:** a player's import, whatever its file says.
+  - Blocks in the way are outlined **orange** and hand-only blocks are **violet** on every colour (`Blueprint.Kind`).
 - **Placing:** hold a blueprint to preview the structure where you look, up to 80 blocks (five chunks) away.
-  - Faint blue means clear; red means something is in the way. The stake's spot is marked amber.
+  - A faint ghost in the blueprint's colour means clear; orange means something is in the way. The stake's spot is marked amber.
   - Right-click to set the **Survey Stake** there. The build extends away from you, facing you.
 - **The hologram:** every player sees the build as a hologram.
-  - **blue:** a block is still missing;
-  - **amber:** place this by hand (the Tower Core and the depot terminal);
-  - **red shell:** a wrong block is in the way.
-- **Building:** build it by hand, or let a drone depot build it, one layer at a time from the bottom.
+  - **the blueprint's colour** (blue, green or red): a block is still missing;
+  - **violet:** place this by hand (the Tower Core and the depot terminal);
+  - **orange shell:** a wrong block is in the way. Drones replace it, top down.
+- **Building:** build it by hand, or let a drone depot build it from the bottom up, a few layers at once, each column bottom first.
 - **The stake screen** (right-click the stake) shows:
   - progress and what is still needed, with icons;
   - blocks in the way;
@@ -71,5 +76,5 @@ Owner: Narvisius
 ## World height
 
 If a staked-out blueprint (or, for one that grows like the Drone Tower, its final stage) would reach above the
-world height limit, the placement preview marks the clipped cells red and shows a red warning on screen; the
+world height limit, the placement preview marks the clipped cells orange and shows a red warning on screen; the
 stake-out message repeats it. Nothing above the limit is built.

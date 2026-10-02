@@ -192,14 +192,21 @@ def stake_texture():
     return img
 
 
-def blueprint_texture():
-    """The Blueprint item: a rolled blue sheet with a white grid."""
+# Blueprint colours by kind (Blueprint.Kind): the whole build of a mod structure is blue, one part of a larger
+# build (a single cooling tower) green, a player's import red. (sheet, grid lines)
+KIND_COLOURS = {"complete": ((40, 90, 180), (210, 228, 255)), "part": ((34, 128, 64), (206, 246, 214)),
+                "imported": ((168, 44, 36), (255, 214, 206))}
+
+
+def blueprint_texture(kind="complete"):
+    """The Blueprint item: a rolled sheet with a white grid, coloured by its kind."""
     from PIL import Image
+    sheet, grid = KIND_COLOURS[kind]
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     for y in range(2, 14):
         for x in range(2, 14):
             line = x % 4 == 1 or y % 4 == 1
-            img.putpixel((x, y), (210, 228, 255, 255) if line else (40, 90, 180, 255))
+            img.putpixel((x, y), grid + (255,) if line else sheet + (255,))
     for y in range(2, 14):
         img.putpixel((1, y), (200, 200, 200, 255))
         img.putpixel((14, y), (200, 200, 200, 255))
@@ -293,7 +300,8 @@ def draw_textures():
 
 
 def draw_item_textures():
-    return {"blueprint": blueprint_texture()}
+    return {"blueprint": blueprint_texture(), "blueprint_part": blueprint_texture("part"),
+            "blueprint_imported": blueprint_texture("imported")}
 
 
 def write_assets(write, rid, assets, lang):
@@ -335,8 +343,14 @@ def write_assets(write, rid, assets, lang):
           {"parent": "minecraft:block/cube_all", "textures": {"all": rid("block/creative_energy_cell")}})
     write(assets / "blockstates" / "creative_energy_cell.json", {"variants": {"": {"model": rid("block/creative_energy_cell")}}})
     write(assets / "items" / "creative_energy_cell.json", {"model": {"type": "minecraft:model", "model": rid("block/creative_energy_cell")}})
-    write(assets / "models" / "item" / "blueprint.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid("item/blueprint")}})
-    write(assets / "items" / "blueprint.json", {"model": {"type": "minecraft:model", "model": rid("item/blueprint")}})
+    for name in ("blueprint", "blueprint_part", "blueprint_imported"):
+        write(assets / "models" / "item" / f"{name}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{name}")}})
+    # The item picks its colour from the kind BlueprintItem.stack writes into custom_model_data (strings[0]).
+    write(assets / "items" / "blueprint.json", {"model": {
+        "type": "minecraft:select", "property": "minecraft:custom_model_data", "index": 0,
+        "cases": [{"when": "part", "model": {"type": "minecraft:model", "model": rid("item/blueprint_part")}},
+                  {"when": "imported", "model": {"type": "minecraft:model", "model": rid("item/blueprint_imported")}}],
+        "fallback": {"type": "minecraft:model", "model": rid("item/blueprint")}}})
 
 
 def write_loot(write, rid, out, self_drop):
