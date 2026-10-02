@@ -310,9 +310,10 @@ public class TowerGameTests {
 		BlockPos pos = core.getBlockPos();
 		long chunk = net.minecraft.world.level.ChunkPos.containing(pos).pack();
 		helper.runAfterDelay(3, () -> {
-			helper.assertTrue(helper.getLevel().getForceLoadedChunks().contains(chunk), "the core's chunk is kept loaded");
+			var tickets = helper.getLevel().getDataStorage().computeIfAbsent(net.minecraft.world.level.TicketStorage.TYPE);
+			helper.assertTrue(tickets.getTickets(chunk).stream().anyMatch(ticket -> ticket.getType() == TowerCoreBlockEntity.CHUNK_TICKET), "the core's chunk has a tower ticket");
 			helper.getLevel().setBlockAndUpdate(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
-			helper.assertTrue(!helper.getLevel().getForceLoadedChunks().contains(chunk), "broken, the tower lets its chunks go");
+			helper.assertTrue(tickets.getTickets(chunk).stream().noneMatch(ticket -> ticket.getType() == TowerCoreBlockEntity.CHUNK_TICKET), "broken, the tower removes only its own ticket");
 			helper.succeed();
 		});
 	}
