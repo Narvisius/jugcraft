@@ -25,17 +25,18 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Draws a placed blueprint as a walk-through hologram, worked out on each client from its own copy of the
- * world: a blue ghost where a block is still missing, an amber ghost where it must be placed by hand (blocks
- * with their own block entity, like the Tower Core), and a red outline where a wrong block is in the way.
+ * world: a ghost in the blueprint's colour where a block is still missing (blue complete, green part, red imported),
+ * a violet ghost where it must be placed by hand (blocks with their own block entity, like the Tower Core), and an
+ * orange outline where a wrong block is in the way.
  * Blocks already in place show nothing.
  */
 public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlockEntity, SurveyStakeRenderer.State> {
 	private static final Identifier TEXTURE = Jugcraft.id("textures/misc/blueprint_ghost.png");
 	private static final RenderType RENDER_TYPE = RenderTypes.entityTranslucentEmissive(TEXTURE);
 	private static final float[] UV = {0, 0, 1, 1};
-	private static final int MISSING = 0x6A4F9DFF;
-	private static final int HAND_ONLY = 0x8CFFB040;
-	private static final int WRONG = 0xB0FF4030;
+	/** Hand-only cells (the Tower Core, a terminal): violet. Wrong blocks in the way: orange. Missing: the blueprint's colour. */
+	private static final int HAND_ONLY = 0x8CB478FF;
+	private static final int WRONG = 0xB0FF8C1E;
 	private static final int MAX_GHOSTS = 8192;
 	private static final Map<String, List<Blueprint.Cell>> TURNED = new HashMap<>();
 
@@ -77,6 +78,8 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 			return;
 		}
 		BlockPos origin = stake.getBlockPos();
+		Blueprint blueprint = stake.blueprint();
+		int missing = (blueprint != null ? blueprint.kind : Blueprint.Kind.COMPLETE).argb(0x6A);
 		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
 		for (Blueprint.Cell cell : cells(stake)) {
 			if (state.ghosts.size() >= MAX_GHOSTS) {
@@ -87,7 +90,7 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 			if (SurveyStakeBlockEntity.matches(now, cell.state())) {
 				continue;
 			}
-			int color = !now.canBeReplaced() ? WRONG : SurveyStakeBlockEntity.handOnly(cell.state()) ? HAND_ONLY : MISSING;
+			int color = !now.canBeReplaced() ? WRONG : SurveyStakeBlockEntity.handOnly(cell.state()) ? HAND_ONLY : missing;
 			state.ghosts.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(color)});
 		}
 	}

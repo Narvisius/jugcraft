@@ -99,6 +99,19 @@ def _hi_res(name):
     return name in tower_art.TEXTURES or name.startswith(("landing_pad_formed_", "supply_pickup_formed_", "hangar_pad_"))
 
 
+def item_model_refs(node):
+    """Every model an item definition can show: a plain model, or the cases and fallback of a select/condition."""
+    if node.get("type", "minecraft:model") == "minecraft:model":
+        return [node["model"]]
+    refs = []
+    for case in node.get("cases", []):
+        refs += item_model_refs(case["model"])
+    for key in ("fallback", "on_true", "on_false"):
+        if key in node:
+            refs += item_model_refs(node[key])
+    return refs
+
+
 def check_assets(registered):
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for block in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS) + list(tank_display.BLOCKS):
@@ -117,7 +130,8 @@ def check_assets(registered):
             continue  # A crop block has no item of its own: its seeds plant it.
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
-            model(definition["model"]["model"])
+            for ref in item_model_refs(definition["model"]):
+                model(ref)
         if item not in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS) + list(tank_display.BLOCKS) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 

@@ -56,6 +56,32 @@ public class BlueprintGameTests {
 		helper.succeed();
 	}
 
+	/** Blueprint colours: built-in whole builds blue, parts of a larger build green, imports red (item and hologram). */
+	@GameTest
+	public void blueprintKinds(GameTestHelper helper) {
+		String hut = "{\"format\": 1, \"name\": \"Kind Test\", \"palette\": {\"S\": \"minecraft:stone_bricks\"},"
+				+ " \"layers\": [[\"SSS\"]], \"anchor\": [1, 0, 2]}";
+		try {
+			helper.assertTrue(Blueprint.get("small_church", false).kind == Blueprint.Kind.COMPLETE, "a built-in build is complete (blue)");
+			helper.assertTrue(Blueprint.parse("t/part", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"part\""), "built in").kind
+					== Blueprint.Kind.PART, "a built-in part is green");
+			helper.assertTrue(Blueprint.parse("t/imp", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"complete\""), "imported").kind
+					== Blueprint.Kind.IMPORTED, "an import is red whatever its file says");
+		} catch (Blueprint.Invalid e) {
+			throw new AssertionError("a valid blueprint was refused: " + e.getMessage());
+		}
+		try {
+			Blueprint.parse("t/bad", hut.replace("\"format\": 1", "\"format\": 1, \"kind\": \"giant\""), "built in");
+			throw new AssertionError("a built-in blueprint with an unknown kind was accepted");
+		} catch (Blueprint.Invalid e) {
+			helper.assertTrue(e.getMessage().contains("kind"), "the error names the kind");
+		}
+		net.minecraft.world.item.ItemStack stack = io.github.jimbozoomer.jugcraft.blueprint.BlueprintItem.stack("small_church");
+		net.minecraft.world.item.component.CustomModelData data = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_MODEL_DATA);
+		helper.assertTrue(data != null && "complete".equals(data.getString(0)), "the blueprint item carries its colour");
+		helper.succeed();
+	}
+
 	@GameTest
 	public void importChecksAndSaves(GameTestHelper helper) {
 		String good = "{\"format\": 1, \"name\": \"Game Test Hut\", \"palette\": {\"S\": \"minecraft:stone_bricks\"},"

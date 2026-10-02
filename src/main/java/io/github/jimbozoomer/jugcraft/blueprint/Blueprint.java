@@ -48,6 +48,28 @@ public final class Blueprint {
 	private static final Map<String, Blueprint> CLIENT = new LinkedHashMap<>();
 
 	/** One block of the blueprint, relative to the stake (already turned). */
+	/**
+	 * Blueprint colours: a whole build of the mod's own (blue), one part of a larger build such as a single cooling
+	 * tower (green, {@code "kind": "part"} in the file), or a player's import (red, whatever the file says).
+	 */
+	public enum Kind {
+		COMPLETE("complete", 0x5AB4FF), PART("part", 0x5ADC78), IMPORTED("imported", 0xFF5A46);
+
+		public final String id;
+		/** The hologram colour, 0xRRGGBB. */
+		public final int rgb;
+
+		Kind(String id, int rgb) {
+			this.id = id;
+			this.rgb = rgb;
+		}
+
+		/** The colour with an alpha, 0xAARRGGBB. */
+		public int argb(int alpha) {
+			return (alpha << 24) | rgb;
+		}
+	}
+
 	public record Cell(BlockPos offset, BlockState state) {
 	}
 
@@ -62,16 +84,19 @@ public final class Blueprint {
 	public final String name;
 	/** "built in" or "imported". */
 	public final String source;
+	/** What the blueprint is, which sets its hologram and item colour. */
+	public final Kind kind;
 	public final String json;
 	public final int sizeX;
 	public final int sizeY;
 	public final int sizeZ;
 	private final List<Cell> raw;
 
-	private Blueprint(String id, String name, String source, String json, int sizeX, int sizeY, int sizeZ, List<Cell> raw) {
+	private Blueprint(String id, String name, String source, Kind kind, String json, int sizeX, int sizeY, int sizeZ, List<Cell> raw) {
 		this.id = id;
 		this.name = name;
 		this.source = source;
+		this.kind = kind;
 		this.json = json;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
@@ -211,7 +236,17 @@ public final class Blueprint {
 			}
 			cells.add(new Cell(offset, states.get(i)));
 		}
-		return new Blueprint(id, name, source, json, sx, sy, sz, List.copyOf(cells));
+		Kind kind = Kind.COMPLETE;
+		if ("imported".equals(source)) {
+			kind = Kind.IMPORTED;
+		} else if (root.has("kind")) {
+			String text = root.get("kind").getAsString();
+			if (!text.equals("complete") && !text.equals("part")) {
+				throw new Invalid("\"kind\" must be \"complete\" or \"part\"");
+			}
+			kind = text.equals("part") ? Kind.PART : Kind.COMPLETE;
+		}
+		return new Blueprint(id, name, source, kind, json, sx, sy, sz, List.copyOf(cells));
 	}
 
 	private static String shortMessage(Exception e) {

@@ -1,6 +1,27 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/blueprint"
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {
+        "when": "part",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/blueprint_part"
+        }
+      },
+      {
+        "when": "imported",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/blueprint_imported"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/blueprint"
+    }
   }
 }
