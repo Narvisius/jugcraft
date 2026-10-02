@@ -15,6 +15,8 @@ import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
+import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
@@ -607,6 +609,48 @@ public class PetroGameTests {
 			// The magnet dynamo takes at most 512 KE/t: about 46 mB of gasoline in 40 ticks, plus what the engine holds.
 			long most = 40L * DynamoBlockEntity.MAGNET.rate() / FluidFuels.ADVANCED_GASOLINE + 4;
 			helper.assertTrue(burnt > 0 && burnt <= most, "Gasoline burnt in 40 ticks: " + burnt + " mB (at most " + most + ")");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Turbocharger and flywheel (batch 19): a turbocharged advanced engine with coolant spins a flywheel faster than an
+	 * engine without one could, and uses its coolant; a charged flywheel drives a dynamo from its front, and one with
+	 * nothing to drive runs down by friction.
+	 */
+	@GameTest(maxTicks = 100)
+	public void turbochargerAndFlywheel(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 1);
+		BlockPos wheelPos = master.south();
+		helper.setBlock(wheelPos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.SOUTH));
+		FlywheelBlockEntity wheel = helper.getBlockEntity(wheelPos, FlywheelBlockEntity.class);
+		MachineBlockEntity engine = placeUnpowered(helper, MachineKind.ADVANCED_ENGINE, master);
+		helper.assertTrue(engine.canPlaceItem(0, new ItemStack(PetroItems.TURBOCHARGER))
+				&& !engine.canPlaceItem(0, new ItemStack(Items.IRON_INGOT)), "The engine's slot takes the wrong items");
+		engine.setItem(0, new ItemStack(PetroItems.TURBOCHARGER));
+		engine.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 1000);
+		engine.tanks().input(1).fill(Fluids.WATER, 1000);
+
+		BlockPos driverPos = new BlockPos(1, 1, 4);
+		BlockPos dynamoPos = driverPos.south();
+		helper.setBlock(driverPos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.SOUTH));
+		helper.setBlock(dynamoPos, JugcraftKinetics.MAGNET_DYNAMO);
+		FlywheelBlockEntity driver = helper.getBlockEntity(driverPos, FlywheelBlockEntity.class);
+		DynamoBlockEntity dynamo = helper.getBlockEntity(dynamoPos, DynamoBlockEntity.class);
+		driver.setStored(100_000);
+
+		BlockPos idlePos = new BlockPos(7, 1, 6);
+		helper.setBlock(idlePos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.UP));
+		FlywheelBlockEntity idle = helper.getBlockEntity(idlePos, FlywheelBlockEntity.class);
+		idle.setStored(100_000);
+
+		helper.runAfterDelay(20, () -> {
+			helper.assertTrue(wheel.stored() > 20L * MachineKind.ADVANCED_ENGINE_OUTPUT,
+					"The turbocharged engine gave the flywheel only " + wheel.stored() + " KE in 20 ticks");
+			helper.assertTrue(engine.tanks().input(1).millibuckets() < 1000, "The turbocharger used no coolant");
+			helper.assertTrue(dynamo.energy().getAmount() > 0 && driver.stored() < 100_000, "The flywheel drove nothing");
+			helper.assertTrue(idle.stored() < 100_000 && idle.stored() > 90_000,
+					"Friction left an idle flywheel with " + idle.stored() + " KE");
 			helper.succeed();
 		});
 	}

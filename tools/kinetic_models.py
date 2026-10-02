@@ -14,7 +14,7 @@ TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning"),
            "conveyor_splitter": ("conveyor_belt", "conveyor_belt_moving")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
 # Blocks with a "turning" block state.
-STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "magnet_motor", "conveyor",
+STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "magnet_motor", "flywheel", "conveyor",
                   "conveyor_splitter"}
 
 
@@ -153,6 +153,23 @@ def magnet_motor():
     return m, rotor
 
 
+def flywheel():
+    """A heavy steel flywheel between two bearing pedestals on a riveted base: a thick rim with spokes and a hub on a
+    shaft along z, coming out of the front (north) to drive what it faces and out of the back where the drive comes
+    in. The wheel and shaft spin."""
+    m = [box((0.5, 0, 1), (15.5, 1.5, 15), "dp_gunmetal")]
+    for z0 in (1.5, 12.5):
+        m.append(box((5.5, 1.5, z0), (10.5, 5, z0 + 2), "dp_gunmetal"))
+        m.append(box((6.5, 5, z0), (9.5, 10, z0 + 2), BRASS_PLATE))
+    rotor = [box((6.5, 6.5, 0), (9.5, 9.5, 16), "iron_shaft")]
+    rotor += cyl("z", 8, 8, 7.25, 5.5, 10.5, IRON_PLATE, IRON)
+    rotor += cyl("z", 8, 8, 2, 4.5, 11.5, BRASS, BRASS_PLATE)
+    for z0, z1 in ((5.25, 5.5), (10.5, 10.75)):
+        rotor.append(box((7.25, 1.5, z0), (8.75, 14.5, z1), BRASS))
+        rotor.append(box((1.5, 7.25, z0), (14.5, 8.75, z1), BRASS))
+    return m, rotor
+
+
 def conveyor():
     """A low conveyor: a rubber belt (items ride on it at 5 pixels, heading north) between riveted iron side rails,
     over rollers at both ends, with brass drive hubs on the rails where a shaft or motor meets it."""
@@ -217,6 +234,7 @@ def dynamo_parts():
 PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "hand_crank": hand_crank(),
          "steam_engine": steam_engine(), "dynamo": dynamo_parts(), "belt_pulley": belt_pulley(),
          "electric_motor": electric_motor(), "magnet_dynamo": (magnet_dynamo(), []), "magnet_motor": magnet_motor(),
+         "flywheel": flywheel(),
          "conveyor": (conveyor(), []),
          "conveyor_splitter": (conveyor_splitter(), [])}
 # Conveyor slopes: one block (conveyor_slope, logistics/ConveyorSlopeBlock) with an ascending and a descending model.
@@ -231,6 +249,7 @@ ROTORS = {
     "belt_pulley": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 9},
     "electric_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 12},
     "magnet_motor": {"axis": "z", "center": (8, 8.5), "property": "turning", "speed": 18},
+    "flywheel": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 4},
     "hand_crank": {"axis": "z", "center": (8, 8), "property": "turning", "speed": 6},
     "steam_engine": {"axis": "z", "center": (8, 8), "property": "lit", "speed": 9},
 }

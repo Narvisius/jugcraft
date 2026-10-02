@@ -466,7 +466,30 @@ def grenade_launcher():
     return img
 
 
+def turbocharger():
+    """Turbocharger: a snail-shaped cast housing (dark iron) round a bright compressor wheel, with a flanged outlet."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(16):
+        for x in range(16):
+            d = ((x - 7) ** 2 + (y - 8) ** 2) ** 0.5
+            if d <= 6.5:
+                c = (60, 62, 68) if d > 5.5 else (92, 96, 104) if d > 3.5 else (40, 42, 46)
+                if d <= 3 and (x + y) % 2 == 0:
+                    c = (196, 200, 208)
+                elif d <= 3:
+                    c = (150, 156, 166)
+                if d > 3.5 and x < 7 and y < 8:
+                    c = tuple(v + 24 for v in c)
+                img.putpixel((x, y), c + (255,))
+    for y in range(2, 7):  # The outlet and its flange.
+        for x in range(11, 15):
+            img.putpixel((x, y), ((120, 124, 132) if y == 2 or x == 14 else (84, 88, 96)) + (255,))
+    img.putpixel((7, 8), (230, 232, 236, 255))
+    return img
+
+
 def draw_all(save, save_animation):
+    save(turbocharger(), "item", "turbocharger")
     save(guncotton(), "item", "guncotton")
     save(grenade(), "item", "grenade")
     save(grenade_launcher(), "item", "grenade_launcher")

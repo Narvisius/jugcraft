@@ -37,6 +37,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		RocketPackLayer.register();
 		BlockEntityRendererRegistry.register(JugcraftKinetics.HAND_CRANK_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.ELECTRIC_MOTOR_ENTITY, KineticRotorRenderer::new);
+		BlockEntityRendererRegistry.register(JugcraftKinetics.FLYWHEEL_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.STEAM_ENGINE_ENTITY, KineticRotorRenderer::new);
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
 			StoredFluid stored = stack.get(JugcraftFluids.STORED_FLUID);

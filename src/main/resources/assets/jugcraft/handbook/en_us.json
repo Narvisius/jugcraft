@@ -166,14 +166,16 @@
             "Shut-Off Valve: Make a fluid valve.",
             "Strained Relations: Make a fluid filter.",
             "Here Comes the Sun: Build an advanced solar panel.",
-            "Four on the Floor: Build an advanced combustion engine.",
-            "King Cotton: Grow cotton."
+            "Spool Up: Make a turbocharger for the advanced engine.",
+            "Keep It Spinning: Build a flywheel."
           ]
         },
         {
           "title": "Milestones (13)",
-          "icon": "jugcraft:sprinkler",
+          "icon": "jugcraft:advanced_engine",
           "text": [
+            "Four on the Floor: Build an advanced combustion engine.",
+            "King Cotton: Grow cotton.",
             "Make It Rain: Build a sprinkler.",
             "Reaping What You Sow: Build a crop harvester."
           ]
@@ -764,6 +766,28 @@
               "jugcraft:aluminum_plate"
             ],
             "result": "jugcraft:magnet_motor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Flywheel",
+          "icon": "jugcraft:flywheel",
+          "text": [
+            "Stores rotation: a steel wheel that holds up to 2,000,000 KE. Shafts into any face but its front spin it up, 2,048 KE/t at most; its front shaft drives what it faces from the store at up to 2,048 KE/t. Friction takes a ten-thousandth of what it holds each tick, so it runs down when left alone. Right-click it to read how much it holds."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:iron_shaft",
+              "jugcraft:steel_ingot",
+              "jugcraft:iron_shaft",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:flywheel",
             "count": 1
           }
         }
@@ -2426,7 +2450,7 @@
           "title": "Advanced Combustion Engine",
           "icon": "jugcraft:advanced_engine",
           "text": [
-            "Two blocks long, four cylinders. Burns gasoline (448 KE a mB) or diesel (320) piped into its 8-bucket tank and turns a shaft out of the back of its right-hand block at up to 1,024 KE/t, burning only for what the line takes. Through a magnet dynamo it is the best use of either fuel.",
+            "Two blocks long, four cylinders. Burns gasoline (448 KE a mB) or diesel (320) piped into its 8-bucket tank and turns a shaft out of the back of its right-hand block at up to 1,024 KE/t, burning only for what the line takes. Through a magnet dynamo it is the best use of either fuel. Put a turbocharger in its slot and pipe water into its second tank: up to 1,536 KE/t, 10% more from each mB of fuel, using 2 mB of water a tick.",
             "Needs no power."
           ],
           "craft": {

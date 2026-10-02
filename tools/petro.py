@@ -120,6 +120,8 @@ ITEMS = {
     "guncotton": "Guncotton",
     "grenade": "Grenade",
     "grenade_launcher": "Grenade Launcher",
+    # Power (batch 19): fitted in the advanced engine's slot; needs coolant water.
+    "turbocharger": "Turbocharger",
 }
 
 
@@ -198,7 +200,7 @@ FLUID_MACHINES = {
     # Burns hydrogen (128 JE/mB) at 128 JE/t; one block, electric look (batch 5).
     "fuel_cell": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
     # Burns gasoline (448 KE/mB) or diesel (320) to turn a shaft at up to 1,024 KE/t (batch 10).
-    "advanced_engine": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
+    "advanced_engine": {"inputs": [8_000, 4_000], "outputs": [], "item_inputs": 1, "item_outputs": 0, "recipe_type": None},
     # Sulfur + water -> sulfuric acid; bauxite + lye -> alumina; phosphate + acid -> fertilizer (batch 5). 96 JE/t.
     "chemical_reactor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 1,
                          "recipe_type": "chemical_reaction"},

@@ -8,7 +8,11 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
-### Unmerged: Explosive weapons, batch 18
+### Unmerged: Turbocharger and flywheel, batch 19
+- **Turbocharger** in the advanced engine's new slot, with coolant water in its new second tank: up to 1,536 KE/t and 10% more KE from each mB of fuel.
+- **Flywheel:** stores up to 2,000,000 KE of rotation and drives its front shaft from it; friction runs it down slowly.
+
+### #74 Explosive weapons, batch 18
 - **Guncotton** (2 cotton + 250 mB nitric acid, chemical reactor).
 - **Grenades**, thrown by hand, and the **grenade launcher**, which fires them further. The blast hurts living things only: up to 16 damage, walls shield, and no block, armor stand, frame or dropped item is ever touched.
 - New switch `explosives.enabled`. An advancement, a handbook page and a game test.

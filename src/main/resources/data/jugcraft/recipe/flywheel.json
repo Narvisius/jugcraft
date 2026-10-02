@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "SBS",
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "S": "jugcraft:iron_shaft",
+    "B": "#c:ingots/steel"
+  },
+  "result": {
+    "id": "jugcraft:flywheel",
+    "count": 1
+  }
+}

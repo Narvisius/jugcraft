@@ -80,6 +80,8 @@ TREE = {
     # Advanced power (batch 10).
     "advanced_solar_panel": ("processor", "advanced_solar_panel", "Here Comes the Sun",
                              "Build an advanced solar panel", "goal"),
+    "turbocharger": ("advanced_engine", "turbocharger", "Spool Up", "Make a turbocharger for the advanced engine", "task"),
+    "flywheel": ("steam_engine", "flywheel", "Keep It Spinning", "Build a flywheel", "task"),
     "advanced_engine": ("diesel_engine", "advanced_engine", "Four on the Floor",
                         "Build an advanced combustion engine", "goal"),
     # Farming (batch 9).

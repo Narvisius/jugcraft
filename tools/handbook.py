@@ -185,7 +185,9 @@ ABOUT = {
                             "the pedestal's foot.",
     "advanced_engine": "Two blocks long, four cylinders. Burns gasoline (448 KE a mB) or diesel (320) piped into its "
                        "8-bucket tank and turns a shaft out of the back of its right-hand block at up to 1,024 KE/t, "
-                       "burning only for what the line takes. Through a magnet dynamo it is the best use of either fuel.",
+                       "burning only for what the line takes. Through a magnet dynamo it is the best use of either fuel. "
+                       "Put a turbocharger in its slot and pipe water into its second tank: up to 1,536 KE/t, 10% more "
+                       "from each mB of fuel, using 2 mB of water a tick.",
     "fuel_cell": "One block. Combines hydrogen with the air: 128 JE/t, burning a millibucket of hydrogen a tick (128,000 "
                  "JE a bucket). Pipe hydrogen from the electrolytic cell into it. Its screen lights while it runs.",
     "diesel_engine": "Two wide, two tall and three long. Burns diesel (256 KE a mB) or heavy fuel oil (128) piped into "
@@ -231,6 +233,10 @@ ABOUT = {
                       "the way you looked when placing it. Motor and dynamo together always lose power.",
     "magnet_dynamo": "A dynamo wound round rare-earth magnets: 512 KE/t into JE at 95%, against the copper "
                      "dynamo's 128 at 75%. It pushes the JE into cables on every side.",
+    "flywheel": "Stores rotation: a steel wheel that holds up to 2,000,000 KE. Shafts into any face but its front spin it "
+                "up, 2,048 KE/t at most; its front shaft drives what it faces from the store at up to 2,048 KE/t. "
+                "Friction takes a ten-thousandth of what it holds each tick, so it runs down when left alone. "
+                "Right-click it to read how much it holds.",
     "magnet_motor": "An electric motor with rare-earth magnets: takes 1,024 JE/t and turns it into up to 384 KE/t at "
                     "95%. Paired with a magnet dynamo it still loses a tenth every round.",
     "dynamo": "Turns rotation reaching any face into JE at 75% and pushes it into cables on every side: the bridge "
@@ -385,7 +391,7 @@ def build():
                                                                      "belt_pulley")]
             + [block_page("belt", TOOLS["belt"])]
             + [block_page(b, KINETIC_BLOCKS[b]["display"]) for b in ("dynamo", "electric_motor", "magnet_dynamo",
-                                                                     "magnet_motor")]},
+                                                                     "magnet_motor", "flywheel")]},
         {"title": "Processing", "icon": f"{MOD}:crusher", "pages":
             [machine_page(m) for m in ("electric_furnace", "crusher", "alloy_smelter", "metal_press", "wire_drawer",
                                        "circuit_assembler", "arc_furnace_controller", "auto_crafter")]},

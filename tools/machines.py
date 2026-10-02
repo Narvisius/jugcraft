@@ -147,6 +147,8 @@ KINETIC_BLOCKS = {
     # Rare-earth magnet versions (batch 6): faster and far less lossy.
     "magnet_dynamo": {"display": "Magnet Dynamo", "states": "horizontal"},
     "magnet_motor": {"display": "Magnet Motor", "states": "facing"},
+    # Stores rotation (batch 19): KE in through any face but its front, out of its front.
+    "flywheel": {"display": "Flywheel", "states": "facing"},
     # Item conveyors (logistics/ConveyorBlock): driven by rotation, facing the way items travel.
     "conveyor": {"display": "Conveyor", "states": "horizontal"},
     "conveyor_splitter": {"display": "Conveyor Splitter", "states": "horizontal"},
@@ -470,6 +472,8 @@ CRAFTING = {
                                              "C": "jugcraft:copper_cable"}, 1),
     "magnet_dynamo": (["PMP", "MDM", "PWP"], {"P": "#c:plates/aluminum", "M": "jugcraft:neodymium_magnet",
                                               "D": "jugcraft:dynamo", "W": "jugcraft:aluminum_cable"}, 1),
+    "flywheel": (["PGP", "SBS", "PGP"], {"P": "#c:plates/steel", "G": "#c:gears/steel", "S": "jugcraft:iron_shaft",
+                                         "B": "#c:ingots/steel"}, 1),
     "magnet_motor": (["PMP", "MEM", "PWP"], {"P": "#c:plates/aluminum", "M": "jugcraft:neodymium_magnet",
                                              "E": "jugcraft:electric_motor", "W": "jugcraft:aluminum_cable"}, 1),
     # Conveyors: leather belts over iron plates and a shaft; the splitter adds bronze gears and a brass plate.
@@ -566,6 +570,9 @@ CRAFTING = {
                                                        "M": "jugcraft:machine_casing"}, 1),
     # A steel plate faced with rubber, cut into four gaskets (batch 14).
     "gasket": (["RPR"], {"R": "jugcraft:rubber", "P": "#c:plates/steel"}, 4),
+    # A turbine and compressor on one titanium shaft in a steel housing, sealed with gaskets (batch 19).
+    "turbocharger": (["PKP", "GTG", "PHP"], {"P": "#c:plates/steel", "K": "jugcraft:gasket", "G": "#c:gears/steel",
+                                             "T": "#c:ingots/titanium", "H": "jugcraft:steel_fluid_pipe"}, 1),
     "cracking_catalyst": (["BSB", "SNS", "BSB"], {"B": "jugcraft:bauxite", "S": "minecraft:sand",
                                                   "N": "#c:ingots/nickel"}, 4),
     "charging_station": (["SLS", "WAW", "SBS"], {"S": "#c:plates/steel", "L": "minecraft:redstone_lamp",

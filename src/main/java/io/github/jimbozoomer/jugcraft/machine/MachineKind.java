@@ -97,8 +97,9 @@ public enum MachineKind implements StringRepresentable {
 	GAS_HOLDER("gas_holder", 0, 0, 0, 0, 0),
 	// Power (batch 10, the electric look): a pedestal carrying a 3x3 array of solar cells on the layer above.
 	ADVANCED_SOLAR_PANEL("advanced_solar_panel", 400_000, 0, 512, 0, 0),
-	// A 2x1x1 four-cylinder engine (electric look): burns gasoline or diesel and turns a shaft out of its back.
-	ADVANCED_ENGINE("advanced_engine", 0, 0, 0, 0, 0),
+	// A 2x1x1 four-cylinder engine (electric look): burns gasoline or diesel and turns a shaft out of its back. Its one
+	// slot takes a turbocharger (batch 19), which needs coolant water in its second tank.
+	ADVANCED_ENGINE("advanced_engine", 0, 0, 0, 0, 1),
 	// Farming (batch 9): a two-block gantry that harvests and replants ripe crops in the 9x9 field in front of it.
 	// No inputs; three result slots.
 	CROP_HARVESTER("crop_harvester", 20_000, 256, 0, 24, 3),
@@ -234,6 +235,14 @@ public enum MachineKind implements StringRepresentable {
 	/** Advanced combustion engine: KE per tick at most, out of the back of its master block. */
 	public static final int ADVANCED_ENGINE_OUTPUT = 1_024;
 	public static final int ADVANCED_ENGINE_TANK = 8_000;
+	/** Turbocharger (batch 19): KE per tick at most with a turbocharger fitted and coolant in. */
+	public static final int TURBO_OUTPUT = 1_536;
+	/** Percent of the fuel's usual KE per mB a turbocharged engine gets out of it. */
+	public static final int TURBO_EFFICIENCY_PERCENT = 110;
+	/** Coolant water (mB) the intercooler uses each tick the turbocharged engine runs. */
+	public static final int TURBO_WATER_PER_TICK = 2;
+	/** The advanced engine's coolant tank (mB). */
+	public static final int TURBO_WATER_TANK = 4_000;
 	/** Electrolytic cell: each tank, and the layers its outputs leave from (chlorine top, hydrogen middle, lye base). */
 	public static final int CELL_TANK = 8_000;
 	private static final int[] CELL_DRAW_OFFS = {2, 1, 0};
@@ -372,7 +381,7 @@ public enum MachineKind implements StringRepresentable {
 			case GAS_TURBINE -> new FluidMachineSpec(List.of(TURBINE_TANK, TURBINE_LUBRICANT_TANK), List.of(), 0, 0);
 			case POLYMERIZATION_REACTOR -> new FluidMachineSpec(List.of(REACTOR_TANK), List.of(), 0, 1);
 			case DIESEL_ENGINE -> new FluidMachineSpec(List.of(DIESEL_ENGINE_TANK), List.of(), 0, 0);
-			case ADVANCED_ENGINE -> new FluidMachineSpec(List.of(ADVANCED_ENGINE_TANK), List.of(), 0, 0);
+			case ADVANCED_ENGINE -> new FluidMachineSpec(List.of(ADVANCED_ENGINE_TANK, TURBO_WATER_TANK), List.of(), 1, 0);
 			case ELECTROLYTIC_CELL -> new FluidMachineSpec(List.of(CELL_TANK), List.of(CELL_TANK, CELL_TANK, CELL_TANK), 2, 1);
 			case AIR_SEPARATION_UNIT -> new FluidMachineSpec(List.of(), List.of(ASU_TANK, ASU_TANK, ASU_TANK), 0, 0);
 			case SYNTHESIS_CONVERTER -> new FluidMachineSpec(List.of(CONVERTER_TANK, CONVERTER_TANK, CONVERTER_TANK),
