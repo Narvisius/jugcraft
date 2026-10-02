@@ -62,7 +62,7 @@ Owner: Narvisius
   - It reserves each position for one depot at a time.
   - It never offers positions where a wrong block is in the way.
 
-## Testing aids (development runs only)
+## Testing aids (operators only: cheats on, or op level 2)
 - `/dronetest supplies [off]`: endless power and building blocks for every depot within 96 blocks.
 - `/dronetest modules`: fills nearby Tower Cores with 1024 of each module.
 

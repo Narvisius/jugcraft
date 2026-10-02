@@ -13,7 +13,7 @@ Primary specialty: logistics / building. Supports builders and anyone running a 
   - the modules the next tier needs (held / needed);
   - the build progress;
   - the **UPGRADE DRONE TOWER** button.
-- Feed it **tower modules** by right-clicking the core or the terminal with them, or with any item pipe or conveyor (the core is an item storage). There are four modules: Structural, Hangar, Armour and Avionics.
+- Feed it **tower modules** by right-clicking the core or the terminal with them, or with any item pipe or conveyor (the core is an item storage). There are four modules: Structural, Hangar, Armour and Avionics. Right-clicking the terminal with a module only loads it; it never opens the terminal screen.
 - **Tier 1, the Command Post,** is built by the core itself (16 blocks a tick):
   - eight pads round a command building;
   - inside is a real operations room: a plotting table over the core, a video wall, the depot terminal desk, console desks with operator chairs, equipment racks, ceiling light panels and cable trays.
@@ -32,7 +32,7 @@ Primary specialty: logistics / building. Supports builders and anyone running a 
 - **Tower tier N unlocks drone tier N.** The tower is the only way to get a depot: a terminal without one flies no drones, and the old hand-built platform and control room are gone. Capacity grows from 32 drones (tier 1) to 133 (tier 9). Tier 9 adds 9 more large hangars stacked up the spire, one per level a block apart, doors turning round the spire as it rises. Each of the 8 ground pads holds four small drones round its charger (or two medium, or one large).
 - Lighting is red, set flush into floors on a neat 6-block grid. Every tier is checked (`tools/tower_lights.py`) so no floor, roof, ledge or buttress step is left at block light 0, which means no hostile mob spawns on the tower; the landing field glows faintly (light 4) for the same reason. The command room has a red light band round its walls and fifteen ceiling panels.
 - The Storage Exchange's warehouse is solid inside, so nothing spawns in it.
-- The plotting-table hologram shows a miniature of the tower, tier by tier, with the tier being built filling in amber as drones bring it.
+- The plotting-table hologram shows a miniature of the tower as it really stands: the finished tiers, and the tier being built growing in amber tile by tile as drones put each one in. Tiers not started yet are not shown.
 - Flying drones have a rotor sound (original, made by `tools/drone_sounds.py`). It plays under **Friendly Creatures** in Music & Sounds, so that slider mutes it. Only the 12 nearest flying drones within 48 blocks make sound.
 - The tower comes with 19 building materials anyone can use for other builds (concrete, girders, armour plates, blast glass, hangar doors, cladding, composite panels, light strips and more, nine of them with stairs and slabs) and five furniture blocks.
 
@@ -112,7 +112,7 @@ Primary specialty: logistics / building. Supports builders and anyone running a 
 ## Rollout and open questions
 - Small drones (tiers 1–3) are small and dark, so they are hard to spot in a hangar from a distance.
 - Flights may climb above the tower top on legs that cross it.
-- There is no ops command for instant builds yet; the tests use `buildInstantly`.
+- Operators (op level 2, or cheats on in single player) can build a tower instantly with `/dronetest build [tier]`: the nearest tower, or a new one where they stand, up to the tier given (9 if none). The tests use the same `buildInstantly`.
 - **Testing aids (creative only, no recipes):**
   - Creative Energy Cell: endless power on all sides.
   - Creative Supply Crate: a depot within 48 blocks gets every building block its drones ask for.

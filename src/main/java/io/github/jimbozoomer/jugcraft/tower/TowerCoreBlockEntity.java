@@ -126,6 +126,11 @@ public class TowerCoreBlockEntity extends BlockEntity {
 		return modules[index];
 	}
 
+	/** Which tiles of the tier being built the drones have put in (synced to clients for the hologram). */
+	public BitSet filledTiles() {
+		return (BitSet) filled.clone();
+	}
+
 	/** How far the current build is, 0 to 1. */
 	public float buildProgress() {
 		if (level != null && level.isClientSide()) {

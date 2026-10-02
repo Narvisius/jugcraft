@@ -4,7 +4,6 @@ import io.github.jimbozoomer.jugcraft.party.UseMode;
 import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -28,11 +27,9 @@ final class DroneDevCommands {
 	}
 
 	static void register() {
-		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
-			return;
-		}
+		// Available in every build, for operators only (cheats on in single player, or op level 2 on a server).
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(
-				Commands.literal("dronetest")
+				Commands.literal("dronetest").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.literal("fill")
 								.then(Commands.argument("from", BlockPosArgument.blockPos())
 										.then(Commands.argument("to", BlockPosArgument.blockPos())
