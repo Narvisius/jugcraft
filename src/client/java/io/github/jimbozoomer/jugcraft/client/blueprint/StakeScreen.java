@@ -117,7 +117,7 @@ public class StakeScreen extends Screen {
 			g.text(font, SciFi.fit(font, "Place by hand: " + names, W - 20), left + 10, y - 10, SciFi.AMBER, false);
 		}
 		if (info.wrong() > 0) {
-			g.text(font, info.wrong() + " blocks in the way (orange outline)", left + 10, y, SciFi.AMBER, false);
+			g.text(font, info.wrong() + " blocks in the way (red outline)", left + 10, y, SciFi.AMBER, false);
 		}
 	}
 }

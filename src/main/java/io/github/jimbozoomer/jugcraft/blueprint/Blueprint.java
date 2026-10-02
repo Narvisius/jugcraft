@@ -49,24 +49,32 @@ public final class Blueprint {
 
 	/** One block of the blueprint, relative to the stake (already turned). */
 	/**
-	 * Blueprint colours: a whole build of the mod's own (blue), one part of a larger build such as a single cooling
-	 * tower (green, {@code "kind": "part"} in the file), or a player's import (red, whatever the file says).
+	 * The blueprint item's colour in the inventory: a complete build of the mod's own, an individual structure or a
+	 * whole set (blue); a partial structure, one part of a set such as a single cooling tower (green); or a player's
+	 * import (red).
 	 */
-	public enum Kind {
-		COMPLETE("complete", 0x5AB4FF), PART("part", 0x5ADC78), IMPORTED("imported", 0xFF5A46);
+	public enum Category {
+		/** Several parts making a whole, such as a complete power plant: {@code "kind": "set"}. */
+		SET("set"),
+		/** One structure on its own, not a part and not divided: the default ({@code "kind": "individual"}). */
+		INDIVIDUAL("individual"),
+		/** One part of a set, such as a single cooling tower: {@code "kind": "part"}. */
+		PARTIAL("part");
 
 		public final String id;
-		/** The hologram colour, 0xRRGGBB. */
-		public final int rgb;
 
-		Kind(String id, int rgb) {
+		Category(String id) {
 			this.id = id;
-			this.rgb = rgb;
 		}
+	}
 
-		/** The colour with an alpha, 0xAARRGGBB. */
-		public int argb(int alpha) {
-			return (alpha << 24) | rgb;
+	public enum Kind {
+		COMPLETE("complete"), PART("part"), IMPORTED("imported");
+
+		public final String id;
+
+		Kind(String id) {
+			this.id = id;
 		}
 	}
 
@@ -84,19 +92,22 @@ public final class Blueprint {
 	public final String name;
 	/** "built in" or "imported". */
 	public final String source;
-	/** What the blueprint is, which sets its hologram and item colour. */
+	/** The colour of the blueprint item: blue complete, green a part of a larger build, red imported. */
 	public final Kind kind;
+	/** Which list the Blueprint Table shows it in (imports have their own IMPORT tab). */
+	public final Category category;
 	public final String json;
 	public final int sizeX;
 	public final int sizeY;
 	public final int sizeZ;
 	private final List<Cell> raw;
 
-	private Blueprint(String id, String name, String source, Kind kind, String json, int sizeX, int sizeY, int sizeZ, List<Cell> raw) {
+	private Blueprint(String id, String name, String source, Kind kind, Category category, String json, int sizeX, int sizeY, int sizeZ, List<Cell> raw) {
 		this.id = id;
 		this.name = name;
 		this.source = source;
 		this.kind = kind;
+		this.category = category;
 		this.json = json;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
@@ -236,17 +247,18 @@ public final class Blueprint {
 			}
 			cells.add(new Cell(offset, states.get(i)));
 		}
-		Kind kind = Kind.COMPLETE;
-		if ("imported".equals(source)) {
-			kind = Kind.IMPORTED;
-		} else if (root.has("kind")) {
-			String text = root.get("kind").getAsString();
-			if (!text.equals("complete") && !text.equals("part")) {
-				throw new Invalid("\"kind\" must be \"complete\" or \"part\"");
+		String declared = root.has("kind") ? root.get("kind").getAsString() : "individual";
+		Category category = null;
+		for (Category c : Category.values()) {
+			if (c.id.equals(declared)) {
+				category = c;
 			}
-			kind = text.equals("part") ? Kind.PART : Kind.COMPLETE;
 		}
-		return new Blueprint(id, name, source, kind, json, sx, sy, sz, List.copyOf(cells));
+		if (category == null) {
+			throw new Invalid("\"kind\" must be \"individual\" (one structure), \"set\" (several parts making a whole) or \"part\" (one part of a set)");
+		}
+		Kind kind = "imported".equals(source) ? Kind.IMPORTED : category == Category.PARTIAL ? Kind.PART : Kind.COMPLETE;
+		return new Blueprint(id, name, source, kind, category, json, sx, sy, sz, List.copyOf(cells));
 	}
 
 	private static String shortMessage(Exception e) {
