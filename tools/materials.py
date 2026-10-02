@@ -210,4 +210,7 @@ def feature_of(entry_id):
     import petro
     if entry_id in petro.petro_items() or entry_id in petro.petro_blocks():
         return FEATURE
+    import guide_books  # the Drone Tower guide books go with the drones, part of the machines
+    if entry_id in guide_books.BOOKS:
+        return FEATURE
     raise KeyError(entry_id)

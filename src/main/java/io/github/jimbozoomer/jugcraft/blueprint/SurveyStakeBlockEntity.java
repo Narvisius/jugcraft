@@ -33,6 +33,8 @@ import org.jspecify.annotations.Nullable;
  */
 public class SurveyStakeBlockEntity extends BlockEntity {
 	private static final int CHECK_INTERVAL = 40;
+	/** How many layers above the lowest unfinished one drones may work on at once (each column still bottom-up). */
+	public static final int LAYER_WINDOW = 3;
 
 	private String blueprintId = "";
 	private Rotation rotation = Rotation.NONE;
@@ -287,6 +289,10 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		private final Map<BlockPos, UUID> reservedBy = new HashMap<>();
 		private final Map<BlockPos, Long> reservedUntil = new HashMap<>();
 
+		private static long column(BlockPos pos) {
+			return ((long) pos.getX() << 32) | (pos.getZ() & 0xFFFFFFFFL);
+		}
+
 		private boolean open(ServerLevel level, BlockPos pos, BlockState state) {
 			if (!level.isLoaded(pos)) {
 				return false;
@@ -296,12 +302,22 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		}
 
 		/**
-		 * Something in the way that the drone clears before placing (terrain, a tree, a stray block): anything
-		 * breakable that isn't a block entity. A chest or machine in the footprint is never touched; that cell
-		 * waits for the player.
+		 * Something in the way (a red cell) that the drone breaks and replaces with the right block: terrain, a
+		 * tree, a stray block, or a chest or vanilla machine, which is broken with its drops so nothing in it is
+		 * lost. Never unbreakable blocks (bedrock), nor Jugcraft's own blocks with a block entity (a depot, a
+		 * stake, a tower core): those wait for the player.
 		 */
 		private boolean obstacle(ServerLevel level, BlockPos pos, BlockState now) {
-			return !now.isAir() && level.getBlockEntity(pos) == null && now.getDestroySpeed(level, pos) >= 0;
+			if (now.isAir() || now.getDestroySpeed(level, pos) < 0) {
+				return false;
+			}
+			return level.getBlockEntity(pos) == null
+					|| !net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(now.getBlock()).getNamespace().equals(io.github.jimbozoomer.jugcraft.Jugcraft.MOD_ID);
+		}
+
+		/** A wanted cell with a wrong block in it (drawn red): replacing it never covers anything new. */
+		private boolean blocked(ServerLevel level, BlockPos pos) {
+			return !level.getBlockState(pos).canBeReplaced();
 		}
 
 		/** Is the block under {@code pos} ready to build on: done, solid ground, or a cell drones never fill? */
@@ -323,27 +339,45 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			}
 			long now = level.getGameTime();
 			Map<BlockPos, BlockState> all = wanted();
-			// Layer by layer: drones come down from above, so nothing goes in until every lower block that drones
-			// can place is done (a roof placed early would cover the pews under it).
-			int lowest = Integer.MAX_VALUE;
+			// The blocks this depot could place: in its range, not hand-only, still missing.
+			List<Map.Entry<BlockPos, BlockState>> missing = new ArrayList<>();
+			// The lowest missing block of each column: drones come down from above, so a block only goes in once
+			// everything under it in its column is done (a roof placed early would cover the pews under it).
+			Map<Long, Integer> columnBottom = new HashMap<>();
 			for (Map.Entry<BlockPos, BlockState> e : all.entrySet()) {
-				if (e.getKey().getY() < lowest && !handOnly(e.getValue()) && open(level, e.getKey(), e.getValue())) {
-					lowest = e.getKey().getY();
+				BlockPos pos = e.getKey();
+				if (handOnly(e.getValue()) || !open(level, pos, e.getValue())) {
+					continue;
+				}
+				columnBottom.merge(column(pos), pos.getY(), Math::min);
+				if (Math.abs(pos.getX() - center.getX()) <= radius && Math.abs(pos.getZ() - center.getZ()) <= radius) {
+					missing.add(e);
 				}
 			}
-			int layer = lowest;
 			List<BuildJobs.Target> out = new ArrayList<>();
-			all.entrySet().stream()
-					.filter(e -> Math.abs(e.getKey().getX() - center.getX()) <= radius && Math.abs(e.getKey().getZ() - center.getZ()) <= radius)
-					.filter(e -> e.getKey().getY() == layer)
-					.filter(e -> !handOnly(e.getValue()))
+			// Red cells first, from the top down: a wrong block is swapped for the right one straight away (it was
+			// solid already, so this covers nothing), and clearing the top ones opens the way to those under them.
+			missing.stream()
+					.filter(e -> blocked(level, e.getKey()))
 					.filter(e -> reservedUntil.getOrDefault(e.getKey(), Long.MIN_VALUE) < now)
-					.filter(e -> open(level, e.getKey(), e.getValue()))
-					// Bottom-up: never a block above one of this blueprint that is still missing.
+					.sorted(Comparator.comparingInt((Map.Entry<BlockPos, BlockState> e) -> -e.getKey().getY())
+							.thenComparingDouble(e -> e.getKey().distSqr(center)))
+					.limit(max)
+					.forEach(e -> out.add(new BuildJobs.Target(this, jobId, owner, mode, e.getKey(), e.getValue(), null)));
+			// Then the empty cells, roughly layer by layer, a few layers at a time: while the last blocks of a layer
+			// are still in the air the next layers go ahead, so a big fleet keeps working instead of waiting.
+			int lowest = missing.stream().filter(e -> !blocked(level, e.getKey())).mapToInt(e -> e.getKey().getY()).min().orElse(Integer.MAX_VALUE);
+			missing.stream()
+					.filter(e -> !blocked(level, e.getKey()))
+					.filter(e -> e.getKey().getY() <= lowest + LAYER_WINDOW)
+					.filter(e -> reservedUntil.getOrDefault(e.getKey(), Long.MIN_VALUE) < now)
+					.filter(e -> columnBottom.get(column(e.getKey())) == e.getKey().getY())
+					// Bottom-up: never a block straight above one that is still missing (also outside the blueprint's
+					// own column bookkeeping, e.g. a cell another depot is placing right now).
 					.filter(e -> supported(level, e.getKey(), all))
 					.sorted(Comparator.comparingInt((Map.Entry<BlockPos, BlockState> e) -> e.getKey().getY())
 							.thenComparingDouble(e -> e.getKey().distSqr(center)))
-					.limit(max)
+					.limit(Math.max(0, max - out.size()))
 					.forEach(e -> out.add(new BuildJobs.Target(this, jobId, owner, mode, e.getKey(), e.getValue(), null)));
 			return out;
 		}
@@ -380,7 +414,11 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			if (!now.canBeReplaced() && !obstacle(level, target.pos(), now)) {
 				return false;
 			}
-			// Clears whatever is in the way (no drops: site clearance), then puts the block in.
+			// Clears whatever is in the way, then puts the block in: terrain and stray blocks go without drops (site
+			// clearance), a chest or machine is broken with its drops so its contents are not lost.
+			if (level.getBlockEntity(target.pos()) != null) {
+				level.destroyBlock(target.pos(), true);
+			}
 			level.setBlockAndUpdate(target.pos(), state);
 			return true;
 		}

@@ -77,6 +77,9 @@ public class TowerGameTests {
 		helper.assertFalse(io.github.jimbozoomer.jugcraft.drone.GuideBooks.giveCreativeGuide(player, GameType.CREATIVE), "only once");
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.drone.GuideBooks.MANUAL instanceof io.github.jimbozoomer.jugcraft.drone.GuideBooks.Book book
 				&& book.bookId().equals("drone_tower_manual"), "the Field Manual is a guide book that opens its own pages");
+		helper.assertTrue(helper.getLevel().getServer().getRecipeManager().getRecipes().stream()
+				.anyMatch(holder -> holder.id().identifier().equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("drone_tower_manual"))),
+				"the Field Manual recipe (a book and a tier 1 drone) is loaded");
 		helper.succeed();
 	}
 
@@ -107,6 +110,54 @@ public class TowerGameTests {
 			}
 		}
 		helper.assertTrue(pads > 2000, "the finished tower lays its hangar pads as joined parts, got " + pads);
+		helper.succeed();
+	}
+
+	/**
+	 * Every hangar of the finished tower has a clear way out: nothing in its door opening or in front of it out
+	 * to six blocks, nor in the column its drones climb from the exit point.
+	 */
+	@GameTest
+	public void hangarEntrancesAreClear(GameTestHelper helper) {
+		TowerData data = TowerData.get();
+		java.util.Set<BlockPos> world = new java.util.HashSet<>();
+		for (TowerData.Tier tier : data.tiers) {
+			for (int[] c : tier.clear) {
+				world.remove(new BlockPos(c[0], c[1], c[2]));
+			}
+			for (int[] b : tier.place) {
+				world.add(new BlockPos(b[0], b[1], b[2]));
+			}
+		}
+		int doors = 0;
+		for (TowerData.Tier tier : data.tiers) {
+			for (TowerData.Dock dock : tier.docks) {
+				int[] d = dock.door();
+				if (d == null) {
+					continue;
+				}
+				doors++;
+				for (int x = d[0]; x <= d[2]; x++) {
+					for (int z = d[1]; z <= d[3]; z++) {
+						for (int y = d[4]; y < d[4] + d[5]; y++) {
+							for (int step = 0; step <= 6; step++) {
+								BlockPos pos = new BlockPos(x + d[6] * step, y, z + d[7] * step);
+								helper.assertTrue(!world.contains(pos), "a block at " + pos + " stands in front of the tier "
+										+ dock.tier() + " hangar door at " + d[0] + " " + d[4] + " " + d[1]);
+							}
+						}
+					}
+				}
+				int ex = (int) Math.floor(dock.exitX());
+				int ez = (int) Math.floor(dock.exitZ());
+				for (int y = (int) dock.y(); y < 230; y++) {
+					BlockPos pos = new BlockPos(ex, y, ez);
+					helper.assertTrue(!world.contains(pos), "a block at " + pos + " is in the climb out of the tier " + dock.tier()
+							+ " hangar at " + d[0] + " " + d[4] + " " + d[1]);
+				}
+			}
+		}
+		helper.assertTrue(doors > 90, "the finished tower has its hangars, got " + doors);
 		helper.succeed();
 	}
 

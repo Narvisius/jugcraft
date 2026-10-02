@@ -577,11 +577,41 @@ def spire_hangars(blocks):
     """The spire's hangars: each a large hangar (7 wide, 7 deep, 5 high) set into the spire with its door in the
     spire's face, a floor and a roof of its own, and a landing pad like every other hangar."""
     w, d, h = HANGAR["large"]
+    spire_y0 = [y for t, kind, y, y1, _ in schedule() if kind == "spire"][0]
     for y, side, half in spire_hangar_levels():
         size = 2 * half + 1
         x0 = z0 = C - half
         u0 = (size - (w + 2)) // 2
         hangar_row(blocks, y, x0, z0, size, side, 1, "large", "graphene_lattice", False, start=u0, seed=y, tier=9)
+        # Lower on the level the spire is wider than the hangar's face, so its skin would stand in front of the
+        # door (and a buttress can reach past it): cut a short framed mouth through it, and move the drones' exit point out past it.
+        inside = {yy: cross_section(spire_half(yy, spire_y0), n=3.2) for yy in range(y, y + h + 2)}
+
+        def in_spire(x, yy, z):
+            return (x - C, z - C) in inside[yy]
+
+        def blocked(v):
+            for u in range(u0 + 1, u0 + w + 1):
+                x, z = local(x0, z0, size, side, u, v, False)
+                if any(in_spire(x, yy, z) or (x, yy, z) in blocks for yy in range(y + 1, y + h + 1)):
+                    return True
+            return False
+        # Through the spire's skin, or a buttress that reaches past the door (up to 6 blocks out).
+        depth = max([k for k in range(1, 7) if blocked(-k)], default=0)
+        for v in range(-depth, 0):
+            for u in range(u0, u0 + w + 2):
+                x, z = local(x0, z0, size, side, u, v, False)
+                for yy in range(y, y + h + 2):
+                    frame = u in (u0, u0 + w + 1) or yy in (y, y + h + 1)
+                    if not frame:
+                        HANGAR_SPACE.add((x, yy, z))
+                    elif in_spire(x, yy, z):
+                        put(blocks, x, yy, z, "hazard_plating" if yy == y + h + 1 else "graphene_lattice")
+        if depth and META is not None:
+            dock = META["docks"][-1]
+            e1 = local(x0, z0, size, side, u0 + 1, -depth - 2, False)
+            e2 = local(x0, z0, size, side, u0 + w, -depth - 2, False)
+            dock["ex"], dock["ez"] = (e1[0] + e2[0]) / 2 + 0.5, (e1[1] + e2[1]) / 2 + 0.5
         for u in range(u0, u0 + w + 2):
             for v in range(0, d + 2):
                 x, z = local(x0, z0, size, side, u, v, False)

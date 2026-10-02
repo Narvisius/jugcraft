@@ -101,7 +101,10 @@ def write_assets(write, rid, assets, data, lang):
             {"heading": f"book.{MOD}.{item}.page.{i + 1}.heading", "text": f"book.{MOD}.{item}.page.{i + 1}",
              **({"image": rid(f"textures/gui/guide/{shot}.png")} if shot else {})}
             for i, (_, _, shot) in enumerate(pages)]})
-    write(pathlib.Path(data) / "recipe" / "drone_tower_manual.json", {
+    write(pathlib.Path(data) / MOD / "recipe" / "drone_tower_manual.json", {
+        # Loaded only when the tier 1 drone it needs is (the same feature switches as its recipe).
+        "fabric:load_conditions": [{"condition": f"{MOD}:feature_enabled", "feature": f}
+                                   for f in ("machines", "drones", "lead", "sulfur", "tin")],
         "type": "minecraft:crafting_shapeless", "category": "misc",
         "ingredients": ["minecraft:book", rid("drone_t1")],
         "result": {"id": rid("drone_tower_manual"), "count": 1}})

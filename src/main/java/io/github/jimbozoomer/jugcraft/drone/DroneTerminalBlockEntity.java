@@ -686,25 +686,43 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 			return;
 		}
 		BlockPos center = BlockPos.containing(layout.centerX(), platformY + 1, layout.centerZ());
-		List<BuildJobs.Target> targets = new ArrayList<>();
+		// One list per job source (each placed blueprint, the tower): drones are shared out between them in turn,
+		// so every job in range gets drones at once instead of the first ones taking the whole fleet.
+		List<List<BuildJobs.Target>> jobs = new ArrayList<>();
+		int total = 0;
 		for (BuildJobs.Source source : BuildJobs.sources()) {
-			targets.addAll(source.openTargets(level, center, RANGE, owner, mode, Math.min(MAX_TARGETS_PER_REQUEST, wanted)));
+			List<BuildJobs.Target> open = source.openTargets(level, center, RANGE, owner, mode, Math.min(MAX_TARGETS_PER_REQUEST, wanted));
+			if (!open.isEmpty()) {
+				jobs.add(open);
+				total += open.size();
+			}
 		}
-		openTargets = targets.size();
+		openTargets = total;
 		coveredSkipped = 0;
 		missing.clear();
-		int next = 0;
+		int[] next = new int[jobs.size()];
+		int turn = 0;
 		// Stops per drone: just enough to share the jobs out among all idle drones.
-		int share = Math.max(1, (targets.size() + idle.size() - 1) / idle.size());
+		int share = Math.max(1, (total + idle.size() - 1) / idle.size());
 		for (int drone : idle) {
-			if (!scheduler.canLaunch() || next >= targets.size()) {
-				dispatchAgain = !scheduler.canLaunch() && next < targets.size();
+			int job = -1;
+			for (int k = 0; k < jobs.size(); k++) {
+				int candidate = (turn + k) % jobs.size();
+				if (next[candidate] < jobs.get(candidate).size()) {
+					job = candidate;
+					break;
+				}
+			}
+			if (!scheduler.canLaunch() || job < 0) {
+				dispatchAgain = !scheduler.canLaunch() && job >= 0;
 				break;
 			}
+			turn = job + 1;
+			List<BuildJobs.Target> targets = jobs.get(job);
 			DroneTier tier = fleet.get(drone);
 			List<FlightScheduler.Stop<Cargo>> stops = new ArrayList<>();
-			while (next < targets.size() && stops.size() < Math.min(share, tier.capacity())) {
-				BuildJobs.Target target = targets.get(next++);
+			while (next[job] < targets.size() && stops.size() < Math.min(share, tier.capacity())) {
+				BuildJobs.Target target = targets.get(next[job]++);
 				if (inFlight.contains(target.pos())) {
 					continue;
 				}

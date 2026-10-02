@@ -81,11 +81,49 @@ public class BlueprintGameTests {
 					.flatMap(s -> s.openTargets(helper.getLevel(), stakePos, 64, owner, UseMode.PERSONAL, 64).stream())
 					.filter(t -> t.owner().equals(owner)).toList();
 			helper.assertTrue(!targets.isEmpty(), "the stake offers jobs to its owner's depot");
-			helper.assertTrue(targets.stream().allMatch(t -> t.pos().getY() == stakePos.getY()), "only the floor layer is offered first");
+			int window = SurveyStakeBlockEntity.LAYER_WINDOW;
+			helper.assertTrue(targets.stream().allMatch(t -> t.pos().getY() - stakePos.getY() <= window),
+					"only the bottom few layers are offered first");
+			helper.assertTrue(targets.stream().anyMatch(t -> t.pos().getY() == stakePos.getY()), "the floor layer is among them");
+			helper.assertTrue(targets.stream().allMatch(t -> stake.wanted().keySet().stream().noneMatch(p -> p.getX() == t.pos().getX()
+					&& p.getZ() == t.pos().getZ() && p.getY() < t.pos().getY())), "never a block over an empty cell of its column");
 			List<BuildJobs.Target> stranger = BuildJobs.sources().stream()
 					.flatMap(s -> s.openTargets(helper.getLevel(), stakePos, 64, UUID.randomUUID(), UseMode.PERSONAL, 64).stream())
 					.filter(t -> t.owner().equals(owner)).toList();
 			helper.assertTrue(stranger.isEmpty(), "a stranger's depot gets no jobs from a Personal blueprint");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Wrong blocks in the footprint (drawn red) are offered first, from the top down, and replaced: terrain without
+	 * drops, a chest broken with its contents dropped.
+	 */
+	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
+	public void stakeReplacesBlocksInTheWay(GameTestHelper helper) {
+		UUID owner = UUID.randomUUID();
+		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
+		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
+		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);
+		stake.setup("small_church", Rotation.NONE, owner);
+		// A column of the church: a chest in its lowest cell, dirt in the next one up.
+		BlockPos low = stake.wanted().keySet().stream().filter(p -> stake.wanted().containsKey(p.above()))
+				.min(java.util.Comparator.comparingInt(BlockPos::getY)).orElseThrow();
+		helper.getLevel().setBlockAndUpdate(low, Blocks.CHEST.defaultBlockState());
+		((net.minecraft.world.level.block.entity.ChestBlockEntity) helper.getLevel().getBlockEntity(low)).setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND));
+		helper.getLevel().setBlockAndUpdate(low.above(), Blocks.DIRT.defaultBlockState());
+		helper.runAfterDelay(2, () -> {
+			List<BuildJobs.Target> targets = BuildJobs.sources().stream()
+					.flatMap(s -> s.openTargets(helper.getLevel(), stakePos, 64, owner, UseMode.PERSONAL, 64).stream())
+					.filter(t -> t.owner().equals(owner)).toList();
+			helper.assertTrue(targets.size() >= 2 && targets.get(0).pos().equals(low.above()) && targets.get(1).pos().equals(low),
+					"the blocks in the way come first, top down, got " + targets.stream().limit(3).map(BuildJobs.Target::pos).toList());
+			for (BuildJobs.Target target : targets.subList(0, 2)) {
+				helper.assertTrue(target.source().fill(helper.getLevel(), target, target.state()), "replaced " + target.pos());
+				helper.assertTrue(SurveyStakeBlockEntity.matches(helper.getLevel().getBlockState(target.pos()), target.state()), "the right block is in at " + target.pos());
+			}
+			helper.assertTrue(!helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(low).inflate(2),
+					e -> e.getItem().is(net.minecraft.world.item.Items.DIAMOND)).isEmpty(), "the chest's contents were dropped, not lost");
 			helper.succeed();
 		});
 	}
