@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "AMA",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/aluminum",
+    "G": "minecraft:glass",
+    "A": "jugcraft:advanced_circuit",
+    "M": "jugcraft:machine_casing",
+    "C": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:drone_depot_terminal",
+    "count": 1
+  }
+}

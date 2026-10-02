@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WCW",
+    " K "
+  ],
+  "key": {
+    "W": "#c:wires/copper",
+    "C": "jugcraft:basic_circuit",
+    "K": "minecraft:compass"
+  },
+  "result": {
+    "id": "jugcraft:flight_controller",
+    "count": 1
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SKS",
+    "KSK",
+    "SKS"
+  ],
+  "key": {
+    "S": "jugcraft:silicon",
+    "K": "jugcraft:coke"
+  },
+  "result": {
+    "id": "jugcraft:silicon_carbide_armor",
+    "count": 4
+  }
+}

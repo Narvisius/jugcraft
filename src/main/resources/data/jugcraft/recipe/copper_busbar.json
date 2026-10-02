@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "C",
+    "C",
+    "C"
+  ],
+  "key": {
+    "C": "#c:ingots/copper"
+  },
+  "result": {
+    "id": "jugcraft:copper_busbar",
+    "count": 3
+  }
+}

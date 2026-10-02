@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:plastic_sheet",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 1000
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:hydrogen_lift_cell",
+      "count": 1
+    }
+  ],
+  "time": 120
+}

@@ -1,0 +1,51 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TFT",
+    "TMT"
+  ],
+  "key": {
+    "T": "#c:plates/titanium",
+    "F": "jugcraft:composite_rotor_set",
+    "M": "jugcraft:superconducting_motor"
+  },
+  "result": {
+    "id": "jugcraft:superconducting_lift_fan",
+    "count": 1
+  }
+}

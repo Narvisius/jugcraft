@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PRP",
+    "WCW",
+    "PRP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "R": "minecraft:redstone",
+    "W": "#c:wires/copper",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:energy_exchange_port",
+    "count": 1
+  }
+}

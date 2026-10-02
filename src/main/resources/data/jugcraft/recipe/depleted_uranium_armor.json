@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "uranium"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "UPU",
+    "PUP",
+    "UPU"
+  ],
+  "key": {
+    "U": "#c:ingots/uranium",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:depleted_uranium_armor",
+    "count": 4
+  }
+}

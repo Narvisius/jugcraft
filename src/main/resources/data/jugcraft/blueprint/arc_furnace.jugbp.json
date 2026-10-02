@@ -1,0 +1,37 @@
+{
+ "format": 1,
+ "name": "Arc Furnace",
+ "author": "Jugcraft (built in)",
+ "description": "The Arc Furnace multiblock: a solid 3x3x3 cube of arc furnace casing, with the controller in the middle of the front face. Power the controller from the front.",
+ "size": [
+  3,
+  3,
+  3
+ ],
+ "anchor": [
+  1,
+  0,
+  4
+ ],
+ "palette": {
+  "A": "jugcraft:arc_furnace_casing",
+  "B": "jugcraft:arc_furnace_controller[facing=south]"
+ },
+ "layers": [
+  [
+   "AAA",
+   "AAA",
+   "AAA"
+  ],
+  [
+   "AAA",
+   "AAA",
+   "ABA"
+  ],
+  [
+   "AAA",
+   "AAA",
+   "AAA"
+  ]
+ ]
+}

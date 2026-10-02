@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "YBY",
+    "SRS"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "B": "minecraft:black_dye",
+    "S": "#c:plates/steel",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:landing_pad",
+    "count": 6
+  }
+}

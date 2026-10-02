@@ -1,0 +1,75 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RTR",
+    "CDC",
+    "LWL"
+  ],
+  "key": {
+    "R": "jugcraft:composite_rotor_assembly",
+    "T": "#c:plates/titanium",
+    "C": "jugcraft:processor",
+    "D": "jugcraft:drone_t5",
+    "L": "jugcraft:lithium_cell",
+    "W": "jugcraft:cargo_winch"
+  },
+  "result": {
+    "id": "jugcraft:drone_t6",
+    "count": 1
+  }
+}

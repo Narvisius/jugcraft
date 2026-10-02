@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SRS",
+    " S "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "R": "jugcraft:aluminum_rotor_assembly"
+  },
+  "result": {
+    "id": "jugcraft:ducted_fan",
+    "count": 1
+  }
+}

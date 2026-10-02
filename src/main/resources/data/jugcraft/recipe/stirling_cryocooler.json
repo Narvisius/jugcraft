@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "APA",
+    "GDG",
+    "APA"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "P": "#c:plates/copper",
+    "G": "#c:gears/steel",
+    "D": "jugcraft:drone_motor"
+  },
+  "result": {
+    "id": "jugcraft:stirling_cryocooler",
+    "count": 1
+  }
+}

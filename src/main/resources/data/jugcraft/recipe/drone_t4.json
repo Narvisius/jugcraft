@@ -1,0 +1,58 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FLF",
+    "CDU",
+    "FLF"
+  ],
+  "key": {
+    "F": "jugcraft:ducted_fan",
+    "L": "jugcraft:lithium_cell",
+    "C": "jugcraft:advanced_circuit",
+    "D": "jugcraft:drone_t3",
+    "U": "jugcraft:speed_upgrade"
+  },
+  "result": {
+    "id": "jugcraft:drone_t4",
+    "count": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP",
+    "GLG"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "G": "minecraft:glass_pane",
+    "L": "minecraft:glowstone_dust"
+  },
+  "result": {
+    "id": "jugcraft:ceiling_light_panel",
+    "count": 4
+  }
+}

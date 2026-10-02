@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P P",
+    "WPW"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "W": "#c:wires/copper"
+  },
+  "result": {
+    "id": "jugcraft:cable_tray",
+    "count": 8
+  }
+}

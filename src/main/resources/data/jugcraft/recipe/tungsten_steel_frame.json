@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TST",
+    "S S",
+    "TST"
+  ],
+  "key": {
+    "T": "#c:ingots/tungsten",
+    "S": "#c:ingots/steel"
+  },
+  "result": {
+    "id": "jugcraft:tungsten_steel_frame",
+    "count": 4
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "SWS"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "minecraft:iron_trapdoor",
+    "S": "#c:plates/iron",
+    "W": "jugcraft:cargo_winch"
+  },
+  "result": {
+    "id": "jugcraft:supply_pickup",
+    "count": 9
+  }
+}

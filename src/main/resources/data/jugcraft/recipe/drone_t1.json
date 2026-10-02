@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RBR",
+    "BFB",
+    "RPR"
+  ],
+  "key": {
+    "R": "jugcraft:rotor_assembly",
+    "B": "#c:plates/bronze",
+    "F": "jugcraft:flight_controller",
+    "P": "jugcraft:lead_acid_pack"
+  },
+  "result": {
+    "id": "jugcraft:drone_t1",
+    "count": 1
+  }
+}

@@ -1,21 +1,29 @@
 {
-  "schemaVersion": 1,
-  "id": "jugcraft-test",
-  "version": "1.0.0",
-  "name": "Jugcraft game tests",
-  "description": "Automated in-game tests for Jugcraft. Not shipped with the mod.",
-  "license": "MIT",
-  "environment": "*",
-  "entrypoints": {
-    "fabric-gametest": [
-      "io.github.jimbozoomer.jugcraft.test.JugcraftGameTests",
-      "io.github.jimbozoomer.jugcraft.test.PetroGameTests"
-    ],
-    "fabric-client-gametest": [
-      "io.github.jimbozoomer.jugcraft.test.JugcraftClientGameTests"
-    ]
-  },
-  "depends": {
-    "jugcraft": "*"
-  }
+	"schemaVersion": 1,
+	"id": "jugcraft-test",
+	"version": "1.0.0",
+	"name": "Jugcraft game tests",
+	"description": "Automated in-game tests for Jugcraft. Not shipped with the mod.",
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": [
+			"io.github.jimbozoomer.jugcraft.test.JugcraftGameTests",
+			"io.github.jimbozoomer.jugcraft.test.PetroGameTests",
+			"io.github.jimbozoomer.jugcraft.test.PartyGameTests",
+			"io.github.jimbozoomer.jugcraft.test.DroneGameTests",
+			"io.github.jimbozoomer.jugcraft.test.TowerGameTests",
+			"io.github.jimbozoomer.jugcraft.test.BlueprintGameTests"
+		],
+		"fabric-client-gametest": [
+			"io.github.jimbozoomer.jugcraft.test.JugcraftClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.DroneClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.TowerClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.BlueprintClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.GuideScreenshotGameTests"
+		]
+	},
+	"depends": {
+		"jugcraft": "*"
+	}
 }

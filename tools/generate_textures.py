@@ -1427,6 +1427,25 @@ def main():
     crop_textures.draw_all(save)
     import deposits
     deposits.draw_all(save)
+    import drone_textures
+    drone_textures.draw_all()
+    import blueprints
+    for name, img in blueprints.draw_textures().items():
+        save(img, "block", name)
+    for name, img in blueprints.draw_item_textures().items():
+        save(img, "item", name)
+    ghost_dir = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "misc"
+    ghost_dir.mkdir(parents=True, exist_ok=True)
+    blueprints.ghost_texture().save(ghost_dir / "blueprint_ghost.png")
+    import tower
+    for name, img in tower.draw_textures().items():
+        save(img, "block", name)
+    for name, img in tower.draw_item_textures().items():
+        save(img, "item", name)
+    # The tower's building blocks, pads and pickups at 64 px (tools/tower_art.py), over the 16 px versions above.
+    import tower_art
+    tower_art.write_all(str(ROOT / "src" / "main" / "resources" / "assets" / "jugcraft"))
+
     import tank_display
     tank_display.draw_all(save)
 

@@ -1,0 +1,86 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "EEE",
+    "FDF",
+    "TCT"
+  ],
+  "key": {
+    "E": "jugcraft:ion_emitter",
+    "F": "jugcraft:ducted_fan",
+    "D": "jugcraft:drone_t7",
+    "T": "#c:plates/titanium",
+    "C": "jugcraft:processor"
+  },
+  "result": {
+    "id": "jugcraft:drone_t8",
+    "count": 1
+  }
+}

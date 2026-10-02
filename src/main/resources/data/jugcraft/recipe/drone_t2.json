@@ -1,0 +1,51 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "zinc"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RZR",
+    "IDC",
+    "ZW "
+  ],
+  "key": {
+    "R": "jugcraft:rotor_assembly",
+    "Z": "#c:plates/brass",
+    "I": "#c:plates/invar",
+    "D": "jugcraft:drone_t1",
+    "C": "jugcraft:basic_circuit",
+    "W": "jugcraft:cargo_winch"
+  },
+  "result": {
+    "id": "jugcraft:drone_t2",
+    "count": 1
+  }
+}

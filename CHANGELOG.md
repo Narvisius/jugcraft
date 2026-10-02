@@ -8,6 +8,39 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### Blueprints and test blocks (same draft PR)
+- **Blueprint Table:**
+  - LIBRARY of the mod's structures and imported blueprints, with a front view and materials; printing is free.
+  - IMPORT takes pasted `.jugbp.json` text, checks it, saves it with the world and shares it with everyone.
+- **Placing blueprints:** a hologram preview up to 32 blocks away, a Survey Stake screen (progress, materials, Personal/Party, rotate, remove), and drone building layer by layer.
+- **Drone Tower tier 1** now also builds the Energy Exchange and Storage Exchange, adding seven new building blocks and two ports that feed the depot.
+- **Seating:** Operator Chairs can be sat on.
+- **Creative-only test blocks:** the Creative Energy Cell and the Creative Supply Crate.
+
+### Drone Depot (draft PR, stacked on Parties)
+- **New blocks:** Drone Depot Terminal, Control Screen Panel, Hologram Table, Cargo Packager, and the tower-placed Landing Platform, Landing Pad and Supply Pickup Plate (no recipes: the Drone Tower builds the depot).
+- **Depot:** part of the Drone Tower. Tier 1 places the base floor, eight pads (5x5 plates forming a pad with a charger port), the supply pickup (3x3 plates with a lift hatch) and the terminal building. A terminal without a tower flies no drones.
+- **Drones:** nine tiers, all craftable, each with its own 3D look in the tower's graphite-and-dull-red theme (tier 9 is the Superconducting Ring Lifter). Tiers 5–9 use new parts from real materials: neodymium motors, tilt-rotor nacelles, composite rotors, hydrogen lift cells (chemical reactor), ion emitters, superconducting tape, Stirling cryocoolers and superconducting lift fans.
+- **Drone Tower ([docs](docs/features/drone-tower.md)):** a Tower Core on a 15×15 chiseled stone plinth builds the Command Post (tier 1, with a furnished command room). Tiers 2–9 are flown in tile by tile by the depot's own drones, using four kinds of tower module. Tower tier N unlocks drone tier N; the full tower holds 100 drones, each in its own hangar, with seven pickups. Adds 19 building materials (nine with stairs and slabs), five furniture blocks and a tower status screen. Drones dock round the pads, fly their routes, and winch crates up from the pickup (the hatch opens and a lift raises the crate).
+- **Command room screens:** a hologram table (nine sections form one table projecting a live depot map) and a screen wall (six panels form one live display), both in the tower's command room. The terminal opens a sci-fi screen (OVERVIEW, FLEET, JOBS, POWER, and a PERSONAL/PARTY button) whose text is fitted to the panel.
+- **Pooled power:** standby and working draw, cached. Low power slows flights and never drops cargo.
+- **Flights:** timed flight records (not mobs) with terrain-following routes, at most 5 launches per tick, and reservations. Clients get a small snapshot when something changes and move the drones themselves.
+- **`BuildJobs`:** the build-job interface for blueprints and later builders, plus a development-only `/dronetest` command.
+- **Tests:** tower server and client game tests; server game tests (layout rules, docks, flight paths, and in-world depots that build blocks, re-form pads, respect Party mode and link screens) and a client game test with screenshots, plus checker rules keeping drone numbers in sync.
+
+### Parties (draft PR; proposal #21)
+- **`/party` commands:** create, invite, accept, decline, leave, kick, leader and disband.
+  - Invites expire after 5 minutes, and each player can send 10 a minute.
+  - Parties hold up to 8 members.
+- **Shared API (`JugcraftParties`):**
+  - `sameParty`, `isLeader`, `partyMembers`, change listeners.
+  - `mayServe` with `UseMode` (Personal/Party), which every automated system will use.
+- **Saving:** parties are saved in the world folder (`jugcraft/parties.txt`).
+- **Feature switch:** `parties.enabled`.
+- **Tests:** seven new game tests, plus a checker rule that every party result has a chat message.
+
+### Unmerged: Explosive weapons, batch 18
+
 ### Unmerged: Engineer's Handbook reorganised, batch 23
 - The book fits the window; the chapter list is a scrollable contents list where the open chapter shows its pages, and long pages scroll (mouse wheel or arrow keys).
 - New **Progression** chapter: the road through the mod in nine stages, each a plan and a numbered chain of the items to make in order.
