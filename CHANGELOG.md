@@ -8,6 +8,10 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
+### Unmerged: Joined tanks, glass tanks and gauges, batch 20
+- Tinplate and glass tanks touching each other join into one tank (up to 64), filling from the bottom.
+- **Glass tank** shows its fluid; **tank gauge** shows any tank's or machine's level in eighths.
+
 ### Unmerged: Turbocharger and flywheel, batch 19
 - **Turbocharger** in the advanced engine's new slot, with coolant water in its new second tank: up to 1,536 KE/t and 10% more KE from each mB of fuel.
 - **Flywheel:** stores up to 2,000,000 KE of rotation and drives its front shaft from it; friction runs it down slowly.

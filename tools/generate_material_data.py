@@ -132,6 +132,8 @@ def assets():
     machine_assets(lang)
     import deposits
     deposits.write_all(write, ASSETS, DATA / MOD, lang)
+    import tank_display
+    tank_display.write_all(write, ASSETS, DATA / MOD, lang, model_writer)
     import advancements
     lang.update(advancements.generate(MOD)[1])
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
@@ -921,6 +923,9 @@ def tags():
     # Deposits break (slowly, for nothing) with a pickaxe; only a deposit drill gets their ore.
     import deposits
     for block in deposits.DEPOSITS:
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import tank_display
+    for block in tank_display.BLOCKS:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
     tags.write()
 

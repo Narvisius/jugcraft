@@ -1424,6 +1424,8 @@ def main():
     crop_textures.draw_all(save)
     import deposits
     deposits.draw_all(save)
+    import tank_display
+    tank_display.draw_all(save)
 
 
 if __name__ == "__main__":

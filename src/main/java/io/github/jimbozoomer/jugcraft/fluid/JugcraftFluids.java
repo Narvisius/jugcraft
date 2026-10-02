@@ -39,6 +39,9 @@ public final class JugcraftFluids {
 	public static Block HEAVY_PUMP;
 	public static Block FLUID_TANK;
 	public static Block ELECTRIC_PUMP;
+	/** Batch 20: a borosilicate glass tank (it shows what it holds) and the tank gauge. */
+	public static Block GLASS_TANK;
+	public static Block TANK_GAUGE;
 	public static BlockEntityType<FluidTankBlockEntity> TANK_ENTITY;
 	public static BlockEntityType<ElectricPumpBlockEntity> PUMP_ENTITY;
 	public static BlockEntityType<FluidFilterBlockEntity> FILTER_ENTITY;
@@ -66,20 +69,24 @@ public final class JugcraftFluids {
 				FluidPipeBlock.STEEL_RATE_MB));
 		FLUID_TANK = block("fluid_tank", new FluidTankBlock(properties("fluid_tank",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
+		GLASS_TANK = block("glass_tank", new FluidTankBlock(properties("glass_tank",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(1.5F).noOcclusion())));
+		TANK_GAUGE = block("tank_gauge", new TankGaugeBlock(properties("tank_gauge",
+				BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.0F).sound(SoundType.METAL).noOcclusion())));
 		ELECTRIC_PUMP = block("electric_pump", new ElectricPumpBlock(properties("electric_pump",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.ELECTRIC));
 		HEAVY_PUMP = block("heavy_pump", new ElectricPumpBlock(properties("heavy_pump",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(4.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.HEAVY));
 
 		TANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_tank"),
-				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK).build());
+				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK, GLASS_TANK).build());
 		PUMP_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("electric_pump"),
 				FabricBlockEntityTypeBuilder.create(ElectricPumpBlockEntity::new, ELECTRIC_PUMP, HEAVY_PUMP).build());
 
 		FILTER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_filter"),
 				FabricBlockEntityTypeBuilder.create(FluidFilterBlockEntity::new, FLUID_FILTER).build());
 
-		FluidStorage.SIDED.registerForBlockEntity((tank, side) -> tank.storage, TANK_ENTITY);
+		FluidStorage.SIDED.registerForBlockEntity((tank, side) -> TankGroup.at(tank.getLevel(), tank.getBlockPos()), TANK_ENTITY);
 		FluidStorage.SIDED.registerForBlockEntity(ElectricPumpBlockEntity::fluidFor, PUMP_ENTITY);
 		FluidStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
 			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
@@ -93,6 +100,8 @@ public final class JugcraftFluids {
 			output.accept(FLUID_VALVE);
 			output.accept(FLUID_FILTER);
 			output.accept(FLUID_TANK);
+			output.accept(GLASS_TANK);
+			output.accept(TANK_GAUGE);
 			output.accept(ELECTRIC_PUMP);
 			output.accept(HEAVY_PUMP);
 		});

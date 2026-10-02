@@ -14,6 +14,7 @@ import io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.fluid.TankGaugeBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlockEntity;
@@ -652,6 +653,48 @@ public class PetroGameTests {
 			helper.assertTrue(idle.stored() < 100_000 && idle.stored() > 90_000,
 					"Friction left an idle flywheel with " + idle.stored() + " KE");
 			helper.succeed();
+		});
+	}
+
+	/**
+	 * Joined tanks and the tank gauge (batch 20): two stacked tinplate tanks and a glass tank beside the lower one act
+	 * as one 48-bucket tank of one fluid, filled from the bottom and drained from the top; a gauge on the lower tank
+	 * shows the whole group's level in eighths.
+	 */
+	@GameTest(maxTicks = 100)
+	public void joinedTanksAndGauge(GameTestHelper helper) {
+		BlockPos low = new BlockPos(2, 1, 2);
+		BlockPos high = low.above();
+		BlockPos glass = low.east();
+		helper.setBlock(low, JugcraftFluids.FLUID_TANK);
+		helper.setBlock(high, JugcraftFluids.FLUID_TANK);
+		helper.setBlock(glass, JugcraftFluids.GLASS_TANK);
+		Storage<FluidVariant> group = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(high), Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long water = group.insert(FluidVariant.of(Fluids.WATER), 40 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(water == 40 * FluidConstants.BUCKET, "The group took " + water / FluidConstants.BUCKET + " buckets");
+			long lava = group.insert(FluidVariant.of(Fluids.LAVA), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(lava == 0, "The water tanks took lava");
+			transaction.commit();
+		}
+		long full = FluidTankBlockEntity.CAPACITY;
+		helper.assertTrue(helper.getBlockEntity(low, FluidTankBlockEntity.class).storage.amount == full
+				&& helper.getBlockEntity(glass, FluidTankBlockEntity.class).storage.amount == full
+				&& helper.getBlockEntity(high, FluidTankBlockEntity.class).storage.amount == 8 * FluidConstants.BUCKET,
+				"The group did not fill from the bottom");
+		try (Transaction transaction = Transaction.openOuter()) {
+			long taken = group.extract(FluidVariant.of(Fluids.WATER), 10 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(taken == 10 * FluidConstants.BUCKET, "Took " + taken / FluidConstants.BUCKET + " buckets");
+			transaction.commit();
+		}
+		helper.assertTrue(helper.getBlockEntity(high, FluidTankBlockEntity.class).storage.amount == 0,
+				"The group did not drain from the top");
+		BlockPos gauge = low.north();
+		helper.setBlock(gauge, JugcraftFluids.TANK_GAUGE.defaultBlockState().setValue(TankGaugeBlock.FACING, Direction.NORTH));
+		helper.succeedWhen(() -> {
+			// 30 of 48 buckets: five eighths.
+			int level = helper.getBlockState(gauge).getValue(TankGaugeBlock.LEVEL);
+			helper.assertTrue(level == 5, "The gauge shows " + level + " eighths");
 		});
 	}
 

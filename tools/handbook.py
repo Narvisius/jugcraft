@@ -405,7 +405,13 @@ def build():
         {"title": "Fluids", "icon": f"{MOD}:fluid_tank", "pages":
             [block_page(p, PIPES[p]["display"]) for p in ("bronze_fluid_pipe", "steel_fluid_pipe", "fluid_valve",
                                                           "fluid_filter")]
-            + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump", "heavy_pump")]},
+            + [block_page(b, FLUID_BLOCKS[b]["display"]) for b in ("fluid_tank", "electric_pump", "heavy_pump")]
+            + [{"title": "Joined Tanks and Gauges", "icon": f"{MOD}:tank_gauge", "text": [
+                "Tinplate and glass tanks touching face to face join into one tank of one fluid, up to 64 of them. "
+                "They fill from the bottom and drain from the top; pipes, buckets and comparators see the whole group.",
+                "A glass tank (four borosilicate glass in a steel frame) shows the fluid inside it.",
+                "Hang a tank gauge on the side of any tank or machine: its sight glass shows how full it is in "
+                "eighths. Right-click it to read the fluid and amount; a comparator reads it too."]}]},
         {"title": "Oil", "icon": f"{MOD}:crude_oil_bucket", "pages": [
             {"title": "Crude Oil", "icon": f"{MOD}:crude_oil_bucket", "text": [
                 "Crude oil lies in hidden reservoirs under some Overworld chunks. The prospector reports Oil (pumpable) "

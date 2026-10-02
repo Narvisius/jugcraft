@@ -15,6 +15,7 @@ from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS
                        all_blocks, all_items, feature_of)
 import petro
 import deposits
+import tank_display
 from machines import (CROPS, MACHINES, STATS, ORE_PROCESSING_MULTIPLIER, ORE_WASHING_MULTIPLIER, BYPRODUCT_SHARE,
                       RENEWABLE_UNITS, WOODS, machine_blocks, machine_items, machine_recipes)
 
@@ -91,7 +92,7 @@ def model(ref):
 
 def check_assets(registered):
     lang = load(ASSETS / "lang" / "en_us.json") or {}
-    for block in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS):
+    for block in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS) + list(tank_display.BLOCKS):
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
             for variant in state.get("variants", {}).values():
@@ -108,7 +109,7 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             model(definition["model"]["model"])
-        if item not in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS) and f"item.{MOD}.{item}" not in lang:
+        if item not in all_blocks() + machine_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS) + list(tank_display.BLOCKS) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
 
@@ -189,7 +190,7 @@ UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_bloc
          **{f"{form}s": units for form, units in PART_UNITS.items()}}
 
 
-NON_METAL = {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items()) | set(petro.petro_blocks())
+NON_METAL = {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items()) | set(petro.petro_blocks()) | set(tank_display.BLOCKS)
 
 
 def item_units(ref):
@@ -403,7 +404,7 @@ def check_tags():
                     err(f"{path.relative_to(ROOT)}: unknown fluid {value}")
             elif split(value)[0] == MOD and split(value)[1] not in (all_blocks() + all_items() + machine_blocks()
                                                                     + machine_items() + petro.petro_blocks()
-                                                                    + petro.petro_items() + list(deposits.DEPOSITS)):
+                                                                    + petro.petro_items() + list(deposits.DEPOSITS) + list(tank_display.BLOCKS)):
                 err(f"{path.relative_to(ROOT)}: unknown entry {value}")
 
 
@@ -674,7 +675,7 @@ def check_deposits():
 
 def main():
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
-                  | set(petro.petro_items()) | set(petro.petro_blocks()) | set(deposits.DEPOSITS))
+                  | set(petro.petro_items()) | set(petro.petro_blocks()) | set(deposits.DEPOSITS) | set(tank_display.BLOCKS))
     check_assets(sorted(registered))
     check_petro()
     check_loot(registered)

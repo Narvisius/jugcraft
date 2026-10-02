@@ -210,4 +210,7 @@ def feature_of(entry_id):
     import petro
     if entry_id in petro.petro_items() or entry_id in petro.petro_blocks():
         return FEATURE
+    import tank_display
+    if entry_id in tank_display.BLOCKS:
+        return FEATURE
     raise KeyError(entry_id)
