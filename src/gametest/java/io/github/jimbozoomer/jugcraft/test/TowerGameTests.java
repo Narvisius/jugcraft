@@ -290,16 +290,65 @@ public class TowerGameTests {
 		helper.succeed();
 	}
 
-	/** One tower per player per dimension; the tower's own plotting table is tied to its own terminal. */
+	/** The tower keeps its own chunks loaded from the start, and lets them go when the core is broken. */
+	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
+	public void towerKeepsItsChunksLoaded(GameTestHelper helper) {
+		TowerCoreBlockEntity core = placeCore(helper);
+		BlockPos pos = core.getBlockPos();
+		long chunk = net.minecraft.world.level.ChunkPos.containing(pos).pack();
+		helper.runAfterDelay(3, () -> {
+			helper.assertTrue(helper.getLevel().getForceLoadedChunks().contains(chunk), "the core's chunk is kept loaded");
+			helper.getLevel().setBlockAndUpdate(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+			helper.assertTrue(!helper.getLevel().getForceLoadedChunks().contains(chunk), "broken, the tower lets its chunks go");
+			helper.succeed();
+		});
+	}
+
+	/** A drone flies to a loaded site far away over chunks that are not loaded: only the two ends must be. */
+	@GameTest(structure = ARENA, maxTicks = 400, skyAccess = true)
+	public void dronesFlyOverUnloadedChunks(GameTestHelper helper) {
+		BlockPos from = helper.absolutePos(new BlockPos(5, 3, 5));
+		BlockPos to = from.offset(40 * 16, 0, 0);
+		net.minecraft.world.level.ChunkPos far = net.minecraft.world.level.ChunkPos.containing(to);
+		helper.getLevel().setChunkForced(far.x(), far.z(), true);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(helper.getLevel().isLoaded(to), "the far site's chunk has loaded");
+			BlockPos middle = from.offset(20 * 16, 0, 0);
+			if (!helper.getLevel().isLoaded(middle)) {
+				double cruise = io.github.jimbozoomer.jugcraft.drone.DroneRoutes.cruiseHeight(helper.getLevel(),
+						net.minecraft.world.phys.Vec3.atCenterOf(from), net.minecraft.world.phys.Vec3.atCenterOf(to));
+				helper.getLevel().setChunkForced(far.x(), far.z(), false);
+				helper.assertTrue(!Double.isNaN(cruise), "a route over unloaded chunks still gets a cruise height");
+			} else {
+				helper.getLevel().setChunkForced(far.x(), far.z(), false);
+			}
+		});
+	}
+
+	/**
+	 * Several towers per player per dimension, each outside the build radius of the player's others (other players
+	 * are not limited by it); the tower's own plotting table is tied to its own terminal.
+	 */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void oneTowerPerPlayerAndPinnedDisplays(GameTestHelper helper) {
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());
 		io.github.jimbozoomer.jugcraft.tower.TowerRegistry.get(helper.getLevel()).claim(owner.getUUID(), core.getBlockPos());
-		helper.assertTrue(!io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.mayPlace(helper.getLevel(), owner), "a second core in the same dimension is refused");
+		int radius = TowerCoreBlockEntity.BUILD_RADIUS_CHUNKS;
+		BlockPos inside = core.getBlockPos().offset(radius * 16, 0, 0);
+		BlockPos outside = core.getBlockPos().offset((radius + 1) * 16, 0, 0);
+		helper.assertTrue(!io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.mayPlace(helper.getLevel(), owner, inside),
+				"a second core inside the first one's " + radius + "-chunk build radius is refused");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.mayPlace(helper.getLevel(), owner, outside),
+				"a second core outside the build radius is allowed");
+		io.github.jimbozoomer.jugcraft.tower.TowerRegistry.get(helper.getLevel()).claim(owner.getUUID(), outside);
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.tower.TowerRegistry.get(helper.getLevel()).coresOf(helper.getLevel(), owner.getUUID()).size() == 2,
+				"the player owns both towers");
+		io.github.jimbozoomer.jugcraft.tower.TowerRegistry.get(helper.getLevel()).release(outside);
 		Player other = helper.makeMockPlayer(GameType.CREATIVE);
-		helper.assertTrue(io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.mayPlace(helper.getLevel(), other), "another player may still place one");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.mayPlace(helper.getLevel(), other, core.getBlockPos().offset(32, 0, 0)),
+				"another player may still place one nearby");
 		core.buildInstantly(helper.getLevel(), 1);
 		TowerData data = TowerData.get();
 		BlockPos terminal = core.getBlockPos().offset(data.terminal[0], data.terminal[1], data.terminal[2]);

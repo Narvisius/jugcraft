@@ -500,7 +500,7 @@ LANG = {
     "message.jugcraft.tower.not_owner": "Only this tower's owner (or their party, in Party mode) can do that",
     "message.jugcraft.tower.busy": "The tower is already building its next tier",
     "message.jugcraft.tower.max": "The tower is complete (tier 9)",
-    "message.jugcraft.tower.one_per_dimension": "You already have a Drone Tower in this dimension, at %s, %s, %s",
+    "message.jugcraft.tower.too_close": "Too close to your Drone Tower at %s, %s, %s: a new tower must stand more than %s chunks from your others",
     "message.jugcraft.tower.no_plinth": "Finish the 15x15 plinth of chiseled stone bricks round the core first",
     "message.jugcraft.tower.no_terminal": "The tower's Drone Depot Terminal is missing from the command room",
     "message.jugcraft.tower.missing": "Needs %s more %s",

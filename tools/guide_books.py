@@ -42,6 +42,9 @@ FIELD_MANUAL = [
     ("8. Grow the tower",
      "Load the next tier's modules and press UPGRADE again. From tier 2 on, your drones fly each tier in, from the "
      "bottom up, as long as power and blocks keep coming.", "tier2"),
+    ("Range",
+     "Your drones build blueprints up to 50 chunks from the tower, wherever the site's chunks are loaded; the tower "
+     "keeps itself loaded. You can build more towers, each over 50 chunks from your others.", None),
     ("Tips",
      "The terminal's mode (Personal or Party) decides who may use it. Place other blueprints and your drones build "
      "those too. The tower is lit, so mobs do not spawn on it.", None),

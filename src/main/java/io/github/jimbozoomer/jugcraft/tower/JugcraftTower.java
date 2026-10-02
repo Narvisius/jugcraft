@@ -137,8 +137,9 @@ public final class JugcraftTower {
 		BlockItem item = block instanceof TowerCoreBlock ? new BlockItem(block, properties) {
 			@Override
 			protected boolean canPlace(net.minecraft.world.item.context.BlockPlaceContext context, net.minecraft.world.level.block.state.BlockState state) {
-				// One Drone Tower per player per dimension.
-				return super.canPlace(context, state) && (context.getPlayer() == null || TowerCoreBlock.mayPlace(context.getLevel(), context.getPlayer()));
+				// Several Drone Towers per player per dimension, each outside the others' build radius.
+				return super.canPlace(context, state) && (context.getPlayer() == null
+						|| TowerCoreBlock.mayPlace(context.getLevel(), context.getPlayer(), context.getClickedPos()));
 			}
 		} : new BlockItem(block, properties);
 		Registry.register(BuiltInRegistries.ITEM, itemKey, item);

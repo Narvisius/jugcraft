@@ -38,7 +38,8 @@ public final class DroneRoutes {
 	 * wide), checked every block (at most {@link #MAX_SAMPLES} steps), and never below either end. The drone
 	 * climbs straight up to it, flies level and comes straight down ({@link FlightPath}), so it goes over
 	 * walls, towers and hills, never through them. Every leg lifts at least {@link #MIN_HOP} blocks above its
-	 * higher end. Returns NaN if the leg crosses an unloaded chunk (no chunk is ever loaded for a route).
+	 * higher end. Chunks the leg crosses that are not loaded are flown over without looking (no chunk is ever
+	 * loaded for a route, and nobody is there to see): only the two ends must be loaded. Returns NaN if one isn't.
 	 */
 	public static double cruiseHeight(ServerLevel level, Vec3 from, Vec3 to) {
 		double dx = to.x - from.x;
@@ -57,7 +58,10 @@ public final class DroneRoutes {
 				int x = (int) Math.floor(px + sideX * side);
 				int z = (int) Math.floor(pz + sideZ * side);
 				if (!level.isLoaded(new BlockPos(x, (int) from.y, z))) {
-					return Double.NaN;
+					if ((i == 0 || i == samples) && side == 0) {
+						return Double.NaN;
+					}
+					continue;
 				}
 				if (i > 0 && i < samples) {
 					cruise = Math.max(cruise, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) + CLEARANCE);

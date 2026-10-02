@@ -41,7 +41,7 @@ import org.jspecify.annotations.Nullable;
 public class DroneTerminalBlockEntity extends BlockEntity {
 	public static final long ENERGY_CAPACITY = 200_000;
 	public static final long ENERGY_INPUT = 4_096;
-	/** Horizontal reach of the depot, in blocks from the platform centre. */
+	/** Horizontal reach of a depot without a tower, in blocks from the platform centre. */
 	public static final int RANGE = 96;
 	public static final int JOB_INTERVAL = 20;
 	public static final int SCAN_INTERVAL = 20;
@@ -686,12 +686,21 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 			return;
 		}
 		BlockPos center = BlockPos.containing(layout.centerX(), platformY + 1, layout.centerZ());
+		int range = RANGE;
+		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
+		if (tower != null) {
+			// A Drone Tower builds within its build radius: 50 chunks each way from the core's chunk. Only sites in
+			// loaded chunks are offered (their blueprint stakes are loaded); the tower keeps its own chunks loaded.
+			net.minecraft.world.level.ChunkPos chunk = net.minecraft.world.level.ChunkPos.containing(tower.getBlockPos());
+			center = new BlockPos(chunk.getMiddleBlockX(), platformY + 1, chunk.getMiddleBlockZ());
+			range = io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity.BUILD_RADIUS_CHUNKS * 16 + 8;
+		}
 		// One list per job source (each placed blueprint, the tower): drones are shared out between them in turn,
 		// so every job in range gets drones at once instead of the first ones taking the whole fleet.
 		List<List<BuildJobs.Target>> jobs = new ArrayList<>();
 		int total = 0;
 		for (BuildJobs.Source source : BuildJobs.sources()) {
-			List<BuildJobs.Target> open = source.openTargets(level, center, RANGE, owner, mode, Math.min(MAX_TARGETS_PER_REQUEST, wanted));
+			List<BuildJobs.Target> open = source.openTargets(level, center, range, owner, mode, Math.min(MAX_TARGETS_PER_REQUEST, wanted));
 			if (!open.isEmpty()) {
 				jobs.add(open);
 				total += open.size();

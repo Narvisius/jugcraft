@@ -24,7 +24,7 @@ import net.minecraft.world.level.GameType;
  */
 public final class GuideBooks {
 	/** Page counts; keep in step with tools/guide_books.py (check_mod_data.py checks the lang has them). */
-	public static final int MANUAL_PAGES = 10;
+	public static final int MANUAL_PAGES = 11;
 	public static final int CREATIVE_PAGES = 8;
 	/** Tag on a player who has had the creative book, so it is only given once. */
 	public static final String GIVEN_TAG = "jugcraft.creative_guide";

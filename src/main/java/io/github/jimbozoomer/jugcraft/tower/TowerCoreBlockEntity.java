@@ -47,6 +47,36 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	public static final int MODULE_CAPACITY = 1024;
 	/** How close (squared blocks) a player must be to press UPGRADE. */
 	public static final double REACH_SQR = 10 * 10;
+	/**
+	 * How far a tower's drones build, in chunks each way from the core's chunk (from tier 1 on). Another tower of
+	 * the same player must stand outside it.
+	 */
+	public static final int BUILD_RADIUS_CHUNKS = 50;
+	/** The tower itself (its 39x39 field, exchanges and pads) lies within this many blocks of the core. */
+	public static final int FOOTPRINT = 24;
+
+	/** Distance between two chunks, counted in chunks along the longer axis (a square radius). */
+	public static int chunkDistance(net.minecraft.world.level.ChunkPos a, net.minecraft.world.level.ChunkPos b) {
+		return a.getChessboardDistance(b);
+	}
+
+	/**
+	 * Keeps the tower's own chunks loaded (or lets them go): the depot, its drones and its exchanges keep working
+	 * with nobody nearby. Only the tower is kept loaded; drones build at a site only while its chunks are loaded,
+	 * and nothing in between needs to be.
+	 */
+	public static void keepLoaded(ServerLevel level, BlockPos core, boolean loaded) {
+		net.minecraft.world.level.ChunkPos min = net.minecraft.world.level.ChunkPos.containing(core.offset(-FOOTPRINT, 0, -FOOTPRINT));
+		net.minecraft.world.level.ChunkPos max = net.minecraft.world.level.ChunkPos.containing(core.offset(FOOTPRINT, 0, FOOTPRINT));
+		for (int x = min.x(); x <= max.x(); x++) {
+			for (int z = min.z(); z <= max.z(); z++) {
+				level.setChunkForced(x, z, loaded);
+			}
+		}
+	}
+
+	/** Set once the chunks are forced after loading (cores placed before chunk loading existed get it too). */
+	private boolean chunksForced;
 
 	private @Nullable UUID owner;
 	private int tier;
@@ -246,6 +276,10 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	}
 
 	public void serverTick(ServerLevel server) {
+		if (!chunksForced) {
+			chunksForced = true;
+			keepLoaded(server, getBlockPos(), true);
+		}
 		if (building == 1) {
 			TowerData.Tier data = TowerData.get().tier(1);
 			// Progress counts the cells to clear first, then the blocks to place.

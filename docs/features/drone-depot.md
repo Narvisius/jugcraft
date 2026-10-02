@@ -85,7 +85,7 @@ Tiers 5–9 have items and models but no recipe yet, because they need materials
   - at most 5 launches per tick per depot;
   - job requests once a second (at most 64 positions);
   - platform rescans at most once a second, and only after a platform, pad or packager block changed nearby;
-  - routes take at most 64 height-map reads per leg, in loaded chunks only (each leg climbs to one cruise height over the highest ground under it, flies level, and comes straight down);
+  - routes take at most 64 height-map reads per leg, in loaded chunks only; unloaded chunks in between are flown over unread (each leg climbs to one cruise height over the highest ground under it, flies level, and comes straight down);
   - no chunk loading.
 - **Covered positions** (under a roof or in a cave) are skipped and counted. Underground routing is part 2.
 - **Reservations** stop two depots from delivering the same block.

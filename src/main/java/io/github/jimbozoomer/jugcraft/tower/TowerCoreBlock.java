@@ -55,17 +55,18 @@ public class TowerCoreBlock extends BaseEntityBlock {
 	}
 
 	/**
-	 * One Drone Tower per player per dimension: placing a second core is refused (the item stays in hand) and
-	 * the player is told where their tower is. Called from the block item before placing.
+	 * A player may own several Drone Towers in a dimension, but a new core must stand outside the build radius of
+	 * their other towers ({@link TowerCoreBlockEntity#BUILD_RADIUS_CHUNKS} chunks each way): otherwise placing it is
+	 * refused (the item stays in hand) and the player is told which tower is too close. Called from the block item.
 	 */
-	public static boolean mayPlace(Level level, Player player) {
+	public static boolean mayPlace(Level level, Player player, BlockPos pos) {
 		if (level.isClientSide()) {
 			return true;
 		}
-		BlockPos existing = TowerRegistry.get((ServerLevel) level).coreOf((ServerLevel) level, player.getUUID());
+		BlockPos existing = TowerRegistry.get((ServerLevel) level).coreCovering((ServerLevel) level, player.getUUID(), pos);
 		if (existing != null) {
-			player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("message.jugcraft.tower.one_per_dimension",
-					existing.getX(), existing.getY(), existing.getZ()));
+			player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("message.jugcraft.tower.too_close",
+					existing.getX(), existing.getY(), existing.getZ(), TowerCoreBlockEntity.BUILD_RADIUS_CHUNKS));
 			return false;
 		}
 		return true;
@@ -104,6 +105,7 @@ public class TowerCoreBlock extends BaseEntityBlock {
 	@Override
 	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
 		TowerRegistry.get(level).release(pos);
+		TowerCoreBlockEntity.keepLoaded(level, pos, false);
 		super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
 	}
 
