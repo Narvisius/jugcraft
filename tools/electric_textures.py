@@ -544,6 +544,37 @@ def cable(collar):
     return img
 
 
+def mirror(seed):
+    """A heliostat mirror: bright sky-blue silvered glass with white glints and a thin graphite rim."""
+    rng = random.Random(seed)
+    img = new()
+    for y in range(16):
+        for x in range(16):
+            c = (150, 196, 232) if rng.random() < 0.85 else (176, 214, 242)
+            if (x + y) in (9, 10, 21):
+                c = (236, 246, 252)
+            if x in (0, 15) or y in (0, 15):
+                c = GRAPHITE[2]
+            put(img, x, y, c)
+    return img
+
+
+def receiver(seed):
+    """The solar receiver's absorber: rows of dark tubes glowing orange-hot between graphite headers."""
+    img = new()
+    hot = [(120, 40, 12), (200, 80, 20), (250, 150, 50), (255, 210, 120)]
+    for y in range(16):
+        for x in range(16):
+            if y in (0, 1, 14, 15):
+                c = GRAPHITE[2] if y in (1, 14) else GRAPHITE[1]
+            else:
+                c = hot[2] if x % 3 == 1 else hot[1] if x % 3 == 0 else hot[0]
+                if x % 3 == 1 and y % 5 == 2:
+                    c = hot[3]
+            put(img, x, y, c)
+    return img
+
+
 def draw_all():
     save(casing(730), "el_casing")
     save(seams(731), "el_seams")
@@ -576,6 +607,8 @@ def draw_all():
     save(glass(True), "el_glass_on")
     save(glow(VIOLET), "el_glow_violet")
     save(glow(VANADIUM), "el_glow_blue")
+    save(mirror(757), "el_mirror")
+    save(receiver(758), "el_receiver")
     save(conduit(743), "el_conduit")
     save(boule(744), "el_boule")
     save(cyan_screen(False), "el_screen_cyan")

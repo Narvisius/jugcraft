@@ -213,4 +213,7 @@ def feature_of(entry_id):
     import guide_books  # the Drone Tower guide books go with the drones, part of the machines
     if entry_id in guide_books.BOOKS:
         return FEATURE
+    import tank_display
+    if entry_id in tank_display.BLOCKS:
+        return FEATURE
     raise KeyError(entry_id)

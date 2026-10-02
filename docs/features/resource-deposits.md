@@ -1,6 +1,6 @@
 # Surface resource deposits and the deposit drill
 
-Status: implemented on `feature/deposits-11` (batch 11), awaiting review. Compiles and tests in CI only; **not yet played**.
+Status: merged in #62 (batch 11). Compiles and tests in CI only; **not yet played**.
 Proposal issue: owner request, 1 October 2026: "add some surface deposits of resources like coal and iron which have different blocks that aren't mineable directly but that the players must put big drills on and they keep putting out resources until like 1000 are depleted per block the mining drills would mine like 4 at a time and output them into a chest which the player could then send on a conveyer belt or item pipes to furnaces and industrial machines to process, lets start with these showing up on the surface in like stoney hill biomes and maybe make new resource rich biome? We can eventually put them underground." Rate changed the same day at the owner's request: "Should produce like 1 of each resource every 15 seconds".
 Owner: jimbozoomer-byte
 Target milestone and tier: workshop tier (right after the first coal generator and a basic circuit)

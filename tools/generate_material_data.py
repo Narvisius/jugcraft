@@ -134,6 +134,10 @@ def assets():
     machine_assets(lang)
     import deposits
     deposits.write_all(write, ASSETS, DATA / MOD, lang)
+    import tank_display
+    tank_display.write_all(write, ASSETS, DATA / MOD, lang, model_writer)
+    import gui_textures
+    gui_textures.write_all(write, ASSETS, lang, MACHINES)
     import advancements
     lang.update(advancements.generate(MOD)[1])
     party_lang(lang)
@@ -568,6 +572,8 @@ def machine_assets(lang):
     lang[f"message.{MOD}.steam_engine"] = "Steam engine: %s fuel, %s / %s mB water"
     lang[f"message.{MOD}.dynamo"] = "Dynamo: %s / %s JE"
     lang[f"message.{MOD}.electric_motor"] = "Electric motor: %s / %s JE"
+    lang[f"message.{MOD}.flywheel"] = "Flywheel: %s / %s KE"
+    lang[f"message.{MOD}.solar_receiver"] = "Solar receiver: %s heliostats in the field, %s JE/t, %s mB of water"
     lang[f"message.{MOD}.network_terminal"] = "Network: %s cables at %s JE/t, %s devices holding %s / %s JE (%s%%)"
     lang[f"message.{MOD}.network_terminal.none"] = "No cable connected"
     lang[f"tooltip.{MOD}.stored_fluid"] = "%s: %s mB"
@@ -1132,6 +1138,9 @@ def tags():
     # Deposits break (slowly, for nothing) with a pickaxe; only a deposit drill gets their ore.
     import deposits
     for block in deposits.DEPOSITS:
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import tank_display
+    for block in tank_display.BLOCKS:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
     tags.write()
 

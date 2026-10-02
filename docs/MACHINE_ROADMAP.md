@@ -83,10 +83,10 @@ Ideas Claude suggested after batch 10 (advanced power and tanks). The owner aske
 ### Power, tanks and engines
 | Idea | What it adds | Notes |
 | --- | --- | --- |
-| **Fluid gauge and tank walls** | A panel showing a tank's level; tinplate tanks side by side join into one bigger tank | |
-| **Turbocharger / intercooler** | An add-on for the advanced engine: more output for more fuel, needs coolant water | Tuning instead of just more engines |
-| **Solar tracker and concentrator** | The array follows the sun; a heliostat mirror field boils water for steam | A solar-thermal route |
-| **Flywheel** | Stores kinetic energy for engines, smoothing bursty kinetic lines | |
+| **Fluid gauge and tank walls** ✅ batch 20 (tank gauge, joined tanks, glass tank) | A panel showing a tank's level; tinplate tanks side by side join into one bigger tank | |
+| **Turbocharger / intercooler** ✅ batch 19 (fitted in the advanced engine, water coolant) | An add-on for the advanced engine: more output for more fuel, needs coolant water | Tuning instead of just more engines |
+| **Solar tracker and concentrator** ✅ batch 21 (solar tracker, heliostats and a solar receiver) | The array follows the sun; a heliostat mirror field boils water for steam | A solar-thermal route |
+| **Flywheel** ✅ batch 19 (2,000,000 KE, friction) | Stores kinetic energy for engines, smoothing bursty kinetic lines | |
 | **Pressure tiers for pipes** | Heavy gas pipes and compressor stations | The gas holder becomes a real buffer for hydrogen and natural gas grids |
 | **Grid control room** | A cyan monitor bank wired to battery banks, showing generation and use per source over time | |
 | **Portable tanks / fluid canisters** | Handheld containers to refuel engines, rocket packs and tools in the field | |

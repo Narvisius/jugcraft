@@ -21,6 +21,23 @@ import net.minecraft.world.phys.AABB;
 
 /** The Blueprint System's first slice: built-in blueprints load, stakes offer bottom-up jobs, and finished builds pop off. */
 public class BlueprintGameTests {
+	@GameTest
+	public void uploadIsBoundedAndOrdered(GameTestHelper helper) {
+		var upload = new io.github.jimbozoomer.jugcraft.blueprint.BlueprintUpload(2);
+		helper.assertTrue(upload.append(0, 2, "first"), "First part accepted");
+		helper.assertFalse(upload.append(0, 2, "duplicate"), "Repeated part refused");
+		helper.assertFalse(upload.append(1, 3, "changed"), "Changed total refused");
+		helper.assertTrue(upload.append(1, 2, "second"), "Next part accepted");
+		helper.assertTrue(upload.complete() && upload.text().equals("firstsecond"), "Only valid parts assembled");
+		helper.assertFalse(upload.append(2, 2, "extra"), "Completed upload refuses more data");
+		var large = new io.github.jimbozoomer.jugcraft.blueprint.BlueprintUpload(33);
+		for (int i = 0; i < 32; i++) {
+			helper.assertTrue(large.append(i, 33, "x".repeat(8000)), "Bounded part accepted");
+		}
+		helper.assertFalse(large.append(32, 33, "x".repeat(8000)), "Total character limit enforced");
+		helper.assertFalse(large.complete(), "Oversized upload cannot complete");
+		helper.succeed();
+	}
 	private static final String ARENA = "jugcraft-test:drone_tower";
 
 	@GameTest

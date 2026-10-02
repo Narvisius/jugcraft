@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "el_casing": "jugcraft:block/el_casing",
+    "el_frame": "jugcraft:block/el_frame",
+    "el_mirror": "jugcraft:block/el_mirror",
+    "iron_shaft": "jugcraft:block/iron_shaft",
+    "particle": "jugcraft:block/sp_iron"
+  },
+  "elements": [
+    {
+      "from": [
+        5.0,
+        0.0,
+        5.0
+      ],
+      "to": [
+        11.0,
+        1.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_frame"
+        },
+        "south": {
+          "texture": "#el_frame"
+        },
+        "east": {
+          "texture": "#el_frame"
+        },
+        "west": {
+          "texture": "#el_frame"
+        },
+        "up": {
+          "texture": "#el_frame"
+        },
+        "down": {
+          "texture": "#el_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        1.0,
+        7.0
+      ],
+      "to": [
+        9.0,
+        9.02,
+        9.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_casing"
+        },
+        "south": {
+          "texture": "#el_casing"
+        },
+        "east": {
+          "texture": "#el_casing"
+        },
+        "west": {
+          "texture": "#el_casing"
+        },
+        "up": {
+          "texture": "#el_casing"
+        },
+        "down": {
+          "texture": "#el_casing"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        9.0,
+        2.0
+      ],
+      "to": [
+        14.0,
+        10.0,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_frame"
+        },
+        "south": {
+          "texture": "#el_frame"
+        },
+        "east": {
+          "texture": "#el_frame"
+        },
+        "west": {
+          "texture": "#el_frame"
+        },
+        "up": {
+          "texture": "#el_mirror"
+        },
+        "down": {
+          "texture": "#el_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        6.98,
+        8.0,
+        2.5
+      ],
+      "to": [
+        9.02,
+        9.0,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron_shaft"
+        },
+        "south": {
+          "texture": "#iron_shaft"
+        },
+        "east": {
+          "texture": "#iron_shaft"
+        },
+        "west": {
+          "texture": "#iron_shaft"
+        },
+        "up": {
+          "texture": "#iron_shaft"
+        },
+        "down": {
+          "texture": "#iron_shaft"
+        }
+      }
+    }
+  ]
+}

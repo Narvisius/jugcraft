@@ -178,6 +178,21 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.takeScreenshot("jugcraft_machine_screen");
 			context.setScreen(() -> null);
 
+			// One screen in each of the other two themes (batch 22): the electric battery box and the lab's circuit
+			// assembler.
+			for (MachineKind kind : List.of(MachineKind.BATTERY_BOX, MachineKind.CIRCUIT_ASSEMBLER)) {
+				BlockPos machine = new BlockPos(x - 7 + singleIndex(kind), y, z - 5);
+				server.runCommand("tp @p %d %d %d 180 30".formatted(machine.getX(), y, z - 3));
+				context.waitTicks(10);
+				context.getInput().lookAt(machine);
+				context.waitTick();
+				context.getInput().pressKey(options -> options.keyUse);
+				context.waitForScreen(MachineScreen.class);
+				context.waitTicks(25);
+				context.takeScreenshot("jugcraft_machine_screen_" + kind.id);
+				context.setScreen(() -> null);
+			}
+
 			// The auto-crafter's screen, with a stick pattern in its grid.
 			BlockPos crafter = new BlockPos(x - 7 + singleIndex(MachineKind.AUTO_CRAFTER), y, z - 5);
 			server.runOnServer(minecraft -> {
@@ -200,7 +215,11 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.setScreen(HandbookScreen::new);
 			context.waitTicks(2);
 			context.takeScreenshot("jugcraft_handbook");
-			context.setScreen(() -> new HandbookScreen(3, 1));
+			// The Progression chapter's first stage, and a machine page (Processing: the crusher).
+			context.setScreen(() -> new HandbookScreen(0, 1));
+			context.waitTicks(2);
+			context.takeScreenshot("jugcraft_handbook_progression");
+			context.setScreen(() -> new HandbookScreen(4, 1));
 			context.waitTicks(2);
 			context.takeScreenshot("jugcraft_handbook_machine_page");
 			context.setScreen(() -> null);

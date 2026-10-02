@@ -1,6 +1,6 @@
 # Advanced power: solar arrays, engines and tanks
 
-Status: implemented on feature/power-10 (PR #60), awaiting review
+Status: merged in #60 (batch 10). Compiles and tests in CI only; **not yet played**.
 Proposal issue: owner request, 1 October 2026, with three reference images: "Want bigger solar panels to look like this and be called Advanced Solar Panel, image 2 shows what I want tanks to look like which the player should be able to break and they should maintain how full they are of any liquid put inside it. Image 3 shows what more advanced engines should look like."
 Owner: jimbozoomer-byte
 Target milestone and tier: the high-tech tier (after advanced materials and electronics)

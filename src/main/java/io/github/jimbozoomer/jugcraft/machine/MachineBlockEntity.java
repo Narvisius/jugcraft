@@ -9,6 +9,7 @@ import io.github.jimbozoomer.jugcraft.chemistry.FluidTanks;
 import io.github.jimbozoomer.jugcraft.chemistry.GasFluid;
 import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
+import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.deposit.DepositBlock;
 import io.github.jimbozoomer.jugcraft.deposit.Deposits;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
@@ -223,7 +224,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return switch (kind) {
 			case FRACKING_RIG -> variant.isOf(PetroFluids.FRACKING_FLUID.source());
 			case DIESEL_GENERATOR -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
-			case DIESEL_ENGINE, FUEL_CELL, ADVANCED_ENGINE -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
+			case DIESEL_ENGINE, FUEL_CELL -> tank == 0 && FluidFuels.jePerMb(kind, variant.getFluid()) > 0;
+			// The advanced engine's second tank is the turbocharger's coolant.
+			case ADVANCED_ENGINE -> tank == 0 ? FluidFuels.jePerMb(kind, variant.getFluid()) > 0 : variant.isOf(Fluids.WATER);
 			case GAS_TURBINE -> tank == 0 ? FluidFuels.jePerMb(kind, variant.getFluid()) > 0
 					: variant.isOf(PetroFluids.LUBRICANT.source());
 			default -> FluidRecipes.usesFluid(server.getServer(), kind, tank, variant);
@@ -669,7 +672,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 */
 	private boolean tickDieselEngine(ServerLevel level, BlockPos pos, BlockState state) {
 		boolean advanced = kind == MachineKind.ADVANCED_ENGINE;
-		int output = advanced ? MachineKind.ADVANCED_ENGINE_OUTPUT : MachineKind.DIESEL_ENGINE_OUTPUT;
+		// A turbocharger in the advanced engine's slot, with coolant for its intercooler: more power, a little more
+		// from each mB of fuel.
+		boolean turbo = advanced && items.get(0).is(PetroItems.TURBOCHARGER)
+				&& tanks.input(1).millibuckets() >= MachineKind.TURBO_WATER_PER_TICK;
+		int output = turbo ? MachineKind.TURBO_OUTPUT
+				: advanced ? MachineKind.ADVANCED_ENGINE_OUTPUT : MachineKind.DIESEL_ENGINE_OUTPUT;
 		maxBurn = output;
 		maxProgress = output;
 		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
@@ -680,6 +688,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			int value = FluidFuels.jePerMb(kind, fuel.variant.getFluid());
 			if (value <= 0) {
 				break;
+			}
+			if (turbo) {
+				value = value * MachineKind.TURBO_EFFICIENCY_PERCENT / 100;
 			}
 			fuel.drain(1);
 			burn += value;
@@ -696,6 +707,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return false;
 		}
 		burn -= (int) taken;
+		if (turbo) {
+			tanks.input(1).drain(MachineKind.TURBO_WATER_PER_TICK);
+		}
 		setChanged();
 		return true;
 	}
@@ -1648,6 +1662,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if (kind == MachineKind.ADVANCED_ENGINE) {
+			return slot == 0 && stack.is(PetroItems.TURBOCHARGER);
+		}
 		if (kind.isFluidProcessor()) {
 			// Only the server knows the recipes; on the client the menu's slots accept anything and the server decides.
 			return slot < kind.outputSlot() && (!(level instanceof ServerLevel server)

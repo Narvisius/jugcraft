@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.fluid;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -19,9 +20,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * The tinplate tank. Right-click with a bucket (or any fluid container item) to fill or
- * empty it, with an empty hand to read its contents. Comparators read how full it is.
- * Breaking the tank keeps its contents: the item carries them ({@link StoredFluid}).
+ * The tinplate tank, and the glass tank (batch 20). Right-click with a bucket (or any fluid container item) to fill or
+ * empty it, with an empty hand to read its contents. Comparators read how full it is. Tanks touching face to face join
+ * into one ({@link TankGroup}). Breaking a tank keeps its contents: the item carries them ({@link StoredFluid}).
  */
 public class FluidTankBlock extends BaseEntityBlock implements FluidConnectable {
 	public FluidTankBlock(Properties properties) {
@@ -36,8 +37,8 @@ public class FluidTankBlock extends BaseEntityBlock implements FluidConnectable 
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 			InteractionHand hand, BlockHitResult hit) {
-		if (level.getBlockEntity(pos) instanceof FluidTankBlockEntity tank
-				&& FluidStorageUtil.interactWithFluidStorage(tank.storage, player, hand)) {
+		if (level.getBlockEntity(pos) instanceof FluidTankBlockEntity
+				&& FluidStorageUtil.interactWithFluidStorage(TankGroup.at(level, pos), player, hand)) {
 			return InteractionResult.SUCCESS;
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hit);
@@ -45,19 +46,25 @@ public class FluidTankBlock extends BaseEntityBlock implements FluidConnectable 
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FluidTankBlockEntity tank) {
-			player.sendOverlayMessage(describe(tank.storage));
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FluidTankBlockEntity) {
+			TankGroup group = TankGroup.at(level, pos);
+			player.sendOverlayMessage(describe(group.fluid(), group.amount(), group.capacity()));
 		}
 		return InteractionResult.SUCCESS;
 	}
 
 	/** "Water: 3000 / 16000 mB" (or "Empty"), for any single-fluid tank; shown when right-clicked with an empty hand. */
 	public static Component describe(SingleFluidStorage storage) {
-		long capacity = storage.getCapacity() / FluidNetworks.DROPLETS_PER_MB;
-		return storage.isResourceBlank()
-				? Component.translatable("message.jugcraft.tank.empty", capacity)
-				: Component.translatable("message.jugcraft.tank", FluidVariantAttributes.getName(storage.variant),
-						storage.amount / FluidNetworks.DROPLETS_PER_MB, capacity);
+		return describe(storage.variant, storage.amount, storage.getCapacity());
+	}
+
+	/** The same for any amount and capacity in droplets (a group of joined tanks, a gauge's reading). */
+	public static Component describe(FluidVariant variant, long amount, long capacity) {
+		long capacityMb = capacity / FluidNetworks.DROPLETS_PER_MB;
+		return variant.isBlank() || amount <= 0
+				? Component.translatable("message.jugcraft.tank.empty", capacityMb)
+				: Component.translatable("message.jugcraft.tank", FluidVariantAttributes.getName(variant),
+						amount / FluidNetworks.DROPLETS_PER_MB, capacityMb);
 	}
 
 	@Override
@@ -77,6 +84,6 @@ public class FluidTankBlock extends BaseEntityBlock implements FluidConnectable 
 
 	@Override
 	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
-		return level.getBlockEntity(pos) instanceof FluidTankBlockEntity tank ? StorageUtil.getRedstoneSignal(tank.storage) : 0;
+		return level.getBlockEntity(pos) instanceof FluidTankBlockEntity ? StorageUtil.getRedstoneSignal(TankGroup.at(level, pos)) : 0;
 	}
 }

@@ -27,7 +27,7 @@ public final class BlueprintNetwork {
 	/** Pasted text is sent in parts this long (serverbound packets are limited to 32 KB). */
 	public static final int CHUNK = 8000;
 	private static final double REACH_SQR = 10 * 10;
-	private static final Map<UUID, StringBuilder> UPLOADS = new HashMap<>();
+	private static final Map<UUID, BlueprintUpload> UPLOADS = new HashMap<>();
 
 	private BlueprintNetwork() {
 	}
@@ -171,6 +171,7 @@ public final class BlueprintNetwork {
 		ServerLifecycleEvents.SERVER_STARTED.register(BlueprintLibrary::load);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> sendAll(handler.player));
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> UPLOADS.remove(handler.player.getUUID()));
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> UPLOADS.clear());
 
 		ServerPlayNetworking.registerGlobalReceiver(PrintPayload.TYPE, (payload, context) -> {
 			ServerPlayer player = context.player();
@@ -189,25 +190,28 @@ public final class BlueprintNetwork {
 			if (payload.parts() < 1 || payload.parts() > Blueprint.MAX_CHARS / CHUNK + 1 || payload.part() < 0 || payload.part() >= payload.parts()) {
 				return;
 			}
-			StringBuilder text = payload.part() == 0 ? new StringBuilder() : UPLOADS.get(player.getUUID());
+			BlueprintUpload text = payload.part() == 0 ? new BlueprintUpload(payload.parts()) : UPLOADS.get(player.getUUID());
 			if (text == null) {
 				return;
 			}
-			text.append(payload.text());
+			if (!text.append(payload.part(), payload.parts(), payload.text())) {
+				UPLOADS.remove(player.getUUID());
+				return;
+			}
 			UPLOADS.put(player.getUUID(), text);
-			if (payload.part() < payload.parts() - 1) {
+			if (!text.complete()) {
 				return;
 			}
 			UPLOADS.remove(player.getUUID());
 			try {
-				Blueprint blueprint = BlueprintLibrary.importText(context.server(), text.toString());
+				Blueprint blueprint = BlueprintLibrary.importText(context.server(), text.text());
 				for (ServerPlayer other : context.server().getPlayerList().getPlayers()) {
 					send(other, blueprint, false);
 				}
 				ServerPlayNetworking.send(player, new ImportResultPayload(true, "Imported \"" + blueprint.name + "\": " + blueprint.sizeX + " x "
 						+ blueprint.sizeY + " x " + blueprint.sizeZ + ", " + blueprint.size() + " blocks. It is now in the LIBRARY.", blueprint.id));
 				Jugcraft.LOGGER.info("{} imported blueprint {} ({} blocks)", player.getName().getString(), blueprint.id, blueprint.size());
-			} catch (Blueprint.Invalid e) {
+			} catch (Blueprint.Invalid | IllegalArgumentException | IllegalStateException | UnsupportedOperationException e) {
 				ServerPlayNetworking.send(player, new ImportResultPayload(false, e.getMessage(), ""));
 			}
 		});

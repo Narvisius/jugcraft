@@ -14,7 +14,10 @@ import io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.fluid.TankGaugeBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
+import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlock;
+import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
@@ -23,6 +26,8 @@ import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import java.util.List;
+import io.github.jimbozoomer.jugcraft.solar.JugcraftSolar;
+import io.github.jimbozoomer.jugcraft.solar.SolarReceiverBlockEntity;
 import io.github.jimbozoomer.jugcraft.weapons.Blast;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -608,6 +613,125 @@ public class PetroGameTests {
 			long most = 40L * DynamoBlockEntity.MAGNET.rate() / FluidFuels.ADVANCED_GASOLINE + 4;
 			helper.assertTrue(burnt > 0 && burnt <= most, "Gasoline burnt in 40 ticks: " + burnt + " mB (at most " + most + ")");
 			helper.succeed();
+		});
+	}
+
+	/**
+	 * Turbocharger and flywheel (batch 19): a turbocharged advanced engine with coolant spins a flywheel faster than an
+	 * engine without one could, and uses its coolant; a charged flywheel drives a dynamo from its front, and one with
+	 * nothing to drive runs down by friction.
+	 */
+	@GameTest(maxTicks = 100)
+	public void turbochargerAndFlywheel(GameTestHelper helper) {
+		BlockPos master = new BlockPos(4, 1, 1);
+		BlockPos wheelPos = master.south();
+		helper.setBlock(wheelPos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.SOUTH));
+		FlywheelBlockEntity wheel = helper.getBlockEntity(wheelPos, FlywheelBlockEntity.class);
+		MachineBlockEntity engine = placeUnpowered(helper, MachineKind.ADVANCED_ENGINE, master);
+		helper.assertTrue(engine.canPlaceItem(0, new ItemStack(PetroItems.TURBOCHARGER))
+				&& !engine.canPlaceItem(0, new ItemStack(Items.IRON_INGOT)), "The engine's slot takes the wrong items");
+		engine.setItem(0, new ItemStack(PetroItems.TURBOCHARGER));
+		engine.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 1000);
+		engine.tanks().input(1).fill(Fluids.WATER, 1000);
+
+		BlockPos driverPos = new BlockPos(1, 1, 4);
+		BlockPos dynamoPos = driverPos.south();
+		helper.setBlock(driverPos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.SOUTH));
+		helper.setBlock(dynamoPos, JugcraftKinetics.MAGNET_DYNAMO);
+		FlywheelBlockEntity driver = helper.getBlockEntity(driverPos, FlywheelBlockEntity.class);
+		DynamoBlockEntity dynamo = helper.getBlockEntity(dynamoPos, DynamoBlockEntity.class);
+		driver.setStored(100_000);
+
+		BlockPos idlePos = new BlockPos(7, 1, 6);
+		helper.setBlock(idlePos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.UP));
+		FlywheelBlockEntity idle = helper.getBlockEntity(idlePos, FlywheelBlockEntity.class);
+		idle.setStored(100_000);
+
+		helper.runAfterDelay(20, () -> {
+			helper.assertTrue(wheel.stored() > 20L * MachineKind.ADVANCED_ENGINE_OUTPUT,
+					"The turbocharged engine gave the flywheel only " + wheel.stored() + " KE in 20 ticks");
+			helper.assertTrue(engine.tanks().input(1).millibuckets() < 1000, "The turbocharger used no coolant");
+			helper.assertTrue(dynamo.energy().getAmount() > 0 && driver.stored() < 100_000, "The flywheel drove nothing");
+			helper.assertTrue(idle.stored() < 100_000 && idle.stored() > 90_000,
+					"Friction left an idle flywheel with " + idle.stored() + " KE");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Joined tanks and the tank gauge (batch 20): two stacked tinplate tanks and a glass tank beside the lower one act
+	 * as one 48-bucket tank of one fluid, filled from the bottom and drained from the top; a gauge on the lower tank
+	 * shows the whole group's level in eighths.
+	 */
+	@GameTest(maxTicks = 100)
+	public void joinedTanksAndGauge(GameTestHelper helper) {
+		BlockPos low = new BlockPos(2, 1, 2);
+		BlockPos high = low.above();
+		BlockPos glass = low.east();
+		helper.setBlock(low, JugcraftFluids.FLUID_TANK);
+		helper.setBlock(high, JugcraftFluids.FLUID_TANK);
+		helper.setBlock(glass, JugcraftFluids.GLASS_TANK);
+		Storage<FluidVariant> group = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(high), Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long water = group.insert(FluidVariant.of(Fluids.WATER), 40 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(water == 40 * FluidConstants.BUCKET, "The group took " + water / FluidConstants.BUCKET + " buckets");
+			long lava = group.insert(FluidVariant.of(Fluids.LAVA), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(lava == 0, "The water tanks took lava");
+			transaction.commit();
+		}
+		long full = FluidTankBlockEntity.CAPACITY;
+		helper.assertTrue(helper.getBlockEntity(low, FluidTankBlockEntity.class).storage.amount == full
+				&& helper.getBlockEntity(glass, FluidTankBlockEntity.class).storage.amount == full
+				&& helper.getBlockEntity(high, FluidTankBlockEntity.class).storage.amount == 8 * FluidConstants.BUCKET,
+				"The group did not fill from the bottom");
+		try (Transaction transaction = Transaction.openOuter()) {
+			long taken = group.extract(FluidVariant.of(Fluids.WATER), 10 * FluidConstants.BUCKET, transaction);
+			helper.assertTrue(taken == 10 * FluidConstants.BUCKET, "Took " + taken / FluidConstants.BUCKET + " buckets");
+			transaction.commit();
+		}
+		helper.assertTrue(helper.getBlockEntity(high, FluidTankBlockEntity.class).storage.amount == 0,
+				"The group did not drain from the top");
+		BlockPos gauge = low.north();
+		helper.setBlock(gauge, JugcraftFluids.TANK_GAUGE.defaultBlockState().setValue(TankGaugeBlock.FACING, Direction.NORTH));
+		helper.succeedWhen(() -> {
+			// 30 of 48 buckets: five eighths.
+			int level = helper.getBlockState(gauge).getValue(TankGaugeBlock.LEVEL);
+			helper.assertTrue(level == 5, "The gauge shows " + level + " eighths");
+		});
+	}
+
+	/**
+	 * Solar thermal (batch 21): a receiver counts the heliostats under open sky in the field below it (not one that is
+	 * roofed over), makes nothing without water, and with water makes 12 JE/t a heliostat in daylight (half in rain),
+	 * boiling water for it. The test world's time and weather are not fixed, so daylight is read from the level.
+	 */
+	@GameTest(maxTicks = 200)
+	public void heliostatsHeatASolarReceiver(GameTestHelper helper) {
+		BlockPos receiverPos = new BlockPos(4, 5, 4);
+		helper.setBlock(receiverPos, JugcraftSolar.SOLAR_RECEIVER);
+		for (BlockPos mirror : List.of(new BlockPos(2, 1, 2), new BlockPos(6, 1, 6), new BlockPos(1, 2, 6), new BlockPos(6, 1, 1))) {
+			helper.setBlock(mirror, JugcraftSolar.HELIOSTAT);
+		}
+		helper.setBlock(new BlockPos(6, 2, 1), Blocks.STONE);
+		BlockPos absolute = helper.absolutePos(receiverPos);
+		SolarReceiverBlockEntity receiver = helper.getBlockEntity(receiverPos, SolarReceiverBlockEntity.class);
+		// Sky light (what "open sky" reads) catches up with the new roof a few ticks after it is placed.
+		helper.runAfterDelay(20, () -> {
+			int count = SolarReceiverBlockEntity.countHeliostats(helper.getLevel(), absolute);
+			helper.assertTrue(count == 3, "The receiver counted " + count + " heliostats under open sky");
+			helper.assertTrue(receiver.lastOutput() == 0 && receiver.energy().getAmount() == 0, "It made power without water");
+			receiver.water().variant = FluidVariant.of(Fluids.WATER);
+			receiver.water().amount = 4 * FluidConstants.BUCKET;
+			helper.runAfterDelay(5, () -> {
+				ServerLevel level = helper.getLevel();
+				boolean sun = level.isBrightOutside() && level.canSeeSky(absolute.above());
+				int expected = sun ? (level.isRaining() ? 18 : 36) : 0;
+				helper.assertTrue(receiver.lastOutput() == expected,
+						"The receiver made " + receiver.lastOutput() + " JE/t, expected " + expected);
+				helper.assertTrue((expected > 0) == (receiver.water().amount < 4 * FluidConstants.BUCKET),
+						"Water boiled " + (4 * FluidConstants.BUCKET - receiver.water().amount) / 81 + " mB at " + expected + " JE/t");
+				helper.succeed();
+			});
 		});
 	}
 
