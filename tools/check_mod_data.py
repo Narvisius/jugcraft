@@ -577,6 +577,7 @@ def check_handbook(registered):
             craft = page.get("craft")
             if craft:
                 refs += [ref for ref in craft["grid"] if ref] + [craft["result"]]
+            refs += [step["item"] for step in page.get("steps", [])]
             for row in page.get("recipes", []):
                 refs += [ref for ref, _ in row["in"]] + [row["out"][0]] + [ref for ref, _ in row.get("extra", [])]
     for ref in refs:

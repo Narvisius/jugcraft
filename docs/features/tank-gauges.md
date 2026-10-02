@@ -1,6 +1,6 @@
 # Joined tanks, glass tanks and tank gauges
 
-Status: implemented on `feature/power-20` (batch 20), awaiting the owner's review. Compiles and tests in CI only; **not yet played**.
+Status: merged in #76 (batch 20). Compiles and tests in CI only; **not yet played**.
 Proposal issue: the owner, 1 October 2026: "Then lets do 7-9". This is item 8 of the options list ("tank gauges and joined tanks"), from the backlog's "Fluid gauge and tank walls" and the glass tanks promised with glass chemistry (batch 16).
 Owner: jimbozoomer-byte
 Target milestone and tier: fluid logistics, after borosilicate glass (batch 16)

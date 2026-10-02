@@ -1,6 +1,6 @@
 # Machine screens redesigned
 
-Status: implemented on `feature/ui-22` (batch 22), awaiting the owner's review. Compiles and tests in CI only; screenshots come from the client game test.
+Status: merged in #78 (batch 22). Compiles and tests in CI only; screenshots come from the client game test.
 Proposal issue: the owner, 1 October 2026: "redo all the userinterfaces for all the machines to make them more interesting and obvious what they are for and thematically correct and still readable". The owner attached five reference images:
 - an orange-on-brown terminal with a pixel keyboard;
 - a grey device with a screen;

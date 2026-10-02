@@ -1,6 +1,6 @@
 # Solar tracker and heliostat field
 
-Status: implemented on `feature/power-21` (batch 21), awaiting the owner's review. Compiles and tests in CI only; **not yet played**.
+Status: merged in #77 (batch 21). Compiles and tests in CI only; **not yet played**.
 Proposal issue: the owner, 1 October 2026: "Then lets do 7-9", item 9 of the options list ("solar tracker and heliostat"), from the backlog's "Solar tracker and concentrator".
 Owner: jimbozoomer-byte
 Target milestone and tier: renewable power, after the advanced solar panel (batch 10)

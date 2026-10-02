@@ -212,7 +212,11 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.setScreen(HandbookScreen::new);
 			context.waitTicks(2);
 			context.takeScreenshot("jugcraft_handbook");
-			context.setScreen(() -> new HandbookScreen(3, 1));
+			// The Progression chapter's first stage, and a machine page (Processing: the crusher).
+			context.setScreen(() -> new HandbookScreen(0, 1));
+			context.waitTicks(2);
+			context.takeScreenshot("jugcraft_handbook_progression");
+			context.setScreen(() -> new HandbookScreen(4, 1));
 			context.waitTicks(2);
 			context.takeScreenshot("jugcraft_handbook_machine_page");
 			context.setScreen(() -> null);

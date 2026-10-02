@@ -1,6 +1,6 @@
 # Turbocharger and flywheel
 
-Status: implemented on `feature/power-19` (batch 19), awaiting the owner's review. Compiles and tests in CI only; **not yet played**.
+Status: merged in #75 (batch 19). Compiles and tests in CI only; **not yet played**.
 Proposal issue: the owner, 1 October 2026: "Then lets do 7-9", item 7 of the options list ("turbocharger and flywheel"), from the saved backlog in [MACHINE_ROADMAP.md](../MACHINE_ROADMAP.md).
 Owner: jimbozoomer-byte
 Target milestone and tier: late kinetic power, with the advanced engine (batch 10)

@@ -8,19 +8,23 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Everything below is on `main`.
 
-### Unmerged: Machine screens redesigned, batch 22
+### Unmerged: Engineer's Handbook reorganised, batch 23
+- The book fits the window; the chapter list is a scrollable contents list where the open chapter shows its pages, and long pages scroll (mouse wheel or arrow keys).
+- New **Progression** chapter: the road through the mod in nine stages, each a plan and a numbered chain of the items to make in order.
+
+### #78 Machine screens redesigned, batch 22
 - Every machine screen has a themed look: dieselpunk amber, electric green or lab teal, after the machine's model.
 - A control terminal says what the machine is for, what it is doing, its progress, power and power rate, and holds the side controls.
 
-### Unmerged: Solar tracker and heliostats, batch 21
+### #77 Solar tracker and heliostats, batch 21
 - **Solar tracker:** a panel that tilts after the sun, 20 JE/t in one block.
 - **Heliostats** and a **solar receiver**: 12 JE/t per heliostat under open sky in the field below the receiver (up to 48), boiling water.
 
-### Unmerged: Joined tanks, glass tanks and gauges, batch 20
+### #76 Joined tanks, glass tanks and gauges, batch 20
 - Tinplate and glass tanks touching each other join into one tank (up to 64), filling from the bottom.
 - **Glass tank** shows its fluid; **tank gauge** shows any tank's or machine's level in eighths.
 
-### Unmerged: Turbocharger and flywheel, batch 19
+### #75 Turbocharger and flywheel, batch 19
 - **Turbocharger** in the advanced engine's new slot, with coolant water in its new second tank: up to 1,536 KE/t and 10% more KE from each mB of fuel.
 - **Flywheel:** stores up to 2,000,000 KE of rotation and drives its front shaft from it; friction runs it down slowly.
 
