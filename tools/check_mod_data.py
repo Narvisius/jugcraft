@@ -96,7 +96,9 @@ def model(ref):
 def _hi_res(name):
     """The drone tower's realistic block textures (tools/tower_art.py) are 64x64."""
     import tower_art
-    return name in tower_art.TEXTURES or name.startswith(("landing_pad_formed_", "supply_pickup_formed_", "hangar_pad_"))
+    import blueprints
+    return (name in tower_art.TEXTURES or name in blueprints.TABLE_TEXTURES
+            or name.startswith(("landing_pad_formed_", "supply_pickup_formed_", "hangar_pad_")))
 
 
 def item_model_refs(node):

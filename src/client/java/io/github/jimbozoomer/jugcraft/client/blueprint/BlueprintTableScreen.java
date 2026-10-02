@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -18,25 +18,33 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
 /**
- * The Blueprint Table, in four tabs:
+ * The Blueprint Table, drawn as a drafting sheet clipped to a steel board, with four folder tabs:
  * <ul>
  * <li>STRUCTURE SET: the mod's blueprints of several parts making a whole (a complete plant).</li>
  * <li>INDIVIDUAL STRUCTURES: one structure, not a part and not divided (a church).</li>
  * <li>PARTIAL STRUCTURES: one part of a set (a single cooling tower).</li>
  * <li>IMPORT: every blueprint this player has imported (kept on their computer, {@link ImportHistory}), and a
- * new import: paste the text of a blueprint (.jugbp.json, for example one an AI designed) and IMPORT adds it to
- * the server's library; problems are explained in plain words.</li>
+ * new import on tracing paper: paste the text of a blueprint (.jugbp.json, for example one an AI designed) and
+ * IMPORT adds it to the server's library; problems are explained in plain words.</li>
  * </ul>
- * Each list shows a front view, size and bill of materials; PRINT gives you the blueprint (free).
+ * The left of the sheet is the drawing register; the selected blueprint turns slowly in the middle
+ * ({@link BlueprintTurntable}), with its bill of materials and a title block on the right. PRINT gives you the
+ * blueprint (free).
  */
 public class BlueprintTableScreen extends Screen {
 	private static final int W = 410;
-	private static final int H = 234;
-	/** Everything below the tab row starts this much lower. */
-	private static final int DY = 14;
-	private static final int ROW = 14;
+	private static final int H = 250;
+	private static final int ROW = 13;
 	private static final int SETS = 0, INDIVIDUAL = 1, PARTIAL = 2, IMPORT = 3;
 	private static final Blueprint.Category[] CATEGORY = {Blueprint.Category.SET, Blueprint.Category.INDIVIDUAL, Blueprint.Category.PARTIAL};
+	private static final String[] TAB_NAMES = {"STRUCTURE SET", "INDIVIDUAL STRUCTURES", "PARTIAL STRUCTURES", "IMPORT"};
+	/** The colour chip on each tab: the colour of that kind of blueprint item. */
+	private static final int[] TAB_CHIP = {0xFF408CF0, 0xFF408CF0, 0xFF46BE64, 0xFFDC4638};
+	private static final int STEEL = 0xFF363A42, STEEL_LIGHT = 0xFF525862, STEEL_DARK = 0xFF1E2126, SCREW = 0xFF7C8086;
+	private static final int PAPER = 0xFF1A3E80, GRID = 0xFF2C549C, GRID_MAJOR = 0xFF406AB4, INK = 0xFFE2ECFA, PALE = 0xFF96B2DC;
+	private static final int STAMP_RED = 0xFFB02A22, STAMP_GREY = 0xFF464E5C, AMBER = 0xFFFFC86E, GOOD = 0xFF9CE6A4;
+	/** The turning preview: its size in GUI pixels. */
+	private static final int PREVIEW_W = 132, PREVIEW_H = 160;
 	static BlueprintTableScreen open;
 
 	private final BlockPos table;
@@ -46,23 +54,48 @@ public class BlueprintTableScreen extends Screen {
 	private int selected;
 	private int scroll;
 	private String selectId = "";
-	private int[][] preview;
-	private String previewFor = "";
-	private Button print;
-	private Button importButton;
-	private Button remove;
 	private MultiLineEditBox paste;
-	private final List<Button> tabs = new ArrayList<>();
-	private final List<Button> pasteButtons = new ArrayList<>();
+	private BlueprintTurntable turntable;
+	private final List<Stamp> stamps = new ArrayList<>();
+	private final int[][] tabBounds = new int[4][];
 	private List<ImportHistory.Entry> history = List.of();
 	/** The text sent with the last IMPORT, saved to the history once the server accepts it. */
 	private String sent = "";
 	private String result = "";
 	private boolean resultOk;
 
+	/** A rubber-stamp button drawn on the sheet: it only works while {@code active}. */
+	private record Stamp(String label, int x, int y, int w, int h, int colour, boolean active, Runnable action) {
+		boolean over(double mx, double my) {
+			return mx >= x && mx < x + w && my >= y && my < y + h;
+		}
+	}
+
 	public BlueprintTableScreen(BlockPos table) {
 		super(Component.translatable("block.jugcraft.blueprint_table"));
 		this.table = table;
+	}
+
+	// The sheet, inside the steel board, and its parts.
+	private int px0() {
+		return left + 6;
+	}
+
+	private int py0() {
+		return top + 30;
+	}
+
+	private int px1() {
+		return left + W - 6;
+	}
+
+	private int py1() {
+		return top + H - 6;
+	}
+
+	/** The right edge of the drawing register. */
+	private int listRight() {
+		return px0() + 112;
 	}
 
 	@Override
@@ -70,33 +103,16 @@ public class BlueprintTableScreen extends Screen {
 		open = this;
 		left = (width - W) / 2;
 		top = (height - H) / 2;
-		tabs.clear();
-		pasteButtons.clear();
 		history = ImportHistory.list();
-		String[] names = {"STRUCTURE SET", "INDIVIDUAL STRUCTURES", "PARTIAL STRUCTURES", "IMPORT"};
-		int tx = left + 6;
-		for (int i = 0; i < names.length; i++) {
-			int which = i;
-			int w = font.width(names[i]) + 12;
-			tabs.add(addRenderableWidget(Button.builder(Component.literal(names[i]), b -> setTab(which)).bounds(tx, top + 18, w, 14).build()));
-			tx += w + 3;
+		if (turntable == null) {
+			turntable = new BlueprintTurntable(PREVIEW_W, PREVIEW_H);
 		}
-		print = addRenderableWidget(Button.builder(Component.literal("PRINT"), b -> printSelected()).bounds(left + W - 44, top + H - 30, 38, 20).build());
-		importButton = addRenderableWidget(Button.builder(Component.literal("IMPORT"), b -> sendImport()).bounds(left + W - 94, top + H - 30, 48, 20).build());
-		remove = addRenderableWidget(Button.builder(Component.literal("REMOVE"), b -> removeSelected()).bounds(left + 150, top + H - 30, 46, 20).build());
-		paste = new MultiLineEditBox.Builder().setX(left + 148).setY(top + 38 + DY).setTextColor(0xFFD2C8C8).setCursorColor(SciFi.ACCENT)
+		paste = new MultiLineEditBox.Builder().setX(listRight() + 22).setY(py0() + 14).setTextColor(0xFF28303C).setCursorColor(0xFF28303C)
+				.setShowBackground(false)
 				.setPlaceholder(Component.literal("{\"format\": 1, \"name\": \"...\", \"palette\": {...}, \"layers\": [...]}"))
-				.build(font, W - 156, H - 112 - DY, Component.literal("Blueprint text"));
+				.build(font, px1() - listRight() - 34, py1() - py0() - 62, Component.literal("Blueprint text"));
 		paste.setCharacterLimit(Blueprint.MAX_CHARS);
 		addRenderableWidget(paste);
-		pasteButtons.add(addRenderableWidget(Button.builder(Component.literal("PASTE"), b -> {
-			paste.setValue(Minecraft.getInstance().keyboardHandler.getClipboard());
-			result = "";
-		}).bounds(left + 150, top + H - 30, 46, 20).build()));
-		pasteButtons.add(addRenderableWidget(Button.builder(Component.literal("CLEAR"), b -> {
-			paste.setValue("");
-			result = "";
-		}).bounds(left + 199, top + H - 30, 44, 20).build()));
 		setTab(tab);
 	}
 
@@ -107,21 +123,13 @@ public class BlueprintTableScreen extends Screen {
 			result = "";
 		}
 		tab = value;
-		for (int i = 0; i < tabs.size(); i++) {
-			tabs.get(i).active = i != tab;      // the open tab shows pressed
-		}
 		updateWidgets();
 	}
 
-	/** Which buttons show: the paste box and its buttons only on IMPORT's "new import" row. */
+	/** The paste box shows only on IMPORT's "new import" row. */
 	private void updateWidgets() {
-		boolean importing = tab == IMPORT;
-		boolean newImport = importing && selected == 0;
+		boolean newImport = tab == IMPORT && selected == 0;
 		paste.visible = newImport;
-		pasteButtons.forEach(b -> b.visible = newImport);
-		importButton.visible = importing;
-		remove.visible = importing && !newImport;
-		print.visible = true;
 		if (newImport) {
 			setFocused(paste);
 		}
@@ -130,6 +138,10 @@ public class BlueprintTableScreen extends Screen {
 	@Override
 	public void removed() {
 		open = null;
+		if (turntable != null) {
+			turntable.close();
+			turntable = null;
+		}
 		super.removed();
 	}
 
@@ -152,7 +164,7 @@ public class BlueprintTableScreen extends Screen {
 		return tab == IMPORT ? history.size() + 1 : library().size();
 	}
 
-	/** The blueprint the right-hand side shows, or null (nothing, or a new import). */
+	/** The blueprint the sheet shows, or null (nothing, or a new import). */
 	private Blueprint shown() {
 		if (tab == IMPORT) {
 			return selected > 0 && selected - 1 < history.size() ? history.get(selected - 1).blueprint() : null;
@@ -166,17 +178,15 @@ public class BlueprintTableScreen extends Screen {
 		return Blueprint.get("import/" + entry.slug(), true);
 	}
 
-	private void printSelected() {
+	private Blueprint printable() {
 		if (tab == IMPORT) {
-			if (selected > 0 && selected - 1 < history.size()) {
-				Blueprint server = onServer(history.get(selected - 1));
-				if (server != null) {
-					ClientPlayNetworking.send(new BlueprintNetwork.PrintPayload(table, server.id));
-				}
-			}
-			return;
+			return selected > 0 && selected - 1 < history.size() ? onServer(history.get(selected - 1)) : null;
 		}
-		Blueprint b = shown();
+		return shown();
+	}
+
+	private void printSelected() {
+		Blueprint b = printable();
 		if (b != null) {
 			ClientPlayNetworking.send(new BlueprintNetwork.PrintPayload(table, b.id));
 		}
@@ -241,11 +251,52 @@ public class BlueprintTableScreen extends Screen {
 		}
 	}
 
+	/** The stamps for what is on the sheet now. */
+	private void layoutStamps() {
+		stamps.clear();
+		int px1 = px1(), py0 = py0(), py1 = py1(), lr = listRight();
+		boolean newImport = tab == IMPORT && selected == 0;
+		if (newImport) {
+			stamps.add(new Stamp("PASTE", lr + 16, py1 - 30, 44, 17, STAMP_GREY, true, () -> {
+				paste.setValue(Minecraft.getInstance().keyboardHandler.getClipboard());
+				result = "";
+			}));
+			stamps.add(new Stamp("CLEAR", lr + 64, py1 - 30, 44, 17, STAMP_GREY, true, () -> {
+				paste.setValue("");
+				result = "";
+			}));
+			stamps.add(new Stamp("IMPORT", px1 - 64, py1 - 30, 56, 17, STAMP_RED, true, this::sendImport));
+			return;
+		}
+		stamps.add(new Stamp("PRINT", px1 - 60, py0 + 7, 52, 18, STAMP_RED, printable() != null, this::printSelected));
+		if (tab == IMPORT && selected > 0) {
+			stamps.add(new Stamp("IMPORT", px1 - 116, py0 + 7, 52, 18, STAMP_GREY, true, this::sendImport));
+			stamps.add(new Stamp("REMOVE", px1 - 60, py0 + 28, 52, 18, STAMP_GREY, true, this::removeSelected));
+		}
+	}
+
 	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
 		double x = event.x(), y = event.y();
-		if (x >= left + 8 && x < left + 140 && y >= top + 36 + DY && y < top + 36 + DY + rows() * ROW) {
-			int index = scroll + (int) ((y - top - 36 - DY) / ROW);
+		for (int i = 0; i < tabBounds.length; i++) {
+			int[] b = tabBounds[i];
+			if (b != null && x >= b[0] && x < b[2] && y >= b[1] && y < b[3]) {
+				setTab(i);
+				return true;
+			}
+		}
+		for (Stamp stamp : List.copyOf(stamps)) {
+			if (stamp.over(x, y)) {
+				if (stamp.active()) {
+					stamp.action().run();
+					layoutStamps();
+				}
+				return true;
+			}
+		}
+		int listTop = py0() + 22;
+		if (x >= px0() + 4 && x < listRight() && y >= listTop && y < listTop + rows() * ROW) {
+			int index = scroll + (int) ((y - listTop) / ROW);
 			if (index < rowCount()) {
 				selected = index;
 				if (tab == IMPORT) {
@@ -260,7 +311,7 @@ public class BlueprintTableScreen extends Screen {
 
 	@Override
 	public boolean mouseScrolled(double x, double y, double dx, double dy) {
-		if (x < left + 142) {
+		if (x < listRight()) {
 			scroll = Math.max(0, Math.min(Math.max(0, rowCount() - rows()), scroll - (int) Math.signum(dy)));
 			return true;
 		}
@@ -268,25 +319,98 @@ public class BlueprintTableScreen extends Screen {
 	}
 
 	private int rows() {
-		return (H - 80 - DY) / ROW;
+		return (py1() - py0() - 50) / ROW;
 	}
 
 	@Override
 	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractBackground(g, mouseX, mouseY, delta);
-		SciFi.frame(g, left, top, left + W, top + H);
-		g.fill(left + 6, top + 22 + DY, left + 142, top + H - 36, SciFi.PANEL);
-		g.fill(left + 146, top + 22 + DY, left + W - 6, top + H - 36, SciFi.PANEL);
+		drawBoard(g);
+		drawTabs(g);
+		drawSheet(g);
 		if (paste.visible) {
-			g.fill(left + 147, top + 37 + DY, left + W - 7, top + H - 73, 0xFF3C2826);
-			g.fill(left + 148, top + 38 + DY, left + W - 8, top + H - 74, 0xFF080708);
+			// tracing paper over the sheet, with a shadow
+			int x0 = listRight() + 16, y0 = py0() + 8, x1 = px1() - 8, y1 = py1() - 36;
+			g.fill(x0 + 3, y0 + 3, x1 + 3, y1 + 3, 0xFF12285A);
+			g.fill(x0, y0, x1, y1, 0xFFD6DEE8);
+			g.fill(x0, y0, x1, y0 + 1, 0xFFF0F4F8);
 		}
+	}
+
+	/** The steel drawing board: a rim, four screws, the title and the drafting tools on the rail. */
+	private void drawBoard(GuiGraphicsExtractor g) {
+		g.fill(left - 1, top - 1, left + W + 1, top + H + 1, STEEL_DARK);
+		g.fill(left, top, left + W, top + H, STEEL);
+		g.outline(left + 2, top + 2, W - 4, H - 4, STEEL_LIGHT);
+		for (int[] c : new int[][] {{left + 4, top + 4}, {left + W - 8, top + 4}, {left + 4, top + H - 8}, {left + W - 8, top + H - 8}}) {
+			g.fill(c[0], c[1] + 1, c[0] + 4, c[1] + 3, SCREW);
+			g.fill(c[0] + 1, c[1], c[0] + 3, c[1] + 4, SCREW);
+			g.fill(c[0], c[1] + 2, c[0] + 4, c[1] + 3, STEEL_DARK);   // the slot
+		}
+		g.text(font, Component.literal("BLUEPRINT TABLE").withStyle(ChatFormatting.BOLD), left + 12, top + 6, 0xFFDEE2E8, false);
+		int tx = left + W - 80, ty = top + 6, tool = 0xFFC8CCD2;
+		g.outline(tx, ty + 1, 24, 5, tool);                              // a scale ruler
+		for (int k = 2; k < 24; k += 3) {
+			g.fill(tx + k, ty + 1, tx + k + 1, ty + 3, tool);
+		}
+		for (int k = 0; k < 9; k++) {                                     // a set square
+			g.fill(tx + 32, ty + k, tx + 33, ty + k + 1, tool);
+			g.fill(tx + 32 + k, ty + k, tx + 33 + k, ty + k + 1, tool);
+		}
+		g.fill(tx + 32, ty + 8, tx + 41, ty + 9, tool);
+		for (int k = 0; k < 9; k++) {                                     // a compass
+			g.fill(tx + 52 - k / 2, ty + k, tx + 53 - k / 2, ty + k + 1, tool);
+			g.fill(tx + 52 + k / 2, ty + k, tx + 53 + k / 2, ty + k + 1, tool);
+		}
+		g.fill(tx + 51, ty - 2, tx + 54, ty + 1, tool);
+	}
+
+	/** Folder tabs along the top of the sheet, each with its colour chip; the open one joins the sheet. */
+	private void drawTabs(GuiGraphicsExtractor g) {
+		int x = px0();
+		int bottom = py0();
+		for (int i = 0; i < TAB_NAMES.length; i++) {
+			int w = font.width(TAB_NAMES[i]) + 22;
+			boolean active = i == tab;
+			int fill = active ? PAPER : 0xFF3A424E;
+			int edge = active ? INK : STEEL_LIGHT;
+			int h = 13;
+			for (int r = 0; r < h; r++) {                                 // a trapezoid, a row at a time
+				int inset = (h - r) * 4 / h;
+				int y = bottom - h + r;
+				g.fill(x + inset, y, x + w - inset, y + 1, fill);
+				g.fill(x + inset, y, x + inset + 1, y + 1, edge);
+				g.fill(x + w - inset - 1, y, x + w - inset, y + 1, edge);
+			}
+			g.fill(x + 4, bottom - h, x + w - 4, bottom - h + 1, edge);
+			g.fill(x + 8, bottom - 9, x + 13, bottom - 4, TAB_CHIP[i]);
+			g.text(font, TAB_NAMES[i], x + 16, bottom - 10, active ? INK : PALE, false);
+			tabBounds[i] = new int[] {x, bottom - h, x + w, bottom};
+			x += w + 2;
+		}
+	}
+
+	/** Blueprint paper with a fine and a coarse grid and an inked border. */
+	private void drawSheet(GuiGraphicsExtractor g) {
+		int x0 = px0(), y0 = py0(), x1 = px1(), y1 = py1();
+		g.fill(x0, y0, x1, y1, PAPER);
+		for (int x = x0 + 4; x < x1; x += 4) {
+			g.fill(x, y0, x + 1, y1, (x - x0) % 20 == 0 ? GRID_MAJOR : GRID);
+		}
+		for (int y = y0 + 4; y < y1; y += 4) {
+			g.fill(x0, y, x1, y + 1, (y - y0) % 20 == 0 ? GRID_MAJOR : GRID);
+		}
+		int[] tb = tabBounds[tab];
+		g.outline(x0 + 2, y0 + 2, x1 - x0 - 4, y1 - y0 - 4, INK);
+		if (tb != null) {
+			g.fill(tb[0] + 1, y0, tb[2] - 1, y0 + 2, PAPER);         // the open tab runs into the sheet
+		}
+		g.fill(listRight() + 5, y0 + 6, listRight() + 6, y1 - 6, INK);
 	}
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractRenderState(g, mouseX, mouseY, delta);
-		g.text(font, "| BLUEPRINT TABLE", left + 8, top + 7, SciFi.ACCENT, false);
 		if (tab != IMPORT && !selectId.isEmpty()) {
 			List<Blueprint> all = library();
 			for (int i = 0; i < all.size(); i++) {
@@ -298,115 +422,123 @@ public class BlueprintTableScreen extends Screen {
 			selectId = "";
 		}
 		selected = Math.max(0, Math.min(rowCount() - 1, selected));
-		g.text(font, new String[] {"SETS", "STRUCTURES", "PARTS", "YOUR IMPORTS"}[tab], left + 10, top + 25 + DY, SciFi.DIM, false);
+		layoutStamps();
+		drawRegister(g);
+		Blueprint b = shown();
+		if (tab == IMPORT && selected == 0) {
+			g.text(font, "PASTE  .jugbp.json  TEXT HERE", listRight() + 22, py1() - 46, 0xFF78829A, false);
+		} else if (b == null) {
+			g.text(font, new String[] {"No structure sets yet", "No blueprints yet", "No partial structures yet", ""}[tab],
+					listRight() + 16, py0() + 12, PALE, false);
+		} else {
+			drawDrawing(g, b, mouseX, mouseY);
+		}
+		for (Stamp stamp : stamps) {
+			drawStamp(g, stamp, stamp.over(mouseX, mouseY));
+		}
+	}
+
+	/** The drawing register: one numbered line per blueprint (or saved import), with its colour chip. */
+	private void drawRegister(GuiGraphicsExtractor g) {
+		int x0 = px0() + 8, x1 = listRight() - 2, y = py0() + 9;
+		g.text(font, tab == IMPORT ? "YOUR IMPORTS" : "DRAWING REGISTER", x0, y, PALE, false);
 		for (int i = 0; i < rows() && scroll + i < rowCount(); i++) {
 			int index = scroll + i;
-			int y = top + 36 + DY + i * ROW;
+			int ry = py0() + 24 + i * ROW;
 			if (index == selected) {
-				g.fill(left + 8, y - 2, left + 140, y + ROW - 3, SciFi.SELECTED);
+				g.outline(x0 - 4, ry - 3, x1 - x0 + 4, ROW, INK);
 			}
-			String name;
-			int colour;
-			if (tab == IMPORT) {
-				name = index == 0 ? "+ NEW IMPORT" : history.get(index - 1).blueprint().name;
-				colour = index == 0 ? SciFi.ACCENT : SciFi.AMBER;
-			} else {
-				name = library().get(index).name;
-				colour = SciFi.WHITE;
+			if (tab == IMPORT && index == 0) {
+				g.text(font, Component.literal("+ NEW IMPORT").withStyle(ChatFormatting.BOLD), x0, ry, INK, false);
+				continue;
 			}
-			g.text(font, SciFi.fit(font, name, 126), left + 11, y, colour, false);
+			String name = tab == IMPORT ? history.get(index - 1).blueprint().name : library().get(index).name;
+			String number = String.format("%02d  ", tab == IMPORT ? index : index + 1);
+			g.text(font, number + SciFi.fit(font, name, x1 - x0 - 12 - font.width(number)), x0, ry, tab == IMPORT ? AMBER : INK, false);
+			g.fill(x1 - 8, ry + 1, x1 - 3, ry + 6, TAB_CHIP[tab]);
 		}
 		int count = tab == IMPORT ? history.size() : rowCount();
-		g.text(font, count + (tab == IMPORT ? " saved on this computer" : count == 1 ? " blueprint" : " blueprints"), left + 10, top + H - 48, SciFi.DIM, false);
+		g.text(font, count + (tab == IMPORT ? " saved locally" : count == 1 ? " drawing" : " drawings"), x0, py1() - 14, PALE, false);
 		if (tab == IMPORT && !result.isEmpty()) {
-			List<net.minecraft.util.FormattedCharSequence> lines = font.split(Component.literal(result), 128);
-			int n = Math.min(4, lines.size());
+			List<net.minecraft.util.FormattedCharSequence> lines = font.split(Component.literal(result), x1 - x0);
+			int n = Math.min(5, lines.size());
 			for (int i = 0; i < n; i++) {
-				g.text(font, lines.get(i), left + 10, top + H - 60 - (n - i) * 10, resultOk ? SciFi.GOOD : SciFi.AMBER, false);
+				g.text(font, lines.get(i), x0, py1() - 26 - (n - i) * 10, resultOk ? GOOD : AMBER, false);
 			}
 		}
-		if (tab == IMPORT && selected == 0) {
-			g.text(font, "Paste a blueprint (.jugbp.json text), then IMPORT.", left + 150, top + 26 + DY, SciFi.DIM, false);
-			importButton.active = true;
-			print.active = false;
-			return;
+	}
+
+	/** The selected blueprint: turning in the middle with a dimension line, materials and the title block. */
+	private void drawDrawing(GuiGraphicsExtractor g, Blueprint b, int mouseX, int mouseY) {
+		int vx = listRight() + 14, vy = py0() + 10;
+		if (turntable != null) {
+			turntable.draw(g, b, vx, vy);
 		}
-		Blueprint b = shown();
-		if (tab == IMPORT) {
-			ImportHistory.Entry entry = selected - 1 < history.size() ? history.get(selected - 1) : null;
-			print.active = entry != null && onServer(entry) != null;
-			importButton.active = entry != null;
-		} else {
-			print.active = b != null;
+		int dy = vy + PREVIEW_H + 8;
+		g.fill(vx + 4, dy, vx + PREVIEW_W - 4, dy + 1, INK);
+		g.fill(vx + 4, dy - 3, vx + 5, dy + 4, INK);
+		g.fill(vx + PREVIEW_W - 5, dy - 3, vx + PREVIEW_W - 4, dy + 4, INK);
+		String size = b.sizeX + " x " + b.sizeY + " x " + b.sizeZ;
+		g.text(font, size, vx + (PREVIEW_W - font.width(size)) / 2, dy + 4, INK, false);
+
+		int rx = px1() - 136, rw = 128;
+		if (tab != IMPORT) {
+			g.text(font, "free", px1() - 60, py0() + 28, PALE, false);
 		}
-		if (b == null) {
-			g.text(font, new String[] {"No structure sets yet", "No blueprints yet", "No partial structures yet", ""}[tab], left + 152, top + 28 + DY, SciFi.DIM, false);
-			return;
-		}
-		drawPreview(g, b, left + 150, top + 26 + DY, 100, H - 66 - DY);
-		int x = left + 256;
-		int y = top + 26 + DY;
-		g.text(font, SciFi.fit(font, b.name.toUpperCase(java.util.Locale.ROOT), W - 262), x, y, SciFi.WHITE, false);
-		g.text(font, b.sizeX + " x " + b.sizeY + " x " + b.sizeZ, x, y + 12, SciFi.DIM, false);
-		g.text(font, b.size() + " blocks", x, y + 22, SciFi.DIM, false);
-		g.text(font, tab == IMPORT ? (print.active ? "on this server" : "not on this server yet") : b.source, x, y + 32, SciFi.DIM, false);
+		int my = py0() + 50;
+		g.text(font, "BILL OF MATERIALS", rx, my, PALE, false);
 		int line = 0;
 		for (Map.Entry<Block, Integer> entry : b.materials().entrySet()) {
-			if (line >= (tab == IMPORT ? 4 : 6)) {
+			if (line >= 3) {
 				break;
 			}
 			ItemStack stack = new ItemStack(entry.getKey().asItem());
-			int ly = y + 46 + line * 17;
-			g.item(stack, x, ly);
-			g.text(font, SciFi.fit(font, entry.getValue() + " x " + stack.getHoverName().getString(), W - 284), x + 18, ly + 4, SciFi.AMBER, false);
-			if (mouseX >= x && mouseX < x + 16 && mouseY >= ly && mouseY < ly + 16) {
+			int ly = my + 11 + line * 17;
+			g.item(stack, rx, ly);
+			g.text(font, SciFi.fit(font, entry.getValue() + " x " + stack.getHoverName().getString(), rw - 20), rx + 18, ly + 4, INK, false);
+			if (mouseX >= rx && mouseX < rx + 16 && mouseY >= ly && mouseY < ly + 16) {
 				g.setTooltipForNextFrame(font, stack, mouseX, mouseY);
 			}
 			line++;
 		}
-		if (tab != IMPORT) {
-			g.text(font, "Free to print", left + 150, top + H - 26, SciFi.DIM, false);
+		// the title block
+		String type = switch (b.kind) {
+			case PART -> "PARTIAL - GREEN";
+			case IMPORTED -> "IMPORT - RED";
+			default -> b.category == Blueprint.Category.SET ? "SET - BLUE" : "INDIVIDUAL - BLUE";
+		};
+		String[][] rows = {{"TITLE", b.name.toUpperCase(java.util.Locale.ROOT)}, {"TYPE", type},
+				{"BLOCKS", String.format("%,d", b.size())},
+				{"SOURCE", tab != IMPORT ? b.source : printable() != null ? "on this server" : "not on server yet"}};
+		int ty0 = py1() - 8 - rows.length * 13;
+		g.fill(rx - 2, ty0 - 2, px1() - 6, py1() - 6, PAPER);
+		g.outline(rx - 2, ty0 - 2, px1() - 4 - rx, py1() - 4 - ty0, INK);
+		for (int i = 0; i < rows.length; i++) {
+			int y = ty0 + 2 + i * 13;
+			if (i > 0) {
+				g.fill(rx - 2, y - 3, px1() - 6, y - 2, INK);
+			}
+			g.text(font, rows[i][0], rx + 2, y, PALE, false);
+			g.text(font, SciFi.fit(font, rows[i][1], rw - 44), rx + 42, y, i == 1 ? TAB_CHIP[tab] | 0xFF202020 : INK, false);
 		}
 	}
 
-	/** The front of the blueprint (as seen from the stake), each block in its map colour, scaled to fit. */
-	private void drawPreview(GuiGraphicsExtractor g, Blueprint b, int x0, int y0, int w, int h) {
-		if (!b.id.equals(previewFor)) {
-			previewFor = b.id;
-			int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
-			for (Blueprint.Cell c : b.rawCells()) {
-				minX = Math.min(minX, c.offset().getX());
-				maxX = Math.max(maxX, c.offset().getX());
-				minY = Math.min(minY, c.offset().getY());
-				maxY = Math.max(maxY, c.offset().getY());
-			}
-			int pw = maxX - minX + 1, ph = maxY - minY + 1;
-			int[][] colour = new int[pw][ph];
-			int[][] depth = new int[pw][ph];
-			for (int[] row : depth) {
-				java.util.Arrays.fill(row, Integer.MIN_VALUE);
-			}
-			var level = Minecraft.getInstance().level;
-			for (Blueprint.Cell c : b.rawCells()) {
-				int px = c.offset().getX() - minX, py = c.offset().getY() - minY, z = c.offset().getZ();
-				if (z > depth[px][py]) {
-					depth[px][py] = z;
-					int rgb = level == null ? 0x808080 : c.state().getMapColor(level, BlockPos.ZERO).col;
-					colour[px][py] = 0xFF000000 | rgb;
-				}
-			}
-			preview = colour;
+	/** A rubber stamp: a solid colour with a pale rim and bold white lettering; grey and dull while inactive. */
+	private void drawStamp(GuiGraphicsExtractor g, Stamp s, boolean hover) {
+		int colour = !s.active() ? 0xFF3C4250 : hover ? brighten(s.colour()) : s.colour();
+		int rim = s.active() ? 0xFFF2CCC2 : 0xFF6C7482;
+		if (s.colour() == STAMP_GREY && s.active()) {
+			rim = 0xFFC8CED6;
 		}
-		int pw = preview.length, ph = preview[0].length;
-		int scale = Math.max(1, Math.min(w / pw, h / ph));
-		int ox = x0 + (w - pw * scale) / 2, oy = y0 + h - ph * scale;
-		for (int px = 0; px < pw; px++) {
-			for (int py = 0; py < ph; py++) {
-				if (preview[px][py] != 0) {
-					int sx = ox + px * scale, sy = oy + (ph - 1 - py) * scale;
-					g.fill(sx, sy, sx + scale, sy + scale, preview[px][py]);
-				}
-			}
-		}
+		g.fill(s.x() + 1, s.y(), s.x() + s.w() - 1, s.y() + s.h(), rim);
+		g.fill(s.x(), s.y() + 1, s.x() + s.w(), s.y() + s.h() - 1, rim);
+		g.fill(s.x() + 1, s.y() + 1, s.x() + s.w() - 1, s.y() + s.h() - 1, colour);
+		Component text = Component.literal(s.label()).withStyle(ChatFormatting.BOLD);
+		g.text(font, text, s.x() + (s.w() - font.width(text)) / 2, s.y() + (s.h() - 8) / 2 + 1, s.active() ? 0xFFFCF2EE : 0xFF8890A0, false);
+	}
+
+	private static int brighten(int argb) {
+		int r = Math.min(255, ((argb >> 16) & 255) + 28), g = Math.min(255, ((argb >> 8) & 255) + 28), b = Math.min(255, (argb & 255) + 28);
+		return 0xFF000000 | r << 16 | g << 8 | b;
 	}
 }

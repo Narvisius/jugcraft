@@ -5,7 +5,8 @@ Owner: Narvisius
 
 ## Player experience
 - **Craft a Blueprint Table** (3 paper, 4 planks, 1 copper ingot) and right-click it.
-  - It has three tabs (below). Each blueprint shows a front view, its size, its block count and the main materials. **PRINT** gives you the blueprint for free.
+  - It is a drafting station two blocks wide (an MBS placed by one item, like a bed; it needs the block to your right free): steel trestle legs, a tilted drawing board with a blueprint taped on, a drafting arm and scales, a pencil ledge, a shelf of drawings and rolled plans, and a swing-arm lamp. Breaking either half breaks the whole table and drops it once.
+  - The screen is a drafting sheet on a steel board, with folder tabs (below). The left is the drawing register; the selected blueprint turns slowly in the middle (drawn in blueprint blue with white ink, one turn every 14 seconds) over a dimension line, with its bill of materials and a title block (title, type, block count, source) on the right. The red **PRINT** stamp gives you the blueprint for free.
   - **Importing:** paste the text of a blueprint (`.jugbp.json`, for example one an AI designed for you) under IMPORT, **+ NEW IMPORT**, and press IMPORT.
     - The server checks it and explains any problem in plain words: unknown block, too big, forbidden block, bad JSON.
     - If it passes, it is saved with the world (so stakes of it keep working) and in your own import list.
@@ -16,7 +17,7 @@ Owner: Narvisius
   - **IMPORT:**
     - Every blueprint you have imported, kept on your own computer in `.minecraft/jugcraft/imported_blueprints/`, so the list follows you to any server.
     - Select one to see it, import it again (IMPORT), print it when the server has it (PRINT), or remove it from your list (REMOVE).
-    - **+ NEW IMPORT** has the paste box.
+    - **+ NEW IMPORT** shows a sheet of tracing paper to paste on, with PASTE, CLEAR and IMPORT stamps.
 - **Item colour in the inventory** (`Blueprint.Kind`; the holograms are unchanged):
   - **blue:** a complete build, either an individual structure or a whole set;
   - **green:** a partial structure, one part of a set such as a single cooling tower;
@@ -32,10 +33,10 @@ Owner: Narvisius
 - **The stake screen** (right-click the stake) shows:
   - progress and what is still needed, with icons;
   - blocks in the way;
-  - **PERSONAL/PARTY**, **ROTATE** and **REMOVE** buttons for the player who placed it (or the party leader).
+  - **PERSONAL/PARTY**, **ROTATE** and **REMOVE** buttons for the player who placed it (or the party leader). REMOVE takes the stake down without giving the blueprint back.
 
   Sneak-right-click also switches Personal/Party.
-- **When every block is in place,** the stake pops off and gives the blueprint back.
+- **A blueprint is used up when it is placed:** when every block is in place the stake pops off and nothing drops, and breaking the stake drops nothing either. Print another at the table (it is free).
 
 ## How it works
 - **Format:** format 1 `*.jugbp.json` files. Each holds:
@@ -54,6 +55,8 @@ Owner: Narvisius
   - A stake syncs only its blueprint id, rotation, owner and mode.
   - Pasted text goes to the server in 8,000-character parts.
 - **Block checks:** a block counts when it is the same block as the one wanted. Stairs and other directional blocks are turned with the blueprint.
+- **The table block:** `BlueprintTableBlock` has `facing` and `part` (`main`/`side`). The side half goes to the player's right; each half removes itself when its partner is gone, and only the main half drops the item (loot `match_block` on `part=main`). Models are generated per half by `tools/blueprints.py` (`table_elements`), with the board tilted 22.5 degrees and its drawing split across the two halves; the item model shows both halves.
+- **The turning preview:** `TurntableRaster` (plain Java) fills each block face that shows, shaded by direction and tinted by the block's map colour, then inks the outline and depth steps in white. `BlueprintTurntable` runs it on a worker thread about twelve times a second into a `DynamicTexture` the screen draws.
 - **Drone jobs:** the stake is a `BuildJobs.Source`, the interface the Drone Depot already uses.
   - It offers missing positions bottom-up, only to depots that pass `JugcraftParties.mayServe`.
   - It reserves each position for one depot at a time.

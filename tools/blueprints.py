@@ -20,7 +20,7 @@ STAKE = {"survey_stake": {"display": "Survey Stake"}, "blueprint_table": {"displ
          "creative_energy_cell": {"display": "Creative Energy Cell"},
          "creative_supply_crate": {"display": "Creative Supply Crate"}}
 # Blocks that drop themselves (the stake gives its blueprint back instead; the creative cell drops nothing).
-SELF_DROP = ["blueprint_table"]
+SELF_DROP = []
 CRAFTING = {
     "blueprint_table": (["PPP", "LCL", "L L"], {"P": "minecraft:paper", "L": "#minecraft:planks", "C": "#c:ingots/copper"}, 1),
     "survey_stake": (["Y", "S", "S"], {"Y": "minecraft:yellow_dye", "S": "minecraft:stick"}, 2),
@@ -42,7 +42,7 @@ LANG = {
     "message.jugcraft.blueprint.hand_only": "Place by hand: %s",
     "message.jugcraft.blueprint.mode": "Blueprint mode: %s",
     "message.jugcraft.blueprint.not_owner": "Only the player who staked this blueprint (or the party leader) can change it",
-    "message.jugcraft.blueprint.complete": "%s is complete! The Survey Stake pops off and returns the blueprint.",
+    "message.jugcraft.blueprint.complete": "%s is complete! The Survey Stake pops off (the blueprint was used up).",
     "blueprint.jugcraft.drone_tower_foundation": "Drone Tower Foundation",
     "blueprint.jugcraft.small_church": "Small Church",
     "message.jugcraft.blueprint.printed": "Printed: %s",
@@ -225,39 +225,75 @@ def ghost_texture():
     return img
 
 
+# The Blueprint Table is a drafting station two blocks wide (64 px textures, realistic like the tower's blocks):
+# steel trestle legs, a birch drawing board tilted 22.5 degrees with a full blueprint taped on (split over the two
+# blocks), a drafting arm with scales, a pencil ledge, a swing-arm lamp, a shelf of drawings and a plan holder.
+TABLE_TEXTURES = ("blueprint_table_board_left", "blueprint_table_board_right", "blueprint_table_side", "blueprint_table_birch",
+                  "blueprint_table_alu", "blueprint_table_paper", "blueprint_table_rubber", "blueprint_table_bulb",
+                  "blueprint_table_roll", "blueprint_table_roll_end")
+
+
+def drafting_sheet(w=128, h=64):
+    """The drawing on the board, both halves: a birch rim, cyanotype paper with a grid, a gabled elevation with a
+    dimension line on the left, a plan with a door swing and a title block on the right."""
+    from PIL import Image, ImageDraw
+    L = (232, 240, 252)
+    img = Image.new("RGB", (w, h), (206, 178, 132))                    # birch rim
+    d = ImageDraw.Draw(img)
+    d.rectangle([3, 3, w - 4, h - 4], fill=(30, 72, 154))
+    for x in range(3, w - 3, 4):
+        d.line([x, 3, x, h - 4], fill=(46, 90, 168) if (x - 3) % 16 else (62, 106, 182))
+    for y in range(3, h - 3, 4):
+        d.line([3, y, w - 4, y], fill=(46, 90, 168) if (y - 3) % 16 else (62, 106, 182))
+    d.rectangle([6, 6, w - 7, h - 7], outline=L)
+    d.rectangle([12, 26, 50, 48], outline=L)                             # elevation
+    d.line([10, 26, 31, 14, 52, 26], fill=L)
+    for k in range(3):
+        d.rectangle([16 + k * 11, 31, 21 + k * 11, 37], outline=L)
+    d.rectangle([28, 40, 34, 48], outline=L)
+    d.line([12, 53, 50, 53], fill=L)
+    d.line([12, 51, 12, 55], fill=L); d.line([50, 51, 50, 55], fill=L)
+    d.rectangle([72, 12, 108, 38], outline=L)                            # plan
+    d.line([90, 12, 90, 28], fill=L); d.line([72, 28, 98, 28], fill=L)
+    d.arc([90, 28, 98, 36], 270, 360, fill=L)
+    d.rectangle([90, 44, w - 8, h - 8], outline=L)                       # title block
+    d.line([90, 49, w - 8, 49], fill=L)
+    d.line([104, 49, 104, h - 8], fill=L)
+    return img
+
+
 def table_textures():
-    """The Blueprint Table: oak with a blue gridded sheet and a pencil on top, a drawer on the sides."""
+    """{name: 64 px image} for the drafting station."""
+    import numpy as np
     from PIL import Image
-    import random
-    rnd = random.Random(7)
-    def oak():
-        img = Image.new("RGBA", (16, 16))
-        for y in range(16):
-            for x in range(16):
-                base = (162, 130, 78) if (y // 4) % 2 == 0 else (152, 120, 72)
-                n = rnd.randint(-8, 8)
-                img.putpixel((x, y), tuple(max(0, min(255, c + n)) for c in base) + (255,))
-            if y % 4 == 3:
-                for x in range(16):
-                    img.putpixel((x, y), (110, 84, 50, 255))
-        return img
-    top = oak()
-    for y in range(2, 14):
-        for x in range(2, 14):
-            line = (x - 2) % 4 == 0 or (y - 2) % 4 == 0
-            top.putpixel((x, y), (214, 228, 250, 255) if line else (52, 96, 176, 255))
-    for k in range(4):
-        top.putpixel((10 + k, 12 - k), (232, 190, 70, 255))
-    top.putpixel((9, 13), (60, 60, 60, 255))
-    side = oak()
-    for x in range(16):
-        side.putpixel((x, 0), (90, 68, 40, 255))
-    for x in range(5, 11):
-        for y in (1, 2, 3):
-            side.putpixel((x, y), (120, 92, 56, 255))
-    side.putpixel((7, 2), (210, 190, 120, 255))
-    side.putpixel((8, 2), (210, 190, 120, 255))
-    return top, side
+    from tower_art import pnoise, grain, colorize, bevel, groove, grime, to_image, N
+    sheet = drafting_sheet().resize((2 * N, N), Image.NEAREST)
+    steel = colorize((70, 74, 82), grain(211) * 0.5 + pnoise(212, 6) * 0.5, 9)
+    bevel(steel, 0, 0, N, N, 2)
+    grime(steel, 213, 0.1)
+    birch = colorize((214, 190, 150), grain(221, horizontal=True) * 0.6 + pnoise(222, 8) * 0.4, (16, 14, 10))
+    alu = colorize((196, 200, 206), grain(231) * 0.6 + pnoise(232, 5) * 0.4, 10)
+    for x in range(0, N, 4):                                             # scale ticks along the edge
+        alu[0:3 if x % 16 else 6, x] *= 0.45
+    paper = colorize((236, 232, 220), pnoise(241, 5) * 0.3, 8)
+    for y in range(4, N, 6):
+        paper[y, :] *= 0.9
+    rubber = colorize((40, 42, 40), pnoise(251, 3) * 0.5, 6)
+    bulb = colorize((255, 238, 196), pnoise(261, 8) * 0.2, 6)
+    roll = colorize((40, 80, 156), grain(271, horizontal=False) * 0.3, 10)
+    for x in range(0, N, 8):
+        roll[:, x] = roll[:, x] * 0.6 + np.array((180, 204, 240)) * 0.4
+    roll[20:26, :] = (214, 196, 150)
+    yy, xx = np.mgrid[0:N, 0:N]
+    rr = np.sqrt((xx - 31.5) ** 2 + (yy - 31.5) ** 2)
+    end = colorize((232, 228, 214), np.sin(rr * 1.2), 10)
+    end[(np.sin(rr * 1.2) > 0.85)] = (70, 110, 180)
+    end[rr > 30] *= 0.7
+    return {"blueprint_table_board_left": sheet.crop((0, 0, N, N)).convert("RGBA"),
+            "blueprint_table_board_right": sheet.crop((N, 0, 2 * N, N)).convert("RGBA"),
+            "blueprint_table_side": to_image(steel), "blueprint_table_birch": to_image(birch), "blueprint_table_alu": to_image(alu),
+            "blueprint_table_paper": to_image(paper), "blueprint_table_rubber": to_image(rubber), "blueprint_table_bulb": to_image(bulb),
+            "blueprint_table_roll": to_image(roll), "blueprint_table_roll_end": to_image(end)}
 
 
 def creative_cell_texture():
@@ -294,8 +330,7 @@ def creative_crate_texture():
 
 
 def draw_textures():
-    top, side = table_textures()
-    return {"survey_stake": stake_texture(), "blueprint_table_top": top, "blueprint_table_side": side,
+    return {"survey_stake": stake_texture(), **table_textures(),
             "creative_energy_cell": creative_cell_texture(), "creative_supply_crate": creative_crate_texture()}
 
 
@@ -324,21 +359,35 @@ def write_assets(write, rid, assets, lang):
           {"parent": "minecraft:block/cube_all", "textures": {"all": rid("block/creative_supply_crate")}})
     write(assets / "blockstates" / "creative_supply_crate.json", {"variants": {"": {"model": rid("block/creative_supply_crate")}}})
     write(assets / "items" / "creative_supply_crate.json", {"model": {"type": "minecraft:model", "model": rid("block/creative_supply_crate")}})
-    top, side = rid("block/blueprint_table_top"), rid("block/blueprint_table_side")
+    def box(a, b, faces, **extra):
+        return {"from": a, "to": b, "faces": faces, **extra}
 
-    def box(a, b, faces):
-        return {"from": a, "to": b, "faces": faces}
-    all_side = {f: {"texture": "#side"} for f in ("north", "south", "east", "west", "down")}
-    leg_faces = {f: {"texture": "#side"} for f in ("north", "south", "east", "west", "up", "down")}
-    write(assets / "models" / "block" / "blueprint_table.json", {
-        "parent": "minecraft:block/block", "textures": {"top": top, "side": side, "particle": side},
-        "elements": [box([0, 12, 0], [16, 16, 16], {**all_side, "up": {"texture": "#top"}}),
-                     box([1, 0, 1], [4, 12, 4], leg_faces), box([12, 0, 1], [15, 12, 4], leg_faces),
-                     box([1, 0, 12], [4, 12, 15], leg_faces), box([12, 0, 12], [15, 12, 15], leg_faces)]})
+    def faces(default, **over):
+        return {f: {"texture": over.get(f, default)} for f in ("north", "south", "east", "west", "up", "down")}
+    tex = {k: rid(f"block/blueprint_table_{k}") for k in ("side", "birch", "alu", "paper", "rubber", "bulb", "roll", "roll_end")}
+    for part in ("main", "side"):
+        write(assets / "models" / "block" / f"blueprint_table_{part}.json", {
+            "parent": "minecraft:block/block", "ambientocclusion": False,
+            "textures": {**tex, "board": rid(f"block/blueprint_table_board_{'left' if part == 'main' else 'right'}"),
+                         "particle": tex["side"]},
+            "elements": table_elements(part)})
     write(assets / "blockstates" / "blueprint_table.json", {"variants": {
-        f"facing={face}": {"model": rid("block/blueprint_table"), **({"y": y} if y else {})}
-        for face, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}})
-    write(assets / "items" / "blueprint_table.json", {"model": {"type": "minecraft:model", "model": rid("block/blueprint_table")}})
+        f"facing={face},part={part}": {"model": rid(f"block/blueprint_table_{part}"), **({"y": y} if y else {})}
+        for face, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270)) for part in ("main", "side")}})
+    # The item shows the whole station: both halves side by side, centred on the block.
+    whole = [shift(e, 8) for e in table_elements("main")] + [shift(e, -8) for e in table_elements("side")]
+    write(assets / "models" / "item" / "blueprint_table.json", {
+        "parent": "minecraft:block/block",
+        "textures": {**tex, "board_left": rid("block/blueprint_table_board_left"), "board_right": rid("block/blueprint_table_board_right"),
+                     "particle": tex["side"]},
+        "elements": [retexture(e, "#board", "#board_left" if i < len(table_elements("main")) else "#board_right") for i, e in enumerate(whole)],
+        "display": {"gui": {"rotation": [30, 160, 0], "translation": [0, 0, 0], "scale": [0.42, 0.42, 0.42]},
+                    "ground": {"rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.2, 0.2, 0.2]},
+                    "fixed": {"rotation": [0, 180, 0], "translation": [0, 0, 0], "scale": [0.4, 0.4, 0.4]},
+                    "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.25, 0.25, 0.25]},
+                    "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, 0, 0], "scale": [0.3, 0.3, 0.3]},
+                    "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.3, 0.3, 0.3]}}})
+    write(assets / "items" / "blueprint_table.json", {"model": {"type": "minecraft:model", "model": rid("item/blueprint_table")}})
     write(assets / "models" / "block" / "creative_energy_cell.json",
           {"parent": "minecraft:block/cube_all", "textures": {"all": rid("block/creative_energy_cell")}})
     write(assets / "blockstates" / "creative_energy_cell.json", {"variants": {"": {"model": rid("block/creative_energy_cell")}}})
@@ -353,9 +402,77 @@ def write_assets(write, rid, assets, lang):
         "fallback": {"type": "minecraft:model", "model": rid("item/blueprint")}}})
 
 
+def _faces(default, **over):
+    return {f: ({"texture": over[f]} if isinstance(over.get(f), str) else over[f]) if f in over else {"texture": default}
+            for f in ("north", "south", "east", "west", "up", "down")}
+
+
+BOARD_TILT = {"origin": [8, 11, 1], "axis": "x", "angle": -22.5}
+
+
+def table_elements(part):
+    """The model of one half of the drafting station, facing north (the pencil ledge towards the player). The main
+    half is the player's left (its outer end at x=16), the side half the right (outer end at x=0), with the lamp."""
+    outer = 16 if part == "main" else 0
+    def x(a, b):  # an x span measured from the outer end inwards
+        return (outer - b, outer - a) if outer == 16 else (a, b)
+    def box(x0, y0, z0, x1, y1, z1, faces, tilt=False, **extra):
+        e = {"from": [x0, y0, z0], "to": [x1, y1, z1], "faces": faces, **extra}
+        if tilt:
+            e["rotation"] = dict(BOARD_TILT)
+        return e
+    steel, alu = _faces("#side"), _faces("#alu")
+    els = []
+    lx0, lx1 = x(1, 3)
+    els += [box(lx0, 1, 2, lx1, 11, 4, steel), box(lx0, 1, 12, lx1, 15, 14, steel),          # front and back legs
+            box(*x(0.5, 3.5)[:1], 0, 1, x(0.5, 3.5)[1], 1, 15, _faces("#rubber")),              # foot
+            box(lx0, 10, 2, lx1, 11, 14, steel)]                                                 # top rail
+    sx0, sx1 = x(3, 16)
+    els += [box(sx0, 3, 7.5, sx1, 4, 8.5, steel),                                               # stretcher
+            box(sx0, 5, 3, sx1, 5.5, 13, _faces("#birch"))]                                     # shelf
+    board_uv = {"texture": "#board", "uv": [16, 16, 0, 0]}
+    els.append(box(0, 11, 1, 16, 11.8, 16, _faces("#birch", up=board_uv), tilt=True))         # the drawing board
+    els.append(box(0, 10.4, 0, 16, 11.8, 1.4, alu))                                            # pencil ledge
+    els.append(box(0, 11.8, 14.6, 16, 12.6, 15.6, alu, tilt=True))                             # drafting-machine track
+    if part == "main":
+        els += [box(2, 5.5, 4, 12, 6.6, 12, _faces("#paper")),                                  # a stack of drawings
+                box(6, 11.8, 0.3, 11, 12.3, 0.8, _faces("#bulb")),                              # pencils on the ledge
+                box(3, 11.8, 0.4, 5, 12.2, 0.9, _faces("#rubber")),
+                box(10, 11.8, 7, 10.8, 12.3, 14.6, alu, tilt=True),                             # the arm
+                box(3, 11.8, 6, 13, 12.2, 7, alu, tilt=True),                                   # horizontal scale
+                box(3, 11.8, 6, 4, 12.2, 13, alu, tilt=True)]                                   # vertical scale
+    else:
+        roll = _faces("#roll", east="#roll_end", west="#roll_end")
+        els += [box(4, 5.5, 4, 15, 7, 5.5, roll), box(5, 5.5, 6, 16, 7, 7.5, roll),           # rolled plans on the shelf
+                box(4, 7, 4.8, 13, 8.4, 6.2, roll),
+                box(1.5, 10, 15, 2.5, 26, 16, steel),                                           # lamp post, arm, shade
+                box(1.5, 25, 6, 2.5, 26, 15, steel),
+                box(0.8, 23, 4.8, 3.2, 25.2, 7.2, steel),                                      # shade: a cap over
+                box(0, 21, 4, 4, 23, 8, _faces("#side", down="#bulb")),                         # a flared rim
+                box(0.8, 20.4, 4.8, 3.2, 21, 7.2, _faces("#bulb"), light_emission=15)]
+    return els
+
+
+def shift(element, dx):
+    e = {**element, "from": [element["from"][0] + dx, *element["from"][1:]], "to": [element["to"][0] + dx, *element["to"][1:]]}
+    if "rotation" in e:
+        e["rotation"] = {**e["rotation"], "origin": [e["rotation"]["origin"][0] + dx, *e["rotation"]["origin"][1:]]}
+    return e
+
+
+def retexture(element, old, new):
+    return {**element, "faces": {f: ({**v, "texture": new} if v["texture"] == old else v) for f, v in element["faces"].items()}}
+
+
 def write_loot(write, rid, out, self_drop):
     for block in SELF_DROP:
         write(out / f"{block}.json", self_drop(block))
+    # The drafting station drops from its main half only (breaking the side half breaks the main one too).
+    table = self_drop("blueprint_table")
+    table["pools"][0]["entries"][0]["condition"] = {"type": "minecraft:match_block", "blocks": f"{MOD}:blueprint_table",
+                                                    "state": {"part": "main"}}
+    write(out / "blueprint_table.json", table)
+
 
 
 def preview(name, path, scale=12):

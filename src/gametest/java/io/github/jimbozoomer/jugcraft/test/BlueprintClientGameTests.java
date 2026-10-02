@@ -106,7 +106,8 @@ public class BlueprintClientGameTests implements FabricClientGameTest {
 
 			// The Blueprint Table: LIBRARY, then IMPORT a pasted blueprint.
 			BlockPos table = new BlockPos(x + 3, y, z);
-			server.runCommand("setblock %d %d %d jugcraft:blueprint_table".formatted(table.getX(), table.getY(), table.getZ()));
+			server.runCommand("setblock %d %d %d jugcraft:blueprint_table[facing=north,part=main]".formatted(table.getX(), table.getY(), table.getZ()));
+			server.runCommand("setblock %d %d %d jugcraft:blueprint_table[facing=north,part=side]".formatted(table.getX() - 1, table.getY(), table.getZ()));
 			context.setScreen(() -> new BlueprintTableScreen(table));
 			context.waitTicks(5);
 			context.takeScreenshot("jugcraft_blueprint_table_library");

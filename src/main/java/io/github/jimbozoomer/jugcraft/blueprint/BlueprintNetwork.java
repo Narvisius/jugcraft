@@ -234,7 +234,7 @@ public final class BlueprintNetwork {
 				}
 				case StakeActionPayload.REMOVE -> {
 					if (stake.mayChange(player)) {
-						stake.removeAndReturn(player);
+						stake.remove(player);
 						return;
 					}
 				}

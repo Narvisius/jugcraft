@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.blueprint.Blueprint;
 import io.github.jimbozoomer.jugcraft.blueprint.BlueprintItem;
+import io.github.jimbozoomer.jugcraft.blueprint.BlueprintTableBlock;
 import io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints;
 import io.github.jimbozoomer.jugcraft.blueprint.SurveyStakeBlockEntity;
 import io.github.jimbozoomer.jugcraft.drone.BuildJobs;
@@ -115,6 +116,24 @@ public class BlueprintGameTests {
 		}
 	}
 
+	/** The drafting station is two blocks; breaking either half takes both and drops one table. */
+	@GameTest(structure = ARENA, maxTicks = 40, skyAccess = true)
+	public void blueprintTableIsTwoBlocks(GameTestHelper helper) {
+		BlockPos main = helper.absolutePos(new BlockPos(10, 1, 10));
+		BlockState state = JugcraftBlueprints.TABLE.defaultBlockState().setValue(BlueprintTableBlock.FACING, net.minecraft.core.Direction.NORTH);
+		BlockPos side = BlueprintTableBlock.partner(state, main);
+		helper.assertTrue(side.equals(main.west()), "facing north, the side half is to the west (the player's right)");
+		helper.getLevel().setBlockAndUpdate(main, state);
+		helper.getLevel().setBlockAndUpdate(side, state.setValue(BlueprintTableBlock.PART, BlueprintTableBlock.Part.SIDE));
+		helper.getLevel().destroyBlock(side, true);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(helper.getLevel().getBlockState(main).isAir(), "the main half went with the side half");
+			java.util.List<ItemEntity> drops = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(main).inflate(3),
+					e -> e.getItem().is(JugcraftBlueprints.TABLE.asItem()));
+			helper.assertTrue(drops.stream().mapToInt(e -> e.getItem().getCount()).sum() == 1, "one table dropped");
+		});
+	}
+
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void stakeOffersBottomLayerFirst(GameTestHelper helper) {
 		UUID owner = UUID.randomUUID();
@@ -185,8 +204,8 @@ public class BlueprintGameTests {
 		}
 		helper.succeedWhen(() -> {
 			helper.assertTrue(helper.getLevel().getBlockState(stakePos).is(Blocks.AIR), "the stake popped off");
-			helper.assertTrue(!helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(stakePos).inflate(2),
-					e -> e.getItem().is(JugcraftBlueprints.BLUEPRINT)).isEmpty(), "the blueprint came back");
+			helper.assertTrue(helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(stakePos).inflate(2),
+					e -> e.getItem().is(JugcraftBlueprints.BLUEPRINT)).isEmpty(), "the blueprint was used up: nothing drops");
 		});
 	}
 }
