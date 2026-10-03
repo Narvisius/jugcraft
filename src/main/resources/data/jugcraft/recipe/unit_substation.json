@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BTB",
+    "CMC",
+    "FFF"
+  ],
+  "key": {
+    "B": "#c:storage_blocks/steel",
+    "T": "jugcraft:pad_mount_transformer",
+    "C": "jugcraft:advanced_circuit",
+    "M": "jugcraft:machine_casing",
+    "F": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "jugcraft:unit_substation",
+    "count": 1
+  }
+}

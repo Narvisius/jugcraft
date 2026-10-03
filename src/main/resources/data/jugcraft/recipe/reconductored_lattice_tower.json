@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "KAK",
+    "ALA",
+    "KAK"
+  ],
+  "key": {
+    "K": "jugcraft:coke",
+    "A": "jugcraft:aluminum_cable",
+    "L": "jugcraft:lattice_tower"
+  },
+  "result": {
+    "id": "jugcraft:reconductored_lattice_tower",
+    "count": 1
+  }
+}

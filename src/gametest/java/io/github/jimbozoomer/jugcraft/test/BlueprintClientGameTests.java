@@ -34,6 +34,9 @@ public class BlueprintClientGameTests implements FabricClientGameTest {
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		if (TestFocus.skip("blueprints")) {
+			return;
+		}
 		if (GuideScreenshotGameTests.active()) {
 			return;
 		}

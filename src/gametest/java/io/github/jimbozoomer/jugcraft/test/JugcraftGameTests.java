@@ -109,6 +109,10 @@ public class JugcraftGameTests {
 	/** Recipes are data-driven: the crushing recipe for tin ore loads from data/jugcraft/recipe/crushing. */
 	@GameTest
 	public void crushingRecipesLoad(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineRecipe recipe = MachineRecipes.find(helper.getLevel(), MachineKind.CRUSHER, new ItemStack(item("tin_ore")))
 				.orElseThrow(() -> helper.assertionException("No crushing recipe for tin ore"));
 		ItemStack output = recipe.output().create();
@@ -119,6 +123,10 @@ public class JugcraftGameTests {
 	/** A powered crusher turns one ore into two raw ore. */
 	@GameTest(maxTicks = 400)
 	public void crusherDoublesOre(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos pos = new BlockPos(2, 1, 2);
 		helper.setBlock(pos, machine(MachineKind.CRUSHER));
 		charge(helper, pos, Direction.UP);
@@ -133,6 +141,10 @@ public class JugcraftGameTests {
 	/** Coal generator -> copper cables -> electric furnace smelts raw iron. */
 	@GameTest(maxTicks = 600)
 	public void cablesCarryPower(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos generator = new BlockPos(1, 1, 3);
 		BlockPos furnace = new BlockPos(5, 1, 3);
 		helper.setBlock(generator, machine(MachineKind.COAL_GENERATOR));
@@ -152,6 +164,10 @@ public class JugcraftGameTests {
 	/** An electric pump on water pushes it through bronze pipes into a tank. */
 	@GameTest(maxTicks = 200)
 	public void pumpFillsTankThroughPipes(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
 		BlockPos pump = new BlockPos(1, 2, 3);
 		helper.setBlock(pump, JugcraftFluids.ELECTRIC_PUMP);
@@ -168,6 +184,10 @@ public class JugcraftGameTests {
 	/** A powered fluid valve stops a pump's water short of the tank; once the signal goes, the water gets through. */
 	@GameTest(maxTicks = 300)
 	public void fluidValveClosesOnRedstone(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
 		BlockPos pump = new BlockPos(1, 2, 3);
 		helper.setBlock(pump, JugcraftFluids.ELECTRIC_PUMP);
@@ -200,6 +220,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void fluidFilterLetsOnlyItsFluidOut(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
 		BlockPos pump = new BlockPos(1, 2, 3);
 		helper.setBlock(pump, JugcraftFluids.ELECTRIC_PUMP);
@@ -234,6 +258,10 @@ public class JugcraftGameTests {
 	/** The crop harvester harvests a ripe wheat crop in its field, keeps the wheat, and plants one of the seeds again. */
 	@GameTest(maxTicks = 200)
 	public void cropHarvesterHarvestsAndReplants(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 0);
 		LargeMachineBlock block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.CROP_HARVESTER);
 		helper.setBlock(master, block.defaultBlockState().setValue(MachineBlock.FACING, Direction.SOUTH));
@@ -262,6 +290,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest
 	public void cottonGrowsFromSeedsAndDropsCotton(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos crop = new BlockPos(2, 2, 2);
 		helper.setBlock(crop.below(), Blocks.FARMLAND);
 		helper.setBlock(crop, JugcraftFarming.COTTON_CROP);
@@ -286,6 +318,10 @@ public class JugcraftGameTests {
 	/** The 3x2x6 alloy smelter: places all 36 blocks, takes power only at its socket, makes bronze. */
 	@GameTest(maxTicks = 400)
 	public void alloySmelterMakesBronze(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(6, 1, 3);
 		LargeMachineBlock block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.ALLOY_SMELTER);
 		BlockState state = block.defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH);
@@ -316,6 +352,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest
 	public void glassChemistryRecipes(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos pos = helper.absolutePos(new BlockPos(1, 1, 1));
 		BlockState tincal = BuiltInRegistries.BLOCK.getValue(Jugcraft.id("tincal")).defaultBlockState();
 		for (int i = 0; i < 8; i++) {
@@ -348,6 +388,10 @@ public class JugcraftGameTests {
 	/** The two-block crystal grower pulls a silicon boule from 4 silicon and a phosphate; the sawmill cuts it into 8 wafers. */
 	@GameTest(maxTicks = 600)
 	public void crystalGrowerPullsABoule(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(2, 1, 2);
 		MachineBlockEntity grower = large(helper, master, MachineKind.CRYSTAL_GROWER);
 		charge(helper, master.above(), Direction.WEST);
@@ -367,6 +411,10 @@ public class JugcraftGameTests {
 	/** The circuit assembler bonds four microchips to an advanced circuit with gold: a processor. */
 	@GameTest(maxTicks = 600)
 	public void circuitAssemblerMakesAProcessor(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity assembler = processing(helper, new BlockPos(2, 1, 2), MachineKind.CIRCUIT_ASSEMBLER,
 				new ItemStack(item("microchip"), 4));
 		assembler.setItem(1, new ItemStack(item("advanced_circuit")));
@@ -383,6 +431,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest
 	public void networkTerminalReadsItsNetwork(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos terminal = new BlockPos(1, 1, 2);
 		helper.setBlock(terminal, JugcraftElectronics.NETWORK_TERMINAL);
 		helper.assertTrue(NetworkTerminalBlock.read(helper.getLevel(), helper.absolutePos(terminal)) == null,
@@ -409,6 +461,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest
 	public void lootTablesKeepTheirConditionsAndCounts(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos pos = helper.absolutePos(new BlockPos(1, 1, 1));
 		BlockState lower = JugcraftTools.CHARGING_STATION.defaultBlockState();
 		BlockState upper = lower.setValue(ChargingStationBlock.HALF, DoubleBlockHalf.UPPER);
@@ -428,6 +484,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest(maxTicks = 40)
 	public void tanksKeepTheirFluidWhenBroken(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos tank = new BlockPos(1, 1, 1);
 		helper.setBlock(tank, JugcraftFluids.FLUID_TANK);
 		FluidTankBlockEntity tankEntity = helper.getBlockEntity(tank, FluidTankBlockEntity.class);
@@ -485,6 +545,10 @@ public class JugcraftGameTests {
 	/** Breaking any block of a multi-block machine removes the whole machine (here the nine-block wind turbine). */
 	@GameTest(maxTicks = 40)
 	public void breakingOnePartRemovesTheMachine(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos base = new BlockPos(3, 1, 3);
 		LargeMachineBlock block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.WIND_TURBINE);
 		helper.setBlock(base, block.defaultBlockState());
@@ -521,6 +585,10 @@ public class JugcraftGameTests {
 	/** Chest -> extractor -> brass item pipes -> chest. */
 	@GameTest(maxTicks = 200)
 	public void extractorMovesItemsThroughPipes(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ChestBlockEntity source = chest(helper, new BlockPos(1, 1, 3));
 		source.setItem(0, new ItemStack(Items.IRON_INGOT, 5));
 		extractor(helper, new BlockPos(2, 1, 3), Direction.WEST);
@@ -535,6 +603,10 @@ public class JugcraftGameTests {
 	/** A sorter set to iron takes the iron; everything else goes to the plain chest on the same pipes. */
 	@GameTest(maxTicks = 300)
 	public void sorterRoutesMatchingItems(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ChestBlockEntity source = chest(helper, new BlockPos(1, 1, 1));
 		source.setItem(0, new ItemStack(Items.IRON_INGOT, 4));
 		source.setItem(1, new ItemStack(Items.GOLD_INGOT, 4));
@@ -558,6 +630,10 @@ public class JugcraftGameTests {
 	/** A crusher set to eject pushes its results into the chest below (its default output face). */
 	@GameTest(maxTicks = 400)
 	public void machineEjectsIntoChest(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ChestBlockEntity below = chest(helper, new BlockPos(2, 1, 2));
 		BlockPos pos = new BlockPos(2, 2, 2);
 		helper.setBlock(pos, machine(MachineKind.CRUSHER));
@@ -583,6 +659,10 @@ public class JugcraftGameTests {
 	/** Byproducts load from data: pulverizing tin ore sometimes yields tungsten dust. */
 	@GameTest
 	public void pulverizerByproductsLoad(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineRecipe recipe = MachineRecipes.find(helper.getLevel(), MachineKind.PULVERIZER, new ItemStack(item("tin_ore")))
 				.orElseThrow(() -> helper.assertionException("No pulverizing recipe for tin ore"));
 		helper.assertTrue(recipe.byproducts().size() == 1, "Expected one byproduct, got " + recipe.byproducts());
@@ -595,6 +675,10 @@ public class JugcraftGameTests {
 	/** The pulverizer grinds one ore into two dusts. */
 	@GameTest(maxTicks = 400)
 	public void pulverizerGrindsOre(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity pulverizer = processing(helper, new BlockPos(2, 1, 2), MachineKind.PULVERIZER, new ItemStack(item("tin_ore")));
 		helper.succeedWhen(() -> {
 			ItemStack output = pulverizer.getItem(MachineKind.PULVERIZER.outputSlot());
@@ -605,6 +689,10 @@ public class JugcraftGameTests {
 	/** The ore washer, fed by a water source below, turns one ore into three washed ores. */
 	@GameTest(maxTicks = 500)
 	public void oreWasherTriplesOre(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(2, 1, 2), Blocks.WATER);
 		MachineBlockEntity washer = processing(helper, new BlockPos(2, 2, 2), MachineKind.ORE_WASHER, new ItemStack(item("tin_ore")));
 		helper.succeedWhen(() -> {
@@ -616,6 +704,10 @@ public class JugcraftGameTests {
 	/** Without water the ore washer waits instead of washing. */
 	@GameTest(maxTicks = 300)
 	public void oreWasherNeedsWater(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity washer = processing(helper, new BlockPos(2, 1, 2), MachineKind.ORE_WASHER, new ItemStack(item("tin_ore")));
 		helper.runAtTickTime(260, () -> {
 			helper.assertTrue(washer.getItem(MachineKind.ORE_WASHER.outputSlot()).isEmpty(), "A dry ore washer made something");
@@ -626,6 +718,10 @@ public class JugcraftGameTests {
 	/** Dust smelts back into an ingot in the electric furnace. */
 	@GameTest(maxTicks = 300)
 	public void dustSmeltsIntoIngot(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity furnace = processing(helper, new BlockPos(2, 1, 2), MachineKind.ELECTRIC_FURNACE, new ItemStack(item("tin_dust")));
 		helper.succeedWhen(() -> {
 			ItemStack output = furnace.getItem(MachineKind.ELECTRIC_FURNACE.outputSlot());
@@ -636,6 +732,10 @@ public class JugcraftGameTests {
 	/** The sawmill cuts a log into six planks. */
 	@GameTest(maxTicks = 300)
 	public void sawmillCutsLogs(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity sawmill = processing(helper, new BlockPos(2, 1, 2), MachineKind.SAWMILL, new ItemStack(Items.OAK_LOG));
 		helper.succeedWhen(() -> {
 			ItemStack output = sawmill.getItem(MachineKind.SAWMILL.outputSlot());
@@ -646,6 +746,10 @@ public class JugcraftGameTests {
 	/** The sieve sifts gravel into flint. */
 	@GameTest(maxTicks = 300)
 	public void sieveSiftsGravel(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity sieve = processing(helper, new BlockPos(2, 1, 2), MachineKind.SIEVE, new ItemStack(Items.GRAVEL));
 		helper.succeedWhen(() -> {
 			ItemStack output = sieve.getItem(MachineKind.SIEVE.outputSlot());
@@ -666,6 +770,10 @@ public class JugcraftGameTests {
 	/** The coke oven bakes coal into coke with no power at all. */
 	@GameTest(maxTicks = 800)
 	public void cokeOvenBakesCoke(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity oven = large(helper, new BlockPos(2, 1, 2), MachineKind.COKE_OVEN);
 		oven.setItem(0, new ItemStack(Items.COAL));
 		helper.succeedWhen(() -> {
@@ -677,6 +785,10 @@ public class JugcraftGameTests {
 	/** The steel foundry refines one iron ingot with one coke into one steel ingot, unpowered. */
 	@GameTest(maxTicks = 600)
 	public void steelFoundryMakesSteel(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity foundry = large(helper, new BlockPos(2, 1, 2), MachineKind.STEEL_FOUNDRY);
 		foundry.setItem(0, new ItemStack(Items.IRON_INGOT));
 		foundry.setItem(1, new ItemStack(item("coke")));
@@ -689,6 +801,10 @@ public class JugcraftGameTests {
 	/** Cables draw a connection only where power really goes in: never to unpowered machines, only to a socket. */
 	@GameTest(maxTicks = 20)
 	public void cablesConnectOnlyWherePowerGoesIn(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		// Cables first, so placing the machines updates their connections.
 		BlockPos besideOven = new BlockPos(3, 1, 1);
 		BlockPos besideFront = new BlockPos(7, 1, 2);
@@ -717,6 +833,10 @@ public class JugcraftGameTests {
 	/** Four speed upgrades make the crusher three times as fast (160 ticks -> 54). */
 	@GameTest(maxTicks = 120)
 	public void speedUpgradesShortenProcessing(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity crusher = processing(helper, new BlockPos(2, 1, 2), MachineKind.CRUSHER, new ItemStack(item("tin_ore")));
 		crusher.setItem(MachineKind.CRUSHER.slots, new ItemStack(MachineUpgrades.SPEED, 4));
 		helper.runAtTickTime(80, () -> {
@@ -729,6 +849,10 @@ public class JugcraftGameTests {
 	/** Four efficiency upgrades cut the energy one operation uses to about 41%. */
 	@GameTest(maxTicks = 400)
 	public void efficiencyUpgradesSaveEnergy(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity crusher = processing(helper, new BlockPos(2, 1, 2), MachineKind.CRUSHER, new ItemStack(item("tin_ore")));
 		crusher.setItem(MachineKind.CRUSHER.slots + 1, new ItemStack(MachineUpgrades.EFFICIENCY, 4));
 		EnergyStorage energy = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 2)), Direction.UP);
@@ -744,6 +868,10 @@ public class JugcraftGameTests {
 	/** In "high" redstone mode a machine waits until it receives a signal. */
 	@GameTest(maxTicks = 500)
 	public void redstoneHighWaitsForSignal(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos pos = new BlockPos(2, 1, 2);
 		MachineBlockEntity crusher = processing(helper, pos, MachineKind.CRUSHER, new ItemStack(item("tin_ore")));
 		crusher.clickSideButton(SideConfig.REDSTONE_BUTTON);
@@ -761,6 +889,10 @@ public class JugcraftGameTests {
 	/** Comparators read a battery's charge; upgrade slots are never offered to hoppers or pipes. */
 	@GameTest
 	public void comparatorAndUpgradeSlots(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos batteryPos = new BlockPos(1, 1, 1);
 		helper.setBlock(batteryPos, machine(MachineKind.BATTERY_BOX));
 		MachineBlockEntity battery = helper.getBlockEntity(batteryPos, MachineBlockEntity.class);
@@ -800,6 +932,10 @@ public class JugcraftGameTests {
 	/** Silver cable carries 1,024 JE/t, copper 256; a mixed network runs at its slowest cable. */
 	@GameTest
 	public void cableTiersSetTheRate(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		long silver = pushThrough(helper, 1, JugcraftMachines.SILVER_CABLE, JugcraftMachines.SILVER_CABLE);
 		long copper = pushThrough(helper, 3, JugcraftMachines.COPPER_CABLE, JugcraftMachines.COPPER_CABLE);
 		long mixed = pushThrough(helper, 5, JugcraftMachines.SILVER_CABLE, JugcraftMachines.COPPER_CABLE);
@@ -812,6 +948,10 @@ public class JugcraftGameTests {
 	/** The high-pressure extractor moves 32 items every 4 ticks; by tick 10 the brass one could move at most 16. */
 	@GameTest(maxTicks = 40)
 	public void highPressureExtractorIsFaster(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ChestBlockEntity source = chest(helper, new BlockPos(1, 1, 2));
 		source.setItem(0, new ItemStack(Items.COBBLESTONE, 64));
 		helper.setBlock(new BlockPos(2, 1, 2), JugcraftLogistics.HIGH_PRESSURE_EXTRACTOR.defaultBlockState()
@@ -829,6 +969,10 @@ public class JugcraftGameTests {
 	/** The 2x2 capacitor bank holds 4,000,000 JE, takes power at its sides and gives it out of its front. */
 	@GameTest
 	public void capacitorBankOutputsFromItsFront(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 3);
 		large(helper, master, MachineKind.CAPACITOR_BANK);
 		EnergyStorage front = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.above()), Direction.NORTH);
@@ -842,6 +986,10 @@ public class JugcraftGameTests {
 	/** The 3x2 lithium battery bank holds 32,000,000 JE and gives up to 16,384 JE/t out of all six front sockets. */
 	@GameTest
 	public void lithiumBatteryBankOutputsFromItsFront(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 3);
 		large(helper, master, MachineKind.LITHIUM_BATTERY_BANK);
 		EnergyStorage front = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.west().above()), Direction.NORTH);
@@ -857,6 +1005,10 @@ public class JugcraftGameTests {
 	/** The steel tank holds exactly 128 buckets of one fluid. */
 	@GameTest
 	public void steelTankHolds128Buckets(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 2);
 		large(helper, master, MachineKind.STEEL_TANK);
 		Storage<FluidVariant> tank = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master.south()), Direction.UP);
@@ -874,6 +1026,10 @@ public class JugcraftGameTests {
 	/** A crate holds 32 stacks of one item type, refuses others, and shows its fill on a comparator. */
 	@GameTest
 	public void crateHoldsOneItemType(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos pos = new BlockPos(2, 1, 2);
 		helper.setBlock(pos, JugcraftStorage.ITEM_CRATE);
 		Storage<ItemVariant> crate = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
@@ -893,6 +1049,10 @@ public class JugcraftGameTests {
 	/** The prospector's survey reports ore placed nearby, with a signal of 1-5 and a depth band, and no positions. */
 	@GameTest
 	public void surveyFindsNearbyOre(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		for (int x = 1; x <= 4; x++) {
 			for (int z = 1; z <= 4; z++) {
 				helper.setBlock(new BlockPos(x, 1, z), Blocks.COPPER_ORE);
@@ -914,6 +1074,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest(maxTicks = 400)
 	public void oreDrillMinesOreBelow(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 2, 4);
 		BlockPos iron = new BlockPos(5, 1, 3);
 		BlockPos deepIron = new BlockPos(2, 1, 6);
@@ -946,6 +1110,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest(maxTicks = 1000)
 	public void depositDrillEmptiesDepositsIntoAChest(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ServerLevel level = helper.getLevel();
 		BlockPos master = new BlockPos(4, 2, 4);
 		// The drill covers x 2..4, z 4..6 (it faces north); it reaches x 1..5, z 3..7, at y 1 and below.
@@ -984,6 +1152,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest
 	public void depositFeatureReplacesTheTopLayer(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		for (int x = 0; x < 8; x++) {
 			for (int z = 0; z < 8; z++) {
 				helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
@@ -1013,6 +1185,10 @@ public class JugcraftGameTests {
 	/** Breaking a deposit forgets what was taken from it, so a deposit placed there again is full. */
 	@GameTest
 	public void brokenDepositIsForgotten(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ServerLevel level = helper.getLevel();
 		BlockPos pos = new BlockPos(1, 1, 1);
 		helper.setBlock(pos, JugcraftDeposits.BLOCKS.get("tin_deposit"));
@@ -1033,6 +1209,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest(maxTicks = 200)
 	public void cobblestoneGeneratorNeedsWaterAndLava(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos both = new BlockPos(2, 1, 2);
 		BlockPos waterOnly = new BlockPos(6, 1, 2);
 		for (BlockPos pos : List.of(both, waterOnly)) {
@@ -1058,6 +1238,10 @@ public class JugcraftGameTests {
 	/** The tree farm grows an oak sapling into six oak logs and gives the sapling back. */
 	@GameTest(maxTicks = 600)
 	public void treeFarmGrowsLogs(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity farm = processing(helper, new BlockPos(2, 1, 2), MachineKind.TREE_FARM, new ItemStack(Items.OAK_SAPLING));
 		helper.succeedWhen(() -> {
 			ItemStack logs = farm.getItem(MachineKind.TREE_FARM.outputSlot());
@@ -1070,6 +1254,10 @@ public class JugcraftGameTests {
 	/** Water falling past the wheel side of a water wheel turns it; the wheel stores power. */
 	@GameTest(maxTicks = 200)
 	public void waterWheelTurnsInFlowingWater(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(3, 1, 2);
 		MachineBlockEntity wheel = large(helper, master, MachineKind.WATER_WHEEL);
 		// Facing north, the wheel is on the west side. A source above that column falls past both blocks.
@@ -1098,6 +1286,10 @@ public class JugcraftGameTests {
 	/** A steam engine turns a shaft line that runs a crusher with no JE at all; the shafts show as turning. */
 	@GameTest(maxTicks = 400)
 	public void steamEngineDrivesCrusherThroughShafts(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos engine = steamEngine(helper, new BlockPos(1, 1, 2));
 		BlockState shaft = JugcraftKinetics.IRON_SHAFT.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.X);
 		helper.setBlock(engine.east(), shaft);
@@ -1116,6 +1308,10 @@ public class JugcraftGameTests {
 	/** A gearbox splits one engine between a dynamo (which makes JE) and a machine on another side. */
 	@GameTest(maxTicks = 200)
 	public void gearboxBranchesToDynamoAndMachine(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos engine = steamEngine(helper, new BlockPos(1, 1, 2));
 		BlockPos gearbox = engine.east();
 		helper.setBlock(gearbox, JugcraftKinetics.BRASS_GEARBOX);
@@ -1132,6 +1328,10 @@ public class JugcraftGameTests {
 	/** A hand crank on top of a dynamo charges it while it turns. */
 	@GameTest(maxTicks = 100)
 	public void handCrankChargesDynamo(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos dynamoPos = new BlockPos(2, 1, 2);
 		helper.setBlock(dynamoPos, JugcraftKinetics.DYNAMO);
 		helper.setBlock(dynamoPos.above(), JugcraftKinetics.HAND_CRANK.defaultBlockState().setValue(HandCrankBlock.FACING, Direction.DOWN));
@@ -1144,6 +1344,10 @@ public class JugcraftGameTests {
 	/** A charged electric motor facing a crusher runs it on rotation alone, using its own JE. */
 	@GameTest(maxTicks = 300)
 	public void electricMotorDrivesCrusher(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos motorPos = new BlockPos(1, 1, 2);
 		helper.setBlock(motorPos, JugcraftKinetics.ELECTRIC_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
 		ElectricMotorBlockEntity motor = helper.getBlockEntity(motorPos, ElectricMotorBlockEntity.class);
@@ -1164,6 +1368,10 @@ public class JugcraftGameTests {
 	 */
 	@GameTest(maxTicks = 200)
 	public void magnetMotorAndDynamoLoopLosesPower(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos motorPos = new BlockPos(1, 1, 2);
 		helper.setBlock(motorPos, JugcraftKinetics.MAGNET_MOTOR.defaultBlockState().setValue(ElectricMotorBlock.FACING, Direction.EAST));
 		helper.setBlock(motorPos.east(), JugcraftKinetics.MAGNET_DYNAMO);
@@ -1185,6 +1393,10 @@ public class JugcraftGameTests {
 	/** A belt between two pulleys carries a hand crank's rotation to a dynamo under the other pulley. */
 	@GameTest(maxTicks = 200)
 	public void beltCarriesRotation(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockState pulley = JugcraftKinetics.BELT_PULLEY.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.Y);
 		BlockPos first = new BlockPos(1, 2, 2);
 		BlockPos second = new BlockPos(5, 2, 2);
@@ -1206,6 +1418,10 @@ public class JugcraftGameTests {
 	/** Pulleys on different levels of their axis, or too far apart, refuse a belt. */
 	@GameTest
 	public void beltRefusesBadPulleys(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockState pulley = JugcraftKinetics.BELT_PULLEY.defaultBlockState().setValue(ShaftBlock.AXIS, Direction.Axis.Y);
 		helper.setBlock(new BlockPos(1, 1, 1), pulley);
 		helper.setBlock(new BlockPos(3, 2, 1), pulley);
@@ -1232,6 +1448,10 @@ public class JugcraftGameTests {
 	/** Items put in at the back of a driven two-conveyor line (as a pipe would) end up in the chest at its end. */
 	@GameTest(maxTicks = 200)
 	public void conveyorCarriesItemsIntoChest(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
 		conveyor(helper, new BlockPos(3, 1, 2), Direction.EAST, false);
 		ChestBlockEntity chest = chest(helper, new BlockPos(4, 1, 2));
@@ -1249,6 +1469,10 @@ public class JugcraftGameTests {
 	/** Without a drive, items stay on the belt. */
 	@GameTest(maxTicks = 100)
 	public void conveyorNeedsRotation(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ConveyorBlockEntity belt = conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
 		ChestBlockEntity chest = chest(helper, new BlockPos(3, 1, 2));
 		helper.assertTrue(belt.accept(new ItemStack(Items.COBBLESTONE), 0.5F), "The conveyor refused an item");
@@ -1262,6 +1486,10 @@ public class JugcraftGameTests {
 	/** An item entity dropped on a driven conveyor is picked up and carried off. */
 	@GameTest(maxTicks = 200)
 	public void conveyorPicksUpDroppedItems(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
 		ChestBlockEntity chest = chest(helper, new BlockPos(3, 1, 2));
 		motorFacingEast(helper, new BlockPos(1, 1, 2));
@@ -1272,6 +1500,10 @@ public class JugcraftGameTests {
 	/** A splitter sends one stack left, one straight on and one right. */
 	@GameTest(maxTicks = 200)
 	public void splitterTakesTurns(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ConveyorBlockEntity splitter = conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, true);
 		ChestBlockEntity left = chest(helper, new BlockPos(2, 1, 1));
 		ChestBlockEntity ahead = chest(helper, new BlockPos(3, 1, 2));
@@ -1291,6 +1523,10 @@ public class JugcraftGameTests {
 	/** Items climb an up slope onto a raised conveyor, come down a down slope and land in a chest. */
 	@GameTest(maxTicks = 300)
 	public void conveyorSlopesGoUpAndDown(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		conveyor(helper, new BlockPos(2, 1, 2), Direction.EAST, false);
 		helper.setBlock(new BlockPos(3, 1, 2), JugcraftLogistics.CONVEYOR_SLOPE.defaultBlockState()
 				.setValue(ConveyorBlock.FACING, Direction.EAST).setValue(ConveyorSlopeBlock.ASCENDING, true));
@@ -1325,6 +1561,10 @@ public class JugcraftGameTests {
 	/** A charging station on cables' power fills the tool on its cradle and lights up. */
 	@GameTest(maxTicks = 100)
 	public void chargingStationChargesTool(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos lower = new BlockPos(2, 1, 2);
 		BlockState state = JugcraftTools.CHARGING_STATION.defaultBlockState();
 		helper.setBlock(lower, state);
@@ -1342,6 +1582,10 @@ public class JugcraftGameTests {
 	/** An empty drill mines like a bare hand and gets no ore drops; a charged one is fast and correct. */
 	@GameTest
 	public void emptyDrillIsSlow(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		BlockState stone = Blocks.STONE.defaultBlockState();
 		ItemStack empty = new ItemStack(JugcraftTools.MINING_DRILL);
 		ItemStack full = charged(JugcraftTools.MINING_DRILL);
@@ -1355,6 +1599,10 @@ public class JugcraftGameTests {
 	/** In 3x3 mode, breaking one block of a wall breaks the square around it, for the energy of nine blocks. */
 	@GameTest
 	public void drillMinesThreeByThree(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		for (int x = 1; x <= 3; x++) {
 			for (int y = 1; y <= 3; y++) {
 				helper.setBlock(new BlockPos(x, y, 3), Blocks.STONE);
@@ -1377,6 +1625,10 @@ public class JugcraftGameTests {
 	/** Cutting the bottom log with the chainsaw fells the whole tree, branches too. */
 	@GameTest
 	public void chainsawFellsTree(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		for (int y = 1; y <= 5; y++) {
 			helper.setBlock(new BlockPos(2, y, 2), Blocks.OAK_LOG);
 		}
@@ -1393,6 +1645,10 @@ public class JugcraftGameTests {
 	/** A tick of rocket thrust costs its JE and cancels a fall. */
 	@GameTest
 	public void rocketPackThrustUsesEnergy(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setItemSlot(EquipmentSlot.CHEST, charged(JugcraftTools.ROCKET_PACK));
 		player.fallDistance = 10;
@@ -1406,6 +1662,10 @@ public class JugcraftGameTests {
 	/** A capacity module doubles what a drill holds; a second triples it; a third does not fit. */
 	@GameTest
 	public void capacityModulesAddCharge(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ItemStack drill = new ItemStack(JugcraftTools.MINING_DRILL);
 		for (int i = 1; i <= 2; i++) {
 			helper.assertTrue(ToolUpgrades.fit(helper.getLevel(), drill, ToolUpgrades.Kind.CAPACITY) == ToolUpgrades.Result.FITTED,
@@ -1421,6 +1681,10 @@ public class JugcraftGameTests {
 	/** Modules fit only the tools they are for, and silk touch and fortune exclude each other. */
 	@GameTest
 	public void modulesFitTheRightTools(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ItemStack chainsaw = new ItemStack(JugcraftTools.CHAINSAW);
 		helper.assertTrue(ToolUpgrades.fit(helper.getLevel(), chainsaw, ToolUpgrades.Kind.RANGE) == ToolUpgrades.Result.WRONG_TOOL,
 				"A range module fitted the chainsaw");
@@ -1438,6 +1702,10 @@ public class JugcraftGameTests {
 	/** With a range module, the drill's area mode breaks a 5x5 square for the energy of 25 blocks. */
 	@GameTest
 	public void rangeModuleMinesFiveByFive(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		for (int x = 0; x <= 4; x++) {
 			for (int y = 1; y <= 5; y++) {
 				helper.setBlock(new BlockPos(x, y, 3), Blocks.STONE);
@@ -1461,6 +1729,10 @@ public class JugcraftGameTests {
 	/** An overclock module speeds the drill up by half and doubles its JE per block. */
 	@GameTest
 	public void overclockModuleSpeedsUp(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		ItemStack plain = charged(JugcraftTools.MINING_DRILL);
 		ItemStack fast = charged(JugcraftTools.MINING_DRILL);
 		ToolUpgrades.fit(helper.getLevel(), fast, ToolUpgrades.Kind.OVERCLOCK);
@@ -1475,6 +1747,10 @@ public class JugcraftGameTests {
 	/** Charcoal burns three quarters as long as coal in generators (tree farm wood power, slightly weakened). */
 	@GameTest
 	public void charcoalBurnsShorterThanCoal(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		int coal = GeneratorFuels.burnTicks(new ItemStack(Items.COAL));
 		int charcoal = GeneratorFuels.burnTicks(new ItemStack(Items.CHARCOAL));
 		helper.assertTrue(coal == 1600 && charcoal == 1200, "Coal burns " + coal + " ticks and charcoal " + charcoal);
@@ -1486,6 +1762,10 @@ public class JugcraftGameTests {
 	/** The quest line loads: its first and last steps exist, and the rocket pack step leads back to the root. */
 	@GameTest
 	public void advancementTreeLoads(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		var advancements = helper.getLevel().getServer().getAdvancements();
 		for (String id : List.of("root", "bronze", "steel", "charging_station", "upgrade", "rocket_pack")) {
 			helper.assertTrue(advancements.get(Jugcraft.id(id)) != null, "Advancement jugcraft:" + id + " did not load");
@@ -1511,6 +1791,10 @@ public class JugcraftGameTests {
 	/** Planks laid out as a stick recipe craft until one plank is left in each slot as the pattern. */
 	@GameTest(maxTicks = 300)
 	public void autoCrafterKeepsItsPattern(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity crafter = autoCrafter(helper, new BlockPos(2, 1, 2));
 		crafter.setItem(0, new ItemStack(Items.OAK_PLANKS, 3));
 		crafter.setItem(3, new ItemStack(Items.OAK_PLANKS, 3));
@@ -1525,6 +1809,10 @@ public class JugcraftGameTests {
 	/** Container remainders (the glass bottles from a honey block) go to the remainder slot. */
 	@GameTest(maxTicks = 200)
 	public void autoCrafterKeepsRemainders(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity crafter = autoCrafter(helper, new BlockPos(2, 1, 2));
 		for (int slot : new int[] {0, 1, 3, 4}) {
 			crafter.setItem(slot, new ItemStack(Items.HONEY_BOTTLE, 2));
@@ -1539,6 +1827,10 @@ public class JugcraftGameTests {
 	/** Pipes and hoppers only top up grid slots that already hold that item; they never set the pattern. */
 	@GameTest
 	public void autoCrafterAutomationFollowsPattern(GameTestHelper helper) {
+		if (TestFocus.skip("machines")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity crafter = autoCrafter(helper, new BlockPos(2, 1, 2));
 		crafter.setItem(4, new ItemStack(Items.OAK_PLANKS, 1));
 		Storage<ItemVariant> storage = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 2)), Direction.UP);

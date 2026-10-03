@@ -1,0 +1,50 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "rare_earths"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TTT",
+    "PUP",
+    "BXB"
+  ],
+  "key": {
+    "T": "jugcraft:superconducting_tape",
+    "P": "#c:plates/titanium",
+    "U": "jugcraft:uhvdc_tower",
+    "B": "#c:storage_blocks/steel",
+    "X": "jugcraft:processor"
+  },
+  "result": {
+    "id": "jugcraft:superconducting_pylon",
+    "count": 1
+  }
+}

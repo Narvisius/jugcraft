@@ -1446,6 +1446,13 @@ def main():
     import tower_art
     tower_art.write_all(str(ROOT / "src" / "main" / "resources" / "assets" / "jugcraft"))
 
+    import power_lines
+    for name, img in power_lines.draw_item_textures().items():
+        save(img, "item", name)
+    entity_dir = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "entity"
+    entity_dir.mkdir(parents=True, exist_ok=True)
+    power_lines.draw_sheet().save(entity_dir / "power_lines.png", optimize=True)
+
     import tank_display
     tank_display.draw_all(save)
 

@@ -29,6 +29,10 @@ import net.minecraft.world.phys.Vec3;
 public class TowerGameTests {
 	@GameTest
 	public void towerDoesNotClearExternalChunkLoads(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos core = helper.absolutePos(BlockPos.ZERO);
 		var chunk = net.minecraft.world.level.ChunkPos.containing(core);
 		ServerLevel level = helper.getLevel();
@@ -47,6 +51,10 @@ public class TowerGameTests {
 
 	@GameTest
 	public void towerDataIsConsistent(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		TowerData data = TowerData.get();
 		helper.assertTrue(data.tiers.size() == TowerData.TIERS, "9 tiers, got " + data.tiers.size());
 		for (BlockState state : data.palette) {
@@ -79,6 +87,10 @@ public class TowerGameTests {
 	/** A creative player gets the Creative Quick Start once; a survival player does not; the Field Manual has its pages. */
 	@GameTest
 	public void guideBooks(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		// Joining may already have handed the book over (the test world is creative): start from a clean slate.
 		player.removeTag(io.github.jimbozoomer.jugcraft.drone.GuideBooks.GIVEN_TAG);
@@ -99,6 +111,10 @@ public class TowerGameTests {
 	/** Every hangar floor of the finished tower is a whole joined-up pad, with nothing standing on or over it. */
 	@GameTest
 	public void hangarPadsAreWholeAndClear(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		TowerData data = TowerData.get();
 		Map<BlockPos, BlockState> world = new java.util.HashMap<>();
 		for (TowerData.Tier tier : data.tiers) {
@@ -132,6 +148,10 @@ public class TowerGameTests {
 	 */
 	@GameTest
 	public void hangarEntrancesAreClear(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		TowerData data = TowerData.get();
 		java.util.Set<BlockPos> world = new java.util.HashSet<>();
 		for (TowerData.Tier tier : data.tiers) {
@@ -176,6 +196,10 @@ public class TowerGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 600, skyAccess = true)
 	public void towerCoreBuildsTheCommandPost(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		load(core, 1);
@@ -202,6 +226,10 @@ public class TowerGameTests {
 	/** A module used on the terminal goes into the tower and is handled there: it never falls through to the screen. */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void modulesOnTheTerminalLoadTheTower(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());
@@ -221,6 +249,10 @@ public class TowerGameTests {
 	/** The instant-build and test commands exist in every build, for operators. */
 	@GameTest
 	public void droneTestCommandIsRegistered(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		var node = helper.getLevel().getServer().getCommands().getDispatcher().getRoot().getChild("dronetest");
 		helper.assertTrue(node != null && node.getChild("build") != null && node.getChild("modules") != null,
 				"/dronetest build and /dronetest modules are registered");
@@ -229,6 +261,10 @@ public class TowerGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void exchangePortsFeedTheDepot(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());
@@ -264,6 +300,10 @@ public class TowerGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void upgradeNeedsPlinthAndModules(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		BlockPos at = helper.absolutePos(CORE);
 		helper.getLevel().setBlock(at, JugcraftTower.CORE.defaultBlockState(), 3);
@@ -282,6 +322,10 @@ public class TowerGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)
 	public void towerTierGatesDroneTiers(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());
@@ -302,6 +346,10 @@ public class TowerGameTests {
 
 	@GameTest(structure = FULL, maxTicks = 400, skyAccess = true)
 	public void finishedTowerHoldsAHundredDrones(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		BlockPos center = new BlockPos(36, 1, 36);
 		placePlinth(helper, center);
@@ -334,6 +382,10 @@ public class TowerGameTests {
 	/** The tower keeps its own chunks loaded from the start, and lets them go when the core is broken. */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void towerKeepsItsChunksLoaded(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		TowerCoreBlockEntity core = placeCore(helper);
 		BlockPos pos = core.getBlockPos();
 		long chunk = net.minecraft.world.level.ChunkPos.containing(pos).pack();
@@ -349,6 +401,10 @@ public class TowerGameTests {
 	/** A drone flies to a loaded site far away over chunks that are not loaded: only the two ends must be. */
 	@GameTest(structure = ARENA, maxTicks = 400, skyAccess = true)
 	public void dronesFlyOverUnloadedChunks(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos from = helper.absolutePos(new BlockPos(5, 3, 5));
 		BlockPos to = from.offset(40 * 16, 0, 0);
 		net.minecraft.world.level.ChunkPos far = net.minecraft.world.level.ChunkPos.containing(to);
@@ -373,6 +429,10 @@ public class TowerGameTests {
 	 */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void oneTowerPerPlayerAndPinnedDisplays(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());
@@ -408,6 +468,10 @@ public class TowerGameTests {
 	/** Creative Drones fly from a tier 1 tower, draw no power at all and still build the next tier. */
 	@GameTest(structure = ARENA, maxTicks = 2400, skyAccess = true)
 	public void creativeDronesNeedNoPower(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());
@@ -428,6 +492,10 @@ public class TowerGameTests {
 	/** Stray blocks inside the tower's rooms and under the deck are cleared; a chest there is left alone. */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void strayBlocksInsideAreCleared(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		TowerCoreBlockEntity core = placeCore(helper);
 		TowerData data = TowerData.get();
 		helper.assertTrue(data.tier(1).air.length > 0 && data.tier(2).air.length > 0, "tiers 1 and 2 list cells to clear");
@@ -450,6 +518,10 @@ public class TowerGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 2400, skyAccess = true)
 	public void dronesFlyTheNextTierIn(GameTestHelper helper) {
+		if (TestFocus.skip("tower")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		TowerCoreBlockEntity core = placeCore(helper);
 		core.setOwner(owner.getUUID());

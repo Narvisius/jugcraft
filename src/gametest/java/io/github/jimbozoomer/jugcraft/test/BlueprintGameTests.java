@@ -24,6 +24,10 @@ import net.minecraft.world.phys.AABB;
 public class BlueprintGameTests {
 	@GameTest
 	public void uploadIsBoundedAndOrdered(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		var upload = new io.github.jimbozoomer.jugcraft.blueprint.BlueprintUpload(2);
 		helper.assertTrue(upload.append(0, 2, "first"), "First part accepted");
 		helper.assertFalse(upload.append(0, 2, "duplicate"), "Repeated part refused");
@@ -43,6 +47,10 @@ public class BlueprintGameTests {
 
 	@GameTest
 	public void builtInBlueprintsLoad(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		Blueprint tower = Blueprint.get("drone_tower_foundation", false);
 		Blueprint church = Blueprint.get("small_church", false);
 		helper.assertTrue(tower != null && tower.size() == 225, "tower foundation: 15x15 plinth with the core (" + (tower == null ? -1 : tower.size()) + ")");
@@ -60,6 +68,10 @@ public class BlueprintGameTests {
 	/** Blueprint item colours (complete blue, part green, import red) and table categories (set, individual, partial). */
 	@GameTest
 	public void blueprintKinds(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		String hut = "{\"format\": 1, \"name\": \"Kind Test\", \"palette\": {\"S\": \"minecraft:stone_bricks\"},"
 				+ " \"layers\": [[\"SSS\"]], \"anchor\": [1, 0, 2]}";
 		try {
@@ -88,6 +100,10 @@ public class BlueprintGameTests {
 
 	@GameTest
 	public void importChecksAndSaves(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		String good = "{\"format\": 1, \"name\": \"Game Test Hut\", \"palette\": {\"S\": \"minecraft:stone_bricks\"},"
 				+ " \"layers\": [[\"SSS\", \"SSS\"]], \"anchor\": [1, 0, 3]}";
 		try {
@@ -119,6 +135,10 @@ public class BlueprintGameTests {
 	/** The drafting station is two blocks; breaking either half takes both and drops one table. */
 	@GameTest(structure = ARENA, maxTicks = 40, skyAccess = true)
 	public void blueprintTableIsTwoBlocks(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos main = helper.absolutePos(new BlockPos(10, 1, 10));
 		BlockState state = JugcraftBlueprints.TABLE.defaultBlockState().setValue(BlueprintTableBlock.FACING, net.minecraft.core.Direction.NORTH);
 		BlockPos side = BlueprintTableBlock.partner(state, main);
@@ -136,6 +156,10 @@ public class BlueprintGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void stakeOffersBottomLayerFirst(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		UUID owner = UUID.randomUUID();
 		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
 		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
@@ -166,6 +190,10 @@ public class BlueprintGameTests {
 	 */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void stakeReplacesBlocksInTheWay(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		UUID owner = UUID.randomUUID();
 		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
 		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
@@ -195,6 +223,10 @@ public class BlueprintGameTests {
 
 	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)
 	public void finishedFoundationPopsOff(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
 		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
 		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);

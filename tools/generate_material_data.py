@@ -144,6 +144,8 @@ def assets():
     drone_assets(lang)
     import tower
     tower.write_assets(write, rid, ASSETS, lang)
+    import power_lines
+    power_lines.write_assets(write, rid, ASSETS, lang)
     import blueprints
     blueprints.write_assets(write, rid, ASSETS, lang)
     blueprints.write_all()
@@ -327,6 +329,12 @@ def drone_recipes(out):
                 if name in drones.DRONE_CRAFTING:
                     found |= features_of(name)
         features = [MACHINE_FEATURE, drones.FEATURE] + sorted(found - {MACHINE_FEATURE, drones.FEATURE})
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    import power_lines
+    for result, (pattern, key, count) in power_lines.CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted(power_lines.recipe_features(result, feature_of))
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
@@ -886,6 +894,9 @@ def loot_tables():
         write(out / f"{block}.json", table)
     import tower
     tower.write_loot(write, rid, out, self_drop)
+    import power_lines
+    power_lines.write_loot(write, rid, out, self_drop)
+    power_lines.write_data(write, DATA)
     import blueprints
     blueprints.write_loot(write, rid, out, self_drop)
     # The 2-tall charging station drops once, from its lower half.

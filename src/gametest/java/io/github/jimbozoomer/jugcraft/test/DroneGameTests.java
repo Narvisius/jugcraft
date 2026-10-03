@@ -53,6 +53,10 @@ public class DroneGameTests {
 	/** The base platform is 9x9 with a centred 5x5 pad; smaller or pad-less platforms are refused. */
 	@GameTest
 	public void basePlatformIsNineByNine(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		PlatformLayout base = PlatformLayout.scan(4, 4, grid(9, 9, 2, 2, 1, 1));
 		helper.assertTrue(base.isValid() && base.padCount() == 1 && base.slots() == 4, "9x9 base: " + base.status() + ", " + base.padCount() + " pads");
 		helper.assertTrue(PlatformLayout.scan(3, 3, grid(8, 9, 1, 2, 1, 1)).status() == PlatformLayout.Status.TOO_SMALL, "8x9 is too small");
@@ -75,6 +79,10 @@ public class DroneGameTests {
 	/** Expanded to 33x33 with 25 pads one block apart, a depot holds 100 small drones; the 101st is refused. */
 	@GameTest
 	public void expandedPlatformHoldsOneHundredDrones(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		PlatformLayout big = PlatformLayout.scan(0, 0, spacedGrid(33, 33, 5, 5));
 		helper.assertTrue(big.padCount() == 25 && big.slots() == 100, "33x33 platform: " + big.padCount() + " pads");
 		DroneFleet fleet = new DroneFleet();
@@ -92,6 +100,10 @@ public class DroneGameTests {
 	 */
 	@GameTest
 	public void padsNeedAGapAndPickupsAreFound(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		PlatformLayout touching = PlatformLayout.scan(0, 0, grid(16, 9, 2, 2, 2, 1));
 		helper.assertTrue(touching.padCount() == 0 && touching.status() == PlatformLayout.Status.NO_PAD,
 				"touching pads: " + touching.padCount() + " formed");
@@ -117,6 +129,10 @@ public class DroneGameTests {
 	/** Docks: four small drones share a pad's quarters; larger drones are placed first and never overlap. */
 	@GameTest
 	public void docksFillPadsWithoutOverlap(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		List<DroneTier> fleet = List.of(DroneTier.COURIER_QUAD, DroneTier.DUCTED_FAN_RUNNER, DroneTier.COURIER_QUAD, DroneTier.COURIER_QUAD);
 		List<DockLayout.Dock> docks = DockLayout.assign(fleet, 2);
 		java.util.Set<String> used = new java.util.HashSet<>();
@@ -130,6 +146,10 @@ public class DroneGameTests {
 	/** Flight paths: legs climb over the cruise height, and the timing matches the scheduler's. */
 	@GameTest
 	public void flightPathMatchesScheduler(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		double[][] points = {{0, 0, 0}, {10, 0, 0}, {10, 2, 20}, {0, 0, 0}};
 		FlightPath path = new FlightPath(points, new double[] {5, 8, 8}, 4);
 		helper.assertTrue(Math.abs(path.legLength(0) - (10 + 5 + 5)) < 1e-9, "leg 0 length " + path.legLength(0));
@@ -150,6 +170,10 @@ public class DroneGameTests {
 	/** Pooled power is two cached numbers, updated when drones are linked. */
 	@GameTest
 	public void pooledPowerIsCached(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		DroneFleet fleet = new DroneFleet();
 		fleet.link(DroneTier.COURIER_QUAD, 8);
 		fleet.link(DroneTier.DUCTED_FAN_RUNNER, 8);
@@ -162,6 +186,10 @@ public class DroneGameTests {
 	/** 100 flights at once: launches are spread out, each stop is delivered once, then the drone lands. */
 	@GameTest
 	public void schedulerFliesOneHundredDrones(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		FlightScheduler<Integer> scheduler = new FlightScheduler<>();
 		int[] counts = new int[2];
 		FlightScheduler.Listener<Integer> listener = new FlightScheduler.Listener<>() {
@@ -200,6 +228,10 @@ public class DroneGameTests {
 	/** Without power flights wait in place; they never drop their cargo. */
 	@GameTest
 	public void noPowerMeansWaitNotDrop(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		FlightScheduler<Integer> scheduler = new FlightScheduler<>();
 		scheduler.startTick();
 		scheduler.launch(0, 4, new double[] {4, 4, 4}, List.of(new FlightScheduler.Stop<>(1)));
@@ -224,6 +256,10 @@ public class DroneGameTests {
 	/** Every drone tier has an item (5-9 are creative-only prototypes), and the depot blocks exist. */
 	@GameTest
 	public void dronesAreRegistered(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		for (DroneTier tier : DroneTier.values()) {
 			helper.assertTrue(JugcraftDrones.DRONES.containsKey(tier), "item registered for " + tier);
 		}
@@ -304,6 +340,10 @@ public class DroneGameTests {
 	/** Four tier-1 drones fly six stone blocks from the packager onto the platform rim, then all land. */
 	@GameTest(structure = ARENA, maxTicks = 2000, skyAccess = true)
 	public void depotBuildsBlocksInWorld(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		UUID owner = UUID.randomUUID();
 		DroneTerminalBlockEntity terminal = buildDepot(helper, owner, 16, DroneTier.COURIER_QUAD, 4);
 		List<BlockPos> wall = List.of(at(8, 2, 9), at(8, 2, 10), at(8, 2, 11), at(7, 2, 11), at(8, 3, 10), at(8, 3, 11));
@@ -329,6 +369,10 @@ public class DroneGameTests {
 	 */
 	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)
 	public void padUnformsAndReforms(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		DroneTerminalBlockEntity terminal = buildDepot(helper, UUID.randomUUID(), 0, DroneTier.COURIER_QUAD, 0);
 		helper.destroyBlock(at(5, 2, 5));
 		assertPart(helper, at(4, 2, 4), 0);
@@ -350,6 +394,10 @@ public class DroneGameTests {
 	 */
 	@GameTest(structure = ARENA, maxTicks = 2000, skyAccess = true)
 	public void partyDepotServesOnlyItsParty(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
 		UUID member = UUID.randomUUID(), outsider = UUID.randomUUID();
 		PartyManager parties = JugcraftParties.manager();
@@ -387,6 +435,10 @@ public class DroneGameTests {
 	 */
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void controlScreenFormsAndLinks(GameTestHelper helper) {
+		if (TestFocus.skip("drones")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos terminalPos = new BlockPos(8, 1, 8);
 		helper.setBlock(terminalPos, JugcraftDrones.TERMINAL);
 		// Screens on the wall at z = 4, facing south (towards +z), 3 wide (x 6-8) and 2 tall (y 1-2).

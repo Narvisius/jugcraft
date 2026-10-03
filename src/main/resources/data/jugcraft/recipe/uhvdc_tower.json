@@ -1,0 +1,46 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XAX",
+    "PUP",
+    "BPB"
+  ],
+  "key": {
+    "X": "jugcraft:processor",
+    "A": "jugcraft:aluminum_cable",
+    "P": "#c:plates/titanium",
+    "U": "jugcraft:uhv_tower",
+    "B": "#c:storage_blocks/steel"
+  },
+  "result": {
+    "id": "jugcraft:uhvdc_tower",
+    "count": 1
+  }
+}

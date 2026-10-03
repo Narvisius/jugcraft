@@ -26,6 +26,10 @@ public class PartyGameTests {
 	/** Invite, accept, leader hand-over on leave, kick, transfer and disband. */
 	@GameTest
 	public void partyLifecycle(GameTestHelper helper) {
+		if (TestFocus.skip("party")) {
+			helper.succeed();
+			return;
+		}
 		PartyManager parties = new PartyManager(3, 60_000, 10);
 		UUID a = UUID.randomUUID(), b = UUID.randomUUID(), c = UUID.randomUUID(), d = UUID.randomUUID();
 		expect(helper, parties.invite(a, b, NOW), Result.OK, "a invites b (creates a's party)");
@@ -48,6 +52,10 @@ public class PartyGameTests {
 	/** Invites expire after their time-to-live, and each player may send only so many per minute. */
 	@GameTest
 	public void invitesExpireAndAreRateLimited(GameTestHelper helper) {
+		if (TestFocus.skip("party")) {
+			helper.succeed();
+			return;
+		}
 		PartyManager parties = new PartyManager(8, 1000, 2);
 		UUID a = UUID.randomUUID(), b = UUID.randomUUID();
 		expect(helper, parties.invite(a, b, NOW), Result.OK, "invite");
@@ -61,6 +69,10 @@ public class PartyGameTests {
 	/** The shared Personal/Party rule for every automated system, for all mode combinations. */
 	@GameTest
 	public void mayServeFollowsModesAndMembership(GameTestHelper helper) {
+		if (TestFocus.skip("party")) {
+			helper.succeed();
+			return;
+		}
 		PartyManager parties = new PartyManager();
 		UUID a = UUID.randomUUID(), b = UUID.randomUUID(), outsider = UUID.randomUUID();
 		parties.invite(a, b, NOW);
@@ -83,6 +95,10 @@ public class PartyGameTests {
 	/** Turning the feature off makes everyone a party of one but keeps the data. */
 	@GameTest
 	public void disablingKeepsData(GameTestHelper helper) {
+		if (TestFocus.skip("party")) {
+			helper.succeed();
+			return;
+		}
 		PartyManager parties = new PartyManager();
 		UUID a = UUID.randomUUID(), b = UUID.randomUUID();
 		parties.invite(a, b, NOW);
@@ -98,6 +114,10 @@ public class PartyGameTests {
 	/** Listeners fire exactly once per membership change. */
 	@GameTest
 	public void listenersFireOncePerChange(GameTestHelper helper) {
+		if (TestFocus.skip("party")) {
+			helper.succeed();
+			return;
+		}
 		PartyManager parties = new PartyManager();
 		List<Set<UUID>> events = new ArrayList<>();
 		parties.addListener(events::add);
@@ -143,6 +163,10 @@ public class PartyGameTests {
 	/** The live API is registered and answers for players who are not in any party. */
 	@GameTest
 	public void liveApiAnswersForSoloPlayers(GameTestHelper helper) {
+		if (TestFocus.skip("party")) {
+			helper.succeed();
+			return;
+		}
 		UUID solo = UUID.randomUUID();
 		helper.assertTrue(JugcraftParties.partyMembers(solo).equals(List.of(solo)), "a solo player is a party of one");
 		helper.assertFalse(JugcraftParties.isLeader(solo), "a solo player leads nothing");

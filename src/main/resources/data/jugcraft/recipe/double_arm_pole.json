@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TCT",
+    "IPI",
+    " L "
+  ],
+  "key": {
+    "T": "minecraft:white_terracotta",
+    "C": "jugcraft:silver_cable",
+    "I": "#c:ingots/iron",
+    "P": "jugcraft:wooden_pole",
+    "L": "minecraft:spruce_log"
+  },
+  "result": {
+    "id": "jugcraft:double_arm_pole",
+    "count": 1
+  }
+}

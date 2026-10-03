@@ -41,6 +41,9 @@ public class DroneClientGameTests implements FabricClientGameTest {
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		if (TestFocus.skip("drones")) {
+			return;
+		}
 		if (GuideScreenshotGameTests.active()) {
 			return;
 		}

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "AXA",
+    "SMS",
+    "BSB"
+  ],
+  "key": {
+    "A": "jugcraft:aluminum_cable",
+    "X": "jugcraft:plastic_sheet",
+    "S": "#c:ingots/steel",
+    "M": "jugcraft:compact_monopole",
+    "B": "#c:storage_blocks/steel"
+  },
+  "result": {
+    "id": "jugcraft:lattice_tower",
+    "count": 1
+  }
+}
