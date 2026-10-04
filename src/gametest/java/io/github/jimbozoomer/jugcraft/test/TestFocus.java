@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Lets a test run cover only the feature being worked on: with the environment variable
  * {@code JUGCRAFT_TEST_FOCUS} set (a comma-separated list of machines, petro, party, drones, tower, blueprints,
- * powerline), the tests of every other feature pass at once instead of running. Unset, everything runs.
+ * powerline, nuclear), the tests of every other feature pass at once instead of running. Unset, everything runs.
  */
 public final class TestFocus {
 	private TestFocus() {

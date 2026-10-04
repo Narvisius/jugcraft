@@ -56,7 +56,7 @@ COLORS = {
 
 ELECTRIC = {"battery_box", "capacitor_bank", "solar_panel", "fuel_cell", "lithium_battery_bank", "advanced_solar_panel",
             "advanced_engine", "flow_battery"}
-LAB = {"crystal_grower", "lithography_station", "chemical_reactor", "electrolytic_cell", "air_separation_unit",
+LAB = {"gas_centrifuge_cascade", "fuel_fabricator", "crystal_grower", "lithography_station", "chemical_reactor", "electrolytic_cell", "air_separation_unit",
        "synthesis_converter", "polymerization_reactor", "chemical_mixer", "flowback_treatment_unit",
        "circuit_assembler"}
 
@@ -110,6 +110,8 @@ TAGLINES = {
     "flow_battery": "Stores 1,000 JE per mB of electrolyte.",
     "crystal_grower": "Grows doped silicon boules.",
     "lithography_station": "Etches wafers into microchips.",
+    "gas_centrifuge_cascade": "Enriches uranium for reactor fuel.",
+    "fuel_fabricator": "Makes reactor fuel assemblies.",
     "gas_holder": "Holds 1,024 buckets of one gas.",
     "advanced_solar_panel": "Turns sunlight into 64 JE/t.",
     "advanced_engine": "Burns fuel into rotation. Turbo slot.",

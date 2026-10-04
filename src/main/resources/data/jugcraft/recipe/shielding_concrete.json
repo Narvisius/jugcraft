@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "CLC",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:gray_concrete",
+    "L": "#c:ingots/lead"
+  },
+  "result": {
+    "id": "jugcraft:shielding_concrete",
+    "count": 8
+  }
+}

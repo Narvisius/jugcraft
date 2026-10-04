@@ -68,6 +68,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.tower.JugcraftTower.register();
 		io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints.register();
 		io.github.jimbozoomer.jugcraft.powerline.JugcraftPowerLines.register();
+		io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.register();
 		io.github.jimbozoomer.jugcraft.energy.CreativeEnergyCellBlock.register();
 		io.github.jimbozoomer.jugcraft.drone.CreativeSupplyCrateBlock.register();
 		FeatureEnabledCondition.register();

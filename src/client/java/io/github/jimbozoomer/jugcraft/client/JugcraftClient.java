@@ -44,6 +44,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		EntityRendererRegistry.register(JugcraftWeapons.GRENADE, ThrownItemRenderer::new);
 		PetroFluidsClient.register();
 		RocketPackLayer.register();
+		HazmatLayer.register();
+		RadiationHud.register();
 		BlockEntityRendererRegistry.register(JugcraftKinetics.HAND_CRANK_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.ELECTRIC_MOTOR_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.FLYWHEEL_ENTITY, KineticRotorRenderer::new);
@@ -70,5 +72,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		io.github.jimbozoomer.jugcraft.drone.GuideBooks.openScreen = book -> Minecraft.getInstance().gui.setScreen(new GuideBookScreen(book));
 		DroneTerminalBlock.openScreen = pos -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(pos));
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.openScreen = pos -> Minecraft.getInstance().gui.setScreen(new TowerScreen(pos));
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.EQUIPMENT_ENTITY, NuclearRenderer::new);
+		io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement.openConsole = pos -> Minecraft.getInstance().gui.setScreen(new ReactorConsoleScreen(pos));
 	}
 }

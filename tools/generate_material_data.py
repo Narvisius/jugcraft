@@ -146,6 +146,8 @@ def assets():
     tower.write_assets(write, rid, ASSETS, lang)
     import power_lines
     power_lines.write_assets(write, rid, ASSETS, lang)
+    import nuclear
+    nuclear.write_assets(write, rid, ASSETS, lang)
     import blueprints
     blueprints.write_assets(write, rid, ASSETS, lang)
     blueprints.write_all()
@@ -336,6 +338,12 @@ def drone_recipes(out):
     for result, (pattern, key, count) in power_lines.CRAFTING.items():
         features = [MACHINE_FEATURE] + sorted(power_lines.recipe_features(result, feature_of))
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    import nuclear
+    for result, (pattern, key, count) in nuclear.CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted(nuclear.recipe_features(result, feature_of))
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "equipment" if result != "shielding_concrete" else "building")
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
     for result, (pattern, key, count) in drones.DRONE_CRAFTING.items():
@@ -653,7 +661,8 @@ RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_sme
                 "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly",
                 "pulverizer": "pulverizing", "ore_washer": "ore_washing", "sieve": "sifting", "sawmill": "sawing",
                 "coke_oven": "coking", "steel_foundry": "steelmaking",
-                "tree_farm": "tree_growing", "crystal_grower": "crystal_growing"}
+                "tree_farm": "tree_growing", "crystal_grower": "crystal_growing",
+                "gas_centrifuge_cascade": "enrichment", "fuel_fabricator": "fuel_fabrication"}
 
 
 def machine_recipe_files(out):
@@ -897,6 +906,9 @@ def loot_tables():
     import power_lines
     power_lines.write_loot(write, rid, out, self_drop)
     power_lines.write_data(write, DATA)
+    import nuclear
+    nuclear.write_loot(write, rid, out, self_drop)
+    nuclear.write_data(write, DATA)
     import blueprints
     blueprints.write_loot(write, rid, out, self_drop)
     # The 2-tall charging station drops once, from its lower half.
@@ -1153,6 +1165,8 @@ def tags():
     import tank_display
     for block in tank_display.BLOCKS:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import nuclear
+    nuclear.write_tags(tags, rid)
     tags.write()
 
 

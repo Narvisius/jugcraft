@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SMS",
+    "BPB",
+    "SBS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "M": "jugcraft:electric_motor",
+    "B": "#c:storage_blocks/steel",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:reactor_coolant_pump",
+    "count": 1
+  }
+}

@@ -105,7 +105,11 @@ public enum MachineKind implements StringRepresentable {
 	CROP_HARVESTER("crop_harvester", 20_000, 256, 0, 24, 3),
 	// Chemistry (batch 17, the electric look): a 3x3x2 vanadium redox flow battery. Its charge is capped by the
 	// electrolyte in its tanks (FLOW_BATTERY_JE_PER_MB a millibucket); it gives power out of its front.
-	FLOW_BATTERY("flow_battery", 64_000_000, 8_192, 8_192, 0, 0);
+	FLOW_BATTERY("flow_battery", 64_000_000, 8_192, 8_192, 0, 0),
+	// Nuclear fuel (docs/features/nuclear.md): a 5x3x2 hall of gas centrifuges enriching uranium (one input, one
+	// output), and a 3x2x2 fuel line making fuel assemblies (two inputs, one output).
+	GAS_CENTRIFUGE_CASCADE("gas_centrifuge_cascade", 400_000, 4_096, 0, 1_024, 2),
+	FUEL_FABRICATOR("fuel_fabricator", 100_000, 1_024, 0, 256, 3);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -295,7 +299,7 @@ public enum MachineKind implements StringRepresentable {
 				|| this == PULVERIZER || this == ORE_WASHER || this == SIEVE || this == SAWMILL
 				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL || this == DEPOSIT_DRILL
 				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER || this == CRYSTAL_GROWER
-				|| this == CROP_HARVESTER;
+				|| this == CROP_HARVESTER || this == GAS_CENTRIFUGE_CASCADE || this == FUEL_FABRICATOR;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -310,7 +314,8 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Processors whose recipes combine several ingredient stacks placed in any input slots. */
 	public boolean isMultiInput() {
-		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER || this == STEEL_FOUNDRY || this == CRYSTAL_GROWER;
+		return this == ALLOY_SMELTER || this == CIRCUIT_ASSEMBLER || this == STEEL_FOUNDRY || this == CRYSTAL_GROWER
+				|| this == GAS_CENTRIFUGE_CASCADE || this == FUEL_FABRICATOR;
 	}
 
 	/**
@@ -345,6 +350,8 @@ public enum MachineKind implements StringRepresentable {
 			case CHEMICAL_REACTOR -> "chemical_reaction";
 			case CRYSTAL_GROWER -> "crystal_growing";
 			case LITHOGRAPHY_STATION -> "lithography";
+			case GAS_CENTRIFUGE_CASCADE -> "enrichment";
+			case FUEL_FABRICATOR -> "fuel_fabrication";
 			default -> null;
 		};
 	}
@@ -525,6 +532,9 @@ public enum MachineKind implements StringRepresentable {
 			case GAS_HOLDER -> Footprint.cuboid(3, 3, 3);
 			// Two electrolyte tanks either side of the cell stack, three wide, three tall and two deep.
 			case FLOW_BATTERY -> Footprint.cuboid(3, 3, 2);
+			// Nine tall centrifuges in two rows, five wide, three tall, two deep; and the fuel line, three by two by two.
+			case GAS_CENTRIFUGE_CASCADE -> Footprint.cuboid(5, 3, 2);
+			case FUEL_FABRICATOR -> Footprint.cuboid(3, 2, 2);
 			// The pedestal (the master) and the 3x3 array of cells on the layer above it, centred over it.
 			case ADVANCED_SOLAR_PANEL -> Footprint.of(Vec3i.ZERO, new Vec3i(0, 1, 0), new Vec3i(-1, 1, 0), new Vec3i(1, 1, 0),
 					new Vec3i(0, 1, -1), new Vec3i(0, 1, 1), new Vec3i(-1, 1, -1), new Vec3i(1, 1, -1), new Vec3i(-1, 1, 1),

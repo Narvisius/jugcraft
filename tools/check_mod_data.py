@@ -97,7 +97,8 @@ def _hi_res(name):
     """The drone tower's realistic block textures (tools/tower_art.py) are 64x64."""
     import tower_art
     import blueprints
-    return (name in tower_art.TEXTURES or name in blueprints.TABLE_TEXTURES
+    import nuclear
+    return (name in tower_art.TEXTURES or name in nuclear.HI_RES or name in blueprints.TABLE_TEXTURES
             or name.startswith(("landing_pad_formed_", "supply_pickup_formed_", "hangar_pad_")))
 
 
@@ -839,6 +840,33 @@ def check_deposits():
             err(f"MachineKind.{constant} is not {stats[key]} as in tools/machines.py")
 
 
+def check_nuclear():
+    """client/HazmatLayer.java reads the suit sheet from tools/nuclear.py's slots, and the Java registers its items."""
+    import nuclear
+    layer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client" / "HazmatLayer.java").read_text(encoding="utf-8")
+    found = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d), (\d)\);", layer)}
+    for name in nuclear.HAZMAT_MATERIALS:
+        if found.get(name) != nuclear.slot(name):
+            err(f"HazmatLayer.java region for {name} is {found.get(name)}, tools/nuclear.py has {nuclear.slot(name)}")
+    java = (JAVA_ROOT / "nuclear" / "JugcraftNuclear.java").read_text(encoding="utf-8")
+    for item in nuclear.ITEMS + ["shielding_concrete"]:
+        if f'"{item}"' not in java:
+            err(f"JugcraftNuclear.java does not register {item}")
+    kinds = (JAVA_ROOT / "nuclear" / "EquipmentKind.java").read_text(encoding="utf-8")
+    found = [(i, int(w), int(d), int(h)) for i, w, d, h in re.findall(r'[A-Z_]+\("([a-z_]+)", (\d+), (\d+), (\d+)\)', kinds)]
+    expected = [(k, w, d, h) for k, (_, w, d, h) in nuclear.EQUIPMENT.items()]
+    if found != expected:
+        err(f"EquipmentKind.java {found} != tools/nuclear.py EQUIPMENT {expected}")
+    pipes = re.findall(r'[A-Z_]+\("([a-z_]+)", (\d+)\)', (JAVA_ROOT / "nuclear" / "PipeKind.java").read_text(encoding="utf-8"))
+    if [(p, int(n)) for p, n in pipes] != [(k, v[1]) for k, v in nuclear.PIPES.items()]:
+        err(f"PipeKind.java {pipes} != tools/nuclear.py PIPES")
+    renderer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client" / "NuclearRenderer.java").read_text(encoding="utf-8")
+    regions = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d), (\d)\);", renderer)}
+    for name in nuclear.EQ_MATERIALS:
+        if regions.get(name) != nuclear.eq_slot(name):
+            err(f"NuclearRenderer.java region for {name} is {regions.get(name)}, tools/nuclear.py has {nuclear.eq_slot(name)}")
+
+
 def main():
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
                   | set(petro.petro_items()) | set(petro.petro_blocks()) | set(deposits.DEPOSITS) | set(guide_books.BOOKS) | set(tank_display.BLOCKS))
@@ -858,6 +886,7 @@ def main():
     check_drones()
     check_tower()
     check_power_lines()
+    check_nuclear()
     check_guide_books()
     check_handbook(registered)
     check_advancements(registered)

@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/circulating_water_conduit",
+    "side": "jugcraft:block/circulating_water_conduit",
+    "end": "jugcraft:block/circulating_water_conduit_end"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        1.0,
+        1.0
+      ],
+      "to": [
+        16,
+        15.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#end"
+        },
+        "west": {
+          "texture": "#end"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        45,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
+    }
+  }
+}

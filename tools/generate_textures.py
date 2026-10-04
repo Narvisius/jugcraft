@@ -1248,6 +1248,9 @@ def machines():
     save(battery_front(985), "block", "flow_battery_front")
     save(window(979, [(40, 46, 50), (52, 60, 64)]), "block", "crystal_grower_front")
     save(window(979, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "crystal_grower_front_on")
+    for seed, name in ((990, "gas_centrifuge_cascade_front"), (991, "fuel_fabricator_front")):
+        save(window(seed, [(40, 46, 50), (52, 60, 64)]), "block", name)
+        save(window(seed, [(40, 46, 50)], glow=[(90, 230, 130), (170, 250, 190), (60, 190, 100)]), "block", name + "_on")
     save(window(980, [(40, 46, 50), (52, 60, 64)]), "block", "lithography_station_front")
     save(window(980, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "lithography_station_front_on")
     save(tank_side(955), "block", "steel_tank_front")
@@ -1452,6 +1455,17 @@ def main():
     entity_dir = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "entity"
     entity_dir.mkdir(parents=True, exist_ok=True)
     power_lines.draw_sheet().save(entity_dir / "power_lines.png", optimize=True)
+
+    import nuclear
+    for name, img in nuclear.draw_item_textures().items():
+        save(img, "item", name)
+    for name, img in nuclear.draw_block_textures().items():
+        save(img, "block", name)
+    nuclear.draw_sheet().save(entity_dir / "hazmat.png", optimize=True)
+    (TEX / "gui").mkdir(parents=True, exist_ok=True)
+    nuclear.draw_hud_trefoil().save(TEX / "gui" / "radiation_trefoil.png", optimize=True)
+    nuclear.draw_scram_button().save(TEX / "gui" / "reactor_scram.png", optimize=True)
+    nuclear.draw_equipment_sheet().save(entity_dir / "nuclear_equipment.png", optimize=True)
 
     import tank_display
     tank_display.draw_all(save)

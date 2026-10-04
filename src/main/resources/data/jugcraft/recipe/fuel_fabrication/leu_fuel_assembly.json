@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "uranium"
+    }
+  ],
+  "type": "jugcraft:fuel_fabrication",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:enriched_uranium_cylinder",
+      "count": 1
+    },
+    {
+      "ingredient": "#c:plates/steel",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:leu_fuel_assembly",
+    "count": 2
+  },
+  "time": 400
+}

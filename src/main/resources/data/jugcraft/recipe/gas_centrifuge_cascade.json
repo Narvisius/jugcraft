@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "APA",
+    "SMS",
+    "APA"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "P": "jugcraft:processor",
+    "S": "#c:plates/steel",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:gas_centrifuge_cascade",
+    "count": 1
+  }
+}

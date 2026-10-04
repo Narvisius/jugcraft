@@ -83,6 +83,9 @@ MACHINES = {
     # Electronics (batch 7, the cyan look).
     "crystal_grower": {"display": "Crystal Grower", "lit": True},
     "lithography_station": {"display": "Lithography Station", "lit": True},
+    # Nuclear fuel (tools/nuclear.py, docs/features/nuclear.md): enrichment and fuel assembly.
+    "gas_centrifuge_cascade": {"display": "Gas Centrifuge Cascade", "lit": True},
+    "fuel_fabricator": {"display": "Fuel Fabricator", "lit": True},
     # Fluid logistics (batch 8): a Horton sphere for gases.
     "gas_holder": {"display": "Gas Holder", "lit": False},
     # Power (batch 10): a pedestal carrying a 3x3 array of solar cells.
@@ -310,6 +313,9 @@ STATS = {
                        "boost_per_tick": 1, "boost_tank": 8_000},
     # 3x2x2. Wafer + 2 copper wire + 100 mB sulfuric acid -> 4 microchips.
     "lithography_station": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 192, "tank": 4_000},
+    # Nuclear fuel: a 5x3x2 hall of tall centrifuges (enrichment takes a lot of power) and a 3x2x2 fuel line.
+    "gas_centrifuge_cascade": {"capacity": 400_000, "input_per_tick": 4_096, "use_per_tick": 1_024},
+    "fuel_fabricator": {"capacity": 100_000, "input_per_tick": 1_024, "use_per_tick": 256},
     # 2x2x3. Up to 512 KE/t: 2 mB of diesel a tick (256 KE/mB) or 4 mB of heavy fuel oil, only for what it delivers.
     "diesel_engine": {"capacity": 0, "use_per_tick": 0, "output_ke": 512, "tank": 8_000},
 }
@@ -563,6 +569,11 @@ CRAFTING = {
     "lithography_station": (["GSG", "TCT", "PMP"], {"G": "minecraft:glass", "S": "minecraft:redstone_lamp",
                                                     "T": "#c:ingots/titanium", "C": "jugcraft:advanced_circuit",
                                                     "P": "#c:plates/aluminum", "M": "jugcraft:machine_casing"}, 1),
+    "gas_centrifuge_cascade": (["APA", "SMS", "APA"], {"A": "#c:plates/aluminum", "P": "jugcraft:processor",
+                                                       "S": "#c:plates/steel", "M": "jugcraft:machine_casing"}, 1),
+    "fuel_fabricator": (["SGS", "CMC", "SPS"], {"S": "#c:plates/steel", "G": "minecraft:glass",
+                                                "C": "jugcraft:advanced_circuit", "M": "jugcraft:machine_casing",
+                                                "P": "minecraft:piston"}, 1),
     "network_terminal": (["GSG", "PXP", "WKW"], {"G": "minecraft:glass_pane", "S": "jugcraft:processor",
                                                  "P": "jugcraft:plastic_sheet", "X": "minecraft:redstone",
                                                  "W": "jugcraft:copper_cable", "K": "minecraft:stone_button"}, 1),
@@ -797,6 +808,19 @@ CRYSTAL_GROWER = [
 ]
 
 
+# Nuclear fuel (docs/features/nuclear.md). The cascade enriches uranium: eight ingots' worth of natural uranium make
+# one cylinder of low-enriched uranium (the rest is depleted tails, kept inside). The fabricator presses it into fuel
+# pellets, loads them into steel-clad rods and bundles the rods into a fuel assembly.
+GAS_CENTRIFUGE_CASCADE = [
+    {"inputs": [["jugcraft:uranium_ingot", 8]], "output": "jugcraft:enriched_uranium_cylinder",
+     "count": 1, "ticks": 1_200, "features": [FEATURE, "uranium"]},
+]
+FUEL_FABRICATOR = [
+    {"inputs": [["jugcraft:enriched_uranium_cylinder", 1], ["#c:plates/steel", 2]], "output": "jugcraft:leu_fuel_assembly",
+     "count": 2, "ticks": 400, "features": [FEATURE, "uranium"]},
+]
+
+
 # Coke oven: coal baked slowly into coke (no power, no fuel).
 COKE_OVEN = [
     {"input": "minecraft:coal", "output": "jugcraft:coke", "count": 1, "ticks": 600, "features": [FEATURE]},
@@ -829,7 +853,8 @@ def machine_recipes():
             "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
             "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill(),
             "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY, "tree_farm": _tree_farm(),
-            "crystal_grower": CRYSTAL_GROWER}
+            "crystal_grower": CRYSTAL_GROWER, "gas_centrifuge_cascade": GAS_CENTRIFUGE_CASCADE,
+            "fuel_fabricator": FUEL_FABRICATOR}
 
 
 def _arc_dusts():
@@ -848,7 +873,8 @@ def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
             + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS)
             + list(SLOPE_BLOCKS) + list(ELECTRONICS_BLOCKS) + list(FARMING_BLOCKS) + list(CROPS)
-            + drone_blocks() + tower_blocks() + list(__import__('blueprints').STAKE) + __import__('power_lines').blocks())
+            + drone_blocks() + tower_blocks() + list(__import__('blueprints').STAKE) + __import__('power_lines').blocks()
+            + list(__import__('nuclear').BLOCKS))
 
 
 def machine_items():
@@ -857,4 +883,4 @@ def machine_items():
     from tower import tower_items
     return (list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS) + list(UPGRADE_MODULES)
             + [info[key] for info in CROPS.values() for key in ("seeds", "product")]
-            + drone_items() + tower_items() + list(__import__('blueprints').ITEMS))
+            + drone_items() + tower_items() + list(__import__('blueprints').ITEMS) + list(__import__('nuclear').ITEMS))

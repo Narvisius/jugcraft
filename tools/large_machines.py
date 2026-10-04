@@ -78,6 +78,9 @@ FOOTPRINTS = {
                              (1, 1, -1), (-1, 1, 1), (1, 1, 1)],
     # Farming: a two-block crop harvester.
     "crop_harvester": [(0, 0, 0), (0, 1, 0)],
+    # Nuclear fuel: a 5x3x2 centrifuge hall and a 3x2x2 fuel line.
+    "gas_centrifuge_cascade": cuboid(5, 3, 2),
+    "fuel_fabricator": cuboid(3, 2, 2),
 }
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
@@ -390,6 +393,10 @@ MODELS["crop_harvester"] = [
     ((0, 22, 1), (16, 26, 5), "sp_red_iron"),
 ]
 
+import nuclear as _nuclear  # noqa: E402
+MODELS["gas_centrifuge_cascade"] = _nuclear.gas_centrifuge_cascade_model()
+MODELS["fuel_fabricator"] = _nuclear.fuel_fabricator_model()
+
 # Textures the front face uses: "#front" in MODELS. Lit machines also get <front>_on.
 FRONTS = {
     "geothermal_generator": "geothermal_generator_front",
@@ -428,4 +435,6 @@ FRONTS = {
     "advanced_solar_panel": "advanced_solar_panel_front",
     "advanced_engine": "advanced_engine_front",
     "crop_harvester": "crop_harvester_front",
+    "gas_centrifuge_cascade": "gas_centrifuge_cascade_front",
+    "fuel_fabricator": "fuel_fabricator_front",
 }

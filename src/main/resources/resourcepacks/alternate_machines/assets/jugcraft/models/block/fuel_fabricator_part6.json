@@ -1,0 +1,84 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "nu_cabinet": "jugcraft:block/nu_cabinet",
+    "nu_cap": "jugcraft:block/nu_cap",
+    "nu_centrifuge": "jugcraft:block/nu_centrifuge",
+    "nu_floor": "jugcraft:block/nu_floor",
+    "nu_glass": "jugcraft:block/nu_glass",
+    "nu_hazard": "jugcraft:block/nu_hazard",
+    "nu_pipe_blue": "jugcraft:block/nu_pipe_blue",
+    "nu_steel": "jugcraft:block/nu_steel",
+    "front": "jugcraft:block/fuel_fabricator_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        1.0,
+        0,
+        0.5
+      ],
+      "to": [
+        15.0,
+        8.0,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#nu_cabinet"
+        },
+        "east": {
+          "texture": "#nu_cabinet"
+        },
+        "west": {
+          "texture": "#nu_cabinet"
+        },
+        "up": {
+          "texture": "#nu_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        3.0,
+        0.25
+      ],
+      "to": [
+        9.5,
+        6.0,
+        1.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_glass",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#nu_steel"
+        },
+        "east": {
+          "texture": "#nu_steel"
+        },
+        "west": {
+          "texture": "#nu_steel"
+        },
+        "up": {
+          "texture": "#nu_steel"
+        },
+        "down": {
+          "texture": "#nu_steel"
+        }
+      }
+    }
+  ]
+}
