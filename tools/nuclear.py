@@ -237,6 +237,7 @@ def _supersample(draw, size=64, factor=4):
 
 # ---------------------------------------------------------------- the suit's material sheet (256x256, 64 px cells)
 
+# The suit's material sheet: 64 px cells, four a row (tools/nuclear_materials.py draws them).
 SHEET = 256
 CELL = 64
 # Same order as the regions in client/HazmatLayer.java (col, row).
@@ -328,11 +329,12 @@ def _filter(seed):
 
 
 def _trefoil_patch(seed):
+    import nuclear_materials as M
     def draw(big, d, f):
-        base = _fabric(SUIT, seed).resize((CELL * f, CELL * f), Image.NEAREST)
+        base = M.fabric(SUIT, seed).resize((CELL * f, CELL * f), Image.LANCZOS)
         big.paste(base)
         trefoil(d, CELL * f // 2, CELL * f // 2, int(CELL * f * 0.44))
-    return _supersample(draw)
+    return _supersample(draw, size=CELL, factor=4)
 
 
 def _badge(seed):
@@ -366,16 +368,18 @@ def _zip(seed):
 
 
 def draw_sheet():
+    import nuclear_materials as M
     makers = {
-        "fabric": lambda: _fabric(SUIT, 1), "fabric_dark": lambda: _fabric(_shade(SUIT, -22), 2),
-        "rubber": lambda: _rubber(3), "tape": lambda: _tape(4), "visor": lambda: _visor(5), "tank": lambda: _tank(6),
-        "steel": lambda: _steel(7), "filter": lambda: _filter(8), "trefoil": lambda: _trefoil_patch(9),
-        "badge": lambda: _badge(10), "sole": lambda: _sole(11), "zip": lambda: _zip(12), "tank_band": lambda: _tank_band(13),
+        "fabric": lambda: M.fabric(SUIT, 1), "fabric_dark": lambda: M.fabric(_shade(SUIT, -22), 2),
+        "rubber": lambda: M.rubber(3), "tape": lambda: M.tape(4), "visor": lambda: M.visor(5), "tank": lambda: M.tank(6),
+        "steel": lambda: M.brushed((160, 164, 170), 7, "h"), "filter": lambda: M.filter_face(8),
+        "trefoil": lambda: _trefoil_patch(9), "badge": lambda: M.badge(10), "sole": lambda: M.sole(11), "zip": lambda: M.zip_tex(12),
+        "tank_band": lambda: M.tank_band(13),
     }
     sheet = Image.new("RGBA", (SHEET, SHEET), (0, 0, 0, 0))
     for name in HAZMAT_MATERIALS:
         col, row = slot(name)
-        sheet.paste(makers[name](), (col * CELL, row * CELL))
+        sheet.paste(M.stylize(makers[name](), 12), (col * CELL, row * CELL))
     return sheet
 
 
@@ -582,11 +586,19 @@ def _pipe_tex(base, seed):
 
 
 def draw_block_textures():
+    """The fuel machines' and pipes' block textures, in the same stylized-realistic look as the equipment sheet."""
+    import nuclear_materials as M
+    floor = M.concrete(63, tie_holes=False)
+    d = ImageDraw.Draw(floor)
+    d.rectangle([0, 56, 127, 66], fill=(226, 184, 30, 255))
+    d.rectangle([0, 66, 127, 68], fill=(150, 120, 20, 255))
     out = {"shielding_concrete": _concrete(),
-           "nu_centrifuge": _brushed((206, 210, 214), 60), "nu_cap": _brushed((52, 56, 62), 61, fine=6),
-           "nu_steel": _brushed((150, 156, 162), 62, grain="h"), "nu_floor": _floor(63), "nu_cabinet": _cabinet(64),
-           "nu_glass": _glass_tex(65), "nu_hazard": _hazard_tex(66), "nu_pipe_blue": _pipe_tex((40, 100, 190), 67),
-           "nu_pipe_orange": _pipe_tex((220, 120, 30), 68)}
+           "nu_centrifuge": M.stylize(M.brushed((206, 210, 214), 60, "v", dirt=0.15), 10),
+           "nu_cap": M.stylize(M.brushed((52, 56, 62), 61, "h", dirt=0.1), 8),
+           "nu_steel": M.stylize(M.brushed((150, 156, 162), 62, "h"), 10),
+           "nu_floor": M.stylize(floor, 12), "nu_cabinet": M.stylize(M.painted((198, 202, 198), 64, seams=(("v", 62),), bolts=[(12, 20), (116, 20), (12, 108), (116, 108)], chip_count=2, drip_count=2, dirt=0.2), 10),
+           "nu_glass": M.stylize(M.glass(65), 10), "nu_hazard": M.stylize(M.hazard(66), 8),
+           "nu_pipe_blue": M.stylize(M.pipe_stripe((40, 100, 190), 67), 10), "nu_pipe_orange": M.stylize(M.pipe_stripe((220, 120, 30), 68), 10)}
     out.update(draw_pipe_textures())
     return out
 
@@ -605,6 +617,7 @@ def draw_scram_button():
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 9 * f)
         d.text((c, c), "SCRAM", font=font, fill=(255, 255, 255, 255), anchor="mm")
     return _supersample(draw, size=48, factor=8)
+
 
 
 def draw_hud_trefoil():
@@ -673,6 +686,7 @@ def geiger_model(rid):
 # client/NuclearRenderer.java reads these regions by name, in this order (checked by tools/check_mod_data.py).
 # Textures are drawn the right way up: the renderer puts the top of a cell at the top of every vertical face.
 EQ_SHEET = 512
+EQ_CELL = 64
 EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
                 "concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey",
                 "radiator", "glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green",
@@ -846,67 +860,67 @@ def _water_tex(seed):
 
 
 def draw_equipment_sheet():
+    import nuclear_materials as M
     makers = {
-        "stainless": lambda: _plate((182, 186, 190), 100, seams=(("h", 20),), grain="v", fine=10),
-        "stainless_dark": lambda: _plate((120, 126, 132), 101, grain="v"),
-        "carbon_steel": lambda: _plate((92, 96, 100), 102, seams=(("h", 31),), bolts=True),
-        "paint_grey": lambda: _plate((168, 172, 170), 103, seams=(("v", 31),), fine=6),
-        "paint_green": lambda: _plate((92, 130, 104), 104, fine=6),
-        "paint_blue": lambda: _plate((52, 92, 150), 105, fine=6),
-        "paint_white": lambda: _plate((222, 224, 220), 106, seams=(("h", 31),), fine=5),
-        "concrete": lambda: _floor(107).transpose(Image.Transpose.ROTATE_90) if False else _img(_surface((158, 158, 152), 107, fine=14, broad=16)),
-        "grating": lambda: _grating(108), "hazard": lambda: _hazard_tex(109), "insulation": lambda: _insulation(110),
-        "weld_band": lambda: _weld_band(111), "flange": lambda: _flange(112), "crdm": lambda: _crdm(113),
-        "copper": lambda: _plate((196, 118, 72), 114, grain="h", fine=12),
-        "tank_grey": lambda: _plate((126, 134, 136), 115, seams=(("h", 16), ("h", 48)), bolts=True, fine=6),
-        "radiator": lambda: _radiator_eq(116), "glaze_brown": lambda: _glaze((120, 66, 40), 117), "glass": lambda: _glass_tex(118),
-        "screen": lambda: _screen_tex(119), "desk": lambda: _desk(120), "rubber": lambda: _rubber(121),
-        "lamp_red": lambda: _lamp((230, 60, 50), 122), "lamp_green": lambda: _lamp((80, 220, 110), 123),
-        "trefoil_sign": lambda: _trefoil_sign(124), "generator": lambda: _generator(125), "fins": lambda: _fins(126),
-        "handrail": lambda: _handrail(127), "nameplate": lambda: _nameplate(128),
-        "turbine_blue": lambda: _plate((70, 110, 140), 129, seams=(("h", 31),), bolts=True, fine=6),
-        "pipe_red": lambda: _pipe_tex((180, 60, 50), 130), "water": lambda: _water_tex(131),
+        "stainless": lambda: M.brushed((182, 186, 190), 100, "v", seams=(("h", 40),)),
+        "stainless_dark": lambda: M.brushed((120, 126, 132), 101, "v"),
+        "carbon_steel": lambda: M.painted((92, 96, 100), 102, seams=(("h", 62),), bolts=[(x, 10) for x in range(12, 128, 24)], chip_count=2, dirt=0.7),
+        "paint_grey": lambda: M.painted((168, 172, 170), 103, seams=(("v", 62),), chip_count=3, drip_count=3),
+        "paint_green": lambda: M.painted((92, 130, 104), 104, chip_count=4, drip_count=3),
+        "paint_blue": lambda: M.painted((52, 92, 150), 105, chip_count=4, drip_count=3),
+        "paint_white": lambda: M.painted((222, 224, 220), 106, seams=(("h", 62),), chip_count=2, drip_count=4, dirt=0.6),
+        "concrete": lambda: M.concrete(107), "grating": lambda: M.grating(108), "hazard": lambda: M.hazard(109),
+        "insulation": lambda: M.insulation(110), "weld_band": lambda: M.weld_band(111), "flange": lambda: M.flange(112),
+        "crdm": lambda: M.crdm(113), "copper": lambda: M.copper(114), "tank_grey": lambda: M.tank_grey(115),
+        "radiator": lambda: M.radiator(116), "glaze_brown": lambda: M.glaze((120, 66, 40), 117), "glass": lambda: M.glass(118),
+        "screen": lambda: M.screen(119), "desk": lambda: M.desk(120), "rubber": lambda: M.rubber(121),
+        "lamp_red": lambda: M.lamp((230, 60, 50), 122), "lamp_green": lambda: M.lamp((80, 220, 110), 123),
+        "trefoil_sign": lambda: M.trefoil_sign(124), "generator": lambda: M.generator(125), "fins": lambda: M.fins(126),
+        "handrail": lambda: M.handrail(127), "nameplate": lambda: M.nameplate(128), "turbine_blue": lambda: M.turbine_blue(129),
+        "pipe_red": lambda: M.pipe_stripe((180, 60, 50), 130), "water": lambda: M.water(131),
     }
     sheet = Image.new("RGBA", (EQ_SHEET, EQ_SHEET), (0, 0, 0, 0))
     for name in EQ_MATERIALS:
         col, row = eq_slot(name)
-        sheet.paste(makers[name](), (col * 64, row * 64))
+        sheet.paste(M.stylize(makers[name](), 12 if name in ("screen", "desk", "lamp_red", "lamp_green") else 10), (col * EQ_CELL, row * EQ_CELL))
     return sheet
 
 
 # ---------------------------------------------------------------- pipes (block models) and their textures
 
 def _pipe_side(name):
+    import nuclear_materials as M
     if name == "reactor_coolant_pipe":
-        img = _plate((176, 180, 184), 140, grain="h", fine=10)
+        img = M.brushed((176, 180, 184), 140, "h", dirt=0.2)
         d = ImageDraw.Draw(img)
-        d.rectangle([0, 28, 63, 35], fill=(200, 60, 50, 255))
-        for x in (10, 42):
-            d.polygon([(x, 22), (x + 10, 32), (x, 42)], fill=(240, 240, 236, 255))
-        return img
+        d.rectangle([0, 56, 127, 72], fill=(200, 60, 50, 255))
+        d.rectangle([0, 72, 127, 74], fill=(120, 36, 30, 255))
+        for x in (20, 84):
+            d.polygon([(x, 44), (x + 22, 64), (x, 84)], fill=(240, 240, 236, 255))
+        return M.stylize(img, 10)
     if name == "insulated_steam_line":
-        img = _insulation(141)
+        img = M.insulation(141)
         d = ImageDraw.Draw(img)
-        d.rectangle([0, 40, 63, 45], fill=(230, 230, 230, 255))
-        d.rectangle([20, 40, 26, 45], fill=(240, 150, 40, 255))
-        return img
-    img = _img(_surface((150, 150, 144), 142, fine=14, broad=12))
+        d.rectangle([40, 20, 52, 30], fill=(240, 150, 40, 255))
+        return M.stylize(img, 10)
+    img = M.concrete(142, tie_holes=False, stains=True)
     d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, 63, 3], fill=(110, 112, 110, 255))
-    d.rectangle([0, 60, 63, 63], fill=(110, 112, 110, 255))
-    d.rectangle([0, 28, 63, 35], fill=(40, 110, 170, 255))
-    return img
+    d.rectangle([0, 0, 127, 7], fill=(110, 112, 110, 255))
+    d.rectangle([0, 120, 127, 127], fill=(110, 112, 110, 255))
+    d.rectangle([0, 56, 127, 72], fill=(40, 110, 170, 255))
+    return M.stylize(img, 10)
 
 
 def _pipe_end(name):
+    import nuclear_materials as M
     base = {"reactor_coolant_pipe": (150, 156, 160), "insulated_steam_line": (196, 200, 202),
             "circulating_water_conduit": (140, 140, 134)}[name]
-    img = _img(_surface(base, 150, fine=8, broad=8))
+    img = M.brushed(base, 150, "h", dirt=0.1) if name != "circulating_water_conduit" else M.concrete(150, tie_holes=False, stains=False)
     d = ImageDraw.Draw(img)
     inner = (40, 90, 150, 255) if name == "circulating_water_conduit" else (60, 62, 66, 255)
-    d.ellipse([12, 12, 52, 52], fill=inner)
-    d.ellipse([12, 12, 52, 52], outline=_shade(base, -40), width=3)
-    return img
+    d.ellipse([24, 24, 104, 104], fill=inner)
+    d.ellipse([24, 24, 104, 104], outline=tuple(max(0, c - 40) for c in base) + (255,), width=6)
+    return M.stylize(img, 10)
 
 
 def draw_pipe_textures():

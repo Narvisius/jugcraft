@@ -2,7 +2,6 @@ package io.github.jimbozoomer.jugcraft.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
-import io.github.jimbozoomer.jugcraft.client.DroneDepotRenderer.Geometry;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -86,6 +85,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		/** Console: the linked reactor is tripped. */
 		boolean tripped;
 		float time;
+		/** Full detail, or the far-away mesh. */
+		boolean detail = true;
 	}
 
 	@Override
@@ -124,16 +125,27 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			state.tripped = vessel.core.scrammed;
 		}
 		state.time = (level.getGameTime() % 24_000) + partialTick;
+		Vec3 middle = Vec3.atCenterOf(pos.offset(EquipmentKind.toWorld(new BlockPos(state.kind.wide / 2, state.kind.tall / 2, state.kind.deep / 2), state.facing)));
+		double reach = Math.max(state.kind.wide, Math.max(state.kind.deep, state.kind.tall)) / 2.0;
+		state.detail = cameraPos.distanceTo(middle) - reach < DETAIL_DISTANCE;
 	}
 
-	@Override
-	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
-		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> {
-			Geometry g = new Geometry(p, consumer);
-			g.light = state.lightLevel;
-			Frame f = new Frame(g, state.facing);
-			switch (state.kind) {
-				case REACTOR_VESSEL -> vessel(f, state);
+	/** Beyond this many blocks the low-detail mesh is drawn. */
+	static final double DETAIL_DISTANCE = 40;
+	/** Static meshes by kind and detail (index kind.ordinal() * 2 + (detail ? 1 : 0)). */
+	private static final Mesh[] STATIC = new Mesh[EquipmentKind.values().length * 2];
+	/** The vessel's closed head with its drive housings, by detail; the head is left off while refuelling. */
+	private static final Mesh[] HEAD = new Mesh[2];
+	/** The vessel's drive rods at each 5% of travel, by detail. */
+	private static final Mesh[][] RODS = new Mesh[2][21];
+
+	static Mesh staticMesh(EquipmentKind kind, boolean detail) {
+		int i = kind.ordinal() * 2 + (detail ? 1 : 0);
+		if (STATIC[i] == null) {
+			Mesh mesh = new Mesh();
+			Frame f = new Frame(mesh, detail);
+			switch (kind) {
+				case REACTOR_VESSEL -> vessel(f);
 				case STEAM_GENERATOR -> steamGenerator(f);
 				case COOLANT_PUMP -> coolantPump(f);
 				case PRESSURIZER -> pressurizer(f);
@@ -141,43 +153,114 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				case CONDENSER -> condenser(f);
 				case FEEDWATER_PUMP -> feedwaterPump(f);
 				case MAIN_TRANSFORMER -> transformer(f);
-				case CONTROL_CONSOLE -> console(f, state);
+				case CONTROL_CONSOLE -> console(f);
+			}
+			STATIC[i] = mesh;
+		}
+		return STATIC[i];
+	}
+
+	static Mesh headMesh(boolean detail) {
+		int i = detail ? 1 : 0;
+		if (HEAD[i] == null) {
+			Mesh mesh = new Mesh();
+			vesselHead(new Frame(mesh, detail));
+			HEAD[i] = mesh;
+		}
+		return HEAD[i];
+	}
+
+	static Mesh rodsMesh(float rods, boolean detail) {
+		int step = Math.max(0, Math.min(20, Math.round(rods / 5)));
+		int i = detail ? 1 : 0;
+		if (RODS[i][step] == null) {
+			Mesh mesh = new Mesh();
+			vesselRods(new Frame(mesh, detail), step * 5);
+			RODS[i][step] = mesh;
+		}
+		return RODS[i][step];
+	}
+
+	@Override
+	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+		boolean detail = state.detail;
+		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> {
+			staticMesh(state.kind, detail).replay(p, consumer, state.facing, state.lightLevel);
+			if (state.kind == EquipmentKind.REACTOR_VESSEL) {
+				if (state.open) {
+					// Head off: the refuelling cavity's water over the fuel, glowing blue.
+					Mesh water = new Mesh();
+					Frame f = new Frame(water, detail);
+					f.disc(v(3.5, 12.46, 3.5), v(0, 1, 0), 2.55, f.sides(24), WATER);
+					water.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				} else {
+					headMesh(detail).replay(p, consumer, state.facing, state.lightLevel);
+					rodsMesh(state.rods, detail).replay(p, consumer, state.facing, state.lightLevel);
+				}
+			} else if (state.kind == EquipmentKind.CONTROL_CONSOLE) {
+				Mesh lamps = new Mesh();
+				consoleLamps(new Frame(lamps, detail), state);
+				lamps.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 			}
 		});
 	}
 
 	// ------------------------------------------------------------------ the equipment's frame and tiled primitives
 
-	/** Maps the equipment's own coordinates into the block entity's: x to the right of the facing, z along it. */
-	static final class Frame {
-		final Geometry g;
-		final double rx, rz, fx, fz;
+	/**
+	 * Recorded geometry of one piece in its own frame (x right, y up, z away, in blocks from the anchor's corner):
+	 * eight floats a vertex. It is built once per kind and detail level and replayed every frame, turned to the
+	 * equipment's facing, so drawing a plant costs no trigonometry.
+	 */
+	static final class Mesh {
+		private float[] data = new float[8 * 1024];
+		private int size;
 
-		Frame(Geometry g, Direction facing) {
-			this.g = g;
+		void vertex(float x, float y, float z, float u, float v, float nx, float ny, float nz) {
+			if (size + 8 > data.length) {
+				data = java.util.Arrays.copyOf(data, data.length * 2);
+			}
+			data[size++] = x;
+			data[size++] = y;
+			data[size++] = z;
+			data[size++] = u;
+			data[size++] = v;
+			data[size++] = nx;
+			data[size++] = ny;
+			data[size++] = nz;
+		}
+
+		int vertices() {
+			return size / 8;
+		}
+
+		/** Emits the mesh for a piece facing {@code facing}, lit with {@code light}. */
+		void replay(PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, Direction facing, int light) {
 			Direction right = facing.getClockWise();
-			rx = right.getStepX();
-			rz = right.getStepZ();
-			fx = facing.getStepX();
-			fz = facing.getStepZ();
+			float rx = right.getStepX(), rz = right.getStepZ(), fx = facing.getStepX(), fz = facing.getStepZ();
+			for (int i = 0; i < size; i += 8) {
+				float lx = data[i] - 0.5F, lz = data[i + 2] - 0.5F;
+				float x = 0.5F + rx * lx + fx * lz, z = 0.5F + rz * lx + fz * lz;
+				float nx = rx * data[i + 5] + fx * data[i + 7], nz = rz * data[i + 5] + fz * data[i + 7];
+				consumer.addVertex(pose, x, data[i + 1], z).setColor(0xFFFFFFFF).setUv(data[i + 3], data[i + 4])
+						.setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, nx, data[i + 6], nz);
+			}
+		}
+	}
+
+	/** Builds a piece's geometry into a {@link Mesh}. {@code detail} is false for the far-away version. */
+	static final class Frame {
+		final Mesh mesh;
+		final boolean detail;
+
+		Frame(Mesh mesh, boolean detail) {
+			this.mesh = mesh;
+			this.detail = detail;
 		}
 
-		/** A local point in the block entity's space: the anchor's own cell maps onto itself, whichever way it faces. */
-		float wx(double x, double z) {
-			return (float) (0.5 + rx * (x - 0.5) + fx * (z - 0.5));
-		}
-
-		float wz(double x, double z) {
-			return (float) (0.5 + rz * (x - 0.5) + fz * (z - 0.5));
-		}
-
-		/** A local direction (normals). */
-		float dx(double x, double z) {
-			return (float) (rx * x + fx * z);
-		}
-
-		float dz(double x, double z) {
-			return (float) (rz * x + fz * z);
+		/** Sides for a round shape: fewer when far away. */
+		int sides(int full) {
+			return detail ? full : Math.max(6, full / 2);
 		}
 
 		/**
@@ -185,9 +268,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		 * local frame, x right and z away, keeps what a viewer sees where it is: front faces stay front faces.)
 		 */
 		void quad(Vec3 tl, Vec3 bl, Vec3 br, Vec3 tr, Vec3 n, float u0, float v0, float u1, float v1) {
-			g.quad(wx(tl.x, tl.z), (float) tl.y, wz(tl.x, tl.z), wx(bl.x, bl.z), (float) bl.y, wz(bl.x, bl.z),
-					wx(br.x, br.z), (float) br.y, wz(br.x, br.z), wx(tr.x, tr.z), (float) tr.y, wz(tr.x, tr.z),
-					dx(n.x, n.z), (float) n.y, dz(n.x, n.z), new float[] {u0, v0, u1, v1});
+			float nx = (float) n.x, ny = (float) n.y, nz = (float) n.z;
+			mesh.vertex((float) tl.x, (float) tl.y, (float) tl.z, u0, v0, nx, ny, nz);
+			mesh.vertex((float) bl.x, (float) bl.y, (float) bl.z, u0, v1, nx, ny, nz);
+			mesh.vertex((float) br.x, (float) br.y, (float) br.z, u1, v1, nx, ny, nz);
+			mesh.vertex((float) tr.x, (float) tr.y, (float) tr.z, u1, v0, nx, ny, nz);
 		}
 
 		/** A quad tiled about every {@code tile} blocks across and down, so its texture keeps its size. */
@@ -233,6 +318,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 		/** A flat plate facing -z (toward the placer) or another way, with its picture on that face only. */
 		void plate(double x0, double y0, double z0, double x1, double y1, double z1, int facingSide, float[] picture, float[] edge) {
+			if (!detail) {
+				return;
+			}
 			box(x0, y0, z0, x1, y1, z1, edge);
 			double e = 0.002;
 			switch (facingSide) {
@@ -328,6 +416,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 		/** A thin band round a vertical cylinder (a weld seam or stiffening ring). */
 		void band(double cx, double cz, double y, double r, double h, float[] uv) {
+			if (!detail) {
+				return;
+			}
 			revolve(v(cx, y, cz), v(cx, y + h, cz), new double[][] {{0, r}, {h, r}}, 24, uv, true, true);
 		}
 
@@ -339,16 +430,19 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				profile[i] = new double[] {Math.abs(height) * t, r * Math.sqrt(Math.max(0, 1 - t * t))};
 			}
 			Vec3 a = v(cx, y0, cz), b = v(cx, y0 + Math.signum(height), cz);
-			revolve(a, b, profile, 24, uv, false, false);
+			revolve(a, b, profile, sides(24), uv, false, false);
 		}
 
 		/** A straight run of pipe through points, with a flange at each end. */
 		void pipe(double r, float[] uv, Vec3... points) {
 			for (int i = 0; i + 1 < points.length; i++) {
-				cylinder(points[i], points[i + 1], r, 12, uv, false);
+				cylinder(points[i], points[i + 1], r, sides(12), uv, false);
 				if (i > 0) {
 					sphereJoint(points[i], r);
 				}
+			}
+			if (!detail) {
+				return;
 			}
 			cylinder(points[0], points[0].add(points[1].subtract(points[0]).normalize().scale(0.12)), r * 1.35, 12, FLANGE, true);
 			Vec3 last = points[points.length - 1], prev = points[points.length - 2];
@@ -368,49 +462,51 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 	// ------------------------------------------------------------------ the equipment
 
-	static void vessel(Frame f, State s) {
+	static void vessel(Frame f) {
 		double c = 3.5;
 		// Concrete support skirt, then the vessel: bottom head, shell with weld seams, nozzle belt, closure flange.
-		f.revolve(v(c, 0, c), v(c, 1, c), new double[][] {{0, 3.4}, {1.6, 3.4}, {1.6, 2.9}, {2.2, 2.9}}, 24, CONCRETE, false, true);
+		f.revolve(v(c, 0, c), v(c, 1, c), new double[][] {{0, 3.4}, {1.6, 3.4}, {1.6, 2.9}, {2.2, 2.9}}, f.sides(24), CONCRETE, false, true);
 		f.dome(c, c, 3.6, 2.6, -1.5, STAINLESS);
-		f.revolve(v(c, 3.6, c), v(c, 4.6, c), new double[][] {{0, 2.6}, {6.4, 2.6}}, 32, STAINLESS, false, false);
-		for (double y : new double[] {5.4, 7.4}) {
-			f.band(c, c, y, 2.63, 0.22, WELD_BAND);
+		f.revolve(v(c, 3.6, c), v(c, 4.6, c), new double[][] {{0, 2.6}, {6.4, 2.6}}, f.sides(32), STAINLESS, false, false);
+		if (f.detail) {
+			for (double y : new double[] {5.4, 7.4}) {
+				f.band(c, c, y, 2.63, 0.22, WELD_BAND);
+			}
 		}
-		f.revolve(v(c, 10, c), v(c, 11, c), new double[][] {{0, 2.6}, {0.2, 2.95}, {1.5, 2.95}, {1.7, 2.6}}, 32, STAINLESS_DARK, false, false);
+		f.revolve(v(c, 10, c), v(c, 11, c), new double[][] {{0, 2.6}, {0.2, 2.95}, {1.5, 2.95}, {1.7, 2.6}}, f.sides(32), STAINLESS_DARK, false, false);
 		// Hot- and cold-leg nozzles round the belt, flanged.
 		for (int i = 0; i < 8; i++) {
 			double a = Math.PI / 8 + i * Math.PI / 4;
 			Vec3 dir = v(Math.cos(a), 0, Math.sin(a));
 			Vec3 start = v(c, 10.85, c).add(dir.scale(2.9));
 			Vec3 end = v(c, 10.85, c).add(dir.scale(3.45));
-			f.cylinder(start, end, i % 2 == 0 ? 0.42 : 0.36, 12, STAINLESS, false);
-			f.cylinder(end.subtract(dir.scale(0.1)), end, i % 2 == 0 ? 0.55 : 0.48, 12, FLANGE, true);
+			f.cylinder(start, end, i % 2 == 0 ? 0.42 : 0.36, f.sides(12), STAINLESS, false);
+			f.cylinder(end.subtract(dir.scale(0.1)), end, i % 2 == 0 ? 0.55 : 0.48, f.sides(12), FLANGE, true);
 		}
-		f.revolve(v(c, 11.7, c), v(c, 12.7, c), new double[][] {{0, 3.0}, {0.75, 3.0}}, 32, FLANGE, true, true);
-		if (s.open) {
-			// Head off: the refuelling cavity's water over the fuel, glowing blue.
-			Geometry g = f.g;
-			int light = g.light;
-			g.light = LightCoordsUtil.FULL_BRIGHT;
-			f.disc(v(c, 12.46, c), v(0, 1, 0), 2.55, 24, WATER);
-			g.light = light;
-			return;
+		f.revolve(v(c, 11.7, c), v(c, 12.7, c), new double[][] {{0, 3.0}, {0.75, 3.0}}, f.sides(32), FLANGE, true, true);
+		// Warning signs on the skirt.
+		if (f.detail) {
+			f.plate(c - 0.4, 0.5, c - 3.45, c + 0.4, 1.3, c - 3.4, 0, TREFOIL_SIGN, PAINT_GREY);
+			f.plate(c - 0.4, 0.5, c + 3.4, c + 0.4, 1.3, c + 3.45, 1, TREFOIL_SIGN, PAINT_GREY);
 		}
+	}
+
+	/** The closed head: dome, drive housings, shroud rings and the lifting rig (off while refuelling). */
+	static void vesselHead(Frame f) {
+		double c = 3.5;
 		f.dome(c, c, 12.45, 2.6, 1.9, STAINLESS);
-		// The control-rod drive housings in a circle on the head; their drive rods rise as the rods come out.
-		double rise = 1.2 * (1 - s.rods / 100.0);
-		for (double dx = -1.8; dx <= 1.81; dx += 0.45) {
-			for (double dz = -1.8; dz <= 1.81; dz += 0.45) {
+		// The control-rod drive housings in a circle on the head.
+		double step = f.detail ? 0.45 : 0.9;
+		for (double dx = -1.8; dx <= 1.81; dx += step) {
+			for (double dz = -1.8; dz <= 1.81; dz += step) {
 				if (dx * dx + dz * dz > 1.85 * 1.85) continue;
 				double headTop = 12.45 + 1.9 * Math.sqrt(Math.max(0, 1 - (dx * dx + dz * dz) / (2.6 * 2.6)));
-				f.cylinder(v(c + dx, headTop - 0.1, c + dz), v(c + dx, 17.6, c + dz), 0.11, 6, CRDM, true);
-				f.cylinder(v(c + dx, 17.6, c + dz), v(c + dx, 17.9 + rise, c + dz), 0.05, 4, STAINLESS, true);
+				f.cylinder(v(c + dx, headTop - 0.1, c + dz), v(c + dx, 17.6, c + dz), f.detail ? 0.11 : 0.2, f.detail ? 6 : 4, CRDM, true);
 			}
 		}
 		// Cooling shroud ring and the lifting rig on top.
-		f.revolve(v(c, 15.2, c), v(c, 16.2, c), new double[][] {{0, 2.25}, {0.25, 2.25}}, 24, CARBON_STEEL, true, true);
-		f.revolve(v(c, 17.9, c), v(c, 18.9, c), new double[][] {{0, 2.25}, {0.3, 2.25}}, 24, CARBON_STEEL, true, true);
+		f.revolve(v(c, 15.2, c), v(c, 16.2, c), new double[][] {{0, 2.25}, {0.25, 2.25}}, f.sides(24), CARBON_STEEL, true, true);
+		f.revolve(v(c, 17.9, c), v(c, 18.9, c), new double[][] {{0, 2.25}, {0.3, 2.25}}, f.sides(24), CARBON_STEEL, true, true);
 		for (int i = 0; i < 4; i++) {
 			double a = Math.PI / 4 + i * Math.PI / 2;
 			double x = c + Math.cos(a) * 2.1, z = c + Math.sin(a) * 2.1;
@@ -418,9 +514,21 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			f.cylinder(v(x, 18.2, z), v(c, 19.7, c), 0.08, 6, PAINT_GREY, false);
 		}
 		f.box(c - 0.25, 19.6, c - 0.25, c + 0.25, 19.95, c + 0.25, HAZARD);
-		// Warning signs on the skirt.
-		f.plate(c - 0.4, 0.5, c - 3.45, c + 0.4, 1.3, c - 3.4, 0, TREFOIL_SIGN, PAINT_GREY);
-		f.plate(c - 0.4, 0.5, c + 3.4, c + 0.4, 1.3, c + 3.45, 1, TREFOIL_SIGN, PAINT_GREY);
+	}
+
+	/** The drive rods above the housings: they rise as the control rods come out ({@code rods} is % inserted). */
+	static void vesselRods(Frame f, double rods) {
+		if (!f.detail) {
+			return;
+		}
+		double c = 3.5;
+		double rise = 1.2 * (1 - rods / 100.0);
+		for (double dx = -1.8; dx <= 1.81; dx += 0.45) {
+			for (double dz = -1.8; dz <= 1.81; dz += 0.45) {
+				if (dx * dx + dz * dz > 1.85 * 1.85) continue;
+				f.cylinder(v(c + dx, 17.6, c + dz), v(c + dx, 17.9 + rise, c + dz), 0.05, 4, STAINLESS, true);
+			}
+		}
 	}
 
 	static void steamGenerator(Frame f) {
@@ -432,33 +540,33 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			double x = c + Math.cos(a) * 2.0, z = c + Math.sin(a) * 2.0;
 			f.box(x - 0.25, 0, z - 0.25, x + 0.25, 2.3, z + 0.25, CARBON_STEEL);
 		}
-		f.revolve(v(c, 2.2, c), v(c, 3.2, c), new double[][] {{0, 2.2}, {0.3, 2.2}}, 24, CARBON_STEEL, true, true);
+		f.revolve(v(c, 2.2, c), v(c, 3.2, c), new double[][] {{0, 2.2}, {0.3, 2.2}}, f.sides(24), CARBON_STEEL, true, true);
 		f.dome(c, c, 3.5, 2.05, -1.6, STAINLESS);
 		for (int side : new int[] {-1, 1}) {
 			Vec3 start = v(c + side * 0.9, 2.5, c - 1.4);
-			f.cylinder(start, v(c + side * 0.9, 2.5, c - 2.45), 0.45, 12, STAINLESS, false);
-			f.cylinder(v(c + side * 0.9, 2.5, c - 2.35), v(c + side * 0.9, 2.5, c - 2.5), 0.6, 12, FLANGE, true);
+			f.cylinder(start, v(c + side * 0.9, 2.5, c - 2.45), 0.45, f.sides(12), STAINLESS, false);
+			f.cylinder(v(c + side * 0.9, 2.5, c - 2.35), v(c + side * 0.9, 2.5, c - 2.5), 0.6, f.sides(12), FLANGE, true);
 		}
-		f.revolve(v(c, 3.5, c), v(c, 4.5, c), new double[][] {{0, 2.1}, {7.5, 2.1}, {9.5, 2.9}, {16.0, 2.9}}, 32, PAINT_WHITE, false, false);
+		f.revolve(v(c, 3.5, c), v(c, 4.5, c), new double[][] {{0, 2.1}, {7.5, 2.1}, {9.5, 2.9}, {16.0, 2.9}}, f.sides(32), PAINT_WHITE, false, false);
 		for (double y : new double[] {6, 8.5, 14.5, 17}) {
 			double r = y < 11 ? 2.13 : 2.93;
 			f.band(c, c, y, r, 0.2, WELD_BAND);
 		}
 		f.dome(c, c, 19.5, 2.9, 1.2, PAINT_WHITE);
-		f.cylinder(v(c, 20.4, c), v(c, 21.0, c), 0.5, 12, STAINLESS, false);
-		f.cylinder(v(c, 20.85, c), v(c, 21.0, c), 0.68, 12, FLANGE, true);
+		f.cylinder(v(c, 20.4, c), v(c, 21.0, c), 0.5, f.sides(12), STAINLESS, false);
+		f.cylinder(v(c, 20.85, c), v(c, 21.0, c), 0.68, f.sides(12), FLANGE, true);
 		// Feedwater nozzle on the drum.
-		f.cylinder(v(c, 14.0, c - 2.85), v(c, 14.0, c - 3.45), 0.3, 12, STAINLESS, false);
-		f.cylinder(v(c, 14.0, c - 3.35), v(c, 14.0, c - 3.5), 0.42, 12, FLANGE, true);
+		f.cylinder(v(c, 14.0, c - 2.85), v(c, 14.0, c - 3.45), 0.3, f.sides(12), STAINLESS, false);
+		f.cylinder(v(c, 14.0, c - 3.35), v(c, 14.0, c - 3.5), 0.42, f.sides(12), FLANGE, true);
 		// Upper supports and a walkway round the cone.
-		f.revolve(v(c, 12.0, c), v(c, 13.0, c), new double[][] {{0, 3.35}, {0.12, 3.35}}, 24, GRATING, true, true);
+		f.revolve(v(c, 12.0, c), v(c, 13.0, c), new double[][] {{0, 3.35}, {0.12, 3.35}}, f.sides(24), GRATING, true, true);
 		for (int i = 0; i < 8; i++) {
 			double a = i * Math.PI / 4;
 			double x = c + Math.cos(a) * 3.3, z = c + Math.sin(a) * 3.3;
 			f.box(x - 0.04, 12.12, z - 0.04, x + 0.04, 13.1, z + 0.04, HANDRAIL);
 		}
-		f.revolve(v(c, 13.0, c), v(c, 14, c), new double[][] {{0, 3.33}, {0.06, 3.33}}, 24, HANDRAIL, false, false);
-		f.revolve(v(c, 12.6, c), v(c, 13.6, c), new double[][] {{0, 3.33}, {0.05, 3.33}}, 24, HANDRAIL, false, false);
+		f.revolve(v(c, 13.0, c), v(c, 14, c), new double[][] {{0, 3.33}, {0.06, 3.33}}, f.sides(24), HANDRAIL, false, false);
+		f.revolve(v(c, 12.6, c), v(c, 13.6, c), new double[][] {{0, 3.33}, {0.05, 3.33}}, f.sides(24), HANDRAIL, false, false);
 		f.plate(c - 0.5, 9.0, c - 2.2, c + 0.5, 9.5, c - 2.14, 0, NAMEPLATE, STAINLESS);
 	}
 
@@ -469,35 +577,35 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		for (double[] foot : new double[][] {{0.6, 0.4}, {4.4, 0.4}, {2.5, 2.6}}) {
 			f.box(foot[0] - 0.35, 0, foot[1] - 0.3, foot[0] + 0.35, 0.6, foot[1] + 0.3, CARBON_STEEL);
 		}
-		f.revolve(v(cx, 0.3, cz), v(cx, 1.3, cz), new double[][] {{0, 0.6}, {0.4, 1.1}, {1.1, 1.35}, {1.9, 1.2}, {2.3, 0.9}}, 24, STAINLESS_DARK,
+		f.revolve(v(cx, 0.3, cz), v(cx, 1.3, cz), new double[][] {{0, 0.6}, {0.4, 1.1}, {1.1, 1.35}, {1.9, 1.2}, {2.3, 0.9}}, f.sides(24), STAINLESS_DARK,
 				true, true);
-		f.cylinder(v(cx, 1.2, cz - 0.9), v(cx, 1.2, cz - 1.5), 0.5, 12, STAINLESS_DARK, false);
-		f.cylinder(v(cx, 1.2, cz - 1.38), v(cx, 1.2, cz - 1.5), 0.68, 12, FLANGE, true);
-		f.cylinder(v(cx - 1.0, 1.4, cz), v(cx - 2.45, 1.4, cz), 0.45, 12, STAINLESS_DARK, false);
-		f.cylinder(v(cx - 2.33, 1.4, cz), v(cx - 2.5, 1.4, cz), 0.62, 12, FLANGE, true);
-		f.cylinder(v(cx, 2.55, cz), v(cx, 2.75, cz), 1.2, 24, FLANGE, true);
-		f.cylinder(v(cx, 2.75, cz), v(cx, 4.5, cz), 0.85, 16, CARBON_STEEL, true);
+		f.cylinder(v(cx, 1.2, cz - 0.9), v(cx, 1.2, cz - 1.5), 0.5, f.sides(12), STAINLESS_DARK, false);
+		f.cylinder(v(cx, 1.2, cz - 1.38), v(cx, 1.2, cz - 1.5), 0.68, f.sides(12), FLANGE, true);
+		f.cylinder(v(cx - 1.0, 1.4, cz), v(cx - 2.45, 1.4, cz), 0.45, f.sides(12), STAINLESS_DARK, false);
+		f.cylinder(v(cx - 2.33, 1.4, cz), v(cx - 2.5, 1.4, cz), 0.62, f.sides(12), FLANGE, true);
+		f.cylinder(v(cx, 2.55, cz), v(cx, 2.75, cz), 1.2, f.sides(24), FLANGE, true);
+		f.cylinder(v(cx, 2.75, cz), v(cx, 4.5, cz), 0.85, f.sides(16), CARBON_STEEL, true);
 		for (int i = 0; i < 4; i++) {
 			double a = i * Math.PI / 2;
 			f.box(cx + Math.cos(a) * 0.8 - 0.15, 3.0, cz + Math.sin(a) * 0.8 - 0.15, cx + Math.cos(a) * 0.8 + 0.15, 4.4,
 					cz + Math.sin(a) * 0.8 + 0.15, STAINLESS);
 		}
-		f.cylinder(v(cx, 4.5, cz), v(cx, 8.4, cz), 1.3, 24, PAINT_BLUE, true);
+		f.cylinder(v(cx, 4.5, cz), v(cx, 8.4, cz), 1.3, f.sides(24), PAINT_BLUE, true);
 		for (double y = 5.0; y < 8.2; y += 0.45) {
 			f.band(cx, cz, y, 1.36, 0.12, FINS);
 		}
 		f.box(cx + 1.2, 4.9, cz - 0.8, cx + 2.2, 7.9, cz + 0.8, PAINT_BLUE, PAINT_GREY, PAINT_GREY);
 		f.box(cx + 2.2, 5.2, cz - 0.7, cx + 2.35, 7.6, cz + 0.7, RADIATOR);
-		f.revolve(v(cx, 8.4, cz), v(cx, 9.4, cz), new double[][] {{0, 1.15}, {0.6, 1.15}, {0.9, 0.7}}, 24, PAINT_BLUE, false, true);
+		f.revolve(v(cx, 8.4, cz), v(cx, 9.4, cz), new double[][] {{0, 1.15}, {0.6, 1.15}, {0.9, 0.7}}, f.sides(24), PAINT_BLUE, false, true);
 		f.box(cx - 1.75, 5.5, cz - 0.45, cx - 1.25, 6.6, cz + 0.45, PAINT_GREY);
 		f.plate(cx - 0.4, 6.0, cz - 1.33, cx + 0.4, 6.5, cz - 1.3, 0, NAMEPLATE, PAINT_BLUE);
 	}
 
 	static void pressurizer(Frame f) {
 		double cx = 2.5, cz = 1.5;
-		f.revolve(v(cx, 0, cz), v(cx, 1, cz), new double[][] {{0, 1.25}, {1.5, 1.25}}, 24, CARBON_STEEL, false, true);
+		f.revolve(v(cx, 0, cz), v(cx, 1, cz), new double[][] {{0, 1.25}, {1.5, 1.25}}, f.sides(24), CARBON_STEEL, false, true);
 		f.dome(cx, cz, 2.4, 1.3, -1.0, STAINLESS);
-		f.cylinder(v(cx, 2.4, cz), v(cx, 16.0, cz), 1.3, 24, STAINLESS, false);
+		f.cylinder(v(cx, 2.4, cz), v(cx, 16.0, cz), 1.3, f.sides(24), STAINLESS, false);
 		for (double y : new double[] {4.5, 8.0, 11.5, 15.0}) {
 			f.band(cx, cz, y, 1.33, 0.18, WELD_BAND);
 		}
@@ -506,7 +614,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		f.pipe(0.12, STAINLESS, v(cx - 0.3, 16.9, cz), v(cx - 0.3, 17.6, cz), v(cx - 1.6, 17.6, cz), v(cx - 1.6, 12, cz - 0.9));
 		for (int i = 0; i < 3; i++) {
 			double x = cx - 0.5 + i * 0.5;
-			f.cylinder(v(x, 16.85, cz + 0.4), v(x, 17.5, cz + 0.4), 0.13, 8, STAINLESS_DARK, true);
+			f.cylinder(v(x, 16.85, cz + 0.4), v(x, 17.5, cz + 0.4), 0.13, f.sides(8), STAINLESS_DARK, true);
 			f.box(x - 0.12, 17.5, cz + 0.28, x + 0.12, 17.8, cz + 0.52, PAINT_GREY);
 		}
 		f.box(cx - 1.75, 13.8, cz - 1.5, cx + 1.75, 13.95, cz - 1.2, GRATING);
@@ -524,7 +632,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			f.box(x - 0.03, 3.05, 0.2, x + 0.03, 4.1, 49.8, HANDRAIL);
 		}
 		// Shaft line, bearing pedestals.
-		f.cylinder(v(c, axisY, 1.0), v(c, axisY, 49.0), 0.25, 12, STAINLESS, true);
+		f.cylinder(v(c, axisY, 1.0), v(c, axisY, 49.0), 0.25, f.sides(12), STAINLESS, true);
 		for (double z : new double[] {1.5, 9.5, 18.5, 27.5, 36.5, 46.5}) {
 			f.box(c - 0.9, 3.05, z - 0.4, c + 0.9, axisY - 0.2, z + 0.4, CARBON_STEEL);
 		}
@@ -532,7 +640,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		halfCasing(f, c, axisY, 2.5, 9.0, 1.9, TURBINE_BLUE);
 		// Moisture separator reheaters either side, on saddles.
 		for (double x : new double[] {1.45, 9.55}) {
-			f.revolve(v(x, axisY, 3.0), v(x, axisY, 4.0), new double[][] {{0, 0.3}, {0.5, 0.95}, {26.5, 0.95}, {27, 0.3}}, 16, PAINT_GREY, true, true);
+			f.revolve(v(x, axisY, 3.0), v(x, axisY, 4.0), new double[][] {{0, 0.3}, {0.5, 0.95}, {26.5, 0.95}, {27, 0.3}}, f.sides(16), PAINT_GREY, true, true);
 			for (double z = 5; z < 30; z += 6) {
 				f.box(x - 0.7, 3.05, z - 0.2, x + 0.7, axisY - 0.6, z + 0.2, CARBON_STEEL);
 			}
@@ -547,7 +655,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		for (double x : new double[] {c - 1.4, c + 1.4}) {
 			f.pipe(0.55, PAINT_GREY, v(x, axisY + 1.4, 7.5), v(x, 9.1, 7.5), v(x, 9.1, 32.0));
 			for (double z : new double[] {14.0, 23.0, 32.0}) {
-				f.cylinder(v(x, 9.1, z), v(x, 8.1, z), 0.55, 12, PAINT_GREY, false);
+				f.cylinder(v(x, 9.1, z), v(x, 8.1, z), 0.55, f.sides(12), PAINT_GREY, false);
 			}
 		}
 		// Generator, with its end shields and the exciter.
@@ -555,9 +663,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		f.revolve(v(c, axisY + 0.4, 37.0), v(c, axisY + 0.4, 38.0), new double[][] {{0, 1.6}, {0.5, 2.15}, {8.5, 2.15}, {9.0, 1.6}}, 32,
 				GENERATOR, true, true);
 		for (double z : new double[] {39.0, 41.5, 44.0}) {
-			f.revolve(v(c, axisY + 0.4, z), v(c, axisY + 0.4, z + 1), new double[][] {{0, 2.2}, {0.25, 2.2}}, 32, PAINT_GREEN, true, true);
+			f.revolve(v(c, axisY + 0.4, z), v(c, axisY + 0.4, z + 1), new double[][] {{0, 2.2}, {0.25, 2.2}}, f.sides(32), PAINT_GREEN, true, true);
 		}
-		f.cylinder(v(c, axisY, 46.4), v(c, axisY, 48.8), 1.0, 16, PAINT_GREY, true);
+		f.cylinder(v(c, axisY, 46.4), v(c, axisY, 48.8), 1.0, f.sides(16), PAINT_GREY, true);
 		f.plate(c - 0.6, 5.0, 46.9, c + 0.6, 5.6, 46.95, 0, NAMEPLATE, PAINT_GREY);
 		// Bus duct from the generator to the side, toward the main transformer.
 		f.box(c + 2.0, axisY + 0.6, 40.5, 11.0, axisY + 1.4, 41.5, PAINT_GREY);
@@ -566,7 +674,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 	/** A turbine casing: a horizontal half-cylinder (its top) with a split flange, over a box base. */
 	static void halfCasing(Frame f, double c, double y, double z0, double z1, double r, float[] uv) {
-		int sides = 32;
+		int sides = f.sides(32);
 		int repeats = Frame.repeatsFor(Math.PI * r * 2, sides);
 		for (int k = 0; k < sides / 2; k++) {
 			double a0 = Math.PI * k / (sides / 2.0), a1 = Math.PI * (k + 1) / (sides / 2.0);
@@ -615,7 +723,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			f.box(x0, 0.6, 0.6, x1, 4.6, 5.4, PAINT_BLUE);
 			double nx = end == 0 ? 0.05 : 11.95, out = end == 0 ? -0.05 : 0.05;
 			for (double y : new double[] {1.5, 3.6}) {
-				f.cylinder(v(nx, y, 3.0), v(nx + out * 1, y, 3.0), 0.75, 16, PAINT_BLUE, true);
+				f.cylinder(v(nx, y, 3.0), v(nx + out * 1, y, 3.0), 0.75, f.sides(16), PAINT_BLUE, true);
 			}
 		}
 		f.plate(5.4, 2.5, 0.25, 6.6, 3.1, 0.3, 0, NAMEPLATE, TANK_GREY);
@@ -625,13 +733,13 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static void feedwaterPump(Frame f) {
 		f.box(0.05, 0, 0.2, 2.95, 0.3, 1.8, CARBON_STEEL);
 		// Motor along x with cooling fins, the coupling guard, and the pump with its nozzles up to the steam line.
-		f.cylinder(v(0.15, 0.95, 1.0), v(1.35, 0.95, 1.0), 0.6, 16, PAINT_BLUE, true);
+		f.cylinder(v(0.15, 0.95, 1.0), v(1.35, 0.95, 1.0), 0.6, f.sides(16), PAINT_BLUE, true);
 		for (double x = 0.3; x < 1.3; x += 0.2) {
-			f.revolve(v(x, 0.95, 1.0), v(x + 1, 0.95, 1.0), new double[][] {{0, 0.66}, {0.06, 0.66}}, 16, FINS, true, true);
+			f.revolve(v(x, 0.95, 1.0), v(x + 1, 0.95, 1.0), new double[][] {{0, 0.66}, {0.06, 0.66}}, f.sides(16), FINS, true, true);
 		}
 		f.box(0.35, 0.3, 0.5, 1.15, 0.45, 1.5, CARBON_STEEL);
 		f.box(1.35, 0.7, 0.75, 1.75, 1.2, 1.25, HAZARD);
-		f.cylinder(v(1.75, 0.95, 1.0), v(2.8, 0.95, 1.0), 0.55, 16, STAINLESS_DARK, true);
+		f.cylinder(v(1.75, 0.95, 1.0), v(2.8, 0.95, 1.0), 0.55, f.sides(16), STAINLESS_DARK, true);
 		f.box(1.9, 0.3, 0.6, 2.7, 0.45, 1.4, CARBON_STEEL);
 		f.pipe(0.22, STAINLESS, v(2.1, 1.45, 1.0), v(2.1, 2.95, 1.0));
 		f.pipe(0.18, STAINLESS, v(2.6, 1.45, 1.0), v(2.6, 2.6, 1.0), v(2.6, 2.6, 1.8));
@@ -655,7 +763,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			f.box(x0, 3.8, 1.0, x1, 4.0, 3.9, CARBON_STEEL);
 			f.box(x0, 0.5, 1.0, x1, 0.7, 3.9, CARBON_STEEL);
 		}
-		f.cylinder(v(0.8, 5.1, 4.4), v(4.2, 5.1, 4.4), 0.45, 16, TANK_GREY, true);
+		f.cylinder(v(0.8, 5.1, 4.4), v(4.2, 5.1, 4.4), 0.45, f.sides(16), TANK_GREY, true);
 		for (double x : new double[] {1.2, 3.8}) {
 			f.box(x - 0.08, 4.35, 4.3, x + 0.08, 4.7, 4.5, CARBON_STEEL);
 		}
@@ -673,7 +781,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 	/** A porcelain bushing with sheds and a copper terminal on top. */
 	static void bushing(Frame f, double x, double y0, double z, double height) {
-		f.cylinder(v(x, y0, z), v(x, y0 + 0.3, z), 0.28, 12, CARBON_STEEL, true);
+		f.cylinder(v(x, y0, z), v(x, y0 + 0.3, z), 0.28, f.sides(12), CARBON_STEEL, true);
 		java.util.List<double[]> profile = new java.util.ArrayList<>();
 		profile.add(new double[] {0, 0.14});
 		for (double d = 0.25; d + 0.2 < height; d += 0.28) {
@@ -683,19 +791,22 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			profile.add(new double[] {d + 0.1, 0.14});
 		}
 		profile.add(new double[] {height, 0.14});
-		f.revolve(v(x, y0 + 0.3, z), v(x, y0 + 1.3, z), profile.toArray(new double[0][]), 12, GLAZE_BROWN, false, true);
-		f.cylinder(v(x, y0 + 0.3 + height, z), v(x, y0 + 0.55 + height, z), 0.1, 8, COPPER, true);
+		f.revolve(v(x, y0 + 0.3, z), v(x, y0 + 1.3, z), profile.toArray(new double[0][]), f.sides(12), GLAZE_BROWN, false, true);
+		f.cylinder(v(x, y0 + 0.3 + height, z), v(x, y0 + 0.55 + height, z), 0.1, f.sides(8), COPPER, true);
 	}
 
-	static void console(Frame f, State s) {
-		// The desk, its sloped instrument top, the vertical board with three screens, and the annunciator lamps.
+	static void console(Frame f) {
+		// The desk, its sloped instrument top, the vertical board with three screens, and the SCRAM button.
 		f.box(0.05, 0, 0.15, 2.95, 0.72, 1.35, PAINT_GREY, DESK, PAINT_GREY);
 		Vec3 tl = v(0.05, 0.98, 1.3), bl = v(0.05, 0.72, 0.15), br = v(2.95, 0.72, 0.15), tr = v(2.95, 0.98, 1.3);
 		f.tiled(tl, bl, br, tr, v(0, 0.98, -0.2).normalize(), DESK, 1.5);
 		f.box(0.05, 0, 1.35, 2.95, 1.95, 1.95, PAINT_GREY);
-		Geometry g = f.g;
-		int light = g.light;
-		g.light = LightCoordsUtil.FULL_BRIGHT;
+		f.cylinder(v(2.55, 0.86, 0.6), v(2.55, 0.98, 0.6), 0.14, f.sides(12), LAMP_RED, true);
+		f.box(2.35, 0.8, 0.4, 2.75, 0.84, 0.8, HAZARD);
+	}
+
+	/** The console's lit parts: three screens and the annunciator lamps (red and blinking on a trip). */
+	static void consoleLamps(Frame f, State s) {
 		for (int i = 0; i < 3; i++) {
 			double x0 = 0.15 + i * 0.95;
 			f.quad(v(x0, 1.8, 1.34), v(x0, 1.05, 1.34), v(x0 + 0.85, 1.05, 1.34), v(x0 + 0.85, 1.8, 1.34), v(0, 0, -1),
@@ -708,9 +819,5 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			f.quad(v(x0, 1.92, 1.34), v(x0, 1.84, 1.34), v(x0 + 0.25, 1.84, 1.34), v(x0 + 0.25, 1.92, 1.34), v(0, 0, -1),
 					lamp[0], lamp[1], lamp[2], lamp[3]);
 		}
-		g.light = light;
-		// The SCRAM button under its guard.
-		f.cylinder(v(2.55, 0.86, 0.6), v(2.55, 0.98, 0.6), 0.14, 12, LAMP_RED, true);
-		f.box(2.35, 0.8, 0.4, 2.75, 0.84, 0.8, HAZARD);
 	}
 }
