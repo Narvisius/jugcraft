@@ -153,11 +153,50 @@ class Room:
             for c in range(3):
                 cx, cz, cy = x + rx * (c - 1), z + rz * (c - 1), self.y + 1 + r
                 behind = self.b.get(cx + dx, cy, cz + dz)
-                if self.b.get(cx, cy, cz) != 0 or not behind or behind in GLAZING or not self.inside(*self.uv(cx, cz)):
+                if self.b.get(cx, cy, cz) != 0 or not behind or behind in GLAZING or behind in MP.DOORISH \
+                        or not self.inside(*self.uv(cx, cz)):
                     return False
                 cells.append((cx, cy, cz, r * 3 + c))
         for cx, cy, cz, part in cells:
             self.b.p(cx, cy, cz, MP.multi_state(name, fw, part))
+        return True
+
+    def copier(self, u, v, f):
+        """The office copier at (u, v) and the cell to its left as you face it (not on a cell kept clear)."""
+        fw = self.face(f)
+        x, z = self.xz(u, v)
+        rx, rz = P.DIRS[P.CLOCKWISE[fw]]
+        lu, lv = self.uv(x - rx, z - rz)
+        if not (self.free(u, v) and self.free(lu, lv)):
+            return False
+        # Room in front of it to stand and use it, kept clear afterwards.
+        fx, fz = P.DIRS[OPPOSITE[fw]]
+        fronts = [self.uv(x + fx, z + fz), self.uv(x - rx + fx, z - rz + fz)]
+        if not all(self.open(a, c) and not (self.inside(a, c) and self.b.get(*self.xz(a, c)[:1], self.y, self.xz(a, c)[1]))
+                   for a, c in fronts):
+            return False
+        if copier(self.b, x, self.y, z, fw):
+            self.keep.update(fronts)
+            return True
+        return False
+
+    def big_print(self, u, v, f):
+        """A big framed picture two blocks across on the wall on the f side of cells (u, v) and the one to its
+        left as you face it (a random one of the twelve, chosen from where it hangs)."""
+        fw = self.face(f)
+        x, z = self.xz(u, v)
+        return big_print(self.b, x, self.y + 1, z, fw)
+
+    def lounge(self, u, v):
+        """The oval glass coffee table, three blocks across u (from u) and two deep (v and v + 1), if free."""
+        cells = [(u + c, v + r) for c in range(3) for r in range(2)]
+        if not all(self.free(a, b) for a, b in cells):
+            return False
+        xs = [self.xz(a, b) for a, b in cells]
+        x0, z0 = min(p[0] for p in xs), min(p[1] for p in xs)
+        # Laid facing north in the world: columns run east, rows south.
+        for x, z in xs:
+            self.b.p(x, self.y, z, MP.multi_state("lounge_table", "north", (z - z0) * 3 + (x - x0)))
         return True
 
     def oval(self, u, v, chairs=True):
@@ -167,10 +206,11 @@ class Room:
         if not all(self.free(a, c) or (abs(a - u) == 4 or abs(c - v) == 3) and self.open(a, c) for a, c in ring):
             return False
         # The table is laid facing north in the world: columns run east, rows south.
+        x, z = self.xz(u, v)
+        layout = (x * 5 + z * 3 + self.y) % 3          # one of three ways the table is set out for a meeting
         for p in range(15):
             cc, rr = p % 5, p // 5
-            x, z = self.xz(u, v)
-            self.b.p(x + cc - 2, self.y, z + rr - 1, MP.multi_state("oval_table", "north", p))
+            self.b.p(x + cc - 2, self.y, z + rr - 1, MP.multi_state("oval_table", "north", p, layout))
         x, z = self.xz(u, v)
         if chairs:
             for k in range(-2, 3):
@@ -226,6 +266,42 @@ class Room:
         return False
 
 
+def copier(b, x, y, z, fw):
+    """The big office copier, two blocks across (the block at x, z and the one to its left as you face it) and a
+    little into the row above; only where all of that is free floor."""
+    rx, rz = P.DIRS[P.CLOCKWISE[fw]]
+    cells = [(x - rx, z - rz, 0), (x, z, 1)]
+    for cx, cz, _ in cells:
+        for yy in (y, y + 1):
+            if b.get(cx, yy, cz) != 0:
+                return False
+        if b.get(cx, y - 1, cz) == 0:
+            return False
+    for cx, cz, c in cells:
+        for row in range(2):
+            b.p(cx, y + row, cz, MP.M(f"jugcraft:office_copier[facing={fw},part={row * 2 + c}]", (44, 46, 50)))
+    b.seats.append(("office_copier", x, y, z, fw))
+    b.seats.append(("office_copier", x - rx, y, z - rz, fw))
+    return True
+
+
+def big_print(b, x, y, z, fw):
+    """A big framed picture on the wall in front of cell (x, z) (facing fw = toward the wall) and the cell to its
+    left; only on solid wall (no glass, no doors)."""
+    rx, rz = P.DIRS[P.CLOCKWISE[fw]]
+    dx, dz = P.DIRS[fw]
+    cells = [(x - rx, z - rz, 0), (x, z, 1)]
+    for cx, cz, _ in cells:
+        behind = b.get(cx + dx, y, cz + dz)
+        if b.get(cx, y, cz) != 0 or not behind or behind in GLAZING or behind in MP.DOORISH:
+            return False
+    v = (x * 7 + z * 11 + y * 3) % 12
+    for cx, cz, part in cells:
+        b.p(cx, y, cz, MP.M(f"jugcraft:large_print[facing={fw},part={part},variant={v}]", (120, 100, 80)))
+    b.seats.append(("large_print", x, y, z, fw))
+    return True
+
+
 # --------------------------------------------------------------------------------------------------- the rooms
 # Desk tops (office_desk_long): 0 computer, 1 paperwork, 2 binders and a mug, 3 lamp and phone, 4 laptop, 5 rolled
 # drawings. Executive desk: 0 two screens, 1 blotter and nameplate, 2 lamp and phone. Glass desk: 0 computer, 1 a
@@ -246,7 +322,7 @@ def private_office(r):
     r.plant(r.w - 1, 0)
     r.plant(0, r.d - 1)
     r.on_wall("whiteboard", r.w - 1, 4, "east", 24)
-    r.on_wall("framed_print", 0, 5, "west", 12)
+    r.on_wall("framed_print", 0, 5, "west", 16)
     r.on_wall("fire_extinguisher", r.w - 1, r.d - 1, "east")
 
 
@@ -268,8 +344,8 @@ def hr_office(r):
         r.put("filing_cabinet", u, r.d - 1, "door")
     r.plant(r.w - 1, 0)
     r.plant(8, 0)
-    r.on_wall("framed_print", r.w - 1, 2, "east", 12)
-    r.on_wall("framed_print", 0, 6, "west", 12)
+    r.on_wall("framed_print", r.w - 1, 2, "east", 16)
+    r.on_wall("framed_print", 0, 6, "west", 16)
     r.on_wall("whiteboard", r.w - 1, 5, "east", 24)
 
 
@@ -282,7 +358,7 @@ def operations(r):
         r.long_desk([(u, v) for v in range(cv - 1, cv + 3)], "west", [0, 1, 0, 2], [0, 2])
     r.on_wall("whiteboard", r.w - 1, 2, "east", 24)
     r.on_wall("whiteboard", r.w - 1, 4, "east", 24)
-    r.put("printer", r.w - 1, r.d - 3, "east")
+    r.copier(r.w - 1, r.d - 3, "east")
     r.plant(0, 0)
     r.plant(r.w - 1, 0)
 
@@ -294,11 +370,11 @@ def shared_office(r):
         r.long_desk([(u, 0), (u + 1, 0)], "win", [0, (u // 4) % 4 + 1], [0])
     for u in range(0, r.w, 2):
         r.put("filing_cabinet", u, r.d - 1, "door")
-    r.put("printer", r.w - 1, r.d - 3, "east")
+    r.copier(r.w - 1, r.d - 4, "east")
     r.plant(0, r.d - 1)
     r.on_wall("whiteboard", 0, 3, "west", 24)
     r.on_wall("whiteboard", r.w - 1, 3, "east", 24)
-    r.on_wall("framed_print", r.w - 1, 1, "east", 12)
+    r.on_wall("framed_print", r.w - 1, 1, "east", 16)
 
 
 def engineering(r):
@@ -312,7 +388,7 @@ def engineering(r):
         r.on_wall("blueprint_sheet", r.w - 1, v, "east", 6)
     r.put("filing_cabinet_open", r.w - 1, r.d - 2, "east")
     r.put("filing_cabinet", r.w - 1, r.d - 3, "east")
-    r.put("printer", 0, r.d - 2, "west")
+    r.copier(0, r.d - 2, "west")
     r.plant(r.w - 1, 0)
 
 
@@ -328,7 +404,7 @@ def open_office(r):
             r.long_desk([(u + k, 8) for k in range(3)], "win", [4, 0, 0], [0, 1, 2])
         r.plant(u + 3, 0)
         u += 5
-    r.put("printer", 0, r.d - 1, "west")
+    r.copier(0, r.d - 1, "west")
     r.put("water_cooler", r.w - 1, r.d - 1, "east")
     r.on_wall("whiteboard", 0, 4, "west", 24)
     r.on_wall("whiteboard", r.w - 1, 4, "east", 24)
@@ -345,7 +421,7 @@ def meeting_room(r):
     r.on_wall("whiteboard", r.w - 1, 4, "east", 24)
     for u, v in ((0, 0), (r.w - 1, 0), (0, r.d - 1)):
         r.plant(u, v)
-    r.on_wall("framed_print", 0, 6, "west", 12)
+    r.on_wall("framed_print", 0, 6, "west", 16)
 
 
 def board_room(r):
@@ -353,8 +429,8 @@ def board_room(r):
     tables, a coffee counter, bookcases, prints and plants."""
     r.oval(7, 5)
     r.screen("plant_map_screen", 0, 5, "west")
-    r.on_wall("framed_print", 0, 2, "west", 12)
-    r.on_wall("framed_print", 0, 8, "west", 12)
+    r.big_print(0, 2, "west")
+    r.big_print(0, 9, "west")
     lu = r.w - 6
     # Two sofas facing each other over glass coffee tables, a step's room either side of the tables.
     r.row_u(("sofa", 3), lu, 1, "door")
@@ -393,11 +469,20 @@ def documentation(r):
     for u in range(2, 10):
         r.stack("bookcase", u, 2, "door")
         r.stack("bookcase", u, 3, "win")
+    # Tall (person-height) filing cabinets all down both walls, every third with its top drawer cracked open.
     for v in range(1, r.d - 2):
-        r.put("filing_cabinet_open" if v % 3 == 1 else "filing_cabinet", 0, v, "west")
-        r.put("filing_cabinet_open" if v % 3 == 2 else "filing_cabinet", r.w - 1, v, "east")
+        for u, f, k in ((0, "west", v % 4), (r.w - 1, "east", (v + 2) % 4)):
+            if r.free(u, v):
+                x, z = r.xz(u, v)
+                fw = r.face(f)
+                # Every so often a drawer stands open a crack: the top one or one lower down.
+                low = "filing_cabinet_tall_open" if k == 1 else "filing_cabinet_tall"
+                high = "filing_cabinet_tall_open" if k == 3 else "filing_cabinet_tall"
+                r.b.p(x, r.y, z, MP.furniture(low, fw, up=True, down=False))
+                r.b.p(x, r.y + 1, z, MP.furniture(high, fw, up=False, down=True))
+                r.b.seats.append(("filing_cabinet_tall", x, r.y, z, fw))
     r.long_desk([(12, 0), (13, 0)], "win", [1, 2], [0])
-    r.put("printer", 12, r.d - 1, "door")
+    r.copier(12, r.d - 1, "door")
     r.plant(r.w - 2, 0)
 
 
@@ -416,7 +501,7 @@ def training_room(r):
 def break_room(r, big=False):
     """A break room: a kitchenette along the west wall (counters, sink, coffee, fridges), tables with chairs."""
     n = min(6, r.d - 3)
-    names = ["kitchen_counter", "kitchen_sink", "kitchen_counter", "coffee_counter", "kitchen_counter", "kitchen_counter"][:n]
+    names = ["kitchen_counter", "kitchen_sink", "kitchen_counter", "coffee_counter", "microwave_counter", "kitchen_counter"][:n]
     r.row_v(names, 0, 0, "west")
     for k in range(2):
         r.stack("fridge", 0, n + k, "west")
@@ -424,16 +509,18 @@ def break_room(r, big=False):
         for v in range(1, r.d - 2, 3):
             if r.free(u, v):
                 x, z = r.xz(u, v)
-                r.b.furniture("cafe_table", x, r.y, z, "north")
+                # Lunch on some of the tables: noodles, a gyro plate, a burger, a salad, coffee and a croissant.
+                r.b.varied("cafe_table", x, r.y, z, "north", 6)
                 r.chair(u - 1, v, "east", "cafe_chair")
                 r.chair(u + 1, v, "west", "cafe_chair")
     r.put("water_cooler", r.w - 1, r.d - 1, "east")
     r.plant(r.w - 1, 0)
-    r.on_wall("framed_print", r.w - 1, 2, "east", 12)
+    r.on_wall("framed_print", r.w - 1, 2, "east", 16)
     r.on_wall("whiteboard", r.w - 1, 4, "east", 24)
     r.on_wall("fire_extinguisher", r.w - 1, r.d - 2, "east")
     if big:
         r.row_u(("sofa", 3), r.w - 5, r.d - 3, "door")
+        r.screen("flat_tv", r.w - 4, r.d - 1, "door")
 
 
 def locker_room(r):
@@ -461,7 +548,7 @@ def it_support(r):
     r.long_desk([(2, 8), (3, 8), (4, 8)], "win", [1, 3, 0], [2], name="glass_desk")
     for v in (1, 2):
         r.stack("pallet_rack", r.w - 1, v, "east", 2)
-    r.put("printer", r.w - 1, r.d - 3, "east")
+    r.copier(r.w - 1, r.d - 3, "east")
     r.on_wall("whiteboard", 0, 3, "west", 24)
     r.plant(0, r.d - 1)
 
@@ -478,12 +565,12 @@ def manager_office(r):
     r.screen("flat_tv", r.w - 1, 5, "east")
     r.screen("plant_map_screen", 4, r.d - 1, "door")
     r.row_u(("sofa", 3), 1, 8, "win")
-    r.put("glass_coffee_table", 2, 6, "west")
+    r.lounge(1, 5) or r.lounge(1, 6) or r.put("glass_coffee_table", 2, 6, "west")
     r.row_v(["kitchen_counter", "coffee_counter"], r.w - 1, 8, "east")
     for u, v in ((0, 0), (r.w - 1, 0), (0, 8), (r.w - 1, 2), (r.w - 1, 7)):
         r.plant(u, v)
-    r.on_wall("framed_print", 0, 2, "west", 12)
-    r.on_wall("framed_print", r.w - 1, 2, "east", 12)
+    r.on_wall("framed_print", 0, 2, "west", 16)
+    r.on_wall("framed_print", r.w - 1, 2, "east", 16)
 
 
 def first_aid(r):
@@ -497,7 +584,7 @@ def first_aid(r):
     r.on_wall("fire_extinguisher", r.w - 1, r.d - 2, "east")
     r.put("water_cooler", 0, r.d - 1, "west")
     r.plant(4, 0)
-    r.on_wall("framed_print", r.w - 1, 4, "east", 12)
+    r.on_wall("framed_print", r.w - 1, 4, "east", 16)
 
 
 def intern_area(r):
@@ -510,7 +597,7 @@ def intern_area(r):
             r.put("cubicle_panel", u0 + 3, v + 3, "east") if u0 + 3 < r.w - 1 else None
         r.long_desk([(u0, 2), (u0 + 1, 2)], "door", [0, (u0 // 4) % 3 + 1], [0])
         r.long_desk([(u0, 4), (u0 + 1, 4)], "win", [(u0 // 4) % 3 + 1, 0], [1])
-    r.put("printer", r.w - 1, r.d - 3, "east")
+    r.copier(r.w - 1, r.d - 3, "east")
     r.put("water_cooler", 0, r.d - 1, "west")
     r.on_wall("whiteboard", r.w - 1, 1, "east", 24)
 
@@ -586,11 +673,17 @@ def admin_building(s, ox, oz):
                     r = Room(b, x0, zz[0], x1, zz[1], y0, "s", door_x - x0)
                 rooms.append((theme, r))
         # The corridor: prints, plants, a water cooler, fire extinguishers.
-        for x in range(14, W - 3, 12):
-            b.varied("framed_print", x, y0 + 1, cz0, "north", 12)
-            b.seats.append(("framed_print", x, y0 + 1, cz0, "north"))
+        for x in range(15, W - 3, 10):
+            big_print(b, x, y0 + 1, cz0, "north")
+            big_print(b, x + 4, y0 + 1, cz1, "south")
         for x in (20, 44):
-            b.furniture("fire_extinguisher", x, y0 + 1, cz1, "south")
+            # On plain wall only: not in front of a door, a door's sign or a window, the cells either side clear.
+            for xx in (x, x + 1, x - 1, x + 2, x - 2):
+                wall = [b.get(xx + k, y0 + 1, cz1 + 1) for k in (-1, 0, 1)] + [b.get(xx + k, y0, cz1 + 1) for k in (-1, 0, 1)]
+                if all(m and m not in MP.DOORISH and m not in GLAZING for m in wall) \
+                        and all(b.get(xx + k, y0 + 1, cz1) == 0 for k in (-1, 0, 1)):
+                    b.furniture("fire_extinguisher", xx, y0 + 1, cz1, "south")
+                    break
         b.plant(W - 2, y0, cz0)
         b.plant(W - 2, y0, cz1)
         b.furniture("water_cooler", 10, y0, cz1, "south")
@@ -614,7 +707,7 @@ def lobby(b, x0, z0, x1, z1, wall_z):
         b.p(x, 1, z1 - 1, furniture("operator_chair", "north"))
     b.door(33, 1, wall_z, "south", kind="steel", label="staff_only")
     b.furniture("filing_cabinet", x0, 1, z1, "south")
-    b.furniture("printer", x0 + 1, 1, z1, "south")
+    copier(b, x0 + 2, 1, z1, "south")
     b.plant(x1, 1, z1)
     # Waiting area: sofas along both side walls facing in over coffee tables, plants by the doors.
     b.row(("sofa", 3), x0, 1, 1, "east")
@@ -626,8 +719,7 @@ def lobby(b, x0, z0, x1, z1, wall_z):
     b.row(("sofa", 3), x1, 1, 4, "west")
     b.furniture("glass_coffee_table", x1 - 2, 1, 3, "west")
     b.furniture("wall_display", x0, 2, 6, "west")
-    b.varied("framed_print", x1, 2, 6, "east", 12)
-    b.seats.append(("framed_print", x1, 2, 6, "east"))
+    big_print(b, x1, 2, 7, "east")
     b.p(30, 2, z1, sign("lobby", "north"))
     b.furniture("fire_extinguisher", x0, 2, z1 - 2, "west")
 
@@ -677,7 +769,7 @@ def gatehouse(s, ox, oz):
     b.row(("sofa", 2), W - 2, 1, 9, "west")
     b.plant(W - 2, 1, 10)
     b.plant(9, 1, 10)
-    b.varied("framed_print", W - 2, 2, 7, "east", 12)
+    b.varied("framed_print", W - 2, 2, 7, "east", 16)
     b.seats.append(("framed_print", W - 2, 2, 7, "east"))
     # The plant side: out at the north doors.
     entrance(b, 13, 0, "n", kind="glass", step=False)

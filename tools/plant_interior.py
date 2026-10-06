@@ -69,9 +69,26 @@ FURNITURE = {
         (0.5, 5, 0, 15.5, 14, 0.6, {"*": "pi_chrome", "south": "pi_whiteboard!"}),
         (1, 5, 0.6, 15, 5.4, 1.6, "pi_chrome")]},
     "water_cooler": {"display": "Water Cooler", "boxes": [
-        (4, 0, 4, 12, 18, 12, {"*": "pi_cooler", "south": "pi_cooler_front!"}),
-        (4.5, 18, 4.5, 11.5, 18.5, 11.5, "pi_chrome"), (5, 18.5, 5, 11, 28, 11, "pi_bottle"),
-        (6, 28, 6, 10, 29, 10, "pi_bottle")]},
+        # The cabinet, with a real recess at the front where the cup goes: a drip tray at the bottom of it, the two
+        # taps (cold, hot) with push paddles hanging from its top. The bottle stands upside down in the collar on
+        # top: see-through blue plastic, the water inside, ribs round it. A cup dispenser on the side.
+        (3, 0, 3.5, 13, 0.6, 13, "pi_toe_kick"),
+        (3, 0.6, 3.5, 13, 7, 13, {"*": "pi_cooler", "south": "pi_cooler_lower!"}),
+        (3, 7, 3.5, 13, 13, 9.5, "pi_cooler"),
+        (3, 7, 9.5, 4.5, 13, 13, "pi_cooler"), (11.5, 7, 9.5, 13, 13, 13, "pi_cooler"),
+        (3, 13, 3.5, 13, 18, 13, {"*": "pi_cooler", "south": "pi_cooler_badge!"}),
+        (4.5, 7, 9.5, 11.5, 7.1, 13, "pi_steel_dark"),
+        (5, 7.1, 10, 11, 7.6, 12.6, {"*": "pi_chrome", "up": "pi_drip_grate!"}),
+        (5.6, 11.4, 10.2, 7, 13, 11.6, "pi_chrome"), (6, 10.6, 10.6, 6.6, 11.4, 11.2, "pi_chrome"),
+        (9, 11.4, 10.2, 10.4, 13, 11.6, "pi_chrome"), (9.4, 10.6, 10.6, 10, 11.4, 11.2, "pi_chrome"),
+        (5.4, 11.2, 11.6, 7.2, 12.8, 12.2, "pi_marker_blue"), (8.8, 11.2, 11.6, 10.6, 12.8, 12.2, "pi_marker_red"),
+        (4, 18, 4.5, 12, 18.6, 12, "pi_cooler"),
+        (7, 18.6, 7.5, 9, 20, 9.5, "pi_bottle_plastic"),
+        (5.5, 20, 6, 10.5, 21.4, 11, "pi_bottle_plastic"),
+        (4.5, 21.4, 5, 11.5, 30.5, 12, "pi_bottle_plastic"),
+        (4.3, 24.5, 4.8, 11.7, 25.1, 12.2, "pi_bottle_plastic"), (4.3, 28, 4.8, 11.7, 28.6, 12.2, "pi_bottle_plastic"),
+        (4.8, 20.2, 5.3, 11.2, 29, 11.7, "pi_bottle_water"),
+        (13, 6, 6.5, 14.6, 15, 8.5, {"*": "pi_cab_white", "east": "pi_cup_stack!"})]},
     "guard_rail": {"display": "Safety Railing", "boxes": [
         (7.2, 0, 0.4, 8.8, 16, 2, "pi_rail_yellow"), (0, 15, 0.6, 16, 16, 1.8, "pi_rail_yellow"),
         (0, 8, 0.8, 16, 9, 1.6, "pi_rail_yellow"), (0, 0, 0.6, 16, 2, 1.0, "pi_rail_yellow")]},
@@ -155,7 +172,9 @@ def _box_textures(boxes):
     for box in boxes:
         t = box[6]
         for v in (t.values() if isinstance(t, dict) else [t]):
-            names.add(v.rstrip("!"))
+            if v is None:
+                continue
+            names.add(v[0] if isinstance(v, tuple) else v.split("@")[0].rstrip("!"))
     return names
 
 
@@ -166,9 +185,16 @@ def textures_used():
             names |= _box_textures(info.get(part, []))
         for top in info.get("tops", []):
             names |= _box_textures(top)
-        if "multi" in info:
-            for _, boxes in plant_office2.multi_parts(info):
-                names |= _box_textures(boxes)
+        if "prints" in info:
+            for v in range(info["prints"]):
+                for part in range(2):
+                    names |= _box_textures(plant_office2.lprint_boxes(part, v))
+        elif "multi" in info:
+            for v in range(info.get("versions", 1)):
+                for _, boxes in plant_office2.multi_parts(info, v):
+                    names |= _box_textures(boxes)
+        for extra in info.get("vboxes", []):
+            names |= _box_textures(extra)
         if "vtex" in info:
             names.discard(info["vtex"])
             names |= {f"{info['vtex']}_{i}" for i in range(info["variants"])}
@@ -191,11 +217,19 @@ def _faces(t, glow):
     spec = t if isinstance(t, dict) else {"*": t}
     for face in ("north", "south", "east", "west", "up", "down"):
         name = spec.get(face, spec.get("*"))
+        if name is None:                     # no face there (the inside cuts of a glass top in strips)
+            continue
+        if isinstance(name, tuple):          # (texture, uv): a region of a sheet (the book spines)
+            out[face] = {"texture": f"#{name[0]}", "uv": [round(v, 4) for v in name[1]]}
+            continue
+        name, _, turn = name.partition("@")       # "name!@180": the picture turned (paper read from the far side)
         full = name.endswith("!")
         name = name.rstrip("!")
         f = {"texture": f"#{name}"}
         if full:
             f["uv"] = [0, 0, 16, 16]
+        if turn:
+            f["rotation"] = int(turn)
         out[face] = f
     return out
 
@@ -271,8 +305,9 @@ def model(boxes, glow, rid, under=()):
     elements, used = _elements(separate(boxes, under), glow)
     textures = {t: rid(f"block/{t}") for t in sorted(used)}
     textures["particle"] = rid(f"block/{sorted(used)[0]}")
-    # Furniture is lit flat: ambient occlusion on faces inside a block shades each block of a row differently.
-    return {"ambientocclusion": False, "textures": textures, "elements": elements}
+    # Smooth lighting on (the default): the light blends across a row of joined pieces instead of stepping at each
+    # block. (Flat lighting takes each block's own light level, which differs from block to block.)
+    return {"textures": textures, "elements": elements}
 
 
 TURN = (("north", 0), ("east", 90), ("south", 180), ("west", 270))
@@ -291,6 +326,13 @@ def write_assets(write, rid, assets, lang):
                 f"facing={face},variant={i}": {"model": rid(f"block/{block}_{i}"), **({"y": y} if y else {})}
                 for face, y in TURN for i in range(info["variants"])}})
             item_model = rid(f"block/{block}_0")
+        elif "vboxes" in info:
+            for i, extra in enumerate(info["vboxes"]):
+                write(models / f"{block}_{i}.json", model(info["boxes"] + extra, glow, rid))
+            write(assets / "blockstates" / f"{block}.json", {"variants": {
+                f"facing={face},variant={i}": {"model": rid(f"block/{block}_{i}"), **({"y": y} if y else {})}
+                for face, y in TURN for i in range(info["variants"])}})
+            item_model = rid(f"block/{block}_{min(3, info['variants'] - 1)}")
         elif "variants" in info:
             vtex = info["vtex"]
             for i in range(info["variants"]):
@@ -301,10 +343,30 @@ def write_assets(write, rid, assets, lang):
                 f"facing={face},variant={i}": {"model": rid(f"block/{block}_{i}"), **({"y": y} if y else {})}
                 for face, y in TURN for i in range(info["variants"])}})
             item_model = rid(f"block/{block}_0")
+        elif "prints" in info:
+            for v in range(info["prints"]):
+                for part in range(2):
+                    write(models / f"{block}_{v}_{part}.json", model(plant_office2.lprint_boxes(part, v), [], rid))
+            write(assets / "blockstates" / f"{block}.json", {"variants": {
+                f"facing={face},part={part},variant={v}": {"model": rid(f"block/{block}_{v}_{part}"), **({"y": y} if y else {})}
+                for face, y in TURN for part in range(2) for v in range(info["prints"])}})
+            write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            item_model = rid(f"item/{block}")
+        elif "multi" in info and info.get("versions"):
+            # A piece over several blocks in a few versions (the meeting table laid out differently): part x version.
+            w, rows, vertical = info["multi"]
+            for v in range(info["versions"]):
+                for part, boxes in plant_office2.multi_parts(info, v):
+                    write(models / f"{block}_{v}_{part}.json", model(boxes, [], rid))
+            write(assets / "blockstates" / f"{block}.json", {"variants": {
+                f"facing={face},part={part},variant={v}": {"model": rid(f"block/{block}_{v}_{part}"), **({"y": y} if y else {})}
+                for face, y in TURN for part in range(w * rows) for v in range(info["versions"])}})
+            write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            item_model = rid(f"item/{block}")
         elif "multi" in info:
             w, rows, vertical = info["multi"]
             for part, boxes in plant_office2.multi_parts(info):
-                g = [b[6]["south"].rstrip("!") for b in boxes if isinstance(b[6], dict) and "south" in b[6]] if vertical else []
+                g = [b[6]["south"].rstrip("!") for b in boxes if isinstance(b[6], dict) and "south" in b[6]] if vertical is True else []
                 write(models / f"{block}_{part}.json", model(boxes, g, rid))
             write(assets / "blockstates" / f"{block}.json", {"variants": {
                 f"facing={face},part={part}": {"model": rid(f"block/{block}_{part}"), **({"y": y} if y else {})}
@@ -853,9 +915,11 @@ def draw_block_textures():
     out = {}
     for name, make in makers.items():
         rich = name in ("pi_server_face", "pi_relay_front", "pi_office_screen", "pi_carton") or name in plant_office.RICH or name in plant_office2.RICH
-        colours = 24 if rich else 14
+        colours = 64 if name in plant_office2.PAINTINGS else 24 if rich else 14
         src = make()
         out[name] = M.stylize(src, colours)
+        if name in plant_office2.O3.SHARP or name in plant_office2.O4.SHARP:
+            out[name] = src            # kept at full size so the writing reads
         if name in plant_office2.TRANSLUCENT:
             alpha = src.convert("RGBA").split()[3].resize(out[name].size)
             out[name].putalpha(alpha)

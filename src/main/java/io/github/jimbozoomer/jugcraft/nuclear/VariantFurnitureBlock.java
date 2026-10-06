@@ -20,6 +20,26 @@ public class VariantFurnitureBlock extends FurnitureBlock {
 	private final IntegerProperty variant;
 	private final int count;
 
+	private int steamVariant = -1;
+	private double steamX, steamY, steamZ;
+
+	/** The variant with a hot coffee in it, and where the mug's middle is (model pixels, facing north). */
+	public VariantFurnitureBlock steam(int variant, double x, double y, double z) {
+		steamVariant = variant;
+		steamX = x;
+		steamY = y;
+		steamZ = z;
+		return this;
+	}
+
+	@Override
+	public void animateTick(BlockState state, net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos,
+			net.minecraft.util.RandomSource random) {
+		if (state.getValue(variant) == steamVariant) {
+			Steam.puff(level, pos, state.getValue(FACING), steamX, steamY, steamZ, random);
+		}
+	}
+
 	public static IntegerProperty property(int count) {
 		return PROPERTIES.computeIfAbsent(count, n -> IntegerProperty.create("variant", 0, n - 1));
 	}

@@ -34,6 +34,25 @@ public class RowFurnitureBlock extends FurnitureBlock implements Sittable {
 	private final double seat;
 	private final int variants;
 	private final IntegerProperty variant;
+	/** The variant with a hot coffee on it and where the steam rises (model pixels, facing north), or -1. */
+	private int steamVariant = -1;
+	private double steamX, steamY, steamZ;
+
+	public RowFurnitureBlock steam(int variant, double x, double y, double z) {
+		steamVariant = variant;
+		steamX = x;
+		steamY = y;
+		steamZ = z;
+		return this;
+	}
+
+	@Override
+	public void animateTick(BlockState state, net.minecraft.world.level.Level level, BlockPos pos, RandomSource random) {
+		if (variant == null || state.getValue(variant) != steamVariant) {
+			return;
+		}
+		Steam.puff(level, pos, state.getValue(FACING), steamX, steamY, steamZ, random);
+	}
 
 	public static RowFurnitureBlock create(Properties properties, String group, double seat, int variants, double[]... boxes) {
 		building = variants;

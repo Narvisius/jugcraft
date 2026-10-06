@@ -77,7 +77,8 @@ def texture(ref):
         width, height = img.size
         if animated and not (width == 16 and height % 16 == 0 and height > 16):
             err(f"Animated texture {ref} is {img.size}, expected a 16-wide strip of 16x16 frames")
-        elif not animated and img.size != (16, 16) and not (img.size == (64, 64) and _hi_res(png.stem)):
+        elif not animated and img.size != (16, 16) and not (img.size == (64, 64) and _hi_res(png.stem)) \
+                and not (img.size in ((128, 128), (256, 256), (512, 512), (1024, 1024)) and _sharp(png.stem)):
             err(f"Texture {ref} is {img.size}, expected 16x16 (64x64 only for tower_art textures)")
 
 
@@ -91,6 +92,13 @@ def model(ref):
     for tex in data.get("textures", {}).values():
         # A texture is a reference, or {"sprite": reference, "force_translucent": ...}.
         texture(tex["sprite"] if isinstance(tex, dict) else tex)
+
+
+def _sharp(name):
+    """Plant kit textures with writing on them (paperwork, book spines) are kept at 128 or 256 so the text reads."""
+    import plant_office3
+    import plant_office4
+    return name in plant_office3.SHARP or name in plant_office4.SHARP
 
 
 def _hi_res(name):

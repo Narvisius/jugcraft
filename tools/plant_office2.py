@@ -14,6 +14,8 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 import nuclear_materials as M
+import plant_office3 as O3
+import plant_office4 as O4
 
 S = M.CELL
 
@@ -23,18 +25,18 @@ MONITOR = [(6.5, 12.5, 3, 9.5, 12.8, 5.5, "pi_monitor"), (7.6, 12.8, 3.6, 8.4, 1
            (2.8, 15.3, 4, 13.2, 21.7, 4.1, {"*": "pi_monitor", "south": "pi_office_screen!"}),
            (4, 12.5, 8, 12, 12.9, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"}),
            (12.8, 12.5, 8.5, 13.8, 12.9, 10, "pi_monitor")]
-PAPERS = [(1.5, 12.5, 4, 6, 13.6, 10, {"*": "pi_paper", "up": "pi_paper!"}),
-          (7.5, 12.5, 5, 11.5, 12.8, 10.5, {"*": "pi_paper", "up": "pi_paper!"}),
-          (12.5, 12.5, 4, 14.5, 15.5, 6, {"*": "pi_pen_cup", "up": "pi_pens!"})]
-# A row of binders standing between two bookends, spines toward whoever sits there, and a mug.
-BINDERS = [(1.5, 12.5, 3.5, 8.5, 18.5, 9, {"*": "pi_binder_side", "south": "pi_binder_spines!", "north": "pi_binder_side",
-                                            "up": "pi_binder_top!"}),
-           (1, 12.5, 3.5, 1.5, 17, 9, "pi_steel_dark"), (8.5, 12.5, 3.5, 9, 17, 9, "pi_steel_dark"),
-           (1, 12.5, 3.5, 9, 12.8, 9, "pi_steel_dark"),
-           (11, 12.5, 7, 13, 15, 9, "pi_mug"), (13, 13.4, 7.6, 13.8, 14.6, 8.4, "pi_mug")]
+# Paperwork you can read (an operating procedure, a radiation work permit...), a pen cup with pens in it.
+PAPERS = [(1.4, 12.5, 3.4, 6.2, 13.3, 10.2, {"*": "pi_pages", "up": "pi_doc_0!"}),
+          (7.2, 12.5, 4.2, 11.6, 12.7, 10.4, {"*": "pi_paper", "up": "pi_doc_1!"})] + O4.pen_cup(12.4, 4.0, 12.5)
+# Binders standing between two bookends, spines (with their labels) toward whoever sits there, and a coffee.
+BINDERS = [b for k, (code, _) in enumerate(O3.DESK_BINDERS)
+           for b in O3.binder(1.6 + k * O3.DESK_BINDER_W, 12.8, 9, 5.5, "desk:" + code, O3.DESK_BINDER_W, O3.DESK_BINDER_H)] + [
+           (1, 12.5, 3.5, 1.6, 17.4, 9, "pi_steel_dark"), (8.2, 12.5, 3.5, 8.8, 17.4, 9, "pi_steel_dark"),
+           (1, 12.5, 3.5, 8.8, 12.8, 9, "pi_steel_dark")] + O4.mug(10.6, 6.6, 12.5)
+MUG_AT = (10.6 + O3.MUG_CENTRE, 15.6, 6.6 + O3.MUG_CENTRE)   # where the steam rises from (model pixels)
 LAMP = [(2, 12.5, 3, 5, 12.9, 6, "pi_steel_dark"), (3.2, 12.9, 4.2, 3.8, 19, 4.8, "pi_steel_dark"),
-        (2, 18.5, 4, 7, 20, 7, "pi_steel_dark"), (9, 12.5, 4, 13, 13.3, 7, {"*": "pi_monitor", "up": "pi_phone!"}),
-        (8, 12.5, 8, 13, 12.7, 12, {"*": "pi_paper", "up": "pi_notepad!"})]
+        (2, 18.5, 4, 7, 20, 7, "pi_steel_dark")] + O4.phone(9, 3.6, 12.5) + [
+        (8, 12.5, 8, 13, 12.7, 12, {"*": "pi_paper", "up": "pi_doc_2!"})]
 LAPTOP = [(4, 12.5, 6, 12, 12.9, 11, {"*": "pi_laptop", "up": "pi_keyboard!"}),
           (4, 12.9, 5.4, 12, 18, 6, {"*": "pi_laptop", "south": "pi_office_screen!"}),
           (13, 12.5, 7, 15, 12.8, 11, {"*": "pi_paper", "up": "pi_notepad!"})]
@@ -48,12 +50,11 @@ DUAL = [(3, 12.5 + 0.5, 3, 6, 13.3, 5, "pi_monitor"), (10, 13, 3, 13, 13.3, 5, "
 DUAL[4] = DUAL[4] + ("pi_monitor",)
 DUAL[5] = DUAL[5] + ("pi_monitor",)
 BLOTTER = [(3, 13, 5, 13, 13.2, 11, {"*": "pi_leather", "up": "pi_leather!"}),
-           (5, 13.2, 6, 11, 13.4, 10, {"*": "pi_paper", "up": "pi_paper!"}),
-           (13.5, 13, 4, 15, 15.5, 5.5, {"*": "pi_pen_cup", "up": "pi_pens!"}),
-           (2, 13, 12, 8, 14.5, 13.5, {"*": "pi_walnut_edge", "south": "pi_nameplate!"})]
+           (5.6, 13.2, 5.6, 10.4, 13.4, 10.4, {"*": "pi_paper", "up": "pi_doc_4!"}),
+           (2, 13, 12, 8, 14.5, 13.5, {"*": "pi_walnut_edge", "south": "pi_nameplate!"})] + O4.pen_cup(13.2, 3.4, 13)
 EXEC_LAMP = [(1.5, 13, 3, 4.5, 13.4, 6, "pi_brass"), (2.7, 13.4, 4.2, 3.3, 20, 4.8, "pi_brass"),
-             (0.5, 19, 2.5, 5.5, 22, 7.5, "pi_lamp_shade"), (8, 13, 4, 12, 13.8, 7, {"*": "pi_monitor", "up": "pi_phone!"}),
-             (6, 13, 8.5, 12, 13.3, 12.5, {"*": "pi_paper", "up": "pi_paper!"})]
+             (0.5, 19, 2.5, 5.5, 22, 7.5, "pi_lamp_shade")] + O4.phone(7.6, 3.4, 13) + [
+             (6, 13, 8.5, 11, 13.3, 12.5, {"*": "pi_paper", "up": "pi_doc_3!"})]
 PC_OPEN = [(1.5, 12, 3, 7.5, 19, 12, {"*": "pi_pc_case", "east": "pi_pc_inside!"}),
            (8.5, 12, 4, 14, 12.3, 8, {"*": "pi_circuit", "up": "pi_circuit!"}),
            (9, 12, 9, 13.5, 12.4, 10, "pi_ram"), (9, 12, 11, 13.5, 12.4, 12, "pi_ram"),
@@ -62,7 +63,7 @@ TOOLS = [(1.5, 12, 4, 7, 12.3, 9, {"*": "pi_circuit", "up": "pi_circuit!"}),
          (8, 12, 4, 10, 13, 7, "pi_steel_dark"), (9.5, 12, 4.5, 14.5, 12.4, 5.5, "pi_solder_iron"),
          (8.5, 12, 8, 14.5, 12.6, 12, {"*": "pi_tool_case", "up": "pi_tool_case!"}),
          (2, 12, 10, 6, 12.3, 13, "pi_ram")]
-DOCS = [(2, 12, 4, 8, 12.4, 11, {"*": "pi_paper", "up": "pi_paper!"}),
+DOCS = [(2.4, 12, 4, 7.4, 12.4, 11, {"*": "pi_pages", "up": "pi_doc_5!"}),
         (9, 12, 5, 14, 12.4, 11, {"*": "pi_monitor", "up": "pi_tablet!"})]
 
 DESK_BODY = [(0, 11.5, 1, 16, 12.5, 15, {"*": "pi_laminate", "up": "pi_laminate!"}),
@@ -119,12 +120,7 @@ PIECES = {
     "aed_cabinet": {"display": "Defibrillator (AED) Cabinet", "boxes": [
         (3, 3, 0, 13, 14, 3.5, {"*": "pi_cab_white", "south": "pi_aed!"}),
         (4, 15, 0, 12, 19, 0.4, {"*": "pi_cab_white", "south": "pi_aed_sign!"})], "glow": ["pi_aed_sign"]},
-    "fire_extinguisher": {"display": "Fire Extinguisher", "boxes": [
-        (6.5, 6, 0, 9.5, 7, 1.5, "pi_steel_dark"),
-        (5.5, 1, 1.2, 10.5, 12, 5.5, {"*": "pi_extinguisher", "south": "pi_extinguisher!"}),
-        (7, 12, 2.5, 9, 13.5, 4.5, "pi_steel_dark"), (6, 13, 3, 10, 14, 4, "pi_steel_dark"),
-        (9.5, 4, 4.5, 10.5, 12, 5.5, "pi_steel_dark"),
-        (4, 15, 0, 12, 20, 0.4, {"*": "pi_cab_white", "south": "pi_fire_sign!"})]},
+    "fire_extinguisher": {"display": "Fire Extinguisher Cabinet", "boxes": O4.EXTINGUISHER_CABINET},
     "medicine_cabinet": {"display": "First Aid Cabinet", "boxes": [
         (1, 5, 0, 15, 16, 4.5, {"*": "pi_cab_white", "south": "pi_medicine_front!"})]},
     "vitals_monitor": {"display": "Patient Monitor", "boxes": [
@@ -146,15 +142,12 @@ PIECES = {
         (1.5, 0, 2.5, 2.5, 6.5, 3.5, "pi_chrome"), (13.5, 0, 2.5, 14.5, 6.5, 3.5, "pi_chrome"),
         (1.5, 0, 12.5, 2.5, 6.5, 13.5, "pi_chrome"), (13.5, 0, 12.5, 14.5, 6.5, 13.5, "pi_chrome"),
         (2.5, 2, 3, 13.5, 2.5, 13, "pi_walnut"),
-        (4, 7.3, 6, 6, 9.5, 8, "pi_mug"), (6, 8, 6.6, 6.8, 9, 7.4, "pi_mug"),
-        (9, 7.3, 5, 13, 7.6, 10, {"*": "pi_paper", "up": "pi_magazine!"}),
-        (4, 2.5, 8, 9, 3.2, 12, {"*": "pi_paper", "up": "pi_magazine!"})]},
+] + O4.mug(3.6, 5.6, 7.3) + O4.magazines(8.4, 4.4, 7.3) + O4.magazines(4, 7.5, 2.5)[:1]},
     # ---- documents and engineering
-    "filing_cabinet_open": {"display": "Filing Cabinet (open)", "boxes": [
-        (2, 0, 2, 14, 15, 15, {"*": "pi_filing_side", "south": "pi_filing_front!"}),
-        (1.8, 15, 1.8, 14.2, 15.4, 15.2, "pi_filing_side"),
-        (2.5, 9.5, 15, 13.5, 14, 22, {"*": "pi_filing_side", "south": "pi_drawer_front!"}),
-        (3, 10, 15.2, 13, 14.6, 21.6, {"*": "pi_folders", "up": "pi_folders!"})]},
+    "filing_cabinet_open": {"display": "Filing Cabinet (open)", "boxes": O3.LOW_CABINET_OPEN},
+    "filing_cabinet_tall": O3.TALL_CABINET,
+    "filing_cabinet_tall_open": O3.TALL_CABINET_OPEN,
+    "office_copier": {"display": "Office Copier", "multi": (2, 2, "box"), "copier": True},
     "drafting_table": {"display": "Drafting Table", "boxes": [
         (1, 0, 3, 2, 11, 4, "pi_steel_dark"), (14, 0, 3, 15, 11, 4, "pi_steel_dark"),
         (1, 0, 12, 2, 11, 13, "pi_steel_dark"), (14, 0, 12, 15, 11, 13, "pi_steel_dark"),
@@ -170,7 +163,9 @@ PIECES = {
     "plant_map_screen": {"display": "Plant Overview Screen", "multi": (3, 2, True), "screen": "plant_map"},
     "status_screen": {"display": "Plant Status Screen", "multi": (3, 2, True), "screen": "status"},
     "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank"},
-    "oval_table": {"display": "Oval Meeting Table", "multi": (5, 3, False), "table": True},
+    "oval_table": {"display": "Oval Meeting Table", "multi": (5, 3, False), "table": True, "versions": 3},
+    "lounge_table": {"display": "Oval Glass Coffee Table", "multi": (3, 2, False), "lounge": True},
+    "large_print": {"display": "Large Framed Picture", "multi": (2, 1, True), "prints": 12},
 }
 
 CRAFTING = {
@@ -185,13 +180,19 @@ CRAFTING = {
     "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),
     "vitals_monitor": (["GRG", " N ", " N "], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone", "N": "minecraft:iron_nugget"}, 1),
     "filing_cabinet_open": (["PP", "PB"], {"P": "#c:plates/iron", "B": "minecraft:paper"}, 1),
+    "filing_cabinet_tall": (["PP", "PP", "PP"], {"P": "#c:plates/iron"}, 2),
+    "filing_cabinet_tall_open": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:paper"}, 2),
+    "office_copier": (["GCG", "PRP", "PPP"], {"G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone",
+                                              "P": "#c:plates/iron"}, 1),
     "drafting_table": (["PPP", "S S"], {"P": "minecraft:paper", "S": "minecraft:stick"}, 1),
     "blueprint_sheet": (["BBB", "BPB", "BBB"], {"B": "minecraft:blue_dye", "P": "minecraft:paper"}, 2),
     "training_screen": (["GGG", "GCG"], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit"}, 1),
     "plant_map_screen": (["GGG", "GCG", " M "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "M": "minecraft:map"}, 1),
     "status_screen": (["GGG", "GCG", " R "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:comparator"}, 1),
     "oval_table": (["SSS", "SSS", "N N"], {"S": "minecraft:dark_oak_slab", "N": "#c:plates/iron"}, 1),
+    "lounge_table": (["GGG", "W W"], {"G": "minecraft:glass_pane", "W": "minecraft:dark_oak_log"}, 1),
     "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 1),
+    "large_print": (["SSS", "SPS", "SSS"], {"S": "minecraft:dark_oak_planks", "P": "minecraft:painting"}, 1),
     "glass_coffee_table": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "minecraft:iron_nugget"}, 1),
 }
 
@@ -222,11 +223,49 @@ def screen_boxes(name, c, r, w, rows):
     return [(0, 0, 0, 16, 16, 1.6, {"*": "pi_monitor", "south": f"pi_{name}_{r * w + c}!"})]
 
 
-def multi_parts(info):
+LPRINT_KINDS = [0, 1, 3, 4, 6, 7, 9, 11, 13, 14, 2, 10]
+
+
+def lprint_boxes(c, v):
+    """Block c's share of a big framed picture two blocks across: a frame standing off the wall round a recessed
+    canvas (whose texture is the picture cut in two, mapped by position so the halves meet)."""
+    whole = [(2.2, 2.7, 0, 29.8, 13.3, 0.8, {"*": "pi_frame", "south": f"pi_lprint_{v}_{c}"}),
+             (1, 1.5, 0, 31, 2.7, 1.8, "pi_frame"), (1, 13.3, 0, 31, 14.5, 1.8, "pi_frame"),
+             (1, 2.7, 0, 2.2, 13.3, 1.8, "pi_frame"), (29.8, 2.7, 0, 31, 13.3, 1.8, "pi_frame")]
+    out = []
+    for b in whole:
+        x0, x1 = max(b[0], c * 16), min(b[3], c * 16 + 16)
+        if x1 - x0 > 0.01:
+            t = b[6]
+            if isinstance(t, dict) and c * 16 > b[0] or isinstance(t, dict) and c * 16 + 16 < b[3]:
+                t = dict(t)
+            out.append((x0 - c * 16, b[1], b[2], x1 - c * 16, b[4], b[5], t))
+    return out
+
+
+def lprint_texture(v):
+    """The picture for big print v, 256 x 128 over its two blocks: a mat, the panorama inside it."""
+    import paintings
+    img = Image.new("RGBA", (2 * S, S), (240, 238, 230, 255))
+    pic = paintings.painted(LPRINT_KINDS[v], 408, 136, 950 + v).resize((204, 68), Image.LANCZOS).convert("RGBA")
+    img.paste(pic, (26, 30))
+    d = ImageDraw.Draw(img)
+    d.rectangle([25, 29, 230, 98], outline=(200, 196, 186, 255))
+    return {f"pi_lprint_{v}_{c}": img.crop((c * S, 0, c * S + S, S)) for c in range(2)}
+
+
+def multi_parts(info, version=0):
     w, rows, vertical = info["multi"]
+    items = O4.O5.meeting_items(version) if info.get("versions") else []
     for p in range(w * rows):
         c, r = p % w, p // w
-        if vertical:
+        if info.get("lounge"):
+            yield p, O4.O5.lounge_part(c, r)
+        elif info.get("versions"):
+            yield p, oval_boxes(c, r, w, rows) + O4.O5.slice_into(items, c, r)
+        elif info.get("copier"):
+            yield p, O3.copier_part(c, r)
+        elif vertical:
             yield p, screen_boxes(info["screen"], c, r, w, rows)
         else:
             yield p, oval_boxes(c, r, w, rows)
@@ -518,6 +557,65 @@ def _cable():
     return _img((60, 140, 220))
 
 
+def _tinted(colour, alpha):
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., :3] = colour
+    a[..., 3] = alpha
+    return Image.fromarray(a, "RGBA")
+
+
+def _lab_glass():
+    img = _tinted((214, 232, 236), 70)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, S - 1, S - 1], outline=(240, 250, 252, 150), width=6)
+    d.line([(26, 10), (26, S - 10)], fill=(250, 252, 255, 140), width=8)
+    for y in range(40, S - 8, 22):
+        d.line([(S - 30, y), (S - 12, y)], fill=(250, 252, 255, 150), width=3)   # graduations
+    return img
+
+
+def _label():
+    img = _img((246, 246, 240))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, S, 24], fill=(30, 90, 160, 255))
+    for y in (44, 64, 84):
+        d.line([(12, y), (100, y)], fill=(80, 80, 84, 255), width=6)
+    d.polygon([(96, 92), (116, 92), (106, 112)], fill=(240, 180, 30, 255))
+    return img
+
+
+def _cooler_lower():
+    img = _img((230, 228, 220))
+    d = ImageDraw.Draw(img)
+    for y in range(70, 118, 10):
+        d.rectangle([20, y, 108, y + 4], fill=(150, 150, 146, 255))   # the vent
+    return img
+
+
+def _cooler_badge():
+    img = _img((230, 228, 220))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([34, 40, 94, 80], radius=8, fill=(40, 110, 190, 255))
+    d.rectangle([44, 56, 84, 62], fill=(240, 244, 250, 255))
+    return img
+
+
+def _drip_grate():
+    img = _img((70, 72, 76))
+    d = ImageDraw.Draw(img)
+    for x in range(8, S, 14):
+        d.rectangle([x, 8, x + 6, S - 8], fill=(30, 30, 32, 255))
+    return img
+
+
+def _cup_stack():
+    img = _img((236, 236, 232))
+    d = ImageDraw.Draw(img)
+    for y in range(10, S, 12):
+        d.line([(30, y), (98, y)], fill=(200, 200, 196, 255), width=3)
+    return img
+
+
 def _mattress():
     return _img((60, 110, 170))
 
@@ -772,11 +870,24 @@ def makers():
         "pi_folders": _folders, "pi_brass": _brass, "pi_walnut_top": _walnut_top,
         "pi_binder_side": _binder_side, "pi_binder_spines": _binder_spines, "pi_binder_top": _binder_top,
         "pi_basket": _basket, "pi_monitor_case": _monitor_case, "pi_cable": _cable,
+        "pi_lab_glass": _lab_glass, "pi_label": _label,
+        "pi_liquid_blue": lambda: _tinted((60, 130, 230), 150), "pi_liquid_amber": lambda: _tinted((220, 140, 40), 160),
+        "pi_liquid_green": lambda: _tinted((70, 190, 90), 150), "pi_liquid_clear": lambda: _tinted((200, 230, 240), 110),
+        "pi_amber_glass": lambda: _tinted((120, 66, 22), 215), "pi_white_bottle": lambda: _img((236, 236, 230)),
+        "pi_cap_black": lambda: _img((30, 30, 32)), "pi_cap_blue": lambda: _img((40, 80, 180)), "pi_cap_red": lambda: _img((190, 40, 40)),
+        "pi_cooler_lower": _cooler_lower, "pi_cooler_badge": _cooler_badge, "pi_drip_grate": _drip_grate,
+        "pi_bottle_plastic": lambda: _tinted((120, 180, 230), 90), "pi_bottle_water": lambda: _tinted((70, 140, 220), 120),
+        "pi_cup_stack": _cup_stack,
     }
     for i in range(6):
         out[f"pi_blueprint_{i}"] = (lambda i=i: _blueprint(i))
     for i in range(8):
         out[f"pi_plant_top_{i}"] = (lambda i=i: _plant_top(i))
+    out.update(O3.makers())
+    out.update(O4.makers())
+    for v in range(12):
+        for tex, img in lprint_texture(v).items():
+            out[tex] = (lambda img=img: img)
     for name, info in PIECES.items():
         if "screen" in info:
             w, rows, _ = info["multi"]
@@ -786,17 +897,38 @@ def makers():
 
 
 # Kept see-through (translucent) instead of cut out.
-TRANSLUCENT = {"pi_glass_top", "pi_glass_edge"}
+TRANSLUCENT = O4.TRANSLUCENT | {"pi_glass_top", "pi_glass_edge", "pi_lab_glass", "pi_liquid_blue", "pi_liquid_amber", "pi_liquid_green",
+               "pi_liquid_clear", "pi_amber_glass", "pi_bottle_plastic", "pi_bottle_water"}
 RICH = {"pi_medicine_front", "pi_binder_spines", "pi_vitals", "pi_circuit", "pi_pc_inside", "pi_folders", "pi_aed"} | \
     {f"pi_blueprint_{i}" for i in range(6)} | {f"pi_plant_top_{i}" for i in range(8)} | \
     {f"pi_{k}_{p}" for k in ("training", "plant_map", "status", "blank") for p in range(6)}
+
+
+PAINTINGS = {f"pi_lprint_{v}_{c}" for v in range(12) for c in range(2)} | {f"pi_print_{i}" for i in range(16)}
 
 
 def icon(name):
     """Inventory icons for the pieces bigger than a block."""
     img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    if name == "oval_table":
+    if name == "large_print":
+        import paintings
+        d.rectangle([2, 30, 126, 98], fill=(80, 52, 34, 255))
+        img.paste(paintings.painted(0, 112, 56, 950).convert("RGBA"), (8, 36))
+        return M.stylize(img, 24)
+    if name == "office_copier":
+        fr = O3._COPIER_TEX
+        big = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+        for p_ in range(4):
+            big.paste(fr[f"pi_copier_f_{p_}"], ((p_ % 2) * 256, (1 - p_ // 2) * 256))
+        crop = big.crop((16, 150, 512, 512)).resize((124, 90))
+        img.paste(crop, (2, 30))
+        return M.stylize(img, 24)
+    if name == "lounge_table":
+        d.ellipse([6, 40, 122, 84], fill=(200, 226, 230, 255), outline=(150, 190, 196, 255), width=3)
+        d.rectangle([30, 84, 50, 112], fill=(92, 58, 36, 255))
+        d.rectangle([78, 84, 98, 112], fill=(92, 58, 36, 255))
+    elif name == "oval_table":
         d.ellipse([6, 36, 122, 80], fill=(96, 64, 42, 255), outline=(60, 40, 26, 255), width=4)
         d.rectangle([40, 78, 50, 110], fill=(60, 62, 66, 255))
         d.rectangle([78, 78, 88, 110], fill=(60, 62, 66, 255))

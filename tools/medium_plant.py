@@ -82,8 +82,9 @@ def row_state(name, facing, left, right, variant=None):
     return M(f"jugcraft:{name}[facing={facing},left={'true' if left else 'false'},right={'true' if right else 'false'}{v}]", (120, 100, 80))
 
 
-def multi_state(name, facing, part):
-    return M(f"jugcraft:{name}[facing={facing},part={part}]", (60, 60, 64))
+def multi_state(name, facing, part, variant=None):
+    extra = "" if variant is None else f",variant={variant}"
+    return M(f"jugcraft:{name}[facing={facing},part={part}{extra}]", (60, 60, 64))
 
 
 def variant_state(name, facing, v):

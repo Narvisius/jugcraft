@@ -28,8 +28,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 	private static final Map<Integer, IntegerProperty> PROPERTIES = new java.util.HashMap<>();
-	private static int building;
-	protected final int width, rows;
+	private static int building, buildingVariants;
+	protected final int width, rows, variants;
+	private final boolean boxy, low;
+	private final IntegerProperty variant;
 	protected final boolean vertical;
 	private final IntegerProperty part;
 	private final Map<Direction, VoxelShape[]> shapes = new EnumMap<>(Direction.class);
@@ -38,18 +40,39 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 		return PROPERTIES.computeIfAbsent(count, n -> IntegerProperty.create("part", 0, n - 1));
 	}
 
-	protected static Properties prepare(Properties properties, int width, int rows) {
+	protected static Properties prepare(Properties properties, int width, int rows, int variants) {
 		building = width * rows;
+		buildingVariants = variants;
 		return properties;
 	}
 
 	public MultiFurnitureBlock(Properties properties, int width, int rows, boolean vertical) {
-		super(prepare(properties, width, rows));
+		this(properties, width, rows, vertical, 1);
+	}
+
+	/** variants: more than one picks one at random when placed (big framed pictures), kept by every part. */
+	public MultiFurnitureBlock(Properties properties, int width, int rows, boolean vertical, int variants) {
+		this(properties, width, rows, vertical, variants, false);
+	}
+
+	/** boxy: a solid machine standing on the floor (the copier) rather than a screen on a wall. */
+	public MultiFurnitureBlock(Properties properties, int width, int rows, boolean vertical, int variants, boolean boxy) {
+		this(properties, width, rows, vertical, variants, boxy, false);
+	}
+
+	/** low: a coffee table (its oval top at knee height) rather than a meeting table. */
+	public MultiFurnitureBlock(Properties properties, int width, int rows, boolean vertical, int variants, boolean boxy, boolean low) {
+		super(prepare(properties, width, rows, variants));
+		this.boxy = boxy;
+		this.low = low;
 		this.width = width;
 		this.rows = rows;
 		this.vertical = vertical;
+		this.variants = variants;
 		this.part = property(width * rows);
-		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(part, origin()));
+		this.variant = variants > 1 ? VariantFurnitureBlock.property(variants) : null;
+		BlockState state = stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(part, origin());
+		registerDefaultState(variant == null ? state : state.setValue(variant, 0));
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			VoxelShape[] byPart = new VoxelShape[width * rows];
 			for (int p = 0; p < byPart.length; p++) {
@@ -62,6 +85,9 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING, property(building));
+		if (buildingVariants > 1) {
+			builder.add(VariantFurnitureBlock.property(buildingVariants));
+		}
 	}
 
 	public IntegerProperty partProperty() {
@@ -90,7 +116,8 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 				return null;
 			}
 		}
-		return defaultBlockState().setValue(FACING, facing);
+		BlockState state = defaultBlockState().setValue(FACING, facing);
+		return variant == null ? state : state.setValue(variant, context.getLevel().getRandom().nextInt(variants));
 	}
 
 	@Override
@@ -130,6 +157,9 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 	 * oval top over the whole piece (radius just inside its edges) and the pedestals under the middle row.
 	 */
 	private VoxelShape localShape(int c, int r, Direction facing) {
+		if (boxy) {
+			return turned(new double[] {0, 0, 2, 16, r == 0 ? 16 : 7, 15}, facing);
+		}
 		if (vertical) {
 			return turned(new double[] {0, 0, 0, 16, 16, 1.6}, facing);
 		}
@@ -140,10 +170,10 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 			double half = gz * gz >= b * b ? 0 : a * Math.sqrt(1 - gz * gz / (b * b));
 			double x0 = Math.max(0, cx - half - c * 16), x1 = Math.min(16, cx + half - c * 16);
 			if (x1 - x0 > 0.5) {
-				shape = Shapes.or(shape, turned(new double[] {x0, 12, z, x1, 13, z + 2}, facing));
+				shape = Shapes.or(shape, turned(low ? new double[] {x0, 0, z, x1, 7.5, z + 2} : new double[] {x0, 12, z, x1, 13, z + 2}, facing));
 			}
 		}
-		if (r == rows / 2 && c > 0 && c < width - 1 && c % 2 == 1) {
+		if (!low && r == rows / 2 && c > 0 && c < width - 1 && c % 2 == 1) {
 			shape = Shapes.or(shape, turned(new double[] {5, 0, 5, 11, 12, 11}, facing));
 		}
 		return shape.isEmpty() ? Shapes.empty() : shape.optimize();

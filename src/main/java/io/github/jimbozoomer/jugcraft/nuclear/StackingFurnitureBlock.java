@@ -21,6 +21,21 @@ public class StackingFurnitureBlock extends FurnitureBlock {
 	public static final BooleanProperty UP = BlockStateProperties.UP;
 	public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
 
+	/** Pieces with the same group join up with each other (a tall filing cabinet with one drawer pulled out). */
+	private String group;
+
+	public StackingFurnitureBlock group(String group) {
+		this.group = group;
+		return this;
+	}
+
+	private boolean joins(BlockState other) {
+		if (other.is(this)) {
+			return true;
+		}
+		return group != null && other.getBlock() instanceof StackingFurnitureBlock s && group.equals(s.group);
+	}
+
 	public StackingFurnitureBlock(Properties properties, double[]... boxes) {
 		super(properties, boxes);
 		registerDefaultState(defaultBlockState().setValue(UP, false).setValue(DOWN, false));
@@ -48,6 +63,6 @@ public class StackingFurnitureBlock extends FurnitureBlock {
 	}
 
 	private BlockState joined(BlockState state, LevelReader level, BlockPos pos) {
-		return state.setValue(UP, level.getBlockState(pos.above()).is(this)).setValue(DOWN, level.getBlockState(pos.below()).is(this));
+		return state.setValue(UP, joins(level.getBlockState(pos.above()))).setValue(DOWN, joins(level.getBlockState(pos.below())));
 	}
 }

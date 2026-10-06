@@ -21,7 +21,7 @@ B, O = P.BELOW, P.OVER
 # Seats (you sit facing the way they face, so the room you need is in front), things hung on walls (nothing under
 # them), and what may stand on a piece's user side (its chair, a coffee table in front of a sofa).
 SEATED = {"sofa", "locker_bench", "stretcher"}
-WALL_HUNG = {"whiteboard", "framed_print", "wall_display", "coat_rack", "aed_cabinet", "medicine_cabinet", "blueprint_sheet",
+WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "medicine_cabinet", "blueprint_sheet",
              "fire_extinguisher"}
 USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
 
@@ -104,7 +104,7 @@ def check(site, quiet=False):
                 continue
             # The user's side: behind a desk or cabinet (they look the way it faces), but in front of a seat.
             dx, dz = P.DIRS[facing if name in SEATED else MP.OPPOSITE[facing]]
-            if name in ("whiteboard", "office_plant", "coffee_table", "cafe_table", "cubicle_panel", "vitals_monitor", "stretcher", "glass_coffee_table"):
+            if name in ("whiteboard", "large_print", "office_plant", "coffee_table", "cafe_table", "cubicle_panel", "vitals_monitor", "stretcher", "glass_coffee_table"):
                 continue
             front = g[sx + dx, sy + B, sz + dz + O]
             fst = state_of(front)

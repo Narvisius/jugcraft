@@ -14,6 +14,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 import nuclear_materials as M
+import plant_office4 as O4
 
 S = M.CELL
 
@@ -25,6 +26,47 @@ COUNTER_BODY = [
     # The wall cupboards over it.
     (0, 22, 0.5, 16, 30, 6.5, {"*": "pi_cab_white", "south": "pi_wall_cab!"}),
 ]
+# ---- lab glassware, built as real little objects (glass is see-through, the liquid inside shows)
+
+def beaker(x, z, w, h, y0, liquid="pi_liquid_blue", fill=0.55):
+    """A beaker: a clear glass box with liquid standing in it and a lip round the top."""
+    return [(x, y0, z, x + w, y0 + h, z + w, "pi_lab_glass"),
+            (x + 0.2, y0 + 0.1, z + 0.2, x + w - 0.2, y0 + h * fill, z + w - 0.2, liquid)]
+
+
+def flask(x, z, w, h, y0, liquid="pi_liquid_amber"):
+    """An Erlenmeyer flask: a wide base, a tapering middle, a narrow neck; liquid in the base."""
+    return [(x, y0, z, x + w, y0 + h * 0.4, z + w, "pi_lab_glass"),
+            (x + w * 0.2, y0 + h * 0.4, z + w * 0.2, x + w * 0.8, y0 + h * 0.65, z + w * 0.8, "pi_lab_glass"),
+            (x + w * 0.36, y0 + h * 0.65, z + w * 0.36, x + w * 0.64, y0 + h, z + w * 0.64, "pi_lab_glass"),
+            (x + 0.2, y0 + 0.1, z + 0.2, x + w - 0.2, y0 + h * 0.3, z + w - 0.2, liquid)]
+
+
+def bottle(x, z, w, h, y0, body="pi_amber_glass", cap="pi_cap_black"):
+    """A reagent bottle: the body with a white label on the front, the shoulder, the cap."""
+    return [(x, y0, z, x + w, y0 + h, z + w, {"*": body, "south": body}),
+            (x + 0.25, y0 + h * 0.25, z + w, x + w - 0.25, y0 + h * 0.7, z + w + 0.1, "pi_label"),
+            (x + w * 0.2, y0 + h, z + w * 0.2, x + w * 0.8, y0 + h + 0.5, z + w * 0.8, body),
+            (x + w * 0.28, y0 + h + 0.5, z + w * 0.28, x + w * 0.72, y0 + h + 1.4, z + w * 0.72, cap)]
+
+
+def tube_rack(x, z, y0):
+    """A rack of test tubes: a white plastic stand, four tubes with coloured samples."""
+    out = [(x, y0, z, x + 6, y0 + 0.6, z + 2.4, "pi_cab_white"),
+           (x, y0 + 2.6, z, x + 6, y0 + 3.2, z + 2.4, "pi_cab_white"),
+           (x, y0 + 0.6, z + 0.9, x + 0.5, y0 + 2.6, z + 1.5, "pi_cab_white"),
+           (x + 5.5, y0 + 0.6, z + 0.9, x + 6, y0 + 2.6, z + 1.5, "pi_cab_white")]
+    for k, liquid in enumerate(("pi_liquid_blue", "pi_liquid_amber", "pi_liquid_green", "pi_liquid_clear")):
+        tx = x + 0.8 + k * 1.2
+        out += [(tx, y0 + 0.6, z + 0.8, tx + 0.8, y0 + 4.6, z + 1.6, "pi_lab_glass"),
+                (tx + 0.1, y0 + 0.7, z + 0.9, tx + 0.7, y0 + 2.4, z + 1.5, liquid)]
+    return out
+
+
+SHELF_BOTTLES = (bottle(0.8, 1.2, 2.2, 3.2, 23) + bottle(3.4, 1.2, 2.0, 3.6, 23, "pi_white_bottle", "pi_cap_blue")
+                 + beaker(5.8, 1.2, 2.4, 2.6, 23, "pi_liquid_clear") + bottle(9, 1.2, 2.2, 3.0, 23, "pi_amber_glass", "pi_cap_red")
+                 + bottle(11.6, 1.2, 1.8, 3.8, 23, "pi_white_bottle", "pi_cap_black") + flask(13.6, 1.3, 1.8, 3.4, 23, "pi_liquid_green"))
+
 LAB_BODY = [
     (0, 0, 2, 16, 1, 14, "pi_toe_kick"),
     (0, 1, 1.5, 16, 13, 14.5, {"*": "pi_lab_cabinet", "south": "pi_lab_front!"}),
@@ -32,8 +74,7 @@ LAB_BODY = [
     # The reagent shelf along the back.
     (7.4, 14.5, 1, 8.6, 23, 2, "pi_chrome"),
     (0, 22.2, 0.6, 16, 23, 5, "pi_chrome"),
-    (0.6, 23, 1, 15.4, 27, 4.4, {"*": "pi_reagents", "south": "pi_reagents!", "north": "pi_reagents!"}),
-]
+] + SHELF_BOTTLES
 DESK_FRAME = [
     (0, 11.5, 1, 16, 12.5, 15, {"*": "pi_laminate", "up": "pi_laminate!"}),
     (0.5, 0, 1, 1.5, 11.5, 15, "pi_desk_panel"), (14.5, 0, 1, 15.5, 11.5, 15, "pi_desk_panel"),
@@ -58,22 +99,19 @@ OFFICE = {
     "bookcase": {"display": "Bookcase", "stacks": True, "boxes": [
         (1, 0, 1, 2, 16, 15, "pi_veneer"), (14, 0, 1, 15, 16, 15, "pi_veneer"), (2, 0, 1, 14, 16, 2, "pi_veneer"),
         (2, 7.5, 2, 14, 8.5, 15, "pi_veneer"), (2, 15.4, 2, 14, 16, 15, "pi_veneer"),
-        (2.1, 8.5, 2.5, 13.9, 15.4, 13, {"*": "pi_books_side", "south": "pi_books!"}),
-        (2.1, 0.6, 2.5, 13.9, 7.5, 13, {"*": "pi_books_side", "south": "pi_binders!"})],
+        __import__("plant_office3").SHELF_FLOOR] + __import__("plant_office3").shelf_books(2.1, 13.9, 8.5, 13.6)
+        + __import__("plant_office3").shelf_binders(2.1, 13.9, 0.6, 13.6),
         "cap": [(0.6, 15.6, 0.6, 15.4, 16.4, 15.4, "pi_veneer")],
-        "plinth": [(1, 0, 1, 15, 0.6, 15, "pi_veneer")]},
-    "fridge": {"display": "Fridge", "stacks": True, "boxes": [
-        (1.5, 0, 2, 14.5, 16, 15, {"*": "pi_fridge", "south": "pi_fridge_front!"}),
-        (12, 2, 15, 12.8, 14, 15.8, "pi_chrome")],
-        "cap": [(1.3, 15.5, 1.8, 14.7, 16, 15.2, "pi_fridge")],
-        "plinth": [(1.7, 0, 2, 14.3, 1, 14.8, "pi_toe_kick")]},
+        "plinth": [(1, 0, 14.6, 15, 0.6, 15.2, "pi_veneer")]},
+    "fridge": {"display": "Fridge", "stacks": True, "boxes": O4.O5.FRIDGE_BODY,
+               "cap": O4.O5.FRIDGE_CAP, "plinth": O4.O5.FRIDGE_PLINTH},
     "fume_hood": {"display": "Fume Hood", "stacks": True, "boxes": [
         (0, 0, 1, 1, 16, 15.5, "pi_hood_side"), (15, 0, 1, 16, 16, 15.5, "pi_hood_side"), (1, 0, 1, 15, 16, 2, "pi_hood_inside")],
         "cap": [(0, 12, 1, 16, 16, 15.5, {"*": "pi_hood_side", "south": "pi_hood_front!"}),
                 (1, -4, 13.2, 15, 12, 13.8, {"*": "pi_chrome", "south": "pi_sash!", "north": "pi_sash!"})],
         "plinth": [(1, 0, 2, 15, 9, 15, {"*": "pi_lab_cabinet", "south": "pi_lab_front!"}),
                    (0.5, 9, 1, 15.5, 10, 15.5, {"*": "pi_epoxy_black", "up": "pi_epoxy_black!"}),
-                   (4, 10, 4, 7, 14, 7, "pi_glassware"), (9, 10, 5, 11, 13, 7, "pi_glassware")]},
+] + flask(3, 4, 3.5, 5, 10) + beaker(9, 5, 2.6, 3, 10, "pi_liquid_blue")},
     # ---- side by side
     "reception_desk": {"display": "Reception Desk", "row": "reception", "boxes": [
         (0, 0, 1, 16, 15, 3, {"*": "pi_veneer", "north": "pi_reception_front!"}),
@@ -86,8 +124,7 @@ OFFICE = {
             [(7, 11.5, 6, 9, 11.8, 8, "pi_monitor"), (7.6, 11.8, 6.5, 8.4, 13.5, 7, "pi_monitor"),
              (3.5, 13, 6, 12.5, 19, 6.8, {"*": "pi_monitor", "south": "pi_office_screen!"}),
              (4, 11.5, 9, 12, 11.9, 11.5, {"*": "pi_monitor", "up": "pi_keyboard!"})],
-            [(3, 11.5, 6, 7, 12.5, 9, {"*": "pi_monitor", "up": "pi_phone!"}),
-             (9, 11.5, 6, 14, 11.9, 12, {"*": "pi_paper", "up": "pi_visitor_book!"})],
+            O4.phone(2.6, 6, 11.5) + [(9, 11.5, 6, 14, 11.9, 12, {"*": "pi_paper", "up": "pi_visitor_book!"})],
             [(10, 11.5, 5, 14, 15, 9, {"*": "pi_pot_white", "up": "pi_soil"}),
              (10.5, 15, 5.5, 13.5, 18, 8.5, "pi_leaf_ball")]],
         "glow": ["pi_office_screen"]},
@@ -108,22 +145,23 @@ OFFICE = {
         (3, 12, 3, 13, 14.2, 13, {"*": "pi_chrome", "up": "pi_sink!"}),
         (7.4, 15, 1.2, 8.6, 20, 2.4, "pi_chrome"), (7.4, 19, 2.4, 8.6, 20, 6.5, "pi_chrome"),
         COUNTER_BODY[3]], "left": [], "right": []},
-    "coffee_counter": {"display": "Coffee Counter", "row": "counter", "boxes": COUNTER_BODY + [
-        (1.5, 15, 1.5, 7, 22.5, 8.5, {"*": "pi_appliance", "south": "pi_coffee_machine!"}),
-        (8.5, 15, 1.5, 15.5, 20, 10, {"*": "pi_appliance", "south": "pi_microwave!"})],
-        "left": [], "right": [], "glow": ["pi_coffee_machine"]},
+    # The appliances stand on their own stretch of counter with no wall cupboard over them.
+    "coffee_counter": {"display": "Coffee Machine Counter", "row": "counter", "boxes": COUNTER_BODY[:3] + O4.COFFEE_MACHINE,
+                       "left": [], "right": []},
+    "microwave_counter": {"display": "Microwave Counter", "row": "counter", "boxes": COUNTER_BODY[:3] + O4.MICROWAVE,
+                          "left": [], "right": []},
     "lab_bench": {"display": "Lab Bench", "row": "lab", "boxes": LAB_BODY + [
-        (3, 14.5, 7, 5, 18, 9, "pi_glassware"), (6, 14.5, 8, 9, 16.5, 11, "pi_glassware"),
-        (11, 14.5, 6, 14, 15.5, 11, {"*": "pi_paper", "up": "pi_paper!"})], "left": [], "right": []},
+        (10.4, 14.5, 7, 14.6, 14.7, 12.6, {"*": "pi_pages", "up": "pi_doc_6!"})] + beaker(2, 7.5, 2.8, 3.2, 14.5)
+        + flask(5.5, 7.5, 3, 4.2, 14.5) + tube_rack(2, 11.5, 14.5), "left": [], "right": []},
     "lab_sink": {"display": "Lab Sink", "row": "lab", "boxes": LAB_BODY[:2] + [
         (0, 13, 0.5, 4, 14.5, 16, "pi_epoxy_black"), (12, 13, 0.5, 16, 14.5, 16, "pi_epoxy_black"),
         (4, 13, 0.5, 12, 14.5, 4, "pi_epoxy_black"), (4, 13, 12, 12, 14.5, 16, "pi_epoxy_black"),
         (4, 11, 4, 12, 13.2, 12, {"*": "pi_epoxy_black", "up": "pi_sink_black!"}),
         (7.4, 14.5, 2, 8.6, 23, 3.2, "pi_chrome"), (7.4, 22, 3.2, 8.6, 23, 7, "pi_chrome")] + LAB_BODY[3:],
         "left": [], "right": []},
-    "lab_analyzer": {"display": "Water Analyzer", "row": "lab", "boxes": LAB_BODY[:3] + [
-        (1.5, 14.5, 2, 14.5, 22, 11, {"*": "pi_appliance", "south": "pi_analyzer!"}),
-        (2, 14.5, 11.5, 6, 15, 14, "pi_glassware")], "left": [], "right": [], "glow": ["pi_analyzer"]},
+    "lab_analyzer": {"display": "Ion Chromatograph", "row": "lab", "boxes": LAB_BODY[:3] + O4.ANALYZER
+        + [(10, 14.5, 11, 14.6, 14.7, 15.6, {"*": "pi_pages", "up": "pi_doc_7!"})],
+        "left": [], "right": [], "glow": ["pi_analyzer_screen", "pi_analyzer_leds"]},
     # ---- single pieces
     "cctv_desk": {"display": "CCTV Desk", "boxes": DESK_FRAME + [
         (1, 12.5, 3, 15, 13, 5, "pi_monitor"), (7.5, 13, 3.5, 8.5, 22, 4.2, "pi_monitor"),
@@ -139,7 +177,7 @@ OFFICE = {
         (1.5, 0, 3.5, 2.5, 6, 4.5, "pi_chrome"), (13.5, 0, 3.5, 14.5, 6, 4.5, "pi_chrome"),
         (1.5, 0, 11.5, 2.5, 6, 12.5, "pi_chrome"), (13.5, 0, 11.5, 14.5, 6, 12.5, "pi_chrome"),
         (3, 7, 5, 7.5, 7.4, 10, {"*": "pi_paper", "up": "pi_magazine!"}), (9, 7, 6, 13, 7.3, 9, {"*": "pi_paper", "up": "pi_magazine!"})]},
-    "cafe_table": {"display": "Cafe Table", "boxes": [
+    "cafe_table": {"display": "Cafe Table", "variants": 6, "vboxes": O4.FOOD, "boxes": [
         (2, 11.5, 2, 14, 12.5, 14, {"*": "pi_laminate", "up": "pi_laminate!"}),
         (7, 1, 7, 9, 11.5, 9, "pi_chrome"), (4, 0, 4, 12, 1, 12, "pi_chrome")]},
     "cafe_chair": {"display": "Cafe Chair", "boxes": [
@@ -165,8 +203,11 @@ OFFICE = {
         (1, 3, 0.6, 15, 3.4, 1.6, "pi_chrome"),
         (3, 3.4, 0.8, 5.5, 3.9, 1.3, "pi_marker_blue"), (6, 3.4, 0.8, 8.5, 3.9, 1.3, "pi_marker_red"),
         (11, 3.4, 0.7, 13.5, 4.4, 1.5, "pi_eraser")]},
-    "framed_print": {"display": "Framed Print", "variants": 12, "vtex": "pi_print", "boxes": [
-        (1, 3, 0, 15, 14, 1, {"*": "pi_frame", "south": "pi_print!"})]},
+    "framed_print": {"display": "Framed Print", "variants": 16, "vtex": "pi_print", "boxes": [
+        # A moulded frame standing 1.6 px off the wall round a recessed canvas with its mat.
+        (2.2, 4.2, 0, 13.8, 12.8, 0.7, {"*": "pi_frame", "south": "pi_print!"}),
+        (1, 3, 0, 15, 4.2, 1.6, "pi_frame"), (1, 12.8, 0, 15, 14, 1.6, "pi_frame"),
+        (1, 4.2, 0, 2.2, 12.8, 1.6, "pi_frame"), (13.8, 4.2, 0, 15, 12.8, 1.6, "pi_frame")]},
     "office_plant": {"display": "Office Plant", "variants": 8, "plant": True},
 }
 
@@ -184,6 +225,7 @@ CRAFTING = {
     "locker_bench": (["SSS", "N N"], {"S": "minecraft:oak_slab", "N": "minecraft:iron_nugget"}, 3),
     "kitchen_counter": (["SSS", "PPP", "PPP"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 3),
     "kitchen_sink": (["SBS", "PPP"], {"S": "minecraft:smooth_stone_slab", "B": "minecraft:cauldron", "P": "#minecraft:planks"}, 1),
+    "microwave_counter": (["SIS", "PPP"], {"S": "minecraft:smooth_stone_slab", "I": "minecraft:iron_ingot", "P": "#minecraft:planks"}, 1),
     "coffee_counter": (["SCS", "PPP"], {"S": "minecraft:smooth_stone_slab", "C": "minecraft:cocoa_beans", "P": "#minecraft:planks"}, 1),
     "lab_bench": (["BBB", "PPP", "PPP"], {"B": "minecraft:blackstone_slab", "P": "#c:plates/iron"}, 3),
     "lab_sink": (["BCB", "PPP"], {"B": "minecraft:blackstone_slab", "C": "minecraft:cauldron", "P": "#c:plates/iron"}, 1),
@@ -744,6 +786,18 @@ def _board(i):
 # ---- framed prints
 
 def _print(i):
+    """A framed print: a painted scene (tools/paintings.py) in a white mat, drawn to be squeezed onto the
+    11.6 x 8.6 px canvas so it comes out at its own proportions."""
+    import paintings
+    img = Image.new("RGBA", (S, S), (240, 238, 230, 255))
+    pic = paintings.painted(i, 220, 150, 900 + i).resize((110, 104), Image.LANCZOS).convert("RGBA")
+    img.paste(pic, (9, 12))
+    d = ImageDraw.Draw(img)
+    d.rectangle([8, 11, 119, 116], outline=(200, 196, 186, 255))
+    return img
+
+
+def _print_old(i):
     r = random.Random(600 + i)
     a = np.zeros((S, S, 3), np.float32)
     yy = np.linspace(0, 1, S)[:, None]

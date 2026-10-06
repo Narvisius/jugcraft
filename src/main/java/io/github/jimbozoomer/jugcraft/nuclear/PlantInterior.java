@@ -38,58 +38,64 @@ public final class PlantInterior {
 	 * hitbox (pixels, facing north).
 	 */
 	private static final Object[][] FURNITURE = {
-			{"server_rack", 3, "stack", "metal", new double[] {1, 0, 1, 15, 16, 15.6}},
-			{"relay_cabinet", 2, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15.3}},
+			{"server_rack", 0, "stack", "metal", new double[] {1, 0, 1, 15, 16, 15.6}},
+			{"relay_cabinet", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15.3}},
 			{"pallet_rack", 0, "stack", "metal", new double[] {0, 0, 0, 16, 16, 16}},
 			{"pallet_rack_drums", 0, "stack", "metal", new double[] {0, 0, 0, 16, 16, 16}},
-			{"office_desk", 4, "plain", "wood", new double[] {0, 0, 1, 16, 12.5, 15}},
+			{"office_desk", 0, "plain", "wood", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"filing_cabinet", 0, "plain", "metal", new double[] {2, 0, 2, 14, 15, 15}},
 			{"whiteboard", 0, "variant:24", "metal", new double[] {0.5, 3, 0, 15.5, 15, 1.6}},
 			{"water_cooler", 0, "plain", "metal", new double[] {4, 0, 4, 12, 16, 12}},
 			{"guard_rail", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 2}},
-			{"turnstile", 3, "plain", "metal", new double[] {8.5, 0, 0.5, 15.5, 16, 15.5}},
+			{"turnstile", 0, "plain", "metal", new double[] {8.5, 0, 0.5, 15.5, 16, 15.5}},
 			{"locker", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"locker_open", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"bookcase", 0, "stack", "wood", new double[] {1, 0, 1, 15, 16, 15}},
 			{"fridge", 0, "stack", "metal", new double[] {1.5, 0, 2, 14.5, 16, 15}},
-			{"fume_hood", 3, "stack", "metal", new double[] {0, 0, 1, 16, 16, 15.5}},
+			{"fume_hood", 0, "stack", "metal", new double[] {0, 0, 1, 16, 16, 15.5}},
 			{"reception_desk", 0, "row:reception:0:3", "wood", new double[] {0, 0, 0, 16, 16, 16}},
 			{"sofa", 0, "row:sofa:0.42", "wool", new double[] {0, 0, 1, 16, 8, 16}},
 			{"locker_bench", 0, "row:bench:0.4", "wood", new double[] {0, 0, 4, 16, 7, 12}},
 			{"kitchen_counter", 0, "row:counter", "wood", new double[] {0, 0, 1, 16, 15, 16}},
 			{"kitchen_sink", 0, "row:counter", "wood", new double[] {0, 0, 1, 16, 15, 16}},
+			{"microwave_counter", 0, "row:counter", "wood", new double[] {0, 0, 1, 16, 15, 16}},
 			{"coffee_counter", 0, "row:counter", "wood", new double[] {0, 0, 1, 16, 15, 16}},
 			{"lab_bench", 0, "row:lab", "metal", new double[] {0, 0, 1, 16, 14.5, 16}},
 			{"lab_sink", 0, "row:lab", "metal", new double[] {0, 0, 1, 16, 14.5, 16}},
 			{"lab_analyzer", 0, "row:lab", "metal", new double[] {0, 0, 1, 16, 14.5, 16}},
-			{"cctv_desk", 6, "plain", "metal", new double[] {0, 0, 1, 16, 12.5, 15}},
+			{"cctv_desk", 0, "plain", "metal", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"coffee_table", 0, "plain", "wood", new double[] {1, 0, 3, 15, 7, 13}},
-			{"cafe_table", 0, "plain", "wood", new double[] {2, 0, 2, 14, 12.5, 14}},
+			{"cafe_table", 0, "variant:6", "wood", new double[] {2, 0, 2, 14, 12.5, 14}},
 			{"cafe_chair", 0, "seat:0.44", "wood", new double[] {3.5, 0, 3.5, 12.5, 9, 13}},
 			{"coat_rack", 0, "plain", "wood", new double[] {1, 0, 0, 15, 16, 4}},
-			{"printer", 3, "plain", "metal", new double[] {1, 0, 2, 15, 14, 14}},
-			{"wall_display", 5, "plain", "metal", new double[] {0, 4, 0, 16, 14, 1.2}},
+			{"printer", 0, "plain", "metal", new double[] {1, 0, 2, 15, 14, 14}},
+			{"wall_display", 0, "plain", "metal", new double[] {0, 4, 0, 16, 14, 1.2}},
 			{"office_plant", 0, "variant:8", "plant", new double[] {4, 0, 4, 12, 16, 12}},
-			{"framed_print", 0, "variant:12", "wood", new double[] {1, 3, 0, 15, 14, 1}},
+			{"framed_print", 0, "variant:16", "wood", new double[] {1, 3, 0, 15, 14, 1.6}},
 			{"locker_security", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"office_desk_long", 0, "row:desk:0:6", "wood", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"executive_desk", 0, "row:exec:0:3", "wood", new double[] {0, 0, 0.5, 16, 13, 15.5}},
 			{"glass_desk", 0, "row:glass:0:4", "metal", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"stretcher", 0, "row:stretcher:0.6", "metal", new double[] {0, 0, 1.5, 16, 10, 14.5}},
 			{"cubicle_panel", 0, "row:cubicle", "wool", new double[] {0, 0, 7, 16, 16, 9}},
-			{"aed_cabinet", 4, "plain", "metal", new double[] {3, 3, 0, 13, 14, 4}},
-			{"fire_extinguisher", 0, "plain", "metal", new double[] {5, 1, 0, 11, 14, 5}},
+			{"aed_cabinet", 0, "plain", "metal", new double[] {3, 3, 0, 13, 14, 4}},
+			{"fire_extinguisher", 0, "plain", "metal", new double[] {3, 0.5, 0, 13, 15.5, 4.6}},
 			{"medicine_cabinet", 0, "plain", "metal", new double[] {1, 5, 0, 15, 16, 5}},
-			{"vitals_monitor", 6, "plain", "metal", new double[] {4, 0, 4, 12, 16, 12}},
+			{"vitals_monitor", 0, "plain", "metal", new double[] {4, 0, 4, 12, 16, 12}},
 			{"filing_cabinet_open", 0, "plain", "metal", new double[] {2, 0, 2, 14, 15, 15}},
 			{"drafting_table", 0, "plain", "wood", new double[] {0, 0, 1, 16, 16, 15}},
 			{"blueprint_sheet", 0, "variant:6", "wood", new double[] {1, 2, 0, 15, 15, 0.6}},
-			{"training_screen", 7, "multi:3:2:v", "metal", null},
-			{"plant_map_screen", 7, "multi:3:2:v", "metal", null},
-			{"status_screen", 8, "status", "metal", null},
+			{"training_screen", 0, "multi:3:2:v", "metal", null},
+			{"plant_map_screen", 0, "multi:3:2:v", "metal", null},
+			{"status_screen", 0, "status", "metal", null},
 			{"flat_tv", 0, "multi:3:2:v", "metal", null},
-			{"oval_table", 0, "multi:5:3:h", "wood", null},
-			{"glass_coffee_table", 0, "plain", "metal", new double[] {1, 0, 2, 15, 7.3, 14}},
+			{"oval_table", 0, "multi:5:3:h:3", "wood", null},
+			{"lounge_table", 0, "multi:3:2:c", "glass", null},
+			{"large_print", 0, "multi:2:1:v:12", "wood", null},
+			{"filing_cabinet_tall", 0, "stack:tall_filing", "metal", new double[] {2, 0, 2, 14, 16, 15}},
+			{"filing_cabinet_tall_open", 0, "stack:tall_filing", "metal", new double[] {2, 0, 2, 14, 16, 15}},
+			{"office_copier", 0, "multi:2:2:b", "metal", null},
+			{"glass_coffee_table", 0, "steam:4.8:9.8:6.8", "metal", new double[] {1, 0, 2, 15, 7.3, 14}},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};
@@ -127,10 +133,15 @@ public final class PlantInterior {
 				String[] k = kind.split(":");
 				if (kind.equals("stack")) {
 					return new StackingFurnitureBlock(p, shape);
+				} else if (k[0].equals("stack")) {
+					return new StackingFurnitureBlock(p, shape).group(k[1]);
 				} else if (kind.equals("status")) {
 					return new StatusScreenBlock(p);
 				} else if (k[0].equals("multi")) {
-					return new MultiFurnitureBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), k[3].equals("v"));
+					return new MultiFurnitureBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), !k[3].equals("h") && !k[3].equals("c"),
+							k.length > 4 ? Integer.parseInt(k[4]) : 1, k[3].equals("b"), k[3].equals("c"));
+				} else if (k[0].equals("steam")) {
+					return new SteamFurnitureBlock(p, Double.parseDouble(k[1]), Double.parseDouble(k[2]), Double.parseDouble(k[3]), shape);
 				} else if (k[0].equals("seat")) {
 					return new SeatFurnitureBlock(p, Double.parseDouble(k[1]), shape);
 				} else if (k[0].equals("row")) {
@@ -141,6 +152,9 @@ public final class PlantInterior {
 				return new FurnitureBlock(p, shape);
 			}, props);
 		}
+		// The desk with a coffee on it steams (its mug: tools/plant_office2.py MUG_AT).
+		((RowFurnitureBlock) BLOCKS.get("office_desk_long")).steam(2, 11.8, 15.6, 7.8);
+		((VariantFurnitureBlock) BLOCKS.get("cafe_table")).steam(5, 11.7, 15.3, 6.2);
 		block("conference_table", ConferenceTableBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(1.5F).noOcclusion());
 		for (String id : CUBES) {
 			BlockBehaviour.Properties props = BlockBehaviour.Properties.ofFullCopy(id.contains("tank") || id.contains("louvre")
