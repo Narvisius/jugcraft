@@ -49,6 +49,18 @@ public final class PlantBuilder {
 							ServerPlayer player = context.getSource().getPlayerOrException();
 							PlantShowcase.build(player.level(), player, player.blockPosition());
 							return 1;
+						})).then(Commands.literal("refresh").executes(context -> {
+							// Rebuild the medium plant near you in place, from the current blueprint.
+							ServerPlayer player = context.getSource().getPlayerOrException();
+							Blueprint plant = Blueprint.get("nuclear_medium_pwr", false);
+							BlockPos stake = plant == null ? null : PlantShowcase.locate(player.level(), plant, player.blockPosition());
+							if (stake == null) {
+								context.getSource().sendFailure(Component.literal("No medium plant reactor loaded near you."));
+								return 0;
+							}
+							PlantShowcase.rebuild(player.level(), plant, stake, player);
+							context.getSource().sendSuccess(() -> Component.literal("Rebuilt the plant in place."), true);
+							return 1;
 						})).executes(context -> {
 							ServerPlayer player = context.getSource().getPlayerOrException();
 							BlockPos vessel = ReactorShowcase.build(player.level(), player.blockPosition());

@@ -368,6 +368,23 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			// The turbine hall.
 			shotAt(context, singleplayer, wx.applyAsInt(spots[1][0] - 30), y + 18, wz.applyAsInt(spots[1][1] + 6), wx.applyAsInt(spots[1][0] + 20),
 					y + 3, wz.applyAsInt(spots[1][1]), "jugcraft_plant_" + name + "_turbines");
+			if (name.equals("medium")) {
+				// Rebuild it in place (as the showcase does when the plant has changed since a world was built), then
+				// look round the warehouse: an aisle of racks, the high-bay lights, the stores office.
+				singleplayer.getServer().runOnServer(minecraft -> io.github.jimbozoomer.jugcraft.nuclear.PlantShowcase.rebuild(minecraft.overworld(),
+						blueprint[0], stake, minecraft.getPlayerList().getPlayers().get(0)));
+				context.waitTicks(40);
+				server.runCommand("effect clear @p night_vision");
+				shotAt(context, singleplayer, wx.applyAsInt(291), y + 2, wz.applyAsInt(116), wx.applyAsInt(270), y + 2, wz.applyAsInt(116),
+						"jugcraft_plant_medium_warehouse_aisle");
+				shotAt(context, singleplayer, wx.applyAsInt(282), y + 2, wz.applyAsInt(117), wx.applyAsInt(282), y + 11, wz.applyAsInt(113),
+						"jugcraft_plant_medium_warehouse_lights");
+				shotAt(context, singleplayer, wx.applyAsInt(298), y + 1, wz.applyAsInt(132), wx.applyAsInt(292), y + 1, wz.applyAsInt(129),
+						"jugcraft_plant_medium_warehouse_stores");
+				shotAt(context, singleplayer, wx.applyAsInt(282), y + 6, wz.applyAsInt(150), wx.applyAsInt(282), y + 4, wz.applyAsInt(136),
+						"jugcraft_plant_medium_warehouse_outside");
+				server.runCommand("effect give @p night_vision infinite 0 true");
+			}
 			server.runCommand("gamemode creative @p");
 			setHudHidden(context, false);
 		}

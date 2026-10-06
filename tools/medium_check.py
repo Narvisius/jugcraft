@@ -85,6 +85,9 @@ def check(site, quiet=False):
     passable = table(lambda st: st.startswith(PASSABLE_PREFIX))
     see = table(lambda st: st.startswith(SEE_THROUGH))
     high_bay = table(lambda st: st.startswith("jugcraft:high_bay_light"))
+    # Full blocks (a high-bay light's light passes pipes, rails, railings, chains and furniture to the floor).
+    full = table(lambda st: st != "minecraft:air" and not st.startswith(SEE_THROUGH) and not any(
+        k in st for k in ("pipe", "rail", "chain", "hanger", "high_bay", "conduit", "tray", "ladder", "trapdoor", "pane", "bars")))
     light_of = np.zeros(max(P.MATERIALS) + 2, np.int8)
     for k, (st, _) in P.MATERIALS.items():
         base = st.split("[")[0]
@@ -241,12 +244,15 @@ def check(site, quiet=False):
         # floor or whatever stands under it.
         for x, y, z in zip(*np.nonzero(high_bay[sub_g])):
             fy = int(y) - 1
-            while fy > 0 and not sub_solid[x, fy - 1, z]:
+            while fy > 0 and not (full[sub_g[x, fy, z]] or sub_occ[x, fy, z]):
                 fy -= 1
-            fy = min(int(y) - 2, fy + 4)
-            if fy > 0 and not sub_solid[x, fy, z] and lvl[x, fy, z] < 15:
-                lvl[x, fy, z] = 15
-                q.append((int(x), fy, int(z)))
+            for up in (4, 3, 5, 2, 6):
+                gy = fy + up
+                if gy < int(y) - 1 and sub_g[x, gy, z] == 0 and not sub_occ[x, gy, z]:
+                    if lvl[x, gy, z] < 15:
+                        lvl[x, gy, z] = 15
+                        q.append((int(x), gy, int(z)))
+                    break
         trans = (~sub_solid | see[sub_g]) & ~(sub_occ & ~sub_solid)
         trans |= see[sub_g]
         while q:

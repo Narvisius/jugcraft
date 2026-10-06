@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.LevelResource;
 
@@ -43,23 +45,170 @@ public final class PlantShowcase {
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> server.execute(() -> {
 			ServerPlayer player = handler.player;
 			Path marker = server.getWorldPath(LevelResource.ROOT).resolve("jugcraft").resolve("nuclear-showcase.done");
+			ServerLevel level = server.overworld();
 			if (Files.exists(marker)) {
+				// Built before: if the plant has changed since (a new build of the mod), bring it up to date in place
+				// once the player's surroundings have loaded.
+				pending = new Pending(player, marker, 40, 30);
 				return;
 			}
-			try {
-				Files.createDirectories(marker.getParent());
-				Files.writeString(marker, "built\n");
-			} catch (java.io.IOException e) {
-				Jugcraft.LOGGER.warn("Could not mark the nuclear showcase as built: {}", e.toString());
-			}
-			ServerLevel level = server.overworld();
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "time set 6000");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "gamerule advance_time false");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "weather clear 1000000");
 			BlockPos ground = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition());
 			// The plant under review: only the medium plant for now (all three with /nuclear showcase plants).
-			build(level, player, ground, new String[] {"nuclear_medium_pwr"});
+			List<BlockPos> stakes = build(level, player, ground, new String[] {REVIEWED});
+			if (!stakes.isEmpty()) {
+				writeMarker(marker, stakes.get(0), fingerprint(Blueprint.get(REVIEWED, false)));
+			}
 		}));
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			Pending p = pending;
+			if (p == null || --p.wait > 0) {
+				return;
+			}
+			if (p.player.isRemoved()) {
+				pending = null;
+				return;
+			}
+			if (refreshIfChanged(p.player.level(), p.player, p.marker) || --p.tries <= 0) {
+				pending = null;
+			} else {
+				p.wait = 40;
+			}
+		});
+	}
+
+	/** The plant the showcase builds (the one under review). */
+	private static final String REVIEWED = "nuclear_medium_pwr";
+
+	private static final class Pending {
+		final ServerPlayer player;
+		final Path marker;
+		int wait, tries;
+
+		Pending(ServerPlayer player, Path marker, int wait, int tries) {
+			this.player = player;
+			this.marker = marker;
+			this.wait = wait;
+			this.tries = tries;
+		}
+	}
+
+	private static volatile Pending pending;
+
+	/** A fingerprint of every block in a blueprint, so a world built from an older one can tell. */
+	static long fingerprint(Blueprint blueprint) {
+		long h = 1125899906842597L;
+		if (blueprint == null) {
+			return h;
+		}
+		for (int i = 0; i < blueprint.size(); i++) {
+			h = 31 * h + blueprint.offset(i, Rotation.NONE).asLong();
+			h = 31 * h + blueprint.state(i, Rotation.NONE).toString().hashCode();
+		}
+		return h;
+	}
+
+	private static void writeMarker(Path marker, BlockPos stake, long fingerprint) {
+		try {
+			Files.createDirectories(marker.getParent());
+			Files.writeString(marker, "plant=" + REVIEWED + "\nstake=" + stake.getX() + "," + stake.getY() + "," + stake.getZ()
+					+ "\nfingerprint=" + fingerprint + "\n");
+		} catch (java.io.IOException e) {
+			Jugcraft.LOGGER.warn("Could not mark the nuclear showcase as built: {}", e.toString());
+		}
+	}
+
+	/**
+	 * If the showcase plant in this world was built from an older blueprint, rebuilds it in place (its buildings cleared
+	 * and built again). Returns false if it could not tell where the plant is yet (try again once more has loaded).
+	 */
+	static boolean refreshIfChanged(ServerLevel level, ServerPlayer player, Path marker) {
+		Blueprint blueprint = Blueprint.get(REVIEWED, false);
+		if (blueprint == null) {
+			return true;
+		}
+		BlockPos stake = null;
+		long built = 0;
+		try {
+			for (String line : Files.readAllLines(marker)) {
+				if (line.startsWith("stake=")) {
+					String[] xyz = line.substring(6).split(",");
+					stake = new BlockPos(Integer.parseInt(xyz[0].trim()), Integer.parseInt(xyz[1].trim()), Integer.parseInt(xyz[2].trim()));
+				} else if (line.startsWith("fingerprint=")) {
+					built = Long.parseLong(line.substring(12).trim());
+				}
+			}
+		} catch (Exception e) {
+			Jugcraft.LOGGER.warn("Could not read the nuclear showcase marker: {}", e.toString());
+		}
+		long now = fingerprint(blueprint);
+		if (stake != null && built == now) {
+			return true;
+		}
+		if (stake == null) {
+			// A world built before the marker kept the stake: find the plant by its reactor (it is the only one).
+			stake = locate(level, blueprint, player.blockPosition());
+			if (stake == null) {
+				return false;
+			}
+		}
+		player.sendSystemMessage(Component.literal("The nuclear plant has changed since this world was built: rebuilding it in place (a few seconds)...")
+				.withStyle(ChatFormatting.GRAY));
+		rebuild(level, blueprint, stake, player);
+		writeMarker(marker, stake, now);
+		player.sendSystemMessage(Component.literal("Done: the plant is up to date.").withStyle(ChatFormatting.GRAY));
+		return true;
+	}
+
+	/** Where the plant's stake is, from its reactor vessel (loaded near the player), or null. */
+	public static BlockPos locate(ServerLevel level, Blueprint blueprint, BlockPos near) {
+		BlockPos offset = null;
+		for (int i = 0; i < blueprint.size(); i++) {
+			if (blueprint.state(i, Rotation.NONE).getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind == EquipmentKind.REACTOR_VESSEL) {
+				offset = blueprint.offset(i, Rotation.NONE);
+				break;
+			}
+		}
+		if (offset == null) {
+			return null;
+		}
+		BlockPos best = null;
+		for (java.util.Map.Entry<BlockPos, EquipmentRegistry.Entry> e : EquipmentRegistry.of(level).anchors().entrySet()) {
+			if (e.getValue().kind() == EquipmentKind.REACTOR_VESSEL && (best == null || e.getKey().distSqr(near) < best.distSqr(near))) {
+				best = e.getKey();
+			}
+		}
+		return best == null ? null : best.subtract(offset);
+	}
+
+	/**
+	 * Clears every building of the plant above the ground (its box, a block round it for the signs on its walls, two
+	 * over its roof) and builds the plant again, running.
+	 */
+	public static void rebuild(ServerLevel level, Blueprint blueprint, BlockPos stake, ServerPlayer player) {
+		int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SKIP_BLOCK_ENTITY_SIDEEFFECTS;
+		BlockState air = Blocks.AIR.defaultBlockState();
+		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+		for (Blueprint.PartRef part : blueprint.parts) {
+			int x0 = stake.getX() + part.x() - blueprint.anchorX(), y0 = stake.getY() + part.y() - blueprint.anchorY();
+			int z0 = stake.getZ() + part.z() - blueprint.anchorZ();
+			for (int x = x0 - 1; x <= x0 + part.sizeX(); x++) {
+				for (int z = z0 - 1; z <= z0 + part.sizeZ(); z++) {
+					// Only from the ground up: what is below is overwritten by the new blocks, and the ground round a
+					// sunk building (its box's corners) stays.
+					for (int y = Math.max(y0, stake.getY()); y <= y0 + part.sizeY() + 1; y++) {
+						at.set(x, y, z);
+						if (!level.isOutsideBuildHeight(at) && !level.getBlockState(at).isAir()) {
+							level.setBlock(at, air, flags);
+						}
+					}
+				}
+			}
+		}
+		PlantBuilder.Result result = PlantBuilder.build(level, blueprint, stake, Rotation.NONE, player.getUUID(), true);
+		start(level, result);
 	}
 
 	/**

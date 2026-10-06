@@ -395,7 +395,7 @@ class Building(Part):
     # -- lights
     def light_ceilings(self, step=4, hang=4, x0=1, z0=1, x1=None, z1=None, y_max=None, y_min=None, blocked=frozenset()):
         """Ceiling lights flush under every ceiling (slab, suspended ceiling, roof) over open floor, on a grid; in
-        tall spaces they hang on chains to about hang blocks over the floor below. blocked: grid cells a light or
+        tall spaces (more than hang + 1 over the floor) high-bay lights hung close under the roof instead. blocked: grid cells a light or
         its chain must not go through (the plant's equipment and pipes)."""
         w, H, d = self.size
         x1 = w - 2 if x1 is None else x1
@@ -433,12 +433,15 @@ class Building(Part):
                         drop = column(x + ox, z + oz, gy)
                         if drop is None:
                             continue
-                        if self.high_bay and drop > 0:
-                            self.g[x + ox, gy, z + oz] = HIGH_BAY     # close under the roof
+                        if drop > 0:
+                            # A high space: a high-bay light close under the roof, on a block of chain at most where
+                            # the room is very tall; it lights the floor itself (nuclear/HighBayLightBlock.java).
+                            hang_by = 1 if drop >= 4 and not self.high_bay else 0
+                            for j in range(hang_by):
+                                self.g[x + ox, gy - j, z + oz] = HANGER
+                            self.g[x + ox, gy - hang_by, z + oz] = HIGH_BAY
                             break
-                        for j in range(drop):
-                            self.g[x + ox, gy - j, z + oz] = HANGER
-                        self.g[x + ox, gy - drop, z + oz] = LIGHT
+                        self.g[x + ox, gy, z + oz] = LIGHT
                         break
 
 
@@ -1280,7 +1283,7 @@ def medium_site():
     site_sign(s, admin, 30, 4, 0, "n", "administration")
     site_sign(s, gate, 5, 3, 0, "s", "security")
     site_sign(s, gate, 5, 3, 0, "n", "security")
-    site_sign(s, ware, 20, 7, 0, "s", "warehouse")
+    site_sign(s, ware, 20, 6, 0, "s", "warehouse")    # well under the windows (the sign stands taller than its block)
     # The warehouse's door path to the road, and the concrete apron in front of its roller doors.
     A.walkway(s, 266, 136, 268, 149)
     A.walkway(s, 302, 113, 310, 128)
