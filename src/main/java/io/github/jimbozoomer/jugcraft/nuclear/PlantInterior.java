@@ -42,6 +42,9 @@ public final class PlantInterior {
 			{"relay_cabinet", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15.3}},
 			{"pallet_rack", 0, "stack", "metal", new double[] {0, 0, 0, 16, 16, 16}},
 			{"pallet_rack_drums", 0, "stack", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"storage_rack", 0, "rack", "metal", null},
+			{"high_bay_light", 15, "high_bay", "metal", new double[] {2.5, 7.8, 2.5, 13.5, 16, 13.5}},
+			{"light_hanger", 0, "plain", "metal", new double[] {6.5, 0, 6.5, 9.5, 16, 9.5}},
 			{"office_desk", 0, "plain", "wood", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"filing_cabinet", 0, "plain", "metal", new double[] {2, 0, 2, 14, 15, 15}},
 			{"whiteboard", 0, "variant:24", "metal", new double[] {0.5, 3, 0, 15.5, 15, 1.6}},
@@ -107,6 +110,8 @@ public final class PlantInterior {
 	public static BlockEntityType<PlantSignBlockEntity> SIGN_ENTITY;
 	public static BlockEntityType<StatusScreenBlockEntity> STATUS_ENTITY;
 	public static BlockEntityType<LockerBlockEntity> LOCKER_ENTITY;
+	public static BlockEntityType<StorageRackBlockEntity> RACK_ENTITY;
+	public static BlockEntityType<RollerDoorBlockEntity> ROLLER_ENTITY;
 	public static Item LAB_COAT, SECURITY_JACKET;
 
 	public static Item uniform(UniformItem.Kind kind) {
@@ -151,6 +156,10 @@ public final class PlantInterior {
 				String[] k = kind.split(":");
 				if (kind.equals("stack")) {
 					return new StackingFurnitureBlock(p, shape);
+				} else if (kind.equals("high_bay")) {
+					return new HighBayLightBlock(p, shape);
+				} else if (kind.equals("rack")) {
+					return new StorageRackBlock(p);
 				} else if (k[0].equals("locker")) {
 					return new LockerBlock(p, k[1].equals("lab") ? UniformItem.Kind.LAB_COAT : UniformItem.Kind.SECURITY_JACKET, shape);
 				} else if (k[0].equals("stack")) {
@@ -200,6 +209,10 @@ public final class PlantInterior {
 				FabricBlockEntityTypeBuilder.create(PlantSignBlockEntity::new, BUILDING_SIGN, ROOM_SIGN).build());
 		STATUS_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("status_screen"),
 				FabricBlockEntityTypeBuilder.create(StatusScreenBlockEntity::new, BLOCKS.get("status_screen")).build());
+		RACK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_rack"),
+				FabricBlockEntityTypeBuilder.create(StorageRackBlockEntity::new, BLOCKS.get("storage_rack")).build());
+		ROLLER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("roller_door"),
+				FabricBlockEntityTypeBuilder.create(RollerDoorBlockEntity::new, ROLLER_DOOR).build());
 		LOCKER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("locker"),
 				FabricBlockEntityTypeBuilder.create(LockerBlockEntity::new, BLOCKS.get("locker_open"), BLOCKS.get("locker_security")).build());
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {

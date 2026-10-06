@@ -39,6 +39,10 @@ def build_grids(site):
         if st.startswith("minecraft:water"):
             water |= g == k
     solid &= ~water
+    # The invisible light blocks under high-bay lights are air you can walk through.
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("minecraft:light["):
+            solid &= g != k
     occupied = np.zeros_like(solid)
     for kind, ax, ay, az, facing in site.equipment:
         for (x, y, z) in P.equipment_cells(kind, ax, ay, az, facing):
@@ -56,12 +60,12 @@ def build_grids(site):
 
 PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door", "minecraft:ladder", "jugcraft:room_sign",
                    "jugcraft:building_sign", "minecraft:rail", "jugcraft:ceiling_light_panel", "minecraft:iron_chain",
-                   "jugcraft:cable_tray")
+                   "jugcraft:cable_tray", "jugcraft:light_hanger", "jugcraft:high_bay_light", "minecraft:light[")
 SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:blast_glass", "minecraft:water", "jugcraft:guard_rail",
                                  "jugcraft:operator_chair", "jugcraft:office_desk", "jugcraft:console_desk", "jugcraft:turnstile",
                                  "minecraft:iron_trapdoor", "jugcraft:water_cooler", "jugcraft:filing_cabinet",
-                                 "jugcraft:whiteboard", "jugcraft:pallet_rack", "jugcraft:roller_door")
-LIGHTS = {"jugcraft:ceiling_light_panel": 15, "minecraft:sea_lantern": 15, "jugcraft:warning_light": 13,
+                                 "jugcraft:whiteboard", "jugcraft:pallet_rack", "jugcraft:roller_door", "jugcraft:storage_rack")
+LIGHTS = {"jugcraft:ceiling_light_panel": 15, "jugcraft:high_bay_light": 15, "minecraft:light": 15, "minecraft:sea_lantern": 15, "jugcraft:warning_light": 13,
           "minecraft:campfire": 15, "jugcraft:server_rack": 3, "jugcraft:relay_cabinet": 2, "jugcraft:office_desk": 4,
           "jugcraft:console_desk": 4, "jugcraft:turnstile": 3}
 
@@ -80,6 +84,7 @@ def check(site, quiet=False):
     problems = []
     passable = table(lambda st: st.startswith(PASSABLE_PREFIX))
     see = table(lambda st: st.startswith(SEE_THROUGH))
+    high_bay = table(lambda st: st.startswith("jugcraft:high_bay_light"))
     light_of = np.zeros(max(P.MATERIALS) + 2, np.int8)
     for k, (st, _) in P.MATERIALS.items():
         base = st.split("[")[0]
@@ -232,6 +237,16 @@ def check(site, quiet=False):
         for x, y, z in zip(*np.nonzero(src)):
             lvl[x, y, z] = src[x, y, z]
             q.append((int(x), int(y), int(z)))
+        # A high-bay light also puts light (an invisible light block, nuclear/HighBayLightBlock.java) four over the
+        # floor or whatever stands under it.
+        for x, y, z in zip(*np.nonzero(high_bay[sub_g])):
+            fy = int(y) - 1
+            while fy > 0 and not sub_solid[x, fy - 1, z]:
+                fy -= 1
+            fy = min(int(y) - 2, fy + 4)
+            if fy > 0 and not sub_solid[x, fy, z] and lvl[x, fy, z] < 15:
+                lvl[x, fy, z] = 15
+                q.append((int(x), fy, int(z)))
         trans = (~sub_solid | see[sub_g]) & ~(sub_occ & ~sub_solid)
         trans |= see[sub_g]
         while q:

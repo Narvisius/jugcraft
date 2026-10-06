@@ -1464,6 +1464,8 @@ def main():
     nuclear.draw_sheet().save(entity_dir / "hazmat.png", optimize=True)
     import plant_office6
     plant_office6.draw_uniform_sheet().save(entity_dir / "uniform.png", optimize=True)
+    import plant_office7
+    plant_office7.draw_rack_sheet().save(entity_dir / "storage_rack.png", optimize=True)
     # The blank equipment layer the 3D-drawn suits point at (equipment assets need one layer).
     (entity_dir / "equipment" / "humanoid").mkdir(parents=True, exist_ok=True)
     Image.new("RGBA", (64, 32), (0, 0, 0, 0)).save(entity_dir / "equipment" / "humanoid" / "blank.png", optimize=True)

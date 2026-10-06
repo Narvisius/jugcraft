@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " N ",
+    "PGP",
+    " L "
+  ],
+  "key": {
+    "N": "minecraft:iron_chain",
+    "P": "#c:plates/iron",
+    "G": "minecraft:glowstone",
+    "L": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "jugcraft:high_bay_light",
+    "count": 2
+  }
+}

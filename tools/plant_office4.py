@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw
 import plant_office3 as O3
 import plant_office5 as O5
 import plant_office6 as O6
+import plant_office7 as O7
 
 S = 128
 
@@ -433,6 +434,7 @@ def makers():
     }
     out.update(O5.makers())
     out.update(O6.makers())
+    out.update(O7.makers())
     return out
 
 

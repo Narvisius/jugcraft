@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "S S",
+    "BDB",
+    "S S"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:barrel",
+    "D": "minecraft:cauldron"
+  },
+  "result": {
+    "id": "jugcraft:pallet_rack_drums",
+    "count": 4
+  }
+}

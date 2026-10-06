@@ -99,6 +99,9 @@ FURNITURE = {
 }
 FURNITURE["server_rack"]["glow"] = ["pi_server_face"]
 FURNITURE["relay_cabinet"]["glow"] = ["pi_relay_front"]
+# Pallet racking with drums on it (the turbine building's oil store): the racking's frame, drums on the pallet.
+FURNITURE["pallet_rack_drums"] = dict(FURNITURE["pallet_rack"], display="Pallet Racking (Drums)",
+                                      boxes=FURNITURE["pallet_rack"]["boxes"][:8] + plant_office.O4.O7.DRUM_LOAD[1:])
 FURNITURE.update(plant_office.OFFICE)
 FURNITURE.update(plant_office2.PIECES)
 # Caps sit a hair above the body's top so the two tops don't fight for the same plane (the flicker on rack tops).
@@ -145,6 +148,7 @@ CRAFTING = {
     "relay_cabinet": (["PGP", "PCP", "PRP"], {"P": STEEL_PLATE, "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 2),
     "locker": (["PP", "PP", "PP"], {"P": "#c:plates/iron"}, 2),
     "pallet_rack": (["S S", "BBB", "S S"], {"S": STEEL_PLATE, "B": "minecraft:barrel"}, 4),
+    "pallet_rack_drums": (["S S", "BDB", "S S"], {"S": STEEL_PLATE, "B": "minecraft:barrel", "D": "minecraft:cauldron"}, 4),
     "office_desk": (["GGG", "PPP", "P P"], {"G": "minecraft:black_stained_glass_pane", "P": "#minecraft:planks"}, 1),
     "filing_cabinet": (["PP", "PP"], {"P": "#c:plates/iron"}, 1),
     "whiteboard": (["QQQ", "P P"], {"Q": "minecraft:quartz", "P": "#c:plates/iron"}, 2),
@@ -208,7 +212,7 @@ def textures_used():
     return names
 
 
-TEXTURES = textures_used() | set(CUBES) | {"hvac_duct", "hvac_duct_top", "pi_roller_slats", "pi_sign"} | \
+TEXTURES = {t for t in textures_used() if not t.startswith("mc_")} | set(CUBES) | {"hvac_duct", "hvac_duct_top", "pi_roller_slats", "pi_sign"} | \
     {f"{d}_{h}" for d in DOORS for h in ("top", "bottom")}
 HI_RES = TEXTURES | set(ITEM_TEXTURES)
 
@@ -306,8 +310,9 @@ def separate(boxes, under=()):
 
 def model(boxes, glow, rid, under=()):
     elements, used = _elements(separate(boxes, under), glow)
-    textures = {t: rid(f"block/{t}") for t in sorted(used)}
-    textures["particle"] = rid(f"block/{sorted(used)[0]}")
+    # "mc_x": the game's own texture block/x (the chain); everything else is ours.
+    textures = {t: ("minecraft:block/" + t[3:] if t.startswith("mc_") else rid(f"block/{t}")) for t in sorted(used)}
+    textures["particle"] = textures[sorted(used)[0]]
     # Smooth lighting on (the default): the light blends across a row of joined pieces instead of stepping at each
     # block. (Flat lighting takes each block's own light level, which differs from block to block.)
     return {"textures": textures, "elements": elements}
@@ -421,6 +426,7 @@ def write_assets(write, rid, assets, lang):
         write(assets / "models" / "item" / f"{name}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{name}")}})
         write(assets / "items" / f"{name}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{name}")}})
     # The equipment asset needs a layer: a blank one (the coat itself is drawn in 3D by client/UniformLayer.java).
+    lang[f"container.{MOD}.storage_rack"] = "Storage Rack"
     write(assets / "equipment" / "uniform.json", {"layers": {"humanoid": [{"texture": "jugcraft:blank"}]}})
     # The round meeting table: nine blocks, each its slice of the top.
     lang[f"block.{MOD}.conference_table"] = OTHER["conference_table"]
@@ -467,7 +473,8 @@ def write_assets(write, rid, assets, lang):
         write(assets / "blockstates" / f"{door}.json", {"variants": variants})
         write(assets / "models" / "item" / f"{door}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{door}")}})
         write(assets / "items" / f"{door}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{door}")}})
-    # The roller door: slats in the middle of the opening, nothing when rolled up.
+    # The roller door: slats in the middle of the opening, nothing when rolled up; while it rolls (moving) the block
+    # model is empty and client/RollerDoorRenderer.java draws the curtain moving and the coil at the top.
     lang[f"block.{MOD}.roller_door"] = OTHER["roller_door"]
     write(models / "roller_door.json", {"textures": {"slats": rid("block/pi_roller_slats"), "particle": rid("block/pi_roller_slats")},
                                         "elements": [{"from": [0, 0, 6.5], "to": [16, 16, 9.5], "faces": {
@@ -475,8 +482,9 @@ def write_assets(write, rid, assets, lang):
                                             for f in ("north", "south", "east", "west", "up", "down")}}]})
     write(models / "roller_door_open.json", {"textures": {"particle": rid("block/pi_roller_slats")}, "elements": []})
     write(assets / "blockstates" / "roller_door.json", {"variants": {
-        f"facing={face},open={o}": {"model": rid("block/roller_door" + ("_open" if o == "true" else "")), **({"y": y} if y else {})}
-        for face, y in TURN for o in ("false", "true")}})
+        f"facing={face},moving={m},open={o}": {"model": rid("block/roller_door" + ("_open" if o == "true" or m == "true" else "")),
+                                                **({"y": y} if y else {})}
+        for face, y in TURN for o in ("false", "true") for m in ("false", "true")}})
     write(assets / "items" / "roller_door.json", {"model": {"type": "minecraft:model", "model": rid("block/roller_door")}})
     # Signs: drawn by client/PlantSignRenderer.java; the block model only gives break particles.
     for sign in ("building_sign", "room_sign"):

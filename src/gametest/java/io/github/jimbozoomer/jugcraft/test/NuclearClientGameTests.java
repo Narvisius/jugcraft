@@ -94,8 +94,56 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			server.runCommand("kill @e[type=!player]");
 			reactorUnit(context, singleplayer, x, y, z);
 			uniforms(context, singleplayer, x, y, z);
+			warehouse(context, singleplayer, x, y, z);
 			plants(context, singleplayer, x, y, z);
 		}
+	}
+
+	/**
+	 * The warehouse pieces, close up: a storage rack with some bays stocked (the loads drawn from what is in it), high-bay
+	 * lights under a roof, and a roller door shut, half way up, and rolled up.
+	 */
+	private static void warehouse(ClientGameTestContext context, TestSingleplayerContext singleplayer, int x, int y, int z) {
+		TestServerContext server = singleplayer.getServer();
+		int bx = x + 70, bz = z;
+		// A rack facing north (front to the south), its left bay at bx - 1.
+		for (int r = 0; r < 3; r++) {
+			for (int c = 0; c < 3; c++) {
+				server.runCommand("setblock %d %d %d jugcraft:storage_rack[facing=north,part=%d]".formatted(bx - 1 + c, y + r, bz, r * 3 + c));
+			}
+		}
+		String[] stock = {"minecraft:iron_ingot", "minecraft:paper", "minecraft:copper_ingot", "minecraft:redstone", "minecraft:glass",
+				"minecraft:bricks", "minecraft:oak_planks", "minecraft:coal", "minecraft:bone_meal"};
+		int[] filled = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 18, 19, 20, 21, 22, 23, 30, 31, 32, 42, 48, 49};
+		for (int i = 0; i < filled.length; i++) {
+			int slot = filled[i];
+			server.runCommand("item replace block %d %d %d container.%d with %s 32".formatted(bx, y, bz, slot, stock[(slot / 6 + slot) % stock.length]));
+		}
+		// A roof over the rack with high-bay lights under it.
+		server.runCommand("fill %d %d %d %d %d %d jugcraft:aluminum_cladding".formatted(bx - 4, y + 7, bz - 3, bx + 4, y + 7, bz + 4));
+		server.runCommand("setblock %d %d %d jugcraft:high_bay_light[facing=north]".formatted(bx - 2, y + 6, bz + 2));
+		server.runCommand("setblock %d %d %d jugcraft:high_bay_light[facing=north]".formatted(bx + 2, y + 6, bz + 2));
+		// A roller door five wide and four high in a wall, facing north (into the building: its coil on the north side).
+		int dx = bx + 10;
+		server.runCommand("fill %d %d %d %d %d %d jugcraft:aluminum_cladding".formatted(dx - 4, y, bz, dx + 4, y + 5, bz));
+		server.runCommand("fill %d %d %d %d %d %d jugcraft:roller_door[facing=north,open=false]".formatted(dx - 2, y, bz, dx + 2, y + 3, bz));
+		context.waitTicks(20);
+		setHudHidden(context, true);
+		server.runCommand("gamemode spectator @p");
+		context.waitTicks(5);
+		shot(context, singleplayer, bx, y + 1, bz + 4, bx, y + 1, bz, 0.4, "jugcraft_warehouse_rack_front");
+		shot(context, singleplayer, bx + 3, y + 1, bz + 3, bx, y + 1, bz, 0.6, "jugcraft_warehouse_rack_angle");
+		shot(context, singleplayer, bx, y + 2, bz + 4, bx, y + 6, bz + 2, 0.0, "jugcraft_warehouse_high_bay");
+		shot(context, singleplayer, dx, y + 1, bz + 6, dx, y + 1, bz, 0.4, "jugcraft_roller_door_shut");
+		singleplayer.getServer().runOnServer(minecraft -> io.github.jimbozoomer.jugcraft.nuclear.RollerDoorBlock.toggle(minecraft.overworld(),
+				new BlockPos(dx, y, bz)));
+		context.waitTicks(12);
+		context.takeScreenshot("jugcraft_roller_door_rolling");
+		context.waitTicks(30);
+		context.takeScreenshot("jugcraft_roller_door_open");
+		shot(context, singleplayer, dx, y + 1, bz - 4, dx, y + 3, bz, 0.4, "jugcraft_roller_door_coil_inside");
+		server.runCommand("gamemode creative @p");
+		setHudHidden(context, false);
 	}
 
 	/**

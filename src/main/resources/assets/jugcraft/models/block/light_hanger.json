@@ -1,0 +1,252 @@
+{
+  "textures": {
+    "mc_iron_chain": "minecraft:block/iron_chain",
+    "pi_cable": "jugcraft:block/pi_cable",
+    "pi_cable_tie": "jugcraft:block/pi_cable_tie",
+    "particle": "minecraft:block/iron_chain"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        0,
+        8
+      ],
+      "to": [
+        9.5,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#mc_iron_chain",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#mc_iron_chain",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          0,
+          8
+        ]
+      }
+    },
+    {
+      "from": [
+        8,
+        0,
+        6.5
+      ],
+      "to": [
+        8,
+        16,
+        9.5
+      ],
+      "faces": {
+        "east": {
+          "texture": "#mc_iron_chain",
+          "uv": [
+            3,
+            0,
+            6,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#mc_iron_chain",
+          "uv": [
+            3,
+            0,
+            6,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          0,
+          8
+        ]
+      }
+    },
+    {
+      "from": [
+        9.0,
+        0,
+        8.299999999999999
+      ],
+      "to": [
+        9.600000000000001,
+        16,
+        8.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cable"
+        },
+        "south": {
+          "texture": "#pi_cable"
+        },
+        "east": {
+          "texture": "#pi_cable"
+        },
+        "west": {
+          "texture": "#pi_cable"
+        },
+        "up": {
+          "texture": "#pi_cable"
+        },
+        "down": {
+          "texture": "#pi_cable"
+        }
+      }
+    },
+    {
+      "from": [
+        8.850000000000001,
+        1.5,
+        8.15
+      ],
+      "to": [
+        9.75,
+        1.85,
+        9.049999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cable_tie"
+        },
+        "south": {
+          "texture": "#pi_cable_tie"
+        },
+        "east": {
+          "texture": "#pi_cable_tie"
+        },
+        "west": {
+          "texture": "#pi_cable_tie"
+        },
+        "up": {
+          "texture": "#pi_cable_tie"
+        },
+        "down": {
+          "texture": "#pi_cable_tie"
+        }
+      }
+    },
+    {
+      "from": [
+        8.850000000000001,
+        5.5,
+        8.15
+      ],
+      "to": [
+        9.75,
+        5.85,
+        9.049999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cable_tie"
+        },
+        "south": {
+          "texture": "#pi_cable_tie"
+        },
+        "east": {
+          "texture": "#pi_cable_tie"
+        },
+        "west": {
+          "texture": "#pi_cable_tie"
+        },
+        "up": {
+          "texture": "#pi_cable_tie"
+        },
+        "down": {
+          "texture": "#pi_cable_tie"
+        }
+      }
+    },
+    {
+      "from": [
+        8.850000000000001,
+        9.5,
+        8.15
+      ],
+      "to": [
+        9.75,
+        9.85,
+        9.049999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cable_tie"
+        },
+        "south": {
+          "texture": "#pi_cable_tie"
+        },
+        "east": {
+          "texture": "#pi_cable_tie"
+        },
+        "west": {
+          "texture": "#pi_cable_tie"
+        },
+        "up": {
+          "texture": "#pi_cable_tie"
+        },
+        "down": {
+          "texture": "#pi_cable_tie"
+        }
+      }
+    },
+    {
+      "from": [
+        8.850000000000001,
+        13.5,
+        8.15
+      ],
+      "to": [
+        9.75,
+        13.85,
+        9.049999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cable_tie"
+        },
+        "south": {
+          "texture": "#pi_cable_tie"
+        },
+        "east": {
+          "texture": "#pi_cable_tie"
+        },
+        "west": {
+          "texture": "#pi_cable_tie"
+        },
+        "up": {
+          "texture": "#pi_cable_tie"
+        },
+        "down": {
+          "texture": "#pi_cable_tie"
+        }
+      }
+    }
+  ]
+}

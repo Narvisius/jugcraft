@@ -36,6 +36,11 @@ PANE = M("minecraft:glass_pane", (180, 210, 220))
 BLAST = M("jugcraft:blast_glass", (150, 180, 196))
 BARS = M("minecraft:iron_bars", (92, 94, 98))
 CHAIN = M("minecraft:iron_chain[axis=y]", (70, 70, 74))
+# What lights hang from: a chain with the power cable run down it.
+HANGER = M("jugcraft:light_hanger[facing=north]", (70, 70, 74))
+# A high-bay light, hung close under a high roof (when placed it sets the game's invisible light block lower down, to
+# light the floor as brightly as a real one does: block light only reaches 15 blocks).
+HIGH_BAY = M("jugcraft:high_bay_light[facing=north]", (236, 236, 228))
 GIRDER = M("jugcraft:steel_girder", (120, 124, 128))
 FRAME = M("jugcraft:tungsten_steel_frame", (110, 114, 120))
 COLUMN = M("jugcraft:concrete_column", (170, 170, 166))
@@ -138,6 +143,7 @@ class Building(Part):
         self.doors = []  # (x, y, z, facing) lower halves
         self.seats = []  # (x, y, z, facing): furniture, which must stand inside with room in front
         self.stairs = []  # stairwell footprints, for the checker
+        self.high_bay = False  # tall open spaces lit by high-bay lights under the roof instead of lights on chains
 
     # Every method below takes y from the ground floor slab (the grid's y is y + base).
     def b(self, x0, y0, z0, x1, y1, z1, m):
@@ -425,11 +431,15 @@ class Building(Part):
                     # A light here, or next to here if equipment is in the way.
                     for ox, oz in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1), (2, 0), (-2, 0), (0, 2), (0, -2)):
                         drop = column(x + ox, z + oz, gy)
-                        if drop is not None:
-                            for j in range(drop):
-                                self.g[x + ox, gy - j, z + oz] = CHAIN
-                            self.g[x + ox, gy - drop, z + oz] = LIGHT
+                        if drop is None:
+                            continue
+                        if self.high_bay and drop > 0:
+                            self.g[x + ox, gy, z + oz] = HIGH_BAY     # close under the roof
                             break
+                        for j in range(drop):
+                            self.g[x + ox, gy - j, z + oz] = HANGER
+                        self.g[x + ox, gy - drop, z + oz] = LIGHT
+                        break
 
 
 def entrance(b, x, z, side, kind="glass", label=None, canopy=True, step=True, frame=True):
@@ -1041,34 +1051,53 @@ def pump_house(s, ox, oz):
 
 # ------------------------------------------------------------------------------------------------- site buildings
 
+def storage_rack(b, x, y, z, facing):
+    """A storage rack (three bays long, three levels high, one deep) whose left bay as you face its front is at
+    (x, y, z); facing is the way its user looks (its front faces the other way). Its parts: bay c to the user's right,
+    level r up, part r * 3 + c."""
+    rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+    for r in range(3):
+        for c in range(3):
+            b.p(x + rx * c, y + r, z + rz * c, multi_state("storage_rack", facing, r * 3 + c))
+
+
 def warehouse(s, ox, oz):
-    """The warehouse: rows of pallet racking three high with aisles between, the stores office in the corner,
-    roller doors at the loading end."""
+    """The warehouse, level with the ground: storage racks (real stores, three bays by three levels) back to back in
+    rows with aisles between, high-bay lights under the roof, the stores office in the corner (its own block walls on
+    every side), roller doors at the loading end that roll up."""
     W, D, H = 40, 26, 12
-    b = Building("warehouse", "Warehouse", W, D, H)
+    b = Building("warehouse", "Warehouse", W, D, H, grounded=True)
+    b.high_bay = True
     b.shell_walls(CLADDING, step=8)
     b.windows(9, 10, "ns", step=8)
     b.storey(0, 1, 1, W - 2, D - 2, EPOXY)
-    # Rows of racking back to back, each front on an aisle (z 5..8, 11..14), three pallets high.
+    # Rows of racks back to back, each front on an aisle (z 5..8, 11..14, 17..18), eight racks to a row.
     for z in (3, 4, 9, 10, 15, 16):
-        f = "south" if z in (3, 9, 15) else "north"
-        for x in range(3, W - 12):
-            kind = "pallet_rack_drums" if (x // 3) % 4 == 1 else "pallet_rack"
-            b.stack(kind, x, 1, z, f, n=3)
-    # The stores office: block walls with a window, a door, a desk and cabinets.
-    b.wall_x(D - 8, W - 10, W - 2, 1, 4)
-    b.wall_z(W - 10, D - 8, D - 2, 1, 4)
-    for x in range(W - 8, W - 4):
-        b.p(x, 2, D - 8, PANE)
-    b.b(W - 9, 4, D - 7, W - 2, 4, D - 2, CEIL)
-    b.door(W - 10, 1, D - 4, "east", label="stores")
-    b.desk(W - 5, 1, D - 3, "south")
-    b.furniture("filing_cabinet", W - 2, 1, D - 6, "east")
-    for z in range(4, 18):
+        front_south = z in (3, 9, 15)
+        facing = "north" if front_south else "south"     # the user looks at the front, from the aisle
+        for k in range(8):
+            x_left, x_right = 3 + 3 * k, 5 + 3 * k
+            # The left bay as you face the front: west when looking north, east when looking south.
+            storage_rack(b, x_left if facing == "north" else x_right, 1, z, facing)
+    # The stores office: its own block walls inside the outer walls (so every wall inside is painted block), a window
+    # onto the floor, a door, a desk and cabinets.
+    ox0, oz0, ox1, oz1 = W - 11, D - 9, W - 2, D - 2
+    b.wall_x(oz0, ox0, ox1, 1, 4)
+    b.wall_x(oz1, ox0, ox1, 1, 4)
+    b.wall_z(ox0, oz0, oz1, 1, 4)
+    b.wall_z(ox1, oz0, oz1, 1, 4)
+    for x in range(ox0 + 2, ox0 + 6):
+        b.p(x, 2, oz0, PANE)
+    b.b(ox0 + 1, 4, oz0 + 1, ox1 - 1, 4, oz1 - 1, CEIL)
+    b.door(ox0, 1, oz0 + 3, "east", label="stores")
+    b.desk(ox1 - 3, 1, oz1 - 1, "south")
+    b.furniture("filing_cabinet", ox1 - 1, 1, oz0 + 2, "east")
+    b.furniture("filing_cabinet", ox1 - 1, 1, oz0 + 3, "east")
+    for z in range(4, 17):
         for y in range(1, 9):
             b.p(W - 1, y, z, roller("west"))
-    b.b(W - 1, 9, 3, W - 1, 9, 18, CLADDING)
-    entrance(b, 5, D - 1, "s", kind="steel")
+    b.b(W - 1, 9, 3, W - 1, 9, 17, CLADDING)
+    entrance(b, 5, D - 1, "s", kind="steel", step=False)
     s.add(b, ox, oz)
     return b
 
@@ -1130,12 +1159,23 @@ def parking(s, x0, z0, x1, z1):
 
 def site_sign(s, part, x, y, z, side, label):
     """A building's name sign hung on its outer wall: (x, z) along the wall in the part's frame, side n/s/e/w; the
-    sign block stands just outside the wall."""
+    sign block stands just outside the wall. y is the height wanted: it moves down to the first plain wall (never on
+    glass, a door or a roller door)."""
     _, px, pz, _ = next(e for e in s.parts if e[0] is part)
     w, _, d = part.size
     fx, fz = P.DIRS[SIDE[side]]
     wx = px + (x if side in "ns" else (-1 if side == "w" else w))
     wz = pz + (z if side in "ew" else (-1 if side == "n" else d))
+    # The wall behind the sign, in the part's grid (its y counts from the bottom of the part, sunk sink below 0).
+    gx = x if side in "ns" else (0 if side == "w" else w - 1)
+    gz = z if side in "ew" else (0 if side == "n" else d - 1)
+    while y > 1:
+        gy = y + part.sink
+        behind = int(part.g[gx, gy, gz]) if 0 <= gy < part.g.shape[1] else 0
+        name = P.MATERIALS[behind][0] if behind else ""
+        if behind and behind not in GLAZING and behind not in DOORISH and "roller_door" not in name and "glass" not in name:
+            break
+        y -= 1
     s.decor[(wx, y, wz)] = sign(label, SIDE[side], big=True)
 
 
@@ -1240,7 +1280,11 @@ def medium_site():
     site_sign(s, admin, 30, 4, 0, "n", "administration")
     site_sign(s, gate, 5, 3, 0, "s", "security")
     site_sign(s, gate, 5, 3, 0, "n", "security")
-    site_sign(s, ware, 20, 9, 0, "s", "warehouse")
+    site_sign(s, ware, 20, 7, 0, "s", "warehouse")
+    # The warehouse's door path to the road, and the concrete apron in front of its roller doors.
+    A.walkway(s, 266, 136, 268, 149)
+    A.walkway(s, 302, 113, 310, 128)
+    A.walkway(s, 306, 129, 310, 149)
     site_sign(s, diesel, 23, 9, 0, "s", "diesel_building")
     site_sign(s, ctrl_part(s, "aux_building"), 30, 5, 0, "s", "auxiliary_building")
     site_sign(s, ctrl_part(s, "fuel_building"), 0, 16, 23, "e", "fuel_building")

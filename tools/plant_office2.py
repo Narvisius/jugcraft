@@ -164,6 +164,10 @@ PIECES = {
     "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank"},
     "oval_table": {"display": "Oval Meeting Table", "multi": (5, 3, False), "table": True, "versions": 3},
     "lounge_table": {"display": "Oval Glass Coffee Table", "multi": (3, 2, False), "lounge": True},
+    # ---- the warehouse
+    "storage_rack": {"display": "Storage Rack", "multi": (3, 3, "rack"), "rack": True},
+    "high_bay_light": {"display": "High-Bay Light", "boxes": O4.O7.HIGH_BAY, "glow": ["pi_highbay_lens"]},
+    "light_hanger": {"display": "Light Hanger Chain", "boxes": O4.O7.LIGHT_HANGER},
     "large_print": {"display": "Large Framed Picture", "multi": (2, 1, True), "prints": 12},
 }
 
@@ -190,6 +194,9 @@ CRAFTING = {
     "status_screen": (["GGG", "GCG", " R "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:comparator"}, 1),
     "oval_table": (["SSS", "SSS", "N N"], {"S": "minecraft:dark_oak_slab", "N": "#c:plates/iron"}, 1),
     "lounge_table": (["GGG", "W W"], {"G": "minecraft:glass_pane", "W": "minecraft:dark_oak_log"}, 1),
+    "storage_rack": (["SBS", "SBS", "SBS"], {"S": "#c:plates/iron", "B": "minecraft:barrel"}, 1),
+    "high_bay_light": ([" N ", "PGP", " L "], {"N": "minecraft:iron_chain", "P": "#c:plates/iron", "G": "minecraft:glowstone", "L": "minecraft:glass_pane"}, 2),
+    "light_hanger": (["N", "N", "S"], {"N": "minecraft:iron_chain", "S": "minecraft:string"}, 4),
     "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 1),
     "large_print": (["SSS", "SPS", "SSS"], {"S": "minecraft:dark_oak_planks", "P": "minecraft:painting"}, 1),
     "glass_coffee_table": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "minecraft:iron_nugget"}, 1),
@@ -258,7 +265,9 @@ def multi_parts(info, version=0):
     items = O4.O5.meeting_items(version) if info.get("versions") else []
     for p in range(w * rows):
         c, r = p % w, p // w
-        if info.get("lounge"):
+        if info.get("rack"):
+            yield p, O4.O7.rack_part(c, r)
+        elif info.get("lounge"):
             yield p, O4.O5.lounge_part(c, r)
         elif info.get("versions"):
             yield p, oval_boxes(c, r, w, rows) + O4.O5.slice_into(items, c, r)
@@ -923,7 +932,15 @@ def icon(name):
         crop = big.crop((16, 150, 512, 512)).resize((124, 90))
         img.paste(crop, (2, 30))
         return M.stylize(img, 24)
-    if name == "lounge_table":
+    if name == "storage_rack":
+        d.rectangle([10, 14, 118, 114], outline=(30, 60, 120, 255), width=6)
+        for y in (46, 80):
+            d.rectangle([10, y, 118, y + 6], fill=(214, 110, 30, 255))
+        for x in (44, 78):
+            d.rectangle([x, 14, x + 5, 114], fill=(30, 60, 120, 255))
+        for bx, by in ((16, 90), (50, 90), (84, 56), (16, 22)):
+            d.rectangle([bx, by, bx + 24, by + 22], fill=(196, 154, 100, 255), outline=(150, 110, 60, 255))
+    elif name == "lounge_table":
         d.ellipse([6, 40, 122, 84], fill=(200, 226, 230, 255), outline=(150, 190, 196, 255), width=3)
         d.rectangle([30, 84, 50, 112], fill=(92, 58, 36, 255))
         d.rectangle([78, 84, 98, 112], fill=(92, 58, 36, 255))
