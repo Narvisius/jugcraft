@@ -306,7 +306,7 @@ def plant_elements(i):
             els.append(b)
     if name == "spruce":
         # Tiers of branches narrowing to the tip, each a square and the same square turned 45 degrees.
-        y = 10.0
+        y = 12.4      # the tiers start high enough that the top one covers the end of the trunk
         for k, half in enumerate((4.6, 3.8, 3.0, 2.2, 1.4, 0.8)):
             h = 2.6 if k < 5 else 2.0
             els.append(_cube(8 - half, y, 8 - half, 8 + half, y + h, 8 + half, keys[0]))
