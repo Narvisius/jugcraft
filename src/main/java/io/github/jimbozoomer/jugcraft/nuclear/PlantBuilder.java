@@ -45,7 +45,11 @@ public final class PlantBuilder {
 								.executes(context -> build(context.getSource(), StringArgumentType.getString(context, "blueprint"), false))
 								.then(Commands.literal("fuelled")
 										.executes(context -> build(context.getSource(), StringArgumentType.getString(context, "blueprint"), true)))))
-						.then(Commands.literal("showcase").executes(context -> {
+						.then(Commands.literal("showcase").then(Commands.literal("plants").executes(context -> {
+							ServerPlayer player = context.getSource().getPlayerOrException();
+							PlantShowcase.build(player.level(), player, player.blockPosition());
+							return 1;
+						})).executes(context -> {
 							ServerPlayer player = context.getSource().getPlayerOrException();
 							BlockPos vessel = ReactorShowcase.build(player.level(), player.blockPosition());
 							context.getSource().sendSuccess(() -> Component.translatable("message.jugcraft.nuclear.showcase", vessel.toShortString()), true);

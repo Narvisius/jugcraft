@@ -162,6 +162,7 @@ public final class JugcraftNuclear {
 
 		ServerTickEvents.END_SERVER_TICK.register(Radiation::tick);
 		PlantBuilder.register();
+		PlantShowcase.register();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(
 				Commands.literal("radiation").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.literal("dose").then(Commands.argument("mSv", DoubleArgumentType.doubleArg(0)).executes(context -> {

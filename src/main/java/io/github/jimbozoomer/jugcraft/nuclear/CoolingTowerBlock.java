@@ -79,6 +79,17 @@ public class CoolingTowerBlock extends BaseEntityBlock {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
+	/** Turns with a blueprint (or a structure) like any facing block. */
+	@Override
+	protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+	}
+
+	@Override
+	protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+	}
+
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CoolingTowerBlockEntity(pos, state);
