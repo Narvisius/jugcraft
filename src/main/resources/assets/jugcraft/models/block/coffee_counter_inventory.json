@@ -1,0 +1,328 @@
+{
+  "textures": {
+    "pi_appliance": "jugcraft:block/pi_appliance",
+    "pi_cab_white": "jugcraft:block/pi_cab_white",
+    "pi_coffee_machine": "jugcraft:block/pi_coffee_machine",
+    "pi_kitchen_front": "jugcraft:block/pi_kitchen_front",
+    "pi_microwave": "jugcraft:block/pi_microwave",
+    "pi_toe_kick": "jugcraft:block/pi_toe_kick",
+    "pi_wall_cab": "jugcraft:block/pi_wall_cab",
+    "pi_worktop": "jugcraft:block/pi_worktop",
+    "particle": "jugcraft:block/pi_appliance"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        1.5
+      ],
+      "to": [
+        16,
+        1,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_toe_kick"
+        },
+        "south": {
+          "texture": "#pi_toe_kick"
+        },
+        "east": {
+          "texture": "#pi_toe_kick"
+        },
+        "west": {
+          "texture": "#pi_toe_kick"
+        },
+        "up": {
+          "texture": "#pi_toe_kick"
+        },
+        "down": {
+          "texture": "#pi_toe_kick"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1,
+        1
+      ],
+      "to": [
+        16,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cab_white"
+        },
+        "south": {
+          "texture": "#pi_kitchen_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cab_white"
+        },
+        "west": {
+          "texture": "#pi_cab_white"
+        },
+        "up": {
+          "texture": "#pi_cab_white"
+        },
+        "down": {
+          "texture": "#pi_cab_white"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        14,
+        0.5
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_worktop"
+        },
+        "south": {
+          "texture": "#pi_worktop"
+        },
+        "east": {
+          "texture": "#pi_worktop"
+        },
+        "west": {
+          "texture": "#pi_worktop"
+        },
+        "up": {
+          "texture": "#pi_worktop",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_worktop"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        22,
+        0.5
+      ],
+      "to": [
+        16,
+        30,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#pi_wall_cab",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            9.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            0.5,
+            0,
+            6.5,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            0,
+            0.5,
+            16,
+            6.5
+          ]
+        },
+        "down": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            0,
+            9.5,
+            16,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        15,
+        1.5
+      ],
+      "to": [
+        7,
+        22.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_appliance",
+          "uv": [
+            9,
+            0,
+            14.5,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#pi_coffee_machine",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_appliance",
+          "uv": [
+            7.5,
+            0,
+            14.5,
+            7.5
+          ]
+        },
+        "west": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            0,
+            8.5,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            1.5,
+            7,
+            8.5
+          ]
+        },
+        "down": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            7.5,
+            7,
+            14.5
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        8.5,
+        15,
+        1.5
+      ],
+      "to": [
+        15.5,
+        20,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_appliance",
+          "uv": [
+            0.5,
+            0,
+            7.5,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#pi_microwave",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_appliance",
+          "uv": [
+            6,
+            0,
+            14.5,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            0,
+            10,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#pi_appliance",
+          "uv": [
+            8.5,
+            1.5,
+            15.5,
+            10
+          ]
+        },
+        "down": {
+          "texture": "#pi_appliance",
+          "uv": [
+            8.5,
+            6,
+            15.5,
+            14.5
+          ]
+        }
+      }
+    }
+  ]
+}

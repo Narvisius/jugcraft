@@ -1,0 +1,47 @@
+{
+  "textures": {
+    "pi_locker_front": "jugcraft:block/pi_locker_front",
+    "pi_locker_side": "jugcraft:block/pi_locker_side",
+    "particle": "jugcraft:block/pi_locker_front"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        2
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_side"
+        },
+        "south": {
+          "texture": "#pi_locker_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_locker_side"
+        },
+        "west": {
+          "texture": "#pi_locker_side"
+        },
+        "up": {
+          "texture": "#pi_locker_side"
+        },
+        "down": {
+          "texture": "#pi_locker_side"
+        }
+      }
+    }
+  ]
+}

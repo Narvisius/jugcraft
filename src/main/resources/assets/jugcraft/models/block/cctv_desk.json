@@ -1,0 +1,663 @@
+{
+  "textures": {
+    "pi_appliance": "jugcraft:block/pi_appliance",
+    "pi_cctv": "jugcraft:block/pi_cctv",
+    "pi_cctv2": "jugcraft:block/pi_cctv2",
+    "pi_desk_panel": "jugcraft:block/pi_desk_panel",
+    "pi_keyboard": "jugcraft:block/pi_keyboard",
+    "pi_laminate": "jugcraft:block/pi_laminate",
+    "pi_monitor": "jugcraft:block/pi_monitor",
+    "particle": "jugcraft:block/pi_appliance"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        11.5,
+        1
+      ],
+      "to": [
+        16,
+        12.5,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_laminate"
+        },
+        "south": {
+          "texture": "#pi_laminate"
+        },
+        "east": {
+          "texture": "#pi_laminate"
+        },
+        "west": {
+          "texture": "#pi_laminate"
+        },
+        "up": {
+          "texture": "#pi_laminate",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_laminate"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        0,
+        1
+      ],
+      "to": [
+        1.5,
+        11.5,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_desk_panel"
+        },
+        "south": {
+          "texture": "#pi_desk_panel"
+        },
+        "east": {
+          "texture": "#pi_desk_panel"
+        },
+        "west": {
+          "texture": "#pi_desk_panel"
+        },
+        "up": {
+          "texture": "#pi_desk_panel"
+        },
+        "down": {
+          "texture": "#pi_desk_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        0,
+        1
+      ],
+      "to": [
+        15.5,
+        11.5,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_desk_panel"
+        },
+        "south": {
+          "texture": "#pi_desk_panel"
+        },
+        "east": {
+          "texture": "#pi_desk_panel"
+        },
+        "west": {
+          "texture": "#pi_desk_panel"
+        },
+        "up": {
+          "texture": "#pi_desk_panel"
+        },
+        "down": {
+          "texture": "#pi_desk_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        3,
+        1.2
+      ],
+      "to": [
+        14.5,
+        11.5,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_desk_panel"
+        },
+        "south": {
+          "texture": "#pi_desk_panel"
+        },
+        "east": {
+          "texture": "#pi_desk_panel"
+        },
+        "west": {
+          "texture": "#pi_desk_panel"
+        },
+        "up": {
+          "texture": "#pi_desk_panel"
+        },
+        "down": {
+          "texture": "#pi_desk_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        12.5,
+        3
+      ],
+      "to": [
+        15,
+        13,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_monitor"
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        13,
+        3.5
+      ],
+      "to": [
+        8.5,
+        22,
+        4.26
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#pi_monitor",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            9
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            11.8,
+            0,
+            12.5,
+            9
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.5,
+            0,
+            4.2,
+            9
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            7.5,
+            3.5,
+            8.5,
+            4.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            7.5,
+            11.8,
+            8.5,
+            12.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.2,
+        14,
+        3.4
+      ],
+      "to": [
+        5.4,
+        18,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            10.6,
+            0,
+            15.8,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#pi_cctv",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            11.8,
+            0,
+            12.6,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.4,
+            0,
+            4.2,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            0.2,
+            3.4,
+            5.4,
+            4.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            0.2,
+            11.8,
+            5.4,
+            12.6
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        5.4,
+        14,
+        3.4
+      ],
+      "to": [
+        10.6,
+        18,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            5.4,
+            0,
+            10.6,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#pi_cctv2",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            11.8,
+            0,
+            12.6,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.4,
+            0,
+            4.2,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            5.4,
+            3.4,
+            10.6,
+            4.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            5.4,
+            11.8,
+            10.6,
+            12.6
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        10.6,
+        14,
+        3.4
+      ],
+      "to": [
+        15.8,
+        18,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            0.2,
+            0,
+            5.4,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#pi_cctv",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            11.8,
+            0,
+            12.6,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.4,
+            0,
+            4.2,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            10.6,
+            3.4,
+            15.8,
+            4.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            10.6,
+            11.8,
+            15.8,
+            12.6
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        2.8,
+        18.2,
+        3.4
+      ],
+      "to": [
+        8,
+        22.2,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            8,
+            0,
+            13.2,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_cctv2",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            11.8,
+            0,
+            12.6,
+            4.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.4,
+            0,
+            4.2,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            2.8,
+            3.4,
+            8,
+            4.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            2.8,
+            11.8,
+            8,
+            12.6
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        8,
+        18.2,
+        3.4
+      ],
+      "to": [
+        13.2,
+        22.2,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            2.8,
+            0,
+            8,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_cctv",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            11.8,
+            0,
+            12.6,
+            4.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.4,
+            0,
+            4.2,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            8,
+            3.4,
+            13.2,
+            4.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            8,
+            11.8,
+            13.2,
+            12.6
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        4,
+        12.5,
+        8
+      ],
+      "to": [
+        12,
+        12.9,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_keyboard",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        12.5,
+        8
+      ],
+      "to": [
+        15,
+        13.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_appliance"
+        },
+        "south": {
+          "texture": "#pi_appliance"
+        },
+        "east": {
+          "texture": "#pi_appliance"
+        },
+        "west": {
+          "texture": "#pi_appliance"
+        },
+        "up": {
+          "texture": "#pi_appliance"
+        },
+        "down": {
+          "texture": "#pi_appliance"
+        }
+      }
+    }
+  ]
+}

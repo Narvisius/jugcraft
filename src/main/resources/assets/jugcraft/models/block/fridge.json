@@ -1,0 +1,80 @@
+{
+  "textures": {
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_fridge": "jugcraft:block/pi_fridge",
+    "pi_fridge_front": "jugcraft:block/pi_fridge_front",
+    "particle": "jugcraft:block/pi_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        1.5,
+        0,
+        2
+      ],
+      "to": [
+        14.5,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_fridge"
+        },
+        "south": {
+          "texture": "#pi_fridge_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_fridge"
+        },
+        "west": {
+          "texture": "#pi_fridge"
+        },
+        "up": {
+          "texture": "#pi_fridge"
+        },
+        "down": {
+          "texture": "#pi_fridge"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        2,
+        15
+      ],
+      "to": [
+        12.8,
+        14,
+        15.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    }
+  ]
+}

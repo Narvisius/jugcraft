@@ -54,7 +54,7 @@ public final class PlantShowcase {
 			}
 			ServerLevel level = server.overworld();
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "time set 6000");
-			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "gamerule doDaylightCycle false");
+			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "gamerule advance_time false");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "weather clear 1000000");
 			BlockPos ground = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition());
 			// The plant under review: only the medium plant for now (all three with /nuclear showcase plants).
@@ -75,13 +75,22 @@ public final class PlantShowcase {
 	 * the site, y up from the ground, z inland from the shore; then the direction to look, as site x/z, and a name).
 	 */
 	private static final Object[][] MEDIUM_TOUR = {
-			{"Main gate and parking", 150, 1, 196, 0, -1},
-			{"Main control room", 151, 15, 104, 0, -1},
+			{"Main gate and security", 140, 0, 175, 0, -1},
+			{"Security: visitors' hall", 144, 0, 166, -1, 0},
+			{"Main control room", 151, 15, 103, 0, -1},
+			{"Plant computer room", 151, 8, 108, 1, 0},
 			{"Containment: operating floor", 84, 17, 51, 0, 1},
 			{"Containment: steam generator level", 83, 9, 48, 0, 1},
 			{"Turbine hall: operating floor", 140, 13, 50, 1, 0},
+			{"Turbine hall: ground floor", 150, 1, 70, 1, 0},
 			{"Spent fuel pool", 115, 13, 122, 0, -1},
 			{"Intake pump house", 170, 1, 12, 0, -1},
+			{"Warehouse", 280, 1, 117, 1, 0},
+			{"Administration: front lobby", 70, 0, 158, 0, 1},
+			{"Administration: locker room", 52, 0, 167, 1, 0},
+			{"Administration: board room", 80, 5, 167, 1, 0},
+			{"Administration: chemistry lab", 52, 5, 167, 1, 0},
+			{"Administration: manager's office", 80, 10, 167, 1, 0},
 			{"Cooling towers", 185, 30, 160, 0, 1},
 	};
 

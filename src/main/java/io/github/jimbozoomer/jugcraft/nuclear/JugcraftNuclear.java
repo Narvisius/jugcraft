@@ -166,6 +166,7 @@ public final class JugcraftNuclear {
 				new Item.Properties().setId(concreteItem).useBlockDescriptionPrefix()));
 
 		ServerTickEvents.END_SERVER_TICK.register(Radiation::tick);
+		PlantInterior.register();
 		PlantBuilder.register();
 		PlantShowcase.register();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(

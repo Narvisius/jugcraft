@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PCP",
+    "PXP",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "X": "jugcraft:processor"
+  },
+  "result": {
+    "id": "jugcraft:server_rack",
+    "count": 2
+  }
+}

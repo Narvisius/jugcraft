@@ -217,12 +217,18 @@ def cooling_tower(key, name, base_r, height, throat_r, throat_y, kind, inlet=10,
     n = int(2 * math.pi * base_r / 5)
     for i in range(n):
         for side in (-1, 1):
+            prev = None
             for y in range(g + 1, g + inlet + 1):
                 t = (y - g) / inlet
                 a = 2 * math.pi * i / n + side * t * (math.pi / n)
                 rr = radius(inlet) + (base_r - radius(inlet)) * (1 - t)
-                p.box(int(c + math.cos(a) * rr), y, int(c + math.sin(a) * rr),
-                      int(c + math.cos(a) * rr), y, int(c + math.sin(a) * rr), CONC)
+                x1, z1 = int(c + math.cos(a) * rr), int(c + math.sin(a) * rr)
+                p.box(x1, y, z1, x1, y, z1, CONC)
+                # Each step of the leaning column overlaps the one below, so the column is one piece.
+                if y > g + 1:
+                    p.box(x1, y, prev[1], x1, y, prev[1], CONC)
+                    p.box(prev[0], y, prev[1], prev[0], y, prev[1], CONC)
+                prev = (x1, z1)
     for y in range(g + inlet, height + 1):
         rr = radius(y - g)
         m = WHITE
@@ -250,6 +256,10 @@ def cooling_tower(key, name, base_r, height, throat_r, throat_y, kind, inlet=10,
             p.box(int(c + math.cos(a) * r), hy, int(c + math.sin(a) * r), int(c + math.cos(a) * r), hy, int(c + math.sin(a) * r), DIST)
     for rr in (fill_r * 0.45, fill_r * 0.8):
         p.ring(c, c, rr + 0.5, hy, 1.0, DIST)
+    # The headers rest on the fill's support beams.
+    under = p.g[:, hy, :] == DIST
+    layer = p.g[:, hy - 1, :]
+    layer[under & (layer == 0)] = CONC
     # The controller, under the basin floor in the middle, where the cold water leaves for the plant.
     m = size // 2
     p.controller = (m, 0, m)
@@ -651,7 +661,7 @@ def assemble(site, render=True):
     top = max(p.size[1] for p, *_ in site.parts) + 2
     g = np.zeros((site.w, top + BELOW, site.d + OVER), np.uint16)
     for x0, z0, x1, z1 in site.roads:
-        g[max(0, x0):min(site.w, x1), BELOW, max(0, z0) + OVER:min(site.d, z1) + OVER] = ROAD
+        g[max(0, x0):min(site.w, x1), BELOW - 1, max(0, z0) + OVER:min(site.d, z1) + OVER] = ROAD
     for part, x, z, rot in site.parts:
         pg = rotate(part.g, rot)
         w, h, d = pg.shape
@@ -796,7 +806,8 @@ def verify(site):
 # Blueprints (format 2: run-length rows; a plant lists its parts and adds its own blocks on top)
 
 BLUEPRINT_OUT = Path(__file__).resolve().parents[1] / "src" / "main" / "resources" / "data" / "jugcraft" / "blueprint"
-KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&*+-/:;<=>?@^_|~"
+KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&*+-/:;<=>?@^_|~" + "".join(chr(c) for c in range(0x100, 0x180))
+# (More block kinds than ASCII keys: Latin Extended-A letters, which are never digits.)
 TURN180 = {"north": "south", "south": "north", "east": "west", "west": "east"}
 
 
@@ -860,13 +871,15 @@ def plant_blueprint(site, name):
         return W - 1 - x, y + BELOW, D - 1 - z
 
     extra = {}
+    import re
     for (x, y, z), m in site.decor.items():
-        extra[to_file(x, y, z)] = MATERIALS[m][0]
+        # The file is the site turned round, so facings turn too.
+        extra[to_file(x, y, z)] = re.sub(r"facing=(north|south|east|west)", lambda f: "facing=" + TURN180[f.group(1)], MATERIALS[m][0])
     for x0, z0, x1, z1 in site.roads:
         for x in range(max(0, x0), min(W, x1)):
             for z in range(max(0, z0), min(D, z1)):
-                if built[x, BELOW, z + OVER] == ROAD:
-                    extra[to_file(x, 0, z)] = MATERIALS[ROAD][0]
+                if built[x, BELOW - 1, z + OVER] == ROAD:
+                    extra[to_file(x, -1, z)] = MATERIALS[ROAD][0]
     for kind, ax, ay, az, facing in site.equipment:
         for (x, y, z) in equipment_cells(kind, ax, ay, az, facing):
             if built[x, y + BELOW, z + OVER]:

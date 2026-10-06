@@ -1,0 +1,207 @@
+{
+  "textures": {
+    "pi_locker_door": "jugcraft:block/pi_locker_door",
+    "pi_locker_door_in": "jugcraft:block/pi_locker_door_in",
+    "pi_locker_inside": "jugcraft:block/pi_locker_inside",
+    "pi_locker_side": "jugcraft:block/pi_locker_side",
+    "particle": "jugcraft:block/pi_locker_door"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        2
+      ],
+      "to": [
+        15,
+        16,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_side"
+        },
+        "south": {
+          "texture": "#pi_locker_side"
+        },
+        "east": {
+          "texture": "#pi_locker_side"
+        },
+        "west": {
+          "texture": "#pi_locker_side"
+        },
+        "up": {
+          "texture": "#pi_locker_side"
+        },
+        "down": {
+          "texture": "#pi_locker_side"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        0,
+        3
+      ],
+      "to": [
+        2,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_side"
+        },
+        "south": {
+          "texture": "#pi_locker_side"
+        },
+        "east": {
+          "texture": "#pi_locker_side"
+        },
+        "west": {
+          "texture": "#pi_locker_side"
+        },
+        "up": {
+          "texture": "#pi_locker_side"
+        },
+        "down": {
+          "texture": "#pi_locker_side"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        0,
+        3
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_side"
+        },
+        "south": {
+          "texture": "#pi_locker_side"
+        },
+        "east": {
+          "texture": "#pi_locker_side"
+        },
+        "west": {
+          "texture": "#pi_locker_side"
+        },
+        "up": {
+          "texture": "#pi_locker_side"
+        },
+        "down": {
+          "texture": "#pi_locker_side"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        14,
+        16,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_inside"
+        },
+        "south": {
+          "texture": "#pi_locker_inside"
+        },
+        "east": {
+          "texture": "#pi_locker_inside"
+        },
+        "west": {
+          "texture": "#pi_locker_inside"
+        },
+        "up": {
+          "texture": "#pi_locker_inside"
+        },
+        "down": {
+          "texture": "#pi_locker_inside"
+        }
+      }
+    },
+    {
+      "from": [
+        0.4,
+        0.4,
+        15
+      ],
+      "to": [
+        1.2,
+        15.6,
+        21.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_side",
+          "uv": [
+            14.8,
+            0.4,
+            15.6,
+            15.6
+          ]
+        },
+        "south": {
+          "texture": "#pi_locker_side",
+          "uv": [
+            0.4,
+            0.4,
+            1.2,
+            15.6
+          ]
+        },
+        "east": {
+          "texture": "#pi_locker_door_in",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#pi_locker_door",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#pi_locker_side",
+          "uv": [
+            0.4,
+            9.5,
+            1.2,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_locker_side",
+          "uv": [
+            0.4,
+            0,
+            1.2,
+            6.5
+          ]
+        }
+      }
+    }
+  ]
+}

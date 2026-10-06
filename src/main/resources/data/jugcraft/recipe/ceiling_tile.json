@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WWW",
+    "WNW",
+    "WWW"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:ceiling_tile",
+    "count": 8
+  }
+}

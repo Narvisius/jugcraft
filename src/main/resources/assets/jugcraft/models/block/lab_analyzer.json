@@ -1,0 +1,223 @@
+{
+  "textures": {
+    "pi_analyzer": "jugcraft:block/pi_analyzer",
+    "pi_appliance": "jugcraft:block/pi_appliance",
+    "pi_epoxy_black": "jugcraft:block/pi_epoxy_black",
+    "pi_glassware": "jugcraft:block/pi_glassware",
+    "pi_lab_cabinet": "jugcraft:block/pi_lab_cabinet",
+    "pi_lab_front": "jugcraft:block/pi_lab_front",
+    "pi_toe_kick": "jugcraft:block/pi_toe_kick",
+    "particle": "jugcraft:block/pi_analyzer"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        2
+      ],
+      "to": [
+        16,
+        1,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_toe_kick"
+        },
+        "south": {
+          "texture": "#pi_toe_kick"
+        },
+        "east": {
+          "texture": "#pi_toe_kick"
+        },
+        "west": {
+          "texture": "#pi_toe_kick"
+        },
+        "up": {
+          "texture": "#pi_toe_kick"
+        },
+        "down": {
+          "texture": "#pi_toe_kick"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1,
+        1.5
+      ],
+      "to": [
+        16,
+        13,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_lab_cabinet"
+        },
+        "south": {
+          "texture": "#pi_lab_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_lab_cabinet"
+        },
+        "west": {
+          "texture": "#pi_lab_cabinet"
+        },
+        "up": {
+          "texture": "#pi_lab_cabinet"
+        },
+        "down": {
+          "texture": "#pi_lab_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        13,
+        0.5
+      ],
+      "to": [
+        16,
+        14.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_epoxy_black"
+        },
+        "south": {
+          "texture": "#pi_epoxy_black"
+        },
+        "east": {
+          "texture": "#pi_epoxy_black"
+        },
+        "west": {
+          "texture": "#pi_epoxy_black"
+        },
+        "up": {
+          "texture": "#pi_epoxy_black",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_epoxy_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        14.5,
+        2
+      ],
+      "to": [
+        14.5,
+        22,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            0,
+            14.5,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#pi_analyzer",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_appliance",
+          "uv": [
+            5,
+            0,
+            14,
+            7.5
+          ]
+        },
+        "west": {
+          "texture": "#pi_appliance",
+          "uv": [
+            2,
+            0,
+            11,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            2,
+            14.5,
+            11
+          ]
+        },
+        "down": {
+          "texture": "#pi_appliance",
+          "uv": [
+            1.5,
+            5,
+            14.5,
+            14
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        2,
+        14.5,
+        11.5
+      ],
+      "to": [
+        6,
+        15,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_glassware"
+        },
+        "south": {
+          "texture": "#pi_glassware"
+        },
+        "east": {
+          "texture": "#pi_glassware"
+        },
+        "west": {
+          "texture": "#pi_glassware"
+        },
+        "up": {
+          "texture": "#pi_glassware"
+        },
+        "down": {
+          "texture": "#pi_glassware"
+        }
+      }
+    }
+  ]
+}

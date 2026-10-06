@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "CCC",
+    "CWC",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:smooth_stone",
+    "W": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "jugcraft:tank_plate",
+    "count": 8
+  }
+}

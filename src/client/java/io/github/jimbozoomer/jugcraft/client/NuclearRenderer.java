@@ -75,6 +75,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] LOUVRE = region(5, 4);
 	static final float[] SWITCHGEAR = region(6, 4);
 	static final float[] FILTER_BANK = region(7, 4);
+	static final float[] SIGN_PANEL = region(0, 5);
+	static final float[] SIGN_EDGE = region(1, 5);
 
 	private static float[] region(int col, int row) {
 		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX};
@@ -326,6 +328,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			mesh.vertex((float) bl.x * ax, (float) bl.y * ay, (float) bl.z * az, u0, v1, nx, ny, nz);
 			mesh.vertex((float) br.x * ax, (float) br.y * ay, (float) br.z * az, u1, v1, nx, ny, nz);
 			mesh.vertex((float) tr.x * ax, (float) tr.y * ay, (float) tr.z * az, u1, v0, nx, ny, nz);
+		}
+
+		/** A triangle (a quad with its last corner repeated), for the sides under sloped desk tops. */
+		void tri(Vec3 a, Vec3 b, Vec3 c, Vec3 n, float[] uv) {
+			quad(a, b, c, c, n, uv[0], uv[1], uv[2], uv[3]);
 		}
 
 		/** A quad tiled about every {@code tile} blocks across and down, so its texture keeps its size. */
@@ -599,7 +606,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	 * generator and exciter behind it, and the insulated steam inlet on top.
 	 */
 	static void smallTurbine(Frame f) {
-		f.box(0, 0, 0, 3, 0.6, 5, CARBON_STEEL, GRATING, CARBON_STEEL);
+		f.box(0, 0, 0, 3, 0.58, 5, CARBON_STEEL);
+		f.box(0.02, 0.58, 0.02, 2.98, 0.6, 4.98, GRATING);
 		// Condenser shell under the turbine.
 		f.box(0.35, 0.6, 0.3, 2.65, 1.1, 2.7, PAINT_GREY);
 		// Turbine casing with its split flange, along the shaft.
@@ -630,7 +638,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	 */
 	static void circulatingWaterPump(Frame f) {
 		double c = 1.5;
-		f.box(0.05, 0, 0.05, 2.95, 0.3, 2.95, CARBON_STEEL, GRATING, CARBON_STEEL);
+		f.box(0.05, 0, 0.05, 2.95, 0.28, 2.95, CARBON_STEEL);
+		f.box(0.07, 0.28, 0.07, 2.93, 0.3, 2.93, GRATING);
 		f.revolve(v(c, 0.3, c), v(c, 1.3, c), new double[][] {{0, 1.0}, {1.2, 1.0}, {1.5, 1.25}, {1.7, 1.25}}, f.sides(20), PAINT_BLUE, false, true);
 		// The discharge elbow toward the front.
 		f.cylinder(v(c, 1.0, c - 0.6), v(c, 1.0, c - 1.55), 0.55, f.sides(16), PAINT_BLUE, false);
@@ -802,8 +811,10 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		for (double z : new double[] {1.5, 9.5, 18.5, 27.5, 36.5, 46.5}) {
 			f.box(c - 0.9, 3.05, z - 0.4, c + 0.9, axisY - 0.2, z + 0.4, CARBON_STEEL);
 		}
-		// High-pressure turbine.
+		// High-pressure turbine, with the main steam inlet (stop and control valve chest) on top of it.
 		halfCasing(f, c, axisY, 2.5, 9.0, 1.9, TURBINE_BLUE);
+		f.box(c - 0.9, axisY + 1.7, 4.6, c + 0.9, axisY + 2.6, 6.4, CARBON_STEEL);
+		f.pipe(0.55, INSULATION, v(c, axisY + 2.6, 5.5), v(c, 10.0, 5.5));
 		// Moisture separator reheaters either side, on saddles.
 		for (double x : new double[] {1.45, 9.55}) {
 			f.revolve(v(x, axisY, 3.0), v(x, axisY, 4.0), new double[][] {{0, 0.3}, {0.5, 0.95}, {26.5, 0.95}, {27, 0.3}}, f.sides(16), PAINT_GREY, true, true);
@@ -907,8 +918,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		f.box(1.35, 0.7, 0.75, 1.75, 1.2, 1.25, HAZARD);
 		f.cylinder(v(1.75, 0.95, 1.0), v(2.8, 0.95, 1.0), 0.55, f.sides(16), STAINLESS_DARK, true);
 		f.box(1.9, 0.3, 0.6, 2.7, 0.45, 1.4, CARBON_STEEL);
-		f.pipe(0.22, STAINLESS, v(2.1, 1.45, 1.0), v(2.1, 2.95, 1.0));
-		f.pipe(0.18, STAINLESS, v(2.6, 1.45, 1.0), v(2.6, 2.6, 1.0), v(2.6, 2.6, 1.8));
+		// Discharge straight up out of the top of the casing's cell (to the feedwater line above), suction in from the end.
+		f.pipe(0.24, STAINLESS, v(2.3, 1.45, 1.0), v(2.3, 2.2, 1.0), v(2.5, 2.4, 0.5), v(2.5, 3.0, 0.5));
+		f.pipe(0.2, STAINLESS, v(2.8, 0.95, 1.5), v(3.0, 0.95, 1.5));
 	}
 
 	static void transformer(Frame f) {
@@ -966,7 +978,10 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		f.box(0.05, 0, 0.15, 2.95, 0.72, 1.35, PAINT_GREY, DESK, PAINT_GREY);
 		Vec3 tl = v(0.05, 0.98, 1.3), bl = v(0.05, 0.72, 0.15), br = v(2.95, 0.72, 0.15), tr = v(2.95, 0.98, 1.3);
 		f.tiled(tl, bl, br, tr, v(0, 0.98, -0.2).normalize(), DESK, 1.5);
-		f.box(0.05, 0, 1.35, 2.95, 1.95, 1.95, PAINT_GREY);
+		// Close the sides under the sloped top.
+		f.tri(v(0.05, 0.98, 1.3), v(0.05, 0.72, 0.15), v(0.05, 0.72, 1.3), v(-1, 0, 0), PAINT_GREY);
+		f.tri(v(2.95, 0.98, 1.3), v(2.95, 0.72, 1.3), v(2.95, 0.72, 0.15), v(1, 0, 0), PAINT_GREY);
+		f.box(0.05, 0, 1.3, 2.95, 1.95, 1.95, PAINT_GREY);
 		f.cylinder(v(2.55, 0.86, 0.6), v(2.55, 0.98, 0.6), 0.14, f.sides(12), LAMP_RED, true);
 		f.box(2.35, 0.8, 0.4, 2.75, 0.84, 0.8, HAZARD);
 	}

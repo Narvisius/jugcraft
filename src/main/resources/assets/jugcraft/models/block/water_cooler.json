@@ -1,0 +1,113 @@
+{
+  "textures": {
+    "pi_bottle": "jugcraft:block/pi_bottle",
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_cooler": "jugcraft:block/pi_cooler",
+    "pi_cooler_front": "jugcraft:block/pi_cooler_front",
+    "particle": "jugcraft:block/pi_bottle"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cooler"
+        },
+        "south": {
+          "texture": "#pi_cooler_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cooler"
+        },
+        "west": {
+          "texture": "#pi_cooler"
+        },
+        "up": {
+          "texture": "#pi_cooler"
+        },
+        "down": {
+          "texture": "#pi_cooler"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        10,
+        4.5
+      ],
+      "to": [
+        11.5,
+        10.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10.5,
+        5
+      ],
+      "to": [
+        11,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_bottle"
+        },
+        "south": {
+          "texture": "#pi_bottle"
+        },
+        "east": {
+          "texture": "#pi_bottle"
+        },
+        "west": {
+          "texture": "#pi_bottle"
+        },
+        "up": {
+          "texture": "#pi_bottle"
+        },
+        "down": {
+          "texture": "#pi_bottle"
+        }
+      }
+    }
+  ]
+}

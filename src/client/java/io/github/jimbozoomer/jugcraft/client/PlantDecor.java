@@ -303,10 +303,11 @@ final class PlantDecor {
 	 * exhaust manifolds, the flywheel housing, the generator with its end bell and terminal box, and the local panel.
 	 */
 	static void dieselGenerator(Frame f) {
-		f.box(0.1, 0, 0.2, 4.9, 0.45, 13.8, CARBON_STEEL, GRATING, CARBON_STEEL);
+		f.box(0.1, 0, 0.2, 4.9, 0.43, 13.8, CARBON_STEEL);
+		f.box(0.12, 0.43, 0.22, 4.88, 0.45, 13.78, GRATING);
 		// Engine block and the two banks of cylinder heads.
-		f.box(0.9, 0.45, 1.2, 4.1, 2.6, 8.8, PAINT_GREEN);
-		f.box(1.2, 0.45, 1.0, 3.8, 1.2, 9.0, STAINLESS_DARK);
+		f.box(0.9, 0.46, 1.2, 4.1, 2.6, 8.8, PAINT_GREEN);
+		f.box(1.2, 0.46, 1.0, 3.8, 1.2, 9.0, STAINLESS_DARK);
 		for (int i = 0; i < 8; i++) {
 			double z = 1.4 + i * 0.92;
 			f.box(0.95, 2.6, z, 2.15, 3.15, z + 0.8, PAINT_GREEN);
@@ -327,9 +328,9 @@ final class PlantDecor {
 		f.cylinder(v(2.5, 2.2, 9.6), v(2.5, 2.2, 13.2), 1.85, f.sides(24), GENERATOR, true);
 		f.revolve(v(2.5, 2.2, 13.2), v(2.5, 2.2, 13.8), new double[][] {{0, 1.6}, {0.5, 1.2}, {0.6, 0}}, f.sides(20), GENERATOR, false, false);
 		f.box(0.35, 4.0, 10.3, 2.0, 4.9, 11.8, PAINT_GREY);
-		f.box(2.0, 0.45, 9.8, 3.0, 0.9, 13.0, CARBON_STEEL);
+		f.box(2.0, 0.46, 9.8, 3.0, 0.9, 13.0, CARBON_STEEL);
 		// The local control panel at the front left.
-		f.box(0.3, 0.45, 0.1, 2.2, 2.4, 0.9, PAINT_GREY);
+		f.box(0.3, 0.46, 0.1, 2.2, 2.4, 0.9, PAINT_GREY);
 		f.plate(1.7, 1.5, 0.08, 2.1, 1.9, 0.1, 0, NAMEPLATE, PAINT_GREY);
 		f.plate(3.0, 0.6, 0.15, 4.4, 1.6, 0.2, 0, HAZARD, CARBON_STEEL);
 	}
@@ -480,6 +481,8 @@ final class PlantDecor {
 		f.box(0.05, 0, 0.05, 5.95, 0.12, 0.1, RUBBER);
 		Vec3 tl = v(0.05, 1.15, 1.2), bl = v(0.05, 0.85, 0.1), br = v(5.95, 0.85, 0.1), tr = v(5.95, 1.15, 1.2);
 		f.tiled(tl, bl, br, tr, v(0, 1.1, -0.3).normalize(), DESK, 1.5);
+		f.tri(v(0.05, 1.15, 1.2), v(0.05, 0.85, 0.1), v(0.05, 0.85, 1.2), v(-1, 0, 0), PAINT_GREY);
+		f.tri(v(5.95, 1.15, 1.2), v(5.95, 0.85, 1.2), v(5.95, 0.85, 0.1), v(1, 0, 0), PAINT_GREY);
 		f.box(0.05, 0.85, 0.08, 5.95, 0.9, 0.12, PAINT_GREY);
 		// The vertical board, its mimic face toward the operators, a hood over the annunciators.
 		f.box(0.05, 0, 1.2, 5.95, 3.0, 1.95, PAINT_GREY);
@@ -522,9 +525,10 @@ final class PlantDecor {
 		f.plate(0.18, 0.4, 0.8, 0.2, 2.45, 3.8, 2, FILTER_BANK, PAINT_WHITE);
 		f.plate(0.18, 0.4, 4.2, 0.2, 2.45, 7.2, 2, FILTER_BANK, PAINT_WHITE);
 		// The supply duct up from the fan section, the motor's box, coil piping.
-		f.box(1.0, 2.6, 5.6, 3.0, 3.0, 7.6, STAINLESS_DARK);
+		f.box(1.0, 2.6, 6.0, 3.0, 3.0, 8.0, STAINLESS_DARK);
+		f.box(0.9, 2.6, 5.9, 3.1, 2.7, 8.1, CARBON_STEEL);
 		f.box(0.8, 2.6, 2.0, 1.4, 2.95, 2.6, PAINT_GREY);
-		f.pipe(0.1, PIPE_RED, v(3.85, 1.2, 3.95), v(4.0, 1.2, 3.95), v(4.0, 3.0, 3.95));
-		f.pipe(0.1, PAINT_BLUE, v(3.85, 0.8, 4.05), v(3.95, 0.8, 4.05), v(3.95, 3.0, 4.05));
+		f.pipe(0.12, PIPE_RED, v(3.8, 1.6, 3.6), v(3.95, 1.6, 3.6), v(3.95, -0.05, 3.6));
+		f.pipe(0.12, PAINT_BLUE, v(3.8, 1.0, 4.4), v(3.95, 1.0, 4.4), v(3.95, -0.05, 4.4));
 	}
 }

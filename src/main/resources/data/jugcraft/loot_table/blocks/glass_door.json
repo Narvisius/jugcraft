@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:glass_door",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:glass_door",
+            "state": {
+              "half": "lower"
+            }
+          }
+        }
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/glass_door"
+}
