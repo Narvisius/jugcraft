@@ -30,16 +30,31 @@ MATERIALS = {
     9: ("minecraft:gravel", (132, 126, 120)),
     10: ("minecraft:iron_bars", (92, 94, 98)),
     11: ("minecraft:water", (52, 92, 158)),
-    12: ("minecraft:black_concrete", (62, 64, 68)),
+    12: ("jugcraft:asphalt", (56, 58, 60)),
     13: ("minecraft:polished_andesite", (132, 135, 132)),
     14: ("jugcraft:shielding_concrete", (186, 182, 172)),
     15: ("minecraft:yellow_concrete", (226, 178, 36)),
     16: ("minecraft:blue_concrete", (48, 64, 140)),
     17: ("minecraft:stone_bricks", (122, 122, 120)),
     18: ("minecraft:light_blue_terracotta", (116, 136, 150)),
+    19: ("jugcraft:cooling_tower_fill", (206, 212, 214)),
+    20: ("jugcraft:conduit_trench", (150, 150, 146)),
+    21: ("jugcraft:steel_fluid_pipe", (120, 128, 136)),
 }
 NAMES = {k: v[0] for k, v in MATERIALS.items()}
-CONC, WHITE, GREY, SLAB, STEEL, SIDING, GLASS, RED, GRAVEL, BARS, WATER, ROAD, TRIM, SHIELD, YELLOW, BLUE, BRICK, PANEL = range(1, 19)
+_BY_STATE = {v[0]: k for k, v in MATERIALS.items() if v[0]}
+
+
+def M(state, rgb=(150, 150, 150)):
+    """The material id of a block state (any block, with its properties), added to the table the first time."""
+    if state in _BY_STATE:
+        return _BY_STATE[state]
+    k = max(MATERIALS) + 1
+    assert k < 65000
+    MATERIALS[k] = (state, rgb)
+    _BY_STATE[state] = k
+    return k
+CONC, WHITE, GREY, SLAB, STEEL, SIDING, GLASS, RED, GRAVEL, BARS, WATER, ROAD, TRIM, SHIELD, YELLOW, BLUE, BRICK, PANEL, FILL, TRENCH, DIST = range(1, 22)
 
 
 class Part:
@@ -47,9 +62,11 @@ class Part:
 
     def __init__(self, key, name, w, h, d, kind="building"):
         self.key, self.name, self.kind = key, name, kind
-        self.g = np.zeros((w, h, d), np.uint8)
+        self.g = np.zeros((w, h, d), np.uint16)
+        self.props = []  # (kind, ax, ay, az, facing): decor equipment standing in the part (placed whole)
         self.extras = {}  # (x, y, z) -> block state text, for blocks with properties (the tower controller)
         self.controller = None
+        self.sink = 0  # layers below the ground (a tower's controller sits under its basin floor)
 
     @property
     def size(self):
@@ -86,6 +103,30 @@ class Part:
 
     def blocks(self):
         return int(np.count_nonzero(self.g))
+
+    def put(self, x, y, z, m):
+        w, h, d = self.g.shape
+        if 0 <= x < w and 0 <= y < h and 0 <= z < d:
+            self.g[x, y, z] = m
+
+    def prop(self, kind, x0, y, z0, facing="north"):
+        """Decor equipment (drawn by the client, placed whole) with its footprint's corner nearest the origin at
+        (x0, z0): its body is emptied and its anchor written. Props go in last."""
+        _, w, d, _ = EQUIPMENT_SIZES[kind]
+        if facing == "north":
+            anchor = (x0, y, z0 + d - 1)
+        elif facing == "east":
+            anchor = (x0, y, z0)
+        elif facing == "south":
+            anchor = (x0 + w - 1, y, z0)
+        else:
+            anchor = (x0 + d - 1, y, z0 + w - 1)
+        for c in equipment_cells(kind, *anchor, facing):
+            assert 0 <= c[0] < self.size[0] and 0 <= c[1] < self.size[1] and 0 <= c[2] < self.size[2], (self.key, kind, c)
+            self.g[c] = 0
+            self.extras.pop(c, None)
+        self.extras[anchor] = f"jugcraft:{kind}[facing={facing}]"
+        self.props.append((kind, *anchor, facing))
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -154,7 +195,12 @@ def containment(key, name, r, wall_h, dome_h, double=False):
 
 
 def cooling_tower(key, name, base_r, height, throat_r, throat_y, kind, inlet=10, band=True):
-    """A natural-draft hyperbolic cooling tower: a thin shell on raker columns over a water basin."""
+    """A natural-draft hyperbolic cooling tower, working inside like a real one.
+
+    Warm water comes up the riser in the middle, spreads through the distribution headers and sprays down over the
+    fill (packs of corrugated sheets on concrete columns), where the air drawn in through the inlet between the raker
+    columns cools it; it rains into the basin and goes back to the plant. The basin's water is in the blueprint but not
+    built by drones: it fills itself when the tower is finished. The controller is under the basin floor."""
     b = throat_y / math.sqrt((base_r / throat_r) ** 2 - 1)
 
     def radius(y):
@@ -162,54 +208,83 @@ def cooling_tower(key, name, base_r, height, throat_r, throat_y, kind, inlet=10,
 
     size = int(math.ceil(base_r * 2)) + 6
     c = size / 2
-    p = Part(key, name, size, height + 1, size, kind="tower")
-    p.disc(c, c, base_r + 2.5, 0, 0, CONC)
-    p.disc(c, c, base_r + 2.5, 1, 1, CONC, inner=base_r + 1)
-    # Raker columns: crossing pairs every 9 degrees under the shell.
+    p = Part(key, name, size, height + 2, size, kind="tower")
+    g = 1  # the basin floor (layer 0 is below it: the controller and the water riser's foot)
+    p.disc(c, c, base_r + 2.5, g, g, CONC)
+    p.disc(c, c, base_r + 2.5, g + 1, g + 2, CONC, inner=base_r + 0.5)
+    p.disc(c, c, base_r + 0.5, g + 1, g + 1, WATER)
+    # Raker columns: crossing pairs under the shell, standing in the basin rim.
     n = int(2 * math.pi * base_r / 5)
     for i in range(n):
         for side in (-1, 1):
-            for y in range(1, inlet + 1):
-                a = 2 * math.pi * i / n + side * (y / inlet) * (math.pi / n)
-                rr = radius(inlet) + (base_r - radius(inlet)) * (1 - y / inlet)
+            for y in range(g + 1, g + inlet + 1):
+                t = (y - g) / inlet
+                a = 2 * math.pi * i / n + side * t * (math.pi / n)
+                rr = radius(inlet) + (base_r - radius(inlet)) * (1 - t)
                 p.box(int(c + math.cos(a) * rr), y, int(c + math.sin(a) * rr),
                       int(c + math.cos(a) * rr), y, int(c + math.sin(a) * rr), CONC)
-    for y in range(inlet, height + 1):
-        rr = radius(y)
+    for y in range(g + inlet, height + 1):
+        rr = radius(y - g)
         m = WHITE
         if band and height - 14 <= y <= height - 9:
             m = RED
         p.ring(c, c, rr + 0.5, y, 1.4, m)
-    p.ring(c, c, radius(inlet) + 0.8, inlet, 2.2, CONC)
-    p.ring(c, c, radius(height) + 0.9, height, 1.8, GREY)
-    # The controller in the middle of the basin floor (the circulating water risers come up there).
+    p.ring(c, c, radius(inlet) + 0.8, g + inlet, 2.2, CONC)
+    p.ring(c, c, radius(height - g) + 0.9, height, 1.8, GREY)
+    # The fill: two layers of packs just above the air inlet, on a grid of columns standing in the basin.
+    fy = g + inlet + 1
+    fill_r = radius(inlet + 1) - 1.5
+    for x in range(size):
+        for z in range(size):
+            dx, dz = x + 0.5 - c, z + 0.5 - c
+            if dx * dx + dz * dz < (fill_r - 1) ** 2 and x % 6 == 0 and z % 6 == 0:
+                p.box(x, g + 1, z, x, fy - 1, z, CONC)
+    p.disc(c, c, fill_r, fy, fy + 1, FILL, inner=3.5)
+    # The hot water riser up the middle, and the distribution headers over the fill: eight spokes and two rings.
+    p.disc(c, c, 3.5, g + 1, fy + 3, CONC)
+    hy = fy + 3
+    for k in range(8):
+        a = k * math.pi / 4
+        for r10 in range(35, int(fill_r * 10) - 10, 5):
+            r = r10 / 10
+            p.box(int(c + math.cos(a) * r), hy, int(c + math.sin(a) * r), int(c + math.cos(a) * r), hy, int(c + math.sin(a) * r), DIST)
+    for rr in (fill_r * 0.45, fill_r * 0.8):
+        p.ring(c, c, rr + 0.5, hy, 1.0, DIST)
+    # The controller, under the basin floor in the middle, where the cold water leaves for the plant.
     m = size // 2
-    p.g[m, 1, m] = 0
-    p.controller = (m, 1, m)
+    p.controller = (m, 0, m)
     p.extras[p.controller] = f"jugcraft:cooling_tower_controller[facing=south,tower={kind}]"
+    p.sink = 1
     return p
 
 
 def mech_tower_bank(key, name, cells, kind="mechanical", cell=16, h=14):
-    """A row of mechanical-draft cooling cells: louvred concrete boxes with fan stacks."""
+    """A row of mechanical-draft cooling cells. In each: air comes in through louvres on both long sides, the water
+    sprays from a header over two layers of fill and rains into the cell's basin; the fan on top (in its stack) pulls
+    the air up through it. The basins fill themselves when the bank is finished; the controller is under the floor."""
     w, d = cells * cell, cell + 4
-    p = Part(key, name, w, h + 8, d, kind="tower")
-    p.box(0, 0, 0, w - 1, 0, d - 1, CONC)
-    p.box(0, 1, 0, w - 1, 2, d - 1, CONC)
+    p = Part(key, name, w, h + 9, d, kind="tower")
+    g = 1
+    p.box(0, g, 0, w - 1, g + 2, d - 1, CONC)
     for i in range(cells):
         x0 = i * cell
-        p.shell(x0, 2, 2, x0 + cell - 1, h, d - 3, CONC)
-        for y in range(3, 9):
+        p.shell(x0, g + 2, 2, x0 + cell - 1, g + h - 1, d - 3, CONC)
+        # Louvres both sides, the basin water, the fill and the header.
+        for y in range(g + 4, g + 9):
             if y % 2:
                 p.box(x0 + 1, y, 2, x0 + cell - 2, y, 2, BARS)
                 p.box(x0 + 1, y, d - 3, x0 + cell - 2, y, d - 3, BARS)
-        p.box(x0, h, 2, x0 + cell - 1, h, d - 3, GREY)
+        p.box(x0 + 1, g + 3, 3, x0 + cell - 2, g + 3, d - 4, WATER)
+        p.box(x0 + 1, g + 9, 3, x0 + cell - 2, g + 10, d - 4, FILL)
+        for z in range(4, d - 4, 3):
+            p.box(x0 + 2, g + 12, z, x0 + cell - 3, g + 12, z, DIST)
+        p.box(x0, g + h - 1, 2, x0 + cell - 1, g + h - 1, d - 3, GREY)
         cx, cz = x0 + cell / 2, d / 2
-        p.disc(cx, cz, cell / 2 - 1.5, h + 1, h + 7, SIDING, inner=cell / 2 - 2.6)
-        p.clear(int(cx) - 1, h, int(cz) - 1, int(cx), h, int(cz))
-    p.controller = (w // 2, 1, d // 2)
-    p.g[p.controller] = 0
+        p.disc(cx, cz, cell / 2 - 1.5, g + h, g + h + 6, SIDING, inner=cell / 2 - 2.6)
+        p.disc(cx, cz, cell / 2 - 2.6, g + h - 1, g + h - 1, 0)
+    p.controller = (w // 2, 0, d // 2)
     p.extras[p.controller] = f"jugcraft:cooling_tower_controller[facing=south,tower={kind}]"
+    p.sink = 1
     return p
 
 
@@ -274,6 +349,7 @@ class Site:
         self.equipment = []  # (kind, ax, ay, az, facing): the anchor (front left bottom corner) and the way it faces
         self.lines = {}  # (x, y, z) -> pipe id
         self.towers = []  # (x, y, z, tower kind) controllers
+        self.decor = {}  # (x, y, z) -> material: what the plant adds besides parts (pipe galleries)
 
     def add(self, part, x, z, rot=0):
         self.parts.append((part, x, z, rot))
@@ -302,29 +378,54 @@ class Site:
                     self.lines[(x, y, z)] = kind
 
     def conduit(self, *points):
-        """Circulating water conduit at ground level through points (x, z), and the plan's blue lines."""
+        """Circulating water conduit buried just under the ground (y -1) through points (x, z): flush concrete trench
+        covers across open ground, hidden under roads and floors. Stops short of tower controllers (it reaches them)."""
+        stop = {(x, y, z) for x, y, z, _ in self.towers}
         for (x0, z0), (x1, z1) in zip(points, points[1:]):
-            self.line(CONDUIT, (x0, 0, z0), (x1, 0, z1))
+            self.line(TRENCH_KIND, (x0, -1, z0), (x1, -1, z1))
             self.pipes.append((min(x0, x1), min(z0, z1), max(x0, x1) + 1, max(z0, z1) + 1))
+        for c in stop:
+            self.lines.pop(c, None)
+
+    def riser(self, x, z):
+        """The conduit coming up through the floor (y 0) under a condenser, from the trench below."""
+        self.line(TRENCH_KIND, (x, -1, z), (x, -1, z))
+        self.line(CONDUIT, (x, 0, z), (x, 0, z))
+
+    def gallery(self, x0, x1, z0, z1, y0, y1, legs):
+        """An enclosed pipe bridge round exposed steam lines between buildings: concrete box with a window band, a roof,
+        and columns down to the ground at (x, z) in legs."""
+        for x in range(x0, x1 + 1):
+            for y in range(y0, y1 + 1):
+                for z in range(z0, z1 + 1):
+                    edge = x in (x0, x1) or y in (y0, y1) or z in (z0, z1)
+                    if not edge:
+                        continue
+                    side = (z in (z0, z1)) and y0 < y < y1 and not (x in (x0, x1))
+                    m = GLASS if side and y == y0 + 2 else CONC if y == y0 else TRIM if y == y1 else PANEL
+                    self.decor[(x, y, z)] = m
+        for lx, lz in legs:
+            for y in range(0, y0):
+                self.decor[(lx, y, lz)] = TRIM
 
     def tower(self, part, cx, z, kind):
-        """A cooling tower part centred on x = cx, with its controller where the part has it."""
+        """A cooling tower part centred on x = cx, with its controller where the part has it (under the ground)."""
         w, _, d = part.size
         x0 = cx - w // 2
         self.add(part, x0, z)
         lx, ly, lz = part.controller
-        self.towers.append((x0 + lx, ly, z + lz, kind))
+        self.towers.append((x0 + lx, ly - part.sink, z + lz, kind))
 
     def intake(self, ph, x0, z0):
-        """The pump house's intake: a conduit leg down into the lake in each bay, joined by a header under its floor.
-        Returns the header's middle (x, z) for the main conduit."""
+        """The pump house's intake: a conduit leg down into the lake in each bay, joined by a header buried under its
+        floor. Returns the header's middle (x, z) for the main conduit."""
         bays = ph.bays
         bw = ph.size[0] // bays
         legs = [x0 + i * bw + bw // 2 for i in range(bays)]
         for x in legs:
-            self.line(CONDUIT, (x, -4, z0 + 3), (x, 0, z0 + 3))
-            self.line(CONDUIT, (x, 0, z0 + 3), (x, 0, z0 + 7))
-        self.line(CONDUIT, (legs[0], 0, z0 + 7), (legs[-1], 0, z0 + 7))
+            self.line(CONDUIT, (x, -4, z0 + 3), (x, -1, z0 + 3))
+            self.line(CONDUIT, (x, -1, z0 + 3), (x, -1, z0 + 6))
+        self.line(TRENCH_KIND, (legs[0], -1, z0 + 7), (legs[-1], -1, z0 + 7))
         return legs[len(legs) // 2], z0 + 7
 
 
@@ -340,8 +441,9 @@ def footprint(part, rot):
     return (d, w) if rot % 2 else (w, d)
 
 
-PIPE_IDS = {"coolant": "reactor_coolant_pipe", "steam": "insulated_steam_line", "conduit": "circulating_water_conduit"}
-COOLANT, STEAM, CONDUIT = "coolant", "steam", "conduit"
+PIPE_IDS = {"coolant": "reactor_coolant_pipe", "steam": "insulated_steam_line", "conduit": "circulating_water_conduit",
+            "trench": "conduit_trench", "bus": "isolated_phase_bus"}
+COOLANT, STEAM, CONDUIT, TRENCH_KIND, BUS = "coolant", "steam", "conduit", "trench", "bus"
 # id: (name, wide, deep, tall): the equipment table in tools/nuclear.py (the same as EquipmentKind.java).
 from nuclear import EQUIPMENT as EQUIPMENT_SIZES  # noqa: E402
 
@@ -381,36 +483,9 @@ def four_loops(s, ox, oz, c, span, vessel="reactor_pressure_vessel", vw=7):
 
 
 def medium_plant():
-    s = Site("medium_pwr", "Medium Plant (4-loop PWR)", 336, 262, water=(0, -40, 336, 0))
-    rb = s.add(containment("pwr_containment", "Reactor Containment (PWR)", 24.5, 46, 20), 46, 32)
-    sx, sz = four_loops(s, 46, 32, 25.5, 10)
-    th = s.add(hall("pwr_turbine_hall", "Turbine Hall", 88, 38, 34, windows=((24, 30),), band=SIDING), 104, 38)
-    # The turbine runs east to the hall's end wall, where the main transformer stands against it outside.
-    s.eq("turbine_generator", 142, 50, "east")
-    s.eq("condenser", 136, 50, "east")
-    s.eq("main_transformer", 192, 53, "east")
-    s.eq("feedwater_pump", 111, 58)
-    s.line(STEAM, (sx + 1, 22, sz), (150, 22, sz))
-    s.line(STEAM, (150, 9, sz), (150, 22, sz))
-    s.line(STEAM, (112, 1, sz), (112, 22, sz))
-    s.add(hall("fuel_building", "Fuel Building", 40, 30, 26, wall=SHIELD, band=CONC, windows=()), 51, 86)
-    s.add(hall("aux_building", "Nuclear Auxiliary Building", 34, 42, 22, band=CONC, windows=((14, 16),)), 8, 38)
-    s.add(hall("control_building", "Control Building", 26, 22, 16, band=PANEL, windows=((5, 7), (11, 13))), 104, 82)
-    s.eq("reactor_control_console", 114, 91)
-    s.add(hall("diesel_building", "Emergency Diesel Building", 30, 16, 10, band=CONC, windows=()), 8, 90)
-    s.add(transformer_yard("pwr_transformer_yard", "Main Transformer Yard", 20, 26), 192, 40)
-    s.add(switchyard("switchyard_medium", "Switchyard", 60, 50, 5), 222, 32)
-    ph = s.add(pump_house("pump_house", "Intake Pump House", 28, 26, 12, 4), 132, -8)
-    hx, hz = s.intake(ph, 132, -8)
-    t = cooling_tower("ct_natural", "Natural-Draft Cooling Tower", 52, 150, 31, 115, "natural")
-    for cx in (100, 232):
-        s.tower(t, cx, 145, "natural")
-    # Lake -> condenser -> both towers: one conduit network.
-    s.conduit((hx, hz), (hx, 56), (136, 56))
-    s.conduit((hx, 56), (hx, 140), (100, 140), (100, 200))
-    s.conduit((hx, 140), (232, 140), (232, 200))
-    s.roads += [(0, 128, 336, 136), (96, 0, 102, 136), (200, 90, 206, 136)]
-    return s
+    """The medium plant is designed building by building in tools/medium_plant.py."""
+    import medium_plant as MP
+    return MP.medium_site()
 
 
 def large_plant():
@@ -452,6 +527,9 @@ def large_plant():
     s.conduit((hx, hz), (hx, 40), (291, 40), (291, 22))
     s.conduit((291, 40), (291, 180), (110, 180), (110, 261))
     s.conduit((291, 180), (300, 180), (300, 261))
+    s.riser(291, 27)
+    s.riser(291, 51)
+    s.gallery(210, 219, 48, 52, 20, 24, [(211, 48), (211, 52), (218, 48), (218, 52)])
     s.roads += [(0, 176, 440, 184), (30, 0, 36, 184), (346, 0, 352, 16), (352, 64, 358, 184)]
     return s
 
@@ -479,7 +557,11 @@ def small_plant():
     hx, hz = s.intake(ph, 160, -8)
     # Under every small turbine (each is its own condenser), then on to both tower banks.
     s.conduit((hx, hz), (hx, 106), (39, 106))
-    s.conduit((78, 106), (78, 176))
+    s.conduit((78, 106), (78, 150))
+    s.conduit((79, 106), (79, 176))
+    for i in range(6):
+        s.riser(38 + 13 * i + 2, 106)
+    s.gallery(37, 108, 88, 97, 16, 20, [(37, 88), (37, 97), (72, 88), (72, 97), (108, 88), (108, 97)])
     s.roads += [(0, 88, 270, 94), (150, 0, 156, 196)]
     return s
 
@@ -519,7 +601,7 @@ BELOW, OVER = 4, 10
 EQ_RENDER, COOLANT_RENDER, STEAM_RENDER, CONDUIT_RENDER, CONTROLLER_RENDER = 30, 31, 32, 33, 34
 MATERIALS.update({EQ_RENDER: ("", (170, 176, 182)), COOLANT_RENDER: ("", (190, 196, 200)), STEAM_RENDER: ("", (236, 236, 230)),
                   CONDUIT_RENDER: ("", (90, 96, 104)), CONTROLLER_RENDER: ("", (60, 110, 190))})
-PIPE_RENDER = {COOLANT: COOLANT_RENDER, STEAM: STEAM_RENDER, CONDUIT: CONDUIT_RENDER}
+PIPE_RENDER = {COOLANT: COOLANT_RENDER, STEAM: STEAM_RENDER, CONDUIT: CONDUIT_RENDER, BUS: COOLANT_RENDER}
 DIRS = {"north": (0, -1), "east": (1, 0), "south": (0, 1), "west": (-1, 0)}
 CLOCKWISE = {"north": "east", "east": "south", "south": "west", "west": "north"}
 
@@ -567,21 +649,24 @@ def assemble(site, render=True):
     equipment bodies are cut out of whatever building they stand in, and pipes run through walls. With render, the
     equipment, pipes and controllers get their preview colours; without, the grid only holds the parts and roads."""
     top = max(p.size[1] for p, *_ in site.parts) + 2
-    g = np.zeros((site.w, top + BELOW, site.d + OVER), np.uint8)
+    g = np.zeros((site.w, top + BELOW, site.d + OVER), np.uint16)
     for x0, z0, x1, z1 in site.roads:
         g[max(0, x0):min(site.w, x1), BELOW, max(0, z0) + OVER:min(site.d, z1) + OVER] = ROAD
     for part, x, z, rot in site.parts:
         pg = rotate(part.g, rot)
         w, h, d = pg.shape
-        sub = g[x:x + w, BELOW:BELOW + h, z + OVER:z + OVER + d]
+        y0 = BELOW - part.sink
+        sub = g[x:x + w, y0:y0 + h, z + OVER:z + OVER + d]
         np.copyto(sub, pg[:sub.shape[0], :, :sub.shape[2]], where=pg[:sub.shape[0], :, :sub.shape[2]] > 0)
+    for (x, y, z), m in site.decor.items():
+        g[x, y + BELOW, z + OVER] = m
     if not render:
         return g
     for kind, ax, ay, az, facing in site.equipment:
         for (x, y, z) in equipment_cells(kind, ax, ay, az, facing):
             g[x, y + BELOW, z + OVER] = EQ_RENDER
     for (x, y, z), kind in site.lines.items():
-        g[x, y + BELOW, z + OVER] = PIPE_RENDER[kind]
+        g[x, y + BELOW, z + OVER] = TRENCH if kind == TRENCH_KIND else PIPE_RENDER[kind]
     for x, y, z, kind in site.towers:
         g[x, y + BELOW, z + OVER] = CONTROLLER_RENDER
     return g
@@ -606,13 +691,22 @@ def verify(site):
             owner[c] = i
     for x, y, z, kind in site.towers:
         assert (x, y, z) not in owner and (x, y, z) not in site.lines, f"{site.key}: tower controller at {(x, y, z)} is covered"
+    # Decor props standing in the buildings must not be in the way of the plant's own equipment or pipes.
+    for part, px, pz, rot in site.parts:
+        for kind, ax, ay, az, facing in part.props:
+            for (x, y, z) in equipment_cells(kind, ax, ay, az, facing):
+                c = (x + px, y - part.sink, z + pz)
+                assert c not in owner, f"{site.key}: {part.key}'s {kind} overlaps {site.equipment[owner[c]][0]} at {c}"
+                assert c not in site.lines, f"{site.key}: {part.key}'s {kind} overlaps a {site.lines[c]} pipe at {c}"
     kinds = {i: e[0] for i, e in enumerate(site.equipment)}
     takes = {COOLANT: {"reactor_pressure_vessel", "epr_reactor_vessel", "reactor_steam_generator", "reactor_coolant_pump", "pressurizer"},
              STEAM: {"reactor_steam_generator", "turbine_generator", "feedwater_pump", "condenser", "small_modular_reactor",
                      "small_turbine_generator"},
-             CONDUIT: {"condenser", "small_turbine_generator"}}
+             CONDUIT: {"condenser", "small_turbine_generator", "circulating_water_pump"},
+             BUS: {"turbine_generator", "main_transformer"}}
     near = [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)]
     tower_cells = {(x, y, z) for x, y, z, _ in site.towers}
+    lines = {c: (CONDUIT if k == TRENCH_KIND else k) for c, k in site.lines.items()}
 
     def outside(i):
         out = set()
@@ -630,7 +724,7 @@ def verify(site):
         found, seen, queue = set(), set(), []
         for i in start:
             for c in outside(i):
-                if site.lines.get(c) == kind and c not in seen:
+                if lines.get(c) == kind and c not in seen:
                     seen.add(c)
                     queue.append(c)
             found |= {j for j in touching(i) if kinds[j] in takes[kind]}
@@ -639,7 +733,7 @@ def verify(site):
             x, y, z = queue.pop()
             for dx, dy, dz in near:
                 c = (x + dx, y + dy, z + dz)
-                if site.lines.get(c) == kind:
+                if lines.get(c) == kind:
                     if c not in seen:
                         seen.add(c)
                         queue.append(c)
@@ -678,17 +772,23 @@ def verify(site):
                         coolers.add(j)
                     if kinds[j] == "main_transformer":
                         transformers.add(j)
+            bus, _, _ = joined(turbines, BUS)
+            transformers |= {j for j in bus if kinds[j] == "main_transformer"}
             assert turbines and feed and coolers and transformers, f"{site.key}: secondary {len(turbines)} turbines, {len(feed)} feedwater, {len(coolers)} condensers, {len(transformers)} transformers"
             want = 2 if kind == "epr_reactor_vessel" else 1
             assert len(turbines) >= want and len(transformers) >= want, f"{site.key}: needs {want} turbines with transformers"
             report.append(f"{kind}: 4 loops, {len(turbines)} turbine(s), {len(coolers)} condenser(s), {len(transformers)} transformer(s)")
         towers = set()
+        pumps = set()
         for c in coolers:
-            _, t, water = joined([c], CONDUIT)
+            found, t, water = joined([c], CONDUIT)
             assert water, f"{site.key}: condenser {c} conduit does not reach the lake"
             towers |= t
+            pumps |= {j for j in found if kinds[j] == "circulating_water_pump"}
+        if any(k == "circulating_water_pump" for k in kinds.values()):
+            assert pumps, f"{site.key}: no circulating water pump on the conduit"
         assert towers, f"{site.key}: no cooling tower on the conduit"
-        report[-1] += f", {len(towers)} cooling tower(s) and the lake on its conduit"
+        report[-1] += f", {len(towers)} cooling tower(s), {len(pumps)} CW pump(s) and the lake on its conduit"
     return report
 
 
@@ -745,7 +845,7 @@ def part_blueprint(part):
     palette, layers = rle_layers(part_cells(part), (w, h, d))
     return {"format": 2, "name": part.name, "author": "Jugcraft (built in)", "kind": "part",
             "description": f"One part of a pre-made nuclear plant: {part.name}, {w} x {d}, {h} tall.",
-            "size": [w, h, d], "anchor": [w // 2, 0, d + 1], "palette": palette, "layers": layers}
+            "size": [w, h, d], "anchor": [w // 2, part.sink, d + 1], "palette": palette, "layers": layers}
 
 
 def plant_blueprint(site, name):
@@ -760,6 +860,8 @@ def plant_blueprint(site, name):
         return W - 1 - x, y + BELOW, D - 1 - z
 
     extra = {}
+    for (x, y, z), m in site.decor.items():
+        extra[to_file(x, y, z)] = MATERIALS[m][0]
     for x0, z0, x1, z1 in site.roads:
         for x in range(max(0, x0), min(W, x1)):
             for z in range(max(0, z0), min(D, z1)):
@@ -776,7 +878,7 @@ def plant_blueprint(site, name):
     for part, x, z, rot in site.parts:
         assert rot == 0
         w, h, d = part.size
-        parts.append({"id": part.key, "at": [W - x - w, BELOW, D - z - d], "turn": 2})
+        parts.append({"id": part.key, "at": [W - x - w, BELOW - part.sink, D - z - d], "turn": 2})
     size = [W, H, D + OVER]
     palette, layers = rle_layers(extra, size)
     # The stake on the shore, near the middle, on a free spot of the ground layer.

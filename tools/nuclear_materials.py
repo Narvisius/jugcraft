@@ -688,3 +688,147 @@ def zip_tex(seed, size=CELL):
 
 def tank_band(seed, size=CELL):
     return painted((44, 112, 190), seed, chip_count=3, drip_count=0, dirt=0.1)
+
+
+# ---------------------------------------------------------------- the plant buildings' equipment (decor pieces)
+
+def mimic(seed, size=CELL):
+    """A control board's vertical section: grey enamel with a coloured mimic of the plant's flow paths (red reactor
+    coolant, orange steam, blue feedwater), round meters, rows of lit indicators and a label strip along the top."""
+    img = painted((176, 182, 178), seed, seams=(("h", 22),), chip_count=1, drip_count=0, dirt=0.1, size=size)
+    d = ImageDraw.Draw(img)
+    r = random.Random(seed)
+    d.rectangle([4, 4, size - 5, 16], fill=(236, 238, 232, 255))
+    for x in range(10, size - 12, 14):
+        d.line([(x, 10), (x + 8, 10)], fill=(60, 62, 66, 255), width=2)
+    # Flow paths.
+    d.line([(10, 44), (60, 44), (60, 70), (100, 70)], fill=(200, 50, 40, 255), width=3)
+    d.line([(20, 56), (90, 56), (90, 34), (118, 34)], fill=(230, 140, 40, 255), width=3)
+    d.line([(10, 84), (70, 84), (70, 100), (118, 100)], fill=(50, 110, 200, 255), width=3)
+    for x, y in ((60, 44), (90, 56), (70, 84)):
+        d.rectangle([x - 4, y - 4, x + 4, y + 4], fill=(30, 32, 36, 255), outline=(230, 232, 228, 255))
+    # Meters.
+    for x in (22, 48):
+        d.ellipse([x - 9, 22 + 4, x + 9, 22 + 22], fill=(240, 240, 232, 255), outline=(40, 40, 44, 255), width=2)
+        d.line([(x, 35), (x + r.randint(-6, 6), 28)], fill=(200, 40, 30, 255), width=2)
+    # Indicator rows (glowing).
+    for row in range(2):
+        for k in range(9):
+            x, y = 8 + k * 13, 108 + row * 9
+            c = r.choice([(80, 220, 110), (80, 220, 110), (230, 60, 50), (245, 190, 40), (240, 240, 230)])
+            d.rectangle([x, y, x + 8, y + 5], fill=c + (254,))
+    return img
+
+
+def display(seed, size=CELL):
+    """A large plant overview display: the unit's one-line diagram (reactor, steam generators, turbine, condenser) in
+    bright lines on dark blue, a trend graph below and a strip of status tiles."""
+    img = Image.new("RGBA", (size, size), (10, 22, 40, 254))
+    d = ImageDraw.Draw(img)
+    r = random.Random(seed)
+    g = (110, 230, 140, 254)
+    c = (90, 200, 240, 254)
+    a = (250, 190, 50, 254)
+    for y in range(0, size, 4):
+        d.line([(0, y), (size, y)], fill=(14, 28, 48, 254))
+    d.ellipse([10, 14, 34, 52], outline=c, width=2)                 # vessel
+    d.rectangle([44, 12, 58, 52], outline=c, width=2)               # steam generator
+    d.line([(34, 22), (44, 22)], fill=(240, 80, 60, 254), width=2)
+    d.line([(34, 44), (44, 44)], fill=c, width=2)
+    d.polygon([(70, 22), (100, 14), (100, 44), (70, 36)], outline=g)  # turbine
+    d.line([(58, 18), (70, 26)], fill=a, width=2)
+    d.rectangle([104, 22, 120, 40], outline=g, width=2)             # generator
+    d.rectangle([70, 46, 98, 56], outline=c, width=2)               # condenser
+    d.line([(84, 46), (84, 40)], fill=c, width=1)
+    d.text((12, 3), "UNIT 1", fill=(220, 230, 240, 254))
+    # Trend graph.
+    d.rectangle([8, 64, size - 9, 100], outline=(60, 80, 110, 254))
+    pts, y = [], 84.0
+    for x in range(10, size - 10, 3):
+        y = max(68, min(96, y + r.uniform(-2.5, 2.5)))
+        pts.append((x, y))
+    d.line(pts, fill=a, width=2)
+    d.line([(10, 76), (size - 10, 76)], fill=(70, 100, 140, 254))
+    # Status tiles.
+    for k in range(6):
+        x = 8 + k * 19
+        d.rectangle([x, 108, x + 15, 120], fill=(r.choice([(40, 140, 70), (40, 140, 70), (40, 140, 70), (170, 120, 30)])) + (254,))
+    return img
+
+
+def cherenkov(seed, size=CELL):
+    """Water glowing blue over spent fuel: a bright cyan-blue core fading to deep blue, rippled."""
+    yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+    ripple = fbm(size, seed, 3, 24) * 0.25
+    t = np.clip(0.55 + ripple + 0.15 * np.sin(xx / 7.0) * np.sin(yy / 9.0), 0, 1)
+    a = np.zeros((size, size, 4), np.float32)
+    a[..., 0] = 40 + 90 * t
+    a[..., 1] = 120 + 110 * t
+    a[..., 2] = 230 + 25 * t
+    a[..., 3] = 254
+    return to_img(a)
+
+
+def fuel_rack(seed, size=CELL):
+    """The top of a spent fuel rack: a stainless grid of square cells, most holding an assembly's top nozzle (the
+    four corner posts and the hold-down springs), seen through glowing blue water."""
+    img = Image.new("RGBA", (size, size), (70, 140, 220, 254))
+    d = ImageDraw.Draw(img)
+    r = random.Random(seed)
+    n = 4
+    w = size // n
+    for i in range(n):
+        for j in range(n):
+            x, y = i * w, j * w
+            d.rectangle([x, y, x + w - 1, y + w - 1], outline=(200, 210, 220, 254), width=3)
+            if r.random() < 0.85:
+                d.rectangle([x + 6, y + 6, x + w - 7, y + w - 7], fill=(150, 175, 200, 254), outline=(220, 230, 240, 254))
+                for px, py in ((x + 8, y + 8), (x + w - 12, y + 8), (x + 8, y + w - 12), (x + w - 12, y + w - 12)):
+                    d.rectangle([px, py, px + 3, py + 3], fill=(235, 240, 245, 254))
+                d.rectangle([x + w // 2 - 4, y + w // 2 - 4, x + w // 2 + 4, y + w // 2 + 4], fill=(90, 150, 220, 254))
+    return img
+
+
+def louvre(seed, size=CELL):
+    """Air intake louvres: angled slats in a painted frame, dark behind."""
+    a = base((40, 44, 48), size)
+    img = to_img(a)
+    d = ImageDraw.Draw(img)
+    for y in range(6, size - 6, 10):
+        d.polygon([(6, y), (size - 7, y), (size - 7, y + 6), (6, y + 6)], fill=(170, 174, 172, 255))
+        d.line([(6, y), (size - 7, y)], fill=(210, 214, 212, 255), width=2)
+        d.line([(6, y + 6), (size - 7, y + 6)], fill=(90, 94, 96, 255), width=1)
+    d.rectangle([0, 0, size - 1, size - 1], outline=(150, 154, 152, 255), width=6)
+    return img
+
+
+def switchgear(seed, size=CELL):
+    """Medium-voltage switchgear: a cabinet door with a meter window, breaker position lamps, a control switch and a
+    handle; a nameplate at the top."""
+    img = painted((150, 158, 160), seed, seams=(("h", 64),), chip_count=1, drip_count=0, dirt=0.15, size=size)
+    d = ImageDraw.Draw(img)
+    d.rectangle([2, 2, size - 3, size - 3], outline=(80, 86, 90, 255), width=3)
+    d.rectangle([20, 8, 108, 20], fill=(30, 32, 36, 255))
+    d.line([(26, 14), (90, 14)], fill=(230, 230, 230, 255), width=2)
+    d.rectangle([24, 28, 60, 52], fill=(240, 240, 230, 255), outline=(40, 42, 46, 255), width=2)
+    d.line([(42, 50), (52, 34)], fill=(30, 30, 30, 255), width=2)
+    d.ellipse([72, 30, 84, 42], fill=(230, 60, 50, 254))
+    d.ellipse([90, 30, 102, 42], fill=(80, 220, 110, 254))
+    d.ellipse([78, 72, 98, 92], fill=(40, 42, 46, 255))
+    d.rectangle([86, 70, 90, 94], fill=(200, 60, 40, 255))
+    d.rectangle([12, 76, 18, 112], fill=(60, 62, 66, 255))
+    for y in range(98, 122, 6):
+        d.line([(30, y), (70, y)], fill=(100, 106, 110, 255), width=2)
+    return img
+
+
+def filter_bank(seed, size=CELL):
+    """An air handler's access side: two hinged doors with latches and a pressure gauge."""
+    img = painted((196, 200, 196), seed, seams=(("v", 64),), chip_count=1, drip_count=1, dirt=0.2, size=size)
+    d = ImageDraw.Draw(img)
+    for x0 in (6, 70):
+        d.rectangle([x0, 8, x0 + 52, size - 9], outline=(110, 114, 112, 255), width=3)
+        d.rectangle([x0 + 40, 54, x0 + 46, 74], fill=(50, 52, 56, 255))
+    d.ellipse([22, 20, 40, 38], fill=(240, 240, 232, 255), outline=(40, 40, 44, 255), width=2)
+    d.line([(31, 29), (36, 23)], fill=(200, 40, 30, 255), width=2)
+    return img

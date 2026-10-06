@@ -65,6 +65,14 @@ public class EquipmentBlockEntity extends BlockEntity {
 	private List<BlockPos> intakeCells = List.of();
 	/** Cooling tower controllers this condenser's conduit reaches. */
 	private List<BlockPos> towers = List.of();
+	/** Circulating water pumps on this condenser's conduit (the towers need them to move the water). */
+	private List<BlockPos> cwPumps = List.of();
+	/** Each circulating water pump moves the water for half a standard unit's heat. */
+	public static final double PUMP_CAPACITY = 0.5;
+	/** The pumps' and fans' power, taken from the unit's output while cooling towers carry its heat. */
+	public static final double HOUSE_LOAD = 0.03;
+	/** Last tick's cooling tower share (for the house load). */
+	private double lastTowerShare;
 	private int intakeVersion = -1;
 	// Main transformer.
 	public final @Nullable SimpleEnergyStorage output;
@@ -148,8 +156,15 @@ public class EquipmentBlockEntity extends BlockEntity {
 			loops = unit.loops();
 		}
 		ReactorUnit u = unit;
-		long electric = core.tick(new ReactorCore.Plant(u.cooling(), u.steamToPower(), u.formed(), u.generatorLimit(), towerShare(level, u)),
+		double towers = towerShare(level, u);
+		lastTowerShare = towers;
+		long electric = core.tick(new ReactorCore.Plant(u.cooling(), u.steamToPower(), u.formed(), u.generatorLimit(), towers),
 				need -> drawWater(level, u, need));
+		if (towers > 0 && electric > 0) {
+			// The circulating water pumps and the towers' fans run on the plant's own power.
+			electric = Math.round(electric * (1 - HOUSE_LOAD * towers));
+			core.electric = electric;
+		}
 		if (electric > 0) {
 			for (BlockPos t : u.transformers) {
 				if (level.getBlockEntity(t) instanceof EquipmentBlockEntity transformer && transformer.output != null) {
@@ -178,6 +193,13 @@ public class EquipmentBlockEntity extends BlockEntity {
 		double want = Math.max(0.001, Math.min(1, core.heat())) * scale;
 		double got = 0;
 		java.util.Set<BlockPos> seen = new HashSet<>();
+		// Without circulating water pumps the towers stand idle; each pump moves water for part of the heat.
+		java.util.Set<BlockPos> pumps = new HashSet<>();
+		for (BlockPos c : u.condensers) {
+			if (level.getBlockEntity(c) instanceof EquipmentBlockEntity condenser) pumps.addAll(condenser.cwPumps);
+		}
+		want = Math.min(want, pumps.size() * PUMP_CAPACITY);
+		if (want <= 0) return 0;
 		for (BlockPos c : u.condensers) {
 			if (!(level.getBlockEntity(c) instanceof EquipmentBlockEntity condenser)) continue;
 			for (BlockPos t : condenser.towers) {
@@ -187,7 +209,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 				}
 			}
 		}
-		return Math.min(1, got / want);
+		return Math.min(1, got / (Math.max(0.001, Math.min(1, core.heat())) * scale));
 	}
 
 	private int drawWater(ServerLevel level, ReactorUnit u, int need) {
@@ -250,6 +272,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 		Set<BlockPos> seen = new HashSet<>();
 		java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
 		Set<BlockPos> foundTowers = new java.util.LinkedHashSet<>();
+		Set<BlockPos> foundPumps = new java.util.LinkedHashSet<>();
 		for (BlockPos cell : ReactorUnit.outside(registry, getBlockPos())) {
 			if (ReactorUnit.isPipe(level, cell, PipeKind.WATER) && seen.add(cell)) {
 				queue.add(cell);
@@ -266,12 +289,16 @@ public class EquipmentBlockEntity extends BlockEntity {
 					if (seen.add(next)) queue.add(next);
 				} else if (level.getBlockState(next).getBlock() instanceof CoolingTowerBlock) {
 					foundTowers.add(next.immutable());
+				} else if (registry.anchorOf(next) instanceof BlockPos pump && registry.at(pump) != null
+						&& registry.at(pump).kind() == EquipmentKind.CIRCULATING_WATER_PUMP) {
+					foundPumps.add(pump);
 				} else if (level.getFluidState(next).is(FluidTags.WATER)) {
 					water.add(next.immutable());
 				}
 			}
 		}
 		towers = List.copyOf(foundTowers);
+		cwPumps = List.copyOf(foundPumps);
 		return new ArrayList<>(water);
 	}
 

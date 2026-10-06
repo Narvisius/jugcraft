@@ -131,6 +131,13 @@ public final class ReactorUnit {
 				}
 			}
 		}
+		if (!unit.turbines.isEmpty()) {
+			// The isolated phase bus from the generators to the main transformers.
+			for (BlockPos anchor : joined(level, registry, unit.turbines, PipeKind.BUS)) {
+				EquipmentRegistry.Entry e = registry.at(anchor);
+				if (e != null && e.kind() == EquipmentKind.MAIN_TRANSFORMER && !unit.transformers.contains(anchor)) unit.transformers.add(anchor);
+			}
+		}
 		for (BlockPos turbine : unit.turbines) {
 			for (BlockPos anchor : touching(level, registry, turbine)) {
 				EquipmentRegistry.Entry e = registry.at(anchor);

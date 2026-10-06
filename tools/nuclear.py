@@ -35,6 +35,25 @@ EQUIPMENT = {
     "epr_reactor_vessel": ("EPR Reactor Pressure Vessel", 8, 8, 22),
     "small_modular_reactor": ("Small Modular Reactor", 5, 5, 22),
     "small_turbine_generator": ("Small Turbine-Generator", 3, 5, 4),
+    "circulating_water_pump": ("Circulating Water Pump", 3, 3, 6),
+    # Plant equipment that only has to look right (the plants' buildings): drawn by the client, placed whole.
+    "polar_crane": ("Polar Crane", 40, 5, 5),
+    "refueling_machine": ("Refueling Machine", 15, 4, 8),
+    "overhead_crane": ("Overhead Crane", 40, 5, 4),
+    "moisture_separator_reheater": ("Moisture Separator Reheater", 5, 20, 5),
+    "feedwater_heater": ("Feedwater Heater", 3, 12, 3),
+    "emergency_diesel_generator": ("Emergency Diesel Generator", 5, 14, 5),
+    "storage_tank": ("Storage Tank", 5, 5, 9),
+    "heat_exchanger": ("Heat Exchanger", 3, 9, 3),
+    "pump_skid": ("Pump Skid", 3, 5, 3),
+    "fuel_handling_machine": ("Fuel Handling Machine", 14, 5, 7),
+    "spent_fuel_rack": ("Spent Fuel Rack", 4, 4, 4),
+    "dry_storage_cask": ("Dry Storage Cask", 3, 3, 6),
+    "travelling_water_screen": ("Travelling Water Screen", 6, 2, 9),
+    "plant_display_wall": ("Plant Display Wall", 9, 1, 4),
+    "main_control_board": ("Main Control Board", 6, 2, 3),
+    "switchgear_lineup": ("Switchgear Lineup", 8, 2, 3),
+    "air_handling_unit": ("Air Handling Unit", 4, 8, 3),
 }
 # The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
 TOWER_CONTROLLER = "cooling_tower_controller"
@@ -44,9 +63,12 @@ PIPES = {
     "reactor_coolant_pipe": ("Reactor Coolant Pipe", 10),
     "insulated_steam_line": ("Insulated Steam Line", 10),
     "circulating_water_conduit": ("Circulating Water Conduit", 14),
+    "isolated_phase_bus": ("Isolated Phase Bus", 12),
 }
 FRAME = "nuclear_equipment_frame"
-BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER]
+# Plain blocks of the cooling system: the tower fill and the buried conduit (a full block that joins like a conduit).
+COOLING_BLOCKS = {"cooling_tower_fill": "Cooling Tower Fill", "conduit_trench": "Conduit Trench"}
+BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER] + list(COOLING_BLOCKS)
 
 NAMES = {
     "hazmat_hood": "Hazmat Hood",
@@ -61,6 +83,7 @@ NAMES = {
     "spent_fuel_assembly": "Spent Fuel Assembly",
     "reactor_link_card": "Reactor Link Card",
     TOWER_CONTROLLER: "Cooling Tower Controller",
+    **COOLING_BLOCKS,
 }
 NAMES.update({k: v[0] for k, v in EQUIPMENT.items()})
 NAMES.update({k: v[0] for k, v in PIPES.items()})
@@ -85,6 +108,24 @@ LANG = {
     "tooltip.jugcraft.nuclear.reactor_control_console": "Runs the reactor. Link it to the vessel with a Reactor Link Card",
     "tooltip.jugcraft.nuclear.epr_reactor_vessel": "The EPR's larger core: 241 assemblies and 1.6 times the output. Needs two turbine-generators to use it all",
     "tooltip.jugcraft.nuclear.small_modular_reactor": "Reactor, steam generator and pressurizer in one module: 37 assemblies, an eighth of a full unit. Steam line to a Small Turbine-Generator",
+    "tooltip.jugcraft.nuclear.circulating_water_pump": "Moves the cooling water round the cooling towers: a tower only works with these on its conduit (each one carries half a unit's heat)",
+    "tooltip.jugcraft.nuclear.polar_crane": "The containment's round-the-dome crane (for building your own plant: it only looks the part)",
+    "tooltip.jugcraft.nuclear.refueling_machine": "The gantry that lifts fuel out of the open reactor (for show)",
+    "tooltip.jugcraft.nuclear.overhead_crane": "The turbine hall's bridge crane (for show)",
+    "tooltip.jugcraft.nuclear.moisture_separator_reheater": "Dries and reheats the steam between the turbine stages (for show)",
+    "tooltip.jugcraft.nuclear.feedwater_heater": "Warms the feedwater with steam bled from the turbine (for show)",
+    "tooltip.jugcraft.nuclear.emergency_diesel_generator": "Backup power for the safety systems if the grid is lost (for show)",
+    "tooltip.jugcraft.nuclear.storage_tank": "A plant water tank: refuelling water, condensate, demineralised water (for show)",
+    "tooltip.jugcraft.nuclear.heat_exchanger": "A component cooling heat exchanger (for show)",
+    "tooltip.jugcraft.nuclear.pump_skid": "A plant pump and motor on its baseplate (for show)",
+    "tooltip.jugcraft.nuclear.fuel_handling_machine": "The bridge that moves fuel round the spent fuel pool (for show)",
+    "tooltip.jugcraft.nuclear.spent_fuel_rack": "Holds used fuel under water; the water glows blue over it (for show)",
+    "tooltip.jugcraft.nuclear.dry_storage_cask": "A ventilated concrete cask for cooled spent fuel (for show)",
+    "tooltip.jugcraft.nuclear.travelling_water_screen": "Strains fish and debris out of the cooling water intake (for show)",
+    "tooltip.jugcraft.nuclear.plant_display_wall": "The control room's large plant overview display (for show)",
+    "tooltip.jugcraft.nuclear.main_control_board": "A control room benchboard with its mimic, meters and annunciators (for show)",
+    "tooltip.jugcraft.nuclear.switchgear_lineup": "A line of medium-voltage breakers (for show)",
+    "tooltip.jugcraft.nuclear.air_handling_unit": "Filters and moves a building's air (for show)",
     "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
     "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
     "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
@@ -116,7 +157,7 @@ LANG = {
 
 R = "screen.jugcraft.reactor."
 CONSOLE_LANG = {
-    R + "title": "REACTOR CONTROL", R + "unlinked": "Not linked: use a Reactor Link Card on the vessel, then on this console",
+    R + "title": "REACTOR CONTROL", R + "out_of_range": "Linked reactor at %s is out of range: come closer", R + "unlinked": "Not linked: use a Reactor Link Card on the vessel, then on this console",
     R + "header": "UNIT 1  ·  %s-LOOP PWR  ·  LEU",
     R + "header_epr": "UNIT 1  ·  EPR  ·  LEU", R + "header_smr": "MODULE  ·  SMALL MODULAR REACTOR  ·  LEU",
     R + "status.incomplete": "UNIT INCOMPLETE", R + "status.scram": "SCRAM", R + "status.refuelling": "REFUELLING",
@@ -173,11 +214,33 @@ CRAFTING = {
                                                     "F": "jugcraft:leu_fuel_assembly", "B": "#c:storage_blocks/steel"}, 1),
     "small_turbine_generator": (["SGS", "PMP", "SCS"], {"S": "#c:plates/steel", "G": "#c:gears/steel", "P": "jugcraft:steel_fluid_pipe",
                                                       "M": "jugcraft:electric_motor", "C": "minecraft:copper_block"}, 1),
+    "circulating_water_pump": (["SMS", "PGP", "SBS"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe",
+                                                     "G": "#c:gears/steel", "B": "#c:storage_blocks/steel"}, 1),
+    "polar_crane": (["SSS", "GMG", "C C"], {"S": "#c:storage_blocks/steel", "G": "#c:gears/steel", "M": "jugcraft:electric_motor", "C": "minecraft:iron_chain"}, 1),
+    "refueling_machine": (["SMS", "S S", "SCS"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "C": "jugcraft:processor"}, 1),
+    "overhead_crane": (["SSS", "GMG", " C "], {"S": "#c:storage_blocks/steel", "G": "#c:gears/steel", "M": "jugcraft:electric_motor", "C": "minecraft:iron_chain"}, 1),
+    "moisture_separator_reheater": (["WSW", "PBP", "WSW"], {"W": "minecraft:white_wool", "S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "B": "#c:storage_blocks/steel"}, 1),
+    "feedwater_heater": (["SPS", "PCP", "SPS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "C": "minecraft:copper_ingot"}, 1),
+    "emergency_diesel_generator": (["SPS", "GMC", "SSS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "G": "#c:gears/steel", "M": "jugcraft:electric_motor", "C": "minecraft:copper_block"}, 1),
+    "storage_tank": (["SSS", "S S", "SSS"], {"S": "#c:plates/steel"}, 1),
+    "heat_exchanger": (["SPS", "CCC", "SPS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "C": "minecraft:copper_ingot"}, 1),
+    "pump_skid": (["PMP", "SSS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "M": "jugcraft:electric_motor"}, 1),
+    "fuel_handling_machine": (["SMS", "S S", "SCS"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "C": "jugcraft:advanced_circuit"}, 1),
+    "spent_fuel_rack": (["SBS", "B B", "SBS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars"}, 1),
+    "dry_storage_cask": (["CSC", "C C", "CSC"], {"C": "jugcraft:shielding_concrete", "S": "#c:plates/steel"}, 1),
+    "travelling_water_screen": (["SMS", "BBB", "BBB"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "B": "minecraft:iron_bars"}, 1),
+    "plant_display_wall": (["GGG", "CPC", "SSS"], {"G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit", "P": "jugcraft:processor", "S": "#c:plates/steel"}, 1),
+    "main_control_board": (["RGR", "CCC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit", "S": "#c:plates/steel"}, 1),
+    "switchgear_lineup": (["SRS", "CAC", "SSS"], {"S": "#c:plates/steel", "R": "minecraft:redstone", "C": "minecraft:copper_ingot", "A": "jugcraft:aluminum_cable"}, 1),
+    "air_handling_unit": (["SBS", "WMW", "SSS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "W": "minecraft:white_wool", "M": "jugcraft:electric_motor"}, 1),
+    "cooling_tower_fill": (["PPP", "SSS", "PPP"], {"P": "jugcraft:plastic_sheet", "S": "minecraft:stick"}, 8),
+    "conduit_trench": (["CCC", "PPP", "CCC"], {"C": "minecraft:smooth_stone", "P": "jugcraft:circulating_water_conduit"}, 3),
     TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
                                               "A": "jugcraft:advanced_circuit"}, 1),
     "reactor_coolant_pipe": (["SSS", "   ", "SSS"], {"S": "#c:plates/steel"}, 6),
     "insulated_steam_line": (["WWW", "SSS", "WWW"], {"W": "minecraft:white_wool", "S": "#c:plates/steel"}, 6),
     "circulating_water_conduit": (["CCC", "S S", "CCC"], {"C": "minecraft:gray_concrete", "S": "#c:plates/steel"}, 6),
+    "isolated_phase_bus": (["AAA", "CCC", "AAA"], {"A": "#c:plates/aluminum", "C": "minecraft:copper_ingot"}, 6),
 }
 ITEM_FEATURES = {"plastic_sheet": ["crude_oil"], "processor": ["silicon"], "advanced_circuit": ["silver", "nickel"],
                  "leu_fuel_assembly": ["uranium"], "aluminum_cable": ["aluminum"]}
@@ -187,7 +250,8 @@ BASE_METALS = ("copper", "iron", "gold", "steel")
 NU_TEXTURES = ["nu_centrifuge", "nu_cap", "nu_steel", "nu_floor", "nu_cabinet", "nu_glass", "nu_hazard", "nu_pipe_blue",
                "nu_pipe_orange"]
 PIPE_TEXTURES = list(PIPES) + [p + "_end" for p in PIPES]
-TOWER_TEXTURES = [f"{TOWER_CONTROLLER}_side", f"{TOWER_CONTROLLER}_top"]
+TOWER_TEXTURES = [f"{TOWER_CONTROLLER}_side", f"{TOWER_CONTROLLER}_top", f"{TOWER_CONTROLLER}_grate", "cooling_tower_fill",
+                  "cooling_tower_fill_side", "conduit_trench"]
 HI_RES = (set(ITEMS) - {"geiger_counter"}) | set(BLOCKS) | set(NU_TEXTURES) | set(PIPE_TEXTURES) | set(TOWER_TEXTURES) | {
     "geiger_case", "geiger_screen", "geiger_rubber", "geiger_steel", "geiger_grille", "geiger_label"}
 
@@ -610,6 +674,33 @@ def _pipe_tex(base, seed):
     return img
 
 
+def _shielding_concrete():
+    """Dense shielding concrete as it comes out of the forms: a smooth, even warm grey with soft mottling and a
+    little fine aggregate, the faint joints of the form panels at the block's edges (so a wall reads as cast panels)
+    and the two plugged form-tie holes on the panel's middle line. Calm enough to cover a whole containment."""
+    import nuclear_materials as M
+    size = M.CELL
+    a = M.base((168, 166, 160), size)
+    M.shade(a, M.fbm(size, 701, 4, 64) * 12)
+    M.shade(a, M.grain(size, 702, 5))
+    img = M.to_img(a)
+    d = ImageDraw.Draw(img)
+    r = random.Random(703)
+    for _ in range(40):
+        x, y = r.randrange(size), r.randrange(size)
+        d.point((x, y), fill=r.choice([(150, 148, 142, 255), (184, 182, 176, 255)]))
+    # Form panel joints round the edge: a dark line with a light lip.
+    d.rectangle([0, 0, size - 1, size - 1], outline=(146, 144, 138, 255), width=2)
+    d.line([(2, 2), (size - 3, 2)], fill=(182, 180, 174, 255))
+    d.line([(2, 2), (2, size - 3)], fill=(182, 180, 174, 255))
+    for x in (size // 4, size * 3 // 4):
+        y = size // 2
+        d.ellipse([x - 4, y - 4, x + 4, y + 4], fill=(150, 148, 144, 255))
+        d.ellipse([x - 3, y - 3, x + 3, y + 3], fill=(132, 130, 126, 255))
+        d.arc([x - 4, y - 4, x + 4, y + 4], 200, 340, fill=(190, 188, 182, 255))
+    return M.stylize(img, 10)
+
+
 def draw_block_textures():
     """The fuel machines' and pipes' block textures, in the same stylized-realistic look as the equipment sheet."""
     import nuclear_materials as M
@@ -617,7 +708,7 @@ def draw_block_textures():
     d = ImageDraw.Draw(floor)
     d.rectangle([0, 56, 127, 66], fill=(226, 184, 30, 255))
     d.rectangle([0, 66, 127, 68], fill=(150, 120, 20, 255))
-    out = {"shielding_concrete": _concrete(),
+    out = {"shielding_concrete": _shielding_concrete(),
            "nu_centrifuge": M.stylize(M.brushed((206, 210, 214), 60, "v", dirt=0.15), 10),
            "nu_cap": M.stylize(M.brushed((52, 56, 62), 61, "h", dirt=0.1), 8),
            "nu_steel": M.stylize(M.brushed((150, 156, 162), 62, "h"), 10),
@@ -626,6 +717,9 @@ def draw_block_textures():
            "nu_pipe_blue": M.stylize(M.pipe_stripe((40, 100, 190), 67), 10), "nu_pipe_orange": M.stylize(M.pipe_stripe((220, 120, 30), 68), 10)}
     out.update(draw_pipe_textures())
     out.update(draw_tower_controller())
+    grate = draw_cooling_blocks()
+    out.update({k: v for k, v in grate.items() if k != "cooling_tower_controller_grate"})
+    out["cooling_tower_controller_grate"] = grate["cooling_tower_controller_grate"]
     return out
 
 
@@ -647,6 +741,43 @@ def draw_tower_controller():
     d.line([34, 64, 94, 64], fill=(40, 90, 170, 255), width=5)
     d.ellipse([56, 56, 72, 72], fill=(40, 90, 170, 255))
     return {"cooling_tower_controller_side": M.stylize(side, 12), "cooling_tower_controller_top": M.stylize(top, 10)}
+
+
+def draw_cooling_blocks():
+    """The cooling tower fill (corrugated PVC packs, seen from above and the side), the conduit trench cover (precast
+    concrete slabs with lifting eyes, flush with the ground) and the tower controller's drain grate."""
+    import nuclear_materials as M
+    S = 128
+    fill = Image.new("RGBA", (S, S), (214, 220, 222, 255))
+    d = ImageDraw.Draw(fill)
+    r = np.random.default_rng(91)
+    for x in range(0, S, 8):
+        for y in range(S):
+            wave = int(2.5 * math.sin(y / 6.0))
+            d.line([(x + wave, y), (x + wave + 3, y)], fill=(176, 184, 188, 255))
+    for y in (0, 63):
+        d.rectangle([0, y, S - 1, y + 1], fill=(150, 158, 162, 255))
+    a = np.array(fill).astype(float)
+    a[..., :3] *= r.uniform(0.94, 1.04, (S, S, 1))
+    fill = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+    side = Image.new("RGBA", (S, S), (204, 210, 212, 255))
+    d = ImageDraw.Draw(side)
+    for y in range(0, S, 6):
+        d.rectangle([0, y, S - 1, y + 2], fill=(170, 178, 182, 255))
+    for x in range(0, S, 32):
+        d.rectangle([x, 0, x + 1, S - 1], fill=(140, 148, 152, 255))
+    trench = M.concrete(93, tie_holes=False)
+    d = ImageDraw.Draw(trench)
+    d.rectangle([0, 62, 127, 65], fill=(96, 96, 92, 255))
+    for cx, cy in ((32, 30), (96, 30), (32, 96), (96, 96)):
+        d.ellipse([cx - 6, cy - 6, cx + 6, cy + 6], outline=(84, 86, 88, 255), width=3)
+    grate = Image.new("RGBA", (S, S), (70, 74, 78, 255))
+    d = ImageDraw.Draw(grate)
+    for x in range(6, S, 12):
+        d.rectangle([x, 6, x + 6, S - 7], fill=(28, 30, 34, 255))
+    d.rectangle([0, 0, S - 1, S - 1], outline=(110, 114, 118, 255), width=6)
+    return {"cooling_tower_fill": M.stylize(fill, 10), "cooling_tower_fill_side": M.stylize(side, 8),
+            "conduit_trench": M.stylize(trench, 12), "cooling_tower_controller_grate": M.stylize(grate, 8)}
 
 
 def draw_plume_frames():
@@ -759,7 +890,8 @@ EQ_CELL = 64
 EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
                 "concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey",
                 "radiator", "glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green",
-                "trefoil_sign", "generator", "fins", "handrail", "nameplate", "turbine_blue", "pipe_red", "water"]
+                "trefoil_sign", "generator", "fins", "handrail", "nameplate", "turbine_blue", "pipe_red", "water",
+                "paint_yellow", "mimic", "display", "cherenkov", "fuel_rack", "louvre", "switchgear", "filter_bank"]
 
 
 def eq_slot(name):
@@ -947,11 +1079,15 @@ def draw_equipment_sheet():
         "trefoil_sign": lambda: M.trefoil_sign(124), "generator": lambda: M.generator(125), "fins": lambda: M.fins(126),
         "handrail": lambda: M.handrail(127), "nameplate": lambda: M.nameplate(128), "turbine_blue": lambda: M.turbine_blue(129),
         "pipe_red": lambda: M.pipe_stripe((180, 60, 50), 130), "water": lambda: M.water(131),
+        "paint_yellow": lambda: M.painted((222, 178, 40), 132, seams=(("h", 62),), chip_count=5, drip_count=3),
+        "mimic": lambda: M.mimic(133), "display": lambda: M.display(134), "cherenkov": lambda: M.cherenkov(135),
+        "fuel_rack": lambda: M.fuel_rack(136), "louvre": lambda: M.louvre(137), "switchgear": lambda: M.switchgear(138),
+        "filter_bank": lambda: M.filter_bank(139),
     }
     sheet = Image.new("RGBA", (EQ_SHEET, EQ_SHEET), (0, 0, 0, 0))
     for name in EQ_MATERIALS:
         col, row = eq_slot(name)
-        sheet.paste(M.stylize(makers[name](), 12 if name in ("screen", "desk", "lamp_red", "lamp_green") else 10), (col * EQ_CELL, row * EQ_CELL))
+        sheet.paste(M.stylize(makers[name](), 24 if name in ("mimic", "display", "fuel_rack", "switchgear") else 12 if name in ("screen", "desk", "lamp_red", "lamp_green", "cherenkov") else 10), (col * EQ_CELL, row * EQ_CELL))
     return sheet
 
 
@@ -972,6 +1108,14 @@ def _pipe_side(name):
         d = ImageDraw.Draw(img)
         d.rectangle([40, 20, 52, 30], fill=(240, 150, 40, 255))
         return M.stylize(img, 10)
+    if name == "isolated_phase_bus":
+        # The generator's bus duct: a ribbed aluminium enclosure, a flange band and a phase label.
+        img = M.brushed((182, 188, 192), 143, "h", dirt=0.15)
+        d = ImageDraw.Draw(img)
+        for x in range(0, 128, 32):
+            d.rectangle([x, 0, x + 3, 127], fill=(130, 136, 140, 255))
+        d.rectangle([60, 52, 76, 76], fill=(220, 180, 40, 255))
+        return M.stylize(img, 10)
     img = M.concrete(142, tie_holes=False, stains=True)
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, 127, 7], fill=(110, 112, 110, 255))
@@ -982,7 +1126,7 @@ def _pipe_side(name):
 
 def _pipe_end(name):
     import nuclear_materials as M
-    base = {"reactor_coolant_pipe": (150, 156, 160), "insulated_steam_line": (196, 200, 202),
+    base = {"reactor_coolant_pipe": (150, 156, 160), "insulated_steam_line": (196, 200, 202), "isolated_phase_bus": (160, 166, 170),
             "circulating_water_conduit": (140, 140, 134)}[name]
     img = M.brushed(base, 150, "h", dirt=0.1) if name != "circulating_water_conduit" else M.concrete(150, tie_holes=False, stains=False)
     d = ImageDraw.Draw(img)
@@ -1168,6 +1312,17 @@ def _icon_small_turbine(big, d, f):
     d.rectangle(S(17, 10, 23, 24), fill=(220, 220, 214, 255))
 
 
+def _icon_cw_pump(big, d, f):
+    """A vertical pump: blue motor on top of a stand over the pump column, a discharge pipe out of the side."""
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(10, 52, 54, 58), fill=(110, 116, 120, 255))
+    _cyl_icon(d, f, 32, 34, 52, 7, STEEL, STEEL_D, STEEL_L)
+    d.rectangle(S(38, 40, 60, 46), fill=(40, 110, 170, 255))
+    _cyl_icon(d, f, 32, 8, 30, 12, (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255))
+    for y in range(12, 30, 4):
+        d.rectangle(S(20, y, 44, y + 1), fill=(36, 64, 110, 255))
+
+
 def _icon_cylinder(big, d, f):
     _cyl_icon(d, f, 32, 14, 54, 14, (220, 222, 216, 255), (160, 162, 156, 255), (240, 242, 238, 255))
     d.rectangle([18 * f, 30 * f, 46 * f, 36 * f], fill=(240, 190, 40, 255))
@@ -1203,7 +1358,207 @@ EQUIPMENT_ICONS = {"reactor_pressure_vessel": _icon_vessel, "reactor_steam_gener
                    "condenser": _icon_condenser, "feedwater_pump": _icon_feedwater, "main_transformer": _icon_transformer,
                    "epr_reactor_vessel": lambda big, d, f: _icon_epr(big, d, f), "small_modular_reactor": lambda big, d, f: _icon_smr(big, d, f),
                    "small_turbine_generator": lambda big, d, f: _icon_small_turbine(big, d, f),
+                   "circulating_water_pump": lambda big, d, f: _icon_cw_pump(big, d, f),
                    "reactor_control_console": _icon_console}
+
+
+# ---------------------------------------------------------------- the plant buildings' equipment: icons
+
+YEL, YEL_D, YEL_L = (222, 178, 40, 255), (160, 124, 24, 255), (244, 210, 90, 255)
+GRN, GRN_D, GRN_L = (92, 130, 104, 255), (60, 90, 70, 255), (130, 170, 140, 255)
+WHT, WHT_D, WHT_L = (222, 224, 220, 255), (170, 172, 168, 255), (244, 246, 242, 255)
+BLU, BLU_D, BLU_L = (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255)
+DARK = (40, 42, 46, 255)
+
+
+def _hcyl_icon(d, f, x0, x1, cy, r, body, dark, light):
+    """A shaded horizontal cylinder with rounded ends."""
+    S = lambda *v: [c * f for c in v]
+    d.rounded_rectangle(S(x0, cy - r, x1, cy + r), radius=r * f, fill=body)
+    d.rectangle(S(x0 + r * 0.6, cy - r, x1 - r * 0.6, cy - r * 0.45), fill=light)
+    d.rectangle(S(x0 + r * 0.6, cy + r * 0.5, x1 - r * 0.6, cy + r), fill=dark)
+
+
+def _icon_crane(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(4, 12, 60, 20), fill=YEL)
+    d.rectangle(S(4, 18, 60, 20), fill=YEL_D)
+    for x in (4, 52):
+        d.rectangle(S(x, 8, x + 8, 22), fill=YEL_D)
+        d.rectangle(S(x, 8, x + 8, 10), fill=(30, 30, 30, 255))
+    d.rectangle(S(26, 6, 38, 12), fill=(90, 96, 104, 255))
+    d.line(S(30, 20, 30, 42), fill=DARK, width=f)
+    d.line(S(34, 20, 34, 42), fill=DARK, width=f)
+    d.rectangle(S(26, 42, 38, 48), fill=YEL)
+    d.arc(S(28, 48, 38, 58), 0, 200, fill=STEEL_D, width=2 * f)
+
+
+def _icon_overhead_crane(big, d, f):
+    _icon_crane(big, d, f)
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(6, 24, 14, 30), fill=YEL)
+    d.rectangle(S(7, 25, 13, 28), fill=(110, 150, 170, 255))
+
+
+def _icon_gantry(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(6, 10, 58, 16), fill=YEL)
+    for x in (6, 52):
+        d.rectangle(S(x, 10, x + 6, 50), fill=YEL)
+        d.rectangle(S(x - 2, 50, x + 8, 54), fill=YEL_D)
+    d.rectangle(S(26, 4, 38, 12), fill=STEEL)
+    d.rectangle(S(30, 12, 34, 52), fill=STEEL_L)
+    d.rectangle(S(28, 52, 36, 56), fill=(230, 180, 40, 255))
+    d.rectangle(S(20, 6, 26, 10), fill=(60, 180, 220, 255))
+
+
+def _icon_msr(big, d, f):
+    _hcyl_icon(d, f, 4, 60, 34, 14, WHT, WHT_D, WHT_L)
+    S = lambda *v: [c * f for c in v]
+    for x in (18, 46):
+        d.rectangle(S(x - 4, 12, x + 4, 22), fill=WHT_D)
+        d.rectangle(S(x - 6, 10, x + 6, 13), fill=STEEL_D)
+        d.rectangle(S(x - 6, 48, x + 6, 58), fill=(92, 96, 100, 255))
+
+
+def _icon_fw_heater(big, d, f):
+    _hcyl_icon(d, f, 12, 60, 32, 11, (168, 172, 170, 255), (120, 124, 122, 255), (200, 204, 202, 255))
+    S = lambda *v: [c * f for c in v]
+    d.ellipse(S(4, 20, 18, 44), fill=(130, 134, 132, 255))
+    d.rectangle(S(12, 20, 16, 44), fill=STEEL_D)
+    for x in (24, 48):
+        d.rectangle(S(x - 5, 42, x + 5, 56), fill=(92, 96, 100, 255))
+
+
+def _icon_diesel(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(2, 50, 62, 56), fill=(92, 96, 100, 255))
+    d.rectangle(S(4, 24, 36, 50), fill=GRN)
+    for x in range(6, 34, 6):
+        d.rectangle(S(x, 18, x + 4, 24), fill=GRN_D)
+    d.rectangle(S(8, 14, 32, 18), fill=WHT_D)
+    d.rectangle(S(10, 2, 16, 14), fill=WHT_D)
+    _hcyl_icon(d, f, 36, 62, 36, 13, (60, 120, 90, 255), (40, 84, 62, 255), (90, 160, 120, 255))
+
+
+def _icon_tank(big, d, f):
+    _cyl_icon(d, f, 32, 12, 56, 18, WHT, WHT_D, WHT_L)
+    S = lambda *v: [c * f for c in v]
+    for y in (24, 36, 48):
+        d.rectangle(S(14, y, 50, y + 1), fill=WHT_D)
+    d.rectangle(S(20, 10, 22, 56), fill=DARK)
+    d.rectangle(S(26, 10, 28, 56), fill=DARK)
+
+
+def _icon_hx(big, d, f):
+    _hcyl_icon(d, f, 8, 56, 32, 12, GRN, GRN_D, GRN_L)
+    S = lambda *v: [c * f for c in v]
+    for x in (8, 52):
+        d.rectangle(S(x, 18, x + 4, 46), fill=STEEL)
+    d.rectangle(S(18, 8, 24, 20), fill=(180, 60, 50, 255))
+    d.rectangle(S(40, 8, 46, 20), fill=BLU)
+    for x in (18, 42):
+        d.rectangle(S(x, 44, x + 6, 56), fill=(92, 96, 100, 255))
+
+
+def _icon_pump_skid(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(4, 48, 60, 54), fill=(92, 96, 100, 255))
+    d.ellipse(S(4, 24, 24, 48), fill=BLU)
+    d.ellipse(S(8, 28, 20, 44), fill=BLU_L)
+    d.rectangle(S(24, 30, 30, 42), fill=(230, 180, 40, 255))
+    _hcyl_icon(d, f, 30, 60, 36, 11, (168, 172, 170, 255), (120, 124, 122, 255), (200, 204, 202, 255))
+    d.rectangle(S(11, 8, 17, 26), fill=STEEL)
+
+
+def _icon_fhm(big, d, f):
+    _icon_gantry(big, d, f)
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(4, 56, 60, 62), fill=(70, 140, 220, 255))
+
+
+def _icon_rack(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(6, 6, 58, 58), fill=(70, 150, 230, 255))
+    for i in range(4):
+        for j in range(4):
+            x, y = 8 + i * 12.5, 8 + j * 12.5
+            d.rectangle(S(x, y, x + 10, y + 10), fill=(200, 215, 230, 255), outline=(240, 245, 250, 255))
+            d.rectangle(S(x + 3, y + 3, x + 7, y + 7), fill=(90, 160, 230, 255))
+
+
+def _icon_cask(big, d, f):
+    _cyl_icon(d, f, 32, 12, 58, 16, (176, 176, 170, 255), (130, 130, 124, 255), (206, 206, 200, 255), top=(110, 116, 124, 255))
+    S = lambda *v: [c * f for c in v]
+    for x in (20, 40):
+        d.rectangle(S(x, 50, x + 5, 54), fill=DARK)
+        d.rectangle(S(x, 14, x + 5, 18), fill=DARK)
+    trefoil(d, 32 * f, 34 * f, int(6 * f))
+
+
+def _icon_screen(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    for x in (4, 54):
+        d.rectangle(S(x, 4, x + 6, 60), fill=BLU)
+    d.rectangle(S(10, 10, 54, 52), fill=(150, 154, 158, 255))
+    for x in range(12, 54, 4):
+        d.line(S(x, 10, x, 52), fill=(80, 84, 88, 255), width=f)
+    for y in range(12, 52, 6):
+        d.line(S(10, y, 54, y), fill=(60, 64, 68, 255), width=f)
+    d.rectangle(S(4, 2, 60, 10), fill=BLU_D)
+
+
+def _icon_display_wall(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(2, 12, 62, 50), fill=(60, 64, 70, 255))
+    for i in range(3):
+        for j in range(2):
+            x, y = 4 + i * 19.5, 14 + j * 18
+            d.rectangle(S(x, y, x + 18, y + 16), fill=(14, 30, 52, 255))
+            d.line(S(x + 2, y + 10, x + 7, y + 6, x + 12, y + 9, x + 16, y + 4), fill=(110, 230, 140, 255), width=f)
+    d.rectangle(S(24, 50, 40, 58), fill=(90, 94, 100, 255))
+
+
+def _icon_board(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(4, 8, 60, 40), fill=(176, 182, 178, 255))
+    d.line(S(8, 22, 30, 22, 30, 32, 56, 32), fill=(200, 50, 40, 255), width=2 * f)
+    d.line(S(8, 28, 22, 28, 22, 16, 56, 16), fill=(50, 110, 200, 255), width=2 * f)
+    for x in range(8, 58, 6):
+        d.rectangle(S(x, 10, x + 3, 13), fill=(80, 220, 110, 255) if x % 18 else (230, 60, 50, 255))
+    d.polygon(S(2, 40, 62, 40, 62, 48, 2, 54), fill=(150, 156, 160, 255))
+    d.rectangle(S(2, 54, 62, 60), fill=(120, 124, 128, 255))
+
+
+def _icon_switchgear(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    for k in range(3):
+        x = 4 + k * 19
+        d.rectangle(S(x, 6, x + 18, 58), fill=(150, 158, 160, 255), outline=(80, 86, 90, 255))
+        d.rectangle(S(x + 3, 12, x + 11, 20), fill=(240, 240, 230, 255))
+        d.ellipse(S(x + 12, 13, x + 16, 17), fill=(230, 60, 50, 255) if k == 1 else (80, 220, 110, 255))
+        d.rectangle(S(x + 2, 30, x + 4, 46), fill=(60, 62, 66, 255))
+
+
+def _icon_ahu(big, d, f):
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(4, 22, 60, 54), fill=WHT)
+    d.rectangle(S(4, 22, 18, 54), fill=(150, 154, 152, 255))
+    for y in range(25, 52, 4):
+        d.line(S(6, y, 16, y), fill=(60, 64, 66, 255), width=f)
+    d.rectangle(S(22, 26, 38, 50), outline=WHT_D, width=f)
+    d.rectangle(S(42, 26, 58, 50), outline=WHT_D, width=f)
+    d.rectangle(S(44, 8, 58, 22), fill=(110, 116, 124, 255))
+
+
+EQUIPMENT_ICONS.update({
+    "polar_crane": _icon_crane, "refueling_machine": _icon_gantry, "overhead_crane": _icon_overhead_crane,
+    "moisture_separator_reheater": _icon_msr, "feedwater_heater": _icon_fw_heater, "emergency_diesel_generator": _icon_diesel,
+    "storage_tank": _icon_tank, "heat_exchanger": _icon_hx, "pump_skid": _icon_pump_skid, "fuel_handling_machine": _icon_fhm,
+    "spent_fuel_rack": _icon_rack, "dry_storage_cask": _icon_cask, "travelling_water_screen": _icon_screen,
+    "plant_display_wall": _icon_display_wall, "main_control_board": _icon_board, "switchgear_lineup": _icon_switchgear,
+    "air_handling_unit": _icon_ahu,
+})
 
 
 # ---------------------------------------------------------------- the fuel machines' models (MachineKind multi-blocks)
@@ -1290,8 +1645,18 @@ def write_assets(write, rid, assets, lang):
         write(assets / "models" / "item" / f"{kind}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{kind}")}})
         write(assets / "items" / f"{kind}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{kind}")}})
     lang[f"block.{MOD}.{TOWER_CONTROLLER}"] = NAMES[TOWER_CONTROLLER]
+    lang[f"block.{MOD}.cooling_tower_fill"] = NAMES["cooling_tower_fill"]
+    write(assets / "models" / "block" / "cooling_tower_fill.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
+        "side": rid("block/cooling_tower_fill_side"), "top": rid("block/cooling_tower_fill"), "bottom": rid("block/cooling_tower_fill")}})
+    write(assets / "blockstates" / "cooling_tower_fill.json", {"variants": {"": {"model": rid("block/cooling_tower_fill")}}})
+    write(assets / "items" / "cooling_tower_fill.json", {"model": {"type": "minecraft:model", "model": rid("block/cooling_tower_fill")}})
+    lang[f"block.{MOD}.conduit_trench"] = NAMES["conduit_trench"]
+    write(assets / "models" / "block" / "conduit_trench.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
+        "side": rid("block/circulating_water_conduit"), "top": rid("block/conduit_trench"), "bottom": rid("block/conduit_trench")}})
+    write(assets / "blockstates" / "conduit_trench.json", {"variants": {"": {"model": rid("block/conduit_trench")}}})
+    write(assets / "items" / "conduit_trench.json", {"model": {"type": "minecraft:model", "model": rid("block/conduit_trench")}})
     write(assets / "models" / "block" / f"{TOWER_CONTROLLER}.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
-        "side": rid(f"block/{TOWER_CONTROLLER}_side"), "top": rid(f"block/{TOWER_CONTROLLER}_top"),
+        "side": rid(f"block/{TOWER_CONTROLLER}_side"), "top": rid(f"block/{TOWER_CONTROLLER}_grate"),
         "bottom": rid(f"block/{TOWER_CONTROLLER}_side")}})
     turn = {"south": 0, "west": 90, "north": 180, "east": 270}
     write(assets / "blockstates" / f"{TOWER_CONTROLLER}.json", {"variants": {

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SPS",
+    "GMC",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "P": "jugcraft:steel_fluid_pipe",
+    "G": "#c:gears/steel",
+    "M": "jugcraft:electric_motor",
+    "C": "minecraft:copper_block"
+  },
+  "result": {
+    "id": "jugcraft:emergency_diesel_generator",
+    "count": 1
+  }
+}

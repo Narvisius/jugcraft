@@ -56,7 +56,9 @@ public final class PlantShowcase {
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "time set 6000");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "gamerule doDaylightCycle false");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "weather clear 1000000");
-			build(level, player, level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition()));
+			BlockPos ground = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition());
+			// The plant under review: only the medium plant for now (all three with /nuclear showcase plants).
+			build(level, player, ground, new String[] {"nuclear_medium_pwr"});
 		}));
 	}
 
@@ -65,10 +67,30 @@ public final class PlantShowcase {
 	 * north from its lake, and tells {@code player} where each one is (click to go there). Returns the stakes.
 	 */
 	public static List<BlockPos> build(ServerLevel level, ServerPlayer player, BlockPos start) {
+		return build(level, player, start, PLANTS);
+	}
+
+	/**
+	 * Places in each plant worth walking to, for the medium plant (site coordinates as in tools/medium_plant.py: x across
+	 * the site, y up from the ground, z inland from the shore; then the direction to look, as site x/z, and a name).
+	 */
+	private static final Object[][] MEDIUM_TOUR = {
+			{"Main gate and parking", 150, 1, 196, 0, -1},
+			{"Main control room", 151, 15, 104, 0, -1},
+			{"Containment: operating floor", 84, 17, 51, 0, 1},
+			{"Containment: steam generator level", 83, 9, 48, 0, 1},
+			{"Turbine hall: operating floor", 140, 13, 50, 1, 0},
+			{"Spent fuel pool", 115, 13, 122, 0, -1},
+			{"Intake pump house", 170, 1, 12, 0, -1},
+			{"Cooling towers", 185, 30, 160, 0, 1},
+	};
+
+	public static List<BlockPos> build(ServerLevel level, ServerPlayer player, BlockPos start, String[] plants) {
 		List<BlockPos> stakes = new ArrayList<>();
 		int x = start.getX();
-		player.sendSystemMessage(Component.literal("Building the three nuclear plants (a few seconds)...").withStyle(ChatFormatting.GRAY));
-		for (String id : PLANTS) {
+		player.sendSystemMessage(Component.literal("Building the nuclear plant" + (plants.length > 1 ? "s" : "") + " (a few seconds)...")
+				.withStyle(ChatFormatting.GRAY));
+		for (String id : plants) {
 			Blueprint blueprint = Blueprint.get(id, false);
 			if (blueprint == null) {
 				continue;
@@ -86,14 +108,33 @@ public final class PlantShowcase {
 			player.sendSystemMessage(Component.literal("» " + blueprint.name + "  (" + view.toShortString() + ", click to fly there)")
 					.withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withClickEvent(new ClickEvent.RunCommand(
 							"/tp @s " + view.getX() + " " + view.getY() + " " + view.getZ() + " 180 20"))));
+			if (id.equals("nuclear_medium_pwr")) {
+				tour(player, blueprint, stake);
+			}
 		}
-		if (stakes.size() > 1) {
-			BlockPos middle = stakes.get(1);
+		if (!stakes.isEmpty()) {
+			BlockPos middle = stakes.get(stakes.size() / 2);
 			player.teleportTo(level, middle.getX() + 0.5, middle.getY() + 60, middle.getZ() + 110, java.util.Set.of(), 180, 25, true);
 		}
 		player.sendSystemMessage(Component.literal("The reactors are running at 60%. Link Card not needed: the control room consoles are linked.")
 				.withStyle(ChatFormatting.GRAY));
 		return stakes;
+	}
+
+	/** Clickable chat links to the places worth seeing inside a plant. */
+	private static void tour(ServerPlayer player, Blueprint blueprint, BlockPos stake) {
+		// Site to world: built unturned, the plant reaches north from the stake with its east-west turned round.
+		int ax = blueprint.anchorX(), sizeX = blueprint.sizeX;
+		player.sendSystemMessage(Component.literal("Walk through it:").withStyle(ChatFormatting.GRAY));
+		for (Object[] spot : MEDIUM_TOUR) {
+			int sx = (Integer) spot[1], sy = (Integer) spot[2], sz = (Integer) spot[3], lx = (Integer) spot[4], lz = (Integer) spot[5];
+			int wx = stake.getX() + sizeX - 1 - sx - ax, wy = stake.getY() + sy, wz = stake.getZ() - sz;
+			// Looking along site +x is world -x (west, yaw 90); along site +z is world -z (north, yaw 180).
+			int yaw = lx > 0 ? 90 : lx < 0 ? -90 : lz > 0 ? 180 : 0;
+			player.sendSystemMessage(Component.literal("   » " + spot[0])
+					.withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withClickEvent(new ClickEvent.RunCommand(
+							"/tp @s " + wx + " " + wy + " " + wz + " " + yaw + " 10"))));
+		}
 	}
 
 	/** A lake in front of the shore (south of the stake), for the intake: water where there is ground or air. */

@@ -266,6 +266,11 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 
 	private void complete(ServerLevel server) {
 		Blueprint blueprint = blueprint();
+		BuildSite done = site();
+		if (done != null) {
+			// The pools and basins fill once everything else is in.
+			done.fillFluids(server);
+		}
 		BlockPos pos = getBlockPos();
 		if (owner != null && server.getServer().getPlayerList().getPlayer(owner) instanceof Player player && blueprint != null) {
 			player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.complete", blueprint.name));

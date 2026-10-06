@@ -102,6 +102,9 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 			if (state.ghosts.size() >= MAX_GHOSTS) {
 				break;
 			}
+			if (io.github.jimbozoomer.jugcraft.blueprint.BuildSite.fluid(cell.state())) {
+				continue;
+			}
 			at.setWithOffset(origin, cell.offset());
 			BlockState now = level.getBlockState(at);
 			if (SurveyStakeBlockEntity.matches(now, cell.state())) {

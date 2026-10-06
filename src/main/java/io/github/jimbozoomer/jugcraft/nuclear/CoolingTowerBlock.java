@@ -38,24 +38,36 @@ public class CoolingTowerBlock extends BaseEntityBlock {
 	 * above the controller, the plume's radius, and the fans' offsets along the tower for a mechanical bank).
 	 */
 	public enum Tower implements StringRepresentable {
-		NATURAL("natural", "ct_natural", 1.0, 149, 28, new int[] {0}),
-		LARGE("large", "ct_natural_large", 0.9, 174, 33, new int[] {0}),
-		MECHANICAL("mechanical", "ct_mechanical", 0.4, 20, 5, new int[] {-40, -24, -8, 8, 24, 40});
+		//          name          blueprint            cap  plume r   fans                               fill r     fan
+		NATURAL("natural", "ct_natural", 1.0, 150, 28, new int[] {0}, 12, 47, 0),
+		LARGE("large", "ct_natural_large", 0.9, 175, 33, new int[] {0}, 12, 57, 0),
+		MECHANICAL("mechanical", "ct_mechanical", 0.4, 21, 5, new int[] {-40, -24, -8, 8, 24, 40}, 10, 6, 14);
 
 		public final String name;
 		public final String blueprint;
 		public final double capacity;
+		/** Blocks from the controller (under the basin floor) up to the top of the shell or the fan stacks. */
 		public final int plumeHeight;
 		public final int plumeRadius;
+		/** Along the bank: each cell's offset (a natural tower is one "cell" at 0). */
 		public final int[] fans;
+		/** The underside of the fill above the controller, and how far it spreads (radius, or a mechanical cell's half width). */
+		public final int fillHeight;
+		public final int fillRadius;
+		/** A mechanical cell's fan, above the controller (0: no fans). */
+		public final int fanHeight;
 
-		Tower(String name, String blueprint, double capacity, int plumeHeight, int plumeRadius, int[] fans) {
+		Tower(String name, String blueprint, double capacity, int plumeHeight, int plumeRadius, int[] fans, int fillHeight, int fillRadius,
+				int fanHeight) {
 			this.name = name;
 			this.blueprint = blueprint;
 			this.capacity = capacity;
 			this.plumeHeight = plumeHeight;
 			this.plumeRadius = plumeRadius;
 			this.fans = fans;
+			this.fillHeight = fillHeight;
+			this.fillRadius = fillRadius;
+			this.fanHeight = fanHeight;
 		}
 
 		@Override

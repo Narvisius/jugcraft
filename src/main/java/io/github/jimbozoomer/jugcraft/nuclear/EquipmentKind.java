@@ -24,7 +24,27 @@ public enum EquipmentKind {
 	// The pre-made plants' own reactors (docs/features/nuclear.md, "Pre-made plants").
 	EPR_VESSEL("epr_reactor_vessel", 8, 8, 22),
 	SMALL_MODULAR_REACTOR("small_modular_reactor", 5, 5, 22),
-	SMALL_TURBINE("small_turbine_generator", 3, 5, 4);
+	SMALL_TURBINE("small_turbine_generator", 3, 5, 4),
+	// The pump house's circulating water pumps: a cooling tower only works with them on its conduit.
+	CIRCULATING_WATER_PUMP("circulating_water_pump", 3, 3, 6),
+	// Plant equipment that only has to look right (the plants' buildings): drawn by the client, placed whole.
+	POLAR_CRANE("polar_crane", 40, 5, 5),
+	REFUELING_MACHINE("refueling_machine", 15, 4, 8),
+	OVERHEAD_CRANE("overhead_crane", 40, 5, 4),
+	MOISTURE_SEPARATOR_REHEATER("moisture_separator_reheater", 5, 20, 5),
+	FEEDWATER_HEATER("feedwater_heater", 3, 12, 3),
+	EMERGENCY_DIESEL_GENERATOR("emergency_diesel_generator", 5, 14, 5),
+	STORAGE_TANK("storage_tank", 5, 5, 9),
+	HEAT_EXCHANGER("heat_exchanger", 3, 9, 3),
+	PUMP_SKID("pump_skid", 3, 5, 3),
+	FUEL_HANDLING_MACHINE("fuel_handling_machine", 14, 5, 7),
+	SPENT_FUEL_RACK("spent_fuel_rack", 4, 4, 4),
+	DRY_STORAGE_CASK("dry_storage_cask", 3, 3, 6),
+	TRAVELLING_WATER_SCREEN("travelling_water_screen", 6, 2, 9),
+	PLANT_DISPLAY_WALL("plant_display_wall", 9, 1, 4),
+	MAIN_CONTROL_BOARD("main_control_board", 6, 2, 3),
+	SWITCHGEAR_LINEUP("switchgear_lineup", 8, 2, 3),
+	AIR_HANDLING_UNIT("air_handling_unit", 4, 8, 3);
 
 	public final String id;
 	public final int wide, deep, tall;
@@ -43,8 +63,14 @@ public enum EquipmentKind {
 			case COOLANT -> this == REACTOR_VESSEL || this == EPR_VESSEL || this == STEAM_GENERATOR || this == COOLANT_PUMP || this == PRESSURIZER;
 			case STEAM -> this == STEAM_GENERATOR || this == TURBINE_GENERATOR || this == FEEDWATER_PUMP || this == CONDENSER
 					|| this == SMALL_MODULAR_REACTOR || this == SMALL_TURBINE;
-			case WATER -> this == CONDENSER || this == SMALL_TURBINE;
+			case WATER -> this == CONDENSER || this == SMALL_TURBINE || this == CIRCULATING_WATER_PUMP;
+			case BUS -> this == TURBINE_GENERATOR || this == MAIN_TRANSFORMER;
 		};
+	}
+
+	/** Plant equipment that only has to look right: it takes no pipes and does no work. */
+	public boolean decor() {
+		return ordinal() >= POLAR_CRANE.ordinal();
 	}
 
 	/** Equipment that holds a reactor core (and is run from a console). */

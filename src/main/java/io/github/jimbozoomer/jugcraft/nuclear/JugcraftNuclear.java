@@ -67,6 +67,9 @@ public final class JugcraftNuclear {
 	public static net.minecraft.world.level.block.entity.BlockEntityType<EquipmentBlockEntity> EQUIPMENT_ENTITY;
 	// Cooling towers.
 	public static Block COOLING_TOWER;
+	/** The fill packs inside a cooling tower, and the buried conduit. */
+	public static Block COOLING_FILL;
+	public static Block CONDUIT_TRENCH;
 	public static net.minecraft.world.level.block.entity.BlockEntityType<CoolingTowerBlockEntity> COOLING_TOWER_ENTITY;
 	/** A cooling tower's steam plume (always drawn, however far: the plume is what you see of a plant from afar). */
 	public static net.minecraft.core.particles.SimpleParticleType COOLING_PLUME;
@@ -150,6 +153,8 @@ public final class JugcraftNuclear {
 		Registry.register(BuiltInRegistries.ITEM, towerItem, new BlockItem(COOLING_TOWER, new Item.Properties().setId(towerItem).useBlockDescriptionPrefix()));
 		COOLING_TOWER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("cooling_tower_controller"),
 				net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(CoolingTowerBlockEntity::new, COOLING_TOWER).build());
+		COOLING_FILL = block("cooling_tower_fill", p -> new Block(p), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.0F, 3.0F));
+		CONDUIT_TRENCH = block("conduit_trench", ConduitTrenchBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(2.0F, 6.0F));
 		COOLING_PLUME = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Jugcraft.id("cooling_plume"),
 				net.fabricmc.fabric.api.particle.v1.FabricParticleTypes.simple(true));
 
@@ -189,6 +194,8 @@ public final class JugcraftNuclear {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			EQUIPMENT_ITEMS.values().forEach(output::accept);
 			output.accept(COOLING_TOWER);
+			output.accept(COOLING_FILL);
+			output.accept(CONDUIT_TRENCH);
 			PIPES.values().forEach(b -> output.accept(b.asItem()));
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
@@ -203,6 +210,15 @@ public final class JugcraftNuclear {
 	public static EquipmentBlockEntity equipmentAt(net.minecraft.world.level.Level level, BlockPos pos) {
 		BlockPos anchor = EquipmentRegistry.of(level).anchorOf(pos);
 		return anchor != null && level.getBlockEntity(anchor) instanceof EquipmentBlockEntity e ? e : null;
+	}
+
+	/** A block with its item. */
+	private static Block block(String name, java.util.function.Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Jugcraft.id(name));
+		Block block = Registry.register(BuiltInRegistries.BLOCK, key, factory.apply(properties.setId(key)));
+		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id(name));
+		Registry.register(BuiltInRegistries.ITEM, itemKey, new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
+		return block;
 	}
 
 	private static Item item(String name, java.util.function.Function<Item.Properties, Item> factory) {

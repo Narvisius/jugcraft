@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/isolated_phase_bus",
+    "side": "jugcraft:block/isolated_phase_bus",
+    "end": "jugcraft:block/isolated_phase_bus_end"
+  },
+  "elements": [
+    {
+      "from": [
+        2.0,
+        2.0,
+        0
+      ],
+      "to": [
+        14.0,
+        14.0,
+        2.0
+      ],
+      "faces": {
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side",
+          "rotation": 90
+        },
+        "down": {
+          "texture": "#side",
+          "rotation": 90
+        },
+        "north": {
+          "texture": "#end"
+        }
+      }
+    }
+  ]
+}

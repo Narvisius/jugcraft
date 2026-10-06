@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SRS",
+    "CAC",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "R": "minecraft:redstone",
+    "C": "minecraft:copper_ingot",
+    "A": "jugcraft:aluminum_cable"
+  },
+  "result": {
+    "id": "jugcraft:switchgear_lineup",
+    "count": 1
+  }
+}

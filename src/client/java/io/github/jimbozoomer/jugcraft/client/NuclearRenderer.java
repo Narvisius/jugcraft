@@ -67,6 +67,14 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] TURBINE_BLUE = region(5, 3);
 	static final float[] PIPE_RED = region(6, 3);
 	static final float[] WATER = region(7, 3);
+	static final float[] PAINT_YELLOW = region(0, 4);
+	static final float[] MIMIC = region(1, 4);
+	static final float[] DISPLAY = region(2, 4);
+	static final float[] CHERENKOV = region(3, 4);
+	static final float[] FUEL_RACK = region(4, 4);
+	static final float[] LOUVRE = region(5, 4);
+	static final float[] SWITCHGEAR = region(6, 4);
+	static final float[] FILTER_BANK = region(7, 4);
 
 	private static float[] region(int col, int row) {
 		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX};
@@ -162,10 +170,24 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				}
 				case SMALL_MODULAR_REACTOR -> smallModule(f);
 				case SMALL_TURBINE -> smallTurbine(f);
+				case CIRCULATING_WATER_PUMP -> circulatingWaterPump(f);
+				default -> PlantDecor.draw(kind, f);
 			}
 			STATIC[i] = mesh;
 		}
 		return STATIC[i];
+	}
+
+	private static final Mesh[] GLOW = new Mesh[EquipmentKind.values().length * 2];
+
+	static Mesh glowMesh(EquipmentKind kind, boolean detail) {
+		int i = kind.ordinal() * 2 + (detail ? 1 : 0);
+		if (GLOW[i] == null) {
+			Mesh mesh = new Mesh();
+			PlantDecor.glow(kind, new Frame(mesh, detail));
+			GLOW[i] = mesh;
+		}
+		return GLOW[i];
 	}
 
 	static Mesh headMesh(boolean epr, boolean detail) {
@@ -215,6 +237,14 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				Mesh lamps = new Mesh();
 				consoleLamps(new Frame(lamps, detail), state);
 				lamps.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+			} else if (state.kind.decor()) {
+				// The lit parts (screens, lamps, the glow over spent fuel), and whatever blinks.
+				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				if (detail) {
+					Mesh blink = new Mesh();
+					PlantDecor.blink(state.kind, new Frame(blink, true), state.time);
+					if (blink.vertices() > 0) blink.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				}
 			}
 		});
 	}
@@ -592,6 +622,39 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				f.box(x - 0.03, 1.55, 0.1, x + 0.03, 1.61, 4.9, HANDRAIL);
 			}
 		}
+	}
+
+	/**
+	 * A vertical circulating water pump as in a pump house: the pump column going down into its bay, a cast discharge
+	 * head with the outlet elbow, the motor stand and a big blue motor with its cooling fins and terminal box on top.
+	 */
+	static void circulatingWaterPump(Frame f) {
+		double c = 1.5;
+		f.box(0.05, 0, 0.05, 2.95, 0.3, 2.95, CARBON_STEEL, GRATING, CARBON_STEEL);
+		f.revolve(v(c, 0.3, c), v(c, 1.3, c), new double[][] {{0, 1.0}, {1.2, 1.0}, {1.5, 1.25}, {1.7, 1.25}}, f.sides(20), PAINT_BLUE, false, true);
+		// The discharge elbow toward the front.
+		f.cylinder(v(c, 1.0, c - 0.6), v(c, 1.0, c - 1.55), 0.55, f.sides(16), PAINT_BLUE, false);
+		f.cylinder(v(c, 1.0, c - 1.4), v(c, 1.0, c - 1.55), 0.72, f.sides(16), FLANGE, true);
+		// Motor stand: four legs and a ring.
+		for (int i = 0; i < 4; i++) {
+			double a = Math.PI / 4 + i * Math.PI / 2;
+			double x = c + Math.cos(a) * 0.95, z = c + Math.sin(a) * 0.95;
+			f.box(x - 0.1, 1.7, z - 0.1, x + 0.1, 2.6, z + 0.1, CARBON_STEEL);
+		}
+		f.cylinder(v(c, 1.9, c), v(c, 2.5, c), 0.35, f.sides(12), STAINLESS, false);
+		f.revolve(v(c, 2.6, c), v(c, 3.6, c), new double[][] {{0, 1.25}, {0.25, 1.25}}, f.sides(24), CARBON_STEEL, true, true);
+		// The motor.
+		f.revolve(v(c, 2.85, c), v(c, 3.85, c), new double[][] {{0, 1.15}, {2.4, 1.15}, {2.6, 0.9}, {2.75, 0.9}}, f.sides(24), PAINT_BLUE, false, true);
+		if (f.detail) {
+			for (int k = 0; k < 16; k++) {
+				double a = k * Math.PI / 8;
+				double x = c + Math.cos(a) * 1.15, z = c + Math.sin(a) * 1.15;
+				f.box(x - 0.04, 3.0, z - 0.04, x + 0.04, 5.1, z + 0.04, CARBON_STEEL);
+			}
+			f.box(c + 0.9, 3.6, c - 0.35, c + 1.45, 4.3, c + 0.35, PAINT_GREY);
+			f.plate(c - 0.35, 4.3, c - 1.2, c + 0.35, 4.7, c - 1.16, 0, NAMEPLATE, PAINT_GREY);
+		}
+		f.box(c - 0.3, 5.6, c - 0.3, c + 0.3, 5.9, c + 0.3, HAZARD);
 	}
 
 	/** The closed head: dome, drive housings, shroud rings and the lifting rig (off while refuelling). */

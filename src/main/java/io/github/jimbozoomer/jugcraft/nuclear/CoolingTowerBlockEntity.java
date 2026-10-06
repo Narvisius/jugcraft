@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import java.util.List;
 
 /**
  * A cooling tower's controller. Every few seconds it checks its tower against the tower's blueprint (a spread of the
@@ -92,6 +93,10 @@ public class CoolingTowerBlockEntity extends BlockEntity {
 			if (was != formed) {
 				sync();
 			}
+			// A finished tower fills its basin (and tops it up now and then): drones don't carry water.
+			if (formed && (!was || Math.floorMod(now / CHECK_INTERVAL, 12) == 0)) {
+				fillBasin(level);
+			}
 		}
 		if (++usedTicks >= 20) {
 			float next = (float) Math.min(1, usedSum / usedTicks / tower().capacity);
@@ -142,6 +147,38 @@ public class CoolingTowerBlockEntity extends BlockEntity {
 		return checked >= SAMPLES / 3 && matched >= checked * 0.9;
 	}
 
+	/** The tower's water cells (its basin), as offsets from the controller, by blueprint and rotation. */
+	private static final java.util.Map<String, List<BlockPos>> BASINS = new java.util.HashMap<>();
+
+	private static synchronized List<BlockPos> basin(Blueprint blueprint, Rotation rotation) {
+		return BASINS.computeIfAbsent(blueprint.id + "/" + rotation.ordinal(), key -> {
+			List<BlockPos> out = new java.util.ArrayList<>();
+			int self = controllerCell(blueprint);
+			if (self < 0) return out;
+			BlockPos selfOffset = blueprint.offset(self, rotation);
+			for (int i = 0; i < blueprint.size(); i++) {
+				if (!blueprint.state(i, Rotation.NONE).getFluidState().isEmpty()) {
+					out.add(blueprint.offset(i, rotation).subtract(selfOffset));
+				}
+			}
+			return List.copyOf(out);
+		});
+	}
+
+	/** Water where the basin should be and there is only air. */
+	private void fillBasin(ServerLevel level) {
+		Blueprint blueprint = Blueprint.get(tower().blueprint, false);
+		if (blueprint == null) return;
+		Rotation rotation = rotationOf(getBlockState().getValue(CoolingTowerBlock.FACING));
+		net.minecraft.world.level.block.state.BlockState water = net.minecraft.world.level.block.Blocks.WATER.defaultBlockState();
+		for (BlockPos offset : basin(blueprint, rotation)) {
+			BlockPos at = getBlockPos().offset(offset);
+			if (level.isLoaded(at) && level.getBlockState(at).isAir()) {
+				level.setBlock(at, water, Block.UPDATE_CLIENTS);
+			}
+		}
+	}
+
 	private static int controllerCell(Blueprint blueprint) {
 		for (int i = 0; i < blueprint.size(); i++) {
 			if (blueprint.state(i, Rotation.NONE).getBlock() instanceof CoolingTowerBlock) {
@@ -172,7 +209,34 @@ public class CoolingTowerBlockEntity extends BlockEntity {
 				double y = getBlockPos().getY() + tower.plumeHeight + 1;
 				level.addAlwaysVisibleParticle(JugcraftNuclear.COOLING_PLUME, true, x, y, z, 0.03, 0.25 + random.nextDouble() * 0.1, 0.01);
 			}
+			// Under the fill the cooled water rains into the basin (only drawn near the player, like rain).
+			int drops = tower == CoolingTowerBlock.Tower.MECHANICAL ? 2 : 14;
+			for (int k = 0; k < drops * load + random.nextFloat(); k++) {
+				double x, z;
+				if (tower == CoolingTowerBlock.Tower.MECHANICAL) {
+					double a = (random.nextDouble() * 2 - 1) * tower.fillRadius, b = (random.nextDouble() * 2 - 1) * 5;
+					x = getBlockPos().getX() + 0.5 + along.getStepX() * (fan + a) + facing.getStepX() * b;
+					z = getBlockPos().getZ() + 0.5 + along.getStepZ() * (fan + a) + facing.getStepZ() * b;
+				} else {
+					double angle = random.nextDouble() * Math.PI * 2, r = 4 + Math.sqrt(random.nextDouble()) * (tower.fillRadius - 4);
+					x = getBlockPos().getX() + 0.5 + Math.cos(angle) * r;
+					z = getBlockPos().getZ() + 0.5 + Math.sin(angle) * r;
+				}
+				level.addParticle(net.minecraft.core.particles.ParticleTypes.FALLING_WATER, x, getBlockPos().getY() + tower.fillHeight - 0.05, z, 0, 0, 0);
+			}
 		}
+		// The sound of the rain inside, now and then.
+		if (level.getGameTime() % 30 == 0) {
+			level.playLocalSound(getBlockPos().getX() + 0.5, getBlockPos().getY() + tower.fillHeight * 0.5, getBlockPos().getZ() + 0.5,
+					net.minecraft.sounds.SoundEvents.WEATHER_RAIN, net.minecraft.sounds.SoundSource.BLOCKS,
+					tower == CoolingTowerBlock.Tower.MECHANICAL ? 0.6F * load : 1.4F * load, 0.75F, false);
+		}
+	}
+
+	/** Client: how far the fans have turned (degrees), for the renderer. */
+	public float fanAngle(float partialTick) {
+		if (level == null || !formed) return 0;
+		return ((level.getGameTime() % 3600) + partialTick) * 9F * Math.max(0.15F, load);
 	}
 
 	private void sync() {

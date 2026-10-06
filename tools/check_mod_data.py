@@ -872,7 +872,7 @@ def check_nuclear():
             continue
         data = json.loads((ROOT / "src" / "main" / "resources" / "data" / MOD / "blueprint" / f"{blueprint}.jugbp.json").read_text(encoding="utf-8"))
         tops = [y for y, rows in enumerate(data["layers"]) if any(rows)]
-        controller_y = 1
+        controller_y = 0  # the controller is in the bottom layer, under the basin floor
         if int(height) != max(tops) - controller_y:
             err(f"CoolingTowerBlock.Tower {kind} plume height {height} != tower top {max(tops)} - controller {controller_y}")
     renderer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client" / "NuclearRenderer.java").read_text(encoding="utf-8")

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SMS",
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "M": "jugcraft:electric_motor",
+    "B": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "jugcraft:travelling_water_screen",
+    "count": 1
+  }
+}

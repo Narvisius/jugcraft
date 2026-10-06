@@ -25,25 +25,52 @@ public final class BuildSite {
 	/** Cells known to be in place (set when one is seen or filled; checked again from time to time). */
 	public final BitSet done;
 
+	/** Water (pools, basins) in the blueprint: not built by drones; the stake fills it when the build is finished. */
+	private final long[] fluidPos;
+	private final BlockState[] fluidStates;
+
 	public BuildSite(Blueprint blueprint, Rotation rotation, BlockPos origin) {
 		this.blueprint = blueprint;
 		this.rotation = rotation;
 		this.origin = origin.immutable();
-		int n = blueprint.size();
+		int total = blueprint.size();
+		int fluids = 0;
+		for (int i = 0; i < total; i++) {
+			if (fluid(blueprint.state(i, Rotation.NONE))) fluids++;
+		}
+		int n = total - fluids;
 		pos = new long[n];
 		states = new BlockState[n];
-		int lowest = n == 0 ? origin.getY() : origin.getY() + blueprint.offsetY(0);
-		int highest = n == 0 ? origin.getY() : origin.getY() + blueprint.offsetY(n - 1);
+		fluidPos = new long[fluids];
+		fluidStates = new BlockState[fluids];
+		int lowest = Integer.MAX_VALUE, highest = Integer.MIN_VALUE;
+		for (int i = 0; i < total; i++) {
+			if (!fluid(blueprint.state(i, Rotation.NONE))) {
+				lowest = Math.min(lowest, origin.getY() + blueprint.offsetY(i));
+				highest = Math.max(highest, origin.getY() + blueprint.offsetY(i));
+			}
+		}
+		if (n == 0) {
+			lowest = highest = origin.getY();
+		}
 		minY = lowest;
 		layerStart = new int[highest - lowest + 2];
 		int layer = 0;
-		for (int i = 0; i < n; i++) {
+		int k0 = 0, f = 0;
+		for (int i = 0; i < total; i++) {
+			BlockState st = blueprint.state(i, rotation);
 			BlockPos p = origin.offset(blueprint.offset(i, rotation));
-			pos[i] = p.asLong();
-			states[i] = blueprint.state(i, rotation);
+			if (fluid(st)) {
+				fluidPos[f] = p.asLong();
+				fluidStates[f++] = st;
+				continue;
+			}
+			int idx = k0++;
+			pos[idx] = p.asLong();
+			states[idx] = st;
 			int k = p.getY() - lowest;
 			while (layer <= k) {
-				layerStart[layer++] = i;
+				layerStart[layer++] = idx;
 			}
 		}
 		while (layer < layerStart.length) {
@@ -65,6 +92,21 @@ public final class BuildSite {
 
 	public int size() {
 		return pos.length;
+	}
+
+	/** A block the drones never place: a still liquid (the blueprint's water). */
+	public static boolean fluid(BlockState state) {
+		return state.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock;
+	}
+
+	/** Puts the blueprint's water in (where there is air or another liquid): the build's commissioning. */
+	public void fillFluids(net.minecraft.world.level.Level level) {
+		for (int i = 0; i < fluidPos.length; i++) {
+			BlockPos p = BlockPos.of(fluidPos[i]);
+			if (level.isLoaded(p) && (level.getBlockState(p).isAir() || !level.getBlockState(p).getFluidState().isEmpty())) {
+				level.setBlock(p, fluidStates[i], net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+			}
+		}
 	}
 
 	public long pos(int i) {

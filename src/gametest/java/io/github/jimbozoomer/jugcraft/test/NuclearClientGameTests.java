@@ -208,7 +208,7 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 		// Each plant: its id, where interesting things are (site coordinates, see tools/nuclear_plants.py) and a name.
 		Object[][] plants = {
 				{"nuclear_small_modular", "small", new int[][] {{77, 62}, {78, 113}, {78, 150}}},
-				{"nuclear_medium_pwr", "medium", new int[][] {{71, 57}, {148, 57}, {100, 200}}},
+				{"nuclear_medium_pwr", "medium", new int[][] {{85, 65}, {160, 60}, {185, 215}}},
 				{"nuclear_large_epr", "large", new int[][] {{178, 92}, {282, 41}, {110, 261}}},
 		};
 		int along = 0;
