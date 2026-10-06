@@ -112,12 +112,24 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				server.runCommand("setblock %d %d %d jugcraft:storage_rack[facing=north,part=%d]".formatted(bx - 1 + c, y + r, bz, r * 3 + c));
 			}
 		}
-		String[] stock = {"minecraft:iron_ingot", "minecraft:paper", "minecraft:copper_ingot", "minecraft:redstone", "minecraft:glass",
-				"minecraft:bricks", "minecraft:oak_planks", "minecraft:coal", "minecraft:bone_meal"};
-		int[] filled = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 18, 19, 20, 21, 22, 23, 30, 31, 32, 42, 48, 49};
-		for (int i = 0; i < filled.length; i++) {
-			int slot = filled[i];
-			server.runCommand("item replace block %d %d %d container.%d with %s 32".formatted(bx, y, bz, slot, stock[(slot / 6 + slot) % stock.length]));
+		// Each bay's six slots (bays left to right along the bottom, then up): only liquids go in drums or jerrycans.
+		String[][] bays = {
+				{"minecraft:water_bucket", "minecraft:water_bucket", "minecraft:lava_bucket", "minecraft:water_bucket", "minecraft:lava_bucket", "minecraft:water_bucket"},
+				{"minecraft:bucket", "minecraft:bucket", "minecraft:iron_ingot", "minecraft:diamond_pickaxe", "minecraft:glass", "minecraft:paper"},
+				{"jugcraft:crude_oil_bucket", "jugcraft:diesel_bucket", "jugcraft:sulfuric_acid_bucket", "minecraft:milk_bucket",
+						"jugcraft:vanadium_electrolyte_bucket", "jugcraft:brine_bucket"},
+				{"minecraft:potion", "minecraft:honey_bottle", "minecraft:glass_bottle", "minecraft:potion", null, null},
+				{"minecraft:bread", "minecraft:apple", "minecraft:cooked_beef", "minecraft:carrot", "minecraft:bread", null},
+				{"minecraft:redstone", "minecraft:bricks", "minecraft:oak_planks", "minecraft:coal", "minecraft:bone_meal", "minecraft:string"},
+				{"minecraft:copper_ingot", "minecraft:paper", null, null, null, null},
+				{},
+				{"minecraft:water_bucket", null, "minecraft:bucket", null, null, null}};
+		for (int bay = 0; bay < bays.length; bay++) {
+			for (int k = 0; k < bays[bay].length; k++) {
+				if (bays[bay][k] != null) {
+					server.runCommand("item replace block %d %d %d container.%d with %s 1".formatted(bx, y, bz, bay * 6 + k, bays[bay][k]));
+				}
+			}
 		}
 		// A roof over the rack with high-bay lights under it.
 		server.runCommand("fill %d %d %d %d %d %d jugcraft:aluminum_cladding".formatted(bx - 4, y + 7, bz - 3, bx + 4, y + 7, bz + 4));
@@ -133,6 +145,8 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 		context.waitTicks(5);
 		shot(context, singleplayer, bx, y + 1, bz + 4, bx, y + 1, bz, 0.4, "jugcraft_warehouse_rack_front");
 		shot(context, singleplayer, bx + 3, y + 1, bz + 3, bx, y + 1, bz, 0.6, "jugcraft_warehouse_rack_angle");
+		shot(context, singleplayer, bx, y, bz + 3, bx, y, bz, 0.2, "jugcraft_warehouse_rack_low");
+		shot(context, singleplayer, bx, y + 1, bz + 3, bx, y + 1, bz, 0.0, "jugcraft_warehouse_rack_middle");
 		shot(context, singleplayer, bx, y + 2, bz + 4, bx, y + 6, bz + 2, 0.0, "jugcraft_warehouse_high_bay");
 		shot(context, singleplayer, dx, y + 1, bz + 6, dx, y + 1, bz, 0.4, "jugcraft_roller_door_shut");
 		singleplayer.getServer().runOnServer(minecraft -> io.github.jimbozoomer.jugcraft.nuclear.RollerDoorBlock.toggle(minecraft.overworld(),
@@ -371,8 +385,36 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			if (name.equals("medium")) {
 				// Rebuild it in place (as the showcase does when the plant has changed since a world was built), then
 				// look round the warehouse: an aisle of racks, the high-bay lights, the stores office.
-				singleplayer.getServer().runOnServer(minecraft -> io.github.jimbozoomer.jugcraft.nuclear.PlantShowcase.rebuild(minecraft.overworld(),
-						blueprint[0], stake, minecraft.getPlayerList().getPlayers().get(0)));
+				// The warehouse racks are stocked first: the rebuild must put back what was in them.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					net.minecraft.world.item.Item[] goods = {net.minecraft.world.item.Items.WATER_BUCKET, net.minecraft.world.item.Items.PAPER,
+							net.minecraft.world.item.Items.IRON_INGOT, net.minecraft.world.item.Items.BREAD, net.minecraft.world.item.Items.LAVA_BUCKET,
+							net.minecraft.world.item.Items.GLASS, net.minecraft.world.item.Items.BUCKET, net.minecraft.world.item.Items.POTION,
+							net.minecraft.world.item.Items.OAK_PLANKS, net.minecraft.world.item.Items.MILK_BUCKET, net.minecraft.world.item.Items.STRING};
+					java.util.List<BlockPos> racks = new java.util.ArrayList<>();
+					for (int i = 0; i < blueprint[0].size(); i++) {
+						BlockPos at = stake.offset(blueprint[0].offset(i, net.minecraft.world.level.block.Rotation.NONE));
+						if (level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageRackBlockEntity rack) {
+							int k = racks.size();
+							for (int slot = 0; slot < 10 + (k * 7) % 40; slot++) {
+								rack.setItem(slot, new net.minecraft.world.item.ItemStack(goods[(k + slot / 3) % goods.length]));
+							}
+							rack.setChanged();
+							racks.add(at);
+						}
+					}
+					io.github.jimbozoomer.jugcraft.nuclear.PlantShowcase.rebuild(level, blueprint[0], stake, minecraft.getPlayerList().getPlayers().get(0));
+					for (int k = 0; k < racks.size(); k++) {
+						if (!(level.getBlockEntity(racks.get(k)) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageRackBlockEntity rack)
+								|| !rack.getItem(0).is(goods[k % goods.length])) {
+							throw new AssertionError("The rebuild lost what was in the storage rack at " + racks.get(k).toShortString());
+						}
+					}
+					if (racks.isEmpty()) {
+						throw new AssertionError("No storage racks found in the medium plant");
+					}
+				});
 				context.waitTicks(40);
 				server.runCommand("effect clear @p night_vision");
 				shotAt(context, singleplayer, wx.applyAsInt(291), y + 2, wz.applyAsInt(116), wx.applyAsInt(270), y + 2, wz.applyAsInt(116),

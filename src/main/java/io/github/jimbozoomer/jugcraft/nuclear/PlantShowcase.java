@@ -191,12 +191,14 @@ public final class PlantShowcase {
 
 	/**
 	 * Clears every building of the plant above the ground (its box, a block round it for the signs on its walls, two
-	 * over its roof) and builds the plant again, running.
+	 * over its roof) and builds the plant again, running. What was stored in its storage racks is put back in the rack
+	 * built in the same place (or dropped there if there is none now).
 	 */
 	public static void rebuild(ServerLevel level, Blueprint blueprint, BlockPos stake, ServerPlayer player) {
 		int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SKIP_BLOCK_ENTITY_SIDEEFFECTS;
 		BlockState air = Blocks.AIR.defaultBlockState();
 		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+		java.util.Map<BlockPos, List<net.minecraft.world.item.ItemStack>> stored = new java.util.HashMap<>();
 		for (Blueprint.PartRef part : blueprint.parts) {
 			int x0 = stake.getX() + part.x() - blueprint.anchorX(), y0 = stake.getY() + part.y() - blueprint.anchorY();
 			int z0 = stake.getZ() + part.z() - blueprint.anchorZ();
@@ -207,6 +209,13 @@ public final class PlantShowcase {
 					for (int y = Math.max(y0, stake.getY()); y <= y0 + part.sizeY() + 1; y++) {
 						at.set(x, y, z);
 						if (!level.isOutsideBuildHeight(at) && !level.getBlockState(at).isAir()) {
+							if (level.getBlockEntity(at) instanceof StorageRackBlockEntity rack && !rack.isEmpty()) {
+								List<net.minecraft.world.item.ItemStack> items = new ArrayList<>();
+								for (int i = 0; i < rack.getContainerSize(); i++) {
+									items.add(rack.getItem(i).copy());
+								}
+								stored.put(at.immutable(), items);
+							}
 							level.setBlock(at, air, flags);
 						}
 					}
@@ -215,6 +224,22 @@ public final class PlantShowcase {
 		}
 		PlantBuilder.Result result = PlantBuilder.build(level, blueprint, stake, Rotation.NONE, player.getUUID(), true);
 		start(level, result);
+		for (java.util.Map.Entry<BlockPos, List<net.minecraft.world.item.ItemStack>> e : stored.entrySet()) {
+			BlockPos pos = e.getKey();
+			List<net.minecraft.world.item.ItemStack> items = e.getValue();
+			if (level.getBlockEntity(pos) instanceof StorageRackBlockEntity rack) {
+				for (int i = 0; i < items.size() && i < rack.getContainerSize(); i++) {
+					rack.setItem(i, items.get(i));
+				}
+				rack.setChanged();
+			} else {
+				for (net.minecraft.world.item.ItemStack stack : items) {
+					if (!stack.isEmpty()) {
+						net.minecraft.world.Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+					}
+				}
+			}
+		}
 	}
 
 	/**

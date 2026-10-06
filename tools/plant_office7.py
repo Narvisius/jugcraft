@@ -153,15 +153,83 @@ def _lens():
     return img
 
 
-def _drum(colour, seed):
+def _drum(colour, seed, label="plain"):
     img = _img(colour)
     d = ImageDraw.Draw(img)
     rr = random.Random(seed)
     for _ in range(40):
         x, y = rr.randrange(S), rr.randrange(S)
         d.point((x, y), fill=tuple(max(0, c - 30) for c in colour) + (255,))
-    d.rectangle([40, 40, 88, 80], fill=(236, 236, 230, 255))
-    d.rectangle([40, 40, 88, 50], fill=(30, 30, 34, 255))
+    if label == "corrosive":
+        # The corrosive diamond: white over black halves, on a white label.
+        d.rectangle([36, 34, 92, 86], fill=(246, 246, 240, 255))
+        d.polygon([(64, 38), (88, 60), (64, 82), (40, 60)], fill=(250, 250, 250, 255), outline=(20, 20, 22, 255))
+        d.polygon([(42, 60), (86, 60), (64, 81)], fill=(20, 20, 22, 255))
+        d.rectangle([54, 46, 58, 54], fill=(20, 20, 22, 255))
+        d.rectangle([68, 46, 72, 54], fill=(20, 20, 22, 255))
+    elif label == "hazard":
+        # A black band with a yellow-on-black hazard stripe.
+        d.rectangle([0, 50, S, 70], fill=(24, 24, 26, 255))
+        for x in range(-20, S, 16):
+            d.polygon([(x, 70), (x + 8, 70), (x + 28, 50), (x + 20, 50)], fill=tuple(colour) + (255,))
+    else:
+        d.rectangle([40, 40, 88, 80], fill=(236, 236, 230, 255))
+        d.rectangle([40, 40, 88, 50], fill=(30, 30, 34, 255))
+    return img
+
+
+def _jerrycan():
+    """A natural plastic jerrycan's side: the embossed X, the seam and a fill line."""
+    c = (226, 222, 204)
+    img = O5._speckle(c, 7210, [(214, 210, 192, 255), (236, 232, 216, 255)], 300)
+    d = ImageDraw.Draw(img)
+    dark = (196, 190, 168, 255)
+    d.rectangle([0, 0, S - 1, S - 1], outline=dark, width=4)
+    d.line([(14, 18), (S - 14, S - 18)], fill=dark, width=8)
+    d.line([(S - 14, 18), (14, S - 18)], fill=dark, width=8)
+    d.line([(0, 30), (S, 30)], fill=(186, 180, 158, 255), width=2)
+    # The contents show through the plastic up to the fill line.
+    d.rectangle([4, 34, 8, S - 6], fill=(170, 160, 120, 255))
+    return img
+
+
+def _jerrycan_top():
+    img = _img((222, 218, 200))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, S - 1, S - 1], outline=(196, 190, 168, 255), width=6)
+    return img
+
+
+def _kraft_fragile(c, seed):
+    img = _kraft(c, seed)
+    d = ImageDraw.Draw(img)
+    d.rectangle([18, 30, 110, 62], fill=(200, 30, 36, 255))
+    d.text((30, 38), "FRAGILE", font=O3._font(16), fill=(250, 250, 250, 255))
+    # The wine glass, and the this-way-up arrows.
+    d.polygon([(50, 72), (78, 72), (70, 90), (58, 90)], fill=(200, 30, 36, 255))
+    d.rectangle([62, 90, 66, 104], fill=(200, 30, 36, 255))
+    d.rectangle([54, 104, 74, 108], fill=(200, 30, 36, 255))
+    for x in (16, 98):
+        d.polygon([(x, 84), (x + 6, 74), (x + 12, 84)], fill=(40, 40, 46, 255))
+        d.rectangle([x + 4, 84, x + 8, 98], fill=(40, 40, 46, 255))
+    return img
+
+
+def _kraft_label_c(c, seed):
+    img = _kraft(c, seed)
+    d = ImageDraw.Draw(img)
+    # A shipping label: green header, a code block, the part number.
+    d.rectangle([60, 20, 116, 100], fill=(246, 246, 240, 255))
+    d.rectangle([60, 20, 116, 32], fill=(40, 130, 70, 255))
+    rr = random.Random(seed)
+    for i in range(6):
+        for j in range(6):
+            if rr.random() < 0.5:
+                d.rectangle([66 + i * 5, 38 + j * 5, 69 + i * 5, 41 + j * 5], fill=(30, 30, 34, 255))
+    d.text((64, 72), "PN 2290-C", font=O3._font(10), fill=(40, 40, 46, 255))
+    d.text((64, 84), "QTY 24", font=O3._font(10), fill=(40, 40, 46, 255))
+    # Strapping tape down the side.
+    d.rectangle([20, 0, 30, S], fill=(206, 170, 110, 255))
     return img
 
 
@@ -200,6 +268,9 @@ RACK_MATERIALS = ["kraft", "kraft_top", "kraft_label", "white",
                   "white_top", "tote", "tote_lid", "drum",
                   "drum_top", "crate", "pallet", "pallet_dark",
                   "drum_red", "kraft_dark", "white_label", "crate_top"]
+# The second half of the sheet (columns 4-7, rows 0-1): the other fluid containers and two more carton labels.
+RACK_MATERIALS_2 = ["drum_black", "drum_green", "drum_yellow", "drum_white",
+                    "jerrycan", "jerrycan_top", "kraft_fragile", "kraft_label_c"]
 
 
 def _kraft(c, seed, label=False, top=False):
@@ -272,8 +343,15 @@ def draw_rack_sheet():
         "pallet": _pallet((186, 150, 100)), "pallet_dark": _pallet((140, 108, 70)), "drum_red": _drum((170, 40, 40), 7207),
         "kraft_dark": _kraft((170, 128, 80), 7208), "white_label": _kraft((236, 234, 226), 7209, label=True),
         "crate_top": _crate(),
+        "drum_black": _drum((34, 34, 38), 7211), "drum_green": _drum((40, 120, 64), 7212),
+        "drum_yellow": _drum((226, 184, 30), 7213, label="hazard"),
+        "drum_white": _drum((232, 232, 226), 7214, label="corrosive"),
+        "jerrycan": _jerrycan(), "jerrycan_top": _jerrycan_top(),
+        "kraft_fragile": _kraft_fragile((196, 154, 100), 7215), "kraft_label_c": _kraft_label_c((196, 154, 100), 7216),
     }
-    sheet = Image.new("RGBA", (256, 256), (0, 0, 0, 255))
+    sheet = Image.new("RGBA", (512, 256), (0, 0, 0, 255))
     for k, name in enumerate(RACK_MATERIALS):
         sheet.paste(tiles[name].resize((64, 64), Image.LANCZOS).convert("RGBA"), ((k % 4) * 64, (k // 4) * 64))
+    for k, name in enumerate(RACK_MATERIALS_2):
+        sheet.paste(tiles[name].resize((64, 64), Image.LANCZOS).convert("RGBA"), (256 + (k % 4) * 64, (k // 4) * 64))
     return sheet

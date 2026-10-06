@@ -1096,6 +1096,7 @@ def warehouse(s, ox, oz):
     b.desk(ox1 - 3, 1, oz1 - 1, "south")
     b.furniture("filing_cabinet", ox1 - 1, 1, oz0 + 2, "east")
     b.furniture("filing_cabinet", ox1 - 1, 1, oz0 + 3, "east")
+    b.plant(ox0 + 1, 1, oz1 - 1)     # one small potted tree in the corner
     for z in range(4, 17):
         for y in range(1, 9):
             b.p(W - 1, y, z, roller("west"))
