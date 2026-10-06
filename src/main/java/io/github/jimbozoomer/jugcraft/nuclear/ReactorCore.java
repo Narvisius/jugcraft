@@ -54,14 +54,43 @@ public final class ReactorCore {
 	// Last tick's readouts.
 	public double removed, waterShare = 1, cooling;
 	public long electric;
+	/** Cooling water asked for last tick (mB): less with a cooling tower. */
+	public int need;
 	public int alarms;
 	public final int[] trend = new int[TREND];
 	public int trendHead;
 	private int trendTicks;
 
-	/** The plant around the core, from {@link ReactorUnit}. */
-	public record Plant(double cooling, boolean steamToPower, boolean formed) {
+	/**
+	 * A core design: the console's core map rows (assemblies per row), the assembly count, the electric output at 100%
+	 * with full cooling (JE/t) and the cooling water the condenser needs at 100% with no cooling tower (mB/t).
+	 */
+	public record Design(String id, int[] rows, int size, long ratedJe, int water) {
+		/** The stage-1 four-loop PWR: 193 assemblies. */
+		public static final Design STANDARD = new Design("pwr", CORE_ROWS, CORE_SIZE, RATED_JE, FULL_WATER);
+		/** The EPR: 241 assemblies (a 17-wide core), 1.6 times the output; it needs two turbine-generators to use it all. */
+		public static final Design EPR = new Design("epr", new int[] {7, 9, 13, 15, 17, 17, 17, 17, 17, 17, 17, 17, 17, 15, 13, 9, 7}, 241,
+				RATED_JE * 8 / 5, FULL_WATER * 8 / 5);
+		/** A small modular reactor: 37 short assemblies, an eighth of the standard output. */
+		public static final Design SMALL_MODULAR = new Design("smr", new int[] {4, 5, 6, 7, 6, 5, 4}, 37, RATED_JE / 8, FULL_WATER / 8);
 	}
+
+	/** The core's design (set by the vessel from its kind; not saved). */
+	public Design design = Design.STANDARD;
+
+	/**
+	 * The plant around the core, from {@link ReactorUnit}: the share of heat its loops can carry, whether steam reaches a
+	 * generator, whether it is complete, the most electric power its generators can make (JE/t) and the cooling tower
+	 * capacity on its cooling water (a share of the core's heat whose water only needs make-up).
+	 */
+	public record Plant(double cooling, boolean steamToPower, boolean formed, long generatorLimit, double towerShare) {
+		public Plant(double cooling, boolean steamToPower, boolean formed) {
+			this(cooling, steamToPower, formed, Long.MAX_VALUE, 0);
+		}
+	}
+
+	/** With a cooling tower, the water a condenser still needs is the evaporation and blowdown it makes up: 5%. */
+	public static final double MAKEUP = 0.05;
 
 	/** Heat produced this tick (fraction of rated). */
 	public double heat() {
@@ -79,7 +108,7 @@ public final class ReactorCore {
 				sum += 1;
 			}
 		}
-		return sum / CORE_SIZE;
+		return sum / design.size();
 	}
 
 	public int spentCount() {
@@ -118,7 +147,9 @@ public final class ReactorCore {
 		double heat = heat();
 		// Cooling: the loops carry heat to the steam generators, and the condenser needs water to take it away.
 		cooling = plant.cooling();
-		int need = (int) Math.ceil(FULL_WATER * Math.min(1, heat));
+		double tower = Math.max(0, Math.min(1, plant.towerShare()));
+		int need = (int) Math.ceil(design.water() * Math.min(1, heat) * ((1 - tower) + tower * MAKEUP));
+		this.need = need;
 		int got = need > 0 && cooling > 0 ? water.applyAsInt(need) : 0;
 		waterShare = need <= 0 ? 1 : got / (double) need;
 		removed = Math.min(heat, cooling * waterShare);
@@ -148,7 +179,7 @@ public final class ReactorCore {
 			scrammed = true;
 		}
 		// The turbine trips with the reactor: decay heat after a shutdown is dumped, not turned into power.
-		electric = plant.steamToPower() && !scrammed && fission >= 0.01 ? Math.round(removed * RATED_JE) : 0;
+		electric = plant.steamToPower() && !scrammed && fission >= 0.01 ? Math.min(plant.generatorLimit(), Math.round(removed * design.ratedJe())) : 0;
 		// Annunciators.
 		int a = 0;
 		if (temperature >= ALARM_TEMP) a |= A_HIGH_TEMP;
@@ -215,6 +246,7 @@ public final class ReactorCore {
 		out.putDouble("water_share", waterShare);
 		out.putDouble("cooling", cooling);
 		out.putLong("electric", electric);
+		out.putInt("need", need);
 		out.putInt("alarms", alarms);
 		out.putIntArray("trend", trend);
 		out.putInt("trend_head", trendHead);
@@ -226,6 +258,7 @@ public final class ReactorCore {
 		waterShare = in.getDoubleOr("water_share", 1);
 		cooling = in.getDoubleOr("cooling", 0);
 		electric = in.getLongOr("electric", 0);
+		need = in.getIntOr("need", 0);
 		alarms = in.getIntOr("alarms", 0);
 		in.getIntArray("trend").ifPresent(t -> System.arraycopy(t, 0, trend, 0, Math.min(t.length, TREND)));
 		trendHead = in.getIntOr("trend_head", 0);

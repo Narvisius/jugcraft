@@ -31,7 +31,14 @@ EQUIPMENT = {
     "feedwater_pump": ("Feedwater Pump", 3, 2, 3),
     "main_transformer": ("Main Transformer", 5, 5, 8),
     "reactor_control_console": ("Reactor Control Console", 3, 2, 2),
+    # The pre-made plants' own reactors (tools/nuclear_plants.py).
+    "epr_reactor_vessel": ("EPR Reactor Pressure Vessel", 8, 8, 22),
+    "small_modular_reactor": ("Small Modular Reactor", 5, 5, 22),
+    "small_turbine_generator": ("Small Turbine-Generator", 3, 5, 4),
 }
+# The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
+TOWER_CONTROLLER = "cooling_tower_controller"
+TOWERS = ["natural", "large", "mechanical"]
 # The nuclear pipes: id: (name, thickness in pixels). Same order as PipeKind.java.
 PIPES = {
     "reactor_coolant_pipe": ("Reactor Coolant Pipe", 10),
@@ -39,7 +46,7 @@ PIPES = {
     "circulating_water_conduit": ("Circulating Water Conduit", 14),
 }
 FRAME = "nuclear_equipment_frame"
-BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES)
+BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER]
 
 NAMES = {
     "hazmat_hood": "Hazmat Hood",
@@ -53,6 +60,7 @@ NAMES = {
     "leu_fuel_assembly": "LEU Fuel Assembly",
     "spent_fuel_assembly": "Spent Fuel Assembly",
     "reactor_link_card": "Reactor Link Card",
+    TOWER_CONTROLLER: "Cooling Tower Controller",
 }
 NAMES.update({k: v[0] for k, v in EQUIPMENT.items()})
 NAMES.update({k: v[0] for k, v in PIPES.items()})
@@ -75,6 +83,12 @@ LANG = {
     "tooltip.jugcraft.nuclear.feedwater_pump": "Sends the condensed water back to the steam generators (on the steam line)",
     "tooltip.jugcraft.nuclear.main_transformer": "The unit's power comes out here, into cables or a Unit Substation",
     "tooltip.jugcraft.nuclear.reactor_control_console": "Runs the reactor. Link it to the vessel with a Reactor Link Card",
+    "tooltip.jugcraft.nuclear.epr_reactor_vessel": "The EPR's larger core: 241 assemblies and 1.6 times the output. Needs two turbine-generators to use it all",
+    "tooltip.jugcraft.nuclear.small_modular_reactor": "Reactor, steam generator and pressurizer in one module: 37 assemblies, an eighth of a full unit. Steam line to a Small Turbine-Generator",
+    "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
+    "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
+    "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
+    "message.jugcraft.nuclear.tower_incomplete": "Cooling tower incomplete: build the whole tower around this controller",
     "block.jugcraft.nuclear_equipment_frame": "Nuclear Equipment",
     "death.attack.jugcraft.radiation": "%1$s died of radiation sickness",
     "death.attack.jugcraft.radiation.player": "%1$s died of radiation sickness while fighting %2$s",
@@ -97,12 +111,14 @@ LANG = {
     "message.jugcraft.nuclear.refuel_not_shut_down": "Shut down first: rods fully in and the core below 120 °C",
     "message.jugcraft.nuclear.condenser_water": "Cooling water: %s of %s mB",
     "message.jugcraft.nuclear.showcase": "Built a running reactor unit (vessel at %s)",
+    "message.jugcraft.nuclear.built": "Built %s: %s blocks, %s pieces of equipment, %s reactor(s), in %s s",
 }
 
 R = "screen.jugcraft.reactor."
 CONSOLE_LANG = {
     R + "title": "REACTOR CONTROL", R + "unlinked": "Not linked: use a Reactor Link Card on the vessel, then on this console",
     R + "header": "UNIT 1  ·  %s-LOOP PWR  ·  LEU",
+    R + "header_epr": "UNIT 1  ·  EPR  ·  LEU", R + "header_smr": "MODULE  ·  SMALL MODULAR REACTOR  ·  LEU",
     R + "status.incomplete": "UNIT INCOMPLETE", R + "status.scram": "SCRAM", R + "status.refuelling": "REFUELLING",
     R + "status.operating": "OPERATING", R + "status.shut_down": "SHUT DOWN",
     R + "core_map": "CORE MAP  ·  ROD BANKS", R + "core_legend": "%s / %s assemblies",
@@ -151,6 +167,14 @@ CRAFTING = {
                                                 "S": "#c:plates/steel"}, 1),
     "reactor_control_console": (["GGG", "CPC", "SSS"], {"G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit",
                                                        "P": "jugcraft:processor", "S": "#c:plates/steel"}, 1),
+    "epr_reactor_vessel": (["TCT", "BVB", "TBT"], {"T": "#c:plates/tungsten", "C": "jugcraft:processor",
+                                                "B": "#c:storage_blocks/steel", "V": "jugcraft:reactor_pressure_vessel"}, 1),
+    "small_modular_reactor": (["SCS", "TFT", "SBS"], {"S": "#c:plates/steel", "C": "jugcraft:processor", "T": "#c:plates/tungsten",
+                                                    "F": "jugcraft:leu_fuel_assembly", "B": "#c:storage_blocks/steel"}, 1),
+    "small_turbine_generator": (["SGS", "PMP", "SCS"], {"S": "#c:plates/steel", "G": "#c:gears/steel", "P": "jugcraft:steel_fluid_pipe",
+                                                      "M": "jugcraft:electric_motor", "C": "minecraft:copper_block"}, 1),
+    TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
+                                              "A": "jugcraft:advanced_circuit"}, 1),
     "reactor_coolant_pipe": (["SSS", "   ", "SSS"], {"S": "#c:plates/steel"}, 6),
     "insulated_steam_line": (["WWW", "SSS", "WWW"], {"W": "minecraft:white_wool", "S": "#c:plates/steel"}, 6),
     "circulating_water_conduit": (["CCC", "S S", "CCC"], {"C": "minecraft:gray_concrete", "S": "#c:plates/steel"}, 6),
@@ -163,7 +187,8 @@ BASE_METALS = ("copper", "iron", "gold", "steel")
 NU_TEXTURES = ["nu_centrifuge", "nu_cap", "nu_steel", "nu_floor", "nu_cabinet", "nu_glass", "nu_hazard", "nu_pipe_blue",
                "nu_pipe_orange"]
 PIPE_TEXTURES = list(PIPES) + [p + "_end" for p in PIPES]
-HI_RES = (set(ITEMS) - {"geiger_counter"}) | set(BLOCKS) | set(NU_TEXTURES) | set(PIPE_TEXTURES) | {
+TOWER_TEXTURES = [f"{TOWER_CONTROLLER}_side", f"{TOWER_CONTROLLER}_top"]
+HI_RES = (set(ITEMS) - {"geiger_counter"}) | set(BLOCKS) | set(NU_TEXTURES) | set(PIPE_TEXTURES) | set(TOWER_TEXTURES) | {
     "geiger_case", "geiger_screen", "geiger_rubber", "geiger_steel", "geiger_grille", "geiger_label"}
 
 
@@ -600,7 +625,51 @@ def draw_block_textures():
            "nu_glass": M.stylize(M.glass(65), 10), "nu_hazard": M.stylize(M.hazard(66), 8),
            "nu_pipe_blue": M.stylize(M.pipe_stripe((40, 100, 190), 67), 10), "nu_pipe_orange": M.stylize(M.pipe_stripe((220, 120, 30), 68), 10)}
     out.update(draw_pipe_textures())
+    out.update(draw_tower_controller())
     return out
+
+
+def draw_tower_controller():
+    """The controller: a concrete valve pit with a steel hatch and a blue water valve wheel on top."""
+    import nuclear_materials as M
+    side = M.concrete(71, tie_holes=False)
+    d = ImageDraw.Draw(side)
+    d.rectangle([0, 100, 127, 108], fill=(226, 184, 30, 255))
+    d.rectangle([40, 30, 88, 70], fill=(60, 66, 72, 255))
+    d.rectangle([44, 34, 84, 66], fill=(18, 26, 34, 255))
+    for i, c in enumerate([(60, 200, 90), (230, 180, 40), (220, 60, 50)]):
+        d.ellipse([50 + i * 10, 44, 56 + i * 10, 50], fill=c + (255,))
+    top = M.brushed((120, 126, 132), 72, "h", dirt=0.2)
+    d = ImageDraw.Draw(top)
+    d.rectangle([8, 8, 119, 119], outline=(70, 74, 80, 255), width=4)
+    d.ellipse([34, 34, 94, 94], outline=(40, 90, 170, 255), width=7)
+    d.line([64, 34, 64, 94], fill=(40, 90, 170, 255), width=5)
+    d.line([34, 64, 94, 64], fill=(40, 90, 170, 255), width=5)
+    d.ellipse([56, 56, 72, 72], fill=(40, 90, 170, 255))
+    return {"cooling_tower_controller_side": M.stylize(side, 12), "cooling_tower_controller_top": M.stylize(top, 10)}
+
+
+def draw_plume_frames():
+    """Four soft white puffs for the cooling tower plume particle (32 px)."""
+    from PIL import ImageFilter
+    frames = {}
+    for k in range(4):
+        r = np.random.default_rng(80 + k)
+        img = Image.new("L", (32, 32), 0)
+        dd = ImageDraw.Draw(img)
+        for _ in range(9):
+            cx, cy = r.uniform(9, 23, 2)
+            rad = r.uniform(5, 9) - k * 0.4
+            dd.ellipse([cx - rad, cy - rad, cx + rad, cy + rad], fill=int(r.uniform(170, 235)))
+        img = img.filter(ImageFilter.GaussianBlur(2.2))
+        a = np.array(img).astype(float)
+        yy, xx = np.mgrid[0:32, 0:32]
+        a *= np.clip(1.25 - np.hypot(xx - 15.5, yy - 15.5) / 15, 0, 1)
+        rgba = np.zeros((32, 32, 4), np.uint8)
+        rgba[..., :3] = 246
+        rgba[..., 3] = np.clip(a, 0, 255).astype(np.uint8)
+        frames[f"cooling_plume_{k}"] = Image.fromarray(rgba, "RGBA")
+    return frames
 
 
 def draw_scram_button():
@@ -1065,6 +1134,40 @@ def _icon_console(big, d, f):
         d.rectangle(S(x, 40, x + 4, 44), fill=(70, 200, 90, 255))
 
 
+def _icon_epr(big, d, f):
+    """The EPR vessel: the standard vessel's icon, wider, with a blue band (the plant colour)."""
+    S = lambda *v: [c * f for c in v]
+    _cyl_icon(d, f, 32, 22, 58, 18, STEEL, STEEL_D, STEEL_L)
+    d.rectangle(S(14, 34, 50, 38), fill=(60, 90, 160, 255))
+    for x in range(17, 48, 4):
+        d.rectangle(S(x, 4, x + 2, 22), fill=(90, 96, 104, 255))
+        d.rectangle(S(x, 4, x + 2, 6), fill=(230, 190, 40, 255))
+    d.ellipse(S(14, 17, 50, 27), fill=STEEL_L)
+    trefoil(d, 32 * f, 48 * f, int(5 * f))
+
+
+def _icon_smr(big, d, f):
+    """A slim tall module with its flange and nozzles."""
+    S = lambda *v: [c * f for c in v]
+    _cyl_icon(d, f, 32, 8, 58, 10, STEEL, STEEL_D, STEEL_L)
+    d.rectangle(S(20, 30, 44, 34), fill=(120, 126, 132, 255))
+    for y in (14, 20):
+        d.rectangle(S(14, y, 22, y + 3), fill=STEEL_D)
+    for x in range(27, 38, 3):
+        d.rectangle(S(x, 2, x + 1, 8), fill=(90, 96, 104, 255))
+    trefoil(d, 32 * f, 46 * f, int(4 * f))
+
+
+def _icon_small_turbine(big, d, f):
+    """A small skid: blue turbine casing and green generator."""
+    S = lambda *v: [c * f for c in v]
+    d.rectangle(S(4, 46, 60, 54), fill=(120, 126, 130, 255))
+    _cyl_icon(d, f, 20, 26, 46, 11, (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255))
+    d.rectangle(S(34, 24, 58, 46), fill=(60, 120, 90, 255))
+    d.rectangle(S(52, 24, 58, 46), fill=(40, 86, 64, 255))
+    d.rectangle(S(17, 10, 23, 24), fill=(220, 220, 214, 255))
+
+
 def _icon_cylinder(big, d, f):
     _cyl_icon(d, f, 32, 14, 54, 14, (220, 222, 216, 255), (160, 162, 156, 255), (240, 242, 238, 255))
     d.rectangle([18 * f, 30 * f, 46 * f, 36 * f], fill=(240, 190, 40, 255))
@@ -1098,6 +1201,8 @@ def _icon_card(big, d, f):
 EQUIPMENT_ICONS = {"reactor_pressure_vessel": _icon_vessel, "reactor_steam_generator": _icon_sg,
                    "reactor_coolant_pump": _icon_pump, "pressurizer": _icon_pressurizer, "turbine_generator": _icon_turbine,
                    "condenser": _icon_condenser, "feedwater_pump": _icon_feedwater, "main_transformer": _icon_transformer,
+                   "epr_reactor_vessel": lambda big, d, f: _icon_epr(big, d, f), "small_modular_reactor": lambda big, d, f: _icon_smr(big, d, f),
+                   "small_turbine_generator": lambda big, d, f: _icon_small_turbine(big, d, f),
                    "reactor_control_console": _icon_console}
 
 
@@ -1184,6 +1289,16 @@ def write_assets(write, rid, assets, lang):
               {"variants": {f"facing={f}": {"model": rid(f"block/{kind}")} for f in ("north", "east", "south", "west")}})
         write(assets / "models" / "item" / f"{kind}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{kind}")}})
         write(assets / "items" / f"{kind}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{kind}")}})
+    lang[f"block.{MOD}.{TOWER_CONTROLLER}"] = NAMES[TOWER_CONTROLLER]
+    write(assets / "models" / "block" / f"{TOWER_CONTROLLER}.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
+        "side": rid(f"block/{TOWER_CONTROLLER}_side"), "top": rid(f"block/{TOWER_CONTROLLER}_top"),
+        "bottom": rid(f"block/{TOWER_CONTROLLER}_side")}})
+    turn = {"south": 0, "west": 90, "north": 180, "east": 270}
+    write(assets / "blockstates" / f"{TOWER_CONTROLLER}.json", {"variants": {
+        f"facing={f},tower={t}": dict({"model": rid(f"block/{TOWER_CONTROLLER}")}, **({"y": turn[f]} if turn[f] else {}))
+        for f in turn for t in TOWERS}})
+    write(assets / "items" / f"{TOWER_CONTROLLER}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{TOWER_CONTROLLER}")}})
+    write(assets / "particles" / "cooling_plume.json", {"textures": [rid(f"cooling_plume_{k}") for k in range(4)]})
     write(assets / "models" / "block" / f"{FRAME}.json", {"textures": {"particle": "minecraft:block/iron_block"}})
     write(assets / "blockstates" / f"{FRAME}.json", {"variants": {"": {"model": rid(f"block/{FRAME}")}}})
     for pipe in PIPES:

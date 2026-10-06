@@ -20,7 +20,11 @@ public enum EquipmentKind {
 	CONDENSER("condenser", 12, 6, 6),
 	FEEDWATER_PUMP("feedwater_pump", 3, 2, 3),
 	MAIN_TRANSFORMER("main_transformer", 5, 5, 8),
-	CONTROL_CONSOLE("reactor_control_console", 3, 2, 2);
+	CONTROL_CONSOLE("reactor_control_console", 3, 2, 2),
+	// The pre-made plants' own reactors (docs/features/nuclear.md, "Pre-made plants").
+	EPR_VESSEL("epr_reactor_vessel", 8, 8, 22),
+	SMALL_MODULAR_REACTOR("small_modular_reactor", 5, 5, 22),
+	SMALL_TURBINE("small_turbine_generator", 3, 5, 4);
 
 	public final String id;
 	public final int wide, deep, tall;
@@ -36,10 +40,35 @@ public enum EquipmentKind {
 	/** The pipe kinds that join to this equipment. */
 	public boolean takes(PipeKind pipe) {
 		return switch (pipe) {
-			case COOLANT -> this == REACTOR_VESSEL || this == STEAM_GENERATOR || this == COOLANT_PUMP || this == PRESSURIZER;
-			case STEAM -> this == STEAM_GENERATOR || this == TURBINE_GENERATOR || this == FEEDWATER_PUMP || this == CONDENSER;
-			case WATER -> this == CONDENSER;
+			case COOLANT -> this == REACTOR_VESSEL || this == EPR_VESSEL || this == STEAM_GENERATOR || this == COOLANT_PUMP || this == PRESSURIZER;
+			case STEAM -> this == STEAM_GENERATOR || this == TURBINE_GENERATOR || this == FEEDWATER_PUMP || this == CONDENSER
+					|| this == SMALL_MODULAR_REACTOR || this == SMALL_TURBINE;
+			case WATER -> this == CONDENSER || this == SMALL_TURBINE;
 		};
+	}
+
+	/** Equipment that holds a reactor core (and is run from a console). */
+	public boolean reactor() {
+		return this == REACTOR_VESSEL || this == EPR_VESSEL || this == SMALL_MODULAR_REACTOR;
+	}
+
+	/** The core design of a reactor. */
+	public ReactorCore.Design design() {
+		return switch (this) {
+			case EPR_VESSEL -> ReactorCore.Design.EPR;
+			case SMALL_MODULAR_REACTOR -> ReactorCore.Design.SMALL_MODULAR;
+			default -> ReactorCore.Design.STANDARD;
+		};
+	}
+
+	/** Equipment that takes cooling water (and, with a cooling tower on its conduit, only make-up water). */
+	public boolean cooled() {
+		return this == CONDENSER || this == SMALL_TURBINE;
+	}
+
+	/** Equipment that sends a unit's power out into cables. */
+	public boolean powerOut() {
+		return this == MAIN_TRANSFORMER || this == SMALL_TURBINE;
 	}
 
 	/**
@@ -60,6 +89,10 @@ public enum EquipmentKind {
 			// The turbine deck all the way along, the casings above along the middle.
 			case TURBINE_GENERATOR -> y < 3 || (x >= 2 && x <= 8 && y < 8);
 			case MAIN_TRANSFORMER -> y < 5 && x < 5 && z < 5;
+			// The EPR's larger vessel: wider shell, a taller drive forest on top.
+			case EPR_VESSEL -> y < 15 ? r2 <= 3.8 * 3.8 : r2 <= 2.8 * 2.8;
+			// A slim integral module (reactor, steam generator and pressurizer in one steel containment).
+			case SMALL_MODULAR_REACTOR -> r2 <= 2.4 * 2.4;
 			default -> true;
 		};
 	}

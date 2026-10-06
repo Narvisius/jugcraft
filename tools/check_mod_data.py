@@ -860,6 +860,21 @@ def check_nuclear():
     pipes = re.findall(r'[A-Z_]+\("([a-z_]+)", (\d+)\)', (JAVA_ROOT / "nuclear" / "PipeKind.java").read_text(encoding="utf-8"))
     if [(p, int(n)) for p, n in pipes] != [(k, v[1]) for k, v in nuclear.PIPES.items()]:
         err(f"PipeKind.java {pipes} != tools/nuclear.py PIPES")
+    # The cooling tower controller's kinds name the tower blueprints it checks itself against, and the plume heights
+    # match the towers tools/nuclear_plants.py draws (top of the shell above the controller).
+    towers = re.findall(r'[A-Z]+\("(\w+)", "(\w+)", [\d.]+, (\d+), \d+, new int', (JAVA_ROOT / "nuclear" / "CoolingTowerBlock.java").read_text(encoding="utf-8"))
+    large = (ROOT / "src" / "main" / "resources" / "data" / MOD / "blueprint" / "large.txt").read_text(encoding="utf-8").split()
+    if [t[0] for t in towers] != nuclear.TOWERS:
+        err(f"CoolingTowerBlock.Tower {[t[0] for t in towers]} != tools/nuclear.py TOWERS {nuclear.TOWERS}")
+    for kind, blueprint, height in towers:
+        if blueprint not in large:
+            err(f"CoolingTowerBlock.Tower {kind} checks blueprint {blueprint}, which is not a built-in")
+            continue
+        data = json.loads((ROOT / "src" / "main" / "resources" / "data" / MOD / "blueprint" / f"{blueprint}.jugbp.json").read_text(encoding="utf-8"))
+        tops = [y for y, rows in enumerate(data["layers"]) if any(rows)]
+        controller_y = 1
+        if int(height) != max(tops) - controller_y:
+            err(f"CoolingTowerBlock.Tower {kind} plume height {height} != tower top {max(tops)} - controller {controller_y}")
     renderer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client" / "NuclearRenderer.java").read_text(encoding="utf-8")
     regions = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d), (\d)\);", renderer)}
     for name in nuclear.EQ_MATERIALS:

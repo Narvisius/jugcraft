@@ -134,10 +134,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final double DETAIL_DISTANCE = 40;
 	/** Static meshes by kind and detail (index kind.ordinal() * 2 + (detail ? 1 : 0)). */
 	private static final Mesh[] STATIC = new Mesh[EquipmentKind.values().length * 2];
-	/** The vessel's closed head with its drive housings, by detail; the head is left off while refuelling. */
-	private static final Mesh[] HEAD = new Mesh[2];
-	/** The vessel's drive rods at each 5% of travel, by detail. */
-	private static final Mesh[][] RODS = new Mesh[2][21];
+	/** The vessel's closed head with its drive housings, by vessel (standard, EPR) and detail; off while refuelling. */
+	private static final Mesh[][] HEAD = new Mesh[2][2];
+	/** The vessel's drive rods at each 5% of travel, by vessel and detail. */
+	private static final Mesh[][][] RODS = new Mesh[2][2][21];
+	/** The EPR's vessel is the standard one drawn larger: 8 x 8 x 22 instead of 7 x 7 x 20. */
+	static final double[] EPR_SCALE = {8 / 7.0, 22 / 20.0, 8 / 7.0};
 
 	static Mesh staticMesh(EquipmentKind kind, boolean detail) {
 		int i = kind.ordinal() * 2 + (detail ? 1 : 0);
@@ -154,31 +156,41 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				case FEEDWATER_PUMP -> feedwaterPump(f);
 				case MAIN_TRANSFORMER -> transformer(f);
 				case CONTROL_CONSOLE -> console(f);
+				case EPR_VESSEL -> {
+					f.scale(EPR_SCALE);
+					vessel(f);
+				}
+				case SMALL_MODULAR_REACTOR -> smallModule(f);
+				case SMALL_TURBINE -> smallTurbine(f);
 			}
 			STATIC[i] = mesh;
 		}
 		return STATIC[i];
 	}
 
-	static Mesh headMesh(boolean detail) {
-		int i = detail ? 1 : 0;
-		if (HEAD[i] == null) {
+	static Mesh headMesh(boolean epr, boolean detail) {
+		int i = detail ? 1 : 0, k = epr ? 1 : 0;
+		if (HEAD[k][i] == null) {
 			Mesh mesh = new Mesh();
-			vesselHead(new Frame(mesh, detail));
-			HEAD[i] = mesh;
+			Frame f = new Frame(mesh, detail);
+			if (epr) f.scale(EPR_SCALE);
+			vesselHead(f);
+			HEAD[k][i] = mesh;
 		}
-		return HEAD[i];
+		return HEAD[k][i];
 	}
 
-	static Mesh rodsMesh(float rods, boolean detail) {
+	static Mesh rodsMesh(boolean epr, float rods, boolean detail) {
 		int step = Math.max(0, Math.min(20, Math.round(rods / 5)));
-		int i = detail ? 1 : 0;
-		if (RODS[i][step] == null) {
+		int i = detail ? 1 : 0, k = epr ? 1 : 0;
+		if (RODS[k][i][step] == null) {
 			Mesh mesh = new Mesh();
-			vesselRods(new Frame(mesh, detail), step * 5);
-			RODS[i][step] = mesh;
+			Frame f = new Frame(mesh, detail);
+			if (epr) f.scale(EPR_SCALE);
+			vesselRods(f, step * 5);
+			RODS[k][i][step] = mesh;
 		}
-		return RODS[i][step];
+		return RODS[k][i][step];
 	}
 
 	@Override
@@ -186,16 +198,18 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		boolean detail = state.detail;
 		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> {
 			staticMesh(state.kind, detail).replay(p, consumer, state.facing, state.lightLevel);
-			if (state.kind == EquipmentKind.REACTOR_VESSEL) {
+			if (state.kind == EquipmentKind.REACTOR_VESSEL || state.kind == EquipmentKind.EPR_VESSEL) {
+				boolean epr = state.kind == EquipmentKind.EPR_VESSEL;
 				if (state.open) {
 					// Head off: the refuelling cavity's water over the fuel, glowing blue.
 					Mesh water = new Mesh();
 					Frame f = new Frame(water, detail);
+					if (epr) f.scale(EPR_SCALE);
 					f.disc(v(3.5, 12.46, 3.5), v(0, 1, 0), 2.55, f.sides(24), WATER);
 					water.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				} else {
-					headMesh(detail).replay(p, consumer, state.facing, state.lightLevel);
-					rodsMesh(state.rods, detail).replay(p, consumer, state.facing, state.lightLevel);
+					headMesh(epr, detail).replay(p, consumer, state.facing, state.lightLevel);
+					rodsMesh(epr, state.rods, detail).replay(p, consumer, state.facing, state.lightLevel);
 				}
 			} else if (state.kind == EquipmentKind.CONTROL_CONSOLE) {
 				Mesh lamps = new Mesh();
@@ -252,10 +266,18 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final class Frame {
 		final Mesh mesh;
 		final boolean detail;
+		/** Stretch applied to everything recorded (a larger version of the same piece). */
+		double sx = 1, sy = 1, sz = 1;
 
 		Frame(Mesh mesh, boolean detail) {
 			this.mesh = mesh;
 			this.detail = detail;
+		}
+
+		void scale(double[] s) {
+			sx = s[0];
+			sy = s[1];
+			sz = s[2];
 		}
 
 		/** Sides for a round shape: fewer when far away. */
@@ -269,10 +291,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		 */
 		void quad(Vec3 tl, Vec3 bl, Vec3 br, Vec3 tr, Vec3 n, float u0, float v0, float u1, float v1) {
 			float nx = (float) n.x, ny = (float) n.y, nz = (float) n.z;
-			mesh.vertex((float) tl.x, (float) tl.y, (float) tl.z, u0, v0, nx, ny, nz);
-			mesh.vertex((float) bl.x, (float) bl.y, (float) bl.z, u0, v1, nx, ny, nz);
-			mesh.vertex((float) br.x, (float) br.y, (float) br.z, u1, v1, nx, ny, nz);
-			mesh.vertex((float) tr.x, (float) tr.y, (float) tr.z, u1, v0, nx, ny, nz);
+			float ax = (float) sx, ay = (float) sy, az = (float) sz;
+			mesh.vertex((float) tl.x * ax, (float) tl.y * ay, (float) tl.z * az, u0, v0, nx, ny, nz);
+			mesh.vertex((float) bl.x * ax, (float) bl.y * ay, (float) bl.z * az, u0, v1, nx, ny, nz);
+			mesh.vertex((float) br.x * ax, (float) br.y * ay, (float) br.z * az, u1, v1, nx, ny, nz);
+			mesh.vertex((float) tr.x * ax, (float) tr.y * ay, (float) tr.z * az, u1, v0, nx, ny, nz);
 		}
 
 		/** A quad tiled about every {@code tile} blocks across and down, so its texture keeps its size. */
@@ -488,6 +511,86 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		if (f.detail) {
 			f.plate(c - 0.4, 0.5, c - 3.45, c + 0.4, 1.3, c - 3.4, 0, TREFOIL_SIGN, PAINT_GREY);
 			f.plate(c - 0.4, 0.5, c + 3.4, c + 0.4, 1.3, c + 3.45, 1, TREFOIL_SIGN, PAINT_GREY);
+		}
+	}
+
+	/**
+	 * A small modular reactor: one slim steel containment holding the reactor, its steam generator and pressurizer,
+	 * standing in the reactor pool on a support skirt. Steam and feedwater nozzles near the top, the drive housings on
+	 * the top head, a bolted mid flange where it opens for refuelling.
+	 */
+	static void smallModule(Frame f) {
+		double c = 2.5;
+		for (int i = 0; i < 4; i++) {
+			double a = Math.PI / 4 + i * Math.PI / 2;
+			double x = c + Math.cos(a) * 1.6, z = c + Math.sin(a) * 1.6;
+			f.box(x - 0.22, 0, z - 0.22, x + 0.22, 1.4, z + 0.22, CARBON_STEEL);
+		}
+		f.revolve(v(c, 0.9, c), v(c, 1.9, c), new double[][] {{0, 1.9}, {0.35, 1.9}}, f.sides(24), CARBON_STEEL, true, true);
+		f.dome(c, c, 3.2, 2.2, -1.9, STAINLESS);
+		f.revolve(v(c, 3.2, c), v(c, 4.2, c), new double[][] {{0, 2.2}, {10.0, 2.2}}, f.sides(32), STAINLESS, false, false);
+		for (double y : new double[] {6.0, 9.0, 11.8}) {
+			f.band(c, c, y, 2.23, 0.2, WELD_BAND);
+		}
+		f.revolve(v(c, 13.2, c), v(c, 14.2, c), new double[][] {{0, 2.2}, {0.1, 2.5}, {0.8, 2.5}, {0.9, 2.2}}, f.sides(32), FLANGE, false, false);
+		f.revolve(v(c, 14.1, c), v(c, 15.1, c), new double[][] {{0, 2.2}, {5.3, 2.2}}, f.sides(32), STAINLESS, false, false);
+		f.band(c, c, 17.0, 2.23, 0.2, WELD_BAND);
+		f.dome(c, c, 19.4, 2.2, 1.7, STAINLESS);
+		// Steam (upper) and feedwater (lower) nozzles, two of each, toward the front.
+		for (int side : new int[] {-1, 1}) {
+			double x = c + side * 0.9;
+			f.cylinder(v(x, 18.4, c - 2.0), v(x, 18.4, c - 2.48), 0.32, f.sides(12), STAINLESS, false);
+			f.cylinder(v(x, 18.4, c - 2.38), v(x, 18.4, c - 2.5), 0.44, f.sides(12), FLANGE, true);
+			f.cylinder(v(x, 16.2, c - 2.0), v(x, 16.2, c - 2.48), 0.24, f.sides(12), STAINLESS, false);
+			f.cylinder(v(x, 16.2, c - 2.38), v(x, 16.2, c - 2.5), 0.34, f.sides(12), FLANGE, true);
+		}
+		// The drive housings on the top head.
+		double step = f.detail ? 0.42 : 0.84;
+		for (double dx = -0.85; dx <= 0.86; dx += step) {
+			for (double dz = -0.85; dz <= 0.86; dz += step) {
+				if (dx * dx + dz * dz > 0.9 * 0.9) continue;
+				f.cylinder(v(c + dx, 20.6, c + dz), v(c + dx, 21.85, c + dz), f.detail ? 0.1 : 0.18, f.detail ? 6 : 4, CRDM, true);
+			}
+		}
+		// Lifting lugs.
+		for (int i = 0; i < 4; i++) {
+			double a = i * Math.PI / 2;
+			double x = c + Math.cos(a) * 1.7, z = c + Math.sin(a) * 1.7;
+			f.box(x - 0.12, 19.8, z - 0.12, x + 0.12, 20.9, z + 0.12, CARBON_STEEL);
+		}
+		if (f.detail) {
+			f.plate(c - 0.35, 7.0, c - 2.27, c + 0.35, 7.7, c - 2.22, 0, TREFOIL_SIGN, PAINT_GREY);
+			f.plate(c - 0.5, 10.4, c - 2.27, c + 0.5, 10.8, c - 2.22, 0, NAMEPLATE, PAINT_GREY);
+		}
+	}
+
+	/**
+	 * A small turbine-generator for one module, with its own condenser underneath: the turbine casing on a skid, the
+	 * generator and exciter behind it, and the insulated steam inlet on top.
+	 */
+	static void smallTurbine(Frame f) {
+		f.box(0, 0, 0, 3, 0.6, 5, CARBON_STEEL, GRATING, CARBON_STEEL);
+		// Condenser shell under the turbine.
+		f.box(0.35, 0.6, 0.3, 2.65, 1.1, 2.7, PAINT_GREY);
+		// Turbine casing with its split flange, along the shaft.
+		f.cylinder(v(1.5, 1.95, 0.35), v(1.5, 1.95, 2.65), 0.9, f.sides(20), TURBINE_BLUE, true);
+		f.cylinder(v(1.5, 1.95, 0.25), v(1.5, 1.95, 0.4), 1.0, f.sides(20), FLANGE, true);
+		f.cylinder(v(1.5, 1.95, 2.6), v(1.5, 1.95, 2.75), 1.0, f.sides(20), FLANGE, true);
+		f.box(0.45, 1.85, 0.4, 2.55, 2.05, 2.6, STAINLESS_DARK);
+		// Generator and exciter.
+		f.box(0.45, 0.6, 2.85, 2.55, 2.95, 4.55, GENERATOR, PAINT_GREEN, PAINT_GREEN);
+		f.cylinder(v(1.5, 1.8, 2.65), v(1.5, 1.8, 2.9), 0.35, f.sides(12), STAINLESS, false);
+		f.cylinder(v(1.5, 1.8, 4.55), v(1.5, 1.8, 4.95), 0.55, f.sides(16), PAINT_GREEN, true);
+		// Steam inlet from above.
+		f.cylinder(v(1.5, 2.8, 1.2), v(1.5, 4.0, 1.2), 0.32, f.sides(12), INSULATION, true);
+		f.cylinder(v(1.5, 3.85, 1.2), v(1.5, 4.0, 1.2), 0.45, f.sides(12), FLANGE, true);
+		if (f.detail) {
+			f.plate(1.0, 1.4, 4.55, 2.0, 2.0, 4.6, 1, NAMEPLATE, PAINT_GREY);
+			for (double x : new double[] {0.05, 2.95}) {
+				f.box(x - 0.03, 0.6, 0.1, x + 0.03, 1.6, 0.16, HANDRAIL);
+				f.box(x - 0.03, 0.6, 4.84, x + 0.03, 1.6, 4.9, HANDRAIL);
+				f.box(x - 0.03, 1.55, 0.1, x + 0.03, 1.61, 4.9, HANDRAIL);
+			}
 		}
 	}
 

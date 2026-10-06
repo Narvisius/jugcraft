@@ -122,10 +122,7 @@ public class BlueprintItem extends Item {
 			stack.shrink(1);
 		}
 		player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.placed", blueprint.name, "PERSONAL"));
-		int top = pos.getY();
-		for (Blueprint.Cell cell : blueprint.cells(target.rotation())) {
-			top = Math.max(top, pos.getY() + cell.offset().getY());
-		}
+		int top = Math.max(pos.getY(), pos.getY() + blueprint.top());
 		if (top > level.getMaxY()) {
 			player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.clipped", top - level.getMaxY(), level.getMaxY() + 1)
 					.withStyle(net.minecraft.ChatFormatting.RED));
@@ -134,7 +131,7 @@ public class BlueprintItem extends Item {
 	}
 
 	/** Blueprints are drawn extending north from the stake; turn them to extend the way the player looks. */
-	static Rotation rotationFor(Direction facing) {
+	public static Rotation rotationFor(Direction facing) {
 		return switch (facing) {
 			case EAST -> Rotation.CLOCKWISE_90;
 			case SOUTH -> Rotation.CLOCKWISE_180;

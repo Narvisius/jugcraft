@@ -65,6 +65,11 @@ public final class JugcraftNuclear {
 	public static final java.util.Map<EquipmentKind, Item> EQUIPMENT_ITEMS = new java.util.EnumMap<>(EquipmentKind.class);
 	public static final java.util.Map<PipeKind, Block> PIPES = new java.util.EnumMap<>(PipeKind.class);
 	public static net.minecraft.world.level.block.entity.BlockEntityType<EquipmentBlockEntity> EQUIPMENT_ENTITY;
+	// Cooling towers.
+	public static Block COOLING_TOWER;
+	public static net.minecraft.world.level.block.entity.BlockEntityType<CoolingTowerBlockEntity> COOLING_TOWER_ENTITY;
+	/** A cooling tower's steam plume (always drawn, however far: the plume is what you see of a plant from afar). */
+	public static net.minecraft.core.particles.SimpleParticleType COOLING_PLUME;
 
 	private JugcraftNuclear() {
 	}
@@ -138,6 +143,16 @@ public final class JugcraftNuclear {
 		}, net.minecraft.util.Util.make(new java.util.ArrayList<Block>(EQUIPMENT.values()), l -> l.add(FRAME)).toArray(Block[]::new));
 		ConsoleActionPayload.register();
 
+		ResourceKey<Block> towerKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("cooling_tower_controller"));
+		COOLING_TOWER = Registry.register(BuiltInRegistries.BLOCK, towerKey, new CoolingTowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+				.strength(3.0F, 12.0F).setId(towerKey)));
+		ResourceKey<Item> towerItem = ResourceKey.create(Registries.ITEM, Jugcraft.id("cooling_tower_controller"));
+		Registry.register(BuiltInRegistries.ITEM, towerItem, new BlockItem(COOLING_TOWER, new Item.Properties().setId(towerItem).useBlockDescriptionPrefix()));
+		COOLING_TOWER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("cooling_tower_controller"),
+				net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(CoolingTowerBlockEntity::new, COOLING_TOWER).build());
+		COOLING_PLUME = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Jugcraft.id("cooling_plume"),
+				net.fabricmc.fabric.api.particle.v1.FabricParticleTypes.simple(true));
+
 		ResourceKey<Block> concreteKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("shielding_concrete"));
 		SHIELDING_CONCRETE = Registry.register(BuiltInRegistries.BLOCK, concreteKey,
 				new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(net.minecraft.world.level.material.MapColor.COLOR_GRAY).strength(4.0F, 60F).setId(concreteKey)));
@@ -146,6 +161,7 @@ public final class JugcraftNuclear {
 				new Item.Properties().setId(concreteItem).useBlockDescriptionPrefix()));
 
 		ServerTickEvents.END_SERVER_TICK.register(Radiation::tick);
+		PlantBuilder.register();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(
 				Commands.literal("radiation").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.literal("dose").then(Commands.argument("mSv", DoubleArgumentType.doubleArg(0)).executes(context -> {
@@ -171,6 +187,7 @@ public final class JugcraftNuclear {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output -> output.accept(SHIELDING_CONCRETE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			EQUIPMENT_ITEMS.values().forEach(output::accept);
+			output.accept(COOLING_TOWER);
 			PIPES.values().forEach(b -> output.accept(b.asItem()));
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {

@@ -93,6 +93,7 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			server.runCommand("clear @p");
 			server.runCommand("kill @e[type=!player]");
 			reactorUnit(context, singleplayer, x, y, z);
+			plants(context, singleplayer, x, y, z);
 		}
 	}
 
@@ -194,6 +195,89 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 		shotAt(context, singleplayer, bx + 3, by + 22, bz - 6, bx + 3, by + 12, bz - 13, "jugcraft_nuclear_vessel_open");
 		server.runCommand("gamemode creative @p");
 		setHudHidden(context, false);
+	}
+
+	/**
+	 * The three pre-made plants, each built with /nuclear build far apart, with water put round their intake legs (the
+	 * flat test world has no lake), the reactors started, and a tour: from the lake, inside the reactor building, the
+	 * turbine hall, and the cooling towers steaming.
+	 */
+	private static void plants(ClientGameTestContext context, TestSingleplayerContext singleplayer, int x, int y, int z) {
+		TestServerContext server = singleplayer.getServer();
+		server.runCommand("effect give @p night_vision infinite 0 true");
+		// Each plant: its id, where interesting things are (site coordinates, see tools/nuclear_plants.py) and a name.
+		Object[][] plants = {
+				{"nuclear_small_modular", "small", new int[][] {{77, 62}, {78, 113}, {78, 150}}},
+				{"nuclear_medium_pwr", "medium", new int[][] {{71, 57}, {148, 57}, {100, 200}}},
+				{"nuclear_large_epr", "large", new int[][] {{178, 92}, {282, 41}, {110, 261}}},
+		};
+		int along = 0;
+		for (Object[] plant : plants) {
+			String id = (String) plant[0];
+			String name = (String) plant[1];
+			int[][] spots = (int[][]) plant[2];
+			BlockPos stake = new BlockPos(x + 600 + along, y, z - 200);
+			along += 700;
+			io.github.jimbozoomer.jugcraft.blueprint.Blueprint[] blueprint = new io.github.jimbozoomer.jugcraft.blueprint.Blueprint[1];
+			server.runOnServer(minecraft -> {
+				var level = minecraft.overworld();
+				blueprint[0] = io.github.jimbozoomer.jugcraft.blueprint.Blueprint.get(id, false);
+				var result = io.github.jimbozoomer.jugcraft.nuclear.PlantBuilder.build(level, blueprint[0], stake,
+						net.minecraft.world.level.block.Rotation.NONE, null, true);
+				// A lake round the intake legs: water beside every conduit block below the ground.
+				for (int i = 0; i < blueprint[0].size(); i++) {
+					var state = blueprint[0].state(i, net.minecraft.world.level.block.Rotation.NONE);
+					BlockPos at = stake.offset(blueprint[0].offset(i, net.minecraft.world.level.block.Rotation.NONE));
+					if (at.getY() < stake.getY() && state.is(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.PIPES.get(
+							io.github.jimbozoomer.jugcraft.nuclear.PipeKind.WATER))) {
+						for (var d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+							if (!level.getBlockState(at.relative(d)).is(state.getBlock())) {
+								level.setBlock(at.relative(d), net.minecraft.world.level.block.Blocks.WATER.defaultBlockState(), 3);
+							}
+						}
+					}
+				}
+				// Start every reactor at 60%.
+				for (BlockPos vessel : result.vessels()) {
+					if (level.getBlockEntity(vessel) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v) {
+						v.core.rodTarget = 40;
+						v.core.rods = 40;
+						v.core.fission = 0.6;
+						v.core.decay = io.github.jimbozoomer.jugcraft.nuclear.ReactorCore.DECAY_SHARE * 0.6;
+						v.core.temperature = 300;
+						v.changed();
+					}
+				}
+			});
+			int sizeX = blueprint[0].sizeX, ax = blueprint[0].anchorX(), sizeZ = blueprint[0].sizeZ;
+			// Site (sx, sy, sz) to the world: the plant reaches north from the stake, its east-west turned round.
+			java.util.function.IntUnaryOperator wx = sx -> stake.getX() + sizeX - 1 - sx - ax;
+			java.util.function.IntUnaryOperator wz = sz -> stake.getZ() - sz;
+			setHudHidden(context, true);
+			server.runCommand("gamemode spectator @p");
+			// From the lake, high up: the whole plant.
+			int mid = sizeX / 2;
+			shotAt(context, singleplayer, wx.applyAsInt(mid + 40), y + 110, wz.applyAsInt(-140), wx.applyAsInt(mid), y + 20, wz.applyAsInt(sizeZ / 2),
+					"jugcraft_plant_" + name + "_overview");
+			// Let the towers find themselves and the plume start; the reactors run meanwhile.
+			// Between the reactor and the towers, so both tick.
+			server.runCommand("tp @p %d %d %d".formatted(wx.applyAsInt((spots[0][0] + spots[2][0]) / 2), y + 60,
+					wz.applyAsInt((spots[0][1] + spots[2][1]) / 2)));
+			context.waitTicks(260);
+			shotAt(context, singleplayer, wx.applyAsInt(spots[2][0] + 160), y + 90, wz.applyAsInt(spots[2][1] + 120), wx.applyAsInt(spots[2][0]),
+					y + 120, wz.applyAsInt(spots[2][1]), "jugcraft_plant_" + name + "_towers");
+			shotAt(context, singleplayer, wx.applyAsInt(spots[2][0] + 300), y + 40, wz.applyAsInt(spots[2][1] - 60), wx.applyAsInt(spots[2][0]),
+					y + 110, wz.applyAsInt(spots[2][1]), "jugcraft_plant_" + name + "_plume_far");
+			// Inside the reactor building, looking down on the reactor equipment.
+			shotAt(context, singleplayer, wx.applyAsInt(spots[0][0] + 8), y + 30, wz.applyAsInt(spots[0][1] + 12), wx.applyAsInt(spots[0][0]),
+					y + 2, wz.applyAsInt(spots[0][1]), "jugcraft_plant_" + name + "_reactor_inside");
+			// The turbine hall.
+			shotAt(context, singleplayer, wx.applyAsInt(spots[1][0] - 30), y + 18, wz.applyAsInt(spots[1][1] + 6), wx.applyAsInt(spots[1][0] + 20),
+					y + 3, wz.applyAsInt(spots[1][1]), "jugcraft_plant_" + name + "_turbines");
+			server.runCommand("gamemode creative @p");
+			setHudHidden(context, false);
+		}
+		server.runCommand("effect clear @p night_vision");
 	}
 
 	private static void shotAt(ClientGameTestContext context, TestSingleplayerContext singleplayer, int fx, int fy, int fz, int lx, int ly, int lz,

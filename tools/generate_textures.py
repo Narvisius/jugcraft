@@ -1466,6 +1466,9 @@ def main():
     nuclear.draw_hud_trefoil().save(TEX / "gui" / "radiation_trefoil.png", optimize=True)
     nuclear.draw_scram_button().save(TEX / "gui" / "reactor_scram.png", optimize=True)
     nuclear.draw_equipment_sheet().save(entity_dir / "nuclear_equipment.png", optimize=True)
+    (TEX / "particle").mkdir(parents=True, exist_ok=True)
+    for name, img in nuclear.draw_plume_frames().items():
+        img.save(TEX / "particle" / f"{name}.png", optimize=True)
 
     import tank_display
     tank_display.draw_all(save)

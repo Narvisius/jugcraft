@@ -1,7 +1,8 @@
 # Nuclear power (stage 1)
 
-Status: implemented on the drone-tower branch (stage 1 of the approved plan). It has passed focused game tests on the
-owner's PC and is waiting for his review in game. Not merged.
+Status: implemented on the drone-tower branch (stage 1 of the approved plan). Stage 1 passed focused game tests on the
+owner's PC. The pre-made plants, cooling towers and new reactors (below) are built and compile, with game tests
+written, but have not been run in game yet. Not merged.
 Proposal: the "Nuclear Power Plant" proposal (draft 5) and "Nuclear, stage 1" design in the project notes.
 Owner: Justin (jimbozoomer)
 Target milestone and tier: endgame power (after steel, aluminium, titanium, tungsten and electronics).
@@ -27,6 +28,9 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   | Feedwater Pump | 3x2x3 |
   | Main Transformer | 5x5x8 |
   | Reactor Control Console | 3x2x2 |
+  | EPR Reactor Pressure Vessel | 8x8x22 |
+  | Small Modular Reactor | 5x5x22 |
+  | Small Turbine-Generator | 3x5x4 |
 
 - **Building a unit:** nothing fills in automatically; the vessel works out its unit from the world.
   - **Reactor Coolant Pipe** joins the vessel to its steam generators, coolant pumps and pressurizer. Equipment
@@ -61,6 +65,49 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
     above 4,000 and 8,000.
   - The **Geiger counter** clicks at random, as real counts arrive, generated live from the server's dose rate with no
     recorded sound. A readout shows the rate and dose while you hold it or wear the hood or coverall.
+
+## Pre-made plants
+Three full-size plants (one block = one metre), approved from layout previews. Each is a **blue** blueprint with every
+building, all the reactor equipment, the pipes and the conduits. Each large building is also its own **green** part
+blueprint (for players who lay out their own plant).
+
+| Plant | Site | Reactors | Cooling |
+| --- | --- | --- | --- |
+| Small Modular Nuclear Plant | 270 x 196 (+10 over the lake) | 6 Small Modular Reactors, each with its own Small Turbine-Generator | 2 mechanical-draft banks of 6 cells |
+| Medium Nuclear Plant (4-loop PWR) | 336 x 262 | the stage-1 four-loop unit, 1 turbine-generator | 2 natural-draft towers, 150 tall |
+| Large Nuclear Plant (EPR) | 440 x 336 | the EPR vessel, 4 loops, 2 turbine-generators | 2 large natural-draft towers, 175 tall |
+
+- **Where:** stake it on a lake or river shore, facing inland. The intake pump house reaches 10 blocks out over the
+  water, and its conduit legs go 4 blocks down into it. The rest of the plant reaches inland away from you.
+- **Parts:** containment / reactor building, safeguard buildings (EPR), turbine hall, fuel, auxiliary, control,
+  diesel, waste and office buildings, transformer yard, switchyard, intake pump house, and the cooling towers.
+- **What the blue blueprint adds:** the equipment (placed whole by drones), Reactor Coolant Pipe, Insulated Steam Line
+  through the walls to the turbines, Circulating Water Conduit from the lake to the condensers and on to the cooling
+  tower controllers, and the roads. Equipment bodies cut through any building in their way.
+- **Linking:** the consoles are in the control rooms; link each to its reactor with a Reactor Link Card (the build
+  command does it for you).
+- **Building:** drones build from the lowest unfinished layer up a few layers at a time (see the blueprint system
+  doc). In creative, `/nuclear build <blueprint> [fuelled]` builds one at once.
+- **Checked before building:** `tools/nuclear_plants.py` follows the pipes the way `ReactorUnit` does and refuses to
+  write a plant whose units would not form (loops, turbines, condensers, transformers, and the conduit reaching both
+  the lake and the towers). It also re-reads the written blueprints the way the game does.
+
+### The new reactors
+- **EPR vessel:** 241 assemblies (a 17-wide core) and 1.6 times the standard output. Each turbine-generator takes one
+  standard unit's output, so it needs two to use it all. The console's core map shrinks its cells to fit.
+- **Small Modular Reactor:** the reactor, steam generator and pressurizer in one module (natural circulation: no
+  pumps). 37 assemblies, an eighth of the standard output. An Insulated Steam Line joins it to a **Small
+  Turbine-Generator**, which is its own condenser (cooling water in) and transformer (power out into cables).
+
+### Cooling towers
+- Each tower blueprint has a **Cooling Tower Controller** in its basin. It checks its tower against the tower's
+  blueprint every five seconds (160 blocks spread over it; 90% must be in place).
+- A condenser whose Circulating Water Conduit reaches a formed controller sends its heat up the tower: for that share of
+  the heat it only needs **make-up water** (5%) instead of the full once-through flow.
+- Capacity, in standard units of heat: natural-draft tower 1.0, large tower 0.9, mechanical bank 0.4. Reactors on the
+  same tower share it.
+- A busy tower steams: a white plume (always drawn, however far away) as strong as the tower is busy.
+- The basins are left dry (drones can't carry water).
 
 ## How it runs (the model)
 - **Rods:** they move at 2% a second toward the console's setting, and drop fully in within two seconds on a SCRAM.
@@ -135,7 +182,10 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   - a unit joining through coolant pipe;
   - console permission and refuel rules;
   - the Geiger sound following the rate;
-  - a whole showcase unit forming four loops and making power.
+  - a whole showcase unit forming four loops and making power;
+  - written, not yet run: the plant blueprints load whole, the EPR and module cores and cooling towers behave, and
+    a built small modular plant forms six units with both tower banks (`NuclearPlantGameTests`); a screenshot tour of
+    all three plants running (`NuclearClientGameTests`).
 - **Screenshots** of every piece, the console screen (running and tripped), the open vessel and the fuel machines.
 
 ## World and event applicability
@@ -147,4 +197,7 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   equipment blueprints come with the pre-made plants.
 - **Stage 2 and later:** the spent fuel pool, dry casks and hardened drones; cooling towers and the water intake port;
   HALEU and MOX; meltdown, blast, fallout and corium; the small modular and EPR plants.
-- **Operator commands:** `/nuclear showcase` builds a running unit; `/radiation dose|check` are for testing.
+- **Operator commands:** `/nuclear showcase` builds a running unit; `/nuclear build <blueprint> [fuelled]` builds any
+  blueprint at once; `/radiation dose|check` are for testing.
+- **Not yet:** the plants' transformer yards and switchyards are scenery: connect the main transformers (or the small
+  turbines) to power lines yourself. Basins and the reactor pool are dry.

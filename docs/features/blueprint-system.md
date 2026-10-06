@@ -43,15 +43,23 @@ Owner: Narvisius
   - `name`;
   - `palette`: one character → a block state;
   - `layers`: bottom first, each a list of text rows, with `.` or space meaning nothing;
-  - optional `anchor`: where the stake stands, in front of the build.
+  - optional `anchor`: where the stake stands, in front of the build;
+  - optional `size`: the build's full size (empty edges count).
+- **Format 2** is the same with run-length rows: `12.3A` is twelve empty cells then three of `A` (so palette keys
+  can't be digits). A built-in format 2 file may also list `parts`, other built-in blueprints placed inside it
+  (`{"id", "at": [x, y, z], "turn": quarter turns clockwise}`); its own layers go over the parts, and a palette entry
+  of `minecraft:air` takes a part's block away. The nuclear plants are made this way (tools/nuclear_plants.py).
 - **Built-in blueprints** live in `data/jugcraft/blueprint/`, written by `tools/blueprints.py`.
 - **Imported blueprints** are saved in `<world>/jugcraft/blueprints/`.
-- **Limits:**
+- **Limits** (imports):
   - at most 48 blocks each way;
   - at most 8,192 blocks;
   - at most 262,144 characters;
+  - built-in blueprints may be up to 512 blocks each way and 1,500,000 blocks (a whole power plant);
   - forbidden blocks: command, structure, jigsaw, barrier, light, bedrock, spawners and portals.
 - **Syncing:** the server sends the whole library to each player on join, and new imports to everyone.
+  - Except the large built-ins listed in `data/jugcraft/blueprint/large.txt` (the nuclear plants and their parts):
+    each side reads those from its own copy of the jar the first time they are wanted, so they never cross the network.
   - A stake syncs only its blueprint id, rotation, owner and mode.
   - Pasted text goes to the server in 8,000-character parts.
 - **Block checks:** a block counts when it is the same block as the one wanted. Stairs and other directional blocks are turned with the blueprint.
@@ -61,8 +69,20 @@ Owner: Narvisius
   - It offers missing positions bottom-up, only to depots that pass `JugcraftParties.mayServe`.
   - It reserves each position for one depot at a time.
   - It never offers positions where a wrong block is in the way.
+- **Large builds** (more than 8,192 blocks or 48 across: the plants):
+  - Cells are kept compact (`BuildSite`: packed positions, bottom layer first, a sorted copy to find a position, and
+    which cells are known done), a few megabytes for a whole plant.
+  - Drones are offered work only from the lowest unfinished layer up a few layers, skipping cells known done, so a
+    depot's request costs about the same as for a small blueprint. Every 30 seconds the stake checks every block in
+    full (to notice broken ones and finish the build).
+  - The hologram shows only the cells within 96 blocks of you, from the lowest unfinished layer there up a few layers.
+  - The placement preview shows the build's outer skin (boxes of a few blocks) instead of every block.
+- **Nuclear equipment in a blueprint** (an equipment anchor block with its facing): drones deliver the equipment's
+  item and the stake places it whole, clearing any ground in its body first. The blueprint leaves the body empty.
 
 ## Testing aids (operators only: cheats on, or op level 2)
+- `/nuclear build <blueprint> [fuelled]`: builds any blueprint at once where you stand, facing the way you face
+  (equipment placed whole, pipes joined, consoles linked to the nearest reactor).
 - `/dronetest supplies [off]`: endless power and building blocks for every depot within 96 blocks.
 - `/dronetest modules`: fills nearby Tower Cores with 1024 of each module.
 

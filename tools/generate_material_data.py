@@ -151,6 +151,8 @@ def assets():
     import blueprints
     blueprints.write_assets(write, rid, ASSETS, lang)
     blueprints.write_all()
+    import nuclear_plants
+    nuclear_plants.write_blueprints()
     import drone_sounds
     lang.update(drone_sounds.LANG)
     import guide_books

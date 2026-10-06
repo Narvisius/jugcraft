@@ -63,6 +63,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 	// Condenser.
 	public final @Nullable FluidTank water;
 	private List<BlockPos> intakeCells = List.of();
+	/** Cooling tower controllers this condenser's conduit reaches. */
+	private List<BlockPos> towers = List.of();
 	private int intakeVersion = -1;
 	// Main transformer.
 	public final @Nullable SimpleEnergyStorage output;
@@ -73,10 +75,11 @@ public class EquipmentBlockEntity extends BlockEntity {
 	public EquipmentBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftNuclear.EQUIPMENT_ENTITY, pos, state);
 		EquipmentKind kind = kind(state);
-		water = kind == EquipmentKind.CONDENSER
+		water = kind.cooled()
 				? new FluidTank(CONDENSER_TANK, true, v -> v.getFluid() == Fluids.WATER, this::setChanged) : null;
-		output = kind == EquipmentKind.MAIN_TRANSFORMER
-				? new SimpleEnergyStorage(ReactorCore.RATED_JE * 2, 0, ReactorCore.RATED_JE * 2, this::setChanged) : null;
+		long room = kind == EquipmentKind.SMALL_TURBINE ? ReactorCore.Design.SMALL_MODULAR.ratedJe() * 2 : ReactorCore.RATED_JE * 2;
+		output = kind.powerOut() ? new SimpleEnergyStorage(room, 0, room, this::setChanged) : null;
+		core.design = kind.design();
 	}
 
 	static EquipmentKind kind(BlockState state) {
@@ -124,12 +127,15 @@ public class EquipmentBlockEntity extends BlockEntity {
 	// ------------------------------------------------------------------ ticking
 
 	public void serverTick(ServerLevel level) {
-		switch (kind()) {
-			case REACTOR_VESSEL -> tickVessel(level);
-			case CONDENSER -> tickCondenser(level);
-			case MAIN_TRANSFORMER -> tickTransformer(level);
-			default -> {
-			}
+		EquipmentKind kind = kind();
+		if (kind.reactor()) {
+			tickVessel(level);
+		}
+		if (kind.cooled()) {
+			tickCondenser(level);
+		}
+		if (kind.powerOut()) {
+			tickTransformer(level);
 		}
 	}
 
@@ -142,7 +148,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 			loops = unit.loops();
 		}
 		ReactorUnit u = unit;
-		long electric = core.tick(new ReactorCore.Plant(u.cooling(), u.steamToPower(), u.formed()), need -> drawWater(level, u, need));
+		long electric = core.tick(new ReactorCore.Plant(u.cooling(), u.steamToPower(), u.formed(), u.generatorLimit(), towerShare(level, u)),
+				need -> drawWater(level, u, need));
 		if (electric > 0) {
 			for (BlockPos t : u.transformers) {
 				if (level.getBlockEntity(t) instanceof EquipmentBlockEntity transformer && transformer.output != null) {
@@ -160,6 +167,27 @@ public class EquipmentBlockEntity extends BlockEntity {
 		} else {
 			setChanged();
 		}
+	}
+
+	/**
+	 * The share of this core's heat that cooling towers take this tick: the towers on its condensers' conduits lend
+	 * capacity (in standard units of heat), shared with any other reactor on the same towers.
+	 */
+	private double towerShare(ServerLevel level, ReactorUnit u) {
+		double scale = core.design.ratedJe() / (double) ReactorCore.RATED_JE;
+		double want = Math.max(0.001, Math.min(1, core.heat())) * scale;
+		double got = 0;
+		java.util.Set<BlockPos> seen = new HashSet<>();
+		for (BlockPos c : u.condensers) {
+			if (!(level.getBlockEntity(c) instanceof EquipmentBlockEntity condenser)) continue;
+			for (BlockPos t : condenser.towers) {
+				if (got >= want) break;
+				if (seen.add(t) && level.getBlockEntity(t) instanceof CoolingTowerBlockEntity tower) {
+					got += tower.claim(level.getGameTime(), want - got);
+				}
+			}
+		}
+		return Math.min(1, got / want);
 	}
 
 	private int drawWater(ServerLevel level, ReactorUnit u, int need) {
@@ -214,13 +242,19 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 	}
 
-	/** The water blocks touching the circulating water conduit that reaches this condenser. */
+	/**
+	 * The water blocks touching the circulating water conduit that reaches this condenser (and, as it goes, the cooling
+	 * tower controllers on the conduit or touching the condenser).
+	 */
 	private List<BlockPos> conduitIntakes(ServerLevel level, EquipmentRegistry registry) {
 		Set<BlockPos> seen = new HashSet<>();
 		java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
+		Set<BlockPos> foundTowers = new java.util.LinkedHashSet<>();
 		for (BlockPos cell : ReactorUnit.outside(registry, getBlockPos())) {
 			if (ReactorUnit.isPipe(level, cell, PipeKind.WATER) && seen.add(cell)) {
 				queue.add(cell);
+			} else if (level.getBlockState(cell).getBlock() instanceof CoolingTowerBlock) {
+				foundTowers.add(cell.immutable());
 			}
 		}
 		Set<BlockPos> water = new HashSet<>();
@@ -230,11 +264,14 @@ public class EquipmentBlockEntity extends BlockEntity {
 				BlockPos next = pipe.relative(d);
 				if (ReactorUnit.isPipe(level, next, PipeKind.WATER)) {
 					if (seen.add(next)) queue.add(next);
+				} else if (level.getBlockState(next).getBlock() instanceof CoolingTowerBlock) {
+					foundTowers.add(next.immutable());
 				} else if (level.getFluidState(next).is(FluidTags.WATER)) {
 					water.add(next.immutable());
 				}
 			}
 		}
+		towers = List.copyOf(foundTowers);
 		return new ArrayList<>(water);
 	}
 
@@ -267,7 +304,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 	/** Loads up to {@code count} fresh assemblies; returns how many went in (none unless open for refuelling). */
 	public int loadAssemblies(int count) {
 		if (!core.refuelOpen) return 0;
-		int n = Math.max(0, Math.min(count, ReactorCore.CORE_SIZE - core.fuel.size()));
+		int n = Math.max(0, Math.min(count, core.design.size() - core.fuel.size()));
 		for (int i = 0; i < n; i++) {
 			core.fuel.add(0.0);
 		}
@@ -339,7 +376,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
 		TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, registries);
 		saveCommon(out);
-		if (kind() == EquipmentKind.REACTOR_VESSEL) {
+		if (kind().reactor()) {
 			core.saveReadouts(out);
 			out.store("missing", Codec.STRING.listOf(), missing);
 			out.putInt("loops", loops);
@@ -380,7 +417,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 			mode = UseMode.PERSONAL;
 		}
 		linked = in.read("linked", BlockPos.CODEC).orElse(null);
-		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind == EquipmentKind.REACTOR_VESSEL) {
+		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind.reactor()) {
 			core.loadReadouts(in);
 			missing = in.read("missing", Codec.STRING.listOf()).orElse(missing);
 			loops = in.getIntOr("loops", loops);
@@ -400,7 +437,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 	protected void saveAdditional(ValueOutput out) {
 		super.saveAdditional(out);
 		saveCommon(out);
-		if (kind() == EquipmentKind.REACTOR_VESSEL) {
+		if (kind().reactor()) {
 			core.save(out);
 		}
 		if (water != null) out.putLong("water_droplets", water.amount);

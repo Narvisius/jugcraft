@@ -28,14 +28,24 @@ public final class ReactorUnit {
 	public final List<BlockPos> feedwaterPumps = new ArrayList<>();
 	public final List<BlockPos> condensers = new ArrayList<>();
 	public final List<BlockPos> transformers = new ArrayList<>();
+	/** A small modular reactor's unit: its small turbine-generators (each its own condenser and transformer). */
+	public final List<BlockPos> smallTurbines = new ArrayList<>();
+	public boolean module;
 
 	/** Working loops: a steam generator with a coolant pump each, at most four. */
 	public int loops() {
+		if (module) {
+			return smallTurbines.isEmpty() ? 0 : 1;
+		}
 		return Math.min(4, Math.min(steamGenerators.size(), pumps.size()));
 	}
 
 	/** Share of the rated heat the unit can carry away (before cooling water). */
 	public double cooling() {
+		if (module) {
+			// Natural circulation inside the module: it only needs somewhere for its steam to go.
+			return smallTurbines.isEmpty() ? 0 : 1;
+		}
 		if (pressurizers.isEmpty() || feedwaterPumps.isEmpty() || condensers.isEmpty()) {
 			// No pressurizer: the coolant boils. No feedwater pump or condenser: the steam generators boil dry.
 			return 0;
@@ -44,6 +54,9 @@ public final class ReactorUnit {
 	}
 
 	public boolean steamToPower() {
+		if (module) {
+			return !smallTurbines.isEmpty();
+		}
 		return !turbines.isEmpty() && !transformers.isEmpty() && cooling() > 0;
 	}
 
@@ -52,8 +65,20 @@ public final class ReactorUnit {
 	}
 
 	/** What is missing, as translation keys (the console lists them). */
+	/** The most electric power the unit's generators can make (JE/t): each turbine-generator takes a standard unit's output. */
+	public long generatorLimit() {
+		if (module) {
+			return smallTurbines.size() * ReactorCore.Design.SMALL_MODULAR.ratedJe();
+		}
+		return turbines.size() * ReactorCore.RATED_JE;
+	}
+
 	public List<String> missing() {
 		List<String> out = new ArrayList<>();
+		if (module) {
+			if (smallTurbines.isEmpty()) out.add("small_turbine");
+			return out;
+		}
 		if (steamGenerators.isEmpty()) out.add("steam_generator");
 		if (pumps.isEmpty()) out.add("coolant_pump");
 		if (pressurizers.isEmpty()) out.add("pressurizer");
@@ -67,6 +92,20 @@ public final class ReactorUnit {
 	public static ReactorUnit find(Level level, BlockPos vessel) {
 		EquipmentRegistry registry = EquipmentRegistry.of(level);
 		ReactorUnit unit = new ReactorUnit();
+		EquipmentRegistry.Entry self = registry.at(vessel);
+		if (self != null && self.kind() == EquipmentKind.SMALL_MODULAR_REACTOR) {
+			unit.module = true;
+			for (BlockPos anchor : joined(level, registry, List.of(vessel), PipeKind.STEAM)) {
+				EquipmentRegistry.Entry e = registry.at(anchor);
+				if (e != null && e.kind() == EquipmentKind.SMALL_TURBINE) {
+					unit.smallTurbines.add(anchor);
+				}
+			}
+			// The small turbine-generator is its own condenser and transformer.
+			unit.condensers.addAll(unit.smallTurbines);
+			unit.transformers.addAll(unit.smallTurbines);
+			return unit;
+		}
 		Set<BlockPos> primary = joined(level, registry, List.of(vessel), PipeKind.COOLANT);
 		for (BlockPos anchor : primary) {
 			EquipmentRegistry.Entry e = registry.at(anchor);

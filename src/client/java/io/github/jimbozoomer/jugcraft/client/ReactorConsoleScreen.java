@@ -103,7 +103,11 @@ public class ReactorConsoleScreen extends Screen {
 			return;
 		}
 		ReactorCore core = v.core;
-		String header = t("header", v.loops);
+		String header = switch (core.design.id()) {
+			case "epr" -> t("header_epr");
+			case "smr" -> t("header_smr");
+			default -> t("header", v.loops);
+		};
 		g.text(font, header, x0 + W / 2 - font.width(header) / 2, y0 + 6, DIM, false);
 		String status;
 		int statusColour;
@@ -144,13 +148,20 @@ public class ReactorConsoleScreen extends Screen {
 
 	private void coreMap(GuiGraphicsExtractor g, ReactorCore core, int x, int y) {
 		panel(g, x, y, 150, 168, t("core_map"));
-		int cell = 8;
-		int rows = ReactorCore.CORE_ROWS.length;
-		int ox = x + 75 - (15 * cell) / 2, oy = y + 22;
+		int[] coreRows = core.design.rows();
+		int rows = coreRows.length;
+		int wide = 0;
+		for (int n : coreRows) {
+			wide = Math.max(wide, n);
+		}
+		// The map fills the same square whatever the core: 8 px cells for the standard core, smaller for the EPR's.
+		int cell = Math.max(4, Math.min(16, 120 / Math.max(rows, wide)));
+		int ox = x + 75 - (wide * cell) / 2, oy = y + 22 + (120 - rows * cell) / 2;
+		double midRow = (rows - 1) / 2.0, midCol = (wide - 1) / 2.0;
 		int index = 0;
 		for (int r = 0; r < rows; r++) {
-			int n = ReactorCore.CORE_ROWS[r];
-			int start = (15 - n) / 2;
+			int n = coreRows[r];
+			int start = (wide - n) / 2;
 			for (int k = 0; k < n; k++) {
 				int col = start + k;
 				int px = ox + col * cell, py = oy + r * cell;
@@ -165,7 +176,7 @@ public class ReactorConsoleScreen extends Screen {
 						colour = 0xFF34404A;
 					} else {
 						// Heat: hotter towards the middle and with more power.
-						double dr = (r - 7) / 7.0, dc = (col - 7) / 7.0;
+						double dr = (r - midRow) / Math.max(1, midRow), dc = (col - midCol) / Math.max(1, midCol);
 						double heat = core.fission * (1.15 - 0.45 * (dr * dr + dc * dc)) * (1 - burnup * 0.3);
 						colour = heatColour(heat);
 					}
@@ -179,7 +190,7 @@ public class ReactorConsoleScreen extends Screen {
 				index++;
 			}
 		}
-		g.text(font, t("core_legend", core.fuel.size(), ReactorCore.CORE_SIZE), x + 6, y + 156, DIM, false);
+		g.text(font, t("core_legend", core.fuel.size(), core.design.size()), x + 6, y + 156, DIM, false);
 	}
 
 	static int heatColour(double heat) {
@@ -243,8 +254,7 @@ public class ReactorConsoleScreen extends Screen {
 				{t("coolant"), String.format(Locale.ROOT, "%.0f °C / %s", Math.max(20, core.temperature - 15 * core.heat()),
 						(v.missing.contains("pressurizer") ? "0.1" : "15.5") + " MPa")},
 				{t("steam"), t("steam_value", v.loops, Math.round(core.removed * 100))},
-				{t("cooling_water"), String.format(Locale.ROOT, "%,d / %,d mB/t", Math.round(ReactorCore.FULL_WATER * Math.min(1, core.heat())
-						* core.waterShare), Math.round(ReactorCore.FULL_WATER * Math.min(1, core.heat())))},
+				{t("cooling_water"), String.format(Locale.ROOT, "%,d / %,d mB/t", Math.round(core.need * core.waterShare), core.need)},
 		};
 		int[] colours = {GREEN, GREEN, core.temperature >= ReactorCore.ALARM_TEMP ? RED : TEXT, TEXT, TEXT,
 				core.waterShare < 0.95 && core.heat() > 0.01 ? AMBER : TEXT};

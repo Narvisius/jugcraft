@@ -59,7 +59,7 @@ public record ConsoleActionPayload(BlockPos console, int action, int value) impl
 			return true;
 		}
 		if (console.linked == null || !(player.level().getBlockEntity(console.linked) instanceof EquipmentBlockEntity vessel)
-				|| vessel.kind() != EquipmentKind.REACTOR_VESSEL) {
+				|| !vessel.kind().reactor()) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.console_unlinked"));
 			return false;
 		}

@@ -123,13 +123,13 @@ public final class EquipmentPlacement {
 				}
 				return InteractionResult.SUCCESS;
 			}
-			case REACTOR_VESSEL -> {
+			case REACTOR_VESSEL, EPR_VESSEL, SMALL_MODULAR_REACTOR -> {
 				if (level.isClientSide()) {
 					return InteractionResult.SUCCESS;
 				}
 				return useVessel(equipment, player, stack, hand);
 			}
-			case CONDENSER -> {
+			case CONDENSER, SMALL_TURBINE -> {
 				if (equipment.water != null && FluidStorageUtil.interactWithFluidStorage(equipment.water, player, hand)) {
 					return InteractionResult.SUCCESS;
 				}
@@ -146,14 +146,14 @@ public final class EquipmentPlacement {
 	}
 
 	private static InteractionResult linkCard(Level level, EquipmentBlockEntity equipment, Player player, ItemStack card) {
-		if (equipment.kind() == EquipmentKind.REACTOR_VESSEL) {
+		if (equipment.kind().reactor()) {
 			card.set(JugcraftNuclear.LINKED_VESSEL, equipment.getBlockPos());
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.card_set"));
 			return InteractionResult.SUCCESS_SERVER;
 		}
 		if (equipment.kind() == EquipmentKind.CONTROL_CONSOLE) {
 			BlockPos vessel = card.get(JugcraftNuclear.LINKED_VESSEL);
-			if (vessel == null || !(level.getBlockEntity(vessel) instanceof EquipmentBlockEntity v) || v.kind() != EquipmentKind.REACTOR_VESSEL) {
+			if (vessel == null || !(level.getBlockEntity(vessel) instanceof EquipmentBlockEntity v) || !v.kind().reactor()) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.card_empty"));
 				return InteractionResult.FAIL;
 			}
@@ -174,7 +174,7 @@ public final class EquipmentPlacement {
 		if (!core.refuelOpen) {
 			if (stack.isEmpty()) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.vessel_status",
-						Math.round(core.fission * 100), Math.round(core.temperature), core.fuel.size(), ReactorCore.CORE_SIZE));
+						Math.round(core.fission * 100), Math.round(core.temperature), core.fuel.size(), core.design.size()));
 				return InteractionResult.SUCCESS_SERVER;
 			}
 			if (stack.is(JugcraftNuclear.FUEL_ASSEMBLY) || stack.is(JugcraftNuclear.SPENT_FUEL)) {
@@ -197,7 +197,7 @@ public final class EquipmentPlacement {
 				if (!player.getAbilities().instabuild) {
 					stack.shrink(n);
 				}
-				player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.loaded", core.fuel.size(), ReactorCore.CORE_SIZE));
+				player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.loaded", core.fuel.size(), core.design.size()));
 				return InteractionResult.SUCCESS_SERVER;
 			}
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.core_full"));
@@ -210,7 +210,7 @@ public final class EquipmentPlacement {
 				return InteractionResult.FAIL;
 			}
 			player.setItemInHand(hand, taken);
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.unloaded", core.fuel.size(), ReactorCore.CORE_SIZE));
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.unloaded", core.fuel.size(), core.design.size()));
 			return InteractionResult.SUCCESS_SERVER;
 		}
 		return InteractionResult.PASS;

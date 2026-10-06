@@ -38,6 +38,21 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 	private static final int WRONG = 0xB0FF4030;
 	private static final int MAX_GHOSTS = 8192;
 	private static final Map<String, List<Blueprint.Cell>> TURNED = new HashMap<>();
+	/** Large builds: ghosts only within this many blocks of the camera, a few layers from the lowest unfinished one. */
+	private static final int LARGE_REACH = 96;
+	/** Large builds: the client's copy of each placed one, and its ghost list (worked out twice a second). */
+	private static final Map<SurveyStakeBlockEntity, Large> LARGE = new java.util.WeakHashMap<>();
+
+	private static final class Large {
+		final io.github.jimbozoomer.jugcraft.blueprint.BuildSite site;
+		final List<float[]> ghosts = new ArrayList<>();
+		long refreshed = Long.MIN_VALUE;
+		long cleared;
+
+		Large(io.github.jimbozoomer.jugcraft.blueprint.BuildSite site) {
+			this.site = site;
+		}
+	}
 
 	public static class State extends BlockEntityRenderState {
 		final List<float[]> ghosts = new ArrayList<>();
@@ -55,7 +70,7 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 
 	@Override
 	public int getViewDistance() {
-		return 160;
+		return 384;
 	}
 
 	private static List<Blueprint.Cell> cells(SurveyStakeBlockEntity stake) {
@@ -78,6 +93,11 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 		}
 		BlockPos origin = stake.getBlockPos();
 		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+		Blueprint blueprint = stake.blueprint();
+		if (blueprint != null && blueprint.large()) {
+			state.ghosts.addAll(large(stake, blueprint, level, cameraPos));
+			return;
+		}
 		for (Blueprint.Cell cell : cells(stake)) {
 			if (state.ghosts.size() >= MAX_GHOSTS) {
 				break;
@@ -90,6 +110,59 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 			int color = !now.canBeReplaced() ? WRONG : SurveyStakeBlockEntity.handOnly(cell.state()) ? HAND_ONLY : MISSING;
 			state.ghosts.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(color)});
 		}
+	}
+
+	/**
+	 * A large build's ghosts: near the camera only, from the lowest unfinished layer there up a few layers, so a whole
+	 * power plant costs no more to draw than a small blueprint.
+	 */
+	private static List<float[]> large(SurveyStakeBlockEntity stake, Blueprint blueprint, Level level, Vec3 camera) {
+		Large large = LARGE.get(stake);
+		if (large == null || large.site.blueprint != blueprint || large.site.rotation != stake.rotation()) {
+			large = new Large(new io.github.jimbozoomer.jugcraft.blueprint.BuildSite(blueprint, stake.rotation(), stake.getBlockPos()));
+			LARGE.put(stake, large);
+		}
+		long now = level.getGameTime();
+		if (now - large.refreshed < 10 && now >= large.refreshed) {
+			return large.ghosts;
+		}
+		large.refreshed = now;
+		large.ghosts.clear();
+		if (Math.abs(now - large.cleared) > 600) {
+			// Now and then forget what was seen in place, so a block broken since shows again.
+			large.site.done.clear();
+			large.cleared = now;
+		}
+		var site = large.site;
+		BlockPos origin = stake.getBlockPos();
+		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+		int lowest = -1;
+		double reach = (double) LARGE_REACH * LARGE_REACH;
+		for (int i = site.done.nextClearBit(0); i < site.size(); i = site.done.nextClearBit(i + 1)) {
+			at.set(site.pos(i));
+			double dx = at.getX() + 0.5 - camera.x, dz = at.getZ() + 0.5 - camera.z;
+			if (dx * dx + dz * dz > reach) {
+				continue;
+			}
+			int layer = site.layerOf(i);
+			if (lowest >= 0 && layer > lowest + SurveyStakeBlockEntity.LAYER_WINDOW + 1) {
+				break;
+			}
+			BlockState now2 = level.getBlockState(at);
+			if (site.matches(now2, i)) {
+				site.done.set(i);
+				continue;
+			}
+			if (lowest < 0) {
+				lowest = layer;
+			}
+			if (large.ghosts.size() >= MAX_GHOSTS) {
+				break;
+			}
+			int color = !now2.canBeReplaced() ? WRONG : SurveyStakeBlockEntity.handOnly(site.state(i)) ? HAND_ONLY : MISSING;
+			large.ghosts.add(new float[] {at.getX() - origin.getX(), at.getY() - origin.getY(), at.getZ() - origin.getZ(), Float.intBitsToFloat(color)});
+		}
+		return large.ghosts;
 	}
 
 	@Override
