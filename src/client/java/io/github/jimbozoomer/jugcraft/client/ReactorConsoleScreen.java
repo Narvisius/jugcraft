@@ -68,7 +68,7 @@ public class ReactorConsoleScreen extends Screen {
 		Minecraft mc = Minecraft.getInstance();
 		EquipmentBlockEntity c = consoleEntity();
 		if (c == null || c.linked == null || mc.level == null) return null;
-		return mc.level.getBlockEntity(c.linked) instanceof EquipmentBlockEntity v && v.kind() == EquipmentKind.REACTOR_VESSEL ? v : null;
+		return mc.level.getBlockEntity(c.linked) instanceof EquipmentBlockEntity v && v.kind().reactor() ? v : null;
 	}
 
 	private void send(int action, int value) {
@@ -99,7 +99,7 @@ public class ReactorConsoleScreen extends Screen {
 		EquipmentBlockEntity v = vessel();
 		EquipmentBlockEntity c = consoleEntity();
 		if (v == null || c == null) {
-			g.text(font, t("unlinked"), x0 + 8, y0 + 40, AMBER, false);
+			g.text(font, c != null && c.linked != null ? t("out_of_range", c.linked.toShortString()) : t("unlinked"), x0 + 8, y0 + 40, AMBER, false);
 			return;
 		}
 		ReactorCore core = v.core;

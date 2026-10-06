@@ -103,15 +103,17 @@ public final class EquipmentPlacement {
 		EquipmentKind kind = equipment.kind();
 		if (stack.is(JugcraftNuclear.LINK_CARD)) {
 			if (level.isClientSide()) {
+				// Linking a console opens it straight away (the server links it; the screen follows the synced link).
+				if (kind == EquipmentKind.CONTROL_CONSOLE && stack.get(JugcraftNuclear.LINKED_VESSEL) != null) {
+					openConsole.accept(anchor);
+				}
 				return InteractionResult.SUCCESS;
 			}
 			return linkCard(level, equipment, player, stack);
 		}
 		switch (kind) {
 			case CONTROL_CONSOLE -> {
-				if (!stack.isEmpty()) {
-					return InteractionResult.PASS;
-				}
+				// Opens with anything in hand (a block in hand is not placed against the console).
 				if (equipment.linked == null) {
 					if (!level.isClientSide()) {
 						player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.console_unlinked"));
