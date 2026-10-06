@@ -26,7 +26,8 @@ import net.minecraft.world.level.storage.LevelResource;
  * Builds all three pre-made nuclear plants side by side, well apart, each on the shore of its own lake, fuelled and
  * running (operators: {@code /nuclear showcase plants}). Started with the environment variable
  * {@code JUGCRAFT_SHOWCASE=nuclear} (14-nuclear-showcase.bat), it also builds them once in a new world when the first
- * player joins, and puts that player in front of them.
+ * player joins, and puts that player in front of them. A world built that way has its plant brought up to date in
+ * place whenever it is joined after the plant has changed, however the game was started.
  */
 public final class PlantShowcase {
 	/** The plants, west to east, and the space left between them (blocks). */
@@ -39,17 +40,18 @@ public final class PlantShowcase {
 	}
 
 	public static void register() {
-		if (!"nuclear".equalsIgnoreCase(System.getenv("JUGCRAFT_SHOWCASE"))) {
-			return;
-		}
+		boolean buildNew = "nuclear".equalsIgnoreCase(System.getenv("JUGCRAFT_SHOWCASE"));
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> server.execute(() -> {
 			ServerPlayer player = handler.player;
 			Path marker = server.getWorldPath(LevelResource.ROOT).resolve("jugcraft").resolve("nuclear-showcase.done");
 			ServerLevel level = server.overworld();
 			if (Files.exists(marker)) {
-				// Built before: if the plant has changed since (a new build of the mod), bring it up to date in place
-				// once the player's surroundings have loaded.
+				// A showcase world, however the game was started (6-play.bat too): if the plant has changed since (a new
+				// build of the mod), bring it up to date in place once the player's surroundings have loaded.
 				pending = new Pending(player, marker, 40, 30);
+				return;
+			}
+			if (!buildNew) {
 				return;
 			}
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "time set 6000");
@@ -71,8 +73,12 @@ public final class PlantShowcase {
 				pending = null;
 				return;
 			}
-			if (refreshIfChanged(p.player.level(), p.player, p.marker) || --p.tries <= 0) {
+			if (refreshIfChanged(p.player.level(), p.player, p.marker)) {
 				pending = null;
+			} else if (--p.tries <= 0) {
+				pending = null;
+				p.player.sendSystemMessage(Component.literal("The nuclear plant may be out of date, but its reactor is too far away to find. "
+						+ "Go to the plant and use /nuclear showcase refresh.").withStyle(ChatFormatting.GRAY));
 			} else {
 				p.wait = 40;
 			}
