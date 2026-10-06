@@ -1,0 +1,185 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_circuit": "jugcraft:block/pi_circuit",
+    "pi_ram": "jugcraft:block/pi_ram",
+    "pi_solder_iron": "jugcraft:block/pi_solder_iron",
+    "pi_steel_dark": "jugcraft:block/pi_steel_dark",
+    "pi_tool_case": "jugcraft:block/pi_tool_case",
+    "particle": "jugcraft:block/pi_circuit"
+  },
+  "elements": [
+    {
+      "from": [
+        1.5,
+        12,
+        4
+      ],
+      "to": [
+        7,
+        12.3,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_circuit"
+        },
+        "south": {
+          "texture": "#pi_circuit"
+        },
+        "east": {
+          "texture": "#pi_circuit"
+        },
+        "west": {
+          "texture": "#pi_circuit"
+        },
+        "up": {
+          "texture": "#pi_circuit",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_circuit"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        12,
+        4
+      ],
+      "to": [
+        10,
+        13,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        9.5,
+        11.97,
+        4.5
+      ],
+      "to": [
+        14.5,
+        12.4,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_solder_iron"
+        },
+        "south": {
+          "texture": "#pi_solder_iron"
+        },
+        "east": {
+          "texture": "#pi_solder_iron"
+        },
+        "west": {
+          "texture": "#pi_solder_iron"
+        },
+        "up": {
+          "texture": "#pi_solder_iron"
+        },
+        "down": {
+          "texture": "#pi_solder_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        8.5,
+        12,
+        8
+      ],
+      "to": [
+        14.5,
+        12.6,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_tool_case"
+        },
+        "south": {
+          "texture": "#pi_tool_case"
+        },
+        "east": {
+          "texture": "#pi_tool_case"
+        },
+        "west": {
+          "texture": "#pi_tool_case"
+        },
+        "up": {
+          "texture": "#pi_tool_case",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_tool_case"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        12,
+        10
+      ],
+      "to": [
+        6,
+        12.3,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ram"
+        },
+        "south": {
+          "texture": "#pi_ram"
+        },
+        "east": {
+          "texture": "#pi_ram"
+        },
+        "west": {
+          "texture": "#pi_ram"
+        },
+        "up": {
+          "texture": "#pi_ram"
+        },
+        "down": {
+          "texture": "#pi_ram"
+        }
+      }
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 {
+  "ambientocclusion": false,
   "textures": {
     "pi_binders": "jugcraft:block/pi_binders",
     "pi_books": "jugcraft:block/pi_books",
@@ -313,33 +314,69 @@
     },
     {
       "from": [
-        1,
-        0,
-        1
+        0.97,
+        -0.03,
+        0.97
       ],
       "to": [
-        15,
+        15.03,
         0.6,
-        15
+        15.03
       ],
       "faces": {
         "north": {
-          "texture": "#pi_veneer"
+          "texture": "#pi_veneer",
+          "uv": [
+            0.97,
+            15.37,
+            15.03,
+            16.0
+          ]
         },
         "south": {
-          "texture": "#pi_veneer"
+          "texture": "#pi_veneer",
+          "uv": [
+            0.97,
+            15.37,
+            15.03,
+            16.0
+          ]
         },
         "east": {
-          "texture": "#pi_veneer"
+          "texture": "#pi_veneer",
+          "uv": [
+            0.97,
+            15.37,
+            15.03,
+            16.0
+          ]
         },
         "west": {
-          "texture": "#pi_veneer"
+          "texture": "#pi_veneer",
+          "uv": [
+            0.97,
+            15.37,
+            15.03,
+            16.0
+          ]
         },
         "up": {
-          "texture": "#pi_veneer"
+          "texture": "#pi_veneer",
+          "uv": [
+            0.97,
+            0.97,
+            15.03,
+            15.03
+          ]
         },
         "down": {
-          "texture": "#pi_veneer"
+          "texture": "#pi_veneer",
+          "uv": [
+            0.97,
+            0.97,
+            15.03,
+            15.03
+          ]
         }
       }
     }

@@ -1,0 +1,80 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_desk_panel": "jugcraft:block/pi_desk_panel",
+    "pi_laminate": "jugcraft:block/pi_laminate",
+    "particle": "jugcraft:block/pi_desk_panel"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        11.5,
+        1
+      ],
+      "to": [
+        16,
+        12.5,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_laminate"
+        },
+        "south": {
+          "texture": "#pi_laminate"
+        },
+        "east": {
+          "texture": "#pi_laminate"
+        },
+        "west": {
+          "texture": "#pi_laminate"
+        },
+        "up": {
+          "texture": "#pi_laminate",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_laminate"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3,
+        1.2
+      ],
+      "to": [
+        16,
+        11.5,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_desk_panel"
+        },
+        "south": {
+          "texture": "#pi_desk_panel"
+        },
+        "east": {
+          "texture": "#pi_desk_panel"
+        },
+        "west": {
+          "texture": "#pi_desk_panel"
+        },
+        "up": {
+          "texture": "#pi_desk_panel"
+        },
+        "down": {
+          "texture": "#pi_desk_panel"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_paper": "jugcraft:block/pi_paper",
+    "pi_pen_cup": "jugcraft:block/pi_pen_cup",
+    "pi_pens": "jugcraft:block/pi_pens",
+    "particle": "jugcraft:block/pi_paper"
+  },
+  "elements": [
+    {
+      "from": [
+        1.5,
+        12.5,
+        4
+      ],
+      "to": [
+        6,
+        13.6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_paper"
+        },
+        "south": {
+          "texture": "#pi_paper"
+        },
+        "east": {
+          "texture": "#pi_paper"
+        },
+        "west": {
+          "texture": "#pi_paper"
+        },
+        "up": {
+          "texture": "#pi_paper",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_paper"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        12.5,
+        5
+      ],
+      "to": [
+        11.5,
+        12.8,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_paper"
+        },
+        "south": {
+          "texture": "#pi_paper"
+        },
+        "east": {
+          "texture": "#pi_paper"
+        },
+        "west": {
+          "texture": "#pi_paper"
+        },
+        "up": {
+          "texture": "#pi_paper",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_paper"
+        }
+      }
+    },
+    {
+      "from": [
+        12.5,
+        12.5,
+        4
+      ],
+      "to": [
+        14.5,
+        15.5,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pen_cup"
+        },
+        "south": {
+          "texture": "#pi_pen_cup"
+        },
+        "east": {
+          "texture": "#pi_pen_cup"
+        },
+        "west": {
+          "texture": "#pi_pen_cup"
+        },
+        "up": {
+          "texture": "#pi_pens",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_pen_cup"
+        }
+      }
+    }
+  ]
+}

@@ -79,11 +79,17 @@ OFFICE = {
         (0, 0, 1, 16, 15, 3, {"*": "pi_veneer", "north": "pi_reception_front!"}),
         (0, 15, 0, 16, 16, 5, {"*": "pi_quartz", "up": "pi_quartz!"}),
         (0, 10.5, 3, 16, 11.5, 15.5, {"*": "pi_laminate", "up": "pi_laminate!"}),
-        (0, 0, 3, 16, 1, 6, "pi_veneer"),
-        (7, 11.5, 6, 9, 11.8, 8, "pi_monitor"), (7.6, 11.8, 6.5, 8.4, 13.5, 7, "pi_monitor"),
-        (3.5, 13, 6, 12.5, 19, 6.8, {"*": "pi_monitor", "south": "pi_office_screen!"}),
-        (4, 11.5, 9, 12, 11.9, 11.5, {"*": "pi_monitor", "up": "pi_keyboard!"})],
+        (0, 0, 3, 16, 1, 6, "pi_veneer")],
         "left": [(0, 0, 3, 1, 10.5, 15.5, "pi_veneer")], "right": [(15, 0, 3, 16, 10.5, 15.5, "pi_veneer")],
+        # What is on it: a computer, a phone and the visitors' book, or nothing but a small plant.
+        "tops": [
+            [(7, 11.5, 6, 9, 11.8, 8, "pi_monitor"), (7.6, 11.8, 6.5, 8.4, 13.5, 7, "pi_monitor"),
+             (3.5, 13, 6, 12.5, 19, 6.8, {"*": "pi_monitor", "south": "pi_office_screen!"}),
+             (4, 11.5, 9, 12, 11.9, 11.5, {"*": "pi_monitor", "up": "pi_keyboard!"})],
+            [(3, 11.5, 6, 7, 12.5, 9, {"*": "pi_monitor", "up": "pi_phone!"}),
+             (9, 11.5, 6, 14, 11.9, 12, {"*": "pi_paper", "up": "pi_visitor_book!"})],
+            [(10, 11.5, 5, 14, 15, 9, {"*": "pi_pot_white", "up": "pi_soil"}),
+             (10.5, 15, 5.5, 13.5, 18, 8.5, "pi_leaf_ball")]],
         "glow": ["pi_office_screen"]},
     "sofa": {"display": "Sofa", "row": "sofa", "boxes": [
         (0, 0.5, 2, 16, 3, 15.5, "pi_sofa_dark"),
@@ -198,19 +204,24 @@ CRAFTING = {
 # --------------------------------------------------------------------------------------------------- models
 
 def plant_model(i, rid):
-    """A pot of soil with a plant in it, two crossed planes of leaves (a little taller than a block for the big ones)."""
+    """A pot (four walls with a rim, so it reads as a pot from every side and from above) filled with soil, and the
+    plant in it: four planes of leaves crossing in the middle (a little taller than a block for the big ones)."""
     h = PLANT_HEIGHTS[i]
     pot = POTS[i % 3]
-    els = [
-        {"from": [4, 0, 4], "to": [12, 7, 12], "faces": {f: {"texture": "#pot"} for f in ("north", "south", "east", "west", "down")}},
-        {"from": [4.6, 6, 4.6], "to": [11.4, 6.6, 11.4], "faces": {"up": {"texture": "#soil"}}},
-    ]
-    for angle in (45, -45):
-        els.append({"from": [0, 5, 8], "to": [16, h, 8], "rotation": {"angle": angle, "axis": "y", "origin": [8, 8, 8]},
-                    "shade": False, "faces": {"north": {"texture": "#leaves", "uv": [0, 0, 16, 16]},
-                                               "south": {"texture": "#leaves", "uv": [0, 0, 16, 16]}}})
-    return {"textures": {"pot": rid(f"block/{pot}"), "soil": rid("block/pi_soil"), "leaves": rid(f"block/pi_plant_{i}"),
-                         "particle": rid(f"block/pi_plant_{i}")}, "elements": els}
+    six = ("north", "south", "east", "west", "up", "down")
+    els = [{"from": f, "to": t, "faces": {k: {"texture": "#pot"} for k in six}} for f, t in (
+        ([4, 0, 4], [12, 7, 5]), ([4, 0, 11], [12, 7, 12]), ([4, 0, 5], [5, 7, 11]), ([11, 0, 5], [12, 7, 11]))]
+    els.append({"from": [5, 0, 5], "to": [11, 6.4, 11], "faces": {"up": {"texture": "#soil"}, "down": {"texture": "#pot"}}})
+    for angle, along_x in ((45, True), (-45, True), (0, True), (0, False)):
+        f, t = ([0, 6, 8], [16, h, 8]) if along_x else ([8, 6, 0], [8, h, 16])
+        faces = ("north", "south") if along_x else ("east", "west")
+        e = {"from": f, "to": t, "shade": False, "faces": {k: {"texture": "#leaves", "uv": [0, 0, 16, 16]} for k in faces}}
+        if angle:
+            e["rotation"] = {"angle": angle, "axis": "y", "origin": [8, 8, 8]}
+        els.append(e)
+    return {"ambientocclusion": False, "textures": {"pot": rid(f"block/{pot}"), "soil": rid("block/pi_soil"),
+                                                     "leaves": rid(f"block/pi_plant_{i}"), "particle": rid(f"block/pi_plant_{i}")},
+            "elements": els}
 
 
 def table_boxes(part):
@@ -514,7 +525,8 @@ def _boot():
 
 
 def _books(binders=False):
-    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    # Opaque: the gaps between books and above them are the shadow at the back of the shelf, not holes.
+    img = Image.new("RGBA", (S, S), (34, 26, 20, 255))
     d = ImageDraw.Draw(img)
     r = random.Random(416 + binders)
     x = 0
@@ -770,14 +782,14 @@ def _print(i):
             x, h = r.randint(-10, S), r.randint(40, 100)
             g = r.randint(50, 110)
             d.polygon([(x, S), (x + 12, S - h), (x + 24, S)], fill=(30, g, 50, 255))
-    else:                  # a safety poster
-        img = Image.new("RGBA", (S, S), (246, 246, 240, 255))
+    else:                  # a lake shore with pines at dawn
+        a[:] = np.array([236, 200, 170], np.float32) * (1 - yy[..., None]) + np.array([150, 180, 210], np.float32) * yy[..., None]
+        img = Image.fromarray(a.astype(np.uint8)).convert("RGBA")
         d = ImageDraw.Draw(img)
-        d.rectangle([0, 0, S, 30], fill=(30, 120, 60, 255))
-        d.polygon([(64, 40), (100, 104), (28, 104)], fill=(250, 200, 30, 255), outline=(20, 20, 20, 255))
-        d.rectangle([60, 58, 68, 84], fill=(20, 20, 20, 255))
-        d.rectangle([60, 90, 68, 98], fill=(20, 20, 20, 255))
-        d.rectangle([20, 110, 108, 118], fill=(30, 120, 60, 255))
+        d.rectangle([0, 84, S, S], fill=(80, 120, 160, 255))
+        for _ in range(14):
+            x, h = r.randint(-6, S), r.randint(30, 60)
+            d.polygon([(x, 86), (x + 8, 86 - h), (x + 16, 86)], fill=(30, r.randint(60, 90), 50, 255))
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, S - 1, S - 1], outline=(244, 242, 236, 255), width=8)   # the mount
     return img
@@ -816,15 +828,25 @@ def _plant(i):
         for k in range(14):
             cx, cy = r.randint(34, 94), r.randint(80, 120)
             d.ellipse([cx - 9, cy - 6, cx + 9, cy + 6], fill=(110, 160, 130, 255), outline=(70, 120, 90, 255))
-    else:                  # ficus, fern, rubber plant, peace lily: a stem and clusters of leaves
-        stem = (90, 70, 40)
-        d.line([(64, S), (64, 20)], fill=stem + (255,), width=3)
-        for _ in range(130 if kind in (0, 2) else 50):
-            cx, cy = r.randint(20, 108), r.randint(6, 110)
-            if math.hypot(cx - 64, (cy - 56) * 0.9) > 52:
-                continue
-            w = 5 if kind in (0, 2) else 10
-            d.ellipse([cx - w, cy - w // 2, cx + w, cy + w // 2], fill=r.choice(green) + (255,))
+    else:                  # ficus, fern, rubber plant, peace lily: a trunk, branches, leaves along the branches
+        stem = (96, 74, 44, 255)
+        d.line([(64, S), (64, 44)], fill=stem, width=4)
+        tips = []
+        for k in range(7):
+            a_ = math.radians(-160 + k * 23 + r.uniform(-8, 8))
+            y0 = r.randint(46, 90)
+            length = r.randint(30, 50)
+            tx, ty = 64 + math.cos(a_) * length, y0 + math.sin(a_) * length * 0.8 - 10
+            d.line([(64, y0), (tx, ty)], fill=stem, width=2)
+            tips.append(((64, y0), (tx, ty)))
+        w = 6 if kind in (0, 2) else 11
+        for (x0, y0), (x1, y1) in tips:
+            for t in (0.35, 0.55, 0.75, 0.95):
+                cx, cy = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+                for side in (-1, 1):
+                    ox, oy = cx + side * w * 0.6, cy - w * 0.3
+                    d.ellipse([ox - w, oy - w // 2, ox + w, oy + w // 2], fill=r.choice(green) + (255,))
+                    d.line([(cx, cy), (ox, oy)], fill=(40, 90, 40, 255))
         if kind == 6:
             for _ in range(5):
                 cx, cy = r.randint(40, 88), r.randint(20, 70)

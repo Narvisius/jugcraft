@@ -1,4 +1,5 @@
 {
+  "ambientocclusion": false,
   "textures": {
     "pi_rail_yellow": "jugcraft:block/pi_rail_yellow",
     "particle": "jugcraft:block/pi_rail_yellow"
@@ -44,27 +45,63 @@
       ],
       "to": [
         16,
-        16,
+        16.03,
         1.8
       ],
       "faces": {
         "north": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            0,
+            16,
+            1.03
+          ]
         },
         "south": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            0,
+            16,
+            1.03
+          ]
         },
         "east": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            14.2,
+            0,
+            15.4,
+            1.03
+          ]
         },
         "west": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0.6,
+            0,
+            1.8,
+            1.03
+          ]
         },
         "up": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            0.6,
+            16,
+            1.8
+          ]
         },
         "down": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            14.2,
+            16,
+            15.4
+          ]
         }
       }
     },
@@ -103,7 +140,7 @@
     {
       "from": [
         0,
-        0,
+        -0.03,
         0.6
       ],
       "to": [
@@ -113,22 +150,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            13.97,
+            16,
+            16.0
+          ]
         },
         "south": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            13.97,
+            16,
+            16.0
+          ]
         },
         "east": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            15.0,
+            13.97,
+            15.4,
+            16.0
+          ]
         },
         "west": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0.6,
+            13.97,
+            1.0,
+            16.0
+          ]
         },
         "up": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            0.6,
+            16,
+            1.0
+          ]
         },
         "down": {
-          "texture": "#pi_rail_yellow"
+          "texture": "#pi_rail_yellow",
+          "uv": [
+            0,
+            15.0,
+            16,
+            15.4
+          ]
         }
       }
     }

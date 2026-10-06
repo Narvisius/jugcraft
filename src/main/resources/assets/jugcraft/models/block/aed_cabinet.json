@@ -1,0 +1,118 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_aed": "jugcraft:block/pi_aed",
+    "pi_aed_sign": "jugcraft:block/pi_aed_sign",
+    "pi_cab_white": "jugcraft:block/pi_cab_white",
+    "particle": "jugcraft:block/pi_aed"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        3,
+        0
+      ],
+      "to": [
+        13,
+        14,
+        3.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cab_white"
+        },
+        "south": {
+          "texture": "#pi_aed",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cab_white"
+        },
+        "west": {
+          "texture": "#pi_cab_white"
+        },
+        "up": {
+          "texture": "#pi_cab_white"
+        },
+        "down": {
+          "texture": "#pi_cab_white"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        15,
+        0
+      ],
+      "to": [
+        12,
+        19,
+        0.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#pi_aed_sign",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            15.6,
+            0,
+            16,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            0,
+            0,
+            0.4,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            4,
+            0,
+            12,
+            0.4
+          ]
+        },
+        "down": {
+          "texture": "#pi_cab_white",
+          "uv": [
+            4,
+            15.6,
+            12,
+            16
+          ]
+        }
+      },
+      "light_emission": 12
+    }
+  ]
+}

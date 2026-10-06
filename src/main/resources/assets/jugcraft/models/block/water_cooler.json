@@ -1,4 +1,5 @@
 {
+  "ambientocclusion": false,
   "textures": {
     "pi_bottle": "jugcraft:block/pi_bottle",
     "pi_chrome": "jugcraft:block/pi_chrome",
@@ -15,12 +16,18 @@
       ],
       "to": [
         12,
-        10,
+        18,
         12
       ],
       "faces": {
         "north": {
-          "texture": "#pi_cooler"
+          "texture": "#pi_cooler",
+          "uv": [
+            4,
+            0,
+            12,
+            16
+          ]
         },
         "south": {
           "texture": "#pi_cooler_front",
@@ -32,80 +39,244 @@
           ]
         },
         "east": {
-          "texture": "#pi_cooler"
+          "texture": "#pi_cooler",
+          "uv": [
+            4,
+            0,
+            12,
+            16
+          ]
         },
         "west": {
-          "texture": "#pi_cooler"
+          "texture": "#pi_cooler",
+          "uv": [
+            4,
+            0,
+            12,
+            16
+          ]
         },
         "up": {
-          "texture": "#pi_cooler"
+          "texture": "#pi_cooler",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
         },
         "down": {
-          "texture": "#pi_cooler"
+          "texture": "#pi_cooler",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
         }
       }
     },
     {
       "from": [
         4.5,
-        10,
+        18,
         4.5
       ],
       "to": [
         11.5,
-        10.5,
+        18.5,
         11.5
       ],
       "faces": {
         "north": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_chrome",
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            0.5
+          ]
         },
         "south": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_chrome",
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            0.5
+          ]
         },
         "east": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_chrome",
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            0.5
+          ]
         },
         "west": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_chrome",
+          "uv": [
+            4.5,
+            0,
+            11.5,
+            0.5
+          ]
         },
         "up": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_chrome",
+          "uv": [
+            4.5,
+            4.5,
+            11.5,
+            11.5
+          ]
         },
         "down": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_chrome",
+          "uv": [
+            4.5,
+            4.5,
+            11.5,
+            11.5
+          ]
         }
       }
     },
     {
       "from": [
         5,
-        10.5,
+        18.5,
         5
       ],
       "to": [
         11,
-        16,
+        28,
         11
       ],
       "faces": {
         "north": {
-          "texture": "#pi_bottle"
+          "texture": "#pi_bottle",
+          "uv": [
+            5,
+            0,
+            11,
+            9.5
+          ]
         },
         "south": {
-          "texture": "#pi_bottle"
+          "texture": "#pi_bottle",
+          "uv": [
+            5,
+            0,
+            11,
+            9.5
+          ]
         },
         "east": {
-          "texture": "#pi_bottle"
+          "texture": "#pi_bottle",
+          "uv": [
+            5,
+            0,
+            11,
+            9.5
+          ]
         },
         "west": {
-          "texture": "#pi_bottle"
+          "texture": "#pi_bottle",
+          "uv": [
+            5,
+            0,
+            11,
+            9.5
+          ]
         },
         "up": {
-          "texture": "#pi_bottle"
+          "texture": "#pi_bottle",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
         },
         "down": {
-          "texture": "#pi_bottle"
+          "texture": "#pi_bottle",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        28,
+        6
+      ],
+      "to": [
+        10,
+        29,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_bottle",
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#pi_bottle",
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ]
+        },
+        "east": {
+          "texture": "#pi_bottle",
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#pi_bottle",
+          "uv": [
+            6,
+            0,
+            10,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#pi_bottle",
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ]
+        },
+        "down": {
+          "texture": "#pi_bottle",
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ]
         }
       }
     }

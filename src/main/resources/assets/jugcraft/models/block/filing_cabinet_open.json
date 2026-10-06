@@ -1,0 +1,218 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_drawer_front": "jugcraft:block/pi_drawer_front",
+    "pi_filing_front": "jugcraft:block/pi_filing_front",
+    "pi_filing_side": "jugcraft:block/pi_filing_side",
+    "pi_folders": "jugcraft:block/pi_folders",
+    "particle": "jugcraft:block/pi_drawer_front"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        15,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_filing_side"
+        },
+        "south": {
+          "texture": "#pi_filing_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_filing_side"
+        },
+        "west": {
+          "texture": "#pi_filing_side"
+        },
+        "up": {
+          "texture": "#pi_filing_side"
+        },
+        "down": {
+          "texture": "#pi_filing_side"
+        }
+      }
+    },
+    {
+      "from": [
+        1.8,
+        15,
+        1.8
+      ],
+      "to": [
+        14.2,
+        15.4,
+        15.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_filing_side"
+        },
+        "south": {
+          "texture": "#pi_filing_side"
+        },
+        "east": {
+          "texture": "#pi_filing_side"
+        },
+        "west": {
+          "texture": "#pi_filing_side"
+        },
+        "up": {
+          "texture": "#pi_filing_side"
+        },
+        "down": {
+          "texture": "#pi_filing_side"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        9.5,
+        15
+      ],
+      "to": [
+        13.5,
+        14,
+        22
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_filing_side",
+          "uv": [
+            2.5,
+            2,
+            13.5,
+            6.5
+          ]
+        },
+        "south": {
+          "texture": "#pi_drawer_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_filing_side",
+          "uv": [
+            0,
+            2,
+            7,
+            6.5
+          ]
+        },
+        "west": {
+          "texture": "#pi_filing_side",
+          "uv": [
+            9,
+            2,
+            16,
+            6.5
+          ]
+        },
+        "up": {
+          "texture": "#pi_filing_side",
+          "uv": [
+            2.5,
+            9,
+            13.5,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_filing_side",
+          "uv": [
+            2.5,
+            0,
+            13.5,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        10,
+        15.2
+      ],
+      "to": [
+        13,
+        14.6,
+        21.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_folders",
+          "uv": [
+            3,
+            1.4,
+            13,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#pi_folders",
+          "uv": [
+            3,
+            1.4,
+            13,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#pi_folders",
+          "uv": [
+            0,
+            1.4,
+            6.4,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#pi_folders",
+          "uv": [
+            9.6,
+            1.4,
+            16.0,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#pi_folders",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_folders",
+          "uv": [
+            3,
+            0,
+            13,
+            6.4
+          ]
+        }
+      }
+    }
+  ]
+}

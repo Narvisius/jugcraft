@@ -1,4 +1,5 @@
 {
+  "ambientocclusion": false,
   "textures": {
     "pot": "jugcraft:block/pi_pot_white",
     "soil": "jugcraft:block/pi_soil",
@@ -11,6 +12,38 @@
         4,
         0,
         4
+      ],
+      "to": [
+        12,
+        7,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        11
       ],
       "to": [
         12,
@@ -30,6 +63,9 @@
         "west": {
           "texture": "#pot"
         },
+        "up": {
+          "texture": "#pot"
+        },
         "down": {
           "texture": "#pot"
         }
@@ -37,25 +73,92 @@
     },
     {
       "from": [
-        4.6,
-        6,
-        4.6
+        4,
+        0,
+        5
       ],
       "to": [
-        11.4,
-        6.6,
-        11.4
+        5,
+        7,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        0,
+        5
+      ],
+      "to": [
+        12,
+        7,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        6.4,
+        11
       ],
       "faces": {
         "up": {
           "texture": "#soil"
+        },
+        "down": {
+          "texture": "#pot"
         }
       }
     },
     {
       "from": [
         0,
-        5,
+        6,
         8
       ],
       "to": [
@@ -63,6 +166,27 @@
         22,
         8
       ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
       "rotation": {
         "angle": 45,
         "axis": "y",
@@ -71,7 +195,61 @@
           8,
           8
         ]
+      }
+    },
+    {
+      "from": [
+        0,
+        6,
+        8
+      ],
+      "to": [
+        16,
+        22,
+        8
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#leaves",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
       },
+      "rotation": {
+        "angle": -45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
+    },
+    {
+      "from": [
+        0,
+        6,
+        8
+      ],
+      "to": [
+        16,
+        22,
+        8
+      ],
       "shade": false,
       "faces": {
         "north": {
@@ -96,27 +274,18 @@
     },
     {
       "from": [
-        0,
-        5,
-        8
+        8,
+        6,
+        0
       ],
       "to": [
-        16,
+        8,
         22,
-        8
+        16
       ],
-      "rotation": {
-        "angle": -45,
-        "axis": "y",
-        "origin": [
-          8,
-          8,
-          8
-        ]
-      },
       "shade": false,
       "faces": {
-        "north": {
+        "east": {
           "texture": "#leaves",
           "uv": [
             0,
@@ -125,7 +294,7 @@
             16
           ]
         },
-        "south": {
+        "west": {
           "texture": "#leaves",
           "uv": [
             0,

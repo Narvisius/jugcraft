@@ -806,7 +806,7 @@ def verify(site):
 # Blueprints (format 2: run-length rows; a plant lists its parts and adds its own blocks on top)
 
 BLUEPRINT_OUT = Path(__file__).resolve().parents[1] / "src" / "main" / "resources" / "data" / "jugcraft" / "blueprint"
-KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&*+-/:;<=>?@^_|~" + "".join(chr(c) for c in range(0x100, 0x180))
+KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&*+-/:;<=>?@^_|~" + "".join(chr(c) for c in range(0x100, 0x250))
 # (More block kinds than ASCII keys: Latin Extended-A letters, which are never digits.)
 TURN180 = {"north": "south", "south": "north", "east": "west", "west": "east"}
 

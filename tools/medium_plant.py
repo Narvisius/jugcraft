@@ -77,8 +77,13 @@ def door_state(kind, facing, half, hinge="left"):
     return m
 
 
-def row_state(name, facing, left, right):
-    return M(f"jugcraft:{name}[facing={facing},left={'true' if left else 'false'},right={'true' if right else 'false'}]", (120, 100, 80))
+def row_state(name, facing, left, right, variant=None):
+    v = "" if variant is None else f",variant={variant}"
+    return M(f"jugcraft:{name}[facing={facing},left={'true' if left else 'false'},right={'true' if right else 'false'}{v}]", (120, 100, 80))
+
+
+def multi_state(name, facing, part):
+    return M(f"jugcraft:{name}[facing={facing},part={part}]", (60, 60, 64))
 
 
 def variant_state(name, facing, v):
@@ -262,16 +267,17 @@ class Building(Part):
         dx, dz = P.DIRS[OPPOSITE[facing]]
         self.p(x + dx, y, z + dz, furniture("operator_chair", facing))
 
-    def row(self, names, x, y, z, facing, seat=None):
-        """Pieces that join side by side (counters, benches, sofas, lab benches), laid from x, z to the user's
-        right; names is a list (one per block) or a name and a count. seat: chairs on the user's side."""
+    def row(self, names, x, y, z, facing, seat=None, tops=None):
+        """Pieces that join side by side (counters, desks, benches, sofas, lab benches), laid from x, z to the user's
+        right; names is a list (one per block) or a name and a count. seat: chairs on the user's side. tops: which
+        variant (what stands on it) each piece is, for the pieces that have them."""
         if isinstance(names, tuple):
             names = [names[0]] * names[1]
         rx, rz = P.DIRS[P.CLOCKWISE[facing]]
         n = len(names)
         for i, name in enumerate(names):
             cx, cz = x + rx * i, z + rz * i
-            self.p(cx, y, cz, row_state(name, facing, i > 0, i < n - 1))
+            self.p(cx, y, cz, row_state(name, facing, i > 0, i < n - 1, None if tops is None else tops[i]))
             self.seats.append((name, cx, y, cz, facing))
             if seat:
                 dx, dz = P.DIRS[OPPOSITE[facing]]
@@ -425,14 +431,21 @@ class Building(Part):
                             break
 
 
-def entrance(b, x, z, side, kind="glass", label=None, canopy=True, step=True):
+def entrance(b, x, z, side, kind="glass", label=None, canopy=True, step=True, frame=True):
     """A double front door in an outer wall (side n/s/e/w; x, z the first leaf), flush with the outside, with a slab
-    canopy over it, a step up from the ground and a room sign inside if label."""
+    canopy over it, a step up from the ground and a room sign inside if label. frame: a stone surround (a column
+    each side, the full height of the wall, and a lintel over the doors) so the window glass either side ends
+    cleanly against stone rather than against the door."""
     out = SIDE[side]
     facing = OPPOSITE[out]  # you walk in
+    rx, rz = P.DIRS[P.CLOCKWISE[facing]]  # the second leaf is to the facing's left: -r
+    if frame:
+        for k in (1, -2):
+            b.b(x + rx * k, 1, z + rz * k, x + rx * k, b.h, z + rz * k, ANDESITE)
+        for k in (0, -1):
+            b.b(x + rx * k, 3, z + rz * k, x + rx * k, 3, z + rz * k, ANDESITE)
     b.door(x, 1, z, facing, kind=kind, double=True)
     fx, fz = P.DIRS[out]
-    rx, rz = P.DIRS[P.CLOCKWISE[facing]]  # the second leaf is to the facing's left: -r
     cells = [(x, z), (x - rx, z - rz)]
     if canopy:
         for k in range(-2, 2):

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GGG",
+    "N N"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "N": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:glass_desk",
+    "count": 2
+  }
+}

@@ -1,4 +1,5 @@
 {
+  "ambientocclusion": false,
   "textures": {
     "pi_cabinet_dark": "jugcraft:block/pi_cabinet_dark",
     "particle": "jugcraft:block/pi_cabinet_dark"
@@ -12,27 +13,63 @@
       ],
       "to": [
         15.2,
-        16,
+        16.1,
         15.2
       ],
       "faces": {
         "north": {
-          "texture": "#pi_cabinet_dark"
+          "texture": "#pi_cabinet_dark",
+          "uv": [
+            0.8,
+            0,
+            15.2,
+            0.7
+          ]
         },
         "south": {
-          "texture": "#pi_cabinet_dark"
+          "texture": "#pi_cabinet_dark",
+          "uv": [
+            0.8,
+            0,
+            15.2,
+            0.7
+          ]
         },
         "east": {
-          "texture": "#pi_cabinet_dark"
+          "texture": "#pi_cabinet_dark",
+          "uv": [
+            0.8,
+            0,
+            14.2,
+            0.7
+          ]
         },
         "west": {
-          "texture": "#pi_cabinet_dark"
+          "texture": "#pi_cabinet_dark",
+          "uv": [
+            1.8,
+            0,
+            15.2,
+            0.7
+          ]
         },
         "up": {
-          "texture": "#pi_cabinet_dark"
+          "texture": "#pi_cabinet_dark",
+          "uv": [
+            0.8,
+            1.8,
+            15.2,
+            15.2
+          ]
         },
         "down": {
-          "texture": "#pi_cabinet_dark"
+          "texture": "#pi_cabinet_dark",
+          "uv": [
+            0.8,
+            0.8,
+            15.2,
+            14.2
+          ]
         }
       }
     }

@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw
 
 import nuclear_materials as M
 import plant_office
+import plant_office2
 
 MOD = "jugcraft"
 
@@ -68,8 +69,9 @@ FURNITURE = {
         (0.5, 5, 0, 15.5, 14, 0.6, {"*": "pi_chrome", "south": "pi_whiteboard!"}),
         (1, 5, 0.6, 15, 5.4, 1.6, "pi_chrome")]},
     "water_cooler": {"display": "Water Cooler", "boxes": [
-        (4, 0, 4, 12, 10, 12, {"*": "pi_cooler", "south": "pi_cooler_front!"}),
-        (4.5, 10, 4.5, 11.5, 10.5, 11.5, "pi_chrome"), (5, 10.5, 5, 11, 16, 11, "pi_bottle")]},
+        (4, 0, 4, 12, 18, 12, {"*": "pi_cooler", "south": "pi_cooler_front!"}),
+        (4.5, 18, 4.5, 11.5, 18.5, 11.5, "pi_chrome"), (5, 18.5, 5, 11, 28, 11, "pi_bottle"),
+        (6, 28, 6, 10, 29, 10, "pi_bottle")]},
     "guard_rail": {"display": "Safety Railing", "boxes": [
         (7.2, 0, 0.4, 8.8, 16, 2, "pi_rail_yellow"), (0, 15, 0.6, 16, 16, 1.8, "pi_rail_yellow"),
         (0, 8, 0.8, 16, 9, 1.6, "pi_rail_yellow"), (0, 0, 0.6, 16, 2, 1.0, "pi_rail_yellow")]},
@@ -81,6 +83,11 @@ FURNITURE = {
 FURNITURE["server_rack"]["glow"] = ["pi_server_face"]
 FURNITURE["relay_cabinet"]["glow"] = ["pi_relay_front"]
 FURNITURE.update(plant_office.OFFICE)
+FURNITURE.update(plant_office2.PIECES)
+# Caps sit a hair above the body's top so the two tops don't fight for the same plane (the flicker on rack tops).
+for _info in FURNITURE.values():
+    if "cap" in _info:
+        _info["cap"] = [b if b[4] != 16 else b[:4] + (16.1,) + b[5:] for b in _info["cap"]]
 
 CUBES = {"ceiling_tile": "Suspended Ceiling Tile", "vinyl_floor": "Vinyl Floor Tile", "epoxy_floor": "Epoxy Floor",
          "painted_wall": "Painted Block Wall", "tank_plate": "Painted Tank Plate", "intake_louvre": "Intake Louvre"}
@@ -101,17 +108,18 @@ SIGNS = {
     "health_physics": "Health Physics", "charging_pumps": "Charging Pumps", "rhr_pumps": "RHR Pumps",
     "heat_exchangers": "Heat Exchangers", "tank_room": "Tank Room", "ventilation": "Ventilation", "fuel_pool": "Spent Fuel Pool",
     "truck_bay": "Truck Bay", "locker_room": "Locker Room",
-    "break_room": "Break Room", "chemistry_lab": "Chemistry Lab", "document_control": "Document Control",
+    "break_room": "Break Room", "chemistry_lab": "Chemistry Lab", "document_control": "Documentation Storage",
     "training_room": "Training Room", "engineering": "Engineering", "plant_manager": "Plant Manager", "it_support": "IT Support",
     "first_aid": "First Aid", "open_office": "Open Office", "board_room": "Board Room", "screening": "Security Screening",
     "staff_only": "Staff Only", "operations": "Operations", "maintenance_planning": "Maintenance Planning",
-    "human_resources": "Human Resources", "visitors": "Visitors", "washroom": "Washroom",
+    "human_resources": "Human Resources", "visitors": "Visitors", "washroom": "Washroom", "intern_area": "Intern Area",
 }
 
 OTHER["conference_table"] = "Round Meeting Table"
+MULTI = [k for k, v in FURNITURE.items() if "multi" in v]
 BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table"]
 NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER}
-ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"]
+ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"] + MULTI
 
 STEEL_PLATE = "#c:plates/steel"
 CRAFTING = {
@@ -139,6 +147,7 @@ CRAFTING = {
     "room_sign": (["PD"], {"P": "#c:plates/iron", "D": "minecraft:black_dye"}, 4),
 }
 CRAFTING.update(plant_office.CRAFTING)
+CRAFTING.update(plant_office2.CRAFTING)
 
 
 def _box_textures(boxes):
@@ -155,6 +164,11 @@ def textures_used():
     for info in FURNITURE.values():
         for part in ("boxes", "cap", "plinth", "left", "right"):
             names |= _box_textures(info.get(part, []))
+        for top in info.get("tops", []):
+            names |= _box_textures(top)
+        if "multi" in info:
+            for _, boxes in plant_office2.multi_parts(info):
+                names |= _box_textures(boxes)
         if "vtex" in info:
             names.discard(info["vtex"])
             names |= {f"{info['vtex']}_{i}" for i in range(info["variants"])}
@@ -210,12 +224,15 @@ def _auto_uv(face, x0, y0, z0, x1, y1, z1):
 
 def _elements(boxes, glow):
     elements, used = [], set()
-    for x0, y0, z0, x1, y1, z1, t in boxes:
+    for box in boxes:
+        x0, y0, z0, x1, y1, z1, t = box[:7]
         faces = _faces(t, glow)
         if min(x0, y0, z0) < 0 or max(x1, y1, z1) > 16:
             for fname, f in faces.items():
                 f.setdefault("uv", _auto_uv(fname, x0, y0, z0, x1, y1, z1))
         e = {"from": [x0, y0, z0], "to": [x1, y1, z1], "faces": faces}
+        if len(box) > 7:
+            e.update(box[7])
         names = {f["texture"][1:] for f in faces.values()}
         if names & set(glow):
             e["light_emission"] = 12
@@ -224,11 +241,38 @@ def _elements(boxes, glow):
     return elements, used
 
 
-def model(boxes, glow, rid):
-    elements, used = _elements(boxes, glow)
+NUDGE = 0.03
+
+
+def separate(boxes, under=()):
+    """No two faces in the same plane: where a box's face lies in the same plane as a face of a box before it (or of
+    a box in `under`, the model it is drawn over) pointing the same way and overlapping it, the later box's face is
+    moved out a hair, so it covers the other instead of the two flickering for which shows (z-fighting)."""
+    done = [list(b[:6]) for b in under if len(b) <= 7]
+    out = []
+    for box in boxes:
+        b = list(box[:6])
+        if len(box) <= 7:
+            for axis in range(3):
+                o1, o2 = [a for a in range(3) if a != axis]
+                for side in (0, 1):
+                    k = axis + 3 * side
+                    for other in done:
+                        if abs(other[k] - b[k]) < 1e-6 and min(b[o1 + 3], other[o1 + 3]) - max(b[o1], other[o1]) > 1e-6 \
+                                and min(b[o2 + 3], other[o2 + 3]) - max(b[o2], other[o2]) > 1e-6:
+                            b[k] += NUDGE if side else -NUDGE
+                            break
+            done.append(b)
+        out.append(tuple(b) + tuple(box[6:]))
+    return out
+
+
+def model(boxes, glow, rid, under=()):
+    elements, used = _elements(separate(boxes, under), glow)
     textures = {t: rid(f"block/{t}") for t in sorted(used)}
     textures["particle"] = rid(f"block/{sorted(used)[0]}")
-    return {"textures": textures, "elements": elements}
+    # Furniture is lit flat: ambient occlusion on faces inside a block shades each block of a row differently.
+    return {"ambientocclusion": False, "textures": textures, "elements": elements}
 
 
 TURN = (("north", 0), ("east", 90), ("south", 180), ("west", 270))
@@ -257,25 +301,39 @@ def write_assets(write, rid, assets, lang):
                 f"facing={face},variant={i}": {"model": rid(f"block/{block}_{i}"), **({"y": y} if y else {})}
                 for face, y in TURN for i in range(info["variants"])}})
             item_model = rid(f"block/{block}_0")
+        elif "multi" in info:
+            w, rows, vertical = info["multi"]
+            for part, boxes in plant_office2.multi_parts(info):
+                g = [b[6]["south"].rstrip("!") for b in boxes if isinstance(b[6], dict) and "south" in b[6]] if vertical else []
+                write(models / f"{block}_{part}.json", model(boxes, g, rid))
+            write(assets / "blockstates" / f"{block}.json", {"variants": {
+                f"facing={face},part={part}": {"model": rid(f"block/{block}_{part}"), **({"y": y} if y else {})}
+                for face, y in TURN for part in range(w * rows)}})
+            write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            item_model = rid(f"item/{block}")
         elif "row" in info:
             write(models / f"{block}.json", model(info["boxes"], glow, rid))
             parts = []
+            for i, top in enumerate(info.get("tops", [])):
+                write(models / f"{block}_top_{i}.json", model(top, glow, rid, under=info["boxes"]))
             for side in ("left", "right"):
                 if info[side]:
-                    write(models / f"{block}_{side}.json", model(info[side], glow, rid))
+                    write(models / f"{block}_{side}.json", model(info[side], glow, rid, under=info["boxes"]))
             for face, y in TURN:
                 rot = {"y": y} if y else {}
                 parts.append({"when": {"facing": face}, "apply": {"model": rid(f"block/{block}"), **rot}})
                 for side in ("left", "right"):
                     if info[side]:
                         parts.append({"when": {"facing": face, side: "false"}, "apply": {"model": rid(f"block/{block}_{side}"), **rot}})
+                for i in range(len(info.get("tops", []))):
+                    parts.append({"when": {"facing": face, "variant": str(i)}, "apply": {"model": rid(f"block/{block}_top_{i}"), **rot}})
             write(assets / "blockstates" / f"{block}.json", {"multipart": parts})
-            write(models / f"{block}_inventory.json", model(info["boxes"] + info["left"] + info["right"], glow, rid))
+            write(models / f"{block}_inventory.json", model(info["boxes"] + info["left"] + info["right"] + (info["tops"][0] if info.get("tops") else []), glow, rid))
             item_model = rid(f"block/{block}_inventory")
         elif info.get("stacks"):
             write(models / f"{block}.json", model(info["boxes"], glow, rid))
-            write(models / f"{block}_cap.json", model(info["cap"], glow, rid))
-            write(models / f"{block}_plinth.json", model(info["plinth"], glow, rid))
+            write(models / f"{block}_cap.json", model(info["cap"], glow, rid, under=info["boxes"]))
+            write(models / f"{block}_plinth.json", model(info["plinth"], glow, rid, under=info["boxes"]))
             # The item shows the whole unit: body, cap and plinth.
             write(models / f"{block}_inventory.json", model(info["boxes"] + info["cap"] + info["plinth"], glow, rid))
             parts = []
@@ -788,14 +846,19 @@ def draw_block_textures():
         "glass_door_bottom": lambda: _glass_door(0), "glass_door_top": lambda: _glass_door(1),
     }
     makers.update(plant_office.makers())
+    makers.update(plant_office2.makers())
     del makers["pi_whiteboard"]
     missing = TEXTURES - set(makers)
     assert not missing, missing
     out = {}
     for name, make in makers.items():
-        rich = name in ("pi_server_face", "pi_relay_front", "pi_office_screen", "pi_carton") or name in plant_office.RICH
+        rich = name in ("pi_server_face", "pi_relay_front", "pi_office_screen", "pi_carton") or name in plant_office.RICH or name in plant_office2.RICH
         colours = 24 if rich else 14
-        out[name] = M.stylize(make(), colours)
+        src = make()
+        out[name] = M.stylize(src, colours)
+        if name in plant_office2.TRANSLUCENT:
+            alpha = src.convert("RGBA").split()[3].resize(out[name].size)
+            out[name].putalpha(alpha)
     return out
 
 
@@ -815,4 +878,5 @@ def draw_item_textures():
             d.rectangle([x, 56, x + 8, 72], fill=(240, 240, 236, 255))
         return M.stylize(img, 8)
     return {"steel_door": door(_steel_door(1), _steel_door(0)), "glass_door": door(_glass_door(1), _glass_door(0)),
-            "building_sign": sign(60), "room_sign": sign(34), "conference_table": plant_office.conference_icon()}
+            "building_sign": sign(60), "room_sign": sign(34), "conference_table": plant_office.conference_icon(),
+            **{name: plant_office2.icon(name) for name in MULTI}}

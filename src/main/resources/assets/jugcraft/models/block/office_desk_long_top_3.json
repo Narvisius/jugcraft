@@ -1,0 +1,257 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_monitor": "jugcraft:block/pi_monitor",
+    "pi_notepad": "jugcraft:block/pi_notepad",
+    "pi_paper": "jugcraft:block/pi_paper",
+    "pi_phone": "jugcraft:block/pi_phone",
+    "pi_steel_dark": "jugcraft:block/pi_steel_dark",
+    "particle": "jugcraft:block/pi_monitor"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        12.5,
+        3
+      ],
+      "to": [
+        5,
+        12.9,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        12.9,
+        4.2
+      ],
+      "to": [
+        3.8,
+        19,
+        4.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            12.2,
+            0,
+            12.8,
+            6.1
+          ]
+        },
+        "south": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            3.2,
+            0,
+            3.8,
+            6.1
+          ]
+        },
+        "east": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            11.2,
+            0,
+            11.8,
+            6.1
+          ]
+        },
+        "west": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            4.2,
+            0,
+            4.8,
+            6.1
+          ]
+        },
+        "up": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            3.2,
+            4.2,
+            3.8,
+            4.8
+          ]
+        },
+        "down": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            3.2,
+            11.2,
+            3.8,
+            11.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        18.5,
+        4
+      ],
+      "to": [
+        7,
+        20,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            9,
+            0,
+            14,
+            1.5
+          ]
+        },
+        "south": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            2,
+            0,
+            7,
+            1.5
+          ]
+        },
+        "east": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            9,
+            0,
+            12,
+            1.5
+          ]
+        },
+        "west": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            4,
+            0,
+            7,
+            1.5
+          ]
+        },
+        "up": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            2,
+            4,
+            7,
+            7
+          ]
+        },
+        "down": {
+          "texture": "#pi_steel_dark",
+          "uv": [
+            2,
+            9,
+            7,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        12.5,
+        4
+      ],
+      "to": [
+        13,
+        13.3,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_phone",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        12.5,
+        8
+      ],
+      "to": [
+        13,
+        12.7,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_paper"
+        },
+        "south": {
+          "texture": "#pi_paper"
+        },
+        "east": {
+          "texture": "#pi_paper"
+        },
+        "west": {
+          "texture": "#pi_paper"
+        },
+        "up": {
+          "texture": "#pi_notepad",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_paper"
+        }
+      }
+    }
+  ]
+}

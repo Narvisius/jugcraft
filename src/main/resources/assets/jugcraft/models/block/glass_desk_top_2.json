@@ -1,0 +1,87 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "pi_monitor": "jugcraft:block/pi_monitor",
+    "pi_paper": "jugcraft:block/pi_paper",
+    "pi_tablet": "jugcraft:block/pi_tablet",
+    "particle": "jugcraft:block/pi_monitor"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        12,
+        4
+      ],
+      "to": [
+        8,
+        12.4,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_paper"
+        },
+        "south": {
+          "texture": "#pi_paper"
+        },
+        "east": {
+          "texture": "#pi_paper"
+        },
+        "west": {
+          "texture": "#pi_paper"
+        },
+        "up": {
+          "texture": "#pi_paper",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_paper"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        12,
+        5
+      ],
+      "to": [
+        14,
+        12.4,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_tablet",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    }
+  ]
+}

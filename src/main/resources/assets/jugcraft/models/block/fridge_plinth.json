@@ -1,4 +1,5 @@
 {
+  "ambientocclusion": false,
   "textures": {
     "pi_toe_kick": "jugcraft:block/pi_toe_kick",
     "particle": "jugcraft:block/pi_toe_kick"
@@ -7,8 +8,8 @@
     {
       "from": [
         1.7,
-        0,
-        2
+        -0.03,
+        1.97
       ],
       "to": [
         14.3,
@@ -17,22 +18,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#pi_toe_kick"
+          "texture": "#pi_toe_kick",
+          "uv": [
+            1.7,
+            14.97,
+            14.3,
+            16.0
+          ]
         },
         "south": {
-          "texture": "#pi_toe_kick"
+          "texture": "#pi_toe_kick",
+          "uv": [
+            1.7,
+            14.97,
+            14.3,
+            16.0
+          ]
         },
         "east": {
-          "texture": "#pi_toe_kick"
+          "texture": "#pi_toe_kick",
+          "uv": [
+            1.2,
+            14.97,
+            14.03,
+            16.0
+          ]
         },
         "west": {
-          "texture": "#pi_toe_kick"
+          "texture": "#pi_toe_kick",
+          "uv": [
+            1.97,
+            14.97,
+            14.8,
+            16.0
+          ]
         },
         "up": {
-          "texture": "#pi_toe_kick"
+          "texture": "#pi_toe_kick",
+          "uv": [
+            1.7,
+            1.97,
+            14.3,
+            14.8
+          ]
         },
         "down": {
-          "texture": "#pi_toe_kick"
+          "texture": "#pi_toe_kick",
+          "uv": [
+            1.7,
+            1.2,
+            14.3,
+            14.03
+          ]
         }
       }
     }

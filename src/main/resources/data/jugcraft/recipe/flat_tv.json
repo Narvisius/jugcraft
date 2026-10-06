@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GGG",
+    "GRG"
+  ],
+  "key": {
+    "G": "minecraft:black_stained_glass_pane",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:flat_tv",
+    "count": 1
+  }
+}
