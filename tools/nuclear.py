@@ -1683,7 +1683,7 @@ def write_assets(write, rid, assets, lang):
         write(assets / "blockstates" / f"{pipe}.json", pipe_blockstate(rid, pipe))
         write(assets / "items" / f"{pipe}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{pipe}")}})
     # The suit is drawn in 3D by client/HazmatLayer.java, so its equipment asset has no flat layers.
-    write(assets / "equipment" / "hazmat.json", {"layers": {}})
+    write(assets / "equipment" / "hazmat.json", {"layers": {"humanoid": [{"texture": "jugcraft:blank"}]}})
     lang.update(LANG)
     lang.update(CONSOLE_LANG)
 

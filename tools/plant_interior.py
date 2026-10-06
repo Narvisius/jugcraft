@@ -136,7 +136,8 @@ OTHER["conference_table"] = "Round Meeting Table"
 MULTI = [k for k, v in FURNITURE.items() if "multi" in v]
 BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table"]
 NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER}
-ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"] + MULTI
+UNIFORMS = {"lab_coat": "Lab Coat", "security_jacket": "Security Jacket"}   # wearable (client/UniformLayer.java)
+ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"] + MULTI + list(UNIFORMS)
 
 STEEL_PLATE = "#c:plates/steel"
 CRAFTING = {
@@ -165,6 +166,8 @@ CRAFTING = {
 }
 CRAFTING.update(plant_office.CRAFTING)
 CRAFTING.update(plant_office2.CRAFTING)
+CRAFTING["lab_coat"] = (["W W", "WWW", "WWW"], {"W": "minecraft:white_wool"}, 1)
+CRAFTING["security_jacket"] = (["W W", "WDW", "WWW"], {"W": "minecraft:blue_wool", "D": "minecraft:black_dye"}, 1)
 
 
 def _box_textures(boxes):
@@ -199,7 +202,7 @@ def textures_used():
             names.discard(info["vtex"])
             names |= {f"{info['vtex']}_{i}" for i in range(info["variants"])}
         if info.get("plant"):
-            names |= {f"pi_plant_{i}" for i in range(info["variants"])} | set(plant_office.POTS) | {"pi_soil"}
+            names |= plant_office.O4.O6.plant_textures() | set(plant_office.POTS) | {"pi_soil"}
     for part in range(9):
         names |= _box_textures(plant_office.table_boxes(part))
     return names
@@ -411,6 +414,14 @@ def write_assets(write, rid, assets, lang):
             write(assets / "blockstates" / f"{block}.json", {"variants": {
                 f"facing={face}": {"model": rid(f"block/{block}"), **({"y": y} if y else {})} for face, y in TURN}})
         write(assets / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": item_model}})
+    # The wearable uniforms: items with flat icons; worn and in lockers they are drawn in 3D, so their equipment
+    # asset has no flat layers.
+    for name, display in UNIFORMS.items():
+        lang[f"item.{MOD}.{name}"] = display
+        write(assets / "models" / "item" / f"{name}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{name}")}})
+        write(assets / "items" / f"{name}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{name}")}})
+    # The equipment asset needs a layer: a blank one (the coat itself is drawn in 3D by client/UniformLayer.java).
+    write(assets / "equipment" / "uniform.json", {"layers": {"humanoid": [{"texture": "jugcraft:blank"}]}})
     # The round meeting table: nine blocks, each its slice of the top.
     lang[f"block.{MOD}.conference_table"] = OTHER["conference_table"]
     for part in range(9):
@@ -943,4 +954,5 @@ def draw_item_textures():
         return M.stylize(img, 8)
     return {"steel_door": door(_steel_door(1), _steel_door(0)), "glass_door": door(_glass_door(1), _glass_door(0)),
             "building_sign": sign(60), "room_sign": sign(34), "conference_table": plant_office.conference_icon(),
-            **{name: plant_office2.icon(name) for name in MULTI}}
+            **{name: plant_office2.icon(name) for name in MULTI},
+            **{name: plant_office2.O4.O6.uniform_icon(name) for name in UNIFORMS}}

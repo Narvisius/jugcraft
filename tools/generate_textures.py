@@ -1462,6 +1462,11 @@ def main():
     for name, img in nuclear.draw_block_textures().items():
         save(img, "block", name)
     nuclear.draw_sheet().save(entity_dir / "hazmat.png", optimize=True)
+    import plant_office6
+    plant_office6.draw_uniform_sheet().save(entity_dir / "uniform.png", optimize=True)
+    # The blank equipment layer the 3D-drawn suits point at (equipment assets need one layer).
+    (entity_dir / "equipment" / "humanoid").mkdir(parents=True, exist_ok=True)
+    Image.new("RGBA", (64, 32), (0, 0, 0, 0)).save(entity_dir / "equipment" / "humanoid" / "blank.png", optimize=True)
     (TEX / "gui").mkdir(parents=True, exist_ok=True)
     nuclear.draw_hud_trefoil().save(TEX / "gui" / "radiation_trefoil.png", optimize=True)
     nuclear.draw_scram_button().save(TEX / "gui" / "reactor_scram.png", optimize=True)

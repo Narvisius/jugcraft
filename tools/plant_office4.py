@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw
 
 import plant_office3 as O3
 import plant_office5 as O5
+import plant_office6 as O6
 
 S = 128
 
@@ -431,9 +432,11 @@ def makers():
         "pi_croissant": lambda: _food("croissant"),
     }
     out.update(O5.makers())
+    out.update(O6.makers())
     return out
 
 
-SHARP = O5.SHARP | {"pi_analyzer_badge", "pi_phone_lcd", "pi_microwave_panel", "pi_coffee_panel", "pi_analyzer_screen", "pi_extinguisher_label",
+SHARP = O5.SHARP | O6.SHARP | {"pi_analyzer_badge", "pi_phone_lcd", "pi_microwave_panel", "pi_coffee_panel", "pi_analyzer_screen", "pi_extinguisher_label",
          "pi_fire_strip", "pi_magazine_0", "pi_magazine_1", "pi_instrument_front", "pi_takeout_front"}
-TRANSLUCENT = {"pi_cabinet_glass"} | O5.TRANSLUCENT
+TRANSLUCENT = {"pi_cabinet_glass"} | O5.TRANSLUCENT | O6.TRANSLUCENT
+ANALYZER = O6.ANALYZER       # round 9: like the real instrument (plant_office6)

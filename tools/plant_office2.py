@@ -112,8 +112,7 @@ PIECES = {
                 (4.5, 13, 5, 9.5, 14.6, 10, {"*": "pi_security_cap", "up": "pi_security_cap"}),
                 (10, 13, 6, 12, 16, 8, {"*": "pi_radio", "south": "pi_radio!"}),
                 (2.5, 11, 8.6, 13.5, 11.6, 9.4, "pi_chrome"),
-                (4, -9, 6, 12, 10.8, 11, {"*": "pi_security_jacket", "south": "pi_security_jacket!", "north": "pi_security_jacket!"}),
-                (6.5, 10.8, 8.2, 9.5, 11.2, 9.8, "pi_chrome")],
+               ],
         "plinth": [(0.8, 0, 1.8, 15.2, 1, 15.2, "pi_cabinet_dark"),
                    (3.5, 1, 6, 7.5, 4, 12, "pi_boot_black"), (8.5, 1, 6, 12.5, 4, 12, "pi_boot_black")]},
     # ---- first aid

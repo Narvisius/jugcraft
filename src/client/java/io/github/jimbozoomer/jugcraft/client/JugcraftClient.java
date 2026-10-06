@@ -35,6 +35,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		}
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.SIGN_ENTITY, PlantSignRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.STATUS_ENTITY, StatusScreenRenderer::new);
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.LOCKER_ENTITY, LockerRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftMachines.MACHINE_ENTITY, WindTurbineRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.BELT_PULLEY_ENTITY, BeltRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.SHAFT_ENTITY, KineticRotorRenderer::new);
@@ -47,6 +48,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		PetroFluidsClient.register();
 		RocketPackLayer.register();
 		HazmatLayer.register();
+		UniformLayer.register();
 		RadiationHud.register();
 		BlockEntityRendererRegistry.register(JugcraftKinetics.HAND_CRANK_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.ELECTRIC_MOTOR_ENTITY, KineticRotorRenderer::new);

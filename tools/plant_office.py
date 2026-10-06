@@ -92,8 +92,7 @@ OFFICE = {
                 (2, 12.4, 3, 14, 13, 14.5, "pi_locker_side"),                      # the hat shelf
                 (5, 13, 5, 11, 15, 11, {"*": "pi_hardhat_white", "up": "pi_hardhat_white"}),
                 (2.5, 11, 8.6, 13.5, 11.6, 9.4, "pi_chrome"),                       # the hanging rail
-                (4, -9, 6, 12, 10.8, 11, {"*": "pi_lab_coat", "south": "pi_lab_coat!", "north": "pi_lab_coat!"}),
-                (6.5, 10.8, 8.2, 9.5, 11.2, 9.8, "pi_chrome")],
+               ],    # the coat on the rail is the locker's own (LockerBlockEntity), drawn by client/LockerRenderer
         "plinth": [(0.8, 0, 1.8, 15.2, 1, 15.2, "pi_cabinet_dark"),
                    (3.5, 1, 6, 7.5, 4, 12, "pi_boot"), (8.5, 1, 6, 12.5, 4, 12, "pi_boot")]},
     "bookcase": {"display": "Bookcase", "stacks": True, "boxes": [
@@ -159,9 +158,8 @@ OFFICE = {
         (4, 11, 4, 12, 13.2, 12, {"*": "pi_epoxy_black", "up": "pi_sink_black!"}),
         (7.4, 14.5, 2, 8.6, 23, 3.2, "pi_chrome"), (7.4, 22, 3.2, 8.6, 23, 7, "pi_chrome")] + LAB_BODY[3:],
         "left": [], "right": []},
-    "lab_analyzer": {"display": "Ion Chromatograph", "row": "lab", "boxes": LAB_BODY[:3] + O4.ANALYZER
-        + [(10, 14.5, 11, 14.6, 14.7, 15.6, {"*": "pi_pages", "up": "pi_doc_7!"})],
-        "left": [], "right": [], "glow": ["pi_analyzer_screen", "pi_analyzer_leds"]},
+    "lab_analyzer": {"display": "Ion Chromatograph", "row": "lab", "boxes": LAB_BODY[:3] + O4.ANALYZER,
+        "left": [], "right": [], "glow": ["pi_ic_strip"]},
     # ---- single pieces
     "cctv_desk": {"display": "CCTV Desk", "boxes": DESK_FRAME + [
         (1, 12.5, 3, 15, 13, 5, "pi_monitor"), (7.5, 13, 3.5, 8.5, 22, 4.2, "pi_monitor"),
@@ -185,8 +183,7 @@ OFFICE = {
         (4, 0, 4, 5, 6, 5, "pi_chrome"), (11, 0, 4, 12, 6, 5, "pi_chrome"), (4, 0, 11, 5, 6, 12, "pi_chrome"), (11, 0, 11, 12, 6, 12, "pi_chrome")]},
     "coat_rack": {"display": "Coat Rack", "boxes": [
         (1, 12.5, 0, 15, 13.5, 1.2, "pi_veneer"), (1, 15, 0, 15, 15.5, 4.5, "pi_veneer"),
-        (2, 2.5, 0.6, 6.5, 12.5, 4, {"*": "pi_lab_coat", "south": "pi_lab_coat!"}),
-        (9.5, 3, 0.6, 14, 12.5, 4, {"*": "pi_hi_vis", "south": "pi_hi_vis!"}),
+        *O4.O6.coat(4.8, 12.6, 2.6, 19, 7.0, "lab"), *O4.O6.coat(12.2, 12.6, 3.0, 9.8, 4.6, "vest"),
         (2.5, 15.5, 1, 6.5, 17.5, 4, "pi_hardhat_white"), (9.5, 15.5, 1, 13.5, 17.5, 4, "pi_hardhat_yellow")]},
     "printer": {"display": "Office Copier", "boxes": [
         (1, 1, 2, 15, 11, 14, {"*": "pi_copier", "south": "pi_copier_front!"}),
@@ -254,16 +251,14 @@ def plant_model(i, rid):
     els = [{"from": f, "to": t, "faces": {k: {"texture": "#pot"} for k in six}} for f, t in (
         ([4, 0, 4], [12, 7, 5]), ([4, 0, 11], [12, 7, 12]), ([4, 0, 5], [5, 7, 11]), ([11, 0, 5], [12, 7, 11]))]
     els.append({"from": [5, 0, 5], "to": [11, 6.4, 11], "faces": {"up": {"texture": "#soil"}, "down": {"texture": "#pot"}}})
-    for angle, along_x in ((45, True), (-45, True), (0, True), (0, False)):
-        f, t = ([0, 6, 8], [16, h, 8]) if along_x else ([8, 6, 0], [8, h, 16])
-        faces = ("north", "south") if along_x else ("east", "west")
-        e = {"from": f, "to": t, "shade": False, "faces": {k: {"texture": "#leaves", "uv": [0, 0, 16, 16]} for k in faces}}
-        if angle:
-            e["rotation"] = {"angle": angle, "axis": "y", "origin": [8, 8, 8]}
-        els.append(e)
-    return {"ambientocclusion": False, "textures": {"pot": rid(f"block/{pot}"), "soil": rid("block/pi_soil"),
-                                                     "leaves": rid(f"block/pi_plant_{i}"), "particle": rid(f"block/pi_plant_{i}")},
-            "elements": els}
+    # Round 9: the plant built leaf by leaf (plant_office6.plant_elements).
+    # Round 9b: a little tree (plant_office6.plant_elements).
+    tree, refs = O4.O6.plant_elements(i)
+    els += tree
+    textures = {"pot": rid(f"block/{pot}"), "soil": rid("block/pi_soil")}
+    textures.update({k: (rid(f"block/{v[4:]}") if v.startswith("rid:") else v) for k, v in refs.items()})
+    textures["particle"] = textures["leaves0"]
+    return {"textures": textures, "elements": els}
 
 
 def table_boxes(part):

@@ -49,7 +49,7 @@ public final class PlantInterior {
 			{"guard_rail", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 2}},
 			{"turnstile", 0, "plain", "metal", new double[] {8.5, 0, 0.5, 15.5, 16, 15.5}},
 			{"locker", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
-			{"locker_open", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
+			{"locker_open", 0, "locker:lab", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"bookcase", 0, "stack", "wood", new double[] {1, 0, 1, 15, 16, 15}},
 			{"fridge", 0, "stack", "metal", new double[] {1.5, 0, 2, 14.5, 16, 15}},
 			{"fume_hood", 0, "stack", "metal", new double[] {0, 0, 1, 16, 16, 15.5}},
@@ -72,7 +72,7 @@ public final class PlantInterior {
 			{"wall_display", 0, "plain", "metal", new double[] {0, 4, 0, 16, 14, 1.2}},
 			{"office_plant", 0, "variant:8", "plant", new double[] {4, 0, 4, 12, 16, 12}},
 			{"framed_print", 0, "variant:16", "wood", new double[] {1, 3, 0, 15, 14, 1.6}},
-			{"locker_security", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
+			{"locker_security", 0, "locker:security", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"office_desk_long", 0, "row:desk:0:6", "wood", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"executive_desk", 0, "row:exec:0:3", "wood", new double[] {0, 0, 0.5, 16, 13, 15.5}},
 			{"glass_desk", 0, "row:glass:0:4", "metal", new double[] {0, 0, 1, 16, 12.5, 15}},
@@ -106,6 +106,22 @@ public final class PlantInterior {
 	public static Block ROOM_SIGN;
 	public static BlockEntityType<PlantSignBlockEntity> SIGN_ENTITY;
 	public static BlockEntityType<StatusScreenBlockEntity> STATUS_ENTITY;
+	public static BlockEntityType<LockerBlockEntity> LOCKER_ENTITY;
+	public static Item LAB_COAT, SECURITY_JACKET;
+
+	public static Item uniform(UniformItem.Kind kind) {
+		return kind == UniformItem.Kind.LAB_COAT ? LAB_COAT : SECURITY_JACKET;
+	}
+
+	private static Item uniformItem(String name, UniformItem.Kind kind) {
+		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Jugcraft.id(name));
+		return Registry.register(BuiltInRegistries.ITEM, key, new UniformItem(new Item.Properties().setId(key).stacksTo(1)
+				.component(net.minecraft.core.component.DataComponents.EQUIPPABLE,
+						net.minecraft.world.item.equipment.Equippable.builder(net.minecraft.world.entity.EquipmentSlot.CHEST)
+								.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
+								.setAsset(ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, Jugcraft.id("uniform")))
+								.build()), kind));
+	}
 
 	/** Doors that open by hand, with steel door sounds. */
 	public static final BlockSetType STEEL = new BlockSetType("jugcraft_steel", true, true, false, BlockSetType.PressurePlateSensitivity.EVERYTHING,
@@ -117,6 +133,8 @@ public final class PlantInterior {
 	}
 
 	public static void register() {
+		LAB_COAT = uniformItem("lab_coat", UniformItem.Kind.LAB_COAT);
+		SECURITY_JACKET = uniformItem("security_jacket", UniformItem.Kind.SECURITY_JACKET);
 		for (Object[] f : FURNITURE) {
 			String id = (String) f[0];
 			int light = (Integer) f[1];
@@ -133,6 +151,8 @@ public final class PlantInterior {
 				String[] k = kind.split(":");
 				if (kind.equals("stack")) {
 					return new StackingFurnitureBlock(p, shape);
+				} else if (k[0].equals("locker")) {
+					return new LockerBlock(p, k[1].equals("lab") ? UniformItem.Kind.LAB_COAT : UniformItem.Kind.SECURITY_JACKET, shape);
 				} else if (k[0].equals("stack")) {
 					return new StackingFurnitureBlock(p, shape).group(k[1]);
 				} else if (kind.equals("status")) {
@@ -180,6 +200,12 @@ public final class PlantInterior {
 				FabricBlockEntityTypeBuilder.create(PlantSignBlockEntity::new, BUILDING_SIGN, ROOM_SIGN).build());
 		STATUS_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("status_screen"),
 				FabricBlockEntityTypeBuilder.create(StatusScreenBlockEntity::new, BLOCKS.get("status_screen")).build());
+		LOCKER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("locker"),
+				FabricBlockEntityTypeBuilder.create(LockerBlockEntity::new, BLOCKS.get("locker_open"), BLOCKS.get("locker_security")).build());
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {
+			output.accept(LAB_COAT);
+			output.accept(SECURITY_JACKET);
+		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output -> BLOCKS.values().forEach(output::accept));
 	}
 

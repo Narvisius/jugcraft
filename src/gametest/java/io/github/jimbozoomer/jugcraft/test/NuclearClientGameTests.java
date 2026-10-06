@@ -93,8 +93,54 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			server.runCommand("clear @p");
 			server.runCommand("kill @e[type=!player]");
 			reactorUnit(context, singleplayer, x, y, z);
+			uniforms(context, singleplayer, x, y, z);
 			plants(context, singleplayer, x, y, z);
 		}
+	}
+
+	/**
+	 * The admin building's wearables and plants, close up: the lab coat and the security jacket worn (armor stands)
+	 * and hanging in their lockers, the coat rack, and the office plants in a row.
+	 */
+	private static void uniforms(ClientGameTestContext context, TestSingleplayerContext singleplayer, int x, int y, int z) {
+		TestServerContext server = singleplayer.getServer();
+		int bx = x + 40, bz = z;
+		// A backdrop wall, lit, so the lockers read as in a room.
+		server.runCommand("fill %d %d %d %d %d %d jugcraft:painted_wall".formatted(bx - 6, y, bz - 3, bx + 14, y + 3, bz - 3));
+		server.runCommand("fill %d %d %d %d %d %d jugcraft:vinyl_floor".formatted(bx - 6, y - 1, bz - 2, bx + 14, y - 1, bz + 6));
+		server.runCommand(("summon armor_stand %d.5 %d %d.5 {Rotation:[0f,0f],ShowArms:1b,NoBasePlate:1b,"
+				+ "equipment:{chest:{id:\"jugcraft:lab_coat\",count:1}}}").formatted(bx, y, bz));
+		server.runCommand(("summon armor_stand %d.5 %d %d.5 {Rotation:[0f,0f],ShowArms:1b,NoBasePlate:1b,"
+				+ "equipment:{chest:{id:\"jugcraft:security_jacket\",count:1}}}").formatted(bx + 3, y, bz));
+		// Two-high lockers (open fronts south): a lab locker and a security locker, each with its coat on the rail.
+		server.runCommand("setblock %d %d %d jugcraft:locker_open[facing=north,up=true,down=false]".formatted(bx + 6, y, bz - 2));
+		server.runCommand("setblock %d %d %d jugcraft:locker_open[facing=north,up=false,down=true]".formatted(bx + 6, y + 1, bz - 2));
+		server.runCommand("setblock %d %d %d jugcraft:locker_security[facing=north,up=true,down=false]".formatted(bx + 8, y, bz - 2));
+		server.runCommand("setblock %d %d %d jugcraft:locker_security[facing=north,up=false,down=true]".formatted(bx + 8, y + 1, bz - 2));
+		server.runCommand("setblock %d %d %d jugcraft:coat_rack[facing=north]".formatted(bx + 10, y + 1, bz - 2));
+		for (int i = 0; i < 8; i++) {
+			server.runCommand("setblock %d %d %d jugcraft:office_plant[facing=north,variant=%d]".formatted(bx - 6 + i, y, bz + 5, i));
+		}
+		context.waitTicks(20);
+		setHudHidden(context, true);
+		server.runCommand("gamemode spectator @p");
+		context.waitTicks(5);
+		shot(context, singleplayer, bx, y + 1, bz + 2, bx, y + 1, bz, 0.5, "jugcraft_uniform_lab_coat_front");
+		shot(context, singleplayer, bx + 2, y + 2, bz + 3, bx, y + 1, bz, 0.5, "jugcraft_uniform_lab_coat_three_quarter");
+		shot(context, singleplayer, bx, y + 1, bz - 2, bx, y + 1, bz, 0.5, "jugcraft_uniform_lab_coat_back");
+		shot(context, singleplayer, bx + 3, y + 1, bz + 2, bx + 3, y + 1, bz, 0.5, "jugcraft_uniform_security_front");
+		shot(context, singleplayer, bx + 3, y + 1, bz - 2, bx + 3, y + 1, bz, 0.5, "jugcraft_uniform_security_back");
+		shot(context, singleplayer, bx + 6, y + 1, bz, bx + 6, y + 1, bz - 2, -0.2, "jugcraft_uniform_locker_lab");
+		shot(context, singleplayer, bx + 8, y + 1, bz, bx + 8, y + 1, bz - 2, -0.2, "jugcraft_uniform_locker_security");
+		shot(context, singleplayer, bx + 10, y + 1, bz, bx + 10, y + 1, bz - 2, -0.2, "jugcraft_uniform_coat_rack");
+		shot(context, singleplayer, bx - 3, y + 1, bz + 2, bx - 3, y, bz + 5, 0.4, "jugcraft_plants_row_a");
+		shot(context, singleplayer, bx, y + 1, bz + 2, bx + 1, y, bz + 5, 0.4, "jugcraft_plants_row_b");
+		shot(context, singleplayer, bx - 5, y + 1, bz + 4, bx - 6, y, bz + 5, 0.3, "jugcraft_plant_close_0");
+		shot(context, singleplayer, bx - 3, y + 1, bz + 4, bx - 4, y, bz + 5, 0.3, "jugcraft_plant_close_2");
+		shot(context, singleplayer, bx + 1, y + 1, bz + 4, bx, y, bz + 5, 0.3, "jugcraft_plant_close_6");
+		server.runCommand("gamemode creative @p");
+		setHudHidden(context, false);
+		server.runCommand("kill @e[type=!player]");
 	}
 
 	/** The counter's live sound: counts follow the rate (never a fixed clip), and change as soon as the rate does. */
