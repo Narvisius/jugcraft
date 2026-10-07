@@ -56,7 +56,14 @@ public class EquipmentBlockEntity extends BlockEntity {
 	private @Nullable ReactorUnit unit;
 	private int unitVersion = -1;
 	private int ticks;
-	private boolean sourceSet;
+	private boolean sourceSet, coreSourceSet;
+	/**
+	 * A core at full power gives off this much (mSv/h a block from its middle) through its vessel: neutrons and gamma
+	 * while it fissions, then its fission products' decay gamma, falling away after shutdown. The vessel's steel and
+	 * the primary shield round it stop most of it; on the operating floor a counter reads a few mSv/h, outside the
+	 * containment nothing.
+	 */
+	public static final double CORE_RADIATION = 4_000;
 	/** What the console lists as missing (synced). */
 	public List<String> missing = List.of();
 	public int loops;
@@ -145,6 +152,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (kind.powerOut()) {
 			tickTransformer(level);
 		}
+		if (kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
+			DieselFuel.tick(level, this, level.getGameTime());
+		}
 	}
 
 	private void tickVessel(ServerLevel level) {
@@ -225,8 +235,16 @@ public class EquipmentBlockEntity extends BlockEntity {
 		return got;
 	}
 
-	/** An open reactor (refuelling) shines its spent fuel out of the top; a closed one is shielded. */
+	/** An open reactor (refuelling) shines its spent fuel out of the top; a working core shines through its vessel. */
 	private void updateRadiation(ServerLevel level) {
+		double glow = Math.max(0, core.fission) + Math.max(0, core.decay);
+		if (!core.fuel.isEmpty() && glow > 0.001) {
+			RadiationSources.set(level, coreMiddle(), CORE_RADIATION * glow, RadiationKind.NUCLEAR);
+			coreSourceSet = true;
+		} else if (coreSourceSet) {
+			RadiationSources.clear(level, coreMiddle());
+			coreSourceSet = false;
+		}
 		BlockPos centre = centre();
 		if (core.refuelOpen && !core.fuel.isEmpty()) {
 			double strength = core.spentCount() * SPENT_RADIOACTIVITY + (core.fuel.size() - core.spentCount()) * 2;
@@ -236,6 +254,12 @@ public class EquipmentBlockEntity extends BlockEntity {
 			RadiationSources.clear(level, centre);
 			sourceSet = false;
 		}
+	}
+
+	/** The middle of the vessel (the core). */
+	public BlockPos coreMiddle() {
+		EquipmentKind k = kind();
+		return getBlockPos().offset(EquipmentKind.toWorld(new BlockPos(k.wide / 2, k.tall / 2, k.deep / 2), facing()));
 	}
 
 	/** The top middle of the vessel (where the head comes off). */
@@ -382,6 +406,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 			if (sourceSet) {
 				RadiationSources.clear(server, centre());
 			}
+			if (coreSourceSet) {
+				RadiationSources.clear(server, coreMiddle());
+			}
 			EquipmentPlacement.clearFrames(server, pos, kind(state), state.getValue(EquipmentAnchorBlock.FACING));
 		}
 	}
@@ -391,6 +418,12 @@ public class EquipmentBlockEntity extends BlockEntity {
 		super.setRemoved();
 		if (level != null) {
 			EquipmentRegistry.of(level).remove(getBlockPos());
+			// Unloaded (or gone): its radiation goes with it until it ticks again.
+			if (level instanceof ServerLevel server && (sourceSet || coreSourceSet)) {
+				RadiationSources.clear(server, centre());
+				RadiationSources.clear(server, coreMiddle());
+				sourceSet = coreSourceSet = false;
+			}
 		}
 	}
 
@@ -431,6 +464,32 @@ public class EquipmentBlockEntity extends BlockEntity {
 	/** An emergency diesel generator: running (started from its panel), and the game time it was started. */
 	public boolean running;
 	public long runningSince;
+	/** An emergency diesel generator: game ticks run before this run (its panel's hour meter: 1,000 ticks an hour). */
+	public long runTicks;
+	/** An emergency diesel generator's fuel (DieselFuel): its day tank (server), fuel burned not yet drawn (droplets),
+	 * whether it ran dry or found no fuel to start on, and its day tank's level (0..1, -1 none: synced, for the panels). */
+	public @Nullable BlockPos dayTank;
+	public double burn;
+	public boolean fuelOut;
+	public float dayLevel = -1;
+
+	/** Game ticks run in all, at game time {@code now}. */
+	public long runTicksAt(long now) {
+		return runTicks + (running ? Math.max(0, now - runningSince) : 0);
+	}
+
+	/** Starts or stops an emergency diesel generator (its panel, tests): the hour meter keeps the run's time. */
+	public void setDieselRunning(long now, boolean run) {
+		if (run == running) {
+			return;
+		}
+		if (running) {
+			runTicks += Math.max(0, now - runningSince);
+		}
+		running = run;
+		runningSince = now;
+		changed();
+	}
 	/** Client: the diesel generator's speed (0..1) and its shaft's turn as drawn, and when smoke was last made. */
 	public float animSpeed, animAngle;
 	public long animNanos, smokeTick;
@@ -443,6 +502,13 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (running) {
 			out.putBoolean("running", true);
 			out.putLong("running_since", runningSince);
+		}
+		if (runTicks > 0) {
+			out.putLong("run_ticks", runTicks);
+		}
+		if (kind() == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
+			out.putBoolean("fuel_out", fuelOut);
+			out.putFloat("day_level", dayLevel);
 		}
 	}
 
@@ -458,6 +524,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 		linked = in.read("linked", BlockPos.CODEC).orElse(null);
 		running = in.getBooleanOr("running", false);
 		runningSince = in.getLongOr("running_since", 0L);
+		runTicks = in.getLongOr("run_ticks", 0L);
+		fuelOut = in.getBooleanOr("fuel_out", false);
+		dayLevel = in.getFloatOr("day_level", -1F);
 		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind.reactor()) {
 			core.loadReadouts(in);
 			missing = in.read("missing", Codec.STRING.listOf()).orElse(missing);

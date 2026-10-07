@@ -133,6 +133,8 @@ SIGNS = {
     "first_aid": "First Aid", "open_office": "Open Office", "board_room": "Board Room", "screening": "Security Screening",
     "staff_only": "Staff Only", "operations": "Operations", "maintenance_planning": "Maintenance Planning",
     "human_resources": "Human Resources", "visitors": "Visitors", "washroom": "Washroom", "intern_area": "Intern Area",
+    "radwaste_building": "RADWASTE BUILDING", "airlock": "Airlock", "waste_vault": "Waste Vault",
+    "inspection_corridor": "Inspection Corridor",
 }
 
 OTHER["conference_table"] = "Round Meeting Table"
@@ -170,6 +172,7 @@ CRAFTING = {
 }
 CRAFTING.update(plant_office.CRAFTING)
 CRAFTING.update(plant_office2.CRAFTING)
+CRAFTING.update(plant_office2.PN.CRAFTING)
 CRAFTING["lab_coat"] = (["W W", "WWW", "WWW"], {"W": "minecraft:white_wool"}, 1)
 CRAFTING["security_jacket"] = (["W W", "WDW", "WWW"], {"W": "minecraft:blue_wool", "D": "minecraft:black_dye"}, 1)
 
@@ -301,7 +304,13 @@ def separate(boxes, under=()):
                     for other in done:
                         if abs(other[k] - b[k]) < 1e-6 and min(b[o1 + 3], other[o1 + 3]) - max(b[o1], other[o1]) > 1e-6 \
                                 and min(b[o2 + 3], other[o2 + 3]) - max(b[o2], other[o2]) > 1e-6:
-                            b[k] += NUDGE if side else -NUDGE
+                            # Out a hair; but a face on the block's edge goes in instead (out, it would lie on the
+                            # next block's faces: a row of counters).
+                            moved = b[k] + (NUDGE if side else -NUDGE)
+                            inside = 0 <= b[axis] and b[axis + 3] <= 16
+                            if inside and not 0 <= moved <= 16 and b[axis + 3] - b[axis] > 2 * NUDGE:
+                                moved = b[k] - (NUDGE if side else -NUDGE)
+                            b[k] = moved
                             break
             done.append(b)
         out.append(tuple(b) + tuple(box[6:]))
@@ -322,6 +331,10 @@ TURN = (("north", 0), ("east", 90), ("south", 180), ("west", 270))
 
 
 def write_assets(write, rid, assets, lang):
+    import zfight
+    write = zfight.unfighting(write)  # no two faces of a model in the same place (Justin: never any z-fighting)
+    import plant_panels
+    write(assets / "live_panels.json", plant_panels.layout())
     models = assets / "models" / "block"
     for block, info in FURNITURE.items():
         lang[f"block.{MOD}.{block}"] = info["display"]
@@ -937,7 +950,7 @@ def draw_block_textures():
         colours = 64 if name in plant_office2.PAINTINGS else 24 if rich else 14
         src = make()
         out[name] = M.stylize(src, colours)
-        if name in plant_office2.O3.SHARP or name in plant_office2.O4.SHARP:
+        if name in plant_office2.O3.SHARP or name in plant_office2.O4.SHARP or name in plant_office2.PN.SHARP:
             out[name] = src            # kept at full size so the writing reads
         if name in plant_office2.TRANSLUCENT:
             alpha = src.convert("RGBA").split()[3].resize(out[name].size)

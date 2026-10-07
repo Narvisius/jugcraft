@@ -340,6 +340,8 @@ def draw_item_textures():
 
 
 def write_assets(write, rid, assets, lang):
+    import zfight
+    write = zfight.unfighting(write)  # no two faces of a model in the same place
     lang.update(LANG)
     lang[f"block.{MOD}.survey_stake"] = STAKE["survey_stake"]["display"]
     lang[f"item.{MOD}.blueprint"] = ITEMS["blueprint"]

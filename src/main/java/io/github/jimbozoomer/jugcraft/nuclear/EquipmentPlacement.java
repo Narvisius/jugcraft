@@ -3,7 +3,6 @@ package io.github.jimbozoomer.jugcraft.nuclear;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -149,11 +148,21 @@ public final class EquipmentPlacement {
 				// Started and stopped from its panel (anywhere on it): air start, it fires and runs up to speed; stopped,
 				// it coasts down.
 				if (!level.isClientSide()) {
-					equipment.running = !equipment.running;
-					equipment.runningSince = level.getGameTime();
-					equipment.changed();
-					level.playSound(null, anchor, equipment.running ? SoundEvents.FIRE_EXTINGUISH : SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS,
-							1.0F, equipment.running ? 0.6F : 0.5F);
+					if (!equipment.running && !DieselFuel.hasFuel((net.minecraft.server.level.ServerLevel) level, equipment)) {
+						// No diesel in its day tank (or none found, or its outlet shut): it cranks on air but won't fire.
+						equipment.fuelOut = true;
+						equipment.changed();
+						level.playSound(null, anchor, net.minecraft.sounds.SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 1.0F, 0.6F);
+						player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.edg_no_fuel", DieselFuel.REACH));
+						return InteractionResult.SUCCESS;
+					}
+					if (!equipment.running) {
+						equipment.fuelOut = false;
+					}
+					equipment.setDieselRunning(level.getGameTime(), !equipment.running);
+					// The air start (or the shutdown solenoid) from the engine's middle; the running sound is the client's.
+					BlockPos middle = anchor.offset(EquipmentKind.toWorld(new BlockPos(3, 5, 6), equipment.facing()));
+					level.playSound(null, middle, equipment.running ? JugcraftNuclear.EDG_START : JugcraftNuclear.EDG_STOP, SoundSource.BLOCKS, 1.0F, 1.0F);
 					player.sendOverlayMessage(Component.translatable(equipment.running ? "message.jugcraft.nuclear.edg_start"
 							: "message.jugcraft.nuclear.edg_stop"));
 				}

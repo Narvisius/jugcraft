@@ -103,9 +103,15 @@ public final class PlantShowcase {
 
 	private static volatile Pending pending;
 
+	/**
+	 * Bumped when blocks change without their states changing, so a world's showcase is built again (round 14: the
+	 * diesel room's panels gained block entities, which only placing them again gives them).
+	 */
+	static final int REVISION = 1;
+
 	/** A fingerprint of every block in a blueprint, so a world built from an older one can tell. */
 	static long fingerprint(Blueprint blueprint) {
-		long h = 1125899906842597L;
+		long h = 1125899906842597L + REVISION;
 		if (blueprint == null) {
 			return h;
 		}
@@ -189,17 +195,20 @@ public final class PlantShowcase {
 		return best == null ? null : best.subtract(offset);
 	}
 
-	/** Clears a block for the rebuild, keeping what a storage rack or a storage tank held. */
+	/** Clears a block for the rebuild, keeping what a storage rack, a shielded store or a storage tank held. */
 	private static void clear(ServerLevel level, BlockPos.MutableBlockPos at, java.util.Map<BlockPos, List<net.minecraft.world.item.ItemStack>> stored,
 			java.util.Map<BlockPos, io.github.jimbozoomer.jugcraft.fluid.StoredFluid> tanks, int flags) {
 		if (level.isOutsideBuildHeight(at) || level.getBlockState(at).isAir()) {
 			return;
 		}
-		if (level.getBlockEntity(at) instanceof StorageRackBlockEntity rack && !rack.isEmpty()) {
+		if (level.getBlockEntity(at) instanceof net.minecraft.world.Container store
+				&& (store instanceof StorageRackBlockEntity || store instanceof ShieldedStorageBlockEntity) && !store.isEmpty()) {
 			List<net.minecraft.world.item.ItemStack> items = new ArrayList<>();
-			for (int i = 0; i < rack.getContainerSize(); i++) {
-				items.add(rack.getItem(i).copy());
+			for (int i = 0; i < store.getContainerSize(); i++) {
+				items.add(store.getItem(i).copy());
 			}
+			// (Taken out, so clearing the block doesn't spill them as well.)
+			store.clearContent();
 			stored.put(at.immutable(), items);
 		} else if (level.getBlockEntity(at) instanceof StorageTankPortBlockEntity port && port.stored() != null) {
 			tanks.put(at.immutable(), port.stored());
@@ -247,6 +256,22 @@ public final class PlantShowcase {
 				clear(level, at.set(stake.getX() + BlockPos.getX(column), stake.getY() + y, stake.getZ() + BlockPos.getZ(column)), stored, tanks, flags);
 			}
 		});
+		// Where a pipe now runs buried, what the plant had standing there before (a pipe on sleepers, a riser) goes:
+		// the plant's own kinds of block, a few layers up.
+		java.util.Set<Block> own = blueprint.materials().keySet();
+		for (int i = 0; i < blueprint.size(); i++) {
+			BlockPos o = blueprint.offset(i, Rotation.NONE);
+			if (o.getY() == -1 && blueprint.state(i, Rotation.NONE).getBlock() instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRun) {
+				long column = BlockPos.asLong(o.getX(), 0, o.getZ());
+				int from = Math.max(cleared.getOrDefault(column, -1), tops.getOrDefault(column, -2) + 1) + 1;
+				for (int y = Math.max(0, from); y <= 6; y++) {
+					at.set(stake.getX() + o.getX(), stake.getY() + y, stake.getZ() + o.getZ());
+					if (own.contains(level.getBlockState(at).getBlock())) {
+						clear(level, at, stored, tanks, flags);
+					}
+				}
+			}
+		}
 		PlantBuilder.Result result = PlantBuilder.build(level, blueprint, stake, Rotation.NONE, player.getUUID(), true);
 		start(level, result);
 		// The storage tanks keep what was in them.
@@ -259,11 +284,18 @@ public final class PlantShowcase {
 		for (java.util.Map.Entry<BlockPos, List<net.minecraft.world.item.ItemStack>> e : stored.entrySet()) {
 			BlockPos pos = e.getKey();
 			List<net.minecraft.world.item.ItemStack> items = e.getValue();
-			if (level.getBlockEntity(pos) instanceof StorageRackBlockEntity rack) {
-				for (int i = 0; i < items.size() && i < rack.getContainerSize(); i++) {
-					rack.setItem(i, items.get(i));
+			if (level.getBlockEntity(pos) instanceof net.minecraft.world.Container store
+					&& (store instanceof StorageRackBlockEntity || store instanceof ShieldedStorageBlockEntity)) {
+				int i = 0;
+				for (; i < items.size() && i < store.getContainerSize(); i++) {
+					store.setItem(i, items.get(i));
 				}
-				rack.setChanged();
+				for (; i < items.size(); i++) {
+					if (!items.get(i).isEmpty()) {
+						net.minecraft.world.Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, items.get(i));
+					}
+				}
+				store.setChanged();
 			} else {
 				for (net.minecraft.world.item.ItemStack stack : items) {
 					if (!stack.isEmpty()) {

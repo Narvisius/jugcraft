@@ -42,7 +42,7 @@ def mug(x, z, y0):
     return [(x, y0, z, x + w, y0 + 0.3, z + w, m),
             (x, y0, z, x + t, y0 + h, z + w, m), (x + w - t, y0, z, x + w, y0 + h, z + w, m),
             (x + t, y0, z, x + w - t, y0 + h, z + t, m), (x + t, y0, z + w - t, x + w - t, y0 + h, z + w, m),
-            (x + t, y0 + 0.3, z + t, x + w - t, y0 + h - 0.5, z + w - t, {"*": "pi_coffee", "up": "pi_coffee"}),
+            (x + t + 0.02, y0 + 0.3, z + t + 0.02, x + w - t - 0.02, y0 + h - 0.5, z + w - t - 0.02, {"*": "pi_coffee", "up": "pi_coffee"}),
             (x + w, y0 + 0.7, z + 0.9, x + w + 0.9, y0 + 0.95, z + 1.5, m),
             (x + w + 0.65, y0 + 0.95, z + 0.9, x + w + 0.9, y0 + 1.95, z + 1.5, m),
             (x + w, y0 + 1.95, z + 0.9, x + w + 0.9, y0 + 2.2, z + 1.5, m)]

@@ -12,6 +12,8 @@ import net.minecraft.core.Direction;
 import io.github.jimbozoomer.jugcraft.nuclear.Radiation;
 import io.github.jimbozoomer.jugcraft.nuclear.RadiationKind;
 import io.github.jimbozoomer.jugcraft.nuclear.RadiationSources;
+import io.github.jimbozoomer.jugcraft.nuclear.RadiationField;
+import net.minecraft.server.level.ServerLevel;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -61,13 +63,15 @@ public class NuclearGameTests {
 		double rFar = Radiation.rateAt(near);
 		double d1 = Vec3.atCenterOf(src).distanceToSqr(near.getEyePosition().add(0, 0, -3));
 		double d2 = Vec3.atCenterOf(src).distanceToSqr(near.getEyePosition());
-		helper.assertTrue(Math.abs(rNear - STRENGTH / (1 + d1)) < 1e-6, "near rate " + rNear + " = strength / (1 + d^2)");
-		helper.assertTrue(Math.abs(rFar - STRENGTH / (1 + d2)) < 1e-6, "far rate " + rFar + " = strength / (1 + d^2)");
+		// Inverse square, and a little lost to the air on the way (RadiationField.air).
+		double want1 = STRENGTH / (1 + d1) * RadiationField.air(Math.sqrt(d1)), want2 = STRENGTH / (1 + d2) * RadiationField.air(Math.sqrt(d2));
+		helper.assertTrue(Math.abs(rNear - want1) < want1 * 1e-6, "near rate " + rNear + " = strength / (1 + d^2) through air: " + want1);
+		helper.assertTrue(Math.abs(rFar - want2) < want2 * 1e-6, "far rate " + rFar + " = strength / (1 + d^2) through air: " + want2);
 		helper.assertTrue(rFar < rNear / 2, "farther is weaker: " + rFar + " vs " + rNear);
 		done(helper, src);
 	}
 
-	/** A wall of shielding concrete stops 95%; stone only 40%. */
+	/** A wall of shielding concrete lets 0.1% through; stone 10% (round 14, "realistic-ish"); glass 30%. */
 	@GameTest(maxTicks = 20)
 	public void shieldingConcreteStopsMostRadiation(GameTestHelper helper) {
 		if (TestFocus.skip("nuclear")) {
@@ -83,14 +87,26 @@ public class NuclearGameTests {
 			}
 		}
 		double shielded = Radiation.rateAt(player);
-		helper.assertTrue(Math.abs(shielded - open * 0.05) < open * 1e-6, "concrete lets 5% through: " + shielded + " of " + open);
+		helper.assertTrue(Math.abs(shielded / open - 0.001) < 0.0001, "concrete lets 0.1% through: " + shielded + " of " + open);
 		for (int x = -1; x <= 3; x++) {
 			for (int y = 1; y <= 4; y++) {
 				helper.setBlock(new BlockPos(x, y, 2), Blocks.STONE.defaultBlockState());
 			}
 		}
 		double stone = Radiation.rateAt(player);
-		helper.assertTrue(Math.abs(stone - open * 0.6) < open * 1e-6, "stone lets 60% through: " + stone + " of " + open);
+		helper.assertTrue(Math.abs(stone / open - 0.1) < 0.005, "stone lets 10% through: " + stone + " of " + open);
+		for (int x = -1; x <= 3; x++) {
+			for (int y = 1; y <= 4; y++) {
+				helper.setBlock(new BlockPos(x, y, 2), Blocks.GLASS.defaultBlockState());
+			}
+		}
+		double glass = Radiation.rateAt(player);
+		for (int x = -1; x <= 3; x++) {
+			for (int y = 1; y <= 4; y++) {
+				helper.setBlock(new BlockPos(x, y, 2), Blocks.AIR.defaultBlockState());
+			}
+		}
+		helper.assertTrue(Math.abs(glass / open - 0.3) < 0.01, "glass lets 30% through: " + glass + " of " + open);
 		done(helper, src);
 	}
 
@@ -125,18 +141,19 @@ public class NuclearGameTests {
 		}
 		BlockPos src = source(helper, new BlockPos(1, 2, 1));
 		ServerPlayer player = player(helper, new BlockPos(1, 1, 2));
-		Radiation.update(player);
+		// (A test's mock player always says it is in creative, so it is updated as a survival player explicitly.)
+		Radiation.update(player, false);
 		double first = Radiation.state(player).dose();
 		RadiationSources.clear(helper.getLevel(), src);
 		helper.assertTrue(first > 0, "exposure gives a dose: " + first);
 		helper.assertTrue(Radiation.state(player).rate() > 0, "the rate is synced to the player");
 		Radiation.setDose(player, Radiation.SEVERE + 100);
 		float health = player.getHealth();
-		Radiation.update(player);
+		Radiation.update(player, false);
 		helper.assertTrue(player.hasEffect(MobEffects.WEAKNESS), "weakness at a high dose");
 		helper.assertTrue(player.hasEffect(MobEffects.NAUSEA), "nausea at a high dose");
 		// A newly joined player cannot be hurt for a few seconds; after that the dose does damage.
-		helper.onEachTick(() -> Radiation.update(player));
+		helper.onEachTick(() -> Radiation.update(player, false));
 		helper.succeedWhen(() -> helper.assertTrue(player.getHealth() < health, "a severe dose hurts: " + player.getHealth() + " < " + health));
 	}
 
@@ -152,7 +169,96 @@ public class NuclearGameTests {
 		player.getInventory().add(new ItemStack(JugcraftNuclear.CHECK_SOURCE));
 		double carried = Radiation.rateAt(player);
 		player.getInventory().clearContent();     // every test sets up and clears its sources in one tick, so none sees another's
-		helper.assertTrue(Math.abs(carried - 400 / 1.25) < 1e-6, "a carried check source: " + carried);
+		helper.assertTrue(Math.abs(carried - 2 / 1.25) < 1e-6, "a carried check source: " + carried);
+		// Shut in a shulker box it is just as radioactive (the box doesn't shield it).
+		ItemStack box = new ItemStack(net.minecraft.world.item.Items.SHULKER_BOX);
+		box.set(net.minecraft.core.component.DataComponents.CONTAINER,
+				net.minecraft.world.item.component.ItemContainerContents.fromItems(java.util.List.of(new ItemStack(JugcraftNuclear.CHECK_SOURCE))));
+		helper.assertTrue(Math.abs(Radiation.strength(box) - 2) < 1e-6, "a check source in a shulker box still counts: " + Radiation.strength(box));
+		helper.succeed();
+	}
+
+	/** In creative a Geiger counter still reads the rate (Justin's round 13: it showed nothing), but no dose is taken. */
+	@GameTest(maxTicks = 20)
+	public void creativePlayersReadTheRateButTakeNoDose(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos src = source(helper, new BlockPos(1, 2, 1));
+		ServerPlayer player = player(helper, new BlockPos(1, 1, 2));
+		player.setGameMode(GameType.CREATIVE);
+		Radiation.update(player);
+		double rate = Radiation.state(player).rate(), dose = Radiation.state(player).dose();
+		RadiationSources.clear(helper.getLevel(), src);
+		helper.assertTrue(rate > 0, "a creative player's counter reads the rate: " + rate);
+		helper.assertTrue(dose == 0, "but takes no dose: " + dose);
+		helper.succeed();
+	}
+
+	/** Uranium blocks are radioactive where they stand; so is a source shut in a chest (a little less). */
+	@GameTest(maxTicks = 20)
+	public void uraniumBlocksAndStoredSourcesCount(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		ServerPlayer player = player(helper, new BlockPos(1, 1, 1));
+		helper.assertTrue(Radiation.rateAt(player) == 0, "nothing nearby, no rate");
+		helper.setBlock(new BlockPos(1, 2, 3), net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(io.github.jimbozoomer.jugcraft.Jugcraft.id("uranium_block")));
+		double block = Radiation.rateAt(player);
+		helper.setBlock(new BlockPos(1, 2, 3), Blocks.AIR);
+		helper.assertTrue(block > 0.05, "a uranium block two blocks away reads: " + block);
+		helper.setBlock(new BlockPos(1, 2, 3), Blocks.CHEST);
+		if (!(helper.getLevel().getBlockEntity(helper.absolutePos(new BlockPos(1, 2, 3))) instanceof net.minecraft.world.Container chest)) {
+			throw new AssertionError("no chest");
+		}
+		chest.setItem(0, new ItemStack(JugcraftNuclear.CHECK_SOURCE));
+		double stored = Radiation.rateAt(player);
+		chest.clearContent();
+		helper.setBlock(new BlockPos(1, 2, 3), Blocks.AIR);
+		helper.assertTrue(stored > 0.05, "a check source in a chest reads: " + stored);
+		helper.succeed();
+	}
+
+	/**
+	 * Round 14: "the more radiation in one spot, the further it spreads". A thousand uranium blocks (a 10-block cube)
+	 * read far further off than one: the pile shields its own inside, so it counts about as its near face, about a
+	 * hundred times one block. Built well away from the other tests, and taken down again.
+	 */
+	@GameTest(maxTicks = 20)
+	public void bigPileReachesFurther(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		ServerLevel level = helper.getLevel();
+		BlockPos base = helper.absolutePos(BlockPos.ZERO).offset(3_000, 40, -3_000);
+		net.minecraft.world.level.block.state.BlockState uranium = net.minecraft.core.registries.BuiltInRegistries.BLOCK
+				.getValue(io.github.jimbozoomer.jugcraft.Jugcraft.id("uranium_block")).defaultBlockState();
+		Vec3 centre = Vec3.atLowerCornerOf(base).add(5, 5, 5);
+		Vec3 eye = centre.add(60, 0, 0);
+		Vec3 far = centre.add(150, 0, 0);
+		for (int x = 0; x < 10; x++) for (int y = 0; y < 10; y++) for (int z = 0; z < 10; z++) {
+			level.setBlockAndUpdate(base.offset(x, y, z), uranium);
+		}
+		RadiationField.refreshAround(level, centre, 16);
+		double pile = Radiation.rateAt(level, eye), pileFar = Radiation.rateAt(level, far);
+		for (int x = 0; x < 10; x++) for (int y = 0; y < 10; y++) for (int z = 0; z < 10; z++) {
+			level.setBlockAndUpdate(base.offset(x, y, z), Blocks.AIR.defaultBlockState());
+		}
+		BlockPos one = base.offset(9, 5, 5);
+		level.setBlockAndUpdate(one, uranium);
+		RadiationField.refreshAround(level, centre, 16);
+		double single = Radiation.rateAt(level, eye), singleFar = Radiation.rateAt(level, far);
+		level.setBlockAndUpdate(one, Blocks.AIR.defaultBlockState());
+		RadiationField.refreshAround(level, centre, 16);
+		helper.assertTrue(single > 0, "one block still reads 60 blocks off: " + single);
+		helper.assertTrue(pile > 40 * single && pile < 400 * single, "a thousand blocks read about a hundred times one (it shields its own middle): "
+				+ pile + " vs " + single);
+		helper.assertTrue(pileFar > 1e-3, "the pile reads over 1 uSv/h 150 blocks off: " + pileFar);
+		helper.assertTrue(singleFar < pileFar / 40, "one block is lost in the background there: " + singleFar);
+		helper.assertTrue(Radiation.rateAt(level, eye) < 1e-9, "gone when taken down: " + Radiation.rateAt(level, eye));
 		helper.succeed();
 	}
 

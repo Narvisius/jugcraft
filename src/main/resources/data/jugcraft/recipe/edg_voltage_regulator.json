@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PCP",
+    "PRP",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:edg_voltage_regulator",
+    "count": 1
+  }
+}

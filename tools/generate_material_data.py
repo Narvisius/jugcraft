@@ -72,6 +72,9 @@ def core_glow(lo, hi):
 def write(path, obj):
     if isinstance(obj, dict) and obj.get("elements"):
         model_writer.separate_coplanar(obj["elements"])
+        # Then any z-fighting that is left, rotated elements included (tools/zfight.py; Justin: fix all z-fighting).
+        import zfight
+        obj = zfight.fix(obj)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
 
@@ -157,6 +160,8 @@ def assets():
     nuclear_plants.write_blueprints()
     import drone_sounds
     lang.update(drone_sounds.LANG)
+    import diesel_sounds
+    lang.update(diesel_sounds.LANG)
     import guide_books
     guide_books.write_assets(write, rid, ASSETS, DATA, lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
@@ -1242,6 +1247,11 @@ def main():
     import advancements
     for key, advancement in advancements.generate(MOD)[0].items():
         write(DATA / MOD / "advancement" / f"{key}.json", advancement)
+    # Last: no z-fighting between models drawn together (multipart pieces, pieces bigger than a block).
+    import zfight_assets
+    left = zfight_assets.run()
+    if left:
+        print(f"zfight_assets: {len(left)} overlaps between models drawn together are left")
 
 
 if __name__ == "__main__":

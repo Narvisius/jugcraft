@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " S ",
+    "L L",
+    "LLL"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "L": "#c:ingots/lead"
+  },
+  "result": {
+    "id": "jugcraft:lead_pig",
+    "count": 1
+  }
+}

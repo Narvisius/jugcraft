@@ -99,6 +99,14 @@ public final class PlantInterior {
 			{"filing_cabinet_tall_open", 0, "stack:tall_filing", "metal", new double[] {2, 0, 2, 14, 16, 15}},
 			{"office_copier", 0, "multi:2:2:b", "metal", null},
 			{"glass_coffee_table", 0, "steam:4.8:9.8:6.8", "metal", new double[] {1, 0, 2, 15, 7.3, 14}},
+			// The diesel generator rooms' control and protection panels (tools/plant_panels.py): two high, one or two wide.
+			{"edg_engine_panel", 0, "live:1:2:p", "metal", null},
+			{"edg_generator_panel", 0, "live:2:2:p", "metal", null},
+			{"edg_voltage_regulator", 0, "live:1:2:p", "metal", null},
+			{"edg_protection_panel", 0, "live:1:2:p", "metal", null},
+			{"edg_load_sequencer", 0, "live:1:2:p", "metal", null},
+			{"edg_battery_charger", 0, "live:1:2:p", "metal", null},
+			{"edg_battery_rack", 0, "multi:1:2:p", "metal", null},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};
@@ -109,6 +117,7 @@ public final class PlantInterior {
 	public static Block ROOM_SIGN;
 	public static BlockEntityType<PlantSignBlockEntity> SIGN_ENTITY;
 	public static BlockEntityType<StatusScreenBlockEntity> STATUS_ENTITY;
+	public static BlockEntityType<LivePanelBlockEntity> LIVE_PANEL_ENTITY;
 	public static BlockEntityType<LockerBlockEntity> LOCKER_ENTITY;
 	public static BlockEntityType<StorageRackBlockEntity> RACK_ENTITY;
 	public static BlockEntityType<RollerDoorBlockEntity> ROLLER_ENTITY;
@@ -166,9 +175,14 @@ public final class PlantInterior {
 					return new StackingFurnitureBlock(p, shape).group(k[1]);
 				} else if (kind.equals("status")) {
 					return new StatusScreenBlock(p);
+				} else if (k[0].equals("live")) {
+					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]));
 				} else if (k[0].equals("multi")) {
+					// "b": a machine standing on the floor (rising a little into the row above); "p": a panel standing on the
+					// floor, full height in both rows.
 					return new MultiFurnitureBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), !k[3].equals("h") && !k[3].equals("c"),
-							k.length > 4 ? Integer.parseInt(k[4]) : 1, k[3].equals("b"), k[3].equals("c"));
+							k.length > 4 ? Integer.parseInt(k[4]) : 1, k[3].equals("b") || k[3].equals("p"), k[3].equals("c"),
+							k[3].equals("p") ? 15.6 : 7);
 				} else if (k[0].equals("steam")) {
 					return new SteamFurnitureBlock(p, Double.parseDouble(k[1]), Double.parseDouble(k[2]), Double.parseDouble(k[3]), shape);
 				} else if (k[0].equals("seat")) {
@@ -209,6 +223,9 @@ public final class PlantInterior {
 				FabricBlockEntityTypeBuilder.create(PlantSignBlockEntity::new, BUILDING_SIGN, ROOM_SIGN).build());
 		STATUS_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("status_screen"),
 				FabricBlockEntityTypeBuilder.create(StatusScreenBlockEntity::new, BLOCKS.get("status_screen")).build());
+		LIVE_PANEL_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("live_panel"),
+				FabricBlockEntityTypeBuilder.create(LivePanelBlockEntity::new, BLOCKS.entrySet().stream()
+						.filter(e -> e.getValue() instanceof LivePanelBlock).map(java.util.Map.Entry::getValue).toArray(Block[]::new)).build());
 		RACK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_rack"),
 				FabricBlockEntityTypeBuilder.create(StorageRackBlockEntity::new, BLOCKS.get("storage_rack")).build());
 		ROLLER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("roller_door"),

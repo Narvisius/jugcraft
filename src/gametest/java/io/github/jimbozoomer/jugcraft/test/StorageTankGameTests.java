@@ -19,14 +19,22 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * The storage tank MBS (docs/features/nuclear.md, "Storage tanks"): a small square tank forms round its space (the
- * interior filled, the plates painted by place, the inlet linked), holds a bucket per block inside, takes fluid in at
+ * interior filled, the plates painted by place, the inlet linked), holds four buckets per block inside, takes fluid in at
  * the inlet and gives it out at the outlet only while their valves are open, and comes apart when a plate is broken,
  * keeping its fluid. The railing joins like a fence (and to a gate along its line); a steel ladder is caged from its
  * third length up.
@@ -74,7 +82,7 @@ public class StorageTankGameTests {
 		helper.assertTrue(outlet != null, "the outlet has its block entity");
 		outlet.check(helper.getLevel());
 		helper.assertTrue(outlet.formed(), "the tank forms");
-		helper.assertTrue(outlet.fluid.capacity() == 27 * FluidConstants.BUCKET, "a bucket per block inside: " + outlet.fluid.capacity());
+		helper.assertTrue(outlet.fluid.capacity() == 27 * 4 * FluidConstants.BUCKET, "four buckets per block inside: " + outlet.fluid.capacity());
 		helper.assertBlockPresent(StorageTanks.INTERIOR, new BlockPos(3, 2, 3));
 		helper.assertBlockPresent(StorageTanks.INTERIOR, new BlockPos(2, 1, 2));
 		helper.assertBlockProperty(new BlockPos(3, 1, 1), StorageTankPlateBlock.BAND, StorageTankPlateBlock.Band.WALL);
@@ -131,7 +139,7 @@ public class StorageTankGameTests {
 		BlockPos outletPos = helper.absolutePos(new BlockPos(6, 1, 3));
 		StorageTankPortBlockEntity outlet = (StorageTankPortBlockEntity) helper.getLevel().getBlockEntity(outletPos);
 		outlet.check(helper.getLevel());
-		helper.assertTrue(outlet.formed() && outlet.fluid.capacity() == 27 * FluidConstants.BUCKET, "the tank forms round its hatch");
+		helper.assertTrue(outlet.formed() && outlet.fluid.capacity() == 27 * 4 * FluidConstants.BUCKET, "the tank forms round its hatch");
 		helper.assertBlockProperty(new BlockPos(3, 4, 3), StorageTankPlateBlock.FORMED, true);
 		helper.assertBlockProperty(new BlockPos(3, 4, 3), StorageTankPlateBlock.BAND, StorageTankPlateBlock.Band.ROOF);
 		helper.assertTrue(outlet.columns().length == 9, "the space as nine columns: " + outlet.columns().length);
@@ -163,6 +171,50 @@ public class StorageTankGameTests {
 			helper.assertTrue(outlet.fluid.amount == shut[0], "a shut outlet feeds nothing");
 			helper.succeed();
 		});
+	}
+
+	/** A right-click on a block as the game does it: with the item first, then with an empty hand if it falls through. */
+	private static void use(GameTestHelper helper, Player player, BlockPos at) {
+		BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(at).add(0, 0.5, 0), Direction.UP, at, false);
+		BlockState state = helper.getLevel().getBlockState(at);
+		InteractionResult result = state.useItemOn(player.getItemInHand(InteractionHand.MAIN_HAND), helper.getLevel(), player, InteractionHand.MAIN_HAND, hit);
+		if (result == InteractionResult.TRY_WITH_EMPTY_HAND) {
+			state.useWithoutItem(helper.getLevel(), player, hit);
+		}
+	}
+
+	/**
+	 * The roof hatch takes buckets (Justin, round 14): with the lid down a bucket click opens it; with the lid up a water
+	 * bucket is poured in and comes back empty; lava is refused while the tank holds water.
+	 */
+	@GameTest(maxTicks = 20)
+	public void hatchTakesBucketsPouredIn(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		tank(helper);
+		BlockPos hatch = new BlockPos(3, 4, 3);
+		helper.setBlock(hatch, StorageTanks.HATCH.defaultBlockState());
+		StorageTankPortBlockEntity outlet = (StorageTankPortBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(new BlockPos(3, 1, 0)));
+		outlet.check(helper.getLevel());
+		helper.assertTrue(outlet.formed(), "the tank forms round its hatch");
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		BlockPos at = helper.absolutePos(hatch);
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WATER_BUCKET));
+		use(helper, player, at);
+		helper.assertBlockProperty(hatch, StorageTankHatchBlock.OPEN, true);
+		helper.assertTrue(outlet.fluid.amount == 0, "a click on the shut lid opens it, pouring nothing: " + outlet.fluid.amount);
+		use(helper, player, at);
+		helper.assertTrue(outlet.fluid.amount == FluidConstants.BUCKET && outlet.fluid.variant.equals(FluidVariant.of(Fluids.WATER)),
+				"a bucket of water poured in through the open hatch: " + outlet.fluid.amount);
+		helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(Items.BUCKET), "the bucket comes back empty");
+		helper.assertBlockProperty(hatch, StorageTankHatchBlock.OPEN, true);
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.LAVA_BUCKET));
+		use(helper, player, at);
+		helper.assertTrue(outlet.fluid.amount == FluidConstants.BUCKET, "lava is refused while it holds water");
+		helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(Items.LAVA_BUCKET), "the lava stays in the bucket");
+		helper.succeed();
 	}
 
 	@GameTest(maxTicks = 20)

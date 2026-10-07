@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "io.github.jimbozoomer.jugcraft.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "ChannelAccessor",
+    "SoundEngineAccessor",
+    "SoundEngineMixin",
+    "SoundManagerAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

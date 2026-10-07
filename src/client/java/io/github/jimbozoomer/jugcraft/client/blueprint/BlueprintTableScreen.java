@@ -32,12 +32,18 @@ import net.minecraft.world.level.block.Block;
  * blueprint (free).
  */
 public class BlueprintTableScreen extends Screen {
-	private static final int W = 410;
+	/** The board's size: wider when the screen has room, so the four tabs fit with their full names. */
+	private static final int W_WIDE = 440, W_NARROW = 410;
 	private static final int H = 250;
 	private static final int ROW = 13;
 	private static final int SETS = 0, INDIVIDUAL = 1, PARTIAL = 2, IMPORT = 3;
 	private static final Blueprint.Category[] CATEGORY = {Blueprint.Category.SET, Blueprint.Category.INDIVIDUAL, Blueprint.Category.PARTIAL};
 	private static final String[] TAB_NAMES = {"STRUCTURE SET", "INDIVIDUAL STRUCTURES", "PARTIAL STRUCTURES", "IMPORT"};
+	/** The same, shorter, for when the full names don't fit along the sheet (a narrow screen). */
+	private static final String[] TAB_SHORT = {"SETS", "INDIVIDUAL", "PARTIAL", "IMPORT"};
+	/** Long names slide along (pixels a second), waiting this long at each end (ms). */
+	private static final double SLIDE_SPEED = 22;
+	private static final long SLIDE_WAIT = 1400;
 	/** The colour chip on each tab: the colour of that kind of blueprint item. */
 	private static final int[] TAB_CHIP = {0xFF408CF0, 0xFF408CF0, 0xFF46BE64, 0xFFDC4638};
 	private static final int STEEL = 0xFF363A42, STEEL_LIGHT = 0xFF525862, STEEL_DARK = 0xFF1E2126, SCREW = 0xFF7C8086;
@@ -48,6 +54,7 @@ public class BlueprintTableScreen extends Screen {
 	static BlueprintTableScreen open;
 
 	private final BlockPos table;
+	private int W = W_NARROW;
 	private int left;
 	private int top;
 	private int tab = INDIVIDUAL;
@@ -101,6 +108,7 @@ public class BlueprintTableScreen extends Screen {
 	@Override
 	protected void init() {
 		open = this;
+		W = width >= W_WIDE + 8 ? W_WIDE : W_NARROW;
 		left = (width - W) / 2;
 		top = (height - H) / 2;
 		history = ImportHistory.list();
@@ -365,12 +373,22 @@ public class BlueprintTableScreen extends Screen {
 		g.fill(tx + 51, ty - 2, tx + 54, ty + 1, tool);
 	}
 
+	/** The tab names that fit along the sheet: the full ones, else the short ones. */
+	private String[] tabNames() {
+		int total = 0;
+		for (String name : TAB_NAMES) {
+			total += font.width(name) + 22 + 2;
+		}
+		return total - 2 <= px1() - px0() ? TAB_NAMES : TAB_SHORT;
+	}
+
 	/** Folder tabs along the top of the sheet, each with its colour chip; the open one joins the sheet. */
 	private void drawTabs(GuiGraphicsExtractor g) {
 		int x = px0();
 		int bottom = py0();
-		for (int i = 0; i < TAB_NAMES.length; i++) {
-			int w = font.width(TAB_NAMES[i]) + 22;
+		String[] names = tabNames();
+		for (int i = 0; i < names.length; i++) {
+			int w = font.width(names[i]) + 22;
 			boolean active = i == tab;
 			int fill = active ? PAPER : 0xFF3A424E;
 			int edge = active ? INK : STEEL_LIGHT;
@@ -384,7 +402,7 @@ public class BlueprintTableScreen extends Screen {
 			}
 			g.fill(x + 4, bottom - h, x + w - 4, bottom - h + 1, edge);
 			g.fill(x + 8, bottom - 9, x + 13, bottom - 4, TAB_CHIP[i]);
-			g.text(font, TAB_NAMES[i], x + 16, bottom - 10, active ? INK : PALE, false);
+			g.text(font, names[i], x + 16, bottom - 10, active ? INK : PALE, false);
 			tabBounds[i] = new int[] {x, bottom - h, x + w, bottom};
 			x += w + 2;
 		}
@@ -454,7 +472,9 @@ public class BlueprintTableScreen extends Screen {
 			}
 			String name = tab == IMPORT ? history.get(index - 1).blueprint().name : library().get(index).name;
 			String number = String.format("%02d  ", tab == IMPORT ? index : index + 1);
-			g.text(font, number + SciFi.fit(font, name, x1 - x0 - 12 - font.width(number)), x0, ry, tab == IMPORT ? AMBER : INK, false);
+			int colour = tab == IMPORT ? AMBER : INK;
+			g.text(font, number, x0, ry, colour, false);
+			sliding(g, name, x0 + font.width(number), ry, x1 - x0 - 12 - font.width(number), colour, index * 337L);
 			g.fill(x1 - 8, ry + 1, x1 - 3, ry + 6, TAB_CHIP[tab]);
 		}
 		int count = tab == IMPORT ? history.size() : rowCount();
@@ -495,7 +515,7 @@ public class BlueprintTableScreen extends Screen {
 			ItemStack stack = new ItemStack(entry.getKey().asItem());
 			int ly = my + 11 + line * 17;
 			g.item(stack, rx, ly);
-			g.text(font, SciFi.fit(font, entry.getValue() + " x " + stack.getHoverName().getString(), rw - 20), rx + 18, ly + 4, INK, false);
+			sliding(g, entry.getValue() + " x " + stack.getHoverName().getString(), rx + 18, ly + 4, rw - 20, INK, line * 211L);
 			if (mouseX >= rx && mouseX < rx + 16 && mouseY >= ly && mouseY < ly + 16) {
 				g.setTooltipForNextFrame(font, stack, mouseX, mouseY);
 			}
@@ -519,8 +539,28 @@ public class BlueprintTableScreen extends Screen {
 				g.fill(rx - 2, y - 3, px1() - 6, y - 2, INK);
 			}
 			g.text(font, rows[i][0], rx + 2, y, PALE, false);
-			g.text(font, SciFi.fit(font, rows[i][1], rw - 44), rx + 42, y, i == 1 ? TAB_CHIP[tab] | 0xFF202020 : INK, false);
+			sliding(g, rows[i][1], rx + 42, y, px1() - 8 - (rx + 42), i == 1 ? TAB_CHIP[tab] | 0xFF202020 : INK, 0);
 		}
+	}
+
+	/**
+	 * Text in a space of {@code width}: as it is if it fits; if not, it slides slowly to the left until its end shows,
+	 * waits, and starts again, so the whole of a long name can be read (clipped to the space, like a ticker).
+	 * {@code phase} staggers the rows so they don't all move together.
+	 */
+	private void sliding(GuiGraphicsExtractor g, String text, int x, int y, int width, int colour, long phase) {
+		int over = font.width(text) - width;
+		if (over <= 0) {
+			g.text(font, text, x, y, colour, false);
+			return;
+		}
+		long travel = (long) (over / SLIDE_SPEED * 1000);
+		long cycle = SLIDE_WAIT + travel + SLIDE_WAIT;
+		long t = (net.minecraft.util.Util.getMillis() + phase) % cycle;
+		int shift = t < SLIDE_WAIT ? 0 : t < SLIDE_WAIT + travel ? (int) Math.round((t - SLIDE_WAIT) * SLIDE_SPEED / 1000) : over;
+		g.enableScissor(x, y - 1, x + width, y + 9);
+		g.text(font, text, x - shift, y, colour, false);
+		g.disableScissor();
 	}
 
 	/** A rubber stamp: a solid colour with a pale rim and bold white lettering; grey and dull while inactive. */

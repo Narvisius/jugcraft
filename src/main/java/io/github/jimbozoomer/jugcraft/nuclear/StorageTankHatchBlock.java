@@ -1,11 +1,22 @@
 package io.github.jimbozoomer.jugcraft.nuclear;
 
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.FilteringStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,6 +44,10 @@ import org.jspecify.annotations.Nullable;
  * grate you see the inside of the tank and the liquid at its level (drawn by the outlet's renderer). The grate is
  * walkable and keeps the tank closed, so nothing gets in and nothing spawns inside. FACING is the side the hinges are
  * on: the lid opens away from whoever placed it.
+ *
+ * <p>With the lid up, a bucket of liquid (or any full fluid container) right-clicked on the hatch is poured in through
+ * the grate (Justin, round 14): straight into the tank, valves or not. The tank holds one liquid, so another is
+ * refused, and so is a bucket it has no room for. With the lid down, the click opens it first.
  */
 public class StorageTankHatchBlock extends StorageTankPlateBlock implements EntityBlock {
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
@@ -75,6 +90,49 @@ public class StorageTankHatchBlock extends StorageTankPlateBlock implements Enti
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+	}
+
+	/** Lid up, a fluid container in hand: pour it in. Otherwise the lid swings ({@link #useWithoutItem}). */
+	@Override
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+			BlockHitResult hit) {
+		Storage<FluidVariant> held = FluidStorage.ITEM.find(stack, ContainerItemContext.forPlayerInteraction(player, hand));
+		if (!state.getValue(OPEN) || held == null) {
+			return super.useItemOn(stack, state, level, pos, player, hand, hit);
+		}
+		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		}
+		StorageTankPortBlockEntity tank = tankOf(level, state, pos);
+		if (tank == null) {
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.storage_tank.not_formed"));
+			return InteractionResult.SUCCESS;
+		}
+		FluidVariant pouring = StorageUtil.findStoredResource(held);
+		if (FluidStorageUtil.interactWithFluidStorage(FilteringStorage.insertOnlyOf(tank.fluid), player, hand)) {
+			player.sendOverlayMessage(tank.contents());
+		} else if (pouring == null || pouring.isBlank()) {
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.storage_tank.hatch", tank.contents()));
+		} else if (!tank.fluid.isResourceBlank() && tank.fluid.amount > 0 && !tank.fluid.variant.equals(pouring)) {
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.storage_tank.hatch_other",
+					FluidVariantAttributes.getName(tank.fluid.variant), FluidVariantAttributes.getName(pouring)));
+		} else {
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.storage_tank.hatch_full", tank.contents()));
+		}
+		return InteractionResult.SUCCESS;
+	}
+
+	/** The formed tank this hatch is in (found along the shell to its outlet), or null. */
+	public static @Nullable StorageTankPortBlockEntity tankOf(Level level, BlockState state, BlockPos pos) {
+		if (!state.getValue(FORMED)) {
+			return null;
+		}
+		BlockPos outlet = StorageTanks.outletOf(level, pos);
+		if (outlet != null && level.getBlockEntity(outlet) instanceof StorageTankPortBlockEntity port) {
+			StorageTankPortBlockEntity tank = port.tank();
+			return tank != null && tank.formed() ? tank : null;
+		}
+		return null;
 	}
 
 	@Override

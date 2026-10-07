@@ -461,7 +461,7 @@ final class PlantDecor {
 		f.cylinder(v(3.5, a, 10.0), v(3.5, a, 12.9), 1.55, f.sides(24), GENERATOR, true);
 		f.box(1.75, 0.42, 10.2, 2.45, 1.2, 12.7, GENERATOR);
 		f.box(4.55, 0.42, 10.2, 5.25, 1.2, 12.7, GENERATOR);
-		f.box(2.6, a + 1.45, 10.5, 4.4, a + 1.95, 12.3, LOUVRE);
+		airIntake(f, a);
 		f.revolve(v(3.5, a, 12.9), v(3.5, a, 13.25), new double[][] {{0, 1.55}, {0.2, 1.3}, {0.35, 0.9}}, f.sides(20), GENERATOR, false, true);
 		f.box(3.0, 0.42, 12.9, 4.0, a - 0.4, 13.35, GENERATOR);
 		f.cylinder(v(3.5, a, 13.2), v(3.5, a, 13.55), 0.75, f.sides(16), GENERATOR, true);
@@ -477,6 +477,36 @@ final class PlantDecor {
 		if (f.detail) {
 			f.box(5.5, a - 0.45, 10.55, 5.54, a + 0.45, 11.45, STAINLESS_DARK);
 		}
+	}
+
+	/**
+	 * The generator's cooling air intake on top of it: a louvred hood. Its corner posts and dark bird screen start down
+	 * inside the generator's round body (so it meets the curve with no gaps), real slats on all four sides recessed in
+	 * the frame, a band round the top and an overhanging rain cap.
+	 */
+	private static void airIntake(Frame f, double a) {
+		double x0 = 2.55, x1 = 4.45, z0 = 10.45, z1 = 12.45, y0 = a + 1.05, band = a + 2.09, top = a + 2.17, p = 0.08;
+		// The screen behind the slats.
+		f.box(x0 + 0.06, y0, z0 + 0.06, x1 - 0.06, band, z1 - 0.06, BLACK);
+		// Corner posts, the band under the cap.
+		for (double x : new double[] {x0, x1 - p}) {
+			for (double z : new double[] {z0, z1 - p}) {
+				f.box(x, y0, z, x + p, top, z + p, ENGINE_GREEN);
+			}
+		}
+		f.box(x0, band, z0 + p, x0 + p, top, z1 - p, ENGINE_GREEN);
+		f.box(x1 - p, band, z0 + p, x1, top, z1 - p, ENGINE_GREEN);
+		f.box(x0 + p, band, z0, x1 - p, top, z0 + p, ENGINE_GREEN);
+		f.box(x0 + p, band, z1 - p, x1 - p, top, z1, ENGINE_GREEN);
+		// The slats, a little back from the frame's face, dark gaps between.
+		for (double y = y0 + 0.05; y + 0.04 < band - 0.05; y += 0.12) {
+			f.box(x0 + 0.02, y, z0 + p, x0 + 0.06, y + 0.04, z1 - p, ENGINE_GREEN);
+			f.box(x1 - 0.06, y, z0 + p, x1 - 0.02, y + 0.04, z1 - p, ENGINE_GREEN);
+			f.box(x0 + p, y, z0 + 0.02, x1 - p, y + 0.04, z0 + 0.06, ENGINE_GREEN);
+			f.box(x0 + p, y, z1 - 0.06, x1 - p, y + 0.04, z1 - 0.02, ENGINE_GREEN);
+		}
+		// The rain cap, overhanging all round.
+		f.box(x0 - 0.08, top, z0 - 0.08, x1 + 0.08, top + 0.08, z1 + 0.08, GENERATOR);
 	}
 
 	/** The jacket water, lube oil, fuel and starting air piping, and the fuel supply in from the day tank. */
@@ -581,13 +611,36 @@ final class PlantDecor {
 				f.box(t0, top - 0.1, za + 0.94, t1, top, za + 1.0, PAINT_YELLOW);
 			}
 			for (double x : new double[] {t0 - 0.04, t1 + 0.04}) {
-				f.quad(v(x, deck + 0.12, z1), v(x, deck - 0.45, z1), v(x, 0.0, zEnd - 0.5), v(x, 0.62, zEnd), v(-1, 0, 0),
-						PAINT_YELLOW[0], PAINT_YELLOW[1], PAINT_YELLOW[2], PAINT_YELLOW[3]);
-				f.quad(v(x, 0.62, zEnd), v(x, 0.0, zEnd - 0.5), v(x, deck - 0.45, z1), v(x, deck + 0.12, z1), v(1, 0, 0),
-						PAINT_YELLOW[0], PAINT_YELLOW[1], PAINT_YELLOW[2], PAINT_YELLOW[3]);
+				// The stringer: a steel plate (with thickness: a face drawn both ways would fight with itself).
+				slopedPlate(f, x, 0.015, new double[][] {{deck + 0.12, z1}, {deck - 0.45, z1}, {0.0, zEnd - 0.5}, {0.62, zEnd}}, PAINT_YELLOW);
 				f.cylinder(v(x, deck + 1.0, z1), v(x, 1.5, zEnd), 0.04, 6, PAINT_YELLOW, true);
 				f.box(x - 0.03, 0.0, zEnd - 0.03, x + 0.03, 1.5, zEnd + 0.03, PAINT_YELLOW);
 			}
+		}
+	}
+
+	/**
+	 * A flat plate standing in the plane x (half-thickness {@code h} either side), its outline the four (y, z) corners
+	 * in order round it: both sides and the four edges, so it has real thickness.
+	 */
+	private static void slopedPlate(Frame f, double x, double h, double[][] c, float[] uv) {
+		Vec3[] lo = new Vec3[4], hi = new Vec3[4];
+		for (int i = 0; i < 4; i++) {
+			lo[i] = v(x - h, c[i][0], c[i][1]);
+			hi[i] = v(x + h, c[i][0], c[i][1]);
+		}
+		f.quad(lo[0], lo[1], lo[2], lo[3], v(-1, 0, 0), uv[0], uv[1], uv[2], uv[3]);
+		f.quad(hi[3], hi[2], hi[1], hi[0], v(1, 0, 0), uv[0], uv[1], uv[2], uv[3]);
+		for (int i = 0; i < 4; i++) {
+			int j = (i + 1) % 4;
+			// The edge's outward normal in the (y, z) plane: the outline runs round, so it is the edge turned a quarter.
+			double dy = c[j][0] - c[i][0], dz = c[j][1] - c[i][1], len = Math.hypot(dy, dz);
+			Vec3 n = v(0, dz / len, -dy / len);
+			Vec3 centre = v(x, (c[0][0] + c[2][0]) / 2, (c[0][1] + c[2][1]) / 2), mid = v(x, (c[i][0] + c[j][0]) / 2, (c[i][1] + c[j][1]) / 2);
+			if (n.dot(mid.subtract(centre)) < 0) {
+				n = n.scale(-1);
+			}
+			f.quad(hi[i], lo[i], lo[j], hi[j], n, uv[0], uv[1], uv[2], uv[3]);
 		}
 	}
 
@@ -657,8 +710,8 @@ final class PlantDecor {
 		double cx = Math.cos(b), cy = Math.sin(b), wx = -cy * width / 2, wy = cx * width / 2;
 		Vec3 p0 = v(3.5 + cx * r0 - wx, a + cy * r0 - wy, z), p1 = v(3.5 + cx * r1 - wx, a + cy * r1 - wy, z);
 		Vec3 p2 = v(3.5 + cx * r1 + wx, a + cy * r1 + wy, z), p3 = v(3.5 + cx * r0 + wx, a + cy * r0 + wy, z);
+		// One face: nothing culls back faces, so it shows from both sides (a second face the other way would fight it).
 		f.quad(p0, p1, p2, p3, v(0, 0, -1), uv[0], uv[1], uv[2], uv[3]);
-		f.quad(p3, p2, p1, p0, v(0, 0, 1), uv[0], uv[1], uv[2], uv[3]);
 	}
 
 	/** A vertical storage tank: a welded shell with stiffening rings, a domed roof with a vent, a ladder and a railing. */
@@ -832,7 +885,7 @@ final class PlantDecor {
 			f.tiled(v(x0 + 0.05, 2.8, 0.08), v(x0 + 0.05, 0.15, 0.08), v(x1 - 0.05, 0.15, 0.08), v(x1 - 0.05, 2.8, 0.08), v(0, 0, -1), SWITCHGEAR, 1.4);
 		}
 		f.box(0, 0, 0.05, 8, 0.1, 1.95, CARBON_STEEL);
-		f.box(0.2, 2.85, 0.5, 7.8, 3.0, 1.5, GRATING);
+		f.box(0.2, 2.85, 0.51, 7.8, 3.0, 1.49, GRATING);
 		f.box(0.2, 2.85, 0.45, 7.8, 3.0, 0.5, CARBON_STEEL);
 		f.box(0.2, 2.85, 1.5, 7.8, 3.0, 1.55, CARBON_STEEL);
 	}

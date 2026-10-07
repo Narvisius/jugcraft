@@ -57,14 +57,59 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   - Use a stack of assemblies on the vessel to load it. Use it with an empty hand to take assemblies out, spent ones
     first, up to 16 at a time.
   - Spent fuel is deadly: about 20,000 mSv/h a block away. An open vessel shines its spent fuel out of the top.
-- **Radiation:** sources fall off with distance (strength / (1 + d²)) and with blocks in the way:
-  - shielding concrete and lead blocks let 5% through, water 50% and other solid blocks 60%.
+- **Radiation:** sources fall off with distance (strength / (1 + d²)), a little with the air they cross (by e every
+  130 blocks), and with what is in the way. Each block lets a share through for its full thickness (a metre), less for
+  a thinner slice or a part-filled block (slabs, doors), as real shielding thins radiation exponentially:
+  - lead blocks, shielding concrete, uranium metal and depleted uranium: 0.1%; lead glass 1%; metal blocks 1%;
+  - stone, concrete, brick and ore 10%; dirt, sand and gravel 20%; glass and water 30%; wood 50%; wool, leaves and
+    the like 85%. (A real metre of stone stops nearly everything; these keep ore findable through a block or two.)
+  - **Reach grows with the source:** a source counts as far as it can still be measured over background, up to 192
+    blocks. Near you every radioactive block and container counts by itself; further off, each chunk section's
+    radioactive blocks count as one source, a pile shielding its own middle, so a big pile reads like its near face. One
+    uranium block fades into background within a few dozen blocks; a cube of a thousand still reads over 1 µSv/h 150
+    blocks away.
   - The four-piece hazmat suit stops 90% of nuclear radiation (22.5% a piece). It is drawn in 3D: visor, respirator
     filters, an air tank on the back with its hose into the hood, harness, gloves and boots.
   - Dose builds up and slowly recovers. 500 mSv brings weakness, 1,000 nausea and hunger, 2,000 damage, and more
     above 4,000 and 8,000.
+  - What is radioactive: a working core through its vessel (with its power; its decay gamma after shutdown), spent fuel
+    (racks, casks, the open vessel), uranium and thorium from the ore up (ore, raw, dust, ingots, blocks, monazite),
+    depleted uranium, enriched uranium and fuel, the check source. Counted placed, carried, dropped, stored in a
+    container (a chest lets 80% out; a shulker box or bundle counts what is in it) or hung in an item frame.
   - The **Geiger counter** clicks at random, as real counts arrive, generated live from the server's dose rate with no
-    recorded sound. A readout shows the rate and dose while you hold it or wear the hood or coverall.
+    recorded sound: a tick every few seconds on background, a patter by uranium ore, a rattle at a few mSv/h, a roar by
+    spent fuel. Its **dial** is a real meter: a needle on a log scale from 0.1 µSv/h to 100 Sv/h with three bands,
+    SAFE (green, below 50 µSv/h, where real plants rope off a radiation area), CAUTION (amber, to 1 Sv/h) and LETHAL
+    (red). The needle swings like a real ratemeter's: it hunts about on background and steadies as the rate climbs.
+  - The **readout** (top right, while you hold the counter or wear the hood or coverall) shows the rate (µSv/h below
+    1 mSv/h) with its band, a live gauge with the same scale and needle, and the dose taken so far on a bar under it.
+    It reads in creative too; only the dose is not taken.
+  - **Storing radioactive material** (round 14): shielded stores let only a little of what is in them out (a chest
+    lets 80% out):
+    - **lead pig** (9 slots, 0.1%): a squat lead flask with a wire bail; picked up with what is in it, like a shulker
+      box, and still shielding it in your inventory;
+    - **lead-lined locker** (27 slots, 0.1%): a steel cabinet whose doors swing open while it is in use, showing the
+      lead lining;
+    - **shielded waste drum** (18 slots, 0.2%): a concrete-lined 208-litre drum, a full block high so drums stack;
+    - **lead-lined door**: closed it stops 99.9%, open nothing. It closes itself (its door closer) five seconds after
+      it was opened, once the doorway is clear. Lead-lined doors within six blocks of each other are an **airlock**:
+      one won't open while another is open (a pair side by side counts as one door);
+    - **lead glass**: amber shielding glass, 1% a block;
+    - **warning beacon**: a wall-mounted beacon (steel bracket, ribbed lens, wire guard) that gives light; use it to
+      change its colour (amber, red, green). A red or green beacon by a lead-lined door shows the airlock's interlock:
+      green, the door may be opened; red, another door of the airlock is open. (In the plants it replaces the red cube
+      warning light; the drone tower keeps its own.)
+  - **The radwaste building** in every pre-made plant (medium: beside the auxiliary building's health physics
+    entrance; large: where the waste treatment hall stood; small: across the road from the radwaste treatment hall),
+    23 x 35: two layers of wall round its vault (the building's concrete wall, then the vault of shielding concrete 2
+    thick with its own 2-thick roof) with an inspection corridor between them and lead-glass windows into the vault;
+    the entry hall (health physics checkpoint: protective clothing lockers and bench, sample counter, the technician's
+    desk, a step-off pad); the only way into the vault an airlock of two lead-lined doors with a shielded chamber
+    between. In the vault: 52 waste drums two high along the back, 6 lead-lined lockers, 6 lead pigs on a steel bench,
+    all empty, and the middle clear.
+  - **The plants keep it in:** with every core at full power, nowhere in the open round a pre-made plant reads over a
+    tenth of background (checked by a game test). The spent fuel pool has shielding-concrete walls round its liner;
+    the small modular plant's modules stand under water in a shielded pool, in a shielding-concrete building.
 
 ## Pre-made plants
 Three full-size plants (one block = one metre), approved from layout previews. Each is a **blue** blueprint with every
@@ -86,6 +131,27 @@ blueprint (for players who lay out their own plant).
   tower controllers, and the roads. Equipment bodies cut through any building in their way.
 - **Linking:** the consoles are in the control rooms; link each to its reactor with a Reactor Link Card (the build
   command does it for you).
+- **Diesel generator rooms:** use the emergency diesel generator to start or stop it. Its room's panels follow it live.
+  Each panel links itself to the nearest generator within 24 blocks that has no panel of its kind yet, so a generator
+  has at most one of each of the six panels: put two generators by one set and the set follows one of them; put down a
+  second set and it takes the other. A panel whose generator is broken links to another free one, or reads stopped. The
+  panels show: engine speed, start air, lube oil and jacket water gauges, the hour meter (an
+  hour every 1,000 game ticks run, counted from when the panel linked to its generator, so it starts at zero), the
+  alarm windows (LOW DAY TANK LEVEL below a quarter; FAIL TO START when it had no fuel), the generator's volts, amps, kilowatts, kilovars, frequency and
+  power factor, the breaker's lamps and mimic, the regulator's display and field meters, the protection relays'
+  readings, the load sequencer's screen and step lamps, and the battery charger. A start plays out as a real
+  emergency start on a loss of offsite power: cranking on air, running up to 514 rpm and 4.16 kV in about 4 s, the
+  breaker closing at 5 s, then the sequencer starting the safety loads every 5 s (each motor start dipping the voltage
+  and frequency for a moment) up to full load, 6,800 kW, with the battery chargers back last. A stop opens the breaker
+  and coasts the engine down.
+- **Diesel fuel:** the generator burns diesel as a real 7 MW emergency diesel does, a millibucket being a litre and an
+  hour a Minecraft hour (1,000 ticks): about 110 mB an hour running light and about 1,690 mB an hour at full load
+  (0.23 mB per kWh more), following the load sequence. It burns from its day tank: the nearest formed storage tank of
+  diesel within 24 blocks, drawn through the tank's outlet (shut the valve and it starves). With no diesel it cranks
+  but won't fire; run dry it stops. In the pre-made plant each room's day tank is kept topped up from the fuel oil
+  storage tank outside through its fill line (while that tank's outlet valve is open), so keep the big tank filled. A
+  storage tank holds four buckets for every block of space inside. With its roof hatch lid up, a tank also takes liquid poured in from a
+  bucket (or any full fluid container) right-clicked on the hatch; it holds one liquid, so another is refused.
 - **Building:** drones build from the lowest unfinished layer up a few layers at a time (see the blueprint system
   doc). In creative, `/nuclear build <blueprint> [fuelled]` builds one at once.
 - **Checked before building:** `tools/nuclear_plants.py` follows the pipes the way `ReactorUnit` does and refuses to
@@ -190,7 +256,7 @@ blueprint (for players who lay out their own plant).
 
 ## World and event applicability
 - **Placement:** player-built industry only. Nothing generates in the world.
-- **Radiation:** only from items and sources players make.
+- **Radiation:** from what players make and from natural uranium and thorium ore (a counter finds it underground).
 
 ## Rollout and open questions
 - **Placement:** equipment bigger than 5x5 is placed from one item in this stage. The proposal's drone-built
@@ -200,4 +266,4 @@ blueprint (for players who lay out their own plant).
 - **Operator commands:** `/nuclear showcase` builds a running unit; `/nuclear build <blueprint> [fuelled]` builds any
   blueprint at once; `/radiation dose|check` are for testing.
 - **Not yet:** the plants' transformer yards and switchyards are scenery: connect the main transformers (or the small
-  turbines) to power lines yourself. Basins and the reactor pool are dry.
+  turbines) to power lines yourself. Basins are dry.

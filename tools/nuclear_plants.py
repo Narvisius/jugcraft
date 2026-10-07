@@ -183,10 +183,13 @@ def containment(key, name, r, wall_h, dome_h, double=False):
         bx, bz = c + math.cos(a) * (r + 0.2), c + math.sin(a) * (r + 0.2)
         p.box(int(bx) - 1, 0, int(bz) - 1, int(bx) + 1, wall_h, int(bz) + 1, CONC)
     # Dome: a shallow ellipsoid, 2 thick.
+    # Each layer reaches in to just inside the layer above it, so the shell has no gap where it flattens near the top
+    # (round 14: the EPR's dome had a ring open to the sky round its cap, and the core shone out of it).
     for y in range(1, dome_h + 1):
         t = y / dome_h
         rr = r * math.sqrt(max(0.0, 1 - t * t))
-        p.disc(c, c, rr, wall_h + y, wall_h + y, SHIELD, inner=max(-1, rr - 2.6))
+        above = r * math.sqrt(max(0.0, 1 - ((y + 1) / dome_h) ** 2))
+        p.disc(c, c, rr, wall_h + y, wall_h + y, SHIELD, inner=max(-1, min(rr - 2.6, above - 1.2)))
     p.disc(c, c, 3, wall_h + dome_h, wall_h + dome_h, GREY)
     # Personnel and equipment hatches on the front.
     p.box(int(c) - 3, 1, size - 3, int(c) + 3, 9, size - 1, CONC)
@@ -525,7 +528,9 @@ def large_plant():
     s.eq("feedwater_pump", 229, 51)
     s.add(hall("epr_fuel_building", "Fuel Building (EPR)", 44, 36, 40, wall=SHIELD, band=CONC, windows=()), 155, 124)
     s.add(hall("epr_aux_building", "Nuclear Auxiliary Building (EPR)", 46, 42, 30, band=CONC, windows=((20, 22),)), 96, 124)
-    s.add(hall("waste_building", "Waste Treatment Building", 32, 30, 18, band=PANEL, windows=((12, 14),)), 52, 124)
+    # The radwaste building (round 14: two layers of wall, an airlock) where the waste treatment hall stood.
+    import radwaste_store
+    radwaste_store.place(s, 54, 122)
     for x in (40, 244):
         s.add(hall("diesel_building_large", "Emergency Diesel Building", 36, 20, 16, band=CONC, windows=()), x, 76)
     s.add(hall("access_building", "Access and Office Building", 32, 22, 16, band=PANEL, windows=((5, 7), (11, 13))), 60, 34)
@@ -559,7 +564,10 @@ def small_plant():
         s.line(STEAM, (mx + 2, 1, 103), (mx + 2, 17, 103))
         s.eq("reactor_control_console", 134 + 4 * i, 51)
     s.add(hall("smr_control_building", "Control Building", 28, 24, 16, band=PANEL, windows=((5, 7), (11, 13))), 132, 40)
-    s.add(hall("radwaste_building", "Radwaste Building", 30, 22, 14, band=CONC, windows=()), 132, 68)
+    s.add(hall("radwaste_treatment", "Radwaste Treatment Building", 30, 22, 14, band=CONC, windows=()), 132, 68)
+    # The radwaste building (round 14: two layers of wall, an airlock) across the road from the treatment building.
+    import radwaste_store
+    radwaste_store.place(s, 164, 50)
     bank = mech_tower_bank("ct_mechanical", "Mechanical-Draft Cooling Tower (6 cells)", 6)
     for z in (140, 166):
         s.tower(bank, 78, z, "mechanical")
@@ -589,13 +597,20 @@ def transformer_yard(key, name, w, d):
 
 
 def smr_reactor_building(key, name, modules):
+    """The modules stand in one pool, under water to their tops as in the real plant (the water is their shielding),
+    in a building of shielding concrete, roof included (round 14: radiation reached outside through clad walls). The
+    door is behind a shield wall, so no line runs from a module to the open."""
     w, d, h = 16 + modules * 13, 52, 28
-    p = hall(key, name, w, d, h, band=WHITE, pilaster=TRIM, windows=((20, 22),))
+    p = hall(key, name, w, d, h, wall=SHIELD, roof=SHIELD, band=SHIELD, pilaster=SHIELD, windows=())
     p.box(0, h - 6, 0, w - 1, h - 5, d - 1, BLUE)
     p.clear(1, h - 6, 1, w - 2, h - 5, d - 2)
-    # The reactor pool's rim (the pool itself is below grade in the real plant; here the modules stand in its bay).
-    p.shell(4, 1, 6, w - 5, 2, 24, BRICK)
-    p.clear(5, 1, 7, w - 6, 2, 23)
+    # The reactor pool: shielding concrete walls, water to just over the modules' tops (they are 22 tall from y 1).
+    p.shell(4, 1, 6, w - 5, 24, 24, SHIELD)
+    p.clear(5, 1, 7, w - 6, 24, 23)
+    p.box(5, 1, 7, w - 6, 23, 23, WATER)
+    # A shield wall inside the door.
+    cx = w // 2
+    p.box(cx - 5, 1, d - 5, cx + 4, 6, d - 5, SHIELD)
     p.box(w - 14, h + 2 - 2, 10, w - 4, h + 2 - 1, 22, GREY)  # crane house
     return p
 

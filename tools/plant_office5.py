@@ -36,9 +36,14 @@ def cyl(cx, cz, r, y0, y1, tex):
 
 
 def cyl_x(cy, cz, r, x0, x1, tex):
-    """A round piece lying along x (a wrap, a roll)."""
+    """A round piece lying along x (a wrap, a roll). Only the square middle box carries the ends' texture; the two
+    arms of the plus stop a hair short of each end (showing the side texture there), so the three never share an end
+    face (round 14: the gyro's cut end, stretched over all three, z-fought at its edge)."""
     a, b = r * 0.55, r * 0.85
-    return [(x0, cy - r, cz - a, x1, cy + r, cz + a, tex), (x0, cy - a, cz - r, x1, cy + a, cz + r, tex),
+    side = tex.get("*") if isinstance(tex, dict) else tex
+    arms = {**tex, "west": side, "east": side} if isinstance(tex, dict) else tex
+    e = 0.06
+    return [(x0 + e, cy - r, cz - a, x1 - e, cy + r, cz + a, arms), (x0 + e, cy - a, cz - r, x1 - e, cy + a, cz + r, arms),
             (x0, cy - b, cz - b, x1, cy + b, cz + b, tex)]
 
 
@@ -54,7 +59,7 @@ def mug(x, z, y0):
     return [(x, y0, z, x + w, y0 + 0.3, z + w, m),
             (x, y0, z, x + t, y0 + h, z + w, m), (x + w - t, y0, z, x + w, y0 + h, z + w, m),
             (x + t, y0, z, x + w - t, y0 + h, z + t, m), (x + t, y0, z + w - t, x + w - t, y0 + h, z + w, m),
-            (x + t, y0 + 0.3, z + t, x + w - t, y0 + h - 0.5, z + w - t, {"*": "pi_coffee", "up": "pi_coffee"}),
+            (x + t + 0.02, y0 + 0.3, z + t + 0.02, x + w - t - 0.02, y0 + h - 0.5, z + w - t - 0.02, {"*": "pi_coffee", "up": "pi_coffee"}),
             (x + w, y0 + 0.7, z + 0.9, x + w + 0.9, y0 + 0.95, z + 1.5, m),
             (x + w + 0.65, y0 + 0.95, z + 0.9, x + w + 0.9, y0 + 1.95, z + 1.5, m),
             (x + w, y0 + 1.95, z + 0.9, x + w + 0.9, y0 + 2.2, z + 1.5, m)]
@@ -180,8 +185,9 @@ def takeout():
         else:
             out.append(turned((x - 0.5, top + 0.25, z - 0.1, x + 0.5, top + 0.45, z + 0.1, "pi_carrot"), "y", -45, (x, top, z)))
     # The flaps: the long ones (north and south) hinged at the rim and turned out, the short ones standing up.
-    out.append(turned((cx - hw, top, cz + hw - 0.12, cx + hw, top + 1.5, cz + hw, "pi_takeout_side"), "x", 45, (cx, top, cz + hw)))
-    out.append(turned((cx - hw, top, cz - hw, cx + hw, top + 1.5, cz - hw + 0.12, "pi_takeout_side"), "x", -45, (cx, top, cz - hw)))
+    # (A hair narrower than the pail's rim, so their ends don't share its sides' planes.)
+    out.append(turned((cx - hw + 0.03, top, cz + hw - 0.12, cx + hw - 0.03, top + 1.5, cz + hw, "pi_takeout_side"), "x", 45, (cx, top, cz + hw)))
+    out.append(turned((cx - hw + 0.03, top, cz - hw, cx + hw - 0.03, top + 1.5, cz - hw + 0.12, "pi_takeout_side"), "x", -45, (cx, top, cz - hw)))
     out.append(turned((cx + hw - 0.12, top, cz - 1.0, cx + hw, top + 1.1, cz + 1.0, "pi_takeout_side"), "z", -22.5, (cx + hw, top, cz)))
     out.append(turned((cx - hw, top, cz - 1.0, cx - hw + 0.12, top + 1.1, cz + 1.0, "pi_takeout_side"), "z", 22.5, (cx - hw, top, cz)))
     # The wire handle folded down along the east and west sides.
@@ -207,12 +213,13 @@ def gyro_plate():
     r = random.Random(81)
     for k in range(9):                                 # fries in a loose pile
         x, z = 9.6 + r.uniform(-1.2, 1.2), 10.4 + r.uniform(-1.0, 0.8)
-        lift = 0.0 if k < 6 else 0.32
+        lift = (0.0 if k < 6 else 0.32) + k * 0.025      # each a hair higher, so crossing fries never share a top
         out.append(turned((x - 1.1, y + lift, z - 0.16, x + 1.1, y + lift + 0.32, z + 0.16, "pi_fry"),
                           "y", r.choice((-45, -22.5, 0, 22.5, 45)), (x, y, z)))
-    for x, z, t in ((5.2, 10.4, "pi_tomato_wedge"), (6.2, 11.2, "pi_tomato_wedge"), (4.6, 11.4, "pi_cucumber"),
-                    (5.8, 9.6, "pi_cucumber"), (6.6, 10.2, "pi_onion")):
-        out.append(turned((x - 0.45, y, z - 0.3, x + 0.45, y + 0.5, z + 0.3, t), "y", 22.5 if t != "pi_onion" else -22.5, (x, y, z)))
+    for k, (x, z, t) in enumerate(((5.2, 10.4, "pi_tomato_wedge"), (6.2, 11.2, "pi_tomato_wedge"), (4.6, 11.4, "pi_cucumber"),
+                                   (5.8, 9.6, "pi_cucumber"), (6.6, 10.2, "pi_onion"))):
+        h = 0.5 + k * 0.03
+        out.append(turned((x - 0.45, y, z - 0.3, x + 0.45, y + h, z + 0.3, t), "y", 22.5 if t != "pi_onion" else -22.5, (x, y, z)))
     out += cyl(11.2, 5.0, 0.9, y, y + 0.9, {"*": "pi_ramekin", "up": "pi_tzatziki_c"})
     out += fork(13.4, 9.0, T, 0)
     return out
@@ -238,7 +245,7 @@ def burger():
                     {"*": "pi_fries_carton", "up": "pi_fries_carton", "south": "pi_fries_carton_front!"}))
     r = random.Random(82)
     for k in range(11):
-        x, z = 11.2 + (k % 4 - 1.5) * 0.5 + r.uniform(-0.1, 0.1), 4.8 + (k // 4 - 1) * 0.42
+        x, z = 11.2 + (k % 4 - 1.5) * 0.5 + r.uniform(-0.1, 0.1), 4.8 + (k // 4 - 1) * 0.42 + k * 0.013
         h = r.uniform(1.0, 2.0)
         out.append(turned((x - 0.15, T + 2.2, z - 0.15, x + 0.15, T + 2.7 + h, z + 0.15, "pi_fry"),
                           r.choice("xz"), r.choice((-22.5, 0, 0, 22.5)), (x, T + 2.7, z)))

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PCP",
+    "P P",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "minecraft:light_gray_concrete"
+  },
+  "result": {
+    "id": "jugcraft:waste_drum",
+    "count": 1
+  }
+}

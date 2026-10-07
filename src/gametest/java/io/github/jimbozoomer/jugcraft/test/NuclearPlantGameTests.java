@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "78685"}, {"nuclear_medium_pwr", "331638"}, {"nuclear_large_epr", "382021"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "337223"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -121,6 +121,126 @@ public class NuclearPlantGameTests {
 		}
 		helper.assertTrue(towers == 2, "two tower banks: " + towers);
 		helper.assertTrue(EquipmentKind.SMALL_MODULAR_REACTOR.design() == ReactorCore.Design.SMALL_MODULAR, "module design");
+		surveyAtFullPower(helper, built, "small modular plant", blueprint, stake);
 		helper.succeed();
+	}
+
+	/**
+	 * Round 14: "make sure wherever the reactor is, it's shielded". With every core of the medium and large plants at full
+	 * power, nothing measurable gets out of the reactor buildings: everywhere in the open round them (on the ground and on
+	 * the roofs, within 70 blocks) reads below a tenth of a microsievert an hour over background.
+	 */
+	@GameTest(maxTicks = 400)
+	public void reactorBuildingsKeepRadiationIn(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		BlockPos origin = helper.absolutePos(BlockPos.ZERO);
+		Blueprint mediumPrint = Blueprint.get("nuclear_medium_pwr", false);
+		PlantBuilder.Result medium = PlantBuilder.build(level, mediumPrint, origin.offset(-5_000, 0, 4_000), Rotation.NONE, null, true);
+		surveyAtFullPower(helper, medium, "medium plant", mediumPrint, origin.offset(-5_000, 0, 4_000));
+		Blueprint largePrint = Blueprint.get("nuclear_large_epr", false);
+		PlantBuilder.Result large = PlantBuilder.build(level, largePrint, origin.offset(5_000, 0, -5_000), Rotation.NONE, null, true);
+		surveyAtFullPower(helper, large, "large plant", largePrint, origin.offset(5_000, 0, -5_000));
+		helper.succeed();
+	}
+
+	/**
+	 * Each core of a built plant set to full power, then the open ground and roofs round it surveyed: at each spot, eye
+	 * height above the topmost block of the column (read block by block, so a roof or dome always counts).
+	 */
+	private static void surveyAtFullPower(GameTestHelper helper, PlantBuilder.Result built, String plant, Blueprint blueprint, BlockPos stake) {
+		var level = helper.getLevel();
+		// First, that the build put down what the blueprint says (equipment bodies aside), so a leak is a design fault.
+		int wrong = 0;
+		StringBuilder missing = new StringBuilder();
+		for (int i = 0; i < blueprint.size(); i++) {
+			var want = blueprint.state(i, Rotation.NONE);
+			if (want.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock) {
+				continue;
+			}
+			BlockPos pos = stake.offset(blueprint.offset(i, Rotation.NONE));
+			var have = level.getBlockState(pos);
+			if (have.getBlock() != want.getBlock() && level.getBlockEntity(pos) == null) {
+				if (wrong++ < 6) {
+					missing.append(" ").append(pos.subtract(stake).toShortString()).append(" ")
+							.append(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(want.getBlock()).getPath()).append("->")
+							.append(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(have.getBlock()).getPath());
+				}
+			}
+		}
+		String build = wrong + " blocks differ from the blueprint after the build" + (wrong == 0 ? "" : ":" + missing);
+		io.github.jimbozoomer.jugcraft.Jugcraft.LOGGER.info("{}: {}", plant, build);
+		java.util.List<BlockPos> cores = new java.util.ArrayList<>();
+		for (BlockPos vessel : built.vessels()) {
+			if (level.getBlockEntity(vessel) instanceof EquipmentBlockEntity v) {
+				cores.add(v.coreMiddle());
+				io.github.jimbozoomer.jugcraft.nuclear.RadiationSources.set(level, v.coreMiddle(), EquipmentBlockEntity.CORE_RADIATION * 1.07,
+						io.github.jimbozoomer.jugcraft.nuclear.RadiationKind.NUCLEAR);
+			}
+		}
+		helper.assertTrue(!cores.isEmpty(), plant + ": reactors found");
+		double worst = 0;
+		BlockPos where = null;
+		int points = 0;
+		try {
+			for (BlockPos core : cores) {
+				for (int dx = -70; dx <= 70; dx += 3) {
+					for (int dz = -70; dz <= 70; dz += 3) {
+						if (dx * dx + dz * dz > 70 * 70) {
+							continue;
+						}
+						int x = core.getX() + dx, z = core.getZ() + dz;
+						int y = Math.min(level.getMaxY(), core.getY() + 100);
+						while (y > level.getMinY() && level.getBlockState(new BlockPos(x, y - 1, z)).isAir()) {
+							y--;
+						}
+						net.minecraft.world.phys.Vec3 eye = new net.minecraft.world.phys.Vec3(x + 0.5, y + 1.6, z + 0.5);
+						double rate = io.github.jimbozoomer.jugcraft.nuclear.Radiation.rateAt(level, eye);
+						points++;
+						if (rate > worst) {
+							worst = rate;
+							where = BlockPos.containing(eye);
+						}
+					}
+				}
+			}
+		} finally {
+			for (BlockPos core : cores) {
+				io.github.jimbozoomer.jugcraft.nuclear.RadiationSources.clear(level, core);
+			}
+		}
+		if (worst >= 1e-4) {
+			// Say where it gets out: the column at the spot, and what the line from the nearest core crosses.
+			StringBuilder why = new StringBuilder();
+			BlockPos near = cores.get(0);
+			for (BlockPos core : cores) {
+				if (core.distSqr(where) < near.distSqr(where)) {
+					near = core;
+				}
+			}
+			why.append(" | core ").append(near.toShortString()).append(" | column:");
+			int found = 0;
+			for (int yy = level.getMaxY(); yy >= level.getMinY() && found < 8; yy--) {
+				var st = level.getBlockState(new BlockPos(where.getX(), yy, where.getZ()));
+				if (!st.isAir()) {
+					why.append(" ").append(yy).append("=").append(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(st.getBlock()).getPath());
+					found++;
+				}
+			}
+			final BlockPos own = near;
+			// Sources here (cores at full power, radioactive blocks) were cleared above; trace the nearest core's line.
+			why.append(" | line: ").append(String.join("; ", io.github.jimbozoomer.jugcraft.nuclear.Shielding.trace(
+					io.github.jimbozoomer.jugcraft.nuclear.RadiationField.states(level), net.minecraft.world.phys.Vec3.atCenterOf(near),
+					net.minecraft.world.phys.Vec3.atCenterOf(where).add(0, 0.1, 0), (cell, st) -> cell.equals(own), 30)));
+			why.append(" | ").append(build).append(" | stake ").append(stake.toShortString()).append(" | heightmap ")
+					.append(level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, where.getX(), where.getZ()))
+					.append(" | world y ").append(level.getMinY()).append("..").append(level.getMaxY());
+			helper.assertTrue(false, plant + " at full power: " + (worst * 1000) + " uSv/h in the open at " + where
+					+ " (" + (int) Math.sqrt(where.distSqr(near)) + " blocks from a core); want under 0.1" + why);
+		}
+		io.github.jimbozoomer.jugcraft.Jugcraft.LOGGER.info("{} at full power: worst {} uSv/h over {} points in the open", plant, worst * 1000, points);
 	}
 }

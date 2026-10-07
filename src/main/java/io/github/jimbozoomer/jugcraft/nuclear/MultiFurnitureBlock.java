@@ -31,6 +31,7 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 	private static int building, buildingVariants;
 	protected final int width, rows, variants;
 	private final boolean boxy, low;
+	private final double topHeight;
 	private final IntegerProperty variant;
 	protected final boolean vertical;
 	private final IntegerProperty part;
@@ -62,7 +63,14 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 
 	/** low: a coffee table (its oval top at knee height) rather than a meeting table. */
 	public MultiFurnitureBlock(Properties properties, int width, int rows, boolean vertical, int variants, boolean boxy, boolean low) {
+		this(properties, width, rows, vertical, variants, boxy, low, 7);
+	}
+
+	/** topHeight: how high a boxy piece stands into its upper row, in pixels (a copier's top, a panel's full height). */
+	public MultiFurnitureBlock(Properties properties, int width, int rows, boolean vertical, int variants, boolean boxy, boolean low,
+			double topHeight) {
 		super(prepare(properties, width, rows, variants));
+		this.topHeight = topHeight;
 		this.boxy = boxy;
 		this.low = low;
 		this.width = width;
@@ -158,7 +166,7 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 	 */
 	private VoxelShape localShape(int c, int r, Direction facing) {
 		if (boxy) {
-			return turned(new double[] {0, 0, 2, 16, r == 0 ? 16 : 7, 15}, facing);
+			return turned(new double[] {0, 0, 2, 16, r == 0 ? 16 : topHeight, 15}, facing);
 		}
 		if (vertical) {
 			return turned(new double[] {0, 0, 0, 16, 16, 1.6}, facing);

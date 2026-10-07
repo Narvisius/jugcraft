@@ -99,7 +99,11 @@ def _sharp(name):
     """Plant kit textures with writing on them (paperwork, book spines) are kept at 128 or 256 so the text reads."""
     import plant_office3
     import plant_office4
-    return name in plant_office3.SHARP or name in plant_office4.SHARP
+    import plant_panels
+    import nuclear
+    import nuclear_storage
+    return (name in plant_office3.SHARP or name in plant_office4.SHARP or name in plant_panels.SHARP or name in nuclear.SHARP
+            or name in nuclear_storage.SHARP)
 
 
 def _hi_res(name):
@@ -107,7 +111,8 @@ def _hi_res(name):
     import tower_art
     import blueprints
     import nuclear
-    return (name in tower_art.TEXTURES or name in nuclear.HI_RES or name in blueprints.TABLE_TEXTURES
+    import nuclear_storage
+    return (name in tower_art.TEXTURES or name in nuclear.HI_RES or name in blueprints.TABLE_TEXTURES or name in nuclear_storage.HI_RES
             or name.startswith(("landing_pad_formed_", "supply_pickup_formed_", "hangar_pad_")))
 
 
@@ -116,8 +121,10 @@ def item_model_refs(node):
     if node.get("type", "minecraft:model") == "minecraft:model":
         return [node["model"]]
     refs = []
-    for case in node.get("cases", []):
+    for case in node.get("cases", []) + node.get("entries", []):
         refs += item_model_refs(case["model"])
+    for sub in node.get("models", []):
+        refs += item_model_refs(sub)
     for key in ("fallback", "on_true", "on_false"):
         if key in node:
             refs += item_model_refs(node[key])

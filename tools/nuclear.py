@@ -10,7 +10,7 @@ import random
 import subprocess
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 MOD = "jugcraft"
 FEATURE = "machines"
@@ -70,9 +70,10 @@ FRAME = "nuclear_equipment_frame"
 COOLING_BLOCKS = {"cooling_tower_fill": "Cooling Tower Fill", "conduit_trench": "Conduit Trench"}
 import plant_interior
 import storage_tank
+import nuclear_storage
 
 BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER] + list(COOLING_BLOCKS) + plant_interior.BLOCKS \
-    + list(storage_tank.NAMES)
+    + list(storage_tank.NAMES) + nuclear_storage.BLOCKS
 
 NAMES = {
     "hazmat_hood": "Hazmat Hood",
@@ -141,6 +142,7 @@ LANG = {
     "message.jugcraft.nuclear.no_room": "Not enough room: it needs %s wide, %s deep and %s tall, clear",
     "message.jugcraft.nuclear.console_unlinked": "Not linked: use a Reactor Link Card on the vessel, then on this console",
     "message.jugcraft.nuclear.edg_start": "Emergency diesel generator: air start... it fires and comes up to speed",
+    "message.jugcraft.nuclear.edg_no_fuel": "No diesel: it cranks on air but won't fire. Its day tank (a storage tank of diesel within %s blocks) is empty or missing, or the tank's outlet valve is shut",
     "message.jugcraft.nuclear.edg_stop": "Emergency diesel generator: stopping, coasting down",
     "message.jugcraft.nuclear.console_linked": "Console linked to the reactor",
     "message.jugcraft.nuclear.card_set": "Link card set to this reactor: now use it on a console",
@@ -250,6 +252,7 @@ CRAFTING = {
 }
 CRAFTING.update(plant_interior.CRAFTING)
 CRAFTING.update(storage_tank.CRAFTING)
+CRAFTING.update(nuclear_storage.CRAFTING)
 ITEM_FEATURES = {"plastic_sheet": ["crude_oil"], "processor": ["silicon"], "advanced_circuit": ["silver", "nickel"],
                  "leu_fuel_assembly": ["uranium"], "aluminum_cable": ["aluminum"]}
 BASE_METALS = ("copper", "iron", "gold", "steel")
@@ -261,8 +264,12 @@ PIPE_TEXTURES = list(PIPES) + [p + "_end" for p in PIPES]
 TOWER_TEXTURES = [f"{TOWER_CONTROLLER}_side", f"{TOWER_CONTROLLER}_top", f"{TOWER_CONTROLLER}_grate", "cooling_tower_fill",
                   "cooling_tower_fill_side", "conduit_trench"]
 HI_RES = (set(ITEMS) - {"geiger_counter"}) | set(BLOCKS) | set(NU_TEXTURES) | set(PIPE_TEXTURES) | set(TOWER_TEXTURES) | {
-    "geiger_case", "geiger_screen", "geiger_rubber", "geiger_steel", "geiger_grille", "geiger_label"} | plant_interior.HI_RES \
+    "geiger_case", "geiger_rubber", "geiger_steel", "geiger_grille", "geiger_label"} | plant_interior.HI_RES \
     | set(storage_tank.TEXTURES)
+
+
+# Textures kept at 256 px so their lettering reads (tools/check_mod_data.py).
+SHARP = {"geiger_screen"}
 
 
 def recipe_features(result, feature_of):
@@ -320,7 +327,7 @@ def trefoil(d, cx, cy, size, fg=(18, 18, 20, 255), bg=(244, 200, 36, 255), ring=
         d.ellipse([cx - size, cy - size, cx + size, cy + size], fill=bg, outline=fg, width=max(1, size // 9))
     r0, r1 = size * 0.2, size * 0.8
     for k in range(3):
-        a = -90 + k * 120
+        a = 90 + k * 120  # ISO 361: one blade pointing down, two up
         d.pieslice([cx - r1, cy - r1, cx + r1, cy + r1], a - 30, a + 30, fill=fg)
     d.ellipse([cx - r0 * 1.45, cy - r0 * 1.45, cx + r0 * 1.45, cy + r0 * 1.45], fill=bg)
     d.ellipse([cx - r0, cy - r0, cx + r0, cy + r0], fill=fg)
@@ -579,26 +586,91 @@ def _concrete():
     return img
 
 
+# The Geiger counter's dial (round 14): a real moving needle over a log scale from background to 100 Sv/h, in the
+# same bands as the readout (client/RadiationMeter.java): SAFE (green) below 50 uSv/h, CAUTION (amber) up to 1 Sv/h,
+# LETHAL (red) above. Kept in step with RadiationMeter.LOW/HIGH/SAFE/LETHAL.
+DIAL_LOW, DIAL_HIGH = -4, 5             # log10 mSv/h: 0.1 uSv/h .. 100 Sv/h
+DIAL_SAFE, DIAL_LETHAL = math.log10(0.05), 3.0
+DIAL_SWEEP = 50                         # degrees either side of upright
+DIAL_STEPS = 48                         # needle positions (item models)
+SCREEN = ((4.6, 4.4), (11.4, 9.2))      # the screen face, model px (x, y): 6.8 x 4.8
+DIAL_PIVOT = (170, 228)                 # in the 340 x 240 drawing
+DIAL_R = 190
+
+
+def dial_fraction(log_rate):
+    return min(1.0, max(0.0, (log_rate - DIAL_LOW) / (DIAL_HIGH - DIAL_LOW)))
+
+
+def geiger_dial():
+    """The dial face: cream card, coloured band, decade ticks and figures, unit names; drawn at 340 x 240 (the face's
+    6.8 x 4.8 model px) and squeezed into a 256 px square texture."""
+    W, H, f = 340, 240, 4
+    big = Image.new("RGBA", (W * f, H * f), (22, 24, 26, 255))
+    d = ImageDraw.Draw(big)
+    cx, cy, R = DIAL_PIVOT[0] * f, DIAL_PIVOT[1] * f, DIAL_R * f
+    d.rounded_rectangle([6 * f, 6 * f, (W - 6) * f, (H - 6) * f], radius=10 * f, fill=(236, 232, 216, 255))
+
+    def ang(frac):
+        return math.radians(-90 - DIAL_SWEEP + 2 * DIAL_SWEEP * frac)   # PIL: 0 = east, clockwise
+
+    def pt(frac, r):
+        a = ang(frac)
+        return cx + math.cos(a) * r, cy + math.sin(a) * r
+
+    # The coloured band just inside the scale.
+    bands = [(0, dial_fraction(DIAL_SAFE), (70, 176, 84)), (dial_fraction(DIAL_SAFE), dial_fraction(DIAL_LETHAL), (232, 172, 30)),
+             (dial_fraction(DIAL_LETHAL), 1, (212, 52, 40))]
+    for f0, f1, col in bands:
+        a0, a1 = math.degrees(ang(f0)), math.degrees(ang(f1))
+        d.arc([cx - R + 14 * f, cy - R + 14 * f, cx + R - 14 * f, cy + R - 14 * f], a0, a1, fill=col + (255,), width=16 * f)
+    # The scale arc and ticks: a long tick each decade, short ones at 2 and 5.
+    a0, a1 = math.degrees(ang(0)), math.degrees(ang(1))
+    d.arc([cx - R, cy - R, cx + R, cy + R], a0, a1, fill=(20, 20, 22, 255), width=3 * f)
+    font_n = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf", 15 * f)
+    labels = {-3: "1", -2: "10", -1: "100", 0: "1", 1: "10", 2: "100", 3: "1", 4: "10"}
+    for dec in range(DIAL_LOW, DIAL_HIGH + 1):
+        for m, long_ in ((1, True), (2, False), (5, False)):
+            lr = dec + math.log10(m)
+            if lr > DIAL_HIGH:
+                continue
+            fr = dial_fraction(lr)
+            r0 = R - (16 if long_ else 9) * f
+            d.line([pt(fr, R + 1 * f), pt(fr, r0)], fill=(20, 20, 22, 255), width=(3 if long_ else 2) * f)
+        if dec in labels:
+            x, y = pt(dial_fraction(dec), R + 17 * f)
+            d.text((x, y), labels[dec], font=font_n, fill=(20, 20, 22, 255), anchor="mm")
+    # Unit names under each third of the scale, and the zone words.
+    font_u = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf", 13 * f)
+    for lo, hi, unit in ((-4, -1, "\u00b5Sv/h"), (-1, 2, "mSv/h"), (2, 5, "Sv/h")):
+        x, y = pt(dial_fraction((lo + hi) / 2 + 0.5), R - 44 * f)
+        d.text((x, y), unit, font=font_u, fill=(60, 60, 64, 255), anchor="mm")
+    font_z = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf", 12 * f)
+    for frac, word, col in ((dial_fraction(DIAL_SAFE) / 2, "SAFE", (40, 120, 52)),
+                            ((dial_fraction(DIAL_SAFE) + dial_fraction(DIAL_LETHAL)) / 2, "CAUTION", (150, 104, 10)),
+                            ((dial_fraction(DIAL_LETHAL) + 1) / 2, "LETHAL", (176, 30, 24))):
+        x, y = pt(frac, R - 74 * f)
+        d.text((x, y), word, font=font_z, fill=col + (255,), anchor="mm")
+    # Maker's line and a little trefoil at the bottom.
+    font_s = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed.ttf", 10 * f)
+    d.text((W * f // 2, (H - 18) * f), "DOSE RATE", font=font_s, fill=(70, 70, 74, 255), anchor="mm")
+    return big.resize((256, 256), Image.LANCZOS)
+
+
+def geiger_needle_texture():
+    img = Image.new("RGBA", (16, 16), (24, 24, 26, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 15, 5], fill=(214, 60, 30, 255))   # the tip end is painted orange (top of the needle)
+    return img
+
+
 def _geiger_textures():
     case = _surface((232, 190, 40), 50, fine=6, broad=10)
     case_img = _img(case)
     d = ImageDraw.Draw(case_img)
     for y in range(0, 64, 16):
         d.line([(0, y), (63, y)], fill=(196, 156, 26, 255))
-    screen = Image.new("RGBA", (64, 64), (26, 32, 30, 255))
-    d = ImageDraw.Draw(screen)
-    d.rectangle([0, 0, 63, 63], outline=(60, 62, 66, 255), width=4)
-    d.rectangle([7, 8, 56, 40], fill=(40, 70, 52, 255))
-    # A needle meter over a green LCD.
-    for k in range(9):
-        a = math.radians(200 + k * 17.5)
-        x0, y0 = 32 + math.cos(a) * 20, 38 + math.sin(a) * 20
-        x1, y1 = 32 + math.cos(a) * 24, 38 + math.sin(a) * 24
-        d.line([(x0, y0), (x1, y1)], fill=(150, 240, 170, 255), width=2 if k % 4 == 0 else 1)
-    d.line([(32, 38), (32 + math.cos(math.radians(250)) * 22, 38 + math.sin(math.radians(250)) * 22)], fill=(255, 120, 60, 255), width=2)
-    d.rectangle([7, 46, 56, 56], fill=(40, 70, 52, 255))
-    for x in range(10, 54, 7):
-        d.rectangle([x, 48, x + 4, 54], fill=(120, 230, 150, 255))
+    screen = geiger_dial()
     rubber = _rubber(52, (34, 36, 40))
     steel = _steel(53)
     grille = Image.new("RGBA", (64, 64), (40, 40, 44, 255))
@@ -611,7 +683,7 @@ def _geiger_textures():
         d.rectangle([4 * f, 4 * f, 60 * f, 60 * f], fill=(244, 244, 238, 255), outline=(20, 20, 22, 255), width=2 * f)
         trefoil(d, 32 * f, 32 * f, 22 * f)
     return {"geiger_case": case_img, "geiger_screen": screen, "geiger_rubber": rubber, "geiger_steel": steel,
-            "geiger_grille": grille, "geiger_label": _supersample(label)}
+            "geiger_grille": grille, "geiger_label": _supersample(label), "geiger_needle": geiger_needle_texture()}
 
 
 def draw_item_textures():
@@ -625,6 +697,7 @@ def draw_item_textures():
     out["spent_fuel_assembly"] = _icon(_icon_assembly(True))
     out["reactor_link_card"] = _icon(_icon_card)
     out.update(plant_interior.draw_item_textures())
+    out["lead_door"] = nuclear_storage.door_item_icon()
     return out
 
 
@@ -732,6 +805,7 @@ def draw_block_textures():
     grate = draw_cooling_blocks()
     out.update({k: v for k, v in grate.items() if k != "cooling_tower_controller_grate"})
     out["cooling_tower_controller_grate"] = grate["cooling_tower_controller_grate"]
+    out.update(nuclear_storage.textures())
     return out
 
 
@@ -860,8 +934,8 @@ def geiger_model(rid):
         _el([4, 1.5, 5], [12, 9.5, 10], "case", {"south": "case"}),                      # body
         _el([3.5, 0.5, 4.5], [12.5, 1.5, 10.5], "rubber"),                               # bottom bumper
         _el([3.5, 9.5, 4.5], [12.5, 10.5, 10.5], "rubber"),                              # top bumper
-        _el([5, 5, 10], [11, 9, 10.5], "rubber", {"south": "screen"}, {"south": full}),  # screen, standing out
-        _el([5, 2, 10], [11, 4.5, 10.3], "grille", uv={"south": full}),                  # speaker grille
+        _el([SCREEN[0][0], SCREEN[0][1], 10], [SCREEN[1][0], SCREEN[1][1], 10.4], "rubber", {"south": "screen"}, {"south": full}),  # dial
+        _el([5, 2, 10], [11, 4.0, 10.3], "grille", uv={"south": full}),                  # speaker grille
         _el([12, 3, 6], [12.2, 8, 9], None, {"east": "label"}, {"east": full}),          # trefoil label
         _el([9.6, 10.5, 6.6], [11, 11.6, 8], "steel"),                                   # range knob
         _el([5, 10.5, 7], [6, 13, 8], "steel"),                                          # handle posts
@@ -892,6 +966,35 @@ def geiger_model(rid):
             "firstperson_lefthand": {"rotation": [10, 20, 0], "translation": [1.5, 1.5, -1], "scale": [0.45, 0.45, 0.45]},
         },
     }
+
+
+def geiger_needle_model(rid, k):
+    """The dial's needle at position k of DIAL_STEPS (0 = the left stop), turned about its pivot; it inherits the
+    counter's display transforms (and replaces its elements), so it sits on the dial in every view."""
+    sx = (SCREEN[1][0] - SCREEN[0][0]) / 340
+    sy = (SCREEN[1][1] - SCREEN[0][1]) / 240
+    px = SCREEN[0][0] + DIAL_PIVOT[0] * sx
+    py = SCREEN[1][1] - DIAL_PIVOT[1] * sy
+    length = (DIAL_R - 8) * sy
+    angle = round(DIAL_SWEEP - 2 * DIAL_SWEEP * k / DIAL_STEPS, 4)
+    n = {"texture": "#needle", "uv": [0, 0, 16, 16]}
+    needle = {"from": [round(px - 0.09, 4), round(py, 4), 10.46], "to": [round(px + 0.09, 4), round(py + length, 4), 10.5],
+              "rotation": {"origin": [round(px, 4), round(py, 4), 10.48], "axis": "z", "angle": angle},
+              "faces": {"south": n, "north": n, "east": n, "west": n, "up": n}}
+    hub = {"from": [round(px - 0.28, 4), round(py - 0.28, 4), 10.42], "to": [round(px + 0.28, 4), round(py + 0.28, 4), 10.56],
+           "faces": {f: {"texture": "#hub"} for f in ("south", "east", "west", "up", "down")}}
+    return {"parent": rid("item/geiger_counter"), "textures": {"needle": rid("item/geiger_needle"), "hub": rid("item/geiger_rubber")},
+            "elements": [needle, hub]}
+
+
+def geiger_item(rid):
+    """The counter and its needle on top, the needle chosen by the meter's reading (client/RadiationNeedle.java)."""
+    entries = [{"threshold": round((k - 0.5) / DIAL_STEPS, 6), "model": {"type": "minecraft:model", "model": rid(f"item/geiger_needle_{k}")}}
+               for k in range(1, DIAL_STEPS + 1)]
+    return {"model": {"type": "minecraft:composite", "models": [
+        {"type": "minecraft:model", "model": rid("item/geiger_counter")},
+        {"type": "minecraft:range_dispatch", "property": rid("radiation_needle"), "entries": entries,
+         "fallback": {"type": "minecraft:model", "model": rid("item/geiger_needle_0")}}]}}
 
 
 # ---------------------------------------------------------------- the equipment's material sheet (512x512, 64 px cells)
@@ -1726,11 +1829,16 @@ def fuel_fabricator_model():
 
 def write_assets(write, rid, assets, lang):
     plant_interior.write_assets(write, rid, assets, lang)
+    nuclear_storage.write_assets(write, rid, assets, lang)
     storage_tank.write_assets(write, rid, assets, lang)
     for item in ITEMS:
         lang[f"item.{MOD}.{item}"] = NAMES[item]
         if item == "geiger_counter":
             write(assets / "models" / "item" / f"{item}.json", geiger_model(rid))
+            for k in range(DIAL_STEPS + 1):
+                write(assets / "models" / "item" / f"geiger_needle_{k}.json", geiger_needle_model(rid, k))
+            write(assets / "items" / f"{item}.json", geiger_item(rid))
+            continue
         else:
             write(assets / "models" / "item" / f"{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
         write(assets / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
@@ -1789,6 +1897,7 @@ def write_loot(write, rid, out, self_drop):
     # Breaking a frame block breaks the equipment, and its anchor drops the item.
     write(out / f"{FRAME}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{FRAME}")})
     storage_tank.write_loot(write, rid, out, self_drop)
+    nuclear_storage.write_loot(write, rid, out, self_drop)
 
 
 def write_data(write, data):

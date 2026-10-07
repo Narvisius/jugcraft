@@ -50,6 +50,8 @@ public final class JugcraftNuclear {
 	public static Block SHIELDING_CONCRETE;
 	/** The Geiger counter's sound: made live on the client from the dose rate (client/GeigerSound.java), no recording. */
 	public static SoundEvent GEIGER;
+	/** The emergency diesel generator's air start, its running loop (client/DieselSounds.java) and its stop. */
+	public static SoundEvent EDG_START, EDG_RUN, EDG_STOP;
 	// Fuel.
 	public static Item ENRICHED_URANIUM;
 	public static Item FUEL_ASSEMBLY;
@@ -86,6 +88,9 @@ public final class JugcraftNuclear {
 				DataComponentType.<Float>builder().persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT).build());
 		GEIGER = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("geiger_counter"),
 				SoundEvent.createVariableRangeEvent(Jugcraft.id("geiger_counter")));
+		EDG_START = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.start"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.start"), 40));
+		EDG_RUN = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.run"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.run"), 40));
+		EDG_STOP = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.stop"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.stop"), 32));
 
 		EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 		for (int i = 0; i < 4; i++) {
@@ -96,7 +101,7 @@ public final class JugcraftNuclear {
 							.setAsset(ResourceKey.create(EquipmentAssets.ROOT_ID, Jugcraft.id("hazmat"))).build())));
 		}
 		GEIGER_COUNTER = item("geiger_counter", p -> new NuclearItem(p.stacksTo(1), "tooltip.jugcraft.geiger_counter"));
-		CHECK_SOURCE = item("check_source", p -> new NuclearItem(p.stacksTo(1).rarity(Rarity.UNCOMMON).component(RADIOACTIVITY, 400F), "tooltip.jugcraft.check_source"));
+		CHECK_SOURCE = item("check_source", p -> new NuclearItem(p.stacksTo(1).rarity(Rarity.UNCOMMON).component(RADIOACTIVITY, 2F), "tooltip.jugcraft.check_source"));
 
 		BURNUP = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Jugcraft.id("burnup"),
 				DataComponentType.<Float>builder().persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT).build());
@@ -165,8 +170,11 @@ public final class JugcraftNuclear {
 		Registry.register(BuiltInRegistries.ITEM, concreteItem, new BlockItem(SHIELDING_CONCRETE,
 				new Item.Properties().setId(concreteItem).useBlockDescriptionPrefix()));
 
+		ServerTickEvents.END_SERVER_TICK.register(RadiationField::tick);
 		ServerTickEvents.END_SERVER_TICK.register(Radiation::tick);
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, ok) -> Shielding.clear());
 		PlantInterior.register();
+		StorageBlocks.register();
 		StorageTanks.register();
 		PlantBuilder.register();
 		PlantShowcase.register();

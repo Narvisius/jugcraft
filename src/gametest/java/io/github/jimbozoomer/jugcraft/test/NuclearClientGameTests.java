@@ -74,7 +74,8 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			context.takeScreenshot("jugcraft_nuclear_player_third_person");
 			context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
 
-			// The Geiger counter in hand with the dose readout, a check source on the ground in front (survival, so it counts).
+			// The Geiger counter in hand with the dose readout, a check source on the ground in front and a block of uranium
+			// beside it; in creative, the way Justin plays (it must read there too).
 			setHudHidden(context, false);
 			server.runCommand("clear @p");
 			server.runCommand("item replace entity @p hotbar.0 with jugcraft:geiger_counter");
@@ -85,10 +86,38 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			server.runCommand("item replace entity @p hotbar.5 with jugcraft:check_source");
 			server.runCommand("item replace entity @p hotbar.6 with jugcraft:shielding_concrete");
 			server.runCommand("tp @p %d.5 %d %d.5 180 25".formatted(x + 8, y, z + 4));
-			server.runCommand("gamemode survival @p");
 			server.runCommand("summon item %d.5 %d %d.5 {Item:{id:\"jugcraft:check_source\",count:1},PickupDelay:32767}".formatted(x + 8, y, z + 2));
+			server.runCommand("setblock %d %d %d jugcraft:uranium_block".formatted(x + 10, y, z + 2));
 			context.waitTicks(60);
+			double read = context.computeOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.Radiation.state(client.player).rate());
+			if (read < 1) {
+				throw new AssertionError("In creative, holding the counter by a check source and a uranium block, it reads only " + read + " mSv/h");
+			}
 			context.takeScreenshot("jugcraft_nuclear_geiger_hud");
+			// Round 14: the counter's needle and the readout's gauge follow the rate (they stood still before): in the
+			// CAUTION band here, LETHAL by spent fuel, SAFE away from it all.
+			double needle = context.computeOnClient(client -> io.github.jimbozoomer.jugcraft.client.RadiationMeter.needle());
+			double want = io.github.jimbozoomer.jugcraft.client.RadiationMeter.position(read);
+			if (Math.abs(needle - want) > 0.08) {
+				throw new AssertionError("The needle stands at " + needle + " for " + read + " mSv/h; it should be near " + want);
+			}
+			server.runCommand("summon item %d.5 %d %d.5 {Item:{id:\"jugcraft:spent_fuel_assembly\",count:1},PickupDelay:32767}".formatted(x + 8, y, z + 1));
+			context.waitTicks(50);
+			double lethal = context.computeOnClient(client -> io.github.jimbozoomer.jugcraft.client.RadiationMeter.needle());
+			context.takeScreenshot("jugcraft_nuclear_geiger_lethal");
+			if (lethal < io.github.jimbozoomer.jugcraft.client.RadiationMeter.position(io.github.jimbozoomer.jugcraft.client.RadiationMeter.LETHAL)) {
+				throw new AssertionError("By a spent fuel assembly the needle should be in the LETHAL band: " + lethal);
+			}
+			server.runCommand("kill @e[type=item]");
+			server.runCommand("item replace entity @p hotbar.5 with air");
+			server.runCommand("setblock %d %d %d air".formatted(x + 10, y, z + 2));
+			context.waitTicks(80);
+			double safe = context.computeOnClient(client -> io.github.jimbozoomer.jugcraft.client.RadiationMeter.needle());
+			context.takeScreenshot("jugcraft_nuclear_geiger_safe");
+			if (safe > io.github.jimbozoomer.jugcraft.client.RadiationMeter.position(io.github.jimbozoomer.jugcraft.client.RadiationMeter.SAFE)) {
+				throw new AssertionError("With nothing about the needle should fall back into the SAFE band: " + safe);
+			}
+			server.runCommand("setblock %d %d %d air".formatted(x + 10, y, z + 2));
 			server.runCommand("gamemode creative @p");
 			server.runCommand("clear @p");
 			server.runCommand("kill @e[type=!player]");
@@ -96,6 +125,130 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			uniforms(context, singleplayer, x, y, z);
 			warehouse(context, singleplayer, x, y, z);
 			plants(context, singleplayer, x, y, z);
+		}
+	}
+
+	/**
+	 * Round 14: the radwaste building west of the auxiliary building (site x 5..27, z 98..132; tools/radwaste_store.py):
+	 * outside, the entry hall, the airlock (its beacons green, then the outer door open: the inner door's beacons red
+	 * and the inner door won't open), the vault, the inspection corridor.
+	 */
+	private static void radwaste(ClientGameTestContext context, TestSingleplayerContext singleplayer, java.util.function.IntUnaryOperator wx,
+			java.util.function.IntUnaryOperator wz, int y) {
+		int[][] shots = {{16, 5, 146, 16, 3, 132}, {10, 2, 131, 16, 2, 122}, {16, 2, 126, 16, 2, 122}, {16, 2, 120, 16, 2, 117},
+				{7, 5, 118, 15, 1, 106}, {6, 2, 122, 6, 2, 104}, {16, 2, 114, 16, 1, 104}};
+		String[] names = {"outside", "hall", "airlock_outer", "airlock_chamber", "vault", "corridor", "vault_from_door"};
+		for (int i = 0; i < shots.length; i++) {
+			int[] t = shots[i];
+			shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+					"jugcraft_plant_medium_r14_radwaste_" + names[i]);
+		}
+		BlockPos outer = new BlockPos(wx.applyAsInt(16), y, wz.applyAsInt(122)), inner = new BlockPos(wx.applyAsInt(16), y, wz.applyAsInt(117));
+		singleplayer.getServer().runOnServer(minecraft -> {
+			var level = minecraft.overworld();
+			var o = level.getBlockState(outer);
+			var in = level.getBlockState(inner);
+			if (!(o.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.LeadDoorBlock door) || !(in.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.LeadDoorBlock)) {
+				throw new AssertionError("The radwaste airlock's doors are not at " + outer.toShortString() + " and " + inner.toShortString()
+						+ ": " + o + ", " + in);
+			}
+			door.setOpen(null, level, o, outer, true);
+			if (io.github.jimbozoomer.jugcraft.nuclear.LeadDoorBlock.blockedBy(level, inner, in) == null) {
+				throw new AssertionError("With the outer door open the inner door should be interlocked");
+			}
+		});
+		context.waitTicks(5);
+		shotAt(context, singleplayer, wx.applyAsInt(16), y + 2, wz.applyAsInt(127), wx.applyAsInt(16), y + 2, wz.applyAsInt(117),
+				"jugcraft_plant_medium_r14_radwaste_airlock_open");
+		singleplayer.getServer().runOnServer(minecraft -> {
+			var level = minecraft.overworld();
+			var o = level.getBlockState(outer);
+			((io.github.jimbozoomer.jugcraft.nuclear.LeadDoorBlock) o.getBlock()).setOpen(null, level, o, outer, false);
+		});
+	}
+
+	/**
+	 * Round 14: diesel room A's panels follow its generator. Stopped and settled, then started again: part way into the
+	 * load sequence (the safety injection pump starting, the voltage and frequency dipping) and with it complete (full
+	 * load, everything steady), then stopping. The panels' block entities must be there, and the readings right.
+	 */
+	private static void livePanels(ClientGameTestContext context, TestSingleplayerContext singleplayer, java.util.function.IntUnaryOperator wx,
+			java.util.function.IntUnaryOperator wz, int y, int baseY) {
+		BlockPos edg = new BlockPos(wx.applyAsInt(184), baseY, wz.applyAsInt(97));
+		java.util.function.Consumer<Boolean> run = on -> singleplayer.getServer().runOnServer(minecraft -> {
+			var level = minecraft.overworld();
+			if (level.getBlockEntity(edg) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity generator) {
+				generator.setDieselRunning(level.getGameTime(), on);
+			}
+		});
+		singleplayer.getServer().runOnServer(minecraft -> {
+			int panels = 0;
+			for (BlockPos at : BlockPos.betweenClosed(new BlockPos(Math.min(wx.applyAsInt(176), wx.applyAsInt(196)), baseY, Math.min(wz.applyAsInt(102), wz.applyAsInt(114))),
+					new BlockPos(Math.max(wx.applyAsInt(176), wx.applyAsInt(196)), baseY + 1, Math.max(wz.applyAsInt(102), wz.applyAsInt(114))))) {
+				if (minecraft.overworld().getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity) {
+					panels++;
+				}
+			}
+			if (panels < 6) {
+				throw new AssertionError("Diesel room A has " + panels + " live panels (block entities); it should have 6");
+			}
+		});
+		run.accept(false);
+		context.waitTicks(120);
+		// Each panel has linked itself to this room's generator (the server links them; the players are told).
+		String links = context.computeOnClient(client -> {
+			StringBuilder wrong = new StringBuilder();
+			int linked = 0;
+			for (BlockPos at : BlockPos.betweenClosed(new BlockPos(Math.min(wx.applyAsInt(176), wx.applyAsInt(196)), baseY, Math.min(wz.applyAsInt(102), wz.applyAsInt(114))),
+					new BlockPos(Math.max(wx.applyAsInt(176), wx.applyAsInt(196)), baseY + 1, Math.max(wz.applyAsInt(102), wz.applyAsInt(114))))) {
+				if (client.level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel) {
+					if (edg.equals(panel.generator)) {
+						linked++;
+					} else {
+						wrong.append(" ").append(at.toShortString()).append("->").append(panel.generator == null ? "none" : panel.generator.toShortString());
+					}
+				}
+			}
+			return linked == 6 ? "" : linked + " of 6 panels linked to the generator at " + edg.toShortString() + ";" + wrong;
+		});
+		if (!links.isEmpty()) {
+			throw new AssertionError(links);
+		}
+		shotAt(context, singleplayer, wx.applyAsInt(187), y + 2, wz.applyAsInt(104), wx.applyAsInt(186), y + 1, wz.applyAsInt(108),
+				"jugcraft_plant_medium_r14_panels_stopped");
+		run.accept(true);
+		// The screenshot comes about 10.3 s after the start: the safety injection pump starting.
+		context.waitTicks(181);
+		shotAt(context, singleplayer, wx.applyAsInt(187), y + 2, wz.applyAsInt(104), wx.applyAsInt(186), y + 1, wz.applyAsInt(108),
+				"jugcraft_plant_medium_r14_panels_starting");
+		context.waitTicks(700);
+		java.util.function.Supplier<io.github.jimbozoomer.jugcraft.client.EdgTelemetry.Snapshot> read = () -> context.computeOnClient(client -> {
+			var level = client.level;
+			return io.github.jimbozoomer.jugcraft.client.EdgTelemetry.of(level.getBlockEntity(edg) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity e
+					? e : null, level.getGameTime());
+		});
+		var full = read.get();
+		if (!full.breaker || full.steps != 8 || full.kw < 6600 || full.kw > 7000 || Math.abs(full.hz - 60) > 0.2 || Math.abs(full.kv - 4.16) > 0.05
+				|| Math.abs(full.rpm - 514) > 3) {
+			throw new AssertionError(String.format(java.util.Locale.ROOT, "At full load the panels read %.0f kW %.2f Hz %.3f kV %.0f rpm, breaker %s, %d steps",
+					full.kw, full.hz, full.kv, full.rpm, full.breaker, full.steps));
+		}
+		int[][] shots = {{187, 2, 104, 186, 1, 108}, {188, 0, 105, 189, 1, 108}, {185, 0, 105, 184, 1, 108}, {189, 1, 106, 190, 1, 108},
+				{183, 1, 106, 183, 1, 108}};
+		String[] names = {"panels_running_wide", "panels_running_left", "panels_running_right", "panels_running_close_a",
+				"panels_running_close_b"};
+		for (int i = 0; i < shots.length; i++) {
+			int[] t = shots[i];
+			shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+					"jugcraft_plant_medium_r14_" + names[i]);
+		}
+		run.accept(false);
+		context.waitTicks(30);
+		shotAt(context, singleplayer, wx.applyAsInt(187), y + 2, wz.applyAsInt(104), wx.applyAsInt(186), y + 1, wz.applyAsInt(108),
+				"jugcraft_plant_medium_r14_panels_stopping");
+		var stopped = read.get();
+		if (stopped.breaker || stopped.kw > 1 || stopped.running) {
+			throw new AssertionError("Stopped, the breaker should be open and the load gone: " + stopped.kw + " kW, breaker " + stopped.breaker);
 		}
 	}
 
@@ -451,9 +604,12 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						}
 						level.setBlock(at, st.setValue(io.github.jimbozoomer.jugcraft.nuclear.StorageTankHatchBlock.OPEN, true), 3);
 					}
-					BlockPos wall = new BlockPos(wx.applyAsInt(198), baseY + 4, wz.applyAsInt(109));
-					if (!(level.getBlockEntity(wall) instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRunBlockEntity run) || !run.hasDisguise()) {
-						throw new AssertionError("The fuel line's pipe in the diesel building's wall has no look: " + level.getBlockState(wall));
+					// The fuel line goes in under the wall (in the slab), from its trench outside, on along the floor.
+					for (int[] c : new int[][] {{198, -1, 109}, {198, -1, 110}, {200, -1, 114}, {198, -1, 100}}) {
+						BlockPos wall = new BlockPos(wx.applyAsInt(c[0]), baseY + c[1], wz.applyAsInt(c[2]));
+						if (!(level.getBlockEntity(wall) instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRunBlockEntity run) || !run.hasDisguise()) {
+							throw new AssertionError("The buried fuel line at " + wall.toShortString() + " has no look: " + level.getBlockState(wall));
+						}
 					}
 					BlockPos day = new BlockPos(wx.applyAsInt(195), baseY, wz.applyAsInt(93));
 					if (!(level.getBlockEntity(day) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity tank) || !tank.formed()
@@ -465,12 +621,14 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				int[][] roundShots = {
 						{235, 17, 125, 234, 6, 125}, {199, 9, 93, 198, 1, 93}, {191, 3, 105, 198, 3, 93}, {181, 4, 106, 190, 1, 100},
 						{196, 2, 106, 191, 2, 101}, {183, 6, 100, 195, 2, 100}, {190, 5, 105, 185, 7, 100}, {186, 2, 94, 189, 0, 97},
-						{196, 5, 114, 198, 4, 109}, {196, 4, 105, 198, 4, 109}, {196, 15, 96, 198, 12, 92}, {200, 2, 100, 194, 1, 97},
+						{202, 1, 114, 199, -1, 111}, {199, 1, 103, 198, -1, 99}, {196, 15, 96, 198, 12, 92}, {200, 2, 100, 194, 1, 97},
 						{187, 3, 97, 196, 0, 97}, {195, 1, 116, 193, 0, 109}, {157, 1, 123, 156, 0, 117}, {118, 1, 70, 124, 0, 69},
-						{35, 1, 140, 34, 0, 134}};
+						{35, 1, 140, 34, 0, 134}, {188, 0, 105, 189, 1, 108}, {185, 0, 105, 184, 1, 108}, {187, 2, 104, 186, 1, 108},
+						{197, 5, 103, 195, 4, 100}, {196, 1, 105, 195, 1, 101}};
 				String[] roundNames = {"cst_hatch_open", "day_tank_hatch_open", "day_tank", "edg_front", "edg_steps", "edg_top", "edg_exhaust",
-						"edg_fuel_inlet", "wall_pipe_outside", "wall_pipe_inside", "day_tank_vent_roof", "edg_left_steps", "edg_left_walkway",
-						"diesel_door_level", "control_door_level", "turbine_door_level", "aux_door_level"};
+						"edg_fuel_inlet", "fuel_trench_outside", "fuel_floor_inside", "day_tank_vent_roof", "edg_left_steps", "edg_left_walkway",
+						"diesel_door_level", "control_door_level", "turbine_door_level", "aux_door_level", "panels_left", "panels_right",
+						"panels_wide", "edg_air_intake", "edg_stringers"};
 				for (int i = 0; i < roundShots.length; i++) {
 					int[] t = roundShots[i];
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
@@ -498,6 +656,32 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 					}
 				});
 				context.waitTicks(100);
+				context.runOnClient(client -> {
+					if (io.github.jimbozoomer.jugcraft.client.DieselSounds.playing() < 1) {
+						throw new AssertionError("The running diesel generator makes no sound");
+					}
+					// Sound through walls: in the room it is heard plainly; outside, through the concrete wall, muffled
+					// to a tenth; from two rooms away (through the dividing wall too), not at all.
+					net.minecraft.world.phys.Vec3 engine = new net.minecraft.world.phys.Vec3(wx.applyAsInt(190) + 0.5, baseY + 5.5, wz.applyAsInt(100) + 0.5);
+					double inside = io.github.jimbozoomer.jugcraft.client.SoundOcclusion.walls(client.level,
+							new net.minecraft.world.phys.Vec3(wx.applyAsInt(186) + 0.5, baseY + 1.6, wz.applyAsInt(105) + 0.5), engine);
+					double outside = io.github.jimbozoomer.jugcraft.client.SoundOcclusion.walls(client.level,
+							new net.minecraft.world.phys.Vec3(wx.applyAsInt(190) + 0.5, baseY + 1.6, wz.applyAsInt(114) + 0.5), engine);
+					double otherRoom = io.github.jimbozoomer.jugcraft.client.SoundOcclusion.walls(client.level,
+							new net.minecraft.world.phys.Vec3(wx.applyAsInt(214) + 0.5, baseY + 1.6, wz.applyAsInt(114) + 0.5), engine);
+					if (inside > 0.3 || outside < 0.9 || otherRoom < 1.9) {
+						throw new AssertionError("Walls between the generator and you: in its room " + inside + ", outside " + outside
+								+ ", beyond the next room " + otherRoom);
+					}
+				});
+				// The day tank, drawn down, is filling again from the storage tank through the buried line.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					BlockPos day = new BlockPos(wx.applyAsInt(195), baseY, wz.applyAsInt(93));
+					if (!(minecraft.overworld().getBlockEntity(day) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity tank)
+							|| tank.inRate() <= 0) {
+						throw new AssertionError("No fuel is reaching day tank DT-1A through the buried line");
+					}
+				});
 				int[][] edgShots = {{182, 2, 100, 184, 1, 100}, {196, 3, 105, 193, 1, 100}, {200, 2, 101, 197, 2, 100}, {196, 2, 106, 193, 1, 103},
 						{186, 23, 116, 185, 18, 100}};
 				String[] edgNames = {"edg_running_front", "edg_running_coupling", "edg_running_fan", "edg_steps", "edg_running_smoke"};
@@ -506,6 +690,8 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
 							"jugcraft_plant_medium_r12_" + edgNames[i]);
 				}
+				livePanels(context, singleplayer, wx, wz, y, baseY);
+				radwaste(context, singleplayer, wx, wz, y);
 				// The tank screens: the day tank refilling, and the condensate tank.
 				BlockPos dayOutlet = new BlockPos(wx.applyAsInt(195), y, wz.applyAsInt(93));
 				BlockPos cstOutlet = new BlockPos(wx.applyAsInt(226), y + 1, wz.applyAsInt(125));
@@ -519,7 +705,7 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				context.waitTicks(5);
 				// Holding a pipe: the runs hidden in the wall show through it.
 				server.runCommand("item replace entity @p weapon.mainhand with jugcraft:steel_fluid_pipe");
-				shotAt(context, singleplayer, wx.applyAsInt(196), y + 5, wz.applyAsInt(113), wx.applyAsInt(198), y + 4, wz.applyAsInt(109),
+				shotAt(context, singleplayer, wx.applyAsInt(201), y + 2, wz.applyAsInt(113), wx.applyAsInt(199), y - 1, wz.applyAsInt(109),
 						"jugcraft_plant_medium_r12_wall_pipe_overlay");
 				server.runCommand("item replace entity @p weapon.mainhand with air");
 				server.runCommand("effect give @p night_vision infinite 0 true");

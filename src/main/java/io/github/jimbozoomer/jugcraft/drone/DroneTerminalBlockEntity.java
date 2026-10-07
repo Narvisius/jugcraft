@@ -689,7 +689,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		int range = RANGE;
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
 		if (tower != null) {
-			// A Drone Tower builds within its build radius: 50 chunks each way from the core's chunk. Only sites in
+			// A Drone Tower builds within its build radius: 250 chunks each way from the core's chunk. Only sites in
 			// loaded chunks are offered (their blueprint stakes are loaded); the tower keeps its own chunks loaded.
 			net.minecraft.world.level.ChunkPos chunk = net.minecraft.world.level.ChunkPos.containing(tower.getBlockPos());
 			center = new BlockPos(chunk.getMiddleBlockX(), platformY + 1, chunk.getMiddleBlockZ());

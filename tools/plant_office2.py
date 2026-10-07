@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw
 import nuclear_materials as M
 import plant_office3 as O3
 import plant_office4 as O4
+import plant_panels as PN
 
 S = M.CELL
 
@@ -170,6 +171,8 @@ PIECES = {
     "light_hanger": {"display": "Light Hanger Chain", "boxes": O4.O7.LIGHT_HANGER},
     "large_print": {"display": "Large Framed Picture", "multi": (2, 1, True), "prints": 12},
 }
+# The diesel generator rooms' control and protection panels (tools/plant_panels.py).
+PIECES.update(PN.PANELS)
 
 CRAFTING = {
     "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),
@@ -273,6 +276,8 @@ def multi_parts(info, version=0):
             yield p, oval_boxes(c, r, w, rows) + O4.O5.slice_into(items, c, r)
         elif info.get("copier"):
             yield p, O3.copier_part(c, r)
+        elif info.get("panel"):
+            yield p, PN.part(info["panel"], c, r)
         elif vertical:
             yield p, screen_boxes(info["screen"], c, r, w, rows)
         else:
@@ -893,6 +898,7 @@ def makers():
         out[f"pi_plant_top_{i}"] = (lambda i=i: _plant_top(i))
     out.update(O3.makers())
     out.update(O4.makers())
+    out.update(PN.makers())
     for v in range(12):
         for tex, img in lprint_texture(v).items():
             out[tex] = (lambda img=img: img)
@@ -924,6 +930,8 @@ def icon(name):
         d.rectangle([2, 30, 126, 98], fill=(80, 52, 34, 255))
         img.paste(paintings.painted(0, 112, 56, 950).convert("RGBA"), (8, 36))
         return M.stylize(img, 24)
+    if name in PN.PANELS:
+        return PN.icon(name)
     if name == "office_copier":
         fr = O3._COPIER_TEX
         big = Image.new("RGBA", (512, 512), (0, 0, 0, 0))

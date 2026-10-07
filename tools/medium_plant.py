@@ -49,7 +49,9 @@ COLUMN = M("jugcraft:concrete_column", (170, 170, 166))
 ASPHALT = M("jugcraft:asphalt", (56, 58, 60))
 ROAD_LINE = M("jugcraft:asphalt_road_line", (200, 200, 200))
 LANTERN = M("minecraft:sea_lantern", (210, 230, 226))
-WARN_LIGHT = M("jugcraft:warning_light", (220, 60, 50))
+def beacon(colour, facing):
+    """A warning beacon (nuclear_storage.beacon_model) on the wall behind it: facing is the way it looks out."""
+    return M(f"jugcraft:warning_beacon[colour={colour},facing={facing}]", {"amber": (250, 170, 40), "red": (230, 50, 40), "green": (70, 210, 90)}[colour])
 PIPE = M("jugcraft:steel_fluid_pipe", (120, 128, 136))
 WATER = M("minecraft:water", (52, 92, 158))
 RAIL_NS = M("minecraft:rail[shape=north_south]", (110, 100, 90))
@@ -327,6 +329,15 @@ class Building(Part):
         for k in range(n):
             self.p(x, y + k, z, furniture(name, facing, up=k < n - 1, down=k > 0))
         self.seats.append((name, x, y, z, facing))
+
+    def panel(self, name, x, y, z, facing, width):
+        """A floor-standing panel two blocks high and width wide (plant_panels.py), its left block (as you face it) at
+        x, z."""
+        rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+        for c in range(width):
+            for row in range(2):
+                self.p(x + rx * c, y + row, z + rz * c, multi_state(name, facing, row * width + c))
+            self.seats.append((name, x + rx * c, y, z + rz * c, facing))
 
     def desk(self, x, y, z, facing, name="office_desk"):
         """A desk with its chair on the user's side."""
@@ -659,8 +670,7 @@ def containment(s, ox, oz):
     b.box(cv - 4, 1, size - 4, cv + 4, 10, size - 1, CONCRETE)
     b.box(cv - 3, 1, size - 1, cv + 3, 8, size - 1, LINER)
     b.box(cv - 3, 1, size - 4, cv + 3, 8, size - 2, 0)
-    b.g[cv - 4, 9, size - 1] = WARN_LIGHT
-    b.g[cv + 4, 9, size - 1] = WARN_LIGHT
+    # (Its amber beacons hang on the wall either side, outside the part: site decor, below.)
     # Railing round every opening in the operating floor.
     for x0, z0, x1, z1 in holes:
         b.rail_round(x0, z0, x1, z1, floor_y + 1)
@@ -675,6 +685,9 @@ def containment(s, ox, oz):
                 b.g[x, y, z] = CHAIN
             b.g[x, floor_y + 5, z] = LIGHT
     b.light_steps = [(4, None, floor_y + 6), (5, floor_y + 7, None)]
+    # Amber beacons either side of the equipment hatch, on the face of its collar.
+    for x in (cv - 4, cv + 4):
+        s.decor[(ox + x, b.site_y(9), oz + size)] = beacon("amber", "south")
     s.add(b, ox, oz)
     return b
 
@@ -956,7 +969,7 @@ def aux_building(s, ox, oz):
     for z in range(23, 36):
         b.stack("locker", 1, 1, z, "west", n=2)
     b.desk(8, 1, 27, "west")
-    b.p(6, 3, 22, WARN_LIGHT)
+    b.p(6, 3, 23, beacon("red", "south"))   # the controlled area's warning beacon, on the corridor wall
     b.stairwell(1, 1, [0, 8, 16], door_side="s")
     # Ground floor: pumps north, heat exchangers south.
     for x in range(24, W - 4, 10):
@@ -993,6 +1006,10 @@ def fuel_building(s, ox, oz):
     deck = 12
     b.b(1, deck, 1, W - 2, deck, 30, EPOXY)
     px0, px1, pz0, pz1 = 7, 18, 4, 25
+    # The pool's structure: shielding concrete round its steel liner (in a real plant, walls a couple of metres
+    # thick), so the racks' radiation stays in the water (round 14: it reached the open through the single liner
+    # plate and the building's brick plinth).
+    b.b(px0 - 1, 1, pz0 - 1, px1 + 1, deck, pz1 + 1, SHIELD)
     b.b(px0, 1, pz0, px1, deck, pz1, LINER)
     b.c(px0 + 1, 2, pz0 + 1, px1 - 1, deck, pz1 - 1)
     for x in range(px0 + 1, px1):
@@ -1002,6 +1019,7 @@ def fuel_building(s, ox, oz):
     for x in range(px0 + 1, px1 - 3, 4):
         for z in range(pz0 + 1, pz1 - 3, 4):
             b.prop("spent_fuel_rack", x, 2, z, "north")
+    b.b(0, 4, 12, px0 - 1, deck, 18, SHIELD)
     b.b(0, 5, 13, px0, deck, 17, LINER)
     b.c(1, 6, 14, px0, deck, 16)
     for x in range(1, px0 + 1):
@@ -1043,7 +1061,8 @@ def fuel_building(s, ox, oz):
 def diesel_building(s, ox, oz):
     """The emergency diesel generator building, 46 x 20: two generator rooms (one per safety train), each with its
     diesel generator set (the engine's exhaust up through the roof to its stack), its fuel oil day tank (a small storage
-    tank MBS, filled from the fuel oil storage tank outside) and control panels, air intake louvres in the north wall.
+    tank MBS, filled from the fuel oil storage tank outside), its control and protection panels and battery along the
+    south wall, air intake louvres in the north wall.
     Returns the building and, per room, where its fill line comes through the south wall."""
     W, D, H = 46, 20, 11
     b = Building("diesel_building", "Emergency Diesel Building", W, D, H, grounded=True)
@@ -1053,8 +1072,14 @@ def diesel_building(s, ox, oz):
     fills = []
     for room, x0 in enumerate((2, W // 2 + 2)):
         b.prop("emergency_diesel_generator", x0 + 2, 1, 7, "east")
-        for x in range(x0 + 1, x0 + 9):
-            b.stack("relay_cabinet", x, 1, D - 2, "south", n=2)
+        # Along the south wall, as you face them from the left: the battery rack and its charger, the load sequencer,
+        # the protection relays, the voltage regulator, the generator's control panel, the engine's (nearest the engine's
+        # front).
+        x = x0 + 8
+        for name, width in (("edg_battery_rack", 1), ("edg_battery_charger", 1), ("edg_load_sequencer", 1), ("edg_protection_panel", 1),
+                            ("edg_voltage_regulator", 1), ("edg_generator_panel", 2), ("edg_engine_panel", 1)):
+            b.panel(name, x, 1, D - 2, "south", width)
+            x -= width
         # Louvres high in the north wall; the stack over the engine's turbochargers (its exhaust comes up from them).
         for x in range(x0 + 1, x0 + 17):
             if x % 8:
@@ -1069,44 +1094,37 @@ def diesel_building(s, ox, oz):
         # (No campfire on top: the running generator makes its own exhaust smoke there, client/NuclearRenderer.)
         entrance(b, x0 + 11, D - 1, "s", kind="steel")
         b.p(x0 + 13, 2, D - 2, sign("diesel_a" if room == 0 else "diesel_b", "north"))
-        fill, vent = day_tank(b, x0, room, H, D)
-        fills.append(fill)
-        # The day tank's vent line ends in a gooseneck on the roof (above the part's height: site decor).
-        s.decor[(ox + vent[0], b.site_y(H + 3), oz + vent[1])] = M("jugcraft:storage_tank_vent[facing=north,riser=false]", (150, 156, 160))
+        fills.append(day_tank(b, x0, room, H, D))
     s.add(b, ox, oz)
     return b, fills
 
 
 def day_tank(b, x0, room, H, D):
     """A generator room's fuel oil day tank in its north-east corner: a small storage tank MBS (tank_in) on a steel
-    drip pan with a lip round it, ladder, railing, gate and hatch like the big tanks; its vent piped up through the
-    roof to a gooseneck; its outlet piped overhead to the engine's fuel connection; its inlet fed overhead from the
-    south wall, where the line from the fuel oil storage tank comes through (a pipe in the wall). Returns where that
-    comes through (its x) and the vent's cell (its gooseneck, on the roof, is the caller's)."""
+    drip pan with a lip round it, ladder, railing, gate and hatch like the big tanks, and a short gooseneck vent on its
+    roof like theirs (Justin, round 14: no vent line up through the building's roof). The fuel lines keep out of the way, in the floor (pipes inside the slab, Justin's round 13):
+    the outlet drops into the floor and comes up under the engine's fuel connection; the line from the fuel oil
+    storage tank comes in under the south wall, along the floor and up into the inlet. Returns where that comes in
+    under the wall (its x)."""
     cx, cz, r, h = x0 + 16.5, 3.5, 2.6, 6
-    out_cell, in_cell, vent_cell = tank_in(b, cx, cz, r, h, "diesel_day_a" if room == 0 else "diesel_day_b", outlet="w",
+    out_cell, in_cell, _ = tank_in(b, cx, cz, r, h, "diesel_day_a" if room == 0 else "diesel_day_b", outlet="w",
                                            inlet="s", ladder="e", manway=None, hatch_in=2, vent=(0, -1), foundation=None,
                                            fill_line=False, wall=1.1)
-    # The vent line: up from the vent through the roof (a pipe in the roof slab) to a gooseneck.
-    vx, vz = vent_cell
-    b.p(vx, h + 2, vz, M("jugcraft:storage_tank_vent[facing=north,riser=true]", (150, 156, 160)))
-    for y in range(h + 3, H + 1):
-        assert b.get(vx, y, vz) == 0, ("vent line", vx, y, vz)
-        b.p(vx, y, vz, PIPE)
-    b.p(vx, H + 1, vz, WALL_PIPE)
-    b.p(vx, H + 2, vz, PIPE)
-    # The outlet: overhead to the engine's fuel connection on the generator's near side.
+    # The outlet: a stub off its flange, down into the floor, along under it and up under the engine's fuel connection
+    # on the generator's near side.
     ox, oz = out_cell
     fx = x0 + 7
-    line = [(ox - 1, y, oz) for y in range(1, 5)] + [(x, 4, oz) for x in range(ox - 2, fx - 1, -1)]
-    line += [(fx, 4, z) for z in range(oz + 1, 7)] + [(fx, y, 6) for y in range(3, 0, -1)]
-    # The inlet: from the south wall overhead, and down to the inlet's flange.
     ix, iz = in_cell
-    line += [(ix, 5, z) for z in range(D - 2, iz, -1)] + [(ix, y, iz + 1) for y in range(4, 0, -1)]
-    for x, y, z in line:
+    risers = [(ox - 1, 1, oz), (fx, 1, 6), (ix, 1, iz + 1)]
+    floor = [(ox - 1, 0, oz)] + [(x, 0, oz) for x in range(ox - 2, fx - 1, -1)] + [(fx, 0, z) for z in range(oz + 1, 7)]
+    # The inlet: in under the south wall (through the slab under it), along the floor and up into the inlet's flange.
+    floor += [(ix, 0, z) for z in range(D - 1, iz, -1)]
+    for x, y, z in risers:
         assert b.get(x, y, z) == 0, ("fuel line", x, y, z)
         b.p(x, y, z, PIPE)
-    b.p(ix, 5, D - 1, WALL_PIPE)
+    for x, y, z in floor:
+        assert b.get(x, y, z) in (EPOXY, SMOOTH), ("fuel line in the floor", x, y, z)
+        b.p(x, y, z, WALL_PIPE)
     # The drip pan under and round the tank, a steel lip at its edge (broken where the pipes come out).
     for x in range(int(cx - r - 3), int(cx + r + 3)):
         for z in range(1, int(cz + r + 3)):
@@ -1115,7 +1133,7 @@ def day_tank(b, x0, room, H, D):
                 b.p(x, 0, z, LINER)
             if r + 0.9 < d <= r + 1.5 and b.get(x, 1, z) == 0:
                 b.p(x, 1, z, LIP)
-    return ix, vent_cell
+    return ix
 
 
 # ------------------------------------------------------------------------------------------------- pump house
@@ -1408,6 +1426,9 @@ def medium_site():
             s.decor[(x, y, 60)] = GIRDER
     # Around the reactor.
     aux_building(s, 30, 95)
+    # The radwaste building (round 14) west of the auxiliary building, by its health physics entrance.
+    import radwaste_store
+    radwaste_store.place(s, 5, 98)
     fuel_building(s, 100, 95)
     ctrl = control_building(s, 136, 88)
     cx, cz, cy = ctrl
@@ -1416,18 +1437,18 @@ def medium_site():
     outdoor_tank(s, 16, 70, 6.5, 14, "Refuelling Water Storage Tank", "rwst_tank", service="refuelling_water")
     outdoor_tank(s, 232, 125, 5.5, 12, "Condensate Storage Tank", "condensate_tank", service="condensate")
     # The diesel generators' fuel oil storage tank on its spill pad south of the diesel building (where the tanker
-    # fills it): its outlet piped north on concrete sleepers to the building, up its south wall and along it, above
-    # the doors' canopies, to where each room's day tank line comes in through the wall.
+    # fills it). Its line keeps out of the way (Justin's round 13): off the outlet, straight down through the pad, then
+    # buried in a trench flush with the grass (pipe in concrete) north to the building and along its south wall to
+    # where each room's line goes in under the wall. A smooth stone bed under the trench gives it its look.
     outdoor_tank(s, 200, 125, 4.5, 8, "Diesel Fuel Oil Storage Tank", "diesel_fuel_tank", service="diesel_fuel", outlet="n", inlet="e",
                  ladder="w", manway="s", bund=True)
-    for z in range(110, 120):
-        s.decor[(200, 1, z)] = PIPE
-    for z in (111, 114, 117):
-        s.decor[(200, 0, z)] = SMOOTH
-    for y in range(2, diesel.site_y(5)):
-        s.decor[(200, y, 110)] = PIPE
-    for x in range(180 + min(fills), 180 + max(fills) + 1):
-        s.decor[(x, diesel.site_y(5), 110)] = PIPE
+    s.decor[(200, 1, 119)] = PIPE
+    trench = [(200, 0, 119)] + [(200, -1, z) for z in range(110, 120)]
+    trench += [(x, -1, 110) for x in range(180 + min(fills), 180 + max(fills) + 1)]
+    for x, y, z in trench:
+        s.decor[(x, y, z)] = WALL_PIPE
+        if y == -1:
+            s.decor[(x, -2, z)] = SMOOTH
     # Electrical: the transformer yard by the turbine hall, the switchyard beyond.
     s.add(P.transformer_yard("pwr_transformer_yard", "Main Transformer Yard", 20, 26), 226, 46)
     s.add(P.switchyard("switchyard_medium", "Switchyard", 70, 60, 6), 262, 30)

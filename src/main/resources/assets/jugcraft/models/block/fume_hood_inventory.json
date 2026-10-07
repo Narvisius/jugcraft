@@ -112,12 +112,12 @@
     },
     {
       "from": [
-        -0.03,
+        0.03,
         12,
         0.97
       ],
       "to": [
-        16.03,
+        15.97,
         16.1,
         15.53
       ],
@@ -125,9 +125,9 @@
         "north": {
           "texture": "#pi_hood_side",
           "uv": [
+            0.03,
             0,
-            0,
-            16,
+            15.97,
             4.1
           ]
         },
@@ -161,18 +161,18 @@
         "up": {
           "texture": "#pi_hood_side",
           "uv": [
-            0,
+            0.03,
             0.97,
-            16,
+            15.97,
             15.53
           ]
         },
         "down": {
           "texture": "#pi_hood_side",
           "uv": [
-            0,
+            0.03,
             0.47,
-            16,
+            15.97,
             15.03
           ]
         }
@@ -249,7 +249,7 @@
     {
       "from": [
         0.97,
-        -0.03,
+        0.03,
         2
       ],
       "to": [
@@ -259,13 +259,7 @@
       ],
       "faces": {
         "north": {
-          "texture": "#pi_lab_cabinet",
-          "uv": [
-            0.97,
-            6.97,
-            15.03,
-            16.0
-          ]
+          "texture": "#pi_lab_cabinet"
         },
         "south": {
           "texture": "#pi_lab_front",
@@ -277,40 +271,16 @@
           ]
         },
         "east": {
-          "texture": "#pi_lab_cabinet",
-          "uv": [
-            1,
-            6.97,
-            14,
-            16.0
-          ]
+          "texture": "#pi_lab_cabinet"
         },
         "west": {
-          "texture": "#pi_lab_cabinet",
-          "uv": [
-            2,
-            6.97,
-            15,
-            16.0
-          ]
+          "texture": "#pi_lab_cabinet"
         },
         "up": {
-          "texture": "#pi_lab_cabinet",
-          "uv": [
-            0.97,
-            2,
-            15.03,
-            15
-          ]
+          "texture": "#pi_lab_cabinet"
         },
         "down": {
-          "texture": "#pi_lab_cabinet",
-          "uv": [
-            0.97,
-            1,
-            15.03,
-            14
-          ]
+          "texture": "#pi_lab_cabinet"
         }
       }
     },

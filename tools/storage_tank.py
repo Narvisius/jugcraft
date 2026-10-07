@@ -5,7 +5,7 @@ foundation, a roof of plates, an outlet nozzle (the controller) and an inlet noz
 with a safety cage, a railing round the roof with a self-closing gate where the ladder comes up. When the outlet
 finds the shell, roof and floor closed round a space it forms the tank: the space fills with invisible interior
 blocks (nothing spawns in there), the plates turn from grey primer to the finished paint and it holds one fluid,
-a bucket for every block of space inside.
+four buckets for every block of space inside.
 
 Models are drawn facing north: whatever faces out (a nozzle, a ladder's climbing side, a manway) looks north (-z) and
 the tank shell is on the south side (z = 16), as in vanilla's ladder. Elements are (from, to, texture[, options]) in
@@ -500,6 +500,8 @@ def _turn(y):
 
 
 def write_assets(write, rid, assets, lang):
+    import zfight
+    write = zfight.unfighting(write)  # no two faces of a model in the same place (Justin: never any z-fighting)
     models = assets / "models" / "block"
     for block, name in NAMES.items():
         lang[f"block.{MOD}.{block}"] = name
@@ -615,6 +617,9 @@ def write_assets(write, rid, assets, lang):
         f"message.{MOD}.storage_tank.empty": "Empty (%s buckets)",
         f"message.{MOD}.storage_tank.not_formed": "Tank not formed: the shell, roof and floor must close round the space inside, with the outlet on the shell",
         f"message.{MOD}.storage_tank.no_tank": "Not on a formed tank: an inlet works once the tank's outlet has formed it",
+        f"message.{MOD}.storage_tank.hatch": "Roof hatch. %s. Pour liquid in here from a bucket",
+        f"message.{MOD}.storage_tank.hatch_other": "This tank holds %s: it won't take %s as well",
+        f"message.{MOD}.storage_tank.hatch_full": "Not enough room in the tank for that. %s",
         f"tank.{MOD}.condensate.name": "CONDENSATE STORAGE TANK",
         f"tank.{MOD}.condensate.tag": "CST-01",
         f"tank.{MOD}.refuelling_water.name": "REFUELLING WATER STORAGE TANK",

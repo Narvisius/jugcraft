@@ -43,7 +43,7 @@ import org.jspecify.annotations.Nullable;
  * tank its nozzle is on. Going in through the shell behind it, it fills the space it finds; the tank is whole when
  * that space is closed in by tank plates (walls and roof) and a solid floor, nothing else. A whole tank forms: the
  * space fills with {@link StorageTankInteriorBlock}s, every plate is painted by where it is, the inlets on its shell
- * are linked, and it holds one fluid, a bucket for every block of space inside. A tank that comes apart unforms: the
+ * are linked, and it holds one fluid, four buckets for every block of space inside ({@link #BUCKETS_PER_BLOCK}). A tank that comes apart unforms: the
  * interior is cleared and the plates go back to primer, and the outlet keeps the fluid until the tank is whole again.
  * The outlet also works out where its float gauge runs (up the shell above it) and the widest clear stretch of shell
  * to stencil the tank's name on, for client/StorageTankRenderer.
@@ -51,6 +51,8 @@ import org.jspecify.annotations.Nullable;
 public class StorageTankPortBlockEntity extends BlockEntity {
 	private static final int CHECK_TICKS = 40, MAX_CELLS = 16000, MAX_SPAN = 48;
 	/** An open outlet feeds its line: every few ticks it sends this much (a bucket a second) into whatever its pipe reaches. */
+	/** What a block of space inside holds (Justin, round 14: four times a bucket, so a tank holds a useful amount). */
+	public static final int BUCKETS_PER_BLOCK = 4;
 	private static final int FEED_TICKS = 5;
 	private static final long FEED = 250 * FluidNetworks.DROPLETS_PER_MB;
 	/** Fill changes reach clients at most this often (ticks). */
@@ -252,11 +254,8 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		Component contents;
 		if (tank == null || !tank.formed) {
 			contents = Component.translatable(isOutlet() ? "message.jugcraft.storage_tank.not_formed" : "message.jugcraft.storage_tank.no_tank");
-		} else if (tank.fluid.isResourceBlank() || tank.fluid.amount <= 0) {
-			contents = Component.translatable("message.jugcraft.storage_tank.empty", String.format("%,d", tank.fluid.capacity / FluidConstants.BUCKET));
 		} else {
-			contents = Component.translatable("message.jugcraft.storage_tank.contents", FluidVariantAttributes.getName(tank.fluid.variant),
-					String.format("%,d", tank.fluid.amount / FluidConstants.BUCKET), String.format("%,d", tank.fluid.capacity / FluidConstants.BUCKET));
+			contents = tank.contents();
 		}
 		Component which = Component.translatable(isOutlet() ? "message.jugcraft.storage_tank.outlet" : "message.jugcraft.storage_tank.inlet");
 		if (state.getValue(StorageTankPortBlock.POWERED)) {
@@ -264,6 +263,15 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		}
 		boolean open = opened != null ? opened : state.getValue(StorageTankPortBlock.OPEN);
 		return Component.translatable(open ? "message.jugcraft.storage_tank.opened" : "message.jugcraft.storage_tank.shut", which, contents);
+	}
+
+	/** A formed tank's contents: "Water: 312 / 624 buckets", or "Empty (624 buckets)". */
+	public Component contents() {
+		if (fluid.isResourceBlank() || fluid.amount <= 0) {
+			return Component.translatable("message.jugcraft.storage_tank.empty", String.format("%,d", fluid.capacity / FluidConstants.BUCKET));
+		}
+		return Component.translatable("message.jugcraft.storage_tank.contents", FluidVariantAttributes.getName(fluid.variant),
+				String.format("%,d", fluid.amount / FluidConstants.BUCKET), String.format("%,d", fluid.capacity / FluidConstants.BUCKET));
 	}
 
 	// ------------------------------------------------------------------ forming
@@ -486,7 +494,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		interior = interiorList.stream().mapToInt(Integer::intValue).toArray();
 		plates = plateList.stream().mapToInt(Integer::intValue).toArray();
 		inlets = inletList.stream().mapToInt(Integer::intValue).toArray();
-		fluid.capacity = (long) scan.inside.size() * FluidConstants.BUCKET;
+		fluid.capacity = (long) scan.inside.size() * BUCKETS_PER_BLOCK * FluidConstants.BUCKET;
 		if (fluid.amount > fluid.capacity) {
 			fluid.amount = fluid.capacity;
 		}

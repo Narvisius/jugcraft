@@ -17,6 +17,9 @@
 		"client": ["io.github.jimbozoomer.jugcraft.client.JugcraftClient"],
 		"jei_mod_plugin": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJeiPlugin"]
 	},
+	"mixins": [
+		{"config": "jugcraft.client.mixins.json", "environment": "client"}
+	],
 	"depends": {
 		"fabricloader": ">=0.19.3",
 		"minecraft": "~26.3",

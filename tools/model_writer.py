@@ -46,6 +46,9 @@ def rid(path):
 def write(path, obj):
     if isinstance(obj, dict) and obj.get("elements"):
         separate_coplanar(obj["elements"])
+        # Then any z-fighting that is left, rotated elements included (tools/zfight.py).
+        import zfight
+        obj = zfight.fix(obj)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
 
@@ -94,10 +97,16 @@ def separate_coplanar(elements):
                     def size(e):
                         return (e["to"][others[0]] - e["from"][others[0]]) * (e["to"][others[1]] - e["from"][others[1]])
                     detail = second if size(second) <= size(first) else first
-                    if sign > 0:
-                        detail["to"][axis] = round(detail["to"][axis] + COPLANAR_NUDGE, 4)
-                    else:
-                        detail["from"][axis] = round(detail["from"][axis] - COPLANAR_NUDGE, 4)
+                    # Outwards, unless that takes the face past the block's edge (onto a neighbouring block's faces):
+                    # then inwards, the detail a hair thinner.
+                    key = "to" if sign > 0 else "from"
+                    v = detail[key][axis]
+                    out = round(v + sign * COPLANAR_NUDGE, 4)
+                    other = detail["from" if sign > 0 else "to"][axis]
+                    inside = 0 <= detail["from"][axis] and detail["to"][axis] <= 16
+                    if inside and not 0 <= out <= 16 and abs(v - other) > 2 * COPLANAR_NUDGE:
+                        out = round(v - sign * COPLANAR_NUDGE, 4)
+                    detail[key][axis] = out
                     moved = True
         if not moved:
             break
@@ -159,6 +168,32 @@ def texture_names(elements):
         values = texture.values() if isinstance(texture, dict) else [texture]
         names |= {value.rstrip("!") for value in values if value is not None}
     return sorted(name for name in names if not name.startswith("#"))
+
+
+def separate_parts(parts, footprint):
+    """Z-fighting between the parts of a large machine (faces of elements in neighbouring parts on the same plane):
+    the parts are put back together, separated as one model (tools/zfight.py) and cut apart again."""
+    import zfight
+    whole, owner = [], []
+    for index, (elements, offset) in enumerate(zip(parts, footprint)):
+        for e in elements:
+            e = json.loads(json.dumps(e))
+            for key in ("from", "to"):
+                e[key] = [e[key][axis] + offset[axis] * 16 for axis in range(3)]
+            if e.get("rotation") and "origin" in e["rotation"]:
+                e["rotation"]["origin"] = [e["rotation"]["origin"][axis] + offset[axis] * 16 for axis in range(3)]
+            whole.append(e)
+            owner.append(index)
+    fixed = zfight.fix({"elements": whole})["elements"]
+    out = [[] for _ in parts]
+    for e, index in zip(fixed, owner):
+        offset = footprint[index]
+        for key in ("from", "to"):
+            e[key] = [round(e[key][axis] - offset[axis] * 16, 4) for axis in range(3)]
+        if e.get("rotation") and "origin" in e["rotation"]:
+            e["rotation"]["origin"] = [round(e["rotation"]["origin"][axis] - offset[axis] * 16, 4) for axis in range(3)]
+        out[index].append(e)
+    return out
 
 
 def slice_model(name, elements, footprint):
@@ -288,7 +323,7 @@ def write_classic(root, machines, parts, fluid_blocks):
             textures = {name: rid(f"block/{name}") for name in texture_names(MODELS[machine])}
             textures["front"] = rid(f"block/{front}")
             textures["particle"] = rid("block/machine_side")
-            for index, elements in enumerate(slice_model(machine, MODELS[machine], FOOTPRINTS[machine])):
+            for index, elements in enumerate(separate_parts(slice_model(machine, MODELS[machine], FOOTPRINTS[machine]), FOOTPRINTS[machine])):
                 out.model(f"{machine}_part{index}", {"ambientocclusion": False, "textures": textures, "elements": elements})
                 if info["lit"]:
                     out.model(f"{machine}_part{index}_on", {"parent": rid(f"block/{machine}_part{index}"),
@@ -331,9 +366,17 @@ def write_steampunk(root, machines, parts, fluid_blocks):
     from steampunk_models import MODELS, GLOW, CUBES, PARTICLE
     out = StyleWriter(root)
 
-    def textures_for(elements):
+    from large_machines import FRONTS
+
+    def textures_for(elements, machine=None):
         textures = {name: rid(f"block/{name}") for name in texture_names(elements)}
         textures["particle"] = rid(f"block/{PARTICLE}")
+        # Models drawn with the machine's own front ("#front": the nuclear fuel machines) take it from FRONTS.
+        uses_front = any(v is not None and v.rstrip("!") == "#front"
+                         for item in elements
+                         for v in (unpack(item)[2].values() if isinstance(unpack(item)[2], dict) else [unpack(item)[2]]))
+        if uses_front and machine in FRONTS:
+            textures["front"] = rid(f"block/{FRONTS[machine]}")
         return textures
 
     def glow_override(elements):
@@ -341,10 +384,10 @@ def write_steampunk(root, machines, parts, fluid_blocks):
 
     for machine, info in machines.items():
         elements = MODELS[machine]
-        textures = textures_for(elements)
+        textures = textures_for(elements, machine)
         lit = info["lit"] and bool(glow_override(elements))
         if machine in FOOTPRINTS:
-            for index, part_elements in enumerate(slice_model(machine, elements, FOOTPRINTS[machine])):
+            for index, part_elements in enumerate(separate_parts(slice_model(machine, elements, FOOTPRINTS[machine]), FOOTPRINTS[machine])):
                 out.model(f"{machine}_part{index}", {"ambientocclusion": False, "textures": textures,
                                                      "elements": part_elements})
                 if lit:

@@ -1468,6 +1468,8 @@ def main():
     plant_office7.draw_rack_sheet().save(entity_dir / "storage_rack.png", optimize=True)
     import storage_tank
     storage_tank.draw_sheet().save(entity_dir / "storage_tank.png", optimize=True)
+    import plant_panels
+    plant_panels.live_sheet().save(entity_dir / "live_panel.png", optimize=True)
     # The blank equipment layer the 3D-drawn suits point at (equipment assets need one layer).
     (entity_dir / "equipment" / "humanoid").mkdir(parents=True, exist_ok=True)
     Image.new("RGBA", (64, 32), (0, 0, 0, 0)).save(entity_dir / "equipment" / "humanoid" / "blank.png", optimize=True)
