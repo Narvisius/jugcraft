@@ -126,7 +126,7 @@ public class DieselGeneratorGameTests {
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.DieselFuel.hasFuel(level, edg), "the generator finds its day tank");
 		double fullLoad = io.github.jimbozoomer.jugcraft.nuclear.DieselFuel.IDLE_LPH + io.github.jimbozoomer.jugcraft.nuclear.DieselFuel.LPH_PER_KW * 6800;
 		helper.assertTrue(fullLoad > 1600 && fullLoad < 1800, "about 1,690 L an hour at full load: " + fullLoad);
-		// Started, then 1,800 ticks: the sequence (40 s) and a Minecraft hour at full load.
+		// Started, then 1,800 ticks (1.8 Minecraft hours): the sequence (40 s), then full load: about 2,350 mB.
 		long t0 = level.getGameTime();
 		edg.setDieselRunning(t0, true);
 		double expected = 0;
@@ -135,7 +135,7 @@ public class DieselGeneratorGameTests {
 			expected += io.github.jimbozoomer.jugcraft.nuclear.DieselFuel.litresPerHour((now - t0) / 20.0) / io.github.jimbozoomer.jugcraft.nuclear.DieselFuel.TICKS_PER_HOUR;
 		}
 		double burned = (start - tank.fluid.amount) / (double) io.github.jimbozoomer.jugcraft.fluid.FluidNetworks.DROPLETS_PER_MB;
-		helper.assertTrue(Math.abs(burned - expected) < 40 && burned > 1500 && burned < 2200,
+		helper.assertTrue(Math.abs(burned - expected) < 40 && burned > 2100 && burned < 2600,
 				String.format(java.util.Locale.ROOT, "burned %.0f mB in 1,800 ticks, expected %.0f", burned, expected));
 		helper.assertTrue(edg.running, "still running with fuel left");
 		// Nearly dry: within a second it runs out and stops.

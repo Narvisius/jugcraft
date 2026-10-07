@@ -119,7 +119,7 @@ public class BlueprintGameTests {
 		expectInvalid(helper, good.replace("minecraft:stone_bricks", "minecraft:command_block"), "not allowed");
 		expectInvalid(helper, good.replace("\"SSS\", \"SSS\"", "\"SXS\""), "not in the palette");
 		expectInvalid(helper, "{not json", "Not valid JSON");
-		expectInvalid(helper, good.replace("\"format\": 1", "\"format\": 2"), "format");
+		expectInvalid(helper, good.replace("\"format\": 1", "\"format\": 3"), "format");
 		helper.succeed();
 	}
 

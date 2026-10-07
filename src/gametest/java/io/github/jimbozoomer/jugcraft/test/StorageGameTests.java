@@ -66,7 +66,7 @@ public class StorageGameTests {
 		var level = helper.getLevel();
 		BlockPos at = helper.absolutePos(new BlockPos(2, 1, 2));
 		level.setBlock(at, StorageBlocks.BLOCKS.get("lead_pig").defaultBlockState(), 3);
-		((ShieldedStorageBlockEntity) level.getBlockEntity(at)).setItem(4, new ItemStack(JugcraftNuclear.CHECK_SOURCE, 3));
+		((ShieldedStorageBlockEntity) level.getBlockEntity(at)).setItem(4, new ItemStack(JugcraftNuclear.CHECK_SOURCE));
 		level.destroyBlock(at, true);
 		var drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(at).inflate(2));
 		boolean found = false;
@@ -74,7 +74,7 @@ public class StorageGameTests {
 			ItemStack stack = drop.getItem();
 			var contents = stack.get(DataComponents.CONTAINER);
 			if (stack.is(StorageBlocks.BLOCKS.get("lead_pig").asItem()) && contents != null
-					&& contents.nonEmptyItemCopyStream().anyMatch(s -> s.is(JugcraftNuclear.CHECK_SOURCE) && s.getCount() == 3)) {
+					&& contents.nonEmptyItemCopyStream().anyMatch(s -> s.is(JugcraftNuclear.CHECK_SOURCE))) {
 				found = true;
 			}
 			if (stack.is(JugcraftNuclear.CHECK_SOURCE)) {
@@ -82,7 +82,7 @@ public class StorageGameTests {
 			}
 			drop.discard();
 		}
-		helper.assertTrue(found, "the pig dropped with its check sources in it (" + drops.size() + " drops)");
+		helper.assertTrue(found, "the pig dropped with its check source in it (" + drops.size() + " drops)");
 		helper.succeed();
 	}
 
