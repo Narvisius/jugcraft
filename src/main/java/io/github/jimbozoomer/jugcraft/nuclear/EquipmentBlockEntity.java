@@ -428,10 +428,22 @@ public class EquipmentBlockEntity extends BlockEntity {
 	/** Synced: water held in the unit's condensers (mB). */
 	public int syncedWater;
 
+	/** An emergency diesel generator: running (started from its panel), and the game time it was started. */
+	public boolean running;
+	public long runningSince;
+	/** Client: the diesel generator's speed (0..1) and its shaft's turn as drawn, and when smoke was last made. */
+	public float animSpeed, animAngle;
+	public long animNanos, smokeTick;
+	public int smokeY = Integer.MIN_VALUE;
+
 	private void saveCommon(ValueOutput out) {
 		if (owner != null) out.store("owner", UUIDUtil.CODEC, owner);
 		out.putString("mode", mode.name());
 		if (linked != null) out.store("linked", BlockPos.CODEC, linked);
+		if (running) {
+			out.putBoolean("running", true);
+			out.putLong("running_since", runningSince);
+		}
 	}
 
 	@Override
@@ -444,6 +456,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 			mode = UseMode.PERSONAL;
 		}
 		linked = in.read("linked", BlockPos.CODEC).orElse(null);
+		running = in.getBooleanOr("running", false);
+		runningSince = in.getLongOr("running_since", 0L);
 		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind.reactor()) {
 			core.loadReadouts(in);
 			missing = in.read("missing", Codec.STRING.listOf()).orElse(missing);

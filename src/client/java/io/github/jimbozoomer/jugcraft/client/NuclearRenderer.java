@@ -77,6 +77,20 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] FILTER_BANK = region(7, 4);
 	static final float[] SIGN_PANEL = region(0, 5);
 	static final float[] SIGN_EDGE = region(1, 5);
+	static final float[] ENGINE_GREEN = region(2, 5);
+	static final float[] ROCKER = region(3, 5);
+	static final float[] GUNMETAL = region(4, 5);
+	static final float[] RED_IRON = region(5, 5);
+	static final float[] PIPE_GREEN = region(6, 5);
+	static final float[] PIPE_BROWN = region(7, 5);
+	static final float[] PIPE_YELLOW = region(0, 6);
+	static final float[] PIPE_LBLUE = region(1, 6);
+	static final float[] CRANKCASE_DOOR = region(2, 6);
+	static final float[] GAUGE_BOARD = region(3, 6);
+	static final float[] SIGN_AUTOSTART = region(4, 6);
+	static final float[] STENCIL_EDG = region(5, 6);
+	static final float[] TURBO = region(6, 6);
+	static final float[] BLACK = region(7, 6);
 
 	private static float[] region(int col, int row) {
 		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX};
@@ -97,6 +111,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		float time;
 		/** Full detail, or the far-away mesh. */
 		boolean detail = true;
+		/** A diesel generator: running, its speed (0..1) and its shaft's turn (degrees). */
+		boolean running;
+		float speed, angle;
 	}
 
 	@Override
@@ -135,9 +152,66 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			state.tripped = vessel.core.scrammed;
 		}
 		state.time = (level.getGameTime() % 24_000) + partialTick;
+		if (state.kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
+			diesel(equipment, state, level, partialTick);
+		}
 		Vec3 middle = Vec3.atCenterOf(pos.offset(EquipmentKind.toWorld(new BlockPos(state.kind.wide / 2, state.kind.tall / 2, state.kind.deep / 2), state.facing)));
 		double reach = Math.max(state.kind.wide, Math.max(state.kind.deep, state.kind.tall)) / 2.0;
 		state.detail = cameraPos.distanceTo(middle) - reach < DETAIL_DISTANCE;
+	}
+
+	/**
+	 * A diesel generator's run: started, the air start turns it over slowly for a second and a half, it fires (a puff
+	 * of black smoke at the stack) and runs up to speed in two and a half seconds; stopped, it coasts down over four.
+	 * Running, exhaust smoke rises from the top of its stack (found above the exhaust's roof thimble).
+	 */
+	private static void diesel(EquipmentBlockEntity e, State state, Level level, float partialTick) {
+		long nanos = System.nanoTime();
+		float dt = e.animNanos == 0 ? 0 : Math.min(0.1F, (nanos - e.animNanos) / 1.0E9F);
+		e.animNanos = nanos;
+		long since = level.getGameTime() - e.runningSince;
+		if (e.running) {
+			float t = since + partialTick;
+			e.animSpeed = t < 30 ? 0.12F : Math.min(1F, 0.12F + (t - 30) / 50F * 0.88F);
+		} else {
+			e.animSpeed = Math.max(0, e.animSpeed - dt * 0.25F);
+		}
+		e.animAngle = (e.animAngle + e.animSpeed * 540F * dt) % 360F;
+		state.running = e.running;
+		state.speed = e.animSpeed;
+		state.angle = e.animAngle;
+		if (!e.running || since < 28 || level.getGameTime() == e.smokeTick) {
+			return;
+		}
+		e.smokeTick = level.getGameTime();
+		// Where the exhaust comes out: straight up from its roof thimble to the first open air (the stack's top).
+		Direction right = state.facing.getClockWise();
+		double lx = 3.5 - 0.5, lz = 0.95 - 0.5;
+		BlockPos pos = e.getBlockPos();
+		double x = pos.getX() + 0.5 + right.getStepX() * lx + state.facing.getStepX() * lz;
+		double z = pos.getZ() + 0.5 + right.getStepZ() * lx + state.facing.getStepZ() * lz;
+		if (e.smokeY == Integer.MIN_VALUE || level.getGameTime() % 200 == 0) {
+			BlockPos p = BlockPos.containing(x, pos.getY() + 11.05, z);
+			for (int k = 0; k < 16 && !level.getBlockState(p).isAir(); k++) {
+				p = p.above();
+			}
+			e.smokeY = p.getY();
+		}
+		net.minecraft.util.RandomSource random = level.getRandom();
+		double y = e.smokeY + 0.05;
+		if (since < 70) {
+			// It has just fired: thick black smoke.
+			for (int k = 0; k < 3; k++) {
+				level.addParticle(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE, x + random.nextGaussian() * 0.25, y,
+						z + random.nextGaussian() * 0.25, random.nextGaussian() * 0.02, 0.18 + random.nextDouble() * 0.08, random.nextGaussian() * 0.02);
+			}
+		} else if (level.getGameTime() % 3 == 0) {
+			level.addParticle(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE, x + random.nextGaussian() * 0.2, y,
+					z + random.nextGaussian() * 0.2, 0, 0.12 + random.nextDouble() * 0.05, 0);
+			if (random.nextInt(4) == 0) {
+				level.addParticle(net.minecraft.core.particles.ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 0.3, z, 0, 0.05, 0);
+			}
+		}
 	}
 
 	/** Beyond this many blocks the low-detail mesh is drawn. */
@@ -245,7 +319,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				if (detail) {
 					Mesh blink = new Mesh();
 					PlantDecor.blink(state.kind, new Frame(blink, true), state.time);
+					PlantDecor.liveLamps(state.kind, new Frame(blink, true), state.time, state.speed, state.running);
 					if (blink.vertices() > 0) blink.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+					// What moves while it runs, lit like the rest.
+					Mesh live = new Mesh();
+					PlantDecor.live(state.kind, new Frame(live, true), state.time, state.speed, state.angle, state.running);
+					if (live.vertices() > 0) live.replay(p, consumer, state.facing, state.lightLevel);
 				}
 			}
 		});
@@ -382,7 +461,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				return;
 			}
 			box(x0, y0, z0, x1, y1, z1, edge);
-			double e = 0.002;
+			// The picture stands a little off the face (enough to never z-fight with it at any distance it is drawn).
+			double e = 0.004;
 			switch (facingSide) {
 				case 0 -> quad(v(x0, y1, z0 - e), v(x0, y0, z0 - e), v(x1, y0, z0 - e), v(x1, y1, z0 - e), v(0, 0, -1),
 						picture[0], picture[1], picture[2], picture[3]);

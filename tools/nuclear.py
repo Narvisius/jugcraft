@@ -42,7 +42,7 @@ EQUIPMENT = {
     "overhead_crane": ("Overhead Crane", 40, 5, 4),
     "moisture_separator_reheater": ("Moisture Separator Reheater", 5, 20, 5),
     "feedwater_heater": ("Feedwater Heater", 3, 12, 3),
-    "emergency_diesel_generator": ("Emergency Diesel Generator", 5, 14, 5),
+    "emergency_diesel_generator": ("Emergency Diesel Generator", 7, 14, 5),
     "storage_tank": ("Storage Tank", 5, 5, 9),
     "heat_exchanger": ("Heat Exchanger", 3, 9, 3),
     "pump_skid": ("Pump Skid", 3, 5, 3),
@@ -140,6 +140,8 @@ LANG = {
     "subtitles.jugcraft.geiger_counter": "Geiger counter clicks",
     "message.jugcraft.nuclear.no_room": "Not enough room: it needs %s wide, %s deep and %s tall, clear",
     "message.jugcraft.nuclear.console_unlinked": "Not linked: use a Reactor Link Card on the vessel, then on this console",
+    "message.jugcraft.nuclear.edg_start": "Emergency diesel generator: air start... it fires and comes up to speed",
+    "message.jugcraft.nuclear.edg_stop": "Emergency diesel generator: stopping, coasting down",
     "message.jugcraft.nuclear.console_linked": "Console linked to the reactor",
     "message.jugcraft.nuclear.card_set": "Link card set to this reactor: now use it on a console",
     "message.jugcraft.nuclear.card_empty": "Use the card on a reactor vessel first",
@@ -902,7 +904,10 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 "radiator", "glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green",
                 "trefoil_sign", "generator", "fins", "handrail", "nameplate", "turbine_blue", "pipe_red", "water",
                 "paint_yellow", "mimic", "display", "cherenkov", "fuel_rack", "louvre", "switchgear", "filter_bank",
-                "sign_panel", "sign_edge"]
+                "sign_panel", "sign_edge",
+                # The emergency diesel generator (round 12): its engine, piping by service, panel and signs.
+                "engine_green", "rocker", "gunmetal", "red_iron", "pipe_green", "pipe_brown",
+                "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board", "sign_autostart", "stencil_edg", "turbo", "black"]
 
 
 def eq_slot(name):
@@ -1071,6 +1076,81 @@ def _water_tex(seed):
     return _img(np.clip(a, 0, 255))
 
 
+def _font(size, bold=True):
+    from PIL import ImageFont
+    return ImageFont.truetype("/usr/share/fonts/truetype/dejavu/" + ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"), size)
+
+
+def _rocker_cover():
+    """A cast aluminium rocker cover: dull, with raised ribs across it and a bolt at each corner."""
+    import nuclear_materials as M
+    img = M.brushed((172, 176, 174), 143, "h", dirt=0.25)
+    d = ImageDraw.Draw(img)
+    for y in range(20, 128, 22):
+        d.rectangle([10, y, 117, y + 5], fill=(198, 202, 200, 255))
+        d.line([(10, y + 6), (117, y + 6)], fill=(110, 114, 112, 255), width=2)
+    for x, y in ((8, 8), (119, 8), (8, 119), (119, 119)):
+        d.ellipse([x - 5, y - 5, x + 5, y + 5], fill=(80, 84, 86, 255))
+    return img
+
+
+def _crankcase_door():
+    """A crankcase inspection door: an oval cover on the engine's green, a ring of bolts and the explosion relief
+    valve's round cap in the middle."""
+    import nuclear_materials as M
+    img = M.painted((66, 104, 80), 150, chip_count=3, drip_count=2, dirt=0.5)
+    d = ImageDraw.Draw(img)
+    d.ellipse([10, 22, 117, 105], fill=(80, 122, 94, 255), outline=(40, 64, 48, 255), width=4)
+    for k in range(12):
+        a = k / 12 * math.tau
+        x, y = 64 + 48 * math.cos(a), 64 + 36 * math.sin(a)
+        d.ellipse([x - 4, y - 4, x + 4, y + 4], fill=(40, 44, 46, 255))
+    d.ellipse([46, 46, 82, 82], fill=(150, 154, 152, 255), outline=(60, 64, 66, 255), width=3)
+    d.ellipse([58, 58, 70, 70], fill=(90, 94, 96, 255))
+    return img
+
+
+def _gauge_board():
+    """The engine's gauge board: four white dials on black (lube oil, jacket water, fuel and starting air), each with
+    its scale and red zone and a label strip under it. The needles are drawn over them, moving (PlantDecor.live)."""
+    img = Image.new("RGBA", (128, 128), (28, 30, 32, 255))
+    d = ImageDraw.Draw(img)
+    for k in range(4):
+        cx, cy = 32 + (k % 2) * 64, 30 + (k // 2) * 64
+        d.ellipse([cx - 24, cy - 24, cx + 24, cy + 24], fill=(150, 154, 156, 255))
+        d.ellipse([cx - 20, cy - 20, cx + 20, cy + 20], fill=(238, 238, 232, 255))
+        d.arc([cx - 16, cy - 16, cx + 16, cy + 16], 140, 400, fill=(30, 30, 30, 255), width=2)
+        d.arc([cx - 16, cy - 16, cx + 16, cy + 16], 340, 400, fill=(200, 40, 34, 255), width=3)
+        for t in range(11):
+            a = math.radians(140 + 26 * t)
+            d.line([(cx + 12 * math.cos(a), cy + 12 * math.sin(a)), (cx + 16 * math.cos(a), cy + 16 * math.sin(a))], fill=(30, 30, 30, 255))
+        d.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=(40, 40, 42, 255))
+        d.rectangle([cx - 18, cy + 26, cx + 18, cy + 31], fill=(220, 220, 214, 255))
+    return img
+
+
+def _sign_autostart():
+    """The sign every emergency diesel carries: CAUTION on a yellow band, and under it that the engine may start on
+    its own at any time."""
+    img = Image.new("RGBA", (128, 128), (244, 244, 238, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 127, 127], outline=(20, 20, 22, 255), width=4)
+    d.rectangle([4, 4, 123, 38], fill=(240, 196, 30, 255))
+    d.text((64, 22), "CAUTION", font=_font(22), fill=(16, 16, 18, 255), anchor="mm")
+    for k, line in enumerate(("THIS ENGINE", "STARTS", "AUTOMATICALLY")):
+        d.text((64, 56 + k * 22), line, font=_font((15, 18, 13)[k]), fill=(16, 16, 18, 255), anchor="mm")
+    return img
+
+
+def _stencil_edg():
+    """The generator's stencil: EDG, white on the frame's green."""
+    import nuclear_materials as M
+    img = M.painted((58, 118, 88), 152, chip_count=2, drip_count=1, dirt=0.2)
+    d = ImageDraw.Draw(img)
+    d.text((64, 66), "EDG", font=_font(52), fill=(240, 240, 234, 255), anchor="mm")
+    return img
+
+
 def draw_equipment_sheet():
     import nuclear_materials as M
     makers = {
@@ -1095,11 +1175,20 @@ def draw_equipment_sheet():
         "fuel_rack": lambda: M.fuel_rack(136), "louvre": lambda: M.louvre(137), "switchgear": lambda: M.switchgear(138),
         "filter_bank": lambda: M.filter_bank(139),
         "sign_panel": lambda: M.brushed((44, 48, 54), 140, "h", dirt=0.05), "sign_edge": lambda: M.brushed((190, 194, 198), 141, "h", dirt=0.05),
+        "engine_green": lambda: M.painted((66, 104, 80), 142, seams=(("h", 64),), chip_count=4, drip_count=4, dirt=0.6),
+        "rocker": _rocker_cover, "gunmetal": lambda: M.painted((62, 66, 70), 144, chip_count=4, drip_count=0, dirt=0.3),
+        "red_iron": lambda: M.painted((160, 34, 30), 145, chip_count=6, drip_count=0, dirt=0.2),
+        "pipe_green": lambda: M.pipe_stripe((64, 132, 84), 146), "pipe_brown": lambda: M.pipe_stripe((128, 82, 40), 147),
+        "pipe_yellow": lambda: M.pipe_stripe((214, 172, 40), 148), "pipe_lblue": lambda: M.pipe_stripe((120, 170, 212), 149),
+        "crankcase_door": _crankcase_door, "gauge_board": _gauge_board, "sign_autostart": _sign_autostart,
+        "stencil_edg": _stencil_edg, "turbo": lambda: M.painted((96, 98, 100), 153, seams=(("v", 64),), chip_count=3, drip_count=2, dirt=0.7),
+        "black": lambda: M.rubber(154, colour=(26, 27, 30)),
     }
     sheet = Image.new("RGBA", (EQ_SHEET, EQ_SHEET), (0, 0, 0, 0))
     for name in EQ_MATERIALS:
         col, row = eq_slot(name)
-        sheet.paste(M.stylize(makers[name](), 24 if name in ("mimic", "display", "fuel_rack", "switchgear") else 12 if name in ("screen", "desk", "lamp_red", "lamp_green", "cherenkov") else 10), (col * EQ_CELL, row * EQ_CELL))
+        many = ("mimic", "display", "fuel_rack", "switchgear", "gauge_board", "sign_autostart", "stencil_edg")
+        sheet.paste(M.stylize(makers[name](), 24 if name in many else 12 if name in ("screen", "desk", "lamp_red", "lamp_green", "cherenkov") else 10), (col * EQ_CELL, row * EQ_CELL))
     return sheet
 
 

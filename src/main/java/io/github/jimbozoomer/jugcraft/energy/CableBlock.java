@@ -95,7 +95,7 @@ public class CableBlock extends PipeBlock implements EnergyConnectable {
 	 * an energy storage on the touching face (Jugcraft machines or other mods' blocks).
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
-	private static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
 		if (neighbor.getBlock() instanceof MachineBlock machine) {
 			// Only faces that really take power: a machine's power socket, never an unpowered machine.
 			return machine.acceptsPower(neighbor, direction.getOpposite());

@@ -3,6 +3,8 @@ package io.github.jimbozoomer.jugcraft.nuclear;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -55,7 +57,9 @@ public final class EquipmentPlacement {
 		level.setBlock(anchor, JugcraftNuclear.EQUIPMENT.get(kind).defaultBlockState().setValue(EquipmentAnchorBlock.FACING, facing), Block.UPDATE_ALL);
 		BlockState frame = JugcraftNuclear.FRAME.defaultBlockState();
 		for (BlockPos offset : kind.frames(facing)) {
-			level.setBlock(anchor.offset(offset), frame, Block.UPDATE_ALL);
+			BlockPos local = EquipmentKind.toLocal(offset, facing);
+			level.setBlock(anchor.offset(offset), frame.setValue(EquipmentFrameBlock.SHAPE, kind.frameShape(local.getX(), local.getY(), local.getZ())),
+					Block.UPDATE_ALL);
 		}
 		if (player != null && level.getBlockEntity(anchor) instanceof EquipmentBlockEntity equipment) {
 			equipment.setOwner(player.getUUID());
@@ -140,6 +144,20 @@ public final class EquipmentPlacement {
 							String.format("%,d", equipment.water.millibuckets()), String.format("%,d", EquipmentBlockEntity.CONDENSER_TANK)));
 				}
 				return stack.isEmpty() ? InteractionResult.SUCCESS : InteractionResult.PASS;
+			}
+			case EMERGENCY_DIESEL_GENERATOR -> {
+				// Started and stopped from its panel (anywhere on it): air start, it fires and runs up to speed; stopped,
+				// it coasts down.
+				if (!level.isClientSide()) {
+					equipment.running = !equipment.running;
+					equipment.runningSince = level.getGameTime();
+					equipment.changed();
+					level.playSound(null, anchor, equipment.running ? SoundEvents.FIRE_EXTINGUISH : SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS,
+							1.0F, equipment.running ? 0.6F : 0.5F);
+					player.sendOverlayMessage(Component.translatable(equipment.running ? "message.jugcraft.nuclear.edg_start"
+							: "message.jugcraft.nuclear.edg_stop"));
+				}
+				return InteractionResult.SUCCESS;
 			}
 			default -> {
 				return InteractionResult.PASS;

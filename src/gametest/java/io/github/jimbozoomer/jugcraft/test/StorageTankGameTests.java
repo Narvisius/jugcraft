@@ -1,8 +1,11 @@
 package io.github.jimbozoomer.jugcraft.test;
 
+import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
+import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.nuclear.RailingBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.RailingGateBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.SteelLadderBlock;
+import io.github.jimbozoomer.jugcraft.nuclear.StorageTankHatchBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.StorageTankPlateBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity;
@@ -105,6 +108,61 @@ public class StorageTankGameTests {
 		outlet.check(helper.getLevel());
 		helper.assertTrue(outlet.formed() && outlet.fluid.amount == 3 * FluidConstants.BUCKET, "mended, it is a tank again with its water");
 		helper.succeed();
+	}
+
+	/**
+	 * A hatch in the roof is part of it (the tank forms round it, the same space inside) and opens without the tank
+	 * coming apart; the outlet tells clients the space as columns (to draw the inside and the liquid); an open outlet
+	 * feeds its line into what is at the other end, and shut, it stops.
+	 */
+	@GameTest(maxTicks = 200)
+	public void hatchFormsAndOutletFeedsItsLine(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		tank(helper);
+		helper.setBlock(new BlockPos(3, 4, 3), StorageTanks.HATCH.defaultBlockState());
+		// The outlet on the east side, its line a steel pipe to a tinplate tank.
+		helper.setBlock(new BlockPos(3, 1, 0), Blocks.AIR);
+		helper.setBlock(new BlockPos(6, 1, 3), StorageTanks.OUTLET.defaultBlockState().setValue(StorageTankPortBlock.FACING, Direction.EAST));
+		helper.setBlock(new BlockPos(7, 1, 4), JugcraftFluids.FLUID_TANK);
+		helper.setBlock(new BlockPos(7, 1, 3), JugcraftFluids.STEEL_FLUID_PIPE);
+		BlockPos outletPos = helper.absolutePos(new BlockPos(6, 1, 3));
+		StorageTankPortBlockEntity outlet = (StorageTankPortBlockEntity) helper.getLevel().getBlockEntity(outletPos);
+		outlet.check(helper.getLevel());
+		helper.assertTrue(outlet.formed() && outlet.fluid.capacity() == 27 * FluidConstants.BUCKET, "the tank forms round its hatch");
+		helper.assertBlockProperty(new BlockPos(3, 4, 3), StorageTankPlateBlock.FORMED, true);
+		helper.assertBlockProperty(new BlockPos(3, 4, 3), StorageTankPlateBlock.BAND, StorageTankPlateBlock.Band.ROOF);
+		helper.assertTrue(outlet.columns().length == 9, "the space as nine columns: " + outlet.columns().length);
+		int c = outlet.columns()[0];
+		helper.assertTrue(StorageTankPortBlockEntity.columnTop(c) - StorageTankPortBlockEntity.columnBottom(c) == 2, "each three high");
+		// Opened, it is still a tank.
+		helper.setBlock(new BlockPos(3, 4, 3), helper.getBlockState(new BlockPos(3, 4, 3)).setValue(StorageTankHatchBlock.OPEN, true));
+		outlet.check(helper.getLevel());
+		helper.assertTrue(outlet.formed(), "an open hatch keeps the tank whole");
+		helper.assertBlockPresent(StorageTanks.INTERIOR, new BlockPos(3, 3, 3));
+		try (Transaction t = Transaction.openOuter()) {
+			outlet.fluid.insert(FluidVariant.of(Fluids.WATER), 10 * FluidConstants.BUCKET, t);
+			t.commit();
+		}
+		FluidTankBlockEntity receiver = helper.getBlockEntity(new BlockPos(7, 1, 4), FluidTankBlockEntity.class);
+		long[] shut = new long[1];
+		helper.runAfterDelay(60, () -> {
+			helper.assertTrue(receiver.storage.amount > 0, "the line carried water to the tank at its end");
+			helper.assertTrue(outlet.fluid.amount < 10 * FluidConstants.BUCKET, "the storage tank gave it");
+			helper.assertTrue(outlet.outRate() > 0 && outlet.inRate() == 0, "its screen shows it going out: " + outlet.inRate() + " in, "
+					+ outlet.outRate() + " out a second");
+			helper.assertTrue(outletPos.equals(StorageTanks.outletOf(helper.getLevel(), helper.absolutePos(new BlockPos(1, 2, 3)))),
+					"the shell finds its outlet (for the screen)");
+			BlockPos p = new BlockPos(6, 1, 3);
+			helper.setBlock(p, helper.getBlockState(p).setValue(StorageTankPortBlock.OPEN, false));
+			shut[0] = outlet.fluid.amount;
+		});
+		helper.runAfterDelay(120, () -> {
+			helper.assertTrue(outlet.fluid.amount == shut[0], "a shut outlet feeds nothing");
+			helper.succeed();
+		});
 	}
 
 	@GameTest(maxTicks = 20)

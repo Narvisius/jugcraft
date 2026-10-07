@@ -1,6 +1,11 @@
 package io.github.jimbozoomer.jugcraft.nuclear;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -39,5 +44,20 @@ public class StorageTankPlateBlock extends Block {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FORMED, BAND);
+	}
+
+	/** A formed tank's shell, right-clicked: the tank's screen (what it holds, how fast it fills and empties). */
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (!state.getValue(FORMED)) {
+			return InteractionResult.PASS;
+		}
+		if (level.isClientSide()) {
+			BlockPos outlet = StorageTanks.outletOf(level, pos);
+			if (outlet != null) {
+				StorageTanks.openScreen.accept(outlet);
+			}
+		}
+		return InteractionResult.SUCCESS;
 	}
 }

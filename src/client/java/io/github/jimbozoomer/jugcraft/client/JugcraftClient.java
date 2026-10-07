@@ -40,6 +40,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.ROLLER_ENTITY, RollerDoorRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.PORT_ENTITY, StorageTankRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.GATE_ENTITY, RailingGateRenderer::new);
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.HATCH_ENTITY, StorageTankHatchRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftMachines.MACHINE_ENTITY, WindTurbineRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.BELT_PULLEY_ENTITY, BeltRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.SHAFT_ENTITY, KineticRotorRenderer::new);
@@ -47,6 +48,9 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftTools.CHARGING_STATION_ENTITY, ChargingStationRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.powerline.JugcraftPowerLines.ANCHOR_ENTITY, context -> new LineRenderer());
 		LinePreview.register();
+		WallRunModel.register();
+		io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen = pos -> net.minecraft.client.Minecraft.getInstance().gui.setScreen(new StorageTankScreen(pos));
+		WallRunOverlay.register();
 		RocketPackClient.register();
 		EntityRendererRegistry.register(JugcraftWeapons.GRENADE, ThrownItemRenderer::new);
 		PetroFluidsClient.register();

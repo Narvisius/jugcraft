@@ -189,6 +189,24 @@ public final class PlantShowcase {
 		return best == null ? null : best.subtract(offset);
 	}
 
+	/** Clears a block for the rebuild, keeping what a storage rack or a storage tank held. */
+	private static void clear(ServerLevel level, BlockPos.MutableBlockPos at, java.util.Map<BlockPos, List<net.minecraft.world.item.ItemStack>> stored,
+			java.util.Map<BlockPos, io.github.jimbozoomer.jugcraft.fluid.StoredFluid> tanks, int flags) {
+		if (level.isOutsideBuildHeight(at) || level.getBlockState(at).isAir()) {
+			return;
+		}
+		if (level.getBlockEntity(at) instanceof StorageRackBlockEntity rack && !rack.isEmpty()) {
+			List<net.minecraft.world.item.ItemStack> items = new ArrayList<>();
+			for (int i = 0; i < rack.getContainerSize(); i++) {
+				items.add(rack.getItem(i).copy());
+			}
+			stored.put(at.immutable(), items);
+		} else if (level.getBlockEntity(at) instanceof StorageTankPortBlockEntity port && port.stored() != null) {
+			tanks.put(at.immutable(), port.stored());
+		}
+		level.setBlock(at, Blocks.AIR.defaultBlockState(), flags);
+	}
+
 	/**
 	 * Clears every building of the plant above the ground (its box, a block round it for the signs on its walls, two
 	 * over its roof) and builds the plant again, running. What was stored in its storage racks is put back in the rack
@@ -196,35 +214,39 @@ public final class PlantShowcase {
 	 */
 	public static void rebuild(ServerLevel level, Blueprint blueprint, BlockPos stake, ServerPlayer player) {
 		int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SKIP_BLOCK_ENTITY_SIDEEFFECTS;
-		BlockState air = Blocks.AIR.defaultBlockState();
 		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
 		java.util.Map<BlockPos, List<net.minecraft.world.item.ItemStack>> stored = new java.util.HashMap<>();
 		java.util.Map<BlockPos, io.github.jimbozoomer.jugcraft.fluid.StoredFluid> tanks = new java.util.HashMap<>();
+		// Each column cleared so far: up to this height over the stake.
+		java.util.Map<Long, Integer> cleared = new java.util.HashMap<>();
 		for (Blueprint.PartRef part : blueprint.parts) {
-			int x0 = stake.getX() + part.x() - blueprint.anchorX(), y0 = stake.getY() + part.y() - blueprint.anchorY();
-			int z0 = stake.getZ() + part.z() - blueprint.anchorZ();
+			int x0 = part.x() - blueprint.anchorX(), y0 = part.y() - blueprint.anchorY(), z0 = part.z() - blueprint.anchorZ();
 			for (int x = x0 - 1; x <= x0 + part.sizeX(); x++) {
 				for (int z = z0 - 1; z <= z0 + part.sizeZ(); z++) {
 					// Only from the ground up: what is below is overwritten by the new blocks, and the ground round a
 					// sunk building (its box's corners) stays.
-					for (int y = Math.max(y0, stake.getY()); y <= y0 + part.sizeY() + 1; y++) {
-						at.set(x, y, z);
-						if (!level.isOutsideBuildHeight(at) && !level.getBlockState(at).isAir()) {
-							if (level.getBlockEntity(at) instanceof StorageRackBlockEntity rack && !rack.isEmpty()) {
-								List<net.minecraft.world.item.ItemStack> items = new ArrayList<>();
-								for (int i = 0; i < rack.getContainerSize(); i++) {
-									items.add(rack.getItem(i).copy());
-								}
-								stored.put(at.immutable(), items);
-							} else if (level.getBlockEntity(at) instanceof StorageTankPortBlockEntity port && port.stored() != null) {
-								tanks.put(at.immutable(), port.stored());
-							}
-							level.setBlock(at, air, flags);
-						}
+					for (int y = Math.max(y0, 0); y <= y0 + part.sizeY() + 1; y++) {
+						clear(level, at.set(stake.getX() + x, stake.getY() + y, stake.getZ() + z), stored, tanks, flags);
 					}
+					cleared.merge(BlockPos.asLong(x, 0, z), y0 + part.sizeY() + 1, Math::max);
 				}
 			}
 		}
+		// Then what stands outside or above the buildings (pipe bridges, pipes, the bus, stacks), column by column up
+		// to a block over its top: when the buildings come down a block, what went with them leaves nothing behind
+		// where it was.
+		java.util.Map<Long, Integer> tops = new java.util.HashMap<>();
+		for (int i = 0; i < blueprint.size(); i++) {
+			BlockPos o = blueprint.offset(i, Rotation.NONE);
+			if (o.getY() >= 0) {
+				tops.merge(BlockPos.asLong(o.getX(), 0, o.getZ()), o.getY(), Math::max);
+			}
+		}
+		tops.forEach((column, top) -> {
+			for (int y = Math.max(0, cleared.getOrDefault(column, -1) + 1); y <= top + 1; y++) {
+				clear(level, at.set(stake.getX() + BlockPos.getX(column), stake.getY() + y, stake.getZ() + BlockPos.getZ(column)), stored, tanks, flags);
+			}
+		});
 		PlantBuilder.Result result = PlantBuilder.build(level, blueprint, stake, Rotation.NONE, player.getUUID(), true);
 		start(level, result);
 		// The storage tanks keep what was in them.

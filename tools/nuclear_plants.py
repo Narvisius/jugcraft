@@ -458,33 +458,35 @@ COOLANT, STEAM, CONDUIT, TRENCH_KIND, BUS = "coolant", "steam", "conduit", "tren
 from nuclear import EQUIPMENT as EQUIPMENT_SIZES  # noqa: E402
 
 
-def four_loops(s, ox, oz, c, span, vessel="reactor_pressure_vessel", vw=7):
+def four_loops(s, ox, oz, c, span, vessel="reactor_pressure_vessel", vw=7, floor=0):
     """A four-loop primary inside a containment whose local centre is (c, c), placed at (ox, oz) on the site.
 
     The vessel in the middle; a steam generator on each diagonal; coolant pipe from the vessel east and west with a
     branch to each steam generator; a coolant pump against the pipe beside each steam generator; the pressurizer on a
     pipe north of the vessel. The steam generators' tops join on a steam header one block above them (y 22), which
-    leaves east at the vessel's row. Returns the site position where the steam header leaves (x, z)."""
+    leaves east at the vessel's row. floor: the site y of the containment's floor slab (-1 when it is level with the
+    ground). Returns the site position where the steam header leaves (x, z)."""
+    y = floor + 1
     cv = int(c)  # the vessel's middle cell row/column
     v0 = cv - vw // 2
-    s.eq(vessel, ox + v0, oz + v0)
+    s.eq(vessel, ox + v0, oz + v0, y=y)
     g = [cv - span - 3, cv + span - 3]  # steam generator corners
     for gx in g:
         for gz in g:
-            s.eq("reactor_steam_generator", ox + gx, oz + gz)
+            s.eq("reactor_steam_generator", ox + gx, oz + gz, y=y)
     west, east = v0 - 1, v0 + vw
-    s.line(COOLANT, (ox + g[0], 1, oz + cv), (ox + west, 1, oz + cv))
-    s.line(COOLANT, (ox + east, 1, oz + cv), (ox + g[1] + 6, 1, oz + cv))
+    s.line(COOLANT, (ox + g[0], y, oz + cv), (ox + west, y, oz + cv))
+    s.line(COOLANT, (ox + east, y, oz + cv), (ox + g[1] + 6, y, oz + cv))
     for gx in g:
         bx = gx + 3
-        s.line(COOLANT, (ox + bx, 1, oz + g[0] + 6), (ox + bx, 1, oz + cv - 1))
-        s.line(COOLANT, (ox + bx, 1, oz + cv + 1), (ox + bx, 1, oz + g[1]))
+        s.line(COOLANT, (ox + bx, y, oz + g[0] + 6), (ox + bx, y, oz + cv - 1))
+        s.line(COOLANT, (ox + bx, y, oz + cv + 1), (ox + bx, y, oz + g[1]))
     for px in (west - 4, east):
-        s.eq("reactor_coolant_pump", ox + px, oz + cv - 3)
-        s.eq("reactor_coolant_pump", ox + px, oz + cv + 1)
-    s.line(COOLANT, (ox + cv, 1, oz + v0 - 1), (ox + cv, 1, oz + v0 - 5))
-    s.eq("pressurizer", ox + cv - 2, oz + v0 - 8)
-    top = 22
+        s.eq("reactor_coolant_pump", ox + px, oz + cv - 3, y=y)
+        s.eq("reactor_coolant_pump", ox + px, oz + cv + 1, y=y)
+    s.line(COOLANT, (ox + cv, y, oz + v0 - 1), (ox + cv, y, oz + v0 - 5))
+    s.eq("pressurizer", ox + cv - 2, oz + v0 - 8, y=y)
+    top = floor + 22
     a, b = g[0] + 3, g[1] + 3
     s.line(STEAM, (ox + a, top, oz + a), (ox + b, top, oz + a))
     s.line(STEAM, (ox + a, top, oz + b), (ox + b, top, oz + b))
@@ -637,6 +639,10 @@ def equipment_solid(kind, x, y, z):
         return r2 <= 3.8 ** 2 if y < 15 else r2 <= 2.8 ** 2
     if kind == "small_modular_reactor":
         return r2 <= 2.4 ** 2
+    if kind == "emergency_diesel_generator":
+        if 1 <= x <= 5:
+            return y < 5 and (z < 13 or (2 <= x <= 4 and y < 4))
+        return (1 <= z <= 8 and y <= 1) or (z == 9 and y <= 1) or (z in (10, 11) and y == 0) or (x == 0 and z == 0 and y <= 2)
     return True
 
 

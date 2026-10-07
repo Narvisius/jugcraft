@@ -151,6 +151,11 @@ public final class PlantBuilder {
 			if (joined != now) {
 				level.setBlock(pos, joined, flags);
 			}
+			// A pipe or cable in a wall takes the look of the wall round it.
+			if (now.getBlock() instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRun
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRunBlockEntity run && !run.hasDisguise()) {
+				run.setDisguise(io.github.jimbozoomer.jugcraft.wallrun.WallRuns.lookAround(level, pos));
+			}
 		}
 		// Each console runs the reactor nearest to it that no other console has taken (a plant's control room).
 		List<BlockPos> free = new ArrayList<>(vessels);

@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
 public class StorageTankOutletBlock extends StorageTankPortBlock {
 	public enum Service implements StringRepresentable {
 		NONE("none", null), CONDENSATE("condensate", "minecraft:water"), REFUELLING_WATER("refuelling_water", "minecraft:water"),
-		DIESEL_FUEL("diesel_fuel", "jugcraft:diesel");
+		DIESEL_FUEL("diesel_fuel", "jugcraft:diesel"), DIESEL_DAY_A("diesel_day_a", "jugcraft:diesel"), DIESEL_DAY_B("diesel_day_b", "jugcraft:diesel");
 
 		private final String name;
 		/** What a fuelled build fills the tank with (most of the way), or null. */
@@ -29,6 +29,11 @@ public class StorageTankOutletBlock extends StorageTankPortBlock {
 		@Override
 		public String getSerializedName() {
 			return name;
+		}
+
+		/** A fuel tank: stencilled with the no-smoking warnings and the fire diamond. */
+		public boolean diesel() {
+			return "jugcraft:diesel".equals(fill);
 		}
 	}
 

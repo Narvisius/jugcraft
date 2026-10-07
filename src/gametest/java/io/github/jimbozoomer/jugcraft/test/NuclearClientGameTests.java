@@ -438,6 +438,90 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
 							"jugcraft_plant_medium_tank_" + tankNames[i]);
 				}
+				// Round 12: the roof hatches opened (the condensate tank's and diesel room A's day tank's: the inside of the
+				// tank and the liquid in it), the day tank and its fuel lines, the generator, the pipe through the wall.
+				int baseY = y;
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					for (int[] h : new int[][] {{234, 13, 125}, {198, 6, 93}}) {
+						BlockPos at = new BlockPos(wx.applyAsInt(h[0]), baseY + h[1], wz.applyAsInt(h[2]));
+						net.minecraft.world.level.block.state.BlockState st = level.getBlockState(at);
+						if (!(st.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankHatchBlock)) {
+							throw new AssertionError("No tank hatch at " + at.toShortString() + ": " + st);
+						}
+						level.setBlock(at, st.setValue(io.github.jimbozoomer.jugcraft.nuclear.StorageTankHatchBlock.OPEN, true), 3);
+					}
+					BlockPos wall = new BlockPos(wx.applyAsInt(198), baseY + 4, wz.applyAsInt(109));
+					if (!(level.getBlockEntity(wall) instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRunBlockEntity run) || !run.hasDisguise()) {
+						throw new AssertionError("The fuel line's pipe in the diesel building's wall has no look: " + level.getBlockState(wall));
+					}
+					BlockPos day = new BlockPos(wx.applyAsInt(195), baseY, wz.applyAsInt(93));
+					if (!(level.getBlockEntity(day) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity tank) || !tank.formed()
+							|| tank.fluid.amount <= 0) {
+						throw new AssertionError("Diesel room A's day tank is not formed and filled: " + level.getBlockState(day));
+					}
+				});
+				context.waitTicks(30);
+				int[][] roundShots = {
+						{235, 17, 125, 234, 6, 125}, {199, 9, 93, 198, 1, 93}, {191, 3, 105, 198, 3, 93}, {181, 4, 106, 190, 1, 100},
+						{196, 2, 106, 191, 2, 101}, {183, 6, 100, 195, 2, 100}, {190, 5, 105, 185, 7, 100}, {186, 2, 94, 189, 0, 97},
+						{196, 5, 114, 198, 4, 109}, {196, 4, 105, 198, 4, 109}, {196, 15, 96, 198, 12, 92}, {200, 2, 100, 194, 1, 97},
+						{187, 3, 97, 196, 0, 97}, {195, 1, 116, 193, 0, 109}, {157, 1, 123, 156, 0, 117}, {118, 1, 70, 124, 0, 69},
+						{35, 1, 140, 34, 0, 134}};
+				String[] roundNames = {"cst_hatch_open", "day_tank_hatch_open", "day_tank", "edg_front", "edg_steps", "edg_top", "edg_exhaust",
+						"edg_fuel_inlet", "wall_pipe_outside", "wall_pipe_inside", "day_tank_vent_roof", "edg_left_steps", "edg_left_walkway",
+						"diesel_door_level", "control_door_level", "turbine_door_level", "aux_door_level"};
+				for (int i = 0; i < roundShots.length; i++) {
+					int[] t = roundShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_r12_" + roundNames[i]);
+				}
+				// Diesel room A's generator started (it turns over, fires and runs up to speed: the coupling and fan
+				// turning, the gauges up, smoke at the stack); its day tank drawn down so the storage tank refills it, and
+				// the day tank's screen showing it filling.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					BlockPos edg = new BlockPos(wx.applyAsInt(184), baseY, wz.applyAsInt(97));
+					if (!(level.getBlockEntity(edg) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity generator)
+							|| generator.kind() != io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
+						throw new AssertionError("No diesel generator at " + edg.toShortString() + ": " + level.getBlockState(edg));
+					}
+					generator.running = true;
+					generator.runningSince = level.getGameTime();
+					generator.changed();
+					BlockPos day = new BlockPos(wx.applyAsInt(195), baseY, wz.applyAsInt(93));
+					if (level.getBlockEntity(day) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity tank) {
+						try (var t = net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()) {
+							tank.fluid.extract(tank.fluid.variant, 20 * net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET, t);
+							t.commit();
+						}
+					}
+				});
+				context.waitTicks(100);
+				int[][] edgShots = {{182, 2, 100, 184, 1, 100}, {196, 3, 105, 193, 1, 100}, {200, 2, 101, 197, 2, 100}, {196, 2, 106, 193, 1, 103},
+						{186, 23, 116, 185, 18, 100}};
+				String[] edgNames = {"edg_running_front", "edg_running_coupling", "edg_running_fan", "edg_steps", "edg_running_smoke"};
+				for (int i = 0; i < edgShots.length; i++) {
+					int[] t = edgShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_r12_" + edgNames[i]);
+				}
+				// The tank screens: the day tank refilling, and the condensate tank.
+				BlockPos dayOutlet = new BlockPos(wx.applyAsInt(195), y, wz.applyAsInt(93));
+				BlockPos cstOutlet = new BlockPos(wx.applyAsInt(226), y + 1, wz.applyAsInt(125));
+				context.runOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen.accept(dayOutlet));
+				context.waitTicks(10);
+				context.takeScreenshot("jugcraft_plant_medium_r12_day_tank_screen");
+				context.runOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen.accept(cstOutlet));
+				context.waitTicks(10);
+				context.takeScreenshot("jugcraft_plant_medium_r12_cst_screen");
+				context.runOnClient(client -> client.gui.setScreen(null));
+				context.waitTicks(5);
+				// Holding a pipe: the runs hidden in the wall show through it.
+				server.runCommand("item replace entity @p weapon.mainhand with jugcraft:steel_fluid_pipe");
+				shotAt(context, singleplayer, wx.applyAsInt(196), y + 5, wz.applyAsInt(113), wx.applyAsInt(198), y + 4, wz.applyAsInt(109),
+						"jugcraft_plant_medium_r12_wall_pipe_overlay");
+				server.runCommand("item replace entity @p weapon.mainhand with air");
 				server.runCommand("effect give @p night_vision infinite 0 true");
 			}
 			server.runCommand("gamemode creative @p");

@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * <li>Right-click turns a machine to face the next way (extractors and sorters cycle through all
  * six directions). Multi-block machines cannot be turned.</li>
  * <li>Sneak + right-click dismantles the block: it drops as an item, and anything inside drops
- * too, so nothing is lost.</li>
+ * too, so nothing is lost. A pipe or cable in a wall comes out and the wall stays.</li>
  * </ul>
  */
 public class BrassWrenchItem extends Item {
@@ -48,7 +48,12 @@ public class BrassWrenchItem extends Item {
 		}
 		if (player != null && player.isSecondaryUseActive()) {
 			if (!level.isClientSide()) {
-				level.destroyBlock(pos, !player.isCreative(), player);
+				if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRun) {
+					// A pipe or cable in a wall comes out; the wall stays.
+					io.github.jimbozoomer.jugcraft.wallrun.WallRuns.pullOut(level, pos, player);
+				} else {
+					level.destroyBlock(pos, !player.isCreative(), player);
+				}
 			}
 			return InteractionResult.SUCCESS;
 		}

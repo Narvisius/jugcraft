@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/wall_run_sleeve_cable"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/wall_run_sleeve_cable",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/wall_run_sleeve_cable",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/wall_run_sleeve_cable",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/wall_run_sleeve_cable",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/wall_run_sleeve_cable",
+        "x": 90
+      }
+    }
+  ]
+}

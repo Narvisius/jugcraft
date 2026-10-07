@@ -8,6 +8,7 @@ import java.util.function.Function;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -34,11 +35,44 @@ import net.minecraft.world.level.material.PushReaction;
  */
 public final class StorageTanks {
 	public static final Map<String, Block> BLOCKS = new LinkedHashMap<>();
-	public static Block PLATE, INTERIOR, OUTLET, INLET, RAILING, GATE, LADDER;
+	public static Block PLATE, INTERIOR, OUTLET, INLET, HATCH, RAILING, GATE, LADDER;
 	public static BlockEntityType<StorageTankPortBlockEntity> PORT_ENTITY;
+	public static BlockEntityType<StorageTankHatchBlockEntity> HATCH_ENTITY;
 	public static BlockEntityType<RailingGateBlockEntity> GATE_ENTITY;
 
+	/** Opens a tank's screen on the client (set by the client; the outlet's position). */
+	public static java.util.function.Consumer<BlockPos> openScreen = pos -> {
+	};
+
 	private StorageTanks() {
+	}
+
+	/**
+	 * The outlet of the formed tank whose shell (or roof) {@code plate} is part of: a walk over the joined plates to
+	 * the one an outlet stands against, facing out from it. Null if there is none near enough.
+	 */
+	public static @org.jspecify.annotations.Nullable BlockPos outletOf(net.minecraft.world.level.Level level, BlockPos plate) {
+		java.util.Set<BlockPos> seen = new java.util.HashSet<>();
+		java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
+		queue.add(plate.immutable());
+		seen.add(plate.immutable());
+		while (!queue.isEmpty() && seen.size() < 8000) {
+			BlockPos p = queue.poll();
+			for (Direction d : Direction.values()) {
+				BlockPos q = p.relative(d);
+				if (!level.isLoaded(q) || !seen.add(q)) {
+					continue;
+				}
+				BlockState state = level.getBlockState(q);
+				if (state.getBlock() instanceof StorageTankPlateBlock) {
+					queue.add(q);
+				} else if (d.getAxis().isHorizontal() && state.getBlock() instanceof StorageTankOutletBlock
+						&& state.getValue(StorageTankPortBlock.FACING) == d && state.getValue(StorageTankPortBlock.FORMED)) {
+					return q;
+				}
+			}
+		}
+		return null;
 	}
 
 	/** A piece set against a wall or a roof: placed facing out from the face clicked. */
@@ -67,10 +101,9 @@ public final class StorageTanks {
 		block("storage_tank_fill_pipe", TankFillPipeBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F, 6.0F).noOcclusion());
 		block("storage_tank_manway", p -> new TankDecorBlock(p, new double[] {1.8, 1.8, 12.0, 14.2, 14.2, 16}),
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F, 6.0F).noOcclusion());
-		block("storage_tank_vent", p -> new TankDecorBlock(p, new double[] {4.0, 0, 2.4, 12.0, 15.6, 13.6}),
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F, 6.0F).noOcclusion());
-		block("storage_tank_hatch", p -> new TankDecorBlock(p, new double[] {2.6, 0, 2.6, 13.4, 3.3, 14.0}),
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F, 6.0F).noOcclusion());
+		block("storage_tank_vent", TankVentBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.5F, 6.0F).noOcclusion());
+		HATCH = block("storage_tank_hatch", StorageTankHatchBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.5F, 8.0F)
+				.mapColor(MapColor.SNOW).noOcclusion());
 		RAILING = block("railing", RailingBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5F, 6.0F)
 				.sound(SoundType.METAL).noOcclusion());
 		GATE = block("railing_gate", RailingGateBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5F, 6.0F)
@@ -80,6 +113,8 @@ public final class StorageTanks {
 
 		PORT_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_tank_port"),
 				FabricBlockEntityTypeBuilder.create(StorageTankPortBlockEntity::new, OUTLET, INLET).build());
+		HATCH_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_tank_hatch"),
+				FabricBlockEntityTypeBuilder.create(StorageTankHatchBlockEntity::new, HATCH).build());
 		GATE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("railing_gate"),
 				FabricBlockEntityTypeBuilder.create(RailingGateBlockEntity::new, GATE).build());
 		// Pipes join a nozzle at its outer flange.

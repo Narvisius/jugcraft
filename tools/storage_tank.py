@@ -54,7 +54,7 @@ BLOCKS = list(NAMES) + [INTERIOR]
 # The plate's finished paint, by where it is in the formed shell (StorageTankPlateBlock.Band).
 BANDS = ("wall", "band", "rim", "roof")
 # What a tank's outlet is stencilled for (StorageTankOutletBlock.Service).
-SERVICES = ("none", "condensate", "refuelling_water", "diesel_fuel")
+SERVICES = ("none", "condensate", "refuelling_water", "diesel_fuel", "diesel_day_a", "diesel_day_b")
 FACINGS = (("north", 0), ("east", 90), ("south", 180), ("west", 270))
 
 GUN, CHROME, RED = "dp_gunmetal", "dp_chrome", "sp_red_iron"
@@ -179,30 +179,83 @@ def manway():
 
 
 def vent():
-    """The roof vent: a standpipe off a flange on the roof, the flame arrester housing (flanged, bolted), and a
-    gooseneck turning the vent down, a screen over its mouth."""
+    """The roof vent: a standpipe off a flange on the roof (or on the pipe it tops), the flame arrester housing
+    (flanged, bolted), and a gooseneck turning the vent down, a screen over its mouth."""
     m = cyl("y", 8, 8, 3.6, 0, 0.6, GUN)
-    m += cyl("y", 8, 9.6, 2.3, 0.6, 5.6, PIPE)
-    m += cyl("y", 8, 9.6, 3.9, 5.6, 6.2, GUN)
-    m += cyl("y", 8, 9.6, 3.5, 6.2, 9.4, GUN)
-    m += cyl("y", 8, 9.6, 3.9, 9.4, 10.0, GUN)
-    m += cyl("y", 8, 9.6, 2.3, 10.0, 13.0, PIPE)
-    m.append(box((5.7, 13.0, 2.5), (10.3, 15.6, 11.9), PIPE))
-    m += cyl("y", 8, 4.8, 2.3, 10.6, 13.0, PIPE)
-    m.append(box((5.9, 10.2, 2.7), (10.1, 10.6, 6.9), {"*": PIPE, "down": MESH}))
+    m += cyl("y", 8, 8, 2.3, 0.6, 5.6, PIPE)
+    m += cyl("y", 8, 8, 3.9, 5.6, 6.2, GUN)
+    m += cyl("y", 8, 8, 3.5, 6.2, 9.4, GUN)
+    m += cyl("y", 8, 8, 3.9, 9.4, 10.0, GUN)
+    m += cyl("y", 8, 8, 2.3, 10.0, 13.0, PIPE)
+    m.append(box((5.7, 13.0, 0.9), (10.3, 15.6, 10.3), PIPE))
+    m += cyl("y", 8, 3.2, 2.3, 10.6, 13.0, PIPE)
+    m.append(box((5.9, 10.2, 1.1), (10.1, 10.6, 5.3), {"*": PIPE, "down": MESH}))
     return m
 
 
-def hatch():
-    """A roof hatch: a square curb, the lid on two hinges at the back, a yellow lifting handle at the front."""
-    m = [box((3, 0, 3), (13, 1.8, 13), "st_rim")]
-    m.append(box((2.6, 1.8, 2.6), (13.4, 2.5, 13.4), WHITE))
-    for x in (4.5, 10.5):
-        m.append(box((x, 1.4, 13.4), (x + 1.0, 2.6, 14.0), GUN))
-    m.append(box((6.0, 2.5, 3.6), (10.0, 3.3, 4.2), YELLOW))
-    for x in (6.0, 9.4):
-        m.append(box((x, 2.5, 4.2), (x + 0.6, 3.3, 4.8), YELLOW))
+def vent_riser():
+    """The vent at the foot of a vent line: the flange on the roof, the flame arrester, and the pipe on up into the
+    steel pipe above it."""
+    m = cyl("y", 8, 8, 3.6, 0, 0.6, GUN)
+    m += cyl("y", 8, 8, 2.3, 0.6, 4.6, PIPE)
+    m += cyl("y", 8, 8, 3.9, 4.6, 5.2, GUN)
+    m += cyl("y", 8, 8, 3.5, 5.2, 8.4, GUN)
+    m += cyl("y", 8, 8, 3.9, 8.4, 9.0, GUN)
+    m.append(box((6, 9.0, 6), (10, 16, 10), "steel_fluid_pipe"))
     return m
+
+
+def hatch(formed):
+    """A roof hatch, a cell of the roof itself (hinges at the back, -z): the roof plate round a square opening, the
+    opening's sides dark, a galvanised safety grate across it a pixel below the roof (bearing bars and cross bars on
+    a frame), the coaming standing three pixels proud of the roof round the opening, and on its back the hinge cheeks
+    and pins the lid swings on (the lid itself is drawn by client/StorageTankHatchRenderer)."""
+    top = "st_roof" if formed else "st_primer"
+    plate = {"*": top, "north": "st_rim", "south": "st_rim", "east": "st_rim", "west": "st_rim", "down": "st_rim"}
+    m = [box((0, 0, 0), (16, 16, 3), {**plate, "north": top}), box((0, 0, 13), (16, 16, 16), {**plate, "south": top}),
+         box((0, 0, 3), (3, 16, 13), {**plate, "west": top}), box((13, 0, 3), (16, 16, 13), {**plate, "east": top})]
+    # The grate: a frame, three bearing bars front to back and three cross bars, galvanised.
+    m.append(box((3, 14.2, 3), (13, 15.6, 3.6), GALV))
+    m.append(box((3, 14.2, 12.4), (13, 15.6, 13), GALV))
+    for x in (5.4, 7.7, 10.0):
+        m.append(box((x, 14.0, 3.6), (x + 0.6, 15.6, 12.4), GALV))
+    for z in (5.6, 8.0, 10.4):
+        m.append(box((3, 14.4, z), (13, 15.0, z + 0.5), GALV))
+    # The coaming, painted like the roof, its top edge dark.
+    coat = {"*": WHITE, "up": "st_rim"}
+    m += [box((2.5, 16, 2.5), (13.5, 19, 3), coat), box((2.5, 16, 13), (13.5, 19, 13.5), coat),
+          box((2.5, 16, 3), (3, 19, 13), coat), box((13, 16, 3), (13.5, 19, 13), coat)]
+    # Two hinges: cheeks either side of where the lid's knuckle turns, and the pin through them.
+    for x0, x1 in ((4.0, 5.5), (10.5, 12.0)):
+        for cx in (x0 - 0.7, x1 + 0.1):
+            m.append(box((cx, 16.0, 1.0), (cx + 0.6, 20.0, 2.5), GUN))
+        m.append(box((x0 - 0.7, 19.1, 1.5), (x1 + 0.7, 19.7, 2.1), CHROME))
+    # The stop the open lid rests back on.
+    m.append(box((7.2, 16.0, 0.6), (8.8, 18.6, 2.5), GUN))
+    return m
+
+
+def hatch_lid():
+    """The lid as it sits shut (for the item; in the world the renderer draws and swings it)."""
+    m = [box((2.0, 19.0, 2.0), (14.0, 19.8, 14.0), WHITE),
+         box((2.0, 18.1, 2.0), (2.5, 19.0, 14.0), WHITE), box((13.5, 18.1, 2.0), (14.0, 19.0, 14.0), WHITE),
+         box((2.5, 18.1, 13.5), (13.5, 19.0, 14.0), WHITE)]
+    for x in (4.0, 10.5):
+        m.append(box((x, 19.8, 1.8), (x + 1.5, 20.15, 7.0), GUN))
+    m += [box((6.0, 19.8, 11.6), (6.6, 21.2, 12.2), YELLOW), box((9.4, 19.8, 11.6), (10.0, 21.2, 12.2), YELLOW),
+          box((6.0, 21.2, 11.6), (10.0, 21.8, 12.2), YELLOW)]
+    return m
+
+
+def _cull(model):
+    """Faces on the block's edge are hidden against a full neighbour (the roof plates round a hatch)."""
+    for e in model["elements"]:
+        for face, entry in e["faces"].items():
+            axis, sign = MW._FACE_DIR[face]
+            edge = e["to"][axis] if sign > 0 else e["from"][axis]
+            if (sign > 0 and edge >= 16) or (sign < 0 and edge <= 0):
+                entry["cullface"] = face
+    return model
 
 
 # The railing: a post, and an arm towards each joined neighbour (drawn here towards the north: the top rail, the
@@ -347,11 +400,34 @@ def draw_block_textures():
     return {name: M.stylize(make(), 16 if name == "st_band" else 14) for name, make in makers.items()}
 
 
-# The renderers' sheet (client/StorageTankRenderer, RailingGateRenderer): 256 px, 64 px regions, 4 by 4.
-SHEET = ["red_iron", "chrome", "gunmetal", "yellow",
-         "gauge_board", "pointer", "black", "galvanised",
-         "white", "nfpa_blue", "nfpa_red", "nfpa_yellow",
-         "rim", "spring", "hazard_tag", "nfpa_white"]
+# The renderers' sheet (client/StorageTankRenderer, StorageTankHatchRenderer, RailingGateRenderer): 512 x 256 px,
+# 64 px regions, 8 across and 4 down; the first four columns as before, then the inside of a tank and the hatch lid's
+# gasket in the fifth to eighth of the top row.
+SHEET = {"red_iron": (0, 0), "chrome": (1, 0), "gunmetal": (2, 0), "yellow": (3, 0),
+         "gauge_board": (0, 1), "pointer": (1, 1), "black": (2, 1), "galvanised": (3, 1),
+         "white": (0, 2), "nfpa_blue": (1, 2), "nfpa_red": (2, 2), "nfpa_yellow": (3, 2),
+         "rim": (0, 3), "spring": (1, 3), "hazard_tag": (2, 3), "nfpa_white": (3, 3),
+         "lining": (4, 0), "lining_floor": (5, 0), "lining_roof": (6, 0), "gasket": (7, 0)}
+
+
+def _lining(colour, seed, floor=False):
+    """The inside of a tank: oxide primer gone dark, a weld seam round each course, streaks of rust running down
+    (on the floor, sediment instead)."""
+    img = M.painted(colour, seed, seams=() if floor else (("h", 122),), chip_count=0, drip_count=0 if floor else 7, dirt=0.9)
+    d = ImageDraw.Draw(img)
+    rr = random.Random(seed)
+    if floor:
+        for _ in range(60):
+            x, y, r = rr.randrange(128), rr.randrange(128), rr.choice((1, 1, 2, 3))
+            d.ellipse([x - r, y - r, x + r, y + r], fill=tuple(max(0, c - rr.randrange(10, 30)) for c in colour) + (255,))
+    else:
+        for x in range(0, 128, 3):
+            y = 121 + rr.randint(-1, 1)
+            d.ellipse([x - 2, y - 2, x + 2, y + 2], fill=(68, 52, 44, 255))
+        for _ in range(5):
+            x = rr.randrange(8, 120)
+            d.line([(x, 0), (x + rr.randint(-2, 2), rr.randrange(30, 110))], fill=(120, 66, 40, 255), width=rr.choice((1, 2)))
+    return img
 
 
 def _gauge_board():
@@ -385,10 +461,14 @@ def draw_sheet():
         "spring": M.brushed((70, 74, 78), 7325, "h", dirt=0.1),
         "hazard_tag": M.hazard(7326),
         "nfpa_white": Image.new("RGBA", (128, 128), (246, 246, 242, 255)),
+        "lining": _lining((92, 70, 60), 7327),
+        "lining_floor": _lining((70, 60, 54), 7328, floor=True),
+        "lining_roof": _lining((84, 74, 68), 7329),
+        "gasket": M.rubber(7330),
     }
-    sheet = Image.new("RGBA", (256, 256), (0, 0, 0, 255))
-    for k, name in enumerate(SHEET):
-        sheet.paste(tiles[name].resize((64, 64), Image.LANCZOS).convert("RGBA"), ((k % 4) * 64, (k // 4) * 64))
+    sheet = Image.new("RGBA", (512, 256), (0, 0, 0, 255))
+    for name, (col, row) in SHEET.items():
+        sheet.paste(tiles[name].resize((64, 64), Image.LANCZOS).convert("RGBA"), (col * 64, row * 64))
     return sheet
 
 
@@ -467,8 +547,26 @@ def write_assets(write, rid, assets, lang):
         for face, y in FACINGS for top in ("false", "true")}})
     write(assets / "items" / "storage_tank_fill_pipe.json", {"model": {"type": "minecraft:model", "model": rid("block/storage_tank_fill_pipe")}})
 
-    # Manway, roof vent, roof hatch: plain pieces turned by facing.
-    for block, elements in (("storage_tank_manway", manway()), ("storage_tank_vent", vent()), ("storage_tank_hatch", hatch())):
+    # The roof hatch: a cell of the roof, primer until the tank forms; turned so its hinges are on the side it faces.
+    write(models / "storage_tank_hatch.json", _cull(_model(hatch(False), rid)))
+    write(models / "storage_tank_hatch_formed.json", _cull(_model(hatch(True), rid)))
+    write(models / "storage_tank_hatch_inventory.json", _model(hatch(True) + hatch_lid(), rid))
+    write(assets / "blockstates" / "storage_tank_hatch.json", {"variants": {
+        f"band={band},facing={face},formed={formed},open={o}": {"model": rid("block/storage_tank_hatch" + ("_formed" if formed == "true" else "")),
+                                                            **_turn(y)}
+        for band in BANDS for face, y in FACINGS for formed in ("false", "true") for o in ("false", "true")}})
+    write(assets / "items" / "storage_tank_hatch.json", {"model": {"type": "minecraft:model", "model": rid("block/storage_tank_hatch_inventory")}})
+
+    # The roof vent: a gooseneck, or the foot of a vent line with a pipe on top of it.
+    write(models / "storage_tank_vent.json", _model(vent(), rid))
+    write(models / "storage_tank_vent_riser.json", _model(vent_riser(), rid))
+    write(assets / "blockstates" / "storage_tank_vent.json", {"variants": {
+        f"facing={face},riser={r}": {"model": rid("block/storage_tank_vent" + ("_riser" if r == "true" else "")), **_turn(y)}
+        for face, y in FACINGS for r in ("false", "true")}})
+    write(assets / "items" / "storage_tank_vent.json", {"model": {"type": "minecraft:model", "model": rid("block/storage_tank_vent")}})
+
+    # Manway: a plain piece turned by facing.
+    for block, elements in (("storage_tank_manway", manway()),):
         write(models / f"{block}.json", _model(elements, rid))
         write(assets / "blockstates" / f"{block}.json", {"variants": {
             f"facing={face}": {"model": rid(f"block/{block}"), **_turn(y)} for face, y in FACINGS}})
@@ -522,10 +620,36 @@ def write_assets(write, rid, assets, lang):
         f"tank.{MOD}.refuelling_water.name": "REFUELLING WATER STORAGE TANK",
         f"tank.{MOD}.refuelling_water.tag": "RWST-01",
         f"tank.{MOD}.diesel_fuel.name": "DIESEL FUEL OIL",
-        f"tank.{MOD}.diesel_fuel.tag": "DFO-1A",
+        f"tank.{MOD}.diesel_fuel.tag": "DFO-01",
         f"tank.{MOD}.diesel_fuel.warning": "NO SMOKING",
         f"tank.{MOD}.diesel_fuel.warning2": "NO NAKED FLAMES",
+        f"tank.{MOD}.diesel_day_a.name": "DIESEL FUEL OIL DAY TANK",
+        f"tank.{MOD}.diesel_day_a.tag": "DT-1A",
+        f"tank.{MOD}.diesel_day_a.warning": "NO SMOKING",
+        f"tank.{MOD}.diesel_day_a.warning2": "NO NAKED FLAMES",
+        f"tank.{MOD}.diesel_day_b.name": "DIESEL FUEL OIL DAY TANK",
+        f"tank.{MOD}.diesel_day_b.tag": "DT-1B",
+        f"tank.{MOD}.diesel_day_b.warning": "NO SMOKING",
+        f"tank.{MOD}.diesel_day_b.warning2": "NO NAKED FLAMES",
         f"tank.{MOD}.empty": "EMPTY",
+        f"screen.{MOD}.tank.title": "Storage Tank",
+        f"screen.{MOD}.tank.not_formed": "Not formed: the shell, roof and floor must close round the space inside",
+        f"screen.{MOD}.tank.fluid": "Fluid",
+        f"screen.{MOD}.tank.empty": "Empty",
+        f"screen.{MOD}.tank.contents": "Contents",
+        f"screen.{MOD}.tank.of": "of %s mB (%s buckets)",
+        f"screen.{MOD}.tank.fill": "%s%% full",
+        f"screen.{MOD}.tank.in": "In",
+        f"screen.{MOD}.tank.out": "Out",
+        f"screen.{MOD}.tank.net": "Net",
+        f"screen.{MOD}.tank.full_in": "Full in %s",
+        f"screen.{MOD}.tank.empty_in": "Empty in %s",
+        f"screen.{MOD}.tank.steady": "Steady",
+        f"screen.{MOD}.tank.outlet": "Outlet",
+        f"screen.{MOD}.tank.open": "Open (feeding its line)",
+        f"screen.{MOD}.tank.shut": "Shut",
+        f"screen.{MOD}.tank.held_shut": "Held shut (redstone)",
+        f"screen.{MOD}.tank.hint": "Right-click the outlet to open or shut it",
     })
 
 

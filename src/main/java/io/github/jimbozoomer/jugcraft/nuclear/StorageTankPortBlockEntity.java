@@ -50,6 +50,11 @@ import org.jspecify.annotations.Nullable;
  */
 public class StorageTankPortBlockEntity extends BlockEntity {
 	private static final int CHECK_TICKS = 40, MAX_CELLS = 16000, MAX_SPAN = 48;
+	/** An open outlet feeds its line: every few ticks it sends this much (a bucket a second) into whatever its pipe reaches. */
+	private static final int FEED_TICKS = 5;
+	private static final long FEED = 250 * FluidNetworks.DROPLETS_PER_MB;
+	/** Fill changes reach clients at most this often (ticks). */
+	private static final int SYNC_TICKS = 10;
 
 	/** The tank's fluid (outlets only), a bucket for each block inside. */
 	public final TankFluid fluid = new TankFluid();
@@ -59,6 +64,8 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	private @Nullable BlockPos controller;
 	/** Positions relative to the outlet, packed ({@link #pack}): the interior blocks, the plates and the linked inlets. */
 	private int[] interior = new int[0], plates = new int[0], inlets = new int[0];
+	/** The space inside as columns, for the client to draw the inside of the tank and the liquid in it ({@link #columns}). */
+	private int[] columns = new int[0];
 	/** The float gauge: how many blocks of shell above the outlet it runs up. */
 	private int gaugeHeight;
 	/** The stencil: the face it is painted on, its middle (relative to the outlet's corner) and its width (blocks). */
@@ -70,10 +77,20 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	/** Fill the tank (most of the way, with what its service says) when it first forms: a fuelled plant build. */
 	private boolean prefill;
 	private int timer;
+	private boolean syncPending;
+	private long lastSync;
+	/** What has come in and gone out (droplets) this second, the amount at the last count, and the last second's
+	 * rates (mB a second), for the tank's screen. */
+	private long inCount, outCount, counted;
+	private int inRate, outRate;
 
-	/** Client: the handwheel's turn (renderer bookkeeping). */
+	/** Client: the handwheel's turn, and the liquid's level as drawn (renderer bookkeeping). */
 	public boolean animOpen;
 	public long animStart = Long.MIN_VALUE;
+	public float shownFill = -1;
+	public long shownAt;
+	public @Nullable Object lining;
+	public int liningKey;
 
 	public StorageTankPortBlockEntity(BlockPos pos, BlockState state) {
 		super(StorageTanks.PORT_ENTITY, pos, state);
@@ -99,7 +116,16 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 
 		@Override
 		protected void onFinalCommit() {
-			changed();
+			// Pipes and buckets move fluid one way a transaction: the change is what came in or went out.
+			long change = amount - counted;
+			if (change > 0) {
+				inCount += change;
+			} else {
+				outCount -= change;
+			}
+			counted = amount;
+			setChanged();
+			syncPending = true;
 		}
 	}
 
@@ -134,6 +160,40 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 
 	public int paint() {
 		return paint;
+	}
+
+	/** What came in over the last second (mB). */
+	public int inRate() {
+		return inRate;
+	}
+
+	/** What went out over the last second (mB). */
+	public int outRate() {
+		return outRate;
+	}
+
+	/**
+	 * The space inside the tank, a vertical run of it at a time: each entry packs the run's x and z and its lowest and
+	 * highest y, relative to the outlet, 7 bits each offset by 64 ({@link #columnX} and the rest unpack them).
+	 */
+	public int[] columns() {
+		return columns;
+	}
+
+	public static int columnX(int packed) {
+		return (packed >> 21 & 127) - 64;
+	}
+
+	public static int columnZ(int packed) {
+		return (packed >> 14 & 127) - 64;
+	}
+
+	public static int columnBottom(int packed) {
+		return (packed >> 7 & 127) - 64;
+	}
+
+	public static int columnTop(int packed) {
+		return (packed & 127) - 64;
 	}
 
 	/** A fuelled plant build: fill the tank when it forms. */
@@ -209,11 +269,43 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	// ------------------------------------------------------------------ forming
 
 	public void serverTick(ServerLevel level) {
+		long now = level.getGameTime();
+		if (formed && Math.floorMod(now + worldPosition.asLong(), FEED_TICKS) == 0) {
+			feed(level);
+		}
+		if (now % 20 == 0) {
+			int in = (int) (inCount / FluidNetworks.DROPLETS_PER_MB), out = (int) (outCount / FluidNetworks.DROPLETS_PER_MB);
+			inCount = 0;
+			outCount = 0;
+			if (in != inRate || out != outRate) {
+				inRate = in;
+				outRate = out;
+				syncPending = true;
+			}
+		}
+		if (syncPending && now - lastSync >= SYNC_TICKS) {
+			syncPending = false;
+			lastSync = now;
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+		}
 		if (--timer > 0) {
 			return;
 		}
 		timer = CHECK_TICKS;
 		check(level);
+	}
+
+	/**
+	 * An open outlet feeds its line: its fluid runs out through the pipe on its flange into whatever takes it at the
+	 * other end (another tank's inlet, a machine), a bucket a second, until that is full or this tank is empty. Shut,
+	 * or held shut by redstone, nothing goes.
+	 */
+	private void feed(ServerLevel level) {
+		if (!isOutlet() || fluid.isResourceBlank() || fluid.amount <= 0 || !StorageTankPortBlock.valveOpen(getBlockState())) {
+			return;
+		}
+		Direction out = getBlockState().getValue(StorageTankPortBlock.FACING);
+		FluidNetworks.pushToNeighbors(level, worldPosition, fluid, Math.min(FEED, fluid.amount), List.of(out));
 	}
 
 	/** Looks the tank over now (the plant builder, tests). */
@@ -406,6 +498,8 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			}
 		}
 		prefill = false;
+		counted = fluid.amount;
+		columns = columnsOf(scan.inside);
 		layout(level, scan, roofY);
 		BlockState state = getBlockState();
 		if (!state.getValue(StorageTankPortBlock.FORMED)) {
@@ -423,7 +517,37 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	private String signature() {
 		return formed + ":" + fluid.capacity + ":" + fluid.amount + ":" + gaugeHeight + ":" + stencilFace + ":" + stencilCenter + ":" + stencilWidth
 				+ ":" + stencilHeight
-				+ ":" + inlets.length;
+				+ ":" + inlets.length + ":" + java.util.Arrays.hashCode(columns);
+	}
+
+	/** The space inside as vertical runs (see {@link #columns()}). */
+	private int[] columnsOf(Set<Long> inside) {
+		java.util.Map<Long, List<Integer>> byColumn = new java.util.TreeMap<>();
+		for (long key : inside) {
+			BlockPos p = BlockPos.of(key);
+			byColumn.computeIfAbsent((long) p.getX() << 32 | (p.getZ() & 0xFFFFFFFFL), k -> new ArrayList<>()).add(p.getY());
+		}
+		List<Integer> out = new ArrayList<>();
+		for (java.util.Map.Entry<Long, List<Integer>> e : byColumn.entrySet()) {
+			int dx = (int) (e.getKey() >> 32) - worldPosition.getX(), dz = (int) (long) e.getKey() - worldPosition.getZ();
+			List<Integer> ys = e.getValue();
+			ys.sort(null);
+			int start = ys.get(0), last = start;
+			for (int i = 1; i <= ys.size(); i++) {
+				if (i < ys.size() && ys.get(i) == last + 1) {
+					last = ys.get(i);
+					continue;
+				}
+				int y0 = start - worldPosition.getY(), y1 = last - worldPosition.getY();
+				if (Math.abs(dx) < 64 && Math.abs(dz) < 64 && Math.abs(y0) < 64 && Math.abs(y1) < 64) {
+					out.add((dx + 64) << 21 | (dz + 64) << 14 | (y0 + 64) << 7 | (y1 + 64));
+				}
+				if (i < ys.size()) {
+					start = last = ys.get(i);
+				}
+			}
+		}
+		return out.stream().mapToInt(Integer::intValue).toArray();
 	}
 
 	/** Where the float gauge and the stencil go. */
@@ -531,6 +655,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		interior = new int[0];
 		plates = new int[0];
 		inlets = new int[0];
+		columns = new int[0];
 		formed = false;
 		gaugeHeight = 0;
 		stencilFace = null;
@@ -598,12 +723,16 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		fluid.variant = input.read("fluid", FluidVariant.CODEC).orElseGet(FluidVariant::blank);
 		fluid.amount = Math.max(0, input.getLongOr("amount", 0L));
 		fluid.capacity = Math.max(0, input.getLongOr("capacity", 0L));
+		counted = fluid.amount;
+		inRate = input.getIntOr("in_rate", 0);
+		outRate = input.getIntOr("out_rate", 0);
 		formed = input.getBooleanOr("formed", false);
 		controller = input.read("controller", BlockPos.CODEC).orElse(null);
 		interior = input.getIntArray("interior").orElse(interior);
 		plates = input.getIntArray("plates").orElse(plates);
 		inlets = input.getIntArray("inlets").orElse(inlets);
 		gaugeHeight = input.getIntOr("gauge", 0);
+		columns = input.getIntArray("columns").orElse(new int[0]);
 		int face = input.getIntOr("stencil_face", -1);
 		stencilFace = face < 0 ? null : Direction.from3DDataValue(face);
 		stencilCenter = new Vec3(input.getDoubleOr("stencil_x", 0), input.getDoubleOr("stencil_y", 0), input.getDoubleOr("stencil_z", 0));
@@ -634,6 +763,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			output.store("controller", BlockPos.CODEC, controller);
 		}
 		output.putInt("gauge", gaugeHeight);
+		output.putIntArray("columns", columns);
 		output.putInt("stencil_face", stencilFace == null ? -1 : stencilFace.get3DDataValue());
 		output.putDouble("stencil_x", stencilCenter.x);
 		output.putDouble("stencil_y", stencilCenter.y);
@@ -648,7 +778,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
-	/** Clients get the fluid, the gauge and the stencil, not the interior and plate lists. */
+	/** Clients get the fluid, the gauge, the stencil and the space inside (as columns), not the interior and plate lists. */
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
 		CompoundTag tag = new CompoundTag();
@@ -659,6 +789,9 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		tag.putLong("capacity", fluid.capacity);
 		tag.putBoolean("formed", formed);
 		tag.putInt("gauge", gaugeHeight);
+		tag.putIntArray("columns", columns);
+		tag.putInt("in_rate", inRate);
+		tag.putInt("out_rate", outRate);
 		tag.putInt("stencil_face", stencilFace == null ? -1 : stencilFace.get3DDataValue());
 		tag.putDouble("stencil_x", stencilCenter.x);
 		tag.putDouble("stencil_y", stencilCenter.y);
@@ -684,6 +817,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		if (stored != null) {
 			fluid.variant = stored.variant();
 			fluid.amount = stored.amount();
+			counted = fluid.amount;
 		}
 	}
 
@@ -697,6 +831,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		if (stored != null) {
 			fluid.variant = stored.variant();
 			fluid.amount = stored.amount();
+			counted = fluid.amount;
 			prefill = false;
 			changed();
 		}

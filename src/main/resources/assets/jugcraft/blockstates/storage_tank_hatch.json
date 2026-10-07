@@ -1,18 +1,243 @@
 {
   "variants": {
-    "facing=north": {
+    "band=wall,facing=north,formed=false,open=false": {
       "model": "jugcraft:block/storage_tank_hatch"
     },
-    "facing=east": {
+    "band=wall,facing=north,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=wall,facing=north,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=wall,facing=north,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=wall,facing=east,formed=false,open=false": {
       "model": "jugcraft:block/storage_tank_hatch",
       "y": 90
     },
-    "facing=south": {
+    "band=wall,facing=east,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=wall,facing=east,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=wall,facing=east,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=wall,facing=south,formed=false,open=false": {
       "model": "jugcraft:block/storage_tank_hatch",
       "y": 180
     },
-    "facing=west": {
+    "band=wall,facing=south,formed=false,open=true": {
       "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=wall,facing=south,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=wall,facing=south,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=wall,facing=west,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=wall,facing=west,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=wall,facing=west,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=wall,facing=west,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=band,facing=north,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=band,facing=north,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=band,facing=north,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=band,facing=north,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=band,facing=east,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=band,facing=east,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=band,facing=east,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=band,facing=east,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=band,facing=south,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=band,facing=south,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=band,facing=south,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=band,facing=south,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=band,facing=west,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=band,facing=west,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=band,facing=west,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=band,facing=west,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=rim,facing=north,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=rim,facing=north,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=rim,facing=north,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=rim,facing=north,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=rim,facing=east,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=rim,facing=east,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=rim,facing=east,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=rim,facing=east,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=rim,facing=south,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=rim,facing=south,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=rim,facing=south,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=rim,facing=south,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=rim,facing=west,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=rim,facing=west,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=rim,facing=west,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=rim,facing=west,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=roof,facing=north,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=roof,facing=north,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch"
+    },
+    "band=roof,facing=north,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=roof,facing=north,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed"
+    },
+    "band=roof,facing=east,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=roof,facing=east,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 90
+    },
+    "band=roof,facing=east,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=roof,facing=east,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 90
+    },
+    "band=roof,facing=south,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=roof,facing=south,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 180
+    },
+    "band=roof,facing=south,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=roof,facing=south,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 180
+    },
+    "band=roof,facing=west,formed=false,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=roof,facing=west,formed=false,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch",
+      "y": 270
+    },
+    "band=roof,facing=west,formed=true,open=false": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
+      "y": 270
+    },
+    "band=roof,facing=west,formed=true,open=true": {
+      "model": "jugcraft:block/storage_tank_hatch_formed",
       "y": 270
     }
   }

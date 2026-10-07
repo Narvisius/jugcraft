@@ -33,7 +33,7 @@ public enum EquipmentKind {
 	OVERHEAD_CRANE("overhead_crane", 40, 5, 4),
 	MOISTURE_SEPARATOR_REHEATER("moisture_separator_reheater", 5, 20, 5),
 	FEEDWATER_HEATER("feedwater_heater", 3, 12, 3),
-	EMERGENCY_DIESEL_GENERATOR("emergency_diesel_generator", 5, 14, 5),
+	EMERGENCY_DIESEL_GENERATOR("emergency_diesel_generator", 7, 14, 5),
 	STORAGE_TANK("storage_tank", 5, 5, 9),
 	HEAT_EXCHANGER("heat_exchanger", 3, 9, 3),
 	PUMP_SKID("pump_skid", 3, 5, 3),
@@ -119,8 +119,23 @@ public enum EquipmentKind {
 			case EPR_VESSEL -> y < 15 ? r2 <= 3.8 * 3.8 : r2 <= 2.8 * 2.8;
 			// A slim integral module (reactor, steam generator and pressurizer in one steel containment).
 			case SMALL_MODULAR_REACTOR -> r2 <= 2.4 * 2.4;
+			// The engine and generator along the middle; the walkways either side are walked on (their supports below
+			// them), with steps up to each one beside the generator; the local panel at the front left.
+			case EMERGENCY_DIESEL_GENERATOR -> x >= 1 && x <= 5 ? y < 5 && (z < 13 || x >= 2 && x <= 4 && y < 4)
+					: z >= 1 && z <= 8 && y <= 1 || (z == 9 && y <= 1 || (z == 10 || z == 11) && y == 0) || x == 0 && z == 0 && y <= 2;
 			default -> true;
 		};
+	}
+
+	/**
+	 * How a frame cell stands: a whole block, or half a block high where the piece's steps are drawn (so they can be
+	 * walked up: the diesel generator's steps to its walkways).
+	 */
+	public EquipmentFrameBlock.Shape frameShape(int x, int y, int z) {
+		if (this == EMERGENCY_DIESEL_GENERATOR && (x == 0 || x == 6) && (z == 9 && y == 1 || z == 11 && y == 0)) {
+			return EquipmentFrameBlock.Shape.HALF;
+		}
+		return EquipmentFrameBlock.Shape.FULL;
 	}
 
 	/** Every solid cell, local coordinates (the anchor's own cell included if solid). */

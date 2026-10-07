@@ -4,14 +4,19 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.client.DroneDepotRenderer.Geometry;
+import io.github.jimbozoomer.jugcraft.nuclear.StorageTankHatchBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.StorageTankOutletBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity;
 import java.util.ArrayList;
 import java.util.List;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -19,6 +24,8 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -27,6 +34,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
@@ -44,14 +52,20 @@ import org.jspecify.annotations.Nullable;
 public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortBlockEntity, StorageTankRenderer.State> {
 	public static final Identifier TEXTURE = Jugcraft.id("textures/entity/storage_tank.png");
 	private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
-	private static final float PX = 1 / 256F;
+	/** The inside of the tank: drawn facing in only, so it never shows from outside. */
+	private static final RenderType LINING_TYPE = RenderTypes.entityCutoutCull(TEXTURE);
+	/** The liquid: the fluid's own (animated) texture from the block atlas, a little see-through for water. */
+	private static final RenderType FLUID_TYPE = RenderTypes.entityTranslucentCull(TextureAtlas.LOCATION_BLOCKS);
+	/** The sheet is 512 x 256: 64 px regions, 8 across and 4 down (tools/storage_tank.py SHEET). */
+	private static final float PX_U = 1 / 512F, PX_V = 1 / 256F;
 	static final float[] RED_IRON = region(0, 0), CHROME = region(1, 0), GUNMETAL = region(2, 0), YELLOW = region(3, 0);
 	static final float[] GAUGE_BOARD = region(0, 1), POINTER = region(1, 1), BLACK = region(2, 1), GALVANISED = region(3, 1);
 	static final float[] WHITE = region(0, 2), NFPA_BLUE = region(1, 2), NFPA_RED = region(2, 2), NFPA_YELLOW = region(3, 2);
 	static final float[] RIM = region(0, 3), SPRING = region(1, 3), HAZARD_TAG = region(2, 3), NFPA_WHITE = region(3, 3);
+	static final float[] LINING = region(4, 0), LINING_FLOOR = region(5, 0), LINING_ROOF = region(6, 0), GASKET = region(7, 0);
 
 	private static float[] region(int col, int row) {
-		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX};
+		return new float[] {(col * 64 + 0.5F) * PX_U, (row * 64 + 0.5F) * PX_V, (col * 64 + 63.5F) * PX_U, (row * 64 + 63.5F) * PX_V};
 	}
 
 	private final Font font;
@@ -72,6 +86,89 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 		final List<Float> sizes = new ArrayList<>();
 		boolean diamond;
 		int stencilLight;
+		/** The inside of the tank (null when not formed) and the liquid: its level (blocks above the outlet), look and light. */
+		@Nullable Lining lining;
+		final List<float[]> ceilings = new ArrayList<>();
+		float surface;
+		boolean liquid;
+		@Nullable TextureAtlasSprite sprite;
+		int liquidColour, liningLight, liquidLight;
+	}
+
+	/**
+	 * The inside of a formed tank, worked out once from the outlet's columns: the walls round the space and its floor
+	 * (quads facing in), the cells of the roof's underside (a hatch over one leaves it open), and the runs themselves.
+	 */
+	static final class Lining {
+		final int[] columns;
+		final float[] walls;
+		final int[] ceilings;
+		final int bottom, top;
+
+		Lining(int[] columns) {
+			this.columns = columns;
+			java.util.Map<Long, List<int[]>> runs = new java.util.HashMap<>();
+			int lo = Integer.MAX_VALUE, hi = Integer.MIN_VALUE;
+			for (int c : columns) {
+				int x = StorageTankPortBlockEntity.columnX(c), z = StorageTankPortBlockEntity.columnZ(c);
+				int y0 = StorageTankPortBlockEntity.columnBottom(c), y1 = StorageTankPortBlockEntity.columnTop(c);
+				runs.computeIfAbsent(key(x, z), k -> new ArrayList<>()).add(new int[] {y0, y1});
+				lo = Math.min(lo, y0);
+				hi = Math.max(hi, y1);
+			}
+			bottom = lo == Integer.MAX_VALUE ? 0 : lo;
+			top = hi == Integer.MIN_VALUE ? 0 : hi;
+			List<Float> quads = new ArrayList<>();
+			List<Integer> roof = new ArrayList<>();
+			int[][] sides = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+			for (int c : columns) {
+				int x = StorageTankPortBlockEntity.columnX(c), z = StorageTankPortBlockEntity.columnZ(c);
+				int y0 = StorageTankPortBlockEntity.columnBottom(c), y1 = StorageTankPortBlockEntity.columnTop(c);
+				// The floor and the roof's underside.
+				add(quads, 0, x, y0, z, x + 1, y0, z + 1);
+				roof.add(c);
+				for (int[] d : sides) {
+					List<int[]> beside = runs.get(key(x + d[0], z + d[1]));
+					for (int y = y0; y <= y1; y++) {
+						if (!within(beside, y)) {
+							int side = d[0] == 1 ? 1 : d[0] == -1 ? 2 : d[1] == 1 ? 3 : 4;
+							add(quads, side, x, y, z, x + 1, y + 1, z + 1);
+						}
+					}
+				}
+			}
+			walls = new float[quads.size()];
+			for (int i = 0; i < walls.length; i++) {
+				walls[i] = quads.get(i);
+			}
+			ceilings = roof.stream().mapToInt(Integer::intValue).toArray();
+		}
+
+		private static long key(int x, int z) {
+			return (long) x << 32 | (z & 0xFFFFFFFFL);
+		}
+
+		private static boolean within(@Nullable List<int[]> runs, int y) {
+			if (runs != null) {
+				for (int[] r : runs) {
+					if (y >= r[0] && y <= r[1]) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		/** A quad facing into the space: 0 the floor, 1..4 the wall on the +x, -x, +z, -z side of a cell (kind, then the cell's box). */
+		private static void add(List<Float> quads, int kind, float x0, float y0, float z0, float x1, float y1, float z1) {
+			quads.add((float) kind);
+			quads.add(x0);
+			quads.add(y0);
+			quads.add(z0);
+			quads.add(x1);
+			quads.add(y1);
+			quads.add(z1);
+		}
 	}
 
 	public StorageTankRenderer(BlockEntityRendererProvider.Context context) {
@@ -106,6 +203,9 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 		state.lift = open ? t : 1 - t;
 		state.spin = state.lift * 720;
 		state.gauge = 0;
+		state.lining = null;
+		state.ceilings.clear();
+		state.liquid = false;
 		state.stencilFace = null;
 		state.lines.clear();
 		state.widths.clear();
@@ -118,7 +218,18 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 		BlockPos pos = port.getBlockPos();
 		state.gauge = port.gaugeHeight();
 		long capacity = port.fluid.capacity();
-		state.fill = capacity <= 0 ? 0 : Math.min(1, port.fluid.amount / (float) capacity);
+		float target = capacity <= 0 || port.fluid.isResourceBlank() ? 0 : Math.min(1, port.fluid.amount / (float) capacity);
+		// The level eases to where it now is (the server sends it twice a second), so it rises and falls smoothly.
+		long nanos = System.nanoTime();
+		if (port.shownFill < 0) {
+			port.shownFill = target;
+		} else {
+			float dt = Math.min(1, (nanos - port.shownAt) / 1.0E9F);
+			port.shownFill += (target - port.shownFill) * Math.min(1, dt * 2.5F);
+		}
+		port.shownAt = nanos;
+		state.fill = port.shownFill;
+		inside(port, state, level, pos);
 		state.gaugeLight = new int[state.gauge + 2];
 		for (int k = 0; k < state.gaugeLight.length; k++) {
 			state.gaugeLight[k] = LightCoordsUtil.getLightCoords(level, pos.above(k));
@@ -136,7 +247,7 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 				String key = "tank.jugcraft." + service.getSerializedName();
 				line(state, Component.translatable(key + ".name"), 0.075F, 0xFF1C1C1E);
 				line(state, Component.translatable(key + ".tag"), 0.06F, 0xFF1C1C1E);
-				if (service == StorageTankOutletBlock.Service.DIESEL_FUEL) {
+				if (service.diesel()) {
 					line(state, Component.translatable(key + ".warning"), 0.04F, 0xFFB01818);
 					line(state, Component.translatable(key + ".warning2"), 0.04F, 0xFFB01818);
 					state.diamond = true;
@@ -175,8 +286,52 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 		state.colours.add(colour);
 	}
 
+	/** The inside of the tank and the liquid in it, seen through an open roof hatch. */
+	private static void inside(StorageTankPortBlockEntity port, State state, Level level, BlockPos pos) {
+		int[] columns = port.columns();
+		if (columns.length == 0) {
+			return;
+		}
+		int key = java.util.Arrays.hashCode(columns);
+		if (!(port.lining instanceof Lining) || port.liningKey != key) {
+			port.lining = new Lining(columns);
+			port.liningKey = key;
+		}
+		Lining lining = (Lining) port.lining;
+		state.lining = lining;
+		// Under a hatch the roof is open.
+		for (int c : lining.ceilings) {
+			int x = StorageTankPortBlockEntity.columnX(c), z = StorageTankPortBlockEntity.columnZ(c), y = StorageTankPortBlockEntity.columnTop(c) + 1;
+			if (!(level.getBlockState(pos.offset(x, y, z)).getBlock() instanceof StorageTankHatchBlock)) {
+				state.ceilings.add(new float[] {x, y, z});
+			}
+		}
+		// Daylight comes in at the hatch: the inside is a good deal darker than the roof.
+		int c0 = columns[0];
+		int roof = LightCoordsUtil.getLightCoords(level, pos.offset(StorageTankPortBlockEntity.columnX(c0), lining.top + 2,
+				StorageTankPortBlockEntity.columnZ(c0)));
+		int sky = LightCoordsUtil.sky(roof), block = LightCoordsUtil.block(roof);
+		state.liningLight = LightCoordsUtil.pack(Math.max(block - 1, 7), Math.max(sky - 3, 0));
+		state.liquidLight = LightCoordsUtil.pack(Math.max(block, 9), Math.max(sky - 2, 0));
+		if (state.fill > 0.001F && !port.fluid.isResourceBlank()) {
+			FluidVariant variant = port.fluid.variant;
+			FluidModel model = Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(variant.getFluid().defaultFluidState());
+			state.sprite = model.stillMaterial().sprite();
+			int rgb = (Minecraft.getInstance().level != null ? FluidVariantRendering.getColor(variant, Minecraft.getInstance().level, pos)
+					: FluidVariantRendering.getColor(variant)) & 0xFFFFFF;
+			boolean water = variant.getFluid().isSame(Fluids.WATER);
+			state.liquidColour = (water ? 0xD8000000 : 0xF4000000) | rgb;
+			int height = lining.top + 1 - lining.bottom;
+			state.surface = Math.min(lining.top + 1 - 0.04F, lining.bottom + state.fill * height);
+			state.liquid = true;
+		}
+	}
+
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+		if (state.lining != null) {
+			lining(state, pose, collector);
+		}
 		int light = state.lightCoords;
 		pose.pushPose();
 		pose.translate(0.5F, 0.0F, 0.5F);
@@ -196,6 +351,53 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 		if (state.stencilFace != null && !state.lines.isEmpty()) {
 			stencil(state, pose, collector);
 		}
+	}
+
+	/** The tank's inside walls, floor and roof (facing in), and the liquid's surface at its level. */
+	private static void lining(State state, PoseStack pose, SubmitNodeCollector collector) {
+		Lining lining = state.lining;
+		int light = state.liningLight;
+		collector.submitCustomGeometry(pose, LINING_TYPE, (p, consumer) -> {
+			Geometry g = new Geometry(p, consumer);
+			g.light = light;
+			float[] w = lining.walls;
+			for (int i = 0; i < w.length; i += 7) {
+				int kind = (int) w[i];
+				float ax = w[i + 1], ay = w[i + 2], az = w[i + 3], bx = w[i + 4], by = w[i + 5], bz = w[i + 6];
+				switch (kind) {
+					case 0 -> g.quad(ax, ay + 0.002F, az, ax, ay + 0.002F, bz, bx, ay + 0.002F, bz, bx, ay + 0.002F, az, 0, 1, 0, LINING_FLOOR);
+					// A wall on the +x side of the cell faces -x, and so on.
+					case 1 -> g.quad(bx, ay, bz, bx, by, bz, bx, by, az, bx, ay, az, -1, 0, 0, LINING);
+					case 2 -> g.quad(ax, ay, az, ax, by, az, ax, by, bz, ax, ay, bz, 1, 0, 0, LINING);
+					case 3 -> g.quad(ax, ay, bz, ax, by, bz, bx, by, bz, bx, ay, bz, 0, 0, -1, LINING);
+					default -> g.quad(bx, ay, az, bx, by, az, ax, by, az, ax, ay, az, 0, 0, 1, LINING);
+				}
+			}
+			for (float[] c : state.ceilings) {
+				float x = c[0], y = c[1] - 0.002F, z = c[2];
+				g.quad(x, y, z + 1, x, y, z, x + 1, y, z, x + 1, y, z + 1, 0, -1, 0, LINING_ROOF);
+			}
+		});
+		if (!state.liquid || state.sprite == null) {
+			return;
+		}
+		TextureAtlasSprite sprite = state.sprite;
+		float y = state.surface;
+		int colour = state.liquidColour, liquidLight = state.liquidLight;
+		float[] uv = {sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1()};
+		collector.submitCustomGeometry(pose, FLUID_TYPE, (p, consumer) -> {
+			Geometry g = new Geometry(p, consumer);
+			g.light = liquidLight;
+			g.color = colour;
+			for (int c : lining.columns) {
+				int y0 = StorageTankPortBlockEntity.columnBottom(c), y1 = StorageTankPortBlockEntity.columnTop(c);
+				if (y < y0 || y > y1 + 1) {
+					continue;
+				}
+				float x = StorageTankPortBlockEntity.columnX(c), z = StorageTankPortBlockEntity.columnZ(c);
+				g.quad(x, y, z, x, y, z + 1, x + 1, y, z + 1, x + 1, y, z, 0, 1, 0, uv);
+			}
+		});
 	}
 
 	/** The stem (rising 2.2 px as it opens) and the handwheel, turned about the stem. */

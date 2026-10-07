@@ -148,6 +148,8 @@ def assets():
     power_lines.write_assets(write, rid, ASSETS, lang)
     import nuclear
     nuclear.write_assets(write, rid, ASSETS, lang)
+    import wall_runs
+    wall_runs.write_assets(write, rid, ASSETS, lang)
     import blueprints
     blueprints.write_assets(write, rid, ASSETS, lang)
     blueprints.write_all()
@@ -910,6 +912,8 @@ def loot_tables():
     power_lines.write_data(write, DATA)
     import nuclear
     nuclear.write_loot(write, rid, out, self_drop)
+    import wall_runs
+    wall_runs.write_loot(write, rid, out, self_drop)
     nuclear.write_data(write, DATA)
     import blueprints
     blueprints.write_loot(write, rid, out, self_drop)
@@ -1169,6 +1173,8 @@ def tags():
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
     import nuclear
     nuclear.write_tags(tags, rid)
+    import wall_runs
+    wall_runs.write_tags(tags, rid)
     tags.write()
 
 
