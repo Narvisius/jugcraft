@@ -124,8 +124,88 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			reactorUnit(context, singleplayer, x, y, z);
 			uniforms(context, singleplayer, x, y, z);
 			warehouse(context, singleplayer, x, y, z);
+			tankKits(context, singleplayer, x, y, z);
 			plants(context, singleplayer, x, y, z);
 		}
+	}
+
+	/**
+	 * The tank ratings (Justin, Oct 7): every kit placed in a row, each part filled with a liquid of its class (water,
+	 * diesel, sulfuric acid, liquid oxygen; one flammable tank titled with a name tag), seen from the front-left, and its
+	 * painted label close up; the tank screen of a titled, rated tank.
+	 */
+	private static void tankKits(ClientGameTestContext context, TestSingleplayerContext singleplayer, int x, int y, int z) {
+		TestServerContext server = singleplayer.getServer();
+		String[] kits = {"general_small", "general_medium", "general_large", "flammable_small", "flammable_medium", "flammable_large",
+				"corrosive_small", "corrosive_medium", "corrosive_large", "cryogenic"};
+		String[] fluids = {"minecraft:water", "minecraft:water", "minecraft:water", "jugcraft:diesel", "jugcraft:gasoline", "jugcraft:crude_oil",
+				"jugcraft:lye", "jugcraft:sulfuric_acid", "jugcraft:nitric_acid", "jugcraft:liquid_oxygen"};
+		int x0 = x - 320, z0 = z + 40;
+		java.util.List<BlockPos> outlets = new java.util.ArrayList<>();
+		server.runCommand("effect give @p night_vision infinite 0 true");
+		server.runCommand("gamemode spectator @p");
+		setHudHidden(context, true);
+		for (int i = 0; i < kits.length; i++) {
+			String kit = kits[i];
+			String fluid = fluids[i];
+			BlockPos stake = new BlockPos(x0 + i * 26, y, z0);
+			server.runCommand("tp @p %d.5 %d %d.5".formatted(stake.getX(), y + 2, stake.getZ() + 8));
+			context.waitTicks(10);
+			singleplayer.getConnection().waitForChunksRender();
+			BlockPos[] outlet = new BlockPos[1];
+			singleplayer.getServer().runOnServer(minecraft -> {
+				net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+				net.minecraft.network.chat.Component refused = io.github.jimbozoomer.jugcraft.nuclear.TankKitItem.place(level, kit, stake,
+						net.minecraft.world.level.block.Rotation.NONE, null);
+				if (refused != null) {
+					throw new AssertionError("The " + kit + " kit was refused: " + refused.getString());
+				}
+				io.github.jimbozoomer.jugcraft.blueprint.Blueprint bp = io.github.jimbozoomer.jugcraft.nuclear.TankKitItem.blueprint(kit);
+				for (int k = 0; k < bp.size(); k++) {
+					if (bp.state(k, net.minecraft.world.level.block.Rotation.NONE).getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankOutletBlock) {
+						outlet[0] = stake.offset(bp.offset(k, net.minecraft.world.level.block.Rotation.NONE));
+					}
+				}
+				if (!(level.getBlockEntity(outlet[0]) instanceof io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity tank) || !tank.formed()) {
+					throw new AssertionError("The " + kit + " kit's tank did not form");
+				}
+				net.minecraft.world.level.material.Fluid f = net.minecraft.core.registries.BuiltInRegistries.FLUID.getValue(
+						net.minecraft.resources.Identifier.parse(fluid));
+				try (var t = net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()) {
+					long in = tank.fluid.insert(net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(f), tank.fluid.capacity() * 3 / 5, t);
+					t.commit();
+					if (in <= 0) {
+						throw new AssertionError("The " + kit + " tank refused " + fluid);
+					}
+				}
+				if (kit.equals("flammable_large")) {
+					tank.setTitle("Main Fuel Store");
+				}
+			});
+			outlets.add(outlet[0]);
+		}
+		context.waitTicks(40);
+		for (int i = 0; i < kits.length; i++) {
+			BlockPos stake = new BlockPos(x0 + i * 26, y, z0);
+			int depth = kits[i].endsWith("large") ? 15 : kits[i].endsWith("medium") ? 11 : 8;
+			int tall = kits[i].endsWith("large") ? 10 : kits[i].endsWith("medium") ? 8 : kits[i].equals("cryogenic") ? 13 : 6;
+			BlockPos middle = new BlockPos(stake.getX(), y + tall / 2, stake.getZ() - depth / 2 - 1);
+			shotAt(context, singleplayer, stake.getX() - depth + 1, y + tall / 2 + 3, stake.getZ() + depth, middle.getX(), middle.getY(), middle.getZ(),
+					"jugcraft_tank_kit_" + kits[i]);
+			// The label, square on.
+			shotAt(context, singleplayer, stake.getX(), y + tall / 2, stake.getZ() + Math.max(4, depth / 2 + 2), middle.getX(), middle.getY(), middle.getZ(),
+					"jugcraft_tank_kit_" + kits[i] + "_label");
+		}
+		// The screen of the titled fuel store.
+		BlockPos store = outlets.get(5);
+		context.runOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen.accept(store));
+		context.waitTicks(10);
+		context.takeScreenshot("jugcraft_tank_kit_titled_screen");
+		context.runOnClient(client -> client.gui.setScreen(null));
+		context.waitTicks(5);
+		server.runCommand("effect clear @p night_vision");
+		server.runCommand("gamemode creative @p");
+		setHudHidden(context, false);
 	}
 
 	/**

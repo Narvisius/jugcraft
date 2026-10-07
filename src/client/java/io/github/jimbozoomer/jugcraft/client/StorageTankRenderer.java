@@ -45,8 +45,10 @@ import org.jspecify.annotations.Nullable;
  * yoke; shutting, the other way.</li>
  * <li>The float gauge up the shell over the outlet: a white board marked in tenths, a red pointer riding up and down
  * with the level between two guide wires, its cable up to a pulley on the roof's edge and over into the tank.</li>
- * <li>The stencil on the widest clear side of the shell: the tank's name and tag for a plant's tank (with the fire
- * diamond and a no-smoking line on a diesel tank), or what it holds for any other.</li>
+ * <li>The stencil on the widest clear side of the shell, filled in from what the tank holds (TankProducts; Justin,
+ * Oct 7): a name tag's title, a plant tank's name and tag or else the liquid's name, its UN number, the NFPA 704 fire
+ * diamond with its numbers and special mark, and the warning lines of its kind. An empty tank keeps the last liquid's
+ * label. Dark lettering, light on a corrosive tank's dark shell.</li>
  * </ul>
  */
 public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortBlockEntity, StorageTankRenderer.State> {
@@ -63,6 +65,8 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 	static final float[] WHITE = region(0, 2), NFPA_BLUE = region(1, 2), NFPA_RED = region(2, 2), NFPA_YELLOW = region(3, 2);
 	static final float[] RIM = region(0, 3), SPRING = region(1, 3), HAZARD_TAG = region(2, 3), NFPA_WHITE = region(3, 3);
 	static final float[] LINING = region(4, 0), LINING_FLOOR = region(5, 0), LINING_ROOF = region(6, 0), GASKET = region(7, 0);
+	/** A corrosive tank's darker paint (its hatch lid). */
+	static final float[] DARK_PAINT = region(4, 1);
 
 	private static float[] region(int col, int row) {
 		return new float[] {(col * 64 + 0.5F) * PX_U, (row * 64 + 0.5F) * PX_V, (col * 64 + 63.5F) * PX_U, (row * 64 + 63.5F) * PX_V};
@@ -85,6 +89,9 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 		final List<Integer> widths = new ArrayList<>(), colours = new ArrayList<>();
 		final List<Float> sizes = new ArrayList<>();
 		boolean diamond;
+		/** The fire diamond's health, fire and instability numbers, and its special mark ("", "OX", "W"). */
+		final int[] nfpa = new int[3];
+		String special = "";
 		int stencilLight;
 		/** The inside of the tank (null when not formed) and the liquid: its level (blocks above the outlet), look and light. */
 		@Nullable Lining lining;
@@ -242,20 +249,54 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 			state.stencilHeight = (float) port.stencilHeight();
 			Vec3 world = Vec3.atLowerCornerOf(pos).add(state.stencilCenter).add(face.getStepX() * 0.5, 0, face.getStepZ() * 0.5);
 			state.stencilLight = LightCoordsUtil.getLightCoords(level, BlockPos.containing(world));
-			StorageTankOutletBlock.Service service = block.getValue(StorageTankOutletBlock.SERVICE);
-			if (service != StorageTankOutletBlock.Service.NONE) {
-				String key = "tank.jugcraft." + service.getSerializedName();
-				line(state, Component.translatable(key + ".name"), 0.075F, 0xFF1C1C1E);
-				line(state, Component.translatable(key + ".tag"), 0.06F, 0xFF1C1C1E);
-				if (service.diesel()) {
-					line(state, Component.translatable(key + ".warning"), 0.04F, 0xFFB01818);
-					line(state, Component.translatable(key + ".warning2"), 0.04F, 0xFFB01818);
-					state.diamond = true;
-				}
-			} else if (!port.fluid.isResourceBlank() && port.fluid.amount > 0) {
-				line(state, Component.literal(FluidVariantAttributes.getName(port.fluid.variant).getString().toUpperCase(java.util.Locale.ROOT)),
-						0.075F, 0xFF1C1C1E);
-			}
+			stencil(state, port, block);
+		}
+	}
+
+	/** What is painted on the shell (see the class comment). */
+	private void stencil(State state, StorageTankPortBlockEntity port, BlockState block) {
+		io.github.jimbozoomer.jugcraft.nuclear.TankRating rating = block.getValue(StorageTankOutletBlock.RATING);
+		boolean dark = rating == io.github.jimbozoomer.jugcraft.nuclear.TankRating.CORROSIVE;
+		int ink = dark ? 0xFFF2F2EE : 0xFF1C1C1E;
+		StorageTankOutletBlock.Service service = block.getValue(StorageTankOutletBlock.SERVICE);
+		String key = "tank.jugcraft." + service.getSerializedName();
+		net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant liquid = port.label();
+		io.github.jimbozoomer.jugcraft.nuclear.TankProducts.Product product = io.github.jimbozoomer.jugcraft.nuclear.TankProducts.of(liquid);
+		if (!port.title().isEmpty()) {
+			line(state, Component.literal(port.title().toUpperCase(java.util.Locale.ROOT)), 0.075F, ink);
+		} else if (service != StorageTankOutletBlock.Service.NONE) {
+			line(state, Component.translatable(key + ".name"), 0.075F, ink);
+		}
+		if (service != StorageTankOutletBlock.Service.NONE) {
+			line(state, Component.translatable(key + ".tag"), 0.06F, ink);
+		}
+		if (product == null) {
+			return;
+		}
+		// A plant tank's name says what it holds; any other names its liquid (under the title, if it has one).
+		String name = FluidVariantAttributes.getName(liquid).getString().toUpperCase(java.util.Locale.ROOT);
+		if (service == StorageTankOutletBlock.Service.NONE) {
+			line(state, Component.literal(name), port.title().isEmpty() ? 0.075F : 0.055F, ink);
+		}
+		if (!product.un().isEmpty()) {
+			line(state, Component.literal("UN " + product.un()), 0.045F, ink);
+		}
+		boolean first = true;
+		for (String warning : product.warnings()) {
+			int colour = switch (warning) {
+				case "cryogenic" -> 0xFF2A64B4;
+				case "corrosive", "no_water", "face_shield" -> dark ? 0xFFF2CE2A : 0xFF8A6A00;
+				default -> 0xFFB01818;
+			};
+			line(state, Component.translatable("tank.jugcraft.warning." + warning), first ? 0.045F : 0.04F, colour);
+			first = false;
+		}
+		if (product.diamond()) {
+			state.diamond = true;
+			state.nfpa[0] = product.health();
+			state.nfpa[1] = product.fire();
+			state.nfpa[2] = product.instability();
+			state.special = product.special();
 		}
 	}
 
@@ -497,7 +538,7 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 			y += scale[i] * 11;
 		}
 		if (diamond > 0) {
-			// NFPA 704: health 1 (blue, left), fire 2 (red, top), instability 0 (yellow, right), nothing special (white).
+			// NFPA 704: health (blue, left), fire (red, top), instability (yellow, right), the special mark (white, bottom).
 			float s = diamond / 2;
 			float cy = -y - s * 1.1F;
 			int light = state.stencilLight;
@@ -512,9 +553,12 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 				diamondQuad(g, q, 0, q, NFPA_YELLOW);
 				diamondQuad(g, 0, -q, q, NFPA_WHITE);
 			});
-			String[] numbers = {"2", "1", "0"};
-			float[][] at = {{0, s / 2}, {-s / 2, 0}, {s / 2, 0}};
-			for (int i = 0; i < 3; i++) {
+			String[] numbers = {String.valueOf(state.nfpa[1]), String.valueOf(state.nfpa[0]), String.valueOf(state.nfpa[2]), state.special};
+			float[][] at = {{0, s / 2}, {-s / 2, 0}, {s / 2, 0}, {0, -s / 2}};
+			for (int i = 0; i < 4; i++) {
+				if (numbers[i].isEmpty()) {
+					continue;
+				}
 				pose.pushPose();
 				pose.translate(at[i][0], at[i][1], 0.006F);
 				float k = s * 0.055F;

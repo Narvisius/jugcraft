@@ -31,6 +31,7 @@ public class StorageTankHatchRenderer implements BlockEntityRenderer<StorageTank
 	public static final class State extends BlockEntityRenderState {
 		Direction facing = Direction.NORTH;
 		float swing;
+		float[] paint = StorageTankRenderer.WHITE;
 	}
 
 	public StorageTankHatchRenderer(BlockEntityRendererProvider.Context context) {
@@ -47,6 +48,9 @@ public class StorageTankHatchRenderer implements BlockEntityRenderer<StorageTank
 		BlockEntityRenderState.extractBase(hatch, state, crumbling);
 		BlockState block = hatch.getBlockState();
 		state.facing = block.getValue(StorageTankHatchBlock.FACING);
+		// The lid in the tank's paint: a corrosive tank's darker grey, every other white.
+		state.paint = block.getValue(StorageTankHatchBlock.RATING) == io.github.jimbozoomer.jugcraft.nuclear.TankRating.CORROSIVE
+				? StorageTankRenderer.DARK_PAINT : StorageTankRenderer.WHITE;
 		long now = hatch.getLevel() == null ? 0 : hatch.getLevel().getGameTime();
 		boolean open = block.getValue(StorageTankHatchBlock.OPEN);
 		if (hatch.animStart == Long.MIN_VALUE) {
@@ -65,6 +69,7 @@ public class StorageTankHatchRenderer implements BlockEntityRenderer<StorageTank
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
 		int light = state.lightCoords;
+		float[] paint = state.paint;
 		float angle = state.swing * OPEN_ANGLE;
 		pose.pushPose();
 		pose.translate(0.5F, 0.0F, 0.5F);
@@ -79,10 +84,10 @@ public class StorageTankHatchRenderer implements BlockEntityRenderer<StorageTank
 			g.translate(0, 19.4, 2.0);
 			g.pitch(Math.toRadians(-angle));
 			// The lid plate, its lip turned down round the edge, the gasket on its underside.
-			LineRenderer.box(g, 2.0, -0.4, 0, 14.0, 0.4, 12.0, StorageTankRenderer.WHITE);
-			LineRenderer.box(g, 2.0, -1.3, 0, 2.5, -0.4, 12.0, StorageTankRenderer.WHITE);
-			LineRenderer.box(g, 13.5, -1.3, 0, 14.0, -0.4, 12.0, StorageTankRenderer.WHITE);
-			LineRenderer.box(g, 2.5, -1.3, 11.5, 13.5, -0.4, 12.0, StorageTankRenderer.WHITE);
+			LineRenderer.box(g, 2.0, -0.4, 0, 14.0, 0.4, 12.0, paint);
+			LineRenderer.box(g, 2.0, -1.3, 0, 2.5, -0.4, 12.0, paint);
+			LineRenderer.box(g, 13.5, -1.3, 0, 14.0, -0.4, 12.0, paint);
+			LineRenderer.box(g, 2.5, -1.3, 11.5, 13.5, -0.4, 12.0, paint);
 			LineRenderer.box(g, 3.0, -0.7, 1.0, 13.0, -0.4, 11.0, StorageTankRenderer.GASKET);
 			// The hinge straps and their knuckles round the pins.
 			for (double x : new double[] {4.0, 10.5}) {

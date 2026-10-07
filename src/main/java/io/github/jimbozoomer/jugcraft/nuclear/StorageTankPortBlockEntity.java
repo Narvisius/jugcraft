@@ -86,6 +86,10 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	private long inCount, outCount, counted;
 	private int inRate, outRate;
 
+	/** The last liquid the tank held (its label while empty) and the title a name tag gave it. */
+	private FluidVariant label = FluidVariant.blank();
+	private String title = "";
+
 	/** Client: the handwheel's turn, and the liquid's level as drawn (renderer bookkeeping). */
 	public boolean animOpen;
 	public long animStart = Long.MIN_VALUE;
@@ -112,6 +116,13 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			return capacity;
 		}
 
+		/** A tank takes only what it is rated for (TankRating): a general tank no fuel or acid, no tank a gas or lava. */
+		@Override
+		protected boolean canInsert(FluidVariant variant) {
+			// A tank built before the ratings keeps taking what it already holds.
+			return rating().takes(TankProducts.kind(variant)) || !isResourceBlank() && amount > 0 && variant.equals(this.variant);
+		}
+
 		public long capacity() {
 			return capacity;
 		}
@@ -126,9 +137,44 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 				outCount -= change;
 			}
 			counted = amount;
+			if (!variant.isBlank() && !variant.equals(label)) {
+				label = variant;
+			}
 			setChanged();
 			syncPending = true;
 		}
+	}
+
+	/** The tank's rating (its outlet's; an inlet's is its tank's). */
+	public TankRating rating() {
+		StorageTankPortBlockEntity tank = isOutlet() ? this : tank();
+		BlockState state = tank == null ? null : tank.getBlockState();
+		return state != null && state.hasProperty(StorageTankOutletBlock.RATING) ? state.getValue(StorageTankOutletBlock.RATING) : TankRating.GENERAL;
+	}
+
+	/** What the label shows: the liquid in the tank, or the last one it held (a tank keeps its label while empty). */
+	public FluidVariant label() {
+		return !fluid.isResourceBlank() && fluid.amount > 0 ? fluid.variant : label;
+	}
+
+	/** Where the formed tank's plates are (an outlet's; empty for an inlet or an unformed tank). */
+	public List<BlockPos> platePositions() {
+		List<BlockPos> out = new ArrayList<>(plates.length);
+		for (int packed : plates) {
+			out.add(unpack(packed));
+		}
+		return out;
+	}
+
+	/** The title a name tag gave the tank, or "". */
+	public String title() {
+		return title;
+	}
+
+	/** A name tag used on the tank: its name becomes the label's title (an empty name clears it). */
+	public void setTitle(String title) {
+		this.title = title == null ? "" : title.strip();
+		changed();
 	}
 
 	private boolean isOutlet() {
@@ -451,6 +497,9 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			}
 		}
 		int roofY = scan.maxY + 1;
+		TankRating rating = rating();
+		// The course under the band takes the product band when there is a wall course left below it.
+		boolean stripe = roofY - 2 > scan.minY;
 		List<Integer> plateList = new ArrayList<>(plateSet.size());
 		List<Integer> inletList = new ArrayList<>();
 		for (long key : plateSet) {
@@ -462,11 +511,14 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 				band = scan.inside.contains(p.below().asLong()) ? StorageTankPlateBlock.Band.ROOF : StorageTankPlateBlock.Band.RIM;
 			} else if (p.getY() == roofY - 1) {
 				band = StorageTankPlateBlock.Band.BAND;
+			} else if (stripe && p.getY() == roofY - 2) {
+				band = StorageTankPlateBlock.Band.STRIPE;
 			} else {
 				band = StorageTankPlateBlock.Band.WALL;
 			}
 			BlockState state = level.getBlockState(p);
-			BlockState painted = state.setValue(StorageTankPlateBlock.FORMED, true).setValue(StorageTankPlateBlock.BAND, band);
+			BlockState painted = state.setValue(StorageTankPlateBlock.FORMED, true).setValue(StorageTankPlateBlock.BAND, band)
+					.setValue(StorageTankPlateBlock.RATING, rating);
 			if (painted != state) {
 				level.setBlock(p, painted, flags);
 			}
@@ -503,6 +555,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			if (fill != null) {
 				fluid.variant = FluidVariant.of(BuiltInRegistries.FLUID.getValue(Identifier.parse(fill)));
 				fluid.amount = fluid.capacity * 4 / 5 / FluidConstants.BUCKET * FluidConstants.BUCKET;
+				label = fluid.variant;
 			}
 		}
 		prefill = false;
@@ -525,7 +578,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	private String signature() {
 		return formed + ":" + fluid.capacity + ":" + fluid.amount + ":" + gaugeHeight + ":" + stencilFace + ":" + stencilCenter + ":" + stencilWidth
 				+ ":" + stencilHeight
-				+ ":" + inlets.length + ":" + java.util.Arrays.hashCode(columns);
+				+ ":" + inlets.length + ":" + java.util.Arrays.hashCode(columns) + ":" + label + ":" + title;
 	}
 
 	/** The space inside as vertical runs (see {@link #columns()}). */
@@ -568,8 +621,11 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		}
 		gaugeHeight = h;
 		// The stencil: on the side (not the outlet's) with the widest clear stretch of flat shell, centred between the
-		// foot (a manway may stand there) and the band round the top.
-		double low = scan.minY + 1.3, high = roofY - 1 - 0.15;
+		// foot (a manway may stand there) and the band round the top (and under a flammable or corrosive tank's
+		// product stripe).
+		TankRating rating = rating();
+		boolean striped = roofY - 2 > scan.minY && (rating == TankRating.FLAMMABLE || rating == TankRating.CORROSIVE);
+		double low = scan.minY + 1.3, high = (striped ? roofY - 2 : roofY - 1) - 0.15;
 		int y = (int) Math.floor((low + high) / 2);
 		stencilFace = null;
 		stencilWidth = 0;
@@ -748,6 +804,8 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		stencilHeight = input.getDoubleOr("stencil_height", 0);
 		paint = input.getIntOr("paint", paint);
 		prefill = input.getBooleanOr("prefill", false);
+		label = input.read("label", FluidVariant.CODEC).orElse(fluid.isResourceBlank() ? FluidVariant.blank() : fluid.variant);
+		title = input.getStringOr("title", "");
 	}
 
 	@Override
@@ -779,6 +837,12 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		output.putDouble("stencil_width", stencilWidth);
 		output.putDouble("stencil_height", stencilHeight);
 		output.putInt("paint", paint);
+		if (!label.isBlank()) {
+			output.store("label", FluidVariant.CODEC, label);
+		}
+		if (!title.isEmpty()) {
+			output.putString("title", title);
+		}
 	}
 
 	@Override
@@ -807,6 +871,10 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		tag.putDouble("stencil_width", stencilWidth);
 		tag.putDouble("stencil_height", stencilHeight);
 		tag.putInt("paint", paint);
+		if (!label.isBlank()) {
+			tag.store("label", FluidVariant.CODEC, label);
+		}
+		tag.putString("title", title);
 		return tag;
 	}
 
@@ -840,6 +908,7 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			fluid.variant = stored.variant();
 			fluid.amount = stored.amount();
 			counted = fluid.amount;
+			label = fluid.variant;
 			prefill = false;
 			changed();
 		}

@@ -158,6 +158,61 @@ blueprint (for players who lay out their own plant).
   write a plant whose units would not form (loops, turbines, condensers, transformers, and the conduit reaching both
   the lake and the towers). It also re-reads the written blueprints the way the game does.
 
+### Storage tank ratings
+Justin, 7 October 2026: "at the very least... one for caustic, one for flammable, one for general liquids", with the
+painted side filling itself in from what is inside, and every tank placeable as one item. Design sheet approved the same
+day ("silo design sheet looks fine").
+- **One tank, four ratings.** The outlet (the tank's controller) carries the rating (`nuclear/TankRating.java`); forming
+  paints every plate for it.
+  - **General:** white, the checker band, the gooseneck vent. Takes water, brine, nutrient solution, fracking fluid,
+    flowback water and lubricant.
+  - **Flammable:** a red product stripe under the band, a pressure/vacuum vent on a flame arrester, two foam chambers on
+    the top course with their foam lines down the shell, and an earthing boss at the foot. Takes crude oil, naphtha, the
+    gasolines, bioethanol, kerosene, the diesels and heavy fuel oil, and any general liquid.
+  - **Corrosive:** rubber-lined, so the shell is a darker grey with a yellow stripe and a scrubber vent; the kit adds a
+    spill bund round the foundation and a safety shower and eyewash by the ladder. Takes lye, sulfuric acid, nitric
+    acid and vanadium electrolyte, and any general liquid.
+  - **Cryogenic:** a tall white vacuum-insulated tank on legs, with relief valves on its roof and an ambient vaporizer
+    beside it; no ladder or hatch. Takes liquid oxygen only. Made only as its own kit.
+- **The wrong liquid is refused** at the inlet, the outlet's line and the roof hatch, with a message naming the rating it
+  needs. Gases go in no storage tank (the gas holder or gas cylinders take them), and nor does lava (the steel tank does).
+  A liquid from another mod counts as general. A tank already holding a liquid before the ratings came in keeps
+  taking that liquid.
+- **The label** (`nuclear/TankProducts.java`, drawn by `client/StorageTankRenderer`) is painted on the widest clear
+  side. It shows the product's name, its UN number, the NFPA 704 fire diamond with its real health, fire and
+  instability numbers and special mark (OX oxidizer, W don't add water), and its warning lines (FLAMMABLE, NO SMOKING,
+  NO NAKED FLAMES; CORROSIVE, DO NOT ADD WATER, WEAR FACE SHIELD; OXIDIZER; CRYOGENIC LIQUID). Liquids rated 0-0-0
+  show their name alone. The label keeps the last product while the tank is empty and changes when a new liquid goes
+  in. A named name tag used on the tank adds a title above the product (the tank screen shows it too). The plant's
+  tanks keep their tags (CST-01, DT-1A...).
+- **NFPA numbers** come from NFPA 49 tables and Wikipedia's NFPA 704 page. For mixtures without a published rating
+  they are estimates: fracking fluid and flowback water 1-0-0, lubricant 0-1-0, naphtha 1-4-0, vanadium electrolyte
+  3-0-0.
+- **Re-rating.** A flame arrester or a rubber lining used on an empty tank re-rates it: repainted, its vent swapped,
+  foam chambers added or taken off. A tank holding anything is refused ("empty the tank first"). A cryogenic tank
+  keeps its rating, and no other tank can become cryogenic.
+- **Tank kits.** One item places a whole tank, level with the ground and reaching away from the player: its foundation
+  set into the ground, shell, roof, nozzles, fill line, manway, caged ladder, railing and gate, hatch and the fittings of
+  its rating. The tank forms at once. It needs clear room: grass and flowers go, anything solid refuses the kit with
+  where it is in the way. Structures: `data/jugcraft/tank_kit/*.jugbp.json`, written by `tools/tank_kits.py` with the
+  plant's own tank code. Justin allowed this one exception to the 5×5 MBS rule.
+
+  | Kit | Shell across | Height | Holds |
+  |---|---|---|---|
+  | Small (general, flammable, corrosive) | 5 | 6 | 216 buckets |
+  | Medium | 9 | 8 | 1,184 buckets |
+  | Large | 13 | 10 | 3,560 buckets |
+  | Cryogenic | 5 | 11 | 220 buckets |
+
+  The large kit holds more than the design sheet's "about 2,500": the sheet's figure was a rough guess.
+- **Recipes.** Tank shell section = 9 storage tank plates. Small general kit = 4 shell sections, the outlet, inlet,
+  caged ladder and 2 railings. Medium = 4 small; large = 4 medium. A flammable kit = a general kit + a flame arrester;
+  a corrosive kit = a general kit + a rubber lining. Flame arrester = steel plates, iron bars and a fluid valve. Rubber
+  lining = 8 rubber round a steel plate. Cryogenic kit = 2 relief valves, 2 ceramic insulators, 2 shell sections, a
+  small general kit and 2 vaporizers.
+- **In the plant:** the diesel fuel oil tank (DFO-01) and both day tanks are flammable-rated. The day tanks indoors
+  have no foam chambers.
+
 ### The new reactors
 - **EPR vessel:** 241 assemblies (a 17-wide core) and 1.6 times the standard output. Each turbine-generator takes one
   standard unit's output, so it needs two to use it all. The console's core map shrinks its cells to fit.

@@ -228,6 +228,8 @@ def assets():
     blueprints.write_all()
     import nuclear_plants
     nuclear_plants.write_blueprints()
+    import tank_kits
+    tank_kits.write()
     import drone_sounds
     lang.update(drone_sounds.LANG)
     import diesel_sounds

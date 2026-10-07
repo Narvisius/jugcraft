@@ -254,7 +254,8 @@ CRAFTING.update(plant_interior.CRAFTING)
 CRAFTING.update(storage_tank.CRAFTING)
 CRAFTING.update(nuclear_storage.CRAFTING)
 ITEM_FEATURES = {"plastic_sheet": ["crude_oil"], "processor": ["silicon"], "advanced_circuit": ["silver", "nickel"],
-                 "leu_fuel_assembly": ["uranium"], "aluminum_cable": ["aluminum"]}
+                 "leu_fuel_assembly": ["uranium"], "aluminum_cable": ["aluminum"], "rubber": ["crude_oil"],
+                 "tank_rubber_lining": ["crude_oil"], "ceramic_insulator": ["drones"], "cryogenic_vaporizer": ["aluminum"]}
 BASE_METALS = ("copper", "iron", "gold", "steel")
 
 # The textures made here at 64x64 (tools/check_mod_data.py allows these by name).
@@ -698,6 +699,7 @@ def draw_item_textures():
     out["reactor_link_card"] = _icon(_icon_card)
     out.update(plant_interior.draw_item_textures())
     out["lead_door"] = nuclear_storage.door_item_icon()
+    out.update(storage_tank.draw_item_textures())
     return out
 
 

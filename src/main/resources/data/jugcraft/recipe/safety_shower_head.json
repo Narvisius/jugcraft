@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    " G "
+  ],
+  "key": {
+    "P": "jugcraft:steel_fluid_pipe",
+    "G": "minecraft:green_dye"
+  },
+  "result": {
+    "id": "jugcraft:safety_shower_head",
+    "count": 1
+  }
+}

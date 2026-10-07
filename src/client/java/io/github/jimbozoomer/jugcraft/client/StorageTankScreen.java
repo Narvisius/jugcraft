@@ -79,7 +79,22 @@ public class StorageTankScreen extends Screen {
 			String key = "tank.jugcraft." + state.getValue(StorageTankOutletBlock.SERVICE).getSerializedName();
 			name = Component.translatable(key + ".name").getString() + "  " + Component.translatable(key + ".tag").getString();
 		}
+		if (tank != null && !tank.title().isEmpty()) {
+			name = tank.title();
+		}
 		g.text(font, name, x0 + 8, y0 + 6, ACCENT, false);
+		if (tank != null) {
+			// What the tank is rated for, in its rating's colour.
+			io.github.jimbozoomer.jugcraft.nuclear.TankRating rating = tank.rating();
+			int colour = switch (rating) {
+				case FLAMMABLE -> 0xFFE0605A;
+				case CORROSIVE -> 0xFFE8C040;
+				case CRYOGENIC -> 0xFF78B8F0;
+				default -> 0xFFB8C0C8;
+			};
+			g.text(font, Component.translatable("screen.jugcraft.tank.rating", io.github.jimbozoomer.jugcraft.nuclear.TankUpgrades.name(rating)),
+					x0 + 8, y0 + 17, colour, false);
+		}
 		if (tank == null || !tank.formed()) {
 			g.text(font, t("not_formed"), x0 + 8, y0 + 40, AMBER, false);
 			return;

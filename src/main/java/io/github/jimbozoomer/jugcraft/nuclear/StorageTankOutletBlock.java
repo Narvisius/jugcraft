@@ -38,15 +38,17 @@ public class StorageTankOutletBlock extends StorageTankPortBlock {
 	}
 
 	public static final EnumProperty<Service> SERVICE = EnumProperty.create("service", Service.class);
+	/** What the tank is built to hold (TankRating): the shell's paint and fittings and which liquids it takes. */
+	public static final EnumProperty<TankRating> RATING = TankRating.PROPERTY;
 
 	public StorageTankOutletBlock(Properties properties) {
 		super(properties, true);
-		registerDefaultState(defaultBlockState().setValue(SERVICE, Service.NONE));
+		registerDefaultState(defaultBlockState().setValue(SERVICE, Service.NONE).setValue(RATING, TankRating.GENERAL));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
-		builder.add(SERVICE);
+		builder.add(SERVICE, RATING);
 	}
 }

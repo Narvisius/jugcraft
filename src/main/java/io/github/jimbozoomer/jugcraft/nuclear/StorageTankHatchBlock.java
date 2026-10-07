@@ -96,6 +96,10 @@ public class StorageTankHatchBlock extends StorageTankPlateBlock implements Enti
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
+		InteractionResult upgraded = state.getValue(FORMED) ? TankUpgrades.use(stack, level, pos, player) : null;
+		if (upgraded != null) {
+			return upgraded;
+		}
 		Storage<FluidVariant> held = FluidStorage.ITEM.find(stack, ContainerItemContext.forPlayerInteraction(player, hand));
 		if (!state.getValue(OPEN) || held == null) {
 			return super.useItemOn(stack, state, level, pos, player, hand, hit);
@@ -113,6 +117,8 @@ public class StorageTankHatchBlock extends StorageTankPlateBlock implements Enti
 			player.sendOverlayMessage(tank.contents());
 		} else if (pouring == null || pouring.isBlank()) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.storage_tank.hatch", tank.contents()));
+		} else if (TankUpgrades.refusal(tank.rating(), pouring) != null) {
+			player.sendOverlayMessage(TankUpgrades.refusal(tank.rating(), pouring));
 		} else if (!tank.fluid.isResourceBlank() && tank.fluid.amount > 0 && !tank.fluid.variant.equals(pouring)) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.storage_tank.hatch_other",
 					FluidVariantAttributes.getName(tank.fluid.variant), FluidVariantAttributes.getName(pouring)));

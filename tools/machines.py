@@ -934,4 +934,5 @@ def machine_items():
     from tower import tower_items
     return (list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS) + list(UPGRADE_MODULES)
             + [info[key] for info in CROPS.values() for key in ("seeds", "product")]
-            + drone_items() + tower_items() + list(__import__('blueprints').ITEMS) + list(__import__('nuclear').ITEMS) + list(__import__('plant_interior').UNIFORMS))
+            + drone_items() + tower_items() + list(__import__('blueprints').ITEMS) + list(__import__('nuclear').ITEMS) + list(__import__('plant_interior').UNIFORMS)
+            + list(__import__('storage_tank').ITEMS))

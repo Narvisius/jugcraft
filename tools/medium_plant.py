@@ -125,8 +125,8 @@ def sign(label, facing, big=False):
     return M(f"jugcraft:{'building' if big else 'room'}_sign[facing={facing},label={label}]", (44, 48, 54))
 
 
-def tank_port(role, facing, service="none"):
-    extra = f",service={service}" if role == "outlet" else ""
+def tank_port(role, facing, service="none", rating="general"):
+    extra = f",rating={rating},service={service}" if role == "outlet" else ""
     return M(f"jugcraft:storage_tank_{role}[facing={facing},formed=false,open=true,powered=false{extra}]", (70, 74, 80))
 
 
@@ -151,11 +151,13 @@ def finish_railings(part):
     rails = {k for k, (st, _) in P.MATERIALS.items() if st == "jugcraft:railing" or st.startswith("jugcraft:railing[")}
     gates = {k: st for k, (st, _) in P.MATERIALS.items() if st.startswith("jugcraft:railing_gate[")}
     w, h, d = g.shape
+    # Joined against the railing as laid (a converted neighbour's new state is not in rails yet).
+    laid = g.copy()
 
     def joins(x, y, z, axis):
         if not (0 <= x < w and 0 <= z < d):
             return False
-        m = int(g[x, y, z])
+        m = int(laid[x, y, z])
         if m in rails:
             return True
         if m in gates:
@@ -1101,15 +1103,16 @@ def diesel_building(s, ox, oz):
 
 def day_tank(b, x0, room, H, D):
     """A generator room's fuel oil day tank in its north-east corner: a small storage tank MBS (tank_in) on a steel
-    drip pan with a lip round it, ladder, railing, gate and hatch like the big tanks, and a short gooseneck vent on its
-    roof like theirs (Justin, round 14: no vent line up through the building's roof). The fuel lines keep out of the way, in the floor (pipes inside the slab, Justin's round 13):
+    drip pan with a lip round it, ladder, railing, gate and hatch like the big tanks, and a short vent on its roof like
+    theirs (Justin, round 14: no vent line up through the building's roof). It is rated for flammable liquids (the
+    pressure/vacuum vent; no foam chambers indoors). The fuel lines keep out of the way, in the floor (pipes inside the slab, Justin's round 13):
     the outlet drops into the floor and comes up under the engine's fuel connection; the line from the fuel oil
     storage tank comes in under the south wall, along the floor and up into the inlet. Returns where that comes in
     under the wall (its x)."""
     cx, cz, r, h = x0 + 16.5, 3.5, 2.6, 6
     out_cell, in_cell, _ = tank_in(b, cx, cz, r, h, "diesel_day_a" if room == 0 else "diesel_day_b", outlet="w",
                                            inlet="s", ladder="e", manway=None, hatch_in=2, vent=(0, -1), foundation=None,
-                                           fill_line=False, wall=1.1)
+                                           fill_line=False, wall=1.1, rating="flammable", foam=False)
     # The outlet: a stub off its flange, down into the floor, along under it and up under the engine's fuel connection
     # on the generator's near side.
     ox, oz = out_cell
@@ -1241,18 +1244,34 @@ def warehouse(s, ox, oz):
 SIDES = {"n": ("north", 0, -1), "s": ("south", 0, 1), "e": ("east", 1, 0), "w": ("west", -1, 0)}
 
 
+# The roof vent of each tank rating (nuclear/TankFittings.java): a gooseneck, a pressure/vacuum vent on a flame
+# arrester, a scrubber vent, the cryogenic tank's relief valves.
+RATING_VENTS = {"general": "storage_tank_vent[facing=north,riser=false]", "flammable": "storage_tank_pv_vent[facing=north]",
+                "corrosive": "storage_tank_scrubber_vent[facing=north]", "cryogenic": "tank_relief_valves[facing=north]"}
+BUND = M("minecraft:smooth_stone_slab[type=bottom,waterlogged=false]", (158, 158, 156))
+
+
 def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", manway="s", hatch_in=2, vent=(0, 0),
-            foundation=SMOOTH, fill_line=True, wall=1.2):
+            foundation=SMOOTH, fill_line=True, wall=1.2, rating="general", foam=None, bund=False, shower=False,
+            foundation_r=None):
     """A storage tank (the MBS, tools/storage_tank.py) drawn into part b round (cx, cz) (block-centre coordinates):
     a shell of tank plates from y 1 to h on a foundation, a roof of plates at h + 1; low on the shell the outlet (the
     tank's controller, its float gauge run up the shell above it) and the inlet (with its fill line climbing to the
     top, fill_line), a bolted manway (manway None: none); a steel ladder with its safety cage up one side to a
     self-closing gate in the railing that runs round the roof edge unbroken; on the roof the hatch (part of the roof,
     hatch_in blocks in from the gate, its lid hinged on the far side) and the vent (vent: its offset from the middle,
-    None for none). The plates are primer in the blueprint; the outlet paints them when it forms the tank. Returns
-    the cells of the outlet, the inlet and the vent."""
+    None for none). The plates are primer in the blueprint; the outlet paints them when it forms the tank.
+
+    rating (nuclear/TankRating.java) sets the outlet's rating and the fittings: the roof vent (RATING_VENTS); a
+    flammable tank's two foam chambers on the top course with their lines down the shell and an earthing boss at the
+    foot (foam, on unless said otherwise); a corrosive tank's spill bund round the foundation (bund) and safety
+    shower by the ladder (shower); a cryogenic tank has no ladder, railing or hatch (ladder None) and relief valves on
+    its roof (tools/tank_kits.py stands it on legs and adds its vaporizer). Returns the cells of the outlet, the inlet
+    and the vent."""
+    if foam is None:
+        foam = rating == "flammable"
     if foundation is not None:
-        b.disc(cx, cz, r + 1, 0, 0, foundation)
+        b.disc(cx, cz, foundation_r or r + 1, 0, 0, foundation)
     b.disc(cx, cz, r, 1, h, TANK_PLATE, inner=r - wall)
     b.disc(cx, cz, r, h + 1, h + 1, TANK_PLATE)
     mx, mz = int(cx), int(cz)
@@ -1273,7 +1292,7 @@ def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", 
 
     # Outlet (the controller; the gauge runs up the shell above it) and the inlet with its fill line.
     facing, out_cell, _ = outside(outlet, 1)
-    b.p(out_cell[0], 1, out_cell[1], tank_port("outlet", facing, service))
+    b.p(out_cell[0], 1, out_cell[1], tank_port("outlet", facing, service, rating))
     facing, in_cell, _ = outside(inlet, 1)
     b.p(in_cell[0], 1, in_cell[1], tank_port("inlet", facing))
     if fill_line:
@@ -1282,31 +1301,104 @@ def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", 
     if manway:
         facing, (x, z), _ = outside(manway, 1)
         b.p(x, 1, z, tank_piece("storage_tank_manway", facing))
-    # The ladder, from the foundation to a length above the roof's edge, caged from the third length up.
-    facing, (lx, lz), (ex, ez) = outside(ladder, 1)
-    for y in range(1, h + 3):
-        b.p(lx, y, lz, steel_ladder(facing, y >= 3, y == h + 2))
-    # Railing round the roof's edge: the roof cells with a gap beside them (corners too), so it runs unbroken; the
-    # self-closing gate where the ladder comes up, swinging in over the roof.
     roof = {(x, z) for x in range(gw) for z in range(gd)
             if b.get(x, h + 1, z) == TANK_PLATE and math.hypot(x + 0.5 - cx, z + 0.5 - cz) <= r + 0.5}
-    for x, z in roof:
-        if any((x + dx, z + dz) not in roof for dx in (-1, 0, 1) for dz in (-1, 0, 1)):
-            b.p(x, h + 2, z, RAIL)
-    b.p(ex, h + 2, ez, M(f"jugcraft:railing_gate[facing={OPPOSITE[facing]},open=false]", (232, 190, 30)))
-    # The hatch, a cell of the roof a little in from the gate (its lid opens away from whoever comes up), the vent.
-    _, gdx, gdz = SIDES[ladder]
-    hx, hz = ex - hatch_in * gdx, ez - hatch_in * gdz
-    assert (hx, hz) in roof and b.get(hx, h + 2, hz) == 0, ("hatch", hx, hz)
-    b.p(hx, h + 1, hz, M(f"jugcraft:storage_tank_hatch[band=wall,facing={OPPOSITE[facing]},formed=false,open=false]", (150, 156, 150)))
+    if ladder is not None:
+        # The ladder, from the foundation to a length above the roof's edge, caged from the third length up.
+        facing, (lx, lz), (ex, ez) = outside(ladder, 1)
+        for y in range(1, h + 3):
+            b.p(lx, y, lz, steel_ladder(facing, y >= 3, y == h + 2))
+        # Railing round the roof's edge: the roof cells with a gap beside them (corners too), so it runs unbroken;
+        # the self-closing gate where the ladder comes up, swinging in over the roof.
+        for x, z in roof:
+            if any((x + dx, z + dz) not in roof for dx in (-1, 0, 1) for dz in (-1, 0, 1)):
+                b.p(x, h + 2, z, RAIL)
+        b.p(ex, h + 2, ez, M(f"jugcraft:railing_gate[facing={OPPOSITE[facing]},open=false]", (232, 190, 30)))
+        # The hatch, a cell of the roof a little in from the gate (its lid opens away from whoever comes up).
+        _, gdx, gdz = SIDES[ladder]
+        hx, hz = ex - hatch_in * gdx, ez - hatch_in * gdz
+        assert (hx, hz) in roof and b.get(hx, h + 2, hz) == 0, ("hatch", hx, hz)
+        b.p(hx, h + 1, hz, M(f"jugcraft:storage_tank_hatch[band=wall,facing={OPPOSITE[facing]},formed=false,open=false]", (150, 156, 150)))
+        if shower:
+            # The safety shower and eyewash (two blocks tall) a few steps along from the ladder's foot, facing out
+            # from the tank, on the foundation and a block clear of the shell.
+            tdx, tdz = -gdz, gdx
+            for k in (3, -3, 4, -4):
+                sx, sz = lx + gdx + tdx * k, lz + gdz + tdz * k
+                if (0 <= sx < gw and 0 <= sz < gd and b.get(sx, 1, sz) == 0 and b.get(sx, 2, sz) == 0 and b.get(sx, 0, sz) != 0
+                        and all(b.get(sx + ex, 1, sz + ez) != TANK_PLATE for ex, ez in ((1, 0), (-1, 0), (0, 1), (0, -1)))):
+                    b.p(sx, 1, sz, M(f"jugcraft:safety_shower[facing={facing}]", (60, 150, 80)))
+                    b.p(sx, 2, sz, M(f"jugcraft:safety_shower_head[facing={facing}]", (60, 150, 80)))
+                    break
+            else:
+                raise AssertionError(("no room for the safety shower", lx, lz))
     vent_cell = None
     if vent is not None:
         vent_cell = (mx + vent[0], mz + vent[1])
-        b.p(vent_cell[0], h + 2, vent_cell[1], M("jugcraft:storage_tank_vent[facing=north,riser=false]", (150, 156, 160)))
+        b.p(vent_cell[0], h + 2, vent_cell[1], M("jugcraft:" + RATING_VENTS[rating], (150, 156, 160)))
+    if foam:
+        tank_foam(b, cx, cz, h)
+    if bund:
+        # The spill bund: a low concrete kerb round the foundation's edge.
+        fr = foundation_r or r + 1
+        for x in range(gw):
+            for z in range(gd):
+                d = math.hypot(x + 0.5 - cx, z + 0.5 - cz)
+                if fr - 0.9 < d <= fr and b.get(x, 1, z) == 0 and b.get(x, 0, z) != 0:
+                    b.p(x, 1, z, BUND)
     return out_cell, in_cell, vent_cell
 
 
-def outdoor_tank(s, cx, cz, r, h, name, key, service="none", outlet="w", inlet="n", ladder="e", manway="s", bund=False):
+def tank_foam(b, cx, cz, h):
+    """A flammable tank's foam system (as nuclear/TankFittings.java lays it on a re-rated tank): two foam chambers on
+    the top course as far apart as they go, from the north-east round, each with its foam line down the shell to the
+    foot, and the earthing boss at the foot a quarter turn round from the first."""
+    gw, _, gd = b.g.shape
+    plate = TANK_PLATE
+
+    def spots(y, need_clear_down):
+        out = []
+        for x in range(gw):
+            for z in range(gd):
+                if b.get(x, y, z) != plate:
+                    continue
+                for facing, dx, dz in SIDES.values():
+                    ox, oz = x + dx, z + dz
+                    if not (0 <= ox < gw and 0 <= oz < gd) or b.get(ox, y, oz) != 0:
+                        continue
+                    if (ox + 0.5 - cx) * dx + (oz + 0.5 - cz) * dz <= 0:
+                        continue
+                    if need_clear_down and any(b.get(ox, yy, oz) != 0 for yy in range(1, y)):
+                        continue
+                    out.append(((ox, oz), facing, math.atan2(oz + 0.5 - cz, ox + 0.5 - cx)))
+        return out
+
+    def best(cands, angle, not_near=None):
+        found, off = None, 1e9
+        for c in cands:
+            if not_near is not None and abs(c[0][0] - not_near[0][0]) + abs(c[0][1] - not_near[0][1]) < 3:
+                continue
+            o = abs(math.atan2(math.sin(c[2] - angle), math.cos(c[2] - angle)))
+            if o < off:
+                found, off = c, o
+        return found
+
+    top = spots(h, True)
+    first = best(top, math.pi / 4)
+    assert first is not None, "foam chamber"
+    second = best(top, first[2] + math.pi, first)
+    for (x, z), facing, _ in [s for s in (first, second) if s is not None]:
+        b.p(x, h, z, M(f"jugcraft:tank_foam_chamber[facing={facing}]", (200, 44, 44)))
+        for y in range(1, h):
+            b.p(x, y, z, M(f"jugcraft:tank_foam_line[facing={facing}]", (190, 40, 40)))
+    boss = best(spots(1, False), first[2] + math.pi / 2)
+    if boss is not None:
+        (x, z), facing, _ = boss
+        b.p(x, 1, z, M(f"jugcraft:tank_earthing_boss[facing={facing}]", (150, 110, 40)))
+
+
+def outdoor_tank(s, cx, cz, r, h, name, key, service="none", outlet="w", inlet="n", ladder="e", manway="s", bund=False,
+                 rating="general"):
     """A big outdoor storage tank as the storage tank MBS (tank_in) on its concrete foundation ring. A fuel tank
     (bund) stands on a concrete spill pad."""
     margin = 7 if bund else 5
@@ -1317,7 +1409,7 @@ def outdoor_tank(s, cx, cz, r, h, name, key, service="none", outlet="w", inlet="
         # A concrete spill pad round a fuel tank, its edge a darker kerb.
         b.disc(c, c, r + 3.3, 0, 0, CONCRETE)
         b.disc(c, c, r + 3.3, 0, 0, CONCRETE_DARK, inner=r + 2.5)
-    tank_in(b, c, c, r, h, service, outlet, inlet, ladder, manway)
+    tank_in(b, c, c, r, h, service, outlet, inlet, ladder, manway, rating=rating)
     finish_railings(b)
     s.add(b, int(cx - c), int(cz - c))
     return b
@@ -1441,7 +1533,7 @@ def medium_site():
     # buried in a trench flush with the grass (pipe in concrete) north to the building and along its south wall to
     # where each room's line goes in under the wall. A smooth stone bed under the trench gives it its look.
     outdoor_tank(s, 200, 125, 4.5, 8, "Diesel Fuel Oil Storage Tank", "diesel_fuel_tank", service="diesel_fuel", outlet="n", inlet="e",
-                 ladder="w", manway="s", bund=True)
+                 ladder="w", manway="s", bund=True, rating="flammable")
     s.decor[(200, 1, 119)] = PIPE
     trench = [(200, 0, 119)] + [(200, -1, z) for z in range(110, 120)]
     trench += [(x, -1, 110) for x in range(180 + min(fills), 180 + max(fills) + 1)]

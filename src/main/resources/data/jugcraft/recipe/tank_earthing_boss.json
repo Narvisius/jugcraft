@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "S",
+    "C"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:tank_earthing_boss",
+    "count": 1
+  }
+}

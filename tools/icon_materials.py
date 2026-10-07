@@ -41,6 +41,10 @@ KHAKI = Material((38, 34, 20), (70, 62, 40), (100, 90, 58), (140, 128, 86), (176
 # The Landship's black lacquer: a dark material, so its light and highlight carry the read (ITEM_ICONS.md, rule 4).
 LACQUER = Material((16, 16, 22), (30, 30, 40), (50, 50, 62), (70, 70, 86), (102, 102, 122), (156, 156, 178))
 RED_PAINT = Material((52, 14, 12), (90, 22, 18), (132, 30, 24), (180, 48, 36), (220, 84, 62), (246, 150, 120))
+# The storage tanks' white paint (the tank kits, tools/storage_tank.py): a pale material like the canvas, its outline a
+# cool dark grey. Provisional: not yet shown to the owner.
+TANK_WHITE = Material((50, 54, 58), (90, 94, 98), (146, 150, 150), (192, 196, 194), (224, 226, 222), (246, 246, 242),
+                      shine=False)
 
 MATERIALS = {
     # the approved metals ("I like the alternate versions for steel and bronze")
@@ -55,6 +59,8 @@ MATERIALS = {
     # the war machines' (tools/item_icons/)
     "hazard_yellow": HAZARD_YELLOW, "concrete": CONCRETE, "canvas": CANVAS, "khaki": KHAKI, "red_paint": RED_PAINT,
     "lacquer": LACQUER,
+    # the storage tank kits'
+    "tank_white": TANK_WHITE,
 }
 
 # Materials meant to be vanilla's own metal: the distance test against copper, iron and gold is skipped for them.

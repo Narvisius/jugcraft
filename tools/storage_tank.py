@@ -48,18 +48,52 @@ NAMES = {
     "railing": "Railing",
     "railing_gate": "Self-Closing Railing Gate",
     "caged_ladder": "Caged Steel Ladder",
+    # The ratings' fittings (nuclear/TankFittings.java; Justin, Oct 7, the tank ratings).
+    "storage_tank_pv_vent": "Pressure/Vacuum Vent",
+    "storage_tank_scrubber_vent": "Scrubber Vent",
+    "tank_foam_chamber": "Foam Chamber",
+    "tank_foam_line": "Foam Line",
+    "tank_earthing_boss": "Tank Earthing Boss",
+    "safety_shower": "Safety Shower and Eyewash",
+    "safety_shower_head": "Safety Shower Head",
+    "tank_relief_valves": "Cryogenic Relief Valves",
+    "cryogenic_vaporizer": "Ambient Vaporizer",
+    "tank_leg": "Tank Leg",
 }
 INTERIOR = "storage_tank_interior"
 BLOCKS = list(NAMES) + [INTERIOR]
 # The plate's finished paint, by where it is in the formed shell (StorageTankPlateBlock.Band).
-BANDS = ("wall", "band", "rim", "roof")
+BANDS = ("wall", "band", "stripe", "rim", "roof")
+# What a tank is rated for (nuclear/TankRating.java), and the paint of each band of a formed tank of that rating: a
+# general tank white with the checker band; a flammable one with a red product stripe under it; a corrosive one
+# rubber-lined, its shell darker, a yellow stripe; a cryogenic one plain white all over, no checker band.
+RATINGS = ("general", "flammable", "corrosive", "cryogenic")
+PAINT = {
+    "general": {"wall": "st_wall", "band": "st_band", "stripe": "st_wall", "rim": "st_rim", "roof": "st_roof"},
+    "flammable": {"wall": "st_wall", "band": "st_band", "stripe": "st_stripe_red", "rim": "st_rim", "roof": "st_roof"},
+    "corrosive": {"wall": "st_wall_dark", "band": "st_band", "stripe": "st_stripe_yellow", "rim": "st_rim", "roof": "st_roof_dark"},
+    "cryogenic": {"wall": "st_cryo", "band": "st_cryo", "stripe": "st_cryo", "rim": "st_cryo_rim", "roof": "st_cryo_roof"},
+}
+# Items: the upgrade parts, the shell section the kits are made of, and the kits (one places a whole tank).
+KIT_SIZES = ("small", "medium", "large")
+KITS = [f"{rating}_{size}" for rating in ("general", "flammable", "corrosive") for size in KIT_SIZES] + ["cryogenic"]
+ITEM_NAMES = {"flame_arrester": "Flame Arrester", "tank_rubber_lining": "Tank Rubber Lining",
+              "tank_shell_section": "Tank Shell Section"}
+for _kit in KITS:
+    _rating, _, _size = _kit.partition("_")
+    ITEM_NAMES[f"tank_kit_{_kit}"] = ("Cryogenic Tank Kit" if _kit == "cryogenic"
+                                      else f"{_size.title()} {_rating.title()} Tank Kit")
+ITEMS = list(ITEM_NAMES)
 # What a tank's outlet is stencilled for (StorageTankOutletBlock.Service).
 SERVICES = ("none", "condensate", "refuelling_water", "diesel_fuel", "diesel_day_a", "diesel_day_b")
 FACINGS = (("north", 0), ("east", 90), ("south", 180), ("west", 270))
 
 GUN, CHROME, RED = "dp_gunmetal", "dp_chrome", "sp_red_iron"
 WHITE, PIPE, GALV, MESH, YELLOW = "st_white", "st_pipe", "st_galv", "st_mesh", "pi_rail_yellow"
-TEXTURES = ["st_primer", "st_wall", "st_band", "st_rim", "st_roof", "st_white", "st_pipe", "st_galv", "st_mesh"]
+GREEN, BLUE, BRASS, COPPER, FIN = "st_green", "st_blue", "st_brass", "st_copper", "st_fin"
+TEXTURES = ["st_primer", "st_wall", "st_band", "st_rim", "st_roof", "st_white", "st_pipe", "st_galv", "st_mesh",
+            "st_wall_dark", "st_roof_dark", "st_stripe_red", "st_stripe_yellow", "st_cryo", "st_cryo_roof", "st_cryo_rim",
+            "st_green", "st_blue", "st_brass", "st_copper", "st_fin", "st_shower_sign"]
 
 CRAFTING = {
     "storage_tank_plate": (["PPP", "P P", "PPP"], {"P": "#c:plates/steel"}, 8),
@@ -72,7 +106,33 @@ CRAFTING = {
     "railing": (["NYN", "N N"], {"N": "minecraft:iron_nugget", "Y": "minecraft:yellow_dye"}, 6),
     "railing_gate": (["RIR"], {"R": "jugcraft:railing", "I": "minecraft:iron_ingot"}, 1),
     "caged_ladder": (["I I", "III", "I I"], {"I": "minecraft:iron_ingot"}, 8),
+    # The ratings' parts and fittings.
+    "flame_arrester": (["SBS", "BVB", "SBS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "V": "jugcraft:fluid_valve"}, 1),
+    "tank_rubber_lining": (["RRR", "RSR", "RRR"], {"R": "jugcraft:rubber", "S": "#c:plates/steel"}, 1),
+    "tank_shell_section": (["PPP", "PPP", "PPP"], {"P": "jugcraft:storage_tank_plate"}, 1),
+    "storage_tank_pv_vent": ([" A ", " P "], {"A": "jugcraft:flame_arrester", "P": "jugcraft:steel_fluid_pipe"}, 1),
+    "storage_tank_scrubber_vent": (["SBS", " P "], {"S": "#c:plates/steel", "B": "minecraft:charcoal", "P": "jugcraft:steel_fluid_pipe"}, 1),
+    "tank_foam_chamber": (["SRS", " P "], {"S": "#c:plates/steel", "R": "minecraft:red_dye", "P": "jugcraft:steel_fluid_pipe"}, 1),
+    "tank_foam_line": (["P", "R", "P"], {"P": "jugcraft:steel_fluid_pipe", "R": "minecraft:red_dye"}, 3),
+    "tank_earthing_boss": (["S", "C"], {"S": "#c:plates/steel", "C": "minecraft:copper_ingot"}, 1),
+    "safety_shower": (["PGP", " P ", " S "], {"P": "jugcraft:steel_fluid_pipe", "G": "minecraft:green_dye", "S": "#c:plates/steel"}, 1),
+    "safety_shower_head": (["PPP", " G "], {"P": "jugcraft:steel_fluid_pipe", "G": "minecraft:green_dye"}, 1),
+    "tank_relief_valves": (["V V", "PPP"], {"V": "jugcraft:fluid_valve", "P": "jugcraft:steel_fluid_pipe"}, 1),
+    "cryogenic_vaporizer": (["APA", "APA", "APA"], {"A": "#c:plates/aluminum", "P": "jugcraft:steel_fluid_pipe"}, 2),
+    "tank_leg": (["S", "S", "S"], {"S": "#c:plates/steel"}, 2),
+    # The kits: a small tank from shell sections and its nozzles, ladder and railing; a bigger one from four of the
+    # size below; a rated kit from a general kit and the rating's part; the cryogenic tank its own.
+    "tank_kit_general_small": (["RLR", "SSS", "OSI"], {"R": "jugcraft:railing", "L": "jugcraft:caged_ladder", "S": "jugcraft:tank_shell_section",
+                                                       "O": "jugcraft:storage_tank_outlet", "I": "jugcraft:storage_tank_inlet"}, 1),
+    "tank_kit_general_medium": (["KK", "KK"], {"K": "jugcraft:tank_kit_general_small"}, 1),
+    "tank_kit_general_large": (["KK", "KK"], {"K": "jugcraft:tank_kit_general_medium"}, 1),
+    "tank_kit_cryogenic": (["VCV", "SKS", "ACA"], {"V": "jugcraft:tank_relief_valves", "C": "jugcraft:ceramic_insulator",
+                                                   "S": "jugcraft:tank_shell_section", "K": "jugcraft:tank_kit_general_small",
+                                                   "A": "jugcraft:cryogenic_vaporizer"}, 1),
 }
+for _size in KIT_SIZES:
+    CRAFTING[f"tank_kit_flammable_{_size}"] = (["K", "A"], {"K": f"jugcraft:tank_kit_general_{_size}", "A": "jugcraft:flame_arrester"}, 1)
+    CRAFTING[f"tank_kit_corrosive_{_size}"] = (["K", "R"], {"K": f"jugcraft:tank_kit_general_{_size}", "R": "jugcraft:tank_rubber_lining"}, 1)
 
 
 # ------------------------------------------------------------------------------------------------- the pieces
@@ -205,13 +265,14 @@ def vent_riser():
     return m
 
 
-def hatch(formed):
+def hatch(formed, rating="general"):
     """A roof hatch, a cell of the roof itself (hinges at the back, -z): the roof plate round a square opening, the
     opening's sides dark, a galvanised safety grate across it a pixel below the roof (bearing bars and cross bars on
     a frame), the coaming standing three pixels proud of the roof round the opening, and on its back the hinge cheeks
     and pins the lid swings on (the lid itself is drawn by client/StorageTankHatchRenderer)."""
-    top = "st_roof" if formed else "st_primer"
-    plate = {"*": top, "north": "st_rim", "south": "st_rim", "east": "st_rim", "west": "st_rim", "down": "st_rim"}
+    top = PAINT[rating]["roof"] if formed else "st_primer"
+    rim = PAINT[rating]["rim"]
+    plate = {"*": top, "north": rim, "south": rim, "east": rim, "west": rim, "down": rim}
     m = [box((0, 0, 0), (16, 16, 3), {**plate, "north": top}), box((0, 0, 13), (16, 16, 16), {**plate, "south": top}),
          box((0, 0, 3), (3, 16, 13), {**plate, "west": top}), box((13, 0, 3), (16, 16, 13), {**plate, "east": top})]
     # The grate: a frame, three bearing bars front to back and three cross bars, galvanised.
@@ -222,7 +283,7 @@ def hatch(formed):
     for z in (5.6, 8.0, 10.4):
         m.append(box((3, 14.4, z), (13, 15.0, z + 0.5), GALV))
     # The coaming, painted like the roof, its top edge dark.
-    coat = {"*": WHITE, "up": "st_rim"}
+    coat = {"*": PAINT[rating]["wall"] if formed else WHITE, "up": rim}
     m += [box((2.5, 16, 2.5), (13.5, 19, 3), coat), box((2.5, 16, 13), (13.5, 19, 13.5), coat),
           box((2.5, 16, 3), (3, 19, 13), coat), box((13, 16, 3), (13.5, 19, 13), coat)]
     # Two hinges: cheeks either side of where the lid's knuckle turns, and the pin through them.
@@ -244,6 +305,159 @@ def hatch_lid():
         m.append(box((x, 19.8, 1.8), (x + 1.5, 20.15, 7.0), GUN))
     m += [box((6.0, 19.8, 11.6), (6.6, 21.2, 12.2), YELLOW), box((9.4, 19.8, 11.6), (10.0, 21.2, 12.2), YELLOW),
           box((6.0, 21.2, 11.6), (10.0, 21.8, 12.2), YELLOW)]
+    return m
+
+
+# ------------------------------------------------------------------------------------------------- the ratings' fittings
+
+def pv_vent():
+    """A flammable tank's roof vent: the nozzle off its roof flange, the flame arrester (a red housing between bolted
+    flanges), the pressure/vacuum valve body with the vacuum pallet's housing off one side, and the weather hood over
+    the pressure pallet."""
+    m = cyl("y", 8, 8, 3.6, 0, 0.6, GUN)
+    m += cyl("y", 8, 8, 2.3, 0.6, 2.4, PIPE)
+    m += cyl("y", 8, 8, 4.0, 2.4, 3.0, GUN)
+    m += cyl("y", 8, 8, 4.4, 3.0, 6.6, RED)
+    m += cyl("y", 8, 8, 4.0, 6.6, 7.2, GUN)
+    for k in range(8):
+        a = (k + 0.5) / 8 * math.tau
+        x, z = 8 + 3.55 * math.cos(a), 8 + 3.55 * math.sin(a)
+        m.append(box((x - 0.35, 7.2, z - 0.35), (x + 0.35, 7.6, z + 0.35), CHROME))
+    m += cyl("y", 8, 8, 2.8, 7.2, 10.0, GUN)
+    m.append(box((10.6, 7.6, 6.6), (12.8, 9.8, 9.4), GUN))         # the vacuum pallet's housing
+    m.append(box((12.8, 7.9, 6.9), (13.0, 9.5, 9.1), {"*": GUN, "east": MESH}))
+    m += cyl("y", 8, 8, 2.0, 10.0, 10.6, MESH)                     # the screened gap under the hood
+    m += cyl("y", 8, 8, 4.8, 10.6, 11.2, GALV)
+    m += cyl("y", 8, 8, 3.6, 11.2, 11.9, GALV)
+    m += cyl("y", 8, 8, 1.8, 11.9, 12.6, GALV)
+    return m
+
+
+def scrubber_vent():
+    """A corrosive tank's roof vent: the nozzle off its flange into a blue scrubber canister (bolted flanges top and
+    bottom, a white service band), and a small vent stub out of its dished top."""
+    m = cyl("y", 8, 8, 3.6, 0, 0.6, GUN)
+    m += cyl("y", 8, 8, 2.0, 0.6, 2.8, PIPE)
+    m += cyl("y", 8, 8, 4.6, 2.8, 3.4, GUN)
+    m += cyl("y", 8, 8, 4.2, 3.4, 7.0, BLUE)
+    m += cyl("y", 8, 8, 4.25, 7.0, 7.8, WHITE)
+    m += cyl("y", 8, 8, 4.2, 7.8, 11.2, BLUE)
+    m += cyl("y", 8, 8, 4.6, 11.2, 11.8, GUN)
+    m += cyl("y", 8, 8, 3.2, 11.8, 12.6, BLUE)
+    m += cyl("y", 8, 8, 1.2, 12.6, 14.0, PIPE)
+    m.append(box((6.4, 14.0, 6.4), (9.6, 14.8, 9.6), GUN))
+    return m
+
+
+def foam_chamber():
+    """A foam chamber on the top course of a flammable tank (the shell to the south): the red chamber on its pad, a
+    bolted front cover, the vapour seal box on top, and the foam line's riser coming up under it with its foam maker."""
+    m = [box((4.0, 3.0, 15.4), (12.0, 13.0, 16.0), RED)]
+    m += cyl("z", 8, 9, 3.4, 9.6, 15.4, RED)
+    m += cyl("z", 8, 9, 3.9, 9.0, 9.6, GUN)
+    m += cyl("z", 8, 9, 2.6, 8.4, 9.0, RED)
+    for k in range(8):
+        a = (k + 0.5) / 8 * math.tau
+        x, y = 8 + 3.45 * math.cos(a), 9 + 3.45 * math.sin(a)
+        m.append(box((x - 0.3, y - 0.3, 8.6), (x + 0.3, y + 0.3, 9.0), CHROME))
+    m.append(box((6.2, 12.4, 10.6), (9.8, 13.8, 14.6), RED))       # the vapour seal box
+    m += cyl("y", 8, 13.5, 1.3, 0, 5.8, RED)                        # the riser up from the foam line
+    m += cyl("y", 8, 13.5, 1.9, 2.0, 2.8, GUN)                      # the foam maker's flanges
+    m += cyl("y", 8, 13.5, 1.6, 2.8, 4.0, GALV)
+    m += cyl("y", 8, 13.5, 1.9, 4.0, 4.6, GUN)
+    return m
+
+
+def foam_line():
+    """A length of foam line up the shell to its chamber, red, clamped to the shell on a stand-off."""
+    m = cyl("y", 8, 13.5, 1.3, 0, 16, RED)
+    m += cyl("y", 8, 13.5, 1.7, 7.0, 8.0, GUN)
+    m.append(box((7.4, 7.0, 15.2), (8.6, 8.0, 16.0), GUN))
+    return m
+
+
+def earthing_boss():
+    """The earthing boss at a flammable tank's foot: a lug welded to the shell, the copper strap bolted to it and
+    run down into the ground, a clamp on the strap."""
+    m = [box((5.6, 3.0, 15.0), (10.4, 7.4, 16.0), GALV)]
+    m.append(box((7.4, 4.6, 14.4), (8.6, 5.8, 15.0), CHROME))       # the bolt
+    m.append(box((7.2, 4.4, 13.4), (8.8, 5.4, 15.0), COPPER))        # the strap off the lug...
+    m.append(box((7.2, 0, 12.6), (8.8, 5.4, 13.4), COPPER))          # ...and down into the ground
+    m.append(box((6.8, 1.8, 12.2), (9.2, 3.0, 13.8), GUN))           # the clamp
+    return m
+
+
+def safety_shower():
+    """The safety shower's foot (facing out to whoever uses it): the riser on its floor flange, the foot pedal, the
+    eyewash bowl on its arm with two nozzles and a push flag, and the green sign on the riser."""
+    m = cyl("y", 8, 12.0, 2.4, 0, 0.6, GUN)
+    m += cyl("y", 8, 12.0, 1.1, 0.6, 16, GREEN)
+    m.append(box((5.6, 1.4, 5.6), (10.4, 1.9, 9.4), GALV))            # the pedal
+    m.append(box((7.6, 0.6, 9.4), (8.4, 1.9, 10.9), GALV))
+    m.append(box((7.3, 10.2, 7.8), (8.7, 11.2, 10.9), GREEN))         # the arm to the bowl
+    m += cyl("y", 8, 4.6, 2.2, 9.2, 10.2, GREEN)                      # the bowl: its foot, floor and rim
+    m.append(box((4.6, 10.2, 1.2), (11.4, 10.8, 8.0), GREEN))
+    m += [box((4.0, 10.2, 0.6), (12.0, 11.8, 1.2), GREEN), box((4.0, 10.2, 8.0), (12.0, 11.8, 8.6), GREEN),
+          box((4.0, 10.2, 1.2), (4.6, 11.8, 8.0), GREEN), box((11.4, 10.2, 1.2), (12.0, 11.8, 8.0), GREEN)]
+    m.append(box((6.0, 10.8, 4.0), (7.0, 11.6, 5.0), YELLOW))          # the nozzles' dust caps
+    m.append(box((9.0, 10.8, 4.0), (10.0, 11.6, 5.0), YELLOW))
+    m.append(box((12.0, 10.4, 4.2), (14.6, 12.8, 5.0), YELLOW))         # the push flag
+    m.append(box((4.6, 12.6, 10.4), (11.4, 15.8, 10.8), {"*": GREEN, "north": "st_shower_sign!"}))
+    return m
+
+
+def safety_shower_head():
+    """The safety shower's top, on the block above its foot: the riser turning out over whoever stands under it, the
+    shower head, and the pull rod with its handle."""
+    m = cyl("y", 8, 12.0, 1.1, 0, 10.2, GREEN)
+    m.append(box((6.8, 10.2, 10.8), (9.2, 12.6, 13.2), GREEN))         # the elbow
+    m.append(box((7.0, 10.4, 6.6), (9.0, 12.4, 10.8), GREEN))          # the arm out
+    m += cyl("y", 8, 5.6, 0.9, 8.8, 10.4, GREEN)
+    m += cyl("y", 8, 5.6, 3.4, 7.6, 8.8, GREEN)                        # the head
+    m += cyl("y", 8, 5.6, 3.0, 7.2, 7.6, CHROME)
+    m.append(box((9.0, 10.8, 7.4), (11.6, 11.4, 8.2), GALV))           # the rod's bracket, the rod, its handle
+    m.append(box((11.0, 0.8, 7.5), (11.6, 10.8, 8.1), GALV))
+    m.append(box((9.8, 0.2, 7.5), (12.8, 0.8, 8.1), YELLOW))
+    return m
+
+
+def relief_valves():
+    """A cryogenic tank's relief valves: two brass relief valves on a manifold off the roof flange, their outlets
+    turned out to either side, test levers on top, and the manifold's pressure gauge."""
+    m = cyl("y", 8, 8, 3.6, 0, 0.6, GUN)
+    m.append(box((3.8, 0.6, 6.4), (12.2, 3.0, 9.6), GALV))
+    for x, out in ((5.4, -1), (10.6, 1)):
+        m += cyl("y", x, 8, 1.6, 3.0, 6.6, BRASS)
+        m += cyl("y", x, 8, 1.1, 6.6, 10.4, BRASS)
+        m += cyl("y", x, 8, 1.4, 10.4, 11.4, BRASS)
+        x0, x1 = (3.0, x) if out < 0 else (x, 13.0)
+        m.append(box((x0, 4.0, 7.2), (x1, 5.6, 8.8), BRASS))
+        m.append(box((x - 0.3, 11.4, 7.6), (x + 0.3, 13.8, 8.4), RED))
+    m.append(dial("north", (8, 1.8, 6.0), 1.1, texture="dp_gauge", body=CHROME))
+    return m
+
+
+def vaporizer():
+    """A length of an ambient vaporizer column: the aluminium tube with eight long fins round it, four square and
+    four on the diagonals."""
+    m = cyl("y", 8, 8, 1.4, 0, 16, FIN)
+    m += [box((9.4, 0, 7.6), (15.4, 16, 8.4), FIN), box((0.6, 0, 7.6), (6.6, 16, 8.4), FIN),
+          box((7.6, 0, 9.4), (8.4, 16, 15.4), FIN), box((7.6, 0, 0.6), (8.4, 16, 6.6), FIN)]
+    # (The diagonal fins start clear of the tube's square corners, so no two fins' ends share a place.)
+    for angle in (45, -45):
+        m.append(box((10.1, 0, 7.6), (14.6, 16, 8.4), FIN, rotation=("y", angle, (8, 8, 8))))
+        m.append(box((1.4, 0, 7.6), (5.9, 16, 8.4), FIN, rotation=("y", angle, (8, 8, 8))))
+    return m
+
+
+def tank_leg():
+    """A leg under a cryogenic tank's floor: an H-section column on a bolted base plate, a bearing pad on top."""
+    m = [box((4.0, 0, 4.0), (12.0, 0.8, 12.0), GUN)]
+    for x, z in ((4.8, 4.8), (10.6, 4.8), (4.8, 10.6), (10.6, 10.6)):
+        m.append(box((x, 0.8, z), (x + 0.6, 1.3, z + 0.6), CHROME))
+    m += [box((5.4, 0.8, 5.6), (10.6, 15.2, 6.4), GALV), box((5.4, 0.8, 9.6), (10.6, 15.2, 10.4), GALV),
+          box((7.6, 0.8, 6.4), (8.4, 15.2, 9.6), GALV)]
+    m.append(box((4.6, 15.2, 4.6), (11.4, 16.0, 11.4), GUN))
     return m
 
 
@@ -394,10 +608,79 @@ def _mesh():
     return img
 
 
+def _wall_dark():
+    """A corrosive tank's shell: rubber-lined steel painted a dark grey, so a spill shows."""
+    return M.painted((92, 96, 100), 7311, seams=(("h", 126),), chip_count=2, drip_count=3, dirt=0.25)
+
+
+def _roof_dark():
+    img = M.painted((98, 102, 106), 7312, chip_count=2, drip_count=0, dirt=0.3)
+    d = ImageDraw.Draw(img)
+    d.line([(0, 1), (127, 1)], fill=(70, 72, 76, 255), width=2)
+    d.line([(1, 0), (1, 127)], fill=(78, 80, 84, 255), width=1)
+    return img
+
+
+def _stripe(colour, seed, edge):
+    """The product stripe painted round the course under the checker band: the colour from edge to edge, a thin line
+    of the shell's own paint where it meets the next course, the course's weld seam."""
+    img = M.painted(colour, seed, seams=(("h", 126),), chip_count=3, drip_count=0, dirt=0.2)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 127, 5], fill=edge + (255,))
+    d.rectangle([0, 118, 127, 123], fill=edge + (255,))
+    return img
+
+
+def _cryo():
+    """A cryogenic tank's outer shell: smooth white paint over the vacuum jacket, a fine vertical seam."""
+    return M.painted((240, 242, 240), 7315, seams=(("v", 64),), chip_count=0, drip_count=1, dirt=0.12)
+
+
+def _cryo_roof():
+    return M.painted((232, 234, 232), 7316, chip_count=0, drip_count=0, dirt=0.15)
+
+
+def _cryo_rim():
+    return M.painted((186, 190, 192), 7317, chip_count=1, drip_count=0, dirt=0.15)
+
+
+def _fin():
+    """Extruded aluminium: bright, with the extrusion's fine lines running up it."""
+    return M.brushed((206, 212, 216), 7318, "v", dirt=0.05)
+
+
+def _shower_sign():
+    """The safety shower's sign: white on green, a figure under a shower's spray and an eye with a jet of water."""
+    img = Image.new("RGBA", (128, 128), (0, 136, 74, 255))
+    d = ImageDraw.Draw(img)
+    w = (250, 250, 246, 255)
+    d.rectangle([4, 4, 123, 123], outline=w, width=5)
+    d.rectangle([30, 20, 70, 26], fill=w)                         # the shower's arm and head
+    d.polygon([(54, 26), (78, 26), (86, 36), (46, 36)], fill=w)
+    for x in (50, 60, 70, 80):                                    # the spray
+        d.line([(x, 42), (x - 4, 58)], fill=w, width=3)
+    d.ellipse([56, 62, 72, 78], fill=w)                           # the figure
+    d.rectangle([58, 80, 70, 104], fill=w)
+    d.line([(58, 84), (46, 70)], fill=w, width=5)
+    d.line([(70, 84), (82, 70)], fill=w, width=5)
+    d.rectangle([58, 104, 62, 116], fill=w)
+    d.rectangle([66, 104, 70, 116], fill=w)
+    return img
+
+
 def draw_block_textures():
     makers = {"st_primer": _primer, "st_wall": _wall, "st_band": _band, "st_rim": _rim, "st_roof": _roof,
-              "st_white": _white, "st_pipe": _pipe, "st_galv": _galv, "st_mesh": _mesh}
-    return {name: M.stylize(make(), 16 if name == "st_band" else 14) for name, make in makers.items()}
+              "st_white": _white, "st_pipe": _pipe, "st_galv": _galv, "st_mesh": _mesh,
+              "st_wall_dark": _wall_dark, "st_roof_dark": _roof_dark,
+              "st_stripe_red": lambda: _stripe((196, 36, 32), 7313, (232, 234, 230)),
+              "st_stripe_yellow": lambda: _stripe((232, 188, 30), 7314, (92, 96, 100)),
+              "st_cryo": _cryo, "st_cryo_roof": _cryo_roof, "st_cryo_rim": _cryo_rim,
+              "st_green": lambda: M.painted((0, 136, 74), 7319, chip_count=2, drip_count=0, dirt=0.15),
+              "st_blue": lambda: M.painted((40, 92, 170), 7331, chip_count=2, drip_count=1, dirt=0.15),
+              "st_brass": lambda: M.brushed((196, 160, 70), 7332, "h", dirt=0.1),
+              "st_copper": lambda: M.copper(7333), "st_fin": _fin, "st_shower_sign": _shower_sign}
+    sharp = {"st_band": 16, "st_shower_sign": 6}
+    return {name: M.stylize(make(), sharp.get(name, 14)) for name, make in makers.items()}
 
 
 # The renderers' sheet (client/StorageTankRenderer, StorageTankHatchRenderer, RailingGateRenderer): 512 x 256 px,
@@ -407,7 +690,8 @@ SHEET = {"red_iron": (0, 0), "chrome": (1, 0), "gunmetal": (2, 0), "yellow": (3,
          "gauge_board": (0, 1), "pointer": (1, 1), "black": (2, 1), "galvanised": (3, 1),
          "white": (0, 2), "nfpa_blue": (1, 2), "nfpa_red": (2, 2), "nfpa_yellow": (3, 2),
          "rim": (0, 3), "spring": (1, 3), "hazard_tag": (2, 3), "nfpa_white": (3, 3),
-         "lining": (4, 0), "lining_floor": (5, 0), "lining_roof": (6, 0), "gasket": (7, 0)}
+         "lining": (4, 0), "lining_floor": (5, 0), "lining_roof": (6, 0), "gasket": (7, 0),
+         "dark_paint": (4, 1)}
 
 
 def _lining(colour, seed, floor=False):
@@ -465,15 +749,12 @@ def draw_sheet():
         "lining_floor": _lining((70, 60, 54), 7328, floor=True),
         "lining_roof": _lining((84, 74, 68), 7329),
         "gasket": M.rubber(7330),
+        "dark_paint": _wall_dark(),
     }
     sheet = Image.new("RGBA", (512, 256), (0, 0, 0, 255))
     for name, (col, row) in SHEET.items():
         sheet.paste(tiles[name].resize((64, 64), Image.LANCZOS).convert("RGBA"), (col * 64, row * 64))
     return sheet
-
-
-def draw_item_textures():
-    return {}
 
 
 # ------------------------------------------------------------------------------------------------- writing
@@ -507,13 +788,17 @@ def write_assets(write, rid, assets, lang):
         lang[f"block.{MOD}.{block}"] = name
     lang[f"block.{MOD}.{INTERIOR}"] = "Storage Tank Interior"
 
-    # Plates: grey primer until the tank forms, then painted by where they are in the shell.
+    # Plates: grey primer until the tank forms, then painted by where they are in the shell and what the tank is
+    # rated for (PAINT); one model for each paint.
     write(models / "storage_tank_plate.json", {"parent": "minecraft:block/cube_all", "textures": {"all": rid("block/st_primer")}})
-    for band in BANDS:
-        write(models / f"storage_tank_plate_{band}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/st_{band}")}})
+    for paint in sorted({p for bands in PAINT.values() for p in bands.values()}):
+        write(models / f"storage_tank_plate_{paint[3:]}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{paint}")}})
+
+    def plate_model(band, formed, rating):
+        return rid("block/storage_tank_plate" + (f"_{PAINT[rating][band][3:]}" if formed == "true" else ""))
     write(assets / "blockstates" / "storage_tank_plate.json", {"variants": {
-        f"band={band},formed={formed}": {"model": rid("block/storage_tank_plate" + (f"_{band}" if formed == "true" else ""))}
-        for band in BANDS for formed in ("false", "true")}})
+        f"band={band},formed={formed},rating={rating}": {"model": plate_model(band, formed, rating)}
+        for band in BANDS for formed in ("false", "true") for rating in RATINGS}})
     write(assets / "items" / "storage_tank_plate.json", {"model": {"type": "minecraft:model", "model": rid("block/storage_tank_plate")}})
 
     # The interior: nothing to see (the block is invisible); the model only gives break particles.
@@ -551,12 +836,18 @@ def write_assets(write, rid, assets, lang):
 
     # The roof hatch: a cell of the roof, primer until the tank forms; turned so its hinges are on the side it faces.
     write(models / "storage_tank_hatch.json", _cull(_model(hatch(False), rid)))
-    write(models / "storage_tank_hatch_formed.json", _cull(_model(hatch(True), rid)))
+    for rating in RATINGS:
+        suffix = "" if rating == "general" else f"_{rating}"
+        write(models / f"storage_tank_hatch_formed{suffix}.json", _cull(_model(hatch(True, rating), rid)))
     write(models / "storage_tank_hatch_inventory.json", _model(hatch(True) + hatch_lid(), rid))
+
+    def hatch_model(formed, rating):
+        if formed == "false":
+            return rid("block/storage_tank_hatch")
+        return rid("block/storage_tank_hatch_formed" + ("" if rating == "general" else f"_{rating}"))
     write(assets / "blockstates" / "storage_tank_hatch.json", {"variants": {
-        f"band={band},facing={face},formed={formed},open={o}": {"model": rid("block/storage_tank_hatch" + ("_formed" if formed == "true" else "")),
-                                                            **_turn(y)}
-        for band in BANDS for face, y in FACINGS for formed in ("false", "true") for o in ("false", "true")}})
+        f"band={band},facing={face},formed={formed},open={o},rating={rating}": {"model": hatch_model(formed, rating), **_turn(y)}
+        for band in BANDS for face, y in FACINGS for formed in ("false", "true") for o in ("false", "true") for rating in RATINGS}})
     write(assets / "items" / "storage_tank_hatch.json", {"model": {"type": "minecraft:model", "model": rid("block/storage_tank_hatch_inventory")}})
 
     # The roof vent: a gooseneck, or the foot of a vent line with a pipe on top of it.
@@ -567,8 +858,13 @@ def write_assets(write, rid, assets, lang):
         for face, y in FACINGS for r in ("false", "true")}})
     write(assets / "items" / "storage_tank_vent.json", {"model": {"type": "minecraft:model", "model": rid("block/storage_tank_vent")}})
 
-    # Manway: a plain piece turned by facing.
-    for block, elements in (("storage_tank_manway", manway()),):
+    # Manway and the ratings' fittings: plain pieces turned by facing.
+    for block, elements in (("storage_tank_manway", manway()), ("storage_tank_pv_vent", pv_vent()),
+                            ("storage_tank_scrubber_vent", scrubber_vent()), ("tank_foam_chamber", foam_chamber()),
+                            ("tank_foam_line", foam_line()), ("tank_earthing_boss", earthing_boss()),
+                            ("safety_shower", safety_shower()), ("safety_shower_head", safety_shower_head()),
+                            ("tank_relief_valves", relief_valves()), ("cryogenic_vaporizer", vaporizer()),
+                            ("tank_leg", tank_leg())):
         write(models / f"{block}.json", _model(elements, rid))
         write(assets / "blockstates" / f"{block}.json", {"variants": {
             f"facing={face}": {"model": rid(f"block/{block}"), **_turn(y)} for face, y in FACINGS}})
@@ -655,7 +951,58 @@ def write_assets(write, rid, assets, lang):
         f"screen.{MOD}.tank.shut": "Shut",
         f"screen.{MOD}.tank.held_shut": "Held shut (redstone)",
         f"screen.{MOD}.tank.hint": "Right-click the outlet to open or shut it",
+        f"screen.{MOD}.tank.rating": "Rated for %s",
     })
+    write_rating_assets(write, rid, assets, lang)
+
+
+RATING_NAMES = {"general": "general liquids", "flammable": "flammable liquids", "corrosive": "corrosive liquids",
+                "cryogenic": "cryogenic liquids"}
+WARNINGS = {"flammable": "FLAMMABLE", "no_smoking": "NO SMOKING", "no_naked_flames": "NO NAKED FLAMES",
+            "corrosive": "CORROSIVE", "no_water": "DO NOT ADD WATER", "oxidizer": "OXIDIZER",
+            "face_shield": "WEAR FACE SHIELD", "cryogenic": "CRYOGENIC LIQUID"}
+KIT_TOOLTIPS = {"general": "Holds water, brine, fracking fluid and other general liquids",
+                "flammable": "Rated for flammable liquids: fuels, naphtha, crude oil (and general liquids)",
+                "corrosive": "Rubber-lined for corrosive liquids: acids, lye, electrolyte (and general liquids)",
+                "cryogenic": "Vacuum-insulated, for cryogenic liquids: liquid oxygen"}
+
+
+def write_rating_assets(write, rid, assets, lang):
+    """The items (the upgrade parts, the shell section and the kits, each a 16x16 icon from its map in
+    tools/item_icons/) and the words of the ratings: their names, the label's warning lines, the messages and the kits'
+    tooltips."""
+    for item, name in ITEM_NAMES.items():
+        lang[f"item.{MOD}.{item}"] = name
+        write(assets / "models" / "item" / f"{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
+        write(assets / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    for rating, name in RATING_NAMES.items():
+        lang[f"tank.{MOD}.rating.{rating}"] = name
+        lang[f"tooltip.{MOD}.tank_kit.{rating}"] = KIT_TOOLTIPS[rating]
+    for key, words in WARNINGS.items():
+        lang[f"tank.{MOD}.warning.{key}"] = words
+    lang.update({
+        f"message.{MOD}.storage_tank.titled": "Tank titled %s",
+        f"message.{MOD}.storage_tank.rerated": "Tank re-rated for %s: repainted and refitted",
+        f"message.{MOD}.storage_tank.already_rated": "This tank is already rated for %s",
+        f"message.{MOD}.storage_tank.cryogenic_fixed": "A cryogenic tank is built cold: it keeps its rating, and no other tank can be made cryogenic",
+        f"message.{MOD}.storage_tank.empty_first": "Empty the tank before re-rating it for %s",
+        f"message.{MOD}.storage_tank.refused": "This tank is rated for %s: %s needs a tank rated for %s",
+        f"message.{MOD}.storage_tank.refused_gas": "%s is a gas: store it in a gas holder or gas cylinders",
+        f"message.{MOD}.storage_tank.refused_lava": "%s is too hot for a storage tank: keep it in a steel tank",
+        f"message.{MOD}.tank_kit.missing": "This kit's tank is missing from the mod's data",
+        f"message.{MOD}.tank_kit.no_room": "Not enough room here for the tank",
+        f"message.{MOD}.tank_kit.blocked": "Something is in the way: %s at %s, %s, %s",
+        f"tooltip.{MOD}.tank_kit.size": "%s x %s, %s tall",
+        f"tooltip.{MOD}.tank_kit.use": "Use on the ground to place the whole tank, reaching away from you",
+        f"tooltip.{MOD}.flame_arrester": "Use on an empty storage tank to re-rate it for flammable liquids",
+        f"tooltip.{MOD}.tank_rubber_lining": "Use on an empty storage tank to re-rate it for corrosive liquids",
+        f"tooltip.{MOD}.tank_shell_section": "Nine tank plates welded into a curved section: what tank kits are made of",
+    })
+
+
+def draw_item_textures():
+    import item_icons
+    return {item: item_icons.draw(item) for item in ITEMS}
 
 
 def write_loot(write, rid, out, self_drop):

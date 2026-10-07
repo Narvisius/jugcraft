@@ -121,15 +121,24 @@ public class StorageTankPortBlock extends Block implements EntityBlock, FluidCon
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		if (!(level.getBlockEntity(pos) instanceof StorageTankPortBlockEntity port)
-				|| FluidStorage.ITEM.find(stack, ContainerItemContext.forPlayerInteraction(player, hand)) == null) {
+		InteractionResult upgraded = TankUpgrades.use(stack, level, pos, player);
+		if (upgraded != null) {
+			return upgraded;
+		}
+		net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant> held =
+				FluidStorage.ITEM.find(stack, ContainerItemContext.forPlayerInteraction(player, hand));
+		if (!(level.getBlockEntity(pos) instanceof StorageTankPortBlockEntity port) || held == null) {
 			return super.useItemOn(stack, state, level, pos, player, hand, hit);
 		}
 		if (FluidStorageUtil.interactWithFluidStorage(port.portStorage(), player, hand)) {
 			return InteractionResult.SUCCESS;
 		}
 		if (!level.isClientSide()) {
-			player.sendOverlayMessage(port.status(state, null));
+			// A liquid the tank isn't rated for: say which tank it needs.
+			net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant pouring = net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.findStoredResource(held);
+			net.minecraft.network.chat.Component refused = !outlet && pouring != null && port.tank() != null
+					? TankUpgrades.refusal(port.rating(), pouring) : null;
+			player.sendOverlayMessage(refused != null ? refused : port.status(state, null));
 		}
 		return InteractionResult.SUCCESS;
 	}

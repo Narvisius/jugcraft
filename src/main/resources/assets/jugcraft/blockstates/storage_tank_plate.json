@@ -1,28 +1,124 @@
 {
   "variants": {
-    "band=wall,formed=false": {
+    "band=wall,formed=false,rating=general": {
       "model": "jugcraft:block/storage_tank_plate"
     },
-    "band=wall,formed=true": {
+    "band=wall,formed=false,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=wall,formed=false,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=wall,formed=false,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=wall,formed=true,rating=general": {
       "model": "jugcraft:block/storage_tank_plate_wall"
     },
-    "band=band,formed=false": {
+    "band=wall,formed=true,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate_wall"
+    },
+    "band=wall,formed=true,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate_wall_dark"
+    },
+    "band=wall,formed=true,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate_cryo"
+    },
+    "band=band,formed=false,rating=general": {
       "model": "jugcraft:block/storage_tank_plate"
     },
-    "band=band,formed=true": {
+    "band=band,formed=false,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=band,formed=false,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=band,formed=false,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=band,formed=true,rating=general": {
       "model": "jugcraft:block/storage_tank_plate_band"
     },
-    "band=rim,formed=false": {
+    "band=band,formed=true,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate_band"
+    },
+    "band=band,formed=true,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate_band"
+    },
+    "band=band,formed=true,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate_cryo"
+    },
+    "band=stripe,formed=false,rating=general": {
       "model": "jugcraft:block/storage_tank_plate"
     },
-    "band=rim,formed=true": {
+    "band=stripe,formed=false,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=stripe,formed=false,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=stripe,formed=false,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=stripe,formed=true,rating=general": {
+      "model": "jugcraft:block/storage_tank_plate_wall"
+    },
+    "band=stripe,formed=true,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate_stripe_red"
+    },
+    "band=stripe,formed=true,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate_stripe_yellow"
+    },
+    "band=stripe,formed=true,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate_cryo"
+    },
+    "band=rim,formed=false,rating=general": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=rim,formed=false,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=rim,formed=false,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=rim,formed=false,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=rim,formed=true,rating=general": {
       "model": "jugcraft:block/storage_tank_plate_rim"
     },
-    "band=roof,formed=false": {
+    "band=rim,formed=true,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate_rim"
+    },
+    "band=rim,formed=true,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate_rim"
+    },
+    "band=rim,formed=true,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate_cryo_rim"
+    },
+    "band=roof,formed=false,rating=general": {
       "model": "jugcraft:block/storage_tank_plate"
     },
-    "band=roof,formed=true": {
+    "band=roof,formed=false,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=roof,formed=false,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=roof,formed=false,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate"
+    },
+    "band=roof,formed=true,rating=general": {
       "model": "jugcraft:block/storage_tank_plate_roof"
+    },
+    "band=roof,formed=true,rating=flammable": {
+      "model": "jugcraft:block/storage_tank_plate_roof"
+    },
+    "band=roof,formed=true,rating=corrosive": {
+      "model": "jugcraft:block/storage_tank_plate_roof_dark"
+    },
+    "band=roof,formed=true,rating=cryogenic": {
+      "model": "jugcraft:block/storage_tank_plate_cryo_roof"
     }
   }
 }
