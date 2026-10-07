@@ -59,10 +59,13 @@ public final class DieselFuel {
 		return FluidVariant.of(PetroFluids.DIESEL.source());
 	}
 
-	/** The generator's day tank (a formed tank's outlet), found again when it is gone, or null. */
+	/**
+	 * The generator's day tank (a formed tank's outlet), found again when it is gone, or null. A day tank it has run
+	 * dry stays its day tank (its level reads empty, the low level alarm on) until something else goes in it.
+	 */
 	public static @Nullable StorageTankPortBlockEntity dayTank(ServerLevel level, EquipmentBlockEntity edg) {
 		if (edg.dayTank != null && level.isLoaded(edg.dayTank) && level.getBlockEntity(edg.dayTank) instanceof StorageTankPortBlockEntity tank
-				&& tank.tank() == tank && tank.formed() && holdsDiesel(tank)) {
+				&& tank.tank() == tank && tank.formed() && (holdsDiesel(tank) || tank.fluid.isResourceBlank() || tank.fluid.amount == 0)) {
 			return tank;
 		}
 		edg.dayTank = null;
