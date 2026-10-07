@@ -82,9 +82,10 @@ public class StorageTankScreen extends Screen {
 		if (tank != null && !tank.title().isEmpty()) {
 			name = tank.title();
 		}
-		g.text(font, name, x0 + 8, y0 + 6, ACCENT, false);
+		int nameRoom = W - 16;
 		if (tank != null) {
-			// What the tank is rated for, in its rating's colour.
+			// What the tank is rated for, in its rating's colour, at the right of the title bar (a long title is cut
+			// short to leave it room).
 			io.github.jimbozoomer.jugcraft.nuclear.TankRating rating = tank.rating();
 			int colour = switch (rating) {
 				case FLAMMABLE -> 0xFFE0605A;
@@ -92,9 +93,15 @@ public class StorageTankScreen extends Screen {
 				case CRYOGENIC -> 0xFF78B8F0;
 				default -> 0xFFB8C0C8;
 			};
-			g.text(font, Component.translatable("screen.jugcraft.tank.rating", io.github.jimbozoomer.jugcraft.nuclear.TankUpgrades.name(rating)),
-					x0 + 8, y0 + 17, colour, false);
+			String rated = Component.translatable("screen.jugcraft.tank.rating", io.github.jimbozoomer.jugcraft.nuclear.TankUpgrades.name(rating)).getString();
+			int ratedWidth = font.width(rated);
+			g.text(font, rated, x0 + W - 8 - ratedWidth, y0 + 6, colour, false);
+			nameRoom = W - 28 - ratedWidth;
 		}
+		if (font.width(name) > nameRoom) {
+			name = font.plainSubstrByWidth(name, nameRoom - font.width("...")) + "...";
+		}
+		g.text(font, name, x0 + 8, y0 + 6, ACCENT, false);
 		if (tank == null || !tank.formed()) {
 			g.text(font, t("not_formed"), x0 + 8, y0 + 40, AMBER, false);
 			return;
