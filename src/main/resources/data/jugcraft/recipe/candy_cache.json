@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "L L",
+    "LCL"
+  ],
+  "key": {
+    "L": "#minecraft:logs",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "jugcraft:candy_cache",
+    "count": 1
+  }
+}

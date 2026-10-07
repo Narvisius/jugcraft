@@ -1,0 +1,693 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/dead_tree_bark",
+    "bark": "jugcraft:block/dead_tree_bark",
+    "end": "jugcraft:block/dead_tree_end",
+    "hollow": "jugcraft:block/dead_tree_hollow",
+    "face": "jugcraft:block/dead_tree_face",
+    "eye": "jugcraft:block/dead_tree_eye",
+    "lantern_iron": "jugcraft:block/yard_lantern_iron",
+    "lantern_glass": "jugcraft:block/yard_lantern_glass"
+  },
+  "elements": [
+    {
+      "from": [
+        3.5,
+        2,
+        3.5
+      ],
+      "to": [
+        12.5,
+        16,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#bark"
+        },
+        "down": {
+          "texture": "#bark"
+        }
+      }
+    },
+    {
+      "from": [
+        -13,
+        4,
+        6.5
+      ],
+      "to": [
+        3.5,
+        7,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            9.0,
+            16.0,
+            12.0
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            9.0,
+            16.0,
+            12.0
+          ]
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            6.5,
+            16.0,
+            9.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            6.5,
+            16.0,
+            9.5
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          3.5,
+          5.5,
+          8
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        12.5,
+        12,
+        6.5
+      ],
+      "to": [
+        29,
+        15,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            1.0,
+            16.0,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            1.0,
+            16.0,
+            4.0
+          ]
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            6.5,
+            16.0,
+            9.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            6.5,
+            16.0,
+            9.5
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          12.5,
+          13.5,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        -9.5,
+        10,
+        7.5
+      ],
+      "to": [
+        -8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark",
+          "uv": [
+            8.5,
+            0.0,
+            9.5,
+            6.0
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            0.0,
+            7.5,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            7.5,
+            7.5,
+            8.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            7.5,
+            7.5,
+            8.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        3.5,
+        21.5
+      ],
+      "to": [
+        8.5,
+        8,
+        22.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark",
+          "uv": [
+            9.5,
+            8.0,
+            10.5,
+            12.5
+          ]
+        },
+        "west": {
+          "texture": "#bark",
+          "uv": [
+            5.5,
+            8.0,
+            6.5,
+            12.5
+          ]
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            7.5,
+            5.5,
+            8.5,
+            6.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            7.5,
+            9.5,
+            8.5,
+            10.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -6.25,
+        5.5,
+        7.75
+      ],
+      "to": [
+        -5.75,
+        9,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron",
+          "uv": [
+            5.75,
+            7.0,
+            6.25,
+            10.5
+          ]
+        },
+        "south": {
+          "texture": "#lantern_iron",
+          "uv": [
+            9.75,
+            7.0,
+            10.25,
+            10.5
+          ]
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron",
+          "uv": [
+            9.75,
+            7.75,
+            10.25,
+            8.25
+          ]
+        },
+        "down": {
+          "texture": "#lantern_iron",
+          "uv": [
+            9.75,
+            7.75,
+            10.25,
+            8.25
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        21.75,
+        13,
+        7.75
+      ],
+      "to": [
+        22.25,
+        17,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron",
+          "uv": [
+            9.75,
+            0.0,
+            10.25,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#lantern_iron",
+          "uv": [
+            5.75,
+            0.0,
+            6.25,
+            4.0
+          ]
+        },
+        "east": {
+          "texture": "#lantern_iron",
+          "uv": [
+            7.75,
+            0.0,
+            8.25,
+            4.0
+          ]
+        },
+        "west": {
+          "texture": "#lantern_iron",
+          "uv": [
+            7.75,
+            0.0,
+            8.25,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#lantern_iron",
+          "uv": [
+            5.75,
+            7.75,
+            6.25,
+            8.25
+          ]
+        },
+        "down": {
+          "texture": "#lantern_iron",
+          "uv": [
+            5.75,
+            7.75,
+            6.25,
+            8.25
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -8,
+        0.0,
+        6
+      ],
+      "to": [
+        -4,
+        4.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_glass",
+          "uv": [
+            4.0,
+            11.5,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#lantern_glass",
+          "uv": [
+            8.0,
+            11.5,
+            12.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#lantern_glass"
+        },
+        "west": {
+          "texture": "#lantern_glass"
+        },
+        "up": {
+          "texture": "#lantern_glass",
+          "uv": [
+            8.0,
+            6.0,
+            12.0,
+            10.0
+          ]
+        },
+        "down": {
+          "texture": "#lantern_glass",
+          "uv": [
+            8.0,
+            6.0,
+            12.0,
+            10.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -7.5,
+        4.5,
+        6.5
+      ],
+      "to": [
+        -4.5,
+        5.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            10.5,
+            7.5,
+            11.5
+          ]
+        },
+        "south": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            10.5,
+            11.5,
+            11.5
+          ]
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            6.5,
+            11.5,
+            9.5
+          ]
+        },
+        "down": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            6.5,
+            11.5,
+            9.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        20.5,
+        7,
+        6.5
+      ],
+      "to": [
+        23.5,
+        7.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            8.5,
+            11.5,
+            9.0
+          ]
+        },
+        "south": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            8.5,
+            7.5,
+            9.0
+          ]
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            6.5,
+            7.5,
+            9.5
+          ]
+        },
+        "down": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            6.5,
+            7.5,
+            9.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        20,
+        7.5,
+        6
+      ],
+      "to": [
+        24,
+        12,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_glass",
+          "uv": [
+            8.0,
+            4.0,
+            12.0,
+            8.5
+          ]
+        },
+        "south": {
+          "texture": "#lantern_glass",
+          "uv": [
+            4.0,
+            4.0,
+            8.0,
+            8.5
+          ]
+        },
+        "east": {
+          "texture": "#lantern_glass"
+        },
+        "west": {
+          "texture": "#lantern_glass"
+        },
+        "up": {
+          "texture": "#lantern_glass",
+          "uv": [
+            4.0,
+            6.0,
+            8.0,
+            10.0
+          ]
+        },
+        "down": {
+          "texture": "#lantern_glass",
+          "uv": [
+            4.0,
+            6.0,
+            8.0,
+            10.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        20.5,
+        12,
+        6.5
+      ],
+      "to": [
+        23.5,
+        13,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            3.0,
+            11.5,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            3.0,
+            7.5,
+            4.0
+          ]
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            6.5,
+            7.5,
+            9.5
+          ]
+        },
+        "down": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            6.5,
+            7.5,
+            9.5
+          ]
+        }
+      }
+    }
+  ]
+}

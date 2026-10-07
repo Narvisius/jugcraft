@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "NGN"
+  ],
+  "key": {
+    "C": "#minecraft:candles",
+    "N": "minecraft:iron_nugget",
+    "G": "minecraft:tinted_glass"
+  },
+  "result": {
+    "id": "jugcraft:wall_girandole",
+    "count": 1
+  }
+}

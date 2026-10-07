@@ -8,13 +8,16 @@ import random
 
 from PIL import Image
 
+import block_style as bs
+import material_style as ms
 from petro import FLUIDS, GASES
 
 FRAMES = 16
 
 
 def still(colors, seed):
-    """A slow, heavy surface: dark swells drifting across, with a thin oily sheen catching on the crests."""
+    """A slow, heavy surface, as vanilla still water and lava: mostly the middle tone, with lighter swells drifting
+    across, a thin sheen on their crests and a few darker troughs."""
     dark, mid, light, sheen = colors
     rng = random.Random(seed)
     # Wave vectors in whole cycles per tile, so the texture tiles; each wave moves a whole cycle per loop.
@@ -28,8 +31,8 @@ def still(colors, seed):
             for x in range(16):
                 v = sum(math.sin(2 * math.pi * (x * fx + y * fy) / 16 + p + t * (1 if i % 2 else -1))
                         for i, ((fx, fy), p) in enumerate(zip(waves, phases))) / len(waves)
-                c = dark if v < -0.2 else mid if v < 0.25 else light
-                if v > 0.55:
+                c = dark if v < -0.42 else mid if v < 0.26 else light
+                if v > 0.5:
                     c = sheen
                 img.putpixel((x, y), c + (255,))
         frames.append(img)
@@ -37,66 +40,57 @@ def still(colors, seed):
 
 
 def flowing(colors, seed):
-    """The same oil running downhill: long streaks that slide down the texture one pixel a frame."""
+    """The same fluid running downhill, as vanilla flowing water: soft streaks a few pixels wide and long, mostly the
+    middle tone, sliding down the texture one pixel a frame (the pattern tiles, so the loop is seamless)."""
     dark, mid, light, sheen = colors
-    rng = random.Random(seed)
-    columns = []
-    for _ in range(16):
-        raw = [rng.random() for _ in range(16)]
-        # Smooth along the flow so each column is a few long streaks rather than speckle.
-        columns.append([(raw[y] + raw[(y - 1) % 16] + raw[(y - 2) % 16]) / 3 for y in range(16)])
+    long, short = bs.Field(16, 16, seed, 3.0, 8.0), bs.Field(16, 16, seed + 1, 2.0, 4.0)
     frames = []
     for frame in range(FRAMES):
         img = Image.new("RGBA", (16, 16))
         for y in range(16):
             for x in range(16):
-                v = columns[x][(y - frame) % 16]
-                c = dark if v < 0.42 else mid if v < 0.62 else light
-                if v > 0.78:
+                v = 0.7 * long(x, (y - frame) % 16) + 0.3 * short(x, (y - frame) % 16)
+                c = dark if v < 0.33 else mid if v < 0.6 else light
+                if v > 0.72:
                     c = sheen
                 img.putpixel((x, y), c + (255,))
         frames.append(img)
     return frames
 
 
-# A bucket seen from the front and a little above: rim, handle, tapered body.
+# A bucket, drawn for Jugcraft in the manner of the vanilla one: an iron pail seen from a little above, its round
+# mouth full of the fluid, the body narrowing to the base, lit on the left and outlined in dark iron.
+IRON = {"0": (52, 52, 58), "r": (214, 214, 220), "R": (168, 168, 176), "a": (198, 198, 204), "b": (150, 150, 158),
+        "c": (112, 112, 120)}
 BUCKET = [
     "................",
-    "....HHHHHHHH....",
-    "...H........H...",
-    "..H..........H..",
-    "..RRRRRRRRRRRR..",
-    "..RFFFFFFFFFFR..",
-    "..RFFFFFFFFFFR..",
-    "..RFFFFFFFFFFR..",
-    "...SBBBBBBBBS...",
-    "...SBBBBBBBBS...",
-    "...SBBBBBBBBS...",
-    "....SBBBBBBS....",
-    "....SBBBBBBS....",
-    ".....SSSSSS.....",
     "................",
+    "................",
+    "....00000000....",
+    "...0rrrrrrrr0...",
+    "..0rDDDDDDDDr0..",
+    "..0rLlLLLLLLR0..",
+    "..0rLLLLLLLLR0..",
+    "...0RRRRRRRR0...",
+    "...0aabbbbbc0...",
+    "...0abbbbbbc0...",
+    "...0abbbbbcc0...",
+    "....0abbbbc0....",
+    "....0abbbcc0....",
+    ".....000000.....",
     "................",
 ]
-STEEL = {"H": (70, 72, 76), "R": (196, 200, 204), "S": (64, 66, 70), "B": (132, 136, 142)}
 
 
-def bucket(colors, seed):
-    rng = random.Random(seed)
+def bucket(colors, seed=0):
+    """A bucket of the fluid: its dark, mid and light tones on the surface (shadowed under the back of the rim, a
+    highlight at the front left). Every bucket shares the pail; `seed` is kept for the callers."""
+    fluid = {"D": colors[0], "L": colors[1], "l": colors[2]}
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     for y, row in enumerate(BUCKET):
         for x, key in enumerate(row):
-            if key == ".":
-                continue
-            if key == "F":
-                c = colors[1] if rng.random() < 0.7 else colors[2]
-                if x in (5, 6) and y == 5:
-                    c = colors[3]
-            else:
-                c = STEEL[key]
-                if key == "B" and x < 6:
-                    c = (156, 160, 166)
-            img.putpixel((x, y), c + (255,))
+            if key != ".":
+                img.putpixel((x, y), (fluid.get(key) or IRON[key]) + (255,))
     return img
 
 
@@ -110,25 +104,17 @@ def catalyst():
         for y in range(16):
             for x in range(16):
                 if (x - cx) ** 2 + (y - cy) ** 2 <= 2.2:
-                    shade = shades[2] if x < cx and y < cy else shades[1] if (x + y) % 3 else shades[0]
+                    shade = shades[2] if x < cx and y < cy else shades[0] if x > cx and y > cy else shades[1]
                     img.putpixel((x, y), shade + (255,))
     return img
 
 
 def asphalt_binder():
     """Asphalt binder: a glossy black lump of tar with a dull sheen and a few stuck grains."""
-    rng = random.Random(961)
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    for y in range(16):
-        for x in range(16):
-            d = ((x - 8) / 6.5) ** 2 + ((y - 9) / 5) ** 2
-            if d <= 1:
-                c = (36, 32, 30) if rng.random() < 0.7 else (22, 20, 19)
-                if d < 0.35 and x < 8 and y < 9:
-                    c = (78, 74, 70)
-                if rng.random() < 0.05:
-                    c = (120, 112, 98)
-                img.putpixel((x, y), c + (255,))
+    img = ms.lumps([(6.6, 9.6, 4.2), (10.4, 8.4, 3.6), (8.4, 6.2, 3.0)],
+                    [(12, 11, 10), (24, 22, 21), (38, 35, 33), (62, 58, 55), (104, 98, 92)])
+    for x, y in ((5, 11), (10, 11), (11, 7)):
+        img.putpixel((x, y), (120, 112, 98, 255))
     return img
 
 
@@ -162,18 +148,21 @@ def plastic_sheet():
 
 
 def asphalt(seed=963):
-    """Asphalt: dark grey-black binder with pale and rust-brown aggregate chips, worn a little lighter in patches.
-    Tiles seamlessly (no edge treatment)."""
-    rng = random.Random(seed)
+    """Asphalt: dark grey-black binder in soft clumps with pale and rust-brown aggregate chips spaced across it. Tiles
+    seamlessly (no edge treatment)."""
     img = Image.new("RGBA", (16, 16))
+    s = bs.surface([(38, 38, 40), (46, 46, 48), (54, 54, 57)], seed, spread=0.7)
     for y in range(16):
         for x in range(16):
-            base = 46 + rng.randint(-5, 5) + (6 if (x * 7 + y * 3) % 11 == 0 else 0)
-            img.putpixel((x, y), (base, base, base + 2, 255))
-    for _ in range(26):
+            img.putpixel((x, y), s(x, y) + (255,))
+    rng = random.Random(seed)
+    taken = set()
+    for _ in range(40):
         x, y = rng.randrange(16), rng.randrange(16)
-        chip = rng.choice([(96, 94, 90), (118, 114, 106), (84, 70, 60), (70, 70, 72)])
-        img.putpixel((x, y), chip + (255,))
+        if len(taken) >= 14 or any(((x + dx) % 16, (y + dy) % 16) in taken for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            continue
+        taken.add((x, y))
+        img.putpixel((x, y), rng.choice([(96, 94, 90), (118, 114, 106), (84, 70, 60), (70, 70, 72)]) + (255,))
     return img
 
 
@@ -184,37 +173,26 @@ def asphalt_road_line():
     for y in range(16):
         if y % 8 in (1, 2, 3, 4, 5):
             for x in (7, 8):
-                shade = (226, 184, 40) if (x + y) % 5 else (196, 158, 34)
+                shade = (226, 184, 40) if x == 7 else (204, 164, 34)
                 img.putpixel((x, y), shade + (255,))
     return img
 
 
 def alumina():
-    """Alumina: a small heap of fine white powder with grey shading and a few glinting grains."""
-    rng = random.Random(965)
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    for y in range(6, 15):
-        half = (y - 5) * 0.75 + 1
-        for x in range(16):
-            if abs(x - 7.5) <= half:
-                c = (236, 236, 232) if rng.random() < 0.6 else (212, 214, 214)
-                if x > 7.5 + half - 1.5 or y == 14:
-                    c = (182, 184, 188)
-                if rng.random() < 0.04:
-                    c = (252, 252, 255)
-                img.putpixel((x, y), c + (255,))
-    return img
+    """Alumina: a small heap of fine white powder with grey shading."""
+    return ms.dust([(146, 150, 156), (186, 190, 196), (214, 216, 220), (236, 236, 234), (252, 252, 255)])
 
 
 def fertilizer():
     """Fertilizer: a tied burlap sack with a green leaf stencilled on it and a few grey-white granules spilt."""
-    rng = random.Random(966)
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     for y in range(3, 15):
         half = 4 + (1 if 6 <= y <= 12 else 0) - (1 if y < 5 else 0)
         for x in range(16):
             if abs(x - 7.5) <= half:
-                c = (176, 146, 96) if rng.random() < 0.7 else (150, 122, 78)
+                c = (176, 146, 96) if y % 3 else (162, 132, 86)
+                if x < 7.5 - half + 1:
+                    c = (196, 166, 112)
                 if x > 7.5 + half - 1 or y == 14:
                     c = (120, 96, 60)
                 img.putpixel((x, y), c + (255,))
@@ -228,19 +206,11 @@ def fertilizer():
 
 
 def titanium_sponge():
-    """Titanium sponge: a porous, crumbly blue-grey lump full of dark pits."""
-    rng = random.Random(967)
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    for y in range(16):
-        for x in range(16):
-            d = ((x - 7.5) / 6.5) ** 2 + ((y - 8.5) / 5.5) ** 2 + rng.uniform(-0.12, 0.12)
-            if d <= 1:
-                c = (150, 156, 168) if rng.random() < 0.55 else (118, 124, 138)
-                if rng.random() < 0.18:
-                    c = (52, 56, 66)
-                if d < 0.3 and x < 8 and y < 8:
-                    c = (196, 202, 212)
-                img.putpixel((x, y), c + (255,))
+    """Titanium sponge: a porous, crumbly blue-grey lump with dark pits."""
+    img = ms.lumps([(6.0, 9.6, 3.8), (10.6, 8.0, 3.6), (8.2, 5.8, 2.8), (10.0, 11.6, 2.6)],
+                    [(52, 56, 66), (100, 106, 120), (136, 142, 156), (170, 176, 188), (204, 210, 220)])
+    for x, y in ((5, 9), (9, 6), (11, 9), (7, 12), (12, 12), (8, 9)):
+        img.putpixel((x, y), (52, 56, 66, 255))
     return img
 
 
@@ -369,18 +339,8 @@ def gasket():
 
 
 def pvc_resin():
-    """PVC resin: a little heap of chalk-white powder with grey shading."""
-    rng = random.Random(963)
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    for y in range(6, 15):
-        half = int((y - 5) * 0.8) + 1
-        for x in range(8 - half, 8 + half):
-            if 0 <= x < 16:
-                c = rng.choice([(236, 236, 230), (220, 220, 214), (204, 204, 198)])
-                if x > 8 + half // 2:
-                    c = (186, 186, 180)
-                img.putpixel((x, y), c + (255,))
-    return img
+    """PVC resin: a little heap of chalk-white powder with grey shading, a warmer white than alumina."""
+    return ms.dust([(150, 150, 142), (188, 188, 180), (214, 214, 206), (234, 234, 226), (250, 250, 244)])
 
 
 def soap():
@@ -403,18 +363,8 @@ def soap():
 
 def guncotton():
     """Guncotton: a fluffy tuft of nitrated cotton, off-white with a faint straw tint and soft grey shadows."""
-    rng = random.Random(964)
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    for cx, cy, r in ((6, 8, 4), (10, 7, 3.5), (8, 11, 3.5), (5, 11, 2.5), (11, 10, 2.5)):
-        for y in range(16):
-            for x in range(16):
-                d = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
-                if d <= r and rng.random() > 0.08:
-                    c = (226, 220, 196) if d > r - 1 else rng.choice([(246, 242, 222), (236, 230, 206), (250, 248, 234)])
-                    if y > cy + r / 3:
-                        c = tuple(v - 22 for v in c)
-                    img.putpixel((x, y), c + (255,))
-    return img
+    return ms.lumps([(5.6, 10.6, 3.0), (6.6, 7.6, 3.6), (10.4, 7.2, 3.2), (10.8, 10.8, 2.8), (8.4, 11.6, 3.0)],
+                     [(168, 160, 132), (206, 198, 170), (230, 224, 200), (244, 240, 222), (255, 253, 244)])
 
 
 def grenade():
@@ -474,10 +424,9 @@ def turbocharger():
             d = ((x - 7) ** 2 + (y - 8) ** 2) ** 0.5
             if d <= 6.5:
                 c = (60, 62, 68) if d > 5.5 else (92, 96, 104) if d > 3.5 else (40, 42, 46)
-                if d <= 3 and (x + y) % 2 == 0:
-                    c = (196, 200, 208)
-                elif d <= 3:
-                    c = (150, 156, 166)
+                if d <= 3:
+                    blade = int(((math.degrees(math.atan2(y - 8, x - 7)) + 360) % 360) // 45) % 2
+                    c = (196, 200, 208) if blade else (150, 156, 166)
                 if d > 3.5 and x < 7 and y < 8:
                     c = tuple(v + 24 for v in c)
                 img.putpixel((x, y), c + (255,))

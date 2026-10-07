@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  S",
+    "LLI",
+    "PPP"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "L": "#minecraft:logs",
+    "I": "#c:ingots/iron",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:trebuchet",
+    "count": 1
+  }
+}

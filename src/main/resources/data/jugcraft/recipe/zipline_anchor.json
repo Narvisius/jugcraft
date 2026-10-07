@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PHP",
+    " B ",
+    "PBP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "H": "minecraft:tripwire_hook",
+    "B": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "jugcraft:zipline_anchor",
+    "count": 2
+  }
+}

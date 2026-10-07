@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SBS",
+    "EGE",
+    "CCC"
+  ],
+  "key": {
+    "S": "#c:storage_blocks/steel",
+    "B": "jugcraft:bastion_mortar",
+    "E": "jugcraft:diesel_engine",
+    "G": "#c:gears/steel",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:grand_mortar",
+    "count": 1
+  }
+}

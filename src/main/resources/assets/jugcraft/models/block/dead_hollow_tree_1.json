@@ -1,0 +1,296 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/dead_tree_bark",
+    "bark": "jugcraft:block/dead_tree_bark",
+    "end": "jugcraft:block/dead_tree_end",
+    "hollow": "jugcraft:block/dead_tree_hollow",
+    "face": "jugcraft:block/dead_tree_face",
+    "eye": "jugcraft:block/dead_tree_eye",
+    "lantern_iron": "jugcraft:block/yard_lantern_iron",
+    "lantern_glass": "jugcraft:block/yard_lantern_glass"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        -2,
+        3
+      ],
+      "to": [
+        13,
+        6,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            8.0,
+            13.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            8.0,
+            13.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            8.0,
+            13.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            8.0,
+            13.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#bark"
+        },
+        "down": {
+          "texture": "#bark"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        6,
+        3
+      ],
+      "to": [
+        13,
+        18,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#face",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            0.0,
+            13.0,
+            12.0
+          ]
+        },
+        "east": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            0.0,
+            13.0,
+            12.0
+          ]
+        },
+        "west": {
+          "texture": "#bark",
+          "uv": [
+            3.0,
+            0.0,
+            13.0,
+            12.0
+          ]
+        },
+        "up": {
+          "texture": "#bark"
+        },
+        "down": {
+          "texture": "#bark"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        13,
+        2.9
+      ],
+      "to": [
+        7,
+        14.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#eye"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        9,
+        13,
+        2.9
+      ],
+      "to": [
+        11,
+        14.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#eye"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        6.5,
+        14,
+        11.5
+      ],
+      "to": [
+        9.5,
+        17,
+        26
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            3.0
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            3.0
+          ]
+        },
+        "east": {
+          "texture": "#bark",
+          "uv": [
+            1.5,
+            0.0,
+            16.0,
+            3.0
+          ]
+        },
+        "west": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            0.0,
+            14.5,
+            3.0
+          ]
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            14.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            1.5,
+            9.5,
+            16.0
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          15.5,
+          11.5
+        ],
+        "axis": "x",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        -7.5,
+        15.5,
+        6.5
+      ],
+      "to": [
+        -4.5,
+        16.0,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron",
+          "uv": [
+            4.5,
+            0.0,
+            7.5,
+            0.5
+          ]
+        },
+        "south": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            0.0,
+            11.5,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            6.5,
+            11.5,
+            9.5
+          ]
+        },
+        "down": {
+          "texture": "#lantern_iron",
+          "uv": [
+            8.5,
+            6.5,
+            11.5,
+            9.5
+          ]
+        }
+      }
+    }
+  ]
+}

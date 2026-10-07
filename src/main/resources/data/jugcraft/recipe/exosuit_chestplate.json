@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "T T",
+    "LRL",
+    "TCT"
+  ],
+  "key": {
+    "T": "#c:plates/titanium",
+    "L": "jugcraft:lithium_cell",
+    "R": "jugcraft:rocket_pack",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:exosuit_chestplate",
+    "count": 1
+  }
+}

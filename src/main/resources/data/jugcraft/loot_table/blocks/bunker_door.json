@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "jugcraft:blocks/bunker_door",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:bunker_door"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:bunker_door",
+            "state": {
+              "half": "lower"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

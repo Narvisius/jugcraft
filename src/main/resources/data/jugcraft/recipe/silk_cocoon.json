@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "S",
+    "W",
+    "S"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "W": "minecraft:white_wool"
+  },
+  "result": {
+    "id": "jugcraft:silk_cocoon",
+    "count": 1
+  }
+}

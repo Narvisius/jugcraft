@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:hydrotreating",
+  "fluids": [
+    {
+      "fluid": "jugcraft:diesel",
+      "amount": 1000
+    },
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 100
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:premium_diesel",
+      "amount": 1000
+    },
+    {
+      "fluid": "jugcraft:hydrogen_sulfide",
+      "amount": 100
+    }
+  ],
+  "time": 120
+}

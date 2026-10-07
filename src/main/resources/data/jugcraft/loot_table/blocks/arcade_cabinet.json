@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:arcade_cabinet"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:arcade_cabinet",
+            "state": {
+              "half": "lower"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/arcade_cabinet"
+}

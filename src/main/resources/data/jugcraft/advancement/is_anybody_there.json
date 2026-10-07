@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:spirit_board"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.is_anybody_there.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.is_anybody_there.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

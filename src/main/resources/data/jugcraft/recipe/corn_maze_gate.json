@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SHS",
+    "S S"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "H": "minecraft:hay_block"
+  },
+  "result": {
+    "id": "jugcraft:corn_maze_gate",
+    "count": 1
+  }
+}

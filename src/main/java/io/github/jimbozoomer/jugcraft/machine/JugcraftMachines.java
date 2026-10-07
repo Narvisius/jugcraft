@@ -60,7 +60,8 @@ public final class JugcraftMachines {
 			BlockBehaviour.Properties props = properties(kind.id, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)).noOcclusion();
 			// Pistons already refuse to move multi-block machines: every part is an entity block (even
 			// dummies without a block entity), which pistons never push.
-			MachineBlock machine = kind.isLarge() ? new LargeMachineBlock(props, kind) : new MachineBlock(props, kind);
+			MachineBlock machine = kind.enlarged() ? new EnlargedMachineBlock(props, kind)
+					: kind.isLarge() ? new LargeMachineBlock(props, kind) : new MachineBlock(props, kind);
 			MACHINES.put(kind, (MachineBlock) block(kind.id, machine));
 
 			ExtendedMenuType<MachineMenu, BlockPos> menu = new ExtendedMenuType<>(

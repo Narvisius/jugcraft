@@ -9,6 +9,8 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -28,10 +30,23 @@ public final class JugcraftWorldgen {
 		String[][] ores = {
 				{"tin", "tin"}, {"zinc", "zinc"}, {"lead", "lead"}, {"silver", "silver"},
 				{"nickel", "nickel"}, {"tungsten", "tungsten"}, {"uranium", "uranium"}, {"titanium", "titanium"},
+				{"thallite", "thallite"},
 				{"salt", "salt"}, {"phosphate", "phosphate"}, {"lepidolite", "lithium"}, {"monazite", "rare_earths"},
 		};
 		for (String[] ore : ores) {
 			add(ore[0], ore[1], overworld);
+		}
+
+		// Veins placed only in some biomes (a "biomes" key on their worldgen entry in tools/materials.py): placed feature
+		// name, feature switch. Their biomes are the biome tag jugcraft:has_ore/<name>, written from that list. Thallite's
+		// rich pockets lie in Lush Caves and the Glowcap Grotto; with the biomes switch off, the grotto is never placed and
+		// Lush Caves still carry them.
+		String[][] biomeOres = {
+				{"thallite_rich", "thallite"},
+		};
+		for (String[] ore : biomeOres) {
+			TagKey<Biome> biomes = TagKey.create(Registries.BIOME, Jugcraft.id("has_ore/" + ore[0]));
+			add(ore[0], ore[1], BiomeSelectors.tag(biomes));
 		}
 
 		// Bauxite forms by tropical weathering; oil sand occurs in dry sandy basins.

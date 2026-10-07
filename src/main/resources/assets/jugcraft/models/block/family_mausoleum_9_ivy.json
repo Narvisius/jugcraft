@@ -1,0 +1,112 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gy_ivy",
+    "ivy": "jugcraft:block/gy_ivy"
+  },
+  "elements": [
+    {
+      "from": [
+        -1.1,
+        7.4,
+        0
+      ],
+      "to": [
+        -0.2,
+        8.6,
+        0.3
+      ],
+      "faces": {
+        "south": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            7.4,
+            0.9,
+            8.6
+          ]
+        },
+        "east": {
+          "texture": "#ivy"
+        },
+        "west": {
+          "texture": "#ivy"
+        },
+        "up": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            0,
+            0.9,
+            0.3
+          ]
+        },
+        "down": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            15.7,
+            0.9,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -1.1,
+        12.6,
+        0.0
+      ],
+      "to": [
+        -0.2,
+        13.8,
+        1.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ivy",
+          "uv": [
+            15.1,
+            2.2,
+            16.0,
+            3.4
+          ]
+        },
+        "south": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            2.2,
+            0.9,
+            3.4
+          ]
+        },
+        "east": {
+          "texture": "#ivy"
+        },
+        "west": {
+          "texture": "#ivy"
+        },
+        "up": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            0.0,
+            0.9,
+            1.2
+          ]
+        },
+        "down": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            14.8,
+            0.9,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

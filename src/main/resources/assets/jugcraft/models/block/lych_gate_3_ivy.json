@@ -1,0 +1,121 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gy_ivy",
+    "ivy": "jugcraft:block/gy_ivy"
+  },
+  "elements": [
+    {
+      "from": [
+        14.6,
+        0,
+        2.0
+      ],
+      "to": [
+        17.6,
+        2.4,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            13.6,
+            3.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#ivy",
+          "uv": [
+            13.0,
+            13.6,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#ivy"
+        },
+        "west": {
+          "texture": "#ivy"
+        },
+        "up": {
+          "texture": "#ivy",
+          "uv": [
+            13.0,
+            2.0,
+            16.0,
+            12.0
+          ]
+        },
+        "down": {
+          "texture": "#ivy",
+          "uv": [
+            13.0,
+            4.0,
+            16.0,
+            14.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        15.4,
+        2.4,
+        2.8
+      ],
+      "to": [
+        16.8,
+        3.2,
+        11.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            12.8,
+            1.4,
+            13.6
+          ]
+        },
+        "south": {
+          "texture": "#ivy",
+          "uv": [
+            14.6,
+            12.8,
+            16.0,
+            13.6
+          ]
+        },
+        "east": {
+          "texture": "#ivy"
+        },
+        "west": {
+          "texture": "#ivy"
+        },
+        "up": {
+          "texture": "#ivy",
+          "uv": [
+            14.6,
+            2.8,
+            16.0,
+            11.2
+          ]
+        },
+        "down": {
+          "texture": "#ivy",
+          "uv": [
+            14.6,
+            4.8,
+            16.0,
+            13.2
+          ]
+        }
+      }
+    }
+  ]
+}

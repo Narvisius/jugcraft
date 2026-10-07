@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:candy_corn",
+          "weight": 40,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 2
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:caramel",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:glow_gum",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ghost_taffy",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:fizz_rocks",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:witchs_licorice",
+          "weight": 10
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:entities/costumed_mob_candy"
+}

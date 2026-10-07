@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PNP",
+    "PGP",
+    "PGP"
+  ],
+  "key": {
+    "P": "minecraft:dark_oak_planks",
+    "N": "minecraft:gold_nugget",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "jugcraft:curiosity_cabinet",
+    "count": 1
+  }
+}

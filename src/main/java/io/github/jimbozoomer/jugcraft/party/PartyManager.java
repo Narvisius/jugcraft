@@ -84,9 +84,9 @@ public final class PartyManager {
 		}
 	}
 
-	private final int maxSize;
-	private final long inviteTtlMillis;
-	private final int invitesPerMinute;
+	private int maxSize;
+	private long inviteTtlMillis;
+	private int invitesPerMinute;
 	private boolean enabled = true;
 	private boolean dirty;
 
@@ -105,18 +105,37 @@ public final class PartyManager {
 	}
 
 	public PartyManager(int maxSize, long inviteTtlMillis, int invitesPerMinute) {
+		setLimits(maxSize, inviteTtlMillis, invitesPerMinute);
+	}
+
+	// ---------------------------------------------------------------- settings
+
+	/**
+	 * Sets the limits (from the server config). Parties already bigger than a new, smaller size keep their
+	 * members; they just can't take anyone new until they are under it.
+	 */
+	public void setLimits(int maxSize, long inviteTtlMillis, int invitesPerMinute) {
 		if (maxSize < 2) {
 			throw new IllegalArgumentException("A party needs room for at least 2 players");
+		}
+		if (inviteTtlMillis <= 0 || invitesPerMinute < 1) {
+			throw new IllegalArgumentException("Invites need a positive lifetime and at least 1 a minute");
 		}
 		this.maxSize = maxSize;
 		this.inviteTtlMillis = inviteTtlMillis;
 		this.invitesPerMinute = invitesPerMinute;
 	}
 
-	// ---------------------------------------------------------------- settings
-
 	public int maxSize() {
 		return maxSize;
+	}
+
+	public long inviteTtlMillis() {
+		return inviteTtlMillis;
+	}
+
+	public int invitesPerMinute() {
+		return invitesPerMinute;
 	}
 
 	/** When disabled, every player counts as a party of one and actions return DISABLED. Data is kept. */
@@ -218,6 +237,11 @@ public final class PartyManager {
 			return true;
 		}
 		return systemMode == UseMode.PARTY && jobMode == UseMode.PARTY && sameParty(systemOwner, jobOwner);
+	}
+
+	/** The party with this id, if it still exists. */
+	public Optional<Party> party(UUID id) {
+		return Optional.ofNullable(parties.get(id));
 	}
 
 	public Collection<Party> parties() {
@@ -413,13 +437,56 @@ public final class PartyManager {
 		if (!party.leader.equals(leader)) {
 			return Result.NOT_LEADER;
 		}
-		Set<UUID> affected = new HashSet<>(party.members);
-		for (UUID member : affected) {
-			partyByMember.remove(member);
+		dissolve(party);
+		return Result.OK;
+	}
+
+	// ---------------------------------------------------------------- operator actions (/party admin)
+
+	/**
+	 * Any party member by last known name, ignoring case. Operators only: this walks the members of every
+	 * party, which is fine for a command but not for anything that runs often.
+	 */
+	public Optional<UUID> findAnyMemberByName(String name) {
+		for (UUID member : partyByMember.keySet()) {
+			String known = names.get(member);
+			if (known != null && known.equalsIgnoreCase(name)) {
+				return Optional.of(member);
+			}
 		}
-		parties.remove(party.id);
-		dropInvitesFor(party.id);
+		return Optional.empty();
+	}
+
+	/** Removes a player from their party, whoever they are. Works while parties are disabled, to clean up. */
+	public Result adminRemove(UUID player) {
+		Party party = partyByMember.get(player);
+		if (party == null) {
+			return Result.NOT_IN_PARTY;
+		}
+		Set<UUID> affected = new HashSet<>(party.members);
+		removeMember(party, player);
 		changed(affected);
+		return Result.OK;
+	}
+
+	/** Makes a member the leader of their party. */
+	public Result adminSetLeader(UUID player) {
+		Party party = partyByMember.get(player);
+		if (party == null) {
+			return Result.NOT_IN_PARTY;
+		}
+		party.leader = player;
+		changed(new HashSet<>(party.members));
+		return Result.OK;
+	}
+
+	/** Ends the party the player is in. */
+	public Result adminDisband(UUID member) {
+		Party party = partyByMember.get(member);
+		if (party == null) {
+			return Result.NOT_IN_PARTY;
+		}
+		dissolve(party);
 		return Result.OK;
 	}
 
@@ -497,6 +564,16 @@ public final class PartyManager {
 		} else if (party.leader.equals(player)) {
 			party.leader = party.members.iterator().next();
 		}
+	}
+
+	private void dissolve(Party party) {
+		Set<UUID> affected = new HashSet<>(party.members);
+		for (UUID member : affected) {
+			partyByMember.remove(member);
+		}
+		parties.remove(party.id);
+		dropInvitesFor(party.id);
+		changed(affected);
 	}
 
 	private void dropInvitesFor(UUID partyId) {

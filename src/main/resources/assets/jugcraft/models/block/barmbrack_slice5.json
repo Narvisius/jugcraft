@@ -1,0 +1,76 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/barmbrack_crust",
+    "crust": "jugcraft:block/barmbrack_crust",
+    "top": "jugcraft:block/barmbrack_top",
+    "inside": "jugcraft:block/barmbrack_inside",
+    "end": "jugcraft:block/barmbrack_end"
+  },
+  "elements": [
+    {
+      "from": [
+        12.667,
+        0,
+        4
+      ],
+      "to": [
+        15,
+        6,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crust"
+        },
+        "south": {
+          "texture": "#crust"
+        },
+        "east": {
+          "texture": "#end"
+        },
+        "west": {
+          "texture": "#inside"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "from": [
+        12.667,
+        6,
+        4.5
+      ],
+      "to": [
+        14.5,
+        7,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#top"
+        },
+        "south": {
+          "texture": "#top"
+        },
+        "east": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#inside"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#top"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:horseman_lantern"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.headless_horseman.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.headless_horseman.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

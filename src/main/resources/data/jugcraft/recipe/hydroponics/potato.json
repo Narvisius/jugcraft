@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "minecraft:potato",
+  "result": {
+    "id": "minecraft:potato",
+    "count": 3
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:potato",
+        "count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

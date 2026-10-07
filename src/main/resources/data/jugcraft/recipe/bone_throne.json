@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SBS",
+    "BWB",
+    "BOB"
+  ],
+  "key": {
+    "S": "minecraft:skeleton_skull",
+    "B": "minecraft:bone",
+    "W": "minecraft:red_wool",
+    "O": "minecraft:bone_block"
+  },
+  "result": {
+    "id": "jugcraft:bone_throne",
+    "count": 1
+  }
+}

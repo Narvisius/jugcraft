@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:gothic_headstone"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.groundskeeper.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.groundskeeper.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

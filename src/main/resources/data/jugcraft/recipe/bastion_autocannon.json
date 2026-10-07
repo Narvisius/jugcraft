@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PDP",
+    "GFG",
+    "CCC"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "D": "minecraft:dispenser",
+    "G": "#c:gears/steel",
+    "F": "jugcraft:flak_gun",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:bastion_autocannon",
+    "count": 1
+  }
+}

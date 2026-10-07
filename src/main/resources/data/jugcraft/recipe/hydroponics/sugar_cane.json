@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "minecraft:sugar_cane",
+  "result": {
+    "id": "minecraft:sugar_cane",
+    "count": 3
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:sugar_cane",
+        "count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

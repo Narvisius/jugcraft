@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:mandrake_root"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.mind_your_ears.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.mind_your_ears.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

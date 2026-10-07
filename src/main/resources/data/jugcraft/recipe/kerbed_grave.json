@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GCG",
+    "G G"
+  ],
+  "key": {
+    "G": "minecraft:polished_granite",
+    "C": "minecraft:calcite"
+  },
+  "result": {
+    "id": "jugcraft:kerbed_grave",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "III",
+    "PGP"
+  ],
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "P": "minecraft:purple_stained_glass",
+    "G": "minecraft:glowstone_dust"
+  },
+  "result": {
+    "id": "jugcraft:black_light",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "PCP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "W": "minecraft:red_wool",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "jugcraft:coffin",
+    "count": 1
+  }
+}

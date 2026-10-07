@@ -60,6 +60,20 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 		return pos;
 	}
 
+	/** The blocks this machine fills; one for one-block machines (and for compact copies of enlarged ones). */
+	public Footprint footprint(BlockState state) {
+		return kind.footprint();
+	}
+
+	/** Height of the machine in blocks (the tallest part plus one). */
+	public int height(BlockState state) {
+		int top = 0;
+		for (net.minecraft.core.Vec3i offset : footprint(state).offsets()) {
+			top = Math.max(top, offset.getY());
+		}
+		return top + 1;
+	}
+
 	/** Which block of a multi-block machine this is; 0 (the master) for one-block machines. */
 	public int part(BlockState state) {
 		return 0;
@@ -87,7 +101,7 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 			return;
 		}
 		double x = pos.getX() + 0.5;
-		double y = pos.getY() + kind.height();
+		double y = pos.getY() + height(state);
 		double z = pos.getZ() + 0.5;
 		if (random.nextInt(3) == 0) {
 			level.addParticle(ParticleTypes.SMOKE, x + (random.nextDouble() - 0.5) * 0.3, y + 0.1,

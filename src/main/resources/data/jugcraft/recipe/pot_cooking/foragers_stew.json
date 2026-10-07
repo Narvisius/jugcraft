@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:chanterelle"
+    },
+    {
+      "ingredient": "jugcraft:porcini"
+    },
+    {
+      "ingredient": "jugcraft:puffball"
+    },
+    {
+      "ingredient": "minecraft:potato"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:foragers_stew"
+  },
+  "time": 200
+}

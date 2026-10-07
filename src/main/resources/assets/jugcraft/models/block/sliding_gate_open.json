@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "dp_hazard": "jugcraft:block/dp_hazard",
+    "particle": "jugcraft:block/dp_gunmetal"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        6.0
+      ],
+      "to": [
+        2.5,
+        16.0,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_gunmetal"
+        },
+        "south": {
+          "texture": "#dp_gunmetal"
+        },
+        "east": {
+          "texture": "#dp_gunmetal"
+        },
+        "west": {
+          "texture": "#dp_gunmetal"
+        },
+        "up": {
+          "texture": "#dp_hazard"
+        },
+        "down": {
+          "texture": "#dp_gunmetal"
+        }
+      }
+    }
+  ]
+}

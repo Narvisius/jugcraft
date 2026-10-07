@@ -1,0 +1,205 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/witchs_broom_handle",
+    "bristle": "jugcraft:block/witchs_broom_bristle",
+    "handle": "jugcraft:block/witchs_broom_handle",
+    "twine": "jugcraft:block/witchs_broom_twine"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        4
+      ],
+      "to": [
+        11,
+        5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bristle"
+        },
+        "south": {
+          "texture": "#bristle"
+        },
+        "east": {
+          "texture": "#bristle"
+        },
+        "west": {
+          "texture": "#bristle"
+        },
+        "up": {
+          "texture": "#bristle"
+        },
+        "down": {
+          "texture": "#bristle"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        5,
+        5
+      ],
+      "to": [
+        10,
+        6.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#twine"
+        },
+        "south": {
+          "texture": "#twine"
+        },
+        "east": {
+          "texture": "#twine"
+        },
+        "west": {
+          "texture": "#twine"
+        },
+        "up": {
+          "texture": "#twine"
+        },
+        "down": {
+          "texture": "#twine"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        6.5,
+        6
+      ],
+      "to": [
+        8.5,
+        17,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#handle",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            10.5
+          ]
+        },
+        "south": {
+          "texture": "#handle",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            10.5
+          ]
+        },
+        "east": {
+          "texture": "#handle",
+          "uv": [
+            9,
+            0,
+            10,
+            10.5
+          ]
+        },
+        "west": {
+          "texture": "#handle",
+          "uv": [
+            6,
+            0,
+            7,
+            10.5
+          ]
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "down": {
+          "texture": "#handle"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          6.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        7.5,
+        17,
+        6
+      ],
+      "to": [
+        8.5,
+        24,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#handle",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            7
+          ]
+        },
+        "south": {
+          "texture": "#handle",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            7
+          ]
+        },
+        "east": {
+          "texture": "#handle",
+          "uv": [
+            9,
+            0,
+            10,
+            7
+          ]
+        },
+        "west": {
+          "texture": "#handle",
+          "uv": [
+            6,
+            0,
+            7,
+            7
+          ]
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "down": {
+          "texture": "#handle"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          5,
+          6.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BFB",
+    " D "
+  ],
+  "key": {
+    "B": "minecraft:bone",
+    "F": "minecraft:rotten_flesh",
+    "D": "minecraft:dirt"
+  },
+  "result": {
+    "id": "jugcraft:grasping_hands",
+    "count": 1
+  }
+}

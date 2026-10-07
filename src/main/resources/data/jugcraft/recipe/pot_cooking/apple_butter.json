@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:mason_jar"
+    },
+    {
+      "ingredient": "minecraft:apple",
+      "count": 3
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    },
+    {
+      "ingredient": "jugcraft:sweet_cider"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:apple_butter"
+  },
+  "time": 300
+}

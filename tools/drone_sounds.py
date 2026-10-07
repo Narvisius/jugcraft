@@ -11,6 +11,13 @@ import numpy as np
 
 RATE = 44100
 LANG = {"subtitles.jugcraft.drone.hum": "Drone buzzes"}
+# Their entries in assets/jugcraft/sounds.json (written with every other sound by tools/generate_material_data.py).
+SOUNDS = {
+    "drone.hum": {"subtitle": "subtitles.jugcraft.drone.hum",
+                  "sounds": [{"name": "jugcraft:drone/drone_hum", "attenuation_distance": 32}]},
+    "drone.hum_heavy": {"subtitle": "subtitles.jugcraft.drone.hum",
+                        "sounds": [{"name": "jugcraft:drone/drone_hum_heavy", "attenuation_distance": 48}]},
+}
 SECONDS = 2.0
 N = int(RATE * SECONDS)
 OUT = os.path.join(os.path.dirname(__file__), "..", "src/main/resources/assets/jugcraft/sounds/drone")

@@ -25,6 +25,9 @@ GLOW = {
     "el_screen": "el_screen_on",
     "el_screen_cyan": "el_screen_cyan_on",
     "el_glass": "el_glass_on",
+    "dr_amber": "dr_amber_on",
+    "dr_fire_door": "dr_fire_door_on",
+    "dr_crt": "dr_crt_on",
 }
 # Full-cube parts keep cube models; only their texture changes.
 CUBES = {"machine_casing": "sp_machine_casing", "arc_furnace_casing": "sp_arc_casing"}
@@ -34,6 +37,8 @@ IRON, IRON_PLATE, BRASS, BRASS_PLATE, COPPER = "sp_iron", "sp_iron_plate", "sp_b
 AXES = {"x": 0, "y": 1, "z": 2}
 CAP_FACES = {"x": ("east", "west"), "y": ("up", "down"), "z": ("north", "south")}
 FACE_DIR = {"north": (2, -1), "south": (2, 1), "west": (0, -1), "east": (0, 1), "down": (1, -1), "up": (1, 1)}
+# How much shorter (at each end, pixels) the 45-degree copies in gear() and wheel() are than the straight parts.
+TURNED_COPY_CUT = 0.1
 
 
 def q(value):
@@ -86,16 +91,18 @@ def cyl(axis, cu, cv, r, a0, a1, side, cap=None):
 
 
 def gear(axis, cu, cv, r, a0, a1, texture=BRASS, hub=IRON):
-    """Eight-toothed gear: a disk, four straight teeth bars and the same bars turned 45 degrees."""
+    """Eight-toothed gear: a disk, four straight teeth bars and the same bars turned 45 degrees. The turned copies are
+    a little shorter along the axle, so their caps never share a plane with the straight bars' (that flickers)."""
     out = cyl(axis, cu, cv, r * 0.72, a0, a1, texture)
     inset = min(0.15, (a1 - a0) / 4)
     tooth = max(0.6, r * 0.2)
     origin = point(axis, (a0 + a1) / 2, cu, cv)
-    bars = [span(axis, a0 + inset, a1 - inset, q(cu - r), q(cu + r), q(cv - tooth), q(cv + tooth)),
-            span(axis, a0 + inset, a1 - inset, q(cu - tooth), q(cu + tooth), q(cv - r), q(cv + r))]
-    for frm, to in bars:
-        out.append(box(frm, to, texture))
-        out.append(box(frm, to, texture, rotation=(axis, 45, origin)))
+    cut = min(TURNED_COPY_CUT, (a1 - a0 - 2 * inset) / 4)
+    for lo_u, hi_u, lo_v, hi_v in ((q(cu - r), q(cu + r), q(cv - tooth), q(cv + tooth)),
+                                   (q(cu - tooth), q(cu + tooth), q(cv - r), q(cv + r))):
+        out.append(box(*span(axis, a0 + inset, a1 - inset, lo_u, hi_u, lo_v, hi_v), texture))
+        out.append(box(*span(axis, a0 + inset + cut, a1 - inset - cut, lo_u, hi_u, lo_v, hi_v), texture,
+                       rotation=(axis, 45, origin)))
     out += cyl(axis, cu, cv, max(0.75, r * 0.22), a0 - 0.3, a1 + 0.3, hub)
     return out
 
@@ -109,8 +116,13 @@ def wheel(axis, cu, cv, r, a0, a1, texture="sp_red_iron", hub=BRASS, rim=0.75, s
              span(axis, a0, a1, q(cu - r), q(cu - r + rim), q(cv - half_side), q(cv + half_side)),
              span(axis, a0, a1, q(cu - half_side), q(cu + half_side), q(cv + r - rim), q(cv + r)),
              span(axis, a0, a1, q(cu - half_side), q(cu + half_side), q(cv - r), q(cv - r + rim))]
+    cut = min(TURNED_COPY_CUT, (a1 - a0) / 4)
     for frm, to in sides:
         out.append(box(frm, to, texture))
+        # The turned copy is a little shorter along the axle, so its caps never share a plane with the straight side's.
+        frm, to = list(frm), list(to)
+        frm[AXES[axis]] += cut
+        to[AXES[axis]] -= cut
         out.append(box(frm, to, texture, rotation=(axis, 45, origin)))
     spoke = 0.35
     inset = min(0.1, (a1 - a0) / 4)
@@ -1025,3 +1037,11 @@ MODELS.update(_HIGHTECH)
 # Tanks in the owner's reference look (batch 10): tools/tank_models.py.
 from tank_models import MODELS as _TANKS  # noqa: E402
 MODELS.update(_TANKS)
+# Batch 44: sixteen one-block machines are big dieselpunk multi-blocks now (tools/giant_models.py). Their one-block
+# models stay as the look of compact copies built before then.
+from large_machines import ENLARGED as _ENLARGED  # noqa: E402
+COMPACT = {machine: MODELS[machine] for machine in _ENLARGED}
+from giant_models import MODELS as _GIANTS  # noqa: E402
+MODELS.update(_GIANTS)
+# What the giants' item icons add for the parts a renderer draws (the sawmill's blade): model_writer.
+from giant_models import ITEM_EXTRAS  # noqa: E402,F401

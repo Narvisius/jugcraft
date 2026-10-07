@@ -72,3 +72,4 @@ Not applicable.
 - Shafts placed before #37 have no block entity, so they do not spin until re-placed.
 - A spinning part is drawn up to 96 blocks away; further off, turning blocks show without it.
 - Speed/torque (RPM) is deliberately left out; KE per tick keeps it simple.
+- **Fixed 5 October 2026 (shared render fixes):** spinning rotors never share a plane with the still block and their own collars are separated, so they no longer flicker; where a shaft meets the still part (the hand crank's hub plate, the solar tracker's mount bar, the heliostat's mirror) it is set into it rather than held off it, so no see-through slit opens either. Record: [see-through-and-flicker-fixes.md](see-through-and-flicker-fixes.md).

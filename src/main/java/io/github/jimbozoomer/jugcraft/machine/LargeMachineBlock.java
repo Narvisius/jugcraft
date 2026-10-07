@@ -69,13 +69,19 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 		return super.getShape(state, level, pos, context);
 	}
 
-	public Footprint footprint() {
+	@Override
+	public Footprint footprint(BlockState state) {
 		return kind().footprint();
+	}
+
+	/** The state a newly placed machine gets, built to its full footprint (see {@link EnlargedMachineBlock}). */
+	public BlockState formed(BlockState state) {
+		return state;
 	}
 
 	@Override
 	public BlockPos masterPos(BlockPos pos, BlockState state) {
-		return footprint().masterPos(pos, state.getValue(FACING), state.getValue(PART));
+		return footprint(state).masterPos(pos, state.getValue(FACING), state.getValue(PART));
 	}
 
 	@Override
@@ -101,12 +107,12 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-		BlockState state = super.getStateForPlacement(context);
+		BlockState state = formed(super.getStateForPlacement(context));
 		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		Direction facing = state.getValue(FACING);
-		for (int part = 1; part < footprint().size(); part++) {
-			BlockPos partPos = footprint().partPos(pos, facing, part);
+		for (int part = 1; part < footprint(state).size(); part++) {
+			BlockPos partPos = footprint(state).partPos(pos, facing, part);
 			if (level.isOutsideBuildHeight(partPos) || !level.getWorldBorder().isWithinBounds(partPos)
 					|| !level.getBlockState(partPos).canBeReplaced(BlockPlaceContext.at(context, partPos, Direction.UP))) {
 				return null;
@@ -122,8 +128,8 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 			return;
 		}
 		Direction facing = state.getValue(FACING);
-		for (int part = 1; part < footprint().size(); part++) {
-			level.setBlock(footprint().partPos(pos, facing, part), state.setValue(PART, part), Block.UPDATE_ALL);
+		for (int part = 1; part < footprint(state).size(); part++) {
+			level.setBlock(footprint(state).partPos(pos, facing, part), state.setValue(PART, part), Block.UPDATE_ALL);
 		}
 	}
 
@@ -141,8 +147,8 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 			level.destroyBlock(master, true);
 			return;
 		}
-		for (int part = 0; part < footprint().size(); part++) {
-			BlockPos partPos = footprint().partPos(master, facing, part);
+		for (int part = 0; part < footprint(state).size(); part++) {
+			BlockPos partPos = footprint(state).partPos(master, facing, part);
 			BlockState other = level.getBlockState(partPos);
 			if (!partPos.equals(pos) && other.is(this) && other.getValue(FACING) == facing && other.getValue(PART) == part) {
 				level.removeBlock(partPos, false);

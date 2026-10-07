@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NNN",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "jugcraft:tattered_curtains",
+    "count": 3
+  }
+}

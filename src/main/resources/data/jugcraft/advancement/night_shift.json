@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:bat_house"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.night_shift.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.night_shift.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SWB",
+    "SBW",
+    "S  "
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "W": "minecraft:white_wool",
+    "B": "minecraft:black_wool"
+  },
+  "result": {
+    "id": "jugcraft:regatta_flag",
+    "count": 1
+  }
+}

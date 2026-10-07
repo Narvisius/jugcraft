@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "TCT",
+    "N N",
+    "T T"
+  ],
+  "key": {
+    "T": "#c:plates/titanium",
+    "C": "jugcraft:advanced_circuit",
+    "N": "jugcraft:neodymium_magnet"
+  },
+  "result": {
+    "id": "jugcraft:exosuit_leggings",
+    "count": 1
+  }
+}

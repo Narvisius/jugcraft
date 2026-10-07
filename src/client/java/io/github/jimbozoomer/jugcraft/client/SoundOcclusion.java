@@ -1,9 +1,9 @@
 package io.github.jimbozoomer.jugcraft.client;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
-import io.github.jimbozoomer.jugcraft.client.mixin.ChannelAccessor;
-import io.github.jimbozoomer.jugcraft.client.mixin.SoundEngineAccessor;
-import io.github.jimbozoomer.jugcraft.client.mixin.SoundManagerAccessor;
+import io.github.jimbozoomer.jugcraft.mixin.client.ChannelAccessor;
+import io.github.jimbozoomer.jugcraft.mixin.client.SoundEngineAccessor;
+import io.github.jimbozoomer.jugcraft.mixin.client.SoundManagerAccessor;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentFrameBlock;
 import java.util.List;
 import java.util.Map;

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "FBF",
+    " S ",
+    "SSS"
+  ],
+  "key": {
+    "F": "minecraft:feather",
+    "B": "minecraft:black_dye",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:raven_perch",
+    "count": 1
+  }
+}

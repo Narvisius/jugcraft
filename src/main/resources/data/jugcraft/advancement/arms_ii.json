@@ -1,0 +1,51 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_dagger"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms_ii.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms_ii.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_dagger",
+              "jugcraft:bronze_sabre",
+              "jugcraft:bronze_estoc",
+              "jugcraft:bronze_battle_axe",
+              "jugcraft:bronze_flail",
+              "jugcraft:bronze_scythe",
+              "jugcraft:bronze_quarterstaff",
+              "jugcraft:bronze_pike",
+              "jugcraft:steel_dagger",
+              "jugcraft:steel_sabre",
+              "jugcraft:steel_estoc",
+              "jugcraft:steel_battle_axe",
+              "jugcraft:steel_flail",
+              "jugcraft:steel_scythe",
+              "jugcraft:steel_quarterstaff",
+              "jugcraft:steel_pike"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "CRC",
+    "CCC"
+  ],
+  "key": {
+    "C": "jugcraft:concrete",
+    "R": "jugcraft:rebar"
+  },
+  "result": {
+    "id": "jugcraft:blastproof_concrete",
+    "count": 8
+  }
+}

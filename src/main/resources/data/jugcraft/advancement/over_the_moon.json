@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:flying_broomstick"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.over_the_moon.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.over_the_moon.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "minecraft:beef"
+    },
+    {
+      "ingredient": "minecraft:potato"
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:trench_stew"
+  },
+  "time": 300
+}

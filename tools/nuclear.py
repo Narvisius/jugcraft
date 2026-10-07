@@ -1911,10 +1911,13 @@ def write_tags(tags, rid):
     storage_tank.write_tags(tags, rid)
     tags.add("block", f"{MOD}:{SHIELDING_TAG}", rid("shielding_concrete"))
     tags.add("block", f"{MOD}:{SHIELDING_TAG}", "#c:storage_blocks/lead")
-    tags.add("item", "minecraft:head_armor", rid("hazmat_hood"))
-    tags.add("item", "minecraft:chest_armor", rid("hazmat_coverall"))
-    tags.add("item", "minecraft:leg_armor", rid("hazmat_trousers"))
-    tags.add("item", "minecraft:foot_armor", rid("hazmat_boots"))
+    # (The hazmat suit's armor tags are written with the rest of the armor's, in tools/gear.py: HAZMAT_TAGS.)
+
+
+# The hazmat suit is armor of its slots (enchants, equips): tools/gear.py adds these to its armor tags, because the
+# shared tag writer replaces a whole file.
+HAZMAT_TAGS = {"head_armor": "hazmat_hood", "chest_armor": "hazmat_coverall", "leg_armor": "hazmat_trousers",
+               "foot_armor": "hazmat_boots"}
 
 
 # ---------------------------------------------------------------- sound

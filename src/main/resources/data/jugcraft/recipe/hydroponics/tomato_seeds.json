@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "jugcraft:tomato_seeds",
+  "result": {
+    "id": "jugcraft:tomato",
+    "count": 2
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:tomato_seeds",
+        "count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "result": {
+        "id": "jugcraft:tomato_seeds",
+        "count": 1
+      },
+      "chance": 0.5
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "type": "minecraft:block",
+  "modifier": {
+    "type": "minecraft:explosion_decay"
+  },
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:corn_kernels"
+        }
+      ],
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:corn_crop",
+        "state": {
+          "section": "0"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:corn",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 3
+              }
+            },
+            {
+              "type": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "parameters": {
+                "bonusMultiplier": 1
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:corn_crop",
+        "state": {
+          "section": "0",
+          "age": "7"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:corn_stalks",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:any_of",
+        "terms": [
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:corn_crop",
+            "state": {
+              "section": "0",
+              "age": "5"
+            }
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:corn_crop",
+            "state": {
+              "section": "0",
+              "age": "6"
+            }
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:corn_crop",
+            "state": {
+              "section": "0",
+              "age": "7"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/corn_crop"
+}

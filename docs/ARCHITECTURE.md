@@ -28,6 +28,8 @@ Use stable `jugcraft:` identifiers. Persist schema versions for custom data. Fea
 
 ## External integrations
 
+The selected, owner-approved foundation is described in [FRAMEWORKS.md](FRAMEWORKS.md). Its single dependency lock controls development classpaths and [Modrinth pack installation](DISTRIBUTION.md). Reuse those APIs where they fit. Existing content remains the owner's design; availability of a framework is not permission to silently replace progression, animation ownership, or saved-state formats.
+
 An external mod proposal supplies the official source/project link, exact version and loader compatibility, license/distribution information, dependencies, overlap, upstream maintenance considerations, and actual two-client test plan. Acceptance does not authorize copying or rehosting that mod.
 
 Optional adapters must not load absent APIs. Test with the dependency present and absent. Required dependencies need maintainer approval and versioned installation manifests. Publish Jugcraft's original code as its own JAR; distribute approved external dependencies via an appropriate pack manifest and authorized download sources.

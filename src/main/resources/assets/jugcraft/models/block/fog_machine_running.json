@@ -1,0 +1,234 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/fog_machine_body",
+    "body": "jugcraft:block/fog_machine_body",
+    "steel": "jugcraft:block/fog_machine_steel",
+    "tank": "jugcraft:block/fog_machine_tank",
+    "grille": "jugcraft:block/fog_machine_grille",
+    "gauge": "jugcraft:block/fog_machine_gauge",
+    "lamp": "jugcraft:block/fog_machine_lamp_lit"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        14,
+        10,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#body"
+        },
+        "south": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "west": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        10,
+        4
+      ],
+      "to": [
+        12,
+        15,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tank"
+        },
+        "south": {
+          "texture": "#tank"
+        },
+        "east": {
+          "texture": "#tank"
+        },
+        "west": {
+          "texture": "#tank"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        15,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        3,
+        0
+      ],
+      "to": [
+        10,
+        7,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#grille"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        5,
+        2.8
+      ],
+      "to": [
+        13,
+        8,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gauge",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        9.9,
+        10
+      ],
+      "to": [
+        5,
+        13,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lamp",
+          "uv": [
+            11.0,
+            3.0,
+            13.0,
+            6.0
+          ]
+        },
+        "south": {
+          "texture": "#lamp",
+          "uv": [
+            3.0,
+            3.0,
+            5.0,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#lamp",
+          "uv": [
+            4.0,
+            3.0,
+            6.0,
+            6.0
+          ]
+        },
+        "west": {
+          "texture": "#lamp",
+          "uv": [
+            10.0,
+            3.0,
+            12.0,
+            6.0
+          ]
+        },
+        "up": {
+          "texture": "#lamp",
+          "uv": [
+            3.0,
+            10.0,
+            5.0,
+            12.0
+          ]
+        },
+        "down": {
+          "texture": "#lamp",
+          "uv": [
+            3.0,
+            4.0,
+            5.0,
+            6.0
+          ]
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

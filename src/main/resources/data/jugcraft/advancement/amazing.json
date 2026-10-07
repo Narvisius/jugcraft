@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:corn_maze_gate"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.amazing.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.amazing.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

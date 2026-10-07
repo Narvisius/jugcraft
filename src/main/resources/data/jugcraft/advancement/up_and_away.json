@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:flying_broomstick"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.up_and_away.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.up_and_away.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " X ",
+    "PPP",
+    "BBB"
+  ],
+  "key": {
+    "X": "jugcraft:microchip",
+    "P": "#c:plates/steel",
+    "B": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:rocket_pad",
+    "count": 1
+  }
+}

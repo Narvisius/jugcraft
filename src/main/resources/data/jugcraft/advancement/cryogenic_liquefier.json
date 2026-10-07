@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:cryogenic_liquefier"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.cryogenic_liquefier.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.cryogenic_liquefier.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:cryogenic_liquefier"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:rocket_workshop"
+}

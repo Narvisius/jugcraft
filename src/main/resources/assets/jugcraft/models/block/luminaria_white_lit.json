@@ -1,0 +1,173 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/luminaria_white_lit",
+    "paper": "jugcraft:block/luminaria_white_lit",
+    "inside": "jugcraft:block/luminaria_inside_lit",
+    "sand": "jugcraft:block/luminaria_sand",
+    "candle": "jugcraft:block/luminaria_candle",
+    "flame": "jugcraft:block/luminaria_flame"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paper"
+        },
+        "south": {
+          "texture": "#inside"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        4,
+        0,
+        12
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "south": {
+          "texture": "#paper"
+        },
+        "north": {
+          "texture": "#inside"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        4,
+        10,
+        12
+      ],
+      "faces": {
+        "west": {
+          "texture": "#paper"
+        },
+        "east": {
+          "texture": "#inside"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        12,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "east": {
+          "texture": "#paper"
+        },
+        "west": {
+          "texture": "#inside"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1.5,
+        12
+      ],
+      "faces": {
+        "up": {
+          "texture": "#sand"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1.5,
+        7
+      ],
+      "to": [
+        9,
+        6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#candle"
+        },
+        "south": {
+          "texture": "#candle"
+        },
+        "east": {
+          "texture": "#candle"
+        },
+        "west": {
+          "texture": "#candle"
+        },
+        "up": {
+          "texture": "#candle"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        6,
+        7.5
+      ],
+      "to": [
+        8.5,
+        7.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#flame"
+        },
+        "south": {
+          "texture": "#flame"
+        },
+        "east": {
+          "texture": "#flame"
+        },
+        "west": {
+          "texture": "#flame"
+        },
+        "up": {
+          "texture": "#flame"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

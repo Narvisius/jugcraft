@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " I ",
+    "IAI",
+    " I "
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "A": "minecraft:armor_stand"
+  },
+  "result": {
+    "id": "jugcraft:suit_of_armor",
+    "count": 1
+  }
+}

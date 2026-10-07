@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "skull_firework",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:gunpowder",
+    "minecraft:gunpowder",
+    "minecraft:gunpowder",
+    "minecraft:bone",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "jugcraft:skull_firework",
+    "count": 3,
+    "components": {
+      "minecraft:fireworks": {
+        "flight_duration": 3
+      },
+      "jugcraft:twinkle": true
+    }
+  }
+}

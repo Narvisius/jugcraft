@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/pop_up_skeleton_crate",
+    "crate": "jugcraft:block/pop_up_skeleton_crate",
+    "lid": "jugcraft:block/pop_up_skeleton_lid",
+    "inside": "jugcraft:block/pop_up_skeleton_inside",
+    "spring": "jugcraft:block/pop_up_skeleton_spring",
+    "bone": "jugcraft:block/pop_up_skeleton_bone",
+    "ribs": "jugcraft:block/pop_up_skeleton_ribs",
+    "skull": "jugcraft:block/pop_up_skeleton_skull"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crate"
+        },
+        "south": {
+          "texture": "#crate"
+        },
+        "east": {
+          "texture": "#crate"
+        },
+        "west": {
+          "texture": "#crate"
+        },
+        "up": {
+          "texture": "#inside"
+        },
+        "down": {
+          "texture": "#crate"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        9,
+        1.5
+      ],
+      "to": [
+        14.5,
+        10,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lid"
+        },
+        "south": {
+          "texture": "#lid"
+        },
+        "east": {
+          "texture": "#lid"
+        },
+        "west": {
+          "texture": "#lid"
+        },
+        "up": {
+          "texture": "#lid"
+        },
+        "down": {
+          "texture": "#lid"
+        }
+      }
+    }
+  ]
+}

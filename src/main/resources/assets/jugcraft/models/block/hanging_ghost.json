@@ -1,0 +1,98 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/hanging_ghost",
+    "sheet": "jugcraft:block/hanging_ghost",
+    "face": "jugcraft:block/hanging_ghost_face",
+    "string": "jugcraft:block/hanging_ghost_string"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        13,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#string"
+        },
+        "south": {
+          "texture": "#string"
+        },
+        "east": {
+          "texture": "#string"
+        },
+        "west": {
+          "texture": "#string"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        8,
+        5
+      ],
+      "to": [
+        11,
+        13,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#face"
+        },
+        "south": {
+          "texture": "#sheet"
+        },
+        "east": {
+          "texture": "#sheet"
+        },
+        "west": {
+          "texture": "#sheet"
+        },
+        "up": {
+          "texture": "#sheet"
+        },
+        "down": {
+          "texture": "#sheet"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        1,
+        4
+      ],
+      "to": [
+        12,
+        8,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#face"
+        },
+        "south": {
+          "texture": "#sheet"
+        },
+        "east": {
+          "texture": "#sheet"
+        },
+        "west": {
+          "texture": "#sheet"
+        },
+        "down": {
+          "texture": "#sheet"
+        }
+      }
+    }
+  ]
+}

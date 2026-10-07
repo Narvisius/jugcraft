@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,powered=false": {
+      "model": "jugcraft:block/monster_head"
+    },
+    "facing=north,powered=true": {
+      "model": "jugcraft:block/monster_head_awake"
+    },
+    "facing=east,powered=false": {
+      "model": "jugcraft:block/monster_head",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "jugcraft:block/monster_head_awake",
+      "y": 90
+    },
+    "facing=south,powered=false": {
+      "model": "jugcraft:block/monster_head",
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "jugcraft:block/monster_head_awake",
+      "y": 180
+    },
+    "facing=west,powered=false": {
+      "model": "jugcraft:block/monster_head",
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "jugcraft:block/monster_head_awake",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "N",
+    "J",
+    "G"
+  ],
+  "key": {
+    "N": "minecraft:iron_ingot",
+    "J": "jugcraft:specimen_jar",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "id": "jugcraft:tall_specimen_jar",
+    "count": 1
+  }
+}

@@ -32,11 +32,10 @@ def px(img, x, y, c):
 
 def panel_block(seed, palette=WHITE, strip=True):
     """White composite panel with seams, rivets and an optional cyan light strip."""
-    rnd = random.Random(seed)
     img = new()
     for y in range(16):
         for x in range(16):
-            c = palette[2] if rnd.random() < 0.75 else palette[3]
+            c = palette[3] if x + y < 9 and (x + y) % 4 == 1 else palette[2]
             if x in (0, 15) or y in (0, 15):
                 c = palette[0]
             elif x == 7 or y == 7:
@@ -288,12 +287,11 @@ def formed_screen_frames(seed):
     """The formed 3x2 control screen, 48x32, as SCREEN_FRAMES animation frames: dark navy glass with a
     faint grid, a bezel with cyan corner brackets, and a scan line sweeping down. The live readout text
     is drawn over it by the client."""
-    rnd = random.Random(seed)
     w, h = 16 * SCREEN_W, 16 * SCREEN_H
     base = Image.new("RGBA", (w, h), (0, 0, 0, 255))
     for y in range(h):
         for x in range(w):
-            col = NAVY[0] if rnd.random() < 0.85 else NAVY[1]
+            col = NAVY[0]
             if x % 8 == 0 or y % 8 == 0:
                 col = (14, 28, 44)
             if x in (0, w - 1) or y in (0, h - 1):
@@ -321,7 +319,7 @@ def loose_screen(seed):
     img = new()
     for y in range(16):
         for x in range(16):
-            col = NAVY[0] if rnd.random() < 0.8 else NAVY[1]
+            col = NAVY[0]
             if x in (0, 15) or y in (0, 15):
                 col = STEEL[0]
             px(img, x, y, col)
@@ -333,10 +331,11 @@ def loose_screen(seed):
 
 
 def screen_side(seed):
+    """Plain steel side, lit along its top edge and shaded along its bottom."""
     img = new()
     for y in range(16):
         for x in range(16):
-            px(img, x, y, STEEL[1] if (x + y) % 6 else STEEL[0])
+            px(img, x, y, STEEL[2] if y == 0 else STEEL[0] if y == 15 else STEEL[1])
     return img
 
 
@@ -699,13 +698,12 @@ HOLO_TILES = 3
 def formed_holo(seed):
     """A formed 3x3 hologram table top, 48x48: dark glass with a cyan grid and ring, the projector lens
     in the middle tile, and a steel rim."""
-    rnd = random.Random(seed)
     size = 16 * HOLO_TILES
     img = Image.new("RGBA", (size, size), (0, 0, 0, 255))
     c = (size - 1) / 2
     for y in range(size):
         for x in range(size):
-            col = NAVY[0] if rnd.random() < 0.85 else NAVY[1]
+            col = NAVY[0]
             if x % 6 == 0 or y % 6 == 0:
                 col = (16, 34, 52)
             d = math.hypot(x - c, y - c)
@@ -720,11 +718,10 @@ def formed_holo(seed):
 
 
 def loose_holo(seed):
-    rnd = random.Random(seed)
     img = new()
     for y in range(16):
         for x in range(16):
-            col = NAVY[0] if rnd.random() < 0.85 else NAVY[1]
+            col = NAVY[0]
             if x in (0, 15) or y in (0, 15):
                 col = STEEL[1]
             px(img, x, y, col)
@@ -734,10 +731,11 @@ def loose_holo(seed):
 
 
 def holo_side(seed):
+    """Plain steel side with a dark slot and the table's glow line, lit along its top edge."""
     img = new()
     for y in range(16):
         for x in range(16):
-            col = STEEL[1] if (x + y) % 6 else STEEL[0]
+            col = STEEL[2] if y == 0 else STEEL[0] if y == 15 else STEEL[1]
             if y in (4, 5):
                 col = (40, 44, 50)
             if y == 5 and 3 <= x <= 12:

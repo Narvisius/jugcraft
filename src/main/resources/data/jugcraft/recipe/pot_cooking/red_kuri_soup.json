@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:red_kuri_pumpkin"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    },
+    {
+      "ingredient": "jugcraft:garlic"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:red_kuri_soup"
+  },
+  "time": 200
+}

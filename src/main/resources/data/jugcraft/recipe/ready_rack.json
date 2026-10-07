@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "S S",
+    "PPP",
+    "S S"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "P": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "jugcraft:ready_rack",
+    "count": 2
+  }
+}

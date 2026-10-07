@@ -1,0 +1,217 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/electric_furnace_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0.1231,
+        1.1077,
+        0.2462
+      ],
+      "to": [
+        15.8769,
+        2.0923,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            15.754,
+            0.985
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            15.754,
+            0.985
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            15.754,
+            0.985
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            15.754,
+            0.985
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            15.754,
+            15.754
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            15.754,
+            15.754
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.6154,
+        2.0923,
+        0.7385
+      ],
+      "to": [
+        15.3846,
+        14.8923,
+        15.5077
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            14.769,
+            12.8
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            14.769,
+            12.8
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            14.769,
+            12.8
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            14.769,
+            12.8
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            14.769,
+            14.769
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            14.769,
+            14.769
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        12.4308,
+        7.0154,
+        0.0
+      ],
+      "to": [
+        14.4,
+        8.9846,
+        0.2462
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.969,
+            1.969
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.969,
+            1.969
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.246,
+            1.969
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.246,
+            1.969
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.969,
+            0.246
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            1.969,
+            0.246
+          ]
+        }
+      }
+    }
+  ]
+}

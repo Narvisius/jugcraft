@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:kabocha_pumpkin"
+    },
+    {
+      "ingredient": "minecraft:wheat"
+    },
+    {
+      "ingredient": "minecraft:egg"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:kabocha_tempura",
+    "count": 2
+  },
+  "time": 200
+}

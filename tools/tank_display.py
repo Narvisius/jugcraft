@@ -8,6 +8,8 @@ import random
 
 from PIL import Image
 
+import block_style as bs
+
 from steampunk_models import BRASS, IRON, box
 
 MOD = "jugcraft"
@@ -56,14 +58,15 @@ def glass_side(seed):
 
 
 def fluid_ripple(seed):
-    """Near-white with soft lighter ripples: the glass tank's renderer tints it the fluid's colour."""
-    rng = random.Random(seed)
+    """Near-white in soft clumps with even, lighter diagonal ripples: the glass tank's renderer tints it the fluid's
+    colour."""
+    g = bs.grain(16, 16, seed, 3.0, 6.0, 0.5)
     img = Image.new("RGBA", (16, 16))
     for y in range(16):
         for x in range(16):
-            v = 222 + rng.randint(-8, 8)
-            if (x + 2 * y + rng.randint(0, 1)) % 7 == 0:
-                v = 250
+            v = 230 if g(x, y) > 0.66 else 214 if g(x, y) < 0.34 else 222
+            if (x + 2 * y) % 7 == 0:
+                v = 248
             img.putpixel((x, y), (v, v, v, 255))
     return img
 

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "jugcraft:acorn_squash_seeds",
+  "result": {
+    "id": "jugcraft:acorn_squash",
+    "count": 1
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:acorn_squash_seeds",
+        "count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

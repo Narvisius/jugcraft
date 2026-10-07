@@ -42,12 +42,12 @@
     {
       "from": [
         7,
-        0.02,
+        0,
         2
       ],
       "to": [
         9,
-        1.02,
+        1,
         14
       ],
       "faces": {
@@ -73,12 +73,12 @@
     },
     {
       "from": [
-        6.98,
+        7,
         1,
         7
       ],
       "to": [
-        9.02,
+        9,
         6,
         9
       ],
@@ -137,21 +137,33 @@
     },
     {
       "from": [
-        3.48,
+        3.4,
         7.5,
         3.5
       ],
       "to": [
-        12.52,
+        12.6,
         8.5,
         12.5
       ],
       "faces": {
         "north": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            3.5,
+            7.5,
+            12.5,
+            8.5
+          ]
         },
         "south": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            3.5,
+            7.5,
+            12.5,
+            8.5
+          ]
         },
         "east": {
           "texture": "#fabric"
@@ -160,10 +172,22 @@
           "texture": "#fabric"
         },
         "up": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            3.5,
+            3.5,
+            12.5,
+            12.5
+          ]
         },
         "down": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            3.5,
+            3.5,
+            12.5,
+            12.5
+          ]
         }
       }
     },
@@ -180,16 +204,40 @@
       ],
       "faces": {
         "north": {
-          "texture": "#mesh"
+          "texture": "#mesh",
+          "uv": [
+            3.5,
+            0.0,
+            12.5,
+            11.0
+          ]
         },
         "south": {
-          "texture": "#mesh"
+          "texture": "#mesh",
+          "uv": [
+            3.5,
+            0.0,
+            12.5,
+            11.0
+          ]
         },
         "east": {
-          "texture": "#mesh"
+          "texture": "#mesh",
+          "uv": [
+            2.5,
+            0.0,
+            4.0,
+            11.0
+          ]
         },
         "west": {
-          "texture": "#mesh"
+          "texture": "#mesh",
+          "uv": [
+            12.0,
+            0.0,
+            13.5,
+            11.0
+          ]
         },
         "up": {
           "texture": "#mesh"
@@ -202,7 +250,7 @@
     {
       "from": [
         3,
-        7.98,
+        7.9,
         13
       ],
       "to": [
@@ -212,16 +260,40 @@
       ],
       "faces": {
         "north": {
-          "texture": "#frame"
+          "texture": "#frame",
+          "uv": [
+            3.0,
+            0.0,
+            13.0,
+            11.5
+          ]
         },
         "south": {
-          "texture": "#frame"
+          "texture": "#frame",
+          "uv": [
+            3.0,
+            0.0,
+            13.0,
+            11.5
+          ]
         },
         "east": {
-          "texture": "#frame"
+          "texture": "#frame",
+          "uv": [
+            2.0,
+            0.0,
+            3.0,
+            11.5
+          ]
         },
         "west": {
-          "texture": "#frame"
+          "texture": "#frame",
+          "uv": [
+            13.0,
+            0.0,
+            14.0,
+            11.5
+          ]
         },
         "up": {
           "texture": "#frame"
@@ -244,16 +316,40 @@
       ],
       "faces": {
         "north": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            5.0,
+            9.5,
+            11.0,
+            12.5
+          ]
         },
         "south": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            5.0,
+            9.5,
+            11.0,
+            12.5
+          ]
         },
         "east": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            2.0,
+            9.5,
+            3.5,
+            12.5
+          ]
         },
         "west": {
-          "texture": "#fabric"
+          "texture": "#fabric",
+          "uv": [
+            12.5,
+            9.5,
+            14.0,
+            12.5
+          ]
         },
         "up": {
           "texture": "#fabric"

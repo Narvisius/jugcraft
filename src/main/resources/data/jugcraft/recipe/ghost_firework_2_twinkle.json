@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "ghost_firework",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:gunpowder",
+    "minecraft:gunpowder",
+    "minecraft:phantom_membrane",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "jugcraft:ghost_firework",
+    "count": 3,
+    "components": {
+      "minecraft:fireworks": {
+        "flight_duration": 2
+      },
+      "jugcraft:twinkle": true
+    }
+  }
+}

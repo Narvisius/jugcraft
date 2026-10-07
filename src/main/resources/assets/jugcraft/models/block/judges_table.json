@@ -1,0 +1,280 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/judges_table_cloth",
+    "cloth": "jugcraft:block/judges_table_cloth",
+    "top": "jugcraft:block/judges_table_top",
+    "brass": "jugcraft:block/judges_table_brass",
+    "ballot": "jugcraft:block/judges_table_ballot",
+    "slot": "jugcraft:block/judges_table_ballot_slot",
+    "card": "jugcraft:block/judges_table_card_back",
+    "card_8": "jugcraft:block/judges_table_card_8",
+    "card_9": "jugcraft:block/judges_table_card_9",
+    "card_10": "jugcraft:block/judges_table_card_10"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        2
+      ],
+      "to": [
+        16,
+        11,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#cloth",
+          "uv": [
+            0,
+            5,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#cloth",
+          "uv": [
+            0,
+            5,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#cloth"
+        },
+        "west": {
+          "texture": "#cloth"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#cloth"
+        }
+      }
+    },
+    {
+      "from": [
+        11.5,
+        11,
+        9.5
+      ],
+      "to": [
+        14,
+        12.5,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass"
+        },
+        "south": {
+          "texture": "#brass"
+        },
+        "east": {
+          "texture": "#brass"
+        },
+        "west": {
+          "texture": "#brass"
+        },
+        "up": {
+          "texture": "#brass"
+        },
+        "down": {
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "from": [
+        12.25,
+        12.5,
+        10.25
+      ],
+      "to": [
+        13.25,
+        13.5,
+        11.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass"
+        },
+        "south": {
+          "texture": "#brass"
+        },
+        "east": {
+          "texture": "#brass"
+        },
+        "west": {
+          "texture": "#brass"
+        },
+        "up": {
+          "texture": "#brass"
+        },
+        "down": {
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        11,
+        9
+      ],
+      "to": [
+        5.5,
+        13.5,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ballot"
+        },
+        "south": {
+          "texture": "#ballot"
+        },
+        "east": {
+          "texture": "#ballot"
+        },
+        "west": {
+          "texture": "#ballot"
+        },
+        "up": {
+          "texture": "#slot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#ballot"
+        }
+      }
+    },
+    {
+      "from": [
+        3.25,
+        11,
+        4
+      ],
+      "to": [
+        6.25,
+        11.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#card"
+        },
+        "south": {
+          "texture": "#card"
+        },
+        "east": {
+          "texture": "#card"
+        },
+        "west": {
+          "texture": "#card"
+        },
+        "up": {
+          "texture": "#card_9",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#card"
+        }
+      }
+    },
+    {
+      "from": [
+        6.75,
+        11,
+        4
+      ],
+      "to": [
+        9.75,
+        11.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#card"
+        },
+        "south": {
+          "texture": "#card"
+        },
+        "east": {
+          "texture": "#card"
+        },
+        "west": {
+          "texture": "#card"
+        },
+        "up": {
+          "texture": "#card_10",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#card"
+        }
+      }
+    },
+    {
+      "from": [
+        10.25,
+        11,
+        4
+      ],
+      "to": [
+        13.25,
+        11.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#card"
+        },
+        "south": {
+          "texture": "#card"
+        },
+        "east": {
+          "texture": "#card"
+        },
+        "west": {
+          "texture": "#card"
+        },
+        "up": {
+          "texture": "#card_8",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#card"
+        }
+      }
+    }
+  ]
+}

@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: jugcraft-build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   mod:
     runs-on: ubuntu-latest
@@ -18,6 +21,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
+          cache: gradle
       - name: Install data-generation dependencies
         run: python3 -m pip install --quiet pillow numpy
       - name: Check generated JSON is up to date
@@ -26,13 +30,25 @@ jobs:
           git diff --exit-code -- src/main/resources
       - name: Check material data
         run: python3 tools/check_mod_data.py
+      - name: Test world designer and pack compiler
+        run: node --test tools/world-designer/model.test.cjs
       - name: Build mod
         run: ./gradlew build --no-daemon
+      - name: Verify pinned library downloads
+        run: python3 scripts/package_modrinth.py verify
+      - name: Package Jugcraft Complete
+        run: python3 scripts/package_modrinth.py build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jugcraft-installers
+          path: |
+            build/libs/*.jar
+            build/distributions/*
+          if-no-files-found: error
 
-  # A real game client with software rendering (Mesa): runs the client game tests in
-  # src/gametest (JugcraftClientGameTests), which build a showroom and take screenshots.
-  client:
-    runs-on: ubuntu-24.04
+  optional-absent:
+    name: optional integrations absent
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -42,16 +58,83 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
-      - name: Install Mesa (software rendering)
-        run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers
-      - name: Prepare run directory
+      - name: Build and run server tests without optional integrations
+        run: ./gradlew build --no-daemon -PjugcraftOptionalIntegrations=false
+
+  # Which client game test classes to run, shared out between the three client jobs (tools/select_client_tests.py).
+  # A pull request runs the classes that show what it changed; main and a manual run of this workflow run them all.
+  plan:
+    name: choose client tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      shard0: ${{ steps.choose.outputs.shard0 }}
+      shard1: ${{ steps.choose.outputs.shard1 }}
+      shard2: ${{ steps.choose.outputs.shard2 }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Choose the client test classes
+        id: choose
+        env:
+          EVENT: ${{ github.event_name }}
         run: |
-          mkdir -p run && echo "eula=true" > run/eula.txt
-          echo 'preferredGraphicsBackend:"opengl"' > run/options.txt
-      - name: Run client game tests
-        run: ./gradlew runClientGameTest --no-daemon
+          if [ "$EVENT" = pull_request ]; then
+            # The pull request's merge commit against its first parent, the base branch.
+            python3 tools/select_client_tests.py --base HEAD^1 --shards 3 --github-output "$GITHUB_OUTPUT"
+          else
+            python3 tools/select_client_tests.py --all --shards 3 --github-output "$GITHUB_OUTPUT"
+          fi
+
+  # A real game client with software rendering (Mesa): runs the chosen client game tests in src/gametest
+  # (JugcraftClientGameTests and the rest), which build showrooms and worlds and take screenshots. Three jobs share
+  # them out (the plan job above), so every chosen class runs once; the "client" job below passes only when the plan
+  # and all three do. A job with no classes passes at once.
+  client-shard:
+    name: client (shard ${{ matrix.shard }} of 3)
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2]
+    env:
+      CLASSES: ${{ needs.plan.outputs[format('shard{0}', matrix.shard)] }}
+      LIBGL_ALWAYS_SOFTWARE: 'true'
+      # SDL 3 uses EGL for the software OpenGL context; Xvfb's GLX visual selection fails here.
+      # https://wiki.libsdl.org/SDL3/SDL_HINT_VIDEO_FORCE_EGL
+      SDL_VIDEO_FORCE_EGL: '1'
+    steps:
+      - name: Classes for this job
+        run: |
+          echo "Client test classes: ${CLASSES:-none}"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        if: env.CLASSES != ''
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        if: env.CLASSES != ''
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+      - name: Install Mesa (software rendering)
+        if: env.CLASSES != ''
+        run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers libgl1-mesa-dri libglx-mesa0 libegl1 libegl-mesa0 mesa-utils xvfb
+      - name: Prepare run directory
+        if: env.CLASSES != ''
+        run: |
+          # Test options are written by runClientGameTest after Loom cleans its run directory.
+          mkdir -p run
+          echo "eula=true" > run/eula.txt
+      - name: Run client game tests (shard ${{ matrix.shard }} of 3)
+        if: env.CLASSES != ''
+        run: ./gradlew runClientGameTest --no-daemon "-PclientTests=$CLASSES"
       - name: Print small previews of the screenshots
-        if: always()
+        if: always() && env.CLASSES != ''
         run: |
           python3 -m pip install --quiet pillow
           python3 - <<'PY'
@@ -67,7 +150,22 @@ jobs:
               print("=== END")
           PY
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && env.CLASSES != ''
         with:
-          name: client-screenshots
+          name: client-screenshots-${{ matrix.shard }}
           path: '**/screenshots/*.png'
+
+  # The client game tests' result: green only when the plan and every shard ran and passed.
+  client:
+    needs: [plan, client-shard]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Every client test shard passed
+        env:
+          PLAN: ${{ needs.plan.result }}
+          RESULT: ${{ needs.client-shard.result }}
+        run: |
+          echo "Choosing the client tests: $PLAN; client test shards: $RESULT"
+          test "$PLAN" = success && test "$RESULT" = success

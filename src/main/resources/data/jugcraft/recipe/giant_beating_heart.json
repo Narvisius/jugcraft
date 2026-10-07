@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "GGG",
+    "GHG",
+    "IRI"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "H": "jugcraft:beating_heart_jar",
+    "I": "jugcraft:brass_ingot",
+    "R": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "jugcraft:giant_beating_heart",
+    "count": 1
+  }
+}

@@ -1,6 +1,7 @@
 # Electronics: silicon, chips and the cyan look
 
 Status: implemented (batch 7, #56)
+**Batch 24:** the crystal grower was folded into the arc furnace, which now pulls the silicon boules; see [machine-consolidation.md](machine-consolidation.md). Its section below is kept as history.
 Proposal issue: owner request, 1 October 2026 ("merge it and start the next batch"), following suggestion 3 from batch 5 ("Electronics tier in the cyan look")
 Owner: jimbozoomer-byte
 Target milestone and tier: the high-tech tier after oil and chemistry

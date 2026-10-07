@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/luminaria_lime",
+    "paper": "jugcraft:block/luminaria_lime",
+    "inside": "jugcraft:block/luminaria_inside",
+    "sand": "jugcraft:block/luminaria_sand",
+    "candle": "jugcraft:block/luminaria_candle",
+    "flame": "jugcraft:block/luminaria_flame"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paper"
+        },
+        "south": {
+          "texture": "#inside"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        12
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "south": {
+          "texture": "#paper"
+        },
+        "north": {
+          "texture": "#inside"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        4,
+        10,
+        12
+      ],
+      "faces": {
+        "west": {
+          "texture": "#paper"
+        },
+        "east": {
+          "texture": "#inside"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "east": {
+          "texture": "#paper"
+        },
+        "west": {
+          "texture": "#inside"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1.5,
+        12
+      ],
+      "faces": {
+        "up": {
+          "texture": "#sand"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1.5,
+        7
+      ],
+      "to": [
+        9,
+        6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#candle"
+        },
+        "south": {
+          "texture": "#candle"
+        },
+        "east": {
+          "texture": "#candle"
+        },
+        "west": {
+          "texture": "#candle"
+        },
+        "up": {
+          "texture": "#candle"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:wheat",
+    "minecraft:sugar",
+    "#minecraft:eggs",
+    "minecraft:cocoa_beans"
+  ],
+  "result": {
+    "id": "jugcraft:spiderweb_cupcake",
+    "count": 4
+  }
+}

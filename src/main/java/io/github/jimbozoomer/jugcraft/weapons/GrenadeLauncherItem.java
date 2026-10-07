@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 /**
- * The grenade launcher: fires a grenade from the inventory (the other hand first) two and a half times as fast as a
- * throw, so it flies flatter and further. One every 1.5 seconds.
+ * The grenade launcher: fires a grenade of any kind from the inventory (the other hand first) two and a half times as
+ * fast as a throw, so it flies flatter and further. One every 1.5 seconds.
  */
 public class GrenadeLauncherItem extends Item {
 	public static final float LAUNCH_SPEED = 2.5F;
@@ -49,15 +49,15 @@ public class GrenadeLauncherItem extends Item {
 		return InteractionResult.SUCCESS;
 	}
 
-	/** A grenade in the other hand, or else the first one in the inventory; empty if there is none. */
+	/** A grenade of any kind in the other hand, or else the first one in the inventory; empty if there is none. */
 	private static ItemStack findAmmo(Player player, InteractionHand hand) {
 		ItemStack other = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-		if (other.is(PetroItems.GRENADE)) {
+		if (other.getItem() instanceof GrenadeItem) {
 			return other;
 		}
 		for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
 			ItemStack stack = player.getInventory().getItem(slot);
-			if (stack.is(PetroItems.GRENADE)) {
+			if (stack.getItem() instanceof GrenadeItem) {
 				return stack;
 			}
 		}

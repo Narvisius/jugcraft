@@ -1,0 +1,357 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gy_marble_clean",
+    "stone": "jugcraft:block/gy_marble_clean",
+    "top": "jugcraft:block/gy_marble_clean_upper",
+    "relief": "jugcraft:block/gy_marble_relief_clean",
+    "relief_top": "jugcraft:block/gy_marble_relief_clean_upper"
+  },
+  "elements": [
+    {
+      "from": [
+        -1.0,
+        0,
+        0.5
+      ],
+      "to": [
+        16,
+        1.2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone",
+          "uv": [
+            0.0,
+            14.8,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#stone",
+          "uv": [
+            0.0,
+            14.8,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0.0,
+            0.5,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#stone",
+          "uv": [
+            0.0,
+            0,
+            16.0,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -0.4,
+        1.2,
+        1.2
+      ],
+      "to": [
+        16,
+        1.6,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#relief",
+          "uv": [
+            0.0,
+            14.4,
+            16.0,
+            14.8
+          ]
+        },
+        "south": {
+          "texture": "#relief",
+          "uv": [
+            0.0,
+            14.4,
+            16.0,
+            14.8
+          ]
+        },
+        "west": {
+          "texture": "#relief"
+        },
+        "up": {
+          "texture": "#relief_top",
+          "uv": [
+            0.0,
+            1.2,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#relief",
+          "uv": [
+            0.0,
+            0,
+            16.0,
+            14.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -1.0,
+        4.0,
+        14.9
+      ],
+      "to": [
+        9.0,
+        6.4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone",
+          "uv": [
+            6.0,
+            9.6,
+            16.0,
+            12.0
+          ]
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "west": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0.0,
+            14.9,
+            10.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#stone",
+          "uv": [
+            0.0,
+            0,
+            10.0,
+            1.1
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -0.5,
+        6.4,
+        15.4
+      ],
+      "to": [
+        8.5,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#relief",
+          "uv": [
+            7.0,
+            0,
+            16.0,
+            9.6
+          ]
+        },
+        "east": {
+          "texture": "#relief"
+        },
+        "west": {
+          "texture": "#relief"
+        },
+        "down": {
+          "texture": "#relief",
+          "uv": [
+            0.0,
+            0,
+            9.0,
+            0.6
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.9,
+        1.6,
+        3.9
+      ],
+      "to": [
+        12.1,
+        3.0,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "west": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        6.446,
+        3.0,
+        4.3
+      ],
+      "to": [
+        9.554,
+        4.0,
+        11.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "west": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        4.3,
+        3.0,
+        6.446
+      ],
+      "to": [
+        11.7,
+        4.0,
+        9.554
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "west": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        6.656,
+        4.0,
+        4.8
+      ],
+      "to": [
+        9.344,
+        16,
+        11.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#relief"
+        },
+        "south": {
+          "texture": "#relief"
+        },
+        "east": {
+          "texture": "#relief"
+        },
+        "west": {
+          "texture": "#relief"
+        },
+        "down": {
+          "texture": "#relief"
+        }
+      }
+    },
+    {
+      "from": [
+        4.8,
+        4.0,
+        6.656
+      ],
+      "to": [
+        11.2,
+        16,
+        9.344
+      ],
+      "faces": {
+        "north": {
+          "texture": "#relief"
+        },
+        "south": {
+          "texture": "#relief"
+        },
+        "east": {
+          "texture": "#relief"
+        },
+        "west": {
+          "texture": "#relief"
+        },
+        "down": {
+          "texture": "#relief"
+        }
+      }
+    }
+  ]
+}

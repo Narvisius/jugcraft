@@ -18,6 +18,7 @@ The world now holds the raw materials later technology needs, found where they p
 | Nickel | Nickel ore, Y −64 to 16; iron pickaxe; **blast furnace only** | Nickel ingots | Pentlandite (bronze-yellow) |
 | Tungsten | Tungsten ore, rare, Y −64 to 0; iron pickaxe; **blast furnace only** | Tungsten ingots | Wolframite; too refractory for a plain furnace |
 | Uranium | Uranium ore, very rare, Y −64 to −16; iron pickaxe; **blast furnace only** | Uranium ingots | Pitch-black uraninite with yellow-green crust |
+| Thallite | Thallite ore, Y −32 to 48, richer in Lush Caves and the Glowcap Grotto; stone pickaxe; furnace | Thallite ingots: see [thallite.md](thallite.md) | Epidote ("thallite"), a green, iron-rich mineral |
 | Titanium | Titanium ore (rutile), rare, Y −64 to −8; iron pickaxe; **no furnace smelts it** | Titanium via the Kroll process (chlorine, coke) in the chemical reactor: see [industrial-chemistry.md](industrial-chemistry.md) | Rutile (reddish-brown to black); titanium is made with chlorine, not smelted |
 | Bauxite / aluminum | Bauxite rock near the surface (Y 50–100) in jungle, savanna and badlands | Blast furnace: 1 bauxite → 1 aluminum nugget (**stand-in**) | Tropical weathering; real refining needs electrolysis |
 | Salt | Rock salt ore, Y 0–64; drops 2–4 salt | Salt, salt blocks | Halite beds |
@@ -41,10 +42,10 @@ All compaction is 9 ⇄ 1 and lossless. No recipe creates metal: `tools/check_mo
 Not added on purpose: radiation or other hazards (uranium needs its own design first), lead poisoning, new tool or armor tiers, vanilla recipe changes, and a sulfur-to-gunpowder recipe (a vanilla balance decision).
 
 ## Multiplayer and persistence
-No block entities, screens, packets or tick logic. Every material has its own switch in `config/jugcraft.properties` (`tin`, `zinc`, `lead`, `silver`, `nickel`, `tungsten`, `uranium`, `aluminum`, `salt`, `phosphate`, `lithium`, `rare_earths`, `sulfur`, `silicon`, `crude_oil`). `false` stops that material's worldgen and recipes; registered blocks and items always remain. There is no retrogeneration, so existing chunks get none of the new ores.
+No block entities, screens, packets or tick logic. Every material has its own switch in `config/jugcraft.properties` (`tin`, `zinc`, `lead`, `silver`, `nickel`, `tungsten`, `uranium`, `thallite`, `aluminum`, `salt`, `phosphate`, `lithium`, `rare_earths`, `sulfur`, `silicon`, `crude_oil`). `false` stops that material's worldgen and recipes; registered blocks and items always remain. There is no retrogeneration, so existing chunks get none of the new ores.
 
 ## Dependencies and assets
-Fabric API only. All 79 textures are original, drawn by `tools/generate_textures.py` from fixed seeds (MIT).
+Fabric API only. All 79 textures are original, drawn by `tools/generate_textures.py` from fixed seeds (MIT). The ingots, nuggets, storage blocks, ores, raw ores and raw blocks were since redrawn as material sets ([material-sets.md](material-sets.md)).
 
 ## Verification
 Run in a sandbox without Minecraft (30 September 2026):

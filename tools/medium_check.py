@@ -58,7 +58,7 @@ def build_grids(site):
     return g, solid | occupied, water, occupied
 
 
-PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door", "jugcraft:lead_door", "minecraft:ladder", "jugcraft:steel_ladder",
+PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door", "jugcraft:lead_door", "minecraft:ladder", "jugcraft:caged_ladder",
                    "jugcraft:railing_gate", "jugcraft:room_sign",
                    "jugcraft:building_sign", "minecraft:rail", "jugcraft:ceiling_light_panel", "minecraft:iron_chain",
                    "jugcraft:cable_tray", "jugcraft:light_hanger", "jugcraft:high_bay_light", "minecraft:light[")
@@ -189,9 +189,9 @@ def check(site, quiet=False):
         free[sub_solid & ~passable[sub_g]] = False
         stand = np.zeros_like(free)
         stand[:, 1:-1, :] = free[:, 1:-1, :] & free[:, 2:, :] & (sub_solid[:, :-2, :] & ~passable[sub_g[:, :-2, :]] | sub_occ[:, :-2, :]
-                                                                  | np.isin(sub_g[:, :-2, :], [k for k, (st, _) in P.MATERIALS.items() if st.startswith(("minecraft:ladder", "jugcraft:steel_ladder"))]))
+                                                                  | np.isin(sub_g[:, :-2, :], [k for k, (st, _) in P.MATERIALS.items() if st.startswith(("minecraft:ladder", "jugcraft:caged_ladder"))]))
         # Ladders are climbable: a ladder cell counts as standable.
-        ladder = np.isin(sub_g, [k for k, (st, _) in P.MATERIALS.items() if st.startswith(("minecraft:ladder", "jugcraft:steel_ladder"))])
+        ladder = np.isin(sub_g, [k for k, (st, _) in P.MATERIALS.items() if st.startswith(("minecraft:ladder", "jugcraft:caged_ladder"))])
         stand |= ladder & free
         # Start from every door and the cells just outside the building's outline at ground level.
         start = []

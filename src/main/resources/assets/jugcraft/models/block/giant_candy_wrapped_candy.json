@@ -1,0 +1,170 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/giant_wrapped_candy",
+    "wrapper": "jugcraft:block/giant_wrapped_candy",
+    "twist": "jugcraft:block/giant_wrapped_candy_twist"
+  },
+  "elements": [
+    {
+      "from": [
+        3.5,
+        0,
+        4
+      ],
+      "to": [
+        12.5,
+        8,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wrapper"
+        },
+        "south": {
+          "texture": "#wrapper"
+        },
+        "east": {
+          "texture": "#wrapper"
+        },
+        "west": {
+          "texture": "#wrapper"
+        },
+        "up": {
+          "texture": "#wrapper"
+        },
+        "down": {
+          "texture": "#wrapper"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2.5,
+        6.5
+      ],
+      "to": [
+        3.5,
+        5.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#twist"
+        },
+        "south": {
+          "texture": "#twist"
+        },
+        "east": {
+          "texture": "#twist"
+        },
+        "west": {
+          "texture": "#twist"
+        },
+        "up": {
+          "texture": "#twist"
+        },
+        "down": {
+          "texture": "#twist"
+        }
+      }
+    },
+    {
+      "from": [
+        12.5,
+        2.5,
+        6.5
+      ],
+      "to": [
+        14,
+        5.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#twist"
+        },
+        "south": {
+          "texture": "#twist"
+        },
+        "east": {
+          "texture": "#twist"
+        },
+        "west": {
+          "texture": "#twist"
+        },
+        "up": {
+          "texture": "#twist"
+        },
+        "down": {
+          "texture": "#twist"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0.5,
+        4.5
+      ],
+      "to": [
+        2,
+        7.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#twist"
+        },
+        "south": {
+          "texture": "#twist"
+        },
+        "east": {
+          "texture": "#twist"
+        },
+        "west": {
+          "texture": "#twist"
+        },
+        "up": {
+          "texture": "#twist"
+        },
+        "down": {
+          "texture": "#twist"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        0.5,
+        4.5
+      ],
+      "to": [
+        16,
+        7.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#twist"
+        },
+        "south": {
+          "texture": "#twist"
+        },
+        "east": {
+          "texture": "#twist"
+        },
+        "west": {
+          "texture": "#twist"
+        },
+        "up": {
+          "texture": "#twist"
+        },
+        "down": {
+          "texture": "#twist"
+        }
+      }
+    }
+  ]
+}

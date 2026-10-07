@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "pixel_hollows"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "retro_trader"
+    }
+  ],
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 12
+  },
+  "additional_wants": {
+    "id": "minecraft:compass",
+    "count": 1
+  },
+  "gives": {
+    "id": "jugcraft:pixel_hollows_map",
+    "count": 1
+  },
+  "max_uses": 1,
+  "xp": 5,
+  "reputation_discount": 0.2
+}

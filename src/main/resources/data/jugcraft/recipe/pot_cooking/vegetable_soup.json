@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:cabbage"
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    },
+    {
+      "ingredient": "minecraft:potato"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:vegetable_soup"
+  },
+  "time": 200
+}

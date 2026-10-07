@@ -1,0 +1,15 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": "jugcraft:steampunk_pattern",
+  "base": "jugcraft:steampunk_helmet",
+  "addition": "#c:ingots/bronze",
+  "result": {
+    "id": "jugcraft:bronze_helmet"
+  }
+}

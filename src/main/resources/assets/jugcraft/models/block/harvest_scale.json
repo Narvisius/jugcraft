@@ -1,0 +1,127 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/harvest_scale_side",
+    "side": "jugcraft:block/harvest_scale_side",
+    "top": "jugcraft:block/harvest_scale_top",
+    "dial": "jugcraft:block/harvest_scale_dial"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#top",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        4,
+        12
+      ],
+      "to": [
+        11,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dial",
+          "uv": [
+            5,
+            2,
+            11,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            5,
+            2,
+            11,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            1,
+            2,
+            4,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            1,
+            2,
+            4,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#side",
+          "uv": [
+            5,
+            1,
+            11,
+            4
+          ]
+        }
+      }
+    }
+  ]
+}

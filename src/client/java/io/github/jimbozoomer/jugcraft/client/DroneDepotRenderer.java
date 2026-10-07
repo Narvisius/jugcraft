@@ -381,17 +381,23 @@ public class DroneDepotRenderer implements BlockEntityRenderer<DroneTerminalBloc
 			vertex(dx, dy, dz, uv[2], uv[1], nx, ny, nz);
 		}
 
-		/** One quad with its own UV per corner, drawn from both sides. */
+		/**
+		 * One quad with its own UV per corner, drawn from both sides: the side facing (nx, ny, nz) and the reversed one are
+		 * each lifted {@link DecorDraw#TWO_SIDED_LIFT} pixels off the middle, never one plane drawn twice (the door's render
+		 * type does not cull, so twins on one plane would flicker). Positions are in blocks.
+		 */
 		void face(float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz,
 				float nx, float ny, float nz, float ua, float va, float ub, float vb, float uc, float vc, float ud, float vd) {
-			vertex(ax, ay, az, ua, va, nx, ny, nz);
-			vertex(bx, by, bz, ub, vb, nx, ny, nz);
-			vertex(cx, cy, cz, uc, vc, nx, ny, nz);
-			vertex(dx, dy, dz, ud, vd, nx, ny, nz);
-			vertex(dx, dy, dz, ud, vd, -nx, -ny, -nz);
-			vertex(cx, cy, cz, uc, vc, -nx, -ny, -nz);
-			vertex(bx, by, bz, ub, vb, -nx, -ny, -nz);
-			vertex(ax, ay, az, ua, va, -nx, -ny, -nz);
+			float[] l = DecorDraw.lift(new float[][] {{ax, ay, az}, {bx, by, bz}, {cx, cy, cz}, {dx, dy, dz}}, nx, ny, nz,
+					DecorDraw.TWO_SIDED_LIFT / 16.0F);
+			vertex(ax + l[0], ay + l[1], az + l[2], ua, va, nx, ny, nz);
+			vertex(bx + l[0], by + l[1], bz + l[2], ub, vb, nx, ny, nz);
+			vertex(cx + l[0], cy + l[1], cz + l[2], uc, vc, nx, ny, nz);
+			vertex(dx + l[0], dy + l[1], dz + l[2], ud, vd, nx, ny, nz);
+			vertex(dx - l[0], dy - l[1], dz - l[2], ud, vd, -nx, -ny, -nz);
+			vertex(cx - l[0], cy - l[1], cz - l[2], uc, vc, -nx, -ny, -nz);
+			vertex(bx - l[0], by - l[1], bz - l[2], ub, vb, -nx, -ny, -nz);
+			vertex(ax - l[0], ay - l[1], az - l[2], ua, va, -nx, -ny, -nz);
 		}
 
 		private void vertex(float x, float y, float z, float u, float v, float nx, float ny, float nz) {

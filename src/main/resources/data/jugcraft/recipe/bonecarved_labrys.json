@@ -1,0 +1,15 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": "jugcraft:bonecarvers_pattern",
+  "base": "jugcraft:steel_labrys",
+  "addition": "minecraft:bone_block",
+  "result": {
+    "id": "jugcraft:bonecarved_labrys"
+  }
+}

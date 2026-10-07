@@ -47,6 +47,8 @@ public final class JugcraftFluids {
 	public static BlockEntityType<FluidFilterBlockEntity> FILTER_ENTITY;
 	/** The fluid a broken tank carries as an item (batch 10; see {@link StoredFluid}). */
 	public static DataComponentType<StoredFluid> STORED_FLUID;
+	/** Batch 35: carries 8 buckets of one gas (see {@link GasCylinderItem}). */
+	public static Item GAS_CYLINDER;
 
 	private JugcraftFluids() {
 	}
@@ -93,6 +95,12 @@ public final class JugcraftFluids {
 			return machine == null ? null : machine.fluidFor(side);
 		}, JugcraftMachines.MACHINES.values().toArray(Block[]::new));
 		EnergyStorage.SIDED.registerForBlockEntity((pump, side) -> pump.energy(), PUMP_ENTITY);
+
+		ResourceKey<Item> cylinderKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("gas_cylinder"));
+		GAS_CYLINDER = Registry.register(BuiltInRegistries.ITEM, cylinderKey,
+				new GasCylinderItem(new Item.Properties().setId(cylinderKey).stacksTo(1)));
+		FluidStorage.ITEM.registerForItems((stack, context) -> GasCylinderItem.storage(context), GAS_CYLINDER);
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> output.accept(GAS_CYLINDER));
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(BRONZE_FLUID_PIPE);

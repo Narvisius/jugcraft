@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "S S",
+    "SSS"
+  ],
+  "key": {
+    "S": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "jugcraft:pumpkin_crate",
+    "count": 1
+  }
+}

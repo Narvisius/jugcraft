@@ -107,7 +107,7 @@ public final class ToolUpgrades {
 	}
 
 	/** "Upgrades: Overclock ×2, Range" (silk touch and fortune show as the enchantments they are). */
-	static void appendTooltip(ItemStack stack, Consumer<Component> tooltip) {
+	public static void appendTooltip(ItemStack stack, Consumer<Component> tooltip) {
 		List<Component> parts = new ArrayList<>();
 		for (Kind kind : Kind.values()) {
 			int count = level(stack, kind);

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "EEE",
+    "ENE",
+    "EGE"
+  ],
+  "key": {
+    "E": "minecraft:spider_eye",
+    "N": "minecraft:iron_nugget",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "id": "jugcraft:jar_of_eyeballs",
+    "count": 1
+  }
+}

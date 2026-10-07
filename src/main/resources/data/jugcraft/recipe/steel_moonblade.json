@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "## ",
+    "  #",
+    "L# "
+  ],
+  "key": {
+    "#": "#c:ingots/steel",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "jugcraft:steel_moonblade",
+    "count": 1
+  }
+}

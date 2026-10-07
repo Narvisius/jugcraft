@@ -1,0 +1,130 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/metal_press_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth"
+        },
+        "east": {
+          "texture": "#heavy_plinth"
+        },
+        "up": {
+          "texture": "#heavy_plinth"
+        },
+        "down": {
+          "texture": "#heavy_plinth"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "east": {
+          "texture": "#machine_side"
+        },
+        "down": {
+          "texture": "#machine_side"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        12,
+        -0.5
+      ],
+      "to": [
+        13,
+        16,
+        0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.5,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            0.5,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            4,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#bronze_fluid_pipe",
+          "uv": [
+            0,
+            0,
+            4,
+            0.5
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:tall_specimen_jar",
+            "state": {
+              "part": "0"
+            }
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:tall_specimen_jar",
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "jugcraft:tall_specimen_jar",
+            "properties": [
+              "specimen"
+            ]
+          }
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/tall_specimen_jar"
+}

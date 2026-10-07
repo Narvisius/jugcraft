@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:rocket_motor",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:silver_iodide",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:cloud_seeding_rocket",
+    "count": 1
+  },
+  "time": 200
+}

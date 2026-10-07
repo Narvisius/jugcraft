@@ -1,7 +1,10 @@
 """Original 16x16 textures for the steampunk machine style (see tools/steampunk_models.py).
 
-Deterministic: every texture draws from its own seeded random source, so regenerating never
-changes a file unless its drawing code changes. Called from generate_textures.py.
+Drawn in the clean style the owner asked for on 4 October 2026 (tools/clean_metal.py, docs/ART_DIRECTION.md): flat
+fills from short palettes, bevelled plates and rivets, banded sheens, and wear only as a few placed marks, never a
+random shade per pixel. Deterministic: regenerating never changes a file unless its drawing code changes. (The punch
+card's holes and the counter's engraved figures still come from a seeded random source: they are a pattern, not
+noise.) Called from generate_textures.py.
 All textures are opaque: machine blocks render in the solid layer, where alpha is ignored.
 """
 import math
@@ -9,6 +12,8 @@ import random
 from pathlib import Path
 
 from PIL import Image
+
+import clean_metal
 
 TEX = Path(__file__).resolve().parents[1] / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "block"
 
@@ -46,91 +51,84 @@ def rivet(img, x, y, palette):
 
 
 def plate(seed, palette, rivets=True, border=True):
-    """Beveled metal plate with rivets near the corners."""
-    rng = random.Random(seed)
+    """Bevelled metal plate (a dark seam, lit top and left, shaded bottom and right) with rivets near the corners."""
     img = new()
-    for y in range(16):
-        for x in range(16):
-            c = palette[3] if rng.random() < 0.18 else palette[2]
-            if border:
-                if x == 0 or y == 0:
-                    c = palette[3]
-                elif x == 15 or y == 15:
-                    c = palette[1]
-            put(img, x, y, c)
+    if border:
+        clean_metal.plate(img, palette)
+        clean_metal.scuffs(img, palette[3], [(4, 5, 3), (9, 10, 2)], only=palette[2])
+    else:
+        clean_metal.rect(img, 0, 0, 15, 15, palette[2])
     if rivets:
-        for x, y in ((2, 2), (13, 2), (2, 13), (13, 13)):
+        for x, y in ((3, 3), (12, 3), (3, 12), (12, 12)):
             rivet(img, x, y, palette)
     return img
 
 
+# Where verdigris gathers on brushed copper: small hand-placed blooms (offsets from their corner), so it reads as
+# weathering in a few places rather than speckle.
+BLOOMS = ((2, 9, [(0, 0), (1, 0), (0, 1)]), (11, 3, [(0, 0), (1, 0)]), (7, 13, [(0, 0), (1, 0), (1, 1)]),
+          (13, 11, [(0, 0), (0, 1)]))
+
+
 def brushed(seed, palette, specks=None, speck_count=0):
-    """Polished metal with a soft horizontal sheen and fine scratches."""
-    rng = random.Random(seed)
+    """Polished metal: a soft horizontal sheen (a light band near the top, darker towards the bottom, so it reads
+    as a curved, shiny surface), two fine bright scratches and, with `specks`, a few small verdigris blooms."""
     img = new()
     for y in range(16):
-        # Light band near the top third, darker toward the bottom: reads as a curved, shiny surface.
         band = 4 if 3 <= y <= 5 else (1 if y >= 12 else (3 if y in (2, 6, 7) else 2))
         for x in range(16):
-            c = palette[band]
-            if rng.random() < 0.12:
-                c = palette[max(0, band - 1)]
-            put(img, x, y, c)
-    for _ in range(3):
-        y = rng.randrange(16)
-        x0 = rng.randrange(10)
-        for x in range(x0, x0 + rng.randrange(3, 7)):
-            put(img, x, y, palette[min(len(palette) - 1, 4)])
+            put(img, x, y, palette[band])
+    clean_metal.scuffs(img, palette[min(len(palette) - 1, 4)], [(2, 9, 4), (8, 11, 3)])
     if specks:
-        for _ in range(speck_count):
-            put(img, rng.randrange(16), rng.randrange(16), rng.choice(specks))
+        for i, (x, y, pixels) in enumerate(BLOOMS[:max(1, speck_count // 2)]):
+            clean_metal.patch(img, pixels, specks[i % len(specks)], x, y)
     return img
 
 
 def wrought_iron(seed):
-    rng = random.Random(seed)
-    img = new()
+    """Wrought iron: flat dark iron in vertical bars, each lit along its left edge with a dark joint beside it."""
+    img = new(IRON[2])
     for y in range(16):
         for x in range(16):
-            c = IRON[rng.choice([2, 2, 3])]
-            if x % 5 == 0 and rng.random() < 0.6:
-                c = IRON[1]
-            put(img, x, y, c)
+            if x % 5 == 0:
+                put(img, x, y, IRON[1])
+            elif x % 5 == 1:
+                put(img, x, y, IRON[3])
+    clean_metal.scuffs(img, IRON[3], [(2, 4, 2), (12, 9, 2), (7, 13, 2)], only=IRON[2])
     return img
 
 
 def planks(seed):
-    """Dark stained planks, 4 pixels tall, with staggered joints and grain."""
-    rng = random.Random(seed)
+    """Dark stained planks, 4 pixels tall: each lit along its top, a staggered joint and a few grain lines."""
     img = new()
-    for plank in range(4):
-        base = rng.choice([1, 2])
-        joint = rng.randrange(3, 13)
-        for y in range(plank * 4, plank * 4 + 4):
+    for plank, (base, joint) in enumerate(((2, 5), (1, 11), (2, 3), (1, 9))):
+        y0 = plank * 4
+        for y in range(y0, y0 + 4):
             for x in range(16):
-                c = WOOD[base]
-                if y % 4 == 3:
-                    c = WOOD[0]
-                elif x == joint:
-                    c = WOOD[0]
-                elif rng.random() < 0.18:
-                    c = WOOD[base + 1]
+                c = WOOD[base + 1] if y == y0 else WOOD[0] if y == y0 + 3 or x == joint else WOOD[base]
                 put(img, x, y, c)
+        for x in range(16):
+            if (x + plank * 5) % 9 in (1, 2, 3) and x != joint:
+                put(img, x, y0 + 1 + plank % 2, WOOD[base + 1] if base == 1 else WOOD[base - 1])
     return img
 
 
 def bricks(seed, sooty=True):
-    rng = random.Random(seed)
+    """Firebrick in courses: each brick one flat shade, lit along its top edge, in mortar; a sooty brick or two."""
     img = new()
     for y in range(16):
+        course = y // 4
+        offset = 2 if course % 2 else 0
         for x in range(16):
-            offset = 2 if (y // 4) % 2 else 0
             if y % 4 == 3 or (x + offset) % 8 == 7:
-                c = MORTAR
-            else:
-                c = rng.choice(BRICK)
-                if sooty and rng.random() < 0.08:
-                    c = (60, 34, 28)
+                put(img, x, y, MORTAR)
+                continue
+            brick = (course * 3 + (x + offset) // 8) % 3
+            c = BRICK[(1, 0, 2)[brick]]
+            if sooty and (course, (x + offset) // 8) in ((1, 1), (3, 0)):
+                c = (78, 40, 30)
+            if y % 4 == 0:
+                c = tuple(min(255, v + 18) for v in c)
             put(img, x, y, c)
     return img
 
@@ -172,12 +170,14 @@ def porthole(seed, inner_fn, rim=BRASS):
 
 
 def firebox(seed, lit):
-    """Firebox door: riveted frame, four draft slots, brass latch."""
-    rng = random.Random(seed)
+    """Firebox door: riveted frame, four draft slots (glowing in bands when lit), brass latch."""
     img = plate(seed, IRON)
     for row in (4, 6, 8, 10):
         for x in range(4, 12):
-            c = rng.choice(FIRE) if lit else rng.choice([(22, 16, 14), (38, 22, 18)])
+            if lit:
+                c = FIRE[(1, 2, 3, 2)[(x + row) % 4]]
+            else:
+                c = (38, 22, 18) if (x + row) % 4 == 0 else (22, 16, 14)
             put(img, x, row, c)
             put(img, x, row + 1, IRON[4])
     for y in (7, 8):
@@ -187,17 +187,13 @@ def firebox(seed, lit):
 
 
 def coil(seed):
-    """Copper windings: tight bands with a dark gap every fourth row."""
-    rng = random.Random(seed)
+    """Copper windings: tight bands, each lit on top, with a dark gap every fourth row."""
     img = new()
     for y in range(16):
         for x in range(16):
-            if y % 4 == 3:
-                c = COPPER[0]
-            else:
-                c = COPPER[3] if y % 4 == 1 else COPPER[2]
-                if rng.random() < 0.08:
-                    c = COPPER[1]
+            c = COPPER[0] if y % 4 == 3 else COPPER[3] if y % 4 == 1 else COPPER[2]
+            if y % 4 == 1 and (x + y * 3) % 7 == 0:
+                c = COPPER[4]
             put(img, x, y, c)
     return img
 
@@ -216,15 +212,14 @@ def lamp(lit):
 
 
 def glass(seed):
-    """Opaque bluish glass with highlight streaks."""
-    rng = random.Random(seed)
-    img = new()
+    """Opaque bluish glass: a flat tint with two diagonal highlight streaks."""
+    img = new((132, 170, 184))
     for y in range(16):
         for x in range(16):
-            c = (132, 170, 184) if rng.random() < 0.8 else (118, 156, 170)
             if (x + y) % 11 in (0, 1) and x < 12:
-                c = (214, 236, 242)
-            put(img, x, y, c)
+                put(img, x, y, (214, 236, 242))
+            elif (x + y) % 11 == 2 and x < 12:
+                put(img, x, y, (160, 196, 208))
     return img
 
 
@@ -317,23 +312,21 @@ def screw():
 
 
 def vane(seed):
-    """Galvanized windmill vane with a riveted spine."""
-    rng = random.Random(seed)
-    img = new()
+    """Galvanized windmill vane: flat zinc grey, darker edges and a riveted spine."""
+    img = new((196, 200, 202))
     for y in range(16):
         for x in range(16):
-            c = (196, 200, 202) if rng.random() < 0.85 else (176, 180, 184)
             if y in (0, 15):
-                c = (140, 144, 148)
-            if x == 7:
-                c = (120, 124, 128) if y % 3 else (220, 224, 226)
-            put(img, x, y, c)
+                put(img, x, y, (140, 144, 148))
+            elif x == 7:
+                put(img, x, y, (120, 124, 128) if y % 3 else (220, 224, 226))
+            elif x == 8:
+                put(img, x, y, (176, 180, 184))
     return img
 
 
 def tank(seed):
-    """Riveted copper tank plates with a verdigris bloom."""
-    rng = random.Random(seed)
+    """Riveted copper tank plates with a verdigris bloom here and there."""
     img = brushed(seed, COPPER + [COPPER[4]], PATINA, 7)
     for y in range(16):
         put(img, 0, y, COPPER[0])
@@ -345,7 +338,6 @@ def tank(seed):
         put(img, x, 8, COPPER[0])
         if x % 3 == 2:
             put(img, x, 9, COPPER[4])
-    put(img, 12, 4, PATINA[rng.choice([0, 1])])
     return img
 
 
@@ -366,15 +358,15 @@ def crusher_jaws(seed):
 
 
 def water(seed):
-    """Water surface seen from above: deep blue with pale ripple lines."""
-    rng = random.Random(seed)
-    img = new()
+    """Water surface seen from above: deep blue with long, regular pale ripple lines."""
+    img = new((38, 84, 168))
     for y in range(16):
         for x in range(16):
-            c = (38, 84, 168) if rng.random() < 0.75 else (46, 98, 186)
-            if (y * 3 + x // 4) % 7 == 0 and rng.random() < 0.7:
-                c = (126, 176, 226)
-            put(img, x, y, c)
+            wave = (x + 2 * y) % 16
+            if wave in (0, 1, 2) and y % 4 == 1:
+                put(img, x, y, (126, 176, 226))
+            elif wave in (8, 9, 10, 11) and y % 4 == 3:
+                put(img, x, y, (46, 98, 186))
     return img
 
 
@@ -395,15 +387,13 @@ def mesh(seed):
 
 def saw(seed):
     """Polished saw steel with circular grinding marks."""
-    rng = random.Random(seed)
     img = new()
     for y in range(16):
         for x in range(16):
             d = math.hypot(x - 7.5, y - 7.5)
-            c = (196, 200, 206) if int(d) % 2 else (168, 172, 180)
-            if rng.random() < 0.08:
-                c = (226, 230, 236)
-            put(img, x, y, c)
+            put(img, x, y, (196, 200, 206) if int(d) % 2 else (168, 172, 180))
+    for x, y in ((4, 3), (5, 3), (11, 6), (3, 10)):
+        put(img, x, y, (226, 230, 236))
     return img
 
 
@@ -458,15 +448,11 @@ def grate():
 
 
 def painted(seed, palette):
-    """Painted iron with a few chips showing the metal (valve wheels)."""
-    rng = random.Random(seed)
+    """Painted iron (valve wheels): a flat coat, lit along the top and left, chipped to bare metal at two corners."""
     img = new()
-    for y in range(16):
-        for x in range(16):
-            c = palette[rng.choice([1, 2, 2])]
-            if rng.random() < 0.05:
-                c = IRON[3]
-            put(img, x, y, c)
+    clean_metal.bevel(img, 0, 0, 15, 15, palette[3], palette[1], palette[2])
+    clean_metal.patch(img, clean_metal.CHIP, IRON[3], 1, 13)
+    clean_metal.patch(img, clean_metal.CHIP, IRON[3], 13, 1)
     return img
 
 
@@ -489,19 +475,18 @@ def draw_die():
 
 
 def hopper_inside(seed):
-    rng = random.Random(seed)
-    img = new()
-    for y in range(16):
-        for x in range(16):
-            c = (26, 22, 22) if rng.random() < 0.8 else (54, 46, 40)
-            if x in (0, 15) or y in (0, 15):
-                c = IRON[3]
-            put(img, x, y, c)
+    """The dark inside of a hopper or chute: an iron rim stepping down to a near-black throat."""
+    img = new((26, 22, 22))
+    for i, c in enumerate((IRON[3], IRON[1], (40, 34, 32))):
+        for x in range(i, 16 - i):
+            for y in (i, 15 - i):
+                put(img, x, y, c)
+                put(img, y, x, c)
     return img
 
 
 def fire_glow(x, y, d, rng):
-    return FIRE[3] if d < 2 else (FIRE[2] if d < 3.6 else rng.choice([FIRE[0], FIRE[1], FIRE[4]]))
+    return FIRE[3] if d < 2 else (FIRE[2] if d < 3.6 else (FIRE[0], FIRE[1], FIRE[4])[(x + 2 * y) % 3])
 
 
 def dark_glass(x, y, d, rng):
@@ -515,62 +500,61 @@ def arc_glow(x, y, d, rng):
 
 
 def lava_glow(x, y, d, rng):
-    return rng.choice([(255, 150, 30), (255, 110, 20), (240, 80, 10), (255, 200, 80)])
+    return (255, 200, 80) if d < 2 else (255, 150, 30) if d < 3.6 else ((255, 110, 20), (240, 80, 10))[(x + y) % 2]
 
 
 def lava_crust(x, y, d, rng):
-    return rng.choice([(60, 22, 14), (40, 18, 14), (90, 34, 16)])
+    return (90, 34, 16) if (x + 2 * y) % 5 == 0 else (60, 22, 14) if d < 3.6 else (40, 18, 14)
 
 
 def leaves(seed):
-    """Dense leaf canopy: mid greens with dark gaps and a few sunlit tips."""
-    rng = random.Random(seed)
-    img = new()
+    """Dense leaf canopy: overlapping leaves, each lit along its top, over dark gaps."""
     greens = [(34, 78, 30), (48, 104, 38), (62, 128, 46), (92, 158, 62)]
-    for y in range(16):
-        for x in range(16):
-            r = rng.random()
-            put(img, x, y, greens[0] if r < 0.18 else greens[1] if r < 0.55 else greens[2] if r < 0.9 else greens[3])
+    img = new(greens[0])
+    for lx, ly in ((0, 0), (8, 1), (4, 5), (12, 6), (0, 9), (8, 10), (4, 13), (12, 14)):
+        for dy, row in enumerate((" ### ", "#####", "#####", " ### ")):
+            for dx, ch in enumerate(row):
+                if ch == "#":
+                    c = greens[3] if dy == 0 else greens[2] if dy == 1 else greens[1]
+                    img.putpixel(((lx + dx) % 16, (ly + dy) % 16), c + (255,))
     return img
 
 
 def bark(seed):
-    """Vertical bark ridges in browns."""
-    rng = random.Random(seed)
-    img = new()
+    """Vertical bark ridges in browns: each ridge lit on its left, with dark furrows between."""
     browns = [(56, 38, 22), (78, 54, 32), (98, 70, 42)]
-    ridges = [rng.choice([0, 1, 2]) for _ in range(16)]
+    img = new(browns[1])
     for y in range(16):
         for x in range(16):
-            c = browns[ridges[x]]
-            if rng.random() < 0.12:
-                c = browns[max(0, ridges[x] - 1)]
-            put(img, x, y, c)
+            phase = (x + (y // 6) % 2) % 4
+            put(img, x, y, browns[0] if phase == 0 else browns[2] if phase == 1 else browns[1])
     return img
 
 
 def soil(seed):
-    """Dark tilled soil with small lighter clods."""
-    rng = random.Random(seed)
-    img = new()
+    """Dark tilled soil in furrows, with a few lighter clods along each ridge."""
+    img = new((58, 40, 26))
     for y in range(16):
         for x in range(16):
-            c = (58, 40, 26) if rng.random() < 0.7 else (74, 52, 34)
-            if y % 4 == 0 and rng.random() < 0.5:
-                c = (44, 30, 20)
-            put(img, x, y, c)
+            if y % 4 == 0:
+                put(img, x, y, (44, 30, 20))
+            elif y % 4 == 1 and (x + y) % 5 in (0, 1):
+                put(img, x, y, (74, 52, 34))
     return img
 
 
 def lava(seed):
-    """Molten surface: orange-yellow with dark crust flecks."""
-    rng = random.Random(seed)
-    img = new()
+    """Molten surface: orange with bright yellow currents and a few dark crust plates."""
+    img = new(FIRE[1])
     for y in range(16):
         for x in range(16):
-            r = rng.random()
-            c = FIRE[2] if r < 0.35 else FIRE[1] if r < 0.75 else FIRE[3] if r < 0.88 else (120, 40, 12)
-            put(img, x, y, c)
+            wave = (x + 2 * y + (y // 4) * 3) % 12
+            if wave in (0, 1):
+                put(img, x, y, FIRE[3])
+            elif wave in (2, 3, 11):
+                put(img, x, y, FIRE[2])
+    for x, y in ((3, 4), (4, 4), (11, 10), (12, 10), (12, 11)):
+        put(img, x, y, (120, 40, 12))
     return img
 
 

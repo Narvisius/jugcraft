@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " W ",
+    "WCW",
+    "WWW"
+  ],
+  "key": {
+    "W": "minecraft:black_wool",
+    "C": "#minecraft:candles"
+  },
+  "result": {
+    "id": "jugcraft:floating_witch_hat",
+    "count": 2
+  }
+}

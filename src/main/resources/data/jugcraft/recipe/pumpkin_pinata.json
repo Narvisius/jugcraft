@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "PDP",
+    " P "
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:string",
+    "D": "minecraft:orange_dye"
+  },
+  "result": {
+    "id": "jugcraft:pumpkin_pinata",
+    "count": 1
+  }
+}

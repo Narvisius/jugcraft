@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "WTW",
+    "SAS"
+  ],
+  "key": {
+    "P": "jugcraft:plastic_sheet",
+    "C": "#c:ingots/copper",
+    "W": "jugcraft:copper_cable",
+    "T": "jugcraft:fluid_tank",
+    "S": "#c:plates/steel",
+    "A": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:electroplating_bath",
+    "count": 1
+  }
+}

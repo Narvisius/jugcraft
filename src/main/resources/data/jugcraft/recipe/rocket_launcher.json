@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    " GT",
+    "  P"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "jugcraft:guidance_unit",
+    "T": "minecraft:tripwire_hook"
+  },
+  "result": {
+    "id": "jugcraft:rocket_launcher",
+    "count": 1
+  }
+}

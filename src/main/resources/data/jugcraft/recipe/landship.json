@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "EDE",
+    "BGB"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:imperial_crest",
+    "E": "jugcraft:diesel_engine",
+    "D": "minecraft:dispenser",
+    "B": "jugcraft:belt",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:landship",
+    "count": 1
+  }
+}

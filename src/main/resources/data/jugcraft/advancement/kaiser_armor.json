@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:kaiser_helmet"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.kaiser_armor.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.kaiser_armor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:kaiser_helmet",
+              "jugcraft:kaiser_chestplate",
+              "jugcraft:kaiser_leggings",
+              "jugcraft:kaiser_boots"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:steel_armor"
+}

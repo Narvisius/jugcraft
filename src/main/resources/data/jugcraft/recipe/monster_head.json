@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "WWW",
+    "NFN",
+    "FSF"
+  ],
+  "key": {
+    "W": "minecraft:black_wool",
+    "N": "minecraft:iron_nugget",
+    "F": "minecraft:rotten_flesh",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "jugcraft:monster_head",
+    "count": 1
+  }
+}

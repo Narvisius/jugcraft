@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PP",
+    "PB",
+    "PP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "jugcraft:blastproof_concrete"
+  },
+  "result": {
+    "id": "jugcraft:blast_door",
+    "count": 1
+  }
+}

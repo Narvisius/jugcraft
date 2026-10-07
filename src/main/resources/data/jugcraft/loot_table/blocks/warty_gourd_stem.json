@@ -1,0 +1,140 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:warty_gourd_seeds",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.06666667
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "0"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.13333333
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "1"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.2
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "2"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.26666667
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.33333333
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "4"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.4
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "5"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.46666667
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "6"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:binomial",
+                "n": 3,
+                "p": 0.53333333
+              },
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:warty_gourd_stem",
+                "state": {
+                  "age": "7"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "modifier": {
+        "type": "minecraft:explosion_decay"
+      },
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/warty_gourd_stem"
+}

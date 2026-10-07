@@ -1,0 +1,156 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "p": "jugcraft:block/large_ghost_fern",
+    "particle": "jugcraft:block/large_ghost_fern"
+  },
+  "elements": [
+    {
+      "from": [
+        1.0,
+        0,
+        8
+      ],
+      "to": [
+        15.0,
+        10.5,
+        8
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.0,
+            11.5,
+            6.0,
+            15.5
+          ],
+          "texture": "#p"
+        },
+        "north": {
+          "uv": [
+            6.0,
+            11.5,
+            0.0,
+            15.5
+          ],
+          "texture": "#p"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        8,
+        0,
+        1.0
+      ],
+      "to": [
+        8,
+        10.5,
+        15.0
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            11.5,
+            6.0,
+            15.5
+          ],
+          "texture": "#p"
+        },
+        "east": {
+          "uv": [
+            6.0,
+            11.5,
+            0.0,
+            15.5
+          ],
+          "texture": "#p"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        5.5,
+        0,
+        8
+      ],
+      "to": [
+        10.5,
+        11,
+        8
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            6.25,
+            11.5,
+            8.75,
+            15.5
+          ],
+          "texture": "#p"
+        },
+        "north": {
+          "uv": [
+            8.75,
+            11.5,
+            6.25,
+            15.5
+          ],
+          "texture": "#p"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        0,
+        5.5
+      ],
+      "to": [
+        8,
+        11,
+        10.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6.25,
+            11.5,
+            8.75,
+            15.5
+          ],
+          "texture": "#p"
+        },
+        "east": {
+          "uv": [
+            8.75,
+            11.5,
+            6.25,
+            15.5
+          ],
+          "texture": "#p"
+        }
+      }
+    }
+  ]
+}

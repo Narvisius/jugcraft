@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BRB",
+    "BBB",
+    "B B"
+  ],
+  "key": {
+    "B": "minecraft:black_wool",
+    "R": "minecraft:red_wool"
+  },
+  "result": {
+    "id": "jugcraft:vampire_cape",
+    "count": 1
+  }
+}

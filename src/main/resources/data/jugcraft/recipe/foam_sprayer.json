@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPN",
+    "RT ",
+    "S  "
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "N": "minecraft:iron_nugget",
+    "R": "jugcraft:rubber",
+    "T": "minecraft:piston",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:foam_sprayer",
+    "count": 1
+  }
+}

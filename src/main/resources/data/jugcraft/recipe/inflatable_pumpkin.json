@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "WDW",
+    "WWW",
+    "NRN"
+  ],
+  "key": {
+    "W": "minecraft:orange_wool",
+    "D": "minecraft:purple_dye",
+    "N": "minecraft:iron_nugget",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:inflatable_pumpkin",
+    "count": 1
+  }
+}

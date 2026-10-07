@@ -48,7 +48,7 @@ public final class MetalFamily {
 		this.extras = Collections.unmodifiableList(extraList);
 
 		this.storageBlock = JugcraftRegistry.block(name + "_block", Blocks.IRON_BLOCK);
-		this.ingot = JugcraftRegistry.item(name + "_ingot");
+		this.ingot = builder.lore ? JugcraftRegistry.item(name + "_ingot", LoreItem::new) : JugcraftRegistry.item(name + "_ingot");
 		this.nugget = JugcraftRegistry.item(name + "_nugget");
 	}
 
@@ -59,6 +59,7 @@ public final class MetalFamily {
 	public static final class Builder {
 		private final String name;
 		private boolean mined;
+		private boolean lore;
 		private final List<String> extraItems = new ArrayList<>();
 
 		private Builder(String name) {
@@ -68,6 +69,12 @@ public final class MetalFamily {
 		/** Adds ore, deepslate ore, raw item and raw storage block. */
 		public Builder mined() {
 			this.mined = true;
+			return this;
+		}
+
+		/** Gives the ingot a lore line under its name, {@code tooltip.jugcraft.<metal>_ingot} ({@link LoreItem}). */
+		public Builder lore() {
+			this.lore = true;
 			return this;
 		}
 

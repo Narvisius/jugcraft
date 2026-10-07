@@ -26,7 +26,7 @@ import net.minecraft.world.level.material.Fluid;
 
 /**
  * A fluid processing recipe: items and fluids in, fluids and items out. Data-driven, for example
- * {@code {"type": "jugcraft:oil_sand_extraction", "items": [{"ingredient": "jugcraft:oil_sand"}],
+ * {@code {"type": "jugcraft:water_treatment", "items": [{"ingredient": "jugcraft:oil_sand"}],
  * "fluids": [{"fluid": "minecraft:water", "amount": 500}], "fluid_results": [{"fluid": "jugcraft:crude_oil", "amount": 400}],
  * "results": [{"id": "minecraft:sand"}], "time": 200}}.
  *
@@ -44,14 +44,23 @@ public class FluidRecipe implements Recipe<MachineInput> {
 				Ingredient.CONTENTS_STREAM_CODEC, ItemPart::ingredient, ByteBufCodecs.VAR_INT, ItemPart::count, ItemPart::new);
 	}
 
-	/** A fluid and an amount in millibuckets. */
-	public record FluidAmount(Fluid fluid, int amount) {
+	/**
+	 * A fluid and an amount in millibuckets. A fluid result may name the output {@code tank} it goes to (batch 24: a
+	 * machine with several jobs keeps each product in its own tank); -1, the default, means the result's position.
+	 */
+	public record FluidAmount(Fluid fluid, int amount, int tank) {
 		static final Codec<FluidAmount> CODEC = RecordCodecBuilder.create(i -> i.group(
 				BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidAmount::fluid),
-				ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(FluidAmount::amount)
+				ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(FluidAmount::amount),
+				Codec.INT.optionalFieldOf("tank", -1).forGetter(FluidAmount::tank)
 		).apply(i, FluidAmount::new));
 		static final StreamCodec<RegistryFriendlyByteBuf, FluidAmount> STREAM_CODEC = StreamCodec.composite(
-				ByteBufCodecs.registry(Registries.FLUID), FluidAmount::fluid, ByteBufCodecs.VAR_INT, FluidAmount::amount, FluidAmount::new);
+				ByteBufCodecs.registry(Registries.FLUID), FluidAmount::fluid, ByteBufCodecs.VAR_INT, FluidAmount::amount,
+				ByteBufCodecs.VAR_INT, FluidAmount::tank, FluidAmount::new);
+
+		public FluidAmount(Fluid fluid, int amount) {
+			this(fluid, amount, -1);
+		}
 	}
 
 	private final MachineKind machine;
@@ -126,13 +135,17 @@ public class FluidRecipe implements Recipe<MachineInput> {
 		return true;
 	}
 
+	/** The output tank fluid result {@code index} goes to: its own {@link FluidAmount#tank}, or else its position. */
+	public int resultTank(int index) {
+		int tank = fluidResults.get(index).tank();
+		return tank >= 0 ? tank : index;
+	}
+
 	/** Whether every fluid result has room in its output tank. */
 	public boolean fluidResultsFit(FluidTanks tanks) {
-		if (fluidResults.size() > tanks.spec().outputTanks().size()) {
-			return false;
-		}
 		for (int i = 0; i < fluidResults.size(); i++) {
-			if (!tanks.output(i).fits(fluidResults.get(i).fluid(), fluidResults.get(i).amount())) {
+			if (resultTank(i) >= tanks.spec().outputTanks().size()
+					|| !tanks.output(resultTank(i)).fits(fluidResults.get(i).fluid(), fluidResults.get(i).amount())) {
 				return false;
 			}
 		}

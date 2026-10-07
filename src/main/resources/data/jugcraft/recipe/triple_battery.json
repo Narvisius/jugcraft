@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "EGE",
+    "SCS"
+  ],
+  "key": {
+    "D": "minecraft:dispenser",
+    "E": "jugcraft:diesel_engine",
+    "G": "#c:gears/steel",
+    "S": "#c:storage_blocks/steel",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:triple_battery",
+    "count": 1
+  }
+}

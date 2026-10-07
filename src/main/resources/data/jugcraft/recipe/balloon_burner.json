@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CFC",
+    "CIC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "F": "minecraft:flint_and_steel",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:balloon_burner",
+    "count": 1
+  }
+}

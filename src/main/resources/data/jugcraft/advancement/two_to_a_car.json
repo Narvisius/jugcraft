@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:ferris_wheel"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.two_to_a_car.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.two_to_a_car.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

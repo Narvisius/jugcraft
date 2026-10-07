@@ -1,0 +1,354 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "fluid_tank_side": "jugcraft:block/fluid_tank_side",
+    "fluid_tank_top": "jugcraft:block/fluid_tank_top",
+    "heavy_plinth": "jugcraft:block/heavy_plinth",
+    "machine_side": "jugcraft:block/machine_side",
+    "machine_top": "jugcraft:block/machine_top",
+    "front": "jugcraft:block/hydrotreater_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2.5532,
+        0.0,
+        2.5532
+      ],
+      "to": [
+        13.4468,
+        0.6809,
+        13.4468
+      ],
+      "faces": {
+        "north": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            10.894,
+            0.681
+          ]
+        },
+        "south": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            10.894,
+            0.681
+          ]
+        },
+        "east": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            10.894,
+            0.681
+          ]
+        },
+        "west": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            10.894,
+            0.681
+          ]
+        },
+        "up": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            10.894,
+            10.894
+          ]
+        },
+        "down": {
+          "texture": "#heavy_plinth",
+          "uv": [
+            0,
+            0,
+            10.894,
+            10.894
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.3404,
+        0.6809,
+        2.8936
+      ],
+      "to": [
+        13.1064,
+        4.0851,
+        5.617
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            0,
+            0,
+            4.766,
+            3.404
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            4.766,
+            3.404
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.723,
+            3.404
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            2.723,
+            3.404
+          ]
+        },
+        "up": {
+          "texture": "#machine_top",
+          "uv": [
+            0,
+            0,
+            4.766,
+            2.723
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            4.766,
+            2.723
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.234,
+        0.6809,
+        4.5957
+      ],
+      "to": [
+        7.3191,
+        14.9787,
+        12.0851
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            4.085,
+            14.298
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            4.085,
+            14.298
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            7.489,
+            14.298
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            7.489,
+            14.298
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            4.085,
+            7.489
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            4.085,
+            7.489
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.6809,
+        4.0851,
+        5.9574
+      ],
+      "to": [
+        12.766,
+        7.4894,
+        12.766
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            4.085,
+            3.404
+          ]
+        },
+        "south": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            4.085,
+            3.404
+          ]
+        },
+        "east": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            6.809,
+            3.404
+          ]
+        },
+        "west": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            6.809,
+            3.404
+          ]
+        },
+        "up": {
+          "texture": "#fluid_tank_top",
+          "uv": [
+            0,
+            0,
+            4.085,
+            6.809
+          ]
+        },
+        "down": {
+          "texture": "#fluid_tank_side",
+          "uv": [
+            0,
+            0,
+            4.085,
+            6.809
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5957,
+        14.9787,
+        7.6596
+      ],
+      "to": [
+        5.9574,
+        16.0,
+        9.0213
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.362,
+            1.021
+          ]
+        },
+        "south": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.362,
+            1.021
+          ]
+        },
+        "east": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.362,
+            1.021
+          ]
+        },
+        "west": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.362,
+            1.021
+          ]
+        },
+        "up": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.362,
+            1.362
+          ]
+        },
+        "down": {
+          "texture": "#machine_side",
+          "uv": [
+            0,
+            0,
+            1.362,
+            1.362
+          ]
+        }
+      }
+    }
+  ]
+}

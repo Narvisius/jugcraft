@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " G ",
+    "SIS"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "S": "minecraft:birch_slab",
+    "I": "minecraft:ink_sac"
+  },
+  "result": {
+    "id": "jugcraft:spirit_board",
+    "count": 1
+  }
+}

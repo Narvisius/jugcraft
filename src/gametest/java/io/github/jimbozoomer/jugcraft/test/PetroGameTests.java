@@ -1,6 +1,13 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.chemistry.FoamSprayerItem;
+import io.github.jimbozoomer.jugcraft.chemistry.ConstructionChemistry;
+import net.minecraft.world.entity.EquipmentSlot;
+import io.github.jimbozoomer.jugcraft.weapons.Warhead;
+import io.github.jimbozoomer.jugcraft.weapons.Flash;
+import io.github.jimbozoomer.jugcraft.weapons.FieldChemistry;
+import io.github.jimbozoomer.jugcraft.weapons.ChemicalCloud;
 import io.github.jimbozoomer.jugcraft.chemistry.FertilizerItem;
 import io.github.jimbozoomer.jugcraft.chemistry.FluidFuels;
 import io.github.jimbozoomer.jugcraft.chemistry.OilReservoirs;
@@ -10,10 +17,21 @@ import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.farming.JugcraftFarming;
+import io.github.jimbozoomer.jugcraft.gear.GrappleHook;
+import io.github.jimbozoomer.jugcraft.gear.JugcraftGear;
+import io.github.jimbozoomer.jugcraft.gear.JugcraftGrapple;
+import io.github.jimbozoomer.jugcraft.gear.PneumaticGrappleItem;
+import io.github.jimbozoomer.jugcraft.gear.ScubaTankItem;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.phys.BlockHitResult;
 import io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.ElectricPumpBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.FluidTankBlockEntity;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.fluid.GasCylinderItem;
+import io.github.jimbozoomer.jugcraft.fluid.StoredFluid;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import io.github.jimbozoomer.jugcraft.fluid.TankGaugeBlock;
 import io.github.jimbozoomer.jugcraft.kinetic.DynamoBlockEntity;
 import io.github.jimbozoomer.jugcraft.kinetic.FlywheelBlock;
@@ -204,44 +222,64 @@ public class PetroGameTests {
 		return helper.getBlockEntity(master, MachineBlockEntity.class);
 	}
 
-	/** The extractor's water tank takes water from outside but not lava, and its oil tank takes nothing in. */
+	/**
+	 * The settling plant's input tank takes what its jobs use (water for oil sand, flowback water) but not lava, and
+	 * its output tank takes nothing in.
+	 */
 	@GameTest
-	public void extractorTanksOnlyTakeWhatTheyUse(GameTestHelper helper) {
+	public void settlingPlantTanksOnlyTakeWhatTheyUse(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		MachineBlockEntity extractor = place(helper, MachineKind.OIL_SAND_EXTRACTOR, new BlockPos(3, 1, 1));
-		Storage<FluidVariant> tanks = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(3, 1, 1)), Direction.NORTH);
-		helper.assertTrue(tanks != null, "The extractor has no fluid storage");
+		MachineBlockEntity plant = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
+		Storage<FluidVariant> tanks = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(4, 1, 2)), Direction.NORTH);
+		helper.assertTrue(tanks != null, "The settling plant has no fluid storage");
 		try (Transaction transaction = Transaction.openOuter()) {
 			long water = tanks.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction);
 			long lava = tanks.insert(FluidVariant.of(Fluids.LAVA), FluidConstants.BUCKET, transaction);
 			long oil = tanks.insert(FluidVariant.of(PetroFluids.CRUDE_OIL.source()), FluidConstants.BUCKET, transaction);
-			helper.assertTrue(water == FluidConstants.BUCKET, "The extractor took " + water + " droplets of water");
-			helper.assertTrue(lava == 0 && oil == 0, "The extractor took lava (" + lava + ") or crude oil (" + oil + ")");
+			helper.assertTrue(water == FluidConstants.BUCKET, "The settling plant took " + water + " droplets of water");
+			helper.assertTrue(lava == 0 && oil == 0, "The settling plant took lava (" + lava + ") or crude oil (" + oil + ")");
 			transaction.abort();
 		}
-		helper.assertTrue(extractor.tanks().input(0).isResourceBlank(), "An aborted insert left fluid behind");
+		helper.assertTrue(plant.tanks().input(0).isResourceBlank(), "An aborted insert left fluid behind");
 		helper.succeed();
 	}
 
-	/** A powered oil sand extractor with water turns a block of oil sand into 500 mB of crude oil and a block of sand. */
+	/** With water, the settling plant turns a block of oil sand into 500 mB of crude oil and a block of sand. */
 	@GameTest(maxTicks = 300)
-	public void extractorWashesOilFromOilSand(GameTestHelper helper) {
+	public void settlingPlantWashesOilFromOilSand(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		MachineBlockEntity extractor = place(helper, MachineKind.OIL_SAND_EXTRACTOR, new BlockPos(3, 1, 1));
-		extractor.tanks().input(0).fill(Fluids.WATER, 1000);
-		extractor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("oil_sand"))));
+		MachineBlockEntity plant = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
+		plant.tanks().input(0).fill(Fluids.WATER, 1000);
+		plant.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("oil_sand"))));
 		helper.succeedWhen(() -> {
-			int oil = extractor.tanks().output(0).millibuckets();
-			helper.assertTrue(oil == 500 && extractor.tanks().output(0).variant.isOf(PetroFluids.CRUDE_OIL.source()),
-					"The extractor holds " + oil + " mB of oil");
-			helper.assertTrue(extractor.tanks().input(0).millibuckets() == 750, "Water left: " + extractor.tanks().input(0).millibuckets());
-			helper.assertTrue(extractor.getItem(1).is(Items.SAND), "Output slot holds " + extractor.getItem(1));
+			int oil = plant.tanks().output(0).millibuckets();
+			helper.assertTrue(oil == 500 && plant.tanks().output(0).variant.isOf(PetroFluids.CRUDE_OIL.source()),
+					"The settling plant holds " + oil + " mB of oil");
+			helper.assertTrue(plant.tanks().input(0).millibuckets() == 750, "Water left: " + plant.tanks().input(0).millibuckets());
+			helper.assertTrue(plant.getItem(1).is(Items.SAND), "Output slot holds " + plant.getItem(1));
+		});
+	}
+
+	/** The settling plant's filter press squeezes a block of mud into four clay balls and 250 mB of water. */
+	@GameTest(maxTicks = 200)
+	public void settlingPlantPressesMudIntoClay(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity plant = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
+		plant.setItem(0, new ItemStack(Items.MUD));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(plant.getItem(1).is(Items.CLAY_BALL) && plant.getItem(1).getCount() == 4,
+					"Output slot holds " + plant.getItem(1));
+			helper.assertTrue(plant.tanks().output(0).has(Fluids.WATER, 250), "Water: " + plant.tanks().output(0).millibuckets());
+			helper.assertTrue(plant.getItem(0).isEmpty(), "The mud was not used");
 		});
 	}
 
@@ -340,52 +378,60 @@ public class PetroGameTests {
 		});
 	}
 
-	/** The vacuum distillation unit turns a bucket of heavy fuel oil into 400 mB of lubricant and two asphalt binder. */
+	/**
+	 * Heavy fuel oil piped into the distillation tower boils under vacuum: 400 mB of lubricant in its fifth tank and two
+	 * asphalt binder in its slot.
+	 */
 	@GameTest(maxTicks = 300)
-	public void vacuumUnitMakesLubricantAndAsphalt(GameTestHelper helper) {
+	public void towerVacuumDistilsHeavyFuelOil(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		MachineBlockEntity unit = place(helper, MachineKind.VACUUM_DISTILLATION_UNIT, new BlockPos(4, 1, 2));
-		unit.tanks().input(0).fill(PetroFluids.HEAVY_FUEL_OIL.source(), 1000);
+		MachineBlockEntity tower = place(helper, MachineKind.DISTILLATION_TOWER, new BlockPos(4, 1, 2));
+		tower.tanks().input(0).fill(PetroFluids.HEAVY_FUEL_OIL.source(), 1000);
 		helper.succeedWhen(() -> {
-			helper.assertTrue(unit.tanks().output(0).has(PetroFluids.LUBRICANT.source(), 400), "No lubricant");
-			helper.assertTrue(unit.getItem(0).is(PetroItems.ASPHALT_BINDER) && unit.getItem(0).getCount() == 2,
-					"The unit holds " + unit.getItem(0));
-			helper.assertTrue(unit.tanks().input(0).isResourceBlank(), "Heavy fuel oil left over");
+			helper.assertTrue(tower.tanks().output(4).has(PetroFluids.LUBRICANT.source(), 400), "No lubricant");
+			helper.assertTrue(tower.getItem(0).is(PetroItems.ASPHALT_BINDER) && tower.getItem(0).getCount() == 2,
+					"The tower holds " + tower.getItem(0));
+			helper.assertTrue(tower.tanks().input(0).isResourceBlank(), "Heavy fuel oil left over");
 		});
 	}
 
-	/** The catalytic reformer turns a bucket of naphtha into 900 mB of gasoline and 100 mB of refinery gas. */
+	/**
+	 * Naphtha piped into the catalytic cracker is reformed over one catalyst: 900 mB of gasoline in its fourth tank and
+	 * 100 mB of refinery gas in its gas tank.
+	 */
 	@GameTest(maxTicks = 300)
-	public void reformerMakesGasoline(GameTestHelper helper) {
+	public void crackerReformsNaphtha(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		MachineBlockEntity reformer = place(helper, MachineKind.CATALYTIC_REFORMER, new BlockPos(4, 1, 2));
-		reformer.tanks().input(0).fill(PetroFluids.NAPHTHA.source(), 1000);
+		MachineBlockEntity cracker = place(helper, MachineKind.CATALYTIC_CRACKER, new BlockPos(4, 1, 2));
+		cracker.tanks().input(0).fill(PetroFluids.NAPHTHA.source(), 1000);
+		cracker.setItem(0, new ItemStack(PetroItems.CRACKING_CATALYST, 2));
 		helper.succeedWhen(() -> {
-			helper.assertTrue(reformer.tanks().output(0).has(PetroFluids.GASOLINE.source(), 900), "No gasoline");
-			helper.assertTrue(reformer.tanks().output(1).has(PetroFluids.REFINERY_GAS.fluid(), 100), "No refinery gas");
+			helper.assertTrue(cracker.tanks().output(3).has(PetroFluids.GASOLINE.source(), 900), "No gasoline");
+			helper.assertTrue(cracker.tanks().output(2).has(PetroFluids.REFINERY_GAS.fluid(), 100), "No refinery gas");
+			helper.assertTrue(cracker.getItem(0).getCount() == 1, "The cracker used " + (2 - cracker.getItem(0).getCount()) + " catalysts");
 		});
 	}
 
-	/** The chemical mixer stirs two sand and a dried kelp into a bucket of water to make a bucket of fracking fluid. */
+	/** The chemical reactor mixes two sand and a dried kelp into a bucket of water: a bucket of fracking fluid. */
 	@GameTest(maxTicks = 200)
-	public void mixerMakesFrackingFluid(GameTestHelper helper) {
+	public void reactorMixesFrackingFluid(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		MachineBlockEntity mixer = place(helper, MachineKind.CHEMICAL_MIXER, new BlockPos(4, 1, 2));
-		mixer.tanks().input(0).fill(Fluids.WATER, 1000);
-		mixer.setItem(0, new ItemStack(Items.SAND, 2));
-		mixer.setItem(1, new ItemStack(Items.DRIED_KELP));
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
+		reactor.setItem(0, new ItemStack(Items.SAND, 2));
+		reactor.setItem(1, new ItemStack(Items.DRIED_KELP));
 		helper.succeedWhen(() -> {
-			helper.assertTrue(mixer.tanks().output(0).has(PetroFluids.FRACKING_FLUID.source(), 1000), "No fracking fluid");
-			helper.assertTrue(mixer.getItem(0).isEmpty() && mixer.getItem(1).isEmpty(), "The mixer kept its sand or kelp");
+			helper.assertTrue(reactor.tanks().output(0).has(PetroFluids.FRACKING_FLUID.source(), 1000), "No fracking fluid");
+			helper.assertTrue(reactor.getItem(0).isEmpty() && reactor.getItem(1).isEmpty(), "The reactor kept its sand or kelp");
 		});
 	}
 
@@ -419,7 +465,7 @@ public class PetroGameTests {
 		});
 	}
 
-	/** The flowback treatment unit turns a bucket of flowback water into 750 mB of clean water and a salt. */
+	/** The settling plant turns a bucket of flowback water into 750 mB of clean water and a salt. */
 	@GameTest(maxTicks = 200)
 	public void treatmentCleansFlowback(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
@@ -430,7 +476,7 @@ public class PetroGameTests {
 		unit.tanks().input(0).fill(PetroFluids.FLOWBACK_WATER.source(), 1000);
 		helper.succeedWhen(() -> {
 			helper.assertTrue(unit.tanks().output(0).has(Fluids.WATER, 750), "Water: " + unit.tanks().output(0).millibuckets());
-			helper.assertTrue(unit.getItem(0).is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt"))), "No salt: " + unit.getItem(0));
+			helper.assertTrue(unit.getItem(1).is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt"))), "No salt: " + unit.getItem(1));
 		});
 	}
 
@@ -488,6 +534,148 @@ public class PetroGameTests {
 				helper.assertTrue(lubricant < 100 && lubricant >= 95, "Lubricant left: " + lubricant);
 				helper.succeed();
 			});
+		});
+	}
+
+	/** Batch 29: the hydrotreater turns diesel and hydrogen into premium diesel (base tank) and hydrogen sulfide (top). */
+	@GameTest(maxTicks = 300)
+	public void hydrotreaterMakesPremiumDiesel(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity hydrotreater = place(helper, MachineKind.HYDROTREATER, new BlockPos(4, 1, 2));
+		hydrotreater.tanks().input(0).fill(PetroFluids.DIESEL.source(), 1000);
+		hydrotreater.tanks().input(1).fill(PetroFluids.HYDROGEN.fluid(), 100);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(hydrotreater.tanks().output(0).has(PetroFluids.PREMIUM_DIESEL.source(), 1000), "No premium diesel");
+			helper.assertTrue(hydrotreater.tanks().output(1).has(PetroFluids.HYDROGEN_SULFIDE.fluid(), 100), "No hydrogen sulfide");
+			helper.assertTrue(hydrotreater.tanks().input(0).millibuckets() == 0 && hydrotreater.tanks().input(1).millibuckets() == 0,
+					"Left over: " + hydrotreater.tanks().input(0).millibuckets() + " diesel, " + hydrotreater.tanks().input(1).millibuckets() + " hydrogen");
+		});
+	}
+
+	/** Batch 29: 900 mB of gasoline blended with 100 mB of bioethanol make a bucket of premium gasoline. */
+	@GameTest(maxTicks = 200)
+	public void hydrotreaterBlendsPremiumGasoline(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity hydrotreater = place(helper, MachineKind.HYDROTREATER, new BlockPos(4, 1, 2));
+		hydrotreater.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 900);
+		hydrotreater.tanks().input(1).fill(PetroFluids.BIOETHANOL.source(), 100);
+		helper.succeedWhen(() -> helper.assertTrue(hydrotreater.tanks().output(0).has(PetroFluids.PREMIUM_GASOLINE.source(), 1000),
+				"No premium gasoline"));
+	}
+
+	/** Batch 29: the chemical reactor recovers a sulfur dust from 200 mB of hydrogen sulfide (the Claus process). */
+	@GameTest(maxTicks = 200)
+	public void reactorRecoversSulfur(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(PetroFluids.HYDROGEN_SULFIDE.fluid(), 200);
+		helper.succeedWhen(() -> {
+			ItemStack out = reactor.getItem(MachineKind.CHEMICAL_REACTOR.outputSlot());
+			helper.assertTrue(out.is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("sulfur_dust"))) && out.getCount() == 1, "Got " + out);
+			helper.assertTrue(reactor.tanks().input(0).millibuckets() == 0, "Gas left over");
+		});
+	}
+
+	/** Batch 29: premium diesel is worth 320 JE a mB in the diesel generator, a quarter more than diesel. */
+	@GameTest(maxTicks = 200)
+	public void premiumDieselBurnsBetter(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(4, 1, 2);
+		MachineBlockEntity generator = place(helper, MachineKind.DIESEL_GENERATOR, master);
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		energy.setAmount(0);
+		generator.tanks().input(0).fill(PetroFluids.PREMIUM_DIESEL.source(), 1000);
+		helper.runAfterDelay(40, () -> {
+			int burnt = 1000 - generator.tanks().input(0).millibuckets();
+			long expected = (long) burnt * FluidFuels.PREMIUM_DIESEL;
+			helper.assertTrue(burnt > 0, "Burnt no premium diesel");
+			helper.assertTrue(energy.getAmount() <= expected && energy.getAmount() > expected - MachineKind.DIESEL_OUTPUT,
+					"Energy " + energy.getAmount() + " for " + burnt + " mB");
+			helper.succeed();
+		});
+	}
+
+	/** A gas turbine (master at {@code master}) running on gasoline with lubricant, its buffer emptied. */
+	private static MachineBlockEntity runningTurbine(GameTestHelper helper, BlockPos master) {
+		MachineBlockEntity turbine = place(helper, MachineKind.GAS_TURBINE, master);
+		((SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP)).setAmount(0);
+		turbine.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 4000);
+		turbine.tanks().input(1).fill(PetroFluids.LUBRICANT.source(), 100);
+		return turbine;
+	}
+
+	/** A heat recovery unit at {@code pos}, its buffer emptied, with water and lubricant (or without water). */
+	private static SimpleEnergyStorage recoveryUnit(GameTestHelper helper, BlockPos pos, boolean water) {
+		MachineBlockEntity unit = place(helper, MachineKind.HEAT_RECOVERY_UNIT, pos);
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
+		energy.setAmount(0);
+		if (water) {
+			unit.tanks().input(0).fill(Fluids.WATER, 4000);
+		}
+		unit.tanks().input(1).fill(PetroFluids.LUBRICANT.source(), 100);
+		return energy;
+	}
+
+	/**
+	 * Batch 29: a heat recovery unit in front of a running gas turbine makes 30% of the turbine's output again from its
+	 * exhaust, boiling water as it goes; one without water makes nothing.
+	 */
+	@GameTest(maxTicks = 200)
+	public void heatRecoveryUnitUsesTurbineExhaust(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(5, 1, 3);
+		runningTurbine(helper, master);
+		SimpleEnergyStorage turbine = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		SimpleEnergyStorage dry = recoveryUnit(helper, new BlockPos(5, 1, 5), false);
+		SimpleEnergyStorage unit = recoveryUnit(helper, new BlockPos(5, 1, 2), true);
+		MachineBlockEntity unitEntity = helper.getBlockEntity(new BlockPos(5, 1, 2), MachineBlockEntity.class);
+		helper.runAfterDelay(60, () -> {
+			long made = turbine.getAmount();
+			long share = made * MachineKind.RECOVERY_PERCENT / 100;
+			long slack = 2L * MachineKind.TURBINE_OUTPUT * MachineKind.RECOVERY_PERCENT / 100 + 1;
+			helper.assertTrue(made > 0, "The turbine made nothing");
+			helper.assertTrue(unit.getAmount() <= share && unit.getAmount() >= share - slack,
+					"Recovered " + unit.getAmount() + " JE of the turbine's " + made);
+			int boiled = 4000 - unitEntity.tanks().input(0).millibuckets();
+			helper.assertTrue(Math.abs(boiled - unit.getAmount() / MachineKind.RECOVERY_JE_PER_WATER) <= 1,
+					"Boiled " + boiled + " mB of water for " + unit.getAmount() + " JE");
+			helper.assertTrue(dry.getAmount() == 0, "A unit without water made " + dry.getAmount() + " JE");
+			helper.succeed();
+		});
+	}
+
+	/** Batch 29: two heat recovery units on one turbine share its exhaust heat; together they never make more than one. */
+	@GameTest(maxTicks = 200)
+	public void heatRecoveryUnitsShareOneTurbine(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(5, 1, 3);
+		runningTurbine(helper, master);
+		SimpleEnergyStorage turbine = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		SimpleEnergyStorage front = recoveryUnit(helper, new BlockPos(5, 1, 2), true);
+		SimpleEnergyStorage back = recoveryUnit(helper, new BlockPos(5, 1, 5), true);
+		helper.runAfterDelay(60, () -> {
+			long share = turbine.getAmount() * MachineKind.RECOVERY_PERCENT / 100;
+			long both = front.getAmount() + back.getAmount();
+			helper.assertTrue(both > 0 && both <= share, "Two units recovered " + both + " JE of a one-turbine share of " + share);
+			helper.succeed();
 		});
 	}
 
@@ -816,12 +1004,27 @@ public class PetroGameTests {
 		});
 	}
 
+	/** How long the heliostat test waits for sky light to settle under the roof it places. */
+	private static final int ROOF_SETTLE_TICKS = 100;
+
+	/** Runs {@code then} once the receiver at {@code absolute} counts {@code expected} heliostats; fails after {@code left} ticks. */
+	private static void awaitHeliostatCount(GameTestHelper helper, BlockPos absolute, int expected, int left, Runnable then) {
+		int count = SolarReceiverBlockEntity.countHeliostats(helper.getLevel(), absolute);
+		if (count == expected) {
+			then.run();
+		} else if (left <= 0) {
+			helper.assertTrue(false, "The receiver counted " + count + " heliostats under open sky");
+		} else {
+			helper.runAfterDelay(1, () -> awaitHeliostatCount(helper, absolute, expected, left - 1, then));
+		}
+	}
+
 	/**
 	 * Solar thermal (batch 21): a receiver counts the heliostats under open sky in the field below it (not one that is
 	 * roofed over), makes nothing without water, and with water makes 12 JE/t a heliostat in daylight (half in rain),
 	 * boiling water for it. The test world's time and weather are not fixed, so daylight is read from the level.
 	 */
-	@GameTest(maxTicks = 200)
+	@GameTest(maxTicks = 320)
 	public void heliostatsHeatASolarReceiver(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
@@ -835,22 +1038,27 @@ public class PetroGameTests {
 		helper.setBlock(new BlockPos(6, 2, 1), Blocks.STONE);
 		BlockPos absolute = helper.absolutePos(receiverPos);
 		SolarReceiverBlockEntity receiver = helper.getBlockEntity(receiverPos, SolarReceiverBlockEntity.class);
-		// Sky light (what "open sky" reads) catches up with the new roof a few ticks after it is placed.
-		helper.runAfterDelay(20, () -> {
-			int count = SolarReceiverBlockEntity.countHeliostats(helper.getLevel(), absolute);
-			helper.assertTrue(count == 3, "The receiver counted " + count + " heliostats under open sky");
+		// Sky light (what "open sky" reads) catches up with the new roof some ticks after it is placed, later on a busy
+		// server: wait until the count settles (at most ROOF_SETTLE_TICKS) rather than a fixed delay.
+		awaitHeliostatCount(helper, absolute, 3, ROOF_SETTLE_TICKS, () -> {
 			helper.assertTrue(receiver.lastOutput() == 0 && receiver.energy().getAmount() == 0, "It made power without water");
-			receiver.water().variant = FluidVariant.of(Fluids.WATER);
-			receiver.water().amount = 4 * FluidConstants.BUCKET;
-			helper.runAfterDelay(5, () -> {
-				ServerLevel level = helper.getLevel();
-				boolean sun = level.isBrightOutside() && level.canSeeSky(absolute.above());
-				int expected = sun ? (level.isRaining() ? 18 : 36) : 0;
-				helper.assertTrue(receiver.lastOutput() == expected,
-						"The receiver made " + receiver.lastOutput() + " JE/t, expected " + expected);
-				helper.assertTrue((expected > 0) == (receiver.water().amount < 4 * FluidConstants.BUCKET),
-						"Water boiled " + (4 * FluidConstants.BUCKET - receiver.water().amount) / 81 + " mB at " + expected + " JE/t");
-				helper.succeed();
+			// The receiver counted on its first tick, before the roof's sky light settled, and counts again only when the
+			// game time is a multiple of SCAN_INTERVAL: give it water after its next count, so the test does not depend
+			// on the game time it starts at.
+			int nextScan = (int) (SolarReceiverBlockEntity.SCAN_INTERVAL - helper.getLevel().getGameTime() % SolarReceiverBlockEntity.SCAN_INTERVAL);
+			helper.runAfterDelay(nextScan + 1, () -> {
+				receiver.water().variant = FluidVariant.of(Fluids.WATER);
+				receiver.water().amount = 4 * FluidConstants.BUCKET;
+				helper.runAfterDelay(5, () -> {
+					ServerLevel level = helper.getLevel();
+					boolean sun = level.isBrightOutside() && level.canSeeSky(absolute.above());
+					int expected = sun ? (level.isRaining() ? 18 : 36) : 0;
+					helper.assertTrue(receiver.lastOutput() == expected,
+							"The receiver made " + receiver.lastOutput() + " JE/t, expected " + expected);
+					helper.assertTrue((expected > 0) == (receiver.water().amount < 4 * FluidConstants.BUCKET),
+							"Water boiled " + (4 * FluidConstants.BUCKET - receiver.water().amount) / 81 + " mB at " + expected + " JE/t");
+					helper.succeed();
+				});
 			});
 		});
 	}
@@ -877,17 +1085,17 @@ public class PetroGameTests {
 		helper.succeed();
 	}
 
-	/** The chemical mixer dissolves two salt in a bucket of water to make a bucket of brine. */
+	/** The chemical reactor dissolves two salt in a bucket of water to make a bucket of brine. */
 	@GameTest(maxTicks = 200)
-	public void mixerMakesBrine(GameTestHelper helper) {
+	public void reactorMixesBrine(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		MachineBlockEntity mixer = place(helper, MachineKind.CHEMICAL_MIXER, new BlockPos(4, 1, 2));
-		mixer.tanks().input(0).fill(Fluids.WATER, 1000);
-		mixer.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt")), 2));
-		helper.succeedWhen(() -> helper.assertTrue(mixer.tanks().output(0).has(PetroFluids.BRINE.source(), 1000), "No brine"));
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
+		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt")), 2));
+		helper.succeedWhen(() -> helper.assertTrue(reactor.tanks().output(0).has(PetroFluids.BRINE.source(), 1000), "No brine"));
 	}
 
 	/** The electrolytic cell splits a bucket of brine into 250 mB of chlorine, 250 mB of hydrogen and 500 mB of lye. */
@@ -903,6 +1111,78 @@ public class PetroGameTests {
 			helper.assertTrue(cell.tanks().output(0).has(PetroFluids.CHLORINE.fluid(), 250), "Chlorine: " + cell.tanks().output(0).millibuckets());
 			helper.assertTrue(cell.tanks().output(1).has(PetroFluids.HYDROGEN.fluid(), 250), "Hydrogen: " + cell.tanks().output(1).millibuckets());
 			helper.assertTrue(cell.tanks().output(2).has(PetroFluids.LYE.source(), 500), "Lye: " + cell.tanks().output(2).millibuckets());
+		});
+	}
+
+	/**
+	 * The electrolytic cell also splits plain water, slowly: a bucket gives 500 mB of hydrogen (middle row) and 250 mB
+	 * of oxygen (top row) after 800 ticks.
+	 */
+	@GameTest(maxTicks = 1000)
+	public void cellSplitsWater(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(4, 1, 2);
+		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, master);
+		cell.tanks().input(0).fill(Fluids.WATER, 1000);
+		// A bucket takes 204,800 JE, more than the cell's 60,000 JE battery holds: keep it charged, as a cable would.
+		// (succeedWhen runs this check every tick until it passes.)
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
+		helper.succeedWhen(() -> {
+			energy.setAmount(energy.getCapacity());
+			helper.assertTrue(cell.tanks().output(1).has(PetroFluids.HYDROGEN.fluid(), 500), "Hydrogen: " + cell.tanks().output(1).millibuckets());
+			helper.assertTrue(cell.tanks().output(0).has(PetroFluids.OXYGEN.fluid(), 250), "Oxygen: " + cell.tanks().output(0).millibuckets());
+			helper.assertTrue(cell.tanks().output(2).isResourceBlank(), "Something went into the lye tank");
+			helper.assertTrue(cell.tanks().input(0).isResourceBlank(), "Water left over");
+		});
+	}
+
+	/**
+	 * Batch 26, the best ore route: an iron ore dissolved in 250 mB of sulfuric acid gives four washed iron ore (the
+	 * ore washer gives three).
+	 */
+	@GameTest(maxTicks = 300)
+	public void reactorLeachesOreFourTimes(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 250);
+		reactor.setItem(0, new ItemStack(Items.IRON_ORE));
+		helper.succeedWhen(() -> {
+			ItemStack out = reactor.getItem(reactor.kind().outputSlot());
+			helper.assertTrue(out.is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("washed_iron_ore"))) && out.getCount() == 4,
+					"The reactor made " + out);
+			helper.assertTrue(reactor.tanks().input(0).isResourceBlank(), "Acid left over");
+		});
+	}
+
+	/**
+	 * Batch 26: eight crops ferment in a bucket of water into 250 mB of bioethanol, which the gas turbine and the advanced
+	 * engine burn.
+	 */
+	@GameTest(maxTicks = 300)
+	public void reactorFermentsBioethanol(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
+		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
+		reactor.setItem(0, new ItemStack(Items.SUGAR_CANE, 8));
+		helper.assertTrue(FluidFuels.jePerMb(MachineKind.GAS_TURBINE, PetroFluids.BIOETHANOL.source()) == 192,
+				"The gas turbine does not burn bioethanol at 192 JE/mB");
+		helper.assertTrue(FluidFuels.jePerMb(MachineKind.ADVANCED_ENGINE, PetroFluids.BIOETHANOL.source()) == 256,
+				"The advanced engine does not burn bioethanol at 256 KE/mB");
+		helper.assertTrue(FluidFuels.jePerMb(MachineKind.DIESEL_GENERATOR, PetroFluids.BIOETHANOL.source()) == 0,
+				"The diesel generator burns bioethanol");
+		helper.succeedWhen(() -> {
+			helper.assertTrue(reactor.tanks().output(0).has(PetroFluids.BIOETHANOL.source(), 250),
+					"Bioethanol: " + reactor.tanks().output(0).millibuckets());
+			helper.assertTrue(reactor.getItem(0).isEmpty(), "The reactor kept its sugar cane");
 		});
 	}
 
@@ -1036,21 +1316,36 @@ public class PetroGameTests {
 		});
 	}
 
-	/** Argon around the crystal grower's melt doubles its speed too. */
+	/**
+	 * Argon piped into the arc furnace's controller shields the melt and doubles its speed: a silicon boule (400 ticks
+	 * without) comes out well within 300 ticks.
+	 */
 	@GameTest(maxTicks = 300)
-	public void argonSpeedsUpTheCrystalGrower(GameTestHelper helper) {
+	public void argonSpeedsUpTheArcFurnace(GameTestHelper helper) {
 		if (TestFocus.skip("petro")) {
 			helper.succeed();
 			return;
 		}
-		BlockPos master = new BlockPos(2, 1, 2);
-		MachineBlockEntity grower = place(helper, MachineKind.CRYSTAL_GROWER, master);
-		grower.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("silicon")), 4));
-		grower.setItem(1, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("phosphate"))));
-		feedGas(helper, master, PetroFluids.ARGON.fluid(), 1_000);
+		// A solid 3x3x3 of casing with the controller in the middle of its north face, facing out.
+		for (int x = 2; x <= 4; x++) {
+			for (int y = 1; y <= 3; y++) {
+				for (int z = 1; z <= 3; z++) {
+					helper.setBlock(new BlockPos(x, y, z), JugcraftMachines.ARC_FURNACE_CASING);
+				}
+			}
+		}
+		BlockPos controller = new BlockPos(3, 2, 1);
+		helper.setBlock(controller, JugcraftMachines.MACHINES.get(MachineKind.ARC_FURNACE).defaultBlockState()
+				.setValue(MachineBlock.FACING, Direction.NORTH));
+		MachineBlockEntity furnace = helper.getBlockEntity(controller, MachineBlockEntity.class);
+		EnergyStorage storage = EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(controller), Direction.NORTH);
+		((SimpleEnergyStorage) storage).setAmount(storage.getCapacity());
+		furnace.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("silicon")), 4));
+		furnace.setItem(1, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("phosphate"))));
+		feedGas(helper, controller, PetroFluids.ARGON.fluid(), 1_000);
 		helper.succeedWhen(() -> {
-			ItemStack output = grower.getItem(MachineKind.CRYSTAL_GROWER.outputSlot());
-			helper.assertTrue(output.is(PetroItems.SILICON_BOULE), "Grower output: " + output);
+			ItemStack output = furnace.getItem(MachineKind.ARC_FURNACE.outputSlot());
+			helper.assertTrue(output.is(PetroItems.SILICON_BOULE), "Arc furnace output: " + output);
 		});
 	}
 
@@ -1139,6 +1434,273 @@ public class PetroGameTests {
 			transaction.commit();
 		}
 		helper.succeed();
+	}
+
+	/**
+	 * Batch 27: a scuba tank used on a gas holder of oxygen fills to its 8,000 mB and leaves the rest in the holder.
+	 */
+	@GameTest
+	public void scubaTankFillsFromAGasHolder(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(5, 1, 1);
+		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
+		BlockPos at = helper.absolutePos(master);
+		Storage<FluidVariant> holder = FluidStorage.SIDED.find(helper.getLevel(), at, Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			holder.insert(FluidVariant.of(PetroFluids.OXYGEN.fluid()), 10 * FluidConstants.BUCKET, transaction);
+			transaction.commit();
+		}
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(JugcraftGear.SCUBA_TANK));
+		ItemStack tank = player.getItemInHand(InteractionHand.MAIN_HAND);
+		tank.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(Vec3.atCenterOf(at), Direction.UP, at, false)));
+		helper.assertTrue(ScubaTankItem.oxygen(tank) == ScubaTankItem.CAPACITY, "The tank holds " + ScubaTankItem.oxygen(tank) + " mB");
+		long left = StorageUtil.simulateExtract(holder, FluidVariant.of(PetroFluids.OXYGEN.fluid()), Long.MAX_VALUE, null);
+		helper.assertTrue(left == 2_000 * FluidNetworks.DROPLETS_PER_MB, "The holder has " + left / FluidNetworks.DROPLETS_PER_MB + " mB left");
+		helper.succeed();
+	}
+
+	/**
+	 * Batch 35: a gas cylinder fills from a gas holder up to its 8,000 mB, empties into a fuel cell when used sneaking,
+	 * refuses liquids and a second gas, and tops up a scuba tank in the other hand with its oxygen.
+	 */
+	@GameTest
+	public void gasCylinderCarriesGas(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(5, 1, 1);
+		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
+		BlockPos at = helper.absolutePos(master);
+		Storage<FluidVariant> holder = FluidStorage.SIDED.find(helper.getLevel(), at, Direction.UP);
+		FluidVariant hydrogen = FluidVariant.of(PetroFluids.HYDROGEN.fluid());
+		try (Transaction transaction = Transaction.openOuter()) {
+			holder.insert(hydrogen, 10 * FluidConstants.BUCKET, transaction);
+			transaction.commit();
+		}
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(JugcraftFluids.GAS_CYLINDER));
+		player.getItemInHand(InteractionHand.MAIN_HAND).useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(Vec3.atCenterOf(at), Direction.UP, at, false)));
+		StoredFluid held = GasCylinderItem.contents(player.getItemInHand(InteractionHand.MAIN_HAND));
+		helper.assertTrue(held != null && held.variant().equals(hydrogen)
+				&& held.amount() == GasCylinderItem.CAPACITY * FluidNetworks.DROPLETS_PER_MB, "The cylinder holds " + held);
+		long left = StorageUtil.simulateExtract(holder, hydrogen, Long.MAX_VALUE, null);
+		helper.assertTrue(left == 2_000 * FluidNetworks.DROPLETS_PER_MB, "The holder has " + left / FluidNetworks.DROPLETS_PER_MB + " mB left");
+
+		Storage<FluidVariant> cylinder = GasCylinderItem.storage(
+				ContainerItemContext.withConstant(player.getItemInHand(InteractionHand.MAIN_HAND)));
+		helper.assertTrue(StorageUtil.simulateInsert(cylinder, FluidVariant.of(PetroFluids.OXYGEN.fluid()), FluidConstants.BUCKET, null) == 0,
+				"A hydrogen cylinder took oxygen");
+		Storage<FluidVariant> empty = GasCylinderItem.storage(ContainerItemContext.withConstant(new ItemStack(JugcraftFluids.GAS_CYLINDER)));
+		helper.assertTrue(StorageUtil.simulateInsert(empty, FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, null) == 0,
+				"The cylinder took water");
+
+		BlockPos cellPos = new BlockPos(1, 1, 5);
+		helper.setBlock(cellPos, JugcraftMachines.MACHINES.get(MachineKind.FUEL_CELL).defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));
+		MachineBlockEntity cell = helper.getBlockEntity(cellPos, MachineBlockEntity.class);
+		BlockPos cellAt = helper.absolutePos(cellPos);
+		player.setShiftKeyDown(true);
+		player.getItemInHand(InteractionHand.MAIN_HAND).useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(Vec3.atCenterOf(cellAt), Direction.UP, cellAt, false)));
+		helper.assertTrue(GasCylinderItem.contents(player.getItemInHand(InteractionHand.MAIN_HAND)) == null,
+				"The cylinder kept " + GasCylinderItem.contents(player.getItemInHand(InteractionHand.MAIN_HAND)));
+		helper.assertTrue(cell.tanks().input(0).millibuckets() == GasCylinderItem.CAPACITY,
+				"The fuel cell got " + cell.tanks().input(0).millibuckets() + " mB");
+		player.setShiftKeyDown(false);
+
+		FluidVariant oxygen = FluidVariant.of(PetroFluids.OXYGEN.fluid());
+		player.setItemInHand(InteractionHand.MAIN_HAND, GasCylinderItem.filled(new ItemStack(JugcraftFluids.GAS_CYLINDER), oxygen,
+				3_000 * FluidNetworks.DROPLETS_PER_MB));
+		player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(JugcraftGear.SCUBA_TANK));
+		player.getItemInHand(InteractionHand.MAIN_HAND).use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+		int scuba = ScubaTankItem.oxygen(player.getItemInHand(InteractionHand.OFF_HAND));
+		helper.assertTrue(scuba == 3_000, "The scuba tank got " + scuba + " mB");
+		helper.assertTrue(GasCylinderItem.contents(player.getItemInHand(InteractionHand.MAIN_HAND)) == null, "The oxygen cylinder is not empty");
+		helper.succeed();
+	}
+
+	/** Places a powered one-block machine facing north. */
+	private static MachineBlockEntity placeSingle(GameTestHelper helper, MachineKind kind, BlockPos pos) {
+		helper.setBlock(pos, JugcraftMachines.MACHINES.get(kind).defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), Direction.UP);
+		energy.setAmount(energy.getCapacity());
+		return helper.getBlockEntity(pos, MachineBlockEntity.class);
+	}
+
+	/**
+	 * Batch 35: the ammonia chiller freezes a bucket of water into ice for 5 mB of ammonia, and presses four packed ice
+	 * into blue ice; it refuses lava.
+	 */
+	@GameTest(maxTicks = 400)
+	public void ammoniaChillerMakesIce(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity freezer = placeSingle(helper, MachineKind.AMMONIA_CHILLER, new BlockPos(1, 1, 1));
+		MachineBlockEntity packer = placeSingle(helper, MachineKind.AMMONIA_CHILLER, new BlockPos(4, 1, 1));
+		Storage<FluidVariant> inlet = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, 1)), Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			long ammonia = inlet.insert(FluidVariant.of(PetroFluids.AMMONIA.fluid()), FluidConstants.BUCKET, transaction);
+			long water = inlet.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction);
+			long lava = inlet.insert(FluidVariant.of(Fluids.LAVA), FluidConstants.BUCKET, transaction);
+			helper.assertTrue(ammonia == FluidConstants.BUCKET && water == FluidConstants.BUCKET,
+					"The chiller took " + ammonia / 81 + " mB ammonia and " + water / 81 + " mB water");
+			helper.assertTrue(lava == 0, "The chiller took lava");
+			transaction.commit();
+		}
+		packer.tanks().input(0).fill(PetroFluids.AMMONIA.fluid(), 100);
+		packer.setItem(0, new ItemStack(Items.PACKED_ICE, 4));
+		helper.succeedWhen(() -> {
+			int out = MachineKind.AMMONIA_CHILLER.outputSlot();
+			helper.assertTrue(freezer.getItem(out).is(Items.ICE), "Freezer output is " + freezer.getItem(out));
+			helper.assertTrue(freezer.tanks().input(0).millibuckets() == 995 && freezer.tanks().input(1).millibuckets() == 0,
+					"Freezer tanks: " + freezer.tanks().input(0).millibuckets() + " ammonia, " + freezer.tanks().input(1).millibuckets() + " water");
+			helper.assertTrue(packer.getItem(out).is(Items.BLUE_ICE) && packer.getItem(0).isEmpty(), "Packer output is " + packer.getItem(out));
+		});
+	}
+
+	/**
+	 * Batch 43 (liquid fuels): the cryogenic liquefier condenses a bucket of oxygen into 250 mB of liquid oxygen; RP-1
+	 * kerosene burns in the gas turbine and the advanced engine.
+	 */
+	@GameTest(maxTicks = 300)
+	public void cryogenicLiquefierMakesLiquidOxygen(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		MachineBlockEntity liquefier = placeSingle(helper, MachineKind.CRYOGENIC_LIQUEFIER, new BlockPos(1, 1, 1));
+		liquefier.tanks().input(0).fill(PetroFluids.OXYGEN.fluid(), 1000);
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.chemistry.FluidFuels.jePerMb(MachineKind.GAS_TURBINE,
+				PetroFluids.KEROSENE.source()) == io.github.jimbozoomer.jugcraft.chemistry.FluidFuels.KEROSENE,
+				"Kerosene does not burn in the gas turbine");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.chemistry.FluidFuels.jePerMb(MachineKind.ADVANCED_ENGINE,
+				PetroFluids.KEROSENE.source()) == io.github.jimbozoomer.jugcraft.chemistry.FluidFuels.ADVANCED_KEROSENE,
+				"Kerosene does not burn in the advanced engine");
+		helper.succeedWhen(() -> {
+			int lox = liquefier.tanks().output(0).millibuckets();
+			helper.assertTrue(lox == 250 && liquefier.tanks().output(0).variant.isOf(PetroFluids.LIQUID_OXYGEN.source()),
+					"The liquefier holds " + lox + " mB of " + liquefier.tanks().output(0).variant);
+			helper.assertTrue(liquefier.tanks().input(0).millibuckets() == 0, "Oxygen left: " + liquefier.tanks().input(0).millibuckets());
+		});
+	}
+
+	/** Batch 30: the pneumatic grapple fills with nitrogen from a gas holder, up to its 4,000 mB. */
+	@GameTest
+	public void grappleFillsFromAGasHolder(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos master = new BlockPos(5, 1, 1);
+		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
+		BlockPos at = helper.absolutePos(master);
+		Storage<FluidVariant> holder = FluidStorage.SIDED.find(helper.getLevel(), at, Direction.UP);
+		try (Transaction transaction = Transaction.openOuter()) {
+			holder.insert(FluidVariant.of(PetroFluids.NITROGEN.fluid()), 10 * FluidConstants.BUCKET, transaction);
+			transaction.commit();
+		}
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(JugcraftGrapple.PNEUMATIC_GRAPPLE));
+		ItemStack grapple = player.getItemInHand(InteractionHand.MAIN_HAND);
+		grapple.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(at), Direction.UP, at, false)));
+		helper.assertTrue(PneumaticGrappleItem.nitrogen(grapple) == JugcraftGrapple.CAPACITY, "The grapple holds " + PneumaticGrappleItem.nitrogen(grapple) + " mB");
+		long left = StorageUtil.simulateExtract(holder, FluidVariant.of(PetroFluids.NITROGEN.fluid()), Long.MAX_VALUE, null);
+		helper.assertTrue(left == 6_000 * FluidNetworks.DROPLETS_PER_MB, "The holder has " + left / FluidNetworks.DROPLETS_PER_MB + " mB left");
+		helper.succeed();
+	}
+
+	/** A survival player holding a grapple with {@code nitrogen} mB, standing at {@code pos}. */
+	private static ServerPlayer grappler(GameTestHelper helper, int nitrogen, Vec3 pos) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.SURVIVAL);
+		Vec3 world = helper.absoluteVec(pos);
+		player.setPos(world.x, world.y, world.z);
+		ItemStack grapple = new ItemStack(JugcraftGrapple.PNEUMATIC_GRAPPLE);
+		PneumaticGrappleItem.setNitrogen(grapple, nitrogen);
+		player.setItemInHand(InteractionHand.MAIN_HAND, grapple);
+		return player;
+	}
+
+	/** Batch 30: a shot costs 25 mB and puts a hook out; using it again lets go; an empty grapple does not fire. */
+	@GameTest
+	public void grappleFiresAndLetsGo(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		ServerPlayer player = grappler(helper, 100, new Vec3(2.5, 1, 2.5));
+		ItemStack grapple = player.getMainHandItem();
+		JugcraftGrapple.PNEUMATIC_GRAPPLE.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+		helper.assertTrue(GrappleHook.active(player) != null, "No hook out");
+		helper.assertTrue(PneumaticGrappleItem.nitrogen(grapple) == 75, "Nitrogen left: " + PneumaticGrappleItem.nitrogen(grapple));
+		JugcraftGrapple.PNEUMATIC_GRAPPLE.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+		helper.assertTrue(GrappleHook.active(player) == null, "The hook is still out");
+		helper.assertTrue(PneumaticGrappleItem.nitrogen(grapple) == 75, "Letting go used nitrogen");
+		ServerPlayer empty = grappler(helper, JugcraftGrapple.SHOT_COST - 1, new Vec3(4.5, 1, 4.5));
+		JugcraftGrapple.PNEUMATIC_GRAPPLE.use(helper.getLevel(), empty, InteractionHand.MAIN_HAND);
+		helper.assertTrue(GrappleHook.active(empty) == null, "An empty grapple fired");
+		helper.succeed();
+	}
+
+	/** A hook flying from {@code from} along {@code motion}, owned by {@code owner}. */
+	private static GrappleHook launch(GameTestHelper helper, ServerPlayer owner, Vec3 from, Vec3 motion) {
+		GrappleHook hook = new GrappleHook(helper.getLevel(), owner, owner.getMainHandItem().copyWithCount(1));
+		Vec3 world = helper.absoluteVec(from);
+		hook.setPos(world.x, world.y, world.z);
+		hook.setDeltaMovement(motion);
+		helper.getLevel().addFreshEntity(hook);
+		return hook;
+	}
+
+	/** Batch 30: a hook that bites a wall reels its owner toward it and takes away their fall distance. */
+	@GameTest(maxTicks = 100)
+	public void grappleReelsItsOwnerToAWall(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		for (int y = 1; y <= 4; y++) {
+			for (int z = 0; z <= 4; z++) {
+				helper.setBlock(new BlockPos(7, y, z), Blocks.STONE);
+			}
+		}
+		ServerPlayer player = grappler(helper, 100, new Vec3(1.5, 1, 2.5));
+		player.fallDistance = 10;
+		GrappleHook hook = launch(helper, player, new Vec3(3.0, 2.5, 2.5), new Vec3(1.5, 0, 0));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(hook.isAnchored(), "The hook has not bitten");
+			helper.assertTrue(player.getDeltaMovement().x > 0.5, "The owner is not reeled in: " + player.getDeltaMovement());
+			helper.assertTrue(player.fallDistance == 0, "Fall distance " + player.fallDistance);
+		});
+	}
+
+	/** Batch 30: a hooked pig is dragged toward the owner; an iron golem is too heavy and the hook lets go. */
+	@GameTest(maxTicks = 100)
+	public void grappleDragsLightMobsOnly(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		ServerPlayer player = grappler(helper, 100, new Vec3(1.5, 1, 1.5));
+		Mob pig = helper.spawn(EntityTypes.PIG, new BlockPos(6, 1, 1));
+		Mob golem = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(6, 1, 5));
+		golem.setNoAi(true);
+		GrappleHook onPig = launch(helper, player, new Vec3(3.0, 1.5, 1.5), new Vec3(1.5, 0, 0));
+		GrappleHook onGolem = launch(helper, player, new Vec3(3.0, 1.5, 5.5), new Vec3(1.5, 0, 0));
+		helper.succeedWhen(() -> {
+			helper.assertTrue(onPig.hookedId() == pig.getId() || pig.getX() < helper.absoluteVec(new Vec3(5, 0, 0)).x,
+					"The pig was not hooked");
+			helper.assertTrue(pig.getX() < helper.absoluteVec(new Vec3(5, 0, 0)).x, "The pig was not dragged: " + pig.position());
+			helper.assertTrue(onGolem.isRemoved() && onGolem.hookedId() < 0, "The golem was hooked");
+		});
 	}
 
 	/** A sprinkler with water and fertilizer uses its water a pulse at a time and spreads fertilizer on the crop beside it. */
@@ -1251,5 +1813,157 @@ public class PetroGameTests {
 			helper.assertTrue(out.is(BuiltInRegistries.ITEM.getValue(Jugcraft.id("lithium_carbonate"))) && out.getCount() == 2,
 					"Lithium carbonate: " + out);
 		});
+	}
+
+	/** Batch 31: chlorine hurts a pig, not a pig in a gas mask (whose filter wears), a sealed scuba set or a zombie. */
+	@GameTest
+	public void chlorineHurtsWhatBreathesUnlessMasked(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		Mob bare = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 1, 3));
+		Mob masked = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(4, 1, 3));
+		Mob diver = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 1, 4));
+		Mob zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 4));
+		masked.setItemSlot(EquipmentSlot.HEAD, new ItemStack(FieldChemistry.GAS_MASK));
+		ItemStack tank = new ItemStack(JugcraftGear.SCUBA_TANK);
+		ScubaTankItem.setOxygen(tank, 1000);
+		diver.setItemSlot(EquipmentSlot.HEAD, new ItemStack(JugcraftGear.SCUBA_MASK));
+		diver.setItemSlot(EquipmentSlot.CHEST, tank);
+		ChemicalCloud cloud = ChemicalCloud.spawn(helper.getLevel(), helper.absoluteVec(new Vec3(4.0, 1.5, 4.0)),
+				ChemicalCloud.Kind.CHLORINE, null);
+		helper.assertTrue(bare.getHealth() < bare.getMaxHealth(), "The bare pig was not hurt: " + bare.getHealth());
+		helper.assertTrue(masked.getHealth() == masked.getMaxHealth(), "The masked pig was hurt: " + masked.getHealth());
+		helper.assertTrue(masked.getItemBySlot(EquipmentSlot.HEAD).getDamageValue() == 1, "The filter did not wear");
+		helper.assertTrue(diver.getHealth() == diver.getMaxHealth(), "The diver was hurt: " + diver.getHealth());
+		helper.assertTrue(ScubaTankItem.oxygen(diver.getItemBySlot(EquipmentSlot.CHEST)) == 1000 - FieldChemistry.SCUBA_GAS_OXYGEN,
+				"Oxygen left: " + ScubaTankItem.oxygen(diver.getItemBySlot(EquipmentSlot.CHEST)));
+		helper.assertTrue(zombie.getHealth() == zombie.getMaxHealth(), "The zombie was hurt: " + zombie.getHealth());
+		helper.assertTrue(!cloud.shouldBeSaved(), "Clouds should not be saved");
+		helper.succeed();
+	}
+
+	/** Batch 31: a mob hunting something inside smoke loses its target. */
+	@GameTest(maxTicks = 40)
+	public void smokeHidesFromMobs(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(2, 1, 2));
+		Mob zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(9, 1, 2));
+		zombie.setTarget(pig);
+		ChemicalCloud.spawn(helper.getLevel(), helper.absoluteVec(new Vec3(2.5, 1.5, 2.5)), ChemicalCloud.Kind.SMOKE, null);
+		helper.succeedWhen(() -> helper.assertTrue(zombie.getTarget() == null, "The zombie still sees the pig"));
+	}
+
+	/** Batch 31: thermite burns what stands in it and lights no block. */
+	@GameTest(maxTicks = 60)
+	public void thermiteBurnsButLightsNothing(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 1, 3));
+		helper.setBlock(new BlockPos(4, 1, 3), Blocks.OAK_PLANKS);
+		Warhead.THERMITE.detonate(helper.getLevel(), helper.absoluteVec(new Vec3(3.5, 2.5, 3.5)), null, null);
+		helper.assertTrue(pig.getHealth() < pig.getMaxHealth() && pig.getRemainingFireTicks() > 0,
+				"The pig was not burnt: " + pig.getHealth() + ", fire " + pig.getRemainingFireTicks());
+		helper.runAfterDelay(40, () -> {
+			for (int x = 1; x <= 5; x++) {
+				for (int z = 1; z <= 5; z++) {
+					BlockPos pos = new BlockPos(x, 1, z);
+					helper.assertTrue(!helper.getBlockState(pos).is(Blocks.FIRE), "Fire at " + pos);
+				}
+			}
+			helper.assertBlockPresent(Blocks.OAK_PLANKS, new BlockPos(4, 1, 3));
+			helper.succeed();
+		});
+	}
+
+	/** Batch 31: a flashbang staggers a mob that sees it, not one behind a wall, and hurts nothing. */
+	@GameTest
+	public void flashbangStaggersWhatSeesIt(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		for (int y = 1; y <= 3; y++) {
+			for (int z = 1; z <= 6; z++) {
+				helper.setBlock(new BlockPos(6, y, z), Blocks.STONE);
+			}
+		}
+		Mob seen = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(2, 1, 6));
+		Mob hidden = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(8, 1, 3));
+		int dazzled = Flash.detonate(helper.getLevel(), helper.absoluteVec(new Vec3(4.5, 1.5, 3.5)), null);
+		helper.assertTrue(seen.hasEffect(MobEffects.SLOWNESS), "The zombie in sight was not staggered");
+		helper.assertTrue(!hidden.hasEffect(MobEffects.SLOWNESS), "The wall did not shield the flash");
+		helper.assertTrue(dazzled == 1 && seen.getHealth() == seen.getMaxHealth(), "Dazzled " + dazzled + ", health " + seen.getHealth());
+		helper.succeed();
+	}
+
+	/** Batch 31: the antidote clears poison and keeps speed; the stimulant hastes; the first aid kit heals. */
+	@GameTest(maxTicks = 40)
+	public void medicinesWork(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(2, 1, 2));
+		pig.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
+		pig.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 0));
+		new ItemStack(FieldChemistry.ANTIDOTE).finishUsingItem(helper.getLevel(), pig);
+		helper.assertTrue(!pig.hasEffect(MobEffects.POISON), "The antidote left the poison");
+		helper.assertTrue(pig.hasEffect(MobEffects.SPEED), "The antidote cleared speed");
+		new ItemStack(FieldChemistry.STIMULANT).finishUsingItem(helper.getLevel(), pig);
+		helper.assertTrue(pig.hasEffect(MobEffects.HASTE), "The stimulant gave no haste");
+		pig.setHealth(2.0F);
+		new ItemStack(FieldChemistry.FIRST_AID_KIT).finishUsingItem(helper.getLevel(), pig);
+		// Instant health works on the pig's next tick.
+		helper.succeedWhen(() -> helper.assertTrue(pig.getHealth() >= 9.0F, "The first aid kit healed to " + pig.getHealth()));
+	}
+
+	/** Batch 32: foam fills open space (air and water) but no solid block or space a mob stands in; canisters run down; cement sets foam. */
+	@GameTest
+	public void foamFillsOpenSpaceAndCementSetsIt(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
+		ServerLevel level = helper.getLevel();
+		helper.setBlock(new BlockPos(3, 1, 3), Blocks.STONE);
+		helper.setBlock(new BlockPos(2, 1, 2), Blocks.WATER);
+		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(4, 1, 2));
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.SURVIVAL);
+		player.setPos(helper.absoluteVec(new Vec3(0.5, 1, 7.5)));
+		BlockPos start = helper.absolutePos(new BlockPos(3, 1, 2));
+		List<BlockPos> filled = FoamSprayerItem.fill(level, player, start, ConstructionChemistry.SPRAY_BLOCKS);
+		helper.assertTrue(!filled.isEmpty() && filled.size() <= ConstructionChemistry.SPRAY_BLOCKS, "Filled " + filled.size());
+		helper.assertTrue(filled.contains(helper.absolutePos(new BlockPos(2, 1, 2))), "The foam did not fill the water");
+		helper.assertTrue(!filled.contains(helper.absolutePos(new BlockPos(3, 1, 3))), "The foam replaced stone");
+		helper.assertTrue(filled.stream().noneMatch(pos -> pig.getBoundingBox().intersects(new net.minecraft.world.phys.AABB(pos))),
+				"The foam filled the pig's space");
+		helper.assertTrue(filled.stream().allMatch(pos -> pos.distSqr(start) <= ConstructionChemistry.SPRAY_RADIUS
+				* ConstructionChemistry.SPRAY_RADIUS), "The foam spread too far");
+
+		player.getInventory().add(new ItemStack(ConstructionChemistry.FOAM_CANISTER));
+		helper.assertTrue(FoamSprayerItem.foamLeft(player) == ConstructionChemistry.CANISTER_FOAM, "Foam: " + FoamSprayerItem.foamLeft(player));
+		FoamSprayerItem.useFoam(player, 12);
+		helper.assertTrue(FoamSprayerItem.foamLeft(player) == ConstructionChemistry.CANISTER_FOAM - 12, "Foam left: " + FoamSprayerItem.foamLeft(player));
+		FoamSprayerItem.useFoam(player, ConstructionChemistry.CANISTER_FOAM - 12);
+		helper.assertTrue(FoamSprayerItem.foamLeft(player) == 0, "The empty canister was not used up");
+
+		BlockPos foam = new BlockPos(5, 1, 5);
+		helper.setBlock(foam, ConstructionChemistry.CONSTRUCTION_FOAM);
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ConstructionChemistry.CEMENT, 2));
+		ConstructionChemistry.CEMENT.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+				new BlockHitResult(Vec3.atCenterOf(helper.absolutePos(foam)), Direction.UP, helper.absolutePos(foam), false)));
+		helper.assertBlockPresent(ConstructionChemistry.CONCRETE, foam);
+		helper.assertTrue(player.getMainHandItem().getCount() == 1, "Cement left: " + player.getMainHandItem());
+		helper.assertTrue(ConstructionChemistry.BLASTPROOF_CONCRETE.getExplosionResistance() >= 1200.0F,
+				"Blast-proof concrete is not blast-proof");
+		helper.succeed();
 	}
 }

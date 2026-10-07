@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:hydroponic_bay"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.hydroponic_bay.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.hydroponic_bay.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:hydroponic_bay"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:crop_harvester"
+}

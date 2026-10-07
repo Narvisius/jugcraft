@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:cotton",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:soap",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:first_aid_kit",
+      "count": 2
+    }
+  ],
+  "time": 100
+}

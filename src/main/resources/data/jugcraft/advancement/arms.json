@@ -1,0 +1,53 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_longsword"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_longsword",
+              "jugcraft:bronze_greatsword",
+              "jugcraft:bronze_rapier",
+              "jugcraft:bronze_flanged_mace",
+              "jugcraft:bronze_war_hammer",
+              "jugcraft:bronze_glaive",
+              "jugcraft:bronze_halberd",
+              "jugcraft:bronze_spear",
+              "jugcraft:bronze_lance",
+              "jugcraft:steel_longsword",
+              "jugcraft:steel_greatsword",
+              "jugcraft:steel_rapier",
+              "jugcraft:steel_flanged_mace",
+              "jugcraft:steel_war_hammer",
+              "jugcraft:steel_glaive",
+              "jugcraft:steel_halberd",
+              "jugcraft:steel_spear",
+              "jugcraft:steel_lance"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

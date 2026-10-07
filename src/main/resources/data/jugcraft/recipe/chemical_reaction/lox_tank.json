@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:rocket_casing",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:liquid_oxygen",
+      "amount": 1000
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:lox_tank",
+      "count": 1
+    }
+  ],
+  "time": 60
+}

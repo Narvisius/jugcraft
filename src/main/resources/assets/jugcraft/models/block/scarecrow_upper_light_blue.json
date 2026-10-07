@@ -1,0 +1,136 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/scarecrow_shirt_light_blue",
+    "shirt": "jugcraft:block/scarecrow_shirt_light_blue",
+    "post": "jugcraft:block/scarecrow_post",
+    "straw": "jugcraft:block/scarecrow_straw"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        6
+      ],
+      "to": [
+        12,
+        11,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shirt"
+        },
+        "south": {
+          "texture": "#shirt"
+        },
+        "east": {
+          "texture": "#shirt"
+        },
+        "west": {
+          "texture": "#shirt"
+        },
+        "up": {
+          "texture": "#shirt"
+        },
+        "down": {
+          "texture": "#shirt"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        7,
+        6.5
+      ],
+      "to": [
+        4,
+        10,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shirt"
+        },
+        "south": {
+          "texture": "#shirt"
+        },
+        "east": {
+          "texture": "#shirt"
+        },
+        "west": {
+          "texture": "#straw"
+        },
+        "up": {
+          "texture": "#shirt"
+        },
+        "down": {
+          "texture": "#shirt"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        7,
+        6.5
+      ],
+      "to": [
+        16,
+        10,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shirt"
+        },
+        "south": {
+          "texture": "#shirt"
+        },
+        "east": {
+          "texture": "#straw"
+        },
+        "west": {
+          "texture": "#shirt"
+        },
+        "up": {
+          "texture": "#shirt"
+        },
+        "down": {
+          "texture": "#shirt"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        11,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#post"
+        },
+        "south": {
+          "texture": "#post"
+        },
+        "east": {
+          "texture": "#post"
+        },
+        "west": {
+          "texture": "#post"
+        },
+        "up": {
+          "texture": "#post"
+        }
+      }
+    }
+  ]
+}

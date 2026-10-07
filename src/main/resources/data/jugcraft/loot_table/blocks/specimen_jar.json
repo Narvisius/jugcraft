@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:specimen_jar",
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "jugcraft:specimen_jar",
+            "properties": [
+              "specimen"
+            ]
+          }
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/specimen_jar"
+}

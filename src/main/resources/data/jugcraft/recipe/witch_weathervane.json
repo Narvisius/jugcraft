@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NDN",
+    " I ",
+    " I "
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "D": "minecraft:purple_dye",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:witch_weathervane",
+    "count": 1
+  }
+}

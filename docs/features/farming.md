@@ -40,7 +40,7 @@ Greenhouses and rubber trees are left for later: rubber trees need worldgen, and
 - **Seeds:** the sieve sometimes finds them in coarse dirt (15%, with wheat seeds 10%); the coarse dirt becomes dirt.
 - **A ripe plant** drops one to three cotton and more seeds (Fortune adds seeds), like wheat. The harvester, sprinkler and fertilizer all work on it (`minecraft:crops`, `minecraft:maintains_farmland`).
 - **One cotton spins into one string** (crafting).
-- Code: `farming/CottonCropBlock`; `JugcraftFarming` registers the crop, its seeds (which place it) and cotton. Textures: `tools/crop_textures.py`. `check_mod_data` now knows crops have no item of their own and that item tags may hold machine and chemistry items.
+- Code: `farming/CottonCropBlock`; `JugcraftFarming` registers the crop, its seeds (which place it) and cotton. Textures: `tools/cotton_textures.py`. `check_mod_data` now knows crops have no item of their own and that item tags may hold machine and chemistry items.
 
 ### Advancements
 King Cotton (cotton), Make It Rain (sprinkler) and Reaping What You Sow (crop harvester).
@@ -62,7 +62,7 @@ King Cotton (cotton), Make It Rain (sprinkler) and Reaping What You Sow (crop ha
 Server-side. The harvester's scan position saves with its block entity like the ore drill's, and it only touches crop blocks in its loaded field. The sprinkler's water, fertilizer and pulse count save with its block entity; its spray is a client-side effect of its `wet` block state.
 
 ## Dependencies and assets
-No new dependencies. Textures and models are original (`tools/dieselpunk_models.py`, `tools/farming_models.py`, `tools/crop_textures.py`).
+No new dependencies. Textures and models are original (`tools/dieselpunk_models.py`, `tools/farming_models.py`, `tools/cotton_textures.py`).
 
 ## Verification
 - Game test `cropHarvesterHarvestsAndReplants` (JugcraftGameTests): a ripe wheat crop in its field is harvested, replanted at age 0, and the wheat kept.

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BIB",
+    "BIB"
+  ],
+  "key": {
+    "B": "minecraft:iron_bars",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:cemetery_fence",
+    "count": 6
+  }
+}

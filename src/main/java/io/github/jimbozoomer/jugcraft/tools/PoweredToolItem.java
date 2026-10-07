@@ -114,13 +114,13 @@ public class PoweredToolItem extends Item implements Chargeable {
 	}
 
 	/** Amber, like the machines' energy bars. */
-	static final int BAR_COLOR = 0xFFB8740A;
+	public static final int BAR_COLOR = 0xFFB8740A;
 
-	static int barWidth(ItemStack stack) {
+	public static int barWidth(ItemStack stack) {
 		return (int) Math.round(13.0 * Chargeable.energy(stack) / Math.max(1, Chargeable.capacity(stack)));
 	}
 
-	static Component energyLine(ItemStack stack) {
+	public static Component energyLine(ItemStack stack) {
 		return Component.translatable("tooltip.jugcraft.energy", String.format("%,d", Chargeable.energy(stack)),
 				String.format("%,d", Chargeable.capacity(stack))).withStyle(ChatFormatting.GOLD);
 	}

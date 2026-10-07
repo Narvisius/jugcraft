@@ -1,0 +1,157 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_rubber_ribbed": "jugcraft:block/dp_rubber_ribbed",
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dr_band": "jugcraft:block/dr_band",
+    "dr_blue": "jugcraft:block/dr_blue",
+    "dr_copper_pipe": "jugcraft:block/dr_copper_pipe",
+    "dr_grate": "jugcraft:block/dr_grate",
+    "dr_nut": "jugcraft:block/dr_nut",
+    "dr_red": "jugcraft:block/dr_red",
+    "dr_red_paint": "jugcraft:block/dr_red_paint",
+    "dr_ribbed_patina": "jugcraft:block/dr_ribbed_patina",
+    "dr_rust": "jugcraft:block/dr_rust",
+    "dr_rust_bare": "jugcraft:block/dr_rust_bare",
+    "dr_rust_pipe": "jugcraft:block/dr_rust_pipe",
+    "dr_sawdust": "jugcraft:block/dr_sawdust",
+    "dr_skid": "jugcraft:block/dr_skid",
+    "sp_bark": "jugcraft:block/sp_bark",
+    "sp_gauge": "jugcraft:block/sp_gauge",
+    "sp_wood": "jugcraft:block/sp_wood",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        9.0,
+        0.25,
+        0
+      ],
+      "to": [
+        16,
+        5.75,
+        13.0
+      ],
+      "faces": {
+        "south": {
+          "texture": "#sp_wood"
+        },
+        "west": {
+          "texture": "#sp_bark"
+        },
+        "up": {
+          "texture": "#sp_bark"
+        },
+        "down": {
+          "texture": "#sp_bark"
+        }
+      }
+    },
+    {
+      "from": [
+        9.75,
+        5.75,
+        0
+      ],
+      "to": [
+        16,
+        7.75,
+        13.0
+      ],
+      "faces": {
+        "south": {
+          "texture": "#sp_wood"
+        },
+        "west": {
+          "texture": "#sp_bark"
+        },
+        "up": {
+          "texture": "#sp_bark"
+        },
+        "down": {
+          "texture": "#sp_bark"
+        }
+      }
+    },
+    {
+      "from": [
+        9.75,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        0.25,
+        13.0
+      ],
+      "faces": {
+        "south": {
+          "texture": "#sp_wood"
+        },
+        "west": {
+          "texture": "#sp_bark"
+        },
+        "up": {
+          "texture": "#sp_bark"
+        }
+      }
+    },
+    {
+      "from": [
+        11.5,
+        7.75,
+        0
+      ],
+      "to": [
+        16,
+        9.0,
+        13.0
+      ],
+      "faces": {
+        "south": {
+          "texture": "#sp_wood"
+        },
+        "west": {
+          "texture": "#sp_bark"
+        },
+        "up": {
+          "texture": "#sp_bark"
+        },
+        "down": {
+          "texture": "#sp_bark"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        0,
+        10.0
+      ],
+      "to": [
+        7.0,
+        5.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "south": {
+          "texture": "#dr_rust_pipe"
+        },
+        "east": {
+          "texture": "#dr_rust_pipe"
+        },
+        "west": {
+          "texture": "#dr_rust_pipe"
+        },
+        "up": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    }
+  ]
+}

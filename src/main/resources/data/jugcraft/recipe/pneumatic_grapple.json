@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GCH",
+    "SPT",
+    "S  "
+  ],
+  "key": {
+    "G": "jugcraft:gasket",
+    "C": "minecraft:iron_chain",
+    "H": "minecraft:tripwire_hook",
+    "S": "#c:plates/steel",
+    "P": "minecraft:piston",
+    "T": "jugcraft:fluid_tank"
+  },
+  "result": {
+    "id": "jugcraft:pneumatic_grapple"
+  }
+}

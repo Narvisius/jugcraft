@@ -136,7 +136,7 @@ def tank_piece(name, facing, **props):
 
 
 def steel_ladder(facing, cage, top):
-    return M(f"jugcraft:steel_ladder[cage={'true' if cage else 'false'},facing={facing},top={'true' if top else 'false'},"
+    return M(f"jugcraft:caged_ladder[cage={'true' if cage else 'false'},facing={facing},top={'true' if top else 'false'},"
              f"waterlogged=false]", (170, 176, 178))
 
 

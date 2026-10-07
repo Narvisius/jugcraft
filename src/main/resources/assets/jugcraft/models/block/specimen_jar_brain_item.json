@@ -1,0 +1,236 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/specimen_jar_glass",
+    "iron": "jugcraft:block/specimen_jar_iron",
+    "glass": "jugcraft:block/specimen_jar_glass",
+    "fluid": "jugcraft:block/specimen_jar_fluid",
+    "eye": "jugcraft:block/specimen_eye",
+    "nerve": "jugcraft:block/specimen_nerve",
+    "tentacle": "jugcraft:block/specimen_tentacle",
+    "pumpkin": "jugcraft:block/specimen_pumpkin",
+    "stem": "jugcraft:block/specimen_stem",
+    "brain": "jugcraft:block/specimen_brain"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        4.5,
+        6.5
+      ],
+      "to": [
+        10,
+        7.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brain"
+        },
+        "south": {
+          "texture": "#brain"
+        },
+        "east": {
+          "texture": "#brain"
+        },
+        "west": {
+          "texture": "#brain"
+        },
+        "up": {
+          "texture": "#brain"
+        },
+        "down": {
+          "texture": "#brain"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        3.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        4.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nerve"
+        },
+        "south": {
+          "texture": "#nerve"
+        },
+        "east": {
+          "texture": "#nerve"
+        },
+        "west": {
+          "texture": "#nerve"
+        },
+        "up": {
+          "texture": "#nerve"
+        },
+        "down": {
+          "texture": "#nerve"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        1,
+        5
+      ],
+      "to": [
+        11,
+        10.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid"
+        },
+        "south": {
+          "texture": "#fluid"
+        },
+        "east": {
+          "texture": "#fluid"
+        },
+        "west": {
+          "texture": "#fluid"
+        },
+        "up": {
+          "texture": "#fluid"
+        },
+        "down": {
+          "texture": "#fluid"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        4.5,
+        1,
+        4.5
+      ],
+      "to": [
+        11.5,
+        12,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glass"
+        },
+        "south": {
+          "texture": "#glass"
+        },
+        "east": {
+          "texture": "#glass"
+        },
+        "west": {
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "from": [
+        4.25,
+        12,
+        4.25
+      ],
+      "to": [
+        11.75,
+        13,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        13,
+        7
+      ],
+      "to": [
+        9,
+        13.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:mason_jar"
+    },
+    {
+      "ingredient": "minecraft:beetroot",
+      "count": 4
+    },
+    {
+      "ingredient": "jugcraft:cider_vinegar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:pickled_beets"
+  },
+  "time": 300
+}

@@ -1,0 +1,201 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/tesla_coil_iron",
+    "iron": "jugcraft:block/tesla_coil_iron",
+    "copper": "jugcraft:block/tesla_coil_copper",
+    "winding": "jugcraft:block/tesla_coil_winding",
+    "toroid": "jugcraft:block/tesla_coil_toroid"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        0,
+        6.5
+      ],
+      "to": [
+        9.5,
+        10,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#winding"
+        },
+        "south": {
+          "texture": "#winding"
+        },
+        "east": {
+          "texture": "#winding"
+        },
+        "west": {
+          "texture": "#winding"
+        },
+        "up": {
+          "texture": "#winding"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        10,
+        7
+      ],
+      "to": [
+        9,
+        11.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        11.5,
+        5
+      ],
+      "to": [
+        13,
+        14.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#toroid"
+        },
+        "south": {
+          "texture": "#toroid"
+        },
+        "east": {
+          "texture": "#toroid"
+        },
+        "west": {
+          "texture": "#toroid"
+        },
+        "up": {
+          "texture": "#toroid"
+        },
+        "down": {
+          "texture": "#toroid"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        11.5,
+        3
+      ],
+      "to": [
+        11,
+        14.5,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#toroid"
+        },
+        "south": {
+          "texture": "#toroid"
+        },
+        "east": {
+          "texture": "#toroid"
+        },
+        "west": {
+          "texture": "#toroid"
+        },
+        "up": {
+          "texture": "#toroid"
+        },
+        "down": {
+          "texture": "#toroid"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        12,
+        4
+      ],
+      "to": [
+        12,
+        14,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#toroid"
+        },
+        "south": {
+          "texture": "#toroid"
+        },
+        "east": {
+          "texture": "#toroid"
+        },
+        "west": {
+          "texture": "#toroid"
+        },
+        "up": {
+          "texture": "#toroid"
+        },
+        "down": {
+          "texture": "#toroid"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        14.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        15.5,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    }
+  ]
+}

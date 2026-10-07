@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:steampunk_helmet"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.steampunk_armor.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.steampunk_armor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:steampunk_helmet",
+              "jugcraft:steampunk_chestplate",
+              "jugcraft:steampunk_leggings",
+              "jugcraft:steampunk_boots"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

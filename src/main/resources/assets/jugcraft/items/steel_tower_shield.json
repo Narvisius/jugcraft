@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:using_item",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/steel_tower_shield"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/steel_tower_shield_blocking"
+    }
+  },
+  "swap_animation_scale": 1.0
+}

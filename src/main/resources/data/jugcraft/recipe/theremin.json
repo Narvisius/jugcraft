@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "W W",
+    "PNP",
+    "S S"
+  ],
+  "key": {
+    "W": "jugcraft:copper_wire",
+    "P": "#minecraft:planks",
+    "N": "minecraft:note_block",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:theremin",
+    "count": 1
+  }
+}

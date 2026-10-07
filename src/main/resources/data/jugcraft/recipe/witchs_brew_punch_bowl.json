@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "G G",
+    "GBG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "B": "minecraft:glow_berries"
+  },
+  "result": {
+    "id": "jugcraft:witchs_brew_punch_bowl",
+    "count": 1
+  }
+}

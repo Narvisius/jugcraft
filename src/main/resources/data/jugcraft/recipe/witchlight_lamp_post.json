@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "IN ",
+    "IG ",
+    "I  "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "N": "minecraft:gold_nugget",
+    "G": "minecraft:purple_stained_glass"
+  },
+  "result": {
+    "id": "jugcraft:witchlight_lamp_post",
+    "count": 1
+  }
+}

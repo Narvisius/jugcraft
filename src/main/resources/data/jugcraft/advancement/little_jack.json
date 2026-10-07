@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:hand_carved_pumpkin"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.little_jack.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.little_jack.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

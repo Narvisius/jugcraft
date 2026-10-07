@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B B",
+    "OOO",
+    "B B"
+  ],
+  "key": {
+    "O": "minecraft:bone_block",
+    "B": "minecraft:bone"
+  },
+  "result": {
+    "id": "jugcraft:colossal_vertebra",
+    "count": 3
+  }
+}

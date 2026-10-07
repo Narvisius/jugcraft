@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "LPL",
+    "W W"
+  ],
+  "key": {
+    "S": "minecraft:deepslate_tile_slab",
+    "L": "minecraft:oak_log",
+    "P": "minecraft:oak_planks",
+    "W": "minecraft:cobblestone_wall"
+  },
+  "result": {
+    "id": "jugcraft:lych_gate",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "OWO",
+    "PCP",
+    "PHP"
+  ],
+  "key": {
+    "O": "minecraft:orange_wool",
+    "W": "minecraft:white_wool",
+    "P": "#minecraft:planks",
+    "C": "minecraft:chest",
+    "H": "minecraft:hay_block"
+  },
+  "result": {
+    "id": "jugcraft:farm_stand",
+    "count": 1
+  }
+}

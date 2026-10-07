@@ -1,0 +1,220 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_hazard": "jugcraft:block/dp_hazard",
+    "dp_rubber_ribbed": "jugcraft:block/dp_rubber_ribbed",
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dr_band": "jugcraft:block/dr_band",
+    "dr_blue": "jugcraft:block/dr_blue",
+    "dr_copper_pipe": "jugcraft:block/dr_copper_pipe",
+    "dr_crt": "jugcraft:block/dr_crt",
+    "dr_grate": "jugcraft:block/dr_grate",
+    "dr_nut": "jugcraft:block/dr_nut",
+    "dr_patina": "jugcraft:block/dr_patina",
+    "dr_red": "jugcraft:block/dr_red",
+    "dr_ribbed_patina": "jugcraft:block/dr_ribbed_patina",
+    "dr_ribbed_rust": "jugcraft:block/dr_ribbed_rust",
+    "dr_rust": "jugcraft:block/dr_rust",
+    "dr_rust_bare": "jugcraft:block/dr_rust_bare",
+    "dr_rust_pipe": "jugcraft:block/dr_rust_pipe",
+    "dr_skid": "jugcraft:block/dr_skid",
+    "dr_soot": "jugcraft:block/dr_soot",
+    "el_white": "jugcraft:block/el_white",
+    "sp_gauge": "jugcraft:block/sp_gauge",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        1.0,
+        0,
+        0.9
+      ],
+      "to": [
+        4.0,
+        16,
+        4.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "south": {
+          "texture": "#dr_rust_pipe"
+        },
+        "east": {
+          "texture": "#dr_rust_pipe"
+        },
+        "west": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        14.0,
+        0.5
+      ],
+      "to": [
+        4.5,
+        15.0,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_band"
+        },
+        "south": {
+          "texture": "#dr_band"
+        },
+        "east": {
+          "texture": "#dr_band"
+        },
+        "west": {
+          "texture": "#dr_band"
+        },
+        "up": {
+          "texture": "#dr_band"
+        },
+        "down": {
+          "texture": "#dr_band"
+        }
+      }
+    },
+    {
+      "from": [
+        12.0,
+        0,
+        14.25
+      ],
+      "to": [
+        16,
+        4.25,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_white"
+        },
+        "west": {
+          "texture": "#dp_chrome"
+        },
+        "up": {
+          "texture": "#el_white"
+        }
+      }
+    },
+    {
+      "from": [
+        12.0,
+        0,
+        13.0
+      ],
+      "to": [
+        16,
+        2.5,
+        14.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_white"
+        },
+        "south": {
+          "texture": "#el_white"
+        },
+        "west": {
+          "texture": "#dp_chrome"
+        },
+        "up": {
+          "texture": "#el_white"
+        }
+      }
+    },
+    {
+      "from": [
+        8.0,
+        0,
+        11.5
+      ],
+      "to": [
+        12.0,
+        5.0,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_bare"
+        },
+        "south": {
+          "texture": "#dr_rust_bare"
+        },
+        "east": {
+          "texture": "#dr_rust_bare"
+        },
+        "west": {
+          "texture": "#dr_rust_bare"
+        },
+        "up": {
+          "texture": "#dr_rust_bare"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        0,
+        15.75
+      ],
+      "to": [
+        12.0,
+        2.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "east": {
+          "texture": "#dr_soot"
+        },
+        "west": {
+          "texture": "#dr_soot"
+        },
+        "up": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        0,
+        15.0
+      ],
+      "to": [
+        12.0,
+        1.5,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "south": {
+          "texture": "#dr_rust_pipe"
+        },
+        "east": {
+          "texture": "#dr_soot"
+        },
+        "west": {
+          "texture": "#dr_soot"
+        },
+        "up": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    }
+  ]
+}

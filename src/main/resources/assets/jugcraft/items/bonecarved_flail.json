@@ -1,0 +1,46 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {
+        "when": "flail_link",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/bonecarved_flail_link"
+        }
+      },
+      {
+        "when": "flail_ball",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/bonecarved_flail_ball"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": [
+            "gui",
+            "ground",
+            "fixed",
+            "on_shelf"
+          ],
+          "model": {
+            "type": "minecraft:model",
+            "model": "jugcraft:item/bonecarved_flail"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/bonecarved_flail_in_hand"
+      }
+    }
+  },
+  "swap_animation_scale": 1.2
+}

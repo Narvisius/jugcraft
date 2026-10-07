@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "I I"
+  ],
+  "key": {
+    "C": "minecraft:cauldron",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:bubbling_cauldron",
+    "count": 1
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:yellow_leaf_pile",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": 2,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:yellow_leaf_pile",
+                "state": {
+                  "layers": "2"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 3,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:yellow_leaf_pile",
+                "state": {
+                  "layers": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 4,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:yellow_leaf_pile",
+                "state": {
+                  "layers": "4"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/yellow_leaf_pile"
+}

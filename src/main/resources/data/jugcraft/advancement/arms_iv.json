@@ -1,0 +1,45 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_labrys"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms_iv.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms_iv.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_labrys",
+              "jugcraft:bronze_battleblade",
+              "jugcraft:bronze_war_fork",
+              "jugcraft:bronze_kama",
+              "jugcraft:bronze_war_pick",
+              "jugcraft:steel_labrys",
+              "jugcraft:steel_battleblade",
+              "jugcraft:steel_war_fork",
+              "jugcraft:steel_kama",
+              "jugcraft:steel_war_pick"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

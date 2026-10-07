@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:kerosene_tank",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:lox_tank",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:rocket_nozzle",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:rocket_motor",
+    "count": 3
+  },
+  "time": 200
+}

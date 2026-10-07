@@ -1,6 +1,7 @@
 # Nitrogen chemistry: air separation, ammonia and nitric acid
 
 Status: merged in #65 (batch 12). Compiles and tests in CI only; **not yet played**.
+**Batch 24:** the argon boost now speeds up the arc furnace, which took over the crystal grower's boules; see [machine-consolidation.md](machine-consolidation.md).
 Proposal issue: the owner, 1 October 2026, asked to save Claude's chemistry ideas and pursue them next ("I also loved your chemistry ideas can you save all those and we can pursue them next", then "lets begin your chemistry ideas"). This batch builds the first two from the backlog in [MACHINE_ROADMAP.md](../MACHINE_ROADMAP.md#idea-backlog-saved-by-the-owner-1-october-2026): the air separation unit and Haber–Bosch ammonia, with nitric acid (Ostwald) as the next step.
 Owner: jimbozoomer-byte
 Target milestone and tier: industrial chemistry, after the electrolytic cell (batch 5) and titanium (batch 6)

@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:candy_kettle"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.candy_maker.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.candy_maker.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Parties
 
-Status: implemented in source as a **draft prototype**; not yet played.
+Status: implemented. Commands and API from @Narvisius's prototype (#31, merged through #84); the Party screen, clickable invites, `/party admin` and configurable limits finish it (pull request pending). Not yet play-tested with two clients.
 Proposal issue: #21. Built as a community prototype.
 Owner: @Narvisius
 Target milestone and tier: Discovery (shared infrastructure, no crafting)
@@ -19,8 +19,22 @@ Team up with friends using `/party`. Parties are the shared "who is working toge
 | `/party kick <name>` | leader | Removes a member (works for offline members, by last known name) |
 | `/party leader <name>` | leader | Makes another member the leader |
 | `/party disband` | leader | Ends the party |
+| `/party admin list` | operator (level 2) | Lists every party with its members and leader |
+| `/party admin kick <name>` | operator | Removes that player from whatever party they are in |
+| `/party admin leader <name>` | operator | Makes that player the leader of their party |
+| `/party admin disband <name>` | operator | Ends the party that player is in |
 
-Everyone in the party is told about joins, departures, kicks and leader changes.
+Everyone in the party is told about joins, departures, kicks and leader changes. Operator actions work while parties are turned off, so an operator can tidy saved parties.
+
+**Invites in chat** end with clickable **[Accept]** and **[Decline]**, which run the same commands.
+
+**Party screen** (the Party key, **P** by default, under the Jugcraft controls category), in the red-and-graphite look of the Drone Tower and Blueprint screens:
+- Members in join order, with a green or grey light for online or offline, the leader marked, and "(you)".
+- The leader gets LEAD and KICK beside every other member, and DISBAND; a member gets LEAVE.
+- A name box and INVITE (for the leader, or anyone not in a party).
+- The latest invite with ACCEPT and DECLINE (and how many more are waiting).
+
+Every button runs the ordinary `/party` command, so the server checks it exactly as if it were typed. The server sends the screen's contents when the player joins, when they open it, when their party changes and when they get or answer an invite.
 
 ## Connections
 - Existing input producer: none. This is infrastructure; no resources are involved.
@@ -46,10 +60,19 @@ Call the static methods on `JugcraftParties`. Don't reach into `PartyManager` fr
 
 ## Balance and automation
 - No items, currencies or stat bonuses. Parties only decide who is trusted to work together.
-- Limits (constants in `PartyManager`): 8 members per party, invites last 5 minutes, and each player can send at most 10 invites a minute. Only the leader can invite once a party exists.
+- Limits, set in `config/jugcraft.properties` (read when the server starts):
+
+  | Setting | Default | Allowed |
+  | --- | --- | --- |
+  | `parties.max_size` | 8 | 2 to 64 |
+  | `parties.invite_minutes` | 5 | 1 to 60 |
+  | `parties.invites_per_minute` | 10 | 1 to 60 |
+
+  A value that isn't a number in range is logged and the default used. Lowering the size never removes anyone: a party over it just can't take new members.
+- Only the leader can invite once a party exists.
 
 ## Multiplayer and persistence
-- **Server-authoritative.** Clients send commands only; `PartyManager` checks every rule.
+- **Server-authoritative.** Clients send commands only; `PartyManager` checks every rule. The screen's state message (`PartyStatePayload`) carries only names and flags for the receiving player's own party and invites. Requests for it are answered at most every 5 ticks per player.
 - **Lookups are map reads.** Nothing scans players or the world.
 - **Saving:** `<world>/jugcraft/parties.txt`, a small versioned text file.
   - Saved every 30 seconds when something changed, and when the server stops.
@@ -61,7 +84,7 @@ Call the static methods on `JugcraftParties`. Don't reach into `PartyManager` fr
 - **Offline members** stay members.
 
 ## Dependencies and assets
-Fabric API only (command API v2, lifecycle events). No textures or models yet. Messages are in the generated language file (`tools/party.py`). The checker verifies every `PartyManager.Result` has a message.
+Fabric API only (command API v2, lifecycle events, networking, key bindings). No textures or models; the screen is drawn with fills and text. Messages are in the generated language file (`tools/party.py`). The checker verifies every `PartyManager.Result` has a message.
 
 ## Verification
 Actually run for this PR (30 September 2026):
@@ -82,9 +105,7 @@ No worldgen, dimensions, creatures, loot or seasonal content. PvP, friendly fire
 
 ## Rollout and open questions
 Remaining work:
-- The sci-fi Party screen (keybind `P`) and clickable invite prompts.
-- `/party admin` for operators.
-- Config file values for the limits (currently constants).
+- A two-client dedicated-server playtest (invite, accept, leave, kick, reconnect, restart).
 
 Open questions:
 - Is 8 members the right default?

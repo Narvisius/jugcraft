@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:electroplating_bath"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.electroplating_bath.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.electroplating_bath.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:electroplating_bath"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:electrolytic_cell"
+}

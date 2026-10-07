@@ -32,7 +32,7 @@ No recipe turns bronze back into copper or tin. `tools/check_mod_data.py` audits
 No block entities, screens, packets or tick logic: everything is vanilla mining, crafting and smelting, which the server controls. `config/jugcraft.properties` has `tin.enabled`; `false` stops new tin ore generation and removes the tin/bronze recipes (via the `jugcraft:feature_enabled` resource condition). Blocks and items always stay registered, so saves keep them. No retrogeneration: chunks generated before tin is enabled never contain tin.
 
 ## Dependencies and assets
-Fabric API only. All textures are original, drawn by `tools/generate_textures.py` from fixed seeds (MIT, Jugcraft contributors); no Mojang texture is read, traced or recolored.
+Fabric API only. All textures are original, drawn by `tools/generate_textures.py` from fixed seeds (MIT, Jugcraft contributors); no Mojang texture is read, traced or recolored. Tin ore, raw tin and its raw block, and the tin and bronze ingots, nuggets and blocks were since redrawn as material sets ([material-sets.md](material-sets.md)); the bronze blend keeps its seeded texture.
 
 ## Verification
 Actually run (30 September 2026, in a sandbox without access to Minecraft or Fabric downloads):

@@ -47,7 +47,7 @@ NAMES = {
     "storage_tank_hatch": "Tank Roof Hatch",
     "railing": "Railing",
     "railing_gate": "Self-Closing Railing Gate",
-    "steel_ladder": "Steel Ladder",
+    "caged_ladder": "Caged Steel Ladder",
 }
 INTERIOR = "storage_tank_interior"
 BLOCKS = list(NAMES) + [INTERIOR]
@@ -71,7 +71,7 @@ CRAFTING = {
     "storage_tank_hatch": (["SSS", "N N"], {"S": "#c:plates/steel", "N": "minecraft:iron_nugget"}, 1),
     "railing": (["NYN", "N N"], {"N": "minecraft:iron_nugget", "Y": "minecraft:yellow_dye"}, 6),
     "railing_gate": (["RIR"], {"R": "jugcraft:railing", "I": "minecraft:iron_ingot"}, 1),
-    "steel_ladder": (["I I", "III", "I I"], {"I": "minecraft:iron_ingot"}, 8),
+    "caged_ladder": (["I I", "III", "I I"], {"I": "minecraft:iron_ingot"}, 8),
 }
 
 
@@ -595,16 +595,16 @@ def write_assets(write, rid, assets, lang):
     write(assets / "items" / "railing_gate.json", {"model": {"type": "minecraft:model", "model": rid("block/railing_gate_inventory")}})
 
     # The steel ladder: the ladder, its cage from the third block up, the handholds on the top length.
-    write(models / "steel_ladder.json", _model(ladder_base(), rid))
-    write(models / "steel_ladder_cage.json", _model(ladder_cage(), rid))
-    write(models / "steel_ladder_top.json", _model(ladder_top(), rid))
+    write(models / "caged_ladder.json", _model(ladder_base(), rid))
+    write(models / "caged_ladder_cage.json", _model(ladder_cage(), rid))
+    write(models / "caged_ladder_top.json", _model(ladder_top(), rid))
     parts = []
     for face, y in FACINGS:
-        parts.append({"when": {"facing": face}, "apply": {"model": rid("block/steel_ladder"), **_turn(y)}})
-        parts.append({"when": {"facing": face, "cage": "true"}, "apply": {"model": rid("block/steel_ladder_cage"), **_turn(y)}})
-        parts.append({"when": {"facing": face, "top": "true"}, "apply": {"model": rid("block/steel_ladder_top"), **_turn(y)}})
-    write(assets / "blockstates" / "steel_ladder.json", {"multipart": parts})
-    write(assets / "items" / "steel_ladder.json", {"model": {"type": "minecraft:model", "model": rid("block/steel_ladder")}})
+        parts.append({"when": {"facing": face}, "apply": {"model": rid("block/caged_ladder"), **_turn(y)}})
+        parts.append({"when": {"facing": face, "cage": "true"}, "apply": {"model": rid("block/caged_ladder_cage"), **_turn(y)}})
+        parts.append({"when": {"facing": face, "top": "true"}, "apply": {"model": rid("block/caged_ladder_top"), **_turn(y)}})
+    write(assets / "blockstates" / "caged_ladder.json", {"multipart": parts})
+    write(assets / "items" / "caged_ladder.json", {"model": {"type": "minecraft:model", "model": rid("block/caged_ladder")}})
 
     lang.update({
         f"block.{MOD}.storage_tank_outlet.desc": "The tank's controller: forms the tank, holds its fluid",
@@ -674,4 +674,4 @@ def write_loot(write, rid, out, self_drop):
 def write_tags(tags, rid):
     for block in NAMES:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
-    tags.add("block", "minecraft:climbable", rid("steel_ladder"))
+    tags.add("block", "minecraft:climbable", rid("caged_ladder"))

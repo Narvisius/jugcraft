@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BGB",
+    "PEP",
+    "CCC"
+  ],
+  "key": {
+    "B": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "P": "minecraft:piston",
+    "E": "minecraft:dispenser",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:siege_mortar",
+    "count": 1
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/toilet_paper_drape",
+    "paper": "jugcraft:block/toilet_paper_streamer",
+    "drape": "jugcraft:block/toilet_paper_drape"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        6.5
+      ],
+      "to": [
+        16,
+        0.25,
+        9.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#drape",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#drape",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        -9,
+        6.4
+      ],
+      "to": [
+        16,
+        0,
+        6.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#drape",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#drape",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        -9,
+        9.6
+      ],
+      "to": [
+        16,
+        0,
+        9.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#drape",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#drape",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

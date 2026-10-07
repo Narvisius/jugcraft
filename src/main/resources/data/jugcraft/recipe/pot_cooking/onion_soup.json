@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:onion",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:garlic"
+    },
+    {
+      "ingredient": "minecraft:bread"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:onion_soup"
+  },
+  "time": 200
+}

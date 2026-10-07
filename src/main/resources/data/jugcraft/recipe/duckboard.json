@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TTT",
+    "PPP"
+  ],
+  "key": {
+    "T": "minecraft:stick",
+    "P": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "jugcraft:duckboard",
+    "count": 6
+  }
+}

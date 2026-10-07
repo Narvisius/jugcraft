@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:compass",
+    "jugcraft:microchip"
+  ],
+  "result": {
+    "id": "jugcraft:flight_plan",
+    "count": 1
+  }
+}

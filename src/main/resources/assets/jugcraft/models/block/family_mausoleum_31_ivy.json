@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gy_ivy",
+    "ivy": "jugcraft:block/gy_ivy"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        12.2,
+        16.4
+      ],
+      "to": [
+        0.1,
+        13.4,
+        17.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ivy"
+        },
+        "south": {
+          "texture": "#ivy"
+        },
+        "east": {
+          "texture": "#ivy",
+          "uv": [
+            0.0,
+            2.6,
+            0.9,
+            3.8
+          ]
+        },
+        "up": {
+          "texture": "#ivy",
+          "uv": [
+            0,
+            15.1,
+            0.1,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#ivy",
+          "uv": [
+            0,
+            0.0,
+            0.1,
+            0.9
+          ]
+        }
+      }
+    }
+  ]
+}

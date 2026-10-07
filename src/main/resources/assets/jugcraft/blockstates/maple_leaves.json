@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "season=green": {
+      "model": "jugcraft:block/maple_leaves"
+    },
+    "season=gold": [
+      {
+        "model": "jugcraft:block/maple_leaves_red",
+        "weight": 3
+      },
+      {
+        "model": "jugcraft:block/maple_leaves_orange",
+        "weight": 2
+      },
+      {
+        "model": "jugcraft:block/maple_leaves_gold",
+        "weight": 1
+      }
+    ],
+    "season=bare": {
+      "model": "jugcraft:block/maple_leaves_bare"
+    }
+  }
+}

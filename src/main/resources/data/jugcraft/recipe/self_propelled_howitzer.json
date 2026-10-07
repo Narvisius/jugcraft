@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PBP",
+    "EDE",
+    "TGT"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "minecraft:dispenser",
+    "E": "jugcraft:diesel_engine",
+    "D": "minecraft:piston",
+    "T": "jugcraft:belt",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:self_propelled_howitzer",
+    "count": 1
+  }
+}

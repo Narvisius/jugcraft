@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "GCI",
+    " L "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "C": "jugcraft:basic_circuit",
+    "I": "minecraft:iron_bars",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:leaf_blower",
+    "count": 1
+  }
+}

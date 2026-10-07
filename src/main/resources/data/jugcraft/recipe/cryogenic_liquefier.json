@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "TMT",
+    "PAP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:ammonia_chiller",
+    "T": "jugcraft:fluid_tank",
+    "M": "jugcraft:electric_motor",
+    "A": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:cryogenic_liquefier",
+    "count": 1
+  }
+}

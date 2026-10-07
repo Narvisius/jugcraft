@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:scuba_mask"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.scuba.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.scuba.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:scuba_mask",
+              "jugcraft:scuba_tank"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:rubber"
+}

@@ -9,6 +9,8 @@ import random
 
 from PIL import Image
 
+import block_style as bs
+
 # Block id -> display name, item each unit gives, the feature switch(es) its worldgen needs, and how rare its patches
 # are (one patch per this many chunks of a matching biome, on average).
 DEPOSITS = {
@@ -30,8 +32,9 @@ REPLACES = ["minecraft:stone", "minecraft:andesite", "minecraft:diorite", "minec
 # ---------------------------------------------------------------- textures
 
 # Weathered host rock: grey-brown rubble with dark cracks between the stones.
-RUBBLE = [(86, 82, 78), (100, 96, 90), (114, 109, 102), (128, 123, 115)]
-CRACK = (52, 49, 47)
+# Rubble in plain, neutral stone grey, joined by dark gaps, with the ore's own lumps among it.
+RUBBLE = [(100, 100, 100), (124, 124, 124), (146, 146, 146)]
+JOINT = (58, 58, 60)
 # Ore lumps per deposit: shadow, body, light, highlight.
 LUMPS = {
     "coal_deposit": [(14, 14, 17), (32, 32, 37), (54, 54, 61), (104, 104, 116)],
@@ -44,48 +47,32 @@ ACCENTS = {"copper_deposit": (84, 160, 128)}
 
 
 def deposit_texture(name, seed):
-    """A rich deposit face: rubble with big shaded ore lumps covering about half of it, so it reads as a patch of
-    ore at a glance and never looks like an ordinary ore block."""
+    """A rich deposit face, in the manner of vanilla gravel: rubble packed together, about half of the pieces the
+    ore's own lumps, each piece lit on its upper left and shaded on its lower right with dark gaps between, so it
+    reads as a patch of ore at a glance and never looks like an ordinary ore block. Tiles seamlessly."""
+    shadow, body, light, glint = LUMPS[name]
+    pts = bs._cells(16, 16, seed, 13)
     rng = random.Random(seed)
+    ore = [rng.random() < 0.5 for _ in pts]
+    accent = ACCENTS.get(name)
     img = Image.new("RGBA", (16, 16))
     for y in range(16):
         for x in range(16):
-            img.putpixel((x, y), rng.choice(RUBBLE) + (255,))
-    for _ in range(14):  # Cracks between the stones.
-        x, y = rng.randrange(16), rng.randrange(16)
-        for _ in range(rng.randint(2, 4)):
-            img.putpixel((x % 16, y % 16), CRACK + (255,))
-            x, y = x + rng.choice((-1, 0, 1)), y + rng.choice((0, 1))
-    shadow, body, light, glint = LUMPS[name]
-    # Lumps scattered at random (wrapping round the edges so the face tiles without seams), kept apart so they read
-    # as separate stones, rounded by leaving out the corners of the bigger ones.
-    placed = []
-    for _ in range(200):
-        if len(placed) >= 10:
-            break
-        cx, cy, size = rng.randrange(16), rng.randrange(16), rng.choice((2, 3, 3, 4))
-        if any(min(abs(cx - x), 16 - abs(cx - x)) < (size + s2) / 2 + 1
-               and min(abs(cy - y), 16 - abs(cy - y)) < (size + s2) / 2 + 1 for x, y, s2 in placed):
-            continue
-        placed.append((cx, cy, size))
-        for y in range(size + 1):
-            for x in range(size + 1):
-                corner = size >= 3 and (x in (0, size)) and (y in (0, size))
-                if corner:
-                    continue
-                px, py = (cx + x) % 16, (cy + y) % 16
-                if x == size or y == size:
-                    color = shadow  # Shadow along the lower right edge.
-                elif x == 0 or y == 0:
-                    color = light
-                else:
-                    color = body
-                img.putpixel((px, py), color + (255,))
-        img.putpixel(((cx + 1) % 16, (cy + 1) % 16), glint + (255,))
-    accent = ACCENTS.get(name)
-    if accent:
-        for _ in range(6):
-            img.putpixel((rng.randrange(16), rng.randrange(16)), accent + (255,))
+            i, d1, d2 = bs._nearest(pts, x + 0.5, y + 0.5, 16, 16)
+            if d2 - d1 < 0.9:
+                img.putpixel((x, y), JOINT + (255,))
+                continue
+            px, py = pts[i]
+            dx = ((x + 0.5 - px + 8) % 16) - 8
+            dy = ((y + 0.5 - py + 8) % 16) - 8
+            tones = (shadow, body, light) if ore[i] else RUBBLE
+            k = 1 + (1 if dx + dy < -1.5 else 0) - (1 if dx + dy > 1.6 and d2 - d1 < 2.2 else 0)
+            c = tones[k]
+            if ore[i] and -2.6 < dx + dy < -1.6 and abs(dx - dy) < 1.0:
+                c = glint
+            elif accent and not ore[i] and k == 0 and (x + 2 * y) % 5 == 0:
+                c = accent
+            img.putpixel((x, y), c + (255,))
     return img
 
 

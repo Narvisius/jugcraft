@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "jugcraft:white_pumpkin_seeds",
+  "result": {
+    "id": "jugcraft:white_pumpkin",
+    "count": 1
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:white_pumpkin_seeds",
+        "count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

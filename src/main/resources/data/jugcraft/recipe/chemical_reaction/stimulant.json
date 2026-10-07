@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "minecraft:cocoa_beans",
+      "count": 4
+    },
+    {
+      "ingredient": "minecraft:glass_bottle",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:stimulant",
+      "count": 1
+    }
+  ],
+  "time": 100
+}

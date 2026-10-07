@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CGC",
+    "GWG",
+    "CGC"
+  ],
+  "key": {
+    "C": "jugcraft:cement",
+    "G": "minecraft:gravel",
+    "W": "minecraft:water_bucket"
+  },
+  "result": {
+    "id": "jugcraft:concrete",
+    "count": 8
+  }
+}

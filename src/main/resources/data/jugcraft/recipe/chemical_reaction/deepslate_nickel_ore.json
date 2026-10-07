@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:deepslate_nickel_ore",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:sulfuric_acid",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:washed_nickel_ore",
+      "count": 4
+    }
+  ],
+  "time": 160
+}

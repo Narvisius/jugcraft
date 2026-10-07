@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "SDS",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:sugar",
+    "D": "minecraft:red_dye"
+  },
+  "result": {
+    "id": "jugcraft:giant_candy",
+    "count": 2
+  }
+}

@@ -13,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/** A thrown or launched grenade: it goes off when it hits anything ({@link Blast}). */
+/** A thrown or launched grenade: it goes off when it hits anything, as its item's {@link Warhead} says. */
 public class GrenadeEntity extends ThrowableItemProjectile {
 	public GrenadeEntity(EntityType<? extends GrenadeEntity> type, Level level) {
 		super(type, level);
@@ -38,7 +38,7 @@ public class GrenadeEntity extends ThrowableItemProjectile {
 				Direction face = block.getDirection();
 				center = center.add(face.getStepX() * 0.3, face.getStepY() * 0.3, face.getStepZ() * 0.3);
 			}
-			Blast.detonate(server, center, this, getOwner());
+			Warhead.of(getItem()).detonate(server, center, this, getOwner());
 			discard();
 		}
 	}

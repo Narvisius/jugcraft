@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "G G"
+  ],
+  "key": {
+    "C": "minecraft:red_carpet",
+    "G": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "jugcraft:costume_runway",
+    "count": 3
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_twinblade"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms_v.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms_v.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_twinblade",
+              "jugcraft:bronze_nodachi",
+              "jugcraft:bronze_earthbreaker",
+              "jugcraft:bronze_katar",
+              "jugcraft:bronze_moonblade",
+              "jugcraft:bronze_kusarigama",
+              "jugcraft:steel_twinblade",
+              "jugcraft:steel_nodachi",
+              "jugcraft:steel_earthbreaker",
+              "jugcraft:steel_katar",
+              "jugcraft:steel_moonblade",
+              "jugcraft:steel_kusarigama"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

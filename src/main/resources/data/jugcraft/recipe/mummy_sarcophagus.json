@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "GSG",
+    "SPS",
+    "SRS"
+  ],
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "S": "minecraft:sandstone",
+    "P": "minecraft:paper",
+    "R": "minecraft:rotten_flesh"
+  },
+  "result": {
+    "id": "jugcraft:mummy_sarcophagus",
+    "count": 1
+  }
+}

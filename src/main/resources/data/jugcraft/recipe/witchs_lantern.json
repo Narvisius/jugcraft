@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NNN",
+    "NTN",
+    "NAN"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "T": "minecraft:torch",
+    "A": "minecraft:amethyst_shard"
+  },
+  "result": {
+    "id": "jugcraft:witchs_lantern",
+    "count": 1
+  }
+}

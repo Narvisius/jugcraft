@@ -1,0 +1,156 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "p": "jugcraft:block/shroud_moss",
+    "particle": "jugcraft:block/shroud_moss"
+  },
+  "elements": [
+    {
+      "from": [
+        1.5,
+        4,
+        8
+      ],
+      "to": [
+        14.5,
+        16,
+        8
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.0,
+            8.25,
+            6.5,
+            14.25
+          ],
+          "texture": "#p"
+        },
+        "north": {
+          "uv": [
+            6.5,
+            8.25,
+            0.0,
+            14.25
+          ],
+          "texture": "#p"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        4,
+        8
+      ],
+      "to": [
+        14.5,
+        16,
+        8
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            6.75,
+            8.25,
+            13.25,
+            14.25
+          ],
+          "texture": "#p"
+        },
+        "north": {
+          "uv": [
+            13.25,
+            8.25,
+            6.75,
+            14.25
+          ],
+          "texture": "#p"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        8,
+        4,
+        1.5
+      ],
+      "to": [
+        8,
+        16,
+        14.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            8.25,
+            6.5,
+            14.25
+          ],
+          "texture": "#p"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            8.25,
+            0.0,
+            14.25
+          ],
+          "texture": "#p"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        4,
+        1.5
+      ],
+      "to": [
+        8,
+        16,
+        14.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            6.75,
+            8.25,
+            13.25,
+            14.25
+          ],
+          "texture": "#p"
+        },
+        "east": {
+          "uv": [
+            13.25,
+            8.25,
+            6.75,
+            14.25
+          ],
+          "texture": "#p"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      }
+    }
+  ]
+}

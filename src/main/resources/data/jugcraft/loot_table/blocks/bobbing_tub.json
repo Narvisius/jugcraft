@@ -1,0 +1,76 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:bobbing_tub"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:apple",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": 0,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:bobbing_tub",
+                "state": {
+                  "apples": "0"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 2,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:bobbing_tub",
+                "state": {
+                  "apples": "2"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 3,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:bobbing_tub",
+                "state": {
+                  "apples": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 4,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:bobbing_tub",
+                "state": {
+                  "apples": "4"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/bobbing_tub"
+}

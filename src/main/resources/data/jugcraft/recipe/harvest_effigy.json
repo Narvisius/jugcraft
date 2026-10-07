@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "THT",
+    "SHS",
+    " H "
+  ],
+  "key": {
+    "T": "minecraft:string",
+    "H": "minecraft:hay_block",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:harvest_effigy",
+    "count": 1
+  }
+}

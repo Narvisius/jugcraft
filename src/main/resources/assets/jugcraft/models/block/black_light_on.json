@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/black_light_fixture",
+    "fixture": "jugcraft:block/black_light_fixture",
+    "tube": "jugcraft:block/black_light_tube",
+    "tube_off": "jugcraft:block/black_light_tube_off"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        9,
+        14.5
+      ],
+      "to": [
+        15,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fixture"
+        },
+        "south": {
+          "texture": "#fixture"
+        },
+        "east": {
+          "texture": "#fixture"
+        },
+        "west": {
+          "texture": "#fixture"
+        },
+        "up": {
+          "texture": "#fixture"
+        },
+        "down": {
+          "texture": "#fixture"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        9.5,
+        12.5
+      ],
+      "to": [
+        2,
+        11.5,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fixture"
+        },
+        "south": {
+          "texture": "#fixture"
+        },
+        "east": {
+          "texture": "#fixture"
+        },
+        "west": {
+          "texture": "#fixture"
+        },
+        "up": {
+          "texture": "#fixture"
+        },
+        "down": {
+          "texture": "#fixture"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        9.5,
+        12.5
+      ],
+      "to": [
+        15,
+        11.5,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fixture"
+        },
+        "south": {
+          "texture": "#fixture"
+        },
+        "east": {
+          "texture": "#fixture"
+        },
+        "west": {
+          "texture": "#fixture"
+        },
+        "up": {
+          "texture": "#fixture"
+        },
+        "down": {
+          "texture": "#fixture"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        10,
+        13
+      ],
+      "to": [
+        14,
+        11,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tube"
+        },
+        "south": {
+          "texture": "#tube"
+        },
+        "east": {
+          "texture": "#tube"
+        },
+        "west": {
+          "texture": "#tube"
+        },
+        "up": {
+          "texture": "#tube"
+        },
+        "down": {
+          "texture": "#tube"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

@@ -21,7 +21,8 @@ LISTS = {"crusher": ("crusher", "crushing"), "arc_furnace_controller": ("arc_fur
          "wire_drawer": ("wire_drawer", "wire_drawing"), "circuit_assembler": ("circuit_assembler", "circuit_assembly"),
          "pulverizer": ("pulverizer", "pulverizing"), "ore_washer": ("ore_washer", "ore_washing"),
          "sieve": ("sieve", "sifting"), "sawmill": ("sawmill", "sawing"), "coke_oven": ("coke_oven", "coking"),
-         "steel_foundry": ("steel_foundry", "steelmaking"), "tree_farm": ("tree_farm", "tree_growing")}
+         "steel_foundry": ("steel_foundry", "steelmaking"), "tree_farm": ("tree_farm", "tree_growing"),
+         "hydroponic_bay": ("hydroponic_bay", "hydroponics"), "rocket_workshop": ("rocket_workshop", "rocket_assembly")}
 
 
 def build():
@@ -43,7 +44,7 @@ def build():
     for block, recipes in petro.FLUID_RECIPES.items():
         rows = [{"items": [[ref, count] for ref, count in recipe.get("items", [])],
                  "fluids": [[fluid, mb] for fluid, mb in recipe.get("fluids", [])],
-                 "fluid_results": [[fluid, mb] for fluid, mb in recipe.get("fluid_results", [])],
+                 "fluid_results": [[r[0], r[1]] for r in recipe.get("fluid_results", [])],
                  "results": [[item, count] for item, count in recipe.get("results", [])],
                  "ticks": recipe["ticks"]} for recipe in recipes]
         fluid_machines.append({"block": f"{MOD}:{block}", "type": petro.FLUID_MACHINES[block]["recipe_type"],

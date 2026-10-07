@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NBN",
+    "BGB",
+    "NPN"
+  ],
+  "key": {
+    "N": "#c:nuggets/brass",
+    "B": "minecraft:iron_bars",
+    "G": "minecraft:glowstone",
+    "P": "#c:plates/brass"
+  },
+  "result": {
+    "id": "jugcraft:imperial_gas_lamp",
+    "count": 2
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NNN",
+    "PPP"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:broom_rack",
+    "count": 1
+  }
+}

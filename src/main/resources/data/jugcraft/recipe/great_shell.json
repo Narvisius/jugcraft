@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "HTH"
+  ],
+  "key": {
+    "H": "jugcraft:heavy_shell",
+    "T": "minecraft:tnt"
+  },
+  "result": {
+    "id": "jugcraft:great_shell",
+    "count": 1
+  }
+}

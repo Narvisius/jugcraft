@@ -179,12 +179,12 @@ def write_all():
 
 
 def stake_texture():
-    """The Survey Stake: a wooden post with a cyan-free, dull red survey band."""
+    """The Survey Stake: a wooden post with straight grain lines and a dull red survey band (no cyan)."""
     from PIL import Image
     img = Image.new("RGBA", (16, 16))
     for y in range(16):
         for x in range(16):
-            wood = (122, 90, 56) if (x + y * 3) % 7 else (100, 72, 44)
+            wood = (100, 72, 44) if x % 5 == 2 else (138, 104, 66) if x == 0 else (122, 90, 56)
             img.putpixel((x, y), wood + (255,))
     for y in (3, 4, 5):
         for x in range(16):

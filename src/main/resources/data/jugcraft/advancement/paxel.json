@@ -1,0 +1,43 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:wood_paxel"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.paxel.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.paxel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:wood_paxel",
+              "jugcraft:stone_paxel",
+              "jugcraft:iron_paxel",
+              "jugcraft:gold_paxel",
+              "jugcraft:diamond_paxel",
+              "jugcraft:netherite_paxel",
+              "jugcraft:bronze_paxel",
+              "jugcraft:steel_paxel"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:steel"
+}

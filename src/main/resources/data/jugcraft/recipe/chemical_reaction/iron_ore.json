@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "minecraft:iron_ore",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:sulfuric_acid",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:washed_iron_ore",
+      "count": 4
+    }
+  ],
+  "time": 160
+}

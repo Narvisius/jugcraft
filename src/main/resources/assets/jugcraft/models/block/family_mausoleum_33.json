@@ -1,0 +1,158 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gy_marble_clean_upper",
+    "stone": "jugcraft:block/gy_marble_clean_upper",
+    "top": "jugcraft:block/gy_marble_clean_upper",
+    "relief_top": "jugcraft:block/gy_marble_relief_clean_upper",
+    "lantern": "jugcraft:block/gy_lantern_glass"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        10
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        9.2
+      ],
+      "to": [
+        0.4,
+        13.0,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#top"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        16
+      ],
+      "to": [
+        0.4,
+        13.0,
+        16.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone",
+          "uv": [
+            0.0,
+            3.0,
+            0.8,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0,
+            15.2,
+            0.4,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.55,
+        0,
+        5.05
+      ],
+      "to": [
+        2.45,
+        0.8,
+        5.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#relief_top"
+        },
+        "south": {
+          "texture": "#relief_top"
+        },
+        "east": {
+          "texture": "#relief_top"
+        },
+        "west": {
+          "texture": "#relief_top"
+        },
+        "up": {
+          "texture": "#relief_top"
+        }
+      }
+    },
+    {
+      "from": [
+        1.75,
+        0.8,
+        5.25
+      ],
+      "to": [
+        2.25,
+        1.6,
+        5.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern"
+        },
+        "south": {
+          "texture": "#lantern"
+        },
+        "east": {
+          "texture": "#lantern"
+        },
+        "west": {
+          "texture": "#lantern"
+        },
+        "up": {
+          "texture": "#lantern"
+        },
+        "down": {
+          "texture": "#lantern"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SBS",
+    "CTC",
+    "PGP"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:iron_bars",
+    "C": "#c:ingots/copper",
+    "T": "jugcraft:fluid_tank",
+    "P": "jugcraft:steel_fluid_pipe",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:heat_recovery_unit",
+    "count": 1
+  }
+}

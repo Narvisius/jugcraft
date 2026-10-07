@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "p": "jugcraft:block/beating_heart_jar",
+    "particle": "jugcraft:block/beating_heart_jar"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        12.8,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.3775,
+            10.8775,
+            3.1225,
+            13.6225
+          ],
+          "texture": "#p"
+        }
+      }
+    }
+  ]
+}

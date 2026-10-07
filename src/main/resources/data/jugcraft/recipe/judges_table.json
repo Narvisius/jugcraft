@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CGC",
+    "P P"
+  ],
+  "key": {
+    "C": "minecraft:red_wool",
+    "G": "minecraft:gold_ingot",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:judges_table",
+    "count": 1
+  }
+}

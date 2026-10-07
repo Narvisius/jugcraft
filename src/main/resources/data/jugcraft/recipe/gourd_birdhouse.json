@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "T",
+    "G"
+  ],
+  "key": {
+    "T": "minecraft:string",
+    "G": "jugcraft:dried_bottle_gourd"
+  },
+  "result": {
+    "id": "jugcraft:gourd_birdhouse",
+    "count": 1
+  }
+}

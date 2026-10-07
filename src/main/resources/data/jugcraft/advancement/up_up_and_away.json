@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:harvest_balloon"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.up_up_and_away.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.up_up_and_away.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

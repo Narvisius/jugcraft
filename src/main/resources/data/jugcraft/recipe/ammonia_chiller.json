@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PMP",
+    "CTC",
+    "PKP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:bronze_fluid_pipe",
+    "T": "jugcraft:fluid_tank",
+    "K": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:ammonia_chiller",
+    "count": 1
+  }
+}

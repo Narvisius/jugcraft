@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SDS",
+    "EGE",
+    "CCC"
+  ],
+  "key": {
+    "S": "#c:storage_blocks/steel",
+    "D": "minecraft:dispenser",
+    "E": "jugcraft:diesel_engine",
+    "G": "#c:gears/steel",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:fortress_rifle",
+    "count": 1
+  }
+}

@@ -173,4 +173,54 @@ public class PartyGameTests {
 		helper.assertTrue(JugcraftParties.mayServe(solo, UseMode.PERSONAL, solo, UseMode.PERSONAL), "own jobs served");
 		helper.succeed();
 	}
+
+	/** Operators can remove, promote and disband in any party, by last known name, even with parties off. */
+	@GameTest
+	public void operatorActionsWorkOnAnyParty(GameTestHelper helper) {
+		PartyManager parties = new PartyManager(8, 60_000, 10);
+		UUID a = UUID.randomUUID(), b = UUID.randomUUID(), c = UUID.randomUUID();
+		parties.rememberName(a, "Alex");
+		parties.rememberName(b, "Blake");
+		parties.rememberName(c, "Casey");
+		parties.invite(a, b, NOW);
+		parties.accept(b, NOW);
+		parties.invite(a, c, NOW);
+		parties.accept(c, NOW);
+		helper.assertTrue(parties.findAnyMemberByName("blake").equals(java.util.Optional.of(b)), "names match ignoring case");
+		helper.assertTrue(parties.findAnyMemberByName("Nobody").isEmpty(), "unknown names find nobody");
+		// Operator actions work while parties are off; the lookups below answer "solo" until they are back on.
+		parties.setEnabled(false);
+		expect(helper, parties.adminSetLeader(c), Result.OK, "make Casey leader");
+		expect(helper, parties.adminRemove(a), Result.OK, "remove Alex");
+		parties.setEnabled(true);
+		helper.assertTrue(parties.isLeader(c), "Casey leads");
+		helper.assertTrue(!parties.sameParty(a, b) && parties.sameParty(b, c), "Alex is out, Blake and Casey stay");
+		expect(helper, parties.adminRemove(a), Result.NOT_IN_PARTY, "Alex is no longer in a party");
+		expect(helper, parties.adminDisband(b), Result.OK, "disband through any member");
+		helper.assertTrue(parties.parties().isEmpty() && parties.allMembers().isEmpty(), "nothing left");
+		helper.succeed();
+	}
+
+	/** Limits can change at runtime (server config); a party over a smaller size keeps its members. */
+	@GameTest
+	public void limitsComeFromSettings(GameTestHelper helper) {
+		PartyManager parties = new PartyManager();
+		helper.assertTrue(parties.maxSize() == PartyManager.DEFAULT_MAX_SIZE, "default size");
+		UUID a = UUID.randomUUID(), b = UUID.randomUUID(), c = UUID.randomUUID(), d = UUID.randomUUID();
+		parties.invite(a, b, NOW);
+		parties.accept(b, NOW);
+		parties.invite(a, c, NOW);
+		parties.accept(c, NOW);
+		parties.setLimits(2, 1000, 1);
+		helper.assertTrue(parties.partyOf(a).orElseThrow().size() == 3, "existing members stay over the new size");
+		expect(helper, parties.invite(a, d, NOW), Result.PARTY_FULL, "no one new while over the size");
+		boolean refused = false;
+		try {
+			parties.setLimits(1, 1000, 1);
+		} catch (IllegalArgumentException e) {
+			refused = true;
+		}
+		helper.assertTrue(refused && parties.maxSize() == 2, "a size under 2 is refused and the old limits stay");
+		helper.succeed();
+	}
 }

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " B ",
+    "BNB",
+    " B "
+  ],
+  "key": {
+    "B": "jugcraft:black_lacquer_plate",
+    "N": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "jugcraft:riveted_black_plate",
+    "count": 4
+  }
+}

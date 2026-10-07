@@ -1,0 +1,313 @@
+{
+  "language": {
+    "entity.jugcraft.space_kook": "Spectral Cosmonaut",
+    "item.jugcraft.space_kook_spawn_egg": "Spectral Cosmonaut Spawn Egg",
+    "subtitles.jugcraft.laugh": "Spectral Cosmonaut cackles",
+    "subtitles.jugcraft.hurt": "Space suit clangs",
+    "subtitles.jugcraft.death": "Spectral Cosmonaut fades",
+    "subtitles.jugcraft.step": "Heavy metallic footsteps",
+    "entity.jugcraft.captain_cutler": "Drowned Diver",
+    "item.jugcraft.captain_cutler_spawn_egg": "Drowned Diver Spawn Egg",
+    "subtitles.jugcraft.cutler.ambient": "Drowned Diver moans",
+    "subtitles.jugcraft.cutler.chase": "Drowned Diver groans",
+    "subtitles.jugcraft.cutler.hurt": "Drowned Diver grunts",
+    "subtitles.jugcraft.cutler.death": "Drowned Diver fades",
+    "subtitles.jugcraft.cutler.step": "Diving boots clank",
+    "entity.jugcraft.phantom_shadow": "Emerald Phantom",
+    "item.jugcraft.phantom_shadow_spawn_egg": "Emerald Phantom Spawn Egg",
+    "subtitles.jugcraft.shadow.ambient": "Emerald Phantom giggles",
+    "subtitles.jugcraft.shadow.chase": "Emerald Phantom pursues",
+    "subtitles.jugcraft.shadow.attack": "Emerald Phantom attacks",
+    "subtitles.jugcraft.shadow.hurt": "Emerald Phantom recoils",
+    "subtitles.jugcraft.shadow.death": "Emerald Phantom fades",
+    "subtitles.jugcraft.shadow.chain": "Ghost chains rattle",
+    "entity.jugcraft.black_knight": "Onyx Warden",
+    "item.jugcraft.black_knight_spawn_egg": "Onyx Warden Spawn Egg",
+    "subtitles.jugcraft.knight.ambient": "Onyx Warden growls",
+    "subtitles.jugcraft.knight.chase": "Onyx Warden threatens",
+    "subtitles.jugcraft.knight.attack": "Onyx Warden swings",
+    "subtitles.jugcraft.knight.hurt": "Onyx Warden recoils",
+    "subtitles.jugcraft.knight.death": "Onyx Warden falls",
+    "subtitles.jugcraft.knight.step": "Armor clanks"
+  },
+  "sounds": {
+    "space_kook.laugh": {
+      "subtitle": "subtitles.jugcraft.laugh",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/laugh"
+        }
+      ]
+    },
+    "space_kook.hurt": {
+      "subtitle": "subtitles.jugcraft.hurt",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/hurt"
+        }
+      ]
+    },
+    "space_kook.death": {
+      "subtitle": "subtitles.jugcraft.death",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/death"
+        }
+      ]
+    },
+    "space_kook.step": {
+      "subtitle": "subtitles.jugcraft.step",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/step"
+        }
+      ]
+    },
+    "captain_cutler.ambient": {
+      "subtitle": "subtitles.jugcraft.cutler.ambient",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/cutler/cutler1"
+        },
+        {
+          "name": "jugcraft:scary/cutler/cutler2"
+        }
+      ]
+    },
+    "captain_cutler.chase": {
+      "subtitle": "subtitles.jugcraft.cutler.chase",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/cutler/cutler01"
+        },
+        {
+          "name": "jugcraft:scary/cutler/cutler04"
+        }
+      ]
+    },
+    "captain_cutler.hurt": {
+      "subtitle": "subtitles.jugcraft.cutler.hurt",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/cutler/cutler3"
+        }
+      ]
+    },
+    "captain_cutler.death": {
+      "subtitle": "subtitles.jugcraft.cutler.death",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/cutler/cutler02"
+        },
+        {
+          "name": "jugcraft:scary/cutler/cutler03"
+        }
+      ]
+    },
+    "captain_cutler.step": {
+      "subtitle": "subtitles.jugcraft.cutler.step",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/cutler/step"
+        }
+      ]
+    },
+    "phantom_shadow.ambient": {
+      "subtitle": "subtitles.jugcraft.shadow.ambient",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/shadow/laugh1"
+        },
+        {
+          "name": "jugcraft:scary/shadow/laugh2"
+        }
+      ]
+    },
+    "phantom_shadow.chase": {
+      "subtitle": "subtitles.jugcraft.shadow.chase",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/shadow/laugh1"
+        },
+        {
+          "name": "jugcraft:scary/shadow/laugh2"
+        },
+        {
+          "name": "jugcraft:scary/shadow/laugh3"
+        }
+      ]
+    },
+    "phantom_shadow.attack": {
+      "subtitle": "subtitles.jugcraft.shadow.attack",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/shadow/attack"
+        }
+      ]
+    },
+    "phantom_shadow.hurt": {
+      "subtitle": "subtitles.jugcraft.shadow.hurt",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/shadow/hurt"
+        }
+      ]
+    },
+    "phantom_shadow.death": {
+      "subtitle": "subtitles.jugcraft.shadow.death",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/shadow/death"
+        }
+      ]
+    },
+    "phantom_shadow.chain": {
+      "subtitle": "subtitles.jugcraft.shadow.chain",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/shadow/chain"
+        }
+      ]
+    },
+    "black_knight.ambient": {
+      "subtitle": "subtitles.jugcraft.knight.ambient",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/knight/bk1"
+        },
+        {
+          "name": "jugcraft:scary/knight/bk2"
+        }
+      ]
+    },
+    "black_knight.chase": {
+      "subtitle": "subtitles.jugcraft.knight.chase",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/knight/bkmedieval"
+        }
+      ]
+    },
+    "black_knight.attack": {
+      "subtitle": "subtitles.jugcraft.knight.attack",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/knight/bk5"
+        }
+      ]
+    },
+    "black_knight.hurt": {
+      "subtitle": "subtitles.jugcraft.knight.hurt",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/knight/bk3"
+        }
+      ]
+    },
+    "black_knight.death": {
+      "subtitle": "subtitles.jugcraft.knight.death",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/knight/bk4"
+        }
+      ]
+    },
+    "black_knight.step": {
+      "subtitle": "subtitles.jugcraft.knight.step",
+      "sounds": [
+        {
+          "name": "jugcraft:scary/knight/step"
+        }
+      ]
+    }
+  },
+  "resources": {
+    "assets/jugcraft/items/space_kook_spawn_egg.json": {
+      "model": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/space_kook_spawn_egg"
+      }
+    },
+    "assets/jugcraft/models/item/space_kook_spawn_egg.json": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "jugcraft:item/space_kook_spawn_egg"
+      }
+    },
+    "assets/jugcraft/items/captain_cutler_spawn_egg.json": {
+      "model": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/captain_cutler_spawn_egg"
+      }
+    },
+    "assets/jugcraft/models/item/captain_cutler_spawn_egg.json": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "jugcraft:item/captain_cutler_spawn_egg"
+      }
+    },
+    "assets/jugcraft/items/phantom_shadow_spawn_egg.json": {
+      "model": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/phantom_shadow_spawn_egg"
+      }
+    },
+    "assets/jugcraft/models/item/phantom_shadow_spawn_egg.json": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "jugcraft:item/phantom_shadow_spawn_egg"
+      }
+    },
+    "assets/jugcraft/items/black_knight_spawn_egg.json": {
+      "model": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/black_knight_spawn_egg"
+      }
+    },
+    "assets/jugcraft/models/item/black_knight_spawn_egg.json": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "jugcraft:item/black_knight_spawn_egg"
+      }
+    },
+    "data/jugcraft/loot_table/entities/phantom_shadow.json": {
+      "type": "minecraft:entity",
+      "pools": [
+        {
+          "rolls": 1,
+          "entries": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:phantom_membrane",
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 0,
+                  "max": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "data/jugcraft/tags/entity_type/disabled_natural_spawns.json": {
+      "replace": false,
+      "values": []
+    },
+    "data/jugcraft/tags/entity_type/season/halloween.json": {
+      "replace": false,
+      "values": [
+        "jugcraft:space_kook",
+        "jugcraft:captain_cutler",
+        "jugcraft:phantom_shadow",
+        "jugcraft:black_knight"
+      ]
+    },
+    "data/jugcraft/tags/worldgen/structure/black_knight_spawn_structures.json": {
+      "replace": false,
+      "values": []
+    }
+  }
+}

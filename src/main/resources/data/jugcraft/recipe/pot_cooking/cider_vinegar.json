@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:aged_cider"
+    },
+    {
+      "ingredient": "jugcraft:apple_pomace"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:cider_vinegar"
+  },
+  "time": 200
+}

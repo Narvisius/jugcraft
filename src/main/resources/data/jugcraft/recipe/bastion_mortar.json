@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "PMP",
+    "CCC"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "M": "jugcraft:siege_mortar",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:bastion_mortar",
+    "count": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "jugcraft:maple_leaves",
+    "jugcraft:aspen_leaves",
+    "jugcraft:chestnut_leaves",
+    "minecraft:string"
+  ],
+  "result": {
+    "id": "jugcraft:autumn_leaf_garland",
+    "count": 1
+  }
+}

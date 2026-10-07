@@ -62,8 +62,10 @@ public class MachineMenu extends AbstractContainerMenu {
 	public static final int TANK_WIDTH = 12;
 	public static final int TANK_Y = 17;
 	public static final int TANK_HEIGHT = 52;
-	/** Fluid processors: where the progress arrow starts. */
+	/** Fluid processors: where the progress arrow starts, unless the outputs crowd it (see {@link #fluidArrowX}). */
 	public static final int FLUID_ARROW_X = 84;
+	/** The progress arrow's width: it ends where the first output begins. */
+	private static final int ARROW_SPAN = 24;
 
 	public static int inputTankX(int index) {
 		return 28 + index * 16;
@@ -79,6 +81,15 @@ public class MachineMenu extends AbstractContainerMenu {
 
 	public static int fluidItemOutputX(FluidMachineSpec spec, int slot) {
 		return outputTankX(spec, 0) - 22 - (spec.itemOutputs() - 1 - slot) * 18;
+	}
+
+	/**
+	 * Where a fluid processor's progress arrow starts: at {@link #FLUID_ARROW_X}, or further left when many outputs
+	 * reach that far (the distillation tower's five tanks and slot, batch 24).
+	 */
+	public static int fluidArrowX(FluidMachineSpec spec) {
+		int firstOutput = spec.itemOutputs() > 0 ? fluidItemOutputX(spec, 0) : outputTankX(spec, 0);
+		return Math.min(FLUID_ARROW_X, firstOutput - ARROW_SPAN);
 	}
 
 	private final MachineKind kind;

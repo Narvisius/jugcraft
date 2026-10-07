@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "PWP",
+    "R R"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "S": "jugcraft:steel_block",
+    "W": "jugcraft:diesel_walker",
+    "R": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:armoured_walker",
+    "count": 1
+  }
+}

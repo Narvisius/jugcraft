@@ -1,0 +1,184 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_post"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side",
+        "uvlock": true
+      },
+      "when": {
+        "north": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side_tall",
+        "uvlock": true
+      },
+      "when": {
+        "north": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side_tall",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side_tall",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "minecraft:block/polished_blackstone_wall_side_tall",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall",
+        "uvlock": true
+      },
+      "when": {
+        "north_east": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "south_east": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_west": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "north_west": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall_tall",
+        "uvlock": true
+      },
+      "when": {
+        "north_east": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall_tall",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "south_east": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall_tall",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_west": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/polished_blackstone_wall_tall",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "north_west": "true",
+        "tall": "true"
+      }
+    }
+  ]
+}

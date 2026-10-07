@@ -1,0 +1,205 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/mummy_sarcophagus_case",
+    "case": "jugcraft:block/mummy_sarcophagus_case",
+    "inside": "jugcraft:block/mummy_sarcophagus_inside",
+    "gold": "jugcraft:block/mummy_sarcophagus_gold",
+    "lid_face": "jugcraft:block/mummy_sarcophagus_lid_face",
+    "wraps": "jugcraft:block/mummy_sarcophagus_wraps",
+    "mummy_face": "jugcraft:block/mummy_sarcophagus_mummy_face"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        -0.1,
+        11
+      ],
+      "to": [
+        14,
+        16,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#inside",
+          "uv": [
+            2.0,
+            0.0,
+            14.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#case",
+          "uv": [
+            2.0,
+            0.0,
+            14.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#case",
+          "uv": [
+            2.0,
+            0.0,
+            5.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#case",
+          "uv": [
+            11.0,
+            0.0,
+            14.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#case"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        -0.1,
+        4.5
+      ],
+      "to": [
+        3,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#case",
+          "uv": [
+            13.0,
+            0.0,
+            14.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#case",
+          "uv": [
+            2.0,
+            0.0,
+            3.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#inside",
+          "uv": [
+            5.0,
+            0.0,
+            11.5,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#case",
+          "uv": [
+            4.5,
+            0.0,
+            11.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#case"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        -0.1,
+        4.5
+      ],
+      "to": [
+        14,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#case",
+          "uv": [
+            2.0,
+            0.0,
+            3.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#case",
+          "uv": [
+            13.0,
+            0.0,
+            14.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#case",
+          "uv": [
+            5.0,
+            0.0,
+            11.5,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#inside",
+          "uv": [
+            4.5,
+            0.0,
+            11.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#case"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        0,
+        2
+      ],
+      "to": [
+        14.5,
+        1,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gold"
+        },
+        "south": {
+          "texture": "#gold"
+        },
+        "east": {
+          "texture": "#gold"
+        },
+        "west": {
+          "texture": "#gold"
+        },
+        "up": {
+          "texture": "#gold"
+        },
+        "down": {
+          "texture": "#gold"
+        }
+      }
+    }
+  ]
+}

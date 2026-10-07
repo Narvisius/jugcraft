@@ -46,17 +46,16 @@ FOOTPRINTS = {
     "large_steam_engine": cuboid(2, 2, 2),
     # Petrochemistry: a pumpjack one wide, three tall, three long (wellhead at the front).
     "pumpjack": cuboid(1, 3, 3),
-    "oil_sand_extractor": cuboid(2, 2, 2),
     "distillation_tower": cuboid(2, 7, 2),
     "catalytic_cracker": cuboid(2, 4, 2),
-    "vacuum_distillation_unit": cuboid(2, 3, 2),
-    "catalytic_reformer": cuboid(3, 2, 2),
-    "chemical_mixer": cuboid(2, 2, 2),
     "fracking_rig": cuboid(3, 5, 3),
     "flowback_treatment_unit": cuboid(3, 1, 2),
     "diesel_generator": cuboid(3, 2, 2),
     "gas_turbine": cuboid(4, 2, 2),
     "polymerization_reactor": cuboid(2, 3, 2),
+    # Batch 29: refinery upgrades.
+    "hydrotreater": cuboid(2, 3, 2),
+    "heat_recovery_unit": [(0, 0, 0), (0, 1, 0)],
     "diesel_engine": cuboid(2, 2, 3),
     "electrolytic_cell": cuboid(3, 3, 2),
     "chemical_reactor": cuboid(2, 2, 2),
@@ -67,8 +66,6 @@ FOOTPRINTS = {
     "lithium_battery_bank": cuboid(3, 2, 1),
     # Chemistry: the flow battery, three wide, three tall and two deep.
     "flow_battery": cuboid(3, 3, 2),
-    # Electronics: a two-block crystal grower.
-    "crystal_grower": [(0, 0, 0), (0, 1, 0)],
     "lithography_station": cuboid(3, 2, 2),
     # Fluid logistics: a 3x3x3 gas holder.
     "gas_holder": cuboid(3, 3, 3),
@@ -81,7 +78,30 @@ FOOTPRINTS = {
     # Nuclear fuel: a 5x3x2 centrifuge hall and a 3x2x2 fuel line.
     "gas_centrifuge_cascade": cuboid(5, 3, 2),
     "fuel_fabricator": cuboid(3, 2, 2),
+    # Batch 44: one-block machines rebuilt as big dieselpunk multi-blocks (tools/giant_models.py).
+    "coal_generator": cuboid(2, 2, 3),
+    "steam_generator": cuboid(3, 3, 2),
+    "electric_furnace": cuboid(2, 2, 2),
+    "crusher": cuboid(2, 3, 2),
+    "metal_press": cuboid(2, 3, 2),
+    "wire_drawer": cuboid(4, 1, 2),
+    "circuit_assembler": cuboid(3, 2, 2),
+    "pulverizer": cuboid(3, 2, 2),
+    "ore_washer": cuboid(2, 2, 4),
+    "sieve": cuboid(2, 2, 3),
+    "sawmill": cuboid(2, 2, 5),
+    "fuel_cell": cuboid(2, 2, 2),
+    "hydroponic_bay": cuboid(3, 2, 3),
+    "electroplating_bath": cuboid(4, 2, 2),
+    "ammonia_chiller": cuboid(2, 3, 2),
+    "rocket_workshop": cuboid(5, 3, 3),
 }
+
+# Machines that were one block before batch 44 (MachineKind.enlarged()). Copies built before then load as "compact":
+# one block with the old model. Their blockstates add compact=true|false.
+ENLARGED = ("coal_generator", "steam_generator", "electric_furnace", "crusher", "metal_press", "wire_drawer",
+            "circuit_assembler", "pulverizer", "ore_washer", "sieve", "sawmill", "fuel_cell", "hydroponic_bay",
+            "electroplating_bath", "ammonia_chiller", "rocket_workshop")
 
 # Machines that take power at one marked socket only: (part, face) for a north-facing machine.
 # Keep in sync with MachineKind.powerPort(). Everything else takes power on any face.
@@ -211,15 +231,6 @@ MODELS["pumpjack"] = [
     ((7, 12, 6), (9, 34, 8), PIPE),
 ]
 
-MODELS["oil_sand_extractor"] = [
-    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
-    ((-12, 2, 4), (12, 26, 28), "fluid_tank_side"),
-    ((-12, 26, 4), (12, 28, 28), "fluid_tank_top"),
-    ((-13, 2, 1), (-3, 12, 3), {"*": STEEL, "north": "#front", "up": TOP}),
-    ((-15, 2, 25), (-5, 14, 31), {"*": STEEL, "up": TOP}),
-    ((-9.5, 14, 27), (-6.5, 30, 30), "geothermal_stack"),
-]
-
 MODELS["distillation_tower"] = [
     ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
     ((1, 2, 1), (15, 14, 9), {"*": STEEL, "north": "#front", "up": TOP}),
@@ -240,33 +251,6 @@ MODELS["catalytic_cracker"] = [
     ((-13, 7, 0), (-7, 11, 5), PIPE),
     ((-13, 39, 0), (-7, 43, 5), PIPE),
     ((-13, 55, 0), (-7, 59, 5), PIPE),
-]
-
-MODELS["vacuum_distillation_unit"] = [
-    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
-    ((1, 2, 1), (15, 14, 9), {"*": STEEL, "north": "#front", "up": TOP}),
-    ((-14, 2, 6), (10, 40, 30), "fluid_tank_side"),
-    ((-10, 40, 10), (6, 46, 26), "fluid_tank_top"),
-    ((-13, 7, 0), (-7, 11, 5), PIPE),
-]
-
-MODELS["catalytic_reformer"] = [
-    ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
-    ((1, 2, 1), (15, 14, 9), {"*": STEEL, "north": "#front", "up": TOP}),
-    ((-14, 2, 10), (-2, 26, 22), "fluid_tank_side"),
-    ((-30, 2, 10), (-18, 26, 22), "fluid_tank_side"),
-    ((2, 14, 12), (14, 26, 22), "fluid_tank_side"),
-    ((-28, 26, 14), (12, 29, 18), PIPE),
-    ((-29, 7, 0), (-23, 11, 5), PIPE),
-    ((-29, 21, 0), (-23, 25, 5), PIPE),
-]
-
-MODELS["chemical_mixer"] = [
-    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
-    ((1, 2, 1), (15, 14, 9), {"*": STEEL, "north": "#front", "up": TOP}),
-    ((-12, 2, 6), (10, 24, 28), "fluid_tank_side"),
-    ((-12, 24, 6), (10, 26, 28), "fluid_tank_top"),
-    ((-5, 26, 13), (3, 31, 21), {"*": STEEL, "up": TOP}),
 ]
 
 MODELS["fracking_rig"] = [
@@ -307,6 +291,20 @@ MODELS["polymerization_reactor"] = [
     ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
     ((-12, 2, 6), (12, 40, 28), {"*": "fluid_tank_side", "up": "fluid_tank_top"}),
     ((-4, 40, 14), (4, 46, 22), STEEL),
+]
+
+MODELS["hydrotreater"] = [
+    ((-16, 0, 0), (16, 2, 32), "heavy_plinth"),
+    ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((-14, 2, 6), (-2, 44, 28), {"*": "fluid_tank_side", "up": "fluid_tank_top"}),
+    ((2, 12, 10), (14, 22, 30), {"*": "fluid_tank_side", "up": "fluid_tank_top"}),
+    ((-10, 44, 15), (-6, 47, 19), STEEL),
+]
+
+MODELS["heat_recovery_unit"] = [
+    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
+    ((1, 2, 1), (15, 20, 15), {"*": STEEL, "north": "#front", "up": TOP}),
+    ((8, 20, 8), (14, 32, 14), "geothermal_stack"),
 ]
 
 MODELS["diesel_engine"] = [
@@ -356,13 +354,6 @@ MODELS["flow_battery"] = [
     ((-31, 2, 1), (15, 46, 31), {"*": STEEL, "north": "#front", "up": TOP}),
 ]
 
-MODELS["crystal_grower"] = [
-    ((0, 0, 0), (16, 2, 16), "heavy_plinth"),
-    ((1, 2, 1), (15, 14, 15), {"*": STEEL, "north": "#front", "up": TOP}),
-    ((3, 14, 3), (13, 28, 13), "fluid_tank_side"),
-    ((6, 28, 6), (10, 32, 10), "geothermal_stack"),
-]
-
 MODELS["lithography_station"] = [
     ((-32, 0, 0), (16, 2, 32), "heavy_plinth"),
     ((1, 2, 1), (15, 12, 9), {"*": STEEL, "north": "#front", "up": TOP}),
@@ -410,18 +401,16 @@ FRONTS = {
     "water_wheel": "water_wheel_front",
     "large_steam_engine": "large_steam_engine_front",
     "pumpjack": "pumpjack_front",
-    "oil_sand_extractor": "oil_sand_extractor_front",
     "distillation_tower": "distillation_tower_front",
     "catalytic_cracker": "catalytic_cracker_front",
-    "vacuum_distillation_unit": "vacuum_distillation_unit_front",
-    "catalytic_reformer": "catalytic_reformer_front",
-    "chemical_mixer": "chemical_mixer_front",
     "fracking_rig": "fracking_rig_front",
     "flowback_treatment_unit": "flowback_treatment_unit_front",
     "diesel_generator": "diesel_generator_front",
     "deposit_drill": "deposit_drill_front",
     "gas_turbine": "gas_turbine_front",
     "polymerization_reactor": "polymerization_reactor_front",
+    "hydrotreater": "hydrotreater_front",
+    "heat_recovery_unit": "heat_recovery_unit_front",
     "diesel_engine": "diesel_engine_front",
     "electrolytic_cell": "electrolytic_cell_front",
     "chemical_reactor": "chemical_reactor_front",
@@ -429,7 +418,6 @@ FRONTS = {
     "synthesis_converter": "synthesis_converter_front",
     "lithium_battery_bank": "lithium_battery_bank_front",
     "flow_battery": "flow_battery_front",
-    "crystal_grower": "crystal_grower_front",
     "lithography_station": "lithography_station_front",
     "gas_holder": "gas_holder_front",
     "advanced_solar_panel": "advanced_solar_panel_front",
@@ -438,3 +426,49 @@ FRONTS = {
     "gas_centrifuge_cascade": "gas_centrifuge_cascade_front",
     "fuel_fabricator": "fuel_fabricator_front",
 }
+
+
+def classic_giant(footprint):
+    """The classic look of a batch 44 giant: a plinth under one machine-steel body with its front on the master block,
+    and a tank behind it when the machine is deep enough."""
+    width = 1 + max(-x for x, _, _ in footprint)
+    height = 1 + max(y for _, y, _ in footprint)
+    depth = 1 + max(z for _, _, z in footprint)
+    x0, x1, top, back = -(width - 1) * 16, 16, height * 16, depth * 16
+    m = [((x0, 0, 0), (x1, 2, back), "heavy_plinth"),
+         ((x0 + 1, 2, 1), (x1 - 1, min(top, 30) - 2, min(back, 32) - 1), {"*": STEEL, "north": "#front", "up": TOP})]
+    if depth > 2:
+        m.append(((x0 + 3, 2, 34), (x1 - 3, top - 4, back - 2), {"*": "fluid_tank_side", "up": "fluid_tank_top"}))
+    if height > 2:
+        m.append(((x0 + 4, 28, 4), (x1 - 4, top - 2, 26), {"*": STEEL, "up": TOP}))
+    m.append(((x1 - 7, 12, -0.5), (x1 - 3, 16, 0), PIPE))
+    return m
+
+
+for _machine in ENLARGED:
+    MODELS[_machine] = classic_giant(FOOTPRINTS[_machine])
+    FRONTS[_machine] = f"{_machine}_front"
+
+
+def classic_sawmill():
+    """The classic sawmill keeps clear of the parts client/MachineRotors draws in either style (giant_models.ROTORS):
+    a shorter body at the front and two tanks either side of a slot the blade turns in (x -2.75..2.75; the blade, its
+    flanges and arbor nut run in it, the arbor and pulleys are hidden in the tanks)."""
+    return [((-16, 0, 0), (16, 2, 80), "heavy_plinth"),
+            ((-15, 2, 1), (15, 28, 29.5), {"*": STEEL, "north": "#front", "up": TOP}),
+            ((-13, 2, 31), (-2.75, 28, 78), {"*": "fluid_tank_side", "up": "fluid_tank_top"}),
+            ((2.75, 2, 31), (13, 28, 78), {"*": "fluid_tank_side", "up": "fluid_tank_top"}),
+            ((9, 12, -0.5), (13, 16, 0), PIPE)]
+
+
+def classic_sieve():
+    """The classic sieve's body is two pixels taller than the other giants', so it hides the vibrator weights that
+    client/MachineRotors draws in either style (they turn up to y 29.5)."""
+    m = classic_giant(FOOTPRINTS["sieve"])
+    (x0, y0, z0), (x1, _, z1), texture = m[1]
+    m[1] = ((x0, y0, z0), (x1, 30, z1), texture)
+    return m
+
+
+MODELS["sawmill"] = classic_sawmill()
+MODELS["sieve"] = classic_sieve()

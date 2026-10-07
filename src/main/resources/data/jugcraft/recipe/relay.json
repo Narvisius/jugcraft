@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " R ",
+    "CXC",
+    "PPP"
+  ],
+  "key": {
+    "R": "minecraft:repeater",
+    "C": "jugcraft:copper_wire",
+    "X": "jugcraft:microchip",
+    "P": "jugcraft:plastic_sheet"
+  },
+  "result": {
+    "id": "jugcraft:relay",
+    "count": 2
+  }
+}

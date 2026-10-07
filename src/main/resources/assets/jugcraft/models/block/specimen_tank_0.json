@@ -1,0 +1,136 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/specimen_jar_glass",
+    "iron": "jugcraft:block/specimen_jar_iron",
+    "glass": "jugcraft:block/specimen_jar_glass",
+    "fluid": "jugcraft:block/specimen_jar_fluid"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        12
+      ],
+      "to": [
+        4,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron",
+          "uv": [
+            4.0,
+            15.0,
+            5.3333,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#iron",
+          "uv": [
+            10.6667,
+            15.0,
+            12.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#iron",
+          "uv": [
+            10.6667,
+            4.0,
+            12.0,
+            5.3333
+          ]
+        },
+        "down": {
+          "texture": "#iron",
+          "uv": [
+            10.6667,
+            10.6667,
+            12.0,
+            12.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3,
+        15
+      ],
+      "to": [
+        1,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fluid",
+          "uv": [
+            5.0,
+            10.6667,
+            5.3333,
+            15.0
+          ]
+        },
+        "east": {
+          "texture": "#fluid",
+          "uv": [
+            10.6667,
+            10.6667,
+            11.0,
+            15.0
+          ]
+        },
+        "down": {
+          "texture": "#fluid",
+          "uv": [
+            10.6667,
+            10.6667,
+            11.0,
+            11.0
+          ]
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        0,
+        3,
+        13.5
+      ],
+      "to": [
+        2.5,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glass",
+          "uv": [
+            4.5,
+            10.6667,
+            5.3333,
+            15.0
+          ]
+        },
+        "east": {
+          "texture": "#glass",
+          "uv": [
+            10.6667,
+            10.6667,
+            11.5,
+            15.0
+          ]
+        }
+      }
+    }
+  ],
+  "ambientocclusion": false
+}

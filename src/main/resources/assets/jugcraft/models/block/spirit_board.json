@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/spirit_board_top",
+    "top": "jugcraft:block/spirit_board_top",
+    "edge": "jugcraft:block/spirit_board_edge"
+  },
+  "elements": [
+    {
+      "from": [
+        0.5,
+        0,
+        2.5
+      ],
+      "to": [
+        15.5,
+        1,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#edge"
+        },
+        "south": {
+          "texture": "#edge"
+        },
+        "east": {
+          "texture": "#edge"
+        },
+        "west": {
+          "texture": "#edge"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#edge"
+        }
+      }
+    }
+  ]
+}

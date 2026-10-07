@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " W ",
+    " W ",
+    "WDW"
+  ],
+  "key": {
+    "W": "minecraft:black_wool",
+    "D": "minecraft:purple_dye"
+  },
+  "result": {
+    "id": "jugcraft:witch_hat",
+    "count": 1
+  }
+}

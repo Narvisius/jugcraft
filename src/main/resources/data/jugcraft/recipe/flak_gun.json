@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "D D",
+    "PGP",
+    "I I"
+  ],
+  "key": {
+    "D": "minecraft:dispenser",
+    "P": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:flak_gun",
+    "count": 1
+  }
+}

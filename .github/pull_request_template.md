@@ -1,6 +1,6 @@
 ## Summary
 Player-visible result (or documentation improvement):
-Approved proposal: Closes #
+Proposal: link an issue if available; otherwise describe your idea here.
 Feature record under docs/features/:
 
 ## Progression and integration
@@ -29,7 +29,7 @@ For AI-assisted feature implementation: Claude Opus 5.5 confirmation or approved
 What I personally reviewed/tested:
 
 ## Contributor checklist
-- [ ] One approved scope; unrelated changes excluded.
+- [ ] One focused scope; unrelated changes excluded.
 - [ ] Shared instructions followed and actual model usage disclosed.
 - [ ] Relevant checks run; no fabricated test evidence.
 - [ ] Multiplayer, integration, performance and save effects addressed or explained as not applicable.

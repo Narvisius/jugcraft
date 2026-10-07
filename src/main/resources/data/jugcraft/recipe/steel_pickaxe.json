@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "###",
+    " S ",
+    " S "
+  ],
+  "key": {
+    "#": "#c:ingots/steel",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:steel_pickaxe",
+    "count": 1
+  }
+}

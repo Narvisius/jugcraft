@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "minecraft:charcoal",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:glass_bottle",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:antidote",
+      "count": 1
+    }
+  ],
+  "time": 100
+}

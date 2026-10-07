@@ -1,0 +1,42 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:catalytic_cracking",
+  "items": [
+    {
+      "ingredient": "jugcraft:cracking_catalyst",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:heavy_fuel_oil",
+      "amount": 1000
+    },
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 200
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:kerosene",
+      "amount": 800,
+      "tank": 1
+    },
+    {
+      "fluid": "jugcraft:refinery_gas",
+      "amount": 100,
+      "tank": 2
+    }
+  ],
+  "time": 160
+}

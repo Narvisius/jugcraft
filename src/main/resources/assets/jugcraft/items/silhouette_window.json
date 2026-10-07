@@ -1,0 +1,27 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:block_state",
+    "block_state_property": "design",
+    "cases": [
+      {
+        "when": "cat",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:block/silhouette_window_cat"
+        }
+      },
+      {
+        "when": "witch",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:block/silhouette_window_witch"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:block/silhouette_window_bat"
+    }
+  }
+}

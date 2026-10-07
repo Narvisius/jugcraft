@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:raider_insignia"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.raid_beaten.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.raid_beaten.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

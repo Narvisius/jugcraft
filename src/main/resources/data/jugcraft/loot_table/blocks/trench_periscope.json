@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "jugcraft:blocks/trench_periscope",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:trench_periscope"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:trench_periscope",
+            "state": {
+              "half": "lower"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

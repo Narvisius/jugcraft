@@ -1,6 +1,7 @@
 # Petrochemistry (the dieselpunk oil line)
 
 Status: **in progress**, built in batches of five commits (plan: [branches/CHEMISTRY.md](../branches/CHEMISTRY.md#petrochemistry-the-dieselpunk-oil-line)). Compiles in CI; **not yet played**.
+**Batch 24:** the oil sand extractor, vacuum distillation unit, catalytic reformer and chemical mixer described below were folded into the settling plant, distillation tower, catalytic cracker and chemical reactor; see [machine-consolidation.md](machine-consolidation.md). Their sections below are kept as history.
 Proposal issue: none. The owner asked for this branch directly on 1 October 2026: "the Diesel Punk Chemistry branch of the science tree which should involve crude oil processing turning it into more advanced useable versions of fuel using big machines and oil fracking", planned as 15–20 commits done five at a time.
 Owner: jimbozoomer-byte (implementation: Claude Opus 5.5).
 Target milestone and tier: steel tier and later (dieselpunk; see [ART_DIRECTION.md](../ART_DIRECTION.md)).

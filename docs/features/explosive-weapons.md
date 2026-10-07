@@ -52,5 +52,5 @@ No new dependencies. Item textures are original (`tools/petro_textures.py`). The
 Not applicable: no worldgen, mobs or dimensions.
 
 ## Rollout and open questions
-- More warheads if wanted: a smoke grenade, a flash grenade, a frag grenade with a wider, weaker blast.
+- More warheads: chlorine, smoke and thermite grenades and the flashbang came in batch 31 ([field-chemistry.md](field-chemistry.md)); the launcher fires them all.
 - Mining charges stay out: the owner does not want world-breaking explosives.

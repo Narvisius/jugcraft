@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "#W#",
+    "WWW",
+    " W "
+  ],
+  "key": {
+    "#": "#c:ingots/bronze",
+    "W": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:bronze_heater_shield",
+    "count": 1
+  }
+}

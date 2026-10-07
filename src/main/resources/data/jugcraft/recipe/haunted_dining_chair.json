@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P  ",
+    "PWP",
+    "S S"
+  ],
+  "key": {
+    "P": "minecraft:dark_oak_planks",
+    "W": "minecraft:red_wool",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:haunted_dining_chair",
+    "count": 2
+  }
+}

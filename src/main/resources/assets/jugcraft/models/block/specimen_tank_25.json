@@ -1,0 +1,76 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/specimen_jar_glass",
+    "iron": "jugcraft:block/specimen_jar_iron",
+    "glass": "jugcraft:block/specimen_jar_glass",
+    "fluid": "jugcraft:block/specimen_jar_fluid"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        4,
+        2.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#glass",
+          "uv": [
+            5.3333,
+            4.0,
+            10.6667,
+            5.3333
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        4,
+        0
+      ],
+      "to": [
+        16,
+        7,
+        3.25
+      ],
+      "faces": {
+        "south": {
+          "texture": "#iron",
+          "uv": [
+            5.3333,
+            3.0,
+            10.6667,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#iron",
+          "uv": [
+            5.3333,
+            10.6667,
+            10.6667,
+            11.75
+          ]
+        },
+        "down": {
+          "texture": "#iron",
+          "uv": [
+            5.3333,
+            4.25,
+            10.6667,
+            5.3333
+          ]
+        }
+      }
+    }
+  ],
+  "ambientocclusion": false
+}

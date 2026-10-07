@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " R ",
+    "RNR",
+    " R "
+  ],
+  "key": {
+    "R": "jugcraft:rust_plate",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:riveted_rust_plate",
+    "count": 4
+  }
+}

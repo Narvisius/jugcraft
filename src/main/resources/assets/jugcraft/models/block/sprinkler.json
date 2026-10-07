@@ -42,7 +42,7 @@
     },
     {
       "from": [
-        0.02,
+        -0.1,
         2.0,
         6.5
       ],
@@ -53,10 +53,22 @@
       ],
       "faces": {
         "north": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            13.0,
+            11.0,
+            16.0,
+            14.0
+          ]
         },
         "south": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0.0,
+            11.0,
+            3.0,
+            14.0
+          ]
         },
         "east": {
           "texture": "#dp_gunmetal"
@@ -65,10 +77,22 @@
           "texture": "#dp_gunmetal"
         },
         "up": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0.0,
+            6.5,
+            3.0,
+            9.5
+          ]
         },
         "down": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0.0,
+            6.5,
+            3.0,
+            9.5
+          ]
         }
       }
     },
@@ -79,16 +103,28 @@
         6.5
       ],
       "to": [
-        15.98,
+        16.1,
         5.0,
         9.5
       ],
       "faces": {
         "north": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0.0,
+            11.0,
+            3.0,
+            14.0
+          ]
         },
         "south": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            13.0,
+            11.0,
+            16.0,
+            14.0
+          ]
         },
         "east": {
           "texture": "#dp_gunmetal"
@@ -97,10 +133,22 @@
           "texture": "#dp_gunmetal"
         },
         "up": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            13.0,
+            6.5,
+            16.0,
+            9.5
+          ]
         },
         "down": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            13.0,
+            6.5,
+            16.0,
+            9.5
+          ]
         }
       }
     },
@@ -108,7 +156,7 @@
       "from": [
         6.5,
         2.0,
-        0.02
+        -0.1
       ],
       "to": [
         9.5,
@@ -123,16 +171,40 @@
           "texture": "#dp_gunmetal"
         },
         "east": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            13.0,
+            11.0,
+            16.0,
+            14.0
+          ]
         },
         "west": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0.0,
+            11.0,
+            3.0,
+            14.0
+          ]
         },
         "up": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            3.0
+          ]
         },
         "down": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            6.5,
+            13.0,
+            9.5,
+            16.0
+          ]
         }
       }
     },
@@ -145,7 +217,7 @@
       "to": [
         9.5,
         5.0,
-        15.98
+        16.1
       ],
       "faces": {
         "north": {
@@ -155,16 +227,40 @@
           "texture": "#dp_gunmetal"
         },
         "east": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0.0,
+            11.0,
+            3.0,
+            14.0
+          ]
         },
         "west": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            13.0,
+            11.0,
+            16.0,
+            14.0
+          ]
         },
         "up": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            6.5,
+            13.0,
+            9.5,
+            16.0
+          ]
         },
         "down": {
-          "texture": "#dp_gunmetal"
+          "texture": "#dp_gunmetal",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            3.0
+          ]
         }
       }
     },
@@ -554,21 +650,33 @@
     },
     {
       "from": [
-        5.48,
+        5.4,
         3.5,
         11.5
       ],
       "to": [
-        10.52,
+        10.6,
         4.0,
         12.25
       ],
       "faces": {
         "north": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            12.0,
+            10.5,
+            12.5
+          ]
         },
         "south": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            12.0,
+            10.5,
+            12.5
+          ]
         },
         "east": {
           "texture": "#dp_chrome"
@@ -577,30 +685,54 @@
           "texture": "#dp_chrome"
         },
         "up": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            11.5,
+            10.5,
+            12.25
+          ]
         },
         "down": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            3.75,
+            10.5,
+            4.5
+          ]
         }
       }
     },
     {
       "from": [
-        5.48,
+        5.4,
         3.5,
         3.75
       ],
       "to": [
-        10.52,
+        10.6,
         4.0,
         4.5
       ],
       "faces": {
         "north": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            12.0,
+            10.5,
+            12.5
+          ]
         },
         "south": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            12.0,
+            10.5,
+            12.5
+          ]
         },
         "east": {
           "texture": "#dp_chrome"
@@ -609,10 +741,22 @@
           "texture": "#dp_chrome"
         },
         "up": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            3.75,
+            10.5,
+            4.5
+          ]
         },
         "down": {
-          "texture": "#dp_chrome"
+          "texture": "#dp_chrome",
+          "uv": [
+            5.5,
+            11.5,
+            10.5,
+            12.25
+          ]
         }
       }
     },
@@ -876,12 +1020,12 @@
       "from": [
         7.5,
         14.25,
-        7.48
+        7.5
       ],
       "to": [
         8.5,
         15.5,
-        8.52
+        8.5
       ],
       "faces": {
         "north": {

@@ -1,0 +1,98 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/scarecrow_trousers",
+    "post": "jugcraft:block/scarecrow_post",
+    "trousers": "jugcraft:block/scarecrow_trousers",
+    "straw": "jugcraft:block/scarecrow_straw"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#post"
+        },
+        "south": {
+          "texture": "#post"
+        },
+        "east": {
+          "texture": "#post"
+        },
+        "west": {
+          "texture": "#post"
+        },
+        "down": {
+          "texture": "#post"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        3,
+        6.5
+      ],
+      "to": [
+        7.5,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#trousers"
+        },
+        "south": {
+          "texture": "#trousers"
+        },
+        "east": {
+          "texture": "#trousers"
+        },
+        "west": {
+          "texture": "#trousers"
+        },
+        "down": {
+          "texture": "#straw"
+        }
+      }
+    },
+    {
+      "from": [
+        8.5,
+        3,
+        6.5
+      ],
+      "to": [
+        11.5,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#trousers"
+        },
+        "south": {
+          "texture": "#trousers"
+        },
+        "east": {
+          "texture": "#trousers"
+        },
+        "west": {
+          "texture": "#trousers"
+        },
+        "down": {
+          "texture": "#straw"
+        }
+      }
+    }
+  ]
+}

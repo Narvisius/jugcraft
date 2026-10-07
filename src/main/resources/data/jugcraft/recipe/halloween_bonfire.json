@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " L ",
+    "LCL",
+    "SSS"
+  ],
+  "key": {
+    "L": "#minecraft:logs",
+    "C": "#minecraft:coals",
+    "S": "minecraft:cobblestone"
+  },
+  "result": {
+    "id": "jugcraft:halloween_bonfire",
+    "count": 1
+  }
+}

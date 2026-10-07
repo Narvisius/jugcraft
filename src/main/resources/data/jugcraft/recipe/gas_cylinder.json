@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " V ",
+    "PGP",
+    "PPP"
+  ],
+  "key": {
+    "V": "jugcraft:fluid_valve",
+    "G": "jugcraft:gasket",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:gas_cylinder",
+    "count": 1
+  }
+}

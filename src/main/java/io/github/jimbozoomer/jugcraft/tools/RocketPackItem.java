@@ -21,7 +21,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
  * <p>On a dedicated server with {@code allow-flight=false}, hovering for more than a few seconds gets a
  * player kicked for flying, as with other jetpacks; set {@code allow-flight=true} to use it there.
  */
-public class RocketPackItem extends Item implements Chargeable {
+public class RocketPackItem extends Item implements Chargeable, Jetpack {
 	public static final long CAPACITY = 200_000;
 	public static final long ENERGY_PER_TICK = 50;
 	/** Upward speed added per tick of thrust (gravity takes 0.08), and the fastest climb (blocks per tick). */
@@ -37,10 +37,14 @@ public class RocketPackItem extends Item implements Chargeable {
 		return CAPACITY;
 	}
 
-	/** Whether this player wears a rocket pack with enough charge for a tick of thrust. */
+	/** Whether this player wears a jetpack (a rocket pack or exosuit chestplate) with enough charge for a tick of thrust. */
 	public static boolean canThrust(Player player) {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		return chest.getItem() instanceof RocketPackItem && Chargeable.energy(chest) >= ENERGY_PER_TICK;
+		return wornJetpack(chest) && Chargeable.energy(chest) >= ENERGY_PER_TICK;
+	}
+
+	private static boolean wornJetpack(ItemStack chest) {
+		return chest.getItem() instanceof Jetpack jetpack && jetpack.isJetpack(chest) && chest.getItem() instanceof Chargeable;
 	}
 
 	/** Server side of one tick of thrust: pays for it and cancels the fall. At most once per tick per player. */
@@ -51,7 +55,7 @@ public class RocketPackItem extends Item implements Chargeable {
 			return;
 		}
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		if (chest.getItem() instanceof RocketPackItem && Chargeable.drain(chest, ENERGY_PER_TICK)) {
+		if (wornJetpack(chest) && Chargeable.drain(chest, ENERGY_PER_TICK)) {
 			player.resetFallDistance();
 		}
 	}

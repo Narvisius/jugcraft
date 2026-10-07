@@ -54,6 +54,30 @@ FLUIDS = {
     "vanadium_electrolyte": {"display": "Vanadium Electrolyte", "feature": "machines",
                              "colors": [(30, 40, 110), (44, 62, 150), (70, 92, 186), (130, 150, 224)],
                              "tick_delay": 6, "slope": 4, "drop_off": 1},
+    # Batch 26: crops fermented into fuel alcohol, a pale straw colour and thin as gasoline.
+    "bioethanol": {"display": "Bioethanol", "feature": "machines",
+                   "colors": [(170, 150, 90), (204, 188, 128), (226, 214, 164), (246, 240, 212)],
+                   "tick_delay": 4, "slope": 4, "drop_off": 1},
+    # Batch 29: refinery upgrades. Hydrotreated diesel, its sulfur taken out with hydrogen: clear and pale gold.
+    "premium_diesel": {"display": "Premium Diesel", "feature": "crude_oil",
+                       "colors": [(150, 110, 30), (200, 160, 60), (228, 196, 100), (248, 230, 160)],
+                       "tick_delay": 8, "slope": 3, "drop_off": 1},
+    # Gasoline blended with a tenth of bioethanol: higher octane, so engines run leaner and hotter. Pink-orange.
+    "premium_gasoline": {"display": "Premium Gasoline", "feature": "crude_oil",
+                         "colors": [(170, 70, 60), (214, 110, 90), (236, 160, 130), (252, 214, 196)],
+                         "tick_delay": 4, "slope": 4, "drop_off": 1},
+    # Batch 33: hydroponics. Fertilizer dissolved in water, for the hydroponic bay: a cloudy green.
+    "nutrient_solution": {"display": "Nutrient Solution", "feature": "machines",
+                          "colors": [(40, 90, 50), (70, 130, 70), (110, 170, 100), (170, 214, 150)],
+                          "tick_delay": 5, "slope": 4, "drop_off": 1},
+    # Batch 43: liquid fuels (tools/rocketry.py). RP-1 rocket kerosene, hydrocracked from heavy fuel oil: water-clear
+    # with a straw tint. Liquid oxygen, condensed in the cryogenic liquefier: pale sky blue, runs fast.
+    "kerosene": {"display": "RP-1 Kerosene", "feature": "crude_oil",
+                 "colors": [(150, 150, 120), (196, 196, 160), (224, 224, 196), (246, 246, 228)],
+                 "tick_delay": 5, "slope": 4, "drop_off": 1},
+    "liquid_oxygen": {"display": "Liquid Oxygen", "feature": "machines",
+                      "colors": [(70, 120, 180), (110, 160, 214), (160, 200, 236), (214, 234, 250)],
+                      "tick_delay": 3, "slope": 4, "drop_off": 1},
 }
 
 # Gases: fluids that only live in tanks and pipes (no block, no bucket). Gauge colour in Java (PetroFluids.gas).
@@ -82,6 +106,10 @@ GASES = {
     # Batch 15: chlorine joined to refinery gas (standing in for ethylene), polymerized into PVC.
     "vinyl_chloride": {"display": "Vinyl Chloride", "feature": "salt",
                        "colors": [(170, 180, 130), (194, 204, 156), (214, 222, 182), (236, 240, 214)]},
+    # Batch 29: the sulfur hydrotreating strips out of diesel, carried off as hydrogen sulfide (sour gas). The
+    # chemical reactor recovers it as sulfur (the Claus process). A sickly yellow-green.
+    "hydrogen_sulfide": {"display": "Hydrogen Sulfide", "feature": "crude_oil",
+                         "colors": [(150, 150, 70), (178, 178, 96), (204, 204, 126), (230, 230, 170)]},
 }
 
 
@@ -162,31 +190,25 @@ def petro_blocks():
 FLUID_MACHINES = {
     # Pumps the conventional reservoir under its chunk (no recipes): 2 mB a tick at 32 JE/t.
     "pumpjack": {"inputs": [], "outputs": [16_000], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
-    # Hot-water extraction: oil sand or bitumen + water -> crude oil (+ sand). 32 JE/t.
-    "oil_sand_extractor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 1, "item_outputs": 1,
-                           "recipe_type": "oil_sand_extraction"},
-    # Crude oil -> four fractions, each drawn off at its own height (Java: MachineKind.outputLayer). 128 JE/t.
-    "distillation_tower": {"inputs": [16_000], "outputs": [8_000, 8_000, 8_000, 8_000], "item_inputs": 0,
-                           "item_outputs": 0, "recipe_type": "distillation"},
-    # Heavy fuel oil + water (steam) + catalyst -> diesel (base), naphtha (layer 2), refinery gas (top). 160 JE/t.
-    "catalytic_cracker": {"inputs": [8_000, 8_000], "outputs": [8_000, 8_000, 8_000], "item_inputs": 1,
+    # Crude oil -> four fractions, each drawn off at its own height (Java: MachineKind.outputLayer). Batch 24: it
+    # also takes heavy fuel oil and vacuum-distils it into lubricant (fifth tank, layer 1) and asphalt binder (its
+    # item slot), replacing the vacuum distillation unit. 128 JE/t.
+    "distillation_tower": {"inputs": [16_000], "outputs": [8_000, 8_000, 8_000, 8_000, 8_000], "item_inputs": 0,
+                           "item_outputs": 1, "recipe_type": "distillation"},
+    # Heavy fuel oil + water (steam) + catalyst -> diesel (base), naphtha (layer 2), refinery gas (top). Batch 24: it
+    # also reforms naphtha over the same catalyst into gasoline (fourth tank, layer 1), replacing the catalytic
+    # reformer. 160 JE/t.
+    "catalytic_cracker": {"inputs": [8_000, 8_000], "outputs": [8_000, 8_000, 8_000, 8_000], "item_inputs": 1,
                           "item_outputs": 0, "recipe_type": "catalytic_cracking"},
-    # Heavy fuel oil -> lubricant + asphalt binder. 96 JE/t.
-    "vacuum_distillation_unit": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 0, "item_outputs": 1,
-                                 "recipe_type": "vacuum_distillation"},
-    # Naphtha -> gasoline (base) + refinery gas (top). 120 JE/t.
-    "catalytic_reformer": {"inputs": [8_000], "outputs": [8_000, 8_000], "item_inputs": 0, "item_outputs": 0,
-                           "recipe_type": "reforming"},
     # Over shale (no recipes): 4 mB/t fracking fluid down; 8 mB/t freed (6 crude, 2 gas) and 3 mB/t flowback up.
     # 256 JE/t. Draw-offs: crude at the base, flowback one block up, gas at the top (MachineKind.outputLayer).
     "fracking_rig": {"inputs": [16_000], "outputs": [16_000, 8_000, 16_000], "item_inputs": 0, "item_outputs": 0,
                      "recipe_type": None},
-    # Flowback water -> clean water + salt. 48 JE/t.
-    "flowback_treatment_unit": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 0, "item_outputs": 1,
+    # Settling basins and a filter press (batch 24 widens the flowback treatment unit): flowback water -> clean water
+    # + salt; oil sand or bitumen + hot water -> crude oil (+ sand), replacing the oil sand extractor; mud -> clay.
+    # 48 JE/t.
+    "flowback_treatment_unit": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 1, "item_outputs": 1,
                                 "recipe_type": "water_treatment"},
-    # Water + two powders/solids -> a mixture. 64 JE/t.
-    "chemical_mixer": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 0,
-                       "recipe_type": "chemical_mixing"},
     # Burns diesel (256 JE/mB) or heavy fuel oil (128 JE/mB) from its tank at 256 JE/t (FLUID_FUELS).
     "diesel_generator": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
     # Burns gasoline (384 JE/mB) or refinery gas (192 JE/mB) at 512 JE/t; the second tank takes lubricant,
@@ -194,14 +216,16 @@ FLUID_MACHINES = {
     "gas_turbine": {"inputs": [16_000, 4_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
     # Burns diesel or heavy fuel oil (FLUID_FUELS, KE per mB) to turn a shaft at up to 512 KE/t.
     "diesel_engine": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
-    # Brine -> chlorine (top), hydrogen (middle) and lye (base); alumina + coke -> aluminum (batch 5). 256 JE/t.
+    # Brine -> chlorine (top), hydrogen (middle) and lye (base); alumina + coke -> aluminum (batch 5); water ->
+    # hydrogen (middle) and oxygen (top) (batch 24). 256 JE/t.
     "electrolytic_cell": {"inputs": [8_000], "outputs": [8_000, 8_000, 8_000], "item_inputs": 2, "item_outputs": 1,
                           "recipe_type": "electrolysis"},
     # Burns hydrogen (128 JE/mB) at 128 JE/t; one block, electric look (batch 5).
     "fuel_cell": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 0, "recipe_type": None},
     # Burns gasoline (448 KE/mB) or diesel (320) to turn a shaft at up to 1,024 KE/t (batch 10).
     "advanced_engine": {"inputs": [8_000, 4_000], "outputs": [], "item_inputs": 1, "item_outputs": 0, "recipe_type": None},
-    # Sulfur + water -> sulfuric acid; bauxite + lye -> alumina; phosphate + acid -> fertilizer (batch 5). 96 JE/t.
+    # Sulfur + water -> sulfuric acid; bauxite + lye -> alumina; phosphate + acid -> fertilizer (batch 5). Batch 24:
+    # also the mixing jobs (brine, fracking fluid), replacing the chemical mixer. 96 JE/t.
     "chemical_reactor": {"inputs": [8_000], "outputs": [8_000], "item_inputs": 2, "item_outputs": 1,
                          "recipe_type": "chemical_reaction"},
     # Electronics (batch 7): a wafer and copper wire etched with sulfuric acid into microchips. 192 JE/t.
@@ -219,35 +243,40 @@ FLUID_MACHINES = {
     # Refinery gas -> plastic pellets. 96 JE/t.
     "polymerization_reactor": {"inputs": [8_000], "outputs": [], "item_inputs": 0, "item_outputs": 1,
                                "recipe_type": "polymerization"},
+    # Batch 29. Fuel in tank 0, hydrogen or bioethanol in tank 1; the finished fuel is drawn off the base and the sour
+    # gas off the top (Java: MachineKind.outputLayer). Its catalyst bed is built in, so it has no item slots. 128 JE/t.
+    "hydrotreater": {"inputs": [8_000, 8_000], "outputs": [8_000, 8_000], "item_inputs": 0, "item_outputs": 0,
+                     "recipe_type": "hydrotreating"},
+    # Batch 29. Bolted to a running diesel generator or gas turbine, it boils water in that generator's exhaust and
+    # makes JE from the steam (no recipes): water in tank 0 (or a spring below it), lubricant in tank 1.
+    "heat_recovery_unit": {"inputs": [8_000, 4_000], "outputs": [], "item_inputs": 0, "item_outputs": 0,
+                           "recipe_type": None},
 }
 
 # JE per mB each fluid-burning generator gets from each fuel (Java: chemistry/FluidFuels).
 FLUID_FUELS = {
-    "diesel_generator": {"diesel": 256, "heavy_fuel_oil": 128},
-    "gas_turbine": {"gasoline": 384, "refinery_gas": 192},
-    "diesel_engine": {"diesel": 256, "heavy_fuel_oil": 128},
+    "diesel_generator": {"diesel": 256, "heavy_fuel_oil": 128, "premium_diesel": 320},
+    "gas_turbine": {"gasoline": 384, "refinery_gas": 192, "bioethanol": 192, "premium_gasoline": 448, "kerosene": 448},
+    "diesel_engine": {"diesel": 256, "heavy_fuel_oil": 128, "premium_diesel": 320},
     "fuel_cell": {"hydrogen": 128},
-    "advanced_engine": {"gasoline": 448, "diesel": 320},
+    "advanced_engine": {"gasoline": 448, "diesel": 320, "bioethanol": 256, "premium_diesel": 400, "premium_gasoline": 512,
+                        "kerosene": 480},
 }
 
 # Fluid recipes per machine. Each: name, item ingredients [(item or #tag, count)], fluids in [(fluid, mB)],
 # fluids out [(fluid, mB)], item results [(item, count)], ticks, feature switches.
 # "source": mB of fluid the recipe releases from its items (the audit allows that much more fluid out than in).
 FLUID_RECIPES = {
-    "oil_sand_extractor": [
-        # A whole oil sand block (silk touch) gives the most: two buckets of crude oil from four blocks.
-        {"name": "oil_sand", "items": [("jugcraft:oil_sand", 1)], "fluids": [("minecraft:water", 250)],
-         "fluid_results": [("jugcraft:crude_oil", 500)], "results": [("minecraft:sand", 1)], "source": 500,
-         "ticks": 160, "features": ["crude_oil"]},
-        # Bitumen (what oil sand drops, or crushes into, three to a block) gives less per block.
-        {"name": "bitumen", "items": [("jugcraft:bitumen", 1)], "fluids": [("minecraft:water", 100)],
-         "fluid_results": [("jugcraft:crude_oil", 150)], "source": 150, "ticks": 80, "features": ["crude_oil"]},
-    ],
     # One bucket of crude oil splits into fractions that add up to one bucket, in the tower's output tank order.
     "distillation_tower": [
         {"name": "crude_oil", "fluids": [("jugcraft:crude_oil", 1000)],
          "fluid_results": [("jugcraft:refinery_gas", 100), ("jugcraft:naphtha", 250), ("jugcraft:diesel", 400),
                            ("jugcraft:heavy_fuel_oil", 250)], "ticks": 100, "features": ["crude_oil"]},
+        # Vacuum distillation (batch 24, from the old vacuum distillation unit): heavy fuel oil fed back in boils under
+        # vacuum into lubricant (fifth tank) and a residue of asphalt binder.
+        {"name": "heavy_fuel_oil", "fluids": [("jugcraft:heavy_fuel_oil", 1000)],
+         "fluid_results": [("jugcraft:lubricant", 400, 4)], "results": [("jugcraft:asphalt_binder", 2)], "ticks": 120,
+         "features": ["crude_oil"]},
     ],
     # Cracking breaks heavy oil into lighter fuels; the steam's water is not counted as product.
     "catalytic_cracker": [
@@ -255,12 +284,11 @@ FLUID_RECIPES = {
          "fluids": [("jugcraft:heavy_fuel_oil", 1000), ("minecraft:water", 250)],
          "fluid_results": [("jugcraft:diesel", 500), ("jugcraft:naphtha", 300), ("jugcraft:refinery_gas", 200)],
          "source": 0, "ticks": 160, "features": ["crude_oil"]},
-    ],
-    # The heaviest part of heavy fuel oil, boiled under vacuum: lubricant, and a residue of asphalt binder.
-    "vacuum_distillation_unit": [
-        {"name": "heavy_fuel_oil", "fluids": [("jugcraft:heavy_fuel_oil", 1000)],
-         "fluid_results": [("jugcraft:lubricant", 400)], "results": [("jugcraft:asphalt_binder", 2)], "ticks": 120,
-         "features": ["crude_oil"]},
+        # Catalytic reforming (batch 24, from the old catalytic reformer): naphtha rearranged over the catalyst into
+        # high-octane gasoline (fourth tank), giving off a little gas (the gas tank).
+        {"name": "naphtha", "items": [("jugcraft:cracking_catalyst", 1)], "fluids": [("jugcraft:naphtha", 1000)],
+         "fluid_results": [("jugcraft:gasoline", 900, 3), ("jugcraft:refinery_gas", 100, 2)], "source": 0,
+         "ticks": 120, "features": ["crude_oil"]},
     ],
     # Refinery gas polymerizes into plastic: a bucket of gas gives four pellets.
     "polymerization_reactor": [
@@ -273,16 +301,6 @@ FLUID_RECIPES = {
         {"name": "butadiene", "fluids": [("jugcraft:butadiene", 500)], "fluid_results": [],
          "results": [("jugcraft:rubber", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
     ],
-    # Fracking fluid: water carrying sand (to prop the cracks open) and a gelling agent (dried kelp, standing in for
-    # guar gum) to carry the sand.
-    "chemical_mixer": [
-        {"name": "fracking_fluid", "items": [("minecraft:sand", 2), ("minecraft:dried_kelp", 1)],
-         "fluids": [("minecraft:water", 1000)], "fluid_results": [("jugcraft:fracking_fluid", 1000)], "source": 0,
-         "ticks": 80, "features": ["crude_oil"]},
-        # Brine for the electrolytic cell: two salt dissolved in a bucket of water.
-        {"name": "brine", "items": [("jugcraft:salt", 2)], "fluids": [("minecraft:water", 1000)],
-         "fluid_results": [("jugcraft:brine", 1000)], "source": 0, "ticks": 60, "features": ["salt"]},
-    ],
     # The chlor-alkali process: a bucket of brine splits into chlorine at the anode, hydrogen at the cathode and lye
     # left in the cell. Electricity-hungry: 256 JE/t for 200 ticks.
     "electrolytic_cell": [
@@ -292,6 +310,12 @@ FLUID_RECIPES = {
         # The Hall-Heroult process: alumina dissolved in molten salt and split with a coke anode, which burns away.
         {"name": "aluminum", "items": [("jugcraft:alumina", 2), ("jugcraft:coke", 1)],
          "results": [("jugcraft:aluminum_ingot", 2)], "ticks": 160, "features": ["aluminum"]},
+        # Water electrolysis (batch 24): hydrogen at the cathode (middle), oxygen at the anode (top), two to one. An
+        # early hydrogen source for the fuel cell, deliberately dear: 204,800 JE for 500 mB of hydrogen (410 JE/mB)
+        # against the fuel cell's 128 JE/mB, so even four efficiency cards (41%) leave it a loss.
+        {"name": "water", "fluids": [("minecraft:water", 1000)],
+         "fluid_results": [("jugcraft:oxygen", 250, 0), ("jugcraft:hydrogen", 500, 1)], "ticks": 800,
+         "features": ["machines"]},
     ],
     # Sulfur burnt to sulfur trioxide and absorbed in water (the contact process, simplified): two sulfur dust and a
     # bucket of water make a bucket of sulfuric acid.
@@ -328,11 +352,65 @@ FLUID_RECIPES = {
         # Guncotton (batch 18): cotton nitrated in nitric acid (nitrocellulose), the grenade's charge.
         {"name": "guncotton", "items": [("jugcraft:cotton", 2)], "fluids": [("jugcraft:nitric_acid", 250)],
          "results": [("jugcraft:guncotton", 2)], "ticks": 100, "features": ["machines", "explosives"]},
+        # Field chemistry (batch 31, tools/field_chemistry.py). Chlorine grenades: a steel case charged with chlorine.
+        {"name": "chlorine_grenade", "items": [("#c:plates/steel", 1), ("minecraft:iron_nugget", 1)],
+         "fluids": [("jugcraft:chlorine", 500)], "results": [("jugcraft:chlorine_grenade", 2)], "ticks": 80,
+         "features": ["machines", "salt"]},
+        # Smoke grenades: sugar to burn and an ammonium salt to make a thick white smoke.
+        {"name": "smoke_grenade", "items": [("#c:plates/steel", 1), ("minecraft:sugar", 2)],
+         "fluids": [("jugcraft:ammonia", 250)], "results": [("jugcraft:smoke_grenade", 2)], "ticks": 80,
+         "features": ["machines"]},
+        # Construction chemistry (batch 32, tools/construction.py). A foam canister: polyurethane-style foam from plastic
+        # and ammonia, in a steel can.
+        {"name": "foam_canister", "items": [("jugcraft:plastic_pellets", 2), ("minecraft:iron_nugget", 1)],
+         "fluids": [("jugcraft:ammonia", 250)], "results": [("jugcraft:foam_canister", 1)], "ticks": 80,
+         "features": ["machines", "crude_oil"]},
+        # Hydroponics (batch 33): nutrient solution, a fertilizer dissolved in a bucket of water; enough for ten harvests.
+        {"name": "nutrient_solution", "items": [("jugcraft:fertilizer", 1)], "fluids": [("minecraft:water", 1000)],
+         "fluid_results": [("jugcraft:nutrient_solution", 1000)], "ticks": 40, "features": ["machines"]},
+        # Medicines. A first aid kit: cotton dressings and soap, sterilised in bioethanol.
+        {"name": "first_aid_kit", "items": [("jugcraft:cotton", 2), ("jugcraft:soap", 1)],
+         "fluids": [("jugcraft:bioethanol", 250)], "results": [("jugcraft:first_aid_kit", 2)], "ticks": 100,
+         "features": ["machines"]},
+        # Antidote: charcoal activated in lye, in a bottle of water.
+        {"name": "antidote", "items": [("minecraft:charcoal", 2), ("minecraft:glass_bottle", 1)],
+         "fluids": [("jugcraft:lye", 250)], "results": [("jugcraft:antidote", 1)], "ticks": 100,
+         "features": ["machines", "salt"]},
+        # Stimulant: caffeine extracted from cocoa beans with bioethanol.
+        {"name": "stimulant", "items": [("minecraft:cocoa_beans", 4), ("minecraft:glass_bottle", 1)],
+         "fluids": [("jugcraft:bioethanol", 250)], "results": [("jugcraft:stimulant", 1)], "ticks": 100,
+         "features": ["machines"]},
         # Vanadium electrolyte (batch 17): the vanadium in heavy oil residue leached into sulfuric acid, for the flow
         # battery. As much electrolyte as acid goes in.
         {"name": "vanadium_electrolyte", "items": [("jugcraft:asphalt_binder", 2)],
          "fluids": [("jugcraft:sulfuric_acid", 1000)], "fluid_results": [("jugcraft:vanadium_electrolyte", 1000)],
          "ticks": 160, "features": ["crude_oil", "sulfur"]},
+        # Fermentation (batch 26, after Mekanism's bio-generator): eight crops (#jugcraft:fermentable) in a bucket of
+        # water make 250 mB of bioethanol for the gas turbine or the advanced engine.
+        {"name": "bioethanol", "items": [("#jugcraft:fermentable", 8)], "fluids": [("minecraft:water", 1000)],
+         "fluid_results": [("jugcraft:bioethanol", 250)], "source": 0, "ticks": 100, "features": ["machines"]},
+        # Sulfur recovery (batch 29, the Claus process): hydrogen sulfide from the hydrotreater partly burnt, and the
+        # rest reacted over a catalyst into sulfur: a renewable source of sulfur for the acid recipes.
+        {"name": "sulfur_recovery", "fluids": [("jugcraft:hydrogen_sulfide", 200)], "results": [("jugcraft:sulfur_dust", 1)],
+         "ticks": 60, "features": ["crude_oil", "sulfur"]},
+        # Mixing jobs (batch 24, from the old chemical mixer). Fracking fluid: water carrying sand (to prop the
+        # cracks open) and a gelling agent (dried kelp, standing in for guar gum) to carry the sand.
+        {"name": "fracking_fluid", "items": [("minecraft:sand", 2), ("minecraft:dried_kelp", 1)],
+         "fluids": [("minecraft:water", 1000)], "fluid_results": [("jugcraft:fracking_fluid", 1000)], "source": 0,
+         "ticks": 80, "features": ["crude_oil"]},
+        # Brine for the electrolytic cell: two salt dissolved in a bucket of water.
+        {"name": "brine", "items": [("jugcraft:salt", 2)], "fluids": [("minecraft:water", 1000)],
+         "fluid_results": [("jugcraft:brine", 1000)], "source": 0, "ticks": 60, "features": ["salt"]},
+    ],
+    # Batch 29: refinery upgrades. Hydrotreating: diesel and hydrogen over the built-in catalyst bed. The sulfur
+    # leaves as hydrogen sulfide (the top tank), and the diesel burns a quarter better (FLUID_FUELS).
+    "hydrotreater": [
+        {"name": "premium_diesel", "fluids": [("jugcraft:diesel", 1000), ("jugcraft:hydrogen", 100)],
+         "fluid_results": [("jugcraft:premium_diesel", 1000), ("jugcraft:hydrogen_sulfide", 100)], "ticks": 120,
+         "features": ["crude_oil", "salt"]},
+        # Blending: a tenth of bioethanol raises gasoline's octane, worth more than the two fuels apart.
+        {"name": "premium_gasoline", "fluids": [("jugcraft:gasoline", 900), ("jugcraft:bioethanol", 100)],
+         "fluid_results": [("jugcraft:premium_gasoline", 1000)], "ticks": 40, "features": ["crude_oil", "machines"]},
     ],
     # Photolithography (batch 7): a wafer patterned and etched with sulfuric acid, with copper wire for the bonds.
     "lithography_station": [
@@ -364,14 +442,57 @@ FLUID_RECIPES = {
         {"name": "flowback_water", "fluids": [("jugcraft:flowback_water", 1000)],
          "fluid_results": [("minecraft:water", 750)], "results": [("jugcraft:salt", 1)], "ticks": 80,
          "features": ["crude_oil"]},
-    ],
-    # Reforming rearranges naphtha into high-octane gasoline, giving off a little gas.
-    "catalytic_reformer": [
-        {"name": "naphtha", "fluids": [("jugcraft:naphtha", 1000)],
-         "fluid_results": [("jugcraft:gasoline", 900), ("jugcraft:refinery_gas", 100)], "ticks": 120,
-         "features": ["crude_oil"]},
+        # Hot-water extraction (batch 24, from the old oil sand extractor): the oil floats off in the settling cells
+        # and the sand sinks.
+        # A whole oil sand block (silk touch) gives the most: two buckets of crude oil from four blocks.
+        {"name": "oil_sand", "items": [("jugcraft:oil_sand", 1)], "fluids": [("minecraft:water", 250)],
+         "fluid_results": [("jugcraft:crude_oil", 500)], "results": [("minecraft:sand", 1)], "source": 500,
+         "ticks": 160, "features": ["crude_oil"]},
+        # Bitumen (what oil sand drops, or crushes into, three to a block) gives less per block.
+        {"name": "bitumen", "items": [("jugcraft:bitumen", 1)], "fluids": [("minecraft:water", 100)],
+         "fluid_results": [("jugcraft:crude_oil", 150)], "source": 150, "ticks": 80, "features": ["crude_oil"]},
+        # The filter press squeezes the water out of mud, leaving clay: four balls a block, as vanilla's dripstone
+        # gives a clay block.
+        {"name": "mud", "items": [("minecraft:mud", 1)], "fluid_results": [("minecraft:water", 250)],
+         "results": [("minecraft:clay_ball", 4)], "source": 250, "ticks": 60, "features": ["machines"]},
     ],
 }
+
+
+def _leaching():
+    """Batch 26: each ore dissolved in 250 mB of sulfuric acid gives four washed ores (ORE_LEACHING_MULTIPLIER), the
+    best ore route, one better than the ore washer's three."""
+    from machines import ORE_LEACHING_MULTIPLIER, _metal_features
+    from materials import WASHED_ORES, ore_ids
+    return [{"name": ore.split(":")[1], "items": [(ore, 1)], "fluids": [("jugcraft:sulfuric_acid", 250)],
+             "results": [(f"jugcraft:washed_{metal}_ore", ORE_LEACHING_MULTIPLIER)], "ticks": 160,
+             "ore_bonus": ORE_LEACHING_MULTIPLIER, "features": ["sulfur"] + _metal_features(metal)}
+            for metal in WASHED_ORES for ore in ore_ids(metal)]
+
+
+FLUID_RECIPES["chemical_reactor"] += _leaching()
+
+# Gas storage (batch 35, tools/gas_storage.py): the ammonia chiller, ammonia first and water second.
+import gas_storage as _gas_storage  # noqa: E402
+FLUID_MACHINES["ammonia_chiller"] = _gas_storage.FLUID_MACHINE
+FLUID_RECIPES["ammonia_chiller"] = _gas_storage.FLUID_RECIPES
+# Rocketry (batch 38, tools/rocketry.py): iodine from kelp and ammonium perchlorate in the chemical reactor.
+import rocketry as _rocketry  # noqa: E402
+FLUID_RECIPES["chemical_reactor"] += _rocketry.REACTOR_RECIPES
+# Liquid fuels (batch 43, tools/rocketry.py): hydrocracking to kerosene, the cryogenic liquefier, propellant tanks.
+FLUID_RECIPES["catalytic_cracker"] += _rocketry.CRACKER_RECIPES
+FLUID_MACHINES["cryogenic_liquefier"] = _rocketry.LIQUEFIER
+FLUID_RECIPES["cryogenic_liquefier"] = _rocketry.LIQUEFIER_RECIPES
+FLUID_RECIPES["chemical_reactor"] += _rocketry.TANK_RECIPES
+
+# Crops that ferment into bioethanol (data/jugcraft/tags/item/fermentable.json).
+FERMENTABLE = ["minecraft:wheat", "minecraft:sugar_cane", "minecraft:potato", "minecraft:carrot", "minecraft:beetroot",
+               "minecraft:sweet_berries", "minecraft:melon_slice", "minecraft:apple"]
+
+
+def result_tank(index, result):
+    """The output tank a fluid result goes to: its own third value (batch 24), or else its position."""
+    return result[2] if len(result) > 2 else index
 
 
 def fluid_recipe_files(condition):
@@ -386,7 +507,8 @@ def fluid_recipe_files(condition):
             if recipe.get("fluids"):
                 data["fluids"] = [{"fluid": fluid, "amount": mb} for fluid, mb in recipe["fluids"]]
             if recipe.get("fluid_results"):
-                data["fluid_results"] = [{"fluid": fluid, "amount": mb} for fluid, mb in recipe["fluid_results"]]
+                data["fluid_results"] = [{"fluid": r[0], "amount": r[1]} | ({"tank": r[2]} if len(r) > 2 else {})
+                                         for r in recipe["fluid_results"]]
             if recipe.get("results"):
                 data["results"] = [{"id": item, "count": count} for item, count in recipe["results"]]
             data["time"] = recipe["ticks"]

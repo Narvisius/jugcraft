@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "WDW",
+    "WWW",
+    "NRN"
+  ],
+  "key": {
+    "W": "minecraft:black_wool",
+    "D": "minecraft:spider_eye",
+    "N": "minecraft:iron_nugget",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:inflatable_spider",
+    "count": 1
+  }
+}

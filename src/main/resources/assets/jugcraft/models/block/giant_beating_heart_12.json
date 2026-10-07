@@ -1,0 +1,65 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "p": "jugcraft:block/beating_heart_jar",
+    "particle": "jugcraft:block/beating_heart_jar"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        3.1,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.4887,
+            0.4843,
+            3.0113,
+            3.2516
+          ],
+          "texture": "#p"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        2.2,
+        12.8,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9.6275,
+            5.75,
+            12.3725,
+            7.9826
+          ],
+          "texture": "#p"
+        },
+        "up": {
+          "uv": [
+            3.1225,
+            10.8775,
+            3.5,
+            13.6225
+          ],
+          "texture": "#p"
+        }
+      }
+    }
+  ]
+}

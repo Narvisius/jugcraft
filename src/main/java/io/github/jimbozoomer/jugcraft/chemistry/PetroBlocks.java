@@ -1,6 +1,9 @@
 package io.github.jimbozoomer.jugcraft.chemistry;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
@@ -14,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GlazedTerracottaBlock;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
@@ -27,6 +31,13 @@ public final class PetroBlocks {
 	public static Block ASPHALT;
 	public static Block ASPHALT_SLAB;
 	public static Block ASPHALT_ROAD_LINE;
+	/**
+	 * Plastic building blocks in the sixteen dye colours (batch 27; tools/plastic.py COLORS, in this order): eight
+	 * plastic sheets around a dye make eight.
+	 */
+	public static final List<String> PLASTIC_COLORS = List.of("white", "orange", "magenta", "light_blue", "yellow", "lime",
+			"pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black");
+	public static final Map<String, Block> PLASTIC = new LinkedHashMap<>();
 
 	private PetroBlocks() {
 	}
@@ -36,18 +47,28 @@ public final class PetroBlocks {
 		ASPHALT_SLAB = register("asphalt_slab", SlabBlock::new);
 		ASPHALT_ROAD_LINE = register("asphalt_road_line", GlazedTerracottaBlock::new);
 
+		for (String color : PLASTIC_COLORS) {
+			PLASTIC.put(color, block(color + "_plastic", BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+					.strength(1.5F, 6.0F).sound(SoundType.STONE), Block::new));
+		}
+
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output -> {
 			output.accept(ASPHALT);
 			output.accept(ASPHALT_SLAB);
 			output.accept(ASPHALT_ROAD_LINE);
 		});
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COLORED_BLOCKS).register(output -> PLASTIC.values()
+				.forEach(output::accept));
 	}
 
 	/** A stone-like block (pickaxe, needs a tool to drop) that speeds up walking. */
 	private static Block register(String path, Function<BlockBehaviour.Properties, Block> factory) {
+		return block(path, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).speedFactor(ASPHALT_SPEED), factory);
+	}
+
+	private static Block block(String path, BlockBehaviour.Properties properties, Function<BlockBehaviour.Properties, Block> factory) {
 		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id(path));
-		Block block = Registry.register(BuiltInRegistries.BLOCK, blockKey,
-				factory.apply(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).speedFactor(ASPHALT_SPEED).setId(blockKey)));
+		Block block = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(properties.setId(blockKey)));
 		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id(path));
 		Registry.register(BuiltInRegistries.ITEM, itemKey,
 				new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:water_treatment",
+  "items": [
+    {
+      "ingredient": "minecraft:mud",
+      "count": 1
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:clay_ball",
+      "count": 4
+    }
+  ],
+  "time": 60
+}

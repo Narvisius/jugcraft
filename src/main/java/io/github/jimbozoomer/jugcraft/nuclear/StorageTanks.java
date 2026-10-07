@@ -108,7 +108,7 @@ public final class StorageTanks {
 				.sound(SoundType.METAL).noOcclusion());
 		GATE = block("railing_gate", RailingGateBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5F, 6.0F)
 				.sound(SoundType.METAL).noOcclusion());
-		LADDER = block("steel_ladder", SteelLadderBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.0F, 6.0F)
+		LADDER = block("caged_ladder", SteelLadderBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.0F, 6.0F)
 				.sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.POPPED));
 
 		PORT_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_tank_port"),

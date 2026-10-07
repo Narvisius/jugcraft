@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:wheat",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    },
+    {
+      "ingredient": "minecraft:egg"
+    },
+    {
+      "ingredient": "jugcraft:roasted_chestnuts",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:chestnut_mooncake",
+    "count": 4
+  },
+  "time": 300
+}

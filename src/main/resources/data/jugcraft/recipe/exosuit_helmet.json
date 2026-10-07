@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "TPT",
+    "TGT"
+  ],
+  "key": {
+    "T": "#c:plates/titanium",
+    "P": "jugcraft:processor",
+    "G": "minecraft:tinted_glass"
+  },
+  "result": {
+    "id": "jugcraft:exosuit_helmet",
+    "count": 1
+  }
+}

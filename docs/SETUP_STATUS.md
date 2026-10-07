@@ -10,7 +10,7 @@
 - Merge strategy: squash only; merged branches automatically deleted; auto-merge disabled.
 - Workflow permissions: read-only; workflow PR approval disabled.
 - Project license: MIT, selected by the owner on 30 September 2026 (see LICENSE and LICENSE_POLICY.md).
-- Minecraft/loader/build pins: Minecraft 26.3 + Fabric scaffold; pins compile in the Build workflow (see PLATFORM.md). Playable mod pending client launch and two-client test.
+- Minecraft/loader/build pins: Minecraft 26.3 + Fabric; use the exact current pins in PLATFORM.md and distribution/frameworks.lock.json. The playable scaffold and feature implementations exist; inspect WHAT_EXISTS.md and the source before starting a contribution. Server and real-client test evidence is recorded in feature documents and the Build workflow. A two-player release playtest is a separate check, not a prerequisite to starting development.
 
 This status distinguishes prepared files from controls actually active on GitHub.
 

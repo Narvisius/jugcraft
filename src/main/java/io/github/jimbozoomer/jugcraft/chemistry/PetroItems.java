@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 public final class PetroItems {
 	/** Used up by the catalytic cracker, one per bucket of heavy fuel oil. */
 	public static Item CRACKING_CATALYST;
-	/** The residue of vacuum distillation: binds gravel into asphalt. */
+	/** The residue of vacuum distillation (in the distillation tower): binds gravel into asphalt. */
 	public static Item ASPHALT_BINDER;
 	/** Polymerized refinery gas: the metal press flattens each into a plastic sheet. */
 	public static Item PLASTIC_PELLETS;
@@ -27,7 +27,7 @@ public final class PetroItems {
 	public static Item LITHIUM_CELL;
 	/** Rare earths alloyed with iron in the alloy smelter: for the magnet dynamo and magnet motor. */
 	public static Item NEODYMIUM_MAGNET;
-	/** Electronics (batch 7): a doped silicon crystal from the crystal grower, sawn into wafers. */
+	/** Electronics (batch 7): a doped silicon crystal pulled in the arc furnace (batch 24), sawn into wafers. */
 	public static Item SILICON_BOULE;
 	public static Item SILICON_WAFER;
 	/** Wafers etched in the lithography station: four chips each. */

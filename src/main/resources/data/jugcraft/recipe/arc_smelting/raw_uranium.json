@@ -10,7 +10,12 @@
     }
   ],
   "type": "jugcraft:arc_smelting",
-  "ingredient": "jugcraft:raw_uranium",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:raw_uranium",
+      "count": 1
+    }
+  ],
   "result": {
     "id": "jugcraft:uranium_ingot",
     "count": 1

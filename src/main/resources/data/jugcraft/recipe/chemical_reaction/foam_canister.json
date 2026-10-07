@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:plastic_pellets",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:iron_nugget",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:ammonia",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:foam_canister",
+      "count": 1
+    }
+  ],
+  "time": 80
+}

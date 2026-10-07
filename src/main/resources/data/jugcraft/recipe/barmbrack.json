@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WSW",
+    "BGB"
+  ],
+  "key": {
+    "W": "minecraft:wheat",
+    "S": "minecraft:sugar",
+    "B": "minecraft:sweet_berries",
+    "G": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "jugcraft:barmbrack",
+    "count": 1
+  }
+}

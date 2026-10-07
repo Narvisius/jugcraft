@@ -1,0 +1,592 @@
+{
+  "schemaVersion": 1,
+  "minecraft": "26.3",
+  "fabricLoader": "0.19.5",
+  "java": 25,
+  "kotlin": "2.4.20",
+  "verifiedDate": "2026-10-05",
+  "dependencies": [
+    {
+      "key": "fabric-api",
+      "name": "Fabric API",
+      "purpose": "Fabric platform APIs",
+      "modId": "fabric-api",
+      "modVersion": "0.161.0+26.3",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:P7dR8mSH:bNnaTiuM",
+      "modrinthProject": "P7dR8mSH",
+      "modrinthVersion": "bNnaTiuM",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/fabric-api",
+      "sourceUrl": "https://github.com/FabricMC/fabric",
+      "license": "Apache-2.0",
+      "artifactLicense": "Apache-2.0",
+      "filename": "fabric-api-0.161.0+26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/P7dR8mSH/versions/bNnaTiuM/fabric-api-0.161.0%2B26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "53f9ee02c3702734d90520aa8c9719bf0e1c8d4f",
+        "sha512": "ed6b2586d6fde11fde8472f5a527c51e99b67026e46f94d4bfd85e7e28ce5ee299173ee16ad576ceb51f39f98d30a811086a6deb1a86a524859cc16e12da109d"
+      },
+      "size": 2620967,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "geckolib",
+      "name": "Geckolib",
+      "purpose": "Animated creatures, block entities, items, and armor",
+      "modId": "geckolib",
+      "modVersion": "5.5.7",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:8BmcQJ2H:kSxHvs99",
+      "modrinthProject": "8BmcQJ2H",
+      "modrinthVersion": "kSxHvs99",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/geckolib",
+      "sourceUrl": "https://github.com/bernie-g/geckolib",
+      "license": "MIT",
+      "artifactLicense": "MIT",
+      "filename": "geckolib-fabric-26.3-5.5.7.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/8BmcQJ2H/versions/kSxHvs99/geckolib-fabric-26.3-5.5.7.jar"
+      ],
+      "hashes": {
+        "sha512": "c7c89bd6c5f2801ef1575e2e1212202f5a3eff480d73503beff12b1d60dfb751112fccf36e36c243b26b6b492261cef12d8b2c1a92a734bb0b621daa8c158fc5",
+        "sha1": "064ad66ea62bcf3fd0e89a719843b1a06c81925c"
+      },
+      "size": 1191230,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "player-animation-library",
+      "name": "Player Animation Library",
+      "purpose": "Authored player animation; coordinate with Jugcraft ArmsMotion",
+      "modId": "player_animation_library",
+      "modVersion": "1.2.7+mc.26.3",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:ha1mEyJS:kemJXVHZ",
+      "modrinthProject": "ha1mEyJS",
+      "modrinthVersion": "kemJXVHZ",
+      "releaseType": "beta",
+      "projectUrl": "https://modrinth.com/mod/player-animation-library",
+      "sourceUrl": "https://github.com/ZigyTheBird/PlayerAnimationLibrary",
+      "license": "MIT",
+      "artifactLicense": "MIT License",
+      "filename": "PlayerAnimationLibMerged-1.2.7+mc.26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/ha1mEyJS/versions/kemJXVHZ/PlayerAnimationLibMerged-1.2.7%2Bmc.26.3.jar"
+      ],
+      "hashes": {
+        "sha512": "673dd58186e43c41a18f44aa24fa3bb386cf11e979c28b5663a32d7802f43c09908c7afd7e05083d5dd0129151152329d03a8c4a35095d53d4b78e3a6b131efc",
+        "sha1": "1ad625ed4bb412698017134124c6c22825032b59"
+      },
+      "size": 400987,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "modonomicon",
+      "name": "Modonomicon",
+      "purpose": "Data-defined books and branching research presentation",
+      "modId": "modonomicon",
+      "modVersion": "2.16.0",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:692GClaE:qhDMl9BM",
+      "modrinthProject": "692GClaE",
+      "modrinthVersion": "qhDMl9BM",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/modonomicon",
+      "sourceUrl": "https://github.com/klikli-dev/modonomicon",
+      "license": "MIT AND CC-BY-4.0",
+      "artifactLicense": "MIT AND CC-BY-4.0",
+      "filename": "modonomicon-26.3-fabric-2.16.0.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/692GClaE/versions/qhDMl9BM/modonomicon-26.3-fabric-2.16.0.jar"
+      ],
+      "hashes": {
+        "sha512": "62f8b18c8f0d4c1d142191ea7d4972de42cd80a9f93b89b1588db90d1b9ce72f603688efff3386449d5ae671e79698198daf19f3429a8d5e0b7b71e097b9b473",
+        "sha1": "35256260d33c3cc9634f82879a66fa8e936aea13"
+      },
+      "size": 3321106,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "smartbrainlib",
+      "name": "SmartBrainLib",
+      "purpose": "Complex creature sensors, memories, and behaviors",
+      "modId": "smartbrainlib",
+      "modVersion": "2.0.3",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:PuyPazRT:cwerutUM",
+      "modrinthProject": "PuyPazRT",
+      "modrinthVersion": "cwerutUM",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/smartbrainlib",
+      "sourceUrl": "https://github.com/Tslat/SmartBrainLib",
+      "license": "MPL-2.0",
+      "artifactLicense": "MPL-2.0",
+      "filename": "smartbrainlib-fabric-26.3-2.0.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/PuyPazRT/versions/cwerutUM/smartbrainlib-fabric-26.3-2.0.3.jar"
+      ],
+      "hashes": {
+        "sha512": "b31f96d6afb8bcdf9c402291834008ed95d10dfe0efa0d9300f9a077427bfaf653d9a66774450ddc823158fcf60c7d3b90ddfeddff42a31d3c4e7c143194b54a",
+        "sha1": "e3f42524e63798f571063c028a3a7c4140dae067"
+      },
+      "size": 518085,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "fusion-connected-textures",
+      "name": "Fusion (Connected Textures)",
+      "purpose": "Connected, scrolling, and continuous textures",
+      "modId": "fusion",
+      "modVersion": "1.3.16",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:p19vrgc2:wRjdAbXf",
+      "modrinthProject": "p19vrgc2",
+      "modrinthVersion": "wRjdAbXf",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/fusion-connected-textures",
+      "sourceUrl": "https://github.com/SuperMartijn642/Fusion",
+      "license": "LicenseRef-All-Rights-Reserved",
+      "artifactLicense": "All rights reserved",
+      "filename": "fusion-1.3.16-fabric-mc26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/p19vrgc2/versions/wRjdAbXf/fusion-1.3.16-fabric-mc26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "5e000a3c7990d0e1d130f11278de062d60beb8c6",
+        "sha512": "0b1d3e06f9f53fcaa661ae223fa8eb175dd5cbde58bb849c25ac0febbfbe59474d45a957a500f8b0e03f0934afb41c7b570acfdb6c914914db913478f4880518"
+      },
+      "size": 953730,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "lambdynamiclights",
+      "name": "LambDynamicLights - Dynamic Lights",
+      "purpose": "Optional moving item/entity illumination",
+      "modId": "lambdynlights",
+      "modVersion": "4.13.0+26.3",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:yBW8D80W:rylKnJ4M",
+      "modrinthProject": "yBW8D80W",
+      "modrinthVersion": "rylKnJ4M",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/lambdynamiclights",
+      "sourceUrl": "https://github.com/LambdAurora/LambDynamicLights",
+      "license": "LicenseRef-Lambda-License",
+      "artifactLicense": "Lambda License",
+      "filename": "lambdynamiclights-4.13.0+26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/yBW8D80W/versions/rylKnJ4M/lambdynamiclights-4.13.0%2B26.3.jar"
+      ],
+      "hashes": {
+        "sha512": "67c37ca7d619bd7f2b0dc02217070c20e34fb3bb3363d4e23f5ef9ca90b1b58adb223fab73639a3499d366497316f1eb297d2759f3ffb976467b4759f784619d",
+        "sha1": "18c8ab40f03219bfcf809a83db6e3958ed8bb866"
+      },
+      "size": 1345715,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "spell-engine",
+      "name": "Spell Engine",
+      "purpose": "Data-defined spellcasting, targeting, delivery, presentation, and equipment",
+      "modId": "spell_engine",
+      "modVersion": "1.10.9+26.3",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:XvoWJaA2:kgVsejrW",
+      "modrinthProject": "XvoWJaA2",
+      "modrinthVersion": "kgVsejrW",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/spell-engine",
+      "sourceUrl": "https://github.com/ZsoltMolnarrr/SpellEngine",
+      "license": "GPL-3.0-only",
+      "artifactLicense": "GPL-3.0",
+      "filename": "spell_engine-fabric-1.10.9+26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/XvoWJaA2/versions/kgVsejrW/spell_engine-fabric-1.10.9%2B26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "7315ceea437dd46789559eb3852a7db9fa1bdb74",
+        "sha512": "b6e9e1b0e6b5e2b51912385d0a0af79eab911bedd97a5ec1b9174110736385f9d386e3f3715fb9b32ac95fb94476d0793831b48eca8ff82d0a1a3076d0c27dba"
+      },
+      "size": 4763225,
+      "requiredProjects": [
+        {
+          "project": "XaT8sLP6",
+          "version": null
+        },
+        {
+          "project": "9s6osm5g",
+          "version": null
+        },
+        {
+          "project": "8ooWzSQP",
+          "version": null
+        },
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        },
+        {
+          "project": "ha1mEyJS",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "spell-power",
+      "name": "Spell Power Attributes",
+      "purpose": "Shared magical attributes and custom schools",
+      "modId": "spell_power",
+      "modVersion": "1.6.2+26.3",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:8ooWzSQP:YdRPWTj8",
+      "modrinthProject": "8ooWzSQP",
+      "modrinthVersion": "YdRPWTj8",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/spell-power",
+      "sourceUrl": "https://github.com/ZsoltMolnarrr/SpellPower",
+      "license": "LGPL-3.0-only",
+      "artifactLicense": "GPL-3.0",
+      "filename": "spell_power-fabric-1.6.2+26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/8ooWzSQP/versions/YdRPWTj8/spell_power-fabric-1.6.2%2B26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "5b59aa59eb9ab307a5543d1556725f4187853eba",
+        "sha512": "26fbf824391fd4acf3a2e91d660705c745c6bf144d76eddf5a74e05f87fa3d0fc16e3f616b972e00657a93c590ecc85d822895133eb3cfc34882d28cab5e9be4"
+      },
+      "size": 226520,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "trinkets-updated",
+      "name": "Trinkets Updated",
+      "purpose": "Equipment slots used by Spell Engine",
+      "modId": "trinkets_updated",
+      "modVersion": "4.2.1+26.3",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:XaT8sLP6:lVR1OKgV",
+      "modrinthProject": "XaT8sLP6",
+      "modrinthVersion": "lVR1OKgV",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/trinkets-updated",
+      "sourceUrl": "https://github.com/Patbox/trinkets",
+      "license": "MIT",
+      "artifactLicense": "MIT",
+      "filename": "trinkets-4.2.1+26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/XaT8sLP6/versions/lVR1OKgV/trinkets-4.2.1%2B26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "134fa691e3afac2236bd72e8a07ebfeabaacd531",
+        "sha512": "d4038e93b95462cff05075dad5b97669871f62212c0228ec6483782e22476d0354d1869f0e523fdb23b2a233fa0f15ff01d497fd2c8a5292ab20838dc464d15a"
+      },
+      "size": 663821,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "cloth-config",
+      "name": "Cloth Config API",
+      "purpose": "Configuration screens; required by Spell Engine",
+      "modId": "cloth-config",
+      "modVersion": "26.3.159",
+      "side": "both",
+      "requiredByJugcraft": true,
+      "maven": "maven.modrinth:9s6osm5g:fg2uyxOW",
+      "modrinthProject": "9s6osm5g",
+      "modrinthVersion": "fg2uyxOW",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/cloth-config",
+      "sourceUrl": "https://github.com/shedaniel/ClothConfig/",
+      "license": "LGPL-3.0-only",
+      "artifactLicense": "GNU LGPLv3",
+      "filename": "cloth-config-fabric-26.3.159.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/9s6osm5g/versions/fg2uyxOW/cloth-config-fabric-26.3.159.jar"
+      ],
+      "hashes": {
+        "sha1": "9a5cce069380a2047250831dcb19f4ef1b15872d",
+        "sha512": "8924e19d41845096724fa10f3717bc51964a0edbbbcad0ff1e6c6187a398b08f356e49579a657c2dc44a7f92e3850771f3ca70bf8c1f654de60425163b91dbb1"
+      },
+      "size": 1135009,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "jade",
+      "name": "Jade \ud83d\udd0d",
+      "purpose": "Optional inspection overlays and Jugcraft machine data",
+      "modId": "jade",
+      "modVersion": "26.3.5+fabric",
+      "side": "both",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:nvQzSEkH:71CTWqdE",
+      "modrinthProject": "nvQzSEkH",
+      "modrinthVersion": "71CTWqdE",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/jade",
+      "sourceUrl": "https://github.com/Snownee/Jade",
+      "license": "CC-BY-NC-SA-4.0",
+      "artifactLicense": "CC-BY-NC-SA-4.0",
+      "filename": "Jade-mc26.3-Fabric-26.3.5.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/nvQzSEkH/versions/71CTWqdE/Jade-mc26.3-Fabric-26.3.5.jar"
+      ],
+      "hashes": {
+        "sha512": "2e7331e62eb6658268ae92dc42de8b469f50dd6c6a9d2546a6f649bae97c2cdfd8d4c1560948cf46269175d2c79c6c47a36a02685e39d476768d18fbb2a28703",
+        "sha1": "da61413c586c8918c14e2bbfdc808ce2d56ea9df"
+      },
+      "size": 1092685,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "jei",
+      "name": "Just Enough Items (JEI)",
+      "purpose": "Optional recipe viewer; existing Jugcraft recipe integration",
+      "modId": "jei",
+      "modVersion": "31.8.0.49",
+      "side": "both",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:u6dRKJwZ:N2UbrNk9",
+      "modrinthProject": "u6dRKJwZ",
+      "modrinthVersion": "N2UbrNk9",
+      "releaseType": "beta",
+      "projectUrl": "https://modrinth.com/mod/jei",
+      "sourceUrl": "https://github.com/mezz/JustEnoughItems",
+      "license": "MIT",
+      "artifactLicense": "The MIT License (MIT)",
+      "filename": "jei-26.3-fabric-31.8.0.49.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/u6dRKJwZ/versions/N2UbrNk9/jei-26.3-fabric-31.8.0.49.jar"
+      ],
+      "hashes": {
+        "sha1": "d73b079023b1d59c5a84c4eba32a615c346e9c77",
+        "sha512": "139f899c8b1d8e7ac4478a5f78f6b4faa88bc1ea3bc18fb7302de27217eb017ccc87e01a1d0c128ea1dec777e9d31dff88d9095e37448bdb9b08c56a9c565602"
+      },
+      "size": 2389062,
+      "requiredProjects": [
+        {
+          "project": "7tEfOcA7",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {
+        "7tEfOcA7": "mezz_config 0.6.3"
+      }
+    },
+    {
+      "key": "modmenu",
+      "name": "Mod Menu",
+      "purpose": "Client access to library configuration screens",
+      "modId": "modmenu",
+      "modVersion": "21.0.0",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:mOgUt4GM:kyy7dbrZ",
+      "modrinthProject": "mOgUt4GM",
+      "modrinthVersion": "kyy7dbrZ",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/modmenu",
+      "sourceUrl": "https://github.com/TerraformersMC/ModMenu",
+      "license": "MIT",
+      "artifactLicense": "MIT",
+      "filename": "modmenu-21.0.0.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/mOgUt4GM/versions/kyy7dbrZ/modmenu-21.0.0.jar"
+      ],
+      "hashes": {
+        "sha512": "588c0c557963f4778572ee81bfafc190b332c26d5926c5fe7e3e1614dcf8e14f58e3bc80a97694521dd05907e9753a7c8575048ea769e4dbf40a3db74a4e2606",
+        "sha1": "66ec40f1cd0c037ddca2b5fc6b4b976d479c18e8"
+      },
+      "size": 856779,
+      "requiredProjects": [
+        {
+          "project": "eXts2L7r",
+          "version": null
+        },
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {
+        "eXts2L7r": "placeholder-api 3.2.0+26.3"
+      }
+    },
+    {
+      "key": "iris",
+      "name": "Iris Shaders",
+      "purpose": "Optional shader-pack loading; no shader pack is bundled",
+      "modId": "iris",
+      "modVersion": "1.11.7+mc26.3",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:YL57xq9U:vTN4NRGW",
+      "modrinthProject": "YL57xq9U",
+      "modrinthVersion": "vTN4NRGW",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/iris",
+      "sourceUrl": "https://github.com/IrisShaders/Iris",
+      "license": "LGPL-3.0-only",
+      "artifactLicense": "LGPL-3.0-only",
+      "filename": "iris-fabric-1.11.7+mc26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/YL57xq9U/versions/vTN4NRGW/iris-fabric-1.11.7%2Bmc26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "fa03640ba1e4ef2f7ae3619c6373a06e46d0ba2c",
+        "sha512": "d8d3312f77fc52a48e4a6cd836fda33669bdebcb4de0b8c0d30adc808b287330a533e0baef355cc1ce6336a26851d9775369a802a4666b7b7a6266af20088f42"
+      },
+      "size": 2850938,
+      "requiredProjects": [
+        {
+          "project": "AANobbMI",
+          "version": "bAZQdGpg"
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "sodium",
+      "name": "Sodium",
+      "purpose": "Renderer required by the pinned Iris release",
+      "modId": "sodium",
+      "modVersion": "0.9.2+mc26.3",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:AANobbMI:bAZQdGpg",
+      "modrinthProject": "AANobbMI",
+      "modrinthVersion": "bAZQdGpg",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/sodium",
+      "sourceUrl": "https://github.com/CaffeineMC/sodium",
+      "license": "LicenseRef-Polyform-Shield-1.0.0",
+      "artifactLicense": "Polyform-Shield-1.0.0",
+      "filename": "sodium-fabric-0.9.2+mc26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/AANobbMI/versions/bAZQdGpg/sodium-fabric-0.9.2%2Bmc26.3.jar"
+      ],
+      "hashes": {
+        "sha1": "9acfe851e36f4fb27d7c5baa224e8bd4e0334283",
+        "sha512": "f3f260f204b8ce5e8777c2c73f537956755ec61f3817b0b78b5e5568e8aa40f14891f146475075109747665c7c88a45ca0ca9a8df3c68d79c58ecdaa8d8c4b93"
+      },
+      "size": 1908068,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "fabric-language-kotlin",
+      "name": "Fabric Language Kotlin",
+      "purpose": "Kotlin runtime required by GuiLib",
+      "modId": "fabric-language-kotlin",
+      "modVersion": "1.14.1+kotlin.2.4.20",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:Ha28R6CL:eRRZzGMc",
+      "modrinthProject": "Ha28R6CL",
+      "modrinthVersion": "eRRZzGMc",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/fabric-language-kotlin",
+      "sourceUrl": "https://github.com/FabricMC/fabric-language-kotlin/",
+      "license": "Apache-2.0",
+      "artifactLicense": "Apache-2.0",
+      "filename": "fabric-language-kotlin-1.14.1+kotlin.2.4.20.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/Ha28R6CL/versions/eRRZzGMc/fabric-language-kotlin-1.14.1%2Bkotlin.2.4.20.jar"
+      ],
+      "hashes": {
+        "sha1": "62ae40a31b689b52fde399f2143d547a631e942c",
+        "sha512": "91404f87774466ce8604aafea791d8cc97b603bc310dce17c8188f94f7783cca6dc14fc726ce871ca317bfe9033c199d8d858d51284106a00754e952147703b8"
+      },
+      "size": 8142858,
+      "requiredProjects": [],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "guilib",
+      "name": "GuiLib",
+      "purpose": "Composable client screens, CSS layouts, transitions, and controls",
+      "modId": "guilib",
+      "modVersion": "0.12.4",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "net.sbo:guilib-26.3-fabric:0.12.4",
+      "modrinthProject": null,
+      "modrinthVersion": null,
+      "releaseType": "release",
+      "projectUrl": "https://skyblockoverhaul.github.io/maven/guilib/index.html",
+      "sourceUrl": "https://github.com/SkyblockOverhaul/maven",
+      "license": "LGPL-3.0-only",
+      "artifactLicense": "LGPL-3.0-only",
+      "filename": "guilib-26.3-fabric-0.12.4.jar",
+      "downloads": [
+        "https://raw.githubusercontent.com/SkyblockOverhaul/maven/15091644f73b6e85eee84bd2526fbbe29b54fe96/net/sbo/guilib-26.3-fabric/0.12.4/guilib-26.3-fabric-0.12.4.jar"
+      ],
+      "hashes": {
+        "sha1": "171526788ebb4c4196a28f44841aaaa2f8aa3a9b",
+        "sha512": "53c0af29fcfc40a2c54936af506725903e0a941745650bbc13cb2dd4f5a3b920b64e528032e6c572d3a075e402a2d058342915d2891ab6d340591afe8ca71b78"
+      },
+      "size": 3383446,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        },
+        {
+          "project": "Ha28R6CL",
+          "version": "eRRZzGMc"
+        }
+      ],
+      "embeddedProjects": {}
+    }
+  ]
+}

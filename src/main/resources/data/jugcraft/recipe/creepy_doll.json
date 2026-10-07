@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " C ",
+    "WSW"
+  ],
+  "key": {
+    "C": "minecraft:clay_ball",
+    "W": "#minecraft:wool",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "jugcraft:creepy_doll",
+    "count": 1
+  }
+}

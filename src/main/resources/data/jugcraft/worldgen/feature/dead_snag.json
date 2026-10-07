@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:tree",
+  "below_trunk_provider": "minecraft:soil_beneath_tree",
+  "decorators": [],
+  "foliage_placer": {
+    "type": "minecraft:blob_foliage_placer",
+    "height": 1,
+    "offset": 0,
+    "radius": 0
+  },
+  "foliage_provider": {
+    "id": "minecraft:air"
+  },
+  "ignore_vines": true,
+  "minimum_size": {
+    "type": "minecraft:two_layers_feature_size"
+  },
+  "trunk_placer": {
+    "type": "minecraft:straight_trunk_placer",
+    "base_height": 3,
+    "height_rand_a": 4,
+    "height_rand_b": 3
+  },
+  "trunk_provider": {
+    "id": "jugcraft:dead_log",
+    "properties": {
+      "axis": "y"
+    }
+  }
+}

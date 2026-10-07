@@ -8,14 +8,19 @@ import java.util.Locale;
 import java.util.UUID;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
  * {@code /party} commands. Every check happens in {@link PartyManager}; this class only turns
- * results into messages. Any player may use them (no operator level needed).
+ * results into messages. Any player may use them (no operator level needed), apart from
+ * {@code /party admin}, which needs operator level 2 (game masters) and works on any party.
+ * The Party screen's buttons run these same commands.
  */
 final class PartyCommands {
 	private PartyCommands() {
@@ -38,7 +43,22 @@ final class PartyCommands {
 				.then(Commands.literal("leader")
 						.then(Commands.argument("name", StringArgumentType.word())
 								.executes(context -> leader(context.getSource(), StringArgumentType.getString(context, "name")))))
-				.then(Commands.literal("disband").executes(context -> disband(context.getSource()))));
+				.then(Commands.literal("disband").executes(context -> disband(context.getSource())))
+				.then(Commands.literal("admin").requires(PartyCommands::isOperator)
+						.then(Commands.literal("list").executes(context -> adminList(context.getSource())))
+						.then(Commands.literal("kick")
+								.then(Commands.argument("name", StringArgumentType.word())
+										.executes(context -> adminKick(context.getSource(), StringArgumentType.getString(context, "name")))))
+						.then(Commands.literal("leader")
+								.then(Commands.argument("name", StringArgumentType.word())
+										.executes(context -> adminLeader(context.getSource(), StringArgumentType.getString(context, "name")))))
+						.then(Commands.literal("disband")
+								.then(Commands.argument("name", StringArgumentType.word())
+										.executes(context -> adminDisband(context.getSource(), StringArgumentType.getString(context, "name")))))));
+	}
+
+	private static boolean isOperator(CommandSourceStack source) {
+		return Commands.LEVEL_GAMEMASTERS.check(source.permissions());
 	}
 
 	private static PartyManager manager() {
@@ -102,8 +122,12 @@ final class PartyCommands {
 			return fail(source, result);
 		}
 		String targetName = target.getName().getString();
-		source.sendSuccess(() -> Component.translatable("message.jugcraft.party.invite_sent", targetName), false);
-		target.sendSystemMessage(Component.translatable("message.jugcraft.party.invite_received", player.getName().getString()));
+		long minutes = manager().inviteTtlMillis() / 60_000L;
+		source.sendSuccess(() -> Component.translatable("message.jugcraft.party.invite_sent", targetName, minutes), false);
+		target.sendSystemMessage(Component.translatable("message.jugcraft.party.invite_received", player.getName().getString())
+				.append(" ").append(button("accept", "/party accept", ChatFormatting.GREEN))
+				.append(" ").append(button("decline", "/party decline", ChatFormatting.RED)));
+		PartyNetwork.send(target);
 		return 1;
 	}
 
@@ -124,6 +148,7 @@ final class PartyCommands {
 			return fail(source, result);
 		}
 		source.sendSuccess(() -> Component.translatable("message.jugcraft.party.declined"), false);
+		PartyNetwork.send(player);
 		return 1;
 	}
 
@@ -180,6 +205,87 @@ final class PartyCommands {
 		}
 		notifyPlayers(source.getServer(), before, null, Component.translatable("message.jugcraft.party.disbanded"));
 		return 1;
+	}
+
+	// ---------------------------------------------------------------- /party admin
+
+	private static int adminList(CommandSourceStack source) {
+		PartyManager manager = manager();
+		if (manager.parties().isEmpty()) {
+			source.sendSuccess(() -> Component.translatable("message.jugcraft.party.admin.none"), false);
+			return 0;
+		}
+		for (PartyManager.Party party : manager.parties()) {
+			StringBuilder roster = new StringBuilder();
+			for (UUID member : party.members()) {
+				if (!roster.isEmpty()) {
+					roster.append(", ");
+				}
+				roster.append(name(member));
+				if (member.equals(party.leader())) {
+					roster.append(" ★");
+				}
+			}
+			String text = roster.toString();
+			int size = party.size();
+			source.sendSuccess(() -> Component.translatable("message.jugcraft.party.admin.entry", size, manager.maxSize(), text), false);
+		}
+		return manager.parties().size();
+	}
+
+	private static int adminKick(CommandSourceStack source, String name) {
+		var target = manager().findAnyMemberByName(name);
+		if (target.isEmpty()) {
+			return fail(source, PartyManager.Result.NOT_IN_PARTY);
+		}
+		List<UUID> before = JugcraftParties.partyMembers(target.get());
+		PartyManager.Result result = manager().adminRemove(target.get());
+		if (result != PartyManager.Result.OK) {
+			return fail(source, result);
+		}
+		source.sendSuccess(() -> Component.translatable("message.jugcraft.party.admin.done"), true);
+		notifyPlayers(source.getServer(), before, target.get(), Component.translatable("message.jugcraft.party.kicked", name));
+		ServerPlayer kicked = source.getServer().getPlayerList().getPlayer(target.get());
+		if (kicked != null) {
+			kicked.sendSystemMessage(Component.translatable("message.jugcraft.party.you_were_kicked"));
+		}
+		return 1;
+	}
+
+	private static int adminLeader(CommandSourceStack source, String name) {
+		var target = manager().findAnyMemberByName(name);
+		if (target.isEmpty()) {
+			return fail(source, PartyManager.Result.NOT_IN_PARTY);
+		}
+		PartyManager.Result result = manager().adminSetLeader(target.get());
+		if (result != PartyManager.Result.OK) {
+			return fail(source, result);
+		}
+		source.sendSuccess(() -> Component.translatable("message.jugcraft.party.admin.done"), true);
+		notifyParty(source.getServer(), target.get(), Component.translatable("message.jugcraft.party.new_leader", name));
+		return 1;
+	}
+
+	private static int adminDisband(CommandSourceStack source, String name) {
+		var target = manager().findAnyMemberByName(name);
+		if (target.isEmpty()) {
+			return fail(source, PartyManager.Result.NOT_IN_PARTY);
+		}
+		List<UUID> before = JugcraftParties.partyMembers(target.get());
+		PartyManager.Result result = manager().adminDisband(target.get());
+		if (result != PartyManager.Result.OK) {
+			return fail(source, result);
+		}
+		source.sendSuccess(() -> Component.translatable("message.jugcraft.party.admin.done"), true);
+		notifyPlayers(source.getServer(), before, null, Component.translatable("message.jugcraft.party.disbanded"));
+		return 1;
+	}
+
+	/** A clickable chat button, such as [Accept], that runs {@code command} for the player who clicks it. */
+	private static Component button(String key, String command, ChatFormatting colour) {
+		return Component.translatable("message.jugcraft.party.button." + key).withStyle(style -> style.withColor(colour)
+				.withClickEvent(new ClickEvent.RunCommand(command))
+				.withHoverEvent(new HoverEvent.ShowText(Component.literal(command))));
 	}
 
 	private static int fail(CommandSourceStack source, PartyManager.Result result) {

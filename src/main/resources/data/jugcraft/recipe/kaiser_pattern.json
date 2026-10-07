@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NCN",
+    "BPB",
+    "NRN"
+  ],
+  "key": {
+    "N": "minecraft:gold_nugget",
+    "C": "jugcraft:imperial_crest",
+    "B": "minecraft:black_dye",
+    "P": "minecraft:paper",
+    "R": "minecraft:red_dye"
+  },
+  "result": {
+    "id": "jugcraft:kaiser_pattern",
+    "count": 4
+  }
+}

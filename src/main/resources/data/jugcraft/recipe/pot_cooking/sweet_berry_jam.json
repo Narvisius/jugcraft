@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:mason_jar"
+    },
+    {
+      "ingredient": "minecraft:sweet_berries",
+      "count": 6
+    },
+    {
+      "ingredient": "minecraft:sugar",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:sweet_berry_jam"
+  },
+  "time": 300
+}

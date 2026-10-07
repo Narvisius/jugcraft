@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:water_treatment",
+  "items": [
+    {
+      "ingredient": "jugcraft:bitumen",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 100
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:crude_oil",
+      "amount": 150
+    }
+  ],
+  "time": 80
+}

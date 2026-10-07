@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SFS",
+    "SDS"
+  ],
+  "key": {
+    "S": "minecraft:smooth_sandstone",
+    "F": "#jugcraft:grave_flowers",
+    "D": "minecraft:dirt"
+  },
+  "result": {
+    "id": "jugcraft:planted_grave",
+    "count": 1
+  }
+}

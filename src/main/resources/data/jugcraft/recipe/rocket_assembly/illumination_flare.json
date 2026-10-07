@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:solid_propellant",
+      "count": 1
+    },
+    {
+      "ingredient": "minecraft:paper",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:glowstone_dust",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:illumination_flare",
+    "count": 4
+  },
+  "time": 100
+}

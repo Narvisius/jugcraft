@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    " P ",
+    "PPP"
+  ],
+  "key": {
+    "W": "minecraft:purple_wool",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:judging_stand",
+    "count": 1
+  }
+}

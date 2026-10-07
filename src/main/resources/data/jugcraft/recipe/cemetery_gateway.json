@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "L L",
+    "GIG",
+    "G G"
+  ],
+  "key": {
+    "L": "minecraft:lantern",
+    "G": "minecraft:polished_granite",
+    "I": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "jugcraft:cemetery_gateway",
+    "count": 1
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dr_band": "jugcraft:block/dr_band",
+    "dr_blue": "jugcraft:block/dr_blue",
+    "dr_copper_pipe": "jugcraft:block/dr_copper_pipe",
+    "dr_grate": "jugcraft:block/dr_grate",
+    "dr_leaves": "jugcraft:block/dr_leaves",
+    "dr_nut": "jugcraft:block/dr_nut",
+    "dr_patina": "jugcraft:block/dr_patina",
+    "dr_red": "jugcraft:block/dr_red",
+    "dr_ribbed_patina": "jugcraft:block/dr_ribbed_patina",
+    "dr_rust": "jugcraft:block/dr_rust",
+    "dr_rust_bare": "jugcraft:block/dr_rust_bare",
+    "dr_rust_pipe": "jugcraft:block/dr_rust_pipe",
+    "dr_skid": "jugcraft:block/dr_skid",
+    "sp_gauge": "jugcraft:block/sp_gauge",
+    "sp_soil": "jugcraft:block/sp_soil",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        7.0,
+        0,
+        1.0
+      ],
+      "to": [
+        10.0,
+        14.0,
+        4.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "south": {
+          "texture": "#dr_rust_pipe"
+        },
+        "east": {
+          "texture": "#dr_rust_pipe"
+        },
+        "west": {
+          "texture": "#dr_rust_pipe"
+        },
+        "up": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        14.0,
+        1.0
+      ],
+      "to": [
+        16,
+        16.0,
+        4.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust"
+        },
+        "south": {
+          "texture": "#dr_rust"
+        },
+        "up": {
+          "texture": "#dr_rust"
+        },
+        "down": {
+          "texture": "#dr_rust"
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        14.0,
+        4.0
+      ],
+      "to": [
+        10.0,
+        16.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust"
+        },
+        "east": {
+          "texture": "#dr_rust"
+        },
+        "west": {
+          "texture": "#dr_rust"
+        },
+        "up": {
+          "texture": "#dr_rust"
+        },
+        "down": {
+          "texture": "#dr_rust"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12.0,
+        8.0
+      ],
+      "to": [
+        16,
+        14.0,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "south": {
+          "texture": "#dr_rust_pipe"
+        },
+        "up": {
+          "texture": "#dr_rust_pipe"
+        },
+        "down": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        0,
+        6.0
+      ],
+      "to": [
+        5.0,
+        1.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_leaves"
+        },
+        "south": {
+          "texture": "#dr_leaves"
+        },
+        "east": {
+          "texture": "#dr_leaves"
+        },
+        "west": {
+          "texture": "#dr_leaves"
+        },
+        "up": {
+          "texture": "#dr_leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        9.0,
+        0,
+        6.0
+      ],
+      "to": [
+        11.0,
+        1.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_leaves"
+        },
+        "south": {
+          "texture": "#dr_leaves"
+        },
+        "east": {
+          "texture": "#dr_leaves"
+        },
+        "west": {
+          "texture": "#dr_leaves"
+        },
+        "up": {
+          "texture": "#dr_leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        15.0,
+        0,
+        6.0
+      ],
+      "to": [
+        16,
+        1.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_leaves"
+        },
+        "south": {
+          "texture": "#dr_leaves"
+        },
+        "west": {
+          "texture": "#dr_leaves"
+        },
+        "up": {
+          "texture": "#dr_leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10.0,
+        7.0
+      ],
+      "to": [
+        16,
+        11.5,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_bare"
+        },
+        "south": {
+          "texture": "#dr_rust_bare"
+        },
+        "up": {
+          "texture": "#dr_rust_bare"
+        },
+        "down": {
+          "texture": "#dr_amber"
+        }
+      }
+    }
+  ]
+}

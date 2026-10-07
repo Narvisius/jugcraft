@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:premium_diesel_bucket"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.premium_fuel.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.premium_fuel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:premium_diesel_bucket",
+              "jugcraft:premium_gasoline_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:diesel_generator"
+}

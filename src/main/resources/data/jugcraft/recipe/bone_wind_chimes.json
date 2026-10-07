@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " N ",
+    "SPS",
+    "BBB"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "S": "minecraft:string",
+    "P": "#minecraft:wooden_slabs",
+    "B": "minecraft:bone"
+  },
+  "result": {
+    "id": "jugcraft:bone_wind_chimes",
+    "count": 1
+  }
+}

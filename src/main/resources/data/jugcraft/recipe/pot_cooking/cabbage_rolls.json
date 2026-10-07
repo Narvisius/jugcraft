@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:cabbage"
+    },
+    {
+      "ingredient": "minecraft:beef"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    },
+    {
+      "ingredient": "jugcraft:garlic"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:cabbage_rolls",
+    "count": 2
+  },
+  "time": 300
+}

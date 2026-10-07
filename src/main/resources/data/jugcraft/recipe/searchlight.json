@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SGS",
+    "SLS",
+    " I "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "G": "minecraft:glass",
+    "L": "minecraft:glowstone",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:searchlight",
+    "count": 1
+  }
+}

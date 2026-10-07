@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BDB",
+    "B B"
+  ],
+  "key": {
+    "B": "minecraft:iron_bars",
+    "D": "minecraft:black_dye"
+  },
+  "result": {
+    "id": "jugcraft:wrought_iron_lattice",
+    "count": 4
+  }
+}

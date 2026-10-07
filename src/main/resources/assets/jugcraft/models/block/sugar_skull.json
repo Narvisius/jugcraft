@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/sugar_skull_side",
+    "face": "jugcraft:block/sugar_skull_face",
+    "sugar": "jugcraft:block/sugar_skull_side"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        1,
+        5
+      ],
+      "to": [
+        11,
+        6,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#face",
+          "uv": [
+            5,
+            4,
+            11,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#sugar"
+        },
+        "east": {
+          "texture": "#sugar"
+        },
+        "west": {
+          "texture": "#sugar"
+        },
+        "up": {
+          "texture": "#sugar"
+        },
+        "down": {
+          "texture": "#sugar"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        0,
+        5.5
+      ],
+      "to": [
+        10,
+        1,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#face",
+          "uv": [
+            6,
+            9,
+            10,
+            10
+          ]
+        },
+        "south": {
+          "texture": "#sugar"
+        },
+        "east": {
+          "texture": "#sugar"
+        },
+        "west": {
+          "texture": "#sugar"
+        },
+        "up": {
+          "texture": "#sugar"
+        },
+        "down": {
+          "texture": "#sugar"
+        }
+      }
+    }
+  ]
+}

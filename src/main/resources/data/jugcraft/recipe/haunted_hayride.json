@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " J ",
+    "HMH"
+  ],
+  "key": {
+    "J": "minecraft:jack_o_lantern",
+    "H": "minecraft:hay_block",
+    "M": "minecraft:minecart"
+  },
+  "result": {
+    "id": "jugcraft:haunted_hayride",
+    "count": 1
+  }
+}

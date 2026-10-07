@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "WWW",
+    "WSW",
+    "WWW"
+  ],
+  "key": {
+    "W": "jugcraft:copper_wire",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:fire_control_wire",
+    "count": 1
+  }
+}

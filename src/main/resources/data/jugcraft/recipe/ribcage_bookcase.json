@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BPB",
+    "B B",
+    "BPB"
+  ],
+  "key": {
+    "B": "minecraft:bone",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:ribcage_bookcase",
+    "count": 1
+  }
+}

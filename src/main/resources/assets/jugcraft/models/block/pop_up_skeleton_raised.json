@@ -1,0 +1,356 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/pop_up_skeleton_crate",
+    "crate": "jugcraft:block/pop_up_skeleton_crate",
+    "lid": "jugcraft:block/pop_up_skeleton_lid",
+    "inside": "jugcraft:block/pop_up_skeleton_inside",
+    "spring": "jugcraft:block/pop_up_skeleton_spring",
+    "bone": "jugcraft:block/pop_up_skeleton_bone",
+    "ribs": "jugcraft:block/pop_up_skeleton_ribs",
+    "skull": "jugcraft:block/pop_up_skeleton_skull"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crate"
+        },
+        "south": {
+          "texture": "#crate"
+        },
+        "east": {
+          "texture": "#crate"
+        },
+        "west": {
+          "texture": "#crate"
+        },
+        "up": {
+          "texture": "#inside"
+        },
+        "down": {
+          "texture": "#crate"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        9,
+        1.5
+      ],
+      "to": [
+        14.5,
+        10,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lid"
+        },
+        "south": {
+          "texture": "#lid"
+        },
+        "east": {
+          "texture": "#lid"
+        },
+        "west": {
+          "texture": "#lid"
+        },
+        "up": {
+          "texture": "#lid"
+        },
+        "down": {
+          "texture": "#lid"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          10,
+          14.5
+        ],
+        "axis": "x",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        7.5,
+        9,
+        7.5
+      ],
+      "to": [
+        8.5,
+        13,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spring"
+        },
+        "south": {
+          "texture": "#spring"
+        },
+        "east": {
+          "texture": "#spring"
+        },
+        "west": {
+          "texture": "#spring"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        13,
+        7
+      ],
+      "to": [
+        10.5,
+        19,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ribs",
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#bone",
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#bone",
+          "uv": [
+            7,
+            0,
+            9,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#bone",
+          "uv": [
+            7,
+            0,
+            9,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#bone"
+        },
+        "down": {
+          "texture": "#bone"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        19,
+        5.5
+      ],
+      "to": [
+        10.5,
+        24,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#skull",
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#bone",
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#bone",
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#bone",
+          "uv": [
+            5.5,
+            0,
+            10.5,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#bone"
+        },
+        "down": {
+          "texture": "#bone"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        18,
+        7.5
+      ],
+      "to": [
+        5.5,
+        19,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bone",
+          "uv": [
+            10.5,
+            0,
+            14.5,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#bone",
+          "uv": [
+            1.5,
+            0,
+            5.5,
+            1
+          ]
+        },
+        "east": {
+          "texture": "#bone",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#bone",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#bone"
+        },
+        "down": {
+          "texture": "#bone"
+        }
+      },
+      "rotation": {
+        "origin": [
+          5.5,
+          18.5,
+          8
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        10.5,
+        18,
+        7.5
+      ],
+      "to": [
+        14.5,
+        19,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bone",
+          "uv": [
+            1.5,
+            0,
+            5.5,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#bone",
+          "uv": [
+            10.5,
+            0,
+            14.5,
+            1
+          ]
+        },
+        "east": {
+          "texture": "#bone",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#bone",
+          "uv": [
+            7.5,
+            0,
+            8.5,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#bone"
+        },
+        "down": {
+          "texture": "#bone"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.5,
+          18.5,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    }
+  ]
+}

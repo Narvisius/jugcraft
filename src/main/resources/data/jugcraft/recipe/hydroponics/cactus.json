@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "minecraft:cactus",
+  "result": {
+    "id": "minecraft:cactus",
+    "count": 2
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:cactus",
+        "count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

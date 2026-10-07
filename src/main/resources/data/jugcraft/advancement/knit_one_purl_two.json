@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:knitting_needles"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.knit_one_purl_two.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.knit_one_purl_two.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

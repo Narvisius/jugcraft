@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:floating_candle",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": 2,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:floating_candle",
+                "state": {
+                  "candles": "2"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 3,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:floating_candle",
+                "state": {
+                  "candles": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 4,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:floating_candle",
+                "state": {
+                  "candles": "4"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/floating_candle"
+}

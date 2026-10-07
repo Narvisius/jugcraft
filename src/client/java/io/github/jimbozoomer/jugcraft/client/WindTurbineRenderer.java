@@ -7,6 +7,7 @@ import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
+import java.util.List;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -25,8 +26,9 @@ import org.jspecify.annotations.Nullable;
 /**
  * Draws the wind turbine's rotor: eight wooden vanes on a brass hub, about seven blocks across, in
  * front of the nacelle on top of the nine-block tower. It turns while the turbine generates (the
- * master block's LIT state). The rotor is too big for a block model, so it is drawn here; the rest of
- * every machine is a normal block model, so this renderer draws nothing for other machines.
+ * master block's LIT state). The rotor is too big for a block model, so it is drawn here. It also
+ * draws the turning parts of other multi-block machines ({@link MachineRotors}: the sawmill's blade,
+ * the sieve's weights); the rest of every machine is a normal block model.
  */
 public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEntity, WindTurbineRenderer.State> {
 	private static final RenderType VANE = RenderTypes.entitySolid(Jugcraft.id("textures/block/sp_vane.png"));
@@ -45,6 +47,7 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 
 	public static final class State extends BlockEntityRenderState {
 		boolean turbine;
+		List<MachineRotors.Spin> spins = List.of();
 		Direction facing = Direction.NORTH;
 		float angle;
 	}
@@ -61,6 +64,7 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 	public void extractRenderState(MachineBlockEntity machine, State state, float partialTick, Vec3 camera,
 			ModelFeatureRenderer.@Nullable CrumblingOverlay crumbling) {
 		BlockEntityRenderState.extractBase(machine, state, crumbling);
+		state.spins = MachineRotors.extract(machine, partialTick);
 		state.turbine = machine.kind() == MachineKind.WIND_TURBINE;
 		if (!state.turbine) {
 			return;
@@ -73,6 +77,7 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+		MachineRotors.submit(state.spins, pose, collector, state.lightCoords);
 		if (!state.turbine) {
 			return;
 		}
@@ -137,7 +142,7 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 
 	@Override
 	public boolean shouldRenderOffScreen() {
-		return true; // The rotor is far above the master block, which may be off screen.
+		return true; // The rotors are far from the master block (the turbine's nine blocks up), which may be off screen.
 	}
 
 	@Override

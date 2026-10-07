@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SCS",
+    "SGS",
+    "SCS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "C": "minecraft:iron_chain",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:ammo_hoist",
+    "count": 4
+  }
+}

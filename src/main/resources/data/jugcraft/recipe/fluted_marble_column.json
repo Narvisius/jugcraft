@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "M",
+    "N",
+    "M"
+  ],
+  "key": {
+    "M": "jugcraft:polished_marble",
+    "N": "#c:nuggets/brass"
+  },
+  "result": {
+    "id": "jugcraft:fluted_marble_column",
+    "count": 2
+  }
+}

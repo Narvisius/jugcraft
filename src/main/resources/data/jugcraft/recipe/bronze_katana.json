@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  #",
+    " #N",
+    "L  "
+  ],
+  "key": {
+    "#": "#c:ingots/bronze",
+    "N": "minecraft:iron_nugget",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "jugcraft:bronze_katana",
+    "count": 1
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "jugcraft:corn_kernels",
+  "result": {
+    "id": "jugcraft:corn",
+    "count": 2
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:corn_kernels",
+        "count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "result": {
+        "id": "jugcraft:corn_kernels",
+        "count": 1
+      },
+      "chance": 0.5
+    }
+  ]
+}

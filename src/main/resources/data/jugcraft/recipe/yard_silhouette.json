@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P",
+    "D",
+    "S"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "D": "minecraft:black_dye",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:yard_silhouette",
+    "count": 2
+  }
+}

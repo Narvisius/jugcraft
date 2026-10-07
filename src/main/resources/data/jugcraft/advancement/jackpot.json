@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:jumbo_pumpkin_plush"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.jackpot.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.jackpot.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -13,6 +13,9 @@ TURNING = {"brass_gearbox": ("brass_gearbox", "brass_gearbox_turning"),
            "conveyor": ("conveyor_belt", "conveyor_belt_moving"),
            "conveyor_splitter": ("conveyor_belt", "conveyor_belt_moving")}
 LIT = {"steam_engine": ("sp_firebox", "sp_firebox_on")}
+# How far (pixels) a spinning rotor stays off the faces of the still block it meets in the "_active" model: the two are
+# drawn separately, so a shared plane would flicker (docs/ART_DIRECTION.md, Rules for everything).
+ROTOR_GAP = 0.1
 # Blocks with a "turning" block state.
 STATES_TURNING = {"iron_shaft", "brass_gearbox", "hand_crank", "belt_pulley", "electric_motor", "magnet_motor", "flywheel", "solar_tracker", "heliostat", "conveyor",
                   "conveyor_splitter"}
@@ -40,7 +43,9 @@ def brass_gearbox():
 def hand_crank():
     """A hub plate against the driven block (north); the axle, brass arm and wooden handle spin."""
     static = cyl("z", 8, 8, 3, 0, 1.5, IRON_PLATE, BRASS)
-    rotor = cyl("z", 8, 8, 1, 1.5, 7, IRON)
+    # The axle starts ROTOR_GAP inside the hub plate: its end is hidden in the plate, and no plane of the spinning rotor
+    # is shared with the still block (nor does a slit open between them).
+    rotor = cyl("z", 8, 8, 1, 1.5 - ROTOR_GAP, 7, IRON)
     rotor.append(box((7, 7, 7), (9, 13.5, 8.5), BRASS))
     rotor += cyl("z", 8, 12.5, 0.9, 8.5, 13, "sp_wood")
     return static, rotor
@@ -60,7 +65,7 @@ def steam_engine():
     # Piston cylinder and rod back to the flywheel crank.
     m += cyl("z", 3.5, 3.5, 1.75, 6, 12, BRASS, IRON)
     m.append(box((3, 3, 12), (4, 4, 14), IRON))
-    m.append(box((6, 1, 13.25), (10, 2.75, 14.25), IRON_PLATE))
+    m.append(box((6, 1, 13.25), (10, 2.75 - ROTOR_GAP, 14.25), IRON_PLATE))  # under the flywheel rim, not flush
     # Flywheel and the axle out of the back spin while the engine runs.
     rotor = wheel("z", 8, 8, 6, 13, 14.5, IRON, BRASS)
     rotor += cyl("z", 8, 8, 1.25, 11, 16, IRON)
@@ -130,8 +135,8 @@ def electric_motor():
     m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": "el_frame", "east": "el_port!"}))
     m.append(box((6, 14, 7), (10, 15.75, 11), {"*": "el_frame", "up": "el_vent!"}))
     m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": "el_frame", "south": "el_port!"}))
-    # The output shaft spins, with a coupling on it.
-    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
+    # The output shaft spins, with a coupling on it; it ends ROTOR_GAP inside the housing, off its front ring.
+    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5 + ROTOR_GAP), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
     return m, rotor
 
 
@@ -149,7 +154,7 @@ def magnet_motor():
     m.append(box((13.5, 6, 7), (15.75, 11, 11), {"*": "el_frame", "east": "el_port!"}))
     m.append(box((6, 14.5, 4), (10, 15.75, 6.5), {"*": "el_frame", "up": "el_vent!"}))
     m.append(box((6, 6.5, 14.5), (10, 10.5, 15.75), {"*": "el_frame", "south": "el_port!"}))
-    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
+    rotor = [box((6, 6.5, 0), (10, 10.5, 3.5 + ROTOR_GAP), "iron_shaft"), box((5.5, 6, 1), (10.5, 11, 2.5), "el_frame")]
     return m, rotor
 
 
@@ -161,7 +166,10 @@ def flywheel():
     for z0 in (1.5, 12.5):
         m.append(box((5.5, 1.5, z0), (10.5, 5, z0 + 2), "dp_gunmetal"))
         m.append(box((6.5, 5, z0), (9.5, 10, z0 + 2), BRASS_PLATE))
-    rotor = [box((6.5, 6.5, 0), (9.5, 9.5, 16), "iron_shaft")]
+    # The shaft is ROTOR_GAP slimmer on each side than the bearing blocks it runs through, so their sides never share
+    # a plane with the spinning shaft's.
+    g = ROTOR_GAP
+    rotor = [box((6.5 + g, 6.5 + g, 0), (9.5 - g, 9.5 - g, 16), "iron_shaft")]
     rotor += cyl("z", 8, 8, 7.25, 5.5, 10.5, IRON_PLATE, IRON)
     rotor += cyl("z", 8, 8, 2, 4.5, 11.5, BRASS, BRASS_PLATE)
     for z0, z1 in ((5.25, 5.5), (10.5, 10.75)):
@@ -179,7 +187,8 @@ def solar_tracker():
     m.append(box((5.5, 4, 5.5), (10.5, 4.5, 10.5), "el_glow"))
     m.append(box((7, 7, 2), (9, 7.5, 14), "el_frame"))
     rotor = [box((1, 8.5, 1), (15, 9.5, 15), {"*": "el_frame", "up": "el_solar"}),
-             box((7, 7.5, 1.5), (9, 8.5, 14.5), "iron_shaft")]
+             # The pivot sinks into the mount bar and is ROTOR_GAP narrower on each side: no shared plane, no slit.
+             box((7 + ROTOR_GAP, 7.5 - ROTOR_GAP, 1.5), (9 - ROTOR_GAP, 8.5, 14.5), "iron_shaft")]
     return m, rotor
 
 
@@ -188,7 +197,9 @@ def heliostat():
     rotor, half as far as a tracker, as a mirror aiming at a fixed receiver turns half the sun's angle)."""
     m = [box((5, 0, 5), (11, 1, 11), "el_frame"), box((7, 1, 7), (9, 9, 9), "el_casing")]
     rotor = [box((2, 9, 2), (14, 10, 14), {"*": "el_frame", "up": "el_mirror"}),
-             box((7, 8, 2.5), (9, 9, 13.5), "iron_shaft")]
+             # Inside the post's sides; its top meets the mirror's underside (both turn), so no slit opens under the
+             # mirror. Its top shares the post's top plane only where the mirror covers both.
+             box((7 + ROTOR_GAP, 8, 2.5), (9 - ROTOR_GAP, 9, 13.5), "iron_shaft")]
     return m, rotor
 
 

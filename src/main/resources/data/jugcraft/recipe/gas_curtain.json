@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "S",
+    "W",
+    "W"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "W": "#minecraft:wool"
+  },
+  "result": {
+    "id": "jugcraft:gas_curtain",
+    "count": 1
+  }
+}

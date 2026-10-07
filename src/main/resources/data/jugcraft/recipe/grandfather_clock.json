@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PGP",
+    "PCP",
+    "PNP"
+  ],
+  "key": {
+    "P": "minecraft:dark_oak_planks",
+    "G": "minecraft:glass",
+    "C": "minecraft:clock",
+    "N": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "jugcraft:grandfather_clock",
+    "count": 1
+  }
+}

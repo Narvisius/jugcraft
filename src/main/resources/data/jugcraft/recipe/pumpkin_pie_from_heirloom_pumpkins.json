@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#jugcraft:heirloom_pumpkins",
+    "minecraft:sugar",
+    "#minecraft:eggs"
+  ],
+  "result": {
+    "id": "minecraft:pumpkin_pie",
+    "count": 1
+  }
+}

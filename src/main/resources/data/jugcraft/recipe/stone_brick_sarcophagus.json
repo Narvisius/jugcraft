@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "BCB",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:stone_bricks",
+    "B": "minecraft:bone",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "jugcraft:stone_brick_sarcophagus",
+    "count": 1
+  }
+}

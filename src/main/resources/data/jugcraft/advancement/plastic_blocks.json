@@ -1,0 +1,51 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:white_plastic"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.plastic_blocks.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.plastic_blocks.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:white_plastic",
+              "jugcraft:orange_plastic",
+              "jugcraft:magenta_plastic",
+              "jugcraft:light_blue_plastic",
+              "jugcraft:yellow_plastic",
+              "jugcraft:lime_plastic",
+              "jugcraft:pink_plastic",
+              "jugcraft:gray_plastic",
+              "jugcraft:light_gray_plastic",
+              "jugcraft:cyan_plastic",
+              "jugcraft:purple_plastic",
+              "jugcraft:blue_plastic",
+              "jugcraft:brown_plastic",
+              "jugcraft:green_plastic",
+              "jugcraft:red_plastic",
+              "jugcraft:black_plastic"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:plastic"
+}

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " W ",
+    "SHS",
+    " S "
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "S": "minecraft:stick",
+    "H": "minecraft:hay_block"
+  },
+  "result": {
+    "id": "jugcraft:scarecrow",
+    "count": 1
+  }
+}

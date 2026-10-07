@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "GGG"
+  ],
+  "key": {
+    "B": "#c:ingots/bronze",
+    "G": "minecraft:polished_granite"
+  },
+  "result": {
+    "id": "jugcraft:faithful_hound",
+    "count": 1
+  }
+}

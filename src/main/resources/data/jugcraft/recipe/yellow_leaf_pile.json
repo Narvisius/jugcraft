@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#minecraft:leaves",
+    "#minecraft:leaves",
+    "#minecraft:leaves",
+    "#minecraft:leaves",
+    "minecraft:yellow_dye"
+  ],
+  "result": {
+    "id": "jugcraft:yellow_leaf_pile",
+    "count": 4
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "biomes"
+    }
+  ],
+  "type": "jugcraft:sawing",
+  "ingredient": "#jugcraft:mahogany_logs",
+  "result": {
+    "id": "jugcraft:mahogany_planks",
+    "count": 6
+  },
+  "time": 100,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:sawdust",
+        "count": 1
+      },
+      "chance": 0.5
+    }
+  ]
+}

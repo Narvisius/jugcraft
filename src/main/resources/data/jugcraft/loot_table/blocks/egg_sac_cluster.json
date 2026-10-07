@@ -1,0 +1,97 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": 0,
+              "add": false
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 1,
+              "add": true,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:egg_sac_cluster",
+                "state": {
+                  "north": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 1,
+              "add": true,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:egg_sac_cluster",
+                "state": {
+                  "south": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 1,
+              "add": true,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:egg_sac_cluster",
+                "state": {
+                  "east": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 1,
+              "add": true,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:egg_sac_cluster",
+                "state": {
+                  "west": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 1,
+              "add": true,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:egg_sac_cluster",
+                "state": {
+                  "up": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": 1,
+              "add": true,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:egg_sac_cluster",
+                "state": {
+                  "down": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "jugcraft:egg_sac_cluster"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/egg_sac_cluster"
+}

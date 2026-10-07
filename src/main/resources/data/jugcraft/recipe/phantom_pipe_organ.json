@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "III",
+    "BNB",
+    "PPP"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "B": "minecraft:bone",
+    "N": "minecraft:note_block",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:phantom_pipe_organ",
+    "count": 1
+  }
+}

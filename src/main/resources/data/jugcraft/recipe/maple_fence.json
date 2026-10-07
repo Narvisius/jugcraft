@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "biomes"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "wooden_fence",
+  "pattern": [
+    "W#W",
+    "W#W"
+  ],
+  "key": {
+    "W": "jugcraft:maple_planks",
+    "#": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:maple_fence",
+    "count": 3
+  }
+}

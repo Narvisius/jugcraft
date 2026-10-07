@@ -2,6 +2,18 @@
 
 Status: **in progress.** The petrochemistry (oil) line below is being built in batches; the rest of the branch is still planned. This document reserves the branch's scope so mechanical and fluid work stays out of it. See [../TECH_TREE.md](../TECH_TREE.md) for how it fits with the rest of Jugcraft.
 
+## Owner planning: mineral sands and shared refining
+
+The [mineral-sands and refining plan](../features/mineral-sands-and-refining-plan.md) records dedicated plentiful regional sands as a major industrial supply, hybrid finite-deposit extraction, moderate physical separation and shared chemical machines with distinct roles. Proposed recipes and equipment remain planning work.
+
+Rare-earth development starts with named neodymium, cerium and yttrium products. **Expansion beyond this initial set is explicitly planned at the owner's request; three materials are not the final roster.** Add further named materials alongside useful consumers and reachable recovery routes, following the plan's expansion criteria.
+
+## Owner-selected industrial expansion (7 October 2026)
+
+The independent [industrial chemistry, gas fuels and advanced materials plan](../features/industrial-chemistry-and-fuels-plan.md) records the owner's detailed fuel request and two ten-answer batches. Substantial chemistry begins with **steel-built electrical equipment**, particularly usable gasoline and gas processing. Priorities are gas processing, aluminum and titanium; shared stations support more process-specific reagents, limited purity grades, useful polymer/ceramic products and mostly larger general-purpose batteries with a few specialty options. Entry aluminum equipment uses earlier copper conductors, with aluminum improvements later.
+
+Selected fuel branches include water electrolysis and a **shared hydrogen/methane gas-burning generator**, plus a **separate lower-output Bio-Generator for cleaned biogas and bioethanol**. Methane improves electricity per tank and upgraded gas-generator output. Catalytic synthesis uses an initial reusable nickel/ceramic bed; gas pipes handle pressurization automatically, without player-managed compressors or pressure settings. Earlier polluting coal gasification yields a CO/hydrogen mixture for cleanup/separation. The first advanced 60/40 biogas digester is a substantial bulk installation. Milling/mashing -> fermentation -> distillation supplies earlier Bio-Generator ethanol, with dehydration for later demanding fuel/blending uses. Optional CO2 capture defaults to continued production/excess venting when full, with optional stop-instead; cement, later breweries and Coke Oven recovery remain useful connections. Filled gas tanks are picked up, placed and pipe-connected using shared storage. Balanced reaction ratios, existing-source distinctions, machine proposals and unresolved costs are in the brief and [TODO](../TODO.md#industrial-chemistry-gas-fuels-and-advanced-materials); these additions are planning, not implemented by that document.
+
 ## What belongs here
 
 Anything that changes what a substance *is* through a reaction, as opposed to its shape or mix (mechanical) or where it is (fluids):
@@ -146,6 +158,10 @@ The first batch from the owner's saved idea backlog ([MACHINE_ROADMAP.md](../MAC
 - **Oil is finite.** Reservoirs run dry and oil sand is an ore; nothing turns power back into crude. Every fuel's JE per bucket is set so refining pays off over burning raw bitumen, and the full chain is audited in BALANCE.md (commit 19).
 - **Reachable everywhere.** A player with no reservoir can still get crude from oil sand (commit 5), and shale (fracking) is common where conventional oil is not.
 - **Volume is conserved** through refining: the fractions of one bucket of crude add up to one bucket or less.
+
+## Waste recovery and pollution planning
+
+The owner's [step 6 plan](../features/waste-recycling-and-pollution-plan.md) chooses optional initial recovery and equipment disassembly. Pollution replaces random automatic raids; higher thresholds unlock stronger marauder parties. It concentrates locally, spreads modestly nearby and naturally declines, with readings on a map device and no landscape appearance changes. Proposed shared equipment includes filtration/settling, selected neutralization, reagent recovery and compatible emissions scrubbing. Numeric balance, scheduler details, equipment and recipes remain to be developed; this is not implemented gameplay or a blanket mandatory waste-treatment requirement.
 
 ## Boundaries
 

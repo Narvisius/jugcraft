@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:nuggets/brass",
+    "G": "minecraft:gunpowder"
+  },
+  "result": {
+    "id": "jugcraft:flak_shell",
+    "count": 4
+  }
+}

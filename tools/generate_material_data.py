@@ -8,12 +8,15 @@ import shutil
 from pathlib import Path
 
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, EXTRA_NAMES, MINERAL_TAGS, PROCESSING, COMPONENTS, CIRCUITS,
-                       metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id)
+                       metal_blocks, metal_items, mineral_blocks, all_blocks, all_items, feature_of, ingot_id, ore_gens)
 
 from machines import CROPS, ELECTRONICS_BLOCKS, FARMING_BLOCKS, MACHINES, PARTS, CABLES, PIPES, FLUID_BLOCKS, ITEM_PIPES, LOGISTICS_BLOCKS, STORAGE_BLOCKS, KINETIC_BLOCKS, TOOLS, UPGRADES, POWERED_TOOLS, TOOL_BLOCKS, UPGRADE_MODULES, SLOPE_BLOCKS, CRAFTING, ALT_CRAFTING, FEATURE as MACHINE_FEATURE, machine_blocks, machine_recipes
 import model_writer
+import agriculture_data
 from party import party_lang
 import drones
+import town_assets
+import material_icons
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -25,6 +28,8 @@ GENERATED_DIRS = [
     DATA / MOD / "advancement", ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang", ASSETS / "handbook",
     DATA / MOD / "loot_table", DATA / MOD / "recipe", DATA / MOD / "worldgen",
     DATA / "c" / "tags", DATA / "minecraft" / "tags", RES / MOD, PACKS,
+    DATA / MOD / "villager_trade", DATA / MOD / "trade_set", DATA / MOD / "tags" / "villager_trade",
+    RES / "assets" / "minecraft",
 ]
 
 CABLE_ROTATION = {"north": {}, "east": {"y": 90}, "south": {"y": 180}, "west": {"y": 270},
@@ -71,10 +76,7 @@ def core_glow(lo, hi):
 
 def write(path, obj):
     if isinstance(obj, dict) and obj.get("elements"):
-        model_writer.separate_coplanar(obj["elements"])
-        # Then any z-fighting that is left, rotated elements included (tools/zfight.py; Justin: fix all z-fighting).
-        import zfight
-        obj = zfight.fix(obj)
+        model_writer.finish_elements(obj["elements"])
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
 
@@ -84,7 +86,9 @@ def rid(path):
 
 
 def condition(feature):
-    return [{"condition": f"{MOD}:feature_enabled", "feature": feature}]
+    """A feature switch's load condition, as a one-item list; a list of switches (a wood's sawmill recipe) loads with
+    any of them (agriculture_data.condition)."""
+    return [agriculture_data.condition(feature)]
 
 
 def title(path):
@@ -122,23 +126,89 @@ def item_name(item):
 
 
 def assets():
-    lang = {}
+    lang = {
+        "generator.jugcraft.designed": "Jugcraft Designed",
+        "config.jade.plugin_jugcraft.machine_status": "Machine status",
+        "tooltip.jugcraft.machine_energy": "Energy: %s / %s JE",
+        "tooltip.jugcraft.machine_progress": "Processing: %s%%",
+    }
     for block in all_blocks():
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
-        write(ASSETS / "models" / "block" / f"{block}.json",
-              {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{block}")}})
+        write(ASSETS / "models" / "block" / f"{block}.json", material_icons.block_model(block)
+              or {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{block}")}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
         lang[f"block.{MOD}.{block}"] = block_name(block)
+    material_icons.write_templates(ASSETS)
     for item in all_items():
         write(ASSETS / "models" / "item" / f"{item}.json",
               {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
         lang[f"item.{MOD}.{item}"] = item_name(item)
+    for metal, info in METALS.items():
+        if "lore" in info:
+            lang[f"tooltip.{MOD}.{metal}_ingot"] = info["lore"]
     machine_assets(lang)
+    agriculture_data.assets(ASSETS, write, lang)
+    pixel_hollows_assets(lang)
+    town_assets.assets(ASSETS, write, lang)
+    import styx
+    styx.write_all(write, ASSETS, DATA / MOD, lang)
     import deposits
     deposits.write_all(write, ASSETS, DATA / MOD, lang)
     import tank_display
     tank_display.write_all(write, ASSETS, DATA / MOD, lang, model_writer)
+    import gear
+    gear.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import exosuit
+    exosuit.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import arms
+    arms.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import arms_variants
+    arms_variants.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import arms_motion
+    arms_motion.write_all(write, ASSETS)
+    import grapple
+    grapple.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import field_chemistry
+    field_chemistry.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import construction
+    construction.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import electroplating
+    electroplating.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import gas_storage
+    gas_storage.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import control_electronics
+    control_electronics.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import rocketry
+    rocketry.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import dieselworks
+    dieselworks.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import kaiserworks
+    kaiserworks.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import trenchworks
+    trenchworks.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import fortifications
+    fortifications.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import bunkerworks
+    bunkerworks.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import fire_control
+    fire_control.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import raiders
+    import armoured_walker
+    armoured_walker.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    raiders.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import zeppelin
+    zeppelin.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import mech
+    mech.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import landship
+    landship.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import artillery
+    artillery.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import tower_guns
+    tower_guns.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import plastic
+    plastic.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import gui_textures
     gui_textures.write_all(write, ASSETS, lang, MACHINES)
     import advancements
@@ -164,7 +234,36 @@ def assets():
     lang.update(diesel_sounds.LANG)
     import guide_books
     guide_books.write_assets(write, rid, ASSETS, DATA, lang)
+    seasons_assets(lang)
+    import alpine_data
+    alpine_data.lang(lang)
+    import biomes_data
+    biomes_data.lang(lang)
+    # Last: it adds diagonal parts to the fence blockstates written above.
+    import diagonal_connections
+    diagonal_connections.write_all(write, ASSETS, RES / "assets" / "minecraft")
+    import scary_data
+    scary_data.write_all(write, RES, lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
+
+
+def seasons_assets(lang):
+    """Seasonal snow: vanilla snow layers' models (layers 1-7, then a full block), its name and its drops."""
+    import seasons
+    block = seasons.SNOW_BLOCK
+    models = {layers: f"minecraft:block/snow_height{layers * 2}" for layers in range(1, 8)}
+    models[8] = "minecraft:block/snow_block"
+    write(ASSETS / "blockstates" / f"{block}.json",
+          {"variants": {f"layers={layers}": {"model": model} for layers, model in models.items()}})
+    lang[f"block.{MOD}.{block}"] = seasons.SNOW_DISPLAY
+    # Broken by a player or mob, a snowball per layer, like vanilla snow layers (never the block itself).
+    write(DATA / MOD / "loot_table" / "blocks" / f"{block}.json", {"type": "minecraft:block", "pools": [{
+        "condition": {"type": "minecraft:entity_properties", "entity": "this", "predicate": {}},
+        "entries": [{"type": "minecraft:alternatives", "children": [
+            {"type": "minecraft:item", "condition": block_state(block, {"layers": str(layers)}),
+             "modifier": {"type": "minecraft:set_count", "count": layers}, "name": "minecraft:snowball"}
+            for layers in range(1, 9)]}],
+        "rolls": 1}], "random_sequence": rid(f"blocks/{block}")})
 
 
 def drone_assets(lang):
@@ -565,6 +664,9 @@ def machine_assets(lang):
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {k.rstrip(","): v for k, v in variants.items()}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
     write(ASSETS / "kinetic_rotors.json", kinetic_rotors.export(KINETIC_BLOCKS))
+    # Machines' turning parts (the sawmill's blade, the sieve's weights): client/MachineRotors draws them.
+    import machine_rotors
+    write(ASSETS / "machine_rotor_quads.json", machine_rotors.export())
     # Conveyor slopes: an ascending and a descending model, each with a moving-belt version, turned to face the way
     # items travel.
     for block, info in SLOPE_BLOCKS.items():
@@ -670,7 +772,9 @@ RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_sme
                 "metal_press": "pressing", "wire_drawer": "wire_drawing", "circuit_assembler": "circuit_assembly",
                 "pulverizer": "pulverizing", "ore_washer": "ore_washing", "sieve": "sifting", "sawmill": "sawing",
                 "coke_oven": "coking", "steel_foundry": "steelmaking",
-                "tree_farm": "tree_growing", "crystal_grower": "crystal_growing",
+                "tree_farm": "tree_growing",
+                "hydroponic_bay": "hydroponics",
+                "rocket_workshop": "rocket_assembly",
                 "gas_centrifuge_cascade": "enrichment", "fuel_fabricator": "fuel_fabrication"}
 
 
@@ -762,7 +866,7 @@ def powered_tools(lang):
         elements = tool_models.BLOCKS[block]
         textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
         textures["particle"] = rid("block/dp_olive")
-        halves = model_writer.slice_model(block, elements, [(0, 0, 0), (0, 1, 0)])
+        halves = model_writer.split_model(block, elements, [(0, 0, 0), (0, 1, 0)])
         lit_from, lit_to = tool_models.LIT[block]
         for half, part in zip(("lower", "upper"), halves):
             write(ASSETS / "models" / "block" / f"{block}_{half}.json",
@@ -786,7 +890,12 @@ def powered_tools(lang):
     # rocket_pack.png), and the pack itself in 3D on the back (client/RocketPackLayer draws these quads).
     write(ASSETS / "equipment" / "rocket_pack.json", {"layers": {"humanoid": [{"texture": rid("rocket_pack")}]}})
     import kinetic_rotors
-    write(ASSETS / "worn_models.json", {"rocket_pack": kinetic_rotors.quads(tool_models.ITEMS["rocket_pack"])})
+    # The exosuit's 3D parts (shoulder plates, skirt plates, the Ronin's hat) too: client/WornModelLayer.
+    import exosuit
+    worn = {"rocket_pack": kinetic_rotors.quads(tool_models.ITEMS["rocket_pack"]), **exosuit.worn_models(kinetic_rotors.quads)}
+    # ...and the 3D armor sets (tools/armor_models.py), keyed "<item>_<bone>".
+    import armor_models
+    write(ASSETS / "worn_models.json", {**worn, **armor_models.entries(taken=worn)})
     for module, (display, short, about) in UPGRADE_MODULES.items():
         lang[f"item.{MOD}.{module}"] = display
         lang[f"item.{MOD}.{module}.short"] = short
@@ -810,6 +919,68 @@ def powered_tools(lang):
     lang[f"tooltip.{MOD}.rocket_pack"] = "Hold jump in the air to fly"
     lang[f"message.{MOD}.charging_station"] = "Charging station: %s / %s JE"
     lang[f"message.{MOD}.charging_station.tool"] = "%s: %s / %s JE"
+
+
+def pixel_hollows_assets(lang):
+    """Pixel Hollows blocks, the shard, the Retro Trader's cabinet, names and sounds (tools/pixel_hollows.py)."""
+    import pixel_hollows as ph
+    import retro_models
+    for block, info in ph.CUBES.items():
+        write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
+        write(ASSETS / "models" / "block" / f"{block}.json",
+              {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{block}")}})
+        write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+        lang[f"block.{MOD}.{block}"] = info["display"]
+
+    # The crystal cluster grows from whichever face it sits on, like an amethyst cluster.
+    elements = retro_models.pixel_crystal_cluster()
+    textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+    textures["particle"] = rid("block/ph_crystal")
+    write(ASSETS / "models" / "block" / f"{ph.CLUSTER}.json", {
+        "parent": "minecraft:block/block", "textures": textures,
+        "elements": model_writer.slice_model(ph.CLUSTER, elements, [(0, 0, 0)])[0]})
+    write(ASSETS / "blockstates" / f"{ph.CLUSTER}.json", {"variants": {
+        f"facing={facing}": {"model": rid(f"block/{ph.CLUSTER}"), **rotation}
+        for facing, rotation in retro_models.CLUSTER_ROTATION.items()}})
+    write(ASSETS / "items" / f"{ph.CLUSTER}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{ph.CLUSTER}")}})
+
+    for item in ph.items():
+        write(ASSETS / "models" / "item" / f"{item}.json",
+              {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
+        write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+
+    # The arcade cabinet: one model cut into a lower and an upper half, turned to four facings.
+    elements = retro_models.arcade_cabinet()
+    textures = {name: rid(f"block/{name}") for name in model_writer.texture_names(elements)}
+    textures["particle"] = rid("block/rt_side_art")
+    halves = model_writer.split_model(ph.CABINET, elements, [(0, 0, 0), (0, 1, 0)])
+    for half, part in zip(("lower", "upper"), halves):
+        write(ASSETS / "models" / "block" / f"{ph.CABINET}_{half}.json",
+              {"parent": "minecraft:block/block", "textures": textures, "elements": part})
+    variants = {}
+    for facing, y in model_writer.FACING_Y.items():
+        for half in ("lower", "upper"):
+            variant = {"model": rid(f"block/{ph.CABINET}_{half}")}
+            if y:
+                variant["y"] = y
+            variants[f"facing={facing},half={half}"] = variant
+    write(ASSETS / "blockstates" / f"{ph.CABINET}.json", {"variants": variants})
+    write(ASSETS / "models" / "item" / f"{ph.CABINET}.json", {
+        "parent": "minecraft:block/block", "textures": textures, "elements": model_writer.scaled_elements(elements)})
+    write(ASSETS / "items" / f"{ph.CABINET}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{ph.CABINET}")}})
+
+    for entry, display in ph.NAMES.items():
+        lang[f"{'item' if entry in ph.items() else 'block'}.{MOD}.{entry}"] = display
+    lang[f"biome.{MOD}.pixel_hollows"] = "Pixel Hollows"
+    lang[f"entity.{MOD}.villager.retro_trader"] = "Retro Trader"
+    lang[f"filled_map.{MOD}.pixel_hollows"] = "Pixel Hollows, around Y %s"
+    lang[f"message.{MOD}.pixel_hollows_map.none"] = "No Pixel Hollows within %s blocks of here"
+    lang[f"message.{MOD}.pixel_hollows_map.found"] = "Pixel Hollows marked on the map, around Y %s"
+    for event, subtitle in ph.SUBTITLES.items():
+        lang[f"subtitles.{MOD}.{event}"] = subtitle
+    import choir_sounds
+    import drone_sounds
+    write(ASSETS / "sounds.json", {**drone_sounds.SOUNDS, **ph.SOUNDS, **choir_sounds.SOUNDS})
 
 
 def petro_assets(lang):
@@ -941,6 +1112,28 @@ def loot_tables():
         drop = info["drop"]
         table = ore_drop(rock, drop["item"], drop["min"], drop["max"]) if drop else self_drop(rock)
         write(out / f"{rock}.json", table)
+    agriculture_data.loot(DATA, write)
+    # Pixel Hollows: blocks drop themselves; a cluster drops 1-2 shards (Fortune: up to one more per level) or, with
+    # Silk Touch, itself. The cabinet drops from its lower half only.
+    import pixel_hollows as ph
+    for block in ph.CUBES:
+        write(out / f"{block}.json", self_drop(block))
+    low, high = ph.CLUSTER_DROPS
+    write(out / f"{ph.CLUSTER}.json", loot(ph.CLUSTER, [{"type": "minecraft:alternatives", "children": [
+        {"type": "minecraft:item", "condition": SILK, "name": rid(ph.CLUSTER)},
+        {"type": "minecraft:item", "modifier": [
+            {"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": low, "max": high}},
+            {"type": "minecraft:apply_bonus", "enchantment": "minecraft:fortune",
+             "formula": "minecraft:uniform_bonus_count", "parameters": {"bonusMultiplier": 1}},
+            {"type": "minecraft:explosion_decay"}], "name": rid(ph.SHARD)},
+    ]}]))
+    # The town's Jug Teller drops itself.
+    for block in town_assets.blocks():
+        write(out / f"{block}.json", self_drop(block))
+    table = self_drop(ph.CABINET)
+    table["pools"][0]["condition"] = {"type": "minecraft:all_of",
+                                      "terms": [SURVIVES_EXPLOSION, block_state(ph.CABINET, {"half": "lower"})]}
+    write(out / f"{ph.CABINET}.json", table)
 
 
 # ---------------------------------------------------------------- recipes
@@ -1051,6 +1244,24 @@ def recipes():
     string["result"] = {"id": "minecraft:string", "count": 1}
     write(out / "string_from_cotton.json", string)
 
+    # Pixel Hollows decor and the arcade cabinet. Nothing makes pixel shards: they only come from clusters (and trade).
+    import pixel_hollows as ph
+    for name, ingredient, result in ph.STONECUTTING:
+        write(out / f"{name}.json", {"fabric:load_conditions": condition(ph.CAVE), "type": "minecraft:stonecutting",
+                                     "ingredient": ingredient, "result": {"id": rid(result), "count": 1}})
+    for result, (features, pattern, key, count, category) in ph.SHAPED.items():
+        recipe = shaped(features[0], pattern, key, result, count, category)
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+
+    # Plates by hand, for the metals that have that route ("hand_plate" ingots for one plate, a dearer route than the
+    # Metal Press's one ingot): the ingots stacked in a column. A plate is a machines part, so both switches.
+    for metal, info in METALS.items():
+        if "hand_plate" in info:
+            recipe = shaped(MACHINE_FEATURE, ["#"] * info["hand_plate"], {"#": f"#c:ingots/{metal}"}, f"{metal}_plate")
+            recipe["fabric:load_conditions"] = [c for f in sorted({MACHINE_FEATURE, info["feature"]}) for c in condition(f)]
+            write(out / f"{metal}_plate_by_hand.json", recipe)
+
     # Gears: four plates of one metal (36 nugget units in, 36 out).
     for metal in COMPONENTS["gear"]:
         write(out / f"{metal}_gear.json", shaped(MACHINE_FEATURE, [" P ", "P P", " P "],
@@ -1063,6 +1274,7 @@ def recipes():
         else:
             write(out / f"{recipe['id']}.json",
                   cooking(recipe["feature"], recipe["kind"], recipe["input"], recipe["result"], recipe["xp"]))
+    agriculture_data.recipes(out, write)
 
 
 # ---------------------------------------------------------------- tags
@@ -1109,6 +1321,46 @@ def storage_tags(tags, path, block_id, tool):
 
 def tags():
     tags = Tags()
+    import petro
+    for crop in petro.FERMENTABLE:
+        tags.add("item", f"{MOD}:fermentable", crop)
+    import plastic
+    for block in plastic.blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import control_electronics
+    for block in control_electronics.blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import rocketry
+    for block in rocketry.blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import dieselworks
+    for block in dieselworks.blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import kaiserworks
+    for block in kaiserworks.blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import trenchworks
+    for block in trenchworks.blocks():
+        tool = "shovel" if block.startswith("sandbags") else "axe" if block.startswith(("timber", "duckboard")) else "pickaxe"
+        tags.add("block", f"minecraft:mineable/{tool}", rid(block))
+    import fortifications
+    fortifications.add_tags(tags)
+    import bunkerworks
+    bunkerworks.add_tags(tags)
+    import fire_control
+    fire_control.add_tags(tags)
+    import raiders
+    raiders.add_tags(tags)
+    tags.add("block", "minecraft:rails", rid("booster_rail"))
+    tags.add("item", "minecraft:rails", rid("booster_rail"))
+    import construction
+    for block in construction.blocks():
+        if block.startswith("concrete"):
+            tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+            tags.add("block", "minecraft:needs_stone_tool", rid(block))
+        elif block.startswith("blastproof_concrete"):
+            tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+            tags.add("block", "minecraft:needs_diamond_tool", rid(block))
     for metal, info in METALS.items():
         tool = info.get("tool", "stone")
         tags.add("item", f"c:ingots/{metal}", rid(f"{metal}_ingot"))
@@ -1132,6 +1384,12 @@ def tags():
 
     for rock, info in ROCKS.items():
         tags.add("block", f"minecraft:mineable/{info['tool']}", rid(rock))
+    # Veins placed only in some biomes (a "biomes" key on a metal's or mineral's worldgen entry): the biome tag that
+    # JugcraftWorldgen places them in.
+    for name, info in list(METALS.items()) + list(MINERALS.items()):
+        for placed, gen in ore_gens(name, info):
+            for biome in gen.get("biomes", []):
+                tags.add("worldgen/biome", f"{MOD}:has_ore/{placed}", biome)
 
     for block in machine_blocks():
         if block not in CROPS:
@@ -1154,11 +1412,30 @@ def tags():
             tags.add("item", f"c:{form}s/{metal}", rid(f"{metal}_{form}"))
             tags.add("item", f"c:{form}s", f"#c:{form}s/{metal}")
 
+    # Pixel Hollows: tools for its blocks, the biome's tags and the cabinet as a job site villagers can claim.
+    import pixel_hollows as ph
+    for block, info in ph.CUBES.items():
+        if info["tool"]:
+            tags.add("block", f"minecraft:mineable/{info['tool']}", rid(block))
+    tags.add("block", "minecraft:mineable/pickaxe", rid(ph.CLUSTER))
+    for block in town_assets.blocks():
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    for value in town_assets.USABLE:
+        tags.add("block", "jugcraft:town_usable", value)
+    tags.add("block", "minecraft:mineable/axe", rid(ph.CABINET))
+    for tag in ph.BIOME_TAGS:
+        tags.add("worldgen/biome", tag, rid("pixel_hollows"))
+    tags.add("point_of_interest_type", "minecraft:acquirable_job_site", rid("arcade_cabinet"))
+    # Ores may replace the lining (a deepslate-like stone), so lining that spills into a chunk decorated later does
+    # not take that chunk's ores away; ore there becomes the deepslate kind.
+    tags.add("block", "minecraft:deepslate_ore_replaceables", rid(ph.LINING_BLOCK))
+
     for item, info in ITEMS.items():
         if info["tag"]:
             tags.add("item", f"c:{info['tag']}", rid(item))
             if info["tag"].startswith("dusts/"):
                 tags.add("item", "c:dusts", f"#c:{info['tag']}")
+    agriculture_data.tags(tags)
 
     # Petroleum fluids, so other mods' machines can recognise them (c:crude_oil and so on).
     import petro
@@ -1180,6 +1457,21 @@ def tags():
     nuclear.write_tags(tags, rid)
     import wall_runs
     wall_runs.write_tags(tags, rid)
+    # Biomes whose grass and leaves change colour with the seasons (client/SeasonColors).
+    import seasons
+    for biome in seasons.BIOMES:
+        tags.add("worldgen/biome", seasons.TAG, biome)
+    for biome in seasons.WINTER_SNOW:
+        tags.add("worldgen/biome", seasons.WINTER_SNOW_TAG, biome)
+    import alpine_data
+    alpine_data.tags(tags)
+    import biomes_data
+    biomes_data.tags(tags)
+    # Seasonal snow counts as snow (grass under it turns snowy) and is dug with a shovel.
+    tags.add("block", "minecraft:snow", rid(seasons.SNOW_BLOCK))
+    tags.add("block", "minecraft:mineable/shovel", rid(seasons.SNOW_BLOCK))
+    import diagonal_connections
+    diagonal_connections.tags(tags)
     tags.write()
 
 
@@ -1220,15 +1512,94 @@ def layered_targets(ore, deep):
 
 def worldgen():
     for name, info in list(METALS.items()) + list(MINERALS.items()):
-        if "gen" not in info:
-            continue
-        ore_feature(name, info["gen"]["size"], layered_targets(f"{name}_ore", f"deepslate_{name}_ore"))
-        placed_feature(name, info["gen"])
+        for placed, gen in ore_gens(name, info):
+            ore_feature(placed, gen["size"], layered_targets(f"{name}_ore", f"deepslate_{name}_ore"))
+            placed_feature(placed, gen)
     for rock, info in ROCKS.items():
         gen = info["gen"]
         ore_feature(rock, gen["size"], [{"target": {"predicate_type": "minecraft:tag_match", "tag": gen["target"]},
                                          "state": rid(rock)}])
         placed_feature(rock, gen)
+    agriculture_data.worldgen(DATA, write)
+    import alpine_data
+    alpine_data.worldgen(DATA, write)
+    import biomes_data
+    biomes_data.worldgen(DATA, write)
+    pixel_hollows_worldgen()
+
+
+def pixel_hollows_worldgen():
+    """The biome, its bonus ores (vanilla ore features, more attempts, only inside it) and its lining feature."""
+    import pixel_hollows as ph
+    folder = DATA / MOD / "worldgen"
+    write(folder / "biome" / "pixel_hollows.json", ph.biome())
+    for name, gen in ph.BONUS_ORES.items():
+        write(folder / "placed_feature" / f"{name}.json", {
+            "feature": gen["feature"],
+            "placement": [
+                {"type": "minecraft:count", "count": gen["count"]},
+                {"type": "minecraft:in_square"},
+                {"type": "minecraft:height_range", "height": {
+                    "type": f"minecraft:{gen['shape']}",
+                    "min_inclusive": {"absolute": gen["min_y"]},
+                    "max_inclusive": {"absolute": gen["max_y"]},
+                }},
+                {"type": "minecraft:biome"},
+            ],
+        })
+    # The lining: circuitstone blobs replacing stone and deepslate (not ores), only inside the biome.
+    gen = ph.LINING_GEN
+    write(folder / "feature" / f"{ph.LINING}.json", {
+        "type": "minecraft:ore", "size": gen["size"], "discard_chance_on_air_exposure": 0.0,
+        "targets": [{"target": {"predicate_type": "minecraft:tag_match", "tag": "minecraft:base_stone_overworld"},
+                     "state": rid(ph.LINING_BLOCK)}]})
+    write(folder / "placed_feature" / f"{ph.LINING}.json", {"feature": rid(ph.LINING), "placement": [
+        {"type": "minecraft:count", "count": gen["count"]},
+        {"type": "minecraft:in_square"},
+        {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"absolute": gen["min_y"]},
+                                                      "max_inclusive": {"absolute": gen["max_y"]}}},
+        {"type": "minecraft:biome"}]})
+    # Crystal clusters: scan down (up) from a random point to the air just above a floor (below a ceiling) and sit
+    # there. 26.3 writes block states directly ("id" and "properties") instead of a simple_state_provider.
+    air = {"type": "minecraft:matching_blocks", "blocks": ["minecraft:air", "minecraft:cave_air"]}
+    for name, crystal in ph.CRYSTALS.items():
+        write(folder / "feature" / f"{name}.json", {"type": "minecraft:simple_block", "to_place": {
+            "id": rid(ph.CLUSTER), "properties": {"facing": crystal["facing"], "waterlogged": "false"}}})
+        support = {"type": "minecraft:has_sturdy_face", "offset": [0, -crystal["offset"], 0], "direction": crystal["facing"]}
+        write(folder / "placed_feature" / f"{name}.json", {"feature": rid(name), "placement": [
+            {"type": "minecraft:count", "count": crystal["count"]},
+            {"type": "minecraft:in_square"},
+            {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"absolute": gen["min_y"]},
+                                                          "max_inclusive": {"absolute": gen["max_y"]}}},
+            {"type": "minecraft:environment_scan", "direction_of_search": crystal["scan"], "max_steps": 12,
+             "target_condition": {"type": "minecraft:all_of", "predicates": [air, support]},
+             "allowed_search_condition": air},
+            {"type": "minecraft:biome"}]})
+    retro_trader_trades()
+
+
+def retro_trader_trades():
+    """The Retro Trader's trades (26.1+ data): villager_trade files, a tag per level and the trade sets his profession
+    names. Tag entries are optional, so a trade switched off by its feature simply drops out."""
+    import pixel_hollows as ph
+
+    def cost(entry):
+        return {"id": entry[0], "count": entry[1]}
+
+    for name, trade in ph.TRADES.items():
+        data = {"fabric:load_conditions": [c for f in trade["features"] for c in condition(f)], "wants": cost(trade["wants"])}
+        if "additional_wants" in trade:
+            data["additional_wants"] = cost(trade["additional_wants"])
+        data.update({"gives": cost(trade["gives"]), "max_uses": trade["max_uses"], "xp": trade["xp"],
+                     "reputation_discount": trade["reputation_discount"]})
+        write(DATA / MOD / "villager_trade" / "retro_trader" / f"{name}.json", data)
+    for level in ph.TRADE_LEVELS:
+        names = [name for name, trade in ph.TRADES.items() if trade["level"] == level]
+        write(DATA / MOD / "tags" / "villager_trade" / "retro_trader" / f"level_{level}.json",
+              {"replace": False, "values": [{"id": rid(f"retro_trader/{name}"), "required": False} for name in names]})
+        write(DATA / MOD / "trade_set" / "retro_trader" / f"level_{level}.json", {
+            "amount": len(names), "trades": f"#{MOD}:retro_trader/level_{level}",
+            "random_sequence": rid(f"trade_set/retro_trader/level_{level}")})
 
 
 def main():
@@ -1247,11 +1618,10 @@ def main():
     import advancements
     for key, advancement in advancements.generate(MOD)[0].items():
         write(DATA / MOD / "advancement" / f"{key}.json", advancement)
-    # Last: no z-fighting between models drawn together (multipart pieces, pieces bigger than a block).
-    import zfight_assets
-    left = zfight_assets.run()
-    if left:
-        print(f"zfight_assets: {len(left)} overlaps between models drawn together are left")
+    agriculture_data.advancements(DATA, write)
+    import town
+    for problem in town.write():
+        print("town:", problem)
 
 
 if __name__ == "__main__":

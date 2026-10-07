@@ -1,0 +1,43 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_zweihander"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms_iii.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms_iii.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_zweihander",
+              "jugcraft:bronze_maul",
+              "jugcraft:bronze_executioner",
+              "jugcraft:bronze_bill",
+              "jugcraft:steel_zweihander",
+              "jugcraft:steel_maul",
+              "jugcraft:steel_executioner",
+              "jugcraft:steel_bill"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

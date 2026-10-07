@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " PW",
+    "LAW",
+    " PW"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "W": "minecraft:string",
+    "L": "jugcraft:lithium_cell",
+    "A": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:power_bow",
+    "count": 1
+  }
+}

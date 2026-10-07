@@ -1,0 +1,302 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dp_rubber_ribbed": "jugcraft:block/dp_rubber_ribbed",
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dr_band": "jugcraft:block/dr_band",
+    "dr_coil": "jugcraft:block/dr_coil",
+    "dr_copper_pipe": "jugcraft:block/dr_copper_pipe",
+    "dr_crt": "jugcraft:block/dr_crt",
+    "dr_grate": "jugcraft:block/dr_grate",
+    "dr_nut": "jugcraft:block/dr_nut",
+    "dr_patina": "jugcraft:block/dr_patina",
+    "dr_perforated": "jugcraft:block/dr_perforated",
+    "dr_red": "jugcraft:block/dr_red",
+    "dr_ribbed_patina": "jugcraft:block/dr_ribbed_patina",
+    "dr_rust": "jugcraft:block/dr_rust",
+    "dr_rust_bare": "jugcraft:block/dr_rust_bare",
+    "dr_rust_pipe": "jugcraft:block/dr_rust_pipe",
+    "dr_skid": "jugcraft:block/dr_skid",
+    "el_seams": "jugcraft:block/el_seams",
+    "sp_belt": "jugcraft:block/sp_belt",
+    "sp_gauge": "jugcraft:block/sp_gauge",
+    "particle": "jugcraft:block/sp_iron_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        4.0,
+        2.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_skid"
+        },
+        "east": {
+          "texture": "#dr_skid"
+        },
+        "west": {
+          "texture": "#dr_skid"
+        },
+        "up": {
+          "texture": "#dr_skid"
+        },
+        "down": {
+          "texture": "#dr_skid"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        0.5,
+        2.0
+      ],
+      "to": [
+        16,
+        1.75,
+        4.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_skid"
+        },
+        "south": {
+          "texture": "#dr_skid"
+        },
+        "west": {
+          "texture": "#dr_skid"
+        },
+        "up": {
+          "texture": "#dr_skid"
+        },
+        "down": {
+          "texture": "#dr_skid"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        0.5,
+        14.0
+      ],
+      "to": [
+        16,
+        1.75,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_skid"
+        },
+        "south": {
+          "texture": "#dr_skid"
+        },
+        "west": {
+          "texture": "#dr_skid"
+        },
+        "up": {
+          "texture": "#dr_skid"
+        },
+        "down": {
+          "texture": "#dr_skid"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "to": [
+        16,
+        3.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust"
+        },
+        "west": {
+          "texture": "#dr_rust"
+        },
+        "up": {
+          "texture": "#dr_grate"
+        },
+        "down": {
+          "texture": "#dr_rust"
+        }
+      }
+    },
+    {
+      "from": [
+        1.0,
+        3.0,
+        4.0
+      ],
+      "to": [
+        16,
+        13.1,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust"
+        },
+        "west": {
+          "texture": "#dr_rust"
+        },
+        "up": {
+          "texture": "#dr_rust_bare"
+        },
+        "down": {
+          "texture": "#dr_rust"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        12.0,
+        3.5
+      ],
+      "to": [
+        16,
+        13.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_band"
+        },
+        "west": {
+          "texture": "#dr_band"
+        },
+        "up": {
+          "texture": "#dr_band"
+        },
+        "down": {
+          "texture": "#dr_band"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        13.0,
+        10.0
+      ],
+      "to": [
+        16,
+        14.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber_ribbed"
+        },
+        "west": {
+          "texture": "#dp_rubber_ribbed"
+        },
+        "up": {
+          "texture": "#sp_belt"
+        },
+        "down": {
+          "texture": "#dp_rubber_ribbed"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        14.0,
+        11.5
+      ],
+      "to": [
+        10.0,
+        14.75,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_seams"
+        },
+        "east": {
+          "texture": "#el_seams"
+        },
+        "west": {
+          "texture": "#el_seams"
+        },
+        "up": {
+          "texture": "#el_seams"
+        },
+        "down": {
+          "texture": "#el_seams"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        14.0,
+        11.5
+      ],
+      "to": [
+        16,
+        14.75,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_seams"
+        },
+        "west": {
+          "texture": "#el_seams"
+        },
+        "up": {
+          "texture": "#el_seams"
+        },
+        "down": {
+          "texture": "#el_seams"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        13.0,
+        4.9
+      ],
+      "to": [
+        5.0,
+        16,
+        7.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dr_rust_pipe"
+        },
+        "south": {
+          "texture": "#dr_rust_pipe"
+        },
+        "east": {
+          "texture": "#dr_rust_pipe"
+        },
+        "west": {
+          "texture": "#dr_rust_pipe"
+        },
+        "down": {
+          "texture": "#dr_rust_pipe"
+        }
+      }
+    }
+  ]
+}

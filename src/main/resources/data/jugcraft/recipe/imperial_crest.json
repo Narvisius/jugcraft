@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NGN",
+    "BRB",
+    "NBN"
+  ],
+  "key": {
+    "B": "jugcraft:black_lacquer_plate",
+    "N": "minecraft:gold_nugget",
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:red_dye"
+  },
+  "result": {
+    "id": "jugcraft:imperial_crest",
+    "count": 2
+  }
+}

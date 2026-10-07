@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " S ",
+    "GWG",
+    " G "
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "G": "minecraft:gold_ingot",
+    "W": "minecraft:white_wool"
+  },
+  "result": {
+    "id": "jugcraft:ghost_bell",
+    "count": 1
+  }
+}

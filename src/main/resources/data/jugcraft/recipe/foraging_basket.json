@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " S ",
+    "C C",
+    "CCC"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "C": "minecraft:sugar_cane"
+  },
+  "result": {
+    "id": "jugcraft:foraging_basket",
+    "count": 1
+  }
+}

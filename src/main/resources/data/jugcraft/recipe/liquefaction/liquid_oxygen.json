@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:liquefaction",
+  "fluids": [
+    {
+      "fluid": "jugcraft:oxygen",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:liquid_oxygen",
+      "amount": 250
+    }
+  ],
+  "time": 80
+}

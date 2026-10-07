@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:heat_recovery_unit"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.heat_recovery_unit.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.heat_recovery_unit.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:heat_recovery_unit"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:gas_turbine"
+}

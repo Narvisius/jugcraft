@@ -45,22 +45,14 @@ MACHINES = {
     "geothermal_generator": {"display": "Geothermal Generator", "lit": True},
     # Petrochemistry (tools/petro.py): a 1x3x3 pumpjack over a conventional oil reservoir.
     "pumpjack": {"display": "Pumpjack", "lit": True},
-    # A 2x2x2 hot-water extraction plant: oil sand or bitumen + water -> crude oil (+ sand).
-    "oil_sand_extractor": {"display": "Oil Sand Extractor", "lit": True},
     # A 2x2 column seven blocks tall: crude oil -> refinery gas, naphtha, diesel and heavy fuel oil.
     "distillation_tower": {"display": "Distillation Tower", "lit": True},
     # A 2x2x4 fluid catalytic cracker: heavy fuel oil + steam + catalyst -> diesel, naphtha, refinery gas.
     "catalytic_cracker": {"display": "Catalytic Cracker", "lit": True},
-    # A 2x2x3 vacuum column: heavy fuel oil -> lubricant + asphalt binder.
-    "vacuum_distillation_unit": {"display": "Vacuum Distillation Unit", "lit": True},
-    # A 3x2x2 row of reactors: naphtha -> gasoline + refinery gas.
-    "catalytic_reformer": {"display": "Catalytic Reformer", "lit": True},
-    # A 2x2x2 stirred mixing vessel: water + sand + dried kelp -> fracking fluid.
-    "chemical_mixer": {"display": "Chemical Mixer", "lit": True},
     # A 3x3x5 derrick over shale oil: fracking fluid down; crude oil, refinery gas and flowback water up.
     "fracking_rig": {"display": "Fracking Rig", "lit": True},
     # 3x1x2 settling basins and a filter press: flowback water -> water + salt.
-    "flowback_treatment_unit": {"display": "Flowback Treatment Unit", "lit": True},
+    "flowback_treatment_unit": {"display": "Settling Plant", "lit": True},
     # A 3x2x2 inline six on a skid: burns diesel or heavy fuel oil from its tank.
     "diesel_generator": {"display": "Diesel Generator", "lit": True},
     # A 4x2x2 gas turbine: burns gasoline or refinery gas, with a lubricant tank.
@@ -76,12 +68,15 @@ MACHINES = {
     "synthesis_converter": {"display": "Synthesis Converter", "lit": True},
     # A one-block hydrogen fuel cell in the electric look: hydrogen -> JE.
     "fuel_cell": {"display": "Fuel Cell", "lit": True},
+    # Batch 29, refinery upgrades: a 2x2x3 hydrotreater (diesel + hydrogen -> premium diesel and sour gas; gasoline +
+    # bioethanol -> premium gasoline), and a two-tall heat recovery boiler for a diesel generator or gas turbine.
+    "hydrotreater": {"display": "Hydrotreater", "lit": True},
+    "heat_recovery_unit": {"display": "Heat Recovery Unit", "lit": True},
     # Storage (batch 6): a 3x2 lithium battery bank in the electric look.
     "lithium_battery_bank": {"display": "Lithium Battery Bank", "lit": False},
     # Chemistry (batch 17): a 3x3x2 vanadium redox flow battery in the electric look.
     "flow_battery": {"display": "Flow Battery", "lit": False},
     # Electronics (batch 7, the cyan look).
-    "crystal_grower": {"display": "Crystal Grower", "lit": True},
     "lithography_station": {"display": "Lithography Station", "lit": True},
     # Nuclear fuel (tools/nuclear.py, docs/features/nuclear.md): enrichment and fuel assembly.
     "gas_centrifuge_cascade": {"display": "Gas Centrifuge Cascade", "lit": True},
@@ -94,6 +89,16 @@ MACHINES = {
     "advanced_engine": {"display": "Advanced Combustion Engine", "lit": True},
     # Farming (batch 9): harvests and replants ripe crops in the 9x9 field in front of it.
     "crop_harvester": {"display": "Crop Harvester", "lit": True},
+    # Batch 33 (tools/hydroponics.py): grows crops in nutrient solution, anywhere.
+    "hydroponic_bay": {"display": "Hydroponic Bay", "lit": True},
+    # Batch 34 (tools/electroplating.py): plates and repairs tools, weapons and armor.
+    "electroplating_bath": {"display": "Electroplating Bath", "lit": True},
+    # Batch 35 (tools/gas_storage.py): freezes water into ice with ammonia refrigerant, and packs ice into blue ice.
+    "ammonia_chiller": {"display": "Ammonia Chiller", "lit": True},
+    # Batch 43 (tools/rocketry.py): condenses oxygen into liquid oxygen for liquid rocket motors.
+    "cryogenic_liquefier": {"display": "Cryogenic Liquefier", "lit": True},
+    # Batch 38 (tools/rocketry.py): assembles solid propellant, rocket parts and rockets from up to three ingredients.
+    "rocket_workshop": {"display": "Rocket Workshop", "lit": True},
     # Kinetic: a 2x2x3 V8 diesel engine; its shaft leaves the back of the upper right back block.
     "diesel_engine": {"display": "Diesel Engine", "lit": True},
     "wind_turbine": {"display": "Wind Turbine", "lit": False},
@@ -214,7 +219,10 @@ STATS = {
     "battery_box": {"capacity": 400_000, "io_per_tick": 256},
     "electric_furnace": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 10, "ticks": 100},
     "crusher": {"capacity": 10_000, "input_per_tick": 128, "use_per_tick": 16},
-    "arc_furnace_controller": {"capacity": 50_000, "input_per_tick": 512, "use_per_tick": 64},
+    # Batch 24: also pulls silicon boules (from the old crystal grower), and argon piped into the controller doubles
+    # its speed.
+    "arc_furnace_controller": {"capacity": 50_000, "input_per_tick": 512, "use_per_tick": 64, "boost": "argon",
+                               "boost_per_tick": 1, "boost_tank": 8_000},
     # Full sun under open sky; half in rain or thunder; nothing at night.
     "solar_panel": {"capacity": 4_000, "output_per_tick": 32, "generation_per_tick": 8},
     # Boils 10 mB of water per tick; the tank holds 8 buckets and a water source below refills 20 mB/t.
@@ -242,6 +250,16 @@ STATS = {
     "advanced_engine": {"capacity": 0, "tank": 8_000},
     # 2 tall. One ripe crop per 20 ticks from the 9x9 field in front of it; replants with one of the seeds.
     "crop_harvester": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 24, "ticks": 20, "radius": 4},
+    # A harvest every 600 ticks on 100 mB of nutrient solution; the seed comes back.
+    "hydroponic_bay": {"capacity": 20_000, "input_per_tick": 128, "use_per_tick": 12},
+    # A plating every 200 ticks: an ingot of nickel, silver or gold and 100 mB of sulfuric acid.
+    "electroplating_bath": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32},
+    # A block of ice (or a pressing) every 100 ticks for 5 mB of ammonia; a bucket of water per ice block.
+    "ammonia_chiller": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 24, "tank": 8_000},
+    # 250 mB of liquid oxygen from a bucket of oxygen every 80 ticks, at 96 JE/t: the cold costs 7,680 JE a batch.
+    "cryogenic_liquefier": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
+    # Like the circuit assembler, three ingredients in any slots, at 48 JE/t.
+    "rocket_workshop": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 48},
     # 2 tall. Mines one c:ores block per 40 ticks from a 9x9 column below it, down to the bottom of the world.
     "ore_drill": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "ticks": 40, "radius": 4},
     # 3x3x2. Every 300 ticks (15 s) takes 1 unit (item) from each kind of deposit under its base and 1 block round
@@ -269,18 +287,10 @@ STATS = {
     "wind_turbine": {"capacity": 48_000, "output_per_tick": 192, "generation_per_tick": 72},
     # 1x3x3. Pumps 2 mB of crude oil a tick (a bucket every 25 s) from the conventional reservoir under its chunk.
     "pumpjack": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "pump_per_tick": 2, "tank": 16_000},
-    # 2x2x2. Recipes in tools/petro.py; 8,000 mB water tank and 8,000 mB crude oil tank.
-    "oil_sand_extractor": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 32, "tank": 8_000},
     # 2x2x7. 128 JE/t heats the reboiler; a bucket of crude oil per 100 ticks.
     "distillation_tower": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 128, "tank": 16_000},
     # 2x2x4. 160 JE/t; a bucket of heavy fuel oil per 160 ticks.
     "catalytic_cracker": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 160, "tank": 8_000},
-    # 2x2x3. 96 JE/t; a bucket of heavy fuel oil per 120 ticks.
-    "vacuum_distillation_unit": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
-    # 3x2x2. 120 JE/t; a bucket of naphtha per 120 ticks.
-    "catalytic_reformer": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 120, "tank": 8_000},
-    # 2x2x2. 64 JE/t; a bucket of mixture per 80 ticks.
-    "chemical_mixer": {"capacity": 20_000, "input_per_tick": 256, "use_per_tick": 64, "tank": 8_000},
     # 3x3x5. 256 JE/t; 4 mB/t fracking fluid down, 8 mB/t oil freed, 3 mB/t flowback.
     "fracking_rig": {"capacity": 80_000, "input_per_tick": 1_024, "use_per_tick": 256, "tank": 16_000},
     # 3x1x2. 48 JE/t; a bucket of flowback water per 80 ticks.
@@ -303,14 +313,16 @@ STATS = {
     "synthesis_converter": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 128, "tank": 8_000},
     # One block. 128 JE/t from 1 mB of hydrogen a tick (128 JE/mB).
     "fuel_cell": {"capacity": 40_000, "output_per_tick": 512, "generation_per_tick": 128, "tank": 8_000},
+    # 2x2x3. 128 JE/t: a bucket of diesel hydrotreated per 120 ticks (15,360 JE), a bucket of gasoline blended per 40.
+    "hydrotreater": {"capacity": 40_000, "input_per_tick": 512, "use_per_tick": 128, "tank": 8_000},
+    # One block, two tall. Recovers 30% of the JE a touching diesel generator or gas turbine makes (77 or 154 JE/t),
+    # boiling 1 mB of water per 64 JE recovered and using 1 mB of lubricant every 40 ticks.
+    "heat_recovery_unit": {"capacity": 20_000, "output_per_tick": 512, "recovery_percent": 30, "tank": 8_000},
     # 3x2, one deep. Outputs from its front (all six blocks), charges from any other face.
     "lithium_battery_bank": {"capacity": 32_000_000, "io_per_tick": 16_384},
     # 3x3x2. Holds 1,000 JE per mB of vanadium electrolyte in its 64,000 mB tank, so 64,000,000 JE when full.
     # Outputs from its front, charges from any other face.
     "flow_battery": {"capacity": 64_000_000, "io_per_tick": 8_192, "tank": 64_000, "je_per_mb": 1_000},
-    # 2 tall. 4 silicon + 1 phosphate (the dopant) -> a silicon boule.
-    "crystal_grower": {"capacity": 60_000, "input_per_tick": 512, "use_per_tick": 128, "boost": "argon",
-                       "boost_per_tick": 1, "boost_tank": 8_000},
     # 3x2x2. Wafer + 2 copper wire + 100 mB sulfuric acid -> 4 microchips.
     "lithography_station": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 192, "tank": 4_000},
     # Nuclear fuel: a 5x3x2 hall of tall centrifuges (enrichment takes a lot of power) and a 3x2x2 fuel line.
@@ -332,11 +344,16 @@ STEAM_FUELS = {**GENERATOR_FUELS, "jugcraft:bitumen": 800}
 ORE_PROCESSING_MULTIPLIER = 2
 # The ore washer's better route: one ore -> three washed ores -> three dusts -> three ingots.
 ORE_WASHING_MULTIPLIER = 3
+# The best route (batch 26, after Mekanism's chemical ore processing): one ore dissolved in sulfuric acid in the
+# chemical reactor -> four washed ores -> four ingots.
+ORE_LEACHING_MULTIPLIER = 4
 # Pulverizer byproducts: grinding ore (or washed ore) of the first metal sometimes yields dust of the
 # second, as the real ores occur together. Chance per operation.
 BYPRODUCTS = {"copper": ("gold", 0.1), "iron": ("nickel", 0.1), "gold": ("silver", 0.1), "tin": ("tungsten", 0.05),
               "zinc": ("lead", 0.1), "lead": ("silver", 0.1), "silver": ("lead", 0.1), "nickel": ("iron", 0.1),
-              "tungsten": ("tin", 0.1), "uranium": ("lead", 0.1)}
+              "tungsten": ("tin", 0.1), "uranium": ("lead", 0.1),
+              # Thallite is named for epidote, a green iron-rich mineral (docs/features/thallite.md).
+              "thallite": ("iron", 0.1)}
 # Byproducts may not add more than this share of the input's metal (expected value), and a
 # renewable recipe (no metal in) at most this many nugget units per operation.
 BYPRODUCT_SHARE = 0.25
@@ -457,6 +474,24 @@ CRAFTING = {
     "advanced_solar_panel": (["SSS", "ACA", "PTP"], {"S": "jugcraft:solar_panel", "A": "#c:plates/aluminum",
                                                      "C": "jugcraft:processor", "P": "jugcraft:aluminum_cable",
                                                      "T": "#c:ingots/titanium"}, 1),
+    # Glass walls, grow lights (glowstone), a tank for the solution and a steel frame.
+    # A plastic-lined tank of electrolyte between two electrodes on a rectifier (circuit).
+    # A compressor (a piston driven by an electric motor), coils of pipe and a tank, in a steel case.
+    # A steel bench with a press (piston), a welder (circuit) and a vice (anvil) on a casing.
+    "rocket_workshop": (["SPS", "AMC", "SSS"], {"S": "#c:plates/steel", "P": "minecraft:piston", "A": "minecraft:anvil",
+                                               "M": "jugcraft:machine_casing", "C": "jugcraft:advanced_circuit"}, 1),
+    "cryogenic_liquefier": (["PCP", "TMT", "PAP"], {"P": "#c:plates/steel", "C": "jugcraft:ammonia_chiller",
+                                                    "T": "jugcraft:fluid_tank", "M": "jugcraft:electric_motor",
+                                                    "A": "jugcraft:advanced_circuit"}, 1),
+    "ammonia_chiller": (["PMP", "CTC", "PKP"], {"P": "#c:plates/steel", "M": "jugcraft:electric_motor",
+                                               "C": "jugcraft:bronze_fluid_pipe", "T": "jugcraft:fluid_tank",
+                                               "K": "minecraft:piston"}, 1),
+    "electroplating_bath": (["PCP", "WTW", "SAS"], {"P": "jugcraft:plastic_sheet", "C": "#c:ingots/copper",
+                                                    "W": "jugcraft:copper_cable", "T": "jugcraft:fluid_tank",
+                                                    "S": "#c:plates/steel", "A": "jugcraft:advanced_circuit"}, 1),
+    "hydroponic_bay": (["GLG", "TMT", "PCP"], {"G": "minecraft:glass", "L": "minecraft:glowstone",
+                                              "T": "jugcraft:fluid_tank", "M": "jugcraft:machine_casing",
+                                              "P": "#c:plates/steel", "C": "jugcraft:advanced_circuit"}, 1),
     "crop_harvester": (["GSG", "HMH", "PCP"], {"G": "#c:gears/steel", "S": "minecraft:shears",
                                                "H": "minecraft:hopper", "M": "jugcraft:machine_casing",
                                                "P": "#c:plates/steel", "C": "jugcraft:basic_circuit"}, 1),
@@ -519,23 +554,11 @@ CRAFTING = {
     # Petrochemistry: steel frame and gears around an electric pump; after the steel tier.
     "pumpjack": (["PPP", "GUG", "PMP"], {"P": "#c:plates/steel", "G": "#c:gears/steel", "U": "jugcraft:electric_pump",
                                          "M": "jugcraft:machine_casing"}, 1),
-    "oil_sand_extractor": (["PHP", "TMT", "PGP"], {"P": "#c:plates/steel", "H": "minecraft:hopper",
-                                                   "T": "jugcraft:fluid_tank", "M": "jugcraft:machine_casing",
-                                                   "G": "#c:gears/steel"}, 1),
     "distillation_tower": (["PTP", "PCP", "PFP"], {"P": "#c:plates/steel", "T": "jugcraft:steel_tank",
                                                    "C": "jugcraft:advanced_circuit", "F": "minecraft:blast_furnace"}, 1),
     "catalytic_cracker": (["PCP", "TAT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
                                                   "T": "jugcraft:steel_tank", "A": "jugcraft:arc_furnace_casing",
                                                   "M": "jugcraft:machine_casing"}, 1),
-    "vacuum_distillation_unit": (["PEP", "TCT", "PMP"], {"P": "#c:plates/steel", "E": "jugcraft:heavy_pump",
-                                                         "T": "jugcraft:fluid_tank", "C": "jugcraft:advanced_circuit",
-                                                         "M": "jugcraft:machine_casing"}, 1),
-    "catalytic_reformer": (["PCP", "TFT", "PMP"], {"P": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
-                                                   "T": "jugcraft:fluid_tank", "F": "minecraft:blast_furnace",
-                                                   "M": "jugcraft:machine_casing"}, 1),
-    "chemical_mixer": (["PMP", "TCT", "PHP"], {"P": "#c:plates/steel", "M": "jugcraft:electric_motor",
-                                               "T": "jugcraft:fluid_tank", "C": "jugcraft:machine_casing",
-                                               "H": "minecraft:hopper"}, 1),
     "fracking_rig": (["SDS", "UCU", "SMS"], {"S": "#c:plates/steel", "D": "jugcraft:ore_drill",
                                              "U": "jugcraft:heavy_pump", "C": "jugcraft:advanced_circuit",
                                              "M": "jugcraft:machine_casing"}, 1),
@@ -563,9 +586,14 @@ CRAFTING = {
     "fuel_cell": (["PWP", "SCS", "PTP"], {"P": "#c:plates/aluminum", "W": "jugcraft:aluminum_cable",
                                           "S": "#c:plates/steel", "C": "jugcraft:advanced_circuit",
                                           "T": "jugcraft:fluid_tank"}, 1),
-    "crystal_grower": (["GTG", "GHG", "PCP"], {"G": "minecraft:glass", "T": "#c:ingots/titanium",
-                                               "H": "jugcraft:arc_furnace_casing", "P": "#c:plates/aluminum",
-                                               "C": "jugcraft:advanced_circuit"}, 1),
+    # Batch 29: a catalyst-packed steel column (the bed is built in) between two fluid tanks.
+    "hydrotreater": (["PKP", "TCT", "PMP"], {"P": "#c:plates/steel", "K": "jugcraft:cracking_catalyst",
+                                            "T": "jugcraft:fluid_tank", "C": "jugcraft:advanced_circuit",
+                                            "M": "jugcraft:machine_casing"}, 1),
+    # A copper-tubed boiler with a steel stack and a small turbine.
+    "heat_recovery_unit": (["SBS", "CTC", "PGP"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars",
+                                                  "C": "#c:ingots/copper", "T": "jugcraft:fluid_tank",
+                                                  "P": "jugcraft:steel_fluid_pipe", "G": "#c:gears/steel"}, 1),
     "lithography_station": (["GSG", "TCT", "PMP"], {"G": "minecraft:glass", "S": "minecraft:redstone_lamp",
                                                     "T": "#c:ingots/titanium", "C": "jugcraft:advanced_circuit",
                                                     "P": "#c:plates/aluminum", "M": "jugcraft:machine_casing"}, 1),
@@ -787,12 +815,18 @@ SIEVE = [
 
 
 def _sawmill():
-    """Logs -> 6 planks (4 by hand) with sawdust; planks -> 3 sticks (2 by hand)."""
+    """Logs -> 6 planks (4 by hand) with sawdust; planks -> 3 sticks (2 by hand). Vanilla woods and Jugcraft's own."""
     recipes = []
     for wood, tag in WOODS.items():
         planks = 3 if wood == "bamboo" else 6
         recipes.append({"input": f"#minecraft:{tag}", "output": f"minecraft:{wood}_planks", "count": planks, "ticks": 100,
                         "features": [FEATURE], "byproducts": [["jugcraft:sawdust", 1, 0.5, None]]})
+    # Jugcraft's own woods (agriculture.WOOD_SETS): the chestnut, Alpine Spawn's larch and the biomes branch's trees, each
+    # also following its wood's switches (agriculture.WOOD_SWITCHES: any one of them loads the recipe).
+    from agriculture import WOOD_SETS, WOOD_SWITCHES
+    for wood in WOOD_SETS:
+        recipes.append({"input": f"#jugcraft:{wood}_logs", "output": f"jugcraft:{wood}_planks", "count": 6, "ticks": 100,
+                        "features": [FEATURE, WOOD_SWITCHES[wood]], "byproducts": [["jugcraft:sawdust", 1, 0.5, None]]})
     recipes.append({"input": "#minecraft:planks", "output": "minecraft:stick", "count": 3, "ticks": 60,
                     "features": [FEATURE]})
     # Electronics (batch 7): a wire saw slices a silicon boule into wafers.
@@ -801,9 +835,11 @@ def _sawmill():
     return recipes
 
 
-# Crystal grower (batch 7): polysilicon melted with a phosphorus dopant and pulled into a single crystal.
-CRYSTAL_GROWER = [
-    {"inputs": [["jugcraft:silicon", 4], ["jugcraft:phosphate", 1]], "output": "jugcraft:silicon_boule",
+# Silicon boules (batch 7; the arc furnace's since batch 24): polysilicon melted with a phosphorus dopant and pulled
+# into a single crystal.
+SILICON_BOULE = [
+    {"name": "silicon_boule", "inputs": [["jugcraft:silicon", 4], ["jugcraft:phosphate", 1]],
+     "output": "jugcraft:silicon_boule",
      "count": 1, "ticks": 400, "features": [FEATURE, "silicon", "phosphate"]},
 ]
 
@@ -841,20 +877,35 @@ TREES = {"oak": ("oak_sapling", "minecraft:apple"), "spruce": ("spruce_sapling",
          "pale_oak": ("pale_oak_sapling", "minecraft:pale_moss_carpet")}
 
 
+# Jugcraft's own trees with a sapling item (agriculture.TREES; the chestnut's sapling is planted from a chestnut,
+# so it has none), with sticks as their extra.
+def _own_trees():
+    from agriculture import TREES, sapling
+    return {tree: (sapling(tree), "minecraft:stick") for tree in TREES}
+
+
 def _tree_farm():
-    return [{"input": f"minecraft:{sapling}", "output": f"minecraft:{wood}_log", "count": 6, "ticks": 400,
+    return [{"input": f"{ns}:{sapling}", "output": f"{ns}:{wood}_log", "count": 6, "ticks": 400,
              "features": [FEATURE], "renewable": True,
-             "byproducts": [[f"minecraft:{sapling}", 1, 1.0, None], [extra, 1, 0.1, None]]}
-            for wood, (sapling, extra) in TREES.items()]
+             "byproducts": [[f"{ns}:{sapling}", 1, 1.0, None], [extra, 1, 0.1, None]]}
+            for ns, trees in (("minecraft", TREES), ("jugcraft", _own_trees())) for wood, (sapling, extra) in trees.items()]
 
 
 def machine_recipes():
-    return {"crusher": _crusher(), "arc_furnace": ARC_FURNACE + _arc_dusts(), "alloy_smelter": ALLOY_SMELTER,
+    return {"crusher": _crusher(), "arc_furnace": _arc_furnace(), "alloy_smelter": ALLOY_SMELTER,
             "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
             "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill(),
             "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY, "tree_farm": _tree_farm(),
-            "crystal_grower": CRYSTAL_GROWER, "gas_centrifuge_cascade": GAS_CENTRIFUGE_CASCADE,
-            "fuel_fabricator": FUEL_FABRICATOR}
+            "hydroponic_bay": __import__("hydroponics").recipes(),
+            "rocket_workshop": __import__("rocketry").workshop_recipes(),
+            "gas_centrifuge_cascade": GAS_CENTRIFUGE_CASCADE, "fuel_fabricator": FUEL_FABRICATOR}
+
+
+def _arc_furnace():
+    """The arc furnace takes several ingredient stacks since batch 24 (the silicon boule needs two), so every one of
+    its single-input recipes is written as a one-ingredient recipe, named after its input."""
+    return [{"name": r["input"].split(":")[1], "inputs": [[r["input"], 1]],
+             **{k: v for k, v in r.items() if k != "input"}} for r in ARC_FURNACE + _arc_dusts()] + SILICON_BOULE
 
 
 def _arc_dusts():

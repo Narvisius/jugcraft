@@ -1,0 +1,203 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gourd_birdhouse_side",
+    "front": "jugcraft:block/gourd_birdhouse_front",
+    "side": "jugcraft:block/gourd_birdhouse_side",
+    "top": "jugcraft:block/gourd_birdhouse_top",
+    "string": "jugcraft:block/gourd_birdhouse_string"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        4,
+        4
+      ],
+      "to": [
+        12,
+        11,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
+        },
+        "down": {
+          "texture": "#top",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        11,
+        6
+      ],
+      "to": [
+        10,
+        14,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        14,
+        6.5
+      ],
+      "to": [
+        8,
+        16,
+        9.5
+      ],
+      "faces": {
+        "west": {
+          "texture": "#string",
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#string",
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        14,
+        8
+      ],
+      "to": [
+        9.5,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#string",
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#string",
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            2
+          ]
+        }
+      }
+    }
+  ]
+}

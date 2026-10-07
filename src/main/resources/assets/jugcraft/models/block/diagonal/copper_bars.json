@@ -1,0 +1,164 @@
+{
+  "parent": "minecraft:block/copper_bars_side",
+  "elements": [
+    {
+      "from": [
+        8,
+        0,
+        0
+      ],
+      "to": [
+        8,
+        16,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45,
+        "rescale": true
+      },
+      "faces": {
+        "west": {
+          "uv": [
+            16,
+            0,
+            4.6863,
+            16
+          ],
+          "texture": "#bars"
+        },
+        "east": {
+          "uv": [
+            4.6863,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bars"
+        }
+      }
+    },
+    {
+      "from": [
+        7.29289,
+        0,
+        0
+      ],
+      "to": [
+        8.70711,
+        16,
+        0
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45,
+        "rescale": true
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            0,
+            9,
+            16
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "from": [
+        7.29289,
+        0.001,
+        0
+      ],
+      "to": [
+        8.70711,
+        0.001,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45,
+        "rescale": true
+      },
+      "faces": {
+        "down": {
+          "uv": [
+            9,
+            0,
+            7,
+            8
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "from": [
+        7.29289,
+        15.999,
+        0
+      ],
+      "to": [
+        8.70711,
+        15.999,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45,
+        "rescale": true
+      },
+      "faces": {
+        "down": {
+          "uv": [
+            9,
+            0,
+            7,
+            8
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ],
+          "texture": "#edge"
+        }
+      }
+    }
+  ]
+}

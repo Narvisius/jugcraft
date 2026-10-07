@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "NBN",
+    "S S"
+  ],
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "N": "minecraft:iron_nugget",
+    "B": "minecraft:barrel",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:cider_barrel",
+    "count": 1
+  }
+}

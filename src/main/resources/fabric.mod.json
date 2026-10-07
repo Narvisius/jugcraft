@@ -15,13 +15,17 @@
 	"entrypoints": {
 		"main": ["io.github.jimbozoomer.jugcraft.Jugcraft"],
 		"client": ["io.github.jimbozoomer.jugcraft.client.JugcraftClient"],
-		"jei_mod_plugin": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJeiPlugin"]
+		"jei_mod_plugin": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJeiPlugin"],
+		"jade": ["io.github.jimbozoomer.jugcraft.compat.jade.JugcraftJadePlugin"],
+		"jugcraft:jade_client": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJadeClient"]
 	},
 	"mixins": [
+		"jugcraft.mixins.json",
+		"jugcraft.seasons.mixins.json",
 		{"config": "jugcraft.client.mixins.json", "environment": "client"}
 	],
 	"depends": {
-		"fabricloader": ">=0.19.3",
+		"fabricloader": ">=0.19.5",
 		"minecraft": "~26.3",
 		"java": ">=25",
 		"fabric-api": "*"

@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "pixel_hollows"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "retro_trader"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "SRS",
+    "PPP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "G": "minecraft:glass_pane",
+    "S": "jugcraft:pixel_shard",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:arcade_cabinet",
+    "count": 1
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PGP",
+    "GXG",
+    "PCP"
+  ],
+  "key": {
+    "P": "jugcraft:plastic_sheet",
+    "G": "minecraft:glass_pane",
+    "X": "jugcraft:microchip",
+    "C": "jugcraft:data_cable"
+  },
+  "result": {
+    "id": "jugcraft:control_monitor",
+    "count": 6
+  }
+}

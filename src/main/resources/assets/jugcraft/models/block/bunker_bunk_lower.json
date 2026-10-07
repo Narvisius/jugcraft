@@ -1,0 +1,352 @@
+{
+  "textures": {
+    "bk_blanket": "jugcraft:block/bk_blanket",
+    "bk_frame": "jugcraft:block/bk_frame",
+    "bk_mattress": "jugcraft:block/bk_mattress",
+    "bk_pillow": "jugcraft:block/bk_pillow",
+    "ts_wood": "jugcraft:block/ts_wood",
+    "particle": "jugcraft:block/bk_frame"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        2.0,
+        16.0,
+        2.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_frame"
+        },
+        "south": {
+          "texture": "#bk_frame"
+        },
+        "east": {
+          "texture": "#bk_frame"
+        },
+        "west": {
+          "texture": "#bk_frame"
+        },
+        "down": {
+          "texture": "#bk_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        2.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_frame"
+        },
+        "south": {
+          "texture": "#bk_frame"
+        },
+        "east": {
+          "texture": "#bk_frame"
+        },
+        "west": {
+          "texture": "#bk_frame"
+        },
+        "down": {
+          "texture": "#bk_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        0.0,
+        14.0
+      ],
+      "to": [
+        2.0,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_frame"
+        },
+        "south": {
+          "texture": "#bk_frame"
+        },
+        "east": {
+          "texture": "#bk_frame"
+        },
+        "west": {
+          "texture": "#bk_frame"
+        },
+        "down": {
+          "texture": "#bk_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        0.0,
+        14.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_frame"
+        },
+        "south": {
+          "texture": "#bk_frame"
+        },
+        "east": {
+          "texture": "#bk_frame"
+        },
+        "west": {
+          "texture": "#bk_frame"
+        },
+        "down": {
+          "texture": "#bk_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        3.0,
+        2.0
+      ],
+      "to": [
+        1.5,
+        5.0,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ts_wood"
+        },
+        "south": {
+          "texture": "#ts_wood"
+        },
+        "east": {
+          "texture": "#ts_wood"
+        },
+        "west": {
+          "texture": "#ts_wood"
+        },
+        "up": {
+          "texture": "#ts_wood"
+        },
+        "down": {
+          "texture": "#ts_wood"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        3.0,
+        2.0
+      ],
+      "to": [
+        15.5,
+        5.0,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ts_wood"
+        },
+        "south": {
+          "texture": "#ts_wood"
+        },
+        "east": {
+          "texture": "#ts_wood"
+        },
+        "west": {
+          "texture": "#ts_wood"
+        },
+        "up": {
+          "texture": "#ts_wood"
+        },
+        "down": {
+          "texture": "#ts_wood"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        3.0,
+        0.5
+      ],
+      "to": [
+        14.0,
+        5.0,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ts_wood"
+        },
+        "south": {
+          "texture": "#ts_wood"
+        },
+        "east": {
+          "texture": "#ts_wood"
+        },
+        "west": {
+          "texture": "#ts_wood"
+        },
+        "up": {
+          "texture": "#ts_wood"
+        },
+        "down": {
+          "texture": "#ts_wood"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        3.0,
+        14.5
+      ],
+      "to": [
+        14.0,
+        5.0,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ts_wood"
+        },
+        "south": {
+          "texture": "#ts_wood"
+        },
+        "east": {
+          "texture": "#ts_wood"
+        },
+        "west": {
+          "texture": "#ts_wood"
+        },
+        "up": {
+          "texture": "#ts_wood"
+        },
+        "down": {
+          "texture": "#ts_wood"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        4.0,
+        1.5
+      ],
+      "to": [
+        14.5,
+        6.5,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_mattress"
+        },
+        "south": {
+          "texture": "#bk_mattress"
+        },
+        "east": {
+          "texture": "#bk_mattress"
+        },
+        "west": {
+          "texture": "#bk_mattress"
+        },
+        "up": {
+          "texture": "#bk_mattress"
+        },
+        "down": {
+          "texture": "#bk_mattress"
+        }
+      }
+    },
+    {
+      "from": [
+        1.25,
+        5.0,
+        6.0
+      ],
+      "to": [
+        14.75,
+        7.0,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_blanket"
+        },
+        "south": {
+          "texture": "#bk_blanket"
+        },
+        "east": {
+          "texture": "#bk_blanket"
+        },
+        "west": {
+          "texture": "#bk_blanket"
+        },
+        "up": {
+          "texture": "#bk_blanket"
+        },
+        "down": {
+          "texture": "#bk_blanket"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        6.5,
+        2.0
+      ],
+      "to": [
+        12.0,
+        8.0,
+        5.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bk_pillow"
+        },
+        "south": {
+          "texture": "#bk_pillow"
+        },
+        "east": {
+          "texture": "#bk_pillow"
+        },
+        "west": {
+          "texture": "#bk_pillow"
+        },
+        "up": {
+          "texture": "#bk_pillow"
+        },
+        "down": {
+          "texture": "#bk_pillow"
+        }
+      }
+    }
+  ]
+}

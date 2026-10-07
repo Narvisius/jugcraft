@@ -523,27 +523,107 @@
     },
     {
       "from": [
-        5.98,
+        5.9,
         6.75,
         4.5
       ],
       "to": [
-        10.02,
+        10.1,
         9.25,
         11.5
       ],
       "faces": {
         "north": {
-          "texture": "#sp_brass_plate"
+          "texture": "#sp_brass_plate",
+          "uv": [
+            6.0,
+            6.75,
+            10.0,
+            9.25
+          ]
         },
         "south": {
-          "texture": "#sp_brass_plate"
+          "texture": "#sp_brass_plate",
+          "uv": [
+            6.0,
+            6.75,
+            10.0,
+            9.25
+          ]
         },
         "east": {
           "texture": "#sp_iron"
         },
         "west": {
           "texture": "#sp_iron"
+        },
+        "up": {
+          "texture": "#sp_iron",
+          "uv": [
+            6.0,
+            4.5,
+            10.0,
+            11.5
+          ]
+        },
+        "down": {
+          "texture": "#sp_iron",
+          "uv": [
+            6.0,
+            4.5,
+            10.0,
+            11.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        9.25,
+        4.5
+      ],
+      "to": [
+        9.5,
+        10.1,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass_plate",
+          "uv": [
+            6.5,
+            6.0,
+            9.5,
+            6.75
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass_plate",
+          "uv": [
+            6.5,
+            6.0,
+            9.5,
+            6.75
+          ]
+        },
+        "east": {
+          "texture": "#sp_iron",
+          "uv": [
+            4.5,
+            6.0,
+            11.5,
+            6.75
+          ]
+        },
+        "west": {
+          "texture": "#sp_iron",
+          "uv": [
+            4.5,
+            6.0,
+            11.5,
+            6.75
+          ]
         },
         "up": {
           "texture": "#sp_iron"
@@ -556,39 +636,7 @@
     {
       "from": [
         6.5,
-        9.25,
-        4.5
-      ],
-      "to": [
-        9.5,
-        10.02,
-        11.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#sp_brass_plate"
-        },
-        "south": {
-          "texture": "#sp_brass_plate"
-        },
-        "east": {
-          "texture": "#sp_iron"
-        },
-        "west": {
-          "texture": "#sp_iron"
-        },
-        "up": {
-          "texture": "#sp_iron"
-        },
-        "down": {
-          "texture": "#sp_iron"
-        }
-      }
-    },
-    {
-      "from": [
-        6.5,
-        5.98,
+        5.9,
         4.5
       ],
       "to": [
@@ -598,16 +646,40 @@
       ],
       "faces": {
         "north": {
-          "texture": "#sp_brass_plate"
+          "texture": "#sp_brass_plate",
+          "uv": [
+            6.5,
+            9.25,
+            9.5,
+            10.0
+          ]
         },
         "south": {
-          "texture": "#sp_brass_plate"
+          "texture": "#sp_brass_plate",
+          "uv": [
+            6.5,
+            9.25,
+            9.5,
+            10.0
+          ]
         },
         "east": {
-          "texture": "#sp_iron"
+          "texture": "#sp_iron",
+          "uv": [
+            4.5,
+            9.25,
+            11.5,
+            10.0
+          ]
         },
         "west": {
-          "texture": "#sp_iron"
+          "texture": "#sp_iron",
+          "uv": [
+            4.5,
+            9.25,
+            11.5,
+            10.0
+          ]
         },
         "up": {
           "texture": "#sp_iron"

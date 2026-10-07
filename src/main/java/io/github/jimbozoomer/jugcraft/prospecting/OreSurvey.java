@@ -28,7 +28,8 @@ public final class OreSurvey {
 			family("diamond", "minecraft:diamond_ore"), family("emerald", "minecraft:emerald_ore"),
 			family("tin", "jugcraft:tin_ore"), family("zinc", "jugcraft:zinc_ore"), family("lead", "jugcraft:lead_ore"),
 			family("silver", "jugcraft:silver_ore"), family("nickel", "jugcraft:nickel_ore"), family("tungsten", "jugcraft:tungsten_ore"),
-			family("uranium", "jugcraft:uranium_ore"), family("titanium", "jugcraft:titanium_ore"), family("salt", "jugcraft:salt_ore"), family("phosphate", "jugcraft:phosphate_ore"),
+			family("uranium", "jugcraft:uranium_ore"), family("titanium", "jugcraft:titanium_ore"), family("thallite", "jugcraft:thallite_ore"),
+			family("salt", "jugcraft:salt_ore"), family("phosphate", "jugcraft:phosphate_ore"),
 			family("lepidolite", "jugcraft:lepidolite_ore"), family("monazite", "jugcraft:monazite_ore"));
 	/** Surveyed chunks in each direction from the player's chunk: 1 means 3x3. */
 	public static final int RADIUS = 1;
@@ -61,6 +62,14 @@ public final class OreSurvey {
 	}
 
 	public static List<Reading> survey(ServerLevel level, BlockPos center, RandomSource random) {
+		return survey(level, center, random, RADIUS, STRIDE);
+	}
+
+	/**
+	 * A survey of {@code radius} chunks in each direction, sampling every {@code stride}-th column (batch 38: the survey
+	 * rocket's wider, coarser look). Chunks that are not loaded are skipped, never loaded or generated.
+	 */
+	public static List<Reading> survey(ServerLevel level, BlockPos center, RandomSource random, int radius, int stride) {
 		int[] counts = new int[FAMILIES.size()];
 		long[] heights = new long[FAMILIES.size()];
 		int middleX = SectionPos.blockToSectionCoord(center.getX());
@@ -68,10 +77,13 @@ public final class OreSurvey {
 		int bottom = level.getMinY();
 		int top = Math.min(level.getMaxY(), center.getY() + ABOVE);
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for (int cx = middleX - RADIUS; cx <= middleX + RADIUS; cx++) {
-			for (int cz = middleZ - RADIUS; cz <= middleZ + RADIUS; cz++) {
-				for (int dx = 0; dx < 16; dx += STRIDE) {
-					for (int dz = 0; dz < 16; dz += STRIDE) {
+		for (int cx = middleX - radius; cx <= middleX + radius; cx++) {
+			for (int cz = middleZ - radius; cz <= middleZ + radius; cz++) {
+				if (!level.hasChunk(cx, cz)) {
+					continue;
+				}
+				for (int dx = 0; dx < 16; dx += stride) {
+					for (int dz = 0; dz < 16; dz += stride) {
 						for (int y = bottom; y <= top; y++) {
 							BlockState state = level.getBlockState(pos.set((cx << 4) + dx, y, (cz << 4) + dz));
 							if (state.isAir()) {
@@ -96,7 +108,7 @@ public final class OreSurvey {
 				readings.add(new Reading(FAMILIES.get(i).icon(), signal(counts[i], random), average >= 40 ? 0 : average >= 0 ? 1 : 2));
 			}
 		}
-		oil(level, middleX, middleZ, random, readings);
+		oil(level, middleX, middleZ, radius, random, readings);
 		readings.sort((a, b) -> Integer.compare(b.signal(), a.signal()));
 		return readings;
 	}
@@ -105,11 +117,14 @@ public final class OreSurvey {
 	 * Oil reservoirs under the surveyed chunks (see {@link OilReservoirs}): one reading for pumpable oil (middle depth)
 	 * and one for shale oil (deep), from how much is left, as vaguely as the ores.
 	 */
-	private static void oil(ServerLevel level, int middleX, int middleZ, RandomSource random, List<Reading> readings) {
+	private static void oil(ServerLevel level, int middleX, int middleZ, int radius, RandomSource random, List<Reading> readings) {
 		long conventional = 0;
 		long shale = 0;
-		for (int cx = middleX - RADIUS; cx <= middleX + RADIUS; cx++) {
-			for (int cz = middleZ - RADIUS; cz <= middleZ + RADIUS; cz++) {
+		for (int cx = middleX - radius; cx <= middleX + radius; cx++) {
+			for (int cz = middleZ - radius; cz <= middleZ + radius; cz++) {
+				if (!level.hasChunk(cx, cz)) {
+					continue;
+				}
 				OilReservoirs.Reservoir reservoir = OilReservoirs.get(level, new ChunkPos(cx, cz));
 				switch (reservoir.kind()) {
 					case CONVENTIONAL -> conventional += reservoir.remaining();

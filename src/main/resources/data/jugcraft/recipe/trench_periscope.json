@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PG",
+    "P ",
+    "P "
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "jugcraft:trench_periscope",
+    "count": 1
+  }
+}

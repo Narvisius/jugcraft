@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silver"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "S",
+    "T"
+  ],
+  "key": {
+    "S": "#c:ingots/silver",
+    "T": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:silver_dagger",
+    "count": 1
+  }
+}

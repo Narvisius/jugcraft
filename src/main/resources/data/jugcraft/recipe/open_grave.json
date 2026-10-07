@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P S",
+    "DDD"
+  ],
+  "key": {
+    "P": "minecraft:oak_planks",
+    "S": "minecraft:iron_shovel",
+    "D": "minecraft:coarse_dirt"
+  },
+  "result": {
+    "id": "jugcraft:open_grave",
+    "count": 1
+  }
+}

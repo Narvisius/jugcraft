@@ -19,7 +19,7 @@ Suggested labels: proposal, integration, approved, needs-design, blocked-platfor
 
 ## Review checklist
 
-1. Does it connect to the design and approved issue?
+1. Does it connect to the design and the proposal described in the PR or a linked issue? An approved issue is not required for a focused community prototype.
 2. Are implementation and diff understandable? Review AI-generated code as carefully as human code.
 3. Are checks real and relevant? Review changes to the checker/workflows themselves.
 4. Has multiplayer and integration evidence been supplied under docs/TESTING.md?
@@ -30,6 +30,15 @@ Suggested labels: proposal, integration, approved, needs-design, blocked-platfor
 Use a small trusted maintainer team for merge authority. Community participants use forks. Never give contributors server credentials merely to test a PR. Keep deployments and production world administration separate from contribution builds.
 
 The initial CODEOWNERS is @jimbozoomer-byte. During solo-maintainer development, the owner may review and merge their own PR once checks pass. No second account is needed. Independent approval can be reinstated when the owner adds trusted maintainers.
+
+## Merge priority (owner's rule)
+
+When merging, combining or porting work from contributors, forks or other sessions, the owner's (@jimbozoomer-byte's) contributions and commits come first:
+- **Order:** merge the owner's own pull requests before contributor pull requests that touch the same areas.
+- **Conflicts:** where a contributor change conflicts with the owner's code, keep the owner's version. Fold in only what the contributor's change needs to work, such as a missing case in a shared helper.
+- **Intersections:** where a contribution intersects existing features (IDs, registries, shared APIs, config, generated data, UI style), make it work with the owner's current mod. Adapt the contribution, not the owner's code, unless the owner's code is broken.
+- **Credit:** contributors keep their commits and credit. A replacement pull request on this repository (for example, when a fork can't be pushed to) keeps the contributor's commits, names them in the description, and closes the original as superseded.
+- **Records:** write each owner-first resolution in the pull request description, so the contributor can see what changed.
 
 ## Initial setup tracking
 

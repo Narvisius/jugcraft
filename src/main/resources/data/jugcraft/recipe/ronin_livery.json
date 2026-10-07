@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RBR",
+    "BPB",
+    "RBR"
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "B": "minecraft:black_dye",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:ronin_livery",
+    "count": 2
+  }
+}

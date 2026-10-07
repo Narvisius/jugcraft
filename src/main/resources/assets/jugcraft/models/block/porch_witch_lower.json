@@ -1,0 +1,331 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/porch_witch_robe",
+    "pot": "jugcraft:block/porch_witch_pot",
+    "brew": "jugcraft:block/porch_witch_brew",
+    "robe": "jugcraft:block/porch_witch_robe",
+    "skin": "jugcraft:block/porch_witch_skin",
+    "face": "jugcraft:block/porch_witch_face",
+    "hat": "jugcraft:block/porch_witch_hat",
+    "hair": "jugcraft:block/porch_witch_hair",
+    "spoon": "jugcraft:block/porch_witch_spoon"
+  },
+  "elements": [
+    {
+      "from": [
+        5.5,
+        0,
+        0.5
+      ],
+      "to": [
+        14.5,
+        2,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        2,
+        0.5
+      ],
+      "to": [
+        14.5,
+        7,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        2,
+        6.5
+      ],
+      "to": [
+        14.5,
+        7,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        2,
+        1.5
+      ],
+      "to": [
+        6.5,
+        7,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        13.5,
+        2,
+        1.5
+      ],
+      "to": [
+        14.5,
+        7,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        5.5,
+        1.5
+      ],
+      "to": [
+        13.5,
+        6,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brew"
+        },
+        "south": {
+          "texture": "#brew"
+        },
+        "east": {
+          "texture": "#brew"
+        },
+        "west": {
+          "texture": "#brew"
+        },
+        "up": {
+          "texture": "#brew"
+        },
+        "down": {
+          "texture": "#brew"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        3.5,
+        0,
+        8.5
+      ],
+      "to": [
+        12.5,
+        13,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#robe"
+        },
+        "south": {
+          "texture": "#robe"
+        },
+        "east": {
+          "texture": "#robe"
+        },
+        "west": {
+          "texture": "#robe"
+        },
+        "up": {
+          "texture": "#robe"
+        },
+        "down": {
+          "texture": "#robe"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        13,
+        9
+      ],
+      "to": [
+        11.5,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#robe"
+        },
+        "south": {
+          "texture": "#robe"
+        },
+        "east": {
+          "texture": "#robe"
+        },
+        "west": {
+          "texture": "#robe"
+        },
+        "down": {
+          "texture": "#robe"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        13.5,
+        10.5
+      ],
+      "to": [
+        4.5,
+        16,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#robe"
+        },
+        "south": {
+          "texture": "#robe"
+        },
+        "east": {
+          "texture": "#robe"
+        },
+        "west": {
+          "texture": "#robe"
+        },
+        "down": {
+          "texture": "#robe"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        12,
+        10.5
+      ],
+      "to": [
+        4.5,
+        13.5,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#skin"
+        },
+        "south": {
+          "texture": "#skin"
+        },
+        "east": {
+          "texture": "#skin"
+        },
+        "west": {
+          "texture": "#skin"
+        },
+        "up": {
+          "texture": "#skin"
+        },
+        "down": {
+          "texture": "#skin"
+        }
+      }
+    }
+  ]
+}

@@ -22,6 +22,8 @@ public final class JugcraftMaterials {
 	public static MetalFamily TUNGSTEN;
 	public static MetalFamily TITANIUM;
 	public static MetalFamily URANIUM;
+	/** The Earth school's green metal (docs/features/thallite.md); its ingot carries a lore line. */
+	public static MetalFamily THALLITE;
 	public static MetalFamily BRONZE;
 	public static MetalFamily ALUMINUM;
 	public static MetalFamily BRASS;
@@ -62,6 +64,7 @@ public final class JugcraftMaterials {
 		TUNGSTEN = MetalFamily.builder("tungsten").mined().build();
 		URANIUM = MetalFamily.builder("uranium").mined().build();
 		TITANIUM = MetalFamily.builder("titanium").mined().build();
+		THALLITE = MetalFamily.builder("thallite").mined().lore().build();
 		BRONZE = MetalFamily.builder("bronze").extraItem("bronze_blend").build();
 		ALUMINUM = MetalFamily.builder("aluminum").build();
 		BRASS = MetalFamily.builder("brass").build();
@@ -93,7 +96,7 @@ public final class JugcraftMaterials {
 	}
 
 	private static void registerCreativeTabs() {
-		MetalFamily[] metals = {TIN, ZINC, LEAD, SILVER, NICKEL, TUNGSTEN, URANIUM, TITANIUM, BRONZE, ALUMINUM, BRASS, INVAR, SOLDER, STEEL};
+		MetalFamily[] metals = {TIN, ZINC, LEAD, SILVER, NICKEL, TUNGSTEN, URANIUM, TITANIUM, THALLITE, BRONZE, ALUMINUM, BRASS, INVAR, SOLDER, STEEL};
 		MineralFamily[] minerals = {SALT, PHOSPHATE, LEPIDOLITE, MONAZITE};
 
 		List<ItemLike> natural = new ArrayList<>();

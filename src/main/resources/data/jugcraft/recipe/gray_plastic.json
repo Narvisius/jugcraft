@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP",
+    "PDP",
+    "PPP"
+  ],
+  "key": {
+    "P": "jugcraft:plastic_sheet",
+    "D": "minecraft:gray_dye"
+  },
+  "result": {
+    "id": "jugcraft:gray_plastic",
+    "count": 8
+  }
+}

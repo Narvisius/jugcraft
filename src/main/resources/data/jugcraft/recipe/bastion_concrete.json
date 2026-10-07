@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CRC",
+    "RCR",
+    "CRC"
+  ],
+  "key": {
+    "C": "jugcraft:concrete",
+    "R": "jugcraft:rebar"
+  },
+  "result": {
+    "id": "jugcraft:bastion_concrete",
+    "count": 8
+  }
+}

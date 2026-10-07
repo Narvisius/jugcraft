@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " N ",
+    "GSG",
+    " G "
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "G": "minecraft:glass",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "jugcraft:specimen_jar",
+    "count": 1
+  }
+}

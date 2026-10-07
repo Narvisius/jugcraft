@@ -2,12 +2,13 @@
 
 Where the steampunk tiers are brass, copper and riveted iron, the dieselpunk tiers are gunmetal and
 olive-drab paint worn through at the edges, chrome trim, hazard stripes, black rubber hoses,
-bakelite grips, louvred grilles and green phosphor gauges. Deterministic like steampunk_textures:
-each texture draws from its own seed. Names start with "dp_". Called from generate_textures.py.
+bakelite grips, louvred grilles and green phosphor gauges. Drawn in the clean style (tools/clean_metal.py): flat
+fills, bevelled panels and bolts, and wear only as a few marks at the edges. Deterministic: the same code always draws
+the same pixels. Names start with "dp_". Called from generate_textures.py.
 """
 import math
-import random
 
+from clean_metal import CHIP, CHIP_WIDE, corner_bolts, inset, patch, plate, scuffs
 from steampunk_textures import new, put, save
 
 GUNMETAL = [(24, 26, 28), (38, 41, 44), (54, 58, 62), (72, 77, 82), (96, 102, 108), (132, 138, 144)]
@@ -22,97 +23,70 @@ STEEL = [(60, 64, 70), (88, 94, 100), (120, 126, 134), (160, 166, 172), (200, 20
 
 
 def gunmetal_plate(seed):
-    """Dark gunmetal with a bevel, faint brushed streaks and a countersunk screw in each corner."""
-    rng = random.Random(seed)
+    """Dark gunmetal: a bevelled panel with a recessed groove inset and a screw in each corner."""
     img = new()
-    for y in range(16):
-        streak = rng.choice([0, 0, 0, 1])
-        for x in range(16):
-            c = GUNMETAL[3] if (rng.random() < 0.12 or streak and rng.random() < 0.5) else GUNMETAL[2]
-            if x == 0 or y == 0:
-                c = GUNMETAL[4]
-            elif x == 15 or y == 15:
-                c = GUNMETAL[1]
-            put(img, x, y, c)
-    for x, y in ((2, 2), (13, 2), (2, 13), (13, 13)):
-        put(img, x, y, GUNMETAL[0])
-        put(img, x + 1, y, GUNMETAL[5])
-        put(img, x, y + 1, GUNMETAL[1])
+    plate(img, GUNMETAL)
+    inset(img, 4, 4, 11, 11, GUNMETAL[3], GUNMETAL[1])
+    scuffs(img, GUNMETAL[3], [(6, 7, 3), (8, 9, 2)], only=GUNMETAL[2])
+    corner_bolts(img, GUNMETAL)
     return img
 
 
 def painted(seed, paint, chip_rate=0.22):
-    """Army paint over gunmetal, worn through to bare metal along the edges and in a few scuffs."""
-    rng = random.Random(seed)
+    """Army paint on gunmetal: a bevelled painted panel with bolts, worn through to bare metal at two corners."""
     img = new()
-    for y in range(16):
-        for x in range(16):
-            c = paint[2] if rng.random() < 0.8 else paint[3]
-            edge = min(x, y, 15 - x, 15 - y)
-            if edge == 0:
-                c = paint[1]
-            if edge <= 1 and rng.random() < chip_rate:
-                c = GUNMETAL[4] if rng.random() < 0.5 else GUNMETAL[3]
-            put(img, x, y, c)
-    for _ in range(3):
-        sx, sy = rng.randrange(3, 13), rng.randrange(3, 13)
-        for i in range(rng.randrange(2, 4)):
-            put(img, sx + i, sy, GUNMETAL[4])
-    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14)):
-        put(img, x, y, paint[4])
-        put(img, x + 1 if x < 8 else x - 1, y + 1 if y < 8 else y - 1, paint[0])
+    plate(img, paint)
+    scuffs(img, paint[3], only=paint[2])
+    corner_bolts(img, paint)
+    patch(img, CHIP_WIDE, GUNMETAL[3], 1, 12)
+    put(img, 2, 13, GUNMETAL[2])
+    patch(img, CHIP, GUNMETAL[3], 12, 1)
     return img
 
 
 def chrome(seed):
     """Polished chrome: bright horizontal highlight bands over a darker reflection."""
-    rng = random.Random(seed)
     img = new()
     for y in range(16):
         band = CHROME[4] if y in (3, 4) else CHROME[3] if y in (2, 5, 11) else CHROME[1] if y in (8, 9, 14) else CHROME[2]
         for x in range(16):
-            c = band
-            if rng.random() < 0.05:
-                c = CHROME[3]
-            put(img, x, y, c)
+            put(img, x, y, band)
     return img
 
 
 def hazard(seed):
-    """Yellow and black hazard stripes, scuffed."""
-    rng = random.Random(seed)
+    """Yellow and black hazard stripes, the yellow lit along each stripe's upper edge."""
     img = new()
     for y in range(16):
         for x in range(16):
-            c = HAZARD[2] if ((x + y) // 4) % 2 else (HAZARD[0] if rng.random() < 0.75 else HAZARD[1])
-            if rng.random() < 0.05:
-                c = GUNMETAL[3]
+            phase = (x + y) % 8
+            c = HAZARD[2] if phase >= 4 else HAZARD[1] if phase == 0 else HAZARD[0]
             put(img, x, y, c)
     return img
 
 
 def rubber(seed, ribbed=False):
-    """Black rubber (hoses, grips, tyres); ribbed has a raised rib every other row."""
-    rng = random.Random(seed)
-    img = new()
+    """Black rubber (hoses, grips, tyres): a flat fill with a faint diagonal grain; ribbed has a raised rib every
+    third row."""
+    img = new(RUBBER[1])
     for y in range(16):
         for x in range(16):
-            c = RUBBER[1] if rng.random() < 0.8 else RUBBER[2]
-            if ribbed and y % 3 == 0:
-                c = RUBBER[2]
-            if ribbed and y % 3 == 2:
-                c = RUBBER[0]
-            put(img, x, y, c)
+            if ribbed:
+                if y % 3 == 0:
+                    put(img, x, y, RUBBER[2])
+                elif y % 3 == 2:
+                    put(img, x, y, RUBBER[0])
+            elif (x + 2 * y) % 11 == 0:
+                put(img, x, y, RUBBER[2])
     return img
 
 
 def bakelite(seed):
     """Brown bakelite with a glossy swirl."""
-    rng = random.Random(seed)
     img = new()
     for y in range(16):
         for x in range(16):
-            swirl = math.sin((x * 0.7 + y * 0.35) + rng.random() * 0.6)
+            swirl = math.sin(x * 0.7 + y * 0.35 + math.sin(y * 0.9) * 0.6)
             c = BAKELITE[2] if swirl > 0.55 else BAKELITE[1] if swirl > -0.4 else BAKELITE[0]
             put(img, x, y, c)
     for x in range(3, 7):
@@ -150,40 +124,32 @@ def gauge(value=0.65):
 
 
 def exhaust(seed):
-    """Sooty exhaust pipe metal, darker at one end."""
-    rng = random.Random(seed)
+    """Exhaust pipe metal: gunmetal fading into soot towards the hot end, darker at the edges."""
     img = new()
     for y in range(16):
+        base = GUNMETAL[2] if y < 6 else SOOT[2] if y < 11 else SOOT[1]
         for x in range(16):
-            base = SOOT[2] if y > 10 else GUNMETAL[2]
-            c = SOOT[1] if rng.random() < 0.25 else base
-            if x in (0, 15):
-                c = SOOT[0]
-            put(img, x, y, c)
+            put(img, x, y, SOOT[0] if x in (0, 15) else base)
     return img
 
 
 def drill_bit(seed):
     """Fluted steel drill bit: diagonal spiral flutes with bright cutting edges."""
-    rng = random.Random(seed)
     img = new()
     for y in range(16):
         for x in range(16):
             phase = (x + 2 * y) % 8
             c = STEEL[4] if phase == 0 else STEEL[3] if phase in (1, 2) else STEEL[1] if phase in (5, 6) else STEEL[2]
-            if rng.random() < 0.04:
-                c = STEEL[0]
             put(img, x, y, c)
     return img
 
 
 def saw_chain(seed):
     """A saw chain seen side-on: chrome cutter teeth on dark links, running along the texture's length."""
-    rng = random.Random(seed)
-    img = new()
+    img = new(GUNMETAL[1])
     for y in range(16):
         for x in range(16):
-            c = GUNMETAL[1] if rng.random() < 0.8 else GUNMETAL[2]
+            c = GUNMETAL[2] if y % 4 == 0 else GUNMETAL[1]
             if x in (0, 15):
                 c = CHROME[2] if y % 4 in (0, 1) else GUNMETAL[0]
             elif x in (1, 14):

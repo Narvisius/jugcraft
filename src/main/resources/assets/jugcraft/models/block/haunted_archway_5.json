@@ -1,0 +1,200 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/haunted_archway_stone",
+    "stone": "jugcraft:block/haunted_archway_stone",
+    "iron": "jugcraft:block/haunted_archway_iron",
+    "skull": "jugcraft:block/haunted_archway_skull",
+    "web": "jugcraft:block/haunted_archway_web",
+    "lantern_iron": "jugcraft:block/yard_lantern_iron",
+    "lantern_glass": "jugcraft:block/yard_lantern_glass"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        4
+      ],
+      "to": [
+        14,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "west": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        10,
+        1
+      ],
+      "to": [
+        9,
+        11,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "from": [
+        7.75,
+        7,
+        1.75
+      ],
+      "to": [
+        8.25,
+        10,
+        2.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "down": {
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        1,
+        0.5
+      ],
+      "to": [
+        9.5,
+        1.5,
+        3.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron"
+        },
+        "south": {
+          "texture": "#lantern_iron"
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron"
+        },
+        "down": {
+          "texture": "#lantern_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1.5,
+        0
+      ],
+      "to": [
+        10,
+        6,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_glass"
+        },
+        "south": {
+          "texture": "#lantern_glass"
+        },
+        "east": {
+          "texture": "#lantern_glass"
+        },
+        "west": {
+          "texture": "#lantern_glass"
+        },
+        "up": {
+          "texture": "#lantern_glass"
+        },
+        "down": {
+          "texture": "#lantern_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        6,
+        0.5
+      ],
+      "to": [
+        9.5,
+        7,
+        3.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lantern_iron"
+        },
+        "south": {
+          "texture": "#lantern_iron"
+        },
+        "east": {
+          "texture": "#lantern_iron"
+        },
+        "west": {
+          "texture": "#lantern_iron"
+        },
+        "up": {
+          "texture": "#lantern_iron"
+        },
+        "down": {
+          "texture": "#lantern_iron"
+        }
+      }
+    }
+  ]
+}

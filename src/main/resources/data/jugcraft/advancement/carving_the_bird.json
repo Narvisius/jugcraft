@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:roast_turkey"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.carving_the_bird.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.carving_the_bird.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

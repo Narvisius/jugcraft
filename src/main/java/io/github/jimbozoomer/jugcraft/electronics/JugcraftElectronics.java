@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
  * The electronics tier's blocks outside the machine framework (batch 7, docs/features/electronics.md): the network
- * terminal. The crystal grower and lithography station are machines (see MachineKind); wafers, chips and
- * processors are items (PetroItems, JugcraftComponents).
+ * terminal. The lithography station is a machine, and the arc furnace pulls the boules (see MachineKind); wafers,
+ * chips and processors are items (PetroItems, JugcraftComponents).
  */
 public final class JugcraftElectronics {
 	public static Block NETWORK_TERMINAL;

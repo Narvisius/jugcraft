@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jugcraft · World Designer</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brandmark" aria-hidden="true">J</span><div><strong>JUGCRAFT</strong><span>WORLD DESIGNER</span></div></div>
+    <input id="name" aria-label="World design name" maxlength="80" value="The first valley">
+    <div class="file-actions"><button id="open">Open design</button><button id="save">Save design</button><button id="export" class="primary">Export world pack <span aria-hidden="true">↗</span></button><button id="help" class="icon" aria-label="Help">?</button></div>
+  </header>
+  <main>
+    <aside class="tools panel">
+      <div class="eyebrow">YOUR LANDSCAPE</div><h1>Shape a world.</h1><p class="intro">Draw the land. Give it life.<br>Choose where the story begins.</p>
+      <h2>01 / Sculpt terrain</h2>
+      <div class="toolgrid">
+        <button data-tool="raise" class="selected"><b>↗</b>Raise</button><button data-tool="lower"><b>↘</b>Lower</button>
+        <button data-tool="flatten"><b>━</b>Level</button><button data-tool="smooth"><b>∿</b>Smooth</button>
+        <button data-tool="river"><b>≈</b>River</button><button data-tool="pan"><b>✥</b>Move map</button>
+      </div>
+      <h2>02 / Paint biomes</h2><div class="toolgrid"><button data-tool="biome"><b>❋</b>Paint</button><button data-tool="erase"><b>◌</b>Clear paint</button></div>
+      <h2>03 / Place landmarks</h2><div class="toolgrid"><button data-tool="spawn"><b>⚑</b>Spawn</button><button data-tool="town"><b>▥</b>Walled city</button><button data-tool="structure" class="wide"><b>⌂</b>Village / structure</button></div>
+      <div class="brush-settings">
+        <label for="radius">Brush size <output id="radius-value">128 blocks</output></label><input id="radius" type="range" min="32" max="320" step="16" value="128">
+        <label for="strength">Strength <output id="strength-value">4</output></label><input id="strength" type="range" min="1" max="16" value="4">
+        <label for="target">Level height <output id="target-value">80</output></label><input id="target" type="range" min="40" max="256" value="80">
+      </div>
+      <div class="undo-row"><button id="undo" disabled title="Ctrl/Cmd Z">↶ Undo</button><button id="redo" disabled title="Ctrl/Cmd Shift Z">↷ Redo</button></div>
+      <p class="quiet">Scroll to zoom · Space + drag to move<br>Heights between 40 and 256 blocks</p>
+    </aside>
+    <section class="map-area" aria-label="World map">
+      <div class="map-toolbar"><div class="segmented" role="group" aria-label="Map display"><button data-view="terrain" class="selected">Landscape</button><button data-view="biomes">Biomes</button><button data-view="height">Height</button></div><label><input id="contours" type="checkbox" checked> Contours</label><button id="fit">Fit map</button></div>
+      <canvas id="map" tabindex="0" aria-label="Editable world map. Choose a brush, then click or drag to paint. Use landmark coordinates in the details panel for precise placement."></canvas>
+      <div class="north" aria-hidden="true">N<br>↑</div>
+      <div class="map-caption"><strong id="map-size">2,048 × 2,048 blocks</strong><span>Surface plan · procedural world beyond the border</span></div>
+      <div class="map-scale" id="scale">256 blocks</div>
+      <div class="statusbar"><span id="cursor">Move across the map to inspect</span><span id="active-tool">Raise terrain</span></div>
+    </section>
+    <aside class="details panel">
+      <div class="eyebrow">WORLD CONTENT</div>
+      <div class="catalog-status"><span class="dot" id="catalog-dot"></span><strong id="catalog-state">Planning mode</strong></div>
+      <p id="catalog-detail">Load your mod catalog to paint installed biomes and export a playable world.</p><button id="catalog" class="full">Load mod catalog</button>
+      <label class="field-label" for="biome">Biome palette</label><input id="biome-filter" type="search" placeholder="Find a biome…" aria-label="Filter biomes"><select id="biome" size="5" aria-label="Selected biome"></select><div class="selection-note" id="biome-id"></div>
+      <label class="field-label" for="structure">Village / structure</label><select id="structure" aria-label="Selected structure"></select><p id="structure-detail" class="quiet"></p>
+      <h2>Landmarks <span id="landmark-count">1</span></h2><div id="landmarks" class="landmarks"></div>
+      <details class="precision"><summary>Place by coordinates</summary><label>Landmark <select id="coordinate-kind"><option value="spawn">Spawn</option><option value="town">Walled city</option><option value="structure">Selected structure</option></select></label><div class="xy"><label>X<input id="coordinate-x" type="number" value="0" step="1"></label><label>Z<input id="coordinate-z" type="number" value="0" step="1"></label></div><button id="place-coordinates" class="full">Place landmark</button></details>
+      <div class="readiness"><strong id="validation-title">Ready to design</strong><ul id="validation"></ul></div>
+    </aside>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="guide"><button class="close" aria-label="Close help">×</button><div class="eyebrow">FROM MAP TO MINECRAFT</div><h2>Your world, drawn by you.</h2><ol><li>In a local Jugcraft world with cheats enabled, run <code>/jugcraft design export</code>. Open the exported <code>index.html</code>, or load its <code>catalog.json</code> here.</li><li>Sculpt terrain, paint biomes, and place spawn. A walled city uses Jugcraft’s existing working town. Structure markers use structures from your installed mods.</li><li>Save your design JSON to keep editing. Export a world pack when the validation panel is clear.</li><li>Create a <strong>new world</strong> in the same Jugcraft installation. Add and enable the ZIP in <strong>Data Packs</strong>, select <strong>Jugcraft Designed</strong> under World Type, and keep structures enabled.</li></ol><p>Sea level is 63. Rivers carve towards 59. The outer two grid cells blend into the seed’s normal terrain. The preview shows the planned surface, not trees, caves or the finished Minecraft world.</p><p>Structure pins choose a start chunk. Their native biome and terrain rules still apply; random structures can still appear nearby. The city is one fixed Jugcraft town, and its builder levels its footprint. Deep caves below height 8 remain procedural, transitioning to the sculpted land by height 32.</p><p>Use this for new worlds. Changing the pack does not reshape chunks you have already explored. No server is required to design or test in single-player.</p><button class="primary close">Start designing</button></dialog>
+  <input id="file" type="file" accept=".json,application/json" hidden>
+  <!-- The in-game export writes this catalog alongside the editor. In the repository it is empty. -->
+  <script src="catalog.js"></script><script src="model.js"></script><script src="editor.js"></script>
+</body>
+</html>

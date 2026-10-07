@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "RTC",
+    "PMP",
+    "S S"
+  ],
+  "key": {
+    "R": "jugcraft:range_finder",
+    "T": "jugcraft:field_telephone",
+    "C": "minecraft:comparator",
+    "P": "#c:plates/steel",
+    "M": "minecraft:map",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:fire_control_table",
+    "count": 1
+  }
+}

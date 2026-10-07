@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:wisp_in_a_jar"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.wisp_in_a_jar.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.wisp_in_a_jar.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

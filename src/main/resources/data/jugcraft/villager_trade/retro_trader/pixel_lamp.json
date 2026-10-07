@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "pixel_hollows"
+    }
+  ],
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 3
+  },
+  "gives": {
+    "id": "jugcraft:pixel_lamp",
+    "count": 1
+  },
+  "max_uses": 4,
+  "xp": 5,
+  "reputation_discount": 0.05
+}

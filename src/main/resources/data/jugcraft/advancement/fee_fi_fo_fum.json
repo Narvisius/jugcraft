@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:giants_draught"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.fee_fi_fo_fum.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.fee_fi_fo_fum.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

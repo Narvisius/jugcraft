@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gourd_birdhouse_side",
+    "front": "jugcraft:block/gourd_birdhouse_front",
+    "side": "jugcraft:block/gourd_birdhouse_side",
+    "top": "jugcraft:block/gourd_birdhouse_top",
+    "string": "jugcraft:block/gourd_birdhouse_string"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        7,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            4,
+            4,
+            12,
+            11
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
+        },
+        "down": {
+          "texture": "#top",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        7,
+        6
+      ],
+      "to": [
+        10,
+        10,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            6,
+            1,
+            10,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ]
+        }
+      }
+    }
+  ]
+}

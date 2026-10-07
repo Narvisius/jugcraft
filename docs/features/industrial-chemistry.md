@@ -1,6 +1,7 @@
 # Industrial chemistry: electrochemistry and acids
 
 Status: implemented (batch 5 of the Chemistry branch, #52; batch 6, advanced materials, #54)
+**Batch 24:** brine is now mixed in the chemical reactor (the chemical mixer is gone), and the electrolytic cell also splits water; see [machine-consolidation.md](machine-consolidation.md).
 Proposal issue: owner request, 1 October 2026 ("merge it and start the next batch immediately"); plan in [CHEMISTRY.md](../branches/CHEMISTRY.md#industrial-chemistry-electrochemistry-and-acids)
 Owner: jimbozoomer-byte
 Target milestone and tier: steel tier, after the oil line

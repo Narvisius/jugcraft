@@ -121,17 +121,24 @@ public final class BlueprintPlacementPreview {
 		quad(pose, c, color, bx, ay, az, bx, by, az, bx, by, bz, bx, ay, bz, 1, 0, 0);
 	}
 
-	/** One flat face, both sides visible: horizontal when y0 == y1, otherwise a vertical wall along x or z. */
+	/** How far (blocks) each side of a flat face stands off its plane: {@code DecorDraw.TWO_SIDED_LIFT} pixels. */
+	private static final float LIFT = 0.05F / 16.0F;
+
+	/**
+	 * One flat face, both sides visible: horizontal when y0 == y1, otherwise a vertical wall along x or z. Each side stands
+	 * {@link #LIFT} off the plane on its own side, never one plane drawn twice (the ghost's type does not cull, so twins
+	 * would flicker).
+	 */
 	private static void face(PoseStack.Pose pose, VertexConsumer c, float x0, float y0, float z0, float x1, float y1, float z1, int color) {
 		if (y0 == y1) {
-			quad(pose, c, color, x0, y0, z0, x0, y0, z1, x1, y0, z1, x1, y0, z0, 0, 1, 0);
-			quad(pose, c, color, x0, y0, z1, x0, y0, z0, x1, y0, z0, x1, y0, z1, 0, -1, 0);
+			quad(pose, c, color, x0, y0 + LIFT, z0, x0, y0 + LIFT, z1, x1, y0 + LIFT, z1, x1, y0 + LIFT, z0, 0, 1, 0);
+			quad(pose, c, color, x0, y0 - LIFT, z1, x0, y0 - LIFT, z0, x1, y0 - LIFT, z0, x1, y0 - LIFT, z1, 0, -1, 0);
 		} else if (x0 == x1) {
-			quad(pose, c, color, x0, y0, z0, x0, y1, z0, x0, y1, z1, x0, y0, z1, 1, 0, 0);
-			quad(pose, c, color, x0, y0, z1, x0, y1, z1, x0, y1, z0, x0, y0, z0, -1, 0, 0);
+			quad(pose, c, color, x0 + LIFT, y0, z0, x0 + LIFT, y1, z0, x0 + LIFT, y1, z1, x0 + LIFT, y0, z1, 1, 0, 0);
+			quad(pose, c, color, x0 - LIFT, y0, z1, x0 - LIFT, y1, z1, x0 - LIFT, y1, z0, x0 - LIFT, y0, z0, -1, 0, 0);
 		} else {
-			quad(pose, c, color, x0, y0, z0, x0, y1, z0, x1, y1, z0, x1, y0, z0, 0, 0, -1);
-			quad(pose, c, color, x1, y0, z0, x1, y1, z0, x0, y1, z0, x0, y0, z0, 0, 0, 1);
+			quad(pose, c, color, x0, y0, z0 - LIFT, x0, y1, z0 - LIFT, x1, y1, z0 - LIFT, x1, y0, z0 - LIFT, 0, 0, -1);
+			quad(pose, c, color, x1, y0, z0 + LIFT, x1, y1, z0 + LIFT, x0, y1, z0 + LIFT, x0, y0, z0 + LIFT, 0, 0, 1);
 		}
 	}
 

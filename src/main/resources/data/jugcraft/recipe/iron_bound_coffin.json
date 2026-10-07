@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " I ",
+    "ICI",
+    " I "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "jugcraft:coffin"
+  },
+  "result": {
+    "id": "jugcraft:iron_bound_coffin",
+    "count": 1
+  }
+}

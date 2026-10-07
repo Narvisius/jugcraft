@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FBF",
+    " S ",
+    "SSS"
+  ],
+  "key": {
+    "F": "minecraft:feather",
+    "B": "minecraft:book",
+    "S": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "jugcraft:grimoire_stand",
+    "count": 1
+  }
+}

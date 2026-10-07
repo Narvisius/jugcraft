@@ -53,6 +53,16 @@ Fabric API transfer API. Original models and textures, including the animated be
 ## World and event applicability
 Not applicable.
 
+## Owner-selected performance review and pipe alternative
+
+Industrial planning on 6 October 2026 keeps hoppers and shaft-powered conveyors as early workshop handling options. The owner specifically noted: if conveyor belts prove very costly in late-game factories, bulk transport can be replaced with item pipes whose moving items are not visible. Record this as a conditional performance direction alongside the [industrial starter workshop plan](industrial-starter-workshop-plan.md#selected-early-item-handling-and-conveyor-performance-review).
+
+The pipe alternative uses static pipe blocks and inventory transfers without rendering moving item stacks in the world. Reuse the shared item-transport/inventory interfaces. This is not a benchmark result or a claim that current item pipes necessarily outperform conveyors; client rendering and server transport/routing costs must be measured separately.
+
+Before deciding, compare matched conveyor and non-rendered pipe workloads at small, expanding and large late-game factory scale. Record loaded segments, active lines, moving stacks, source/destination/filter counts, players and hardware/settings. Include active, idle and blocked-output cases; measure server median/p95 tick time, client frame time, synchronization traffic and memory. Identify whether cost comes from rendering, simulation, updates or routing, and agree performance limits from that evidence.
+
+If measured conveyor cost is unacceptable and pipe transport supplies a suitable alternative, make that replacement route accessible for late-game bulk lines and document it in the Encyclopedia. Preserve contents and stable saved identities through ordinary compatibility handling; this planning note does not convert worlds or remove conveyors. No new conveyor/pipe benchmark or game test was performed for this documentation update.
+
 ## Rollout and open questions
 - Slopes change height one block at a time. There are no vertical lifts, and slopes do not carry players up.
 - No filters on splitters; the item sorter does filtering.

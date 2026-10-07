@@ -14,7 +14,7 @@
   "elements": [
     {
       "from": [
-        0.0,
+        -0.1,
         0.0,
         0.0
       ],
@@ -25,16 +25,34 @@
       ],
       "faces": {
         "north": {
-          "texture": "#sp_iron_plate"
+          "texture": "#sp_iron_plate",
+          "uv": [
+            0.0,
+            15.0,
+            16.0,
+            16.0
+          ]
         },
         "west": {
           "texture": "#sp_iron_plate"
         },
         "up": {
-          "texture": "#sp_iron_plate"
+          "texture": "#sp_iron_plate",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
         },
         "down": {
-          "texture": "#sp_iron_plate"
+          "texture": "#sp_iron_plate",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
         }
       }
     },
@@ -351,13 +369,13 @@
     },
     {
       "from": [
-        -0.02,
-        0.98,
+        0.0,
+        0.9,
         12.0
       ],
       "to": [
         2.5,
-        5.02,
+        5.0,
         16
       ],
       "faces": {

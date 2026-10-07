@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:acorn"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.nuts_about_squirrels.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.nuts_about_squirrels.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

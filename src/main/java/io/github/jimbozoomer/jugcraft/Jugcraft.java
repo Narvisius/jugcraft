@@ -1,5 +1,8 @@
 package io.github.jimbozoomer.jugcraft;
 
+import io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture;
+import io.github.jimbozoomer.jugcraft.biome.JugcraftDimensions;
+import io.github.jimbozoomer.jugcraft.biome.JugcraftRegions;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroBlocks;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
@@ -10,6 +13,9 @@ import io.github.jimbozoomer.jugcraft.electronics.JugcraftElectronics;
 import io.github.jimbozoomer.jugcraft.drone.JugcraftDrones;
 import io.github.jimbozoomer.jugcraft.farming.JugcraftFarming;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
+import io.github.jimbozoomer.jugcraft.gear.JugcraftExosuit;
+import io.github.jimbozoomer.jugcraft.gear.JugcraftGear;
+import io.github.jimbozoomer.jugcraft.gear.JugcraftGrapple;
 import io.github.jimbozoomer.jugcraft.guide.JugcraftGuide;
 import io.github.jimbozoomer.jugcraft.kinetic.JugcraftKinetics;
 import io.github.jimbozoomer.jugcraft.logistics.JugcraftLogistics;
@@ -18,12 +24,16 @@ import io.github.jimbozoomer.jugcraft.materials.JugcraftMaterials;
 import io.github.jimbozoomer.jugcraft.materials.JugcraftWorldgen;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.prospecting.JugcraftProspecting;
+import io.github.jimbozoomer.jugcraft.season.JugcraftSeasons;
 import io.github.jimbozoomer.jugcraft.storage.JugcraftStorage;
 import io.github.jimbozoomer.jugcraft.tools.JugcraftTools;
 import io.github.jimbozoomer.jugcraft.party.JugcraftParties;
 
 import io.github.jimbozoomer.jugcraft.solar.JugcraftSolar;
 import io.github.jimbozoomer.jugcraft.weapons.JugcraftWeapons;
+import io.github.jimbozoomer.jugcraft.world.AlpineSpawn;
+import io.github.jimbozoomer.jugcraft.world.PixelHollows;
+import io.github.jimbozoomer.jugcraft.world.RetroTrader;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
@@ -44,10 +54,12 @@ public final class Jugcraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		JugcraftConfig.load();
+		io.github.jimbozoomer.jugcraft.world.design.WorldDesigner.register();
 		// Registration always happens, even when a feature is disabled, so saved
 		// blocks and items are never lost. The config only controls acquisition.
 		JugcraftMaterials.register();
 		JugcraftComponents.register();
+		io.github.jimbozoomer.jugcraft.machine.Electroplating.register();
 		JugcraftDeposits.register();
 		JugcraftMachines.register();
 		JugcraftFluids.register();
@@ -60,11 +72,33 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.wallrun.WallRuns.register();
 		JugcraftStorage.register();
 		JugcraftElectronics.register();
+		io.github.jimbozoomer.jugcraft.control.JugcraftControl.register();
+		io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.register();
+		io.github.jimbozoomer.jugcraft.building.Dieselworks.register();
+		io.github.jimbozoomer.jugcraft.building.Kaiserworks.register();
+		io.github.jimbozoomer.jugcraft.building.Trenchworks.register();
+		io.github.jimbozoomer.jugcraft.airship.JugcraftAirships.register();
+		io.github.jimbozoomer.jugcraft.walker.JugcraftWalkers.register();
+		io.github.jimbozoomer.jugcraft.landship.JugcraftLandships.register();
+		io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.register();
+		io.github.jimbozoomer.jugcraft.artillery.JugcraftTowerGuns.register();
+		io.github.jimbozoomer.jugcraft.building.Fortifications.register();
+		io.github.jimbozoomer.jugcraft.building.Bunkerworks.register();
+		io.github.jimbozoomer.jugcraft.building.FireControl.register();
+		io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.register();
 		JugcraftFarming.register();
 		JugcraftProspecting.register();
 		JugcraftKinetics.register();
 		JugcraftTools.register();
+		JugcraftGear.register();
+		JugcraftExosuit.register();
+		JugcraftGrapple.register();
+		io.github.jimbozoomer.jugcraft.weapons.JugcraftArms.register();
+		io.github.jimbozoomer.jugcraft.weapons.FieldChemistry.register();
+		io.github.jimbozoomer.jugcraft.chemistry.ConstructionChemistry.register();
 		JugcraftGuide.register();
+		JugcraftAgriculture.register();
+		io.github.jimbozoomer.jugcraft.styx.JugcraftStyx.register();
 		JugcraftDrones.register();
 		io.github.jimbozoomer.jugcraft.tower.JugcraftTower.register();
 		io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints.register();
@@ -72,6 +106,15 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.register();
 		io.github.jimbozoomer.jugcraft.energy.CreativeEnergyCellBlock.register();
 		io.github.jimbozoomer.jugcraft.drone.CreativeSupplyCrateBlock.register();
+		PixelHollows.register();
+		RetroTrader.register();
+		AlpineSpawn.register();
+		JugcraftRegions.register();
+		JugcraftDimensions.register();
+		JugcraftSeasons.register();
+		new io.github.jimbozoomer.jugcraft.creatures.scary.ScaryMod().onInitialize();
+		io.github.jimbozoomer.jugcraft.town.JugcraftTown.register();
+		io.github.jimbozoomer.jugcraft.diagonal.DiagonalWalls.register();
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
 		JugcraftParties.register();

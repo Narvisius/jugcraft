@@ -1,6 +1,6 @@
 # Specialties and contribution briefs
 
-This is a contribution map for the owner's vision, not a claim of shipped content or blanket approval of every implementation. Open one focused proposal, establish shared interfaces first, and build one usable slice per PR. Example specialties may be refined during review.
+This is a contribution map for the owner's vision, not a claim of shipped content or guaranteed acceptance. You may start one focused prototype in your fork and submit a draft PR without an approved issue. Reuse shared interfaces and build one usable slice per PR. Coordinate major shared-API changes first. Example specialties may be refined during review.
 
 ## Factory engineering
 
@@ -9,6 +9,8 @@ Possible specialties: metallurgy and processing; power generation/storage; preci
 Idle machines should do negligible work. Cache networks and invalidate on topology changes. Cap scans, transfers, active jobs and work per tick. Document behavior on unload/reload, full outputs, interruption and simultaneous use. Performance claims require realistic factory benchmarks, not just an empty test world.
 
 ## Magical workshops and schools
+
+The [Styxhexenhammer and Nightglass Observatory](features/styxhexenhammer.md) prototype adds a reference-led dark wizard/herbalist, the owner's brick observatory and timber greenhouse reconstructed from screenshots, and eight decorative flower cultivars. Placement is operator-controlled; natural discovery, flower uses and deeper magic integration remain future work.
 
 Magic supports transport, crafting and combat. Every school needs a distinct identity, an accessible starting spell or craft, deeper specialties, and useful cross-system interactions. Effects below are proposal seeds; exact mechanics and numbers need review.
 
@@ -33,11 +35,17 @@ Start from useful ordinary crops, food, livestock and soils. Branch into magical
 
 Proposals may cover orchards, culinary specialties, animal products, breeding, magical herbs, climate cultivation, fiber/fuel crops and off-world farming. Explain planting conditions, growth limits, harvesting automation, outputs, regional role and interactions with both industry and magic. Prevent infinite growth/yield feedback loops. Avoid excessive breeding/entity counts as the optimal farming strategy.
 
+The branch's first three slices (the Fall Harvest: tall corn, wild plants and sickles; the Kitchen Garden: trellis crops, vegetables, grains and the Cooking Pot; the Festival Crops: gourds, turnips and Turnip Lanterns, cranberry bogs and the chestnut tree; and pumpkin carving) and its planned crop roster and farm equipment are in [branches/AGRICULTURE.md](branches/AGRICULTURE.md).
+
+The owner-endorsed [industrial agriculture plan](features/industrial-agriculture-plan.md) gives farming and forestry finished-product industries: textiles, coated fabrics, paper, packaging, panels, linoleum, rubber goods and later fuels/chemical materials. It records machine routes, sidegrade choices, bootstrap boundaries and a proposed delivery sequence; it is planning documentation rather than a claim of shipped content.
+
 ## Cozy surface biomes
 
 Biomes should belong geographically: temperature, moisture, elevation, water, neighboring terrain, vegetation and animal ecology need a coherent explanation. Give players attractive building palettes, usable regional resources, quiet scenic places and ambient life. Example proposals: orchard valleys, misty woodland workshops, warm meadows or sheltered snowy groves.
 
 Specify transition rules and whether resources are unique or obtainable elsewhere. Avoid forcing essential early items into an extremely rare distant biome. Review exploration distance, seed behavior and existing-chunk compatibility. Keep ambient sounds and effects adjustable and readable.
+
+The biomes branch's roster (a remake of the Biomes O' Plenty catalog's biomes in nine batches, placed in Jugcraft regions) is in [branches/BIOMES.md](branches/BIOMES.md).
 
 ## Caves, dungeons and bosses
 

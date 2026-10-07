@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PPP",
+    "FFF",
+    "PPP"
+  ],
+  "key": {
+    "P": "jugcraft:plastic_sheet",
+    "F": "jugcraft:optical_fibre"
+  },
+  "result": {
+    "id": "jugcraft:data_cable",
+    "count": 12
+  }
+}

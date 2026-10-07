@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "CRC",
+    "B B",
+    "C C"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:lightning_rod",
+    "B": "jugcraft:brass_ingot"
+  },
+  "result": {
+    "id": "jugcraft:lightning_harness",
+    "count": 1
+  }
+}

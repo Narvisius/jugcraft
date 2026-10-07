@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:exosuit_helmet"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.exosuit.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.exosuit.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:exosuit_helmet",
+              "jugcraft:exosuit_chestplate",
+              "jugcraft:exosuit_leggings",
+              "jugcraft:exosuit_boots"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:charging_station"
+}

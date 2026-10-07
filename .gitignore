@@ -5,6 +5,8 @@ run/
 runs/
 world/
 worlds/
+# ...but not source packages named world (docs/ARCHITECTURE.md's world area).
+!/src/**/world/
 logs/
 crash-reports/
 .idea/

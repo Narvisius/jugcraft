@@ -1,0 +1,74 @@
+{
+  "parent": "minecraft:block/light_gray_stained_glass_pane_side",
+  "elements": [
+    {
+      "from": [
+        7.29289,
+        0,
+        0
+      ],
+      "to": [
+        8.70711,
+        16,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45,
+        "rescale": true
+      },
+      "faces": {
+        "down": {
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ],
+          "texture": "#edge"
+        },
+        "north": {
+          "uv": [
+            7,
+            0,
+            9,
+            16
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            16,
+            0,
+            4.6863,
+            16
+          ],
+          "texture": "#pane"
+        },
+        "east": {
+          "uv": [
+            4.6863,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pane"
+        }
+      }
+    }
+  ]
+}

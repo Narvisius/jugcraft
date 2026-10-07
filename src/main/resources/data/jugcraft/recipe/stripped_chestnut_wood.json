@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture",
+      "or": [
+        "biomes"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "jugcraft:stripped_chestnut_log"
+  },
+  "result": {
+    "id": "jugcraft:stripped_chestnut_wood",
+    "count": 3
+  }
+}

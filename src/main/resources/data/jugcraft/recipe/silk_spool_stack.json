@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "WWW",
+    "PPP"
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:silk_spool_stack",
+    "count": 1
+  }
+}

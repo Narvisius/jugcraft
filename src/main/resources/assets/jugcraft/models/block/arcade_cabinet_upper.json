@@ -1,0 +1,336 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "rt_bezel": "jugcraft:block/rt_bezel",
+    "rt_black": "jugcraft:block/rt_black",
+    "rt_button_blue": "jugcraft:block/rt_button_blue",
+    "rt_button_red": "jugcraft:block/rt_button_red",
+    "rt_button_yellow": "jugcraft:block/rt_button_yellow",
+    "rt_coin_door": "jugcraft:block/rt_coin_door",
+    "rt_control_deck": "jugcraft:block/rt_control_deck",
+    "rt_marquee": "jugcraft:block/rt_marquee",
+    "rt_screen": "jugcraft:block/rt_screen",
+    "rt_side_art": "jugcraft:block/rt_side_art",
+    "particle": "jugcraft:block/rt_side_art"
+  },
+  "elements": [
+    {
+      "from": [
+        2.0,
+        0,
+        7.0
+      ],
+      "to": [
+        14.0,
+        11.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_black"
+        },
+        "south": {
+          "texture": "#rt_black"
+        },
+        "east": {
+          "texture": "#rt_side_art"
+        },
+        "west": {
+          "texture": "#rt_side_art"
+        },
+        "up": {
+          "texture": "#rt_black"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        11.0,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_black"
+        },
+        "south": {
+          "texture": "#rt_black"
+        },
+        "east": {
+          "texture": "#rt_side_art"
+        },
+        "west": {
+          "texture": "#rt_side_art"
+        },
+        "up": {
+          "texture": "#rt_black"
+        }
+      }
+    },
+    {
+      "from": [
+        13.0,
+        0,
+        5.0
+      ],
+      "to": [
+        14.0,
+        11.0,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_black"
+        },
+        "south": {
+          "texture": "#rt_black"
+        },
+        "east": {
+          "texture": "#rt_side_art"
+        },
+        "west": {
+          "texture": "#rt_side_art"
+        },
+        "up": {
+          "texture": "#rt_black"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        0,
+        6.5
+      ],
+      "to": [
+        13.0,
+        1.0,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_bezel"
+        },
+        "south": {
+          "texture": "#rt_bezel"
+        },
+        "east": {
+          "texture": "#rt_bezel"
+        },
+        "west": {
+          "texture": "#rt_bezel"
+        },
+        "up": {
+          "texture": "#rt_bezel"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        1.0,
+        6.5
+      ],
+      "to": [
+        13.0,
+        10.0,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_screen",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#rt_bezel"
+        },
+        "east": {
+          "texture": "#rt_bezel"
+        },
+        "west": {
+          "texture": "#rt_bezel"
+        },
+        "up": {
+          "texture": "#rt_bezel"
+        },
+        "down": {
+          "texture": "#rt_bezel"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        10.0,
+        6.5
+      ],
+      "to": [
+        13.0,
+        11.0,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_bezel"
+        },
+        "south": {
+          "texture": "#rt_bezel"
+        },
+        "east": {
+          "texture": "#rt_bezel"
+        },
+        "west": {
+          "texture": "#rt_bezel"
+        },
+        "up": {
+          "texture": "#rt_bezel"
+        },
+        "down": {
+          "texture": "#rt_bezel"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        11.0,
+        5.0
+      ],
+      "to": [
+        14.0,
+        15.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_marquee",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#rt_black"
+        },
+        "east": {
+          "texture": "#rt_side_art"
+        },
+        "west": {
+          "texture": "#rt_side_art"
+        },
+        "up": {
+          "texture": "#rt_black"
+        },
+        "down": {
+          "texture": "#rt_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        15.0,
+        4.5
+      ],
+      "to": [
+        14.5,
+        16.0,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_black"
+        },
+        "south": {
+          "texture": "#rt_black"
+        },
+        "east": {
+          "texture": "#rt_black"
+        },
+        "west": {
+          "texture": "#rt_black"
+        },
+        "up": {
+          "texture": "#rt_black"
+        },
+        "down": {
+          "texture": "#rt_black"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        0,
+        3.5
+      ],
+      "to": [
+        5.5,
+        1.0,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_chrome"
+        },
+        "south": {
+          "texture": "#dp_chrome"
+        },
+        "east": {
+          "texture": "#dp_chrome"
+        },
+        "west": {
+          "texture": "#dp_chrome"
+        },
+        "up": {
+          "texture": "#dp_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        6.0,
+        3.0,
+        5.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rt_button_red"
+        },
+        "south": {
+          "texture": "#rt_button_red"
+        },
+        "east": {
+          "texture": "#rt_button_red"
+        },
+        "west": {
+          "texture": "#rt_button_red"
+        },
+        "up": {
+          "texture": "#rt_button_red"
+        },
+        "down": {
+          "texture": "#rt_button_red"
+        }
+      }
+    }
+  ]
+}

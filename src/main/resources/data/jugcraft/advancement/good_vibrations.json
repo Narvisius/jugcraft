@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:theremin"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.good_vibrations.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.good_vibrations.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

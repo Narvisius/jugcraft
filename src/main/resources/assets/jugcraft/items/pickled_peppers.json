@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "jugcraft:sealed",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/pickled_peppers_sealed"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/pickled_peppers"
+    }
+  }
+}

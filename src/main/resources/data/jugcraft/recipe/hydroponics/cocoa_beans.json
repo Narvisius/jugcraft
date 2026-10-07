@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "minecraft:cocoa_beans",
+  "result": {
+    "id": "minecraft:cocoa_beans",
+    "count": 3
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:cocoa_beans",
+        "count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

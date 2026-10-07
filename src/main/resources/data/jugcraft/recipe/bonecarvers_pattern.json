@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BFB",
+    "LPL",
+    "BFB"
+  ],
+  "key": {
+    "B": "minecraft:bone",
+    "F": "minecraft:flint",
+    "L": "minecraft:leather",
+    "P": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:bonecarvers_pattern",
+    "count": 1
+  }
+}

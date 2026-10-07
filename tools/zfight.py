@@ -1,6 +1,6 @@
 """Z-fighting in block models (Justin: "make sure textures can't z-fight"): finds faces of different elements that
-face the same way in the same plane and overlap, and pulls one of each pair a hair (0.02 model px) off the plane, so
-the game never draws two faces in the same place.
+face the same way in the same plane (or within 0.09 px of it) and overlap, and pulls one of each pair 0.1 model px off
+the plane, so the game never draws two faces in the same place (upstream's rule, docs/ART_DIRECTION.md).
 
     model = zfight.fix(model)      # a model dict with "elements"
     zfight.overlaps(elements)      # [(area, i, face, j, face)] left
@@ -13,7 +13,7 @@ import math
 
 import numpy as np
 
-EPS = 0.02
+EPS = 0.1  # upstream's rule (docs/ART_DIRECTION.md): two faces never within 0.09 px, facing the same way
 _OUT = {"north": (2, 0, -1), "south": (2, 1, 1), "west": (0, 0, -1), "east": (0, 1, 1), "down": (1, 0, -1), "up": (1, 1, 1)}
 
 
@@ -102,7 +102,7 @@ def _ccw(poly):
     return poly
 
 
-def overlaps(elements, tol=1e-3):
+def overlaps(elements, tol=0.095):
     """[(area, i, face_i, j, face_j)]: same-direction coplanar overlapping faces of different elements."""
     fs = _faces(elements)
     hits = []

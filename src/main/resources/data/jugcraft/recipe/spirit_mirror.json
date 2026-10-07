@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NNN",
+    "NPN",
+    "NSN"
+  ],
+  "key": {
+    "N": "minecraft:gold_nugget",
+    "P": "minecraft:glass_pane",
+    "S": "minecraft:soul_sand"
+  },
+  "result": {
+    "id": "jugcraft:spirit_mirror",
+    "count": 1
+  }
+}

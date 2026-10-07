@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " D ",
+    "NXN",
+    "PCP"
+  ],
+  "key": {
+    "D": "minecraft:orange_stained_glass",
+    "N": "minecraft:note_block",
+    "X": "jugcraft:microchip",
+    "P": "jugcraft:plastic_sheet",
+    "C": "jugcraft:data_cable"
+  },
+  "result": {
+    "id": "jugcraft:alarm",
+    "count": 1
+  }
+}

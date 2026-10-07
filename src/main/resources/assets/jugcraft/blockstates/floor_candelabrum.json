@@ -1,0 +1,51 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "half": "lower",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/floor_candelabrum"
+      }
+    },
+    {
+      "when": {
+        "half": "lower",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/floor_candelabrum",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "half": "lower",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/floor_candelabrum",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "half": "lower",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/floor_candelabrum",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "half": "upper"
+      },
+      "apply": {
+        "model": "jugcraft:block/floor_candelabrum_upper"
+      }
+    }
+  ]
+}

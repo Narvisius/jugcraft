@@ -1,0 +1,43 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_javelin"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms_viii.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms_viii.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_javelin",
+              "jugcraft:bronze_francisca",
+              "jugcraft:bronze_chakram",
+              "jugcraft:bronze_harpoon",
+              "jugcraft:steel_javelin",
+              "jugcraft:steel_francisca",
+              "jugcraft:steel_chakram",
+              "jugcraft:steel_harpoon"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

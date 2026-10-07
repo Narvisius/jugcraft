@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "minecraft:wheat_seeds",
+  "result": {
+    "id": "minecraft:wheat",
+    "count": 2
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "minecraft:wheat_seeds",
+        "count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "result": {
+        "id": "minecraft:wheat_seeds",
+        "count": 1
+      },
+      "chance": 0.5
+    }
+  ]
+}

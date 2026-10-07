@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SRS",
+    "RGR"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "R": "jugcraft:rubber",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "jugcraft:scuba_mask",
+    "count": 1
+  }
+}

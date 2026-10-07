@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/giant_pumpkin_side_3_0_0",
+    "s": "jugcraft:block/giant_pumpkin_side_3_1_0",
+    "up": "jugcraft:block/giant_pumpkin_top_3_1_2"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#s"
+        },
+        "up": {
+          "texture": "#up"
+        }
+      }
+    }
+  ]
+}

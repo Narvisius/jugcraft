@@ -27,6 +27,31 @@ public final class FluidFuels {
 	 * the fuel is still used up, so never a loop. */
 	public static final int ADVANCED_DIESEL = 320;
 	public static final int ADVANCED_GASOLINE = 448;
+	/**
+	 * Bioethanol (batch 26), fermented from crops: as good as refinery gas in the gas turbine, and a little below diesel
+	 * in the advanced engine. A bucket of it takes 32 crops and 38,400 JE of fermenting.
+	 */
+	public static final int BIOETHANOL = 192;
+	public static final int ADVANCED_BIOETHANOL = 256;
+	/**
+	 * Batch 29: hydrotreated diesel burns a quarter better than diesel (and in the advanced engine). Hydrotreating a
+	 * bucket costs 15,360 JE and 100 mB of hydrogen, so it pays best with the electrolytic cell's spare hydrogen.
+	 */
+	public static final int PREMIUM_DIESEL = 320;
+	public static final int ADVANCED_PREMIUM_DIESEL = 400;
+	/**
+	 * Premium gasoline (900 mB gasoline + 100 mB bioethanol): 448,000 JE a bucket in the gas turbine against 364,800 for
+	 * the two fuels burnt apart, and 512 KE/mB in the advanced engine. The fuels are still used up, so never a loop.
+	 */
+	public static final int PREMIUM_GASOLINE = 448;
+	public static final int ADVANCED_PREMIUM_GASOLINE = 512;
+	/**
+	 * Batch 43: RP-1 kerosene, hydrocracked from heavy fuel oil with hydrogen: jet fuel, as good as premium gasoline in
+	 * the gas turbine and a little better in the advanced engine. A bucket of heavy fuel oil (128 JE/mB burnt as it
+	 * is) and 200 mB of hydrogen give 800 mB. The fuels are used up, so never a loop.
+	 */
+	public static final int KEROSENE = 448;
+	public static final int ADVANCED_KEROSENE = 480;
 
 	private FluidFuels() {
 	}
@@ -35,14 +60,23 @@ public final class FluidFuels {
 	public static int jePerMb(MachineKind kind, Fluid fluid) {
 		return switch (kind) {
 			case DIESEL_GENERATOR -> fluid == PetroFluids.DIESEL.source() ? DIESEL
-					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
+					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL
+					: fluid == PetroFluids.PREMIUM_DIESEL.source() ? PREMIUM_DIESEL : 0;
 			case DIESEL_ENGINE -> fluid == PetroFluids.DIESEL.source() ? DIESEL
-					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL : 0;
+					: fluid == PetroFluids.HEAVY_FUEL_OIL.source() ? HEAVY_FUEL_OIL
+					: fluid == PetroFluids.PREMIUM_DIESEL.source() ? PREMIUM_DIESEL : 0;
 			case FUEL_CELL -> fluid == PetroFluids.HYDROGEN.fluid() ? HYDROGEN : 0;
 			case ADVANCED_ENGINE -> fluid == PetroFluids.GASOLINE.source() ? ADVANCED_GASOLINE
-					: fluid == PetroFluids.DIESEL.source() ? ADVANCED_DIESEL : 0;
+					: fluid == PetroFluids.DIESEL.source() ? ADVANCED_DIESEL
+					: fluid == PetroFluids.BIOETHANOL.source() ? ADVANCED_BIOETHANOL
+					: fluid == PetroFluids.PREMIUM_DIESEL.source() ? ADVANCED_PREMIUM_DIESEL
+					: fluid == PetroFluids.PREMIUM_GASOLINE.source() ? ADVANCED_PREMIUM_GASOLINE
+					: fluid == PetroFluids.KEROSENE.source() ? ADVANCED_KEROSENE : 0;
 			case GAS_TURBINE -> fluid == PetroFluids.GASOLINE.source() ? GASOLINE
-					: fluid == PetroFluids.REFINERY_GAS.fluid() ? REFINERY_GAS : 0;
+					: fluid == PetroFluids.REFINERY_GAS.fluid() ? REFINERY_GAS
+					: fluid == PetroFluids.BIOETHANOL.source() ? BIOETHANOL
+					: fluid == PetroFluids.PREMIUM_GASOLINE.source() ? PREMIUM_GASOLINE
+					: fluid == PetroFluids.KEROSENE.source() ? KEROSENE : 0;
 			default -> 0;
 		};
 	}

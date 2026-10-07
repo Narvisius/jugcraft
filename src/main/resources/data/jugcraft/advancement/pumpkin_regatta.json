@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:pumpkin_racer"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.pumpkin_regatta.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.pumpkin_regatta.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

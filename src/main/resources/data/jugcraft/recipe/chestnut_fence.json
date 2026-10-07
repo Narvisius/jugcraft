@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture",
+      "or": [
+        "biomes"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "wooden_fence",
+  "pattern": [
+    "W#W",
+    "W#W"
+  ],
+  "key": {
+    "W": "jugcraft:chestnut_planks",
+    "#": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:chestnut_fence",
+    "count": 3
+  }
+}

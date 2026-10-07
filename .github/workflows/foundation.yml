@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: jugcraft-foundation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   repository:
     runs-on: ubuntu-latest
@@ -16,3 +19,7 @@ jobs:
           persist-credentials: false
       - name: Check contribution foundation
         run: python3 scripts/check_repository.py
+      - name: Check dependency pins and installer contracts
+        run: |
+          python3 scripts/package_modrinth.py check
+          python3 -m unittest discover -s scripts/tests -v

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SBS",
+    "I I"
+  ],
+  "key": {
+    "S": "minecraft:oak_slab",
+    "B": "#c:ingots/bronze",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:memorial_bench",
+    "count": 1
+  }
+}

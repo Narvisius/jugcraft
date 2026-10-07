@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:tungsten_ingot",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:steel_plate",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:rocket_nozzle",
+    "count": 2
+  },
+  "time": 160
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LBL",
+    "BIB",
+    "WBW"
+  ],
+  "key": {
+    "L": "minecraft:redstone_lamp",
+    "B": "minecraft:iron_bars",
+    "I": "minecraft:iron_block",
+    "W": "#minecraft:wool"
+  },
+  "result": {
+    "id": "jugcraft:ferris_wheel",
+    "count": 1
+  }
+}

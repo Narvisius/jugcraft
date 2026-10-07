@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:ronin_exosuit_helmet"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.ronin.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.ronin.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:ronin_exosuit_helmet",
+              "jugcraft:ronin_exosuit_chestplate",
+              "jugcraft:ronin_exosuit_leggings",
+              "jugcraft:ronin_exosuit_boots",
+              "jugcraft:ronin_katana"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:exosuit"
+}

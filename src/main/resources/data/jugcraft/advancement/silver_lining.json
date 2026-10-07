@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:silver_dagger"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.silver_lining.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.silver_lining.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " P ",
+    "BRB",
+    " C "
+  ],
+  "key": {
+    "P": "minecraft:purple_wool",
+    "B": "minecraft:black_wool",
+    "R": "minecraft:redstone",
+    "C": "minecraft:cauldron"
+  },
+  "result": {
+    "id": "jugcraft:porch_witch",
+    "count": 1
+  }
+}

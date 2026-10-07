@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:rocket_motor",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:guidance_unit",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:sensor",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:survey_rocket",
+    "count": 1
+  },
+  "time": 300
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:foraging_basket"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.forager.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.forager.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

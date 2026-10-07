@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WLW",
+    "WBW",
+    "W W"
+  ],
+  "key": {
+    "W": "minecraft:brown_wool",
+    "L": "minecraft:leather",
+    "B": "minecraft:bone"
+  },
+  "result": {
+    "id": "jugcraft:werewolf_mask",
+    "count": 1
+  }
+}

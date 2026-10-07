@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:rocket_motor",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:aluminum_wire",
+      "count": 4
+    },
+    {
+      "ingredient": "minecraft:string",
+      "count": 8
+    }
+  ],
+  "result": {
+    "id": "jugcraft:line_rocket",
+    "count": 1
+  },
+  "time": 200
+}

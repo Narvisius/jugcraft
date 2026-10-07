@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:shadow_werewolf_pelt"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.leader_of_the_pack.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.leader_of_the_pack.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

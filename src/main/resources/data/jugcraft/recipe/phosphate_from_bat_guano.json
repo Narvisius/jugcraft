@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:bat_guano",
+    "jugcraft:bat_guano",
+    "jugcraft:bat_guano",
+    "jugcraft:bat_guano"
+  ],
+  "result": {
+    "id": "jugcraft:phosphate",
+    "count": 1
+  }
+}

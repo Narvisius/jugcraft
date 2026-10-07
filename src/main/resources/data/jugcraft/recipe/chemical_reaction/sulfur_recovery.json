@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "sulfur"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrogen_sulfide",
+      "amount": 200
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:sulfur_dust",
+      "count": 1
+    }
+  ],
+  "time": 60
+}

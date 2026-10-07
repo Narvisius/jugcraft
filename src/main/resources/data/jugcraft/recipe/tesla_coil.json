@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " R ",
+    "CWC",
+    "III"
+  ],
+  "key": {
+    "R": "minecraft:lightning_rod",
+    "C": "#c:ingots/copper",
+    "W": "jugcraft:copper_cable",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:tesla_coil",
+    "count": 1
+  }
+}

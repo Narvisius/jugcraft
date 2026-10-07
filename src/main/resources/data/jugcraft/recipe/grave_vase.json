@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B B",
+    " B ",
+    " G "
+  ],
+  "key": {
+    "B": "#c:ingots/bronze",
+    "G": "minecraft:polished_granite"
+  },
+  "result": {
+    "id": "jugcraft:grave_vase",
+    "count": 1
+  }
+}

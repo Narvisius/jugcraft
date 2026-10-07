@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RER",
+    "DPA",
+    "L L"
+  ],
+  "key": {
+    "R": "jugcraft:riveted_rust_plate",
+    "E": "jugcraft:diesel_engine",
+    "D": "jugcraft:mining_drill",
+    "P": "#c:plates/steel",
+    "A": "minecraft:anvil",
+    "L": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:diesel_walker",
+    "count": 1
+  }
+}

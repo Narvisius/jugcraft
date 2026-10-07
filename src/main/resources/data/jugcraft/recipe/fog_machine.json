@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IGI",
+    "CBC",
+    "III"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "G": "minecraft:iron_bars",
+    "C": "jugcraft:copper_cable",
+    "B": "minecraft:bucket"
+  },
+  "result": {
+    "id": "jugcraft:fog_machine",
+    "count": 1
+  }
+}

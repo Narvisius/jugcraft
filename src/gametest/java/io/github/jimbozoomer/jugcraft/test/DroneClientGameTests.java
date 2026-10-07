@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.client.DroneTerminalScreen;
+import io.github.jimbozoomer.jugcraft.client.PartyScreen;
 import io.github.jimbozoomer.jugcraft.drone.BuildJobs;
 import io.github.jimbozoomer.jugcraft.drone.CargoPackagerBlockEntity;
 import io.github.jimbozoomer.jugcraft.drone.DepotView;
@@ -141,6 +142,12 @@ public class DroneClientGameTests implements FabricClientGameTest {
 			context.runOnClient(client -> client.player.connection.sendCommand("party info"));
 			context.waitTicks(10);
 			context.takeScreenshot("jugcraft_party_info");
+			// The Party screen (the P key) shows the same party, sent by the server when the screen opens.
+			context.setScreen(PartyScreen::new);
+			context.waitForScreen(PartyScreen.class);
+			context.waitTicks(10);
+			context.takeScreenshot("jugcraft_party_screen");
+			context.setScreen(() -> null);
 
 			server.runOnServer(minecraft -> BuildJobs.unregister(jobs[0]));
 		}

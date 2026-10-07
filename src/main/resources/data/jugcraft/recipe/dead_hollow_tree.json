@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LSL",
+    "TJT",
+    " T "
+  ],
+  "key": {
+    "L": "minecraft:lantern",
+    "S": "minecraft:stick",
+    "T": "#minecraft:logs",
+    "J": "minecraft:jack_o_lantern"
+  },
+  "result": {
+    "id": "jugcraft:dead_hollow_tree",
+    "count": 1
+  }
+}

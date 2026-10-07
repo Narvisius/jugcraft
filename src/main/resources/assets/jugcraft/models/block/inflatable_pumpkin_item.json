@@ -1,0 +1,312 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/inflatable_pumpkin_vinyl",
+    "blower": "jugcraft:block/inflatable_blower",
+    "ghost": "jugcraft:block/inflatable_ghost_vinyl",
+    "ghost_face": "jugcraft:block/inflatable_ghost_face",
+    "cat": "jugcraft:block/inflatable_cat_vinyl",
+    "cat_face": "jugcraft:block/inflatable_cat_face",
+    "bow": "jugcraft:block/inflatable_bow",
+    "pumpkin": "jugcraft:block/inflatable_pumpkin_vinyl",
+    "pumpkin_face": "jugcraft:block/inflatable_pumpkin_face",
+    "hat": "jugcraft:block/inflatable_hat",
+    "spider": "jugcraft:block/inflatable_spider_vinyl",
+    "spider_face": "jugcraft:block/inflatable_spider_face",
+    "leg": "jugcraft:block/inflatable_leg"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        -0.1,
+        10.25
+      ],
+      "to": [
+        9.5,
+        2.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#blower",
+          "uv": [
+            6.5,
+            14.0,
+            9.5,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#blower",
+          "uv": [
+            6.5,
+            14.0,
+            9.5,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#blower",
+          "uv": [
+            4.0,
+            14.0,
+            5.75,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#blower",
+          "uv": [
+            10.25,
+            14.0,
+            12.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#blower"
+        },
+        "down": {
+          "texture": "#blower"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        0.5,
+        9.25
+      ],
+      "to": [
+        8.5,
+        1.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#blower"
+        },
+        "south": {
+          "texture": "#blower"
+        },
+        "east": {
+          "texture": "#blower"
+        },
+        "west": {
+          "texture": "#blower"
+        },
+        "up": {
+          "texture": "#blower"
+        },
+        "down": {
+          "texture": "#blower"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        0.0,
+        4.5
+      ],
+      "to": [
+        11.5,
+        6.0,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pumpkin_face",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pumpkin"
+        },
+        "east": {
+          "texture": "#pumpkin"
+        },
+        "west": {
+          "texture": "#pumpkin"
+        },
+        "up": {
+          "texture": "#pumpkin"
+        },
+        "down": {
+          "texture": "#pumpkin"
+        }
+      }
+    },
+    {
+      "from": [
+        5.75,
+        6.0,
+        5.75
+      ],
+      "to": [
+        10.25,
+        10.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pumpkin_face",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pumpkin"
+        },
+        "east": {
+          "texture": "#pumpkin"
+        },
+        "west": {
+          "texture": "#pumpkin"
+        },
+        "up": {
+          "texture": "#pumpkin"
+        },
+        "down": {
+          "texture": "#pumpkin"
+        }
+      }
+    },
+    {
+      "from": [
+        5.25,
+        10.25,
+        5.25
+      ],
+      "to": [
+        10.75,
+        10.75,
+        10.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hat"
+        },
+        "south": {
+          "texture": "#hat"
+        },
+        "east": {
+          "texture": "#hat"
+        },
+        "west": {
+          "texture": "#hat"
+        },
+        "up": {
+          "texture": "#hat"
+        },
+        "down": {
+          "texture": "#hat"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        10.75,
+        6.5
+      ],
+      "to": [
+        9.5,
+        12.75,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hat"
+        },
+        "south": {
+          "texture": "#hat"
+        },
+        "east": {
+          "texture": "#hat"
+        },
+        "west": {
+          "texture": "#hat"
+        },
+        "up": {
+          "texture": "#hat"
+        },
+        "down": {
+          "texture": "#hat"
+        }
+      }
+    },
+    {
+      "from": [
+        7.25,
+        12.75,
+        7.25
+      ],
+      "to": [
+        8.75,
+        14.25,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hat"
+        },
+        "south": {
+          "texture": "#hat"
+        },
+        "east": {
+          "texture": "#hat"
+        },
+        "west": {
+          "texture": "#hat"
+        },
+        "up": {
+          "texture": "#hat"
+        },
+        "down": {
+          "texture": "#hat"
+        }
+      }
+    },
+    {
+      "from": [
+        7.75,
+        14.25,
+        7.75
+      ],
+      "to": [
+        8.25,
+        15.25,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hat"
+        },
+        "south": {
+          "texture": "#hat"
+        },
+        "east": {
+          "texture": "#hat"
+        },
+        "west": {
+          "texture": "#hat"
+        },
+        "up": {
+          "texture": "#hat"
+        },
+        "down": {
+          "texture": "#hat"
+        }
+      }
+    }
+  ]
+}

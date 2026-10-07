@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:rocket_casing",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:rocket_nozzle",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:solid_propellant",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:rocket_motor",
+    "count": 1
+  },
+  "time": 200
+}

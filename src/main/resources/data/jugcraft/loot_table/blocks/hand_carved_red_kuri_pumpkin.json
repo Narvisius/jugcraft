@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:hand_carved_red_kuri_pumpkin",
+          "modifier": [
+            {
+              "type": "minecraft:copy_components",
+              "include": [
+                "jugcraft:carving"
+              ],
+              "source": "block_entity"
+            },
+            {
+              "type": "minecraft:copy_state",
+              "block": "jugcraft:hand_carved_red_kuri_pumpkin",
+              "properties": [
+                "lit",
+                "soul"
+              ]
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/hand_carved_red_kuri_pumpkin"
+}

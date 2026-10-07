@@ -10,22 +10,36 @@ Build factories and magical workshops, specialize in agriculture or a school of 
 
 Jugcraft's original gameplay ships as one mod, organized into internal feature packages. Third-party mods, if approved, remain separately installed dependencies in an accompanying pack. We do not copy their code or bundle their JARs into Jugcraft.
 
+## Frameworks and automatic installation
+
+**Jugcraft Complete** is the companion Modrinth `.mrpack`: import it in Modrinth App and confirm installation to download Jugcraft and the selected pinned libraries together. Successful Build workflow runs provide it in the **jugcraft-installers** artifact. A public Modrinth listing is not configured yet; see [installation and publishing](docs/DISTRIBUTION.md).
+
+**Contributors and AI agents:** use the [approved framework catalog](docs/FRAMEWORKS.md) before building new animation, texture, spell, creature, or UI infrastructure. The foundation includes GeckoLib, Player Animation Library, Spell Engine/Spell Power, Modonomicon, SmartBrainLib, GuiLib, Fusion, and the supporting libraries, plus Jade/JEI and optional visual integrations. Their availability does not mean existing content has already been migrated. Jade's adapter reports shared-machine energy and processing progress. Exact versions and sides come from one [dependency lock](distribution/frameworks.lock.json).
+
+Minecraft remains **26.3 + Fabric**, with **Loader 0.19.5** required by the selected framework artifacts. Read the [feature record](docs/features/framework-foundation.md) for actual verification and outstanding playtests.
+
 ## Start here
 
+- [Design a new world's terrain, biomes, spawn, city and villages with World Designer](docs/WORLD_DESIGNER.md).
+
+- [Start contributing now: fork, connect your AI, and open a PR](docs/COMMUNITY_QUICKSTART.md).
 - [Propose a feature](../../issues/new?template=feature.yml): no coding experience needed.
 - [Propose an existing mod integration](../../issues/new?template=integration.yml).
 - [Contribute code, art, or documentation](CONTRIBUTING.md).
+- [Browse the shared owner asset library](art/owner-library/README.md): reusable textures, reference sheets, sounds and animations for every content branch, including building, industry, equipment, vehicles, biomes and farming.
 - [Read the connected gameplay design](docs/DESIGN.md).
 - [See everything that exists so far](docs/WHAT_EXISTS.md) (content, APIs and file map, for contributors and AI agents) and [what changed](CHANGELOG.md).
 - [See how the technology tree works](docs/TECH_TREE.md), including the planned [Chemistry branch](docs/branches/CHEMISTRY.md).
+- [Grow crops in the Agriculture branch](docs/branches/AGRICULTURE.md): 3-block corn for fields and mazes, sunflowers, beans, sweet potatoes, flax and sickles; a kitchen garden with trellis tomatoes, peppers, onions, garlic, cabbage, oats and barley, and a Cooking Pot for soups and chili; festival crops with squash and gourds, Turnip Lanterns, cranberry bogs and a chestnut tree; a Carving Knife to carve any face into a pumpkin; plus the plan for what comes next.
 - [Explore specialties, magic schools, creatures and seasonal briefs](docs/CONTENT_BRANCHES.md).
 - [See architecture and integration rules](docs/ARCHITECTURE.md).
-- [Check the roadmap](docs/ROADMAP.md) and [platform decision](docs/PLATFORM.md).
+- [Check the roadmap](docs/ROADMAP.md), [owner-requested TODO list](docs/TODO.md) and [platform decision](docs/PLATFORM.md).
+- [Plan the Jugcraft Encyclopedia](docs/features/jugcraft-encyclopedia.md): inventory/keybind access, technology and magic pathways, integrated quests and ten UI references.
 - [Maintainer setup and review guide](docs/MAINTAINERS.md).
 
 ## How additions become part of Jugcraft
 
-Proposal → maintainer approval → fork and feature branch → commits → pull request → checks and review → multiplayer playtest → merge → numbered release.
+Idea → fork and feature branch → focused prototype and commits → draft pull request → checks and maintainer review → multiplayer playtest → acceptance and merge → numbered release. You may start a prototype without an approved issue.
 
 One feature per PR. Include the proposal, integration contract, and actual test evidence. An approved idea is permission to develop it, not a promise to merge it. Maintainers decide fit, quality, and release timing.
 
@@ -43,7 +57,7 @@ The first content, tin and bronze plus the base materials (zinc, lead, silver, n
 ./gradlew runServer
 ```
 
-`build` is verified in CI; `runClient` and `runServer` are the standard Loom commands and have not been tried yet. Data checks that do not need Minecraft:
+`build` is verified in CI, and CI also runs a real client (`./gradlew runClientGameTest`) that joins an in-process dedicated server; `runClient` and `runServer` are the standard Loom commands and have not been tried by hand yet. The two-client checklist is in [docs/TESTING.md](docs/TESTING.md#dedicated-server-and-two-clients). Data checks that do not need Minecraft:
 
 ```sh
 python3 -m pip install pillow
@@ -58,7 +72,7 @@ Install Python 3.11 or newer, then run:
 python scripts/check_repository.py
 ```
 
-This checks the contribution foundation only. It does **not** compile Minecraft code or certify multiplayer compatibility. The platform bootstrap must introduce a pinned Gradle wrapper, mod build, and required game tests before implementation PRs can merge.
+This checks the contribution foundation only. It does **not** compile Minecraft code or certify multiplayer compatibility. The pinned Gradle build already exists; use the Build workflow and documented build commands for compilation. Multiplayer playtesting remains separate.
 
 ## Rights and conduct
 

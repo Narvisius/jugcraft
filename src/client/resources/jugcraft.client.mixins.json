@@ -1,8 +1,16 @@
 {
   "required": true,
-  "package": "io.github.jimbozoomer.jugcraft.client.mixin",
-  "compatibilityLevel": "JAVA_25",
+  "minVersion": "0.8",
+  "package": "io.github.jimbozoomer.jugcraft.mixin.client",
+  "compatibilityLevel": "JAVA_21",
   "client": [
+    "ArmsFirstPersonMixin",
+    "ArmsHumanoidModelMixin",
+    "ArmsItemInHandLayerMixin",
+    "ArmsRenderStateMixin",
+    "ClientLevelSeasonMixin",
+    "DiagonalParticlesMixin",
+    "JeiRegistryBootstrapMixin",
     "ChannelAccessor",
     "SoundEngineAccessor",
     "SoundEngineMixin",

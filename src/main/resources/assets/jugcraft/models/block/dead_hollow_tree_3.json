@@ -1,0 +1,288 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/dead_tree_bark",
+    "bark": "jugcraft:block/dead_tree_bark",
+    "end": "jugcraft:block/dead_tree_end",
+    "hollow": "jugcraft:block/dead_tree_hollow",
+    "face": "jugcraft:block/dead_tree_face",
+    "eye": "jugcraft:block/dead_tree_eye",
+    "lantern_iron": "jugcraft:block/yard_lantern_iron",
+    "lantern_glass": "jugcraft:block/yard_lantern_glass"
+  },
+  "elements": [
+    {
+      "from": [
+        4.5,
+        0,
+        4.5
+      ],
+      "to": [
+        11.5,
+        10,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#bark"
+        },
+        "down": {
+          "texture": "#bark"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        9,
+        14,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#end"
+        },
+        "down": {
+          "texture": "#bark"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        10,
+        7
+      ],
+      "to": [
+        11,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#end"
+        },
+        "down": {
+          "texture": "#bark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        2,
+        -12
+      ],
+      "to": [
+        9.5,
+        5,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            11.0,
+            16.0,
+            14.0
+          ]
+        },
+        "west": {
+          "texture": "#bark",
+          "uv": [
+            0.0,
+            11.0,
+            16.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            0.0,
+            9.5,
+            16.0
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          3.5,
+          4.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        24.5,
+        2.5,
+        7.5
+      ],
+      "to": [
+        25.5,
+        8,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark",
+          "uv": [
+            6.5,
+            8.0,
+            7.5,
+            13.5
+          ]
+        },
+        "south": {
+          "texture": "#bark",
+          "uv": [
+            8.5,
+            8.0,
+            9.5,
+            13.5
+          ]
+        },
+        "east": {
+          "texture": "#bark"
+        },
+        "west": {
+          "texture": "#bark"
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            8.5,
+            7.5,
+            9.5,
+            8.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            8.5,
+            7.5,
+            9.5,
+            8.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        8.5,
+        -8.5
+      ],
+      "to": [
+        8.5,
+        13,
+        -7.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bark"
+        },
+        "south": {
+          "texture": "#bark"
+        },
+        "east": {
+          "texture": "#bark",
+          "uv": [
+            7.5,
+            3.0,
+            8.5,
+            7.5
+          ]
+        },
+        "west": {
+          "texture": "#bark",
+          "uv": [
+            7.5,
+            3.0,
+            8.5,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#bark",
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ]
+        },
+        "down": {
+          "texture": "#bark",
+          "uv": [
+            7.5,
+            7.5,
+            8.5,
+            8.5
+          ]
+        }
+      }
+    }
+  ]
+}

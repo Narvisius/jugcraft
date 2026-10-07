@@ -1,0 +1,15 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": "jugcraft:gilders_pattern",
+  "base": "jugcraft:steel_rapier",
+  "addition": "minecraft:gold_ingot",
+  "result": {
+    "id": "jugcraft:gilded_rapier"
+  }
+}

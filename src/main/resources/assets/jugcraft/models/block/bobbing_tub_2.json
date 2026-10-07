@@ -1,0 +1,364 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/bobbing_tub_wood",
+    "wood": "jugcraft:block/bobbing_tub_wood",
+    "band": "jugcraft:block/bobbing_tub_band",
+    "water": "jugcraft:block/bobbing_tub_water",
+    "apple": "jugcraft:block/bobbing_tub_apple",
+    "stem": "jugcraft:block/bobbing_tub_stem"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        1,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wood"
+        },
+        "south": {
+          "texture": "#wood"
+        },
+        "east": {
+          "texture": "#wood"
+        },
+        "west": {
+          "texture": "#wood"
+        },
+        "up": {
+          "texture": "#wood"
+        },
+        "down": {
+          "texture": "#wood"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wood"
+        },
+        "south": {
+          "texture": "#wood"
+        },
+        "east": {
+          "texture": "#wood"
+        },
+        "west": {
+          "texture": "#wood"
+        },
+        "up": {
+          "texture": "#wood"
+        },
+        "down": {
+          "texture": "#wood"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        14
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wood"
+        },
+        "south": {
+          "texture": "#wood"
+        },
+        "east": {
+          "texture": "#wood"
+        },
+        "west": {
+          "texture": "#wood"
+        },
+        "up": {
+          "texture": "#wood"
+        },
+        "down": {
+          "texture": "#wood"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        2
+      ],
+      "to": [
+        2,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wood"
+        },
+        "south": {
+          "texture": "#wood"
+        },
+        "east": {
+          "texture": "#wood"
+        },
+        "west": {
+          "texture": "#wood"
+        },
+        "up": {
+          "texture": "#wood"
+        },
+        "down": {
+          "texture": "#wood"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        1,
+        2
+      ],
+      "to": [
+        15,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wood"
+        },
+        "south": {
+          "texture": "#wood"
+        },
+        "east": {
+          "texture": "#wood"
+        },
+        "west": {
+          "texture": "#wood"
+        },
+        "up": {
+          "texture": "#wood"
+        },
+        "down": {
+          "texture": "#wood"
+        }
+      }
+    },
+    {
+      "from": [
+        0.75,
+        2,
+        0.75
+      ],
+      "to": [
+        15.25,
+        3,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#band"
+        },
+        "south": {
+          "texture": "#band"
+        },
+        "east": {
+          "texture": "#band"
+        },
+        "west": {
+          "texture": "#band"
+        }
+      }
+    },
+    {
+      "from": [
+        0.75,
+        7,
+        0.75
+      ],
+      "to": [
+        15.25,
+        8,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#band"
+        },
+        "south": {
+          "texture": "#band"
+        },
+        "east": {
+          "texture": "#band"
+        },
+        "west": {
+          "texture": "#band"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        8,
+        2
+      ],
+      "to": [
+        14,
+        8.5,
+        14
+      ],
+      "faces": {
+        "up": {
+          "texture": "#water"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        7.5,
+        4
+      ],
+      "to": [
+        7,
+        10.5,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#apple"
+        },
+        "south": {
+          "texture": "#apple"
+        },
+        "east": {
+          "texture": "#apple"
+        },
+        "west": {
+          "texture": "#apple"
+        },
+        "up": {
+          "texture": "#apple"
+        },
+        "down": {
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "from": [
+        5.25,
+        10.5,
+        5.25
+      ],
+      "to": [
+        5.75,
+        11.5,
+        5.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stem"
+        },
+        "south": {
+          "texture": "#stem"
+        },
+        "east": {
+          "texture": "#stem"
+        },
+        "west": {
+          "texture": "#stem"
+        },
+        "up": {
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        7.5,
+        8.5
+      ],
+      "to": [
+        12,
+        10.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#apple"
+        },
+        "south": {
+          "texture": "#apple"
+        },
+        "east": {
+          "texture": "#apple"
+        },
+        "west": {
+          "texture": "#apple"
+        },
+        "up": {
+          "texture": "#apple"
+        },
+        "down": {
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "from": [
+        10.25,
+        10.5,
+        9.75
+      ],
+      "to": [
+        10.75,
+        11.5,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stem"
+        },
+        "south": {
+          "texture": "#stem"
+        },
+        "east": {
+          "texture": "#stem"
+        },
+        "west": {
+          "texture": "#stem"
+        },
+        "up": {
+          "texture": "#stem"
+        }
+      }
+    }
+  ]
+}

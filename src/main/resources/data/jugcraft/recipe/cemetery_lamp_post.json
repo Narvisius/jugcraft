@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "ILI",
+    " I ",
+    " I "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "minecraft:lantern"
+  },
+  "result": {
+    "id": "jugcraft:cemetery_lamp_post",
+    "count": 1
+  }
+}

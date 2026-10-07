@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " S ",
+    "SES",
+    "RSR"
+  ],
+  "key": {
+    "S": "minecraft:stone_bricks",
+    "E": "minecraft:ender_eye",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:gargoyle_sentinel",
+    "count": 1
+  }
+}

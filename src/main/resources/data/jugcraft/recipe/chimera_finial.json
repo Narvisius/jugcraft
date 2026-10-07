@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "B",
+    "S",
+    "T"
+  ],
+  "key": {
+    "B": "minecraft:bone",
+    "S": "minecraft:stone",
+    "T": "minecraft:stone_slab"
+  },
+  "result": {
+    "id": "jugcraft:chimera_finial",
+    "count": 1
+  }
+}

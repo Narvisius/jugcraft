@@ -1,0 +1,47 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:bronze_katana"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.arms_vi.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.arms_vi.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:bronze_katana",
+              "jugcraft:bronze_brazier_mace",
+              "jugcraft:bronze_longbow",
+              "jugcraft:bronze_arbalest",
+              "jugcraft:bronze_heater_shield",
+              "jugcraft:bronze_tower_shield",
+              "jugcraft:steel_katana",
+              "jugcraft:steel_brazier_mace",
+              "jugcraft:steel_longbow",
+              "jugcraft:steel_arbalest",
+              "jugcraft:steel_heater_shield",
+              "jugcraft:steel_tower_shield"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:bronze"
+}

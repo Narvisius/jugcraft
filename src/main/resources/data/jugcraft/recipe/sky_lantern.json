@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "P P",
+    "SCS"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:string",
+    "C": "minecraft:candle"
+  },
+  "result": {
+    "id": "jugcraft:sky_lantern",
+    "count": 2
+  }
+}

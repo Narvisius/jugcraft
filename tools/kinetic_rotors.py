@@ -10,7 +10,7 @@ from pathlib import Path
 
 import kinetic_models
 from logistics_models import FACING_ROTATION
-from model_writer import unpack
+from model_writer import fit_uv, separate_boxes, unpack
 
 TEXTURES = Path(__file__).resolve().parent.parent / "src/main/resources/assets/jugcraft/textures/block"
 AXIS_ROTATION = {"x": {"y": 90}, "y": {"x": 90}, "z": {}}
@@ -52,11 +52,28 @@ def face_texture(texture, face):
     return texture.get(face, texture.get("*")) if isinstance(texture, dict) else texture
 
 
-def quads(elements):
+# A zero-thickness plane drawn from both sides (two opposite faces on one plane) has each face lifted this far (pixels)
+# along its own normal: the cutout and translucent entity types do not cull, so twins on one plane would fight.
+TWO_SIDED_LIFT = 0.05
+OPPOSITE = {"north": "south", "south": "north", "west": "east", "east": "west", "up": "down", "down": "up"}
+
+
+def turn_for_separation(point, rotation):
+    """rotate() with an element's "rotation" option, for model_writer.separate_boxes."""
+    return rotate(point, tuple(rotation[:3]))
+
+
+def quads(elements, separate=True):
+    """Textured quads of model elements (tuples, see model_writer). With separate (the default) differently drawn faces
+    that share a plane are first pulled apart (model_writer.separate_boxes, whole boxes, never single quads), so a
+    collar, band or cap never flickers against the body it sits on."""
+    if separate:
+        elements = separate_boxes(elements, turn=turn_for_separation)
     out = []
     for item in elements:
         frm, to, texture, options = unpack(item)
         rotation = options.get("rotation")
+        pinned = options.get("uv", {})
         for face, (corners, normal) in FACE_CORNERS.items():
             name = face_texture(texture, face)
             if name is None:
@@ -67,9 +84,17 @@ def quads(elements):
                 raise ValueError(f"rotor texture {name} is animated; the renderer draws the whole image")
             points = [[to[k] if corner[k] else frm[k] for k in range(3)] for corner in corners]
             uvs = [vanilla_uv(face, *p) for p in points]
+            us, vs = [u for u, _ in uvs], [v for _, v in uvs]
             if stretch:
-                us, vs = [u for u, _ in uvs], [v for _, v in uvs]
                 uvs = [((u - min(us)) / (max(us) - min(us)) * 16, (v - min(vs)) / (max(vs) - min(vs)) * 16) for u, v in uvs]
+            else:
+                # A pinned UV (kept by a separation push) or the automatic one moved inside the sprite by whole tiles.
+                u0, v0, u1, v1 = pinned.get(face) or fit_uv([min(us), min(vs), max(us), max(vs)], clamp=False)
+                uvs = [(u0 + (u - min(us)) / ((max(us) - min(us)) or 1) * (u1 - u0),
+                        v0 + (v - min(vs)) / ((max(vs) - min(vs)) or 1) * (v1 - v0)) for u, v in uvs]
+            axis = [abs(c) for c in normal].index(1)
+            if abs(to[axis] - frm[axis]) < 1e-9 and face_texture(texture, OPPOSITE[face]) is not None:
+                points = [[p[k] + normal[k] * TWO_SIDED_LIFT for k in range(3)] for p in points]
             n = list(normal)
             if rotation:
                 points = [rotate(p, rotation) for p in points]

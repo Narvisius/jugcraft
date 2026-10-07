@@ -1,0 +1,98 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": "minecraft:tool/can_shear",
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:creeping_ivy",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": 1,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:creeping_ivy",
+                "state": {
+                  "down": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": 1,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:creeping_ivy",
+                "state": {
+                  "up": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": 1,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:creeping_ivy",
+                "state": {
+                  "north": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": 1,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:creeping_ivy",
+                "state": {
+                  "south": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": 1,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:creeping_ivy",
+                "state": {
+                  "west": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": 1,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:creeping_ivy",
+                "state": {
+                  "east": "true"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": true,
+              "count": -1
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/creeping_ivy"
+}

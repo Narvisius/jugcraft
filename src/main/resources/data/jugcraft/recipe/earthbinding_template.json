@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "thallite"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GTG",
+    "TRT",
+    "GTG"
+  ],
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "T": "#c:nuggets/thallite",
+    "R": "minecraft:rooted_dirt"
+  },
+  "result": {
+    "id": "jugcraft:earthbinding_template",
+    "count": 1
+  }
+}

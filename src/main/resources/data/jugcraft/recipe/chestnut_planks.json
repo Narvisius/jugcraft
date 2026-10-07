@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture",
+      "or": [
+        "biomes"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "#jugcraft:chestnut_logs"
+  ],
+  "result": {
+    "id": "jugcraft:chestnut_planks",
+    "count": 4
+  }
+}

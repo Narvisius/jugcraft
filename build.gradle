@@ -1,5 +1,6 @@
 plugins {
 	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
 	id 'maven-publish'
 }
 
@@ -11,6 +12,16 @@ base {
 }
 
 repositories {
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content { includeGroup "maven.modrinth" }
+	}
+	maven {
+		name = "GuiLib"
+		url = "https://skyblockoverhaul.github.io/maven"
+		content { includeGroup "net.sbo" }
+	}
 	// JEI (optional recipe viewer integration, compile-time API only; see client/compat/JugcraftJeiPlugin).
 	maven {
 		name = "BlameJared"
@@ -32,6 +43,15 @@ loom {
 	}
 }
 
+// One reviewed list controls the development classpaths, pack downloads, and release metadata.
+def frameworkLockFile = file("distribution/frameworks.lock.json")
+def frameworkLock = new groovy.json.JsonSlurper().parse(frameworkLockFile)
+if (frameworkLock.minecraft != project.minecraft_version || frameworkLock.fabricLoader != project.loader_version
+		|| frameworkLock.kotlin != project.kotlin_version) {
+	throw new GradleException("Platform pins disagree with distribution/frameworks.lock.json")
+}
+def withOptionalIntegrations = providers.gradleProperty("jugcraftOptionalIntegrations").getOrElse("true").toBoolean()
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -39,13 +59,47 @@ dependencies {
 	// Only the API: Jugcraft runs without JEI; with it, JEI loads our plugin (entrypoint "jei_mod_plugin").
 	compileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
 	compileOnly "mezz.jei:jei-${project.minecraft_version}-fabric-api:${project.jei_version}"
+	frameworkLock.dependencies.each { library ->
+		// Fabric API and the JEI API already have their established declarations above.
+		if (library.key != "fabric-api") {
+			boolean clientOnly = library.side == "client"
+			if (library.requiredByJugcraft) {
+				add(clientOnly ? "clientImplementation" : "implementation", library.maven) { transitive = false }
+			} else {
+				if (library.key != "jei") {
+					add(clientOnly ? "clientCompileOnly" : "compileOnly", library.maven) { transitive = false }
+				}
+				if (withOptionalIntegrations) {
+					add(clientOnly ? "clientRuntimeOnly" : "runtimeOnly", library.maven) { transitive = false }
+				}
+			}
+		}
+	}
 }
 
 processResources {
+	from('tools/world-designer') {
+		include 'index.html', 'style.css', 'model.js', 'editor.js'
+		into 'jugcraft/world-designer'
+	}
 	inputs.property "version", project.version
+	inputs.file frameworkLockFile
 
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version
+	}
+	doLast {
+		File manifest = new File(destinationDir, "fabric.mod.json")
+		def metadata = new groovy.json.JsonSlurper().parse(manifest)
+		frameworkLock.dependencies.each { library ->
+			if (library.requiredByJugcraft) {
+				metadata.depends[library.modId] = ">=${library.modVersion}"
+			} else {
+				if (!metadata.suggests) metadata.suggests = [:]
+				metadata.suggests[library.modId] = ">=${library.modVersion}"
+			}
+		}
+		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(metadata)) + "\n"
 	}
 }
 
@@ -61,8 +115,65 @@ fabricApi {
 		createSourceSet = true
 		modId = "jugcraft-test"
 		enableGameTests = true
-		enableClientGameTests = true // Real client with rendering; CI job "client" runs it and keeps the screenshots.
+		enableClientGameTests = true // Real client with rendering; CI's client jobs run it and keep the screenshots.
 		eula = true // Accepts the Minecraft EULA for the test server only.
+	}
+}
+
+// CI chooses and shares out the client game tests (tools/select_client_tests.py, docs/TESTING.md):
+// Loom deletes build/run/clientGameTest before each run, so CI must write these AFTER that dependency.
+// Restrict this to CI: never overwrite a local developer's client settings.
+tasks.named("runClientGameTest") {
+	doFirst {
+		if (System.getenv("CI") == "true") {
+			workingDir.mkdirs()
+			new File(workingDir, "options.txt").text = 'preferredGraphicsBackend:"opengl"\nfullscreen:false\nlang:en_us\n'
+		}
+	}
+}
+
+// -PclientTests=<Class,Class,...> keeps only those classes of the test mod's client test list (simple names), and
+// -PclientTestShard=<n> -PclientTestShards=<count> keeps the classes at positions n, n + count, n + 2 * count ... of
+// it. Without them every class runs. Server game tests are never split.
+def clientTests = providers.gradleProperty("clientTests").getOrElse("")
+def clientTestShard = providers.gradleProperty("clientTestShard").getOrElse("")
+def clientTestShards = providers.gradleProperty("clientTestShards").getOrElse("")
+tasks.named("processGametestResources", ProcessResources) {
+	inputs.property("clientTests", clientTests)
+	inputs.property("clientTestShard", clientTestShard)
+	inputs.property("clientTestShards", clientTestShards)
+	doLast { task ->
+		if (clientTests.isEmpty() && clientTestShard.isEmpty() && clientTestShards.isEmpty()) {
+			return
+		}
+		File manifest = new File(task.destinationDir, "fabric.mod.json")
+		def json = new groovy.json.JsonSlurper().parse(manifest)
+		List<String> all = json.entrypoints["fabric-client-gametest"]
+		List<String> mine
+		if (!clientTests.isEmpty()) {
+			if (!clientTestShard.isEmpty() || !clientTestShards.isEmpty()) {
+				throw new GradleException("Give clientTests, or clientTestShard and clientTestShards, not both")
+			}
+			Set<String> wanted = clientTests.split(",").collect { it.trim() }.findAll { !it.isEmpty() } as Set
+			mine = all.findAll { wanted.contains(it.substring(it.lastIndexOf('.') + 1)) }
+			Set<String> unknown = wanted - (mine.collect { it.substring(it.lastIndexOf('.') + 1) } as Set)
+			if (!unknown.isEmpty()) {
+				throw new GradleException("clientTests names classes the test mod does not list: ${unknown}")
+			}
+		} else {
+			if (clientTestShard.isEmpty() || clientTestShards.isEmpty()) {
+				throw new GradleException("Give both clientTestShard and clientTestShards, or neither")
+			}
+			int shard = clientTestShard as int
+			int shards = clientTestShards as int
+			if (shards < 1 || shard < 0 || shard >= shards) {
+				throw new GradleException("clientTestShard must be from 0 to clientTestShards - 1, got ${shard} of ${shards}")
+			}
+			mine = (0..<all.size()).findAll { it % shards == shard }.collect { all[it] }
+		}
+		json.entrypoints["fabric-client-gametest"] = mine
+		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+		task.logger.lifecycle("Client game tests: ${mine.size()} of ${all.size()} classes: ${mine}")
 	}
 }
 
@@ -74,6 +185,10 @@ java {
 	withSourcesJar()
 	sourceCompatibility = JavaVersion.VERSION_25
 	targetCompatibility = JavaVersion.VERSION_25
+}
+
+kotlin {
+	jvmToolchain(25)
 }
 
 jar {

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "autumn_wreath",
+  "pattern": [
+    "LCL",
+    "L L",
+    "LML"
+  ],
+  "key": {
+    "L": "jugcraft:chestnut_leaves",
+    "C": "jugcraft:ornamental_corn",
+    "M": "jugcraft:orange_mum"
+  },
+  "result": {
+    "id": "jugcraft:autumn_wreath",
+    "count": 1,
+    "components": {
+      "minecraft:block_state": {
+        "flowers": "orange"
+      }
+    }
+  }
+}

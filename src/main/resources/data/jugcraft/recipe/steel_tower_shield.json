@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "#W#",
+    "#W#",
+    "#W#"
+  ],
+  "key": {
+    "#": "#c:ingots/steel",
+    "W": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:steel_tower_shield",
+    "count": 1
+  }
+}

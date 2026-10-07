@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "LCL",
+    " W "
+  ],
+  "key": {
+    "L": "jugcraft:hydrogen_lift_cell",
+    "C": "minecraft:lead",
+    "W": "minecraft:barrel"
+  },
+  "result": {
+    "id": "jugcraft:observation_balloon",
+    "count": 1
+  }
+}

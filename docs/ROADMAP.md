@@ -1,6 +1,8 @@
 # Roadmap
 
-The broad vision is approved as direction, not as a promise that all content is available or a fixed delivery schedule. All gameplay remains unimplemented in this contribution foundation.
+The broad vision is approved as direction, not as a promise that all content is available or a fixed delivery schedule. See the feature documents and current PRs for implementation status.
+
+Concrete owner-requested follow-ups are tracked in the [TODO list](TODO.md), including the independently documented [Jugcraft Encyclopedia](features/jugcraft-encyclopedia.md) and its ten UI reference images. The Encyclopedia's approved direction is a full UI with technology/magic route explanations, detailed pathway guidance and quests, accessed from the inventory or a keybind without an item.
 
 | Milestone | Deliverable | Exit evidence |
 | --- | --- | --- |
@@ -19,6 +21,16 @@ Before a viewer release, verify permissions/claims, combined progression, realis
 
 ## Initial proposal board
 
+### Owner-requested TODO: Ars Goetia summoning and pacts
+
+- [ ] Add a future summoning and pact system covering **all 72 spirits of the Ars Goetia, including Stolas** (owner request, 5 October 2026).
+- [ ] Give each spirit its own appearance, personality, summoning requirements, and clearly stated pact benefits, costs, limits, duration, and exit/breach rules. Players must knowingly accept pact terms; another player cannot bind them without consent.
+- [ ] Start the first pilot with Stolas, connecting botanical knowledge, astronomy, and minerals to [Styxhexenhammer's conservatory](features/styxhexenhammer.md); expand through a shared, data-driven roster instead of 72 incompatible systems.
+- [ ] Connect later flower uses to existing agriculture, materials, crafting and magic. Keep the current decorative flowers usable before pacts exist.
+- [ ] Design server authority, ownership, protected-area rules, encounter bounds, concurrent summons, entity caps, restart/unload recovery, and save compatibility before implementation.
+
+This is future work. Styxhexenhammer's initial release does not implement summoning or pacts.
+
 These are suggested issue-sized briefs, not assigned or implementation-approved work:
 
 - Shared material plan: one resource with distinct mechanical and magical uses.
@@ -32,4 +44,4 @@ These are suggested issue-sized briefs, not assigned or implementation-approved 
 - One school brief chosen from Fire, Ice, Storm, Earth, Necromancy, Blood, Vampirism or Cursing.
 - One realm brief and one moon/rocket brief, including safe return travel and material uses.
 
-Use the feature proposal form. Maintainers approve scope, sequence dependencies and assign one lead before substantial implementation. Do not accept a single PR implementing the entire roadmap.
+Use the feature proposal form for discussion, or start one focused prototype in your fork and open a draft PR. Prior issue approval is not required for that prototype. Coordinate major shared-API or platform changes first; maintainers decide acceptance during review. Do not submit a single PR implementing the entire roadmap.

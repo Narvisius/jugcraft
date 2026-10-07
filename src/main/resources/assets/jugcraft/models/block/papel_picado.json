@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/papel_picado",
+    "paper": "jugcraft:block/papel_picado"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        1,
+        15.25
+      ],
+      "to": [
+        16,
+        15,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paper"
+        },
+        "south": {
+          "texture": "#paper"
+        }
+      }
+    }
+  ]
+}

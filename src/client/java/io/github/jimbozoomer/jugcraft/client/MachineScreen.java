@@ -213,7 +213,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			for (int slot = 0; slot < spec.itemOutputs(); slot++) {
 				slotFrame(graphics, x + MachineMenu.fluidItemOutputX(spec, slot), y + MachineMenu.SLOT_Y);
 			}
-			arrow(graphics, x + MachineMenu.FLUID_ARROW_X, y + 43);
+			arrow(graphics, x + MachineMenu.fluidArrowX(spec), y + 43);
 		} else if (kind.isProcessor()) {
 			int inputs = kind.outputSlot();
 			for (int slot = 0; slot < inputs; slot++) {

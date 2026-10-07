@@ -222,44 +222,6 @@ def pumpjack():
     return m
 
 
-def oil_sand_extractor():
-    """Two by two by two hot-water extraction plant. A hazard-striped skid under a big olive separation vessel with a
-    stepped cone bottom on gunmetal legs; oil sand rides up a short belt into a hopper on the rim, and the froth of
-    crude oil shows in the open top inside a chrome launder. At the back a gunmetal water heater with an exhaust stack
-    feeds the vessel through rubber hoses; a control panel with a phosphor gauge and a caged lamp faces the front."""
-    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
-    # Legs and the cone bottom.
-    for x in (-10, 8):
-        for z in (6, 24):
-            m.append(box((x, 2, z), (x + 2, 9, z + 2), GUNMETAL))
-    m += cyl("y", 0, 16, 5, 2, 4, GUNMETAL, CHROME)
-    m += cyl("y", 0, 16, 8, 4, 6.5, OLIVE)
-    m += cyl("y", 0, 16, 10.5, 6.5, 9, OLIVE)
-    # The vessel: olive shell with gunmetal and hazard bands, open at the top with the oil froth showing.
-    m += cyl("y", 0, 16, 12, 9, 27, OLIVE, GUNMETAL)
-    for y, texture in ((13, GUNMETAL), (20, HAZARD), (25.5, GUNMETAL)):
-        m += cyl("y", 0, 16, 12.4, y, y + 1, texture)
-    m += cyl("y", 0, 16, 12.75, 27, 28.5, CHROME, GUNMETAL)
-    m += cyl("y", 0, 16, 11, 28.5, 28.75, "crude_oil_still")
-    # Froth outlet: a chrome pipe from the rim down the right side.
-    m.append(box((-14.5, 10, 14.5), (-12.5, 28, 17.5), CHROME))
-    # Feed hopper on the rim and the belt that carries oil sand up to it.
-    m.append(box((4, 28.5, 10), (11, 31.5, 16), {"*": GUNMETAL, "up": "oil_sand"}))
-    m.append(box((10, 2, 1), (15, 4, 12), {"*": GUNMETAL, "up": "oil_sand"}))
-    m.append(box((11, 4, 3), (14, 28.5, 5), {"*": RUBBER, "north": "oil_sand"}))
-    m.append(box((11, 26, 5), (14, 28.5, 11), {"*": RUBBER, "up": "oil_sand"}))
-    # Water heater at the back left with its exhaust stack, and hoses into the vessel.
-    m.append(box((-15, 2, 25), (-5, 14, 31), {"*": GUNMETAL, "south": GRILLE, "up": STENCIL}))
-    m += cyl("y", -8, 28, 1.25, 14, 31, EXHAUST, "sp_hopper_inside")
-    for y in (6, 10):
-        m.append(box((-6, y, 22), (-4.5, y + 1.25, 25), RUBBER))
-    # Control panel at the front: gauge and the running lamp.
-    m.append(box((-12, 2, 0.5), (-4, 13, 3.5), {"*": OLIVE, "north": GUNMETAL}))
-    m.append(dial("north", (-8, 9.5, 0.25), 3.5, texture=GAUGE, body=CHROME))
-    m.append(dial("north", (-8, 5, 0.25), 2, texture=LAMP, body=GUNMETAL))
-    return m
-
-
 def heavy_pump():
     """Heavy pump: a gunmetal skid under an olive pump casing with a ribbed rubber-sealed volute, a chrome motor bell
     on top with an exhaust vent, hazard-striped corner guards and thick chrome flanges on its top and four sides."""
@@ -365,96 +327,6 @@ def catalytic_cracker():
         m.append(box((-12, y - 2, 0.5), (-8, y + 2, 6.5), CHROME))
         m.append(box((-13, y - 3, 0), (-7, y + 3, 0.5), GUNMETAL))
         m += wheel("z", -10, y + 4.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
-    return m
-
-
-def vacuum_distillation_unit():
-    """A two by two vacuum distillation unit three blocks tall: a squat olive column, wide at the base and stepping in
-    towards the top, under a nest of chrome steam ejectors and a condenser drum that keep it under vacuum. A fired
-    heater with a glowing window, gauge and lamp stands at its foot, a residue chute drops asphalt binder at the back,
-    and a chrome draw-off with a red valve gives lubricant out of the front."""
-    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
-    m.append(box((1, 2, 0.5), (15, 14, 9), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
-    m.append(box((4, 3, 0.25), (12, 9, 0.5), {"*": GUNMETAL, "north": "sp_window!"}))
-    m.append(dial("north", (5, 11.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
-    m.append(dial("north", (11, 11.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
-    # The column: wide below, stepping in.
-    m += cyl("y", -2, 18, 12, 2, 18, OLIVE, GUNMETAL)
-    m += cyl("y", -2, 18, 12.4, 10, 11, HAZARD)
-    m += cyl("y", -2, 18, 10, 18, 30, OLIVE, GUNMETAL)
-    m += cyl("y", -2, 18, 10.4, 24, 25, GUNMETAL)
-    m += cyl("y", -2, 18, 7, 30, 38, OLIVE, GUNMETAL)
-    m += cyl("y", -2, 18, 4, 38, 41, CHROME)
-    # Steam ejectors: three chrome nozzles on top, feeding a condenser drum lying across the back.
-    for x in (-7, -2, 3):
-        m.append(box((x - 0.75, 41, 17), (x + 0.75, 46, 19), CHROME))
-        m.append(box((x - 1.25, 44, 19), (x + 1.25, 45.5, 26), CHROME))
-    m += cyl("x", 44, 27, 3, -12, 8, GUNMETAL, CHROME)
-    # Residue chute at the back: asphalt binder drops out here.
-    m.append(box((-6, 2, 29), (2, 8, 32), {"*": GUNMETAL, "south": "sp_hopper_inside"}))
-    # Lubricant draw-off on the front with its red valve.
-    m.append(box((-12, 7, 0.5), (-8, 11, 6.5), CHROME))
-    m.append(box((-13, 6, 0), (-7, 12, 0.5), GUNMETAL))
-    m += wheel("z", -10, 13.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
-    return m
-
-
-def catalytic_reformer():
-    """Three wide, two tall and two deep: three olive reactor drums in a row, hazard-banded under domed chrome caps,
-    joined across the top by a gunmetal header, with a fired heater (glowing window, gauge, lamp, exhaust stack) at
-    the front left. Chrome draw-offs with red valves on the front right give gasoline (bottom row) and refinery gas
-    (top row)."""
-    m = [box((-32, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
-    # Fired heater at the front left (the master block).
-    m.append(box((1, 2, 0.5), (15, 14, 9), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
-    m.append(box((4, 3, 0.25), (12, 9, 0.5), {"*": GUNMETAL, "north": "sp_window!"}))
-    m.append(dial("north", (5, 11.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
-    m.append(dial("north", (11, 11.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
-    m += cyl("y", 12.5, 5, 1, 14, 28, EXHAUST, "sp_hopper_inside")
-    # Three reactor drums, front to back across the row (centres at x = 8, -8, -24).
-    for x in (8, -8, -24):
-        y0 = 14 if x == 8 else 2
-        m += cyl("y", x, 20, 6, y0, 24, OLIVE, GUNMETAL)
-        m += cyl("y", x, 20, 6.4, 18, 19, HAZARD)
-        m += cyl("y", x, 20, 4.5, 24, 26, CHROME)
-        m += cyl("y", x, 20, 2.5, 26, 27.5, CHROME)
-    # The first drum stands on the heater's plinth behind it.
-    m.append(box((2, 2, 12), (14, 14, 28), GUNMETAL))
-    # Header across the tops, with risers into each drum.
-    m.append(box((-27, 28, 18.5), (11, 30.5, 21.5), GUNMETAL))
-    for x in (8, -8, -24):
-        m.append(box((x - 1, 27.5, 19), (x + 1, 28, 21), CHROME))
-    # Draw-offs on the front right, off a product manifold in front of the last drum: gasoline at the bottom,
-    # refinery gas in the top row.
-    m.append(box((-29.5, 2, 6.5), (-22.5, 27, 14.5), {"*": GUNMETAL, "north": STENCIL}))
-    for y in (9, 23):
-        m.append(box((-28, y - 2, 0.5), (-24, y + 2, 6.5), CHROME))
-        m.append(box((-29, y - 3, 0), (-23, y + 3, 0.5), GUNMETAL))
-        m += wheel("z", -26, y + 4.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
-    return m
-
-
-def chemical_mixer():
-    """A two by two stirred mixing vessel two blocks tall: an olive tank on a hazard skid with gunmetal bands and a
-    sight-glass stripe, a domed lid carrying the agitator's motor and gearbox, a sand hopper and a kelp chute feeding
-    the lid, and a control panel with a gauge and caged lamp at the front."""
-    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
-    m.append(box((1, 2, 0.5), (15, 12, 6), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
-    m.append(dial("north", (5, 8.5, 0.25), 3, texture=GAUGE, body=CHROME))
-    m.append(dial("north", (11, 8.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
-    # The vessel, with a sight glass showing the grey mixture.
-    m += cyl("y", -1, 18, 11, 2, 24, OLIVE, GUNMETAL)
-    for y in (8, 17):
-        m += cyl("y", -1, 18, 11.4, y, y + 1, GUNMETAL)
-    m.append(box((-2.5, 4, 6.5), (0.5, 22, 7), {"*": CHROME, "north": "fracking_fluid_still"}))
-    m += cyl("y", -1, 18, 8, 24, 26, GUNMETAL, CHROME)
-    # Agitator drive: motor and gearbox on the lid.
-    m.append(box((-5, 26, 14), (3, 30, 22), {"*": OLIVE, "east": GRILLE, "west": GRILLE}))
-    m += cyl("y", -1, 18, 2.5, 30, 32, CHROME)
-    # Sand hopper (right) and kelp chute (back), into the lid.
-    m.append(box((-15, 18, 10), (-9, 28, 16), {"*": GUNMETAL, "up": "sp_hopper_inside"}))
-    m.append(box((-11, 24, 15), (-8, 26, 18), RUBBER))
-    m.append(box((4, 24, 27), (9, 30, 31), {"*": GUNMETAL, "up": "sp_hopper_inside"}))
     return m
 
 
@@ -648,6 +520,65 @@ def polymerization_reactor():
     return m
 
 
+def hydrotreater():
+    """Two by two and three tall (batch 29): a tall olive hydrotreating reactor packed with catalyst (left), with
+    hazard bands and a chrome dome, fed through a gunmetal hydrogen compressor; a horizontal gunmetal separator drum
+    behind the control panel (the master block); a sight glass of premium diesel; and chrome draw-offs with red valves
+    at the base (the finished fuel) and at the top (the sour gas)."""
+    m = [box((-16, 0, 0), (16, 2, 32), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    # Control panel at the front right (the master block): gauge and running lamp.
+    m.append(box((1, 2, 0.5), (15, 12, 6), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(dial("north", (5, 8.5, 0.25), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 8.5, 0.25), 2, texture=LAMP, body=GUNMETAL))
+    # The reactor: a tall column of catalyst beds, banded, with a chrome dome and a feed nozzle.
+    m += cyl("y", -8, 18, 7, 2, 40, OLIVE, GUNMETAL)
+    for y in (10, 22, 34):
+        m += cyl("y", -8, 18, 7.4, y, y + 1.25, HAZARD)
+    m += cyl("y", -8, 18, 5, 40, 44, CHROME)
+    m += cyl("y", -8, 18, 2, 44, 47, GUNMETAL)
+    # Sight glass on the reactor's front showing the finished fuel.
+    m.append(box((-10, 14, 10.5), (-6, 30, 11), {"*": CHROME, "north": "premium_diesel_still"}))
+    # Hydrogen compressor: a grilled box with a flywheel, piped up into the reactor head.
+    m.append(box((2, 2, 22), (14, 12, 31), {"*": GUNMETAL, "east": GRILLE, "south": GRILLE, "up": STENCIL}))
+    m += wheel("x", 6, 26.5, 3.5, 14, 15, "sp_red_iron", CHROME)
+    m.append(box((6, 12, 25), (8, 42, 27), RUBBER))
+    m.append(box((-2, 40, 25), (8, 42, 27), RUBBER))
+    # High-pressure separator: a horizontal drum on saddles behind the panel.
+    for z in (9, 19):
+        m.append(box((3, 12, z), (13, 16, z + 2), GUNMETAL))
+    m += cyl("z", 8, 21, 5, 7, 21, GUNMETAL, CHROME)
+    m.append(box((7, 26, 13), (9, 32, 15), CHROME))
+    # Draw-offs out of the front: the finished fuel at the base, the sour gas at the top (layers 0 and 2).
+    for y in (9, 40):
+        m.append(box((-14, y - 2, 0.5), (-10, y + 2, 6.5), CHROME))
+        m.append(box((-15, y - 3, 0), (-9, y + 3, 0.5), GUNMETAL))
+        m += wheel("z", -12, y + 4.5, 1.5, 2.5, 3.25, "sp_red_iron", CHROME, spokes=False)
+    return m
+
+
+def heat_recovery_unit():
+    """One block, two tall (batch 29): a heat recovery boiler for a diesel generator or gas turbine. An olive casing
+    with grilled sides over the finned tubes, a front gauge and lamp, a sooty banded stack, a chrome steam drum on
+    top with a little turbine, and a lubricant sight glass."""
+    m = [box((0, 0, 0), (16, 2, 16), {"*": GUNMETAL, "north": HAZARD, "south": HAZARD})]
+    m.append(box((1, 2, 1), (15, 20, 15), {"*": OLIVE, "east": GRILLE, "west": GRILLE, "up": STENCIL, "north": OLIVE}))
+    for y in (7, 14):
+        m.append(box((0.5, y, 0.5), (15.5, y + 1, 15.5), GUNMETAL))
+    m.append(dial("north", (5, 16, 0.75), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (11, 16, 0.75), 2, texture=LAMP, body=GUNMETAL))
+    # Lubricant sight glass and the water inlet with its valve.
+    m.append(box((10, 4, 0.5), (12, 11, 1), {"*": CHROME, "north": "lubricant_still"}))
+    m.append(box((3, 3, 0.5), (6, 6, 1), CHROME))
+    m += wheel("z", 4.5, 7.5, 1.5, 0.25, 1, "sp_red_iron", CHROME, spokes=False)
+    # Steam drum across the top and the turbine housing on it.
+    m += cyl("x", 22.5, 7, 2.5, 2, 14, CHROME)
+    m.append(box((3, 23, 4), (8, 28, 12), {"*": GUNMETAL, "north": GRILLE}))
+    # The exhaust stack at the back.
+    m += cyl("y", 11, 11, 3, 20, 32, EXHAUST)
+    m += cyl("y", 11, 11, 3.4, 26, 27, HAZARD)
+    return m
+
+
 def diesel_engine():
     """Two wide, two tall and three long: a V8 diesel engine on a hazard-striped skid. Gunmetal crankcase, two olive
     cylinder banks with chrome rocker covers and a gunmetal intake manifold between them, four short sooty exhaust
@@ -823,6 +754,134 @@ def crop_harvester():
     return m
 
 
+def hydroponic_bay():
+    """An open two-tier grow rack (batch 33): rows of leafy crops in gunmetal channels under violet grow lights, a
+    gunmetal frame, the olive nutrient tank across the back with chrome bands, and a phosphor gauge on the front post."""
+    glow = "el_glow_violet!"
+    m = [box((0, 0, 0), (16, 1.5, 16), {"*": GUNMETAL, "north": HAZARD})]
+    # The nutrient tank across the back, banded, with a feed pipe down to each tier.
+    m.append(box((1, 1.5, 11.5), (15, 14.5, 15), {"*": OLIVE, "north": STENCIL}))
+    for y in (4, 11):
+        m.append(box((0.75, y, 11.25), (15.25, y + 0.75, 15.25), CHROME))
+    m.append(pipe((7, 3, 10), (9, 12.5, 11.5), CHROME))
+    # Four corner posts and the roof with its top grow light.
+    for x in (0.5, 14):
+        for z in (0.5, 10):
+            m.append(box((x, 1.5, z), (x + 1.5, 15, z + 1.5), GUNMETAL))
+    m.append(box((0.25, 15, 0.25), (15.75, 16, 15.75), {"*": GUNMETAL, "up": GRILLE}))
+    # Two tiers: a channel tray with rows of crops, each lit from above.
+    for base, light in ((1.5, 7.25), (8.5, 14.25)):
+        m.append(box((1.5, base, 1.5), (14.5, base + 1.25, 10.5), {"*": GUNMETAL, "up": RUBBER}))
+        for x in (2.5, 6.25, 10):
+            m.append(box((x, base + 1.25, 2.5), (x + 3.25, base + 2.25, 9.5), "sp_leaves"))
+            m.append(box((x + 0.5, base + 2.25, 3.5), (x + 2.75, base + 3.75, 8.5), "sp_leaves"))
+        m.append(box((2, light, 2.5), (14, light + 0.75, 9.5), {"*": GUNMETAL, "down": glow}))
+    # The middle shelf the upper tray sits on, and the gauge on the front left post.
+    m.append(box((0.5, 7.75, 0.5), (15.5, 8.5, 11.5), GUNMETAL))
+    m.append(dial("north", (1.25, 5, 0.25), 1.25, texture=GAUGE, body=CHROME))
+    return m
+
+
+def electroplating_bath():
+    """An open electroplating tank (batch 34): a rubber-lined gunmetal tub of yellow sulfuric acid with a hazard band,
+    copper busbars across the top carrying a nickel and a silver anode plate and, between them, a sword hung from a
+    hook on the work bar; a rectifier box with a gauge and a lamp stands on the front left."""
+    m = [box((0, 0, 0), (16, 1.5, 16), {"*": GUNMETAL, "north": HAZARD})]
+    # The tub: four walls round a sunken acid surface, lined with rubber.
+    m.append(box((0.5, 1.5, 4), (15.5, 10, 5), {"*": GUNMETAL, "north": HAZARD, "south": RUBBER}))
+    m.append(box((0.5, 1.5, 15), (15.5, 10, 15.5), {"*": GUNMETAL, "north": RUBBER}))
+    m.append(box((0.5, 1.5, 5), (1.5, 10, 15), {"*": GUNMETAL, "east": RUBBER}))
+    m.append(box((14.5, 1.5, 5), (15.5, 10, 15), {"*": GUNMETAL, "west": RUBBER}))
+    m.append(box((1.5, 1.5, 5), (14.5, 8.5, 15), {"*": RUBBER, "up": "sulfuric_acid_still!"}))
+    # Copper busbars across the tub on chrome insulators, and the plates hanging from them into the acid.
+    for z, plate in ((6.5, "nickel_block"), (13.5, "silver_block")):
+        m.append(box((0.25, 11, z - 0.5), (15.75, 12, z + 0.5), "copper_busbar"))
+        for x in (0.5, 14.5):
+            m.append(box((x, 10, z - 0.5), (x + 1, 11, z + 0.5), CHROME))
+        m.append(box((3, 4.5, z - 0.25), (13, 11, z + 0.25), plate))
+    # The work bar between them, a hook and the sword hanging point down.
+    m.append(box((0.25, 12.5, 9.5), (15.75, 13.25, 10.5), "copper_busbar"))
+    m.append(box((7.5, 10.5, 9.75), (8.5, 12.5, 10.25), CHROME))
+    m.append(box((6, 9.75, 9.75), (10, 10.5, 10.25), GUNMETAL))  # crossguard
+    m.append(box((7.25, 10.5, 9.75), (8.75, 11, 10.25), BAKELITE))  # grip end
+    m.append(box((7.25, 3, 9.85), (8.75, 9.75, 10.15), CHROME))  # blade, dipped in the acid
+    # The rectifier on the front left: a box with a gauge, a lamp and cables to the busbars.
+    m.append(box((1, 1.5, 0.5), (6.5, 7, 3.5), {"*": OLIVE, "north": STENCIL, "up": GRILLE}))
+    m.append(dial("north", (2.75, 4.5, 0.25), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (5.25, 5, 0.25), 1.25, texture=LAMP, body=GUNMETAL))
+    m.append(pipe((3, 7, 2), (4, 11.5, 3), RUBBER))
+    m.append(pipe((3, 11, 3), (4, 11.5, 6), RUBBER))
+    return m
+
+
+def ammonia_chiller():
+    """An ammonia refrigeration unit (batch 35): an olive cabinet with the compressor and its motor on top under a fan
+    grille, frosted chrome condenser coils down the right side, the ammonia receiver (a gunmetal cylinder) along the
+    back, a frost-blue sight glass and a gauge on the front, and an ice chute at the bottom."""
+    cold = "el_glow_cyan!"
+    m = [box((0, 0, 0), (16, 1.5, 16), {"*": GUNMETAL, "north": HAZARD})]
+    # The cabinet.
+    m.append(box((1, 1.5, 1.5), (12.5, 11, 14.5), {"*": OLIVE, "north": STENCIL}))
+    # Condenser coils down the right side: chrome runs between gunmetal headers.
+    m.append(box((12.5, 1.5, 2), (15, 2.5, 14), GUNMETAL))
+    m.append(box((12.5, 10, 2), (15, 11, 14), GUNMETAL))
+    for z in (3, 5.5, 8, 10.5, 13):
+        m.append(box((13, 2.5, z - 0.6), (14.5, 10, z + 0.6), CHROME))
+    # The ammonia receiver along the back.
+    m += cyl("x", 13.5, 13.5, 1.75, 1.5, 12, GUNMETAL, CHROME)
+    # Compressor and motor on top, under the fan grille.
+    m += cyl("y", 5, 9, 3, 11, 14.5, OLIVE, GRILLE)
+    m.append(box((8.5, 11, 6.5), (12, 13.5, 11.5), {"*": GUNMETAL, "up": GRILLE}))
+    m.append(pipe((7.5, 13, 8.5), (9, 14, 9.5), CHROME))
+    # Front: the frost-blue sight glass, a gauge and the status lamp.
+    m.append(box((3, 6, 1), (8, 9.5, 1.5), cold))
+    m.append(dial("north", (10, 8, 1.25), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (10, 4.5, 1.25), 1.25, texture=LAMP, body=GUNMETAL))
+    # The ice chute at the bottom front.
+    m.append(box((2.5, 1.5, 0.25), (8.5, 4.5, 1.5), {"*": GUNMETAL, "north": RUBBER}))
+    return m
+
+
+def cryogenic_liquefier():
+    """A cryogenic liquefier (batch 43): a frosted cold box on a gunmetal skid, chrome heat-exchanger stacks rising from
+    its top, a vacuum-jacketed dewar (a fat chrome cylinder) at the back right, a frost-blue sight glass and a gauge on
+    the front, and frost on its edges."""
+    cold = "el_glow_cyan!"
+    m = [box((0, 0, 0), (16, 1.5, 16), {"*": GUNMETAL, "north": HAZARD})]
+    m.append(box((1, 1.5, 1.5), (11, 12, 14.5), {"*": OLIVE, "north": STENCIL, "up": GRILLE}))
+    for x in (2.5, 5.5, 8.5):  # heat-exchanger stacks
+        m += cyl("y", x + 0.5, 5, 1.0, 12, 15.5, CHROME)
+    m += cyl("y", 13.5, 10.5, 2.4, 1.5, 13.5, CHROME, GUNMETAL)  # the dewar
+    m.append(pipe((11, 9, 9.5), (12, 10, 11.5), CHROME))
+    m.append(box((2.5, 6, 1), (8, 9.5, 1.5), cold))
+    m.append(dial("north", (9.5, 8, 1.25), 2.0, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (9.5, 4.5, 1.25), 1.25, texture=LAMP, body=GUNMETAL))
+    return m
+
+
+def rocket_workshop():
+    """A rocket workshop (batch 38): a gunmetal bench with hazard edging; a white rocket body lies in a cradle on it
+    with a yellow band and a nose cone, a press arm leans over its far end and a welding lamp glows at the front."""
+    m = [box((0, 0, 0), (16, 2, 16), {"*": GUNMETAL, "north": HAZARD})]
+    m.append(box((1, 2, 2), (15, 8, 14), {"*": OLIVE, "north": STENCIL}))
+    m.append(box((0.5, 8, 1.5), (15.5, 9, 14.5), {"*": GUNMETAL, "up": GRILLE}))
+    # The cradle and the rocket in it, lying along x.
+    for x in (3, 11):
+        m.append(box((x, 9, 6), (x + 2, 10.5, 10), GUNMETAL))
+    m += cyl("x", 8, 12, 2.5, 2, 12, "sp_window", CHROME)
+    m.append(box((6, 9.5, 5.5), (8, 14.5, 10.5), {"*": HAZARD, "north": HAZARD}))
+    m += cyl("x", 8, 12, 1.5, 12, 14.5, CHROME)
+    m += cyl("x", 8, 12, 1.8, 0.5, 2, GUNMETAL)
+    # The press arm on a post at the back right.
+    m.append(box((12.5, 9, 12.5), (14.5, 16, 14.5), GUNMETAL))
+    m.append(box((9, 14.5, 11), (14.5, 16, 13), {"*": GUNMETAL, "down": HAZARD}))
+    m.append(pipe((10, 12.5, 11.5), (11, 14.5, 12.5), CHROME))
+    # The welding lamp and a gauge on the front.
+    m.append(dial("north", (3.5, 5, 1.75), 2.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (12.5, 5, 1.75), 1.5, texture=LAMP, body=GUNMETAL))
+    return m
+
+
 def air_separation_unit():
     """Two by two, six tall: an air separation plant. A tall olive cold box with gunmetal corner posts and chrome frost
     bands stands at the back, with the chrome distillation column in front of it rising to a nitrogen vent; an air
@@ -967,15 +1026,17 @@ def deposit_drill():
 
 MODELS = {"steel_foundry": steel_foundry(), "capacitor_bank": capacitor_bank(), "steel_tank": steel_tank(),
           "ore_drill": ore_drill(), "deposit_drill": deposit_drill(), "pumpjack": pumpjack(),
-          "oil_sand_extractor": oil_sand_extractor(), "heavy_pump": heavy_pump(),
+          "heavy_pump": heavy_pump(),
           "distillation_tower": distillation_tower(), "catalytic_cracker": catalytic_cracker(),
-          "vacuum_distillation_unit": vacuum_distillation_unit(), "catalytic_reformer": catalytic_reformer(),
-          "chemical_mixer": chemical_mixer(), "fracking_rig": fracking_rig(),
+          "fracking_rig": fracking_rig(),
           "flowback_treatment_unit": flowback_treatment_unit(), "diesel_generator": diesel_generator(),
           "gas_turbine": gas_turbine(),
           "polymerization_reactor": polymerization_reactor(),
+          "hydrotreater": hydrotreater(), "heat_recovery_unit": heat_recovery_unit(),
           "diesel_engine": diesel_engine(),
           "electrolytic_cell": electrolytic_cell(),
           "chemical_reactor": chemical_reactor(), "air_separation_unit": air_separation_unit(),
           "synthesis_converter": synthesis_converter(), "gas_holder": gas_holder(),
-          "crop_harvester": crop_harvester()}
+          "crop_harvester": crop_harvester(), "hydroponic_bay": hydroponic_bay(),
+          "electroplating_bath": electroplating_bath(), "ammonia_chiller": ammonia_chiller(),
+          "rocket_workshop": rocket_workshop(), "cryogenic_liquefier": cryogenic_liquefier()}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "  A",
+    " X ",
+    "PBP"
+  ],
+  "key": {
+    "A": "jugcraft:copper_wire",
+    "X": "jugcraft:processor",
+    "P": "jugcraft:plastic_sheet",
+    "B": "minecraft:stone_button"
+  },
+  "result": {
+    "id": "jugcraft:control_remote",
+    "count": 1
+  }
+}

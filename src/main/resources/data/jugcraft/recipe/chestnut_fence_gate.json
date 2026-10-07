@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture",
+      "or": [
+        "biomes"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wooden_fence_gate",
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "key": {
+    "W": "jugcraft:chestnut_planks",
+    "#": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:chestnut_fence_gate",
+    "count": 1
+  }
+}

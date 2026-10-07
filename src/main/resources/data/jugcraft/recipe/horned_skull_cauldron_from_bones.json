@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NBN",
+    "ICI"
+  ],
+  "key": {
+    "N": "minecraft:bone",
+    "B": "minecraft:bone_block",
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:cauldron"
+  },
+  "result": {
+    "id": "jugcraft:horned_skull_cauldron",
+    "count": 1
+  }
+}

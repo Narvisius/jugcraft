@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PKP",
+    "TCT",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "K": "jugcraft:cracking_catalyst",
+    "T": "jugcraft:fluid_tank",
+    "C": "jugcraft:advanced_circuit",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:hydrotreater",
+    "count": 1
+  }
+}

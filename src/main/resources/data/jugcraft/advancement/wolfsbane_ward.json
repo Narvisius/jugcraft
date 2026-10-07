@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:wolfsbane"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.wolfsbane_ward.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.wolfsbane_ward.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
