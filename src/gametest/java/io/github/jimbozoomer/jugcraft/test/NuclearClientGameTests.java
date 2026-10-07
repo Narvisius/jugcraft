@@ -26,8 +26,6 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			return;
 		}
 		geigerFollowsTheRate();
-		// The plants' views need their usual distance (an earlier test in a full run may leave it short).
-		context.runOnClient(client -> client.options.renderDistance().set(12));
 		try (TestSingleplayerContext singleplayer = context.worldBuilder()
 				.adjustSettings(creator -> {
 					creator.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE);
