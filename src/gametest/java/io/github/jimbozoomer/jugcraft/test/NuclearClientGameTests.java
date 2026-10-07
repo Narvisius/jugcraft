@@ -26,6 +26,8 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			return;
 		}
 		geigerFollowsTheRate();
+		// The plants' views need their usual distance (an earlier test in a full run may leave it short).
+		context.runOnClient(client -> client.options.renderDistance().set(12));
 		try (TestSingleplayerContext singleplayer = context.worldBuilder()
 				.adjustSettings(creator -> {
 					creator.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE);
@@ -196,8 +198,11 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 			shotAt(context, singleplayer, stake.getX(), y + tall / 2, stake.getZ() + Math.max(4, depth / 2 + 2), middle.getX(), middle.getY(), middle.getZ(),
 					"jugcraft_tank_kit_" + kits[i] + "_label");
 		}
-		// The screen of the titled fuel store.
+		// The screen of the titled fuel store (from beside it, so its chunk is loaded on the client).
 		BlockPos store = outlets.get(5);
+		server.runCommand("tp @p %d.5 %d %d.5".formatted(store.getX() - 3, y + 1, store.getZ()));
+		context.waitTicks(10);
+		singleplayer.getConnection().waitForChunksRender();
 		context.runOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen.accept(store));
 		context.waitTicks(10);
 		context.takeScreenshot("jugcraft_tank_kit_titled_screen");
@@ -775,9 +780,18 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				// The tank screens: the day tank refilling, and the condensate tank.
 				BlockPos dayOutlet = new BlockPos(wx.applyAsInt(195), y, wz.applyAsInt(93));
 				BlockPos cstOutlet = new BlockPos(wx.applyAsInt(226), y + 1, wz.applyAsInt(125));
+				// (Each from beside its tank: in a full run an earlier test may leave the render distance short, and the
+				// screen reads the tank from the client's world.)
+				server.runCommand("tp @p %d.5 %d %d.5".formatted(wx.applyAsInt(182), y + 2, wz.applyAsInt(100)));
+				context.waitTicks(10);
+				singleplayer.getConnection().waitForChunksRender();
 				context.runOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen.accept(dayOutlet));
 				context.waitTicks(10);
 				context.takeScreenshot("jugcraft_plant_medium_r12_day_tank_screen");
+				context.runOnClient(client -> client.gui.setScreen(null));
+				server.runCommand("tp @p %d.5 %d %d.5".formatted(wx.applyAsInt(226), y + 2, wz.applyAsInt(118)));
+				context.waitTicks(10);
+				singleplayer.getConnection().waitForChunksRender();
 				context.runOnClient(client -> io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen.accept(cstOutlet));
 				context.waitTicks(10);
 				context.takeScreenshot("jugcraft_plant_medium_r12_cst_screen");

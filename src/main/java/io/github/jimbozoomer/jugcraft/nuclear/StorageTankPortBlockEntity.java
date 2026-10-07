@@ -629,7 +629,10 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		int y = (int) Math.floor((low + high) / 2);
 		stencilFace = null;
 		stencilWidth = 0;
-		for (Direction d : Direction.Plane.HORIZONTAL) {
+		// Sides tried from the one a quarter turn anticlockwise from the outlet (a kit's front, facing whoever placed
+		// it) round, so that side wins a tie.
+		Direction front = out.getCounterClockWise();
+		for (Direction d : new Direction[] {front, front.getClockWise(), front.getOpposite(), front.getCounterClockWise()}) {
 			if (d == out) {
 				continue;
 			}

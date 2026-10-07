@@ -512,7 +512,8 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 			scale[i] = Math.min(state.sizes.get(i), width / Math.max(1, state.widths.get(i)));
 			total += scale[i] * 11;
 		}
-		float diamond = state.diamond ? Math.min(1.5F, width * 0.4F) : 0;
+		// The fire diamond about as big as on the approved design sheet: nearly half the clear width.
+		float diamond = state.diamond ? Math.min(2.2F, width * 0.45F) : 0;
 		total += diamond > 0 ? diamond * 1.5F : 0;
 		// All of it smaller if it is taller than the clear shell between the foot and the band.
 		if (state.stencilHeight > 0 && total > state.stencilHeight) {
