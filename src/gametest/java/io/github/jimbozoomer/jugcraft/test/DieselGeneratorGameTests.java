@@ -64,8 +64,8 @@ public class DieselGeneratorGameTests {
 	}
 
 	/**
-	 * A small storage tank (3 x 3 x 3 inside: 108 buckets) with its outlet on the north side, its floor at base + 1;
-	 * formed. The generator's day tank in these tests.
+	 * A small flammable-rated storage tank (3 x 3 x 3 inside: 108 buckets) with its outlet on the north side, its floor
+	 * at base + 1; formed. The generator's day tank in these tests.
 	 */
 	static io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity dayTank(net.minecraft.server.level.ServerLevel level, BlockPos base) {
 		var plate = io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.PLATE.defaultBlockState();
@@ -88,8 +88,10 @@ public class DieselGeneratorGameTests {
 			}
 		}
 		BlockPos outlet = base.offset(3, 1, 0);
+		// Rated for flammable liquids, as a diesel day tank must be (a general tank refuses diesel).
 		level.setBlock(outlet, io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.OUTLET.defaultBlockState()
-				.setValue(io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlock.FACING, Direction.NORTH), 3);
+				.setValue(io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlock.FACING, Direction.NORTH)
+				.setValue(io.github.jimbozoomer.jugcraft.nuclear.StorageTankOutletBlock.RATING, io.github.jimbozoomer.jugcraft.nuclear.TankRating.FLAMMABLE), 3);
 		var tank = (io.github.jimbozoomer.jugcraft.nuclear.StorageTankPortBlockEntity) level.getBlockEntity(outlet);
 		tank.check(level);
 		if (!tank.formed()) {
