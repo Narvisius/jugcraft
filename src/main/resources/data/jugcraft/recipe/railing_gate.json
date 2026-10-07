@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RIR"
+  ],
+  "key": {
+    "R": "jugcraft:railing",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:railing_gate",
+    "count": 1
+  }
+}

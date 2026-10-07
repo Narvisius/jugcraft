@@ -38,6 +38,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.LOCKER_ENTITY, LockerRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.RACK_ENTITY, StorageRackRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.ROLLER_ENTITY, RollerDoorRenderer::new);
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.PORT_ENTITY, StorageTankRenderer::new);
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.GATE_ENTITY, RailingGateRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftMachines.MACHINE_ENTITY, WindTurbineRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.BELT_PULLEY_ENTITY, BeltRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.SHAFT_ENTITY, KineticRotorRenderer::new);

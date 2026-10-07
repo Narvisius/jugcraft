@@ -167,6 +167,7 @@ public final class JugcraftNuclear {
 
 		ServerTickEvents.END_SERVER_TICK.register(Radiation::tick);
 		PlantInterior.register();
+		StorageTanks.register();
 		PlantBuilder.register();
 		PlantShowcase.register();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(

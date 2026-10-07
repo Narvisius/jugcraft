@@ -192,13 +192,14 @@ public final class PlantShowcase {
 	/**
 	 * Clears every building of the plant above the ground (its box, a block round it for the signs on its walls, two
 	 * over its roof) and builds the plant again, running. What was stored in its storage racks is put back in the rack
-	 * built in the same place (or dropped there if there is none now).
+	 * built in the same place (or dropped there if there is none now), and its storage tanks keep their fluid.
 	 */
 	public static void rebuild(ServerLevel level, Blueprint blueprint, BlockPos stake, ServerPlayer player) {
 		int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SKIP_BLOCK_ENTITY_SIDEEFFECTS;
 		BlockState air = Blocks.AIR.defaultBlockState();
 		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
 		java.util.Map<BlockPos, List<net.minecraft.world.item.ItemStack>> stored = new java.util.HashMap<>();
+		java.util.Map<BlockPos, io.github.jimbozoomer.jugcraft.fluid.StoredFluid> tanks = new java.util.HashMap<>();
 		for (Blueprint.PartRef part : blueprint.parts) {
 			int x0 = stake.getX() + part.x() - blueprint.anchorX(), y0 = stake.getY() + part.y() - blueprint.anchorY();
 			int z0 = stake.getZ() + part.z() - blueprint.anchorZ();
@@ -215,6 +216,8 @@ public final class PlantShowcase {
 									items.add(rack.getItem(i).copy());
 								}
 								stored.put(at.immutable(), items);
+							} else if (level.getBlockEntity(at) instanceof StorageTankPortBlockEntity port && port.stored() != null) {
+								tanks.put(at.immutable(), port.stored());
 							}
 							level.setBlock(at, air, flags);
 						}
@@ -224,6 +227,13 @@ public final class PlantShowcase {
 		}
 		PlantBuilder.Result result = PlantBuilder.build(level, blueprint, stake, Rotation.NONE, player.getUUID(), true);
 		start(level, result);
+		// The storage tanks keep what was in them.
+		tanks.forEach((pos, fluid) -> {
+			if (level.getBlockEntity(pos) instanceof StorageTankPortBlockEntity port) {
+				port.restore(fluid);
+				port.check(level);
+			}
+		});
 		for (java.util.Map.Entry<BlockPos, List<net.minecraft.world.item.ItemStack>> e : stored.entrySet()) {
 			BlockPos pos = e.getKey();
 			List<net.minecraft.world.item.ItemStack> items = e.getValue();

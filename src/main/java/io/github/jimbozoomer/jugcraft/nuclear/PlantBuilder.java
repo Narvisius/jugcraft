@@ -181,6 +181,19 @@ public final class PlantBuilder {
 				}
 			}
 		}
+		// Storage tanks form at once (their outlets would within two seconds anyway); a fuelled build fills them with
+		// what they are for.
+		for (int i = 0; i < blueprint.size(); i++) {
+			if (blueprint.state(i, rotation).getBlock() instanceof StorageTankOutletBlock) {
+				BlockPos pos = stake.offset(blueprint.offset(i, rotation));
+				if (level.getBlockEntity(pos) instanceof StorageTankPortBlockEntity outlet) {
+					if (fuelled) {
+						outlet.prefill();
+					}
+					outlet.check(level);
+				}
+			}
+		}
 		EquipmentRegistry.of(level).touch();
 		return new Result(blocks, equipment, vessels.size(), List.copyOf(vessels));
 	}

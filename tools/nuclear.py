@@ -69,8 +69,10 @@ FRAME = "nuclear_equipment_frame"
 # Plain blocks of the cooling system: the tower fill and the buried conduit (a full block that joins like a conduit).
 COOLING_BLOCKS = {"cooling_tower_fill": "Cooling Tower Fill", "conduit_trench": "Conduit Trench"}
 import plant_interior
+import storage_tank
 
-BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER] + list(COOLING_BLOCKS) + plant_interior.BLOCKS
+BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER] + list(COOLING_BLOCKS) + plant_interior.BLOCKS \
+    + list(storage_tank.NAMES)
 
 NAMES = {
     "hazmat_hood": "Hazmat Hood",
@@ -245,6 +247,7 @@ CRAFTING = {
     "isolated_phase_bus": (["AAA", "CCC", "AAA"], {"A": "#c:plates/aluminum", "C": "minecraft:copper_ingot"}, 6),
 }
 CRAFTING.update(plant_interior.CRAFTING)
+CRAFTING.update(storage_tank.CRAFTING)
 ITEM_FEATURES = {"plastic_sheet": ["crude_oil"], "processor": ["silicon"], "advanced_circuit": ["silver", "nickel"],
                  "leu_fuel_assembly": ["uranium"], "aluminum_cable": ["aluminum"]}
 BASE_METALS = ("copper", "iron", "gold", "steel")
@@ -256,7 +259,8 @@ PIPE_TEXTURES = list(PIPES) + [p + "_end" for p in PIPES]
 TOWER_TEXTURES = [f"{TOWER_CONTROLLER}_side", f"{TOWER_CONTROLLER}_top", f"{TOWER_CONTROLLER}_grate", "cooling_tower_fill",
                   "cooling_tower_fill_side", "conduit_trench"]
 HI_RES = (set(ITEMS) - {"geiger_counter"}) | set(BLOCKS) | set(NU_TEXTURES) | set(PIPE_TEXTURES) | set(TOWER_TEXTURES) | {
-    "geiger_case", "geiger_screen", "geiger_rubber", "geiger_steel", "geiger_grille", "geiger_label"} | plant_interior.HI_RES
+    "geiger_case", "geiger_screen", "geiger_rubber", "geiger_steel", "geiger_grille", "geiger_label"} | plant_interior.HI_RES \
+    | set(storage_tank.TEXTURES)
 
 
 def recipe_features(result, feature_of):
@@ -721,6 +725,7 @@ def draw_block_textures():
            "nu_pipe_blue": M.stylize(M.pipe_stripe((40, 100, 190), 67), 10), "nu_pipe_orange": M.stylize(M.pipe_stripe((220, 120, 30), 68), 10)}
     out.update(draw_pipe_textures())
     out.update(plant_interior.draw_block_textures())
+    out.update(storage_tank.draw_block_textures())
     out.update(draw_tower_controller())
     grate = draw_cooling_blocks()
     out.update({k: v for k, v in grate.items() if k != "cooling_tower_controller_grate"})
@@ -1632,6 +1637,7 @@ def fuel_fabricator_model():
 
 def write_assets(write, rid, assets, lang):
     plant_interior.write_assets(write, rid, assets, lang)
+    storage_tank.write_assets(write, rid, assets, lang)
     for item in ITEMS:
         lang[f"item.{MOD}.{item}"] = NAMES[item]
         if item == "geiger_counter":
@@ -1693,6 +1699,7 @@ def write_loot(write, rid, out, self_drop):
         write(out / f"{block}.json", plant_interior.door_loot(rid, block) if block in plant_interior.DOORS else self_drop(block))
     # Breaking a frame block breaks the equipment, and its anchor drops the item.
     write(out / f"{FRAME}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{FRAME}")})
+    storage_tank.write_loot(write, rid, out, self_drop)
 
 
 def write_data(write, data):
@@ -1703,6 +1710,7 @@ def write_tags(tags, rid):
     for block in BLOCKS:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
         tags.add("block", "minecraft:needs_stone_tool", rid(block))
+    storage_tank.write_tags(tags, rid)
     tags.add("block", f"{MOD}:{SHIELDING_TAG}", rid("shielding_concrete"))
     tags.add("block", f"{MOD}:{SHIELDING_TAG}", "#c:storage_blocks/lead")
     tags.add("item", "minecraft:head_armor", rid("hazmat_hood"))

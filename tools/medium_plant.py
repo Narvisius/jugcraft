@@ -15,6 +15,8 @@ Site coordinates as in tools/nuclear_plants.py: x east, z south (the lake is nor
 """
 import math
 
+import numpy as np
+
 import nuclear_plants as P
 from nuclear_plants import Part, M
 
@@ -62,6 +64,10 @@ EPOXY = M("jugcraft:epoxy_floor", (176, 180, 178))
 CEIL = M("jugcraft:ceiling_tile", (232, 232, 226))
 PAINTED = M("jugcraft:painted_wall", (226, 224, 214))
 TANK = M("jugcraft:tank_plate", (226, 228, 224))
+# The storage tank MBS (tools/storage_tank.py): grey primer plates until the outlet forms the tank.
+TANK_PLATE = M("jugcraft:storage_tank_plate[band=wall,formed=false]", (150, 156, 150))
+# Railing is laid as this placeholder and joined up at the end (finish_railings), like the game joins it.
+RAIL = M("jugcraft:railing", (232, 190, 30))
 LOUVRE = M("jugcraft:intake_louvre", (150, 154, 152))
 LIGHT = M("jugcraft:ceiling_light_panel", (240, 240, 230))
 BATTERY = M("jugcraft:battery_box", (80, 84, 90))
@@ -111,6 +117,52 @@ def duct(axis):
 
 def sign(label, facing, big=False):
     return M(f"jugcraft:{'building' if big else 'room'}_sign[facing={facing},label={label}]", (44, 48, 54))
+
+
+def tank_port(role, facing, service="none"):
+    extra = f",service={service}" if role == "outlet" else ""
+    return M(f"jugcraft:storage_tank_{role}[facing={facing},formed=false,open=true,powered=false{extra}]", (70, 74, 80))
+
+
+def tank_piece(name, facing, **props):
+    extra = "".join(f",{k}={v}" for k, v in sorted(props.items()))
+    return M(f"jugcraft:{name}[facing={facing}{extra}]", (150, 156, 160))
+
+
+def steel_ladder(facing, cage, top):
+    return M(f"jugcraft:steel_ladder[cage={'true' if cage else 'false'},facing={facing},top={'true' if top else 'false'},"
+             f"waterlogged=false]", (170, 176, 178))
+
+
+def _flag(v):
+    return "true" if v else "false"
+
+
+def finish_railings(part):
+    """Joins every railing in a part the way the game does (nuclear/RailingBlock.java): an arm to each railing or gate
+    beside it (a gate along its line), a post at corners, ends and junctions and every other block of a straight run."""
+    g = part.g
+    rails = {k for k, (st, _) in P.MATERIALS.items() if st == "jugcraft:railing" or st.startswith("jugcraft:railing[")}
+    gates = {k: st for k, (st, _) in P.MATERIALS.items() if st.startswith("jugcraft:railing_gate[")}
+    w, h, d = g.shape
+
+    def joins(x, y, z, axis):
+        if not (0 <= x < w and 0 <= z < d):
+            return False
+        m = int(g[x, y, z])
+        if m in rails:
+            return True
+        if m in gates:
+            facing = gates[m].split("facing=")[1].split(",")[0].rstrip("]")
+            return (facing in ("north", "south")) != (axis == "z")
+        return False
+    cells = [tuple(c) for c in np.argwhere(np.isin(g, list(rails)))]
+    for x, y, z in cells:
+        n, s_, e, wst = joins(x, y, z - 1, "z"), joins(x, y, z + 1, "z"), joins(x + 1, y, z, "x"), joins(x - 1, y, z, "x")
+        straight = n and s_ and not e and not wst or e and wst and not n and not s_
+        post = not straight or (x + z) % 2 == 0
+        g[x, y, z] = M(f"jugcraft:railing[east={_flag(e)},north={_flag(n)},post={_flag(post)},south={_flag(s_)},waterlogged=false,"
+                       f"west={_flag(wst)}]", (232, 190, 30))
 
 
 def roller(facing):
@@ -313,20 +365,22 @@ class Building(Part):
     def prop(self, kind, x0, y, z0, facing="north"):
         super().prop(kind, x0, y + self.base, z0, facing)
 
-    def rail(self, x, y, z, facing):
-        """A section of yellow safety railing standing at y on the facing edge of its cell."""
-        self.p(x, y, z, furniture("guard_rail", facing))
+    def rail(self, x, y, z, facing=None):
+        """A length of yellow safety railing standing at y (it joins the railing beside it like a fence; facing is
+        where the drop is, kept for reading the layouts)."""
+        self.p(x, y, z, RAIL)
 
     def rail_round(self, x0, z0, x1, z1, y):
-        """Railing round an opening x0..x1, z0..z1 in a floor whose top is walked at y (the rails stand just outside)."""
-        for x in range(x0, x1 + 1):
-            for z, f in ((z0 - 1, "south"), (z1 + 1, "north")):
+        """Railing round an opening x0..x1, z0..z1 in a floor whose top is walked at y (the rails stand just outside,
+        corners included, so it runs round unbroken)."""
+        for x in range(x0 - 1, x1 + 2):
+            for z in (z0 - 1, z1 + 1):
                 if self.get(x, y, z) == 0 and self.get(x, y - 1, z):
-                    self.rail(x, y, z, f)
+                    self.rail(x, y, z)
         for z in range(z0, z1 + 1):
-            for x, f in ((x0 - 1, "east"), (x1 + 1, "west")):
+            for x in (x0 - 1, x1 + 1):
                 if self.get(x, y, z) == 0 and self.get(x, y - 1, z):
-                    self.rail(x, y, z, f)
+                    self.rail(x, y, z)
 
     def duct_up(self, x0, z0, x1, z1, y0):
         """A rectangular duct riser from y0 up to the ceiling above (stops under the first solid block)."""
@@ -1106,30 +1160,64 @@ def warehouse(s, ox, oz):
     return b
 
 
-def outdoor_tank(s, cx, cz, r, h, name, key):
-    """A big outdoor storage tank (refuelling water, condensate): painted steel plate on a concrete ring, a caged
-    ladder, a railing round the roof."""
-    size = int(2 * r) + 5
+SIDES = {"n": ("north", 0, -1), "s": ("south", 0, 1), "e": ("east", 1, 0), "w": ("west", -1, 0)}
+
+
+def outdoor_tank(s, cx, cz, r, h, name, key, service="none", outlet="w", inlet="n", ladder="e", manway="s", bund=False):
+    """A big outdoor storage tank as the storage tank MBS (tools/storage_tank.py): a shell of tank plates on a
+    concrete foundation ring, a roof of plates; low on the shell the outlet (the tank's controller, its float gauge
+    run up the shell above it) and the inlet with its fill line climbing to the top, a bolted manway; a steel ladder
+    with its safety cage up one side to a self-closing gate in the railing that runs round the roof edge unbroken;
+    a vent and a hatch on the roof. The plates are primer in the blueprint; the outlet paints them when it forms
+    the tank. A fuel tank (bund) stands on a concrete spill pad."""
+    margin = 7 if bund else 5
+    size = int(2 * r) + margin
     c = size / 2
-    b = Building(key, name, size, size, h + 1)
+    b = Building(key, name, size, size, h + 2)
+    if bund:
+        # A concrete spill pad round a fuel tank, its edge a darker kerb.
+        b.disc(c, c, r + 3.3, 0, 0, CONCRETE)
+        b.disc(c, c, r + 3.3, 0, 0, CONCRETE_DARK, inner=r + 2.5)
     b.disc(c, c, r + 1, 0, 0, SMOOTH)
-    b.disc(c, c, r, 1, h, TANK, inner=r - 1.2)
-    b.disc(c, c, r, h + 1, h + 1, TANK)
-    # Railing round the roof edge (on the roof plate, facing out).
-    for x in range(size):
-        for z in range(size):
-            if b.g[x, h + 1, z] and not b.g[x, h + 2, z]:
-                dx, dz = x + 0.5 - c, z + 0.5 - c
-                if r - 1.2 < math.hypot(dx, dz) <= r:
-                    f = ("east" if dx > 0 else "west") if abs(dx) > abs(dz) else ("south" if dz > 0 else "north")
-                    b.g[x, h + 2, z] = furniture("guard_rail", f)
-    lx = int(c)
-    for y in range(1, h + 2):
-        z = int(c + r)
-        while z < size - 1 and b.g[lx, y, z] != 0:
-            z += 1
-        if z < size and b.g[lx, y, z - 1] != 0:
-            b.g[lx, y, z] = LADDER["south"]
+    b.disc(c, c, r, 1, h, TANK_PLATE, inner=r - 1.2)
+    b.disc(c, c, r, h + 1, h + 1, TANK_PLATE)
+    mid = int(c)
+
+    def outside(side, y):
+        """The cell just outside the shell in the middle of a side, and the last plate before it."""
+        facing, dx, dz = SIDES[side]
+        last = None
+        for k in range(size):
+            px, pz = mid + dx * k, mid + dz * k
+            if 0 <= px < size and 0 <= pz < size and b.get(px, y, pz) == TANK_PLATE:
+                last = (px, pz)
+        return facing, (last[0] + dx, last[1] + dz), last
+
+    # Outlet (the controller; the gauge runs up the shell above it) and the inlet with its fill line.
+    facing, (x, z), _ = outside(outlet, 1)
+    b.p(x, 1, z, tank_port("outlet", facing, service))
+    facing, (x, z), _ = outside(inlet, 1)
+    b.p(x, 1, z, tank_port("inlet", facing))
+    for y in range(2, h + 1):
+        b.p(x, y, z, tank_piece("storage_tank_fill_pipe", facing, top=_flag(y == h)))
+    facing, (x, z), _ = outside(manway, 1)
+    b.p(x, 1, z, tank_piece("storage_tank_manway", facing))
+    # The ladder, from the foundation to a length above the roof's edge, caged from the third length up.
+    facing, (lx, lz), (ex, ez) = outside(ladder, 1)
+    for y in range(1, h + 3):
+        b.p(lx, y, lz, steel_ladder(facing, y >= 3, y == h + 2))
+    # Railing round the roof's edge: the roof cells with a gap beside them (corners too), so it runs unbroken; the
+    # self-closing gate where the ladder comes up, swinging in over the roof.
+    roof = {(x, z) for x in range(size) for z in range(size) if b.get(x, h + 1, z) == TANK_PLATE}
+    for x, z in roof:
+        if any((x + dx, z + dz) not in roof for dx in (-1, 0, 1) for dz in (-1, 0, 1)):
+            b.p(x, h + 2, z, RAIL)
+    b.p(ex, h + 2, ez, M(f"jugcraft:railing_gate[facing={OPPOSITE[facing]},open=false]", (232, 190, 30)))
+    # On the roof: the vent near the middle, the hatch a little in from the gate.
+    b.p(mid, h + 2, mid, tank_piece("storage_tank_vent", "north"))
+    _, gdx, gdz = SIDES[ladder]
+    b.p(ex - 2 * gdx, h + 2, ez - 2 * gdz, tank_piece("storage_tank_hatch", OPPOSITE[facing]))
+    finish_railings(b)
     s.add(b, int(cx - c), int(cz - c))
     return b
 
@@ -1241,8 +1329,16 @@ def medium_site():
     cx, cz, cy = ctrl
     s.eq("reactor_control_console", cx, cz, "north", y=cy)
     diesel = diesel_building(s, 180, 90)
-    outdoor_tank(s, 16, 70, 6.5, 14, "Refuelling Water Storage Tank", "rwst_tank")
-    outdoor_tank(s, 232, 125, 5.5, 12, "Condensate Storage Tank", "condensate_tank")
+    outdoor_tank(s, 16, 70, 6.5, 14, "Refuelling Water Storage Tank", "rwst_tank", service="refuelling_water")
+    outdoor_tank(s, 232, 125, 5.5, 12, "Condensate Storage Tank", "condensate_tank", service="condensate")
+    # The diesel generators' fuel oil storage tank on its spill pad south of the diesel building, its outlet piped
+    # to the building (generator A's room) on concrete sleepers.
+    outdoor_tank(s, 200, 125, 4.5, 8, "Diesel Fuel Oil Storage Tank", "diesel_fuel_tank", service="diesel_fuel", outlet="n", inlet="e",
+                 ladder="w", manway="s", bund=True)
+    for z in range(110, 120):
+        s.decor[(200, 1, z)] = PIPE
+    for z in (111, 114):
+        s.decor[(200, 0, z)] = SMOOTH
     # Electrical: the transformer yard by the turbine hall, the switchyard beyond.
     s.add(P.transformer_yard("pwr_transformer_yard", "Main Transformer Yard", 20, 26), 226, 46)
     s.add(P.switchyard("switchyard_medium", "Switchyard", 70, 60, 6), 262, 30)
@@ -1294,6 +1390,8 @@ def medium_site():
     site_sign(s, ctrl_part(s, "fuel_building"), 0, 16, 23, "e", "fuel_building")
     site_sign(s, ph, 20, 12, 0, "s", "pump_house")
     finish_lights(s)
+    for part, *_ in s.parts:
+        finish_railings(part)
     return s
 
 

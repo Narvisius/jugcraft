@@ -1,0 +1,117 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "cage": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_cage"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "top": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "cage": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_cage",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "top": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "cage": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_cage",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "top": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "cage": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_cage",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "top": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/steel_ladder_top",
+        "y": 270
+      }
+    }
+  ]
+}

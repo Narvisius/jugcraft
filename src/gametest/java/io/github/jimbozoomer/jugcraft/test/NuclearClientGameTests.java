@@ -425,6 +425,19 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						"jugcraft_plant_medium_warehouse_stores");
 				shotAt(context, singleplayer, wx.applyAsInt(282), y + 6, wz.applyAsInt(150), wx.applyAsInt(282), y + 4, wz.applyAsInt(136),
 						"jugcraft_plant_medium_warehouse_outside");
+				// The storage tanks (formed and filled by the build): the condensate tank's stencil, outlet and float
+				// gauge, inlet and fill line, ladder top and gate, roof; the diesel tank with its fire diamond and pipe.
+				int[][] tankShots = {
+						{232, 9, 150, 232, 7, 125}, {219, 3, 122, 226, 2, 125}, {214, 9, 125, 227, 8, 125}, {228, 4, 112, 232, 3, 119},
+						{241, 17, 121, 236, 14, 125}, {242, 8, 125, 237, 7, 125}, {232, 25, 142, 232, 13, 125}, {200, 7, 146, 200, 5, 125},
+						{206, 4, 112, 200, 1, 117}, {233, 15, 123, 236, 14, 125}, {239, 16, 128, 236, 14, 125}};
+				String[] tankNames = {"cst_stencil", "cst_outlet", "cst_gauge", "cst_inlet", "cst_ladder_top", "cst_ladder_cage", "cst_roof",
+						"diesel_tank", "diesel_pipe", "cst_gate_inside", "cst_gate_outside"};
+				for (int i = 0; i < tankShots.length; i++) {
+					int[] t = tankShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_tank_" + tankNames[i]);
+				}
 				server.runCommand("effect give @p night_vision infinite 0 true");
 			}
 			server.runCommand("gamemode creative @p");

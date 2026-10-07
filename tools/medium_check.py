@@ -58,10 +58,13 @@ def build_grids(site):
     return g, solid | occupied, water, occupied
 
 
-PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door", "minecraft:ladder", "jugcraft:room_sign",
+PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door", "minecraft:ladder", "jugcraft:steel_ladder",
+                   "jugcraft:railing_gate", "jugcraft:room_sign",
                    "jugcraft:building_sign", "minecraft:rail", "jugcraft:ceiling_light_panel", "minecraft:iron_chain",
                    "jugcraft:cable_tray", "jugcraft:light_hanger", "jugcraft:high_bay_light", "minecraft:light[")
-SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:blast_glass", "minecraft:water", "jugcraft:guard_rail",
+SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:blast_glass", "minecraft:water", "jugcraft:guard_rail", "jugcraft:railing",
+                                 "jugcraft:storage_tank_fill_pipe", "jugcraft:storage_tank_inlet", "jugcraft:storage_tank_outlet",
+                                 "jugcraft:storage_tank_manway", "jugcraft:storage_tank_vent", "jugcraft:storage_tank_hatch",
                                  "jugcraft:operator_chair", "jugcraft:office_desk", "jugcraft:console_desk", "jugcraft:turnstile",
                                  "minecraft:iron_trapdoor", "jugcraft:water_cooler", "jugcraft:filing_cabinet",
                                  "jugcraft:whiteboard", "jugcraft:pallet_rack", "jugcraft:roller_door", "jugcraft:storage_rack")
@@ -186,14 +189,20 @@ def check(site, quiet=False):
         free[sub_solid & ~passable[sub_g]] = False
         stand = np.zeros_like(free)
         stand[:, 1:-1, :] = free[:, 1:-1, :] & free[:, 2:, :] & (sub_solid[:, :-2, :] & ~passable[sub_g[:, :-2, :]] | sub_occ[:, :-2, :]
-                                                                  | np.isin(sub_g[:, :-2, :], [k for k, (st, _) in P.MATERIALS.items() if st.startswith("minecraft:ladder")]))
+                                                                  | np.isin(sub_g[:, :-2, :], [k for k, (st, _) in P.MATERIALS.items() if st.startswith(("minecraft:ladder", "jugcraft:steel_ladder"))]))
         # Ladders are climbable: a ladder cell counts as standable.
-        ladder = np.isin(sub_g, [k for k, (st, _) in P.MATERIALS.items() if st.startswith("minecraft:ladder")])
+        ladder = np.isin(sub_g, [k for k, (st, _) in P.MATERIALS.items() if st.startswith(("minecraft:ladder", "jugcraft:steel_ladder"))])
         stand |= ladder & free
         # Start from every door and the cells just outside the building's outline at ground level.
         start = []
         for x, y, z, facing in part.doors:
             start.append((x, y + part.base, z))
+        # A part without doors (an outdoor tank on its pad) is walked onto from its edge.
+        if not part.doors:
+            for x in range(w):
+                for z in range(d):
+                    if x in (0, w - 1) or z in (0, d - 1):
+                        start.append((x, part.base + 1, z))
         reach = np.zeros_like(stand)
         q = deque()
         for c in start:

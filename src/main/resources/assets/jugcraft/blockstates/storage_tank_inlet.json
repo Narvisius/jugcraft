@@ -1,0 +1,215 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "formed": "true",
+        "open": "true",
+        "powered": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_open"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "formed": "true",
+        "open": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "formed": "true",
+        "open": "true",
+        "powered": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "formed": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "formed": "true",
+        "open": "true",
+        "powered": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_open",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "formed": "true",
+        "open": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "formed": "true",
+        "open": "true",
+        "powered": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "formed": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "formed": "true",
+        "open": "true",
+        "powered": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_open",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "formed": "true",
+        "open": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "formed": "true",
+        "open": "true",
+        "powered": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "formed": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "formed": "true",
+        "open": "true",
+        "powered": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_open",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "formed": "true",
+        "open": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "formed": "true",
+        "open": "true",
+        "powered": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_shut",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "formed": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/storage_tank_inlet_lamp_off",
+        "y": 270
+      }
+    }
+  ]
+}

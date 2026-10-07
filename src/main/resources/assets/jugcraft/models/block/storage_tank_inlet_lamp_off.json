@@ -1,0 +1,47 @@
+{
+  "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_lamp": "jugcraft:block/dp_lamp",
+    "particle": "jugcraft:block/dp_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        7.35,
+        11.75,
+        3.45
+      ],
+      "to": [
+        8.65,
+        13.05,
+        4.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_lamp",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#dp_chrome"
+        },
+        "east": {
+          "texture": "#dp_chrome"
+        },
+        "west": {
+          "texture": "#dp_chrome"
+        },
+        "up": {
+          "texture": "#dp_chrome"
+        },
+        "down": {
+          "texture": "#dp_chrome"
+        }
+      }
+    }
+  ]
+}
