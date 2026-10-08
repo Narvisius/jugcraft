@@ -64,7 +64,7 @@ public class BlueprintClientGameTests implements FabricClientGameTest {
 			context.waitTicks(10);
 			context.takeScreenshot("jugcraft_blueprint_preview");
 			BlockPos stake = context.computeOnClient(client -> {
-				var target = io.github.jimbozoomer.jugcraft.blueprint.BlueprintItem.target(client.player, 1.0F);
+				var target = io.github.jimbozoomer.jugcraft.blueprint.BlueprintItem.target(client.player, client.player.getMainHandItem(), 1.0F);
 				return target == null ? null : target.stake();
 			});
 			if (stake == null || stake.distManhattan(origin) < 10) {

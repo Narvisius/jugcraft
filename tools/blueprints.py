@@ -33,6 +33,8 @@ LANG = {
     "item.jugcraft.blueprint.named": "Blueprint: %s",
     "message.jugcraft.blueprint.placed": "%s staked out (%s). Right-click the stake for progress; sneak-right-click to switch Personal/Party.",
     "message.jugcraft.blueprint.no_room": "No room for the Survey Stake here",
+    # Every MBS placed whole from one item (placement/StructureReach.java): reach plus twice its longest side.
+    "tooltip.jugcraft.structure_reach": "Places up to %s blocks further than a block (in the main hand)",
     "message.jugcraft.blueprint.clipped": "Too tall here: the top %s blocks are above the world height limit (y %s) and will be clipped off",
     "message.jugcraft.blueprint.clipped_later": "Warning: as it grows, this build will reach %s blocks above the world height limit (y %s) and be clipped off",
     "message.jugcraft.blueprint.unknown": "Unknown or changed blueprint",

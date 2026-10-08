@@ -134,7 +134,19 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftSolar.SOLAR_TRACKER_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftSolar.HELIOSTAT_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.STEAM_ENGINE_ENTITY, KineticRotorRenderer::new);
+		// An MBS's longer placing reach while in the main hand (placement/StructureReach.java), set at once on the
+		// client too so the crosshair reaches as soon as the item is in the hand.
+		net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (client.player != null) {
+				io.github.jimbozoomer.jugcraft.placement.StructureReach.update(client.player);
+			}
+		});
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+			int side = io.github.jimbozoomer.jugcraft.placement.StructureReach.longestSide(stack, true);
+			if (side > 0) {
+				lines.add(net.minecraft.network.chat.Component.translatable("tooltip.jugcraft.structure_reach", 2 * side)
+						.withStyle(net.minecraft.ChatFormatting.GRAY));
+			}
 			StoredFluid stored = stack.get(JugcraftFluids.STORED_FLUID);
 			if (stored != null) {
 				lines.add(stored.describe());

@@ -16,7 +16,8 @@ import net.minecraft.world.level.block.Rotation;
 
 /**
  * A printed Blueprint. It carries only the blueprint's id (and an imported blueprint's name). While it is held,
- * the structure is previewed where you look, up to five chunks away; right-click sets a Survey Stake there and
+ * the structure is previewed where you look, as far away as a block can be placed plus twice the structure's longest
+ * side; right-click sets a Survey Stake there and
  * the structure is staked out in front of it, facing you, as a hologram.
  */
 public class BlueprintItem extends Item {
@@ -64,16 +65,18 @@ public class BlueprintItem extends Item {
 				name.isEmpty() ? Component.translatable("blueprint.jugcraft." + id) : Component.literal(name));
 	}
 
-	/** How far away a blueprint can be placed: five chunks, so large builds can be staked out from a distance. */
-	public static final double PLACE_RANGE = 80.0;
-
 	/** Where a blueprint goes: the stake's position and the turn. */
 	public record Target(BlockPos stake, Rotation rotation) {
 	}
 
-	/** The spot the player is looking at, up to {@link #PLACE_RANGE} blocks away (the same on client and server), or null. */
-	public static @org.jspecify.annotations.Nullable Target target(Player player, float partialTick) {
-		net.minecraft.world.phys.HitResult hit = player.pick(PLACE_RANGE, partialTick, false);
+	/**
+	 * The spot the player is looking at (the same on client and server), or null: as far away as any block can be
+	 * placed plus twice the blueprint's longest side (placement/StructureReach.java; Justin, October 8 2026, in place
+	 * of the old fixed 80 blocks).
+	 */
+	public static @org.jspecify.annotations.Nullable Target target(Player player, ItemStack stack, float partialTick) {
+		double range = io.github.jimbozoomer.jugcraft.placement.StructureReach.range(player, stack);
+		net.minecraft.world.phys.HitResult hit = player.pick(range, partialTick, false);
 		if (!(hit instanceof net.minecraft.world.phys.BlockHitResult blockHit) || hit.getType() != net.minecraft.world.phys.HitResult.Type.BLOCK) {
 			return null;
 		}
@@ -98,7 +101,7 @@ public class BlueprintItem extends Item {
 	private InteractionResult place(Level level, Player player, ItemStack stack) {
 		String id = idOf(stack);
 		Blueprint blueprint = Blueprint.get(id, level.isClientSide());
-		Target target = target(player, 1.0F);
+		Target target = target(player, stack, 1.0F);
 		if (target == null) {
 			return InteractionResult.PASS;
 		}

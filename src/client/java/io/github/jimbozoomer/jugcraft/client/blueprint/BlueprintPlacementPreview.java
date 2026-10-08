@@ -56,7 +56,7 @@ public final class BlueprintPlacementPreview {
 				return;
 			}
 			Blueprint blueprint = Blueprint.get(BlueprintItem.idOf(held), true);
-			BlueprintItem.Target target = BlueprintItem.target(player, minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));
+			BlueprintItem.Target target = BlueprintItem.target(player, held, minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));
 			if (blueprint == null || target == null) {
 				return;
 			}

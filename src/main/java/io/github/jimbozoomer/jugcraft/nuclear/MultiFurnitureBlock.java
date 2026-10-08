@@ -98,6 +98,11 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 		}
 	}
 
+	/** The longest side of the piece, in blocks (how far it can be placed from: placement/StructureReach.java). */
+	public int longestSide() {
+		return Math.max(width, rows);
+	}
+
 	public IntegerProperty partProperty() {
 		return part;
 	}

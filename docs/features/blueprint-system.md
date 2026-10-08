@@ -26,7 +26,7 @@ Owner: Narvisius
   - **blue:** a complete build, either an individual structure or a whole set;
   - **green:** a partial structure, one part of a set such as a single cooling tower;
   - **red:** a player's import.
-- **Placing:** hold a blueprint to preview the structure where you look, up to 80 blocks (five chunks) away.
+- **Placing:** hold a blueprint to preview the structure where you look, as far away as any block can be placed plus twice the structure's longest side (the Small Church, 19 blocks tall: 38 blocks further; the large EPR plant, 440 blocks long: 880 further). Every MBS placed whole from one item works the same (see "Placing reach" below).
   - Faint blue means clear; red means something is in the way. The stake's spot is marked amber.
   - Right-click to set the **Survey Stake** there. The build extends away from you, facing you.
 - **The hologram:** every player sees the build as a hologram.
@@ -108,3 +108,10 @@ Owner: Narvisius
 If a staked-out blueprint (or, for one that grows like the Drone Tower, its final stage) would reach above the
 world height limit, the placement preview marks the clipped cells red and shows a red warning on screen; the
 stake-out message repeats it. Nothing above the limit is built.
+
+## Placing reach (October 8 2026)
+Justin: an MBS can be placed as far away as any block can, plus two times its longest side (placement/StructureReach.java).
+- It replaces the blueprints' old fixed 80 blocks.
+- It goes for every MBS placed whole from one item, held in the main hand: blueprints, storage tank kits, the nuclear plant's equipment, power line supports and boxes, the plant's multi-block furniture (wall screens, tables, racks, panels, the copier) and multi-block machines.
+- While one is held, the player's block reach carries a modifier of twice its longest side (on the server and the client, so the crosshair outlines the far block and the server's reach check passes); the tooltip says how far.
+- The longer reach is only for placing: beyond the ordinary reach a click places the item and never uses the block clicked (no far doors, levers or chests), and no block can be broken out there.
