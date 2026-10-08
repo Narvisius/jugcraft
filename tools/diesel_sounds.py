@@ -169,15 +169,22 @@ def write(name, signal):
     print("wrote", path)
 
 
+# Their entries in assets/jugcraft/sounds.json, written with every other sound by tools/generate_material_data.py
+# (a sounds.json written on its own is replaced the next time the data is generated).
+SOUNDS = {
+    "diesel.start": {"subtitle": "subtitles.jugcraft.diesel.start",
+                     "sounds": [{"name": "jugcraft:diesel/edg_start", "attenuation_distance": 40}]},
+    "diesel.run": {"subtitle": "subtitles.jugcraft.diesel.run",
+                   "sounds": [{"name": "jugcraft:diesel/edg_run", "attenuation_distance": 40}]},
+    "diesel.stop": {"subtitle": "subtitles.jugcraft.diesel.stop",
+                    "sounds": [{"name": "jugcraft:diesel/edg_stop", "attenuation_distance": 32}]},
+}
+
+
 def write_sounds_json():
     with open(SOUNDS_JSON, encoding="utf-8") as f:
         data = json.load(f)
-    data["diesel.start"] = {"subtitle": "subtitles.jugcraft.diesel.start",
-                            "sounds": [{"name": "jugcraft:diesel/edg_start", "attenuation_distance": 40}]}
-    data["diesel.run"] = {"subtitle": "subtitles.jugcraft.diesel.run",
-                          "sounds": [{"name": "jugcraft:diesel/edg_run", "attenuation_distance": 40}]}
-    data["diesel.stop"] = {"subtitle": "subtitles.jugcraft.diesel.stop",
-                           "sounds": [{"name": "jugcraft:diesel/edg_stop", "attenuation_distance": 32}]}
+    data.update(SOUNDS)
     with open(SOUNDS_JSON, "w", encoding="utf-8") as f:
         f.write(json.dumps(data, indent=2) + "\n")
 

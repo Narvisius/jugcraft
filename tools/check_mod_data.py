@@ -1868,6 +1868,24 @@ def check_arms():
             err(f"items/{item}.json has no swap_animation_scale")
 
 
+def check_nuclear_sounds():
+    """The sound events nuclear/JugcraftNuclear.java registers by name (the Geiger counter, the diesel generators' start,
+    run and stop) are in sounds.json, each sound with its .ogg: a sounds.json written on its own is replaced the next
+    time the data is generated, and the game then plays nothing (Oct 8: the diesel generators were silent)."""
+    java = (JAVA_ROOT / "nuclear" / "JugcraftNuclear.java").read_text(encoding="utf-8")
+    events = re.findall(r'create(?:Variable|Fixed)RangeEvent\(Jugcraft\.id\("([a-z0-9_.]+)"\)', java)
+    if not events:
+        err("JugcraftNuclear.java registers no sound events by name (check_nuclear_sounds needs updating)")
+    sounds = load(ASSETS / "sounds.json") or {}
+    for event in events:
+        if event not in sounds:
+            err(f"sounds.json has no {event} (registered in JugcraftNuclear.java)")
+        for sound in sounds.get(event, {}).get("sounds", []):
+            ns, path = sound["name"].split(":")
+            if ns == MOD and not (RES / "assets" / ns / "sounds" / f"{path}.ogg").is_file():
+                err(f"The sound {sound['name']} has no .ogg")
+
+
 def check_item_icons():
     """The 16x16 item icon maps, the materials they are coloured in and the item icons' sizes (tools/check_icon_maps.py,
     docs/ITEM_ICONS.md); and the checker's own self-test, so a later edit cannot quietly weaken it."""
@@ -7360,6 +7378,7 @@ def main():
     check_thallite_gear()
     check_arms()
     check_item_icons()
+    check_nuclear_sounds()
     check_arms_variants()
     check_mesh_models()
     check_arms_motion()

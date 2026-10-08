@@ -984,8 +984,12 @@ def pixel_hollows_assets(lang):
     for event, subtitle in ph.SUBTITLES.items():
         lang[f"subtitles.{MOD}.{event}"] = subtitle
     import choir_sounds
+    import diesel_sounds
     import drone_sounds
-    write(ASSETS / "sounds.json", {**drone_sounds.SOUNDS, **ph.SOUNDS, **choir_sounds.SOUNDS})
+    import nuclear
+    # The diesel generators' start, run and stop, and the Geiger counter's clicks (made in game, GeigerSound.java).
+    write(ASSETS / "sounds.json", {**drone_sounds.SOUNDS, **ph.SOUNDS, **choir_sounds.SOUNDS, **diesel_sounds.SOUNDS,
+                                   **nuclear.sound_events()})
 
 
 def petro_assets(lang):
