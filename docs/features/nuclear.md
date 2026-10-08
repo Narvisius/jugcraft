@@ -195,7 +195,10 @@ day ("silo design sheet looks fine").
   set into the ground, shell, roof, nozzles, fill line, manway, caged ladder, railing and gate, hatch and the fittings of
   its rating. The tank forms at once. It needs clear room: grass and flowers go, anything solid refuses the kit with
   where it is in the way. Structures: `data/jugcraft/tank_kit/*.jugbp.json`, written by `tools/tank_kits.py` with the
-  plant's own tank code. Justin allowed this one exception to the 5×5 MBS rule.
+  plant's own tank code. Justin allowed this one exception to the 5×5 MBS rule. While a kit is held, a see-through copy
+  of the formed tank shows where it would go (red where something is in the way). Breaking any block of a kit's tank
+  takes the whole tank down and gives the empty kit back; its liquid is lost (Oct 8; see
+  docs/features/blueprint-system.md, "MBS placement preview and breaking").
 
   | Kit | Shell across | Height | Holds |
   |---|---|---|---|

@@ -115,3 +115,27 @@ Justin: an MBS can be placed as far away as any block can, plus two times its lo
 - It goes for every MBS placed whole from one item, held in the main hand: blueprints, storage tank kits, the nuclear plant's equipment, power line supports and boxes, the plant's multi-block furniture (wall screens, tables, racks, panels, the copier) and multi-block machines.
 - While one is held, the player's block reach carries a modifier of twice its longest side (on the server and the client, so the crosshair outlines the far block and the server's reach check passes); the tooltip says how far.
 - The longer reach is only for placing: beyond the ordinary reach a click places the item and never uses the block clicked (no far doors, levers or chests), and no block can be broken out there.
+
+## MBS placement preview and breaking (October 8 2026)
+Justin: "I want the MBS to also show what it would look like when you put it down ... once you break an MBS, it just
+drops the entire MBS for you." Asked, he chose a see-through copy of the real thing; for tanks, the kit back with its
+liquid lost; hand-built structures left as they are; other contributors' decorations left out.
+- **Preview** (client/MbsPreview.java): while an MBS item is in the main hand and aimed at a block, a faint copy of
+  exactly what it would place stands where it would go, facing the way it would face: a tank kit's whole tank as it
+  looks once formed, plant equipment and power line structures as their renderers draw them (a support turned along
+  its line, with the wire it would hang), and multi-block furniture, the round table and multi-block machines from
+  their own block models. Pale blue where it fits; red where something is in the way, each cell in the way marked with
+  a red box. Blocks of the copy are drawn a hair larger than their cells so none of their faces lies in a face of the
+  world (no z-fighting). Blueprints keep their own preview. The blocks' data comes from `StructureGhost.Source`
+  (MultiFurnitureBlock, ConferenceTableBlock, LargeMachineBlock) and `TankKitItem.formed`/`blocked`.
+- **Breaking:** plant equipment, power line structures, multi-block furniture, the round table and multi-block
+  machines already came down whole with one item. Now:
+  - A tank placed from a kit comes down whole when any block of it is broken (shell, nozzle, ladder, railing, fitting,
+    foundation) and drops one empty kit of its size and rating (none in creative); the liquid is lost and the ground
+    under the foundation comes back (nuclear/TankKitBreaking.java). The outlet remembers what its kit laid. A tank no
+    longer as its kit laid it (a block blown off) forgets its kit and breaks block by block, so nothing comes back
+    twice. Tanks a kit placed before this are recognised once by their layout.
+  - Multi-block furniture and the round table also come down whole when a part goes by an explosion or a command
+    (before, only a player's break did that), so no part is left on its own and only one item drops.
+- Hand-built structures (tanks built from plates, drone pads, the drone control screen and holo table) still break a
+  block at a time, as Justin chose.

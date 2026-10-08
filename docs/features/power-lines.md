@@ -30,7 +30,8 @@ A line's rate is its weakest structure's capacity. Scale: 1 JE/t is about 2.3 kW
 
 **Building.** Place a structure from its item: it is built whole (the pole, a tower's four legs, a box's fence and
 equipment) and is wired at once to the nearest structure it can be wired to (in reach, compatible, wire path clear,
-fewer than four wires). While the item is held, a ghost shows where it would stand and the wire it would get. Lattice
+fewer than four wires). While the item is held, a see-through copy of the structure shows where it would stand, turned along its line, with the
+wire it would get (red if it won't fit; client/MbsPreview.java). Lattice
 and bigger towers stand their legs on uneven ground (up to 12 blocks between the highest and lowest foot), lifted to
 the highest foot, with leg extensions down to the rest. Leaves and solid blocks in the way stop a wire.
 

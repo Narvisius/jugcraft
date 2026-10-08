@@ -348,7 +348,19 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	 * in the slot (minecraft:block/block's gui rotation, 30 and 225 degrees).
 	 */
 	static void drawItem(EquipmentKind kind, PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, int light) {
-		Direction turned = Direction.SOUTH;
+		drawStill(kind, Direction.SOUTH, pose, consumer, light);
+	}
+
+	/**
+	 * The equipment where its item would place it (client/MbsPreview.java, the placement preview): as its item shows
+	 * it, facing {@code facing} from its anchor block as placed equipment does, lit evenly.
+	 */
+	static void drawGhost(EquipmentKind kind, Direction facing, PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer) {
+		drawStill(kind, facing, pose, consumer, LightCoordsUtil.FULL_BRIGHT);
+	}
+
+	/** The equipment standing still (vessel closed, rods in, lamps steady), facing {@code turned}. */
+	private static void drawStill(EquipmentKind kind, Direction turned, PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, int light) {
 		staticMesh(kind, true).replay(pose, consumer, turned, light);
 		int i = kind.ordinal();
 		if (ITEM_STILL[i] == null) {

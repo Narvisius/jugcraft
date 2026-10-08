@@ -229,6 +229,54 @@ public class LineRenderer implements BlockEntityRenderer<LineAnchorBlockEntity, 
 		drawStructure(g, s);
 	}
 
+	/**
+	 * A structure where its item would place it (client/MbsPreview.java, the placement preview): at {@code anchor},
+	 * turned along the line to {@code partner} as it will be once wired, its legs reaching down to the ground there,
+	 * and the wire it would hang to {@code partner} (null: none), lit evenly.
+	 */
+	static void drawGhost(Level level, BlockPos anchor, LineKind kind, @org.jspecify.annotations.Nullable BlockPos partner, PoseStack.Pose pose,
+			com.mojang.blaze3d.vertex.VertexConsumer consumer) {
+		State s = new State();
+		s.kind = kind;
+		s.bodyLight = LightCoordsUtil.FULL_BRIGHT;
+		s.topLight = LightCoordsUtil.FULL_BRIGHT;
+		List<BlockPos> connections = partner == null ? List.of() : List.of(partner);
+		s.yaw = kind.isBox() ? 0 : (float) LineWires.yaw(anchor, connections);
+		if (hasLegs(kind)) {
+			int r = kind.halfWidth();
+			int i = 0;
+			for (int sz : new int[] {-1, 1}) {
+				for (int sx : new int[] {-1, 1}) {
+					s.legDrop[i++] = groundDrop(level, anchor.offset(sx * r, 0, sz * r));
+				}
+			}
+		}
+		if (partner != null && level.getBlockEntity(partner) instanceof LineAnchorBlockEntity other) {
+			LineKind otherKind = other.kind();
+			s.riser = otherKind == LineKind.PAD_MOUNT_TRANSFORMER;
+			s.cryoTermination = otherKind == LineKind.SUPERCONDUCTING_PYLON && kind == LineKind.UNIT_SUBSTATION;
+			LineKind support = kind.isBox() ? otherKind : kind;
+			int bundle = bundle(support);
+			boolean carbon = support == LineKind.RECONDUCTORED_LATTICE_TOWER || otherKind == LineKind.RECONDUCTORED_LATTICE_TOWER;
+			boolean supercon = support == LineKind.SUPERCONDUCTING_PYLON;
+			List<BlockPos> otherConnections = new ArrayList<>(other.connections());
+			otherConnections.add(anchor);
+			for (LineWires.Wire wire : LineWires.between(anchor, kind, connections, partner, otherKind, otherConnections)) {
+				s.wires.add(new float[] {(float) (wire.a().x - anchor.getX()), (float) (wire.a().y - anchor.getY()), (float) (wire.a().z - anchor.getZ()),
+						(float) (wire.b().x - anchor.getX()), (float) (wire.b().y - anchor.getY()), (float) (wire.b().z - anchor.getZ()), (float) wire.sag(),
+						bundle, carbon ? 1 : 0, Float.intBitsToFloat(LightCoordsUtil.FULL_BRIGHT), supercon ? 1 : 0});
+			}
+		}
+		Geometry g = new Geometry(pose, consumer);
+		g.light = LightCoordsUtil.FULL_BRIGHT;
+		g.translate(0.5, 0, 0.5);
+		drawStructure(g, s);
+		g.reset();
+		for (float[] wire : s.wires) {
+			drawWire(g, wire, 0);
+		}
+	}
+
 	// ------------------------------------------------------------------ structures
 
 	private static void drawStructure(Geometry g, State s) {

@@ -3,6 +3,7 @@ package io.github.jimbozoomer.jugcraft.placement;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.blueprint.Blueprint;
 import io.github.jimbozoomer.jugcraft.blueprint.BlueprintItem;
+import io.github.jimbozoomer.jugcraft.machine.LargeMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.ConferenceTableBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentItem;
@@ -132,6 +133,9 @@ public final class StructureReach {
 				side = furniture.longestSide();
 			} else if (block instanceof ConferenceTableBlock) {
 				side = 3;
+			} else if (block instanceof LargeMachineBlock machine) {
+				// As its item places it: an enlarged machine's default is the one-block copy from before it grew.
+				side = longest(machine.footprint(machine.formed(machine.defaultBlockState())).offsets());
 			} else if (block instanceof MachineBlock machine) {
 				side = longest(machine.footprint(machine.defaultBlockState()).offsets());
 			}

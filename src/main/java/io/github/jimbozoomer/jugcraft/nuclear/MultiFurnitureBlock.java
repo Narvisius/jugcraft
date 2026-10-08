@@ -1,9 +1,13 @@
 package io.github.jimbozoomer.jugcraft.nuclear;
 
+import io.github.jimbozoomer.jugcraft.placement.StructureGhost;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,8 +30,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * away from the user across the table), part = r * width + c. The block you place it on is the bottom middle (wall
  * screens) or the middle (tables); it needs all its cells free.
  */
-public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
+public class MultiFurnitureBlock extends HorizontalDirectionalBlock implements StructureGhost.Source {
 	private static final Map<Integer, IntegerProperty> PROPERTIES = new java.util.HashMap<>();
+	/** Set while a piece removes its other parts, so they don't each try to remove the rest again. */
+	private static final ThreadLocal<Boolean> CLEARING = ThreadLocal.withInitial(() -> false);
 	private static int building, buildingVariants;
 	protected final int width, rows, variants;
 	private final boolean boxy, low;
@@ -145,19 +151,69 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock {
 		}
 	}
 
+	/** The whole piece where its item would go (client/MbsPreview.java), the cells in the way marked. */
+	@Override
+	public StructureGhost ghost(BlockPlaceContext context) {
+		Direction facing = context.getHorizontalDirection();
+		BlockPos at = context.getClickedPos();
+		BlockState state = defaultBlockState().setValue(FACING, facing);
+		List<StructureGhost.Cell> cells = new ArrayList<>();
+		List<BlockPos> blocked = new ArrayList<>();
+		for (int p = 0; p < width * rows; p++) {
+			BlockPos cell = at.offset(offset(facing, p));
+			cells.add(new StructureGhost.Cell(cell, state.setValue(part, p)));
+			boolean free = p == origin() ? context.canPlace() : context.getLevel().getBlockState(cell).canBeReplaced(context);
+			if (!free || context.getLevel().isOutsideBuildHeight(cell)) {
+				blocked.add(cell);
+			}
+		}
+		return new StructureGhost(cells, blocked);
+	}
+
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		if (!level.isClientSide()) {
 			Direction facing = state.getValue(FACING);
 			BlockPos origin = pos.subtract(offset(facing, state.getValue(part)));
-			for (int p = 0; p < width * rows; p++) {
-				BlockPos at = origin.offset(offset(facing, p));
-				if (!at.equals(pos) && level.getBlockState(at).is(this)) {
-					level.setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+			CLEARING.set(true);
+			try {
+				for (int p = 0; p < width * rows; p++) {
+					BlockPos at = origin.offset(offset(facing, p));
+					if (!at.equals(pos) && level.getBlockState(at).is(this)) {
+						level.setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+					}
 				}
+			} finally {
+				CLEARING.set(false);
 			}
 		}
 		return super.playerWillDestroy(level, pos, state, player);
+	}
+
+	/**
+	 * However a part goes (an explosion, a command, a piston), the rest of the piece goes with it and drops nothing: one
+	 * piece, one item, never a part left standing on its own.
+	 */
+	@Override
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+		super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+		if (CLEARING.get() || level.getBlockState(pos).is(this)) {
+			return;
+		}
+		Direction facing = state.getValue(FACING);
+		BlockPos origin = pos.subtract(offset(facing, state.getValue(part)));
+		CLEARING.set(true);
+		try {
+			for (int p = 0; p < width * rows; p++) {
+				BlockPos at = origin.offset(offset(facing, p));
+				BlockState there = level.getBlockState(at);
+				if (!at.equals(pos) && there.is(this) && there.getValue(FACING) == facing && there.getValue(part) == p) {
+					level.setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+				}
+			}
+		} finally {
+			CLEARING.set(false);
+		}
 	}
 
 	@Override

@@ -1,6 +1,10 @@
 package io.github.jimbozoomer.jugcraft.nuclear;
 
+import io.github.jimbozoomer.jugcraft.placement.StructureGhost;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,8 +27,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * (row by row from the north-west corner, 4 the middle with the pedestal). Placing it needs the 3 x 3 round the
  * clicked block free.
  */
-public class ConferenceTableBlock extends Block {
+public class ConferenceTableBlock extends Block implements StructureGhost.Source {
 	public static final IntegerProperty PART = IntegerProperty.create("part", 0, 8);
+	/** Set while the table removes its other parts, so they don't each try to remove the rest again. */
+	private static final ThreadLocal<Boolean> CLEARING = ThreadLocal.withInitial(() -> false);
 	private static final VoxelShape[] SHAPES = new VoxelShape[9];
 
 	static {
@@ -84,16 +90,53 @@ public class ConferenceTableBlock extends Block {
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		if (!level.isClientSide()) {
-			int part = state.getValue(PART);
-			BlockPos centre = pos.offset(1 - part % 3, 0, 1 - part / 3);
+			clearOthers(level, pos, state);
+		}
+		return super.playerWillDestroy(level, pos, state, player);
+	}
+
+	/** The table's other parts go, dropping nothing (the part that was broken drops the table). */
+	private void clearOthers(Level level, BlockPos pos, BlockState state) {
+		int part = state.getValue(PART);
+		BlockPos centre = pos.offset(1 - part % 3, 0, 1 - part / 3);
+		CLEARING.set(true);
+		try {
 			for (int p = 0; p < 9; p++) {
 				BlockPos at = centre.offset(p % 3 - 1, 0, p / 3 - 1);
-				if (!at.equals(pos) && level.getBlockState(at).is(this)) {
+				BlockState there = level.getBlockState(at);
+				if (!at.equals(pos) && there.is(this) && there.getValue(PART) == p) {
 					level.setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
 				}
 			}
+		} finally {
+			CLEARING.set(false);
 		}
-		return super.playerWillDestroy(level, pos, state, player);
+	}
+
+	/** However a part goes (an explosion, a command), the rest of the table goes with it: one table, one item. */
+	@Override
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+		super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+		if (!CLEARING.get() && !level.getBlockState(pos).is(this)) {
+			clearOthers(level, pos, state);
+		}
+	}
+
+	/** The whole table where its item would go (client/MbsPreview.java), the cells in the way marked. */
+	@Override
+	public StructureGhost ghost(BlockPlaceContext context) {
+		BlockPos centre = context.getClickedPos();
+		List<StructureGhost.Cell> cells = new ArrayList<>();
+		List<BlockPos> blocked = new ArrayList<>();
+		for (int part = 0; part < 9; part++) {
+			BlockPos cell = centre.offset(part % 3 - 1, 0, part / 3 - 1);
+			cells.add(new StructureGhost.Cell(cell, defaultBlockState().setValue(PART, part)));
+			boolean free = part == 4 ? context.canPlace() : context.getLevel().getBlockState(cell).canBeReplaced(context);
+			if (!free || context.getLevel().isOutsideBuildHeight(cell)) {
+				blocked.add(cell);
+			}
+		}
+		return new StructureGhost(cells, blocked);
 	}
 
 	/** Turned with the structure it is part of: each block takes the place its slice turns to. */

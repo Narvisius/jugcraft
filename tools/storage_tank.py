@@ -1048,7 +1048,7 @@ def write_rating_assets(write, rid, assets, lang):
         f"message.{MOD}.tank_kit.no_room": "Not enough room here for the tank",
         f"message.{MOD}.tank_kit.blocked": "Something is in the way: %s at %s, %s, %s",
         f"tooltip.{MOD}.tank_kit.size": "%s x %s, %s tall",
-        f"tooltip.{MOD}.tank_kit.use": "Use on the ground to place the whole tank, reaching away from you",
+        f"tooltip.{MOD}.tank_kit.use": "Use on the ground to place the whole tank, reaching away from you. Breaking any part of it takes it all down and gives the kit back, empty",
         f"tooltip.{MOD}.flame_arrester": "Use on an empty storage tank to re-rate it for flammable liquids",
         f"tooltip.{MOD}.tank_rubber_lining": "Use on an empty storage tank to re-rate it for corrosive liquids",
         f"tooltip.{MOD}.tank_shell_section": "Nine tank plates welded into a curved section: what tank kits are made of",

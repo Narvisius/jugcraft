@@ -45,9 +45,31 @@ public final class TankFittings {
 				|| state.is(StorageTanks.BLOCKS.get("tank_earthing_boss"));
 	}
 
-	/** Swaps a formed tank's fittings for its rating's. */
+	/**
+	 * Swaps a formed tank's fittings for its rating's. A tank its kit placed keeps track of the fittings it has now
+	 * (StorageTankPortBlockEntity.kitRefit), so it still comes down whole.
+	 */
 	public static void refit(ServerLevel level, StorageTankPortBlockEntity tank, TankRating rating) {
 		List<BlockPos> plates = tank.platePositions();
+		// Where fittings stand: on a plate, or beside one.
+		java.util.Map<BlockPos, BlockState> before = new java.util.HashMap<>();
+		for (BlockPos p : plates) {
+			before.putIfAbsent(p.above(), level.getBlockState(p.above()));
+			for (Direction d : Direction.Plane.HORIZONTAL) {
+				before.putIfAbsent(p.relative(d), level.getBlockState(p.relative(d)));
+			}
+		}
+		swap(level, plates, rating);
+		List<BlockPos> changed = new ArrayList<>();
+		before.forEach((pos, state) -> {
+			if (level.getBlockState(pos) != state) {
+				changed.add(pos);
+			}
+		});
+		tank.kitRefit(level, changed);
+	}
+
+	private static void swap(ServerLevel level, List<BlockPos> plates, TankRating rating) {
 		int flags = Block.UPDATE_ALL;
 		// The roof vent(s): whatever stands on the roof.
 		Block vent = vent(rating);

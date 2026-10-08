@@ -86,6 +86,21 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 	private long inCount, outCount, counted;
 	private int inRate, outRate;
 
+	/**
+	 * A tank a kit placed (TankKitItem) comes down whole when any part of it is broken, and gives the kit back
+	 * (TankKitBreaking; Justin, Oct 8). The outlet keeps what the kit laid while it stands as placed: the kit, every
+	 * block it laid (packed, {@link #pack}) and which block that was (an index into {@link #kitPalette}), and the ground
+	 * its foundation went into (given back when it comes down). Null kit: a hand-built tank, or one that has been
+	 * damaged since; it breaks a block at a time.
+	 */
+	private @Nullable String kit;
+	private int[] kitCells = new int[0], kitBlocks = new int[0], kitGroundCells = new int[0];
+	private List<String> kitPalette = List.of();
+	private List<BlockState> kitGround = List.of();
+	/** Whether a tank placed before kits were remembered has been looked at to see if a kit laid it (TankKitBreaking.adopt). */
+	private boolean kitChecked;
+	private @Nullable Set<Integer> kitLookup;
+
 	/** The last liquid the tank held (its label while empty) and the title a name tag gave it. */
 	private FluidVariant label = FluidVariant.blank();
 	private String title = "";
@@ -397,6 +412,159 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 			return;
 		}
 		form(level, scan);
+		if (!kitChecked) {
+			kitChecked = true;
+			if (kit == null) {
+				TankKitBreaking.adopt(level, this);
+			}
+			setChanged();
+		}
+	}
+
+	// ------------------------------------------------------------------ the kit that placed it
+
+	/** Remembers the kit that placed this tank, the blocks it laid and the ground its foundation took. */
+	public void setKit(ServerLevel level, String kit, List<BlockPos> cells, List<BlockPos> groundCells, List<BlockState> ground) {
+		this.kit = kit;
+		List<String> palette = new ArrayList<>();
+		kitCells = new int[cells.size()];
+		kitBlocks = new int[cells.size()];
+		for (int i = 0; i < cells.size(); i++) {
+			kitCells[i] = pack(cells.get(i));
+			String id = BuiltInRegistries.BLOCK.getKey(level.getBlockState(cells.get(i)).getBlock()).toString();
+			int k = palette.indexOf(id);
+			if (k < 0) {
+				k = palette.size();
+				palette.add(id);
+			}
+			kitBlocks[i] = k;
+		}
+		kitPalette = List.copyOf(palette);
+		kitGroundCells = groundCells.stream().mapToInt(this::pack).toArray();
+		kitGround = List.copyOf(ground);
+		kitChecked = true;
+		kitLookup = null;
+		setChanged();
+	}
+
+	/** The kit that placed this tank (null: hand-built, or damaged since). */
+	public @Nullable String kit() {
+		return kit;
+	}
+
+	/** Whether the kit laid the block at {@code pos}. */
+	public boolean kitHas(BlockPos pos) {
+		if (kit == null) {
+			return false;
+		}
+		if (kitLookup == null) {
+			Set<Integer> lookup = new HashSet<>();
+			for (int packed : kitCells) {
+				lookup.add(packed);
+			}
+			kitLookup = lookup;
+		}
+		BlockPos d = pos.subtract(worldPosition);
+		return Math.abs(d.getX()) < 512 && Math.abs(d.getY()) < 512 && Math.abs(d.getZ()) < 512 && kitLookup.contains(pack(pos));
+	}
+
+	/** Every block the kit laid that is still there as it was laid (none gone, none swapped for something else). */
+	public boolean kitIntact(Level level) {
+		for (int i = 0; i < kitCells.length; i++) {
+			BlockPos p = unpack(kitCells[i]);
+			if (!level.isLoaded(p)) {
+				return false;
+			}
+			Identifier id = BuiltInRegistries.BLOCK.getKey(level.getBlockState(p).getBlock());
+			if (!id.toString().equals(kitPalette.get(kitBlocks[i]))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** The blocks the kit laid. */
+	public List<BlockPos> kitCells() {
+		List<BlockPos> out = new ArrayList<>(kitCells.length);
+		for (int packed : kitCells) {
+			out.add(unpack(packed));
+		}
+		return out;
+	}
+
+	/** The ground the kit's foundation went into, by cell (empty when not known: a tank adopted after the fact). */
+	public java.util.Map<BlockPos, BlockState> kitGround() {
+		java.util.Map<BlockPos, BlockState> out = new java.util.LinkedHashMap<>();
+		for (int i = 0; i < kitGroundCells.length && i < kitGround.size(); i++) {
+			out.put(unpack(kitGroundCells[i]), kitGround.get(i));
+		}
+		return out;
+	}
+
+	/** The tank isn't as its kit laid it any more: from now on it is like a hand-built tank. */
+	public void forgetKit() {
+		kit = null;
+		kitCells = new int[0];
+		kitBlocks = new int[0];
+		kitGroundCells = new int[0];
+		kitPalette = List.of();
+		kitGround = List.of();
+		kitLookup = null;
+		setChanged();
+	}
+
+	/**
+	 * Re-rating swapped some fittings (TankFittings.refit): the blocks at {@code changed} are what the kit's tank has
+	 * there now (a fitting taken off is no longer part of it, a new one is).
+	 */
+	public void kitRefit(Level level, java.util.Collection<BlockPos> changed) {
+		if (kit == null || changed.isEmpty()) {
+			return;
+		}
+		List<BlockPos> cells = kitCells();
+		List<String> blocks = new ArrayList<>();
+		for (int i = 0; i < kitCells.length; i++) {
+			blocks.add(kitPalette.get(kitBlocks[i]));
+		}
+		for (BlockPos p : changed) {
+			BlockState now = level.getBlockState(p);
+			int i = cells.indexOf(p);
+			if (now.isAir()) {
+				if (i >= 0) {
+					cells.remove(i);
+					blocks.remove(i);
+				}
+			} else if (i >= 0) {
+				blocks.set(i, BuiltInRegistries.BLOCK.getKey(now.getBlock()).toString());
+			} else {
+				cells.add(p.immutable());
+				blocks.add(BuiltInRegistries.BLOCK.getKey(now.getBlock()).toString());
+			}
+		}
+		List<String> palette = new ArrayList<>();
+		kitCells = new int[cells.size()];
+		kitBlocks = new int[cells.size()];
+		for (int i = 0; i < cells.size(); i++) {
+			kitCells[i] = pack(cells.get(i));
+			int k = palette.indexOf(blocks.get(i));
+			if (k < 0) {
+				k = palette.size();
+				palette.add(blocks.get(i));
+			}
+			kitBlocks[i] = k;
+		}
+		kitPalette = List.copyOf(palette);
+		kitLookup = null;
+		setChanged();
+	}
+
+	/** The space inside, the tank's own interior blocks. */
+	public List<BlockPos> interiorPositions() {
+		List<BlockPos> out = new ArrayList<>(interior.length);
+		for (int packed : interior) {
+			out.add(unpack(packed));
+		}
+		return out;
 	}
 
 	private static boolean isPlate(BlockState state) {
@@ -809,6 +977,18 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		prefill = input.getBooleanOr("prefill", false);
 		label = input.read("label", FluidVariant.CODEC).orElse(fluid.isResourceBlank() ? FluidVariant.blank() : fluid.variant);
 		title = input.getStringOr("title", "");
+		String savedKit = input.getStringOr("kit", "");
+		kit = savedKit.isEmpty() ? null : savedKit;
+		kitCells = input.getIntArray("kit_cells").orElse(new int[0]);
+		kitBlocks = input.getIntArray("kit_blocks").orElse(new int[0]);
+		kitPalette = input.read("kit_palette", com.mojang.serialization.Codec.STRING.listOf()).orElse(List.of());
+		kitGroundCells = input.getIntArray("kit_ground_cells").orElse(new int[0]);
+		kitGround = input.read("kit_ground", BlockState.CODEC.listOf()).orElse(List.of());
+		kitChecked = input.getBooleanOr("kit_checked", false);
+		kitLookup = null;
+		if (kit != null && (kitCells.length != kitBlocks.length || kitPalette.isEmpty())) {
+			kit = null;
+		}
 	}
 
 	@Override
@@ -819,6 +999,15 @@ public class StorageTankPortBlockEntity extends BlockEntity {
 		output.putIntArray("plates", plates);
 		output.putIntArray("inlets", inlets);
 		output.putBoolean("prefill", prefill);
+		output.putBoolean("kit_checked", kitChecked);
+		if (kit != null) {
+			output.putString("kit", kit);
+			output.putIntArray("kit_cells", kitCells);
+			output.putIntArray("kit_blocks", kitBlocks);
+			output.store("kit_palette", com.mojang.serialization.Codec.STRING.listOf(), kitPalette);
+			output.putIntArray("kit_ground_cells", kitGroundCells);
+			output.store("kit_ground", BlockState.CODEC.listOf(), kitGround);
+		}
 	}
 
 	private void writeSynced(ValueOutput output) {

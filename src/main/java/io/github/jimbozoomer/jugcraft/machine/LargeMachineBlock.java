@@ -1,5 +1,8 @@
 package io.github.jimbozoomer.jugcraft.machine;
 
+import io.github.jimbozoomer.jugcraft.placement.StructureGhost;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,7 +45,7 @@ import org.jspecify.annotations.Nullable;
  * {@code tools/generate_material_data.py} from the model in {@code tools/large_machines.py}.</li>
  * </ul>
  */
-public class LargeMachineBlock extends MachineBlock implements WorldlyContainerHolder {
+public class LargeMachineBlock extends MachineBlock implements WorldlyContainerHolder, StructureGhost.Source {
 	/** Most blocks one machine may fill (PART_STATES in tools/model_writer.py). */
 	public static final int MAX_PARTS = 64;
 	/** Which block of the footprint this is; 0 is the master. */
@@ -119,6 +122,28 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 			}
 		}
 		return state.setValue(PART, 0);
+	}
+
+	/** The whole machine where its item would go (client/MbsPreview.java), the cells in the way marked. */
+	@Override
+	public StructureGhost ghost(BlockPlaceContext context) {
+		BlockState state = formed(super.getStateForPlacement(context)).setValue(PART, 0);
+		Level level = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		Direction facing = state.getValue(FACING);
+		Footprint footprint = footprint(state);
+		List<StructureGhost.Cell> cells = new ArrayList<>();
+		List<BlockPos> blocked = new ArrayList<>();
+		for (int part = 0; part < footprint.size(); part++) {
+			BlockPos partPos = footprint.partPos(pos, facing, part);
+			cells.add(new StructureGhost.Cell(partPos, state.setValue(PART, part)));
+			boolean free = part == 0 ? context.canPlace()
+					: level.getBlockState(partPos).canBeReplaced(BlockPlaceContext.at(context, partPos, Direction.UP));
+			if (!free || level.isOutsideBuildHeight(partPos) || !level.getWorldBorder().isWithinBounds(partPos)) {
+				blocked.add(partPos);
+			}
+		}
+		return new StructureGhost(cells, blocked);
 	}
 
 	@Override
