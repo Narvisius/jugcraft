@@ -15,8 +15,7 @@ import org.jspecify.annotations.Nullable;
  * The roof and shell fittings that go with a tank's rating (TankRating), swapped when a placed tank is re-rated
  * (TankUpgrades): the roof vent (a gooseneck, a pressure/vacuum vent on a flame arrester, a scrubber vent) and, on a
  * flammable tank, two foam chambers on the top course with their foam lines down the shell to the foot, and an earthing
- * boss at the foot. A tank kit lays the same fittings (tools/tank_kits.py), and the corrosive kit's bund and safety
- * shower too.
+ * boss at the foot. A tank kit lays the same fittings (tools/tank_kits.py), and the corrosive kit's spill bund too.
  */
 public final class TankFittings {
 	private TankFittings() {

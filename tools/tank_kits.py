@@ -49,15 +49,15 @@ class Raised:
 
 def rated(rating, size):
     """A general, flammable or corrosive tank of one size on its foundation (a corrosive one's wider, with its spill
-    bund and the safety shower)."""
+    bund round the edge)."""
     r, h = SIZES[size]
     corrosive = rating == "corrosive"
-    fr = r + (3 if corrosive else 1)
+    fr = r + (2 if corrosive else 1)
     w = 2 * math.ceil(fr) + 3   # odd, so the tank's middle is a block's middle (5, 9 and 13 across)
     c = w / 2
     b = MP.Building(f"tank_kit_{rating}_{size}", f"{NAMES[size]} {rating.title()} Storage Tank", w, w, h + 1, grounded=True)
     MP.tank_in(b, c, c, r, h, outlet="w", inlet="n", ladder="e", manway=None if size == "small" else "s",
-               vent=(0, -1) if size == "small" else (0, 0), rating=rating, bund=corrosive, shower=corrosive,
+               vent=(0, -1) if size == "small" else (0, 0), rating=rating, bund=corrosive,
                foundation_r=fr, wall=1.0 if size == "small" else 1.2)
     MP.finish_railings(b)
     return b, int(c)

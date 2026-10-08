@@ -1252,8 +1252,7 @@ BUND = M("minecraft:smooth_stone_slab[type=bottom,waterlogged=false]", (158, 158
 
 
 def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", manway="s", hatch_in=2, vent=(0, 0),
-            foundation=SMOOTH, fill_line=True, wall=1.2, rating="general", foam=None, bund=False, shower=False,
-            foundation_r=None):
+            foundation=SMOOTH, fill_line=True, wall=1.2, rating="general", foam=None, bund=False, foundation_r=None):
     """A storage tank (the MBS, tools/storage_tank.py) drawn into part b round (cx, cz) (block-centre coordinates):
     a shell of tank plates from y 1 to h on a foundation, a roof of plates at h + 1; low on the shell the outlet (the
     tank's controller, its float gauge run up the shell above it) and the inlet (with its fill line climbing to the
@@ -1264,8 +1263,7 @@ def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", 
 
     rating (nuclear/TankRating.java) sets the outlet's rating and the fittings: the roof vent (RATING_VENTS); a
     flammable tank's two foam chambers on the top course with their lines down the shell and an earthing boss at the
-    foot (foam, on unless said otherwise); a corrosive tank's spill bund round the foundation (bund) and safety
-    shower by the ladder (shower); a cryogenic tank has no ladder, railing or hatch (ladder None) and relief valves on
+    foot (foam, on unless said otherwise); a corrosive tank's spill bund round the foundation (bund); a cryogenic tank has no ladder, railing or hatch (ladder None) and relief valves on
     its roof (tools/tank_kits.py stands it on legs and adds its vaporizer). Returns the cells of the outlet, the inlet
     and the vent."""
     if foam is None:
@@ -1319,19 +1317,6 @@ def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", 
         hx, hz = ex - hatch_in * gdx, ez - hatch_in * gdz
         assert (hx, hz) in roof and b.get(hx, h + 2, hz) == 0, ("hatch", hx, hz)
         b.p(hx, h + 1, hz, M(f"jugcraft:storage_tank_hatch[band=wall,facing={OPPOSITE[facing]},formed=false,open=false]", (150, 156, 150)))
-        if shower:
-            # The safety shower and eyewash (two blocks tall) a few steps along from the ladder's foot, facing out
-            # from the tank, on the foundation and a block clear of the shell.
-            tdx, tdz = -gdz, gdx
-            for k in (3, -3, 4, -4):
-                sx, sz = lx + gdx + tdx * k, lz + gdz + tdz * k
-                if (0 <= sx < gw and 0 <= sz < gd and b.get(sx, 1, sz) == 0 and b.get(sx, 2, sz) == 0 and b.get(sx, 0, sz) != 0
-                        and all(b.get(sx + ex, 1, sz + ez) != TANK_PLATE for ex, ez in ((1, 0), (-1, 0), (0, 1), (0, -1)))):
-                    b.p(sx, 1, sz, M(f"jugcraft:safety_shower[facing={facing}]", (60, 150, 80)))
-                    b.p(sx, 2, sz, M(f"jugcraft:safety_shower_head[facing={facing}]", (60, 150, 80)))
-                    break
-            else:
-                raise AssertionError(("no room for the safety shower", lx, lz))
     vent_cell = None
     if vent is not None:
         vent_cell = (mx + vent[0], mz + vent[1])

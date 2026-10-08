@@ -1,6 +1,267 @@
 {
-  "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "jugcraft:item/tank_rubber_lining"
-  }
+    "st_galv": "jugcraft:block/st_galv",
+    "st_rubber": "jugcraft:block/st_rubber",
+    "st_rubber_end": "jugcraft:block/st_rubber_end",
+    "particle": "jugcraft:block/st_galv"
+  },
+  "elements": [
+    {
+      "from": [
+        2.6,
+        3.75,
+        5.75
+      ],
+      "to": [
+        13.4,
+        12.25,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_rubber"
+        },
+        "south": {
+          "texture": "#st_rubber"
+        },
+        "east": {
+          "texture": "#st_rubber_end"
+        },
+        "west": {
+          "texture": "#st_rubber_end"
+        },
+        "up": {
+          "texture": "#st_rubber"
+        },
+        "down": {
+          "texture": "#st_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        2.6,
+        4.25,
+        9.5
+      ],
+      "to": [
+        13.4,
+        11.75,
+        10.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_rubber"
+        },
+        "south": {
+          "texture": "#st_rubber"
+        },
+        "east": {
+          "texture": "#st_rubber_end"
+        },
+        "west": {
+          "texture": "#st_rubber_end"
+        },
+        "up": {
+          "texture": "#st_rubber"
+        },
+        "down": {
+          "texture": "#st_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        2.6,
+        4.25,
+        4.25
+      ],
+      "to": [
+        13.4,
+        11.75,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_rubber"
+        },
+        "south": {
+          "texture": "#st_rubber"
+        },
+        "east": {
+          "texture": "#st_rubber_end"
+        },
+        "west": {
+          "texture": "#st_rubber_end"
+        },
+        "up": {
+          "texture": "#st_rubber"
+        },
+        "down": {
+          "texture": "#st_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        2.6,
+        5.5,
+        10.75
+      ],
+      "to": [
+        13.4,
+        10.5,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_rubber"
+        },
+        "south": {
+          "texture": "#st_rubber"
+        },
+        "east": {
+          "texture": "#st_rubber_end"
+        },
+        "west": {
+          "texture": "#st_rubber_end"
+        },
+        "up": {
+          "texture": "#st_rubber"
+        },
+        "down": {
+          "texture": "#st_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        2.6,
+        5.5,
+        3.25
+      ],
+      "to": [
+        13.4,
+        10.5,
+        4.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_rubber"
+        },
+        "south": {
+          "texture": "#st_rubber"
+        },
+        "east": {
+          "texture": "#st_rubber_end"
+        },
+        "west": {
+          "texture": "#st_rubber_end"
+        },
+        "up": {
+          "texture": "#st_rubber"
+        },
+        "down": {
+          "texture": "#st_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        2.2,
+        6.75,
+        6.5
+      ],
+      "to": [
+        2.6,
+        9.25,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_galv"
+        },
+        "south": {
+          "texture": "#st_galv"
+        },
+        "east": {
+          "texture": "#st_galv"
+        },
+        "west": {
+          "texture": "#st_galv"
+        },
+        "up": {
+          "texture": "#st_galv"
+        },
+        "down": {
+          "texture": "#st_galv"
+        }
+      }
+    },
+    {
+      "from": [
+        13.4,
+        6.75,
+        6.5
+      ],
+      "to": [
+        13.8,
+        9.25,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_galv"
+        },
+        "south": {
+          "texture": "#st_galv"
+        },
+        "east": {
+          "texture": "#st_galv"
+        },
+        "west": {
+          "texture": "#st_galv"
+        },
+        "up": {
+          "texture": "#st_galv"
+        },
+        "down": {
+          "texture": "#st_galv"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        3.8,
+        9.6
+      ],
+      "to": [
+        13.5,
+        4.3,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#st_rubber"
+        },
+        "south": {
+          "texture": "#st_rubber"
+        },
+        "east": {
+          "texture": "#st_rubber"
+        },
+        "west": {
+          "texture": "#st_rubber"
+        },
+        "up": {
+          "texture": "#st_rubber"
+        },
+        "down": {
+          "texture": "#st_rubber"
+        }
+      }
+    }
+  ],
+  "parent": "minecraft:block/block"
 }

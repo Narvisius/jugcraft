@@ -170,7 +170,7 @@ day ("silo design sheet looks fine").
     the top course with their foam lines down the shell, and an earthing boss at the foot. Takes crude oil, naphtha, the
     gasolines, bioethanol, kerosene, the diesels and heavy fuel oil, and any general liquid.
   - **Corrosive:** rubber-lined, so the shell is a darker grey with a yellow stripe and a scrubber vent; the kit adds a
-    spill bund round the foundation and a safety shower and eyewash by the ladder. Takes lye, sulfuric acid, nitric
+    spill bund round the foundation. Takes lye, sulfuric acid, nitric
     acid and vanadium electrolyte, and any general liquid.
   - **Cryogenic:** a tall white vacuum-insulated tank on legs, with relief valves on its roof and an ambient vaporizer
     beside it; no ladder or hatch. Takes liquid oxygen only. Made only as its own kit.

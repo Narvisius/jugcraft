@@ -226,7 +226,7 @@ public class TankRatingGameTests {
 		helper.assertTrue(out != null, "its outlet takes a pipe");
 		helper.assertTrue(insert(cold.fluid, Fluids.WATER, FluidConstants.BUCKET) == 0, "it refuses water");
 		helper.assertTrue(insert(cold.fluid, fluid("jugcraft:liquid_oxygen"), FluidConstants.BUCKET) == FluidConstants.BUCKET, "it takes liquid oxygen");
-		// A corrosive kit, turned: its safety shower stands, two blocks tall.
+		// A corrosive kit, turned: formed and rated corrosive, with no eyewash station (Justin, Oct 8: taken off).
 		BlockPos acid = helper.absolutePos(new BlockPos(16, 1, 30));
 		helper.assertTrue(TankKitItem.place(helper.getLevel(), "corrosive_small", acid, Rotation.CLOCKWISE_90, null) == null, "the corrosive kit is placed turned");
 		Blueprint bp = TankKitItem.blueprint("corrosive_small");
@@ -234,14 +234,14 @@ public class TankRatingGameTests {
 		for (int i = 0; i < bp.size(); i++) {
 			BlockPos p = acid.offset(bp.offset(i, Rotation.CLOCKWISE_90));
 			if (helper.getLevel().getBlockState(p).is(StorageTanks.BLOCKS.get("safety_shower"))) {
-				shower = helper.getLevel().getBlockState(p.above()).is(StorageTanks.BLOCKS.get("safety_shower_head"));
+				shower = true;
 			}
 			if (bp.state(i, Rotation.CLOCKWISE_90).getBlock() instanceof StorageTankOutletBlock) {
 				StorageTankPortBlockEntity a = (StorageTankPortBlockEntity) helper.getLevel().getBlockEntity(p);
 				helper.assertTrue(a.formed() && a.rating() == TankRating.CORROSIVE, "the corrosive tank forms, rated corrosive");
 			}
 		}
-		helper.assertTrue(shower, "the safety shower stands with its head on it");
+		helper.assertTrue(!shower, "no safety shower or eyewash on the corrosive tank");
 		helper.succeed();
 	}
 

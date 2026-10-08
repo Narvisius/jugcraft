@@ -93,7 +93,7 @@ WHITE, PIPE, GALV, MESH, YELLOW = "st_white", "st_pipe", "st_galv", "st_mesh", "
 GREEN, BLUE, BRASS, COPPER, FIN = "st_green", "st_blue", "st_brass", "st_copper", "st_fin"
 TEXTURES = ["st_primer", "st_wall", "st_band", "st_rim", "st_roof", "st_white", "st_pipe", "st_galv", "st_mesh",
             "st_wall_dark", "st_roof_dark", "st_stripe_red", "st_stripe_yellow", "st_cryo", "st_cryo_roof", "st_cryo_rim",
-            "st_green", "st_blue", "st_brass", "st_copper", "st_fin", "st_shower_sign"]
+            "st_green", "st_blue", "st_brass", "st_copper", "st_fin", "st_shower_sign", "st_rubber", "st_rubber_end"]
 
 CRAFTING = {
     "storage_tank_plate": (["PPP", "P P", "PPP"], {"P": "#c:plates/steel"}, 8),
@@ -461,6 +461,41 @@ def tank_leg():
     return m
 
 
+# ------------------------------------------------------------------------------------------------- the parts, in 3D
+
+def flame_arrester_part():
+    """The flame arrester as it stands in a pressure/vacuum vent, laid on its side: the red housing (the arrester's
+    element bank inside it, its band showing) between two bolted flanges, a pipe stub out of each."""
+    m = cyl("x", 8, 8, 1.8, 0.6, 3.4, PIPE) + cyl("x", 8, 8, 1.8, 12.6, 15.4, PIPE)
+    m += cyl("x", 8, 8, 3.4, 3.4, 4.4, GUN) + cyl("x", 8, 8, 3.4, 11.6, 12.6, GUN)
+    m += cyl("x", 8, 8, 3.8, 4.4, 7.6, RED) + cyl("x", 8, 8, 3.8, 8.4, 11.6, RED)
+    m += cyl("x", 8, 8, 3.95, 7.6, 8.4, GALV)
+    for x in (3.2, 12.6):
+        for k in range(6):
+            a = (k + 0.5) / 6 * math.tau
+            y, z = 8 + 2.7 * math.cos(a), 8 + 2.7 * math.sin(a)
+            m.append(box((x, y - 0.35, z - 0.35), (x + 0.2, y + 0.35, z + 0.35), CHROME))
+    return m
+
+
+def rubber_lining_part():
+    """A roll of rubber tank lining on its steel core, the free end of the sheet lying out in front."""
+    m = cyl("x", 8, 7.6, 4.2, 2.6, 13.4, "st_rubber", cap="st_rubber_end")
+    m += cyl("x", 8, 7.6, 1.2, 2.2, 2.6, GALV) + cyl("x", 8, 7.6, 1.2, 13.4, 13.8, GALV)
+    m.append(box((2.6, 3.8, 9.6), (13.4, 4.3, 15.4), "st_rubber"))
+    return m
+
+
+def shell_section_part():
+    """A curved tank shell section standing on its edge: steel plates in grey primer, bent to the tank's curve."""
+    m = []
+    for k in range(-3, 4):
+        x0 = 8 + k * 1.9 - 0.95
+        z = 6.4 + 0.32 * k * k
+        m.append(box((x0, 1.5, z), (x0 + 1.9, 14.5, z + 1.2), "st_primer"))
+    return m
+
+
 def _cull(model):
     """Faces on the block's edge are hidden against a full neighbour (the roof plates round a hatch)."""
     for e in model["elements"]:
@@ -668,6 +703,16 @@ def _shower_sign():
     return img
 
 
+def _rubber_end():
+    """The end of a roll of rubber sheet: the turns of the sheet round the steel core, a thin light line between them."""
+    img = M.rubber(7335)
+    d = ImageDraw.Draw(img)
+    for r in range(18, 64, 7):
+        d.ellipse([64 - r, 64 - r, 64 + r, 64 + r], outline=(92, 94, 98, 255), width=2)
+    d.ellipse([46, 46, 82, 82], fill=(150, 154, 158, 255), outline=(70, 72, 76, 255), width=3)
+    return img
+
+
 def draw_block_textures():
     makers = {"st_primer": _primer, "st_wall": _wall, "st_band": _band, "st_rim": _rim, "st_roof": _roof,
               "st_white": _white, "st_pipe": _pipe, "st_galv": _galv, "st_mesh": _mesh,
@@ -678,7 +723,8 @@ def draw_block_textures():
               "st_green": lambda: M.painted((0, 136, 74), 7319, chip_count=2, drip_count=0, dirt=0.15),
               "st_blue": lambda: M.painted((40, 92, 170), 7331, chip_count=2, drip_count=1, dirt=0.15),
               "st_brass": lambda: M.brushed((196, 160, 70), 7332, "h", dirt=0.1),
-              "st_copper": lambda: M.copper(7333), "st_fin": _fin, "st_shower_sign": _shower_sign}
+              "st_copper": lambda: M.copper(7333), "st_fin": _fin, "st_shower_sign": _shower_sign,
+              "st_rubber": lambda: M.rubber(7334), "st_rubber_end": _rubber_end}
     sharp = {"st_band": 16, "st_shower_sign": 6}
     return {name: M.stylize(make(), sharp.get(name, 14)) for name, make in makers.items()}
 
@@ -968,12 +1014,21 @@ KIT_TOOLTIPS = {"general": "Holds water, brine, fracking fluid and other general
 
 
 def write_rating_assets(write, rid, assets, lang):
-    """The items (the upgrade parts, the shell section and the kits, each a 16x16 icon from its map in
-    tools/item_icons/) and the words of the ratings: their names, the label's warning lines, the messages and the kits'
+    """The items (the upgrade parts, the shell section and the kits, each shown in 3D as it is in the world) and the
+    words of the ratings: their names, the label's warning lines, the messages and the kits'
     tooltips."""
+    # Each shows in the slot as it is in the world, in 3D (Justin, Oct 8): a kit as the very tank it places, in
+    # miniature (tools/tank_kit_models.py); a part as the part itself.
+    import tank_kit_models
+    parts = {"flame_arrester": flame_arrester_part(), "tank_rubber_lining": rubber_lining_part(),
+             "tank_shell_section": shell_section_part()}
     for item, name in ITEM_NAMES.items():
         lang[f"item.{MOD}.{item}"] = name
-        write(assets / "models" / "item" / f"{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
+        if item in parts:
+            model = dict(_model(parts[item], rid), parent="minecraft:block/block")
+        else:
+            model = tank_kit_models.item_model(item[len("tank_kit_"):], rid)
+        write(assets / "models" / "item" / f"{item}.json", model)
         write(assets / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
     for rating, name in RATING_NAMES.items():
         lang[f"tank.{MOD}.rating.{rating}"] = name
@@ -1001,8 +1056,8 @@ def write_rating_assets(write, rid, assets, lang):
 
 
 def draw_item_textures():
-    import item_icons
-    return {item: item_icons.draw(item) for item in ITEMS}
+    """None: the tank items show in 3D (write_rating_assets)."""
+    return {}
 
 
 def write_loot(write, rid, out, self_drop):
