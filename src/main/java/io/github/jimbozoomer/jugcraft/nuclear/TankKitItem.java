@@ -192,16 +192,53 @@ public class TankKitItem extends Item {
 		Blueprint blueprint = blueprint(kit);
 		Formed formed = null;
 		if (blueprint != null) {
-			Set<BlockPos> inside = new HashSet<>();
-			int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+			// The space inside: the cells the kit leaves empty that can't be reached from outside its box.
+			Set<BlockPos> solid = new HashSet<>();
+			int x0 = Integer.MAX_VALUE, y0 = Integer.MAX_VALUE, z0 = Integer.MAX_VALUE, x1 = Integer.MIN_VALUE, y1 = Integer.MIN_VALUE, z1 = Integer.MIN_VALUE;
 			TankRating rating = TankRating.GENERAL;
 			for (Blueprint.Cell cell : blueprint.cells(rotation)) {
-				if (cell.state().isAir()) {
-					inside.add(cell.offset());
-					minY = Math.min(minY, cell.offset().getY());
-					maxY = Math.max(maxY, cell.offset().getY());
-				} else if (cell.state().getBlock() instanceof StorageTankOutletBlock) {
+				BlockPos p = cell.offset();
+				if (!cell.state().isAir()) {
+					solid.add(p);
+				}
+				if (cell.state().getBlock() instanceof StorageTankOutletBlock) {
 					rating = cell.state().getValue(StorageTankOutletBlock.RATING);
+				}
+				x0 = Math.min(x0, p.getX());
+				y0 = Math.min(y0, p.getY());
+				z0 = Math.min(z0, p.getZ());
+				x1 = Math.max(x1, p.getX());
+				y1 = Math.max(y1, p.getY());
+				z1 = Math.max(z1, p.getZ());
+			}
+			Set<BlockPos> outside = new HashSet<>();
+			java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
+			BlockPos start = new BlockPos(x0 - 1, y0 - 1, z0 - 1);
+			outside.add(start);
+			queue.add(start);
+			while (!queue.isEmpty()) {
+				BlockPos p = queue.poll();
+				for (net.minecraft.core.Direction d : net.minecraft.core.Direction.values()) {
+					BlockPos q = p.relative(d);
+					if (q.getX() < x0 - 1 || q.getX() > x1 + 1 || q.getY() < y0 - 1 || q.getY() > y1 + 1 || q.getZ() < z0 - 1 || q.getZ() > z1 + 1
+							|| solid.contains(q) || !outside.add(q)) {
+						continue;
+					}
+					queue.add(q);
+				}
+			}
+			Set<BlockPos> inside = new HashSet<>();
+			int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+			for (int x = x0; x <= x1; x++) {
+				for (int y = y0; y <= y1; y++) {
+					for (int z = z0; z <= z1; z++) {
+						BlockPos p = new BlockPos(x, y, z);
+						if (!solid.contains(p) && !outside.contains(p)) {
+							inside.add(p);
+							minY = Math.min(minY, y);
+							maxY = Math.max(maxY, y);
+						}
+					}
 				}
 			}
 			int roofY = maxY + 1;

@@ -11,6 +11,7 @@ import io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentRegistry;
 import io.github.jimbozoomer.jugcraft.nuclear.TankKitItem;
 import io.github.jimbozoomer.jugcraft.placement.StructureGhost;
+import io.github.jimbozoomer.jugcraft.placement.StructureReach;
 import io.github.jimbozoomer.jugcraft.powerline.LineItem;
 import io.github.jimbozoomer.jugcraft.powerline.LineKind;
 import io.github.jimbozoomer.jugcraft.powerline.LinePlacement;
@@ -105,12 +106,22 @@ public final class MbsPreview {
 			Minecraft minecraft = Minecraft.getInstance();
 			Player player = minecraft.player;
 			Level level = minecraft.level;
-			if (player == null || level == null || player.isSpectator() || !(minecraft.hitResult instanceof BlockHitResult hit)
-					|| hit.getType() != HitResult.Type.BLOCK) {
+			if (player == null || level == null || player.isSpectator()) {
 				return;
 			}
 			ItemStack held = player.getMainHandItem();
 			Item item = held.getItem();
+			if (!(item instanceof TankKitItem || item instanceof EquipmentItem || item instanceof LineItem
+					|| item instanceof BlockItem blockItem && blockItem.getBlock() instanceof StructureGhost.Source)) {
+				return;
+			}
+			// The block under the crosshair; further out than the crosshair reaches (64 blocks), the block looked at
+			// within the item's full placing reach, where using it places it (StructureReach).
+			BlockHitResult hit = minecraft.hitResult instanceof BlockHitResult b && b.getType() == HitResult.Type.BLOCK ? b
+					: StructureReach.farTarget(player, held, minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));
+			if (hit == null) {
+				return;
+			}
 			Vec3 camera = context.levelState().cameraRenderState.pos;
 			PoseStack pose = context.poseStack();
 			SubmitNodeCollector collector = context.submitNodeCollector();

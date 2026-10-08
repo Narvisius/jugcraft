@@ -47,12 +47,19 @@ public class StructureReachGameTests {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		double ordinary = player.blockInteractionRange();
 		expect(helper, "a dirt block", hold(helper, player, new ItemStack(Items.DIRT)), 0);
-		// The turbine-generator is 50 blocks long.
-		expect(helper, "the turbine-generator", hold(helper, player, new ItemStack(JugcraftNuclear.EQUIPMENT_ITEMS.get(EquipmentKind.TURBINE_GENERATOR))), 100);
-		helper.assertTrue(Math.abs(player.blockInteractionRange() - (ordinary + 100)) < 1e-6,
-				"holding the turbine-generator, the reach is " + player.blockInteractionRange() + ", not " + (ordinary + 100));
+		// The turbine-generator is 50 blocks long: placed up to 100 blocks further than a block. The crosshair reaches
+		// only as far as the game allows (64 blocks); beyond that the item places where the player looks (farTarget).
+		ItemStack turbine = new ItemStack(JugcraftNuclear.EQUIPMENT_ITEMS.get(EquipmentKind.TURBINE_GENERATOR));
+		expect(helper, "the turbine-generator (up to the game's limit)", hold(helper, player, turbine), StructureReach.maxRange() - ordinary);
+		helper.assertTrue(Math.abs(player.blockInteractionRange() - StructureReach.maxRange()) < 1e-6,
+				"holding the turbine-generator, the crosshair reaches " + player.blockInteractionRange() + ", not " + StructureReach.maxRange());
+		helper.assertTrue(Math.abs(StructureReach.range(player, turbine) - (ordinary + 100)) < 1e-6,
+				"the turbine-generator's placing reach is " + StructureReach.range(player, turbine) + ", not " + (ordinary + 100));
 		// A lattice tower is 56 blocks tall.
-		expect(helper, "a lattice tower", hold(helper, player, new ItemStack(JugcraftPowerLines.ITEMS.get(LineKind.LATTICE_TOWER))), 112);
+		ItemStack tower = new ItemStack(JugcraftPowerLines.ITEMS.get(LineKind.LATTICE_TOWER));
+		hold(helper, player, tower);
+		helper.assertTrue(Math.abs(StructureReach.range(player, tower) - (ordinary + 112)) < 1e-6,
+				"a lattice tower's placing reach is " + StructureReach.range(player, tower) + ", not " + (ordinary + 112));
 		// The plant status screen is 3 blocks across and 2 high.
 		expect(helper, "a status screen", hold(helper, player, new ItemStack(PlantInterior.BLOCKS.get("status_screen"))), 6);
 		// A large tank kit: twice its blueprint's longest side.

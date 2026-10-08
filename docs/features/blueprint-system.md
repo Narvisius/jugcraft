@@ -114,6 +114,7 @@ Justin: an MBS can be placed as far away as any block can, plus two times its lo
 - It replaces the blueprints' old fixed 80 blocks.
 - It goes for every MBS placed whole from one item, held in the main hand: blueprints, storage tank kits, the nuclear plant's equipment, power line supports and boxes, the plant's multi-block furniture (wall screens, tables, racks, panels, the copier) and multi-block machines.
 - While one is held, the player's block reach carries a modifier of twice its longest side (on the server and the client, so the crosshair outlines the far block and the server's reach check passes); the tooltip says how far.
+- The game holds the block reach to 64 blocks, so the modifier stops there. Further out (a turbine-generator reaches 100 blocks further than a block, a lattice tower 112), using the item with nothing under the crosshair places it on the block the player looks at, up to its full reach: the server works the spot out itself (`StructureReach.farTarget`), as blueprints always have, and the preview shows it there.
 - The longer reach is only for placing: beyond the ordinary reach a click places the item and never uses the block clicked (no far doors, levers or chests), and no block can be broken out there.
 
 ## MBS placement preview and breaking (October 8 2026)
