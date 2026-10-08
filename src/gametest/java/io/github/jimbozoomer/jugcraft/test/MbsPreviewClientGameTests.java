@@ -65,7 +65,7 @@ public class MbsPreviewClientGameTests implements FabricClientGameTest {
 			shot(context, singleplayer, x + 10, y + 14, z + 50, x, y - 1, z, "jugcraft_mbs_preview_lattice");
 			server.runOnServer(minecraft -> LinePlacement.place(minecraft.overworld(), new BlockPos(x - 12, y, z - 4), LineKind.WOODEN_POLE, null));
 			hold(server, "jugcraft:wooden_pole");
-			shot(context, singleplayer, x + 4, y + 4, z + 14, x, y - 1, z, "jugcraft_mbs_preview_pole_wire");
+			shot(context, singleplayer, x + 6, y + 9, z + 16, x, y - 1, z, "jugcraft_mbs_preview_pole_wire");
 
 			// Furniture and a machine, close to.
 			hold(server, "jugcraft:status_screen");

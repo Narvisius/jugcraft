@@ -156,7 +156,7 @@ public final class MbsPreview {
 				cells.add(new StructureGhost.Cell(cell.offset(), cell.state()));
 			}
 			return new Cached(key, level.getGameTime(), Mesh.ofBlocks(level, stake, cells, formed.inside()),
-					TankKitItem.blocked(level, blueprint, stake, rotation), null);
+					TankKitItem.blocked(level, kit.kit, stake, rotation), null);
 		});
 		draw(collector, pose, camera, stake, BLOCKS, (p, consumer) -> c.mesh.replay(p, consumer, tint(c.blocked)));
 		boxes(collector, pose, camera, c.blocked);

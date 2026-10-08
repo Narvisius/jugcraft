@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PGP",
+    "CRC",
+    "PPP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:dc_switchboard",
+    "count": 1
+  }
+}

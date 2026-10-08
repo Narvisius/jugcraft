@@ -107,6 +107,14 @@ public final class PlantInterior {
 			{"edg_load_sequencer", 0, "live:1:2:p", "metal", null},
 			{"edg_battery_charger", 0, "live:1:2:p", "metal", null},
 			{"edg_battery_rack", 0, "multi:1:2:p", "metal", null},
+			// The control building's DC system (tools/plant_panels.py, round 18): the station battery (a four-block step
+			// rack of 30 cells), its distribution switchboard, the vital inverter, and the cables from battery to switchboard.
+			{"station_battery", 0, "multi:4:2:p", "metal", null},
+			{"dc_switchboard", 0, "live:2:2:p", "metal", null},
+			{"vital_inverter", 0, "multi:1:2:p", "metal", null},
+			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
+			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
+			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};

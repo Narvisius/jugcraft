@@ -795,130 +795,356 @@ def turbine_hall(s, ox, oz):
 
 # ------------------------------------------------------------------------------------------------- control building
 
-def control_building(s, ox, oz):
-    """The control building, 40 x 30, three storeys round a corridor (z 13..15) with the stairs at the east end.
+def wall_screen(b, name, x, y, z, facing):
+    """A wall screen three blocks across and two high (plant_office2: status, plant map, training), its left block as
+    you face it at x, z and its bottom at y, on the wall it faces."""
+    rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+    for r in range(2):
+        for c in range(3):
+            b.p(x + rx * c, y + r, z + rz * c, multi_state(name, facing, r * 3 + c))
 
-    Ground floor: the entrance lobby with reception and the turnstiles, the battery room, the HVAC room (air handling
-    units with their ducts up through the ceiling) and the electrical room. First floor: the relay room (relay
-    cabinets back to back in rows), the cable spreading room (tiers of cable tray under the ceiling) and the plant
-    computer room (server racks in hot and cold aisles on a raised floor). Top floor: the main control room, with
-    the horseshoe of control boards under the plant display wall, operator desks, the reactor console, the shift
-    supervisor's office (part glazed) and a break room by the stairs. Returns the reactor console's site position."""
-    W, D, H = 40, 30, 22
+
+def dc_run(b, battery_ends, board, y, z, facing):
+    """The DC power cables from a station battery to its switchboard (plant_panels.RISERS): a riser up the wall from
+    the end of each rack (where its cables come out of the top) to a cable tray under the ceiling at y, the tray along
+    the wall at z to the switchboard, and a riser down into the switchboard's top. battery_ends: the x of each rack's
+    terminal end; board: the x of the switchboard block the cables go down into; the racks and the board stand against
+    the same wall (facing it), two blocks high from the floor below y - 4."""
+    floor = y - 4
+    ends = sorted(set(battery_ends) | {board})
+    for x in ends:
+        for k in range(floor + 2, y):
+            b.p(x, k, z, furniture("dc_cable_riser", facing))
+        b.p(x, y, z, furniture("dc_cable_riser_top", facing))
+    for x in range(ends[0] + 1, ends[-1]):
+        if x not in ends:
+            b.p(x, y, z, furniture("dc_cable_tray", facing))
+
+
+def control_building(s, ox, oz):
+    """The control building, 40 x 30 and four floors, laid out like a real plant's (round 18; Justin: "the stairs are
+    cut off ... I don't know if the batteries are even connected ... the front lobby looks kind of tacky ... make it
+    look realistic"). Nuclear plants put the control room high in a building of its own, over the cable spreading room,
+    with the safety-related DC power at grade, each train in its own fire-separated rooms (NRC fire hazards analyses of
+    TMI, Susquehanna and Peach Bottom; IEEE 484 battery rooms).
+
+    Grade: a small entrance (an airlock-style vestibule, the security officer's desk, badge turnstiles) in place of the
+    old empty lobby; Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (plant_panels'
+    station_battery) with its cables up a riser into a tray and across to the DC Equipment Room next door, down into the
+    125 VDC switchboard beside the chargers and vital inverters; the 480 V switchgear; the remote shutdown room; the
+    operators' locker room. First floor: the cable spreading room under the control room (tiers of tray, risers up into
+    the floor above), the relay room and the plant computer room on its raised floor. Second floor: the main control
+    room (the horseshoe of control boards under the plant display wall, the reactor console, operators' consoles, the
+    shift supervisor's glazed office), across the corridor the Technical Support Center, the kitchen, washroom and the
+    operations office. Top floor: the control room's emergency filtration and air conditioning (air handling units,
+    chillers, pumps), with louvres in the walls. A stair tower serves every floor, laid last so no floor cuts it.
+    Returns the reactor console's site position."""
+    W, D, H = 40, 30, 29
+    L0, L1, L2, L3 = 0, 7, 14, 23
     b = Building("control_building", "Control Building", W, D, H, grounded=True)
     b.shell_walls(CONCRETE, step=8)
-    b.windows(2, 4, "s", step=8, skip=(18, 19, 20, 21))
-    b.windows(9, 11, "ns", step=8)
-    b.storey(0, 1, 1, W - 2, D - 2, VINYL)
-    b.storey(7, 1, 1, W - 2, D - 2, VINYL, ceiling_at=6)
-    b.storey(14, 1, 1, W - 2, D - 2, ACCESS_FLOOR, ceiling_at=13)
-    b.b(1, 21, 1, W - 2, 21, D - 2, CEIL)
-    entrance(b, 20, D - 1, "s", label=None)
-    b.stairwell(W - 9, 16, [0, 7, 14], door_side="n")
-    # The corridor walls on each floor.
-    for lv in (0, 7):
-        y0, y1 = lv + 1, lv + 5
-        b.wall_x(12, 1, W - 2, y0, y1)
-        b.wall_x(16, 1, W - 10, y0, y1)
-    # Ground floor.
-    b.wall_z(14, 1, 11, 1, 5)
-    b.wall_z(30, 1, 11, 1, 5)
-    b.door(7, 1, 12, "north", double=True, label="battery_room")
-    b.door(22, 1, 12, "north", double=True, label="hvac_room")
-    b.door(35, 1, 12, "north", label="electrical_room")
-    for x in range(2, 13, 2):
-        for z in (2, 4, 7, 9):
-            b.p(x, 1, z, BATTERY)
-    b.prop("air_handling_unit", 16, 1, 2, "east")
-    b.prop("air_handling_unit", 16, 1, 7, "east")
-    b.duct_up(22, 3, 23, 4, 4)
-    b.duct_up(22, 8, 23, 9, 4)
-    b.prop("switchgear_lineup", 31, 1, 2, "south")
-    b.p(37, 1, 6, furniture("relay_cabinet", "west", up=False, down=False))
-    # Lobby: reception desk, turnstiles through the corridor wall, lockers.
-    b.c(10, 1, 16, 21, 3, 16)
-    for x in (11, 14, 17, 20):
-        b.furniture("turnstile", x, 1, 16, "north")
-    b.desk(25, 1, 22, "south")
-    b.desk(27, 1, 22, "south")
-    for x in range(2, 9):
-        b.stack("locker", x, 1, 17, "north", n=2)
-    b.furniture("water_cooler", 1, 1, 27, "west")
-    # First floor: relay room (west), cable spreading room (east), computer room (south).
-    b.wall_z(18, 1, 11, 8, 12)
-    b.door(9, 8, 12, "north", double=True, label="relay_room")
-    b.door(27, 8, 12, "north", double=True, label="cable_spreading_room")
-    b.door(15, 8, 16, "south", double=True, label="server_room")
-    for x in range(2, 17):
-        if x == 9:
-            continue
-        b.stack("relay_cabinet", x, 8, 3, "south", n=2)
-        b.stack("relay_cabinet", x, 8, 4, "north", n=2)
-        b.stack("relay_cabinet", x, 8, 8, "south", n=2)
-        b.stack("relay_cabinet", x, 8, 9, "north", n=2)
-    for z in (3, 5, 7, 9):
-        b.tray_run(19, z, W - 3, z, 12, "east")
-    for z in range(2, 11, 4):
-        b.stack("relay_cabinet", W - 2, 8, z, "east", n=2)
-    b.b(1, 7, 17, W - 2, 7, D - 2, ACCESS_FLOOR)
-    for x in range(3, 28):
-        if x in (15, 16):
-            continue
-        for z, f in ((19, "south"), (20, "north"), (24, "south"), (25, "north")):
-            b.stack("server_rack", x, 8, z, f, n=2)
-    for z in (19, 25):
-        b.tray_run(3, z, 27, z, 12, "east")
-    for z in range(18, 28, 3):
-        b.p(1, 8, z, BATTERY)
-    # Top floor: the main control room (west of x 30), break room and stair lobby east.
-    b.wall_z(30, 1, D - 2, 15, 20, ACOUSTIC)
-    b.wall_x(12, 31, W - 2, 15, 20)
-    b.door(30, 15, 14, "west", double=True, label="main_control_room")
-    b.door(34, 15, 12, "north", label="cafeteria")
-    for x in range(1, 30):
-        for y in range(15, 21):
-            for z in (1, D - 2):
-                if b.get(x, y, z) == 0:
-                    b.p(x, y, z, ACOUSTIC)
-    for z in range(1, D - 1):
-        for y in range(15, 21):
-            if b.get(1, y, z) == 0:
-                b.p(1, y, z, ACOUSTIC)
-    b.prop("plant_display_wall", 10, 17, 2, "north")
-    for x in (4, 10, 16, 22):
-        b.prop("main_control_board", x, 15, 4, "north")
-    b.prop("main_control_board", 2, 15, 7, "west")
-    b.prop("main_control_board", 2, 15, 13, "west")
-    b.prop("main_control_board", 27, 15, 7, "east")
-    for x in (8, 12, 20, 24):
-        b.desk(x, 15, 14, "north", name="console_desk")
-    # The shift supervisor's office: a half wall with glazing over it, a door, a desk, cabinets, a whiteboard.
-    for x in range(2, 13):
-        b.p(x, 15, 20, ACOUSTIC)
-        for y in (16, 17):
-            b.p(x, y, 20, PANE)
-        for y in range(18, 21):
-            b.p(x, y, 20, ACOUSTIC)
-    for z in range(21, D - 1):
-        for y in range(15, 21):
-            b.p(13, y, z, ACOUSTIC)
-    b.door(8, 15, 20, "south", label="shift_supervisor")
-    b.b(2, 14, 21, 12, 14, D - 2, CARPET)
-    b.desk(6, 15, 25, "south")
-    b.furniture("filing_cabinet", 2, 15, 27, "west")
-    b.furniture("filing_cabinet", 2, 15, 26, "west")
-    b.furniture("whiteboard", 12, 15, 24, "east")
-    # The control room's lighting: a close grid of panels in the ceiling.
-    for x in range(3, 30, 3):
-        for z in range(3, D - 2, 3):
-            if b.get(x, 20, z) == 0 and b.get(x, 21, z) == CEIL:
-                b.p(x, 20, z, LIGHT)
-    # Break room: kitchen counter, table, water cooler.
-    b.furniture("water_cooler", 38, 15, 2, "east")
-    for x in (33, 35):
-        b.desk(x, 15, 6, "north")
+    b.storey(L0, 1, 1, W - 2, D - 2, EPOXY)
+    b.storey(L1, 1, 1, W - 2, D - 2, VINYL, ceiling_at=L1 - 1)
+    b.storey(L2, 1, 1, W - 2, D - 2, ACCESS_FLOOR, ceiling_at=L2 - 1)
+    b.storey(L3, 1, 1, W - 2, D - 2, EPOXY, ceiling_at=L3 - 1)
+    # Windows only where people work by day: the entrance hall, the second floor's offices; the plant floors have none.
+    for x in range(1, 13):
+        if x % 8 and x not in (3, 4, 5, 6, 7, 8):
+            for y in (2, 3, 4):
+                b.p(x, y, D - 1, PANE)
+    for x in range(1, W - 1):
+        if x % 8:
+            for y in range(L2 + 2, L2 + 6):
+                b.p(x, y, D - 1, PANE)
+    entrance(b, 6, D - 1, "s")
+    # Louvres: the battery rooms' hydrogen exhaust, high in the outside wall; the top floor's air intakes and exhausts.
+    for z in (3, 6):
+        b.p(0, 4, z, LOUVRE)
+    for z in (23, 26):
+        b.p(W - 1, 4, z, LOUVRE)
+    for x in list(range(2, 8)) + list(range(10, 16)):
+        for y in (L3 + 2, L3 + 3, L3 + 4):
+            b.p(x, y, 0, LOUVRE)
+    for z in range(17, 23):
+        for y in (L3 + 2, L3 + 3, L3 + 4):
+            b.p(W - 1, y, z, LOUVRE)
+    ground_floor(b, W, D)
+    first_floor(b, W, D, L1)
+    console = second_floor(b, W, D, L2)
+    top_floor(b, W, D, L3)
+    # The corridors' lights (the ceiling grid misses them), and the entrance hall's.
+    for x in range(3, W - 1, 4):
+        b.p(x, L1 - 2, 16, LIGHT)
+        b.p(x, L2 - 2, 16, LIGHT)
+        b.p(x, L3 - 2, 19, LIGHT)
+    for x, z in ((5, 27), (11, 26), (1, 26)):
+        b.p(x, L1 - 2, z, LIGHT)
+    # The stair tower, last: walls, landings, flights and a door on every floor, nothing laid after it cuts into it.
+    # A light over every floor's landing (under the landing above, or the tower's lid).
+    levels = [L0, L1, L2, L3]
+    b.stairwell(W - 9, 1, levels, door_side="s")
+    for above in levels[1:] + [L3 + 4]:
+        b.p(W - 6, above - 1, 11, LIGHT)
     s.add(b, ox, oz)
-    return (ox + 15, oz + 10, b.site_y(15))
+    cx, cz = console
+    return (ox + cx, oz + cz, b.site_y(L2 + 1))
+
+
+def ground_floor(b, W, D):
+    """Grade (y 1..5): north of the corridor Battery Room 1A, the Remote Shutdown Room, DC Equipment Room 1A and the
+    switchgear, the stairs; south of it the entrance hall, the locker room, DC Equipment Room 1B and Battery Room 1B."""
+    y0, y1 = 1, 5
+    b.wall_x(14, 1, W - 10, y0, y1)
+    b.wall_x(18, 1, W - 2, y0, y1)
+    b.wall_z(10, 1, 13, y0, y1)
+    b.wall_x(9, 1, 9, y0, y1)
+    b.wall_z(20, 1, 13, y0, y1)
+    b.wall_z(30, 1, 13, y0, y1)
+    for x in (13, 18, 29):
+        b.wall_z(x, 19, D - 2, y0, y1)
+
+    # ---- Battery Room 1A (x 1..9, z 1..8): the station battery's two racks end to end along the north wall, their
+    # cables up and along the wall under the ceiling, through into the DC Equipment Room; the hydrogen exhaust louvres.
+    b.panel("station_battery", 1, 1, 1, "north", 4)
+    b.panel("station_battery", 5, 1, 1, "north", 4)
+    dc_run(b, [4, 8], 11, 5, 1, "north")
+    b.door(10, 1, 6, "west", label="battery_room_1a")
+    b.furniture("fire_extinguisher", 1, 2, 7, "west")
+    # ---- Remote Shutdown Room (x 1..9, z 10..13): the remote shutdown panel along its north wall, a chair at it, the
+    # procedures on a shelf.
+    b.prop("main_control_board", 2, 1, 10, "north")
+    b.p(4, 1, 12, furniture("operator_chair", "north"))
+    b.p(6, 1, 12, furniture("operator_chair", "north"))
+    b.stack("bookcase", 9, 1, 10, "east", n=2)
+    b.door(5, 1, 14, "north", label="remote_shutdown")
+    # ---- DC Equipment Room 1A (x 11..19, z 1..13): along the north wall the 125 VDC switchboard (the battery's cables
+    # come down into it), the vital inverters and the chargers; along the south the 480 V load centre feeding them.
+    b.panel("dc_switchboard", 11, 1, 1, "north", 2)
+    b.panel("vital_inverter", 13, 1, 1, "north", 1)
+    b.panel("edg_battery_charger", 14, 1, 1, "north", 1)
+    b.panel("edg_battery_charger", 15, 1, 1, "north", 1)
+    b.panel("vital_inverter", 16, 1, 1, "north", 1)
+    for z in (4, 5):
+        b.stack("relay_cabinet", 19, 1, z, "east", n=2)
+    b.prop("switchgear_lineup", 12, 1, 12, "south")
+    b.door(11, 1, 14, "north", label="dc_equipment_1a")
+    b.furniture("fire_extinguisher", 19, 2, 8, "east")
+    # ---- Switchgear Room (x 21..29, z 1..13): the 480 V load centres of both trains, face to face across the aisle,
+    # walked round at the west end.
+    b.prop("switchgear_lineup", 22, 1, 1, "north")
+    b.prop("switchgear_lineup", 22, 1, 9, "south")
+    b.door(26, 1, 14, "north", double=True, label="switchgear_room")
+    b.furniture("fire_extinguisher", 21, 2, 6, "west")
+
+    # ---- The entrance hall (x 1..12, z 19..28): in through the glass doors to a vestibule, a second pair of glass doors,
+    # the security officer at his desk behind the counter, the badge turnstiles, and through them the doors to the
+    # corridor. A status screen, a notice board, a bench.
+    b.b(1, 0, 19, 12, 0, D - 2, VINYL)
+    b.b(3, 0, 26, 8, 0, D - 2, CARPET)
+    for y in range(y0, y1 + 1):
+        for z in range(26, D - 1):
+            b.p(2, y, z, PANE if y <= 3 else PAINTED)
+            b.p(9, y, z, PANE if y <= 3 else PAINTED)
+        for x in range(2, 10):
+            b.p(x, y, 25, PANE if y <= 3 else PAINTED)
+    b.door(6, 1, 25, "north", kind="glass", double=True)
+    # The security counter facing the hall, the officer behind it; his camera desk inside the turnstiles.
+    b.row(("reception_desk", 3), 11, 1, 23, "west", seat="operator_chair")
+    b.furniture("cctv_desk", 12, 1, 20, "east")
+    b.p(11, 1, 20, furniture("operator_chair", "east"))
+    # The badge turnstiles across the hall, glass either side up to the counter, then the doors in to the plant.
+    for x in (5, 6, 7):
+        b.furniture("turnstile", x, 1, 21, "north")
+    for y in (1, 2):
+        for x in (1, 2, 3, 4, 8, 9, 10):
+            b.p(x, y, 21, PANE)
+    b.door(6, 1, 18, "north", double=True)
+    # The plant's status on a screen, a bench by the window, a notice board.
+    wall_screen(b, "status_screen", 1, 2, 24, "west")
+    b.row(("sofa", 2), 12, 1, 27, "west")
+    b.varied("whiteboard", 10, 2, 28, "south", 24)
+    b.plant(1, 1, 20)
+    b.plant(10, 1, 24)
+    b.furniture("water_cooler", 1, 1, 23, "west")
+    b.furniture("fire_extinguisher", 12, 2, 25, "east")
+    # ---- Locker room (x 14..17): lockers along both walls, a bench down the middle.
+    for z in range(20, D - 1):
+        b.stack("locker", 17, 1, z, "east", n=2)
+        if z not in range(22, 27):
+            b.stack("locker", 14, 1, z, "west", n=2)
+    b.row(("locker_bench", 5), 15, 1, 22, "east")
+    b.door(16, 1, 18, "south", label="locker_room")
+    # ---- DC Equipment Room 1B (x 19..28) and Battery Room 1B (x 30..38): as Train A, along the south wall.
+    b.panel("dc_switchboard", 28, 1, D - 2, "south", 2)
+    b.panel("vital_inverter", 26, 1, D - 2, "south", 1)
+    b.panel("edg_battery_charger", 25, 1, D - 2, "south", 1)
+    b.panel("edg_battery_charger", 24, 1, D - 2, "south", 1)
+    b.panel("vital_inverter", 23, 1, D - 2, "south", 1)
+    for z in (22, 23):
+        b.stack("relay_cabinet", 19, 1, z, "west", n=2)
+    b.door(22, 1, 18, "south", double=True, label="dc_equipment_1b")
+    b.furniture("fire_extinguisher", 19, 2, 26, "west")
+    b.panel("station_battery", 37, 1, D - 2, "south", 4)
+    b.panel("station_battery", 33, 1, D - 2, "south", 4)
+    dc_run(b, [34, 30], 28, 5, D - 2, "south")
+    b.door(34, 1, 18, "south", double=True, label="battery_room_1b")
+    b.furniture("fire_extinguisher", W - 2, 2, 21, "east")
+
+
+def first_floor(b, W, D, y):
+    """The first floor (walked at y + 1): the cable spreading room under the control room (tiers of cable tray, risers
+    up into the floor above), and south of the corridor the relay room and the plant computer room on its raised floor."""
+    y0, y1 = y + 1, y + 5
+    b.wall_x(14, 1, W - 10, y0, y1)
+    b.wall_x(18, 1, W - 2, y0, y1)
+    b.wall_z(30, 1, 13, y0, y1)
+    b.wall_z(19, 19, D - 2, y0, y1)
+    # ---- Cable spreading room (x 1..29, z 1..13): three tiers of tray along the room, risers up into the control room.
+    for z in (2, 5, 8, 11):
+        for k, ty in enumerate((y0 + 2, y0 + 3, y0 + 4)):
+            if z == 11 and k == 0:
+                continue
+            b.tray_run(1, z, 29, z, ty, "north")
+    for x in (6, 12, 18, 24):
+        for k in range(y0, y1 + 1):
+            b.p(x, k, 1, furniture("dc_cable_riser", "north"))
+    for x in range(3, 30, 4):
+        for z in (3, 7, 10, 13):
+            b.p(x, y1, z, LIGHT)
+    b.door(15, y0, 14, "north", double=True, label="cable_spreading_room")
+    b.furniture("fire_extinguisher", 1, y0 + 1, 12, "west")
+    # ---- Relay room (x 1..18, z 19..28): relay cabinets back to back in rows.
+    for x in range(2, 18):
+        if x in (8, 9):
+            continue
+        for z, f in ((21, "south"), (22, "north"), (25, "south"), (26, "north")):
+            b.stack("relay_cabinet", x, y0, z, f, n=2)
+    b.door(9, y0, 18, "south", double=True, label="relay_room")
+    # ---- Plant computer room (x 20..38, z 19..28): racks in hot and cold aisles on the raised floor.
+    b.b(20, y, 19, W - 2, y, D - 2, ACCESS_FLOOR)
+    for x in range(22, W - 2):
+        if x in (29, 30):
+            continue
+        for z, f in ((21, "south"), (22, "north"), (25, "south"), (26, "north")):
+            b.stack("server_rack", x, y0, z, f, n=2)
+    for z in (21, 22, 25, 26):
+        b.tray_run(22, z, W - 3, z, y1, "north")
+    for x in range(21, W - 1, 3):
+        for z in (19, 23, 24, 28):
+            b.p(x, y1, z, LIGHT)
+    b.door(29, y0, 18, "south", double=True, label="server_room")
+    b.furniture("fire_extinguisher", W - 2, y0 + 1, 20, "east")
+
+
+def second_floor(b, W, D, y):
+    """The control room floor (walked at y + 1, a raised floor throughout): the main control room north of the corridor,
+    the shift supervisor's glazed office in its corner; south of the corridor the Technical Support Center, the kitchen,
+    the washroom and the operations office. Returns where the reactor console stands (x, z)."""
+    y0 = y + 1
+    top = y + 7
+    # The control room's walls: acoustic panels inside; the corridor (z 18..20) along its south side.
+    b.wall_x(17, 1, 30, y0, top, ACOUSTIC)
+    b.wall_z(30, 1, 16, y0, top, ACOUSTIC)
+    b.wall_x(21, 1, W - 2, y0, top)
+    for x in range(1, 30):
+        for k in range(y0, top + 1):
+            if b.get(x, k, 1) == 0:
+                b.p(x, k, 1, ACOUSTIC)
+    for z in range(1, 17):
+        for k in range(y0, top + 1):
+            if b.get(1, k, z) == 0:
+                b.p(1, k, z, ACOUSTIC)
+    b.b(2, y, 2, 29, y, 16, CARPET)
+    # The horseshoe: four control boards along the north wall, one down each side, the plant display wall over the
+    # middle ones; the reactor console in front, the operators' consoles behind it, the senior reactor operator's desk.
+    for x in (4, 10, 16, 22):
+        b.prop("main_control_board", x, y0, 2, "north")
+    b.prop("main_control_board", 2, y0, 4, "west")
+    b.prop("main_control_board", 27, y0, 4, "east")
+    b.prop("plant_display_wall", 10, y0 + 3, 2, "north")
+    console = (14, 7)
+    for x in (9, 12, 18, 21):
+        b.desk(x, y0, 10, "north", name="console_desk")
+    b.row(("executive_desk", 3), 14, y0, 13, "north", seat="operator_chair")
+    # The shift technical advisor's desk, the procedures on shelves along the back wall, the plant overview screens on
+    # the east wall, a printer.
+    b.desk(22, y0, 13, "north")
+    for x in range(20, 28):
+        b.stack("bookcase", x, y0, 16, "south", n=2)
+    wall_screen(b, "plant_map_screen", 29, y0 + 1, 11, "east")
+    b.furniture("printer", 11, y0, 16, "south")
+    # The shift supervisor's office in the south-west corner: a half wall glazed over, so he sees the boards.
+    for x in range(2, 9):
+        b.p(x, y0, 12, ACOUSTIC)
+        for k in (y0 + 1, y0 + 2):
+            b.p(x, k, 12, PANE)
+        for k in range(y0 + 3, top + 1):
+            b.p(x, k, 12, ACOUSTIC)
+    for z in range(13, 17):
+        for k in range(y0, top + 1):
+            b.p(9, k, z, ACOUSTIC)
+    b.door(9, y0, 14, "west", label="shift_supervisor")
+    b.desk(5, y0, 14, "north")
+    b.furniture("filing_cabinet", 2, y0, 16, "west")
+    b.furniture("filing_cabinet", 2, y0, 15, "west")
+    b.plant(8, y0, 16)
+    # The control room's lighting: a close grid of panels in its ceiling.
+    for x in range(3, 30, 3):
+        for z in range(3, 17, 3):
+            if b.get(x, top, z) == 0 and b.get(x, top + 1, z) == CEIL:
+                b.p(x, top, z, LIGHT)
+    b.door(15, y0, 17, "north", double=True, label="main_control_room")
+    # ---- The corridor (z 18..20) and the stairs' landing (x 31..38, z 15..17).
+    b.furniture("fire_extinguisher", 1, y0 + 1, 19, "west")
+    b.furniture("water_cooler", W - 2, y0, 19, "east")
+    # ---- South of the corridor, with windows: the Technical Support Center (x 1..13), the kitchen (x 15..24),
+    # the washroom (x 26..29), the operations office (x 31..38).
+    for x in (14, 25, 30):
+        b.wall_z(x, 22, D - 2, y0, top)
+    # Technical Support Center: the meeting table, the plant's status on screens, a whiteboard.
+    b.b(1, y, 22, 13, y, D - 2, CARPET)
+    b.round_table(7, y0, 25)
+    wall_screen(b, "status_screen", 10, y0 + 1, 22, "north")
+    wall_screen(b, "plant_map_screen", 1, y0 + 1, 26, "west")
+    b.varied("whiteboard", 13, y0 + 1, 24, "east", 24)
+    b.door(7, y0, 21, "south", double=True, label="support_center")
+    # Kitchen: counters under the windows, the fridge, tables.
+    b.row(["kitchen_counter", "kitchen_sink", "coffee_counter", "microwave_counter", "kitchen_counter"], 20, y0, D - 2, "south")
+    b.stack("fridge", 22, y0, D - 2, "south", n=2)
+    for x, z in ((17, 24), (21, 24)):
+        b.varied("cafe_table", x, y0, z, "north", 6)
+        b.p(x - 1, y0, z, furniture("cafe_chair", "east"))
+        b.p(x + 1, y0, z, furniture("cafe_chair", "west"))
+    b.door(19, y0, 21, "south", double=True, label="break_room")
+    # Washroom.
+    b.row(("kitchen_sink", 2), 27, y0, D - 2, "south")
+    b.door(27, y0, 21, "south", label="washroom")
+    # Operations office: desks, files.
+    b.b(31, y, 22, W - 2, y, D - 2, CARPET)
+    for x in (32, 36):
+        b.desk(x, y0, 25, "south")
+    b.furniture("filing_cabinet", W - 2, y0, 22, "east")
+    b.furniture("filing_cabinet", W - 2, y0, 23, "east")
+    b.door(34, y0, 21, "south", label="operations")
+    return console
+
+
+def top_floor(b, W, D, y):
+    """The top floor (walked at y + 1, under the roof): the control room's emergency filtration and air conditioning,
+    one plant room round the stair tower. Two air handling units with their filter trains, two chillers and their
+    chilled water pumps, the ducts down into the control room, the louvres in the walls."""
+    y0 = y + 1
+    b.prop("air_handling_unit", 9, y0, 3, "south")
+    b.prop("air_handling_unit", 16, y0, 3, "south")
+    b.prop("heat_exchanger", 22, y0, 2, "south")
+    b.prop("heat_exchanger", 26, y0, 2, "south")
+    b.prop("pump_skid", 6, y0, 18, "south")
+    b.prop("pump_skid", 12, y0, 18, "south")
+    for x in (10, 17):
+        b.duct_up(x, 12, x + 1, 12, y0)
+    for z in (16, 20, 24):
+        b.stack("relay_cabinet", 1, y0, z, "west", n=2)
+    b.furniture("fire_extinguisher", W - 2, y0 + 1, 26, "east")
 
 
 # ------------------------------------------------------------------------------------------------- auxiliary building

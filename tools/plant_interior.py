@@ -135,6 +135,9 @@ SIGNS = {
     "human_resources": "Human Resources", "visitors": "Visitors", "washroom": "Washroom", "intern_area": "Intern Area",
     "radwaste_building": "RADWASTE BUILDING", "airlock": "Airlock", "waste_vault": "Waste Vault",
     "inspection_corridor": "Inspection Corridor",
+    "battery_room_1a": "Battery Room 1A", "battery_room_1b": "Battery Room 1B", "dc_equipment_1a": "DC Equipment 1A",
+    "dc_equipment_1b": "DC Equipment 1B", "remote_shutdown": "Remote Shutdown", "support_center": "Technical Support Center",
+    "emergency_filtration": "Emergency Filtration",
 }
 
 OTHER["conference_table"] = "Round Meeting Table"

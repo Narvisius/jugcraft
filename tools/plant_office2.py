@@ -173,6 +173,7 @@ PIECES = {
 }
 # The diesel generator rooms' control and protection panels (tools/plant_panels.py).
 PIECES.update(PN.PANELS)
+PIECES.update(PN.RISERS)
 
 CRAFTING = {
     "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),

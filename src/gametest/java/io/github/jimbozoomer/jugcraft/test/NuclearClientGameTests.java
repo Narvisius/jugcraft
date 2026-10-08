@@ -717,6 +717,22 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
 							"jugcraft_plant_medium_r12_" + roundNames[i]);
 				}
+				// Round 18: the rebuilt control building (site x 136..175, z 88..117; its floors walked at site y 0, 7, 14, 23):
+				// the battery rooms with their cables up to the tray and across to the DC switchboards, the entrance, the
+				// stairs, the cable spreading room, the control room and the top floor's air conditioning.
+				int[][] ctrlShots = {
+						{144, 0, 95, 139, 0, 90}, {141, 1, 93, 144, 3, 89}, {153, 0, 97, 148, 0, 89}, {142, 0, 115, 142, 0, 109},
+						{140, 0, 112, 147, 0, 110}, {170, 0, 109, 169, 0, 116}, {164, 0, 113, 164, 3, 116}, {170, 0, 99, 171, 5, 93},
+						{151, 7, 101, 151, 9, 90}, {151, 14, 103, 151, 16, 90}, {141, 14, 102, 148, 16, 91}, {156, 23, 102, 148, 24, 94},
+						{142, 1, 126, 142, 3, 117}, {145, 14, 114, 141, 14, 112}};
+				String[] ctrlNames = {"battery_1a", "battery_1a_riser", "dc_room_1a", "entrance_vestibule", "security_counter", "battery_1b",
+						"dc_room_1b_board", "stairs", "cable_spreading", "control_room", "control_room_supervisor", "hvac_floor", "entrance_outside",
+						"support_center"};
+				for (int i = 0; i < ctrlShots.length; i++) {
+					int[] t = ctrlShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_r18_ctrl_" + ctrlNames[i]);
+				}
 				// Diesel room A's generator started (it turns over, fires and runs up to speed: the coupling and fan
 				// turning, the gauges up, smoke at the stack); its day tank drawn down so the storage tank refills it, and
 				// the day tank's screen showing it filling.

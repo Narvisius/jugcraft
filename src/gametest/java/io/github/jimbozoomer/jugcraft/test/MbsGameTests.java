@@ -133,6 +133,25 @@ public class MbsGameTests {
 		helper.succeed();
 	}
 
+	@GameTest(structure = ARENA, maxTicks = 40, skyAccess = true)
+	public void kitRefusedWhereSomethingStandsInside(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
+		ground(helper);
+		String kit = "general_medium";
+		BlockPos stake = helper.absolutePos(new BlockPos(12, 1, 14));
+		TankKitItem.Formed formed = TankKitItem.formed(kit, Rotation.NONE);
+		helper.assertTrue(formed != null && !formed.inside().isEmpty(), "the kit has a space inside");
+		// A stone where the middle of the tank's space would be: in the way, like the shell.
+		BlockPos middle = stake.offset(formed.inside().stream().filter(p -> p.getY() == 2).findFirst().orElseThrow());
+		helper.getLevel().setBlock(middle, Blocks.STONE.defaultBlockState(), Block.UPDATE_ALL);
+		helper.assertTrue(TankKitItem.blocked(helper.getLevel(), kit, stake, Rotation.NONE).contains(middle), "the stone inside is in the way");
+		helper.assertTrue(TankKitItem.place(helper.getLevel(), kit, stake, Rotation.NONE, null) != null, "the kit is refused");
+		helper.succeed();
+	}
+
 	@GameTest(structure = ARENA, maxTicks = 100, skyAccess = true)
 	public void creativeBreaksWholeTankWithoutDrop(GameTestHelper helper) {
 		if (TestFocus.skip("blueprints")) {

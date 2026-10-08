@@ -48,10 +48,40 @@ PANELS = {
     "edg_load_sequencer": {"display": "Load Sequencer", "width": 1},
     "edg_battery_charger": {"display": "Battery Charger", "width": 1},
     "edg_battery_rack": {"display": "Battery Rack", "width": 1},
+    # The control building's DC system (round 18): the station battery, its distribution switchboard and the vital
+    # inverter (the battery chargers are the EDG rooms' charger panel).
+    "station_battery": {"display": "Station Battery (125 VDC, 30 Cells)", "width": 4},
+    "dc_switchboard": {"display": "125 VDC Distribution Switchboard", "width": 2},
+    "vital_inverter": {"display": "Vital AC Inverter", "width": 1},
 }
 for _k, _v in PANELS.items():
     _v["multi"] = (_v["width"], 2, "panel")
     _v["panel"] = _k
+
+# The DC power cables from a station battery to its switchboard (round 18): up the wall from the rack's end in a riser
+# (two heavy cables on a strut, cleated), turning into a cable tray under the ceiling at the top, the tray across to
+# the switchboard and a riser down into its top. Plain pieces, facing north: the wall behind them is at z 0 and the
+# tray runs along x. The cables are where the battery's rise out of it (SB_RISE_*).
+_RED, _BLACK = (6.2, 7.8), (8.6, 10.2)
+_CZ = (0.5, 2.1)
+_TRAY = [(0, 12, 4, 16, 12.5, 12, "pi_chrome"), (0, 12.5, 11.5, 16, 14, 12, "pi_chrome"),
+         (0, 12.5, 5, 16, 13.5, 7, "pi_sb_cable_red"), (0, 12.5, 7.5, 16, 13.5, 11, "pi_sb_cable"),
+         (7.5, 14, 7.5, 8.5, 16, 8.5, "pi_chrome")]
+RISERS = {
+    "dc_cable_tray": {"display": "DC Cable Tray", "boxes": [(0, 12.5, 4, 16, 14, 4.5, "pi_chrome")] + _TRAY},
+    "dc_cable_riser": {"display": "DC Cable Riser", "boxes": [
+        (5.4, 0, 0, 11.0, 16, 0.4, "pi_chrome"),
+        (_RED[0], 0, _CZ[0], _RED[1], 16, _CZ[1], "pi_sb_cable_red"), (_BLACK[0], 0, _CZ[0], _BLACK[1], 16, _CZ[1], "pi_sb_cable"),
+        (5.6, 3, 0.4, 10.8, 4, 2.4, "pi_sb_frame"), (5.6, 11, 0.4, 10.8, 12, 2.4, "pi_sb_frame")]},
+    # The top of a riser: the cables turn out from the wall into the tray (its back wall left open there).
+    "dc_cable_riser_top": {"display": "DC Cable Riser (Top)", "boxes": [
+        (5.4, 0, 0, 11.0, 12, 0.4, "pi_chrome"),
+        (_RED[0], 0, _CZ[0], _RED[1], 13.5, _CZ[1], "pi_sb_cable_red"), (_BLACK[0], 0, _CZ[0], _BLACK[1], 14.3, _CZ[1], "pi_sb_cable"),
+        (5.6, 3, 0.4, 10.8, 4, 2.4, "pi_sb_frame"),
+        (_RED[0], 12.5, _CZ[1], _RED[1], 13.5, 5.0, "pi_sb_cable_red"),
+        (_BLACK[0], 13.5, _CZ[1], _BLACK[1], 14.3, 9.0, "pi_sb_cable"),
+        (0, 12.5, 4, 5.6, 14, 4.5, "pi_chrome"), (10.8, 12.5, 4, 16, 14, 4.5, "pi_chrome")] + _TRAY},
+}
 
 CRAFTING = {
     "edg_engine_panel": (["PGP", "PCP", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
@@ -61,6 +91,14 @@ CRAFTING = {
     "edg_load_sequencer": (["PXP", "PCP", "PRP"], {"P": "#c:plates/steel", "X": "jugcraft:processor", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
     "edg_battery_charger": (["PRP", "PCP", "PRP"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
     "edg_battery_rack": (["S S", "BBB", "S S"], {"S": "#c:plates/steel", "B": "jugcraft:lead_acid_pack"}, 1),
+    "station_battery": (["BBB", "BBB", "SSS"], {"S": "#c:plates/steel", "B": "jugcraft:lead_acid_pack"}, 1),
+    "dc_switchboard": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
+                                               "R": "minecraft:redstone"}, 1),
+    "vital_inverter": (["PCP", "PXP", "PRP"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "X": "jugcraft:processor",
+                                               "R": "minecraft:redstone"}, 1),
+    "dc_cable_tray": (["P P", "CPC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
+    "dc_cable_riser": (["PC", "P ", "PC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
+    "dc_cable_riser_top": (["PCP", "PC "], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
 }
 
 
@@ -482,8 +520,74 @@ def battery_charger():
     return f
 
 
+def dc_switchboard():
+    """The 125 VDC distribution switchboard a station battery and its chargers feed (two sections): the bus meters, the
+    ground detector (a lamp on each side of the bus to ground, both lit while neither side is grounded), the main
+    breaker, and the feeder breakers to everything that runs on the battery, each labelled."""
+    f = Front(2, 407)
+    f.door(0.4, 16.0, handle=False)
+    f.door(16.0, 31.6)
+    f.nameplate(16, 29.0, 21, ["125 VDC DISTRIBUTION SWITCHBOARD", "DC BUS 1A    1200 A    FROM BATTERY 1A"])
+    f.meter(2.0, 21.4, 7.6, 25.6, "BUS VOLTS", (0, 150), 132, "V", live="dc_v")
+    f.meter(8.6, 21.4, 14.2, 25.6, "BATT AMPS", (0, 200), 12, "A", live="dc_a")
+    # The ground detector.
+    f.R(2.0, 15.6, 14.2, 19.6, fill=(52, 54, 58, 255))
+    f.T(8.1, 18.8, "GROUND DETECTOR", 7, fill=(236, 236, 230, 255), bold=True)
+    f.lamp(5.0, 17.0, (240, 240, 230), True, None, r=0.5)
+    f.lamp(11.2, 17.0, (240, 240, 230), True, None, r=0.5)
+    f.T(5.0, 15.95, "+ BUS", 6, fill=(236, 236, 230, 255), bold=True)
+    f.T(11.2, 15.95, "- BUS", 6, fill=(236, 236, 230, 255), bold=True)
+    f.proud(2.0, 15.6, 14.2, 19.6, 0.25)
+    # The main breaker: an insulated-case breaker in its cubicle window, the charging handle and the OPEN/CLOSED flag.
+    f.R(3.0, 5.0, 13.2, 13.8, fill=(36, 38, 42, 255))
+    f.R(4.0, 6.0, 12.2, 12.8, fill=(22, 22, 24, 255))
+    f.R(6.4, 10.6, 9.8, 11.8, fill=(200, 40, 34, 255))
+    f.T(8.1, 11.2, "CLOSED", 7, fill=(255, 255, 255, 255), bold=True)
+    f.T(8.1, 9.4, "MAIN 72-1A", 8, fill=(236, 236, 230, 255), bold=True)
+    f.T(8.1, 8.4, "1200 A  250 VDC", 7, fill=(200, 200, 196, 255), bold=True)
+    f.proud(4.0, 6.0, 12.2, 12.8, 0.4)
+    f.proud(7.3, 6.6, 8.9, 7.8, 0.9)
+    f.warning(8.1, 2.9, "125 VDC")
+    # The feeders: two columns of moulded-case breakers, each with its handle up (on) and its label.
+    feeders = ["INVERTER 1A", "CHARGER 1A", "4160V SWGR 1A CTL", "480V LC 1A CTL", "EDG 1A CONTROL", "MCR PANELS TRAIN A",
+               "RELAY RM CAB 1-6", "TURB AUX OIL PUMP", "EMERG LIGHTING", "AFW TURB CONTROL", "COMPUTER UPS 1A", "SPARE"]
+    for i, name in enumerate(feeders):
+        c, r = i % 2, i // 2
+        x0, y1 = 17.4 + c * 7.3, 26.4 - r * 3.7
+        f.R(x0, y1 - 2.6, x0 + 6.2, y1, fill=(30, 30, 32, 255))
+        f.R(x0 + 2.5, y1 - 2.1, x0 + 3.7, y1 - 0.5, fill=(54, 56, 60, 255))
+        f.proud(x0, y1 - 2.6, x0 + 6.2, y1, 0.45)
+        f.proud(x0 + 2.75, y1 - 1.3, x0 + 3.45, y1 - 0.6, 0.85)    # the handle, up: on
+        f.tag(x0 + 3.1, y1 - 3.05, name, size=6, w=6.2)
+    f.vent(17.6, 2.0, 30.4, 4.6)
+    return f
+
+
+def vital_inverter():
+    """A 120 VAC vital bus inverter: the battery's DC made into steady AC for the instrument and control buses, with
+    its static transfer switch to the bypass supply."""
+    f = Front(1, 408)
+    f.door(0.4, 15.6)
+    f.nameplate(8, 29.0, 13.4, ["VITAL AC INVERTER 1A", "125 VDC IN  120 VAC 60 HZ 10 KVA"])
+    f.meter(1.6, 22.0, 7.6, 26.2, "AC VOLTS", (0, 150), 120, "V")
+    f.meter(8.4, 22.0, 14.4, 26.2, "AC AMPS", (0, 100), 46, "A")
+    # The frequency meter: a small digital readout.
+    f.R(4.0, 18.0, 12.0, 20.2, fill=(26, 26, 28, 255))
+    f.R(4.4, 18.4, 11.6, 19.8, fill=(18, 40, 26, 255))
+    f.T(8.0, 19.1, "60.00 Hz", 9, fill=(120, 250, 150, 255), bold=True)
+    f.proud(4.0, 18.0, 12.0, 20.2, 0.3)
+    for i, (name, col, lit) in enumerate((("DC IN", (40, 180, 70), True), ("INVERTER", (40, 180, 70), True),
+                                          ("ON INV", (240, 240, 230), True), ("BYPASS", (240, 170, 30), False))):
+        f.lamp(3.0 + i * 3.35, 15.0, col, lit, name, r=0.45)
+    f.knob(5.0, 9.6, ["INV", "BYPASS"], 0, "MANUAL BYPASS")
+    f.button(11.4, 10.0, (240, 240, 230), "ALARM RESET", "pi_pnl_white")
+    f.vent(2.0, 2.4, 14.0, 6.6)
+    return f
+
+
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
-            "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger}
+            "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
+            "dc_switchboard": dc_switchboard, "vital_inverter": vital_inverter}
 _FRONTS = {}
 
 
@@ -505,6 +609,8 @@ def cabinet(key):
     """The whole piece: plinth, body (its front the drawing), top, and what stands proud of the door."""
     if key == "edg_battery_rack":
         return battery_rack()
+    if key == "station_battery":
+        return station_battery()
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -536,6 +642,102 @@ def battery_rack():
                 boxes.append((x0 + 2.55, top + 11.1, 7.85, x0 + 5.05, top + 11.4, 8.35, "pi_link"))
     boxes.append((0.6, 30.4, 3.2, 15.4, 31.0, 13.8, "pi_rack_green"))
     boxes.append((4.0, 27.4, 13.8, 12.0, 29.4, 13.9, {"*": "pi_pnl_white", "south": "pi_battery_tag!"}))
+    return boxes
+
+
+# The station battery (round 18): a two-step seismic rack four blocks long holding 30 large flooded lead-acid cells,
+# 15 on the lower step at the front and 15 on the upper step behind it, so two racks make the 60-cell 125 VDC battery.
+# The cells' textures follow their place in the block (no whole-picture faces), so a cell can straddle two blocks.
+SB_CELLS = 15
+SB_X0, SB_PITCH, SB_W = 2.15, 4.0, 3.7          # the first cell's left side, cell to cell, a cell's width
+SB_LOW = (9.2, 15.2, 3.4, 14.4)                   # the lower step's cells: z0, z1, jar bottom, jar top
+SB_HIGH = (2.4, 8.4, 16.4, 27.4)                  # the upper step's cells
+SB_COVER = 0.8                                    # the black cover on top of the jar
+SB_POST = 0.9                                     # how far the posts stand up out of the cover
+# Where the two main cables rise out of the rack's back at its right-hand end (red: positive, black: negative), as the
+# riser above it (dc_cable_riser) carries them on: x across the block they rise in, z.
+SB_RISE_RED, SB_RISE_BLACK, SB_RISE_Z = (6.2, 7.8), (8.6, 10.2), (0.5, 2.1)
+
+
+def station_battery():
+    """The station battery, facing north (its front, the lower step, toward whoever stands at it, +z; its back to the
+    wall): a spill-containment pan on the floor, the black epoxy-coated step rack (uprights at the ends and the middle,
+    rails under each step), 15 cells a step in clear jars (the plates show through, the electrolyte line, the black
+    cover with its flame-arrester vent and two posts), lead-plated intercell connectors post to post, a flexible jumper
+    from the lower step to the upper at the left end, and at the right end the battery's two terminals with their heavy
+    cables, run along the back and up out of the top into the cable riser above."""
+    B = "pi_sb_frame"
+    boxes = [(0.3, 0, 0.3, 63.7, 1.0, 15.7, {"*": "pi_sb_pan", "up": "pi_sb_pan_top"}),
+             # The pan's lip.
+             (0.3, 1.0, 15.3, 63.7, 2.0, 15.7, "pi_sb_pan"), (0.3, 1.0, 0.3, 63.7, 2.0, 0.7, "pi_sb_pan"),
+             (0.3, 1.0, 0.7, 0.7, 2.0, 15.3, "pi_sb_pan"), (63.3, 1.0, 0.7, 63.7, 2.0, 15.3, "pi_sb_pan")]
+    lz0, lz1, ly0, ly1 = SB_LOW
+    hz0, hz1, hy0, hy1 = SB_HIGH
+    # The rack: uprights at both ends and in the middle, under the upper step's two rails and the lower step's two
+    # (under the cells, so they never meet a cell), cross members under each step and a tie between the steps.
+    for x0 in (0.8, 31.5, 62.2):
+        x1 = x0 + 1.0
+        for z0 in (hz0 + 0.2, hz1 - 1.0):
+            boxes.append((x0, 1.0, z0, x1, hy0 - 1.2, z0 + 0.8, B))
+        for z0 in (lz0 + 0.2, lz1 - 1.0):
+            boxes.append((x0, 1.0, z0, x1, ly0 - 1.2, z0 + 0.8, B))
+        boxes.append((x0, hy0 - 1.2, hz0 + 1.0, x1, hy0, hz1 - 1.0, B))
+        boxes.append((x0, ly0 - 1.2, lz0 + 1.0, x1, ly0, lz1 - 1.0, B))
+        boxes.append((x0, 6.4, hz1 - 0.2, x1, 7.2, lz0 + 0.2, B))
+    for z0 in (hz0 + 0.2, hz1 - 1.0):
+        boxes.append((0.8, hy0 - 1.2, z0, 63.2, hy0, z0 + 0.8, "pi_sb_rail"))
+    for z0 in (lz0 + 0.2, lz1 - 1.0):
+        boxes.append((0.8, ly0 - 1.2, z0, 63.2, ly0, z0 + 0.8, "pi_sb_rail"))
+    # The cells.
+    for (z0, z1, y0, y1), jar in ((SB_LOW, "pi_sb_jar_low"), (SB_HIGH, "pi_sb_jar_high")):
+        zc = (z0 + z1) / 2
+        for k in range(SB_CELLS):
+            x0 = SB_X0 + k * SB_PITCH
+            x1 = x0 + SB_W
+            boxes.append((x0, y0, z0, x1, y1, z1, jar))
+            boxes.append((x0 - 0.05, y1, z0 - 0.05, x1 + 0.05, y1 + SB_COVER, z1 + 0.05, "pi_sb_cover"))
+            top = y1 + SB_COVER
+            # The flame-arrester vent in the middle of the cover.
+            xm = (x0 + x1) / 2
+            boxes.append((xm - 0.45, top, zc - 1.6, xm + 0.45, top + 0.7, zc - 0.7, {"*": "pi_sb_vent", "up": "pi_sb_vent_top"}))
+            # Posts: positive (red collar) and negative, alternating so each connector runs straight to the next cell.
+            for px, plus in ((x0 + 0.6, k % 2 == 0), (x1 - 1.3, k % 2 == 1)):
+                boxes.append((px - 0.1, top, zc - 0.45, px + 0.8, top + 0.25, zc + 0.45, "pi_pnl_red" if plus else "pi_pnl_black"))
+                boxes.append((px, top + 0.25, zc - 0.35, px + 0.7, top + SB_POST, zc + 0.35, "pi_sb_post"))
+            if k < SB_CELLS - 1:
+                # The intercell connector, from this cell's right post to the next cell's left post (centre to centre,
+                # its ends inside the posts), under the posts' tops.
+                boxes.append((x1 - 0.95, top + 0.45, zc - 0.5, x1 + SB_PITCH - SB_W + 0.95, top + 0.75, zc + 0.5, "pi_link"))
+    # The jumper from the lower step's first cell up to the upper step's first cell, round the left end.
+    lt, ht = ly1 + SB_COVER, hy1 + SB_COVER
+    lzc, hzc = (lz0 + lz1) / 2, (hz0 + hz1) / 2
+    px = SB_X0 + 0.95
+    cab = "pi_sb_cable"
+    boxes += [(1.0, lt + 0.4, lzc - 0.4, px + 0.4, lt + 1.2, lzc + 0.4, cab),
+              (1.0, lt + 1.2, lzc - 0.4, 1.8, ht + 0.6, lzc + 0.4, cab),
+              (1.0, ht + 0.6, hzc - 0.4, 1.8, ht + 1.4, lzc + 0.4, cab),
+              (1.8, ht + 0.6, hzc - 0.4, px + 0.4, ht + 1.4, hzc + 0.4, cab)]
+    # The terminals at the right end: the upper step's last post (positive) and the lower step's (negative), each with a
+    # copper lug, and the main cables along the back to where they rise.
+    last = SB_X0 + (SB_CELLS - 1) * SB_PITCH + SB_W - 0.95
+    rz0, rz1 = SB_RISE_Z
+    red, black = "pi_sb_cable_red", cab
+    rx0, rx1 = 48 + SB_RISE_RED[0], 48 + SB_RISE_RED[1]
+    bx0, bx1 = 48 + SB_RISE_BLACK[0], 48 + SB_RISE_BLACK[1]
+    # (Where a run turns into a riser it starts inside it, so no two faces of one cable lie in the same plane.)
+    boxes += [(last - 0.5, ht + 0.3, hzc - 0.5, last + 0.5, ht + 1.0, hzc + 0.5, "pi_sb_copper"),
+              (last - 0.4, ht + 1.0, hzc - 0.4, last + 0.4, ht + 2.6, hzc + 0.4, red),
+              (last - 0.4, ht + 1.8, rz0 + 0.4, last + 0.4, ht + 2.6, hzc - 0.4, red),
+              (rx0 + 0.4, ht + 1.8, rz0 + 0.4, last - 0.4, ht + 2.6, rz1 - 0.4, red),
+              (rx0, ht + 1.6, rz0, rx1, 32, rz1, red)]
+    boxes += [(last - 0.5, lt + 0.3, lzc - 0.5, last + 0.5, lt + 1.0, lzc + 0.5, "pi_sb_copper"),
+              (last + 0.4, lt + 0.4, lzc - 0.4, 62.8, lt + 1.2, lzc + 0.4, black),
+              (62.0, lt + 1.2, lzc - 0.4, 62.8, ht + 3.4, lzc + 0.4, black),
+              (62.0, ht + 2.6, rz0 + 0.4, 62.8, ht + 3.4, lzc - 0.4, black),
+              (bx0 + 0.4, ht + 2.6, rz0 + 0.4, 62.0, ht + 3.4, rz1 - 0.4, black),
+              (bx0, ht + 2.4, rz0, bx1, 32, rz1, black)]
+    # The battery's nameplate on the lower step's front rail, at the left.
+    boxes.append((3.0, ly0 - 1.1, lz1 - 0.2, 15.0, ly0 - 0.1, lz1 - 0.12, {"*": "pi_pnl_white", "south": "pi_sb_tag!"}))
     return boxes
 
 
@@ -602,6 +804,42 @@ def _battery_tag():
     return img.resize((128, 128))
 
 
+def _sb_jar(low):
+    """A cell's clear jar as the face it is on shows it (by position, so cells can straddle blocks): through the jar
+    the plates (dark brown positive, grey negative, white separators between), the electrolyte line, the MIN and MAX
+    lines, the bus bar joining the plates' lugs under the cover, the clear space above the acid. The lower step's jars
+    stand 3.4 to 14.4 pixels up their block, the upper step's 0.4 to 11.4 in the block above."""
+    y0, y1 = (3.4, 14.4) if low else (0.4, 11.4)
+    S = 128
+    img = Image.new("RGBA", (S, S), (210, 222, 226, 255))
+    d = ImageDraw.Draw(img)
+    v = lambda y: int(round((16 - y) * S / 16))
+    plates_top, acid = y1 - 2.2, y1 - 1.6
+    d.rectangle([0, v(acid), S - 1, v(y0)], fill=(70, 74, 72, 255))
+    for x in range(0, S, 6):
+        d.rectangle([x, v(plates_top), x + 2, v(y0 + 0.9)], fill=(98, 72, 56, 255))
+        d.rectangle([x + 3, v(plates_top), x + 4, v(y0 + 0.9)], fill=(118, 122, 126, 255))
+        d.line([(x + 5, v(plates_top)), (x + 5, v(y0 + 0.9))], fill=(228, 228, 222, 255))
+    # The sediment space at the bottom, the jar's foot.
+    d.rectangle([0, v(y0 + 0.9), S - 1, v(y0)], fill=(56, 58, 58, 255))
+    d.rectangle([0, v(y0 + 0.3), S - 1, v(y0)], fill=(150, 160, 164, 255))
+    # The electrolyte's surface and the clear space above it, the bus bar.
+    d.rectangle([0, v(y1), S - 1, v(acid)], fill=(196, 212, 218, 255))
+    d.rectangle([0, v(acid) - 1, S - 1, v(acid) + 1], fill=(120, 170, 200, 255))
+    d.rectangle([0, v(y1 - 0.5), S - 1, v(y1 - 1.1)], fill=(120, 124, 128, 255))
+    for y, colour in ((acid - 0.45, (230, 60, 50, 255)), (acid + 0.3, (230, 60, 50, 255))):
+        d.line([(0, v(y)), (S - 1, v(y))], fill=colour, width=1)
+    return img
+
+
+def _sb_tag():
+    img = Image.new("RGBA", (384, 32), (240, 240, 234, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 383, 31], outline=(30, 30, 30, 255), width=2)
+    d.text((192, 16), "125 VDC STATION BATTERY  -  NO SMOKING", font=cfont(17, True), fill=INK, anchor="mm")
+    return img.resize((256, 256))
+
+
 def makers():
     out = {}
     for key in DRAWINGS:
@@ -613,12 +851,21 @@ def makers():
         "pi_pnl_white": lambda: _solid((236, 236, 230), 415), "pi_rack_green": lambda: _solid((70, 100, 80), 416, 0.12),
         "pi_rack_rail": lambda: _solid((150, 40, 30), 417, 0.1), "pi_link": lambda: _solid((150, 152, 156), 418),
         "pi_battery_cell": _cell, "pi_battery_front": _cell_front, "pi_battery_top": _cell_top, "pi_battery_tag": _battery_tag,
+        # The station battery.
+        "pi_sb_frame": lambda: _solid((34, 36, 38), 420, 0.08), "pi_sb_rail": lambda: _solid((44, 46, 50), 421, 0.1),
+        "pi_sb_pan": lambda: _solid((52, 54, 56), 422, 0.06), "pi_sb_pan_top": lambda: _solid((40, 42, 44), 423, 0.15),
+        "pi_sb_jar_low": lambda: _sb_jar(True), "pi_sb_jar_high": lambda: _sb_jar(False),
+        "pi_sb_cover": lambda: _solid((26, 26, 28), 424, 0.04), "pi_sb_post": lambda: _solid((150, 150, 146), 425, 0.05),
+        "pi_sb_vent": lambda: _solid((232, 120, 40), 426, 0.03), "pi_sb_vent_top": lambda: _solid((200, 200, 196), 427, 0.03),
+        "pi_sb_cable": lambda: _solid((24, 24, 26), 428, 0.02), "pi_sb_cable_red": lambda: _solid((168, 30, 26), 429, 0.02),
+        "pi_sb_copper": lambda: _solid((196, 120, 70), 430, 0.04), "pi_sb_tag": _sb_tag,
     })
     return out
 
 
 # Kept at full size so the writing reads.
-SHARP = {f"pi_{key}_f_{p}" for key in DRAWINGS for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front"}
+SHARP = {f"pi_{key}_f_{p}" for key in DRAWINGS for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front",
+                                                                                           "pi_sb_tag", "pi_sb_jar_low", "pi_sb_jar_high"}
 
 
 def icon(key):
@@ -630,6 +877,19 @@ def icon(key):
         for y in (20, 80):
             for k in range(3):
                 d.rectangle([34 + k * 21, y, 52 + k * 21, y + 38], fill=(176, 186, 180, 255), outline=(40, 40, 44, 255), width=2)
+        return M.stylize(img, 16)
+    if key == "station_battery":
+        # The two steps of cells from the front, on the black rack.
+        d = ImageDraw.Draw(img)
+        d.rectangle([4, 100, 124, 112], fill=(40, 42, 44, 255))
+        for step, (y0, y1, x0) in enumerate(((60, 98, 6), (18, 56, 12))):
+            for k in range(7):
+                x = x0 + k * 16
+                d.rectangle([x, y0, x + 13, y1], fill=(196, 208, 212, 255), outline=(40, 40, 44, 255), width=2)
+                d.rectangle([x + 2, y0 + 10, x + 11, y1 - 3], fill=(98, 76, 60, 255))
+                d.rectangle([x, y0 - 4, x + 13, y0], fill=(26, 26, 28, 255))
+                d.rectangle([x + 2, y0 - 7, x + 4, y0 - 4], fill=(196, 38, 32, 255))
+                d.rectangle([x + 9, y0 - 7, x + 11, y0 - 4], fill=(150, 150, 146, 255))
         return M.stylize(img, 16)
     f = front(key).img
     w = f.width * 124 // f.height

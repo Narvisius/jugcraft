@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PCP",
+    "PC "
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:dc_cable_riser_top",
+    "count": 2
+  }
+}

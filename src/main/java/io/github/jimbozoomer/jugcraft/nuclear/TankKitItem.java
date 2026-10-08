@@ -106,7 +106,7 @@ public class TankKitItem extends Item {
 		if (blueprint == null) {
 			return Component.translatable("message.jugcraft.tank_kit.missing");
 		}
-		List<BlockPos> blocked = blocked(level, blueprint, stake, rotation);
+		List<BlockPos> blocked = blocked(level, kit, stake, rotation);
 		if (!blocked.isEmpty()) {
 			BlockPos pos = blocked.get(0);
 			if (level.isOutsideBuildHeight(pos) || !level.isLoaded(pos)) {
@@ -146,13 +146,24 @@ public class TankKitItem extends Item {
 	}
 
 	/**
-	 * Where kit {@code blueprint} can't go with its stake at {@code stake}, turned by {@code rotation}: cells above the
-	 * ground that aren't free (only grass, flowers or air will do), foundation cells holding something built (a block
-	 * entity) or unbreakable, and cells outside the world or not loaded. Empty when it fits. The client's preview asks
-	 * too (client/MbsPreview.java).
+	 * Where kit {@code kit} can't go with its stake at {@code stake}, turned by {@code rotation}: cells above the
+	 * ground that aren't free (only grass, flowers or air will do), the space inside the tank included (a tree in there
+	 * would keep it from forming), foundation cells holding something built (a block entity) or unbreakable, and cells
+	 * outside the world or not loaded. Empty when it fits. The client's preview asks too (client/MbsPreview.java).
 	 */
-	public static List<BlockPos> blocked(Level level, Blueprint blueprint, BlockPos stake, Rotation rotation) {
+	public static List<BlockPos> blocked(Level level, String kit, BlockPos stake, Rotation rotation) {
 		List<BlockPos> blocked = new ArrayList<>();
+		Blueprint blueprint = blueprint(kit);
+		Formed formed = formed(kit, rotation);
+		if (blueprint == null || formed == null) {
+			return blocked;
+		}
+		for (BlockPos offset : formed.inside()) {
+			BlockPos pos = stake.offset(offset);
+			if (level.isOutsideBuildHeight(pos) || !level.isLoaded(pos) || !level.getBlockState(pos).canBeReplaced()) {
+				blocked.add(pos);
+			}
+		}
 		for (int i = 0; i < blueprint.size(); i++) {
 			BlockPos offset = blueprint.offset(i, rotation);
 			BlockPos pos = stake.offset(offset);
