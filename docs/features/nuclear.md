@@ -152,6 +152,24 @@ blueprint (for players who lay out their own plant).
   storage tank outside through its fill line (while that tank's outlet valve is open), so keep the big tank filled. A
   storage tank holds four buckets for every block of space inside. With its roof hatch lid up, a tank also takes liquid poured in from a
   bucket (or any full fluid container) right-clicked on the hatch; it holds one liquid, so another is refused.
+- **The medium plant's control building** (round 18, `tools/medium_plant.py` `control_building`), four floors laid
+  out like a real plant's (NRC fire hazards analyses of TMI, Susquehanna and Peach Bottom; IEEE 484 battery rooms):
+  - Grade: Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (Station Battery, four
+    blocks long, 30 cells in clear jars), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
+    the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
+    beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room;
+    the remote shutdown room; the locker room; and the secure entrance (a vestibule, the security counter and camera
+    desk, badge turnstiles). Hydrogen exhaust louvres high in the battery rooms' outside walls.
+  - First floor: the cable spreading room under the control room (three tiers of tray, risers up into it), the relay
+    room, the plant computer room on its raised floor.
+  - Second floor: the main control room (the horseshoe of boards under the plant display wall, the reactor console,
+    the operators' consoles, the senior reactor operator's and shift technical advisor's desks, procedures, the shift
+    supervisor's glazed office), and across the corridor the Technical Support Center, kitchen, washroom and
+    operations office, with windows.
+  - Top floor: the control room's emergency filtration and air conditioning (air handling units, chillers, chilled
+    water pumps, ducts, louvres).
+  - The stair tower serves all four floors; it is laid last so no floor cuts into it. The switchboard's and chargers'
+    meters are live panels: with no diesel generator within 24 blocks they read the battery on float (132 V, 12 A).
 - **Building:** drones build from the lowest unfinished layer up a few layers at a time (see the blueprint system
   doc). In creative, `/nuclear build <blueprint> [fuelled]` builds one at once.
 - **Checked before building:** `tools/nuclear_plants.py` follows the pipes the way `ReactorUnit` does and refuses to
