@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/double_arm_pole"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/double_arm_pole",
+    "model": {
+      "type": "jugcraft:power_line",
+      "kind": "double_arm_pole"
+    }
   }
 }

@@ -6,6 +6,8 @@ import random
 
 from PIL import Image, ImageDraw
 
+import structure_items
+
 MOD = "jugcraft"
 FEATURE = "machines"
 
@@ -448,110 +450,6 @@ def draw_sheet():
     return sheet
 
 
-# ---------------------------------------------------------------- item icons (16x16)
-
-def _icon_pole(wood, arm, ins, arms=1, concrete=False):
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.rectangle([7, 3, 8, 15], fill=wood)
-    d.line([(7, 3), (7, 15)], fill=_shade(wood, 20))
-    for k in range(arms):
-        y = 4 + k * 3
-        d.line([(3, y), (12, y)], fill=arm)
-        for x in (3, 12):
-            d.point((x, y - 1), fill=ins)
-    d.point((7, 2), fill=ins)
-    if concrete:
-        d.rectangle([6, 9, 9, 15], fill=wood)
-    return img
-
-
-def _icon_monopole(colour, arms, both):
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.polygon([(7, 1), (8, 1), (9, 15), (6, 15)], fill=colour)
-    d.line([(7, 1), (6, 15)], fill=_shade(colour, 25))
-    for k in range(arms):
-        y = 3 + k * 3
-        for side in ((-1, 1) if both else ((-1,) if k % 2 == 0 else (1,))):
-            x1 = 8 + side * 5
-            d.line([(8, y), (x1, y)], fill=_shade(colour, -20))
-            d.point((x1, y + 1), fill=(110, 150, 160, 255))
-    return img
-
-
-def _icon_lattice(colour, accent=None, wide=False):
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.line([(3, 15), (7, 4)], fill=colour)
-    d.line([(12, 15), (8, 4)], fill=colour)
-    for y in (13, 10, 7):
-        w = (y - 4) * 4 // 11
-        d.line([(7 - w, y), (8 + w, y - 3)], fill=_shade(colour, -25))
-        d.line([(8 + w, y), (7 - w, y - 3)], fill=_shade(colour, -25))
-    span = 7 if wide else 5
-    d.line([(7 - span, 4), (8 + span, 4)], fill=colour)
-    d.line([(7 - span + 1, 6), (8 + span - 1, 6)], fill=colour)
-    d.line([(7, 4), (7, 1)], fill=colour)
-    d.line([(8, 4), (8, 1)], fill=colour)
-    if accent:
-        for x in (7 - span, 8 + span):
-            d.point((x, 5), fill=accent)
-            d.point((x, 6), fill=accent)
-    return img
-
-
-def _icon_box(body, top=None, door=None, extra=None):
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.rectangle([3, 6, 12, 14], fill=body)
-    d.rectangle([3, 6, 12, 7], fill=_shade(body, 25))
-    d.line([(12, 6), (12, 14)], fill=_shade(body, -25))
-    if door:
-        d.rectangle([5, 9, 10, 13], fill=door)
-    if top:
-        top(d)
-    if extra:
-        extra(d)
-    return img
-
-
-def draw_item_textures():
-    grey_ins = (110, 150, 160, 255)
-    galv = (176, 182, 188, 255)
-    out = {
-        "wooden_pole": _icon_pole((104, 78, 54, 255), (118, 92, 64, 255), grey_ins),
-        "double_arm_pole": _icon_pole((96, 72, 50, 255), (118, 92, 64, 255), grey_ins, arms=2),
-        "spun_concrete_pole": _icon_pole((178, 178, 172, 255), (86, 90, 98, 255), (86, 90, 98, 255), arms=2, concrete=True),
-        "steel_monopole": _icon_monopole(galv, 3, False),
-        "double_circuit_monopole": _icon_monopole(galv, 3, True),
-        "compact_monopole": _icon_monopole((150, 156, 164, 255), 3, True),
-        "lattice_tower": _icon_lattice(galv),
-        "reconductored_lattice_tower": _icon_lattice(galv, accent=(50, 50, 54, 255)),
-        "monitored_lattice_tower": _icon_lattice(galv, accent=(255, 180, 60, 255)),
-        "uhv_tower": _icon_lattice((190, 196, 200, 255), wide=True),
-        "uhvdc_tower": _icon_lattice((160, 168, 176, 255), accent=(110, 150, 160, 255), wide=True),
-    }
-    sc = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    d = ImageDraw.Draw(sc)
-    d.rectangle([6, 5, 9, 15], fill=galv)
-    d.line([(2, 4), (13, 4)], fill=galv)
-    d.rectangle([1, 2, 4, 4], fill=(110, 210, 250, 255))
-    d.rectangle([11, 2, 14, 4], fill=(110, 210, 250, 255))
-    d.point((7, 1), fill=(240, 60, 40, 255))
-    out["superconducting_pylon"] = sc
-    out["service_pedestal"] = _icon_box((150, 154, 160, 255), door=(200, 214, 224, 255),
-                                        top=lambda d: (d.line([(7, 1), (7, 5)], fill=(120, 124, 128, 255)), d.point((7, 0), fill=grey_ins)))
-    out["pad_mount_transformer"] = _icon_box((78, 112, 82, 255), door=(64, 96, 68, 255),
-                                             extra=lambda d: d.rectangle([7, 10, 8, 11], fill=(230, 190, 40, 255)))
-    out["unit_substation"] = _icon_box((70, 74, 82, 255), top=lambda d: (
-        d.line([(2, 2), (2, 14)], fill=galv), d.line([(13, 2), (13, 14)], fill=galv), d.line([(2, 2), (13, 2)], fill=galv),
-        [d.point((x, 3), fill=grey_ins) for x in (5, 8, 11)]))
-    out["converter_station"] = _icon_box((222, 224, 226, 255), door=(150, 154, 160, 255), top=lambda d: (
-        d.line([(1, 1), (1, 14)], fill=galv), d.line([(14, 1), (14, 14)], fill=galv), d.line([(1, 1), (14, 1)], fill=galv)))
-    return out
-
-
 # ---------------------------------------------------------------- models, blockstates, names, loot, recipes
 
 PARTICLE = {"wood": "minecraft:block/stripped_spruce_log", "box": "minecraft:block/iron_block"}
@@ -570,8 +468,8 @@ def write_assets(write, rid, assets, lang):
         # The structure is drawn by client/LineRenderer.java; the block model only gives break particles.
         write(assets / "models" / "block" / f"{kind}.json", {"textures": {"particle": particle(kind)}})
         write(assets / "blockstates" / f"{kind}.json", {"variants": {"": {"model": rid(f"block/{kind}")}}})
-        write(assets / "models" / "item" / f"{kind}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{kind}")}})
-        write(assets / "items" / f"{kind}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{kind}")}})
+        # The item shows the structure itself, in miniature (tools/structure_items.py).
+        structure_items.line_item(write, rid, assets, kind, particle(kind))
     write(assets / "models" / "block" / f"{FRAME}.json", {"textures": {"particle": "minecraft:block/iron_block"}})
     write(assets / "blockstates" / f"{FRAME}.json", {"variants": {"": {"model": rid(f"block/{FRAME}")}}})
     lang.update(LANG)

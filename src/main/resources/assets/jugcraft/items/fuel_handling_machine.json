@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/fuel_handling_machine"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/fuel_handling_machine",
+    "model": {
+      "type": "jugcraft:equipment",
+      "kind": "fuel_handling_machine"
+    }
   }
 }

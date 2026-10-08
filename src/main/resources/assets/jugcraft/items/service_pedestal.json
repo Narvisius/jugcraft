@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/service_pedestal"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/service_pedestal",
+    "model": {
+      "type": "jugcraft:power_line",
+      "kind": "service_pedestal"
+    }
   }
 }

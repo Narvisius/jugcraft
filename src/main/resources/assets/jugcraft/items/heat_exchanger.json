@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/heat_exchanger"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/heat_exchanger",
+    "model": {
+      "type": "jugcraft:equipment",
+      "kind": "heat_exchanger"
+    }
   }
 }

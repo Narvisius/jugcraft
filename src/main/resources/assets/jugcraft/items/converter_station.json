@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/converter_station"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/converter_station",
+    "model": {
+      "type": "jugcraft:power_line",
+      "kind": "converter_station"
+    }
   }
 }

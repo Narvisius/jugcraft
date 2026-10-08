@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/polar_crane"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/polar_crane",
+    "model": {
+      "type": "jugcraft:equipment",
+      "kind": "polar_crane"
+    }
   }
 }

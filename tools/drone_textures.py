@@ -431,116 +431,6 @@ def drone_sheet(seed):
     return img
 
 
-# Drone item icons (top-down), in the fleet's look: dark hulls, dark rotors, dull red lights.
-HULL4 = [(90, 94, 100), (124, 128, 134), (150, 154, 160)]
-HULL5 = [(52, 54, 60), (72, 74, 82), (92, 94, 102)]
-HULL6 = [(30, 31, 34), (44, 46, 50), (58, 60, 64)]
-HULL7 = [(44, 48, 58), (62, 68, 80), (82, 88, 100)]
-HULL8 = [(40, 45, 38), (58, 64, 54), (76, 84, 70)]
-HULL9 = [(24, 25, 28), (36, 38, 42), (50, 52, 58)]
-RED = [(110, 26, 20), (160, 40, 32), (230, 72, 54)]
-BLADE = [(60, 62, 68), (84, 86, 92), (104, 106, 112)]
-
-
-def dark_rotor(img, cx, cy, radius=2):
-    px(img, cx, cy, (24, 24, 26))
-    for d in range(1, radius + 1):
-        for dx, dy in ((-d, 0), (d, 0), (0, -d), (0, d)):
-            px(img, cx + dx, cy + dy, BLADE[1] if d < radius else BLADE[2])
-
-
-def icon_runner():
-    img = new()
-    for x, y in QUAD:
-        for a in range(16):
-            t = a * math.pi / 8
-            px(img, round(x + 2.4 * math.cos(t)), round(y + 2.4 * math.sin(t)), HULL4[0])
-        dark_rotor(img, x, y, 1)
-    for y in range(4, 12):
-        for x in range(6, 10):
-            px(img, x, y, HULL4[2] if x in (7, 8) else HULL4[1])
-    px(img, 7, 11, RED[2])
-    px(img, 8, 11, RED[1])
-    return img
-
-
-def icon_tiltrotor():
-    img = new()
-    for y in range(2, 14):
-        for x in range(7, 9):
-            px(img, x, y, HULL5[2] if x == 7 else HULL5[1])
-    for x in range(1, 15):
-        px(img, x, 6, HULL5[0])
-        px(img, x, 7, HULL5[1])
-    for cx in (2, 13):
-        dark_rotor(img, cx, 6, 2)
-    px(img, 6, 13, HULL5[0])
-    px(img, 9, 13, HULL5[0])
-    px(img, 7, 2, RED[2])
-    return img
-
-
-def icon_tandem():
-    img = new()
-    for y in range(2, 14):
-        for x in range(6, 10):
-            px(img, x, y, HULL6[0] if x in (6, 9) else HULL6[2])
-    for cy in (3, 12):
-        for d in range(-4, 5):
-            px(img, 8 + d, cy, BLADE[2])
-            px(img, 8, cy + d // 2, BLADE[1])
-    px(img, 7, 7, RED[1])
-    px(img, 8, 13, (214, 170, 38))
-    return img
-
-
-def icon_aerostat():
-    img = new()
-    for y in range(16):
-        for x in range(16):
-            d = ((x - 7.5) / 5.5) ** 2 + ((y - 7.5) / 7.2) ** 2
-            if d <= 1:
-                px(img, x, y, HULL7[0] if d > 0.75 else HULL7[2] if (y % 5) else HULL7[1])
-    for y in range(3, 13):
-        px(img, 2, y, RED[0])
-        px(img, 13, y, RED[0])
-    for x, y in ((1, 4), (14, 4), (1, 11), (14, 11)):
-        dark_rotor(img, x, y, 1)
-    return img
-
-
-def icon_glider():
-    img = new()
-    for i in range(8):
-        for x in range(7 - i, 9 + i):
-            px(img, x, 4 + i // 2 + (i > 5), HULL8[1])
-        px(img, 7 - i, 4 + i // 2 + (i > 5), RED[1])
-        px(img, 8 + i, 4 + i // 2 + (i > 5), RED[1])
-    for y in range(3, 11):
-        px(img, 7, y, HULL8[2])
-        px(img, 8, y, HULL8[2])
-    for x in (3, 12):
-        px(img, x, 7, (20, 20, 22))
-    return img
-
-
-def icon_ring_lifter():
-    img = new()
-    for a in range(72):
-        t = a * math.pi / 36
-        for r in (5.4, 6.2):
-            px(img, round(7.5 + r * math.cos(t)), round(7.5 + r * math.sin(t)), HULL9[2] if r > 6 else HULL9[1])
-        px(img, round(7.5 + 6.9 * math.cos(t)), round(7.5 + 6.9 * math.sin(t)), RED[0])
-    for k in range(6):
-        t = k * math.pi / 3 + math.pi / 6
-        dark_rotor(img, round(7.5 + 5.8 * math.cos(t)), round(7.5 + 5.8 * math.sin(t)), 1)
-    for y in range(6, 10):
-        for x in range(6, 10):
-            px(img, x, y, HULL9[1] if (x + y) % 3 else (214, 170, 38))
-    px(img, 7, 7, RED[2])
-    return img
-
-
 # ---------------------------------------------------------------- control room
 
 
@@ -786,28 +676,6 @@ def rotor(img, cx, cy, blade=ALU, hub=NAVY[3], ring=None):
             px(img, round(cx + 2 * math.cos(t)), round(cy + 2 * math.sin(t)), ring)
 
 
-def drone_icon(rotors, body_size, duct=False, body=WHITE):
-    """Top-down drone: a body with a dull red status light and dark rotors around it."""
-    img = new()
-    c = 7.5
-    for x, y in rotors:
-        # Arm from the body to the rotor.
-        steps = 8
-        for i in range(steps + 1):
-            t = i / steps
-            px(img, round(c + (x - c) * t), round(c + (y - c) * t), STEEL[1])
-    for x, y in rotors:
-        rotor(img, x, y, blade=[(60, 62, 68), (84, 86, 92), (104, 106, 112)], hub=(24, 24, 26))
-    half = body_size // 2
-    for y in range(8 - half, 8 + half):
-        for x in range(8 - half, 8 + half):
-            edge = x in (8 - half, 8 + half - 1) or y in (8 - half, 8 + half - 1)
-            px(img, x, y, body[1] if edge else body[3])
-    px(img, 7, 7, (230, 72, 54))
-    px(img, 8, 7, (160, 40, 32))
-    return img
-
-
 def motor():
     img = new()
     for y in range(4, 13):
@@ -892,11 +760,6 @@ def cargo_winch():
     for x, y in ((6, 12), (7, 13), (8, 13), (9, 12), (10, 11), (6, 11)):
         px(img, x, y, AMBER[1])
     return img
-
-
-QUAD = [(3, 3), (12, 3), (3, 12), (12, 12)]
-HEX = [(8, 1), (14, 5), (14, 11), (8, 14), (2, 11), (2, 5)]
-OCTO = [(round(7.5 + 6.5 * math.cos(a * math.pi / 4)), round(7.5 + 6.5 * math.sin(a * math.pi / 4))) for a in range(8)]
 
 
 # ---------------------------------------------------------------- tier 5-9 parts (tower theme: dark, dull red)
@@ -1070,16 +933,6 @@ def draw_all():
     save(packager_top(907), "block", "cargo_packager_top")
     save(panel_block(908, strip=False), "block", "cargo_packager_bottom")
 
-    save(drone_icon(QUAD, 4, body=[(59, 62, 70), (70, 74, 80), (91, 96, 104), (91, 96, 104)]), "item", "drone_t1")
-    save(drone_icon(QUAD, 4, body=[(150, 112, 20), (214, 170, 38), (240, 206, 90), (240, 206, 90)]), "item", "creative_drone")
-    save(drone_icon(HEX, 4, body=[(40, 42, 48), (59, 62, 70), (214, 170, 38), (59, 62, 70)]), "item", "drone_t2")
-    save(drone_icon(OCTO, 6, body=[(52, 55, 61), (60, 64, 70), (78, 83, 91), (78, 83, 91)]), "item", "drone_t3")
-    save(icon_runner(), "item", "drone_t4")
-    save(icon_tiltrotor(), "item", "drone_t5")
-    save(icon_tandem(), "item", "drone_t6")
-    save(icon_aerostat(), "item", "drone_t7")
-    save(icon_glider(), "item", "drone_t8")
-    save(icon_ring_lifter(), "item", "drone_t9")
 
     save(motor(), "item", "drone_motor")
     save(propellers(WOOD), "item", "wooden_propeller_set")

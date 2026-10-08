@@ -1503,8 +1503,6 @@ def main():
     tower_art.write_all(str(ROOT / "src" / "main" / "resources" / "assets" / "jugcraft"))
 
     import power_lines
-    for name, img in power_lines.draw_item_textures().items():
-        save(img, "item", name)
     entity_dir = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "entity"
     entity_dir.mkdir(parents=True, exist_ok=True)
     power_lines.draw_sheet().save(entity_dir / "power_lines.png", optimize=True)
@@ -1530,6 +1528,9 @@ def main():
     nuclear.draw_hud_trefoil().save(TEX / "gui" / "radiation_trefoil.png", optimize=True)
     nuclear.draw_scram_button().save(TEX / "gui" / "reactor_scram.png", optimize=True)
     nuclear.draw_equipment_sheet().save(entity_dir / "nuclear_equipment.png", optimize=True)
+    # The equipment's and power lines' miniature items are drawn in flat-colour versions of their sheets.
+    import structure_items
+    structure_items.write_item_sheets(entity_dir)
     (TEX / "particle").mkdir(parents=True, exist_ok=True)
     for name, img in nuclear.draw_plume_frames().items():
         img.save(TEX / "particle" / f"{name}.png", optimize=True)

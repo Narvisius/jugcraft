@@ -71,6 +71,7 @@ COOLING_BLOCKS = {"cooling_tower_fill": "Cooling Tower Fill", "conduit_trench": 
 import plant_interior
 import storage_tank
 import nuclear_storage
+import structure_items
 
 BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER] + list(COOLING_BLOCKS) + plant_interior.BLOCKS \
     + list(storage_tank.NAMES) + nuclear_storage.BLOCKS
@@ -691,8 +692,6 @@ def draw_item_textures():
     out = {"hazmat_hood": _icon(_hood), "hazmat_coverall": _icon(_coverall), "hazmat_trousers": _icon(_trousers),
            "hazmat_boots": _icon(_boots), "check_source": _icon(_check_source)}
     out.update(_geiger_textures())
-    for name, draw in EQUIPMENT_ICONS.items():
-        out[name] = _icon(draw)
     out["enriched_uranium_cylinder"] = _icon(_icon_cylinder)
     out["leu_fuel_assembly"] = _icon(_icon_assembly(False))
     out["spent_fuel_assembly"] = _icon(_icon_assembly(True))
@@ -905,7 +904,6 @@ def draw_scram_button():
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 9 * f)
         d.text((c, c), "SCRAM", font=font, fill=(255, 255, 255, 255), anchor="mm")
     return _supersample(draw, size=48, factor=8)
-
 
 
 def draw_hud_trefoil():
@@ -1381,7 +1379,7 @@ def pipe_blockstate(rid, name):
     return {"multipart": parts}
 
 
-# ---------------------------------------------------------------- equipment and fuel item icons (64 px)
+# ---------------------------------------------------------------- fuel and card item icons (64 px)
 
 def _cyl_icon(d, f, cx, y0, y1, r, body, dark, light, top=None):
     """A shaded upright cylinder, seen from slightly above."""
@@ -1393,140 +1391,7 @@ def _cyl_icon(d, f, cx, y0, y1, r, body, dark, light, top=None):
     d.ellipse([S(cx - r), S(y0 - r * 0.35), S(cx + r), S(y0 + r * 0.35)], fill=top or light)
 
 
-STEEL = (176, 182, 188, 255)
 STEEL_D = (110, 116, 124, 255)
-STEEL_L = (220, 224, 228, 255)
-
-
-def _icon_vessel(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    _cyl_icon(d, f, 32, 22, 56, 15, STEEL, STEEL_D, STEEL_L)
-    d.rectangle(S(17, 36, 47, 39), fill=(130, 136, 142, 255))
-    for x in range(20, 46, 5):
-        d.rectangle(S(x, 6, x + 3, 22), fill=(90, 96, 104, 255))
-        d.rectangle(S(x, 6, x + 3, 8), fill=(230, 190, 40, 255))
-    d.ellipse(S(17, 18, 47, 26), fill=STEEL_L)
-    trefoil(d, 32 * f, 47 * f, int(5 * f))
-
-
-def _icon_sg(big, d, f):
-    _cyl_icon(d, f, 32, 26, 58, 10, STEEL, STEEL_D, STEEL_L)
-    d.polygon([(22 * f, 26 * f), (42 * f, 26 * f), (46 * f, 18 * f), (18 * f, 18 * f)], fill=STEEL)
-    _cyl_icon(d, f, 32, 4, 18, 14, STEEL, STEEL_D, STEEL_L)
-    d.rectangle([18 * f, 30 * f, 46 * f, 33 * f], fill=(200, 60, 50, 255))
-
-
-def _icon_pump(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    _cyl_icon(d, f, 32, 8, 34, 9, (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255))
-    d.rectangle(S(20, 34, 44, 40), fill=STEEL_D)
-    _cyl_icon(d, f, 32, 40, 56, 13, STEEL, STEEL_D, STEEL_L)
-    d.rectangle(S(6, 46, 20, 52), fill=STEEL)
-    d.rectangle(S(44, 46, 58, 52), fill=STEEL)
-
-
-def _icon_pressurizer(big, d, f):
-    _cyl_icon(d, f, 32, 8, 54, 9, STEEL, STEEL_D, STEEL_L)
-    d.ellipse([23 * f, 3 * f, 41 * f, 13 * f], fill=STEEL_L)
-    d.rectangle([22 * f, 54 * f, 42 * f, 60 * f], fill=(90, 96, 100, 255))
-
-
-def _icon_turbine(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(2, 44, 62, 56), fill=(150, 150, 146, 255))
-    d.rectangle(S(4, 32, 14, 44), fill=(70, 110, 140, 255))
-    for x in (16, 30):
-        d.chord(S(x - 2, 20, x + 14, 52), 180, 360, fill=(70, 110, 140, 255))
-        d.rectangle(S(x - 2, 36, x + 14, 44), fill=(70, 110, 140, 255))
-    _cyl_icon(d, f, 52, 30, 44, 8, (60, 120, 90, 255), (40, 86, 64, 255), (96, 160, 124, 255))
-
-
-def _icon_condenser(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(6, 18, 58, 54), fill=(126, 134, 136, 255))
-    d.rectangle(S(6, 18, 18, 54), fill=(150, 158, 160, 255))
-    d.rectangle(S(6, 14, 58, 18), fill=(100, 106, 110, 255))
-    for y in (26, 38):
-        d.rectangle(S(58, y, 62, y + 6), fill=(40, 110, 170, 255))
-    d.rectangle(S(2, 40, 6, 48), fill=(40, 110, 170, 255))
-
-
-def _icon_feedwater(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 44, 60, 52), fill=(130, 136, 140, 255))
-    _cyl_icon(d, f, 20, 26, 44, 9, (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255))
-    _cyl_icon(d, f, 44, 30, 44, 7, STEEL, STEEL_D, STEEL_L)
-    d.rectangle(S(29, 34, 37, 38), fill=STEEL_D)
-
-
-def _icon_transformer(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(12, 26, 52, 56), fill=(126, 134, 136, 255))
-    for x in range(14, 52, 4):
-        d.rectangle(S(x, 30, x + 2, 52), fill=(96, 102, 106, 255))
-    for x in (20, 32, 44):
-        d.rectangle(S(x - 2, 8, x + 2, 26), fill=(120, 66, 40, 255))
-        for y in range(10, 26, 4):
-            d.rectangle(S(x - 4, y, x + 4, y + 2), fill=(140, 80, 50, 255))
-    d.rectangle(S(4, 32, 12, 50), fill=(96, 102, 108, 255))
-
-
-def _icon_console(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.polygon(S(4, 50, 60, 50, 54, 34, 10, 34), fill=(150, 156, 160, 255))
-    d.rectangle(S(4, 50, 60, 58), fill=(120, 126, 130, 255))
-    d.rectangle(S(10, 10, 54, 34), fill=(40, 44, 50, 255))
-    d.rectangle(S(13, 13, 51, 31), fill=(14, 22, 30, 255))
-    for y in (17, 22, 27):
-        d.line(S(16, y, 40, y), fill=(80, 200, 230, 255), width=f)
-    d.rectangle(S(44, 40, 50, 46), fill=(220, 50, 40, 255))
-    for x in (14, 22, 30):
-        d.rectangle(S(x, 40, x + 4, 44), fill=(70, 200, 90, 255))
-
-
-def _icon_epr(big, d, f):
-    """The EPR vessel: the standard vessel's icon, wider, with a blue band (the plant colour)."""
-    S = lambda *v: [c * f for c in v]
-    _cyl_icon(d, f, 32, 22, 58, 18, STEEL, STEEL_D, STEEL_L)
-    d.rectangle(S(14, 34, 50, 38), fill=(60, 90, 160, 255))
-    for x in range(17, 48, 4):
-        d.rectangle(S(x, 4, x + 2, 22), fill=(90, 96, 104, 255))
-        d.rectangle(S(x, 4, x + 2, 6), fill=(230, 190, 40, 255))
-    d.ellipse(S(14, 17, 50, 27), fill=STEEL_L)
-    trefoil(d, 32 * f, 48 * f, int(5 * f))
-
-
-def _icon_smr(big, d, f):
-    """A slim tall module with its flange and nozzles."""
-    S = lambda *v: [c * f for c in v]
-    _cyl_icon(d, f, 32, 8, 58, 10, STEEL, STEEL_D, STEEL_L)
-    d.rectangle(S(20, 30, 44, 34), fill=(120, 126, 132, 255))
-    for y in (14, 20):
-        d.rectangle(S(14, y, 22, y + 3), fill=STEEL_D)
-    for x in range(27, 38, 3):
-        d.rectangle(S(x, 2, x + 1, 8), fill=(90, 96, 104, 255))
-    trefoil(d, 32 * f, 46 * f, int(4 * f))
-
-
-def _icon_small_turbine(big, d, f):
-    """A small skid: blue turbine casing and green generator."""
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 46, 60, 54), fill=(120, 126, 130, 255))
-    _cyl_icon(d, f, 20, 26, 46, 11, (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255))
-    d.rectangle(S(34, 24, 58, 46), fill=(60, 120, 90, 255))
-    d.rectangle(S(52, 24, 58, 46), fill=(40, 86, 64, 255))
-    d.rectangle(S(17, 10, 23, 24), fill=(220, 220, 214, 255))
-
-
-def _icon_cw_pump(big, d, f):
-    """A vertical pump: blue motor on top of a stand over the pump column, a discharge pipe out of the side."""
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(10, 52, 54, 58), fill=(110, 116, 120, 255))
-    _cyl_icon(d, f, 32, 34, 52, 7, STEEL, STEEL_D, STEEL_L)
-    d.rectangle(S(38, 40, 60, 46), fill=(40, 110, 170, 255))
-    _cyl_icon(d, f, 32, 8, 30, 12, (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255))
-    for y in range(12, 30, 4):
-        d.rectangle(S(20, y, 44, y + 1), fill=(36, 64, 110, 255))
 
 
 def _icon_cylinder(big, d, f):
@@ -1557,214 +1422,6 @@ def _icon_card(big, d, f):
     d.line(S(30, 26, 52, 26), fill=(200, 220, 240, 255), width=2 * f)
     d.line(S(30, 34, 48, 34), fill=(200, 220, 240, 255), width=2 * f)
     trefoil(d, 18 * f, 40 * f, int(5 * f))
-
-
-EQUIPMENT_ICONS = {"reactor_pressure_vessel": _icon_vessel, "reactor_steam_generator": _icon_sg,
-                   "reactor_coolant_pump": _icon_pump, "pressurizer": _icon_pressurizer, "turbine_generator": _icon_turbine,
-                   "condenser": _icon_condenser, "feedwater_pump": _icon_feedwater, "main_transformer": _icon_transformer,
-                   "epr_reactor_vessel": lambda big, d, f: _icon_epr(big, d, f), "small_modular_reactor": lambda big, d, f: _icon_smr(big, d, f),
-                   "small_turbine_generator": lambda big, d, f: _icon_small_turbine(big, d, f),
-                   "circulating_water_pump": lambda big, d, f: _icon_cw_pump(big, d, f),
-                   "reactor_control_console": _icon_console}
-
-
-# ---------------------------------------------------------------- the plant buildings' equipment: icons
-
-YEL, YEL_D, YEL_L = (222, 178, 40, 255), (160, 124, 24, 255), (244, 210, 90, 255)
-GRN, GRN_D, GRN_L = (92, 130, 104, 255), (60, 90, 70, 255), (130, 170, 140, 255)
-WHT, WHT_D, WHT_L = (222, 224, 220, 255), (170, 172, 168, 255), (244, 246, 242, 255)
-BLU, BLU_D, BLU_L = (52, 92, 150, 255), (36, 64, 110, 255), (90, 130, 190, 255)
-DARK = (40, 42, 46, 255)
-
-
-def _hcyl_icon(d, f, x0, x1, cy, r, body, dark, light):
-    """A shaded horizontal cylinder with rounded ends."""
-    S = lambda *v: [c * f for c in v]
-    d.rounded_rectangle(S(x0, cy - r, x1, cy + r), radius=r * f, fill=body)
-    d.rectangle(S(x0 + r * 0.6, cy - r, x1 - r * 0.6, cy - r * 0.45), fill=light)
-    d.rectangle(S(x0 + r * 0.6, cy + r * 0.5, x1 - r * 0.6, cy + r), fill=dark)
-
-
-def _icon_crane(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 12, 60, 20), fill=YEL)
-    d.rectangle(S(4, 18, 60, 20), fill=YEL_D)
-    for x in (4, 52):
-        d.rectangle(S(x, 8, x + 8, 22), fill=YEL_D)
-        d.rectangle(S(x, 8, x + 8, 10), fill=(30, 30, 30, 255))
-    d.rectangle(S(26, 6, 38, 12), fill=(90, 96, 104, 255))
-    d.line(S(30, 20, 30, 42), fill=DARK, width=f)
-    d.line(S(34, 20, 34, 42), fill=DARK, width=f)
-    d.rectangle(S(26, 42, 38, 48), fill=YEL)
-    d.arc(S(28, 48, 38, 58), 0, 200, fill=STEEL_D, width=2 * f)
-
-
-def _icon_overhead_crane(big, d, f):
-    _icon_crane(big, d, f)
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(6, 24, 14, 30), fill=YEL)
-    d.rectangle(S(7, 25, 13, 28), fill=(110, 150, 170, 255))
-
-
-def _icon_gantry(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(6, 10, 58, 16), fill=YEL)
-    for x in (6, 52):
-        d.rectangle(S(x, 10, x + 6, 50), fill=YEL)
-        d.rectangle(S(x - 2, 50, x + 8, 54), fill=YEL_D)
-    d.rectangle(S(26, 4, 38, 12), fill=STEEL)
-    d.rectangle(S(30, 12, 34, 52), fill=STEEL_L)
-    d.rectangle(S(28, 52, 36, 56), fill=(230, 180, 40, 255))
-    d.rectangle(S(20, 6, 26, 10), fill=(60, 180, 220, 255))
-
-
-def _icon_msr(big, d, f):
-    _hcyl_icon(d, f, 4, 60, 34, 14, WHT, WHT_D, WHT_L)
-    S = lambda *v: [c * f for c in v]
-    for x in (18, 46):
-        d.rectangle(S(x - 4, 12, x + 4, 22), fill=WHT_D)
-        d.rectangle(S(x - 6, 10, x + 6, 13), fill=STEEL_D)
-        d.rectangle(S(x - 6, 48, x + 6, 58), fill=(92, 96, 100, 255))
-
-
-def _icon_fw_heater(big, d, f):
-    _hcyl_icon(d, f, 12, 60, 32, 11, (168, 172, 170, 255), (120, 124, 122, 255), (200, 204, 202, 255))
-    S = lambda *v: [c * f for c in v]
-    d.ellipse(S(4, 20, 18, 44), fill=(130, 134, 132, 255))
-    d.rectangle(S(12, 20, 16, 44), fill=STEEL_D)
-    for x in (24, 48):
-        d.rectangle(S(x - 5, 42, x + 5, 56), fill=(92, 96, 100, 255))
-
-
-def _icon_diesel(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(2, 50, 62, 56), fill=(92, 96, 100, 255))
-    d.rectangle(S(4, 24, 36, 50), fill=GRN)
-    for x in range(6, 34, 6):
-        d.rectangle(S(x, 18, x + 4, 24), fill=GRN_D)
-    d.rectangle(S(8, 14, 32, 18), fill=WHT_D)
-    d.rectangle(S(10, 2, 16, 14), fill=WHT_D)
-    _hcyl_icon(d, f, 36, 62, 36, 13, (60, 120, 90, 255), (40, 84, 62, 255), (90, 160, 120, 255))
-
-
-def _icon_tank(big, d, f):
-    _cyl_icon(d, f, 32, 12, 56, 18, WHT, WHT_D, WHT_L)
-    S = lambda *v: [c * f for c in v]
-    for y in (24, 36, 48):
-        d.rectangle(S(14, y, 50, y + 1), fill=WHT_D)
-    d.rectangle(S(20, 10, 22, 56), fill=DARK)
-    d.rectangle(S(26, 10, 28, 56), fill=DARK)
-
-
-def _icon_hx(big, d, f):
-    _hcyl_icon(d, f, 8, 56, 32, 12, GRN, GRN_D, GRN_L)
-    S = lambda *v: [c * f for c in v]
-    for x in (8, 52):
-        d.rectangle(S(x, 18, x + 4, 46), fill=STEEL)
-    d.rectangle(S(18, 8, 24, 20), fill=(180, 60, 50, 255))
-    d.rectangle(S(40, 8, 46, 20), fill=BLU)
-    for x in (18, 42):
-        d.rectangle(S(x, 44, x + 6, 56), fill=(92, 96, 100, 255))
-
-
-def _icon_pump_skid(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 48, 60, 54), fill=(92, 96, 100, 255))
-    d.ellipse(S(4, 24, 24, 48), fill=BLU)
-    d.ellipse(S(8, 28, 20, 44), fill=BLU_L)
-    d.rectangle(S(24, 30, 30, 42), fill=(230, 180, 40, 255))
-    _hcyl_icon(d, f, 30, 60, 36, 11, (168, 172, 170, 255), (120, 124, 122, 255), (200, 204, 202, 255))
-    d.rectangle(S(11, 8, 17, 26), fill=STEEL)
-
-
-def _icon_fhm(big, d, f):
-    _icon_gantry(big, d, f)
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 56, 60, 62), fill=(70, 140, 220, 255))
-
-
-def _icon_rack(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(6, 6, 58, 58), fill=(70, 150, 230, 255))
-    for i in range(4):
-        for j in range(4):
-            x, y = 8 + i * 12.5, 8 + j * 12.5
-            d.rectangle(S(x, y, x + 10, y + 10), fill=(200, 215, 230, 255), outline=(240, 245, 250, 255))
-            d.rectangle(S(x + 3, y + 3, x + 7, y + 7), fill=(90, 160, 230, 255))
-
-
-def _icon_cask(big, d, f):
-    _cyl_icon(d, f, 32, 12, 58, 16, (176, 176, 170, 255), (130, 130, 124, 255), (206, 206, 200, 255), top=(110, 116, 124, 255))
-    S = lambda *v: [c * f for c in v]
-    for x in (20, 40):
-        d.rectangle(S(x, 50, x + 5, 54), fill=DARK)
-        d.rectangle(S(x, 14, x + 5, 18), fill=DARK)
-    trefoil(d, 32 * f, 34 * f, int(6 * f))
-
-
-def _icon_screen(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    for x in (4, 54):
-        d.rectangle(S(x, 4, x + 6, 60), fill=BLU)
-    d.rectangle(S(10, 10, 54, 52), fill=(150, 154, 158, 255))
-    for x in range(12, 54, 4):
-        d.line(S(x, 10, x, 52), fill=(80, 84, 88, 255), width=f)
-    for y in range(12, 52, 6):
-        d.line(S(10, y, 54, y), fill=(60, 64, 68, 255), width=f)
-    d.rectangle(S(4, 2, 60, 10), fill=BLU_D)
-
-
-def _icon_display_wall(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(2, 12, 62, 50), fill=(60, 64, 70, 255))
-    for i in range(3):
-        for j in range(2):
-            x, y = 4 + i * 19.5, 14 + j * 18
-            d.rectangle(S(x, y, x + 18, y + 16), fill=(14, 30, 52, 255))
-            d.line(S(x + 2, y + 10, x + 7, y + 6, x + 12, y + 9, x + 16, y + 4), fill=(110, 230, 140, 255), width=f)
-    d.rectangle(S(24, 50, 40, 58), fill=(90, 94, 100, 255))
-
-
-def _icon_board(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 8, 60, 40), fill=(176, 182, 178, 255))
-    d.line(S(8, 22, 30, 22, 30, 32, 56, 32), fill=(200, 50, 40, 255), width=2 * f)
-    d.line(S(8, 28, 22, 28, 22, 16, 56, 16), fill=(50, 110, 200, 255), width=2 * f)
-    for x in range(8, 58, 6):
-        d.rectangle(S(x, 10, x + 3, 13), fill=(80, 220, 110, 255) if x % 18 else (230, 60, 50, 255))
-    d.polygon(S(2, 40, 62, 40, 62, 48, 2, 54), fill=(150, 156, 160, 255))
-    d.rectangle(S(2, 54, 62, 60), fill=(120, 124, 128, 255))
-
-
-def _icon_switchgear(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    for k in range(3):
-        x = 4 + k * 19
-        d.rectangle(S(x, 6, x + 18, 58), fill=(150, 158, 160, 255), outline=(80, 86, 90, 255))
-        d.rectangle(S(x + 3, 12, x + 11, 20), fill=(240, 240, 230, 255))
-        d.ellipse(S(x + 12, 13, x + 16, 17), fill=(230, 60, 50, 255) if k == 1 else (80, 220, 110, 255))
-        d.rectangle(S(x + 2, 30, x + 4, 46), fill=(60, 62, 66, 255))
-
-
-def _icon_ahu(big, d, f):
-    S = lambda *v: [c * f for c in v]
-    d.rectangle(S(4, 22, 60, 54), fill=WHT)
-    d.rectangle(S(4, 22, 18, 54), fill=(150, 154, 152, 255))
-    for y in range(25, 52, 4):
-        d.line(S(6, y, 16, y), fill=(60, 64, 66, 255), width=f)
-    d.rectangle(S(22, 26, 38, 50), outline=WHT_D, width=f)
-    d.rectangle(S(42, 26, 58, 50), outline=WHT_D, width=f)
-    d.rectangle(S(44, 8, 58, 22), fill=(110, 116, 124, 255))
-
-
-EQUIPMENT_ICONS.update({
-    "polar_crane": _icon_crane, "refueling_machine": _icon_gantry, "overhead_crane": _icon_overhead_crane,
-    "moisture_separator_reheater": _icon_msr, "feedwater_heater": _icon_fw_heater, "emergency_diesel_generator": _icon_diesel,
-    "storage_tank": _icon_tank, "heat_exchanger": _icon_hx, "pump_skid": _icon_pump_skid, "fuel_handling_machine": _icon_fhm,
-    "spent_fuel_rack": _icon_rack, "dry_storage_cask": _icon_cask, "travelling_water_screen": _icon_screen,
-    "plant_display_wall": _icon_display_wall, "main_control_board": _icon_board, "switchgear_lineup": _icon_switchgear,
-    "air_handling_unit": _icon_ahu,
-})
 
 
 # ---------------------------------------------------------------- the fuel machines' models (MachineKind multi-blocks)
@@ -1855,8 +1512,8 @@ def write_assets(write, rid, assets, lang):
         write(assets / "models" / "block" / f"{kind}.json", {"textures": {"particle": "minecraft:block/iron_block"}})
         write(assets / "blockstates" / f"{kind}.json",
               {"variants": {f"facing={f}": {"model": rid(f"block/{kind}")} for f in ("north", "east", "south", "west")}})
-        write(assets / "models" / "item" / f"{kind}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{kind}")}})
-        write(assets / "items" / f"{kind}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{kind}")}})
+        # The item shows the equipment itself, in miniature (tools/structure_items.py).
+        structure_items.equipment_item(write, rid, assets, kind)
     lang[f"block.{MOD}.{TOWER_CONTROLLER}"] = NAMES[TOWER_CONTROLLER]
     lang[f"block.{MOD}.cooling_tower_fill"] = NAMES["cooling_tower_fill"]
     write(assets / "models" / "block" / "cooling_tower_fill.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {

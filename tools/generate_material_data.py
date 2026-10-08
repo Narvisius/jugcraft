@@ -15,6 +15,7 @@ import model_writer
 import agriculture_data
 from party import party_lang
 import drones
+import structure_items
 import town_assets
 import material_icons
 
@@ -299,13 +300,15 @@ def drone_assets(lang):
         write(ASSETS / "models" / "block" / f"{block}.json", model)
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
-    items = dict(drones.DRONE_PARTS)
-    items.update({tier["id"]: tier["display"] for tier in drones.DRONE_TIERS.values()})
-    for item, display in items.items():
+    for item, display in drones.DRONE_PARTS.items():
         lang[f"item.{MOD}.{item}"] = display
         write(ASSETS / "models" / "item" / f"{item}.json",
               {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    # A drone's item shows the drone itself, in miniature (tools/structure_items.py).
+    for tier, info in drones.DRONE_TIERS.items():
+        lang[f"item.{MOD}.{info['id']}"] = info["display"]
+        structure_items.drone_item(write, rid, ASSETS, info["id"], tier)
     lang.update(drones.DRONE_LANG)
 
 

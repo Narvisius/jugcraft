@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/condenser"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/condenser",
+    "model": {
+      "type": "jugcraft:equipment",
+      "kind": "condenser"
+    }
   }
 }

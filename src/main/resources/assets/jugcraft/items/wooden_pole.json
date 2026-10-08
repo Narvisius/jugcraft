@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/wooden_pole"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/wooden_pole",
+    "model": {
+      "type": "jugcraft:power_line",
+      "kind": "wooden_pole"
+    }
   }
 }

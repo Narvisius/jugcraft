@@ -152,6 +152,10 @@ def texture(ref):
             err(f"Texture {ref} is {img.size}, expected 16x16, 32x32, 48x48, 64x64 or 128x128")
 
 
+# The special item renderers registered by client/StructureItemRenderers.java.
+SPECIAL_ITEM_RENDERERS = {f"{MOD}:equipment", f"{MOD}:power_line", f"{MOD}:drone"}
+
+
 def model(ref):
     ns, path = split(ref)
     if ns == "minecraft":
@@ -177,7 +181,13 @@ def _sharp(name):
 
 def item_models(definition):
     """Every model an item definition can show, through select (the blueprint's kinds), condition and range_dispatch
-    (the power bow's draw)."""
+    (the power bow's draw). A special model (the miniatures of client/StructureItemRenderers.java) shows its base
+    model's display and particle, and one of the special renderers the client registers."""
+    if definition.get("type") == "minecraft:special":
+        model(definition["base"])
+        if definition["model"].get("type") not in SPECIAL_ITEM_RENDERERS:
+            err(f"An item's special model is of {definition['model'].get('type')}, not one of {sorted(SPECIAL_ITEM_RENDERERS)}")
+        return
     if "model" in definition:
         model(definition["model"])
     for case in definition.get("cases", []):

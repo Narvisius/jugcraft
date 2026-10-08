@@ -330,6 +330,53 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		});
 	}
 
+	// ------------------------------------------------------------------ the item
+
+	/**
+	 * The equipment's item texture: the material sheet with every region one flat colour (its average), drawn by
+	 * tools/structure_items.py. Shrunk to a slot, a block-sized texture tile is smaller than a pixel and would sparkle.
+	 */
+	public static final Identifier ITEM_TEXTURE = Jugcraft.id("textures/entity/nuclear_equipment_item.png");
+	/** The item's moving and lit parts as they stand still (vessel closed, rods in, lamps steady), by kind. */
+	private static final Mesh[] ITEM_STILL = new Mesh[EquipmentKind.values().length];
+	private static final Mesh[] ITEM_LIT = new Mesh[EquipmentKind.values().length];
+
+	/**
+	 * The equipment as its item shows it (client/StructureItemRenderers.java), in full detail: the vessel closed with
+	 * its rods in, the console's screens and lamps, a piece of plant decor with its lit parts and what moves on it
+	 * standing still. Turned so its front, the side that faces whoever placed it, faces north: a block item's right side
+	 * in the slot (minecraft:block/block's gui rotation, 30 and 225 degrees).
+	 */
+	static void drawItem(EquipmentKind kind, PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, int light) {
+		Direction turned = Direction.SOUTH;
+		staticMesh(kind, true).replay(pose, consumer, turned, light);
+		int i = kind.ordinal();
+		if (ITEM_STILL[i] == null) {
+			Mesh still = new Mesh(), lit = new Mesh();
+			if (kind == EquipmentKind.REACTOR_VESSEL || kind == EquipmentKind.EPR_VESSEL) {
+				boolean epr = kind == EquipmentKind.EPR_VESSEL;
+				Frame head = new Frame(still, true), rods = new Frame(still, true);
+				if (epr) {
+					head.scale(EPR_SCALE);
+					rods.scale(EPR_SCALE);
+				}
+				vesselHead(head);
+				vesselRods(rods, 100);
+			} else if (kind == EquipmentKind.CONTROL_CONSOLE) {
+				consoleLamps(new Frame(lit, true), new State());
+			} else if (kind.decor()) {
+				PlantDecor.glow(kind, new Frame(lit, true));
+				PlantDecor.blink(kind, new Frame(lit, true), 0);
+				PlantDecor.liveLamps(kind, new Frame(lit, true), 0, 0, false);
+				PlantDecor.live(kind, new Frame(still, true), 0, 0, 0, false);
+			}
+			ITEM_LIT[i] = lit;
+			ITEM_STILL[i] = still;
+		}
+		if (ITEM_STILL[i].vertices() > 0) ITEM_STILL[i].replay(pose, consumer, turned, light);
+		if (ITEM_LIT[i].vertices() > 0) ITEM_LIT[i].replay(pose, consumer, turned, LightCoordsUtil.FULL_BRIGHT);
+	}
+
 	// ------------------------------------------------------------------ the equipment's frame and tiled primitives
 
 	/**

@@ -5,7 +5,7 @@ Each kit's model is built from its own structure (tools/tank_kits.py): every blo
 box in the block's own paint (the shell painted for the kit's rating, band by band, as the outlet paints it when it
 forms), and the small fittings (railing, ladder, nozzles, vents, foam chambers, vaporizer, legs) become
 small boxes in their colours. The whole tank is scaled to fit one block, so the slot shows it like a block item, turned
-so its front (where the label goes) faces the viewer's left and the outlet side the right. Like a block item it is a 3D
+so its front (where the label goes) faces the viewer's right and the outlet side the left. Like a block item it is a 3D
 model, not a flat item icon (docs/ITEM_ICONS.md: "block items that show their 3D block model in the slot" are not item
 icons).
 """
@@ -92,7 +92,7 @@ def item_model(kit, rid):
     ox, oz = (16 - W * s) / 2, (16 - D * s) / 2
 
     # Turned half round: the kit's front (south in its structure) faces the model's north, which a block item shows on
-    # the viewer's left in the slot.
+    # the viewer's right in the slot (minecraft:block/block's gui rotation, 30 and 225 degrees).
     def to_model(x, z):
         return W - 1 - x, D - 1 - z
 

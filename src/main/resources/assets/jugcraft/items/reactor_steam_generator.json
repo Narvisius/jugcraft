@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/reactor_steam_generator"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/reactor_steam_generator",
+    "model": {
+      "type": "jugcraft:equipment",
+      "kind": "reactor_steam_generator"
+    }
   }
 }

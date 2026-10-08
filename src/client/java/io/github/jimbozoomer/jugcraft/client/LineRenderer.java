@@ -206,6 +206,29 @@ public class LineRenderer implements BlockEntityRenderer<LineAnchorBlockEntity, 
 		});
 	}
 
+	// ------------------------------------------------------------------ the item
+
+	/**
+	 * The structures' item texture: the material sheet with every region one flat colour (its average), drawn by
+	 * tools/structure_items.py. Shrunk to a slot, a block-sized texture tile is smaller than a pixel and would sparkle.
+	 */
+	public static final Identifier ITEM_TEXTURE = Jugcraft.id("textures/entity/power_lines_item.png");
+
+	/**
+	 * The structure as its item shows it (client/StructureItemRenderers.java): standing on level ground, unwired, its
+	 * crossarms along x, its warning lights lit.
+	 */
+	static void drawItem(LineKind kind, PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, int light) {
+		State s = new State();
+		s.kind = kind;
+		s.bodyLight = light;
+		s.topLight = light;
+		Geometry g = new Geometry(pose, consumer);
+		g.light = light;
+		g.translate(0.5, 0, 0.5);
+		drawStructure(g, s);
+	}
+
 	// ------------------------------------------------------------------ structures
 
 	private static void drawStructure(Geometry g, State s) {

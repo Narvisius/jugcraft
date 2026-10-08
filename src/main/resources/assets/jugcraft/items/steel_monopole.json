@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/steel_monopole"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/steel_monopole",
+    "model": {
+      "type": "jugcraft:power_line",
+      "kind": "steel_monopole"
+    }
   }
 }

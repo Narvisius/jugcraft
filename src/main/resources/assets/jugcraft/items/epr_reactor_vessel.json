@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/epr_reactor_vessel"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/epr_reactor_vessel",
+    "model": {
+      "type": "jugcraft:equipment",
+      "kind": "epr_reactor_vessel"
+    }
   }
 }
