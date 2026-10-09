@@ -1,0 +1,50 @@
+{
+  "textures": {
+    "sg_steel": "jugcraft:block/sg_steel",
+    "sg_steel_top": "jugcraft:block/sg_steel_top",
+    "sg_end": "jugcraft:block/sg_end",
+    "sg_plinth": "jugcraft:block/sg_plinth",
+    "sg_reader": "jugcraft:block/sg_reader",
+    "sg_screen": "jugcraft:block/sg_screen",
+    "sg_glass": {
+      "sprite": "jugcraft:block/sg_glass",
+      "force_translucent": true
+    },
+    "sg_door_lights": "jugcraft:block/sg_door_lights",
+    "sg_mat": "jugcraft:block/sg_mat",
+    "sg_post": "jugcraft:block/sg_post",
+    "sg_sign_case": "jugcraft:block/sg_sign_case",
+    "sg_sign_go": "jugcraft:block/sg_sign_go",
+    "sg_sign_stop": "jugcraft:block/sg_sign_stop",
+    "sg_led_blue": "jugcraft:block/sg_led_blue",
+    "sg_led_green": "jugcraft:block/sg_led_green",
+    "sg_slot": "jugcraft:block/sg_slot",
+    "sg_rubber": "jugcraft:block/sg_rubber",
+    "particle": "jugcraft:block/sg_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        -2,
+        0,
+        -16
+      ],
+      "to": [
+        18,
+        0.4,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#sg_mat",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

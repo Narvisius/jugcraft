@@ -158,9 +158,10 @@ blueprint (for players who lay out their own plant).
     blocks long, 30 cells in clear jars), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room;
-    the remote shutdown room; the locker room; and the secure entrance (a vestibule, the security counter and camera
-    desk, badge turnstiles). Hydrogen exhaust louvres high in the battery rooms' outside walls. The vestibule, the
-    glass along the turnstiles and the shift supervisor's office are Framed Glass (below).
+    the remote shutdown room; the locker room; and the secure entrance (a vestibule; the security counter, its chairs
+    clear of the wall, and the camera desk; an entry and an exit Speed Gate, below, with framed glass from them to both
+    walls). Hydrogen exhaust louvres high in the battery rooms' outside walls. The vestibule, the glass along the speed
+    gates and the shift supervisor's office are Framed Glass (below).
   - First floor: the cable spreading room under the control room (three tiers of tray, risers up into it), the relay
     room, the server room on its raised floor.
   - Second floor: the main control room (the horseshoe of boards under the plant display wall, the reactor console,
@@ -183,6 +184,19 @@ blueprint (for players who lay out their own plant).
   door's head, the head over it, glass above). Clear glass with a faint tint, no sheen. The Glass Door is built from
   the same parts: a 3D frame, real glass and a push bar. Recipe: 4 glass panes with an iron nugget between each pair
   make 4.
+- **Speed Gate** (`nuclear/SpeedGateBlock.java`, `SpeedGatePedestalBlock.java`, `SpeedGateBlockEntity.java`,
+  `client/SpeedGateRenderer.java`, `tools/speed_gate.py`; Justin, 8 October 2026, after the sliding glass fare gates
+  at Grand Central): a one-way security lane. Placed looking the way through, it stands on the block you come in by,
+  keeps the block ahead clear and puts a brushed stainless pedestal either side of both (two blocks long, rounded
+  ends with a card reader and screen, an arch over the door line). Two tall glass doors, edge-lit with green light
+  bars, meet in the middle; walk up to them the way through and they slide back into slots in the pedestals (brush
+  seals either side of each slot) and close a moment after the lane is clear. From the other side they stay shut, and
+  shut they cannot be jumped. Lights along the pedestals show blue waiting and green open; a sign gantry over the lane
+  shows a green arrow to the way in and a red cross to the other side. Lanes stand side by side on a shared pedestal:
+  an exit lane beside an entry lane facing the other way (as at the plants), or more of either. Each pedestal has two
+  slots, one each side of the line, and the lanes along a row take them in turn, so the doors of two lanes never meet
+  inside a pedestal. Breaking the lane block takes the pedestals only it used; breaking a pedestal takes the lanes
+  beside it. One item, crafted from glass panes, steel plates and redstone.
 - **Building:** drones build from the lowest unfinished layer up a few layers at a time (see the blueprint system
   doc). In creative, `/nuclear build <blueprint> [fuelled]` builds one at once.
 - **Checked before building:** `tools/nuclear_plants.py` follows the pipes the way `ReactorUnit` does and refuses to

@@ -73,6 +73,9 @@ TANK_PLATE = M("jugcraft:storage_tank_plate[band=wall,formed=false]", (150, 156,
 FGLASS = {f: M(f"jugcraft:framed_glass[facing={f}]", (186, 212, 218)) for f in ("north", "south", "east", "west")}
 # Railing is laid as this placeholder and joined up at the end (finish_railings), like the game joins it.
 RAIL = M("jugcraft:railing", (232, 190, 30))
+# A speed gate's lane (shut) and the pedestals either side of it, along z (tools/speed_gate.py).
+SPEED_GATE = {f: M(f"jugcraft:speed_gate[facing={f},open=false,part=lane]", (90, 96, 104)) for f in ("north", "south")}
+GATE_PEDESTAL = {h: M(f"jugcraft:speed_gate_pedestal[axis=z,half={h}]", (176, 180, 184)) for h in ("a", "b")}
 LOUVRE = M("jugcraft:intake_louvre", (150, 154, 152))
 # A steel fluid pipe run inside a wall (wallrun/WallRuns.java): it takes the wall's look when it is built.
 WALL_PIPE = M("jugcraft:wall_steel_fluid_pipe[down=false,east=false,north=false,south=false,up=false,west=false]", (120, 128, 136))
@@ -862,7 +865,7 @@ def control_building(s, ox, oz):
     with the safety-related DC power at grade, each train in its own fire-separated rooms (NRC fire hazards analyses of
     TMI, Susquehanna and Peach Bottom; IEEE 484 battery rooms).
 
-    Grade: a small entrance (an airlock-style vestibule, the security officer's desk, badge turnstiles) in place of the
+    Grade: a small entrance (an airlock-style vestibule, the security officer's desk, speed gates) in place of the
     old empty lobby; Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (plant_panels'
     station_battery) with its cables up a riser into a tray and across to the DC Equipment Room next door, down into the
     125 VDC switchboard beside the chargers and vital inverters; the 480 V switchgear; the remote shutdown room; the
@@ -971,7 +974,7 @@ def ground_floor(b, W, D):
     b.furniture("fire_extinguisher", 21, 2, 6, "west")
 
     # ---- The entrance hall (x 1..12, z 19..28): in through the glass doors to a vestibule, a second pair of glass doors,
-    # the security officer at his desk behind the counter, the badge turnstiles, and through them the doors to the
+    # the security officer at his desk behind the counter, the speed gates, and through them the doors to the
     # corridor. A status screen, a notice board, a bench.
     b.b(1, 0, 19, 12, 0, D - 2, VINYL)
     b.b(3, 0, 26, 8, 0, D - 2, CARPET)
@@ -984,23 +987,31 @@ def ground_floor(b, W, D):
         for x in range(2, 10):
             b.p(x, y, 25, FGLASS["north"] if y <= 3 else PAINTED)
     b.door(6, 1, 25, "north", kind="glass", double=True)
-    # The security counter facing the hall, the officer behind it; his camera desk inside the turnstiles.
-    b.row(("reception_desk", 3), 11, 1, 23, "west", seat="operator_chair")
+    # The security counter in the hall (z 23..25), facing the way in, the officers' chairs behind it clear of the
+    # wall; the camera desk inside the gates.
+    b.row(("reception_desk", 3), 10, 1, 25, "west", seat="operator_chair")
     b.furniture("cctv_desk", 12, 1, 20, "east")
     b.p(11, 1, 20, furniture("operator_chair", "east"))
-    # The badge turnstiles across the hall, glass either side up to the counter, then the doors in to the plant.
-    for x in (5, 6, 7):
-        b.furniture("turnstile", x, 1, 21, "north")
+    # The speed gates across the hall (Justin: "the ones with the two doors ... it'll just open one way"): the entry
+    # lane on the west, opening for whoever walks up from the hall, the exit lane beside it opening for whoever comes
+    # out; three pedestals, the middle one shared, each lane's doors sliding back into their own slots. The door line
+    # is the south edge of z 21, the framed glass either side on the same line (nuclear/SpeedGateBlock.java).
+    b.p(5, 1, 22, SPEED_GATE["north"])
+    b.p(7, 1, 21, SPEED_GATE["south"])
+    for x in (4, 6, 8):
+        b.p(x, 1, 21, GATE_PEDESTAL["a"])
+        b.p(x, 1, 22, GATE_PEDESTAL["b"])
+    # The glass runs on from the outer pedestals to both walls: the counter is on the hall side, so nobody gets round.
     for y in (1, 2):
-        for x in (1, 2, 3, 4, 8, 9, 10):
+        for x in (1, 2, 3, 9, 10, 11, 12):
             b.p(x, y, 21, FGLASS["north"])
     b.door(6, 1, 18, "north", double=True)
-    # The plant's status on a screen, a bench by the window, a notice board.
+    # The plant's status on a screen, a bench by the window, a notice board; the potted plants against the walls.
     wall_screen(b, "status_screen", 1, 2, 24, "west")
     b.row(("sofa", 2), 12, 1, 27, "west")
     b.varied("whiteboard", 10, 2, 28, "south", 24)
     b.plant(1, 1, 20)
-    b.plant(10, 1, 24)
+    b.plant(1, 1, 22)
     b.furniture("water_cooler", 1, 1, 23, "west")
     b.furniture("fire_extinguisher", 12, 2, 25, "east")
     # ---- Locker room (x 14..17): lockers along both walls, a bench down the middle.

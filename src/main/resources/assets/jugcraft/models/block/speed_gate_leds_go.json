@@ -1,0 +1,279 @@
+{
+  "textures": {
+    "sg_steel": "jugcraft:block/sg_steel",
+    "sg_steel_top": "jugcraft:block/sg_steel_top",
+    "sg_end": "jugcraft:block/sg_end",
+    "sg_plinth": "jugcraft:block/sg_plinth",
+    "sg_reader": "jugcraft:block/sg_reader",
+    "sg_screen": "jugcraft:block/sg_screen",
+    "sg_glass": {
+      "sprite": "jugcraft:block/sg_glass",
+      "force_translucent": true
+    },
+    "sg_door_lights": "jugcraft:block/sg_door_lights",
+    "sg_mat": "jugcraft:block/sg_mat",
+    "sg_post": "jugcraft:block/sg_post",
+    "sg_sign_case": "jugcraft:block/sg_sign_case",
+    "sg_sign_go": "jugcraft:block/sg_sign_go",
+    "sg_sign_stop": "jugcraft:block/sg_sign_stop",
+    "sg_led_blue": "jugcraft:block/sg_led_blue",
+    "sg_led_green": "jugcraft:block/sg_led_green",
+    "sg_slot": "jugcraft:block/sg_slot",
+    "sg_rubber": "jugcraft:block/sg_rubber",
+    "particle": "jugcraft:block/sg_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        -2.0,
+        13.4,
+        -15
+      ],
+      "to": [
+        -1.9,
+        14.2,
+        -4.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            1.8,
+            2.0,
+            2.6
+          ]
+        },
+        "south": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            1.8,
+            14.1,
+            2.6
+          ]
+        },
+        "east": {
+          "texture": "#sg_led_green",
+          "uv": [
+            4.6,
+            1.8,
+            15.0,
+            2.6
+          ]
+        },
+        "west": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.0,
+            1.8,
+            11.4,
+            2.6
+          ]
+        },
+        "up": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            1.0,
+            14.1,
+            11.4
+          ]
+        },
+        "down": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            4.6,
+            14.1,
+            15.0
+          ]
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        -2.0,
+        13.4,
+        4.6
+      ],
+      "to": [
+        -1.9,
+        14.2,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            1.8,
+            2.0,
+            2.6
+          ]
+        },
+        "south": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            1.8,
+            14.1,
+            2.6
+          ]
+        },
+        "east": {
+          "texture": "#sg_led_green"
+        },
+        "west": {
+          "texture": "#sg_led_green"
+        },
+        "up": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            4.6,
+            14.1,
+            15.0
+          ]
+        },
+        "down": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            1.0,
+            14.1,
+            11.4
+          ]
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        17.9,
+        13.4,
+        -15
+      ],
+      "to": [
+        18.0,
+        14.2,
+        -4.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            1.8,
+            14.1,
+            2.6
+          ]
+        },
+        "south": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            1.8,
+            2.0,
+            2.6
+          ]
+        },
+        "east": {
+          "texture": "#sg_led_green",
+          "uv": [
+            4.6,
+            1.8,
+            15.0,
+            2.6
+          ]
+        },
+        "west": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.0,
+            1.8,
+            11.4,
+            2.6
+          ]
+        },
+        "up": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            1.0,
+            2.0,
+            11.4
+          ]
+        },
+        "down": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            4.6,
+            2.0,
+            15.0
+          ]
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        17.9,
+        13.4,
+        4.6
+      ],
+      "to": [
+        18.0,
+        14.2,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sg_led_green",
+          "uv": [
+            14.0,
+            1.8,
+            14.1,
+            2.6
+          ]
+        },
+        "south": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            1.8,
+            2.0,
+            2.6
+          ]
+        },
+        "east": {
+          "texture": "#sg_led_green"
+        },
+        "west": {
+          "texture": "#sg_led_green"
+        },
+        "up": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            4.6,
+            2.0,
+            15.0
+          ]
+        },
+        "down": {
+          "texture": "#sg_led_green",
+          "uv": [
+            1.9,
+            1.0,
+            2.0,
+            11.4
+          ]
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

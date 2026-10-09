@@ -216,8 +216,9 @@ def check_assets(registered):
         if not (DATA / MOD / "loot_table" / "blocks" / f"{block}.json").is_file():
             err(f"Missing loot table for {block}")
     # Crops, stems, the cranberry bush and the chestnut sapling have no item of their own: what plants them stands in.
+    import plant_interior
     for item in registered:
-        if item in CROPS or item in ag.itemless_blocks():
+        if item in CROPS or item in ag.itemless_blocks() or item in plant_interior.NO_ITEM:
             continue
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
@@ -2842,7 +2843,7 @@ def check_tower():
     if modules != list(tower.MODULES):
         err("JugcraftTower.MODULES differs from tools/tower.py")
     for block in tower.FURNITURE:
-        if f'furniture("{block}"' not in java:
+        if f'furniture("{block}"' not in java and f'block("{block}",' not in java:
             err(f"JugcraftTower does not register furniture {block}")
     if not (ROOT / "src" / "main" / "resources" / "data" / "jugcraft" / "drone_tower" / "tower.json.gz").exists():
         err("missing tower data: run tools/drone_tower.py")

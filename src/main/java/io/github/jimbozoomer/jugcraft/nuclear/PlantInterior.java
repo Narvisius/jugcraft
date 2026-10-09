@@ -50,7 +50,6 @@ public final class PlantInterior {
 			{"whiteboard", 0, "variant:24", "metal", new double[] {0.5, 3, 0, 15.5, 15, 1.6}},
 			{"water_cooler", 0, "plain", "metal", new double[] {4, 0, 4, 12, 16, 12}},
 			{"guard_rail", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 2}},
-			{"turnstile", 0, "plain", "metal", new double[] {8.5, 0, 0.5, 15.5, 16, 15.5}},
 			{"locker", 0, "stack", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"locker_open", 0, "locker:lab", "metal", new double[] {1, 0, 2, 15, 16, 15}},
 			{"bookcase", 0, "stack", "wood", new double[] {1, 0, 1, 15, 16, 15}},
@@ -129,6 +128,7 @@ public final class PlantInterior {
 	public static BlockEntityType<LockerBlockEntity> LOCKER_ENTITY;
 	public static BlockEntityType<StorageRackBlockEntity> RACK_ENTITY;
 	public static BlockEntityType<RollerDoorBlockEntity> ROLLER_ENTITY;
+	public static BlockEntityType<SpeedGateBlockEntity> SPEED_GATE_ENTITY;
 	public static Item LAB_COAT, SECURITY_JACKET;
 
 	public static Item uniform(UniformItem.Kind kind) {
@@ -222,6 +222,14 @@ public final class PlantInterior {
 			Registry.register(BuiltInRegistries.ITEM, itemKey, new DoubleHighBlockItem(door, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
 			BLOCKS.put(id, door);
 		}
+		// The speed gate: its lane block (the item) and its pedestals (no item: they come with the gates).
+		block("speed_gate", SpeedGateBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F, 12F).noOcclusion()
+				.sound(net.minecraft.world.level.block.SoundType.METAL));
+		ResourceKey<Block> pedestalKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("speed_gate_pedestal"));
+		BLOCKS.put("speed_gate_pedestal", Registry.register(BuiltInRegistries.BLOCK, pedestalKey, new SpeedGatePedestalBlock(
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F, 12F).noOcclusion().setId(pedestalKey))));
+		SPEED_GATE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("speed_gate"),
+				FabricBlockEntityTypeBuilder.create(SpeedGateBlockEntity::new, BLOCKS.get("speed_gate")).build());
 		// Framed glass: a storefront partition that meets the glass doors flush (FramedGlassBlock).
 		block("framed_glass", FramedGlassBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS_PANE).strength(1.0F, 6F).noOcclusion());
 		ROLLER_DOOR = block("roller_door", RollerDoorBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F, 12F).noOcclusion());
@@ -246,7 +254,8 @@ public final class PlantInterior {
 			output.accept(LAB_COAT);
 			output.accept(SECURITY_JACKET);
 		});
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output -> BLOCKS.values().forEach(output::accept));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output -> BLOCKS.values().stream()
+				.filter(b -> b.asItem() != net.minecraft.world.item.Items.AIR).forEach(output::accept));
 	}
 
 	private static Block block(String name, java.util.function.Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {

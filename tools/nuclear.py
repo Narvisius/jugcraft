@@ -1552,7 +1552,10 @@ def write_assets(write, rid, assets, lang):
 
 def write_loot(write, rid, out, self_drop):
     for block in BLOCKS:
-        write(out / f"{block}.json", plant_interior.door_loot(rid, block) if block in plant_interior.DOORS else self_drop(block))
+        if block in plant_interior.NO_DROP:
+            write(out / f"{block}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{block}")})
+        else:
+            write(out / f"{block}.json", plant_interior.door_loot(rid, block) if block in plant_interior.DOORS else self_drop(block))
     # Breaking a frame block breaks the equipment, and its anchor drops the item.
     write(out / f"{FRAME}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{FRAME}")})
     storage_tank.write_loot(write, rid, out, self_drop)

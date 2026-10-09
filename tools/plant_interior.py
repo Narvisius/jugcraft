@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw
 
 import nuclear_materials as M
 import framed_glass
+import speed_gate
 import plant_office
 import plant_office2
 
@@ -93,10 +94,6 @@ FURNITURE = {
     "guard_rail": {"display": "Safety Railing", "boxes": [
         (7.2, 0, 0.4, 8.8, 16, 2, "pi_rail_yellow"), (0, 15, 0.6, 16, 16, 1.8, "pi_rail_yellow"),
         (0, 8, 0.8, 16, 9, 1.6, "pi_rail_yellow"), (0, 0, 0.6, 16, 2, 1.0, "pi_rail_yellow")]},
-    "turnstile": {"display": "Turnstile", "boxes": [
-        (9, 0, 1, 15, 14.5, 15, "pi_steel"), (8.5, 14.5, 0.5, 15.5, 16, 15.5, {"*": "pi_steel", "up": "pi_reader!"}),
-        (8, 10, 6.5, 9, 13, 9.5, "pi_chrome"), (1, 11, 7.4, 8, 12, 8.6, "pi_chrome")],
-        "glow": ["pi_reader"]},
 }
 FURNITURE["server_rack"]["glow"] = ["pi_server_face"]
 FURNITURE["relay_cabinet"]["glow"] = ["pi_relay_front"]
@@ -144,8 +141,12 @@ SIGNS = {
 OTHER["conference_table"] = "Round Meeting Table"
 MULTI = [k for k, v in FURNITURE.items() if "multi" in v]
 BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table",
-                                                                          framed_glass.BLOCK]
-NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER, framed_glass.BLOCK: framed_glass.DISPLAY}
+                                                                          framed_glass.BLOCK, speed_gate.GATE, speed_gate.PEDESTAL]
+# Blocks with no item and no drop of their own: a speed gate's pedestals come and go with the gates beside them
+# (nuclear/SpeedGatePedestalBlock.java).
+NO_ITEM = NO_DROP = {speed_gate.PEDESTAL}
+NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER, framed_glass.BLOCK: framed_glass.DISPLAY,
+         speed_gate.GATE: speed_gate.DISPLAY, speed_gate.PEDESTAL: "Speed Gate Pedestal"}
 UNIFORMS = {"lab_coat": "Lab Coat", "security_jacket": "Security Jacket"}   # wearable (client/UniformLayer.java)
 ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"] + MULTI + list(UNIFORMS)
 
@@ -161,7 +162,6 @@ CRAFTING = {
     "whiteboard": (["QQQ", "P P"], {"Q": "minecraft:quartz", "P": "#c:plates/iron"}, 2),
     "water_cooler": (["G", "B", "P"], {"G": "minecraft:glass_bottle", "B": "minecraft:water_bucket", "P": "#c:plates/iron"}, 1),
     "guard_rail": (["YYY", "S S"], {"Y": "minecraft:yellow_dye", "S": "minecraft:iron_nugget"}, 8),
-    "turnstile": (["SRS", "S S"], {"S": STEEL_PLATE, "R": "minecraft:redstone"}, 1),
     "ceiling_tile": (["WWW", "WNW", "WWW"], {"W": "minecraft:white_wool", "N": "minecraft:iron_nugget"}, 8),
     "vinyl_floor": (["SS", "SS"], {"S": "jugcraft:plastic_sheet"}, 8),
     "epoxy_floor": (["CCC", "CSC", "CCC"], {"C": "minecraft:light_gray_concrete", "S": "jugcraft:plastic_sheet"}, 8),
@@ -177,6 +177,7 @@ CRAFTING = {
 }
 CRAFTING.update(plant_office.CRAFTING)
 CRAFTING.update(framed_glass.CRAFTING)
+CRAFTING.update(speed_gate.CRAFTING)
 CRAFTING.update(plant_office2.CRAFTING)
 CRAFTING.update(plant_office2.PN.CRAFTING)
 CRAFTING["lab_coat"] = (["W W", "WWW", "WWW"], {"W": "minecraft:white_wool"}, 1)
@@ -224,7 +225,8 @@ def textures_used():
 TEXTURES = {t for t in textures_used() if not t.startswith("mc_")} | set(CUBES) | {"hvac_duct", "hvac_duct_top", "pi_roller_slats", "pi_sign"} | \
     {"steel_door_top", "steel_door_bottom"}
 FRAMED_TEXTURES = set(framed_glass.draw_textures())   # the framed glass and the glass door (tools/framed_glass.py)
-HI_RES = TEXTURES | set(ITEM_TEXTURES) | FRAMED_TEXTURES
+GATE_TEXTURES = set(speed_gate.TEXTURES)              # the speed gate (tools/speed_gate.py)
+HI_RES = TEXTURES | set(ITEM_TEXTURES) | FRAMED_TEXTURES | GATE_TEXTURES
 
 
 # --------------------------------------------------------------------------------------------------- models
@@ -499,6 +501,7 @@ def write_assets(write, rid, assets, lang):
         write(assets / "models" / "item" / f"{door}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{door}")}})
         write(assets / "items" / f"{door}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{door}")}})
     framed_glass.write_assets(write, rid, assets, lang)
+    speed_gate.write_assets(write, rid, assets, lang)
     # The roller door: slats in the middle of the opening, nothing when rolled up; while it rolls (moving) the block
     # model is empty and client/RollerDoorRenderer.java draws the curtain moving and the coil at the top.
     lang[f"block.{MOD}.roller_door"] = OTHER["roller_door"]
@@ -952,6 +955,7 @@ def draw_block_textures():
             alpha = src.convert("RGBA").split()[3].resize(out[name].size)
             out[name].putalpha(alpha)
     out.update(framed_glass.draw_textures())   # drawn at 64 px already; the glass keeps its partial alpha
+    out.update(speed_gate.draw_textures())
     return out
 
 

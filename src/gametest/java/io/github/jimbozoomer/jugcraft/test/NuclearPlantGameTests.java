@@ -11,12 +11,17 @@ import io.github.jimbozoomer.jugcraft.nuclear.PlantInterior;
 import io.github.jimbozoomer.jugcraft.nuclear.PlantBuilder;
 import io.github.jimbozoomer.jugcraft.nuclear.ReactorCore;
 import io.github.jimbozoomer.jugcraft.nuclear.ReactorUnit;
+import io.github.jimbozoomer.jugcraft.nuclear.SpeedGateBlock;
+import io.github.jimbozoomer.jugcraft.nuclear.SpeedGateBlockEntity;
+import io.github.jimbozoomer.jugcraft.nuclear.SpeedGatePedestalBlock;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.GameType;
@@ -37,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340688"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340693"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -285,6 +290,7 @@ public class NuclearPlantGameTests {
 	@GameTest(maxTicks = 20)
 	public void framedGlassMeetsTheDoorFlush(GameTestHelper helper) {
 		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
 			return;
 		}
 		for (int x = 0; x < 5; x++) {
@@ -330,6 +336,7 @@ public class NuclearPlantGameTests {
 	@GameTest(maxTicks = 20)
 	public void framedGlassFramesOnlyWhereItNeedsSupport(GameTestHelper helper) {
 		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
 			return;
 		}
 		// A run along x (facing north) three wide and three high with a door in the middle and glass over it.
@@ -370,6 +377,155 @@ public class NuclearPlantGameTests {
 		helper.getLevel().setBlock(turn, block.connected(at(helper, turn), helper.getLevel(), turn), Block.UPDATE_ALL);
 		helper.assertTrue(at(helper, end).getValue(FramedGlassBlock.LEFT) == FramedGlassBlock.End.CORNER, "a corner post: " + at(helper, end));
 		helper.assertTrue(at(helper, turn).getValue(FramedGlassBlock.RIGHT) == FramedGlassBlock.End.JOIN, "the turned run carries on into it: " + at(helper, turn));
+		helper.succeed();
+	}
+
+	// ------------------------------------------------------------------ speed gates
+
+	private static void stoneFloor(GameTestHelper helper) {
+		for (int x = 0; x < 7; x++) {
+			for (int z = 0; z < 7; z++) {
+				helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE.defaultBlockState());
+			}
+		}
+	}
+
+	/** A speed gate placed as a player would, looking {@code facing} at (x, 1, z): the lane block and its pedestals. */
+	private static BlockPos speedGate(GameTestHelper helper, int x, int z, Direction facing) {
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.CREATIVE);
+		BlockPos target = helper.absolutePos(new BlockPos(x, 1, z));
+		player.setPos(target.getX() + 0.5 - facing.getStepX() * 3, target.getY(), target.getZ() + 0.5 - facing.getStepZ() * 3);
+		player.setYRot(facing.toYRot());
+		Block gate = PlantInterior.BLOCKS.get("speed_gate");
+		ItemStack stack = new ItemStack(gate);
+		player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+		BlockPos floor = target.below();
+		BlockPlaceContext place = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, stack,
+				new BlockHitResult(Vec3.atCenterOf(floor).relative(Direction.UP, 0.5), Direction.UP, floor, false));
+		BlockState state = gate.getStateForPlacement(place);
+		helper.assertTrue(state != null && state.getValue(SpeedGateBlock.FACING) == facing, "a speed gate fits at " + x + ", " + z + " facing " + facing);
+		helper.getLevel().setBlock(target, state, Block.UPDATE_ALL);
+		gate.setPlacedBy(helper.getLevel(), target, state, player, stack);
+		player.setGameMode(GameType.SPECTATOR);   // out of the gates' sight
+		return target;
+	}
+
+	private static boolean open(GameTestHelper helper, BlockPos lane) {
+		return helper.getLevel().getBlockState(lane).getValue(SpeedGateBlock.OPEN);
+	}
+
+	/** An entry lane and an exit lane side by side, as at the plants: three pedestals, the middle one shared. */
+	@GameTest(maxTicks = 20)
+	public void speedGatesShareTheirMiddlePedestal(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		stoneFloor(helper);
+		BlockPos entry = speedGate(helper, 2, 3, Direction.NORTH);
+		// The exit lane fits beside it, its pedestal on that side already standing.
+		BlockPos exit = speedGate(helper, 4, 2, Direction.SOUTH);
+		Block pedestal = PlantInterior.BLOCKS.get("speed_gate_pedestal");
+		for (int x : new int[] {1, 3, 5}) {
+			for (int z = 2; z <= 3; z++) {
+				BlockState at = helper.getBlockState(new BlockPos(x, 1, z));
+				helper.assertTrue(at.is(pedestal) && at.getValue(SpeedGatePedestalBlock.AXIS) == Direction.Axis.Z
+						&& at.getValue(SpeedGatePedestalBlock.HALF) == (z == 3 ? SpeedGatePedestalBlock.Half.B : SpeedGatePedestalBlock.Half.A),
+						"a pedestal along the lanes at " + x + ", " + z + ": " + at);
+			}
+		}
+		helper.assertTrue(helper.getBlockState(new BlockPos(2, 1, 2)).isAir() && helper.getBlockState(new BlockPos(4, 1, 3)).isAir(),
+				"the way through each lane is left clear");
+		// Their doors take the shared pedestal's two slots, each lane's in its own block, wherever the pair stands.
+		ServerLevel level = helper.getLevel();
+		helper.assertTrue(SpeedGateBlock.slotSign(level, entry, Direction.NORTH) != SpeedGateBlock.slotSign(level, exit, Direction.SOUTH),
+				"the two lanes' doors run in different slots");
+		helper.assertTrue(SpeedGateBlock.ownSlot(level, entry, Direction.NORTH) && SpeedGateBlock.ownSlot(level, exit, Direction.SOUTH),
+				"each lane's doors run in its own block");
+		// Shut, the doors bar the way where they are drawn (2 px behind the line), too high to jump.
+		AABB doors = level.getBlockState(entry).getCollisionShape(level, entry).bounds();
+		helper.assertTrue(doors.minZ > 0.05 && doors.maxZ < 0.2 && doors.maxY >= 1.5 && doors.minX <= 0 && doors.maxX >= 1,
+				"the entry lane's shut doors: " + doors);
+		helper.assertTrue(level.getBlockState(entry).setValue(SpeedGateBlock.OPEN, true).getCollisionShape(level, entry).isEmpty(),
+				"open, nothing in the way");
+		// Built turned (a blueprint placed another way round), each pedestal is still the one its lane wants there.
+		for (Rotation rotation : Rotation.values()) {
+			for (BlockPos cell : SpeedGateBlock.pedestals(entry, Direction.NORTH)) {
+				BlockState turned = level.getBlockState(cell).rotate(rotation);
+				BlockState want = SpeedGateBlock.pedestalState(cell.rotate(rotation), entry.rotate(rotation), rotation.rotate(Direction.NORTH));
+				helper.assertTrue(turned.equals(want), rotation + ": " + turned + ", wanted " + want);
+			}
+		}
+		helper.succeed();
+	}
+
+	/** The doors open for someone walking up to them the way through, stay open while they pass, and shut behind them. */
+	@GameTest(maxTicks = 100)
+	public void speedGateOpensOnlyTheWayThrough(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		stoneFloor(helper);
+		BlockPos lane = speedGate(helper, 2, 3, Direction.NORTH);
+		ServerPlayer walker = helper.makeMockServerPlayerInLevel();
+		walker.setGameMode(GameType.SURVIVAL);
+		// The line is the lane block's north edge. Coming the wrong way, up to the doors from the north: they stay shut.
+		walker.setPos(lane.getX() + 0.5, lane.getY(), lane.getZ() - 0.6);
+		helper.runAfterDelay(10, () -> {
+			helper.assertTrue(!open(helper, lane), "shut to someone coming the wrong way");
+			walker.setPos(lane.getX() + 0.5, lane.getY(), lane.getZ() + 0.6);
+		});
+		helper.runAfterDelay(20, () -> {
+			helper.assertTrue(open(helper, lane), "open for someone walking up the lane to them");
+			walker.setPos(lane.getX() + 0.5, lane.getY(), lane.getZ() - 0.3);
+		});
+		helper.runAfterDelay(20 + SpeedGateBlockEntity.CLOSE_AFTER + 10, () -> {
+			helper.assertTrue(open(helper, lane), "still open while someone is between the pedestals");
+			walker.setPos(lane.getX() + 0.5, lane.getY(), lane.getZ() - 3.5);
+		});
+		helper.runAfterDelay(40 + 2 * SpeedGateBlockEntity.CLOSE_AFTER + 10, () -> {
+			helper.assertTrue(!open(helper, lane), "shut again once the lane is clear");
+			walker.setGameMode(GameType.SPECTATOR);
+			helper.succeed();
+		});
+	}
+
+	/** Taking a lane away takes the pedestals only it used; breaking a pedestal takes its lane, which drops one gate. */
+	@GameTest(maxTicks = 20)
+	public void speedGateComesDownWhole(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		stoneFloor(helper);
+		BlockPos entry = speedGate(helper, 2, 3, Direction.NORTH);
+		BlockPos exit = speedGate(helper, 4, 2, Direction.SOUTH);
+		ServerLevel level = helper.getLevel();
+		Block pedestal = PlantInterior.BLOCKS.get("speed_gate_pedestal");
+		level.destroyBlock(exit, false);
+		for (int z = 2; z <= 3; z++) {
+			helper.assertTrue(helper.getBlockState(new BlockPos(1, 1, z)).is(pedestal) && helper.getBlockState(new BlockPos(3, 1, z)).is(pedestal),
+					"the entry lane keeps its pedestals, the shared one too (z " + z + ")");
+			helper.assertTrue(helper.getBlockState(new BlockPos(5, 1, z)).isAir(), "the exit lane's own pedestal goes with it (z " + z + ")");
+		}
+		level.destroyBlock(helper.absolutePos(new BlockPos(1, 1, 2)), true);
+		helper.assertTrue(level.getBlockState(entry).isAir(), "breaking a pedestal takes the lane it serves");
+		for (int x : new int[] {1, 3}) {
+			for (int z = 2; z <= 3; z++) {
+				helper.assertTrue(helper.getBlockState(new BlockPos(x, 1, z)).isAir(), "and its other pedestals (" + x + ", " + z + ")");
+			}
+		}
+		int gates = 0, others = 0;
+		for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, new AABB(entry).inflate(4))) {
+			if (item.getItem().is(PlantInterior.BLOCKS.get("speed_gate").asItem())) {
+				gates += item.getItem().getCount();
+			} else {
+				others++;
+			}
+		}
+		helper.assertTrue(gates == 1 && others == 0, "one speed gate dropped and nothing else: " + gates + " gates, " + others + " others");
 		helper.succeed();
 	}
 }
