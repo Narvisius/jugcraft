@@ -732,11 +732,14 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						{142, 0, 112, 142, 1, 109}, {139, 0, 111, 142, 0, 110},
 						// The control room (round 23): the reactor console in line with the boards, the reactor coolant
 						// board up close, the operators' consoles.
-						{151, 14, 96, 151, 15, 90}, {147, 14, 95, 147, 15, 90}, {149, 14, 101, 146, 14, 96}};
+						{151, 14, 96, 151, 15, 90}, {147, 14, 95, 147, 15, 90}, {149, 14, 101, 146, 14, 96},
+						// The remote shutdown room (round 24): the panel from the mat, the room from the door, the
+						// panel's screen and trip switches up close.
+						{141, 1, 101, 141, 1, 98}, {137, 2, 101, 144, 0, 99}, {141, 1, 100, 141, 1, 98}};
 				String[] ctrlNames = {"battery_1a", "battery_1a_riser", "dc_room_1a", "entrance_vestibule", "security_counter", "battery_1b",
 						"dc_room_1b_board", "stairs", "cable_spreading", "control_room", "control_room_supervisor", "hvac_floor", "entrance_outside",
 						"support_center", "vestibule_door_glass", "gate_glass", "supervisor_glass", "speed_gates", "speed_gates_side", "reactor_console", "rcs_board",
-						"operator_consoles"};
+						"operator_consoles", "remote_shutdown_panel", "remote_shutdown_room", "remote_shutdown_screen"};
 				for (int i = 0; i < ctrlShots.length; i++) {
 					int[] t = ctrlShots[i];
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
@@ -748,6 +751,36 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				shotAt(context, singleplayer, wx.applyAsInt(143), y, wz.applyAsInt(108), wx.applyAsInt(143), y, wz.applyAsInt(112),
 						"jugcraft_plant_medium_r23_ctrl_speed_gate_open");
 				singleplayer.getServer().runCommand("gamemode spectator @p");
+				// The remote shutdown panel with control transferred to it: the keys turned, the amber lamps lit, its
+				// screen saying so; then handed back.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					BlockPos at = new BlockPos(wx.applyAsInt(138), baseY, wz.applyAsInt(98));
+					if (!(level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity panel)
+							|| panel.kind() != io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+						throw new AssertionError("No remote shutdown panel at " + at.toShortString() + ": " + level.getBlockState(at));
+					}
+					panel.linkShutdownPanel(level);
+					if (panel.linked == null || !(level.getBlockEntity(panel.linked) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity vessel)) {
+						throw new AssertionError("The remote shutdown panel found no reactor");
+					}
+					vessel.core.remote = true;
+					vessel.changed();
+					panel.linkShutdownPanel(level);
+				});
+				context.waitTicks(20);
+				shotAt(context, singleplayer, wx.applyAsInt(140), y + 1, wz.applyAsInt(100), wx.applyAsInt(140), y + 1, wz.applyAsInt(98),
+						"jugcraft_plant_medium_r24_rsp_transferred");
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					BlockPos at = new BlockPos(wx.applyAsInt(138), baseY, wz.applyAsInt(98));
+					if (level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity panel && panel.linked != null
+							&& level.getBlockEntity(panel.linked) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity vessel) {
+						vessel.core.remote = false;
+						vessel.changed();
+						panel.linkShutdownPanel(level);
+					}
+				});
 				// Diesel room A's generator started (it turns over, fires and runs up to speed: the coupling and fan
 				// turning, the gauges up, smoke at the stack); its day tank drawn down so the storage tank refills it, and
 				// the day tank's screen showing it filling.

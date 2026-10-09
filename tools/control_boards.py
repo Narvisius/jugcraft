@@ -49,6 +49,27 @@ BLINK_DEPTH = 0.004                     # how far behind a flashing window its u
 
 # The new materials on the equipment sheet (row 7).
 NEW_MATERIALS = ["lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches"]
+# Row 8 (round 24, the remote shutdown panel; Justin: "make it look more realistic with detail"): engraved nameplates
+# with real legends in a 3 x 5 pixel font, the panel's title plates, digital indicators, placards and procedure binders.
+TEXT_MATERIALS = ["nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders"]
+
+# The nameplates' legends: each cell holds 16 plates (2 across, 8 down, 32 x 8 pixels), read left to right.
+NAMEPLATES = {
+    "nameplates": ["AFW PP A", "AFW PP B", "TDAFW PP", "CHG PP A", "CHG PP B", "PZR HT A", "PZR HT B", "PORV A",
+                   "PORV B", "BLOCK A", "BLOCK B", "RHR PP A", "RHR PP B", "CCW PP A", "CCW PP B", "SW PP A"],
+    "nameplates2": ["FCV 1", "FCV 2", "FCV 3", "FCV 4", "SG1 ARV", "SG2 ARV", "SG3 ARV", "SG4 ARV",
+                    "SW PP B", "BA PP A", "BA PP B", "LTDN ISO", "EDG A", "EDG B", "MSIV", "STM SPLY"],
+    "nameplates_inst": ["PZR PRES", "PZR LVL", "RCS TH", "RCS TC", "SG1 LVL", "SG2 LVL", "SG3 LVL", "SG4 LVL",
+                        "AFW FLOW", "CST LVL", "SR FLUX", "SUR", "TRIP A", "TRIP B", "SG PRES", "BAT LVL"],
+}
+# The red and yellow plates among the instruments' (a reactor trip's, a warning's).
+PLATE_COLOURS = {("nameplates_inst", 12): "red", ("nameplates_inst", 13): "red"}
+# Title plates: eight rows of 64 x 8 (a plate may take two rows: the panel's own title).
+TITLES = [("REMOTE SHUTDOWN", "red"), ("PANEL - UNIT 1", "red"), ("TRAIN A", "orange"), ("TRAIN B", "blue"),
+          ("AUX FEEDWATER", "white"), ("REACTOR COOLANT", "white"), ("CONTROL TRANSFER", "yellow"), ("INDICATION", "white")]
+# Digital indicators' readings (16, as the nameplates): red LED digits.
+READINGS = ["2235", "54.8", "557.2", "548.1", "44.0", "46.2", "45.1", "43.8", "412", "92.5", "1.2E2", "-0.03",
+            "1005", "998", "62.4", "128.6"]
 
 # Swatch cell: 4 x 4 patches. Mimic colours, plain colours, and label strips (row 3).
 SWATCH = {
@@ -88,6 +109,25 @@ def strip(mat, i, n=4):
     return [mat, (i + e) / n, 0.02, (i + 1 - e) / n, 0.98]
 
 
+def plate(cell, i):
+    """Nameplate i of a nameplate cell (or a digital indicator's reading): 2 across, 8 down."""
+    c, r = i % 2, i // 2
+    return [cell, c / 2 + 0.004, r / 8 + 0.004, (c + 1) / 2 - 0.004, (r + 1) / 8 - 0.004]
+
+
+def title(i, rows=1):
+    """Title plate i (a row of the titles cell; two rows for a two-line plate)."""
+    return ["titles", 0.004, i / 8 + 0.004, 0.996, (i + rows) / 8 - 0.004]
+
+
+def named(legend):
+    """The nameplate with this legend, from whichever cell holds it."""
+    for cell, legends in NAMEPLATES.items():
+        if legend in legends:
+            return plate(cell, legends.index(legend))
+    raise KeyError(legend)
+
+
 # ---------------------------------------------------------------- the board's profile
 
 DESK_FRONT = (0.86, 0.12)     # (y, z) of the desk's front edge
@@ -103,6 +143,14 @@ SCREENS = [(0.15 + i * 0.95, 1.35, 0.15 + i * 0.95 + 0.85, 1.85) for i in range(
 SCREEN_Z = FACE - 0.04
 LAMP_STRIP = (0.2, 1.94, 2.84, 2.02)       # eight lamps in it, at FACE - 0.02
 LAMP_Z = FACE - 0.02
+# The remote shutdown panel's live status screen (x0, y0, x1, y1 at RSP_SCREEN_Z; client/NuclearRenderer.java).
+RSP_SCREEN = (2.62, 1.75, 3.38, 2.45)
+RSP_SCREEN_Z = 0.3 - 0.04
+# Its status lamps (x, y of each lens's middle, at RSP_LAMP_Z): control room in control (white), this panel in
+# control (amber), reactor tripped (red).
+RSP_LAMPS = [(2.75, 1.64), (3.0, 1.64), (3.25, 1.64)]
+RSP_LAMP = 0.05
+RSP_LAMP_Z = 0.3 - 0.016
 
 
 def body():
@@ -110,9 +158,13 @@ def body():
 
 
 class Board:
-    def __init__(self, wide, seed):
+    def __init__(self, wide, seed, face=FACE):
         self.w = wide
+        self.face = face          # the depth of the board's vertical face (z)
         self.still, self.lit, self.blink = [], [], []
+        # Parts drawn one way or another by state (the remote shutdown panel's transfer switches: control at the control
+        # room, "mcr", or at the panel, "rsp"): each state's own still and lit operations, drawn over the board's.
+        self.states = {}
         self.r = random.Random(seed)
 
     # -- primitive operations
@@ -148,13 +200,149 @@ class Board:
         self.quad((w - 0.04, yf, zf), (w - 0.04, yf - 0.06, zf), (w - 0.04, yf - 0.06, zb), (w - 0.04, yb, zb), e)
         self.box(0.04, yf - 0.06, zf - 0.04, w - 0.04, yf + 0.006, zf, [TRIM, None, TRIM, TRIM, TRIM, TRIM])
         # The vertical board and its hood, the section's name along the hood's edge.
-        self.box(0.04, 0, FACE, w - 0.04, TOP, 1.96, [e, e, e, e, None, None])
+        self.box(0.04, 0, self.face, w - 0.04, TOP, 1.96, [e, e, e, e, None, None])
         self.box(0.04, TOP, 0.98, w - 0.04, 3.0, 1.96, [TRIM, TRIM, TRIM, TRIM, TRIM, TRIM])
         if name:
             x0, x1 = w / 2 - 0.6, w / 2 + 0.6
             self.box(x0, TOP + 0.008, 0.972, x1, 3.0 - 0.008, 0.98, [sw("label")] * 5 + [sw("label")])
         # Far away the renderer draws only this much of the board (and its lit parts).
         self.core = len(self.still)
+
+    def cabinet(self, sections):
+        """A vertical switchboard one block deep (the remote shutdown panel): sections bolted side by side (sections:
+        (x0, x1, doors) each, the seams between them dark lines up the face), its face at self.face, a writing ledge
+        across the front at waist height, under it each section's doors (hinges, a latch handle, louvres), a black
+        kick plate below and a cap on top."""
+        w = self.w
+        e = body()
+        self.box(0.04, 0.1, self.face, w - 0.04, TOP, 0.98, [e, e, e, e, None, None])
+        self.box(0.04, 0, self.face + 0.06, w - 0.04, 0.1, 0.98, [sw("black"), None, sw("black"), sw("black"), None, None])
+        self.box(0.04, TOP, self.face - 0.08, w - 0.04, 3.0, 0.98, [TRIM, TRIM, TRIM, TRIM, TRIM, TRIM])
+        self.box(0.06, 0.9, self.face - 0.28, w - 0.06, 0.95, self.face, [TRIM, None, TRIM, TRIM, TRIM, TRIM])
+        self.core = len(self.still)
+        for x0, x1, doors in sections:
+            if x0 > 0.1:
+                self.face_box(x0, (0.12 + TOP) / 2, 0.008, TOP - 0.14, 0.003, sw("black"), sw("black"))
+            dw = (x1 - x0) / doors
+            for k in range(doors):
+                d0, d1 = x0 + k * dw + 0.03, x0 + (k + 1) * dw - 0.03
+                mid = (d0 + d1) / 2
+                self.face_box(mid, 0.84, d1 - d0, 0.012, 0.004, sw("dgrey"), sw("dgrey"))
+                self.face_box(d1 - 0.07, 0.5, 0.025, 0.16, 0.03, sw("mgrey"), sw("mgrey"))
+                self.cyl((d1 - 0.07, 0.6, self.face - 0.004), (d1 - 0.07, 0.6, self.face - 0.02), 0.016, sw("dgrey"), sw("black"), 8)
+                for hy in (0.24, 0.7):
+                    self.face_box(d0 + 0.02, hy, 0.018, 0.07, 0.014, sw("dgrey"), sw("dgrey"))
+                for j in range(4):
+                    self.face_box(mid - 0.08, 0.2 + j * 0.055, min(0.42, d1 - d0 - 0.3), 0.018, 0.006, sw("dgrey"), sw("dgrey"))
+
+    def nameplate(self, x, y, mat, w=0.12, h=0.03, d=0.006):
+        """An engraved nameplate (white lamacoid, black letters) on the face."""
+        self.face_box(x, y, w, h, d, mat, sw("white"))
+
+    def placard(self, x, y, w, h, mat):
+        self.face_box(x, y, w, h, 0.003, mat, sw("white"))
+
+    def zone(self, pts, colour="black"):
+        """A demarcation line round a group of controls (a closed path of (x, y) points, turning square)."""
+        self.mimic(pts, colour, 0.012)
+
+    def digital_indicator(self, x, y, reading):
+        """A digital panel meter: its black case and the lit reading in red LED digits."""
+        self.face_box(x, y, 0.17, 0.07, 0.035, sw("black"), sw("dgrey"))
+        self.front_quad(x - 0.07, y - 0.022, x + 0.07, y + 0.022, self.face - 0.039, plate("digital", reading), self.lit)
+
+    def key_switch(self, x, y, legend):
+        """A transfer switch: its plate, the key-lock barrel with the key in it, the lamps above, its nameplate below.
+        By state: with control at the control room ("mcr") the key stands upright and the white lamp is lit; turned to
+        the panel ("rsp") it lies across and the amber lamp is lit."""
+        self.face_box(x, y, 0.1, 0.1, 0.012, sw("mgrey"), sw("dgrey"))
+        self.cyl((x, y, self.face - 0.012), (x, y, self.face - 0.04), 0.022, sw("dgrey"), sw("black"), 8)
+        for dx in (-0.021, 0.021):
+            self.lamp_rim(x + dx, y + 0.085, 0.026)
+        for name, local in (("mcr", False), ("rsp", True)):
+            s = self.state(name)
+            hx, hy = (0.022, 0.006) if local else (0.006, 0.022)
+            self.box(x - hx, y - hy, self.face - 0.07, x + hx, y + hy, self.face - 0.04, [sw("yellow")] * 5 + [None], s["still"])
+            for dx, colour in ((-0.021, "off_white" if local else "white"), (0.021, "amber" if local else "off_amber")):
+                h = 0.026 / 2 + 0.005
+                self.front_quad(x + dx - h, y + 0.085 - h, x + dx + h, y + 0.085 + h, self.face - 0.012, LENS[colour],
+                                s["still"] if colour.startswith("off") else s["lit"])
+        self.nameplate(x, y - 0.08, named(legend))
+
+    def lamp_rim(self, x, y, size=0.03, z=None, d=0.012):
+        """An indicating lamp's rim alone (its lens drawn by state, or by the renderer)."""
+        z = self.face if z is None else z
+        rim = sw("dgrey")
+        h = size / 2 + 0.005
+        self.box(x - h, y - h, z - d, x + h, y + h, z, [None, None, rim, rim, rim, rim])
+
+    def control_switch(self, x, y, legend, on, grip=True):
+        """A control switch on the face: its brushed escutcheon, a black pistol grip (a pump, a heater) or a knob (a
+        valve), the red and green lamps above (only the one for its state lit), its nameplate below."""
+        self.face_box(x, y, 0.1, 0.1, 0.012, sw("mgrey"), sw("dgrey"))
+        self.cyl((x, y, self.face - 0.012), (x, y, self.face - 0.03), 0.022, sw("black"), sw("dgrey"), 8)
+        if grip:
+            turn = 0.35 if on else -0.35
+            u = (math.cos(turn), math.sin(turn), 0)
+            self.obox((x, y, self.face - 0.042), u, (-u[1], u[0], 0), 0.04, 0.013, 0.012, sw("black"))
+        else:
+            self.cyl((x, y, self.face - 0.03), (x, y, self.face - 0.05), 0.03, sw("black"), sw("dgrey"), 10)
+        self.face_lamp(x - 0.021, y + 0.085, "red" if on else "off_red", 0.026)
+        self.face_lamp(x + 0.021, y + 0.085, "off_green" if on else "green", 0.026)
+        self.nameplate(x, y - 0.08, named(legend))
+
+    def face_guarded(self, x, y, legend):
+        """A reactor trip switch on a vertical panel: a big handle on its red plate under a hinged red guard, its red
+        nameplate below."""
+        self.face_box(x, y, 0.16, 0.16, 0.014, sw("red"))
+        self.face_box(x, y, 0.1, 0.03, 0.045, sw("black"))
+        for dx in (-0.075, 0.075):
+            self.face_box(x + dx, y, 0.012, 0.14, 0.08, sw("red"), sw("red"))
+        self.box(x - 0.074, y - 0.069, self.face - 0.079, x + 0.074, y - 0.057, self.face - 0.014, [sw("red")] * 6)
+        self.nameplate(x, y - 0.115, named(legend), 0.14)
+
+    def phone(self, x, y):
+        """The plant telephone: its grey case, keypad and the black handset on its hook."""
+        self.face_box(x, y, 0.13, 0.22, 0.04, sw("mgrey"), sw("dgrey"))
+        self.face_box(x + 0.025, y - 0.04, 0.06, 0.08, 0.044, sw("black"), sw("black"))
+        for i in range(3):
+            for j in range(4):
+                self.face_box(x + 0.007 + i * 0.018, y - 0.07 + j * 0.02, 0.012, 0.012, 0.05, sw("white"), sw("mgrey"))
+        hx = x - 0.03
+        self.face_box(hx, y + 0.01, 0.032, 0.17, 0.07, sw("black"), sw("black"))
+        for dy in (0.075, -0.06):
+            self.face_box(hx, y + 0.01 + dy, 0.048, 0.045, 0.082, sw("black"), sw("dgrey"))
+        # The cord in coils from the handset's foot to the case.
+        for k in range(5):
+            self.face_box(hx - 0.004 + (k % 2) * 0.008, y - 0.11 - k * 0.018, 0.012, 0.012, 0.03, sw("black"), sw("black"))
+
+    def jack_box(self, x, y):
+        """A sound-powered phone station: a grey box with two headset jacks."""
+        self.face_box(x, y, 0.1, 0.12, 0.03, sw("mgrey"), sw("dgrey"))
+        for dy in (0.025, -0.025):
+            self.cyl((x, y + dy, self.face - 0.03), (x, y + dy, self.face - 0.045), 0.014, sw("black"), sw("black"), 8)
+
+    def open_binder(self, x0, x1):
+        """The procedure, open on the ledge: its cover and the two pages (the procedure's steps)."""
+        y = 0.95
+        z0, z1 = self.face - 0.25, self.face - 0.03
+        self.box(x0, y, z0, x1, y + 0.012, z1, [sw("blue"), sw("blue"), sw("blue"), sw("blue"), sw("blue"), None])
+        mid = (x0 + x1) / 2
+        for k, (a, c) in enumerate(((x0 + 0.012, mid - 0.004), (mid + 0.004, x1 - 0.012))):
+            self.box(a, y + 0.012, z0 + 0.012, c, y + 0.026, z1 - 0.012, [sw("white"), sw("white"), sw("white"), sw("white"), None, None])
+            yt = y + 0.026
+            self.quad((a, yt, z1 - 0.012), (a, yt, z0 + 0.012), (c, yt, z0 + 0.012), (c, yt, z1 - 0.012),
+                      ["binders", 0.504, k * 0.5 + 0.004, 0.996, k * 0.5 + 0.496])
+        self.box(mid - 0.003, y + 0.012, z0 + 0.03, mid + 0.003, y + 0.034, z1 - 0.03, sw("mgrey"))
+
+    def closed_binder(self, x0, x1, spine):
+        """A binder lying shut on the ledge, its spine (with its label) toward the operators."""
+        y0, y1 = 0.95, 0.988
+        z0, z1 = self.face - 0.26, self.face - 0.03
+        colour = ("red", "blue", "white", "black")[spine]
+        self.box(x0, y0, z0, x1, y1, z1, [None, sw(colour), sw(colour), sw(colour), sw(colour), None])
+        # The spine: the strip turned on its side (the texture's length along the binder).
+        self.quad((x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0), ["binders", spine / 8 + 0.004, 0.01, (spine + 1) / 8 - 0.004, 0.99])
 
     # -- placing things on the desk (s: 0 at its front edge, 1 at the back)
 
@@ -242,7 +430,7 @@ class Board:
     def face_box(self, x, y, wx, wy, d, front, sides=None, lst=None):
         """A part standing d out from the face: front material on its face, sides dark."""
         sides = sides or sw("black")
-        self.box(x - wx / 2, y - wy / 2, FACE - d, x + wx / 2, y + wy / 2, FACE, [front, None, sides, sides, sides, sides], lst)
+        self.box(x - wx / 2, y - wy / 2, self.face - d, x + wx / 2, y + wy / 2, self.face, [front, None, sides, sides, sides, sides], lst)
 
     def meter(self, x, y=ROW1, i=0, tall=0.3):
         """An edgewise meter: a narrow black case, its scale behind glass."""
@@ -259,7 +447,7 @@ class Board:
     def recorder(self, x, y=ROW1, i=0, wide=0.3):
         """A strip chart recorder: its door frame and the chart behind the window (lit)."""
         h = 0.3
-        z = FACE - 0.12
+        z = self.face - 0.12
         self.face_box(x, y, wide, h, 0.12, None, sw("dgrey"))
         self.front_quad(x - wide / 2, y + h / 2 - 0.04, x + wide / 2, y + h / 2, z, sw("dgrey"), None)
         self.front_quad(x - wide / 2, y - h / 2, x + wide / 2, y - h / 2 + 0.03, z, sw("dgrey"), None)
@@ -271,10 +459,10 @@ class Board:
     def controller(self, x, y=ROW3):
         """A manual/automatic controller station: its bar-graph display (lit), the auto and manual lamps, the raise and
         lower buttons."""
-        z = FACE - 0.09
+        z = self.face - 0.09
         self.face_box(x, y, 0.12, 0.32, 0.09, sw("dgrey"), sw("dgrey"))
         self.face_box(x, y + 0.07, 0.07, 0.13, 0.095, None)
-        self.front_quad(x - 0.035, y + 0.005, x + 0.035, y + 0.135, FACE - 0.095, strip("meter", self.r.randint(0, 3)), self.lit)
+        self.front_quad(x - 0.035, y + 0.005, x + 0.035, y + 0.135, self.face - 0.095, strip("meter", self.r.randint(0, 3)), self.lit)
         for k, colour in enumerate(("green", "amber")):
             self.face_lamp(x - 0.025 + k * 0.05, y - 0.055, colour, 0.03, z)
         for k in range(2):
@@ -284,24 +472,25 @@ class Board:
         for k in range(n):
             self.controller(x0 + k * step, y)
 
-    def face_lamp(self, x, y, colour, size=0.03, z=FACE, d=0.012):
+    def face_lamp(self, x, y, colour, size=0.03, z=None, d=0.012):
         """An indicating lamp: its rim and lens (lit, unless off)."""
+        z = self.face if z is None else z
         rim = sw("dgrey")
         h = size / 2 + 0.005
         self.box(x - h, y - h, z - d, x + h, y + h, z, [None, None, rim, rim, rim, rim])
-        self.front_quad(x - h, y - h, x + h, y + h, z - d, LENS[colour], self.lit if colour != "off" else None)
+        self.front_quad(x - h, y - h, x + h, y + h, z - d, LENS[colour], None if colour.startswith("off") else self.lit)
 
     def face_switch(self, x, y=ROW3, lamps=("red", "green")):
         """A switch on the vertical board: its plate, a knob, its lamps above."""
         self.face_box(x, y, 0.1, 0.1, 0.012, sw("black"))
-        self.cyl((x, y, FACE - 0.012), (x, y, FACE - 0.05), 0.025, sw("black"), sw("dgrey"), 8)
+        self.cyl((x, y, self.face - 0.012), (x, y, self.face - 0.05), 0.025, sw("black"), sw("dgrey"), 8)
         for k, colour in enumerate(lamps):
             self.face_lamp(x + (k - (len(lamps) - 1) / 2) * 0.042, y + 0.085, colour, 0.026)
 
     def bezel(self, x0, y0, x1, y1, d=0.05, b=0.02):
         """A black frame d out from the face round an opening x0..x1, y0..y1 (a screen's)."""
-        self.box(x0 - b, y0 - b, FACE - d, x1 + b, y1 + b, FACE, [None, None, sw("black"), sw("black"), sw("black"), sw("black")])
-        z = FACE - d
+        self.box(x0 - b, y0 - b, self.face - d, x1 + b, y1 + b, self.face, [None, None, sw("black"), sw("black"), sw("black"), sw("black")])
+        z = self.face - d
         self.front_quad(x0 - b, y1, x1 + b, y1 + b, z, sw("black"), None)
         self.front_quad(x0 - b, y0 - b, x1 + b, y0, z, sw("black"), None)
         self.front_quad(x0 - b, y0, x0, y1, z, sw("black"), None)
@@ -330,13 +519,13 @@ class Board:
 
     def pump(self, x, y, colour, r=0.05):
         """A pump on a mimic: a white-capped ring standing off the line, its colour in the middle."""
-        self.cyl((x, y, FACE - 0.008), (x, y, FACE - 0.02), r, sw(colour), sw("white"), 12)
-        self.cyl((x, y, FACE - 0.02), (x, y, FACE - 0.026), r * 0.55, sw(colour), sw(colour), 12)
+        self.cyl((x, y, self.face - 0.008), (x, y, self.face - 0.02), r, sw(colour), sw("white"), 12)
+        self.cyl((x, y, self.face - 0.02), (x, y, self.face - 0.026), r * 0.55, sw(colour), sw(colour), 12)
 
     def valve(self, x, y, open_=True):
         """A valve on a mimic: its square with the position lamp (red open, green shut)."""
         self.face_box(x, y, 0.05, 0.05, 0.02, sw("black"))
-        self.face_lamp(x, y, "red" if open_ else "green", 0.026, FACE - 0.02, 0.006)
+        self.face_lamp(x, y, "red" if open_ else "green", 0.026, self.face - 0.02, 0.006)
 
     def vessel(self, x, y, wx, wy, colour):
         """A tank, heat exchanger or vessel on a mimic: a block outlined in white."""
@@ -356,10 +545,10 @@ class Board:
         r = random.Random(seed)
         y_top = TOP - 0.02
         y_bot = y_top - rows * 0.085 - 0.02
-        self.box(x0, y_bot, FACE - 0.03, x1, y_top, FACE, [None, None, sw("black"), sw("black"), sw("black"), sw("black")])
+        self.box(x0, y_bot, self.face - 0.03, x1, y_top, self.face, [None, None, sw("black"), sw("black"), sw("black"), sw("black")])
         cols = cols or max(1, int((x1 - x0 - 0.02) / 0.1))
         cw = (x1 - x0 - 0.02) / cols
-        z = FACE - 0.03
+        z = self.face - 0.03
         for q in ((x0, y_top - 0.01, x1, y_top), (x0, y_bot, x1, y_bot + 0.01), (x0, y_bot + 0.01, x0 + 0.01, y_top - 0.01),
                   (x1 - 0.01, y_bot + 0.01, x1, y_top - 0.01)):
             self.front_quad(*q, z, sw("black"), None)
@@ -392,10 +581,18 @@ class Board:
         self.front_quad(x - wide / 2, y - high / 2, x + wide / 2, y + high / 2, z, pic("drpi"), self.lit)
 
     def ops(self):
-        return {"still": self.still, "lit": self.lit, "blink": self.blink, "core": getattr(self, "core", len(self.still))}
+        out = {"still": self.still, "lit": self.lit, "blink": self.blink, "core": getattr(self, "core", len(self.still))}
+        if self.states:
+            out["states"] = self.states
+        return out
+
+    def state(self, name):
+        return self.states.setdefault(name, {"still": [], "lit": []})
 
 
-LENS = {"red": pic("lamp_red"), "green": pic("lamp_green"), "white": pic("lamp_white"), "amber": pic("lamp_amber"), "off": sw("dgrey")}
+LENS = {"red": pic("lamp_red"), "green": pic("lamp_green"), "white": pic("lamp_white"), "amber": pic("lamp_amber"), "off": sw("dgrey"),
+        # An unlit lamp of a colour: its lens in the room's light.
+        "off_red": sw("red"), "off_green": sw("green"), "off_white": sw("enamel"), "off_amber": sw("orange")}
 
 
 def _r(*v):
@@ -733,9 +930,115 @@ def reactor_console(seed=7):
     return b
 
 
+def remote_shutdown_panel(seed=89):
+    """The remote shutdown panel (round 24; Justin: "make it look more realistic with detail"): a vertical
+    switchboard to trip the reactor and hold it shut down from outside the control room, laid out as a real one is.
+    Three sections bolted together: Train A on the left (orange), Train B on the right (blue), the reactor in the
+    middle. Each train under its title plate: the indication (pressurizer pressure and level, the hot and cold leg
+    temperatures on edgewise meters, the steam generators' levels and the tanks' on digital meters, the source range
+    flux and startup rate dials, a steam pressure recorder); the control transfer switches (key locks that take each
+    component away from the control room, white lamp while the control room has it, amber while this panel has it)
+    in their yellow line; the auxiliary feedwater as a mimic (the condensate storage tank, the pumps, the flow control
+    valves, the steam generators) with its switches under it; the reactor coolant system's switches (charging, boric
+    acid, the pressurizer's heaters, relief and block valves, residual heat removal, cooling water) along the bottom.
+    Every device has its engraved nameplate; the lamps show each component's state (red running or open, green
+    stopped or shut). The middle: the panel's title, the reactor's live status screen and lamps (drawn by the renderer
+    in the openings left for them), the two reactor trip switches under their guards, the plant telephone and the
+    sound-powered phone jacks; on the ledge the evacuation procedure lies open. Under the ledge each section's doors,
+    their caution and danger placards and the panel's number plate."""
+    b = Board(6, seed, face=0.3)
+    b.cabinet(((0.04, 2.5, 2), (2.5, 3.5, 1), (3.5, 5.96, 2)))
+    trains = (
+        # x0, x1, title, indication (meters, digital (legend, reading), dials, recorder), transfer switches (legend,
+        # local), the feedwater pumps (legend, running), its valves, the coolant system's switches (legend, on, grip).
+        (0.1, 2.44, 2, ("PZR PRES", "PZR LVL", "RCS TH", "RCS TC"),
+         (("SG1 LVL", 4), ("SG2 LVL", 5), ("BAT LVL", 9), ("AFW FLOW", 8)), ("SR FLUX", "SUR"),
+         ("AFW PP A", "TDAFW PP", "CHG PP A", "PZR HT A", "PORV A", "SG1 ARV"),
+         (("AFW PP A", False), ("TDAFW PP", False)), (("FCV 1", True), ("FCV 2", True), ("SG1 ARV", False), ("SG2 ARV", False)),
+         (("CHG PP A", True, True), ("BA PP A", False, True), ("PZR HT A", True, True), ("PORV A", False, False),
+          ("BLOCK A", True, False), ("RHR PP A", False, True), ("CCW PP A", True, True), ("SW PP A", True, True))),
+        (3.56, 5.9, 3, ("PZR PRES", "PZR LVL", "RCS TH", "RCS TC"),
+         (("SG3 LVL", 6), ("SG4 LVL", 7), ("BAT LVL", 15), ("CST LVL", 1)), ("SR FLUX", "SUR"),
+         ("AFW PP B", "CHG PP B", "PZR HT B", "PORV B", "SG3 ARV", "SG4 ARV"),
+         (("AFW PP B", False), None), (("FCV 3", True), ("FCV 4", True), ("SG3 ARV", False), ("SG4 ARV", False)),
+         (("CHG PP B", False, True), ("BA PP B", False, True), ("PZR HT B", False, True), ("PORV B", False, False),
+          ("BLOCK B", True, False), ("RHR PP B", False, True), ("CCW PP B", True, True), ("SW PP B", False, True))),
+    )
+    inst = lambda legend: plate("nameplates_inst", NAMEPLATES["nameplates_inst"].index(legend))
+    for k, (x0, x1, title_row, meters, digitals, dials, transfers, pumps, valves, coolant) in enumerate(trains):
+        colour = ("orange", "blue")[k]
+        mid = (x0 + x1) / 2
+        b.nameplate(mid, 2.865, title(title_row), 0.68, 0.085, 0.008)
+        # Indication.
+        b.zone([(x0, 2.27), (x1, 2.27), (x1, 2.78), (x0, 2.78), (x0, 2.27)])
+        b.nameplate(mid, 2.78, title(7), 0.46, 0.055, 0.016)
+        for i, legend in enumerate(meters):
+            x = x0 + 0.14 + i * 0.13
+            b.meter(x, 2.53, i + 2 * k, 0.28)
+            b.nameplate(x, 2.355, inst(legend))
+        for i, (legend, reading) in enumerate(digitals):
+            x, y = x0 + 0.78 + (i % 2) * 0.2, 2.6 - (i // 2) * 0.16
+            b.digital_indicator(x, y, reading)
+            b.nameplate(x, y - 0.058, inst(legend), 0.14)
+        for i, legend in enumerate(dials):
+            x = x0 + 1.3 + i * 0.26
+            b.dial(x, 2.53, (0, 2)[i], 0.22)
+            b.nameplate(x, 2.385, inst(legend), 0.14)
+        b.recorder(x0 + 2.02, 2.53, k, 0.34)
+        b.nameplate(x0 + 2.02, 2.35, inst("SG PRES"), 0.14)
+        # The control transfer switches.
+        b.zone([(x0, 1.89), (x1, 1.89), (x1, 2.21), (x0, 2.21), (x0, 1.89)], "yellow")
+        b.nameplate(mid, 2.21, title(6), 0.6, 0.055, 0.016)
+        for i, legend in enumerate(transfers):
+            b.key_switch(x0 + 0.24 + i * 0.37, 2.03, legend)
+        # Auxiliary feedwater: the tank, the pumps, the header, the valves to the steam generators.
+        # (Its line and the coolant system's below share their sides; the line between them runs across.)
+        b.zone([(x0, 0.99), (x1, 0.99), (x1, 1.81), (x0, 1.81), (x0, 0.99)])
+        b.zone([(x0, 1.27), (x1, 1.27)])
+        b.nameplate(mid, 1.81, title(4), 0.5, 0.055, 0.016)
+        b.vessel(x0 + 0.2, 1.63, 0.18, 0.24, "lblue")
+        hx = x0 + 0.98
+        for (yy, px, pump) in ((1.70, x0 + 0.52, pumps[0]), (1.56, x0 + 0.78, pumps[1])):
+            b.mimic([(x0 + 0.29 if pump else hx, yy), (x0 + 2.03, yy)], "green")
+            if pump:
+                b.pump(px, yy, "green", 0.045)
+                b.control_switch(px, 1.4, pump[0], pump[1])
+        b.mimic([(hx, 1.70), (hx, 1.56)], "green")
+        for (yy, sx), (legend, opened) in zip(((1.70, x0 + 1.32), (1.56, x0 + 1.58)), valves[:2]):
+            b.valve(sx, yy, opened)
+            b.control_switch(sx, 1.4, legend, opened, grip=False)
+        for i, (yy, (legend, opened)) in enumerate(zip((1.70, 1.56), valves[2:])):
+            b.vessel(x0 + 2.1, yy, 0.14, 0.11, "lblue")
+            b.control_switch(x0 + 1.88 + i * 0.26, 1.4, legend, opened, grip=False)
+        # The reactor coolant system along the bottom.
+        b.nameplate(mid, 1.27, title(5), 0.56, 0.05, 0.016)
+        for i, (legend, on, grip) in enumerate(coolant):
+            b.control_switch(x0 + 0.16 + i * 0.29, 1.11, legend, on, grip)
+        # The caution placard on the section's first door.
+        b.placard(x0 + 0.42, 0.7, 0.24, 0.12, ["placards", 0.01, 0.01, 0.99, 0.49])
+    # The middle: the title, the reactor's status (live), its lamps, the trip switches, the telephones.
+    b.nameplate(3.0, 2.78, title(0, 2), 0.8, 0.2, 0.012)
+    b.bezel(*RSP_SCREEN, b.face - RSP_SCREEN_Z, 0.025)
+    for (x, y) in RSP_LAMPS:
+        rim = sw("dgrey")
+        h = RSP_LAMP / 2 + 0.008
+        b.box(x - h, y - h, RSP_LAMP_Z, x + h, y + h, b.face, [None, None, rim, rim, rim, rim])
+    b.face_guarded(2.76, 1.42, "TRIP A")
+    b.face_guarded(3.24, 1.42, "TRIP B")
+    b.phone(3.0, 1.12)
+    b.jack_box(2.68, 1.08)
+    b.jack_box(3.32, 1.08)
+    b.open_binder(2.66, 3.34)
+    b.closed_binder(5.4, 5.78, 0)
+    b.placard(3.0, 0.7, 0.1, 0.1, ["placards", 0.01, 0.51, 0.49, 0.99])
+    b.placard(4.42, 0.7, 0.12, 0.12, ["placards", 0.51, 0.51, 0.99, 0.99])
+    return b
+
+
 SECTIONS = {"esf_control_board": esf_board, "rcs_control_board": rcs_board, "secondary_control_board": secondary_board,
             "turbine_control_board": turbine_board, "electrical_control_board": electrical_board,
-            "radiation_control_board": radiation_board, CONSOLE: reactor_console}
+            "radiation_control_board": radiation_board, CONSOLE: reactor_console,
+            "remote_shutdown_panel": remote_shutdown_panel}
 
 
 def all_ops():
@@ -784,7 +1087,19 @@ def _faces(op):
 
 def overlaps(ops):
     """Faces of a board that lie in one plane, face the same way and overlap: they would flicker in game (Justin:
-    never any z-fighting). Cylinders (knobs, pumps) are left out: their caps stand clear of everything by design."""
+    never any z-fighting). Cylinders (knobs, pumps) are left out: their caps stand clear of everything by design. A
+    board drawn by state is checked as it is drawn in each state."""
+    if ops.get("states"):
+        bad = []
+        for name, s in ops["states"].items():
+            for pair in _overlaps({"still": ops["still"] + s["still"], "lit": ops["lit"] + s["lit"], "blink": ops["blink"]}):
+                if pair not in bad:
+                    bad.append(pair)
+        return bad
+    return _overlaps(ops)
+
+
+def _overlaps(ops):
     groups = {}
     for lst in ("still", "lit", "blink"):
         for i, op in enumerate(ops[lst]):
@@ -989,7 +1304,151 @@ def swatches(seed, size=M.CELL):
     return img
 
 
+# ---------------------------------------------------------------- the lettered materials (row 8: drawn at 64 px)
+
+# A 3 x 5 pixel font: engraved legends small enough for a nameplate a hand wide to read like a real one.
+FONT = {
+    "A": [".#.", "#.#", "###", "#.#", "#.#"], "B": ["##.", "#.#", "##.", "#.#", "##."],
+    "C": [".##", "#..", "#..", "#..", ".##"], "D": ["##.", "#.#", "#.#", "#.#", "##."],
+    "E": ["###", "#..", "##.", "#..", "###"], "F": ["###", "#..", "##.", "#..", "#.."],
+    "G": [".##", "#..", "#.#", "#.#", ".##"], "H": ["#.#", "#.#", "###", "#.#", "#.#"],
+    "I": ["###", ".#.", ".#.", ".#.", "###"], "J": ["..#", "..#", "..#", "#.#", ".#."],
+    "K": ["#.#", "#.#", "##.", "#.#", "#.#"], "L": ["#..", "#..", "#..", "#..", "###"],
+    "M": ["#.#", "###", "###", "#.#", "#.#"], "N": ["##.", "#.#", "#.#", "#.#", "#.#"],
+    "O": [".#.", "#.#", "#.#", "#.#", ".#."], "P": ["##.", "#.#", "##.", "#..", "#.."],
+    "Q": [".#.", "#.#", "#.#", "##.", ".##"], "R": ["##.", "#.#", "##.", "#.#", "#.#"],
+    "S": [".##", "#..", ".#.", "..#", "##."], "T": ["###", ".#.", ".#.", ".#.", ".#."],
+    "U": ["#.#", "#.#", "#.#", "#.#", "###"], "V": ["#.#", "#.#", "#.#", "#.#", ".#."],
+    "W": ["#.#", "#.#", "###", "###", "#.#"], "X": ["#.#", "#.#", ".#.", "#.#", "#.#"],
+    "Y": ["#.#", "#.#", ".#.", ".#.", ".#."], "Z": ["###", "..#", ".#.", "#..", "###"],
+    "0": ["###", "#.#", "#.#", "#.#", "###"], "1": [".#.", "##.", ".#.", ".#.", "###"],
+    "2": ["##.", "..#", ".#.", "#..", "###"], "3": ["##.", "..#", ".#.", "..#", "##."],
+    "4": ["#.#", "#.#", "###", "..#", "..#"], "5": ["###", "#..", "##.", "..#", "##."],
+    "6": [".##", "#..", "###", "#.#", "###"], "7": ["###", "..#", ".#.", ".#.", ".#."],
+    "8": ["###", "#.#", "###", "#.#", "###"], "9": ["###", "#.#", "###", "..#", "##."],
+    "-": ["...", "...", "###", "...", "..."], "/": ["..#", "..#", ".#.", "#..", "#.."],
+    "&": [".#.", "#.#", ".#.", "#.#", ".##"], ".": ["...", "...", "...", "...", "#.."],
+    ":": ["...", "#..", "...", "#..", "..."], " ": ["...", "...", "...", "...", "..."],
+}
+INK = {"white": ((236, 236, 230), (22, 22, 24)), "red": ((188, 32, 28), (250, 244, 236)), "orange": ((226, 116, 30), (20, 20, 22)),
+       "blue": ((34, 80, 170), (244, 244, 240)), "yellow": ((236, 196, 36), (20, 20, 22)), "black": ((24, 24, 26), (232, 232, 226))}
+
+
+NARROW = {" ": 2, ".": 2, ":": 2}     # narrow characters' advance (pixels), the rest take 4 (3 and a space)
+
+
+def text(d, x, y, s, ink, scale=1):
+    """Draws s in the pixel font with its top-left at (x, y)."""
+    for ch in s.upper():
+        glyph = "".join(FONT.get(ch, FONT[" "]))
+        for i, on in enumerate(glyph):
+            if on == "#":
+                px, py = x + (i % 3) * scale, y + (i // 3) * scale
+                d.rectangle([px, py, px + scale - 1, py + scale - 1], fill=ink)
+        x += NARROW.get(ch, 4) * scale
+
+
+def text_width(s, scale=1):
+    return (sum(NARROW.get(ch, 4) for ch in s.upper()) - 1) * scale
+
+
+def _plate(d, x0, y0, w, h, legend, colour, alpha=255):
+    bg, ink = INK[colour]
+    d.rectangle([x0, y0, x0 + w - 1, y0 + h - 1], fill=bg + (alpha,))
+    edge = tuple(max(0, c - 40) for c in bg)
+    d.rectangle([x0, y0, x0 + w - 1, y0 + h - 1], outline=edge + (alpha,))
+    text(d, x0 + (w - text_width(legend)) // 2, y0 + (h - 5) // 2, legend, ink + (alpha,))
+
+
+def _nameplate_cell(cell):
+    def make(seed, size=64):
+        img = Image.new("RGBA", (size, size), (0, 0, 0, 255))
+        d = ImageDraw.Draw(img)
+        for i, legend in enumerate(NAMEPLATES[cell]):
+            _plate(d, (i % 2) * 32, (i // 2) * 8, 32, 8, legend, PLATE_COLOURS.get((cell, i), "white"))
+        return img
+    return make
+
+
+def titles(seed, size=64):
+    img = Image.new("RGBA", (size, size), (0, 0, 0, 255))
+    d = ImageDraw.Draw(img)
+    for i, (legend, colour) in enumerate(TITLES):
+        bg, ink = INK[colour]
+        d.rectangle([0, i * 8, 63, i * 8 + 7], fill=bg + (255,))
+        # One line in the middle of its row; the panel's two-line title a little apart from each other.
+        text(d, (64 - text_width(legend)) // 2, i * 8 + (2 if i == 0 else 1), legend, ink + (255,))
+    return img
+
+
+def digital(seed, size=64):
+    """Digital indicators' windows: red LED digits over the dim unlit segments (every texel glows)."""
+    img = Image.new("RGBA", (size, size), (16, 6, 6, 254))
+    d = ImageDraw.Draw(img)
+    for i, value in enumerate(READINGS):
+        x0, y0 = (i % 2) * 32, (i // 2) * 8
+        d.rectangle([x0, y0, x0 + 31, y0 + 7], fill=(18, 8, 8, 254))
+        # The unlit segments of every digit behind the reading, which is right-aligned like a meter's.
+        x = x0 + 30 - text_width(value)
+        text(d, x, y0 + 1, "".join(c if c in NARROW else "8" for c in value), (62, 16, 14, 254))
+        text(d, x, y0 + 1, value, (255, 58, 40, 254))
+    return img
+
+
+def placards(seed, size=64):
+    """A caution placard (top), the panel's number plate (bottom left) and a voltage warning (bottom right)."""
+    img = Image.new("RGBA", (size, size), (240, 240, 234, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 63, 31], fill=(244, 244, 238, 255), outline=(30, 30, 32, 255))
+    d.rectangle([1, 1, 62, 10], fill=(236, 196, 36, 255))
+    text(d, (64 - text_width("CAUTION")) // 2, 3, "CAUTION", (20, 20, 22, 255))
+    for k, line in enumerate(("TRANSFER PER", "AOP-8 ONLY")):
+        text(d, (64 - text_width(line)) // 2, 13 + k * 8, line, (20, 20, 22, 255))
+    d.rectangle([0, 32, 31, 63], fill=(24, 24, 26, 255))
+    d.rectangle([2, 34, 29, 61], outline=(200, 200, 196, 255))
+    for k, line in enumerate(("PNL", "RSP-1")):
+        text(d, (32 - text_width(line)) // 2, 40 + k * 9, line, (232, 232, 226, 255))
+    d.rectangle([32, 32, 63, 63], fill=(244, 244, 238, 255), outline=(30, 30, 32, 255))
+    d.rectangle([33, 33, 62, 42], fill=(188, 32, 28, 255))
+    text(d, 32 + (32 - text_width("DANGER")) // 2, 35, "DANGER", (250, 244, 236, 255))
+    for k, line in enumerate(("125 V", "DC")):
+        text(d, 32 + (32 - text_width(line)) // 2, 46 + k * 8, line, (20, 20, 22, 255))
+    return img
+
+
+def binders(seed, size=64):
+    """Procedure binders: four spines (left half, 8 x 64 each) and an open binder's two pages (right half, one above
+    the other): the procedure's number, its steps and their check boxes."""
+    img = Image.new("RGBA", (size, size), (240, 240, 234, 255))
+    d = ImageDraw.Draw(img)
+    r = random.Random(seed)
+    for k, colour in enumerate(((168, 30, 28), (34, 70, 150), (230, 230, 224), (28, 28, 30))):
+        x0 = k * 8
+        d.rectangle([x0, 0, x0 + 7, 63], fill=colour + (255,))
+        d.rectangle([x0 + 1, 8, x0 + 6, 30], fill=(244, 244, 238, 255))
+        for y in range(10, 29, 3):
+            d.line([(x0 + 2, y), (x0 + 2 + r.randint(1, 3), y)], fill=(40, 40, 44, 255))
+        for y in (4, 56):
+            d.rectangle([x0 + 2, y, x0 + 5, y + 2], fill=(150, 150, 154, 255))
+    for page in range(2):
+        y0 = page * 32
+        d.rectangle([32, y0, 63, y0 + 31], fill=(246, 246, 240, 255))
+        d.line([(32, y0), (32, y0 + 31)], fill=(170, 170, 166, 255))
+        if page == 0:
+            text(d, 35, y0 + 2, "AOP-8", (20, 20, 22, 255))
+            d.line([(35, y0 + 8), (60, y0 + 8)], fill=(20, 20, 22, 255))
+        for y in range(y0 + (11 if page == 0 else 3), y0 + 30, 3):
+            d.rectangle([35, y, 36, y + 1], outline=(60, 60, 64, 255))
+            d.line([(38, y + 1), (38 + r.randint(10, 22), y + 1)], fill=(80, 80, 86, 255))
+    return img
+
+
 MAKERS = {"lamp_white": lamp_white, "lamp_amber": lamp_amber, "annunciator": annunciator, "meter": meter,
-          "dial": dial, "chart": chart, "drpi": drpi, "swatches": swatches}
-# Colours kept when stylizing (the swatches keep every patch's colour exactly).
-COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 24, "drpi": 16, "lamp_white": 12, "lamp_amber": 12}
+          "dial": dial, "chart": chart, "drpi": drpi, "swatches": swatches,
+          "nameplates": _nameplate_cell("nameplates"), "nameplates2": _nameplate_cell("nameplates2"),
+          "nameplates_inst": _nameplate_cell("nameplates_inst"), "titles": titles, "digital": digital,
+          "placards": placards, "binders": binders}
+# Colours kept when stylizing (the swatches keep every patch's colour exactly; the lettered cells are drawn at the
+# sheet's own 64 px and keep theirs too).
+COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 24, "drpi": 16, "lamp_white": 12, "lamp_amber": 12,
+           "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32}

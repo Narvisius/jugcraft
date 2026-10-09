@@ -84,6 +84,8 @@ LIP = M("minecraft:iron_trapdoor[facing=north,half=bottom,open=false,powered=fal
 LIGHT = M("jugcraft:ceiling_light_panel", (240, 240, 230))
 BATTERY = M("jugcraft:battery_box", (80, 84, 90))
 HAZARD = M("jugcraft:hazard_plating", (210, 170, 40))
+# A black rubber mat on the floor in front of a panel.
+MAT = M("minecraft:black_carpet", (30, 30, 32))
 
 # Blocks a ceiling light may hang under (the undersides of slabs, ceilings and roofs).
 CEILINGS = {CEIL, CONCRETE, CONCRETE_DARK, SMOOTH, SHIELD, VINYL, EPOXY, ACCESS_FLOOR, CARPET, TILES, LINER, CLADDING, GRATE, FRAME}
@@ -947,13 +949,19 @@ def ground_floor(b, W, D):
     dc_run(b, [4, 8], 11, 5, 1, "north")
     b.door(10, 1, 6, "west", label="battery_room_1a")
     b.furniture("fire_extinguisher", 1, 2, 7, "west")
-    # ---- Remote Shutdown Room (x 1..9, z 10..13): the remote shutdown panel along its north wall, a chair at it, the
-    # procedures on a shelf.
-    b.prop("main_control_board", 2, 1, 10, "north")
-    b.p(4, 1, 12, furniture("operator_chair", "north"))
-    b.p(6, 1, 12, furniture("operator_chair", "north"))
-    b.stack("bookcase", 9, 1, 10, "east", n=2)
+    # ---- Remote Shutdown Room (x 1..9, z 10..13; round 24): the remote shutdown panel standing along its north wall
+    # (Justin: no bookcase; the panel must work; "more realistic with detail"), a rubber mat in front of it, the
+    # battery emergency lights over it (the room must stay lit if the plant loses power), against the east wall an
+    # operator console, an extinguisher by the door.
+    b.prop("remote_shutdown_panel", 2, 1, 10, "north")
+    for x in range(2, 8):
+        b.p(x, 1, 11, MAT)
+    for x in (3, 6):
+        b.furniture("emergency_light", x, 4, 10, "north")
+    b.row(("operator_console", 3), 9, 1, 10, "east", tops=(2, 3, 0))
+    b.p(8, 1, 11, furniture("operator_chair", "east"))
     b.door(5, 1, 14, "north", label="remote_shutdown")
+    b.furniture("fire_extinguisher", 1, 2, 13, "west")
     # ---- DC Equipment Room 1A (x 11..19, z 1..13): along the north wall the 125 VDC switchboard (the battery's cables
     # come down into it), the vital inverters and the chargers; along the south the 480 V load centre feeding them.
     b.panel("dc_switchboard", 11, 1, 1, "north", 2)

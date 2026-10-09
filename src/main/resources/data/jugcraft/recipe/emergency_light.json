@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "G G",
+    "PRP"
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "P": "#c:plates/iron",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:emergency_light",
+    "count": 2
+  }
+}

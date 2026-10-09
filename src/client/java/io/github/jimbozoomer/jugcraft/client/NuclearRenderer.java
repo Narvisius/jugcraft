@@ -1,9 +1,11 @@
 package io.github.jimbozoomer.jugcraft.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -13,6 +15,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.Level;
@@ -33,7 +36,9 @@ import net.minecraft.world.phys.Vec3;
 public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity, NuclearRenderer.State> {
 	public static final Identifier TEXTURE = Jugcraft.id("textures/entity/nuclear_equipment.png");
 	private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
-	private static final float PX = 1 / 512F;
+	/** The sheet's rows of 64-pixel cells (eight across): 512 x 576 since round 24 (tools/nuclear.py EQ_ROWS). */
+	static final int ROWS = 9;
+	private static final float PX = 1 / 512F, PX_V = 1 / (64F * ROWS);
 
 	static final float[] STAINLESS = region(0, 0);
 	static final float[] STAINLESS_DARK = region(1, 0);
@@ -100,6 +105,13 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] CHART = region(5, 7);
 	static final float[] DRPI = region(6, 7);
 	static final float[] SWATCHES = region(7, 7);
+	static final float[] NAMEPLATES = region(0, 8);
+	static final float[] NAMEPLATES2 = region(1, 8);
+	static final float[] NAMEPLATES_INST = region(2, 8);
+	static final float[] TITLES = region(3, 8);
+	static final float[] DIGITAL = region(4, 8);
+	static final float[] PLACARDS = region(5, 8);
+	static final float[] BINDERS = region(6, 8);
 	/** Every material on the sheet by name, in the sheet's order (tools/nuclear.py EQ_MATERIALS). */
 	static final String[] SHEET = {
 			"stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
@@ -109,7 +121,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			"fuel_rack", "louvre", "switchgear", "filter_bank", "sign_panel", "sign_edge", "engine_green", "rocker",
 			"gunmetal", "red_iron", "pipe_green", "pipe_brown", "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board",
 			"sign_autostart", "stencil_edg", "turbo", "black", "lamp_white", "lamp_amber", "annunciator", "meter", "dial",
-			"chart", "drpi", "swatches"};
+			"chart", "drpi", "swatches", "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards",
+			"binders"};
 	private static final java.util.Map<String, float[]> BY_NAME = new java.util.HashMap<>();
 
 	static {
@@ -125,10 +138,13 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	}
 
 	private static float[] region(int col, int row) {
-		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX};
+		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX_V, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX_V};
 	}
 
+	private final Font font;
+
 	public NuclearRenderer(net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context context) {
+		this.font = context.font();
 	}
 
 	public static class State extends BlockEntityRenderState {
@@ -146,6 +162,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		/** A diesel generator: running, its speed (0..1) and its shaft's turn (degrees). */
 		boolean running;
 		float speed, angle;
+		/**
+		 * A remote shutdown panel: it has found a reactor, the reactor is there (loaded on the server), control is at
+		 * the panel; the reactor's power and output (0..1), core temperature, and its fuel damaged.
+		 */
+		boolean panelLinked, panelOnline, remote, fuelDamaged;
+		float power, output, temperature;
 	}
 
 	@Override
@@ -182,6 +204,17 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		if (state.kind == EquipmentKind.CONTROL_CONSOLE && equipment.linked != null
 				&& level.getBlockEntity(equipment.linked) instanceof EquipmentBlockEntity vessel) {
 			state.tripped = vessel.core.scrammed;
+		}
+		if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+			// Its own copy of its reactor's state (synced with the panel).
+			state.panelLinked = equipment.linked != null;
+			state.panelOnline = state.panelLinked && equipment.panelOnline;
+			state.tripped = state.panelOnline && equipment.core.scrammed;
+			state.remote = state.panelOnline && equipment.core.remote;
+			state.fuelDamaged = state.panelOnline && equipment.core.fuelDamaged;
+			state.power = (float) equipment.core.fission;
+			state.output = equipment.core.electric / (float) Math.max(1, equipment.core.design.ratedJe());
+			state.temperature = (float) equipment.core.temperature;
 		}
 		state.time = (level.getGameTime() % 24_000) + partialTick;
 		if (state.kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
@@ -345,6 +378,16 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				Mesh lamps = new Mesh();
 				consoleLamps(new Frame(lamps, detail), state);
 				lamps.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+			} else if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+				// The board's lit parts, its transfer switches as control stands (keys and lamps), and its live lamps and
+				// screen.
+				int k = state.remote ? 1 : 0;
+				panelMesh(k, false, detail).replay(p, consumer, state.facing, state.lightLevel);
+				panelMesh(k, true, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				Mesh still = new Mesh(), lit = new Mesh();
+				panelLive(new Frame(still, detail), new Frame(lit, detail), state);
+				if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
+				if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 			} else if (state.kind.decor()) {
 				// The lit parts (screens, lamps, the glow over spent fuel), and whatever blinks.
 				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
@@ -360,6 +403,143 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				}
 			}
 		});
+		if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL && detail) {
+			panelScreen(state, pose, collector);
+		}
+	}
+
+	// ------------------------------------------------------------------ the remote shutdown panel
+
+	/** The panel's still and lit parts with its transfer switches in each state, by state, lit and detail. */
+	private static final Mesh[][][] PANEL = new Mesh[2][2][2];
+
+	static Mesh panelMesh(int remote, boolean lit, boolean detail) {
+		int l = lit ? 1 : 0, d = detail ? 1 : 0;
+		if (PANEL[remote][l][d] == null) {
+			Mesh mesh = new Mesh();
+			Frame f = new Frame(mesh, detail);
+			if (lit) {
+				ControlBoards.lit(EquipmentKind.REMOTE_SHUTDOWN_PANEL, f);
+			}
+			ControlBoards.state(EquipmentKind.REMOTE_SHUTDOWN_PANEL, remote == 1 ? "rsp" : "mcr", f, lit);
+			PANEL[remote][l][d] = mesh;
+		}
+		return PANEL[remote][l][d];
+	}
+
+	/** Its screen and status lamps (tools/control_boards.py RSP_SCREEN, RSP_LAMPS). */
+	static final double SCREEN_X0 = 2.62, SCREEN_Y0 = 1.75, SCREEN_X1 = 3.38, SCREEN_Y1 = 2.45, SCREEN_Z = 0.26;
+	static final double[][] PANEL_LAMPS = {{2.75, 1.64}, {3.0, 1.64}, {3.25, 1.64}};
+	static final double PANEL_LAMP = 0.05, PANEL_LAMP_Z = 0.284;
+
+	/** A patch of the swatch cell (tools/control_boards.py SWATCH: column, row). */
+	static float[] swatch(int col, int row) {
+		float[] c = SWATCHES;
+		float du = (c[2] - c[0]) / 4, dv = (c[3] - c[1]) / 4;
+		return new float[] {c[0] + du * (col + 0.1F), c[1] + dv * (row + 0.1F), c[0] + du * (col + 0.9F), c[1] + dv * (row + 0.9F)};
+	}
+
+	/**
+	 * The panel's live parts: the screen's dark glass (the readings are drawn over it), and the three status lamps,
+	 * white while the control room has control, amber while the panel has it, red while the reactor is tripped (unlit
+	 * lenses in the room's light, lit ones bright).
+	 */
+	static void panelLive(Frame still, Frame lit, State s) {
+		Vec3 n = v(0, 0, -1);
+		float[] glass = swatch(0, 2);
+		lit.quad(v(SCREEN_X0, SCREEN_Y1, SCREEN_Z), v(SCREEN_X0, SCREEN_Y0, SCREEN_Z), v(SCREEN_X1, SCREEN_Y0, SCREEN_Z), v(SCREEN_X1, SCREEN_Y1, SCREEN_Z),
+				n, glass[0], glass[1], glass[2], glass[3]);
+		if (!still.detail) {
+			return;
+		}
+		boolean[] on = {s.panelOnline && !s.remote, s.remote, s.tripped};
+		float[][] lens = {LAMP_WHITE, LAMP_AMBER, LAMP_RED};
+		float[][] dark = {swatch(3, 2), swatch(1, 0), swatch(0, 0)};
+		double h = PANEL_LAMP / 2 + 0.008;
+		for (int i = 0; i < 3; i++) {
+			double x = PANEL_LAMPS[i][0], y = PANEL_LAMPS[i][1], z = PANEL_LAMP_Z;
+			float[] uv = on[i] ? lens[i] : dark[i];
+			(on[i] ? lit : still).quad(v(x - h, y + h, z), v(x - h, y - h, z), v(x + h, y - h, z), v(x + h, y + h, z), n, uv[0], uv[1], uv[2], uv[3]);
+		}
+	}
+
+	/**
+	 * The readings on the panel's screen, in the plant computer's green: the reactor's power, rods, core temperature
+	 * and output, whether it is tripped, and where control is. In the panel's frame: the text's x to the right, up, on
+	 * the screen's face toward whoever stands at it.
+	 */
+	private void panelScreen(State s, PoseStack pose, SubmitNodeCollector collector) {
+		java.util.List<String[]> lines = new java.util.ArrayList<>();
+		java.util.List<Integer> colours = new java.util.ArrayList<>();
+		int green = 0x5ADC78, amber = 0xF0B030, red = 0xF04034, white = 0xDCE6E8, cyan = 0x4FC8E8;
+		if (!s.panelLinked) {
+			lines.add(new String[] {"NO REACTOR", ""});
+			colours.add(amber);
+			lines.add(new String[] {"IN RANGE", ""});
+			colours.add(amber);
+		} else if (!s.panelOnline) {
+			lines.add(new String[] {"NO SIGNAL", ""});
+			colours.add(amber);
+		} else {
+			lines.add(new String[] {"UNIT STATUS", ""});
+			colours.add(cyan);
+			lines.add(new String[] {"POWER", String.format(java.util.Locale.ROOT, "%.1f%%", s.power * 100)});
+			colours.add(green);
+			lines.add(new String[] {"RODS IN", String.format(java.util.Locale.ROOT, "%.0f%%", s.rods)});
+			colours.add(green);
+			lines.add(new String[] {"CORE", String.format(java.util.Locale.ROOT, "%.0f\u00b0C", s.temperature)});
+			colours.add(s.temperature >= 350 ? red : green);
+			lines.add(new String[] {"OUTPUT", String.format(java.util.Locale.ROOT, "%.0f%%", s.output * 100)});
+			colours.add(green);
+			if (s.fuelDamaged) {
+				lines.add(new String[] {"FUEL DAMAGE", ""});
+				colours.add(red);
+			} else if (s.tripped) {
+				lines.add(new String[] {"RX TRIPPED", ""});
+				colours.add(red);
+			} else {
+				lines.add(new String[] {s.power > 0.005 ? "OPERATING" : "SHUT DOWN", ""});
+				colours.add(s.power > 0.005 ? green : white);
+			}
+			lines.add(new String[] {"CONTROL", s.remote ? "RSP" : "MCR"});
+			colours.add(s.remote ? amber : white);
+		}
+		// Lines of the font's 9 pixels a little apart; each line's letters stand on its baseline y (7 pixels tall).
+		double lineHeight = 0.082, k = lineHeight / 10.0;
+		double left = SCREEN_X0 + 0.04, right = SCREEN_X1 - 0.04, top = SCREEN_Y1 - 0.035 - 7 * k;
+		pose.pushPose();
+		pose.translate(0.5F, 0.0F, 0.5F);
+		pose.rotateDegrees(Axis.YP, -yRotation(s.facing));
+		pose.translate(-0.5F, 0.0F, -0.5F);
+		for (int i = 0; i < lines.size(); i++) {
+			double y = top - i * lineHeight;
+			int colour = 0xFF000000 | colours.get(i);
+			String label = lines.get(i)[0], value = lines.get(i)[1];
+			text(pose, collector, label, left, y, k, colour);
+			if (!value.isEmpty()) {
+				text(pose, collector, value, right - font.width(value) * k, y, k, colour);
+			}
+		}
+		pose.popPose();
+	}
+
+	private void text(PoseStack pose, SubmitNodeCollector collector, String s, double x, double y, double k, int colour) {
+		pose.pushPose();
+		// The screen's face is at z = SCREEN_Z in the panel's frame (z away from whoever stands at it): 1 - z here.
+		pose.translate((float) x, (float) y, (float) (1 - SCREEN_Z + 0.003));
+		pose.scale((float) k, (float) -k, (float) k);
+		collector.submitText(pose, 0, -7, Component.literal(s).getVisualOrderText(), false, Font.DisplayMode.POLYGON_OFFSET,
+				LightCoordsUtil.FULL_BRIGHT, colour, 0, 0);
+		pose.popPose();
+	}
+
+	private static float yRotation(Direction facing) {
+		return switch (facing) {
+			case EAST -> 90;
+			case SOUTH -> 180;
+			case WEST -> 270;
+			default -> 0;
+		};
 	}
 
 	// ------------------------------------------------------------------ the item
@@ -408,6 +588,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				vesselRods(rods, 100);
 			} else if (kind == EquipmentKind.CONTROL_CONSOLE) {
 				consoleLamps(new Frame(lit, true), new State());
+			} else if (kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+				ControlBoards.lit(kind, new Frame(lit, true));
+				ControlBoards.state(kind, "mcr", new Frame(still, true), false);
+				ControlBoards.state(kind, "mcr", new Frame(lit, true), true);
+				panelLive(new Frame(still, true), new Frame(lit, true), new State());
 			} else if (kind.decor()) {
 				PlantDecor.glow(kind, new Frame(lit, true));
 				PlantDecor.blink(kind, new Frame(lit, true), 0);

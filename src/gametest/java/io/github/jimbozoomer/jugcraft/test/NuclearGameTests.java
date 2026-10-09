@@ -429,4 +429,54 @@ public class NuclearGameTests {
 		vessel.core.fuel.clear();
 		helper.succeed();
 	}
+
+	/**
+	 * The remote shutdown panel (round 24) finds the nearest reactor itself; its transfer switches take the controls
+	 * from the console (which can then only trip the reactor) until it hands them back; its trip drives the rods in; it
+	 * only works a reactor its user may run; and it shows the reactor's state.
+	 */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 40)
+	public void remoteShutdownPanelTripsAndTakesControl(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		ServerPlayer owner = player(helper, new BlockPos(12, 1, 20));
+		BlockPos consolePos = helper.absolutePos(new BlockPos(20, 1, 22));
+		BlockPos vesselPos = helper.absolutePos(new BlockPos(20, 1, 25));
+		BlockPos panelPos = helper.absolutePos(new BlockPos(8, 1, 22));
+		EquipmentPlacement.place(level, consolePos, EquipmentKind.CONTROL_CONSOLE, Direction.NORTH, owner);
+		EquipmentPlacement.place(level, vesselPos, EquipmentKind.REACTOR_VESSEL, Direction.SOUTH, owner);
+		helper.assertTrue(EquipmentPlacement.place(level, panelPos, EquipmentKind.REMOTE_SHUTDOWN_PANEL, Direction.NORTH, owner), "panel placed");
+		EquipmentBlockEntity console = (EquipmentBlockEntity) level.getBlockEntity(consolePos);
+		EquipmentBlockEntity vessel = (EquipmentBlockEntity) level.getBlockEntity(vesselPos);
+		EquipmentBlockEntity panel = (EquipmentBlockEntity) level.getBlockEntity(panelPos);
+		console.linked = vesselPos;
+		console.setOwner(owner.getUUID());
+		vessel.setOwner(owner.getUUID());
+		panel.setOwner(owner.getUUID());
+		panel.linkShutdownPanel(level);
+		helper.assertTrue(vesselPos.equals(panel.linked), "the panel finds the reactor by itself: " + panel.linked);
+		helper.assertTrue(panel.panelOnline, "and reads it");
+		helper.assertTrue(ConsoleActionPayload.apply(panel, owner, ConsoleActionPayload.TRANSFER, 1) && vessel.core.remote,
+				"its transfer switches take control");
+		helper.assertTrue(panel.core.remote, "it shows control is here");
+		helper.assertTrue(!ConsoleActionPayload.apply(console, owner, ConsoleActionPayload.SET_RODS, 30) && vessel.core.rodTarget == 100,
+				"the console can't move the rods while the panel has control");
+		helper.assertTrue(ConsoleActionPayload.apply(panel, owner, ConsoleActionPayload.SCRAM, 0) && vessel.core.scrammed,
+				"the panel trips the reactor");
+		vessel.core.scrammed = false;
+		helper.assertTrue(ConsoleActionPayload.apply(console, owner, ConsoleActionPayload.SCRAM, 0) && vessel.core.scrammed,
+				"the console can still trip it");
+		helper.assertTrue(ConsoleActionPayload.apply(panel, owner, ConsoleActionPayload.TRANSFER, 0) && !vessel.core.remote,
+				"control handed back");
+		vessel.core.scrammed = false;
+		helper.assertTrue(ConsoleActionPayload.apply(console, owner, ConsoleActionPayload.SET_RODS, 30) && vessel.core.rodTarget == 30,
+				"the console has the rods again");
+		vessel.setOwner(java.util.UUID.randomUUID());
+		helper.assertTrue(!ConsoleActionPayload.apply(panel, owner, ConsoleActionPayload.SCRAM, 0) && !vessel.core.scrammed,
+				"it won't trip a reactor that belongs to someone else");
+		helper.succeed();
+	}
 }

@@ -43,6 +43,11 @@ public final class ReactorCore {
 	public boolean protection = true;
 	public boolean scrammed;
 	public boolean refuelOpen;
+	/**
+	 * Control is at a remote shutdown panel (its transfer switches turned): the control room's console can then only
+	 * trip the reactor, until a remote shutdown panel hands control back.
+	 */
+	public boolean remote;
 	// Plant state.
 	public double rods = 100;
 	public double fission;
@@ -217,6 +222,7 @@ public final class ReactorCore {
 		out.putBoolean("protection", protection);
 		out.putBoolean("scrammed", scrammed);
 		out.putBoolean("refuel", refuelOpen);
+		out.putBoolean("remote", remote);
 		out.putDouble("rods", rods);
 		out.putDouble("fission", fission);
 		out.putDouble("decay", decay);
@@ -230,6 +236,7 @@ public final class ReactorCore {
 		protection = in.getBooleanOr("protection", true);
 		scrammed = in.getBooleanOr("scrammed", false);
 		refuelOpen = in.getBooleanOr("refuel", false);
+		remote = in.getBooleanOr("remote", false);
 		rods = in.getDoubleOr("rods", 100);
 		fission = in.getDoubleOr("fission", 0);
 		decay = in.getDoubleOr("decay", 0);
@@ -237,6 +244,51 @@ public final class ReactorCore {
 		fuelDamaged = in.getBooleanOr("fuel_damaged", false);
 		fuel.clear();
 		fuel.addAll(in.read("fuel", Codec.DOUBLE.listOf()).orElse(List.of()));
+	}
+
+	/** A remote shutdown panel's copy of its reactor's state (what its screen, lamps and window show). */
+	public void copyStatus(ReactorCore from) {
+		design = from.design;
+		rodTarget = from.rodTarget;
+		protection = from.protection;
+		scrammed = from.scrammed;
+		refuelOpen = from.refuelOpen;
+		remote = from.remote;
+		rods = from.rods;
+		fission = from.fission;
+		decay = from.decay;
+		temperature = from.temperature;
+		fuelDamaged = from.fuelDamaged;
+		electric = from.electric;
+		alarms = from.alarms;
+	}
+
+	/** The status a remote shutdown panel sends its clients (no fuel list, no trend). */
+	public void saveStatus(ValueOutput out) {
+		out.putString("design", design.id());
+		out.putBoolean("scrammed", scrammed);
+		out.putBoolean("refuel", refuelOpen);
+		out.putBoolean("remote", remote);
+		out.putDouble("rods", rods);
+		out.putDouble("fission", fission);
+		out.putDouble("temperature", temperature);
+		out.putBoolean("fuel_damaged", fuelDamaged);
+		out.putLong("electric", electric);
+		out.putInt("alarms", alarms);
+	}
+
+	public void loadStatus(ValueInput in) {
+		String id = in.getStringOr("design", "pwr");
+		design = id.equals(Design.EPR.id()) ? Design.EPR : id.equals(Design.SMALL_MODULAR.id()) ? Design.SMALL_MODULAR : Design.STANDARD;
+		scrammed = in.getBooleanOr("scrammed", false);
+		refuelOpen = in.getBooleanOr("refuel", false);
+		remote = in.getBooleanOr("remote", false);
+		rods = in.getDoubleOr("rods", 100);
+		fission = in.getDoubleOr("fission", 0);
+		temperature = in.getDoubleOr("temperature", 30);
+		fuelDamaged = in.getBooleanOr("fuel_damaged", false);
+		electric = in.getLongOr("electric", 0);
+		alarms = in.getIntOr("alarms", 0);
 	}
 
 	/** The readouts the console shows (sent to clients with the vessel). */

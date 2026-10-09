@@ -7299,9 +7299,11 @@ def check_nuclear():
     for name, ops in boards.items():
         if name not in nuclear.EQUIPMENT:
             err(f"control board {name} is not equipment (tools/nuclear.py EQUIPMENT)")
-        names = set(re.findall(r'"([a-z_]+)"', json.dumps(ops))) - {"b", "o", "q", "c", "still", "lit", "blink", "core"}
+        names = set(re.findall(r'"([a-z_]+)"', json.dumps(ops))) - {"b", "o", "q", "c", "still", "lit", "blink", "core", "states"} - set(ops.get("states", {}))
         if names - set(nuclear.EQ_MATERIALS):
             err(f"control board {name} uses materials not on the sheet: {sorted(names - set(nuclear.EQ_MATERIALS))}")
+        if name == "remote_shutdown_panel" and set(ops.get("states", {})) != {"mcr", "rsp"}:
+            err("control board remote_shutdown_panel: its transfer switches need both states, mcr and rsp (client/NuclearRenderer.java)")
         bad = control_boards.overlaps(ops)
         if bad:
             err(f"control board {name}: {len(bad)} pairs of faces overlap in one plane (z-fighting), e.g. {bad[:2]}")

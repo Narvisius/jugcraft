@@ -158,6 +158,13 @@ PIECES = {
         (3, 3, 0, 13, 14, 3.5, {"*": "pi_cab_white", "south": "pi_aed!"}),
         (4, 15, 0, 12, 19, 0.4, {"*": "pi_cab_white", "south": "pi_aed_sign!"})], "glow": ["pi_aed_sign"]},
     "fire_extinguisher": {"display": "Fire Extinguisher Cabinet", "boxes": O4.EXTINGUISHER_CABINET},
+    # ---- an 8-hour battery emergency light (round 24): the cream battery case high on the wall, its test button and
+    # charging lamp on the front, two sealed-beam lamp heads on swivels on top, aimed out into the room.
+    "emergency_light": {"display": "Emergency Light", "boxes": [
+        (2, 2, 0, 14, 8, 4.5, {"*": "pi_emlight_case", "south": "pi_emlight_front!"}),
+        (4, 8, 1.5, 5, 9, 2.5, "pi_emlight_head"), (11, 8, 1.5, 12, 9, 2.5, "pi_emlight_head"),
+        (2.5, 9, 0.5, 6.5, 12.5, 4.5, {"*": "pi_emlight_head", "south": "pi_emlight_lens!"}),
+        (9.5, 9, 0.5, 13.5, 12.5, 4.5, {"*": "pi_emlight_head", "south": "pi_emlight_lens!"})]},
     "medicine_cabinet": {"display": "First Aid Cabinet", "boxes": [
         (1, 5, 0, 15, 16, 4.5, {"*": "pi_cab_white", "south": "pi_medicine_front!"})]},
     "vitals_monitor": {"display": "Patient Monitor", "boxes": [
@@ -223,6 +230,7 @@ CRAFTING = {
     "locker_security": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:blue_wool"}, 2),
     "aed_cabinet": (["PGP", "PRP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "R": "minecraft:redstone"}, 1),
     "fire_extinguisher": (["N", "R", "R"], {"N": "minecraft:iron_nugget", "R": "minecraft:red_dye"}, 2),
+    "emergency_light": (["G G", "PRP"], {"G": "minecraft:glowstone_dust", "P": "#c:plates/iron", "R": "minecraft:redstone"}, 2),
     "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),
     "vitals_monitor": (["GRG", " N ", " N "], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone", "N": "minecraft:iron_nugget"}, 1),
     "filing_cabinet_open": (["PP", "PB"], {"P": "#c:plates/iron", "B": "minecraft:paper"}, 1),
@@ -795,6 +803,32 @@ def _extinguisher():
     return img
 
 
+def _emlight_front():
+    """The emergency light's front: louvre slots across the top, the maker's label, the test button and the green
+    charging lamp."""
+    img = M.painted((222, 220, 210), 811, chip_count=1, drip_count=0, dirt=0.15)
+    d = ImageDraw.Draw(img)
+    for y in range(14, 40, 8):
+        d.rectangle([18, y, 110, y + 3], fill=(120, 118, 110, 255))
+    d.rectangle([18, 52, 76, 70], fill=(40, 42, 46, 255))
+    for k in range(3):
+        d.line([(24, 57 + k * 5), (24 + (40, 30, 46)[k], 57 + k * 5)], fill=(210, 210, 204, 255), width=2)
+    d.ellipse([88, 50, 108, 70], fill=(176, 34, 30, 255), outline=(90, 20, 18, 255), width=2)
+    d.ellipse([92, 80, 102, 90], fill=(60, 220, 90, 255))
+    d.rectangle([18, 96, 110, 100], fill=(190, 188, 178, 255))
+    return img
+
+
+def _emlight_lens():
+    """A sealed-beam lamp's lens: the reflector's rings behind the glass, a bright middle."""
+    img = _img((54, 56, 60))
+    d = ImageDraw.Draw(img)
+    for k, c in enumerate(((150, 150, 144), (196, 194, 184), (226, 224, 212), (244, 242, 228))):
+        r = 56 - k * 13
+        d.ellipse([64 - r, 64 - r, 64 + r, 64 + r], fill=c + (255,))
+    return img
+
+
 def _fire_sign():
     img = _img((200, 30, 30))
     d = ImageDraw.Draw(img)
@@ -973,6 +1007,9 @@ def makers():
         "pi_mattress": _mattress, "pi_sheet": _sheet, "pi_partition": _partition, "pi_security_jacket": _security_jacket,
         "pi_security_cap": _security_cap, "pi_radio": _radio, "pi_boot_black": _boot_black, "pi_aed": _aed,
         "pi_aed_sign": _aed_sign, "pi_extinguisher": _extinguisher, "pi_fire_sign": _fire_sign,
+        "pi_emlight_case": lambda: M.painted((222, 220, 210), 810, chip_count=1, drip_count=0, dirt=0.2),
+        "pi_emlight_front": _emlight_front, "pi_emlight_lens": _emlight_lens,
+        "pi_emlight_head": lambda: M.painted((52, 54, 58), 812, chip_count=0, drip_count=0, dirt=0.1),
         "pi_medicine_front": _medicine_front, "pi_vitals": _vitals, "pi_drawer_front": _drawer_front,
         "pi_folders": _folders, "pi_brass": _brass, "pi_walnut_top": _walnut_top,
         "pi_binder_side": _binder_side, "pi_binder_spines": _binder_spines, "pi_binder_top": _binder_top,

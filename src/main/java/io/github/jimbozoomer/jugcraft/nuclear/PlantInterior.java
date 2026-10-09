@@ -83,6 +83,7 @@ public final class PlantInterior {
 			{"cubicle_panel", 0, "row:cubicle", "wool", new double[] {0, 0, 7, 16, 16, 9}},
 			{"aed_cabinet", 0, "plain", "metal", new double[] {3, 3, 0, 13, 14, 4}},
 			{"fire_extinguisher", 0, "plain", "metal", new double[] {3, 0.5, 0, 13, 15.5, 4.6}},
+			{"emergency_light", 0, "plain", "metal", new double[] {2, 2, 0, 14, 12.5, 4.5}},
 			{"medicine_cabinet", 0, "plain", "metal", new double[] {1, 5, 0, 15, 16, 5}},
 			{"vitals_monitor", 0, "plain", "metal", new double[] {4, 0, 4, 12, 16, 12}},
 			{"filing_cabinet_open", 0, "plain", "metal", new double[] {2, 0, 2, 14, 15, 15}},

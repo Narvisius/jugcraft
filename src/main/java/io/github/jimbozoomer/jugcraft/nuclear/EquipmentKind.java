@@ -51,7 +51,10 @@ public enum EquipmentKind {
 	SECONDARY_BOARD("secondary_control_board", 6, 2, 3),
 	TURBINE_BOARD("turbine_control_board", 6, 2, 3),
 	ELECTRICAL_BOARD("electrical_control_board", 6, 2, 3),
-	RADIATION_BOARD("radiation_control_board", 6, 2, 3);
+	RADIATION_BOARD("radiation_control_board", 6, 2, 3),
+	// The control building's remote shutdown panel (round 24): it works. It finds the nearest reactor itself, shows its
+	// state, trips it, and takes control from the control room's console with its transfer switches.
+	REMOTE_SHUTDOWN_PANEL("remote_shutdown_panel", 6, 1, 3);
 
 	public final String id;
 	public final int wide, deep, tall;
@@ -77,7 +80,7 @@ public enum EquipmentKind {
 
 	/** Plant equipment that only has to look right: it takes no pipes and does no work. */
 	public boolean decor() {
-		return ordinal() >= POLAR_CRANE.ordinal();
+		return ordinal() >= POLAR_CRANE.ordinal() && this != REMOTE_SHUTDOWN_PANEL;
 	}
 
 	/** Equipment that holds a reactor core (and is run from a console). */

@@ -55,6 +55,24 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   - Its screen follows the approved design: core map (193 assemblies, shaded by heat, with rod clusters), rod slider,
     plant readouts, a 10-minute core-temperature trend with the alarm and SCRAM lines, annunciator windows, the
     protection switch, the SCRAM button, RESET TRIP, a Personal/Party switch, and the fuel line with REFUEL.
+- **The remote shutdown panel** (round 24): a vertical switchboard six wide, for tripping the reactor and holding it
+  shut down from outside the control room, laid out as a real one is (three sections bolted together: Train A in
+  orange, the reactor in the middle, Train B in blue). Each train has its indication (edgewise meters, digital meters,
+  dials, a recorder), its control transfer switches in a yellow line, an auxiliary feedwater mimic with its switches,
+  and the reactor coolant system's switches. Every device has an engraved nameplate; each switch's red or green lamp
+  shows its component's state. The middle has the panel's title, a live status screen and lamps, two guarded reactor
+  trip switches, the plant telephone and the sound-powered phone jacks. The evacuation procedure lies open on the
+  ledge; caution, danger and number plates are on the doors below.
+  - It needs no link card: it runs the **nearest reactor within 256 blocks**, found again whenever equipment changes.
+  - Its screen shows that reactor live: power, rods in, core temperature, output, tripped or running, and whether
+    the control room (MCR) or the panel (RSP) has control. The lamps show the same: white means the control room has
+    control, amber means the panel has it, red means tripped.
+  - Using it opens its window, with the same readings and two controls:
+    - **Reactor Trip** drives every rod in (reset from the console).
+    - **Take Control / Return Control** is the key transfer switch. While the panel has control, the keys stand
+      turned and the amber lamps are lit. The console's screen reads CONTROL AT REMOTE SHUTDOWN PANEL, and the console
+      can only trip the reactor until control is handed back.
+  - It only works a reactor its user may run (the reactor's owner, or their party in Party mode).
 - **Refuelling:**
   - Shut the reactor down (rods fully in, core below 120 °C), then press REFUEL. The vessel's head comes off and the
     core glows blue under its water.
@@ -162,7 +180,9 @@ blueprint (for players who lay out their own plant).
     blocks long, 30 cells in clear jars), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room;
-    the remote shutdown room; the locker room; and the secure entrance (a vestibule; the security counter, its chairs
+    the remote shutdown room (the remote shutdown panel on its north wall over a rubber mat, battery emergency lights
+    above it, an operator console three wide on the east wall, an extinguisher by the door); the locker room; and the
+    secure entrance (a vestibule; the security counter, its chairs
     clear of the wall, and the camera desk; an entry and an exit Speed Gate, below, with framed glass from them to both
     walls). Hydrogen exhaust louvres high in the battery rooms' outside walls. The vestibule, the glass along the speed
     gates and the shift supervisor's office are Framed Glass (below).
@@ -208,6 +228,8 @@ blueprint (for players who lay out their own plant).
 - **Operator Console**: a black desk with a raised shelf for its screens that joins up side by side; each block has
   its own setup (two screens and a keyboard; one wide screen, keyboard and phone; stacked screens and an open
   procedure; a screen, phone and papers), everything inside its own block.
+- **Emergency Light** (round 24): an 8-hour battery emergency light for high on a wall. It has a cream case with
+  louvres, a test button and a green charging lamp, and two sealed-beam lamp heads on swivels on top.
 - **Speed Gate** (`nuclear/SpeedGateBlock.java`, `SpeedGatePedestalBlock.java`, `SpeedGateBlockEntity.java`,
   `client/SpeedGateRenderer.java`, `tools/speed_gate.py`; Justin, 8 October 2026, after the sliding glass fare gates
   at Grand Central): a one-way security lane. Placed looking the way through, it stands on the block you come in by,

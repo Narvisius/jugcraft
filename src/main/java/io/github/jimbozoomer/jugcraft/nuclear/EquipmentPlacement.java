@@ -27,6 +27,9 @@ public final class EquipmentPlacement {
 	/** Set by the client: opens the console screen for the console at this position. */
 	public static Consumer<BlockPos> openConsole = pos -> {
 	};
+	/** Set by the client: opens the remote shutdown panel's screen for the panel at this position. */
+	public static Consumer<BlockPos> openShutdownPanel = pos -> {
+	};
 
 	private EquipmentPlacement() {
 	}
@@ -125,6 +128,18 @@ public final class EquipmentPlacement {
 				}
 				if (level.isClientSide()) {
 					openConsole.accept(anchor);
+				}
+				return InteractionResult.SUCCESS;
+			}
+			case REMOTE_SHUTDOWN_PANEL -> {
+				// It finds the nearest reactor itself; with none in range it says so.
+				if (!level.isClientSide()) {
+					equipment.linkShutdownPanel((net.minecraft.server.level.ServerLevel) level);
+					if (equipment.linked == null) {
+						player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.panel_no_reactor", EquipmentBlockEntity.PANEL_RANGE));
+					}
+				} else {
+					openShutdownPanel.accept(anchor);
 				}
 				return InteractionResult.SUCCESS;
 			}

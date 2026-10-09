@@ -82,6 +82,20 @@ final class ControlBoards {
 		}
 	}
 
+	/**
+	 * The parts a board draws by state (the remote shutdown panel's transfer switches: "mcr" with control at the control
+	 * room, "rsp" at the panel): the state's still parts, or its lit ones. Close up only.
+	 */
+	static void state(EquipmentKind kind, String name, Frame f, boolean lit) {
+		JsonObject board = boards().get(kind.id);
+		if (board == null || !f.detail || !board.has("states") || !board.getAsJsonObject("states").has(name)) {
+			return;
+		}
+		for (JsonElement e : board.getAsJsonObject("states").getAsJsonObject(name).getAsJsonArray(lit ? "lit" : "still")) {
+			op(f, e.getAsJsonArray());
+		}
+	}
+
 	/** The alarm windows flashing now and then, lit in front of their unlit faces. */
 	static void blink(EquipmentKind kind, Frame f, float time) {
 		JsonObject board = boards().get(kind.id);

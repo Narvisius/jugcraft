@@ -84,8 +84,16 @@ public class EquipmentBlockEntity extends BlockEntity {
 	// Main transformer.
 	public final @Nullable SimpleEnergyStorage output;
 	private List<BlockPos> outletCells = List.of();
-	// Control console.
+	// Control console (and the remote shutdown panel: the reactor it found).
 	public @Nullable BlockPos linked;
+	/**
+	 * A remote shutdown panel finds the nearest reactor within this many blocks itself (no link card): the plant it
+	 * stands in. It copies the reactor's state into its own {@link #core} for its screen and lamps.
+	 */
+	public static final int PANEL_RANGE = 256;
+	private int panelVersion = -1;
+	/** A remote shutdown panel: its reactor was there (loaded) this tick (synced). */
+	public boolean panelOnline;
 
 	public EquipmentBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftNuclear.EQUIPMENT_ENTITY, pos, state);
@@ -155,6 +163,68 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
 			DieselFuel.tick(level, this, level.getGameTime());
 		}
+		if (kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+			tickShutdownPanel(level);
+		}
+	}
+
+	/**
+	 * A remote shutdown panel: keeps to the nearest reactor (looked for again whenever equipment changes, and every
+	 * five seconds), and copies its state for the screen, the lamps and the panel's window.
+	 */
+	private void tickShutdownPanel(ServerLevel level) {
+		boolean dirty = false;
+		EquipmentRegistry registry = EquipmentRegistry.of(level);
+		if (panelVersion != registry.version() || linked == null || level.getGameTime() % 100 == 0) {
+			panelVersion = registry.version();
+			BlockPos found = nearestReactor(registry);
+			// A reactor in an unloaded chunk is not in the registry: keep to it rather than lose it.
+			if (found == null && linked != null && !level.isLoaded(linked)) {
+				found = linked;
+			}
+			if (!java.util.Objects.equals(found, linked)) {
+				linked = found;
+				dirty = true;
+			}
+		}
+		boolean online = linked != null && level.isLoaded(linked) && level.getBlockEntity(linked) instanceof EquipmentBlockEntity vessel
+				&& vessel.kind().reactor();
+		if (online) {
+			core.copyStatus(((EquipmentBlockEntity) level.getBlockEntity(linked)).core);
+		}
+		if (online != panelOnline) {
+			panelOnline = online;
+			dirty = true;
+		}
+		if (dirty || ++ticks % SYNC_INTERVAL == 0) {
+			changed();
+		}
+	}
+
+	/** The reactor nearest this panel within {@link #PANEL_RANGE} blocks, or null. */
+	public @Nullable BlockPos nearestReactor(EquipmentRegistry registry) {
+		Vec3 here = middle();
+		BlockPos best = null;
+		double bestDist = (double) PANEL_RANGE * PANEL_RANGE;
+		for (java.util.Map.Entry<BlockPos, EquipmentRegistry.Entry> e : registry.anchors().entrySet()) {
+			if (!e.getValue().kind().reactor()) {
+				continue;
+			}
+			EquipmentKind k = e.getValue().kind();
+			BlockPos middle = e.getKey().offset(EquipmentKind.toWorld(new BlockPos(k.wide / 2, k.tall / 2, k.deep / 2), e.getValue().facing()));
+			double d = Vec3.atCenterOf(middle).distanceToSqr(here);
+			if (d < bestDist || d == bestDist && best != null && e.getKey().compareTo(best) < 0) {
+				bestDist = d;
+				best = e.getKey().immutable();
+			}
+		}
+		return best;
+	}
+
+	/** A remote shutdown panel: finds its reactor now (used when it is used before it has ticked). */
+	public void linkShutdownPanel(ServerLevel level) {
+		panelVersion = -1;
+		tickShutdownPanel(level);
 	}
 
 	private void tickVessel(ServerLevel level) {
@@ -442,6 +512,10 @@ public class EquipmentBlockEntity extends BlockEntity {
 			out.putInt("loops", loops);
 			out.putInt("water", totalWater());
 		}
+		if (kind() == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+			core.saveStatus(out);
+			out.putBoolean("online", panelOnline);
+		}
 		return out.buildResult();
 	}
 
@@ -532,6 +606,10 @@ public class EquipmentBlockEntity extends BlockEntity {
 			missing = in.read("missing", Codec.STRING.listOf()).orElse(missing);
 			loops = in.getIntOr("loops", loops);
 			syncedWater = in.getIntOr("water", 0);
+		}
+		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+			core.loadStatus(in);
+			panelOnline = in.getBooleanOr("online", false);
 		}
 		if (water != null) {
 			water.variant = net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(Fluids.WATER);

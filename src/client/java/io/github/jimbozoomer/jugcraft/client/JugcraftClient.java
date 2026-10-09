@@ -327,6 +327,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.EQUIPMENT_ENTITY, NuclearRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.COOLING_TOWER_ENTITY, CoolingTowerRenderer::new);
 		io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement.openConsole = pos -> Minecraft.getInstance().gui.setScreen(new ReactorConsoleScreen(pos));
+		io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement.openShutdownPanel = pos -> Minecraft.getInstance().gui.setScreen(new RemoteShutdownScreen(pos));
 		net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry.getInstance().register(
 				io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.COOLING_PLUME, CoolingPlumeParticle.Provider::new);
 	}

@@ -61,6 +61,8 @@ EQUIPMENT = {
     "turbine_control_board": ("Turbine Generator Control Board", 6, 2, 3),
     "electrical_control_board": ("Electrical Control Board", 6, 2, 3),
     "radiation_control_board": ("Radiation and Ventilation Control Board", 6, 2, 3),
+    # The control building's remote shutdown panel (round 24, tools/control_boards.py remote_shutdown_panel).
+    "remote_shutdown_panel": ("Remote Shutdown Panel", 6, 1, 3),
 }
 # The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
 TOWER_CONTROLLER = "cooling_tower_controller"
@@ -145,6 +147,7 @@ LANG = {
     "tooltip.jugcraft.nuclear.turbine_control_board": "The turbine's controls and the generator's meters and breakers (for show)",
     "tooltip.jugcraft.nuclear.electrical_control_board": "Offsite power, the station busses and the diesel generators (for show)",
     "tooltip.jugcraft.nuclear.radiation_control_board": "The radiation monitors, ventilation and fire detection (for show)",
+    "tooltip.jugcraft.nuclear.remote_shutdown_panel": "Trips the nearest reactor and takes its controls from the control room's console (no link card needed)",
     "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
     "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
     "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
@@ -159,6 +162,11 @@ LANG = {
     "message.jugcraft.nuclear.edg_no_fuel": "No diesel: it cranks on air but won't fire. Its day tank (a storage tank of diesel within %s blocks) is empty or missing, or the tank's outlet valve is shut",
     "message.jugcraft.nuclear.edg_stop": "Emergency diesel generator: stopping, coasting down",
     "message.jugcraft.nuclear.console_linked": "Console linked to the reactor",
+    "message.jugcraft.nuclear.panel_no_reactor": "No reactor within %s blocks: the remote shutdown panel runs the nearest one",
+    "message.jugcraft.nuclear.panel_tripped": "Reactor trip: the rods are going in",
+    "message.jugcraft.nuclear.panel_control_here": "Control transferred to the remote shutdown panel: the control room's console can only trip the reactor",
+    "message.jugcraft.nuclear.panel_control_returned": "Control returned to the main control room",
+    "message.jugcraft.nuclear.control_at_panel": "Control is at the remote shutdown panel: hand it back there first (you can still trip the reactor)",
     "message.jugcraft.nuclear.card_set": "Link card set to this reactor: now use it on a console",
     "message.jugcraft.nuclear.card_empty": "Use the card on a reactor vessel first",
     "message.jugcraft.nuclear.not_owner": "This reactor belongs to someone else",
@@ -183,7 +191,7 @@ CONSOLE_LANG = {
     R + "header": "UNIT 1  ·  %s-LOOP PWR  ·  LEU",
     R + "header_epr": "UNIT 1  ·  EPR  ·  LEU", R + "header_smr": "MODULE  ·  SMALL MODULAR REACTOR  ·  LEU",
     R + "status.incomplete": "UNIT INCOMPLETE", R + "status.scram": "SCRAM", R + "status.refuelling": "REFUELLING",
-    R + "status.operating": "OPERATING", R + "status.shut_down": "SHUT DOWN",
+    R + "status.operating": "OPERATING", R + "status.shut_down": "SHUT DOWN", R + "status.remote": "CONTROL AT REMOTE SHUTDOWN PANEL",
     R + "core_map": "CORE MAP  ·  ROD BANKS", R + "core_legend": "%s / %s assemblies",
     R + "rods": "RODS", R + "rods_in": "%s%% IN", R + "plant": "PLANT",
     R + "thermal": "THERMAL POWER", R + "electric": "ELECTRIC", R + "core_temp": "CORE TEMP", R + "coolant": "COOLANT",
@@ -198,6 +206,20 @@ CONSOLE_LANG = {
     R + "fuel": "FUEL", R + "fuel_line": "LEU · %s assemblies · %s fresh · %s spent · burnup %s%%",
     R + "refuel": "REFUEL", R + "refuel_close": "CLOSE HEAD",
 }
+# The remote shutdown panel's screen (round 24, client/RemoteShutdownScreen.java).
+P = "screen.jugcraft.remote_shutdown."
+CONSOLE_LANG.update({
+    P + "title": "REMOTE SHUTDOWN PANEL", P + "no_reactor": "No reactor within %s blocks: the panel runs the nearest one",
+    P + "status.no_signal": "NO SIGNAL", P + "status.tripped": "REACTOR TRIPPED", P + "status.operating": "OPERATING",
+    P + "status.shut_down": "SHUT DOWN", P + "reactor": "REACTOR", P + "found": "Nearest reactor: %s, %s, %s",
+    P + "distance": "%s blocks from this panel", P + "design_pwr": "Pressurized water reactor", P + "design_epr": "EPR",
+    P + "design_smr": "Small modular reactor", P + "power": "POWER", P + "rods": "RODS IN", P + "temperature": "CORE TEMP",
+    P + "output": "OUTPUT", P + "rods_bar": "ROD TRAVEL (FULL: ALL IN)", P + "fuel_damaged": "FUEL DAMAGED",
+    P + "control": "CONTROL", P + "at_mcr": "Main control room", P + "at_panel": "This panel (control room locked out)",
+    P + "take": "TAKE CONTROL", P + "return": "RETURN CONTROL", P + "trip": "REACTOR TRIP",
+    P + "trip_line": "Drives every rod in", P + "tripped_line": "Tripped: rods going in", P + "trip_line2": "Reset from the console",
+    P + "mode_personal": "PERSONAL", P + "mode_party": "PARTY",
+})
 
 CRAFTING = {
     "hazmat_hood": (["WWW", "WGW", "PIP"], {"W": "minecraft:yellow_wool", "G": "minecraft:glass_pane",
@@ -261,6 +283,8 @@ CRAFTING = {
        for board, dye in (("esf_control_board", "orange"), ("rcs_control_board", "red"), ("secondary_control_board", "yellow"),
                           ("turbine_control_board", "purple"), ("electrical_control_board", "black"),
                           ("radiation_control_board", "light_blue"))},
+    "remote_shutdown_panel": (["RGR", "CKC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit",
+                                                     "K": "minecraft:tripwire_hook", "S": "#c:plates/steel"}, 1),
     "cooling_tower_fill": (["PPP", "SSS", "PPP"], {"P": "jugcraft:plastic_sheet", "S": "minecraft:stick"}, 8),
     "conduit_trench": (["CCC", "PPP", "CCC"], {"C": "minecraft:smooth_stone", "P": "jugcraft:circulating_water_conduit"}, 3),
     TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
@@ -1016,11 +1040,13 @@ def geiger_item(rid):
          "fallback": {"type": "minecraft:model", "model": rid("item/geiger_needle_0")}}]}}
 
 
-# ---------------------------------------------------------------- the equipment's material sheet (512x512, 64 px cells)
+# ---------------------------------------------------------------- the equipment's material sheet (512 wide, 64 px cells)
 # client/NuclearRenderer.java reads these regions by name, in this order (checked by tools/check_mod_data.py).
 # Textures are drawn the right way up: the renderer puts the top of a cell at the top of every vertical face.
+# Eight cells across; nine rows since round 24 (512 x 576: client/NuclearRenderer.java ROWS).
 EQ_SHEET = 512
 EQ_CELL = 64
+EQ_ROWS = 9
 EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
                 "concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey",
                 "radiator", "glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green",
@@ -1031,7 +1057,10 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 "engine_green", "rocker", "gunmetal", "red_iron", "pipe_green", "pipe_brown",
                 "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board", "sign_autostart", "stencil_edg", "turbo", "black",
                 # The control room's boards (round 23, tools/control_boards.py): lamps, windows, meters, charts, swatches.
-                "lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches"]
+                "lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches",
+                # The remote shutdown panel (round 24): engraved nameplates and titles, digital indicators, placards,
+                # procedure binders (tools/control_boards.py TEXT_MATERIALS).
+                "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders"]
 
 
 def eq_slot(name):
@@ -1311,7 +1340,7 @@ def draw_equipment_sheet():
     import control_boards
     for name, make in control_boards.MAKERS.items():
         makers[name] = (lambda make=make, seed=160 + len(makers): make(seed))
-    sheet = Image.new("RGBA", (EQ_SHEET, EQ_SHEET), (0, 0, 0, 0))
+    sheet = Image.new("RGBA", (EQ_SHEET, EQ_CELL * EQ_ROWS), (0, 0, 0, 0))
     for name in EQ_MATERIALS:
         col, row = eq_slot(name)
         if name in control_boards.MAKERS:

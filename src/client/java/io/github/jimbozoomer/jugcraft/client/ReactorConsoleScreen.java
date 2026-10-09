@@ -117,6 +117,10 @@ public class ReactorConsoleScreen extends Screen {
 		} else if (core.scrammed) {
 			status = t("status.scram");
 			statusColour = RED;
+		} else if (core.remote) {
+			// A remote shutdown panel has taken control: this console can only trip the reactor.
+			status = t("status.remote");
+			statusColour = AMBER;
 		} else if (core.refuelOpen) {
 			status = t("status.refuelling");
 			statusColour = AMBER;
