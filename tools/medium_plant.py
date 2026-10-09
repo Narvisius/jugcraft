@@ -68,6 +68,9 @@ PAINTED = M("jugcraft:painted_wall", (226, 224, 214))
 TANK = M("jugcraft:tank_plate", (226, 228, 224))
 # The storage tank MBS (tools/storage_tank.py): grey primer plates until the outlet forms the tank.
 TANK_PLATE = M("jugcraft:storage_tank_plate[band=wall,formed=false]", (150, 156, 150))
+# Framed glass (tools/framed_glass.py): laid facing the way a door in it would face, its frame worked out at the end
+# (finish_glass) from what is round it, like the game does.
+FGLASS = {f: M(f"jugcraft:framed_glass[facing={f}]", (186, 212, 218)) for f in ("north", "south", "east", "west")}
 # Railing is laid as this placeholder and joined up at the end (finish_railings), like the game joins it.
 RAIL = M("jugcraft:railing", (232, 190, 30))
 LOUVRE = M("jugcraft:intake_louvre", (150, 154, 152))
@@ -173,12 +176,43 @@ def finish_railings(part):
                        f"west={_flag(wst)}]", (232, 190, 30))
 
 
+def finish_glass(part):
+    """Frames every framed glass in a part the way the game does (nuclear/FramedGlassBlock.java): the glass runs on
+    into the framed glass beside, above and below it, with a jamb, a corner post, a sill, a head or a door's frame
+    wherever it needs support."""
+    import framed_glass as FG
+    g = part.g
+    laid = g.copy()
+    w, h, d = g.shape
+    placed = {v: f for f, v in FGLASS.items()}
+    doors = {k: st.split("facing=")[1].split(",")[0].rstrip("]") for k, (st, _) in P.MATERIALS.items()
+             if "_door[" in st and "half=" in st}
+
+    def base(x, y, z):
+        if not (0 <= x < w and 0 <= y < h and 0 <= z < d):
+            return None
+        m = int(laid[x, y, z])
+        if m in placed:
+            return ("glass", placed[m], None)
+        if m in doors:
+            return ("door", doors[m])
+        return None
+
+    def at(x, y, z):
+        here = base(x, y, z)
+        if here is not None and here[0] == "glass":
+            return ("glass", here[1], FG.bottom_of(base, x, y, z))
+        return here
+    for x, y, z in [tuple(c) for c in np.argwhere(np.isin(g, list(placed)))]:
+        g[x, y, z] = M(FG.state(at, x, y, z), (186, 212, 218))
+
+
 def roller(facing):
     return M(f"jugcraft:roller_door[facing={facing},open=false]", (150, 156, 160))
 
 
 CCW = {v: k for k, v in P.CLOCKWISE.items()}
-GLAZING = {PANE, GLASS, BLAST}
+GLAZING = {PANE, GLASS, BLAST} | set(FGLASS.values())
 DOORISH = set()  # door block ids, filled as doors are made
 OPPOSITE = {"north": "south", "south": "north", "east": "west", "west": "east"}
 SIDE = {"n": "north", "s": "south", "w": "west", "e": "east"}
@@ -941,12 +975,14 @@ def ground_floor(b, W, D):
     # corridor. A status screen, a notice board, a bench.
     b.b(1, 0, 19, 12, 0, D - 2, VINYL)
     b.b(3, 0, 26, 8, 0, D - 2, CARPET)
+    # The vestibule's glass: framed glass flush with its doors (the doors' plane, the south edge of z 25), the side
+    # walls on the vestibule's outer faces, so the corners meet; a transom of glass over the doors.
     for y in range(y0, y1 + 1):
         for z in range(26, D - 1):
-            b.p(2, y, z, PANE if y <= 3 else PAINTED)
-            b.p(9, y, z, PANE if y <= 3 else PAINTED)
+            b.p(2, y, z, FGLASS["east"] if y <= 3 else PAINTED)
+            b.p(9, y, z, FGLASS["west"] if y <= 3 else PAINTED)
         for x in range(2, 10):
-            b.p(x, y, 25, PANE if y <= 3 else PAINTED)
+            b.p(x, y, 25, FGLASS["north"] if y <= 3 else PAINTED)
     b.door(6, 1, 25, "north", kind="glass", double=True)
     # The security counter facing the hall, the officer behind it; his camera desk inside the turnstiles.
     b.row(("reception_desk", 3), 11, 1, 23, "west", seat="operator_chair")
@@ -957,7 +993,7 @@ def ground_floor(b, W, D):
         b.furniture("turnstile", x, 1, 21, "north")
     for y in (1, 2):
         for x in (1, 2, 3, 4, 8, 9, 10):
-            b.p(x, y, 21, PANE)
+            b.p(x, y, 21, FGLASS["north"])
     b.door(6, 1, 18, "north", double=True)
     # The plant's status on a screen, a bench by the window, a notice board.
     wall_screen(b, "status_screen", 1, 2, 24, "west")
@@ -1073,11 +1109,12 @@ def second_floor(b, W, D, y):
         b.stack("bookcase", x, y0, 16, "south", n=2)
     wall_screen(b, "plant_map_screen", 29, y0 + 1, 11, "east")
     b.furniture("printer", 11, y0, 16, "south")
-    # The shift supervisor's office in the south-west corner: a half wall glazed over, so he sees the boards.
-    for x in range(2, 9):
+    # The shift supervisor's office in the south-west corner: a half wall glazed over, so he sees the boards (framed
+    # glass, one pane from wall to wall), round the corner to his office's east wall.
+    for x in range(2, 10):
         b.p(x, y0, 12, ACOUSTIC)
         for k in (y0 + 1, y0 + 2):
-            b.p(x, k, 12, PANE)
+            b.p(x, k, 12, FGLASS["north"])
         for k in range(y0 + 3, top + 1):
             b.p(x, k, 12, ACOUSTIC)
     for z in range(13, 17):
@@ -1804,6 +1841,7 @@ def medium_site():
     finish_lights(s)
     for part, *_ in s.parts:
         finish_railings(part)
+        finish_glass(part)
     return s
 
 

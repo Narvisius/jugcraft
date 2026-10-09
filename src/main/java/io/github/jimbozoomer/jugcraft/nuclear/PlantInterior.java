@@ -222,6 +222,8 @@ public final class PlantInterior {
 			Registry.register(BuiltInRegistries.ITEM, itemKey, new DoubleHighBlockItem(door, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
 			BLOCKS.put(id, door);
 		}
+		// Framed glass: a storefront partition that meets the glass doors flush (FramedGlassBlock).
+		block("framed_glass", FramedGlassBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS_PANE).strength(1.0F, 6F).noOcclusion());
 		ROLLER_DOOR = block("roller_door", RollerDoorBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F, 12F).noOcclusion());
 		BUILDING_SIGN = block("building_sign", PlantSignBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F).noOcclusion()
 				.noCollision());

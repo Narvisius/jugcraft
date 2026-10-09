@@ -5,13 +5,29 @@ import io.github.jimbozoomer.jugcraft.blueprint.BuildSite;
 import io.github.jimbozoomer.jugcraft.nuclear.CoolingTowerBlockEntity;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind;
+import io.github.jimbozoomer.jugcraft.nuclear.FramedGlassBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear;
+import io.github.jimbozoomer.jugcraft.nuclear.PlantInterior;
 import io.github.jimbozoomer.jugcraft.nuclear.PlantBuilder;
 import io.github.jimbozoomer.jugcraft.nuclear.ReactorCore;
 import io.github.jimbozoomer.jugcraft.nuclear.ReactorUnit;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.block.Rotation;
 
 /**
@@ -21,7 +37,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340681"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340688"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -242,5 +258,118 @@ public class NuclearPlantGameTests {
 					+ " (" + (int) Math.sqrt(where.distSqr(near)) + " blocks from a core); want under 0.1" + why);
 		}
 		io.github.jimbozoomer.jugcraft.Jugcraft.LOGGER.info("{} at full power: worst {} uSv/h over {} points in the open", plant, worst * 1000, points);
+	}
+
+	// ---------------------------------------------------------------- framed glass (FramedGlassBlock)
+
+	private static BlockPos framed(GameTestHelper helper, int x, int y, int z, Direction facing) {
+		BlockPos at = helper.absolutePos(new BlockPos(x, y, z));
+		FramedGlassBlock glass = (FramedGlassBlock) PlantInterior.BLOCKS.get("framed_glass");
+		helper.getLevel().setBlock(at, glass.connected(glass.defaultBlockState().setValue(FramedGlassBlock.FACING, facing),
+				helper.getLevel(), at), Block.UPDATE_ALL);
+		return at;
+	}
+
+	private static BlockState at(GameTestHelper helper, BlockPos absolute) {
+		return helper.getLevel().getBlockState(absolute);
+	}
+
+	private static void door(GameTestHelper helper, int x, int y, int z, Direction facing) {
+		Block door = PlantInterior.BLOCKS.get("glass_door");
+		BlockState lower = door.defaultBlockState().setValue(DoorBlock.FACING, facing);
+		helper.setBlock(new BlockPos(x, y, z), lower.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
+		helper.setBlock(new BlockPos(x, y + 1, z), lower.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+	}
+
+	/** Placed beside a glass door it takes the door's plane, whichever way its placer faces, and lines up with its leaf. */
+	@GameTest(maxTicks = 20)
+	public void framedGlassMeetsTheDoorFlush(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			return;
+		}
+		for (int x = 0; x < 5; x++) {
+			for (int z = 0; z < 5; z++) {
+				helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE.defaultBlockState());
+			}
+		}
+		door(helper, 1, 1, 2, Direction.NORTH);
+		// Placed from the other side (looking south), just east of the door.
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		player.setGameMode(GameType.CREATIVE);
+		BlockPos target = helper.absolutePos(new BlockPos(2, 1, 2));
+		player.setPos(target.getX() + 0.5, target.getY(), target.getZ() - 2.5);
+		player.setYRot(0F);   // looking south
+		ItemStack stack = new ItemStack(PlantInterior.BLOCKS.get("framed_glass"));
+		player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+		BlockPos floor = target.below();
+		BlockPlaceContext place = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, stack,
+				new BlockHitResult(Vec3.atCenterOf(floor).relative(Direction.UP, 0.5), Direction.UP, floor, false));
+		helper.assertTrue(place.getHorizontalDirection() == Direction.SOUTH, "the placer looks south: " + place.getHorizontalDirection());
+		BlockState glass = PlantInterior.BLOCKS.get("framed_glass").getStateForPlacement(place);
+		helper.assertTrue(glass.getValue(FramedGlassBlock.FACING) == Direction.NORTH, "takes the door's facing: " + glass);
+		helper.assertTrue(glass.getValue(FramedGlassBlock.LEFT) == FramedGlassBlock.End.JAMB, "a jamb against the door: " + glass);
+		helper.getLevel().setBlock(target, glass, Block.UPDATE_ALL);
+		// The panel and the closed leaf take the same slice of their blocks.
+		AABB pane = glass.getShape(helper.getLevel(), target).bounds();
+		BlockPos doorAt = helper.absolutePos(new BlockPos(1, 1, 2));
+		AABB leaf = at(helper, doorAt).getShape(helper.getLevel(), doorAt).bounds();
+		helper.assertTrue(Math.abs(pane.minZ - leaf.minZ) < 1e-6 && Math.abs(pane.maxZ - leaf.maxZ) < 1e-6,
+				"flush with the door's leaf: glass z " + pane.minZ + ".." + pane.maxZ + ", leaf z " + leaf.minZ + ".." + leaf.maxZ);
+		// Every facing: the panel sits where a door facing that way has its leaf.
+		for (Direction facing : Direction.Plane.HORIZONTAL) {
+			BlockState g = glass.setValue(FramedGlassBlock.FACING, facing);
+			BlockState d = at(helper, doorAt).setValue(DoorBlock.FACING, facing);
+			AABB a = g.getShape(helper.getLevel(), target).bounds();
+			AABB b = d.getShape(helper.getLevel(), doorAt).bounds();
+			helper.assertTrue(a.equals(b), facing + ": glass " + a + ", door " + b);
+		}
+		helper.succeed();
+	}
+
+	/** The glass runs on unbroken; frames only at ends, corners, top and bottom, and round a door set in it. */
+	@GameTest(maxTicks = 20)
+	public void framedGlassFramesOnlyWhereItNeedsSupport(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			return;
+		}
+		// A run along x (facing north) three wide and three high with a door in the middle and glass over it.
+		door(helper, 2, 1, 1, Direction.NORTH);
+		BlockPos[][] run = new BlockPos[5][4];
+		for (int y = 1; y <= 3; y++) {
+			for (int x = 1; x <= 3; x++) {
+				if (x == 2 && y < 3) {
+					continue;
+				}
+				run[x][y] = framed(helper, x, y, 1, Direction.NORTH);
+			}
+		}
+		// Joined up as the game does when neighbours change: settle once more from the finished arrangement.
+		for (int y = 1; y <= 3; y++) {
+			for (int x = 1; x <= 3; x++) {
+				if (run[x][y] != null) {
+					FramedGlassBlock block = (FramedGlassBlock) at(helper, run[x][y]).getBlock();
+					helper.getLevel().setBlock(run[x][y], block.connected(at(helper, run[x][y]), helper.getLevel(), run[x][y]), Block.UPDATE_ALL);
+				}
+			}
+		}
+		BlockState left = at(helper, run[1][1]), over = at(helper, run[2][3]), besideOver = at(helper, run[1][3]), mid = at(helper, run[1][2]);
+		helper.assertTrue(left.getValue(FramedGlassBlock.RIGHT) == FramedGlassBlock.End.JAMB, "a jamb beside the door: " + left);
+		helper.assertTrue(left.getValue(FramedGlassBlock.BOTTOM) == FramedGlassBlock.Bottom.SILL && left.getValue(FramedGlassBlock.UP), "a sill, glass going on up: " + left);
+		helper.assertTrue(mid.getValue(FramedGlassBlock.BOTTOM) == FramedGlassBlock.Bottom.GLASS && mid.getValue(FramedGlassBlock.UP), "no rails between stacked glass: " + mid);
+		helper.assertTrue(over.getValue(FramedGlassBlock.BOTTOM) == FramedGlassBlock.Bottom.DOOR, "the head over the door: " + over);
+		helper.assertTrue(over.getValue(FramedGlassBlock.LEFT) == FramedGlassBlock.End.JOIN && over.getValue(FramedGlassBlock.RIGHT) == FramedGlassBlock.End.JOIN,
+				"glass carries on either side over the door: " + over);
+		helper.assertTrue(besideOver.getValue(FramedGlassBlock.RIGHT) == FramedGlassBlock.End.HEAD, "the door head's corner beside it: " + besideOver);
+		helper.assertTrue(!besideOver.getValue(FramedGlassBlock.UP), "a head along the top: " + besideOver);
+		// A corner: a run going north from the west end, facing east (its panel on the west edge, in line with the
+		// first run's west end): the first run's end block turns the corner, the new run carries the glass into it.
+		BlockPos turn = framed(helper, 1, 1, 0, Direction.EAST);
+		BlockPos end = run[1][1];
+		FramedGlassBlock block = (FramedGlassBlock) at(helper, end).getBlock();
+		helper.getLevel().setBlock(end, block.connected(at(helper, end), helper.getLevel(), end), Block.UPDATE_ALL);
+		helper.getLevel().setBlock(turn, block.connected(at(helper, turn), helper.getLevel(), turn), Block.UPDATE_ALL);
+		helper.assertTrue(at(helper, end).getValue(FramedGlassBlock.LEFT) == FramedGlassBlock.End.CORNER, "a corner post: " + at(helper, end));
+		helper.assertTrue(at(helper, turn).getValue(FramedGlassBlock.RIGHT) == FramedGlassBlock.End.JOIN, "the turned run carries on into it: " + at(helper, turn));
+		helper.succeed();
 	}
 }

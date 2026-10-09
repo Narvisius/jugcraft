@@ -13,6 +13,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 import nuclear_materials as M
+import framed_glass
 import plant_office
 import plant_office2
 
@@ -120,7 +121,7 @@ SIGNS = {
     "diesel_building": "EMERGENCY DIESEL GENERATORS", "pump_house": "INTAKE PUMP HOUSE", "administration": "ADMINISTRATION",
     "security": "SECURITY", "warehouse": "WAREHOUSE", "transformer_yard": "MAIN TRANSFORMERS", "switchyard": "SWITCHYARD",
     "main_control_room": "Main Control Room", "shift_supervisor": "Shift Supervisor", "relay_room": "Relay Room",
-    "cable_spreading_room": "Cable Spreading Room", "server_room": "Plant Computer Room", "battery_room": "Battery Room",
+    "cable_spreading_room": "Cable Spreading Room", "server_room": "Server Room", "battery_room": "Battery Room",
     "hvac_room": "HVAC Equipment", "switchgear_room": "Switchgear", "lube_oil_room": "Lube Oil", "workshop": "Workshop",
     "turbine_control_room": "Turbine Control", "diesel_a": "Diesel Generator A", "diesel_b": "Diesel Generator B",
     "office": "Office", "meeting_room": "Meeting Room", "cafeteria": "Cafeteria", "lobby": "Reception", "stairs": "Stairs",
@@ -142,8 +143,9 @@ SIGNS = {
 
 OTHER["conference_table"] = "Round Meeting Table"
 MULTI = [k for k, v in FURNITURE.items() if "multi" in v]
-BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table"]
-NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER}
+BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table",
+                                                                          framed_glass.BLOCK]
+NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER, framed_glass.BLOCK: framed_glass.DISPLAY}
 UNIFORMS = {"lab_coat": "Lab Coat", "security_jacket": "Security Jacket"}   # wearable (client/UniformLayer.java)
 ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"] + MULTI + list(UNIFORMS)
 
@@ -174,6 +176,7 @@ CRAFTING = {
     "room_sign": (["PD"], {"P": "#c:plates/iron", "D": "minecraft:black_dye"}, 4),
 }
 CRAFTING.update(plant_office.CRAFTING)
+CRAFTING.update(framed_glass.CRAFTING)
 CRAFTING.update(plant_office2.CRAFTING)
 CRAFTING.update(plant_office2.PN.CRAFTING)
 CRAFTING["lab_coat"] = (["W W", "WWW", "WWW"], {"W": "minecraft:white_wool"}, 1)
@@ -219,8 +222,9 @@ def textures_used():
 
 
 TEXTURES = {t for t in textures_used() if not t.startswith("mc_")} | set(CUBES) | {"hvac_duct", "hvac_duct_top", "pi_roller_slats", "pi_sign"} | \
-    {f"{d}_{h}" for d in DOORS for h in ("top", "bottom")}
-HI_RES = TEXTURES | set(ITEM_TEXTURES)
+    {"steel_door_top", "steel_door_bottom"}
+FRAMED_TEXTURES = set(framed_glass.draw_textures())   # the framed glass and the glass door (tools/framed_glass.py)
+HI_RES = TEXTURES | set(ITEM_TEXTURES) | FRAMED_TEXTURES
 
 
 # --------------------------------------------------------------------------------------------------- models
@@ -470,11 +474,16 @@ def write_assets(write, rid, assets, lang):
     # Doors: the vanilla door models and blockstate pattern.
     for door, name in DOORS.items():
         lang[f"block.{MOD}.{door}"] = name
-        tex = {"bottom": rid(f"block/{door}_bottom"), "top": rid(f"block/{door}_top")}
-        for half in ("bottom", "top"):
-            for hinge in ("left", "right"):
-                for opened in ("", "_open"):
-                    write(models / f"{door}_{half}_{hinge}{opened}.json", {"parent": f"minecraft:block/door_{half}_{hinge}{opened}", "textures": tex})
+        if door == "glass_door":
+            # The glass door: a 3D frame and real glass, the framed glass's parts (tools/framed_glass.py).
+            for name_, body in framed_glass.door_models(rid, door).items():
+                write(models / f"{name_}.json", body)
+        else:
+            tex = {"bottom": rid(f"block/{door}_bottom"), "top": rid(f"block/{door}_top")}
+            for half in ("bottom", "top"):
+                for hinge in ("left", "right"):
+                    for opened in ("", "_open"):
+                        write(models / f"{door}_{half}_{hinge}{opened}.json", {"parent": f"minecraft:block/door_{half}_{hinge}{opened}", "textures": tex})
         closed = {"east": 0, "south": 90, "west": 180, "north": 270}
         variants = {}
         for facing, y0 in closed.items():
@@ -489,6 +498,7 @@ def write_assets(write, rid, assets, lang):
         write(assets / "blockstates" / f"{door}.json", {"variants": variants})
         write(assets / "models" / "item" / f"{door}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{door}")}})
         write(assets / "items" / f"{door}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{door}")}})
+    framed_glass.write_assets(write, rid, assets, lang)
     # The roller door: slats in the middle of the opening, nothing when rolled up; while it rolls (moving) the block
     # model is empty and client/RollerDoorRenderer.java draws the curtain moving and the coil at the top.
     lang[f"block.{MOD}.roller_door"] = OTHER["roller_door"]
@@ -905,22 +915,6 @@ def _steel_door(top):
     return img
 
 
-def _glass_door(top):
-    """An aluminium-framed glass entrance door: dark bronze frame, clear glass (cut out), a push bar across."""
-    a = np.zeros((S, S, 4), np.uint8)
-    a[..., :3] = (70, 66, 60)
-    a[..., 3] = 255
-    a[14:S - 14 if top else S - 30, 14:S - 14, 3] = 0
-    if top:
-        a[14:S - 14, 14:S - 14, 3] = 0
-    img = Image.fromarray(a, "RGBA")
-    d = ImageDraw.Draw(img)
-    if not top:
-        d.rectangle([14, 6, S - 15, 12], fill=(190, 194, 198, 255))   # the push bar
-        d.rectangle([14, S - 30, S - 15, S - 15], fill=(70, 66, 60, 255))
-    return img
-
-
 def _sign_particle():
     return M.brushed((44, 48, 54), 329, "h", dirt=0.05)
 
@@ -940,7 +934,6 @@ def draw_block_textures():
         "ceiling_tile": _ceiling_tile, "vinyl_floor": _vinyl_floor, "epoxy_floor": _epoxy_floor, "painted_wall": _painted_wall,
         "tank_plate": _tank_plate, "intake_louvre": _louvre, "hvac_duct": _duct, "hvac_duct_top": lambda: _duct(True),
         "steel_door_bottom": lambda: _steel_door(0), "steel_door_top": lambda: _steel_door(1),
-        "glass_door_bottom": lambda: _glass_door(0), "glass_door_top": lambda: _glass_door(1),
     }
     makers.update(plant_office.makers())
     makers.update(plant_office2.makers())
@@ -958,6 +951,7 @@ def draw_block_textures():
         if name in plant_office2.TRANSLUCENT:
             alpha = src.convert("RGBA").split()[3].resize(out[name].size)
             out[name].putalpha(alpha)
+    out.update(framed_glass.draw_textures())   # drawn at 64 px already; the glass keeps its partial alpha
     return out
 
 
@@ -976,7 +970,7 @@ def draw_item_textures():
         for x in range(64 - w + 14, 64 + w - 14, 14):
             d.rectangle([x, 56, x + 8, 72], fill=(240, 240, 236, 255))
         return M.stylize(img, 8)
-    return {"steel_door": door(_steel_door(1), _steel_door(0)), "glass_door": door(_glass_door(1), _glass_door(0)),
+    return {"steel_door": door(_steel_door(1), _steel_door(0)), "glass_door": framed_glass.door_icon(),
             "building_sign": sign(60), "room_sign": sign(34), "conference_table": plant_office.conference_icon(),
             **{name: plant_office2.icon(name) for name in MULTI},
             **{name: plant_office2.O4.O6.uniform_icon(name) for name in UNIFORMS}}

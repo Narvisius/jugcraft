@@ -159,9 +159,10 @@ blueprint (for players who lay out their own plant).
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room;
     the remote shutdown room; the locker room; and the secure entrance (a vestibule, the security counter and camera
-    desk, badge turnstiles). Hydrogen exhaust louvres high in the battery rooms' outside walls.
+    desk, badge turnstiles). Hydrogen exhaust louvres high in the battery rooms' outside walls. The vestibule, the
+    glass along the turnstiles and the shift supervisor's office are Framed Glass (below).
   - First floor: the cable spreading room under the control room (three tiers of tray, risers up into it), the relay
-    room, the plant computer room on its raised floor.
+    room, the server room on its raised floor.
   - Second floor: the main control room (the horseshoe of boards under the plant display wall, the reactor console,
     the operators' consoles, the senior reactor operator's and shift technical advisor's desks, procedures, the shift
     supervisor's glazed office), and across the corridor the Technical Support Center, kitchen, washroom and
@@ -170,6 +171,18 @@ blueprint (for players who lay out their own plant).
     water pumps, ducts, louvres).
   - The stair tower serves all four floors; it is laid last so no floor cuts into it. The switchboard's and chargers'
     meters are live panels: with no diesel generator within 24 blocks they read the battery on float (132 V, 12 A).
+- **Framed Glass** (`nuclear/FramedGlassBlock.java`, `tools/framed_glass.py`; Justin, 8 October 2026: the vanilla
+  panes "don't connect all the way" to the glass doors; "as continuous as possible, just glass, until it meets some
+  kind of corner"): a dark bronze aluminium storefront partition. Its panel is 3 px deep, at the edge of the block
+  nearest whoever places it, exactly where a door placed the same way has its leaf; placed beside a door, or on or
+  under other framed glass, it takes that plane by itself, so glass and doors make one face. The glass runs on unbroken
+  through framed glass beside, above and below it (no mullions or rails), and the frame shows only where the glass
+  needs support: a jamb at an end (a wall, a door, nothing), a corner post where a run turns inside the block (the
+  block in front is framed glass at right angles; a stub of glass runs along the side to it), two jambs where runs
+  meet at an outside corner, a sill and a head along the bottom and top, and round a door set in it (jambs up to the
+  door's head, the head over it, glass above). Clear glass with a faint tint, no sheen. The Glass Door is built from
+  the same parts: a 3D frame, real glass and a push bar. Recipe: 4 glass panes with an iron nugget between each pair
+  make 4.
 - **Building:** drones build from the lowest unfinished layer up a few layers at a time (see the blueprint system
   doc). In creative, `/nuclear build <blueprint> [fuelled]` builds one at once.
 - **Checked before building:** `tools/nuclear_plants.py` follows the pipes the way `ReactorUnit` does and refuses to

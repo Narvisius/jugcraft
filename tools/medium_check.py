@@ -62,7 +62,7 @@ PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door"
                    "jugcraft:railing_gate", "jugcraft:room_sign",
                    "jugcraft:building_sign", "minecraft:rail", "jugcraft:ceiling_light_panel", "minecraft:iron_chain",
                    "jugcraft:cable_tray", "jugcraft:dc_cable_tray", "jugcraft:light_hanger", "jugcraft:high_bay_light", "minecraft:light[")
-SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:blast_glass", "jugcraft:lead_glass", "minecraft:water", "jugcraft:guard_rail", "jugcraft:railing",
+SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:framed_glass", "jugcraft:blast_glass", "jugcraft:lead_glass", "minecraft:water", "jugcraft:guard_rail", "jugcraft:railing",
                                  "jugcraft:storage_tank_fill_pipe", "jugcraft:storage_tank_inlet", "jugcraft:storage_tank_outlet",
                                  "jugcraft:storage_tank_manway", "jugcraft:storage_tank_vent", "jugcraft:storage_tank_hatch",
                                  "jugcraft:operator_chair", "jugcraft:office_desk", "jugcraft:console_desk", "jugcraft:turnstile",

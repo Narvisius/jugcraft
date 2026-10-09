@@ -6969,8 +6969,12 @@ def check_model_uvs():
             for side, face in element.get("faces", {}).items():
                 texture = face.get("texture", "")
                 for _ in range(4):
+                    if isinstance(texture, dict):   # {"sprite": ..., "force_translucent": true}
+                        texture = texture.get("sprite", "")
                     if texture.startswith("#"):
                         texture = textures.get(texture[1:], "")
+                if isinstance(texture, dict):
+                    texture = texture.get("sprite", "")
                 if not texture or not translucent(texture):
                     continue
                 uv = face.get("uv") or default_uv(side, element["from"], element["to"])
