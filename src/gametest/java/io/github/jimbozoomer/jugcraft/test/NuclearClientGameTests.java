@@ -729,20 +729,24 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						// shift supervisor's glazing from the control room.
 						{139, 0, 115, 141, 1, 113}, {142, 0, 111, 138, 1, 109}, {142, 14, 97, 141, 15, 100},
 						// The speed gates (round 22): the bank from the hall, shut; from the side, up close.
-						{142, 0, 112, 142, 1, 109}, {139, 0, 111, 142, 0, 110}};
+						{142, 0, 112, 142, 1, 109}, {139, 0, 111, 142, 0, 110},
+						// The control room (round 23): the reactor console in line with the boards, the reactor coolant
+						// board up close, the operators' consoles.
+						{151, 14, 96, 151, 15, 90}, {147, 14, 95, 147, 15, 90}, {149, 14, 101, 146, 14, 96}};
 				String[] ctrlNames = {"battery_1a", "battery_1a_riser", "dc_room_1a", "entrance_vestibule", "security_counter", "battery_1b",
 						"dc_room_1b_board", "stairs", "cable_spreading", "control_room", "control_room_supervisor", "hvac_floor", "entrance_outside",
-						"support_center", "vestibule_door_glass", "gate_glass", "supervisor_glass", "speed_gates", "speed_gates_side"};
+						"support_center", "vestibule_door_glass", "gate_glass", "supervisor_glass", "speed_gates", "speed_gates_side", "reactor_console", "rcs_board",
+						"operator_consoles"};
 				for (int i = 0; i < ctrlShots.length; i++) {
 					int[] t = ctrlShots[i];
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
-							"jugcraft_plant_medium_r22_ctrl_" + ctrlNames[i]);
+							"jugcraft_plant_medium_r23_ctrl_" + ctrlNames[i]);
 				}
 				// Walking up the exit lane from inside (out of spectator, so the gate sees you): its doors slide back into
 				// their pedestals' slots and the lights go green.
 				singleplayer.getServer().runCommand("gamemode creative @p");
 				shotAt(context, singleplayer, wx.applyAsInt(143), y, wz.applyAsInt(108), wx.applyAsInt(143), y, wz.applyAsInt(112),
-						"jugcraft_plant_medium_r22_ctrl_speed_gate_open");
+						"jugcraft_plant_medium_r23_ctrl_speed_gate_open");
 				singleplayer.getServer().runCommand("gamemode spectator @p");
 				// Diesel room A's generator started (it turns over, fires and runs up to speed: the coupling and fan
 				// turning, the gauges up, smoke at the stack); its day tank drawn down so the storage tank refills it, and

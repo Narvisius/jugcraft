@@ -43,10 +43,12 @@ LAPTOP = [(4, 12.5, 6, 12, 12.9, 11, {"*": "pi_laptop", "up": "pi_keyboard!"}),
           (13, 12.5, 7, 15, 12.8, 11, {"*": "pi_paper", "up": "pi_notepad!"})]
 ROLLS = [(1, 12.5, 4, 15, 14, 5.5, "pi_blueprint_roll"), (2, 12.5, 6, 14, 14, 7.5, "pi_blueprint_roll"),
          (3, 12.5, 9, 13, 12.7, 13, {"*": "pi_blueprint_0", "up": "pi_blueprint_0!"})]
-DUAL = [(3, 12.5 + 0.5, 3, 6, 13.3, 5, "pi_monitor"), (10, 13, 3, 13, 13.3, 5, "pi_monitor"),
-        (-1, 15, 3.2, 7.6, 21, 4, {"*": "pi_monitor", "south": "pi_office_screen!"}),
-        (8.4, 15, 3.2, 17, 21, 4, {"*": "pi_monitor", "south": "pi_tv!"}),
-        (4.2, 13, 3.5, 4.8, 15, 4), (11.2, 13, 3.5, 11.8, 15, 4),
+# Two screens side by side, both inside the desk's own block (they used to overhang its sides, and desks in a row
+# pushed their screens into each other: Justin's round 23).
+DUAL = [(2.5, 12.5 + 0.5, 3, 5.5, 13.3, 5, "pi_monitor"), (10.5, 13, 3, 13.5, 13.3, 5, "pi_monitor"),
+        (0.4, 15, 3.2, 7.7, 21, 4, {"*": "pi_monitor", "south": "pi_office_screen!"}),
+        (8.3, 15, 3.2, 15.6, 21, 4, {"*": "pi_monitor", "south": "pi_tv!"}),
+        (3.7, 13, 3.5, 4.3, 15, 4), (11.7, 13, 3.5, 12.3, 15, 4),
         (4, 13, 8, 12, 13.4, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"})]
 DUAL[4] = DUAL[4] + ("pi_monitor",)
 DUAL[5] = DUAL[5] + ("pi_monitor",)
@@ -66,6 +68,36 @@ TOOLS = [(1.5, 12, 4, 7, 12.3, 9, {"*": "pi_circuit", "up": "pi_circuit!"}),
          (2, 12, 10, 6, 12.3, 13, "pi_ram")]
 DOCS = [(2.4, 12, 4, 7.4, 12.4, 11, {"*": "pi_pages", "up": "pi_doc_5!"}),
         (9, 12, 5, 14, 12.4, 11, {"*": "pi_monitor", "up": "pi_tablet!"})]
+
+# The control room operators' consoles (Justin's round 23: "keep the black ones ... at least three blocks each ...
+# have like little setups"): a black desk with a raised shelf along the back for the screens, joining up side by
+# side; each block carries its own setup, everything inside its own block so joined pieces never overlap.
+CONSOLE_BODY = [(0, 11, 0.5, 16, 12, 15.5, {"*": "pi_console_edge", "up": "pi_console_top!"}),
+                (0, 0, 1, 16, 11, 2.5, "pi_console_body"),
+                (0, 12, 0.5, 16, 13.2, 5, {"*": "pi_console_edge", "up": "pi_console_top!"})]
+
+
+def _screen(x0, x1, y0, y1, tex, z=2.2):
+    """A monitor standing on the console's shelf: its case, the picture toward the operator, its foot."""
+    mid = (x0 + x1) / 2
+    return [(x0, y0, z, x1, y1, z + 0.8, {"*": "pi_monitor", "south": f"{tex}!"}),
+            (mid - 0.4, 13.2, z + 0.1, mid + 0.4, y0, z + 0.7, "pi_monitor"),
+            (mid - 1.6, 13.2, z - 0.4, mid + 1.6, 13.5, z + 1.6, "pi_monitor")]
+
+
+CONSOLE_KEYS = [(3.5, 12, 8, 12.5, 12.5, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"}),
+                (13.2, 12, 8.5, 14.4, 12.5, 10.5, "pi_monitor")]
+CONSOLE_TWIN = _screen(0.6, 7.6, 14, 20.4, "pi_plant_screen_a") + _screen(8.4, 15.4, 14, 20.4, "pi_plant_screen_b") + CONSOLE_KEYS
+CONSOLE_WIDE = (_screen(1.0, 15.0, 14, 21.0, "pi_plant_screen_c") + O4.phone(11, 10, 12) +
+                [(2, 12, 8, 10, 12.5, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"})])
+CONSOLE_STACK = (_screen(2.0, 14.0, 14, 19.0, "pi_plant_screen_b") +
+                 [(2.0, 19.2, 2.3, 14.0, 24.2, 3.1, {"*": "pi_monitor", "south": "pi_plant_screen_a!"}),
+                  (7.6, 19.0, 2.5, 8.4, 19.2, 2.9, "pi_monitor"),
+                  (1.5, 12, 7.5, 8.5, 12.4, 12.5, {"*": "pi_pages", "up": "pi_doc_5!"}),
+                  (10, 12, 9, 14.5, 12.5, 11, {"*": "pi_monitor", "up": "pi_keyboard!"})])
+CONSOLE_PHONE = (_screen(0.6, 7.6, 14, 20.4, "pi_plant_screen_c") + O4.phone(9.4, 6.5, 12) +
+                 [(2.5, 12, 8, 7.5, 12.4, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"}),
+                  (9.5, 12, 11.5, 14.5, 12.3, 14.5, {"*": "pi_paper", "up": "pi_doc_3!"})])
 
 DESK_BODY = [(0, 11.5, 1, 16, 12.5, 15, {"*": "pi_laminate", "up": "pi_laminate!"}),
              (0, 3, 1.2, 16, 11.5, 2, "pi_desk_panel")]
@@ -88,6 +120,11 @@ PIECES = {
                        "left": [(0, 0, 0.5, 1.2, 12, 15.5, {"*": "pi_walnut", "west": "pi_walnut!"})],
                        "right": [(14.8, 0, 0.5, 16, 12, 15.5, {"*": "pi_walnut", "east": "pi_walnut!"})],
                        "tops": [DUAL, BLOTTER, EXEC_LAMP], "glow": ["pi_office_screen", "pi_tv"]},
+    "operator_console": {"display": "Operator Console", "row": "opcon", "boxes": CONSOLE_BODY,
+                         "left": [(0, 0, 2.5, 1.2, 11, 15.5, "pi_console_body")],
+                         "right": [(14.8, 0, 2.5, 16, 11, 15.5, "pi_console_body")],
+                         "tops": [CONSOLE_TWIN, CONSOLE_WIDE, CONSOLE_STACK, CONSOLE_PHONE],
+                         "glow": ["pi_plant_screen_a", "pi_plant_screen_b", "pi_plant_screen_c"]},
     "glass_desk": {"display": "Glass Desk", "row": "glass", "boxes": GLASS_BODY,
                    "left": [(0.4, 0, 1.5, 1.4, 11.5, 2.5, "pi_steel_dark"), (0.4, 0, 13.5, 1.4, 11.5, 14.5, "pi_steel_dark")],
                    "right": [(14.6, 0, 1.5, 15.6, 11.5, 2.5, "pi_steel_dark"), (14.6, 0, 13.5, 15.6, 11.5, 14.5, "pi_steel_dark")],
@@ -179,6 +216,8 @@ CRAFTING = {
     "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),
     "executive_desk": (["SSS", "PPP", "P P"], {"S": "minecraft:dark_oak_slab", "P": "minecraft:dark_oak_planks"}, 2),
     "glass_desk": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "#c:plates/iron"}, 2),
+    "operator_console": (["GCG", "SSS", "S S"], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit",
+                                                 "S": "minecraft:smooth_stone_slab"}, 2),
     "stretcher": (["WWW", "N N"], {"W": "minecraft:white_wool", "N": "minecraft:iron_nugget"}, 2),
     "cubicle_panel": (["WWW", "WWW"], {"W": "minecraft:light_gray_wool"}, 4),
     "locker_security": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:blue_wool"}, 2),
@@ -494,6 +533,60 @@ def _tool_case():
     for k in range(5):
         d.rectangle([12 + k * 22, 20, 24 + k * 22, 100], fill=(30, 30, 34, 255))
         d.rectangle([14 + k * 22, 22, 22 + k * 22, 60], fill=(190, 190, 194, 255))
+    return img
+
+
+def _console(part):
+    """The operator console's black laminate top, its edge and its dark grey body panels."""
+    if part == "top":
+        a = M.base((34, 36, 40))
+        M.shade(a, M.fbm(S, 711, 3, 32) * 5)
+        M.shade(a, M.grain(S, 712, 3))
+        return M.to_img(a)
+    if part == "edge":
+        return _img((22, 22, 24))
+    img = _img((52, 54, 58))
+    d = ImageDraw.Draw(img)
+    d.rectangle([3, 3, S - 4, S - 4], outline=(40, 42, 46, 255), width=3)
+    for y in range(20, S - 10, 10):
+        d.line([(18, y), (S - 19, y)], fill=(44, 46, 50, 255), width=2)
+    return img
+
+
+def _plant_screen(kind):
+    """A plant computer display: a (dark) system mimic with values (a), trends and the alarm list (b), the overview of
+    the unit's main parameters as bar graphs (c)."""
+    img = _img((14, 20, 30))
+    d = ImageDraw.Draw(img)
+    r = random.Random({"a": 731, "b": 732, "c": 733}[kind])
+    d.rectangle([0, 0, S, 10], fill=(30, 50, 90, 254))
+    d.rectangle([4, 3, 40, 7], fill=(220, 226, 236, 254))
+    if kind == "a":
+        boxes = [(10, 24, 36, 60), (52, 20, 80, 44), (92, 30, 118, 70), (22, 82, 58, 110), (72, 78, 112, 108)]
+        for x0, y0, x1, y1 in boxes:
+            d.rectangle([x0, y0, x1, y1], outline=(90, 200, 230, 254), width=2)
+            d.rectangle([x0 + 3, y1 - 8, x0 + 3 + r.randint(8, x1 - x0 - 6), y1 - 4], fill=(240, 190, 60, 254))
+        for a, b in (((36, 42), (52, 32)), ((80, 32), (92, 50)), ((40, 82), (40, 60)), ((92, 78), (104, 70))):
+            d.line([a, b], fill=(90, 200, 230, 254), width=2)
+        d.ellipse([60, 54, 74, 68], outline=(70, 220, 110, 254), width=2)
+    elif kind == "b":
+        for k, colour in enumerate(((230, 80, 60), (70, 200, 230), (240, 200, 70))):
+            pts, y = [], 30 + k * 12
+            for x in range(6, 122, 6):
+                y = max(16, min(66, y + r.randint(-4, 4)))
+                pts.append((x, y))
+            d.line(pts, fill=colour + (254,), width=2)
+        d.rectangle([4, 72, S - 5, 74], fill=(60, 70, 90, 254))
+        for k in range(6):
+            y = 80 + k * 8
+            d.rectangle([6, y, 10, y + 4], fill=((230, 60, 50) if k < 2 else (240, 190, 50)) + (254,))
+            d.rectangle([14, y, 14 + r.randint(40, 100), y + 4], fill=(200, 206, 216, 254))
+    else:
+        for k in range(8):
+            x = 10 + k * 14
+            h = r.randint(30, 84)
+            d.rectangle([x, 112 - h, x + 9, 112], fill=((70, 200, 110) if h < 76 else (240, 190, 50)) + (254,))
+            d.rectangle([x, 116, x + 9, 120], fill=(200, 206, 216, 254))
     return img
 
 
@@ -892,6 +985,9 @@ def makers():
         "pi_cooler_lower": _cooler_lower, "pi_cooler_badge": _cooler_badge, "pi_drip_grate": _drip_grate,
         "pi_bottle_plastic": lambda: _tinted((120, 180, 230), 90), "pi_bottle_water": lambda: _tinted((70, 140, 220), 120),
         "pi_cup_stack": _cup_stack,
+        "pi_console_top": lambda: _console("top"), "pi_console_edge": lambda: _console("edge"),
+        "pi_console_body": lambda: _console("body"), "pi_plant_screen_a": lambda: _plant_screen("a"),
+        "pi_plant_screen_b": lambda: _plant_screen("b"), "pi_plant_screen_c": lambda: _plant_screen("c"),
     }
     for i in range(6):
         out[f"pi_blueprint_{i}"] = (lambda i=i: _blueprint(i))
@@ -914,7 +1010,8 @@ def makers():
 # Kept see-through (translucent) instead of cut out.
 TRANSLUCENT = O4.TRANSLUCENT | {"pi_glass_top", "pi_glass_edge", "pi_lab_glass", "pi_liquid_blue", "pi_liquid_amber", "pi_liquid_green",
                "pi_liquid_clear", "pi_amber_glass", "pi_bottle_plastic", "pi_bottle_water"}
-RICH = {"pi_medicine_front", "pi_binder_spines", "pi_vitals", "pi_circuit", "pi_pc_inside", "pi_folders", "pi_aed"} | \
+RICH = {"pi_medicine_front", "pi_binder_spines", "pi_vitals", "pi_circuit", "pi_pc_inside", "pi_folders", "pi_aed",
+        "pi_plant_screen_a", "pi_plant_screen_b", "pi_plant_screen_c"} | \
     {f"pi_blueprint_{i}" for i in range(6)} | {f"pi_plant_top_{i}" for i in range(8)} | \
     {f"pi_{k}_{p}" for k in ("training", "plant_map", "status", "blank") for p in range(6)}
 

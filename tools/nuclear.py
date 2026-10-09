@@ -30,7 +30,7 @@ EQUIPMENT = {
     "condenser": ("Condenser", 12, 6, 6),
     "feedwater_pump": ("Feedwater Pump", 3, 2, 3),
     "main_transformer": ("Main Transformer", 5, 5, 8),
-    "reactor_control_console": ("Reactor Control Console", 3, 2, 2),
+    "reactor_control_console": ("Reactor Control Console", 3, 2, 3),
     # The pre-made plants' own reactors (tools/nuclear_plants.py).
     "epr_reactor_vessel": ("EPR Reactor Pressure Vessel", 8, 8, 22),
     "small_modular_reactor": ("Small Modular Reactor", 5, 5, 22),
@@ -54,6 +54,13 @@ EQUIPMENT = {
     "main_control_board": ("Main Control Board", 6, 2, 3),
     "switchgear_lineup": ("Switchgear Lineup", 8, 2, 3),
     "air_handling_unit": ("Air Handling Unit", 4, 8, 3),
+    # The control room's system boards (round 23, tools/control_boards.py), each its own layout.
+    "esf_control_board": ("Safety Systems Control Board", 6, 2, 3),
+    "rcs_control_board": ("Reactor Coolant Control Board", 6, 2, 3),
+    "secondary_control_board": ("Steam and Feedwater Control Board", 6, 2, 3),
+    "turbine_control_board": ("Turbine Generator Control Board", 6, 2, 3),
+    "electrical_control_board": ("Electrical Control Board", 6, 2, 3),
+    "radiation_control_board": ("Radiation and Ventilation Control Board", 6, 2, 3),
 }
 # The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
 TOWER_CONTROLLER = "cooling_tower_controller"
@@ -132,6 +139,12 @@ LANG = {
     "tooltip.jugcraft.nuclear.main_control_board": "A control room benchboard with its mimic, meters and annunciators (for show)",
     "tooltip.jugcraft.nuclear.switchgear_lineup": "A line of medium-voltage breakers (for show)",
     "tooltip.jugcraft.nuclear.air_handling_unit": "Filters and moves a building's air (for show)",
+    "tooltip.jugcraft.nuclear.esf_control_board": "The safety injection, residual heat removal and containment spray trains (for show)",
+    "tooltip.jugcraft.nuclear.rcs_control_board": "The coolant loops, coolant pumps, pressurizer, charging and letdown (for show)",
+    "tooltip.jugcraft.nuclear.secondary_control_board": "The steam generators' levels, feedwater and main steam (for show)",
+    "tooltip.jugcraft.nuclear.turbine_control_board": "The turbine's controls and the generator's meters and breakers (for show)",
+    "tooltip.jugcraft.nuclear.electrical_control_board": "Offsite power, the station busses and the diesel generators (for show)",
+    "tooltip.jugcraft.nuclear.radiation_control_board": "The radiation monitors, ventilation and fire detection (for show)",
     "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
     "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
     "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
@@ -242,6 +255,12 @@ CRAFTING = {
     "main_control_board": (["RGR", "CCC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit", "S": "#c:plates/steel"}, 1),
     "switchgear_lineup": (["SRS", "CAC", "SSS"], {"S": "#c:plates/steel", "R": "minecraft:redstone", "C": "minecraft:copper_ingot", "A": "jugcraft:aluminum_cable"}, 1),
     "air_handling_unit": (["SBS", "WMW", "SSS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "W": "minecraft:white_wool", "M": "jugcraft:electric_motor"}, 1),
+    # The system boards: a control board's recipe with the system's colour in the middle.
+    **{board: (["RGR", "CDC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit",
+                                         "D": f"minecraft:{dye}_dye", "S": "#c:plates/steel"}, 1)
+       for board, dye in (("esf_control_board", "orange"), ("rcs_control_board", "red"), ("secondary_control_board", "yellow"),
+                          ("turbine_control_board", "purple"), ("electrical_control_board", "black"),
+                          ("radiation_control_board", "light_blue"))},
     "cooling_tower_fill": (["PPP", "SSS", "PPP"], {"P": "jugcraft:plastic_sheet", "S": "minecraft:stick"}, 8),
     "conduit_trench": (["CCC", "PPP", "CCC"], {"C": "minecraft:smooth_stone", "P": "jugcraft:circulating_water_conduit"}, 3),
     TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
@@ -1010,7 +1029,9 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 "sign_panel", "sign_edge",
                 # The emergency diesel generator (round 12): its engine, piping by service, panel and signs.
                 "engine_green", "rocker", "gunmetal", "red_iron", "pipe_green", "pipe_brown",
-                "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board", "sign_autostart", "stencil_edg", "turbo", "black"]
+                "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board", "sign_autostart", "stencil_edg", "turbo", "black",
+                # The control room's boards (round 23, tools/control_boards.py): lamps, windows, meters, charts, swatches.
+                "lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches"]
 
 
 def eq_slot(name):
@@ -1287,9 +1308,15 @@ def draw_equipment_sheet():
         "stencil_edg": _stencil_edg, "turbo": lambda: M.painted((96, 98, 100), 153, seams=(("v", 64),), chip_count=3, drip_count=2, dirt=0.7),
         "black": lambda: M.rubber(154, colour=(26, 27, 30)),
     }
+    import control_boards
+    for name, make in control_boards.MAKERS.items():
+        makers[name] = (lambda make=make, seed=160 + len(makers): make(seed))
     sheet = Image.new("RGBA", (EQ_SHEET, EQ_SHEET), (0, 0, 0, 0))
     for name in EQ_MATERIALS:
         col, row = eq_slot(name)
+        if name in control_boards.MAKERS:
+            sheet.paste(M.stylize(makers[name](), control_boards.COLOURS[name]), (col * EQ_CELL, row * EQ_CELL))
+            continue
         many = ("mimic", "display", "fuel_rack", "switchgear", "gauge_board", "sign_autostart", "stencil_edg")
         sheet.paste(M.stylize(makers[name](), 24 if name in many else 12 if name in ("screen", "desk", "lamp_red", "lamp_green", "cherenkov") else 10), (col * EQ_CELL, row * EQ_CELL))
     return sheet
@@ -1487,6 +1514,8 @@ def fuel_fabricator_model():
 # ---------------------------------------------------------------- data
 
 def write_assets(write, rid, assets, lang):
+    import control_boards
+    control_boards.write(assets / "control_boards.json.gz")
     plant_interior.write_assets(write, rid, assets, lang)
     nuclear_storage.write_assets(write, rid, assets, lang)
     storage_tank.write_assets(write, rid, assets, lang)

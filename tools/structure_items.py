@@ -24,6 +24,9 @@ MOD = "jugcraft"
 # The material sheets drawn by Java with 64-pixel regions, and their flat item versions (8 pixels a region).
 ITEM_SHEETS = {"nuclear_equipment": 64, "power_lines": 64}
 ITEM_REGION = 8
+# Regions whose parts are used on their own (tools/control_boards.py: the colour swatches, the annunciator windows,
+# meter scales, dials and charts): each part keeps its own average, (columns, rows) of parts.
+PATCHES = {"nuclear_equipment": {(7, 7): (4, 4), (2, 7): (2, 2), (3, 7): (4, 1), (4, 7): (2, 2), (5, 7): (2, 1)}}
 
 
 def special_item(write, rid, assets, item, model, particle="minecraft:block/iron_block"):
@@ -44,7 +47,7 @@ def drone_item(write, rid, assets, item, tier):
     special_item(write, rid, assets, item, {"type": f"{MOD}:drone", "tier": tier})
 
 
-def item_sheet(sheet, region, out_region=ITEM_REGION):
+def item_sheet(sheet, region, out_region=ITEM_REGION, patches=None):
     """The sheet with every region one flat colour: its average over opaque pixels. A region mostly see-through
     (grating, handrails, chain-link and barbed wire) is left out altogether, so the miniature shows what is behind it
     rather than a solid wall."""
@@ -57,13 +60,19 @@ def item_sheet(sheet, region, out_region=ITEM_REGION):
             alpha = cell[..., 3] > 127
             if alpha.mean() < 0.5:
                 continue
-            colour = cell[alpha][:, :3].mean(axis=0)
-            out[r * out_region:(r + 1) * out_region, c * out_region:(c + 1) * out_region, :3] = np.round(colour)
-            out[r * out_region:(r + 1) * out_region, c * out_region:(c + 1) * out_region, 3] = 255
+            nx, ny = (patches or {}).get((c, r), (1, 1))
+            for i in range(nx):
+                for j in range(ny):
+                    part = cell[j * region // ny:(j + 1) * region // ny, i * region // nx:(i + 1) * region // nx]
+                    shown = part[..., 3] > 127
+                    colour = part[shown][:, :3].mean(axis=0) if shown.any() else cell[alpha][:, :3].mean(axis=0)
+                    y0, x0 = r * out_region + j * out_region // ny, c * out_region + i * out_region // nx
+                    out[y0:y0 + out_region // ny, x0:x0 + out_region // nx, :3] = np.round(colour)
+                    out[y0:y0 + out_region // ny, x0:x0 + out_region // nx, 3] = 255
     return Image.fromarray(out, "RGBA")
 
 
 def write_item_sheets(entity_dir):
     entity_dir = Path(entity_dir)
     for name, region in ITEM_SHEETS.items():
-        item_sheet(Image.open(entity_dir / f"{name}.png"), region).save(entity_dir / f"{name}_item.png", optimize=True)
+        item_sheet(Image.open(entity_dir / f"{name}.png"), region, patches=PATCHES.get(name)).save(entity_dir / f"{name}_item.png", optimize=True)

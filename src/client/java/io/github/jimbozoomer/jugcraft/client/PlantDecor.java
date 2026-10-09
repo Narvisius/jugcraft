@@ -36,8 +36,7 @@ final class PlantDecor {
 			case MAIN_CONTROL_BOARD -> controlBoard(f);
 			case SWITCHGEAR_LINEUP -> switchgear(f);
 			case AIR_HANDLING_UNIT -> airHandler(f);
-			default -> {
-			}
+			default -> ControlBoards.still(kind, f);
 		}
 	}
 
@@ -85,8 +84,8 @@ final class PlantDecor {
 				double x = kind == EquipmentKind.REFUELING_MACHINE ? 7.5 : 7.0, top = kind == EquipmentKind.REFUELING_MACHINE ? 7.5 : 6.5;
 				front(f, x - 0.92, top + 0.85, x - 0.18, top + 1.25, 0.61, SCREEN);
 			}
-			default -> {
-			}
+			// The control room's system boards: their lamps, screens and lit windows.
+			default -> ControlBoards.lit(kind, f);
 		}
 	}
 
@@ -110,8 +109,7 @@ final class PlantDecor {
 					front(f, 7.55, 2.6, 7.75, 2.72, 0.05, LAMP_RED);
 				}
 			}
-			default -> {
-			}
+			default -> ControlBoards.blink(kind, f, time);
 		}
 	}
 

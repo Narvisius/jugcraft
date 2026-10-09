@@ -91,6 +91,38 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] STENCIL_EDG = region(5, 6);
 	static final float[] TURBO = region(6, 6);
 	static final float[] BLACK = region(7, 6);
+	// The control room's boards (round 23, client/ControlBoards.java): lamps, annunciator windows, meters, charts.
+	static final float[] LAMP_WHITE = region(0, 7);
+	static final float[] LAMP_AMBER = region(1, 7);
+	static final float[] ANNUNCIATOR = region(2, 7);
+	static final float[] METER = region(3, 7);
+	static final float[] DIAL = region(4, 7);
+	static final float[] CHART = region(5, 7);
+	static final float[] DRPI = region(6, 7);
+	static final float[] SWATCHES = region(7, 7);
+	/** Every material on the sheet by name, in the sheet's order (tools/nuclear.py EQ_MATERIALS). */
+	static final String[] SHEET = {
+			"stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
+			"concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey", "radiator",
+			"glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green", "trefoil_sign", "generator", "fins",
+			"handrail", "nameplate", "turbine_blue", "pipe_red", "water", "paint_yellow", "mimic", "display", "cherenkov",
+			"fuel_rack", "louvre", "switchgear", "filter_bank", "sign_panel", "sign_edge", "engine_green", "rocker",
+			"gunmetal", "red_iron", "pipe_green", "pipe_brown", "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board",
+			"sign_autostart", "stencil_edg", "turbo", "black", "lamp_white", "lamp_amber", "annunciator", "meter", "dial",
+			"chart", "drpi", "swatches"};
+	private static final java.util.Map<String, float[]> BY_NAME = new java.util.HashMap<>();
+
+	static {
+		for (int i = 0; i < SHEET.length; i++) {
+			BY_NAME.put(SHEET[i], region(i % 8, i / 8));
+		}
+	}
+
+	/** A sheet material by its name (tools/nuclear.py EQ_MATERIALS). */
+	static float[] material(String name) {
+		float[] uv = BY_NAME.get(name);
+		return uv != null ? uv : PAINT_GREY;
+	}
 
 	private static float[] region(int col, int row) {
 		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX};
@@ -1112,32 +1144,32 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		f.cylinder(v(x, y0 + 0.3 + height, z), v(x, y0 + 0.55 + height, z), 0.1, f.sides(8), COPPER, true);
 	}
 
+	/**
+	 * The reactor control console: a benchboard section three wide, in line with the control room's boards (round 23,
+	 * tools/control_boards.py reactor_console): the rod position indicator, the nuclear instruments' recorders, rod
+	 * control and the reactor trip switches under their guards. Its screens and status lamps are live ({@link
+	 * #consoleLamps}).
+	 */
 	static void console(Frame f) {
-		// The desk, its sloped instrument top, the vertical board with three screens, and the SCRAM button.
-		f.box(0.05, 0, 0.15, 2.95, 0.72, 1.35, PAINT_GREY, DESK, PAINT_GREY);
-		Vec3 tl = v(0.05, 0.98, 1.3), bl = v(0.05, 0.72, 0.15), br = v(2.95, 0.72, 0.15), tr = v(2.95, 0.98, 1.3);
-		f.tiled(tl, bl, br, tr, v(0, 0.98, -0.2).normalize(), DESK, 1.5);
-		// Close the sides under the sloped top.
-		f.tri(v(0.05, 0.98, 1.3), v(0.05, 0.72, 0.15), v(0.05, 0.72, 1.3), v(-1, 0, 0), PAINT_GREY);
-		f.tri(v(2.95, 0.98, 1.3), v(2.95, 0.72, 1.3), v(2.95, 0.72, 0.15), v(1, 0, 0), PAINT_GREY);
-		f.box(0.05, 0, 1.3, 2.95, 1.95, 1.95, PAINT_GREY);
-		f.cylinder(v(2.55, 0.86, 0.6), v(2.55, 0.98, 0.6), 0.14, f.sides(12), LAMP_RED, true);
-		f.box(2.35, 0.8, 0.4, 2.75, 0.84, 0.8, HAZARD);
+		ControlBoards.still(EquipmentKind.CONTROL_CONSOLE, f);
 	}
 
 	/** The console's lit parts: three screens and the annunciator lamps (red and blinking on a trip). */
 	static void consoleLamps(Frame f, State s) {
+		// The board's own lit parts (the rod position indicator, the recorders' charts), then the live ones: the three
+		// screens in their bezels and the eight lamps in their strip (tools/control_boards.py SCREENS, LAMP_STRIP).
+		ControlBoards.lit(EquipmentKind.CONTROL_CONSOLE, f);
 		for (int i = 0; i < 3; i++) {
-			double x0 = 0.15 + i * 0.95;
-			f.quad(v(x0, 1.8, 1.34), v(x0, 1.05, 1.34), v(x0 + 0.85, 1.05, 1.34), v(x0 + 0.85, 1.8, 1.34), v(0, 0, -1),
+			double x0 = 0.15 + i * 0.95, x1 = x0 + 0.85, z = 1.16;
+			f.quad(v(x0, 1.85, z), v(x0, 1.35, z), v(x1, 1.35, z), v(x1, 1.85, z), v(0, 0, -1),
 					SCREEN[0], SCREEN[1], SCREEN[2], SCREEN[3]);
 		}
 		boolean blink = s.tripped && ((int) (s.time / 10)) % 2 == 0;
+		double step = (2.84 - 0.2) / 8;
 		for (int i = 0; i < 8; i++) {
-			double x0 = 0.2 + i * 0.33;
+			double x0 = 0.2 + i * step + 0.04, x1 = 0.2 + (i + 1) * step - 0.04, z = 1.18;
 			float[] lamp = s.tripped ? (blink || i % 2 == 0 ? LAMP_RED : LAMP_GREEN) : LAMP_GREEN;
-			f.quad(v(x0, 1.92, 1.34), v(x0, 1.84, 1.34), v(x0 + 0.25, 1.84, 1.34), v(x0 + 0.25, 1.92, 1.34), v(0, 0, -1),
-					lamp[0], lamp[1], lamp[2], lamp[3]);
+			f.quad(v(x0, 2.02, z), v(x0, 1.94, z), v(x1, 1.94, z), v(x1, 2.02, z), v(0, 0, -1), lamp[0], lamp[1], lamp[2], lamp[3]);
 		}
 	}
 }

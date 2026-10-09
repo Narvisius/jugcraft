@@ -78,6 +78,7 @@ public final class PlantInterior {
 			{"office_desk_long", 0, "row:desk:0:6", "wood", new double[] {0, 0, 1, 16, 12.5, 15}},
 			{"executive_desk", 0, "row:exec:0:3", "wood", new double[] {0, 0, 0.5, 16, 13, 15.5}},
 			{"glass_desk", 0, "row:glass:0:4", "metal", new double[] {0, 0, 1, 16, 12.5, 15}},
+			{"operator_console", 4, "row:opcon:0:4", "metal", new double[] {0, 0, 0.5, 16, 12, 15.5}},
 			{"stretcher", 0, "row:stretcher:0.6", "metal", new double[] {0, 0, 1.5, 16, 10, 14.5}},
 			{"cubicle_panel", 0, "row:cubicle", "wool", new double[] {0, 0, 7, 16, 16, 9}},
 			{"aed_cabinet", 0, "plain", "metal", new double[] {3, 3, 0, 13, 14, 4}},

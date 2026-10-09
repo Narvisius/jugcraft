@@ -1,0 +1,118 @@
+{
+  "textures": {
+    "pi_console_body": "jugcraft:block/pi_console_body",
+    "pi_console_edge": "jugcraft:block/pi_console_edge",
+    "pi_console_top": "jugcraft:block/pi_console_top",
+    "particle": "jugcraft:block/pi_console_body"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        11,
+        0.5
+      ],
+      "to": [
+        16,
+        12,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_console_edge"
+        },
+        "south": {
+          "texture": "#pi_console_edge"
+        },
+        "east": {
+          "texture": "#pi_console_edge"
+        },
+        "west": {
+          "texture": "#pi_console_edge"
+        },
+        "up": {
+          "texture": "#pi_console_top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_console_edge"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        1
+      ],
+      "to": [
+        16,
+        11,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_console_body"
+        },
+        "south": {
+          "texture": "#pi_console_body"
+        },
+        "east": {
+          "texture": "#pi_console_body"
+        },
+        "west": {
+          "texture": "#pi_console_body"
+        },
+        "up": {
+          "texture": "#pi_console_body"
+        },
+        "down": {
+          "texture": "#pi_console_body"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12,
+        0.5
+      ],
+      "to": [
+        16,
+        13.2,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_console_edge"
+        },
+        "south": {
+          "texture": "#pi_console_edge"
+        },
+        "east": {
+          "texture": "#pi_console_edge"
+        },
+        "west": {
+          "texture": "#pi_console_edge"
+        },
+        "up": {
+          "texture": "#pi_console_top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_console_edge"
+        }
+      }
+    }
+  ]
+}

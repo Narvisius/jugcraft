@@ -7286,6 +7286,25 @@ def check_nuclear():
     for name in nuclear.EQ_MATERIALS:
         if regions.get(name) != nuclear.eq_slot(name):
             err(f"NuclearRenderer.java region for {name} is {regions.get(name)}, tools/nuclear.py has {nuclear.eq_slot(name)}")
+    # The control room's boards (tools/control_boards.py, client/ControlBoards.java): the client looks their materials
+    # up by name, every board is equipment, and no two of a board's faces overlap in one plane.
+    import gzip
+    import control_boards
+    sheet = re.search(r"static final String\[\] SHEET = \{(.*?)\};", renderer, re.S)
+    if not sheet or re.findall(r'"(\w+)"', sheet.group(1)) != nuclear.EQ_MATERIALS:
+        err("NuclearRenderer.java SHEET is not tools/nuclear.py EQ_MATERIALS, in order")
+    boards = json.loads(gzip.open(ASSETS / "control_boards.json.gz").read()) if (ASSETS / "control_boards.json.gz").is_file() else {}
+    if set(boards) != set(control_boards.SECTIONS):
+        err(f"control_boards.json.gz has {sorted(boards)}, not tools/control_boards.py's boards")
+    for name, ops in boards.items():
+        if name not in nuclear.EQUIPMENT:
+            err(f"control board {name} is not equipment (tools/nuclear.py EQUIPMENT)")
+        names = set(re.findall(r'"([a-z_]+)"', json.dumps(ops))) - {"b", "o", "q", "c", "still", "lit", "blink", "core"}
+        if names - set(nuclear.EQ_MATERIALS):
+            err(f"control board {name} uses materials not on the sheet: {sorted(names - set(nuclear.EQ_MATERIALS))}")
+        bad = control_boards.overlaps(ops)
+        if bad:
+            err(f"control board {name}: {len(bad)} pairs of faces overlap in one plane (z-fighting), e.g. {bad[:2]}")
 
 
 def check_diagonal_connections():

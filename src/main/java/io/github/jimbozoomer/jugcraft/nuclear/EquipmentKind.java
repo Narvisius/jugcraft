@@ -20,7 +20,7 @@ public enum EquipmentKind {
 	CONDENSER("condenser", 12, 6, 6),
 	FEEDWATER_PUMP("feedwater_pump", 3, 2, 3),
 	MAIN_TRANSFORMER("main_transformer", 5, 5, 8),
-	CONTROL_CONSOLE("reactor_control_console", 3, 2, 2),
+	CONTROL_CONSOLE("reactor_control_console", 3, 2, 3),
 	// The pre-made plants' own reactors (docs/features/nuclear.md, "Pre-made plants").
 	EPR_VESSEL("epr_reactor_vessel", 8, 8, 22),
 	SMALL_MODULAR_REACTOR("small_modular_reactor", 5, 5, 22),
@@ -44,7 +44,14 @@ public enum EquipmentKind {
 	PLANT_DISPLAY_WALL("plant_display_wall", 9, 1, 4),
 	MAIN_CONTROL_BOARD("main_control_board", 6, 2, 3),
 	SWITCHGEAR_LINEUP("switchgear_lineup", 8, 2, 3),
-	AIR_HANDLING_UNIT("air_handling_unit", 4, 8, 3);
+	AIR_HANDLING_UNIT("air_handling_unit", 4, 8, 3),
+	// The control room's system boards (round 23): each its own layout (client/ControlBoards.java).
+	ESF_BOARD("esf_control_board", 6, 2, 3),
+	RCS_BOARD("rcs_control_board", 6, 2, 3),
+	SECONDARY_BOARD("secondary_control_board", 6, 2, 3),
+	TURBINE_BOARD("turbine_control_board", 6, 2, 3),
+	ELECTRICAL_BOARD("electrical_control_board", 6, 2, 3),
+	RADIATION_BOARD("radiation_control_board", 6, 2, 3);
 
 	public final String id;
 	public final int wide, deep, tall;

@@ -65,13 +65,13 @@ PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door"
 SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:framed_glass", "jugcraft:blast_glass", "jugcraft:lead_glass", "minecraft:water", "jugcraft:guard_rail", "jugcraft:railing",
                                  "jugcraft:storage_tank_fill_pipe", "jugcraft:storage_tank_inlet", "jugcraft:storage_tank_outlet",
                                  "jugcraft:storage_tank_manway", "jugcraft:storage_tank_vent", "jugcraft:storage_tank_hatch",
-                                 "jugcraft:operator_chair", "jugcraft:office_desk", "jugcraft:console_desk", "jugcraft:speed_gate_pedestal",
+                                 "jugcraft:operator_chair", "jugcraft:office_desk", "jugcraft:console_desk", "jugcraft:operator_console", "jugcraft:speed_gate_pedestal",
                                  "minecraft:iron_trapdoor", "jugcraft:water_cooler", "jugcraft:filing_cabinet",
                                  "jugcraft:whiteboard", "jugcraft:pallet_rack", "jugcraft:roller_door", "jugcraft:storage_rack",
                                  "jugcraft:dc_cable_riser", "jugcraft:station_battery")
 LIGHTS = {"jugcraft:ceiling_light_panel": 15, "jugcraft:high_bay_light": 15, "minecraft:light": 15, "minecraft:sea_lantern": 15, "jugcraft:warning_light": 13, "jugcraft:warning_beacon": 10,
           "minecraft:campfire": 15, "jugcraft:server_rack": 3, "jugcraft:relay_cabinet": 2, "jugcraft:office_desk": 4,
-          "jugcraft:console_desk": 4}
+          "jugcraft:console_desk": 4, "jugcraft:operator_console": 4}
 
 
 def table(fn):

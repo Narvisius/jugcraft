@@ -1102,24 +1102,32 @@ def second_floor(b, W, D, y):
             if b.get(1, k, z) == 0:
                 b.p(1, k, z, ACOUSTIC)
     b.b(2, y, 2, 29, y, 16, CARPET)
-    # The horseshoe: four control boards along the north wall, one down each side, the plant display wall over the
-    # middle ones; the reactor console in front, the operators' consoles behind it, the senior reactor operator's desk.
-    for x in (4, 10, 16, 22):
-        b.prop("main_control_board", x, y0, 2, "north")
-    b.prop("main_control_board", 2, y0, 4, "west")
-    b.prop("main_control_board", 27, y0, 4, "east")
-    b.prop("plant_display_wall", 10, y0 + 3, 2, "north")
-    console = (14, 7)
-    for x in (9, 12, 18, 21):
-        b.desk(x, y0, 10, "north", name="console_desk")
-    b.row(("executive_desk", 3), 14, y0, 13, "north", seat="operator_chair")
-    # The shift technical advisor's desk, the procedures on shelves along the back wall, the plant overview screens on
-    # the east wall, a printer.
-    b.desk(22, y0, 13, "north")
+    # The horseshoe (round 23; Justin: the reactor console "in line with the boards, as a real control board", the
+    # boards varied "like a real control room"), laid out as a Westinghouse four-loop plant's: along the north wall the
+    # safety systems, the reactor coolant system, the reactor control console in the middle (the working one), steam
+    # and feedwater, the turbine and generator; down the west side the electrical board, down the east side radiation
+    # monitoring and ventilation. The plant display wall over the middle; the operators' consoles in front.
+    for kind, x in (("esf_control_board", 2), ("rcs_control_board", 8), ("secondary_control_board", 17),
+                    ("turbine_control_board", 23)):
+        b.prop(kind, x, y0, 2, "north")
+    console = (14, 2)
+    b.prop("electrical_control_board", 2, y0, 4, "west")
+    b.prop("radiation_control_board", 28, y0, 4, "east")
+    b.prop("plant_display_wall", 11, y0 + 3, 2, "north")
+    # The operators' consoles (Justin: black ones, "at least three blocks each ... like little setups"): the reactor
+    # operator's in front of the reactor side of the boards, the balance of plant operator's in front of the steam and
+    # turbine side, the senior reactor operator's behind them in the middle, looking over the whole horseshoe.
+    for x, z, tops in ((9, 8, (1, 0, 3)), (19, 8, (3, 0, 2)), (14, 11, (2, 1, 0))):
+        b.row(("operator_console", 3), x, y0, z, "north", tops=tops)
+        for k in (0, 2):
+            b.p(x + k, y0, z + 1, furniture("operator_chair", "north"))
+    # The procedures on shelves along the back wall, the plant overview screens on the east wall, and the office
+    # copier the administration building has (Justin: "use that printer").
     for x in range(20, 28):
         b.stack("bookcase", x, y0, 16, "south", n=2)
     wall_screen(b, "plant_map_screen", 29, y0 + 1, 11, "east")
-    b.furniture("printer", 11, y0, 16, "south")
+    import medium_admin
+    assert medium_admin.copier(b, 11, y0, 16, "south")
     # The shift supervisor's office in the south-west corner: a half wall glazed over, so he sees the boards (framed
     # glass, one pane from wall to wall), round the corner to his office's east wall.
     for x in range(2, 10):
@@ -1132,7 +1140,9 @@ def second_floor(b, W, D, y):
         for k in range(y0, top + 1):
             b.p(9, k, z, ACOUSTIC)
     b.door(9, y0, 14, "west", label="shift_supervisor")
-    b.desk(5, y0, 14, "north")
+    # The shift supervisor's executive desks along his glass, looking out over the boards (moved in from the control
+    # room floor, Justin's round 23): a phone and lamp, his two screens, the blotter.
+    b.row(("executive_desk", 3), 4, y0, 13, "north", seat="operator_chair", tops=(2, 0, 1))
     b.furniture("filing_cabinet", 2, y0, 16, "west")
     b.furniture("filing_cabinet", 2, y0, 15, "west")
     b.plant(8, y0, 16)

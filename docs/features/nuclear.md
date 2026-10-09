@@ -27,7 +27,7 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   | Condenser | 12x6x6 |
   | Feedwater Pump | 3x2x3 |
   | Main Transformer | 5x5x8 |
-  | Reactor Control Console | 3x2x2 |
+  | Reactor Control Console | 3x2x3 |
   | EPR Reactor Pressure Vessel | 8x8x22 |
   | Small Modular Reactor | 5x5x22 |
   | Small Turbine-Generator | 3x5x4 |
@@ -47,6 +47,10 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   Substation touching it, and from there onto power lines.
   - Rated output is 524,288 JE/t at 100% on standard fuel with four loops.
 - **The console:**
+  - A benchboard section three wide (round 23), the same height and profile as the control room's system boards, so
+    it stands in line with them: the digital rod position indicator, the nuclear instruments' recorders, three live
+    screens and a strip of status lamps (red and flashing after a trip), and on the desk the rod bank selector, the
+    rods' in-hold-out lever, the rod speed meters and the two reactor trip switches under red guards.
   - Link it with a **Reactor Link Card**: use the card on the vessel, then on the console.
   - Its screen follows the approved design: core map (193 assemblies, shaded by heat, with rod clusters), rod slider,
     plant readouts, a 10-minute core-temperature trend with the alarm and SCRAM lines, annunciator windows, the
@@ -164,10 +168,14 @@ blueprint (for players who lay out their own plant).
     gates and the shift supervisor's office are Framed Glass (below).
   - First floor: the cable spreading room under the control room (three tiers of tray, risers up into it), the relay
     room, the server room on its raised floor.
-  - Second floor: the main control room (the horseshoe of boards under the plant display wall, the reactor console,
-    the operators' consoles, the senior reactor operator's and shift technical advisor's desks, procedures, the shift
-    supervisor's glazed office), and across the corridor the Technical Support Center, kitchen, washroom and
-    operations office, with windows.
+  - Second floor: the main control room (round 23), laid out as a Westinghouse four-loop plant's horseshoe: along the
+    north wall the Safety Systems, Reactor Coolant, the reactor control console in the middle (in line with the
+    boards), Steam and Feedwater and Turbine Generator boards; down the west wall the Electrical board, down the east
+    wall Radiation and Ventilation; the plant display wall over the middle. In front, three Operator Consoles three
+    blocks wide (the reactor operator's, the balance of plant operator's and the senior reactor operator's behind
+    them), each with its own screens, keyboards and phone; the shift supervisor's glazed office with the executive
+    desks along its glass; procedures on shelves along the back wall and the office copier. Across the corridor the
+    Technical Support Center, kitchen, washroom and operations office, with windows.
   - Top floor: the control room's emergency filtration and air conditioning (air handling units, chillers, chilled
     water pumps, ducts, louvres).
   - The stair tower serves all four floors; it is laid last so no floor cuts into it. The switchboard's and chargers'
@@ -184,6 +192,22 @@ blueprint (for players who lay out their own plant).
   door's head, the head over it, glass above). Clear glass with a faint tint, no sheen. The Glass Door is built from
   the same parts: a 3D frame, real glass and a push bar. Recipe: 4 glass panes with an iron nugget between each pair
   make 4.
+- **Control boards** (round 23; `tools/control_boards.py`, `client/ControlBoards.java`; Justin, 8 October 2026: "a
+  realistic reactor control board and varied boards"): six benchboards 6x2x3 for show, each its own system's layout
+  rather than one board repeated: **Safety Systems** (Train A in orange and Train B in blue, the pumps from the
+  refuelling water tank, the ESF status panel, the manual safety injection switches under guards), **Reactor
+  Coolant** (the four loops round the vessel, the pressurizer, charging and letdown), **Steam and Feedwater** (each
+  steam generator's meters, recorder, steam and feed lines and switches), **Turbine Generator** (the generator's
+  meters and synchroscope, the turbine mimic, the control system's lit push buttons, the turbine trip), **Electrical**
+  (the switchyard and station busses with breaker switches set into the mimic, the diesel generators' controls) and
+  **Radiation and Ventilation** (the monitors' drawers, the ventilation mimic, fire detection). Every part is real
+  geometry standing off the board: switches with their red and green lamps and labels, edgewise meters, recorders
+  with lit charts, controllers, mimic lines with pumps and valves, annunciator windows (a few in alarm, one flashing
+  now and then). The reactor control console is drawn the same way. The boards' parts are checked never to share a
+  face's plane (no z-fighting).
+- **Operator Console**: a black desk with a raised shelf for its screens that joins up side by side; each block has
+  its own setup (two screens and a keyboard; one wide screen, keyboard and phone; stacked screens and an open
+  procedure; a screen, phone and papers), everything inside its own block.
 - **Speed Gate** (`nuclear/SpeedGateBlock.java`, `SpeedGatePedestalBlock.java`, `SpeedGateBlockEntity.java`,
   `client/SpeedGateRenderer.java`, `tools/speed_gate.py`; Justin, 8 October 2026, after the sliding glass fare gates
   at Grand Central): a one-way security lane. Placed looking the way through, it stands on the block you come in by,
