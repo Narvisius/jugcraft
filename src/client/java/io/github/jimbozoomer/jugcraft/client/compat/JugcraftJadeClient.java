@@ -16,6 +16,15 @@ public final class JugcraftJadeClient implements JugcraftJadePlugin.ClientRegist
 	@Override
 	public void register(IWailaClientRegistration registration) {
 		registration.registerBlockComponent(MachineTooltip.INSTANCE, MachineBlock.class);
+		// Nuclear equipment's invisible frame blocks (round 25b; Justin: the switchgear was "just labeled nuclear
+		// equipment"): named and shown by what pick-block gives, the piece's own item, not as the frame block. Looked up
+		// by name, so a Jade without it is only logged.
+		try {
+			IWailaClientRegistration.class.getMethod("usePickedResult", net.minecraft.world.level.block.Block.class)
+					.invoke(registration, io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.FRAME);
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			io.github.jimbozoomer.jugcraft.Jugcraft.LOGGER.warn("Jade cannot name nuclear equipment by its picked item: {}", e.toString());
+		}
 	}
 
 	private enum MachineTooltip implements IBlockComponentProvider {

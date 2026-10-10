@@ -864,6 +864,30 @@ def dc_run(b, battery_ends, board, y, z, facing):
             b.p(x, y, z, furniture("dc_cable_tray", facing))
 
 
+def feeder_conduits(b, ax, ay, az, facing, upper):
+    """A load centre's feeder conduits (round 25b; Justin: the conduits on top of the switchgear were "going nowhere"):
+    from the hub over each in-use upper feeder's section (tools/control_boards.py LC_CONDUIT_*), one 4-inch conduit
+    straight up under the ceiling, through the slab and up through the floor of the cable spreading room above, to its
+    lowest tray behind the run, where it turns in under the tray (plant_office2 feeder_conduit_*). ax, ay, az: the
+    lineup's anchor (building coordinates, ay walked on); upper: the slab of the floor above (its floor is upper)."""
+    import control_boards as CB
+    fx, fz = P.DIRS[facing]
+    rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+    _, _, _, h = P.EQUIPMENT_SIZES["switchgear_lineup"]
+    for k in range(5):
+        if CB.LC_FEEDERS[2 * k] == "SPARE":
+            continue
+        lx, lz = 3 + k, int(CB.LC_CONDUIT_Z)
+        x, z = ax + rx * lx + fx * lz, az + rz * lx + fz * lz
+        tray = next(y for y in range(upper + 1, upper + 6) if b.get(x, y, z + 1) and P.MATERIALS[int(b.get(x, y, z + 1))][0].startswith("jugcraft:cable_tray"))
+        column = [(ay + h, "feeder_conduit_base"), (upper - 2, "feeder_conduit_ceiling"), (upper + 1, "feeder_conduit_floor")]
+        column += [(y, "feeder_conduit") for y in range(upper + 2, tray)] + [(tray, "feeder_conduit_tray")]
+        column += [(y, "feeder_conduit") for y in range(ay + h + 1, upper - 2)]
+        for y, piece in column:
+            assert b.get(x, y, z) == 0, (piece, x, y, z, P.MATERIALS[int(b.get(x, y, z))][0])
+            b.p(x, y, z, furniture(piece, "north"))
+
+
 # The control building's electrical runs (building coordinates; the slab is y 0): where the main transformer's buried
 # feed comes up under each load centre's transformer section, and the CHARGER breakers' runs to the chargers.
 SLAB_RISERS = [(22, 1), (28, 10)]
@@ -936,6 +960,10 @@ def control_building(s, ox, oz):
     first_floor(b, W, D, L1)
     console = second_floor(b, W, D, L2)
     top_floor(b, W, D, L3)
+    # The switchgear room's load centres' feeder conduits, up into the cable spreading room's trays (round 25b).
+    for kind, ax, ay, az, facing in list(b.props):
+        if kind == "switchgear_lineup" and (ax, az) in ((22, 2), (29, 9)):
+            feeder_conduits(b, ax, ay - b.base, az, facing, L1)
     # The corridors' lights (the ceiling grid misses them), and the entrance hall's.
     for x in range(3, W - 1, 4):
         b.p(x, L1 - 2, 16, LIGHT)
@@ -1001,8 +1029,9 @@ def ground_floor(b, W, D):
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
     # ---- Switchgear Room (x 21..29, z 1..13; round 25): the 480 V load centres of both trains, face to face across the
     # aisle, walked round at the west end (Justin: "realistic switchgear ... less simple and cartoony", and it must
-    # hold charge and work): rubber mats along their fronts, the battery emergency lights over the aisle, the arc flash
-    # suits' locker by the door, an extinguisher.
+    # hold charge and work): rubber mats along their fronts, the battery emergency lights over the aisle, an
+    # extinguisher (no locker: Justin, round 25b). Their feeder conduits go up into the cable spreading room
+    # (feeder_conduits, after the floors are in).
     b.prop("switchgear_lineup", 22, 1, 1, "north")
     b.prop("switchgear_lineup", 22, 1, 9, "south")
     for x in range(22, 30):
@@ -1010,7 +1039,6 @@ def ground_floor(b, W, D):
         b.p(x, 1, 8, MAT)
     b.furniture("emergency_light", 21, 4, 4, "west")
     b.furniture("emergency_light", 29, 4, 6, "east")
-    b.stack("locker", 21, 1, 12, "west", n=2)
     b.door(26, 1, 14, "north", double=True, label="switchgear_room")
     b.furniture("fire_extinguisher", 21, 2, 6, "west")
     # Their supply comes up through the slab into the back of each transformer section (from the main transformer,

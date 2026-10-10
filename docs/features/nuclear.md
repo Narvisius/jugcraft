@@ -83,7 +83,8 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   front through its cut-out (open and close buttons, the open/closed flag, the spring-charged flag, the charging
   handle and the racking slot), a red and a green lamp, and an engraved nameplate naming its feeder: MCC 1 to 4,
   INVERTER, CHARGER, HVAC, LIGHTING and two spares. The breaker lifting trolley rides rails along the top; the
-  incoming bus duct and the feeders' conduits leave from the back.
+  transformer section's top is its ventilation screen (the supply comes up from below). Each upper feeder in use has a
+  conduit hub on top of its section; a spare's knockout is a blank cover.
   - Its bus holds **2,000,000 JE** and keeps it.
   - **In:** a cable into the back of its transformer section (either of the two left-hand blocks as you face it, any
     side) charges the bus while the **main breaker** is closed. It takes up to 16,384 JE/t.
@@ -214,7 +215,8 @@ blueprint (for players who lay out their own plant).
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room
     (both trains' 480 V load centers face to face across an aisle of rubber mats, fed from the main transformer and
-    feeding the chargers, above; emergency lights, the arc flash suits' locker, an extinguisher);
+    feeding the chargers, above; their feeder conduits up through the ceiling into the cable spreading room's trays;
+    emergency lights, an extinguisher);
     the remote shutdown room (the remote shutdown panel on its north wall over a rubber mat, battery emergency lights
     above it, an operator console three wide on the east wall, an extinguisher by the door); the locker room; and the
     secure entrance (a vestibule; the security counter, its chairs
@@ -263,6 +265,11 @@ blueprint (for players who lay out their own plant).
 - **Operator Console**: a black desk with a raised shelf for its screens that joins up side by side; each block has
   its own setup (two screens and a keyboard; one wide screen, keyboard and phone; stacked screens and an open
   procedure; a screen, phone and papers), everything inside its own block.
+- **Feeder Conduit** (round 25b): 4-inch rigid steel conduit for a load center's feeders, in pieces that stack in a
+  column: the hub piece over a load center's section, plain lengths with couplings, the ceiling piece (its red
+  fire-stop and sleeve), the floor piece (sleeve, fire-stop and a yellow strut clamp), and the tray piece, which turns
+  in under a cable tray on its south side through two cast fittings. In the medium plant, each in-use upper feeder
+  of the switchgear room's load centers runs up into the cable spreading room's lowest tray.
 - **Emergency Light** (round 24): an 8-hour battery emergency light for high on a wall. It has a cream case with
   louvres, a test button and a green charging lamp, and two sealed-beam lamp heads on swivels on top.
 - **Speed Gate** (`nuclear/SpeedGateBlock.java`, `SpeedGatePedestalBlock.java`, `SpeedGateBlockEntity.java`,

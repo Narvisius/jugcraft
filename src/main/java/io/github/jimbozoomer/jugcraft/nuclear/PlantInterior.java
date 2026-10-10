@@ -116,6 +116,12 @@ public final class PlantInterior {
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
+			// A load centre's feeder conduit, up from its hub through the ceiling into the trays above (round 25b).
+			{"feeder_conduit", 0, "plain", "metal", new double[] {6.7, 0, 6.7, 9.3, 16, 9.3}},
+			{"feeder_conduit_base", 0, "plain", "metal", new double[] {6.7, 0, 6.7, 9.3, 16, 9.3}},
+			{"feeder_conduit_ceiling", 0, "plain", "metal", new double[] {6.7, 0, 6.7, 9.3, 16, 9.3}},
+			{"feeder_conduit_floor", 0, "plain", "metal", new double[] {5.6, 0, 0, 10.4, 16, 10.4}},
+			{"feeder_conduit_tray", 0, "plain", "metal", new double[] {6.5, 0, 6.5, 9.5, 8.8, 16}},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};

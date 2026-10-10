@@ -1047,6 +1047,11 @@ def remote_shutdown_panel(seed=89):
 # down through the floor; the transformer section takes it in (client/NuclearRenderer.java, nuclear/Switchgear.java).
 LC_FEEDERS = ["MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "CHARGER", "HVAC", "LIGHTING", "SPARE", "SPARE"]
 LC_FACE = 0.12          # the doors' plane (z)
+# The feeder conduits (round 25b): where each in-use upper feeder's conduit leaves the top of its section (its hub, z in
+# the lineup's frame: the middle of the back row, so the conduit stands in the middle of the block above), the hub's
+# and the conduit's radius (4-inch rigid steel conduit).
+LC_CONDUIT_Z = 1.5
+LC_HUB, LC_CONDUIT = 0.085, 0.057
 LC_TOP = 2.36           # the cabinets' top, under the cap
 
 
@@ -1172,13 +1177,20 @@ def load_center(seed=97):
     b.box(6.9, 2.38, -0.27, 6.95, 2.5, -0.22, [sw("black")] * 6)
     b.box(6.905, 2.08, -0.255, 6.945, 2.38, -0.235, [sw("mgrey")] * 6)
     b.box(6.89, 2.02, -0.26, 6.96, 2.08, -0.23, [sw("dgrey")] * 6)
-    # At the back: the incoming bus duct over the transformer, the feeders' conduits up out of the top.
-    b.box(0.3, 2.4, 1.1, 1.7, 2.92, 1.88, [dark] * 5 + [None])
-    b.box(0.26, 2.92, 1.06, 1.74, 2.96, 1.92, [TRIM] * 6)
+    # On top (round 25b; Justin: the conduits on top "are going nowhere ... it should be connected to what it's actually
+    # supposed to be connected to"). The supply comes up from below into the transformer section, so its top is the
+    # transformer's ventilation screen. Each upper feeder that is in use leaves by one rigid conduit out of the back of
+    # its section's top: here its hub on a gland plate, the conduit itself the plant's (plant kit pieces up through the
+    # ceiling into the cable spreading room's trays, LC_CONDUIT_*). A spare's knockout is a blank cover.
+    b.box(0.22, 2.4, 0.4, 1.78, 2.47, 1.6, [TRIM] * 4 + [sw("black"), None])
+    for k in range(12):
+        bx = 0.31 + k * 0.12
+        b.box(bx, 2.47, 0.46, bx + 0.06, 2.51, 1.54, [grey] * 5 + [None])
     for k in range(5):
-        cx = 2.98 + (k + 0.5) * w
-        for dx in (-0.12, 0.0, 0.12):
-            b.cyl((cx + dx, 2.4, 1.5), (cx + dx, 2.99, 1.5), 0.04, sw("mgrey"), sw("dgrey"), 8)
+        cx = 3.5 + k          # the middle of the block over the section, where the conduit stands
+        b.box(cx - 0.13, 2.4, LC_CONDUIT_Z - 0.13, cx + 0.13, 2.415, LC_CONDUIT_Z + 0.13, [grey] * 5 + [None])
+        if LC_FEEDERS[2 * k] != "SPARE":
+            b.cyl((cx, 2.415, LC_CONDUIT_Z), (cx, 2.47, LC_CONDUIT_Z), LC_HUB, sw("mgrey"), sw("dgrey"), 12)
     out = b
     out.live = live
     return out

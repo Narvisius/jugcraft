@@ -285,9 +285,59 @@ def check(site, quiet=False):
                             f"{[(int(a), int(b_) - part.base, int(c)) for a, b_, c in list(zip(dx_, dy_, dz_))[:4]]}")
     # 7. Power cables (round 25): each network joins only what it is meant to.
     problems += cable_networks(site, g, quiet)
+    # 8. Feeder conduits (round 25b): none stops in mid-air. Each column stands on a load centre's hub and reaches a
+    # cable tray: base over the lineup, up to the ceiling, through the slab, up through the floor, into the tray.
+    problems += feeder_conduits(site, g)
     if not quiet:
         for p in problems:
             print(p)
+    return problems
+
+
+def feeder_conduits(site, g):
+    """Every feeder conduit column runs unbroken from a load centre's in-use upper feeder hub to a cable tray."""
+    import control_boards as CB
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+
+    def at(x, y, z):
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+    problems = []
+    hubs = set()
+    for part, px, pz, rot in site.parts:
+        for kind, ax, ay, az, facing in part.props:
+            if kind != "switchgear_lineup":
+                continue
+            fx, fz = P.DIRS[facing]
+            rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+            for k in range(5):
+                if CB.LC_FEEDERS[2 * k] != "SPARE":
+                    lx, lz = 3 + k, int(CB.LC_CONDUIT_Z)
+                    hubs.add((ax + rx * lx + fx * lz + px, ay - part.sink + P.EQUIPMENT_SIZES[kind][3], az + rz * lx + fz * lz + pz))
+    bases = [tuple(int(v) for v in c) for c in np.argwhere(np.isin(g, [k for k, v in kinds.items() if v == "feeder_conduit_base"]))]
+    for x, y, z in bases:
+        y, z = y - B, z - O
+        if (x, y, z) not in hubs:
+            problems.append(f"feeder conduit at {(x, y, z)} stands on no load centre's hub")
+        k = y + 1
+        while at(x, k, z).startswith("feeder_conduit") and at(x, k, z) != "feeder_conduit_ceiling":
+            k += 1
+        if at(x, k, z) != "feeder_conduit_ceiling":
+            problems.append(f"feeder conduit from {(x, y, z)} does not reach the ceiling ({at(x, k, z)} at y {k})")
+            continue
+        k += 1
+        while at(x, k, z) and not at(x, k, z).startswith("feeder_conduit"):
+            k += 1
+        if at(x, k, z) != "feeder_conduit_floor":
+            problems.append(f"feeder conduit from {(x, y, z)} does not come up through the floor above ({at(x, k, z)} at y {k})")
+            continue
+        k += 1
+        while at(x, k, z) == "feeder_conduit":
+            k += 1
+        if at(x, k, z) != "feeder_conduit_tray" or not at(x, k, z + 1).startswith("cable_tray"):
+            problems.append(f"feeder conduit from {(x, y, z)} does not end in a cable tray ({at(x, k, z)} at y {k}, {at(x, k, z + 1)} beside it)")
     return problems
 
 

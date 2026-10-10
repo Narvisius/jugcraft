@@ -219,6 +219,63 @@ PIECES = {
 PIECES.update(PN.PANELS)
 PIECES.update(PN.RISERS)
 
+
+# ---------------------------------------------------------------------------------------------- feeder conduits
+# A 480 V load centre's feeder conduit (round 25b; Justin: the conduits on top of the switchgear "are going nowhere ...
+# it should be connected to what it's actually supposed to be connected to"): 4-inch rigid steel conduit from the hub on
+# top of its section (tools/control_boards.py LC_CONDUIT_*) straight up through the ceiling into the cable spreading
+# room, where it comes up through the floor and turns into the lowest tray. Pieces stacked in one column (block
+# middle), each facing north: the tray is on its south side, the strut on its north side.
+def _oct_y(x, z, y0, y1, half, tex):
+    """A round-ish run up the block: a square and the same square turned 45 degrees (its ends a hair short, so no two
+    faces share a plane)."""
+    return [(x - half, y0, z - half, x + half, y1, z + half, tex),
+            (x - half, y0 + 0.05, z - half, x + half, y1 - 0.05, z + half, tex, {"rotation": {"angle": 45, "axis": "y", "origin": [x, y0, z]}})]
+
+
+def _oct_z(x, y, z0, z1, half, tex):
+    """The same, running along z."""
+    return [(x - half, y - half, z0, x + half, y + half, z1, tex),
+            (x - half, y - half, z0 + 0.05, x + half, y + half, z1 - 0.05, tex, {"rotation": {"angle": 45, "axis": "z", "origin": [x, y, z0]}})]
+
+
+_CONDUIT, _COUPLING = 1.0, 1.3
+
+
+def _coupling(y):
+    return _oct_y(8, 8, y - 1, y + 1, _COUPLING, "pi_steel")
+
+
+def _firestop(y0, y1, sleeve):
+    """Where it goes through the slab: the red fire-stop seal round it, and the steel sleeve's flange."""
+    return _oct_y(8, 8, y0, y1, 1.6, "pi_extinguisher_red") + _oct_y(8, 8, *sleeve, 2.4, "pi_steel_dark")
+
+
+def _strut(y):
+    """A length of yellow strut channel on the north side at y, with the conduit's clamp and its arm to it."""
+    return [(0, y - 0.9, 0, 16, y + 0.9, 1.6, "pi_rail_yellow"), (7.4, y - 0.6, 1.6, 8.6, y + 0.6, 6.9, "pi_steel_dark"),
+            (6.6, y - 0.7, 6.9, 9.4, y + 0.7, 9.4, "pi_steel_dark")]
+
+
+PIECES.update({
+    # Over the load centre: from its hub (half a block down, on the cubicle's top) up, a coupling half way.
+    "feeder_conduit_base": {"display": "Feeder Conduit (Hub)", "boxes": _oct_y(8, 8, -8.48, 16, _CONDUIT, "pi_chrome") + _coupling(8)},
+    # Under the ceiling: a coupling, and the fire-stop where it goes up through.
+    "feeder_conduit_ceiling": {"display": "Feeder Conduit (Ceiling)", "boxes":
+        _oct_y(8, 8, 0, 16, _CONDUIT, "pi_chrome") + _coupling(6) + _firestop(14.4, 15.4, (15.4, 16))},
+    # Up through the floor of the room above: the sleeve and fire-stop, the strut that holds the run, a coupling.
+    "feeder_conduit_floor": {"display": "Feeder Conduit (Floor)", "boxes":
+        _oct_y(8, 8, 0, 16, _CONDUIT, "pi_chrome") + _firestop(0.6, 1.6, (0, 0.6)) + _strut(11.2) + _coupling(14.4)},
+    "feeder_conduit": {"display": "Feeder Conduit", "boxes": _oct_y(8, 8, 0, 16, _CONDUIT, "pi_chrome") + _coupling(8)},
+    # Into the tray: up to a cast LB fitting, along under the tray (in the next block south), up through a second into
+    # the tray's floor at its bushing, where the cables go on in the tray.
+    "feeder_conduit_tray": {"display": "Feeder Conduit (Into Tray)", "boxes":
+        _oct_y(8, 8, 0, 5.6, _CONDUIT, "pi_chrome") + [(6.5, 5.6, 6.5, 9.5, 8.8, 10.4, "pi_steel_dark"), (6.9, 6.6, 10.4, 9.1, 8.6, 10.6, "pi_steel")]
+        + _oct_z(8, 7.2, 10.6, 22.2, _CONDUIT, "pi_chrome")
+        + [(6.5, 5.6, 22.2, 9.5, 8.8, 25.6, "pi_steel_dark"), (6.9, 8.8, 22.6, 9.1, 9.0, 25.2, "pi_steel")]
+        + _oct_y(8, 24, 9.0, 11.3, _CONDUIT, "pi_chrome") + _oct_y(8, 24, 11.3, 12, 1.7, "pi_steel_dark")},
+})
+
 CRAFTING = {
     "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),
     "executive_desk": (["SSS", "PPP", "P P"], {"S": "minecraft:dark_oak_slab", "P": "minecraft:dark_oak_planks"}, 2),
@@ -230,6 +287,11 @@ CRAFTING = {
     "locker_security": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:blue_wool"}, 2),
     "aed_cabinet": (["PGP", "PRP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "R": "minecraft:redstone"}, 1),
     "fire_extinguisher": (["N", "R", "R"], {"N": "minecraft:iron_nugget", "R": "minecraft:red_dye"}, 2),
+    "feeder_conduit": (["P", "P", "P"], {"P": "#c:plates/steel"}, 8),
+    "feeder_conduit_base": (["N", "P", "P"], {"N": "minecraft:iron_nugget", "P": "#c:plates/steel"}, 4),
+    "feeder_conduit_ceiling": (["R", "P", "P"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
+    "feeder_conduit_floor": (["P", "P", "R"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
+    "feeder_conduit_tray": (["PP", "P "], {"P": "#c:plates/steel"}, 4),
     "emergency_light": (["G G", "PRP"], {"G": "minecraft:glowstone_dust", "P": "#c:plates/iron", "R": "minecraft:redstone"}, 2),
     "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),
     "vitals_monitor": (["GRG", " N ", " N "], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone", "N": "minecraft:iron_nugget"}, 1),
