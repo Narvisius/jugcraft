@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -22,7 +23,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * An invisible part of a piece of nuclear equipment. It belongs to the anchor that placed it: using it is using the
  * equipment, and breaking it breaks the whole thing (its anchor drops the item once). Most are a whole block; a few
- * are half a block high, so a piece's steps can be walked up (EquipmentKind.frameShape).
+ * are half a block high, so a piece's steps can be walked up (EquipmentKind.frameShape). Picked (the middle button, or
+ * what Jade names when you look at it) it is its equipment: every part of a piece shows the piece's own name (round
+ * 25; Justin: every piece showed as "Nuclear Equipment").
  */
 public class EquipmentFrameBlock extends Block {
 	public enum Shape implements StringRepresentable {
@@ -61,6 +64,19 @@ public class EquipmentFrameBlock extends Block {
 	@Override
 	protected RenderShape getRenderShape(BlockState state) {
 		return RenderShape.INVISIBLE;
+	}
+
+	@Override
+	protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+		if (level instanceof Level world) {
+			EquipmentRegistry registry = EquipmentRegistry.of(world);
+			BlockPos anchor = registry.anchorOf(pos);
+			EquipmentRegistry.Entry entry = anchor == null ? null : registry.at(anchor);
+			if (entry != null) {
+				return new ItemStack(JugcraftNuclear.EQUIPMENT_ITEMS.get(entry.kind()));
+			}
+		}
+		return ItemStack.EMPTY;
 	}
 
 	@Override

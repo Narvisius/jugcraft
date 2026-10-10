@@ -357,6 +357,13 @@ public class NuclearGameTests {
 			if (helper.getLevel().getBlockState(anchor.offset(offset)).is(JugcraftNuclear.FRAME)) frames++;
 		}
 		helper.assertTrue(frames == EquipmentKind.COOLANT_PUMP.frames(Direction.NORTH).size(), "every frame placed: " + frames);
+		// Every part of it is the pump by name (Jade names what you look at by its picked item), not "Nuclear Equipment".
+		for (BlockPos offset : EquipmentKind.COOLANT_PUMP.frames(Direction.NORTH)) {
+			net.minecraft.world.item.ItemStack picked = helper.getLevel().getBlockState(anchor.offset(offset))
+					.getCloneItemStack(helper.getLevel(), anchor.offset(offset), false);
+			helper.assertTrue(picked.is(JugcraftNuclear.EQUIPMENT_ITEMS.get(EquipmentKind.COOLANT_PUMP)),
+					"a frame block is picked as the pump: " + picked);
+		}
 		helper.assertTrue(!EquipmentPlacement.place(helper.getLevel(), anchor.offset(1, 0, 0), EquipmentKind.FEEDWATER_PUMP, Direction.NORTH, null),
 				"no room on top of the pump");
 		BlockPos frame = anchor.offset(EquipmentKind.COOLANT_PUMP.frames(Direction.NORTH).get(5));

@@ -15,7 +15,9 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   The **Fuel Fabricator** turns a cylinder and two steel plates into two **LEU Fuel Assemblies**.
 - **Equipment:** each piece is placed whole from one item. Its front left corner goes where you click, and it reaches
   to your right and away from you. The client draws each piece in 3D with depth, and invisible frame blocks give it a
-  body. Breaking any part breaks the whole piece and drops its item.
+  body. Breaking any part breaks the whole piece and drops its item. Every part answers to the piece's own name: Jade
+  names it (a board, say, is "Reactor Coolant Control Board", not "Nuclear Equipment"), and picking any part with the
+  middle button gives its item.
 
   | Piece | Size (wide x deep x tall) |
   | --- | --- |
