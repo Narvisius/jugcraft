@@ -21,7 +21,7 @@ B, O = P.BELOW, P.OVER
 # Seats (you sit facing the way they face, so the room you need is in front), things hung on walls (nothing under
 # them), and what may stand on a piece's user side (its chair, a coffee table in front of a sofa).
 SEATED = {"sofa", "locker_bench", "stretcher"}
-WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "medicine_cabinet", "blueprint_sheet",
+WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
              "fire_extinguisher"}
 USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
 

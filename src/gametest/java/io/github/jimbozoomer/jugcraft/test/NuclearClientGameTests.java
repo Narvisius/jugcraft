@@ -814,9 +814,11 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						{151, 1, 93, 150, 1, 89},
 						// Round 25b: the feeder conduits up from the load centres' tops to the ceiling, and upstairs in the
 						// cable spreading room, up through the floor and into the trays.
-						{163, 2, 95, 164, 4, 89}, {162, 2, 92, 160, 4, 98}, {163, 8, 95, 164, 8, 89}, {160, 8, 93, 160, 9, 98}};
+						{163, 2, 95, 164, 4, 89}, {162, 2, 92, 160, 4, 98}, {163, 8, 95, 164, 8, 89}, {160, 8, 93, 160, 9, 98},
+						// Round 25b: the rebuilt emergency light on the west wall, its heads aimed down at the floor.
+						{160, 2, 94, 157, 3, 92}};
 				String[] gearNames = {"switchgear_room", "switchgear_north", "switchgear_south", "switchgear_charger_breaker", "dc_1a_chargers",
-						"conduits_north", "conduits_south", "spreading_conduits_north", "spreading_conduits_south"};
+						"conduits_north", "conduits_south", "spreading_conduits_north", "spreading_conduits_south", "emergency_light"};
 				for (int i = 0; i < gearShots.length; i++) {
 					int[] t = gearShots[i];
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),

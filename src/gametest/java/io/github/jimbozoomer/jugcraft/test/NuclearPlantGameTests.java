@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340890"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340894"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {

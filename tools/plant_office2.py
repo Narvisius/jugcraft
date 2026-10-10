@@ -158,13 +158,12 @@ PIECES = {
         (3, 3, 0, 13, 14, 3.5, {"*": "pi_cab_white", "south": "pi_aed!"}),
         (4, 15, 0, 12, 19, 0.4, {"*": "pi_cab_white", "south": "pi_aed_sign!"})], "glow": ["pi_aed_sign"]},
     "fire_extinguisher": {"display": "Fire Extinguisher Cabinet", "boxes": O4.EXTINGUISHER_CABINET},
-    # ---- an 8-hour battery emergency light (round 24): the cream battery case high on the wall, its test button and
-    # charging lamp on the front, two sealed-beam lamp heads on swivels on top, aimed out into the room.
-    "emergency_light": {"display": "Emergency Light", "boxes": [
-        (2, 2, 0, 14, 8, 4.5, {"*": "pi_emlight_case", "south": "pi_emlight_front!"}),
-        (4, 8, 1.5, 5, 9, 2.5, "pi_emlight_head"), (11, 8, 1.5, 12, 9, 2.5, "pi_emlight_head"),
-        (2.5, 9, 0.5, 6.5, 12.5, 4.5, {"*": "pi_emlight_head", "south": "pi_emlight_lens!"}),
-        (9.5, 9, 0.5, 13.5, 12.5, 4.5, {"*": "pi_emlight_head", "south": "pi_emlight_lens!"})]},
+    # ---- an 8-hour battery emergency light (round 24; rebuilt in round 25b: Justin, "they look horrible ... I don't want
+    # anything to just be like an image pasted over"): every part is modelled (emergency_light_boxes below).
+    "emergency_light": {"display": "Emergency Light", "glow": ["pi_pnl_green"], "boxes": None},
+    # The 3/4-inch conduit that feeds it from the lighting panel, run down the wall from the ceiling into the top of its
+    # cabinet (Justin: cables must go to something), with a one-hole strap and a set-screw coupling.
+    "emergency_light_conduit": {"display": "Emergency Light Conduit", "boxes": None},
     "medicine_cabinet": {"display": "First Aid Cabinet", "boxes": [
         (1, 5, 0, 15, 16, 4.5, {"*": "pi_cab_white", "south": "pi_medicine_front!"})]},
     "vitals_monitor": {"display": "Patient Monitor", "boxes": [
@@ -218,6 +217,96 @@ PIECES = {
 # The diesel generator rooms' control and protection panels (tools/plant_panels.py).
 PIECES.update(PN.PANELS)
 PIECES.update(PN.RISERS)
+
+
+# ---------------------------------------------------------------------------------------------- emergency light
+def _round_y(cx, cz, y0, y1, r, tex, extra=None):
+    """A round part along y (a lamp head pointing down: its cup, bezel ring, lens) as five boxes side by side across x,
+    a middle column and two steps each side, together a stepped circle of radius r about (cx, cz). They touch but
+    never overlap, so no two of their faces lie in one plane facing the same way (tools/zfight.py would otherwise pull
+    them apart)."""
+    out = []
+    for a0, a1, half in ((-1.0, -0.75, 0.45), (-0.75, -0.35, 0.8), (-0.35, 0.35, 1.0), (0.35, 0.75, 0.8), (0.75, 1.0, 0.45)):
+        box = (cx + a0 * r, y0, cz - half * r, cx + a1 * r, y1, cz + half * r, tex)
+        out.append(box + ((extra,) if extra else ()))
+    return out
+
+
+# The cabinet is against the wall (z 0), its door at z 5..5.25. Each lamp head hangs in a yoke out in front of the
+# cabinet's top on a stalk, pointing down at the floor (Justin, round 25b: "the lights need to face down toward the
+# floor"), swung out into the room 45 degrees ("angled out a bit more"); its pivot here.
+EM_HEADS = (4.6, 11.4)
+EM_PIVOT_Y, EM_PIVOT_Z = 11.4, 8.0
+EM_CONDUIT_X, EM_CONDUIT_Z = (7.7, 8.3), (0.9, 1.5)
+
+
+def _em_head(cx):
+    """A sealed-beam lamp head on its stalk and yoke: the swivel base on the cabinet top, the stalk up and forward, the
+    U yoke hanging from it, the knurled pivot knobs, and the head (a dark cup, a chrome bezel ring, a domed glass lens
+    with the lamp's boss in the middle) pointing down, swung out about its pivot."""
+    y, z = EM_PIVOT_Y, EM_PIVOT_Z
+    tilt = {"rotation": {"angle": -45, "axis": "x", "origin": [cx, y, z]}}
+    out = [(cx - 0.9, 8.6, 2.4, cx + 0.9, 9.0, 4.2, "pi_chrome"),
+           (cx - 0.35, 9.0, 2.95, cx + 0.35, 14.8, 3.65, "pi_chrome"),
+           (cx - 0.35, 14.3, 3.65, cx + 0.35, 14.8, z - 0.4, "pi_chrome"),
+           (cx - 2.7, 14.3, z - 0.4, cx + 2.7, 14.8, z + 0.4, "pi_emlight_head"),
+           (cx - 2.7, 10.9, z - 0.4, cx - 2.3, 14.3, z + 0.4, "pi_emlight_head"),
+           (cx + 2.3, 10.9, z - 0.4, cx + 2.7, 14.3, z + 0.4, "pi_emlight_head"),
+           (cx - 3.2, y - 0.5, z - 0.5, cx - 2.7, y + 0.5, z + 0.5, "pi_cap_black"),
+           (cx + 2.7, y - 0.5, z - 0.5, cx + 3.2, y + 0.5, z + 0.5, "pi_cap_black")]
+    out += _round_y(cx, z, 9.76, 13.3, 1.9, "pi_emlight_head", extra=tilt)
+    out += _round_y(cx, z, 9.2, 9.75, 2.05, "pi_chrome", extra=tilt)
+    out += _round_y(cx, z, 9.0, 9.3, 1.4, "pi_emlight_glass", extra=tilt)
+    out += [(cx - 0.35, 8.75, z - 0.35, cx + 0.35, 8.95, z + 0.35, "pi_emlight_glass", tilt)]
+    return out
+
+
+def emergency_light_boxes():
+    """A Big Beam style 8-hour emergency light (the units Appendix R puts in every room a plant must be run from): a
+    cream steel cabinet on a wall flange, louvred both sides, its hinged front with the TEST push button in its chrome
+    bezel, the AC ON (lit) and HIGH CHARGE pilot lamps, the riveted nameplate and the door latch; two sealed-beam
+    heads on stalks over its top, aimed down at the floor; the feed conduit into the top through its connector."""
+    b = [(3, 0.8, 0, 13, 1.6, 0.6, "pi_emlight_case"),
+         (3.4, 1.0, 0.6, 3.9, 1.4, 0.8, "pi_chrome"), (12.1, 1.0, 0.6, 12.6, 1.4, 0.8, "pi_chrome"),
+         (2, 1.6, 0, 14, 8.6, 5, "pi_emlight_case"),
+         (2.4, 2.0, 5, 13.6, 8.2, 5.25, "pi_emlight_case")]
+    # The louvres down each side: a slat standing out over a dark slot.
+    for y in (3.0, 3.9, 4.8, 5.7, 6.6):
+        b += [(14, y, 1.0, 14.3, y + 0.4, 4.0, "pi_emlight_case"), (14, y - 0.4, 1.1, 14.12, y, 3.9, "pi_emlight_head"),
+              (1.7, y, 1.0, 2, y + 0.4, 4.0, "pi_emlight_case"), (1.88, y - 0.4, 1.1, 2, y, 3.9, "pi_emlight_head")]
+    # The TEST button, the two pilot lamps.
+    b += [(10.1, 5.4, 5.25, 11.7, 7.0, 5.45, "pi_chrome"), (10.45, 5.75, 5.45, 11.35, 6.65, 5.9, "pi_cap_black"),
+          (12.15, 6.8, 5.25, 13.25, 7.9, 5.4, "pi_chrome"), (12.35, 7.0, 5.4, 13.05, 7.7, 5.7, "pi_pnl_green"),
+          (12.15, 5.4, 5.25, 13.25, 6.5, 5.4, "pi_chrome"), (12.35, 5.6, 5.4, 13.05, 6.3, 5.7, "pi_pnl_red")]
+    # The maker's nameplate with its four rivets, the door latch.
+    b += [(3.3, 4.6, 5.25, 9.3, 7.2, 5.35, "pi_chrome"),
+          (3.5, 6.75, 5.35, 3.8, 7.05, 5.47, "pi_cap_black"), (8.8, 6.75, 5.35, 9.1, 7.05, 5.47, "pi_cap_black"),
+          (3.5, 4.75, 5.35, 3.8, 5.05, 5.47, "pi_cap_black"), (8.8, 4.75, 5.35, 9.1, 5.05, 5.47, "pi_cap_black"),
+          (12.5, 2.6, 5.25, 13.0, 4.4, 5.6, "pi_chrome")]
+    # The feed: its connector in the top knockout, the conduit up out of the block.
+    x0, x1 = EM_CONDUIT_X
+    z0, z1 = EM_CONDUIT_Z
+    b += [(x0 - 0.3, 8.6, z0 - 0.3, x1 + 0.3, 9.3, z1 + 0.3, "pi_chrome"), (x0, 9.3, z0, x1, 16, z1, "pi_chrome")]
+    for cx in EM_HEADS:
+        b += _em_head(cx)
+    return b
+
+
+def emergency_light_conduit_boxes():
+    """The emergency light's conduit down the wall: the conduit, a set-screw coupling, a one-hole strap screwed to
+    the wall."""
+    x0, x1 = EM_CONDUIT_X
+    z0, z1 = EM_CONDUIT_Z
+    return [(x0, 0, z0, x1, 16, z1, "pi_chrome"),
+            (x0 - 0.15, 2.6, z0 - 0.15, x1 + 0.15, 3.6, z1 + 0.15, "pi_steel"),
+            (x0 + 0.2, 3.0, z1 + 0.15, x1 - 0.2, 3.2, z1 + 0.3, "pi_steel_dark"),
+            (x0 - 0.25, 9.6, 0, x1 + 0.25, 10.4, z1 + 0.2, "pi_steel_dark"),
+            (x1 + 0.25, 9.72, 0, x1 + 1.3, 10.28, 0.2, "pi_steel_dark"),
+            (x1 + 0.6, 9.82, 0.2, x1 + 0.95, 10.18, 0.4, "pi_chrome")]
+
+
+PIECES["emergency_light"]["boxes"] = emergency_light_boxes()
+PIECES["emergency_light_conduit"]["boxes"] = emergency_light_conduit_boxes()
 
 
 # ---------------------------------------------------------------------------------------------- feeder conduits
@@ -292,6 +381,7 @@ CRAFTING = {
     "feeder_conduit_ceiling": (["R", "P", "P"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
     "feeder_conduit_floor": (["P", "P", "R"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
     "feeder_conduit_tray": (["PP", "P "], {"P": "#c:plates/steel"}, 4),
+    "emergency_light_conduit": (["P", "P", "P"], {"P": "#c:plates/iron"}, 8),
     "emergency_light": (["G G", "PRP"], {"G": "minecraft:glowstone_dust", "P": "#c:plates/iron", "R": "minecraft:redstone"}, 2),
     "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),
     "vitals_monitor": (["GRG", " N ", " N "], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone", "N": "minecraft:iron_nugget"}, 1),
@@ -865,32 +955,6 @@ def _extinguisher():
     return img
 
 
-def _emlight_front():
-    """The emergency light's front: louvre slots across the top, the maker's label, the test button and the green
-    charging lamp."""
-    img = M.painted((222, 220, 210), 811, chip_count=1, drip_count=0, dirt=0.15)
-    d = ImageDraw.Draw(img)
-    for y in range(14, 40, 8):
-        d.rectangle([18, y, 110, y + 3], fill=(120, 118, 110, 255))
-    d.rectangle([18, 52, 76, 70], fill=(40, 42, 46, 255))
-    for k in range(3):
-        d.line([(24, 57 + k * 5), (24 + (40, 30, 46)[k], 57 + k * 5)], fill=(210, 210, 204, 255), width=2)
-    d.ellipse([88, 50, 108, 70], fill=(176, 34, 30, 255), outline=(90, 20, 18, 255), width=2)
-    d.ellipse([92, 80, 102, 90], fill=(60, 220, 90, 255))
-    d.rectangle([18, 96, 110, 100], fill=(190, 188, 178, 255))
-    return img
-
-
-def _emlight_lens():
-    """A sealed-beam lamp's lens: the reflector's rings behind the glass, a bright middle."""
-    img = _img((54, 56, 60))
-    d = ImageDraw.Draw(img)
-    for k, c in enumerate(((150, 150, 144), (196, 194, 184), (226, 224, 212), (244, 242, 228))):
-        r = 56 - k * 13
-        d.ellipse([64 - r, 64 - r, 64 + r, 64 + r], fill=c + (255,))
-    return img
-
-
 def _fire_sign():
     img = _img((200, 30, 30))
     d = ImageDraw.Draw(img)
@@ -1070,7 +1134,7 @@ def makers():
         "pi_security_cap": _security_cap, "pi_radio": _radio, "pi_boot_black": _boot_black, "pi_aed": _aed,
         "pi_aed_sign": _aed_sign, "pi_extinguisher": _extinguisher, "pi_fire_sign": _fire_sign,
         "pi_emlight_case": lambda: M.painted((222, 220, 210), 810, chip_count=1, drip_count=0, dirt=0.2),
-        "pi_emlight_front": _emlight_front, "pi_emlight_lens": _emlight_lens,
+        "pi_emlight_glass": lambda: M.painted((238, 234, 218), 813, chip_count=0, drip_count=0, dirt=0.05),
         "pi_emlight_head": lambda: M.painted((52, 54, 58), 812, chip_count=0, drip_count=0, dirt=0.1),
         "pi_medicine_front": _medicine_front, "pi_vitals": _vitals, "pi_drawer_front": _drawer_front,
         "pi_folders": _folders, "pi_brass": _brass, "pi_walnut_top": _walnut_top,

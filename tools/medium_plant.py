@@ -1826,6 +1826,21 @@ def finish_lights(s):
             blocked |= P.equipment_cells(kind, ax, ay, az, facing)
         for step, y_min, y_max in getattr(part, "light_steps", [(4, None, None)]):
             part.light_ceilings(step=step, blocked=blocked, y_min=y_min, y_max=y_max)
+        emergency_light_feeds(part)
+
+
+def emergency_light_feeds(b):
+    """Each emergency light's conduit (round 25b; Justin: cables must go to something): down the wall from the ceiling
+    into the top of its cabinet. Laid after the ceiling lights, which would otherwise not go where it stands."""
+    for name, x, y, z, facing in list(b.seats):
+        if name != "emergency_light":
+            continue
+        k = y + 1
+        while b.get(x, k, z) == 0 and int(b.get(x, k + 1, z)) not in CEILINGS:
+            b.furniture("emergency_light_conduit", x, k, z, facing)
+            k += 1
+        assert b.get(x, k, z) == 0 and int(b.get(x, k + 1, z)) in CEILINGS, ("emergency light conduit", b.key, x, y, z)
+        b.furniture("emergency_light_conduit", x, k, z, facing)
 
 
 # ------------------------------------------------------------------------------------------------- the site

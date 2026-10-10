@@ -270,8 +270,13 @@ blueprint (for players who lay out their own plant).
   fire-stop and sleeve), the floor piece (sleeve, fire-stop and a yellow strut clamp), and the tray piece, which turns
   in under a cable tray on its south side through two cast fittings. In the medium plant, each in-use upper feeder
   of the switchgear room's load centers runs up into the cable spreading room's lowest tray.
-- **Emergency Light** (round 24): an 8-hour battery emergency light for high on a wall. It has a cream case with
-  louvres, a test button and a green charging lamp, and two sealed-beam lamp heads on swivels on top.
+- **Emergency Light** (round 24, rebuilt in round 25b): an 8-hour battery emergency light for high on a wall, every
+  part modelled. A cream steel cabinet on a wall flange, louvred both sides, its front with a TEST push button, the
+  AC ON (lit) and HIGH CHARGE pilot lamps, a riveted nameplate and a latch; two round sealed-beam heads on stalks out
+  over its top, hanging in yokes with pivot knobs and aimed down and out at the floor. Its feed comes into the top
+  of the cabinet through a connector.
+- **Emergency Light Conduit** (round 25b): the light's 3/4-inch conduit down the wall from the ceiling, with a one-hole
+  strap and a coupling; it lines up with the light's own conduit stub.
 - **Speed Gate** (`nuclear/SpeedGateBlock.java`, `SpeedGatePedestalBlock.java`, `SpeedGateBlockEntity.java`,
   `client/SpeedGateRenderer.java`, `tools/speed_gate.py`; Justin, 8 October 2026, after the sliding glass fare gates
   at Grand Central): a one-way security lane. Placed looking the way through, it stands on the block you come in by,
