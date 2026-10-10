@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340708"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340849"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -490,6 +490,119 @@ public class NuclearPlantGameTests {
 			walker.setGameMode(GameType.SPECTATOR);
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * Round 25 (Justin: "make sure they actually hold charge in game, I want it to actually work"): in a built medium
+	 * plant the main transformer feeds the control building's two load centres by its buried cable (and no other), each
+	 * load centre's CHARGER breaker feeds its train's two battery chargers, the chargers charge the four station
+	 * batteries, and opening the breakers stops it while everything keeps its charge. The pieces are ticked by hand, in
+	 * the order the server ticks them.
+	 */
+	@GameTest(maxTicks = 40)
+	public void mediumPlantPowerReachesTheBatteries(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		// Where a breaker's door is, as the game finds it from a click (the main, an upper and a lower feeder).
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.48, 0.9, 0.1) == 0, "main breaker's door");
+		double w = (7.96 - 2.98) / 5;
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.98 + 2.5 * w, 0.6, 0.1) == 6, "CHARGER breaker's door");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.98 + 2.5 * w, 1.5, 0.1) == 5, "INVERTER breaker's door");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(1.0, 1.0, 0.1) == -1, "the transformer section has no breaker");
+		BlockPos stake = helper.absolutePos(BlockPos.ZERO).offset(-5_000, 0, -5_000);
+		Blueprint print = Blueprint.get("nuclear_medium_pwr", false);
+		PlantBuilder.build(level, print, stake, Rotation.NONE, null, true);
+		java.util.List<EquipmentBlockEntity> gear = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity> banks = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> chargers = new java.util.ArrayList<>();
+		EquipmentBlockEntity transformer = null;
+		for (int i = 0; i < print.size(); i++) {
+			BlockState state = print.state(i, Rotation.NONE);
+			BlockPos pos = stake.offset(print.offset(i, Rotation.NONE));
+			if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock anchor) {
+				if (level.getBlockEntity(pos) instanceof EquipmentBlockEntity e) {
+					if (anchor.kind == EquipmentKind.SWITCHGEAR_LINEUP) {
+						gear.add(e);
+					} else if (anchor.kind == EquipmentKind.MAIN_TRANSFORMER) {
+						transformer = e;
+					}
+				}
+			} else if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlock) {
+				var bank = io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlock.battery(level, pos);
+				if (bank != null && !banks.contains(bank)) {
+					banks.add(bank);
+				}
+			} else if (state.is(PlantInterior.BLOCKS.get("edg_battery_charger"))
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
+				chargers.add(panel);
+			}
+		}
+		helper.assertTrue(transformer != null && transformer.output != null, "the main transformer");
+		helper.assertTrue(banks.size() == 4 && chargers.size() == 4, "four station batteries and four chargers: " + banks.size() + ", " + chargers.size());
+		long cap = io.github.jimbozoomer.jugcraft.nuclear.Switchgear.CAPACITY;
+		for (EquipmentBlockEntity g : gear) {
+			helper.assertTrue(g.bus != null && g.bus.getAmount() == cap, "a fuelled build's load centres start full");
+		}
+		for (var bank : banks) {
+			helper.assertTrue(bank.charge() == 1.0, "a fuelled build's batteries start full");
+		}
+		// 1. The transformer's output reaches the switchgear room's two load centres, and only them.
+		for (EquipmentBlockEntity g : gear) {
+			g.bus.setAmount(0);
+		}
+		transformer.output.setAmount(1_000_000);
+		for (int t = 0; t < 10; t++) {
+			transformer.serverTick(level);
+		}
+		int fed = 0;
+		for (EquipmentBlockEntity g : gear) {
+			fed += g.bus.getAmount() > 0 ? 1 : 0;
+		}
+		helper.assertTrue(fed == 2, "the transformer feeds the two load centres it is cabled to: " + fed + " of " + gear.size());
+		// 2. Full load centres charge the empty batteries through their chargers.
+		for (EquipmentBlockEntity g : gear) {
+			g.bus.setAmount(cap);
+		}
+		for (var bank : banks) {
+			bank.energy.setAmount(0);
+		}
+		Runnable tick = () -> {
+			for (EquipmentBlockEntity g : gear) g.serverTick(level);
+			for (var c : chargers) c.serverTick(level);
+			for (var bank : banks) bank.serverTick(level);
+		};
+		for (int t = 0; t < 200; t++) {
+			tick.run();
+		}
+		java.util.Set<BlockPos> linked = new java.util.HashSet<>();
+		for (var c : chargers) {
+			helper.assertTrue(c.battery != null && linked.add(c.battery), "each charger charges a battery of its own: " + c.battery);
+		}
+		for (var bank : banks) {
+			helper.assertTrue(bank.energy.getAmount() > 100_000, "the battery at " + bank.getBlockPos().subtract(stake).toShortString() + " charges: "
+					+ bank.energy.getAmount());
+		}
+		// 3. With the CHARGER breakers open the chargers run down their buffers and stop; the batteries keep their charge.
+		for (EquipmentBlockEntity g : gear) {
+			g.breakers &= ~(1 << 6);
+		}
+		for (int t = 0; t < 60; t++) {
+			tick.run();
+		}
+		long[] held = banks.stream().mapToLong(b -> b.energy.getAmount()).toArray();
+		for (int t = 0; t < 40; t++) {
+			tick.run();
+		}
+		for (int k = 0; k < banks.size(); k++) {
+			helper.assertTrue(banks.get(k).energy.getAmount() == held[k], "the breaker open, the battery holds: " + held[k] + " -> " + banks.get(k).energy.getAmount());
+		}
+		for (EquipmentBlockEntity g : gear) {
+			helper.assertTrue(g.flows[6] == 0, "an open breaker's feeder carries nothing");
+		}
+		helper.succeed();
 	}
 
 	/** Taking a lane away takes the pedestals only it used; breaking a pedestal takes its lane, which drops one gate. */

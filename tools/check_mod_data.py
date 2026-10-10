@@ -7299,9 +7299,21 @@ def check_nuclear():
     for name, ops in boards.items():
         if name not in nuclear.EQUIPMENT:
             err(f"control board {name} is not equipment (tools/nuclear.py EQUIPMENT)")
-        names = set(re.findall(r'"([a-z_]+)"', json.dumps(ops))) - {"b", "o", "q", "c", "still", "lit", "blink", "core", "states"} - set(ops.get("states", {}))
+        drawn = {k: v for k, v in ops.items() if k != "live"}
+        names = set(re.findall(r'"([a-z_]+)"', json.dumps(drawn))) - {"b", "o", "q", "c", "still", "lit", "blink", "core", "states"} - set(ops.get("states", {}))
         if names - set(nuclear.EQ_MATERIALS):
             err(f"control board {name} uses materials not on the sheet: {sorted(names - set(nuclear.EQ_MATERIALS))}")
+        if name == "switchgear_lineup":
+            # The load centre's live parts (round 25): its breakers in the game's order (nuclear/Switchgear.java NAMES),
+            # their lamps and flags, and its meters as client/NuclearRenderer.java reads them.
+            live = ops.get("live", {})
+            java_names = re.findall(r'"([A-Z0-9 ]+)"', (re.search(r"NAMES = \{(.*?)\};", (JAVA_ROOT / "nuclear" / "Switchgear.java").read_text(encoding="utf-8"), re.S) or [None, ""])[1])
+            if java_names != ["MAIN BKR"] + control_boards.LC_FEEDERS:
+                err(f"control board switchgear_lineup: its feeders {control_boards.LC_FEEDERS} are not nuclear/Switchgear.java NAMES {java_names}")
+            if len(live.get("breakers", [])) != len(java_names) or any(len(b.get("lamps", [])) != 2 or len(b.get("flag", [])) != 4 for b in live.get("breakers", [])):
+                err("control board switchgear_lineup: needs a live lamp pair and flag for each of its 11 breakers")
+            if [m.get("kind") for m in live.get("meters", [])] != ["charge", "volts"] + ["amps"] * 10:
+                err("control board switchgear_lineup: its live meters must be the charge, the volts, then each feeder's amps in order")
         if name == "remote_shutdown_panel" and set(ops.get("states", {})) != {"mcr", "rsp"}:
             err("control board remote_shutdown_panel: its transfer switches need both states, mcr and rsp (client/NuclearRenderer.java)")
         bad = control_boards.overlaps(ops)

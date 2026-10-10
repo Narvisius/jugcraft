@@ -34,7 +34,6 @@ final class PlantDecor {
 			case TRAVELLING_WATER_SCREEN -> waterScreen(f);
 			case PLANT_DISPLAY_WALL -> displayWall(f);
 			case MAIN_CONTROL_BOARD -> controlBoard(f);
-			case SWITCHGEAR_LINEUP -> switchgear(f);
 			case AIR_HANDLING_UNIT -> airHandler(f);
 			default -> ControlBoards.still(kind, f);
 		}
@@ -69,13 +68,6 @@ final class PlantDecor {
 					front(f, 0.4 + k * 0.9, 2.82, 0.75 + k * 0.9, 2.92, 1.17, k % 3 == 2 ? LAMP_RED : LAMP_GREEN);
 				}
 			}
-			case SWITCHGEAR_LINEUP -> {
-				for (int k = 0; k < 4; k++) {
-					double x = k * 2 + 1.0;
-					front(f, x - 0.35, 2.3, x - 0.15, 2.45, 0.06, LAMP_GREEN);
-					front(f, x + 0.15, 2.3, x + 0.35, 2.45, 0.06, k == 2 ? LAMP_RED : LAMP_GREEN);
-				}
-			}
 			// The local panel's screen (its lamps are live).
 			case EMERGENCY_DIESEL_GENERATOR -> front(f, 0.4, 1.7, 1.1, 2.2, 0.195, SCREEN);
 			case AIR_HANDLING_UNIT -> front(f, 3.0, 2.42, 3.3, 2.55, 0.18, LAMP_GREEN);
@@ -102,11 +94,6 @@ final class PlantDecor {
 			case PLANT_DISPLAY_WALL -> {
 				if (tick % 6 < 3) {
 					front(f, 8.35, 3.55, 8.85, 3.75, 0.25, LAMP_RED);
-				}
-			}
-			case SWITCHGEAR_LINEUP -> {
-				if (tick % 10 < 5) {
-					front(f, 7.55, 2.6, 7.75, 2.72, 0.05, LAMP_RED);
 				}
 			}
 			default -> ControlBoards.blink(kind, f, time);
@@ -873,19 +860,6 @@ final class PlantDecor {
 			}
 			f.plate(5.2, 1.2, 1.16, 5.8, 1.7, 1.18, 0, NAMEPLATE, PAINT_GREY);
 		}
-	}
-
-	/** Medium-voltage switchgear: four cabinets in a line, cable trays on top ({@link #glow} lamps). */
-	static void switchgear(Frame f) {
-		for (int k = 0; k < 4; k++) {
-			double x0 = k * 2 + 0.05, x1 = k * 2 + 1.95;
-			f.box(x0, 0.1, 0.1, x1, 2.85, 1.9, PAINT_GREY);
-			f.tiled(v(x0 + 0.05, 2.8, 0.08), v(x0 + 0.05, 0.15, 0.08), v(x1 - 0.05, 0.15, 0.08), v(x1 - 0.05, 2.8, 0.08), v(0, 0, -1), SWITCHGEAR, 1.4);
-		}
-		f.box(0, 0, 0.05, 8, 0.1, 1.95, CARBON_STEEL);
-		f.box(0.2, 2.85, 0.51, 7.8, 3.0, 1.49, GRATING);
-		f.box(0.2, 2.85, 0.45, 7.8, 3.0, 0.5, CARBON_STEEL);
-		f.box(0.2, 2.85, 1.5, 7.8, 3.0, 1.55, CARBON_STEEL);
 	}
 
 	/**

@@ -147,6 +147,10 @@ public final class JugcraftNuclear {
 		}, net.minecraft.util.Util.make(new java.util.ArrayList<Block>(EQUIPMENT.values()), l -> l.add(FRAME)).toArray(Block[]::new));
 		io.github.jimbozoomer.jugcraft.energy.EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
 			EquipmentBlockEntity equipment = equipmentAt(level, pos);
+			if (equipment != null && equipment.bus != null) {
+				// A load centre: its incoming side and its feeders' terminals (nuclear/Switchgear.java).
+				return Switchgear.storageAt(level, pos, equipment);
+			}
 			return equipment == null ? null : equipment.output;
 		}, net.minecraft.util.Util.make(new java.util.ArrayList<Block>(EQUIPMENT.values()), l -> l.add(FRAME)).toArray(Block[]::new));
 		ConsoleActionPayload.register();

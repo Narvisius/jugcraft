@@ -110,7 +110,7 @@ public final class PlantInterior {
 			{"edg_battery_rack", 0, "multi:1:2:p", "metal", null},
 			// The control building's DC system (tools/plant_panels.py, round 18): the station battery (a four-block step
 			// rack of 30 cells), its distribution switchboard, the vital inverter, and the cables from battery to switchboard.
-			{"station_battery", 0, "multi:4:2:p", "metal", null},
+			{"station_battery", 0, "battery:4:2:p", "metal", null},
 			{"dc_switchboard", 0, "live:2:2:p", "metal", null},
 			{"vital_inverter", 0, "multi:1:2:p", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
@@ -127,6 +127,7 @@ public final class PlantInterior {
 	public static BlockEntityType<PlantSignBlockEntity> SIGN_ENTITY;
 	public static BlockEntityType<StatusScreenBlockEntity> STATUS_ENTITY;
 	public static BlockEntityType<LivePanelBlockEntity> LIVE_PANEL_ENTITY;
+	public static BlockEntityType<StationBatteryBlockEntity> STATION_BATTERY_ENTITY;
 	public static BlockEntityType<LockerBlockEntity> LOCKER_ENTITY;
 	public static BlockEntityType<StorageRackBlockEntity> RACK_ENTITY;
 	public static BlockEntityType<RollerDoorBlockEntity> ROLLER_ENTITY;
@@ -187,6 +188,9 @@ public final class PlantInterior {
 					return new StatusScreenBlock(p);
 				} else if (k[0].equals("live")) {
 					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]));
+				} else if (k[0].equals("battery")) {
+					// A station battery that holds charge (round 25).
+					return new StationBatteryBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]));
 				} else if (k[0].equals("multi")) {
 					// "b": a machine standing on the floor (rising a little into the row above); "p": a panel standing on the
 					// floor, full height in both rows.
@@ -246,6 +250,14 @@ public final class PlantInterior {
 		LIVE_PANEL_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("live_panel"),
 				FabricBlockEntityTypeBuilder.create(LivePanelBlockEntity::new, BLOCKS.entrySet().stream()
 						.filter(e -> e.getValue() instanceof LivePanelBlock).map(java.util.Map.Entry::getValue).toArray(Block[]::new)).build());
+		STATION_BATTERY_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("station_battery"),
+				FabricBlockEntityTypeBuilder.create(StationBatteryBlockEntity::new, BLOCKS.get("station_battery")).build());
+		// The DC system holds charge (round 25): a cable into a station battery charges it or draws on it; a cable into a
+		// battery charger is its AC supply.
+		io.github.jimbozoomer.jugcraft.energy.EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) ->
+				StationBatteryBlock.storage(level, pos), BLOCKS.get("station_battery"));
+		io.github.jimbozoomer.jugcraft.energy.EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) ->
+				LivePanelBlockEntity.chargerInput(level, pos), BLOCKS.get("edg_battery_charger"));
 		RACK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_rack"),
 				FabricBlockEntityTypeBuilder.create(StorageRackBlockEntity::new, BLOCKS.get("storage_rack")).build());
 		ROLLER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("roller_door"),

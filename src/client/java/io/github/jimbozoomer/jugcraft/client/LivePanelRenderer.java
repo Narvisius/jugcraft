@@ -118,7 +118,11 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		state.facing = panel.getBlockState().getValue(MultiFurnitureBlock.FACING);
 		state.column = block.origin() % layout.width();
 		double now = level.getGameTime() + partialTick;
-		EdgTelemetry.Snapshot snap = EdgTelemetry.of(panel, generator(panel, level), now);
+		EquipmentBlockEntity edg = generator(panel, level);
+		EdgTelemetry.Snapshot snap = EdgTelemetry.of(panel, edg, now);
+		if (edg == null) {
+			EdgTelemetry.battery(snap, panel, level);
+		}
 		boolean blink = ((long) (now / 5)) % 2 == 0;
 		for (Element e : layout.elements()) {
 			switch (e.type()) {

@@ -781,6 +781,58 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						panel.linkShutdownPanel(level);
 					}
 				});
+				// The switchgear room (round 25): its two load centres working. The buses part charged, train A's batteries
+				// half down so its chargers draw through the CHARGER breaker (its ammeter reading, the chargers' meters
+				// charging); the room from the west end, each lineup from the aisle, the CHARGER breaker up close; then
+				// two breakers opened (green lamps, green flags) and the chargers' room.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					int found = 0;
+					for (int gx = 155; gx <= 167; gx++) {
+						for (int gz = 87; gz <= 101; gz++) {
+							if (level.getBlockEntity(new BlockPos(wx.applyAsInt(gx), baseY, wz.applyAsInt(gz))) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity gear
+									&& gear.bus != null) {
+								gear.bus.setAmount(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.CAPACITY * 87 / 100);
+								gear.changed();
+								found++;
+							}
+						}
+					}
+					if (found != 2) {
+						throw new AssertionError("The switchgear room should have two load centres: " + found);
+					}
+					for (int gx = 136; gx <= 146; gx++) {
+						BlockPos at = new BlockPos(wx.applyAsInt(gx), baseY, wz.applyAsInt(89));
+						var bank = io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlock.battery(level, at);
+						if (bank != null) {
+							bank.energy.setAmount(io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity.CAPACITY / 2);
+						}
+					}
+				});
+				context.waitTicks(100);
+				int[][] gearShots = {{157, 1, 94, 165, 0, 93}, {161, 1, 96, 161, 1, 89}, {161, 1, 91, 161, 1, 98}, {163, 1, 93, 163, 0, 90},
+						{151, 1, 93, 150, 1, 89}};
+				String[] gearNames = {"switchgear_room", "switchgear_north", "switchgear_south", "switchgear_charger_breaker", "dc_1a_chargers"};
+				for (int i = 0; i < gearShots.length; i++) {
+					int[] t = gearShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_r25_" + gearNames[i]);
+				}
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					for (int gx = 155; gx <= 167; gx++) {
+						for (int gz = 87; gz <= 92; gz++) {
+							if (level.getBlockEntity(new BlockPos(wx.applyAsInt(gx), baseY, wz.applyAsInt(gz))) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity gear
+									&& gear.bus != null) {
+								gear.breakers &= ~(1 << 5 | 1 << 6);
+								gear.changed();
+							}
+						}
+					}
+				});
+				context.waitTicks(40);
+				shotAt(context, singleplayer, wx.applyAsInt(163), y + 1, wz.applyAsInt(93), wx.applyAsInt(163), y, wz.applyAsInt(90),
+						"jugcraft_plant_medium_r25_switchgear_breakers_open");
 				// Diesel room A's generator started (it turns over, fires and runs up to speed: the coupling and fan
 				// turning, the gauges up, smoke at the stack); its day tank drawn down so the storage tank refills it, and
 				// the day tank's screen showing it filling.

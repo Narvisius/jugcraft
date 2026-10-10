@@ -80,7 +80,7 @@ public enum EquipmentKind {
 
 	/** Plant equipment that only has to look right: it takes no pipes and does no work. */
 	public boolean decor() {
-		return ordinal() >= POLAR_CRANE.ordinal() && this != REMOTE_SHUTDOWN_PANEL;
+		return ordinal() >= POLAR_CRANE.ordinal() && this != REMOTE_SHUTDOWN_PANEL && this != SWITCHGEAR_LINEUP;
 	}
 
 	/** Equipment that holds a reactor core (and is run from a console). */

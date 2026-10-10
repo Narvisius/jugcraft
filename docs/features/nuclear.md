@@ -75,6 +75,37 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
       turned and the amber lamps are lit. The console's screen reads CONTROL AT REMOTE SHUTDOWN PANEL, and the console
       can only trip the reactor until control is handed back.
   - It only works a reactor its user may run (the reactor's owner, or their party in Party mode).
+- **The 480 V load center** (Switchgear Lineup, round 25): eight blocks long and holding power, built as a real one
+  is: a black sill, then steel cubicles bolted together. On the left is the station service transformer's section
+  (4160 V to 480 V), with louvred bolted covers, its temperature monitor and red voltage warnings. Next is the main
+  breaker's section, with the bus's charge and volts meters above it. Then come five feeder sections, each with two
+  draw-out breakers behind hinged doors and a pair of digital ammeters on top. Each breaker door shows the breaker's
+  front through its cut-out (open and close buttons, the open/closed flag, the spring-charged flag, the charging
+  handle and the racking slot), a red and a green lamp, and an engraved nameplate naming its feeder: MCC 1 to 4,
+  INVERTER, CHARGER, HVAC, LIGHTING and two spares. The breaker lifting trolley rides rails along the top; the
+  incoming bus duct and the feeders' conduits leave from the back.
+  - Its bus holds **2,000,000 JE** and keeps it.
+  - **In:** a cable into the back of its transformer section (either of the two left-hand blocks as you face it, any
+    side) charges the bus while the **main breaker** is closed. It takes up to 16,384 JE/t.
+  - **Out:** each closed feeder breaker sends the bus's power out of the back of its own section, up to 2,048 JE/t
+    each. An upper breaker's power goes out of the top block; a lower breaker's power goes down through the floor.
+  - **Right-click a breaker's door** to open or close it. Only the owner, or their party in Party mode, can do this.
+    Right-clicking anywhere else shows the bus's charge, the main breaker's state and what is coming in.
+  - The lamps, flags and meters are live. A closed breaker has its red lamp lit and a red flag; an open one has its
+    green lamp lit and a green flag. The meters read the charge (%), the bus volts, and each feeder's amps.
+  - In the medium plant, a buried cable from the main transformer comes up through the floor under each of the
+    switchgear room's load centres. Each one's **CHARGER** breaker (the lower breaker of its third section) feeds its
+    train's two battery chargers by a cable in the floor slab. A plant built with `fuelled` starts with every load
+    center and station battery full.
+- **Station batteries hold charge** (round 25): a Station Battery rack holds 1,500,000 JE. Any cable touching it can
+  charge it or draw on it (4,096 JE/t). Right-click it to see its charge and whether it is charging, discharging or
+  on float.
+  - A **Battery Charger** takes AC from a cable into any block of it (it keeps a 40,000 JE buffer). It charges the
+    nearest station battery within 24 blocks that no other charger has, at up to 1,024 JE/t (its 150 A limit).
+  - Away from a diesel generator, the chargers' and the DC switchboard's meters read their battery:
+    - Charging: up to 150 A, and the volts rise towards 135 V (equalize).
+    - Full: float at 132 V.
+    - With no AC: the AC lamp goes out, CHARGER FAIL comes in, and the volts fall with the charge.
 - **Refuelling:**
   - Shut the reactor down (rods fully in, core below 120 °C), then press REFUEL. The vessel's head comes off and the
     core glows blue under its water.
@@ -181,7 +212,9 @@ blueprint (for players who lay out their own plant).
   - Grade: Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (Station Battery, four
     blocks long, 30 cells in clear jars), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
-    beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room;
+    beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room
+    (both trains' 480 V load centers face to face across an aisle of rubber mats, fed from the main transformer and
+    feeding the chargers, above; emergency lights, the arc flash suits' locker, an extinguisher);
     the remote shutdown room (the remote shutdown panel on its north wall over a rubber mat, battery emergency lights
     above it, an operator console three wide on the east wall, an extinguisher by the door); the locker room; and the
     secure entrance (a vestibule; the security counter, its chairs

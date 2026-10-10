@@ -51,7 +51,7 @@ BLINK_DEPTH = 0.004                     # how far behind a flashing window its u
 NEW_MATERIALS = ["lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches"]
 # Row 8 (round 24, the remote shutdown panel; Justin: "make it look more realistic with detail"): engraved nameplates
 # with real legends in a 3 x 5 pixel font, the panel's title plates, digital indicators, placards and procedure binders.
-TEXT_MATERIALS = ["nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders"]
+TEXT_MATERIALS = ["nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders", "nameplates3"]
 
 # The nameplates' legends: each cell holds 16 plates (2 across, 8 down, 32 x 8 pixels), read left to right.
 NAMEPLATES = {
@@ -61,9 +61,12 @@ NAMEPLATES = {
                     "SW PP B", "BA PP A", "BA PP B", "LTDN ISO", "EDG A", "EDG B", "MSIV", "STM SPLY"],
     "nameplates_inst": ["PZR PRES", "PZR LVL", "RCS TH", "RCS TC", "SG1 LVL", "SG2 LVL", "SG3 LVL", "SG4 LVL",
                         "AFW FLOW", "CST LVL", "SR FLUX", "SUR", "TRIP A", "TRIP B", "SG PRES", "BAT LVL"],
+    # The 480 V load centre (round 25): its breakers' feeders, its meters, its warnings.
+    "nameplates3": ["MAIN BKR", "XFMR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "CHARGER", "INVERTER",
+                    "HVAC", "LIGHTING", "SPARE", "LOAD CTR", "CHARGE", "BUS V", "480 V", "4160 V"],
 }
 # The red and yellow plates among the instruments' (a reactor trip's, a warning's).
-PLATE_COLOURS = {("nameplates_inst", 12): "red", ("nameplates_inst", 13): "red"}
+PLATE_COLOURS = {("nameplates_inst", 12): "red", ("nameplates_inst", 13): "red", ("nameplates3", 14): "red", ("nameplates3", 15): "red"}
 # Title plates: eight rows of 64 x 8 (a plate may take two rows: the panel's own title).
 TITLES = [("REMOTE SHUTDOWN", "red"), ("PANEL - UNIT 1", "red"), ("TRAIN A", "orange"), ("TRAIN B", "blue"),
           ("AUX FEEDWATER", "white"), ("REACTOR COOLANT", "white"), ("CONTROL TRANSFER", "yellow"), ("INDICATION", "white")]
@@ -584,6 +587,8 @@ class Board:
         out = {"still": self.still, "lit": self.lit, "blink": self.blink, "core": getattr(self, "core", len(self.still))}
         if self.states:
             out["states"] = self.states
+        if getattr(self, "live", None):
+            out["live"] = self.live
         return out
 
     def state(self, name):
@@ -1035,10 +1040,153 @@ def remote_shutdown_panel(seed=89):
     return b
 
 
+# ---------------------------------------------------------------- the 480 V load centre (round 25)
+
+# Its breakers, in the order the game numbers them: the main (incoming) breaker, then the feeders, two to a section
+# (upper, lower) from the left. The upper feeders send their power up out of the top of their section, the lower ones
+# down through the floor; the transformer section takes it in (client/NuclearRenderer.java, nuclear/Switchgear.java).
+LC_FEEDERS = ["MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "CHARGER", "HVAC", "LIGHTING", "SPARE", "SPARE"]
+LC_FACE = 0.12          # the doors' plane (z)
+LC_TOP = 2.36           # the cabinets' top, under the cap
+
+
+def load_center(seed=97):
+    """A 480 V load centre as it stands in a plant's switchgear room (round 25; Justin: "realistic switchgear ... less
+    simple and cartoony", and it must hold charge and work): a lineup of steel cubicles bolted together on a black
+    sill, eight blocks long. On the left the station service transformer's section (4160 V to 480 V, dry type), its
+    bolted covers louvred top and bottom, its temperature monitor and warnings; then the main breaker's section, its
+    meters above (volts, amps, the bus's charge); then five feeder sections, each with two draw-out breakers behind
+    hinged doors (the breaker's front showing through: open and close buttons, the open/closed flag, the spring's
+    charge flag, the charging handle and the racking slot; red and green lamps above; a nameplate naming its feeder)
+    and a pair of digital ammeters on top. Along the top, the rails and trolley of the breaker lifting device; at the
+    back, the incoming bus duct and the feeders' conduits. The lamps, flags and meters are the game's (live)."""
+    b = Board(8, seed, face=LC_FACE)
+    e, dark, grey = body(), sw("dgrey"), sw("mgrey")
+    # The body (its front dark: the seams between doors), the sill, the cap.
+    b.box(0.04, 0.1, LC_FACE, 7.96, LC_TOP, 1.96, [dark, e, e, e, None, None])
+    b.box(0.04, 0, 0.1, 7.96, 0.1, 1.96, [sw("black"), None, sw("black"), sw("black"), None, None])
+    b.box(0.02, LC_TOP, 0.08, 7.98, 2.4, 1.98, [TRIM] * 6)
+    b.core = len(b.still)
+    live = {"breakers": [], "meters": []}
+
+    def door(x0, x1, y0, y1):
+        b.face_box((x0 + x1) / 2, (y0 + y1) / 2, x1 - x0, y1 - y0, 0.012, e, grey)
+
+    def bolts(x0, x1, y0, y1):
+        for bx in (x0 + 0.04, x1 - 0.04):
+            for by in (y0 + 0.04, y1 - 0.04):
+                b.face_box(bx, by, 0.022, 0.022, 0.018, dark, dark)
+
+    def louvres(cx, y0, n, w):
+        for k in range(n):
+            b.face_box(cx, y0 + k * 0.055, w, 0.022, 0.016, dark, dark)
+
+    def breaker(x0, x1, y0, y1, legend, big=False):
+        """A breaker's door: hinges, latch, nameplate, the lamps' rims, and the breaker's front through its cut-out."""
+        door(x0, x1, y0, y1)
+        cx = (x0 + x1) / 2
+        for hy in (y0 + 0.12, y1 - 0.12):
+            b.face_box(x0 + 0.03, hy, 0.02, 0.07, 0.02, dark, dark)
+        b.face_box(x1 - 0.07, (y0 + y1) / 2, 0.022, 0.13, 0.04, grey, dark)
+        b.nameplate(cx, y1 - 0.06, plate("nameplates3", NAMEPLATES["nameplates3"].index(legend)), 0.3, 0.03, 0.02)
+        lamps = [(cx - 0.045, y1 - 0.135), (cx + 0.045, y1 - 0.135)]
+        for lx, ly in lamps:
+            b.lamp_rim(lx, ly, 0.03, LC_FACE - 0.012)
+        ew, eh = (0.5, 0.42) if big else (0.42, 0.34)
+        ex, ey = cx - 0.05, (y0 + y1) / 2 - (0.02 if big else 0.06)
+        ez = LC_FACE - 0.05
+        b.face_box(ex, ey, ew, eh, 0.05, dark, sw("black"))
+        # The open (green) and close (red) buttons, the charged flag, the racking slot, the charging handle.
+        bx = ex - ew / 2 + 0.06
+        b.cyl((bx, ey + 0.08, ez), (bx, ey + 0.08, ez - 0.016), 0.024, sw("black"), sw("green"), 10)
+        b.cyl((bx, ey - 0.02, ez), (bx, ey - 0.02, ez - 0.016), 0.024, sw("black"), sw("red"), 10)
+        b.face_box(ex + 0.02, ey - 0.04, 0.09, 0.035, 0.054, sw("yellow"), sw("black"))
+        b.face_box(ex - 0.02, ey - eh / 2 + 0.05, 0.06, 0.03, 0.054, sw("black"), sw("black"))
+        b.face_box(ex + ew / 2 - 0.06, ey - 0.02, 0.035, 0.2, 0.1, sw("black"), sw("black"))
+        # Ventilation slots low on the door.
+        for k in range(3):
+            b.face_box(cx - 0.05, y0 + 0.07 + k * 0.045, ew * 0.8, 0.018, 0.018, dark, dark)
+        # The open/closed flag's window: its frame here, the flag the game's.
+        fx0, fy0, fx1, fy1 = ex - 0.04, ey + 0.05, ex + 0.07, ey + 0.11
+        b.face_box((fx0 + fx1) / 2, (fy0 + fy1) / 2, fx1 - fx0 + 0.02, fy1 - fy0 + 0.02, 0.052, sw("black"), sw("black"))
+        live["breakers"].append({"lamps": [list(_r(*l)) for l in lamps], "lamp": 0.03, "lamp_z": _r(LC_FACE - 0.024)[0],
+                                 "flag": list(_r(fx0, fy0, fx1, fy1)), "flag_z": _r(LC_FACE - 0.056)[0]})
+
+    def meter_live(x, y, kind):
+        b.face_box(x, y, 0.17, 0.07, 0.035, sw("black"), dark)
+        live["meters"].append({"kind": kind, "box": list(_r(x - 0.07, y - 0.022, x + 0.07, y + 0.022)), "z": _r(LC_FACE - 0.039)[0]})
+
+    # The transformer's section.
+    door(0.08, 1.92, 1.24, 2.33)
+    door(0.08, 1.92, 0.14, 1.2)
+    bolts(0.08, 1.92, 1.24, 2.33)
+    bolts(0.08, 1.92, 0.14, 1.2)
+    louvres(1.0, 1.82, 8, 1.4)
+    louvres(1.0, 0.28, 9, 1.4)
+    b.nameplate(0.62, 2.25, plate("nameplates3", 11), 0.4, 0.045, 0.02)
+    b.nameplate(1.38, 2.25, plate("nameplates3", 1), 0.3, 0.035, 0.02)
+    b.face_box(1.0, 1.58, 0.42, 0.24, 0.03, sw("mgrey"), dark)
+    b.face_box(0.92, 1.62, 0.17, 0.07, 0.05, sw("black"), dark)
+    b.front_quad(0.85, 1.598, 0.99, 1.642, LC_FACE - 0.054, plate("digital", 14), b.lit)
+    for k, colour in enumerate(("green", "off_amber", "off_red")):
+        b.lamp_rim(1.1 + k * 0.05 - 0.05, 1.51, 0.026, LC_FACE - 0.03)
+        h = 0.026 / 2 + 0.005
+        lx = 1.1 + k * 0.05 - 0.05
+        b.front_quad(lx - h, 1.51 - h, lx + h, 1.51 + h, LC_FACE - 0.042, LENS[colour], None if colour.startswith("off") else b.lit)
+    b.face_box(1.12, 1.64, 0.1, 0.035, 0.05, sw("black"), dark)
+    b.nameplate(0.62, 1.4, plate("nameplates3", 15), 0.24, 0.035, 0.02)
+    b.nameplate(1.38, 1.4, plate("nameplates3", 14), 0.24, 0.035, 0.02)
+    # The main breaker's section: its meters, then the breaker.
+    door(2.0, 2.96, 1.72, 2.33)
+    meter_live(2.48, 2.2, "charge")
+    b.nameplate(2.48, 2.13, plate("nameplates3", 12), 0.22, 0.03, 0.02)
+    meter_live(2.48, 1.98, "volts")
+    b.nameplate(2.48, 1.91, plate("nameplates3", 13), 0.22, 0.03, 0.02)
+    b.dial(2.17, 2.06, 0, 0.2)
+    b.dial(2.79, 2.06, 2, 0.2)
+    # The voltmeter's phase selector switch.
+    b.face_box(2.48, 1.8, 0.1, 0.1, 0.02, dark, sw("black"))
+    b.cyl((2.48, 1.8, LC_FACE - 0.02), (2.48, 1.8, LC_FACE - 0.05), 0.026, sw("black"), sw("dgrey"), 8)
+    breaker(2.0, 2.96, 0.14, 1.68, "MAIN BKR", big=True)
+    # The feeders' sections.
+    w = (7.96 - 2.98) / 5
+    for k in range(5):
+        x0, x1 = 2.98 + k * w + 0.02, 2.98 + (k + 1) * w - 0.02
+        cx = (x0 + x1) / 2
+        door(x0, x1, 1.96, 2.33)
+        for dx, legend in ((-0.21, LC_FEEDERS[2 * k]), (0.21, LC_FEEDERS[2 * k + 1])):
+            meter_live(cx + dx, 2.18, "amps")
+            b.nameplate(cx + dx, 2.1, plate("nameplates3", NAMEPLATES["nameplates3"].index(legend)), 0.17, 0.026, 0.02)
+        breaker(x0, x1, 1.16, 1.93, LC_FEEDERS[2 * k])
+        breaker(x0, x1, 0.14, 1.13, LC_FEEDERS[2 * k + 1])
+    # The breaker lifting device: its rails along the top, the trolley parked at the right end, its hoist out over the
+    # front with the chain and hook.
+    for z0 in (0.22, 0.72):
+        b.box(0.12, 2.4, z0, 7.88, 2.45, z0 + 0.05, [sw("dgrey")] * 5 + [None])
+    yellow = sw("yellow")
+    b.box(6.55, 2.47, 0.16, 7.3, 2.6, 0.84, [yellow] * 6)
+    for wx in (6.62, 7.18):
+        for wz in (0.245, 0.745):
+            b.box(wx - 0.035, 2.45, wz - 0.04, wx + 0.035, 2.47, wz + 0.04, [sw("black")] * 5 + [None])
+    b.box(6.85, 2.5, -0.3, 7.0, 2.58, 0.16, [yellow, None, yellow, yellow, yellow, yellow])
+    b.box(6.9, 2.38, -0.27, 6.95, 2.5, -0.22, [sw("black")] * 6)
+    b.box(6.905, 2.08, -0.255, 6.945, 2.38, -0.235, [sw("mgrey")] * 6)
+    b.box(6.89, 2.02, -0.26, 6.96, 2.08, -0.23, [sw("dgrey")] * 6)
+    # At the back: the incoming bus duct over the transformer, the feeders' conduits up out of the top.
+    b.box(0.3, 2.4, 1.1, 1.7, 2.92, 1.88, [dark] * 5 + [None])
+    b.box(0.26, 2.92, 1.06, 1.74, 2.96, 1.92, [TRIM] * 6)
+    for k in range(5):
+        cx = 2.98 + (k + 0.5) * w
+        for dx in (-0.12, 0.0, 0.12):
+            b.cyl((cx + dx, 2.4, 1.5), (cx + dx, 2.99, 1.5), 0.04, sw("mgrey"), sw("dgrey"), 8)
+    out = b
+    out.live = live
+    return out
+
 SECTIONS = {"esf_control_board": esf_board, "rcs_control_board": rcs_board, "secondary_control_board": secondary_board,
             "turbine_control_board": turbine_board, "electrical_control_board": electrical_board,
             "radiation_control_board": radiation_board, CONSOLE: reactor_console,
-            "remote_shutdown_panel": remote_shutdown_panel}
+            "remote_shutdown_panel": remote_shutdown_panel, "switchgear_lineup": load_center}
 
 
 def all_ops():
@@ -1447,8 +1595,8 @@ MAKERS = {"lamp_white": lamp_white, "lamp_amber": lamp_amber, "annunciator": ann
           "dial": dial, "chart": chart, "drpi": drpi, "swatches": swatches,
           "nameplates": _nameplate_cell("nameplates"), "nameplates2": _nameplate_cell("nameplates2"),
           "nameplates_inst": _nameplate_cell("nameplates_inst"), "titles": titles, "digital": digital,
-          "placards": placards, "binders": binders}
+          "placards": placards, "binders": binders, "nameplates3": _nameplate_cell("nameplates3")}
 # Colours kept when stylizing (the swatches keep every patch's colour exactly; the lettered cells are drawn at the
 # sheet's own 64 px and keep theirs too).
 COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 24, "drpi": 16, "lamp_white": 12, "lamp_amber": 12,
-           "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32}
+           "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32, "nameplates3": 32}

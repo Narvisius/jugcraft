@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.nuclear;
 
 import io.github.jimbozoomer.jugcraft.chemistry.FluidTank;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
+import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
 import io.github.jimbozoomer.jugcraft.party.JugcraftParties;
 import io.github.jimbozoomer.jugcraft.party.UseMode;
@@ -83,6 +84,15 @@ public class EquipmentBlockEntity extends BlockEntity {
 	private int intakeVersion = -1;
 	// Main transformer.
 	public final @Nullable SimpleEnergyStorage output;
+	// The 480 V load centre (nuclear/Switchgear.java): its bus's charge, its breakers (a bit each, closed when set),
+	// each breaker's flow last tick (JE/t: the main's what came in, a feeder's what went out), synced for the meters.
+	public final @Nullable SimpleEnergyStorage bus;
+	public int breakers = Switchgear.DEFAULT_BREAKERS;
+	public final int[] flows = new int[Switchgear.BREAKERS];
+	long incoming;
+	private int shown;
+	private @Nullable EnergyStorage incomingView;
+	private final EnergyStorage[] feederViews = new EnergyStorage[Switchgear.BREAKERS];
 	private List<BlockPos> outletCells = List.of();
 	// Control console (and the remote shutdown panel: the reactor it found).
 	public @Nullable BlockPos linked;
@@ -102,7 +112,25 @@ public class EquipmentBlockEntity extends BlockEntity {
 				? new FluidTank(CONDENSER_TANK, true, v -> v.getFluid() == Fluids.WATER, this::setChanged) : null;
 		long room = kind == EquipmentKind.SMALL_TURBINE ? ReactorCore.Design.SMALL_MODULAR.ratedJe() * 2 : ReactorCore.RATED_JE * 2;
 		output = kind.powerOut() ? new SimpleEnergyStorage(room, 0, room, this::setChanged) : null;
+		bus = kind == EquipmentKind.SWITCHGEAR_LINEUP
+				? new SimpleEnergyStorage(Switchgear.CAPACITY, Switchgear.INCOMING_RATE, Switchgear.FEEDER_RATE * 10, this::setChanged) : null;
 		core.design = kind.design();
+	}
+
+	/** The load centre's incoming side as a cable sees it (one object, so a network counts it once). */
+	EnergyStorage incomingView() {
+		if (incomingView == null) {
+			incomingView = new Switchgear.Incoming(this);
+		}
+		return incomingView;
+	}
+
+	/** A load centre feeder's terminal as a cable sees it. */
+	EnergyStorage feederView(int f) {
+		if (feederViews[f] == null) {
+			feederViews[f] = new Switchgear.Feeder(this, f);
+		}
+		return feederViews[f];
 	}
 
 	static EquipmentKind kind(BlockState state) {
@@ -165,6 +193,17 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 		if (kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
 			tickShutdownPanel(level);
+		}
+		if (kind == EquipmentKind.SWITCHGEAR_LINEUP) {
+			Switchgear.tick(level, this);
+			// Its meters are synced each second while what they show changes.
+			if (++ticks % 20 == 0 && bus != null) {
+				int now = java.util.Objects.hash(breakers, bus.getAmount() * 1000 / Switchgear.CAPACITY, java.util.Arrays.hashCode(flows));
+				if (now != shown) {
+					shown = now;
+					changed();
+				}
+			}
 		}
 	}
 
@@ -516,6 +555,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 			core.saveStatus(out);
 			out.putBoolean("online", panelOnline);
 		}
+		if (bus != null) {
+			out.putIntArray("flows", flows);
+		}
 		return out.buildResult();
 	}
 
@@ -584,6 +626,10 @@ public class EquipmentBlockEntity extends BlockEntity {
 			out.putBoolean("fuel_out", fuelOut);
 			out.putFloat("day_level", dayLevel);
 		}
+		if (bus != null) {
+			out.putLong("bus", bus.getAmount());
+			out.putInt("breakers", breakers);
+		}
 	}
 
 	@Override
@@ -618,6 +664,11 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 		if (output != null) {
 			output.setAmount(Math.min(output.getCapacity(), in.getLongOr("energy", 0)));
+		}
+		if (bus != null) {
+			bus.setAmount(in.getLongOr("bus", 0));
+			breakers = in.getIntOr("breakers", Switchgear.DEFAULT_BREAKERS);
+			in.getIntArray("flows").ifPresent(f -> System.arraycopy(f, 0, flows, 0, Math.min(f.length, flows.length)));
 		}
 	}
 

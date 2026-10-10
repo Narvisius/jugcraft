@@ -197,6 +197,38 @@ public final class EdgTelemetry {
 		return o;
 	}
 
+	/**
+	 * A DC room's charger or switchboard with no generator near but its station battery (round 25: the batteries hold
+	 * charge): what the battery does. A charger with its AC supply on charges at up to 150 A (equalize, the volts up to
+	 * 135), then floats at 132 V once the battery is full; with no supply its AC lamp goes out, CHARGER FAIL comes in and
+	 * the bus reads the battery alone (about 105 V flat to 129 V full). The switchboard reads the battery's own current,
+	 * in or out.
+	 */
+	public static void battery(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level) {
+		if (panel.battery == null
+				|| !(level.getBlockEntity(panel.battery) instanceof io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity bank)) {
+			return;
+		}
+		double soc = bank.charge();
+		boolean charger = panel.input != null;
+		double rate = charger ? panel.charging : bank.flow;
+		o.chargerAc = charger ? panel.ac : bank.flow >= 0 && soc > 0.999 || bank.flow > 0;
+		if (rate > 0) {
+			o.dcA = rate / 8.0;
+			o.equalize = o.dcA > 35;
+			o.dcV = 129 + 6 * soc;
+		} else if (o.chargerAc) {
+			o.dcA = 2;
+			o.equalize = false;
+			o.dcV = FLOAT_V;
+		} else {
+			o.dcA = rate < 0 ? -rate / 8.0 : 0;
+			o.equalize = false;
+			o.dcV = 105 + 24 * soc;
+		}
+		o.alarms[7] = o.chargerAc ? 0 : 1;
+	}
+
 	/** Nothing running, all settled. */
 	static void standby(Snapshot o) {
 		o.air = AIR;

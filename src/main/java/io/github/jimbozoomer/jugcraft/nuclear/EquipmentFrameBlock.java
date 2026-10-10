@@ -82,14 +82,14 @@ public class EquipmentFrameBlock extends Block {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		BlockPos anchor = EquipmentRegistry.of(level).anchorOf(pos);
-		return anchor == null ? InteractionResult.PASS : EquipmentPlacement.use(level, anchor, player, ItemStack.EMPTY, InteractionHand.MAIN_HAND);
+		return anchor == null ? InteractionResult.PASS : EquipmentPlacement.use(level, anchor, player, ItemStack.EMPTY, InteractionHand.MAIN_HAND, hit.getLocation());
 	}
 
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
 		BlockPos anchor = EquipmentRegistry.of(level).anchorOf(pos);
-		return anchor == null ? InteractionResult.PASS : EquipmentPlacement.use(level, anchor, player, stack, hand);
+		return anchor == null ? InteractionResult.PASS : EquipmentPlacement.use(level, anchor, player, stack, hand, hit.getLocation());
 	}
 
 	@Override

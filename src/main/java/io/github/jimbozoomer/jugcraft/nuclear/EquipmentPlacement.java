@@ -103,6 +103,12 @@ public final class EquipmentPlacement {
 
 	/** Using any part of a piece of equipment. */
 	public static InteractionResult use(Level level, BlockPos anchor, Player player, ItemStack stack, InteractionHand hand) {
+		return use(level, anchor, player, stack, hand, null);
+	}
+
+	/** Using any part of a piece of equipment, at {@code hit} (where it was clicked, for the load centre's breakers). */
+	public static InteractionResult use(Level level, BlockPos anchor, Player player, ItemStack stack, InteractionHand hand,
+			net.minecraft.world.phys.@org.jspecify.annotations.Nullable Vec3 hit) {
 		if (!(level.getBlockEntity(anchor) instanceof EquipmentBlockEntity equipment)) {
 			return InteractionResult.PASS;
 		}
@@ -129,6 +135,15 @@ public final class EquipmentPlacement {
 				if (level.isClientSide()) {
 					openConsole.accept(anchor);
 				}
+				return InteractionResult.SUCCESS;
+			}
+			case SWITCHGEAR_LINEUP -> {
+				// A breaker's door opens or closes it; elsewhere, the bus's state. A block in hand is placed against it
+				// (a cable to its terminals).
+				if (stack.getItem() instanceof net.minecraft.world.item.BlockItem) {
+					return InteractionResult.PASS;
+				}
+				Switchgear.use(level, equipment, player, hit);
 				return InteractionResult.SUCCESS;
 			}
 			case REMOTE_SHUTDOWN_PANEL -> {

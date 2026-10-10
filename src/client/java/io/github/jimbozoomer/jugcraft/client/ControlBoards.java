@@ -96,6 +96,15 @@ final class ControlBoards {
 		}
 	}
 
+	/**
+	 * Where a board's live parts are, the ones the game draws by its state (the load centre's breaker lamps and flags
+	 * and its meters; tools/control_boards.py load_center), or null.
+	 */
+	static JsonObject live(EquipmentKind kind) {
+		JsonObject board = boards().get(kind.id);
+		return board != null && board.has("live") ? board.getAsJsonObject("live") : null;
+	}
+
 	/** The alarm windows flashing now and then, lit in front of their unlit faces. */
 	static void blink(EquipmentKind kind, Frame f, float time) {
 		JsonObject board = boards().get(kind.id);

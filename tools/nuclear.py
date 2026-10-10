@@ -139,7 +139,7 @@ LANG = {
     "tooltip.jugcraft.nuclear.travelling_water_screen": "Strains fish and debris out of the cooling water intake (for show)",
     "tooltip.jugcraft.nuclear.plant_display_wall": "The control room's large plant overview display (for show)",
     "tooltip.jugcraft.nuclear.main_control_board": "A control room benchboard with its mimic, meters and annunciators (for show)",
-    "tooltip.jugcraft.nuclear.switchgear_lineup": "A line of medium-voltage breakers (for show)",
+    "tooltip.jugcraft.nuclear.switchgear_lineup": "A 480 V load center that holds 2,000,000 JE: cable into the back of its transformer section, take power out of its feeders' sections (upper breakers out of the top, lower ones down through the floor); right-click a breaker to open or close it",
     "tooltip.jugcraft.nuclear.air_handling_unit": "Filters and moves a building's air (for show)",
     "tooltip.jugcraft.nuclear.esf_control_board": "The safety injection, residual heat removal and containment spray trains (for show)",
     "tooltip.jugcraft.nuclear.rcs_control_board": "The coolant loops, coolant pumps, pressurizer, charging and letdown (for show)",
@@ -170,6 +170,15 @@ LANG = {
     "message.jugcraft.nuclear.card_set": "Link card set to this reactor: now use it on a console",
     "message.jugcraft.nuclear.card_empty": "Use the card on a reactor vessel first",
     "message.jugcraft.nuclear.not_owner": "This reactor belongs to someone else",
+    "message.jugcraft.nuclear.load_center": "Load center bus: %s of %s JE (%s%%), main breaker %s, %s JE/t coming in",
+    "message.jugcraft.nuclear.breaker": "%s breaker %s",
+    "message.jugcraft.nuclear.breaker_open": "open",
+    "message.jugcraft.nuclear.breaker_closed": "closed",
+    "message.jugcraft.nuclear.breaker_not_owner": "This switchgear belongs to someone else",
+    "message.jugcraft.nuclear.station_battery": "Station battery: %s%% charged (%s of %s JE), %s",
+    "message.jugcraft.nuclear.battery_charging": "charging at %s JE/t",
+    "message.jugcraft.nuclear.battery_discharging": "discharging at %s JE/t",
+    "message.jugcraft.nuclear.battery_float": "full, on float",
     "message.jugcraft.nuclear.owner_only": "Only the owner can change who may use it",
     "message.jugcraft.nuclear.vessel_status": "Reactor: %s%% power, %s °C, %s of %s assemblies loaded",
     "message.jugcraft.nuclear.vessel_closed": "The vessel is closed: open it for refuelling from the console",
@@ -1060,7 +1069,9 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 "lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches",
                 # The remote shutdown panel (round 24): engraved nameplates and titles, digital indicators, placards,
                 # procedure binders (tools/control_boards.py TEXT_MATERIALS).
-                "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders"]
+                "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders",
+                # The 480 V load centre's legends (round 25).
+                "nameplates3"]
 
 
 def eq_slot(name):

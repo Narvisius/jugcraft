@@ -81,12 +81,12 @@ public class EquipmentAnchorBlock extends BaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-		return EquipmentPlacement.use(level, pos, player, ItemStack.EMPTY, InteractionHand.MAIN_HAND);
+		return EquipmentPlacement.use(level, pos, player, ItemStack.EMPTY, InteractionHand.MAIN_HAND, hit.getLocation());
 	}
 
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		return EquipmentPlacement.use(level, pos, player, stack, hand);
+		return EquipmentPlacement.use(level, pos, player, stack, hand, hit.getLocation());
 	}
 }

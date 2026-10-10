@@ -79,6 +79,10 @@ GATE_PEDESTAL = {h: M(f"jugcraft:speed_gate_pedestal[axis=z,half={h}]", (176, 18
 LOUVRE = M("jugcraft:intake_louvre", (150, 154, 152))
 # A steel fluid pipe run inside a wall (wallrun/WallRuns.java): it takes the wall's look when it is built.
 WALL_PIPE = M("jugcraft:wall_steel_fluid_pipe[down=false,east=false,north=false,south=false,up=false,west=false]", (120, 128, 136))
+# Power cable (round 25): buried in the ground as it is, and run in a floor slab (wallrun/WallRuns.java: it takes the
+# slab's look when it is built).
+CABLE = M("jugcraft:aluminum_cable[down=false,east=false,north=false,south=false,up=false,west=false]", (150, 152, 158))
+WALL_CABLE = M("jugcraft:wall_aluminum_cable[down=false,east=false,north=false,south=false,up=false,west=false]", (150, 152, 158))
 # A drip pan's lip: a steel plate a few pixels high.
 LIP = M("minecraft:iron_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]", (160, 162, 166))
 LIGHT = M("jugcraft:ceiling_light_panel", (240, 240, 230))
@@ -860,6 +864,27 @@ def dc_run(b, battery_ends, board, y, z, facing):
             b.p(x, y, z, furniture("dc_cable_tray", facing))
 
 
+# The control building's electrical runs (building coordinates; the slab is y 0): where the main transformer's buried
+# feed comes up under each load centre's transformer section, and the CHARGER breakers' runs to the chargers.
+SLAB_RISERS = [(22, 1), (28, 10)]
+CHARGER_RUNS = ([(27, 0, 1), (27, 0, 2)] + [(x, 0, 3) for x in range(15, 28)] + [(15, 0, 2), (15, 0, 1), (14, 0, 1)]
+                + [(24, 0, z) for z in range(10, 29)] + [(25, 0, 28)])
+
+
+def control_building_feed(s, ox, oz):
+    """The buried feed from the main transformer to the control building's load centres (round 25): down from under
+    the transformer, west two blocks under the grass to the building, then under the building a block deeper (clear of
+    the charger runs in its slab) to below each load centre's riser."""
+    run = [(230, 0, 59), (230, -1, 59)] + [(x, -2, 59) for x in range(158, 231)] + [(158, -2, z) for z in range(60, oz + 2)]
+    rx, rz = ox + SLAB_RISERS[1][0], oz + SLAB_RISERS[1][1]
+    run += [(158, -3, oz + 1)] + [(x, -3, oz + 1) for x in range(159, rx + 1)] + [(rx, -3, z) for z in range(oz + 2, rz + 1)]
+    run += [(rx, -2, rz)]
+    assert (ox + SLAB_RISERS[0][0], oz + SLAB_RISERS[0][1]) == (158, oz + 1)
+    for cell in run:
+        s.decor[cell] = CABLE
+    return run
+
+
 def control_building(s, ox, oz):
     """The control building, 40 x 30 and four floors, laid out like a real plant's (round 18; Justin: "the stairs are
     cut off ... I don't know if the batteries are even connected ... the front lobby looks kind of tacky ... make it
@@ -974,12 +999,29 @@ def ground_floor(b, W, D):
     b.prop("switchgear_lineup", 12, 1, 12, "south")
     b.door(11, 1, 14, "north", label="dc_equipment_1a")
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
-    # ---- Switchgear Room (x 21..29, z 1..13): the 480 V load centres of both trains, face to face across the aisle,
-    # walked round at the west end.
+    # ---- Switchgear Room (x 21..29, z 1..13; round 25): the 480 V load centres of both trains, face to face across the
+    # aisle, walked round at the west end (Justin: "realistic switchgear ... less simple and cartoony", and it must
+    # hold charge and work): rubber mats along their fronts, the battery emergency lights over the aisle, the arc flash
+    # suits' locker by the door, an extinguisher.
     b.prop("switchgear_lineup", 22, 1, 1, "north")
     b.prop("switchgear_lineup", 22, 1, 9, "south")
+    for x in range(22, 30):
+        b.p(x, 1, 3, MAT)
+        b.p(x, 1, 8, MAT)
+    b.furniture("emergency_light", 21, 4, 4, "west")
+    b.furniture("emergency_light", 29, 4, 6, "east")
+    b.stack("locker", 21, 1, 12, "west", n=2)
     b.door(26, 1, 14, "north", double=True, label="switchgear_room")
     b.furniture("fire_extinguisher", 21, 2, 6, "west")
+    # Their supply comes up through the slab into the back of each transformer section (from the main transformer,
+    # buried: control_building_feed), and each one's CHARGER breaker (the lower breaker of its third section) feeds its
+    # train's battery chargers by a cable in the slab: train A west along the aisle's mat and through the wall into DC
+    # Equipment Room 1A, train B south under the corridor into 1B (nuclear/Switchgear.java). The runs keep a block clear
+    # of every other terminal, so the feeds never meet.
+    for x, z in SLAB_RISERS:
+        b.p(x, 0, z, WALL_CABLE)
+    for x, y, z in CHARGER_RUNS:
+        b.p(x, y, z, WALL_CABLE)
 
     # ---- The entrance hall (x 1..12, z 19..28): in through the glass doors to a vestibule, a second pair of glass doors,
     # the security officer at his desk behind the counter, the speed gates, and through them the doors to the
@@ -1800,6 +1842,7 @@ def medium_site():
     radwaste_store.place(s, 5, 98)
     fuel_building(s, 100, 95)
     ctrl = control_building(s, 136, 88)
+    control_building_feed(s, 136, 88)
     cx, cz, cy = ctrl
     s.eq("reactor_control_console", cx, cz, "north", y=cy)
     diesel, fills = diesel_building(s, 180, 90)

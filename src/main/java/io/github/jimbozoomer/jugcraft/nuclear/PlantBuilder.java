@@ -113,6 +113,7 @@ public final class PlantBuilder {
 		}
 		List<BlockPos> vessels = new ArrayList<>();
 		List<BlockPos> consoles = new ArrayList<>();
+		List<BlockPos> loadCentres = new ArrayList<>();
 		int equipment = 0;
 		for (int i : anchors) {
 			BlockState state = blueprint.state(i, rotation);
@@ -138,6 +139,8 @@ public final class PlantBuilder {
 				vessels.add(pos);
 			} else if (kind == EquipmentKind.CONTROL_CONSOLE) {
 				consoles.add(pos);
+			} else if (kind == EquipmentKind.SWITCHGEAR_LINEUP) {
+				loadCentres.add(pos);
 			}
 		}
 		// Panes, bars, fences and pipes join their neighbours now that everything is in.
@@ -196,6 +199,24 @@ public final class PlantBuilder {
 						outlet.prefill();
 					}
 					outlet.check(level);
+				}
+			}
+		}
+		// A fuelled plant's electrical system is live: its load centres' buses and its station batteries start full
+		// (round 25).
+		if (fuelled) {
+			for (BlockPos pos : loadCentres) {
+				if (level.getBlockEntity(pos) instanceof EquipmentBlockEntity gear && gear.bus != null) {
+					gear.bus.setAmount(Switchgear.CAPACITY);
+					gear.changed();
+				}
+			}
+			for (int i = 0; i < blueprint.size(); i++) {
+				if (blueprint.state(i, rotation).getBlock() instanceof StationBatteryBlock) {
+					StationBatteryBlockEntity bank = StationBatteryBlock.battery(level, stake.offset(blueprint.offset(i, rotation)));
+					if (bank != null) {
+						bank.fill();
+					}
 				}
 			}
 		}

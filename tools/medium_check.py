@@ -283,9 +283,102 @@ def check(site, quiet=False):
             dx_, dy_, dz_ = np.nonzero(dark)
             problems.append(f"{part.key}: {n} dark places you can stand (block light < 6), e.g. "
                             f"{[(int(a), int(b_) - part.base, int(c)) for a, b_, c in list(zip(dx_, dy_, dz_))[:4]]}")
+    # 7. Power cables (round 25): each network joins only what it is meant to.
+    problems += cable_networks(site, g, quiet)
     if not quiet:
         for p in problems:
             print(p)
+    return problems
+
+
+def lineup_role(lx, ly, lz):
+    """What a cable touching this cell of a load centre finds (nuclear/Switchgear.java storageAt): its incoming side
+    (the back of its transformer section), a feeder's terminal (1..10), or nothing."""
+    if lz == 1 and lx <= 1:
+        return "incoming"
+    for f in range(1, 11):
+        if (lx, ly, lz) == (3 + (f - 1) // 2, 2 if (f - 1) % 2 == 0 else 0, 1):
+            return f"feeder{f}"
+    return None
+
+
+def cable_networks(site, g, quiet=True):
+    """The plant's power cables as the game joins them: every network found, with what it touches that holds or moves
+    power. A network may join the main transformer to load centres' incoming sides, or one load centre's feeder to the
+    chargers (and nothing else): a feeder and an incoming side on one network would feed a load centre back into
+    itself. The control building must have the transformer's feed to both its load centres and each CHARGER breaker's
+    run to its train's two chargers."""
+    cable = table(lambda st: st.split("[")[0].endswith("_cable") and "data_cable" not in st)
+    cells = set(map(tuple, np.argwhere(cable[g])))
+    if not cells:
+        return []
+    # Equipment cells by where they are: (kind, anchor, local cell).
+    where = {}
+
+    def add(kind, ax, ay, az, facing, px=0, py=0, pz=0):
+        _, w, d, h = P.EQUIPMENT_SIZES[kind]
+        fx, fz = P.DIRS[facing]
+        rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+        for ly in range(h):
+            for lz in range(d):
+                for lx in range(w):
+                    if P.equipment_solid(kind, lx, ly, lz) or (lx, ly, lz) == (0, 0, 0):
+                        at = (ax + rx * lx + fx * lz + px, ay + ly + py + B, az + rz * lx + fz * lz + pz + O)
+                        where[at] = (kind, (ax + px, ay + py, az + pz), (lx, ly, lz))
+    for kind, ax, ay, az, facing in site.equipment:
+        add(kind, ax, ay, az, facing)
+    for part, px, pz, rot in site.parts:
+        for kind, ax, ay, az, facing in part.props:
+            add(kind, ax, ay, az, facing, px, -part.sink, pz)
+    problems, seen, nets = [], set(), []
+    for start in sorted(cells):
+        if start in seen:
+            continue
+        net, touches, q = [], set(), deque([start])
+        seen.add(start)
+        while q:
+            c = q.popleft()
+            net.append(c)
+            for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
+                n = (c[0] + dx, c[1] + dy, c[2] + dz)
+                if n in cells:
+                    if n not in seen:
+                        seen.add(n)
+                        q.append(n)
+                    continue
+                if n in where:
+                    kind, anchor, local = where[n]
+                    role = None
+                    if kind == "main_transformer" and local[1] == 0:
+                        role = "out"
+                    elif kind == "switchgear_lineup":
+                        role = lineup_role(*local)
+                    if role:
+                        touches.add((kind, anchor, role))
+                    continue
+                if 0 <= n[0] < g.shape[0] and 0 <= n[1] < g.shape[1] and 0 <= n[2] < g.shape[2] and g[n]:
+                    st = P.MATERIALS[int(g[n])][0].split("[")[0]
+                    if st in ("jugcraft:edg_battery_charger", "jugcraft:station_battery"):
+                        touches.add((st.split(":")[1], (n[0], n[1] - B, n[2] - O), "block"))
+        nets.append((net, touches))
+        feeders = {t for t in touches if t[2].startswith("feeder")}
+        sources = {t for t in touches if t[2] in ("incoming", "out")}
+        cell = (int(net[0][0]), int(net[0][1]) - B, int(net[0][2]) - O)
+        if feeders and sources:
+            problems.append(f"power cable at {cell}: a feeder and a supply on one network (it would feed itself): {sorted(touches)}")
+        if len(feeders) > 1:
+            problems.append(f"power cable at {cell}: two feeders on one network: {sorted(feeders)}")
+        if any(t[0] == "station_battery" for t in touches):
+            problems.append(f"power cable at {cell}: touches a station battery (its chargers charge it): {sorted(touches)}")
+        if not quiet:
+            print(f"  power network of {len(net)} cables from {cell}: {sorted((t[0], t[2]) for t in touches)}")
+    # What the control building must have.
+    feed = [t for net, t in nets if any(x[2] == "out" for x in t)]
+    if not feed or sum(1 for x in feed[0] if x[2] == "incoming") < 2:
+        problems.append("the main transformer does not feed both of the control building's load centres")
+    chargers = [t for net, t in nets if any(x[2] == "feeder6" for x in t)]
+    if len(chargers) != 2 or any(sum(1 for x in t if x[0] == "edg_battery_charger") < 1 for t in chargers):
+        problems.append(f"each CHARGER breaker must reach its train's chargers: {[sorted(t) for t in chargers]}")
     return problems
 
 
