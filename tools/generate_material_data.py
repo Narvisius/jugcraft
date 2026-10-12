@@ -253,6 +253,8 @@ def assets():
     diagonal_connections.write_all(write, ASSETS, RES / "assets" / "minecraft")
     import scary_data
     scary_data.write_all(write, RES, lang)
+    import vanilla_logs
+    vanilla_logs.write_all(write, ASSETS)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 

@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.agriculture;
 
+import io.github.jimbozoomer.jugcraft.SmoothFlight;
+import net.minecraft.world.entity.LinearInterpolationHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -196,6 +198,11 @@ public class Broomstick extends Entity {
 	/** Whether the broom is resting on something. */
 	public boolean grounded() {
 		return !level().noCollision(this, getBoundingBox().move(0.0, -0.06, 0.0));
+	}
+
+	@Override
+	public LinearInterpolationHandler createInterpolationHandler() {
+		return SmoothFlight.handler(this);
 	}
 
 	@Override

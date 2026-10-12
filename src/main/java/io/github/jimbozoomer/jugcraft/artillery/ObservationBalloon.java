@@ -64,7 +64,6 @@ public class ObservationBalloon extends Entity {
 	public void tick() {
 		super.tick();
 		if (!(level() instanceof ServerLevel)) {
-			SmoothFlight.step(this);
 			return;
 		}
 		if (Double.isNaN(anchorY)) {

@@ -43,7 +43,6 @@ public class Pibal extends Entity {
 	public void tick() {
 		super.tick();
 		if (!(level() instanceof ServerLevel server)) {
-			SmoothFlight.step(this);
 			return;
 		}
 		Vec3 wind = FiestaWinds.at(server, getY());

@@ -238,13 +238,19 @@ def item_tags():
 
 def held_model(name):
     """A variant's 3D model, posed as its kind is (tools/arms.py held_model), but held by its own design's grip."""
+    import vanilla_arms
+    if name in vanilla_arms.VARIANTS:
+        return vanilla_arms.held_model(vanilla_arms.VARIANTS[name], f"{MOD}:item/{name}")
     kind_ = kind(name)
     held = arms.KINDS[kind_]["held"]
     (x, y), size, factor = arms_variants_art.held_at(name, held)
     grip = (x * 16.0 / size - 8.0, 8.0 - y * 16.0 / size)
     display = {}
     for context, (rotation, translation, scale) in arms.HANDHELD.items():
-        right, left = arms._pose(rotation, translation, scale, grip, scale, arms.SWORD_GRIP, round(held * factor, 4))
+        hand_size = round(held * factor, 4)
+        if kind_ == "nodachi" and context.startswith("firstperson"):
+            hand_size = min(hand_size, 1.15)
+        right, left = arms._pose(rotation, translation, scale, grip, scale, arms.SWORD_GRIP, hand_size)
         display[context] = right
         display[context.replace("righthand", "lefthand")] = left
     _texture, elements = arms_variants_art.model(name, held)

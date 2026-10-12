@@ -106,28 +106,33 @@ public class LairGameTests {
 	 * The Last Rites' checks, in order: a grave within reach, night, enough lit candles (a block of candles counting each
 	 * of them), and a wreath on the grave. Each refusal names what is missing and changes nothing.
 	 */
-	@GameTest
+	@GameTest(structure = "jugcraft-test:arms_arena", padding = 8, maxAttempts = 5, requiredSuccesses = 5)
 	public void theLastRitesNeedEveryStep(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
-		BlockPos grave = new BlockPos(2, 1, 2);
+		// Keep both range probes and their search volumes inside our 16x16 empty fixture. The old
+		// at.offset(20, 0, 0) probe could find a neighbouring test's grave, depending on suite order.
+		BlockPos grave = new BlockPos(6, 1, 6);
 		helper.setBlock(grave, block("gothic_headstone").defaultBlockState());
-		BlockPos at = helper.absolutePos(new BlockPos(2, 1, 0));
-		helper.assertTrue(LastRites.check(level, at.offset(20, 0, 0), true).missing() == LastRites.Missing.NO_GRAVE,
+		BlockPos at = helper.absolutePos(new BlockPos(6, 1, 4));
+		helper.assertTrue(LastRites.check(level, helper.absolutePos(grave.offset(LastRites.GRAVE_RANGE + 1, 0, 0)), true)
+				.missing() == LastRites.Missing.NO_GRAVE,
 				"No grave within reach");
+		helper.assertTrue(LastRites.check(level, helper.absolutePos(grave.offset(LastRites.GRAVE_RANGE, 0, 0)), false)
+				.missing() == LastRites.Missing.NOT_NIGHT, "A grave exactly at the range limit must be found");
 		helper.assertTrue(LastRites.check(level, at, false).missing() == LastRites.Missing.NOT_NIGHT, "Not by day");
 		BlockState lit = Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, true);
-		helper.setBlock(new BlockPos(0, 1, 2), lit);
-		helper.setBlock(new BlockPos(4, 1, 2), lit);
-		helper.setBlock(new BlockPos(2, 1, 4), Blocks.CANDLE.defaultBlockState());  // unlit: it does not count
+		helper.setBlock(grave.offset(-2, 0, 0), lit);
+		helper.setBlock(grave.offset(2, 0, 0), lit);
+		helper.setBlock(grave.offset(0, 0, 2), Blocks.CANDLE.defaultBlockState());  // unlit: it does not count
 		LastRites.Ring ring = LastRites.check(level, at, true);
 		helper.assertTrue(ring.missing() == LastRites.Missing.CANDLES && ring.candles() == 2, "Two lit candles are too few: " + ring);
-		helper.setBlock(new BlockPos(2, 1, 4), lit.setValue(CandleBlock.CANDLES, 2));
+		helper.setBlock(grave.offset(0, 0, 2), lit.setValue(CandleBlock.CANDLES, 2));
 		ring = LastRites.check(level, at, true);
 		helper.assertTrue(ring.missing() == LastRites.Missing.NO_WREATH && ring.candles() == 4, "Four candles, but no wreath: " + ring);
-		helper.setBlock(new BlockPos(2, 1, 3), JugcraftLairs.MOURNING_WREATH.defaultBlockState());
+		helper.setBlock(grave.offset(0, 0, 1), JugcraftLairs.MOURNING_WREATH.defaultBlockState());
 		ring = LastRites.check(level, at, true);
 		helper.assertTrue(ring.missing() == null && helper.absolutePos(grave).equals(ring.grave()), "Every step done: " + ring);
-		helper.assertBlockPresent(JugcraftLairs.MOURNING_WREATH, new BlockPos(2, 1, 3));
+		helper.assertBlockPresent(JugcraftLairs.MOURNING_WREATH, grave.offset(0, 0, 1));
 		helper.succeed();
 	}
 

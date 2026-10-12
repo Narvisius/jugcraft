@@ -35,6 +35,7 @@ public class DieselWalkerRenderer extends EntityRenderer<DieselWalker, DieselWal
 	public static final class State extends EntityRenderState {
 		float yRot;
 		float stride;
+		float strideWeight;
 		float swing;
 		boolean drilling;
 	}
@@ -59,7 +60,8 @@ public class DieselWalkerRenderer extends EntityRenderer<DieselWalker, DieselWal
 	public void extractRenderState(DieselWalker walker, State state, float partialTick) {
 		super.extractRenderState(walker, state, partialTick);
 		state.yRot = walker.getYRot(partialTick);
-		state.stride = walker.stride();
+		state.stride = walker.stride(partialTick);
+		state.strideWeight = walker.strideWeight(partialTick);
 		float swingTime = walker.sinceSwing() + partialTick;
 		state.swing = swingTime < PUNCH_TICKS ? Mth.sin(swingTime / PUNCH_TICKS * Mth.PI) : 0.0F;
 		state.drilling = walker.drilling();
@@ -71,7 +73,7 @@ public class DieselWalkerRenderer extends EntityRenderer<DieselWalker, DieselWal
 		pose.rotateDegrees(Axis.YP, -state.yRot);
 		draw("walker_body", pose, collector, state.lightCoords);
 		draw("walker_core", pose, collector, FULL_BRIGHT);
-		float legSwing = Mth.sin(state.stride * STRIDE_RATE) * LEG_SWING;
+		float legSwing = Mth.sin(state.stride * STRIDE_RATE) * LEG_SWING * state.strideWeight;
 		for (int i = 0; i < HIPS.length; i++) {
 			pose.pushPose();
 			at(pose, HIPS[i]);

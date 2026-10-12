@@ -141,6 +141,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		// Gear traits' descriptions show while Shift is held (gear/TraitTooltips.java, docs/features/trait-details.md).
 		io.github.jimbozoomer.jugcraft.gear.TraitTooltips.details = () -> Minecraft.getInstance().hasShiftDown();
 		SeasonColors.register();
+		WoodColors.register();
 		PartyClient.register();
 		ConcordanceClient.register();
 		GunsClient.register();

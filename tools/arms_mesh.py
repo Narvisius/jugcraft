@@ -38,7 +38,7 @@ the butt, w through it (towards the viewer of the icon). All original geometry.
 import math
 
 MOD = "jugcraft"
-NAMES = ("runebound_nodachi", "runebound_moonblade", "runebound_staff", "runebound_war_hammer")
+NAMES = ("runebound_nodachi", "runebound_staff", "runebound_war_hammer")
 ATLAS = "runebound_mesh"          # textures/item/runebound_mesh.png: the painted materials
 RUNE = "runebound_rune"           # textures/item/runebound_rune.png: the glowing glyphs, a pulsing animated strip
 ATLAS_SIZE = 128
@@ -904,7 +904,13 @@ DESIGNS = {"runebound_nodachi": runebound_nodachi, "runebound_moonblade": runebo
 
 
 def design(name):
-    return DESIGNS[name]()
+    mesh = DESIGNS[name]()
+    if name == "runebound_nodachi":
+        # Turn over along s, the blade's long axis. A half-turn preserves winding and keeps the grip fixed.
+        for quad in mesh.quads:
+            quad.points = [(-t, s, -w) for t, s, w in quad.points]
+            quad.normals = [(-t, s, -w) for t, s, w in quad.normals]
+    return mesh
 
 
 # ---------------------------------------------------------------- the textures

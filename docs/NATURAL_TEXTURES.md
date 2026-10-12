@@ -1,5 +1,7 @@
 # Natural textures: fitting the vanilla world
 
+**11 October owner correction:** custom logs now use vanilla bark/end-grain with Jugcraft colours, supplied by runtime texture references rather than bundled Minecraft images. See [the visual correction record](features/vehicle-and-vanilla-polish.md). This supersedes conflicting log-art guidance below; existing leaves and planks are unchanged.
+
 How Jugcraft's woods, leaves and other natural textures are drawn so they sit in the vanilla world as if they belonged
 there. Follow it for every new wood, tree, leaf, sapling, plant, stone, soil or ore texture.
 

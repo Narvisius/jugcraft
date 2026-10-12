@@ -419,7 +419,7 @@ def runebound_nodachi():
     curved(d, 18.8, 52.5, 1.5, lambda s: 0.0016 * (s - 18.8) ** 2, st, tip=3.4)
     rune_line(d, 21.0, 46.0, lambda s: -0.5 + 0.0016 * (s - 18.8) ** 2, width=0.45)
     gem(d, 16.8, 0.0, 0.8, st)
-    return d
+    return px.reverse_edge(d)
 
 
 def runebound_moonblade():
@@ -571,7 +571,7 @@ def bogfang():
         d.poly([(s, t), (s - math.cos(r) * 0.9 + 0.3, t - math.sin(r) * 0.9), (s + math.sin(r) * 0.9, t - math.cos(r) * 0.9)],
                VENOM, depth=1.0, z=2)
     d.disc(17.8, 0.0, 0.7, VENOM, depth=2.4, z=2)
-    return d
+    return px.reverse_edge(d)
 
 
 # ---------------------------------------------------------------- the Crypt Lich

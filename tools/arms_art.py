@@ -534,7 +534,7 @@ def nodachi(st):
     d.strip(17.6, 18.8, 1.4, material=st.fitting, depth=2.2, z=1)   # the habaki
     curved(d, 18.8, 52.5, 1.5, lambda s: 0.0016 * (s - 18.8) ** 2, st, tip=3.4)
     gem(d, 16.8, 0.0, 0.8, st)
-    return d
+    return px.reverse_edge(d)
 
 
 def earthbreaker(st):

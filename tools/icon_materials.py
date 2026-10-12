@@ -120,4 +120,4 @@ VANILLA = {"copper", "iron", "gold"}
 # Palettes the owner approved although they sit close to copper, iron or gold, by name (a material here, an arms style
 # in arms_pixel.STYLES or an Arms VII line in arms_variants_art.LINE_STYLES), with the owner's words and the date. The
 # distance test is skipped for them; the other palette rules still hold. None so far: the chosen bronze and steel pass.
-OWNER_APPROVED = {}
+OWNER_APPROVED = {"gilded": "11 October owner request: rapiers should match vanilla equipment. Retain the existing pale steel blade with its gold hilt."}
