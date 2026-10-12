@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BOB",
+    "OMO",
+    "GOG"
+  ],
+  "key": {
+    "B": "minecraft:blaze_powder",
+    "O": "minecraft:obsidian",
+    "M": "minecraft:magma_block",
+    "G": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "jugcraft:kiln_seal",
+    "count": 1
+  }
+}

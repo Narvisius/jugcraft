@@ -14,6 +14,7 @@ import io.github.jimbozoomer.jugcraft.concordance.reliquary.Reliquary;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.concordance.sympathy.Sympathy;
 import io.github.jimbozoomer.jugcraft.concordance.trinket.Wayfaring;
+import io.github.jimbozoomer.jugcraft.concordance.trinket.WornDisplay;
 import io.github.jimbozoomer.jugcraft.concordance.trinket.WornTrinketItem;
 import java.util.ArrayList;
 import java.util.List;
@@ -440,5 +441,35 @@ public class ConcordanceWayfaringGameTests {
 		inventory(player, Wayfaring.FEET_SLOT).setItem(1, ItemStack.EMPTY);
 		inventory(novice, Wayfaring.FEET_SLOT).setItem(0, ItemStack.EMPTY);
 		helper.succeed();
+	}
+
+	/**
+	 * Part 1c: whether a wearer's belt and boots are drawn is their own choice, as the server takes it from their client
+	 * (WornDisplay.choose, which the payload's receiver calls for the player who sent it): hidden, and shown again; a
+	 * choice that changes nothing is dropped and leaves nothing waiting; a change within CHANGE_TICKS of the last waits for
+	 * its tick, a newer choice replaces it, and the newest lands. The choice is sent to clients, kept through death and
+	 * never saved (the client sends it again on joining). Whether everyone who sees the wearer is sent it is the attachment
+	 * type's (check_mod_data holds it to AttachmentSyncPredicate.all()); the client test sees it come back.
+	 */
+	@GameTest(maxTicks = 40)
+	public void eachWearerChoosesWhetherTheirTrinketsShow(GameTestHelper helper) {
+		ServerPlayer player = wayfarer(helper, false);
+		helper.assertFalse(WornDisplay.hidden(player), "A player who has chosen nothing shows their worn trinkets");
+		WornDisplay.choose(player, true);
+		helper.assertTrue(!WornDisplay.hidden(player) && !WornDisplay.pending(player), "Choosing to show what shows changes nothing");
+		WornDisplay.choose(player, false);
+		helper.assertTrue(WornDisplay.hidden(player) && !WornDisplay.pending(player), "Hiding them takes effect at once");
+		WornDisplay.choose(player, true);
+		helper.assertTrue(WornDisplay.hidden(player) && WornDisplay.pending(player), "Showing them again so soon waits for its tick");
+		WornDisplay.choose(player, false);
+		helper.assertTrue(WornDisplay.hidden(player) && !WornDisplay.pending(player),
+				"A newer choice to keep them hidden replaces the waiting one, and nothing waits");
+		WornDisplay.choose(player, true);
+		helper.assertTrue(WornDisplay.HIDDEN.isSynced() && WornDisplay.HIDDEN.copyOnDeath() && !WornDisplay.HIDDEN.isPersistent(),
+				"The choice is sent to clients, kept through death and not saved");
+		helper.runAfterDelay(WornDisplay.CHANGE_TICKS + 2, () -> {
+			helper.assertTrue(!WornDisplay.hidden(player) && !WornDisplay.pending(player), "The waiting choice lands once its tick comes");
+			helper.succeed();
+		});
 	}
 }

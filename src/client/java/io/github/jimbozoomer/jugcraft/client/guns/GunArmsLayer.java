@@ -36,6 +36,11 @@ import org.joml.Vector3f;
  * pixels across, covered the lower middle of the view, and on the guns whose grip comes nearest, half the screen. So
  * the arms shrink about the hands as the aim comes in, to {@link #AIMED_SIZE} at full aim, and the gun's sight picture
  * stays clear. A gun without sights, which stays at the hip, keeps them as they are.
+ * <p>
+ * Slice 10G, two guns at once: a gun drawn in a left hand (the other hand's gun, or a left-handed player's) is the same
+ * model, not its mirror image, so arms drawn as for the right hand ran in across the screen from it. There each arm is
+ * the other side's, running out to its own shoulder: the shoulder's way mirrored across the gun. The other hand's gun
+ * has only its grip hand's arm: the other arm holds the main gun.
  */
 public final class GunArmsLayer extends GeoRenderLayer<GunItem, GeoItemRenderer.RenderData, GeoRenderState> {
 	/** The player model's arm runs from y -2 (shoulder) to 10 (fist); this puts the fist 2 px past the bone's pivot. */
@@ -67,6 +72,9 @@ public final class GunArmsLayer extends GeoRenderLayer<GunItem, GeoItemRenderer.
 		float size = GunRenderer.sight(info, view).isPresent() ? Mth.lerp(view.aim(), 1.0F, AIMED_SIZE) : 1.0F;
 		for (int side = 0; side < 2; side++) {
 			boolean right = side == 0;
+			if (!right && view.offHand()) {
+				continue; // slice 10G: that arm holds the main gun
+			}
 			info.model().getBone(right ? "right_arm" : "left_arm")
 					.ifPresent(bone -> consumer.accept(bone, (pass, posed, tasks) -> arm(pass, tasks, view, bone, right, size)));
 		}
@@ -77,9 +85,14 @@ public final class GunArmsLayer extends GeoRenderLayer<GunItem, GeoItemRenderer.
 		return lastSize;
 	}
 
+	/**
+	 * The arm at this bone: the right_arm bone's ({@code right}) is the grip hand's. In a left hand (slice 10G) each is
+	 * drawn as the other side's arm, running to its shoulder mirrored across the gun.
+	 */
 	private static void arm(RenderPassInfo<GeoRenderState> pass, net.minecraft.client.renderer.SubmitNodeCollector tasks,
 			GunRenderer.View view, GeoBone bone, boolean right, float size) {
-		ModelPart part = parts(view.slim())[right ? 0 : 1];
+		boolean rightPart = right != view.left();
+		ModelPart part = parts(view.slim())[rightPart ? 0 : 1];
 		// Centre the arm on the bone: a wide arm's box spans x -3..1 (right) or -1..3 (left), a slim one's -2..1 or -1..2.
 		float centre = view.slim() ? 0.5F : 1.0F;
 		PoseStack poseStack = pass.poseStack();
@@ -89,7 +102,7 @@ public final class GunArmsLayer extends GeoRenderLayer<GunItem, GeoItemRenderer.
 		String name = right ? "right_shoulder" : "left_shoulder";
 		for (GeoLocator shoulder : bone.locators()) {
 			if (shoulder.name().equals(name)) {
-				float x = shoulder.offsetX() - bone.pivotX();
+				float x = (shoulder.offsetX() - bone.pivotX()) * (view.left() ? -1.0F : 1.0F);
 				float y = shoulder.offsetY() - bone.pivotY();
 				float z = shoulder.offsetZ() - bone.pivotZ();
 				if (x * x + y * y + z * z > 1.0E-4F) {
@@ -105,7 +118,7 @@ public final class GunArmsLayer extends GeoRenderLayer<GunItem, GeoItemRenderer.
 			poseStack.popPose();
 			return;
 		}
-		poseStack.translate((right ? centre : -centre) / 16.0F, -FIST / 16.0F, 0.0F);
+		poseStack.translate((rightPart ? centre : -centre) / 16.0F, -FIST / 16.0F, 0.0F);
 		int light = pass.packedLight();
 		tasks.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(view.skin()), (pose, buffer) -> {
 			PoseStack local = new PoseStack();

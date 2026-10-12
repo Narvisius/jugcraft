@@ -53,7 +53,7 @@ public final class MachineCompanionPort implements CompanionLogistics.Port {
                 for(var part:multi.parts())parts.add(new Part(part.ingredient(),part.count()));results.add(multi.output().create());
             }else if(recipe instanceof SmeltingRecipe smelting && kind==MachineKind.ELECTRIC_FURNACE){
                 parts.add(new Part(smelting.input(),1));results.add(smelting.assemble(new SingleRecipeInput(ItemStack.EMPTY)));
-            }else if(recipe instanceof FluidRecipe fluid && fluid.machine()==kind){
+            }else if(recipe instanceof FluidRecipe fluid && fluid.machine()==kind && fluid.legacy()){
                 ordered=true;for(var part:fluid.items())parts.add(new Part(part.ingredient(),part.count()));
                 for(var result:fluid.results())results.add(result.create());
             }else continue;

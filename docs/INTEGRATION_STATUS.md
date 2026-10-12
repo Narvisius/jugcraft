@@ -1,8 +1,26 @@
 # Jugcraft implementation and remaining work
 
-Updated 10 October 2026 for [integration PR #277](https://github.com/jimbozoomer-byte/jugcraft/pull/277) and [follow-up PR #298](https://github.com/jimbozoomer-byte/jugcraft/pull/298). This is the owner-facing index: feature records contain the detailed behavior and historical test evidence. The PRs' current GitHub states determine which combined work has reached `main`.
+Updated 11 October 2026 for [integration PR #320](https://github.com/jimbozoomer-byte/jugcraft/pull/320) (source PRs #299–308 and #310–319), following [integration PR #277](https://github.com/jimbozoomer-byte/jugcraft/pull/277) and [follow-up PR #298](https://github.com/jimbozoomer-byte/jugcraft/pull/298). This is the owner-facing index: feature records contain the detailed behavior and historical test evidence. The PRs' current GitHub states determine which combined work has reached `main`.
 
-## Included in this integration
+## October 11 additions
+
+The 20 source PRs below are combined on `integrate/oct11-ready-content` for validation against current main. The integration PR's merge state determines whether this batch has reached main. Individual feature records retain their earlier branch test evidence; the combined PR records the final tested commit and results.
+
+| Area | Implemented change | Source PRs / guide |
+| --- | --- | --- |
+| Guns | Eighteen more guns: launchers, coil/plasma, double-barrels, sculk and six Nether guns; 54 guns in total | #299, #301, #305–306, #314, #318; [guns](features/guns.md) |
+| Gun systems | Six-cell charging rack, Raider Gunners in camps/raids, and dual wielding of compatible one-handed guns | #307–308, #311; [guns](features/guns.md) |
+| Bosses and lairs | Glacier Hall/Frost Horn and the Yeti King; Cinder Kiln/Kiln Seal and the Cinder Tyrant; adds, encounter mechanics, loot and return routes | #300, #304, #313, #317; [Yeti](features/yeti-king.md), [Tyrant](features/cinder-tyrant.md) |
+| Industrial machines | Shared multi-block forms with ports, saved batches and status screens; the Electrolytic Separator; the hydrogen Gas Burning Generator | #312, #316, #319; [foundation](features/industrial-machine-foundation.md), [separator](features/industrial-electrolytic-separator.md), [generator](features/industrial-gas-burning-generator.md) |
+| Trinket presentation | Belt/boots hide under covering armor; each player's Show my worn trinkets setting is synchronized to viewers | #315; [Wayfaring](features/arcane-concordance-trinkets.md) |
+| Fixes and integration | Thrown arms hit targets they start a tick inside; all shared registrations/audits retained; the five-client-job scheduler carries the expanded suite | #303 plus integration resolution; [Arms VIII](features/arms-viii.md) |
+| Planning | Factory construction/operation, 36 production cards and eight example layouts; shared boss delivery playbook | #302, #310; [factory plan](features/industrial-factory-implementation-plan.md), [boss playbook](branches/BOSS_PLAYBOOK.md); proposals beyond the machines above remain unimplemented |
+
+The generator's original repository-check failure was the four-job scheduling estimate reaching its 25-minute budget. The boss stack's five-job expansion resolves it without dropping classes or relaxing that check. The combined local repository/pack tests verify complete, duplicate-free class coverage.
+
+Current limits: the generator burns hydrogen only (methane awaits its producer); the wider industrial plan is still being delivered. The Yeti and Tyrant are playable encounter implementations, while the October 10 magic planning pack contains further proposed school/quest interactions. Human two-client play, survival balance and owner art acceptance remain separate work.
+
+## October 10 integration retained
 
 | Area | Implemented content | Source PRs / guide |
 | --- | --- | --- |
@@ -22,7 +40,7 @@ This combines 28 source PRs (#264–273 and #278–295) through #277, plus the l
 
 | Area | What is already present | Remaining boundary |
 | --- | --- | --- |
-| Technology | Shared materials, machines, power, kinetic machinery, pipes/conveyors, logistics, chemistry/refining, tools and drones | The larger industrial redesign and its full production chains still require implementation |
+| Technology | Shared materials, machines, power, kinetic machinery, pipes/conveyors, logistics, chemistry/refining, tools and drones | Shared forms, the separator and hydrogen generator are now in the October 11 batch; the remaining production chains still require implementation |
 | Magic | Concordance research, journal/codex, invocations, rituals, alchemy, cultivation, magical helpers/logistics, relics, progression and shared projects | A framework and some traditions being built does not complete every requested school or every owner-library asset |
 | World and settlement | Surface/cave content, towns, Styx and his botanical/observatory content, plus an offline World Designer for new worlds | Existing chunks are not automatically rebuilt; inspect actual structures and layouts in a new test world |
 | Halloween | A substantial permanent collection of farming, decorations, activities, creatures, equipment and encounters | Public-server event tuning and playtesting still needed; earned builds/items must survive the event ending |
@@ -60,6 +78,6 @@ Giant pumpkins now save their contest identity as `pumpkin_id`, separate from Mi
 
 ## Verification and scope
 
-The full combined validation is recorded in #277; subsequent correction checks are available in the [Build history](https://github.com/jimbozoomer-byte/jugcraft/actions/workflows/build.yml). Individual branch successes are historical evidence, not a substitute for the combined build. Check the exact commit's results for compilation, data regeneration, both server configurations and the selected client tests. Human multiplayer/load testing remains outstanding unless a separate run record is supplied.
+The October 10 full combined validation is recorded in #277. The October 11 integration PR records this batch's combined validation; subsequent correction checks are available in the [Build history](https://github.com/jimbozoomer-byte/jugcraft/actions/workflows/build.yml). Individual branch successes are historical evidence, not a substitute for the combined build. Check the exact commit's results for compilation, data regeneration, both server configurations and the selected client tests. Human multiplayer/load testing remains outstanding unless a separate run record is supplied.
 
 Integration work includes actual conflict resolution, generator corrections and test reliability fixes; it does not change platform pins, remove review protections, execute owner-library programs or deploy to the live server. Integration and this status index were prepared with OpenAI Codex; feature authors and their original attribution are retained.

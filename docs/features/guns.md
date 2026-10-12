@@ -1,6 +1,7 @@
-# Guns: the scrap guns (slice 1), the iron set (slice 2), the lever set (slice 3), the black powder guns (slice 4), the attachments (slices 5 and 7), the guns in use (slice 6), the scopes (slice 7b), the hand guns (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C), the energy weapons (slice 8D), the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C), the pump shotguns (slice 9D), the tactical grip and laser sight (slice 9E), the aiming polish (slice 9F) and the Trench Lobber's grenades (slice 9G)
+# Guns: the scrap guns (slice 1), the iron set (slice 2), the lever set (slice 3), the black powder guns (slice 4), the attachments (slices 5 and 7), the guns in use (slice 6), the scopes (slice 7b), the hand guns (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C), the energy weapons (slice 8D), the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C), the pump shotguns (slice 9D), the tactical grip and laser sight (slice 9E), the aiming polish (slice 9F), the Trench Lobber's grenades (slice 9G), the launchers (slice 10A), coil and plasma (slice 10B), the double-barrels (slice 10C), the sculk guns (slice 10D), the Cell Rack (slice 10E), enemies with guns (slice 10F), two guns at once (slice 10G) and the Nether guns (slices 11A and 11B)
 
 Status:
+- **Slices 1 to 9G are in `main`:** the last of them, 8C to 9G, with #277 on 10 October 2026. The lines below say where each was built.
 - **Slice 1** (the Rust Midge, Patchwork Carbine and Thunderpipe): implemented on `claude/guns` (#248), awaiting review. It is stacked on `claude/owner-gun-models` (#247), which adds the owner's gun models to the owner asset library.
 - **Slice 2** (the iron set: the Warden Pistol, Riveter SMG and Haymaker; [below](#slice-2-the-iron-set)): implemented on `claude/guns-iron` (#252), stacked on slice 1, awaiting review.
 - **Slice 3** (the lever set: the Longhorn Rifle, Drover Rifle and Coach Gun; [below](#slice-3-the-lever-set)): implemented on `claude/guns-lever` (#253), stacked on slice 2, awaiting review.
@@ -20,6 +21,15 @@ Status:
 - **Slice 9E** (the Tactical Grip and the Laser Sight; [below](#slice-9e-the-tactical-grip-and-the-laser-sight)): implemented on `claude/guns-tactical` (#290), stacked on slice 9D, awaiting review.
 - **Slice 9F** (the aiming polish: the hands and the fitted stocks kept off the sights; [below](#slice-9f-the-aiming-polish)): implemented on `claude/guns-aiming` (#291), stacked on slice 9E, awaiting review.
 - **Slice 9G** (the Trench Lobber's grenades: it loads the chemical grenades too; [below](#slice-9g-the-trench-lobbers-grenades)): implemented on `claude/guns-lobber-grenades`, stacked on slice 9F, awaiting review.
+- **Slice 10A** (the launchers: the Earthmover, Skylark Rifle and Bullfrog; [below](#slice-10a-the-launchers)): implemented on `claude/guns-launchers`, based on `main`, awaiting review.
+- **Slice 10B** (coil and plasma: the Solenoid Rifle, Votive Rifle and Glowmouth; [below](#slice-10b-coil-and-plasma)): implemented on `claude/guns-coil-plasma`, stacked on slice 10A, awaiting review.
+- **Slice 10C** (the double-barrels: the Mule, Fowler and Culverin; [below](#slice-10c-the-double-barrels)): implemented on `claude/guns-double-barrels`, stacked on slice 10B, awaiting review.
+- **Slice 10D** (the sculk guns: the Undertone Rifle, Murmur SMG and Reverb; [below](#slice-10d-the-sculk-guns)): implemented on `claude/guns-sculk`, stacked on slice 10C, awaiting review.
+- **Slice 10E** (the Cell Rack, which charges six Energy Cells at once; [below](#slice-10e-the-cell-rack)): implemented on `claude/guns-cell-rack`, stacked on slice 10D, awaiting review.
+- **Slice 10F** (enemies with guns: the Raider Gunner, who carries and fires the service arms; [below](#slice-10f-enemies-with-guns)): implemented on `claude/guns-raider-gunners`, stacked on slice 10E, awaiting review.
+- **Slice 10G** (two guns at once: a one-handed gun in each hand, both fired; [below](#slice-10g-two-guns-at-once)): implemented on `claude/guns-dual-pistols`, stacked on slice 10F, awaiting review.
+- **Slice 11A** (the Nether guns: the Tusker, Cinder Repeater and Bastion Rifle; [below](#slice-11a-the-nether-guns)): implemented on `claude/guns-nether`, stacked on slice 10G, awaiting review.
+- **Slice 11B** (the rest of the Nether guns: the Ashfall Pistol, Goldbristle Carbine and Crackling; [below](#slice-11b-the-rest-of-the-nether-guns)): implemented on `claude/guns-nether-2`, stacked on slice 11A, awaiting review.
 - **Not yet played:** the Java compiles only in CI, and the game tests there are the only runs.
 Proposal issue: none. The owner asked on 7 October 2026: "I want to start working on the Guns plugin which I want to base off of the Mod Scorched Guns 2 I have models and animations that I have created already on the github in the "Blocks" folder for that part". The owner's answers:
 - on the files: "the files in the blocks folder are all mine I made all of them myself and have all the rights to them they are inspired by scorched guns 2 but I made all of them including the animations";
@@ -33,6 +43,8 @@ Proposal issue: none. The owner asked on 7 October 2026: "I want to start workin
 - the heavy weapons: on 9 October 2026, offered how each would work (the Hammer GL firing the existing grenades, which break no blocks; the Gattaler spinning up for about ¾ s and firing rifle rounds; the Kiln Gun burning blaze powder and setting creatures, not blocks, alight), they answered "yes to all, do the heavy weapons next".
 - the energy weapons: in the same answer ("yes to all") they took the offer that the energy weapons charge from the energy system; then, on 9 October 2026, "do the energy weapons next".
 - the next part: on 10 October 2026, "Ok lets do the next part". Offered four more gun sets and three smaller follow-ups, each its own pull request, they chose all of them: "Marksman rifles (Recommended), Automatic weapons, Energy weapons II, Pump shotguns" and "Tactical grip + laser, Aiming polish, Lobber gas grenades". The marksman rifles are slice 9A, the automatic weapons slice 9B, the second energy weapons slice 9C, the pump shotguns slice 9D, the first follow-up, the tactical grip and the laser sight, slice 9E, the second, the aiming polish, slice 9F, and the third, the Lobber's grenades, slice 9G.
+- the round after: on 10 October 2026, asked "Look good what do we need next", and offered more of their gun sets and some systems to add alongside them, each its own pull request, they chose "Launchers (Recommended), Coil and plasma, Double-barrels, Sculk guns" and "Energy Cell rack (Recommended), Enemies with guns, Dual pistols, Javelin test fix". The launchers are slice 10A, coil and plasma slice 10B, the double-barrels slice 10C and the sculk guns slice 10D; the Energy Cell rack is slice 10E, the enemies with guns slice 10F and the dual pistols slice 10G.
+- the next round: on 10 October 2026, with those built, they asked "Ok lets continue and do the next thing we need to". No choice was offered this time: the next of their unbuilt guns were taken up, a set at a time, each its own pull request, starting with three of the six they made in the piglins' crimson, blackstone and gold. The Nether guns are slice 11A, and the other three slice 11B.
 
 Owner: jimbozoomer-byte (models, textures, animations and sounds: the owner; implementation: Claude Opus 5.5).
 Target milestone and tier: early firearms, after the first copper and iron. These are the bottom rungs of a gun line the owner's library holds well over a hundred more of.
@@ -639,7 +651,7 @@ Three more of the owner's guns, past steel, that run on charge from the energy s
 
 **The Energy Cell** (`jugcraft:energy_cell`), their ammunition:
 - **Charge:** it holds 10,000 JE, twice or three times that with capacity modules, and stacks alone, as the powered tools do. Its bar shows its charge in amber, and its tooltip the JE.
-- **Charging:** hang it on a Charging Station (steel tier). It fills at the station's rate: up to 512 JE a tick, 256 on copper cable, so 20 to 40 s.
+- **Charging:** hang it on a Charging Station (steel tier). It fills at the station's rate: up to 512 JE a tick, 256 on copper cable, so in 20 to 40 ticks (1 to 2 s).
 - **Looks:** charged, it is the owner's glowing cell (`energy_cell.png`, its three frames run by an `.mcmeta`); spent, the owner's empty cell (`empty_cell.png`).
 - **Reloading:** a reload pools the charge of every cell in the inventory and draws each round's charge from them in inventory order; the cells stay. A full cell is 25 of the Beam Pistol's shots, 13 of the Stormlock's charges, 40 of the Linesman's. With every cell spent a reload does not start, and says so ("Your Energy Cells are spent. Fill them at a Charging Station."). The gun's counter shows the shots its cells hold.
 - **Only the guns draw on it.** It is not the portable battery `docs/MACHINE_ROADMAP.md` plans.
@@ -712,7 +724,7 @@ Three more of the owner's guns, past steel, that run on charge from the energy s
 
 **Known limits:**
 - **Particles:** a beam or arc is drawn from about where the muzzle is (ahead of the eye, a little right and down), not from the model's muzzle locator, so in first person it starts a little off the gun.
-- **Charging:** cells charge one at a time, on the station's cradle.
+- **Charging:** cells charge one at a time, on the station's cradle. Slice 10E's [Cell Rack](#slice-10e-the-cell-rack) charges six at once.
 - **The Beam Pistol's coil** stands out either side of its back in first person, as the owner's model has it.
 - **Aimed** (the CI screenshots of 9 October): the Beam Pistol's back rises a little past the crosshair, over the target's middle, and the Linesman's broad back fills the lower middle of the view. It is the shared aiming polish item ([below](#rollout-and-open-questions)), larger on these two.
 - **Not played:** none of it has been played yet. The arcs' reach, their seeking cones and the JE costs want play to set.
@@ -1078,11 +1090,653 @@ A reload of another kind than the Lobber holds first puts the grenades it held b
 - **One kind a magazine:** a magazine of mixed grenades is not possible; changing kind changes all of them.
 - **Not played:** none of it has been played yet.
 
+## Slice 10A: the launchers
+The first of the gun sets the owner chose on 10 October 2026 ("Launchers (Recommended)"): two guns that fire the rocketry branch's High-Explosive Rockets, and a grenade launcher.
+
+| | Earthmover | Skylark Rifle | Bullfrog |
+|---|---|---|---|
+| The owner's gun | Dozier RL | Rocket Rifle | Blooper |
+| What it is | a shoulder rocket launcher with a drum of four rockets on top of its tube | a break-open rifle that fires one rocket at a time, fast and flat | a stubby grenade launcher with a sliding barrel |
+| What it fires | High-Explosive Rockets | High-Explosive Rockets | grenades, any kind (as the Trench Lobber, [slice 9G](#slice-9g-the-trench-lobbers-grenades)) |
+| The burst | 24 at its centre (12 hearts), falling off to nothing at 5 blocks: the Rocket Launcher's | the same | the grenade's own: a frag Grenade's 16 at its centre over 4 blocks |
+| Rocket speed | 3 blocks a tick (60 a second), as the Rocket Launcher's | 4.5 blocks a tick (90 a second) | (lobbed as the grenade launcher throws) |
+| Rate | 1 a second (every 20 ticks) | one shot, then the reload | one shot, then the reload |
+| Holds | 4 rockets | 1 | 1 grenade |
+| Reload | 3.05 s | 2.4 s | 2.25 s |
+| Spread, hip / aimed | 2.5° / 1° | 1.5° / 0.25° | 3° / 1.5° |
+| Range | 72 blocks | 135 | 20 (how far a level shot carries) |
+| The view aimed | narrowed to 0.85 | 0.8 | 0.92 |
+| Takes | the light and tactical grips, the bayonets and the three scopes | the three stocks, the light and tactical grips and the bayonets | the same as the Skylark Rifle |
+
+The reload times are the owner's animations'.
+
+**How a rocket flies** (`GunShots.rocket`, the rocketry branch's `CombatRocket`): from the eye along the look, strayed by about the spread in degrees, straight and untouched by gravity. It bursts where it hits anything, or in the air at the end of the gun's range: its fuse is the range over the speed, 24 ticks for the Earthmover's and 30 for the Skylark Rifle's. The burst is the Rocket Launcher's high-explosive one (`Blast`): it hurts living things only (the shooter too, if they stand within 5 blocks of it), walls shield from it, and it never breaks, moves or burns a block. A rocket saved in flight keeps what is left of its fuse.
+
+**What they load:** the rocket guns take High-Explosive Rockets from the inventory, a rocket a round. Homing rockets stay the Rocket Launcher's: a rocket gun neither loads nor fires them. The Bullfrog loads any grenade, the one in the other hand first, as the Trench Lobber does, and lobs the kind it holds.
+
+**Crafting** (a crafting table; the guns switch, and for the rocket guns the machines switch too, since their rockets come from the rocket workshop):
+- **Earthmover:** three steel plates over a copper ingot, a tripwire hook and a copper ingot: the plates for its tube, the copper for its drum and the hook for its trigger, as the Rocket Launcher has.
+- **Skylark Rifle:** three steel plates over planks, a lever and a tripwire hook: its stock and its breech.
+- **Bullfrog:** an iron ingot and two copper ingots over planks and a lever.
+
+**What you see:** the owner's animations.
+- **Earthmover:** each shot kicks the launcher back, and the backblast (the owner's fire part) flares out behind the tube at twice its size and dies back toward it. To reload, the launcher is rolled over to the left, the drum twisted free, pulled out to the left and down, and a full one brought back and twisted home with a clank.
+- **Skylark Rifle:** each shot kicks it back and up. To reload, the barrel breaks open downward on its hinge, the left hand brings up a rocket and slides it nose first into the breech, and the barrel snaps shut.
+- **Bullfrog:** each shot drives the barrel back along the rod under it and flaps the leaf sight. To reload, the gun is brought in and tipped up, the left hand racks the barrel back, holds the muzzle while a grenade is seated in its mouth, and pushes the barrel home. The draw swings the barrel up shut, as the Skylark Rifle's does.
+- **In flight** a rocket is drawn as the Rocket Launcher's are: its item, trailing smoke and flame.
+- **Spent cases:** none. Where the owner's animations cue one, the gun puffs smoke, as a muzzle-loader's lock does.
+- **Sounds:** the library's bazooka shot (the Earthmover), its rocket rifle shot (the Skylark Rifle) and its second air gun shot, a hollow thump (the Bullfrog). None names another source: the first two carry no tags, the third only the program it was made in (`Software=Lavf59.27.100`). The Earthmover's drum clanks as it twists free and home (the Squall Rifle's clank, `GunAnimations.GUN_SOUND_ALIASES`); the Skylark Rifle's rocket and the Bullfrog's grenade go in with the insert sound.
+
+**How the models were built:**
+- **Earthmover:**
+  - **On the shoulder:** its owner display holds it as a shoulder launcher: the grip at the hip guns' depth, the tube running on past the right of the head. In first person the tube's back fills the right of the view, and the backblast is behind the eye.
+  - **Drum:** the owner's drum part, on the magazine bone, under the cylinder_magazine bone; both turn about the drum's middle. The reload twists the drum free (cylinder_magazine), pulls it out and brings it back (magazine).
+  - **Backblast:** the owner's fire part (drawn on the owner's `gyrojet_flames` texture, packed into the gun's atlas), on the flame bone, which the renderer shows only while a shot moves it. It turns about its own middle, so at twice its size it starts at the tube's back end.
+  - **Sights:** a frame with a centre dot, on a bracket off the left side of the body; the aim looks through the dot. A scope stands on the rail under it (the owner's no_sights part, `MOUNTS`), off the left side, beside the drum. The Laser Sight, longer and wider, would run into the drum there, so the Earthmover does not take it.
+  - **Empty bones:** the bolt bone, which only the draw names.
+- **Skylark Rifle:**
+  - **Texture:** the owner's is two frames, one above the other, its flame flickering in a corner no part draws on. The gun takes the first frame (`FRAMED`).
+  - **Barrel:** the main part's elements the owner named "barrel" (the tube, its front post and the fore-end under it), hinged at the bottom of the receiver's front. Its grips and bayonets ride it (`"mounts"`), so they open with it.
+  - **Rocket:** the reload's shell bone carries a High-Explosive Rocket (`PROPS`): a 1.5 × 1.5 × 5 px steel body with a red nose and a dark nozzle. It rests where the reload's offsets, turned and scaled, bring its nose to the opened breech as the carry ends, in line with the barrel, and it shrinks to nothing as it slides in. It shows only while the reload moves it.
+  - **Sights:** the notch on the back of the receiver and the post at the muzzle.
+  - **Empty bones:** the flame bone, which only the shot's scale moves.
+  - **Aiming:** held 3 px further out (`"eye_relief"`): through the aimed shot its kick otherwise brought the back of its receiver to the near plane.
+- **Bullfrog:**
+  - **Barrel:** the owner's barrel part on the standard_barrel bone, which each shot drives back; under the barrels bone, which the reload racks back; under the barrel bone, which the draw swings shut about the bottom of the receiver's front.
+  - **Grenade:** the reload's shell bone, on the barrel, carries a grenade (`PROPS`): a 1.4 × 1.4 × 3 px olive body with a steel cap. It rests inside the barrel, where the reload's offset brings it into the muzzle's mouth.
+  - **Sights:** the leaf sight on the back of the receiver (the main part's elements the owner named "sights"), on its own bone so that it flaps about its foot; the aim looks through its ring.
+- **The props drawn the right way round:** the rocket and the grenade have a front and a back, and GeckoLib reads a box's east face and top from back to front. So those two faces get blocks of their own in the atlas, drawn back to front (`ORIENTED`, `draw_oriented()`). The older props share one block among their four long faces, so their east face and top show it the other way round: the Highwayman's and Thunderpipe's shells, the cartridges, the Linesman's cell and the ramrods, each one or two pixels across. They are left as they were.
+- **Checked** in first-person and side previews: idle, aimed, fired, through each reload, draw and inspection; the Earthmover with each scope, the Laser Sight (which runs into its drum), a grip and a bayonet; the Skylark Rifle and the Bullfrog with a stock and a grip; the Skylark Rifle's rocket through its carry; and the nearest point of each gun to the eye through its aimed shot. The arms' directions were tried against others through the reloads (`armfit.py`); the usual ones stayed.
+
+**Connections:**
+- **Rockets:** the rocketry branch's High-Explosive Rockets, from the rocket workshop (four from two solid propellant, two guncotton and a rocket casing), the Rocket Launcher's ([rocket-launcher.md](rocket-launcher.md)).
+- **Grenades:** the field chemistry branch's ([field-chemistry.md](field-chemistry.md)).
+- **Parts:** steel plates from the machines, copper, tripwire hooks, levers, planks and iron.
+- **Their place:** the rocket guns at the electronics tier, beside the Rocket Launcher, whose rockets they share; the Bullfrog is iron and copper, but its grenades come from field chemistry.
+
+**Balance:** starting numbers.
+- **A rocket** does what the Rocket Launcher's does. The Rocket Launcher fires one every 2 s from the inventory: 12 a second. The Earthmover fires its four a second apart and then reloads for 3 s: about 16 a second over a drum and its reload. The Skylark Rifle fires one and reloads for 2.4 s: 10 a second, flying faster, further and steadier.
+- **The Bullfrog** lobs one grenade a reload, about one every 2.25 s, against the grenade launcher's 1.5 s and the Trench Lobber's six at 0.7 s.
+- **Nothing converts back,** so there is no loop.
+
+**Server authority:** the server spawns each rocket from its own copy of the player's position and look, at the gun's speed, with the gun's fuse, and its burst is the server's. Its rockets and the player's inventory are the server's, as for every gun.
+
+**Save compatibility:** new items `jugcraft:earthmover`, `skylark_rifle` and `bullfrog`. A rocket in flight now saves what is left of its fuse (`fuse`); one saved before has none and gets the Rocket Launcher's lifetime, as it would have. `guns.enabled=false` turns the three recipes off, and `machines.enabled=false` the rocket guns'; the items stay registered. A build from before this slice does not know the three items, and does not read a rocket's fuse; how it loads a world holding them was not tested, so back the world up before going back to one.
+
+**Known limits:**
+- **The Earthmover in first person:** its tube's back fills the right of the view, as its owner display holds it on the shoulder. A scope on its side rail stands close by the eye, so at the hip it is large.
+- **Homing rockets** are the Rocket Launcher's alone; the rocket guns do not load them.
+- **The Bullfrog's barrel** slides in its reload and swings in its draw, as the owner's animations have it. Its grenade sits in the muzzle's mouth, hidden from the shooter by the barrel.
+- **Not played:** none of it has been played yet. The rocket speeds, the ranges and the Bullfrog's reload want play to set.
+
+## Slice 10B: coil and plasma
+The second of the gun sets the owner chose on 10 October 2026 ("Coil and plasma", offered as the Gauss Rifle, Plasgun and Plasmabuss "running on the Energy Cells like the other energy weapons"): three more energy weapons, on slice 8D's Energy Cells and shots.
+
+| | Solenoid Rifle | Votive Rifle | Glowmouth |
+|---|---|---|---|
+| The owner's gun | Gauss Rifle | Plasgun | Plasmabuss |
+| What it is | a coil rifle, rings along its barrel and a glowing battery on its left | a plasma rifle, a wax seal and its parchment hanging from its flank | a plasma blunderbuss, a glowing canister either side of its chamber and a crank on top |
+| Fires | a beam through every creature in its line, to the first block | a short beam through every creature in its line, for as long as the trigger is held | a bolt that leaps from its mark to two more creatures close by |
+| Damage | 14 to each creature in the beam | 3 to each creature in the beam | 10 to its mark, then 6 and 3.6 |
+| Rate | 1.25 a second (every 16 ticks) | 6.7 a second (every 3 ticks) | 1 a second (every 20 ticks) |
+| Holds | 5 charges | 30 | 4 |
+| Reload | 2.6 s: the magazine | 2.5 s: the magazine | 0.4 s, then 0.65 s a charge, then 0.9 s |
+| Spread, hip / aimed | 1.5° / 0.15° | 3° / 1° | 12° / 9°, the cone its arc seeks in |
+| Range | 128 blocks, the farthest of the energy weapons | 48 | 14 |
+| The view aimed | narrowed to 0.75 | 0.85 | 0.95 |
+| Charge a round | 1,100 JE | 200 JE | 750 JE |
+| Takes | both magazines, the three stocks, the light and tactical grips, the bayonets, the three scopes and the Laser Sight | the same | nothing |
+
+The reload times are the owner's animations'.
+
+**Crafting** (a crafting table; as the other energy weapons', the recipes need both the guns and the machines switches):
+- **Solenoid Rifle:** two copper cables (its rings) and a steel ingot over a steel ingot, an advanced circuit and a brass ingot.
+- **Votive Rifle:** three steel ingots over a glass pane (its windows), an advanced circuit and a brass ingot.
+- **Glowmouth:** a copper ingot (its bell) and two steel ingots over planks (its stock), an advanced circuit and a brass ingot.
+
+**How they fire:** as slice 8D's (above): the beam passes through every creature in its line that the shooter may strike and stops at the first block; the arc leaps from the creature nearest the aim within the cone to the nearest within 4 blocks, twice, each taking 60% of the damage before it. Neither touches a block. Each shot is `jugcraft:zap` damage.
+
+**What you see:** the owner's animations.
+- **Solenoid Rifle:** each shot kicks it back, drives the knob in the slot on its right side back and slides the battery on its left out and back. To reload, the gun is lifted and tipped up toward the face, the battery slides out, the magazine swings down and away to the left and a new one comes up into the well; the knob is racked and the battery slides home.
+- **Votive Rifle:** each shot drives the plate along the top of its receiver back and swings the seal. To reload, the gun is rolled to the right, the vent on the chamber's left lifts out, the plate is drawn back and held, the magazine swings down and out of the well and a new one is slapped home; then the plate is let go and the vent drops back.
+- **Glowmouth:** each shot kicks it and jolts its crank. To reload, the gun is rolled to the left; for each charge the left hand brings an Energy Cell up from the lower left and pushes it into the left side of the chamber, where it shrinks away; then the left hand pulls the crank back and over, 106°, and returns it.
+- **Sparks:** where the animations cue a casing, they vent sparks, as slice 8D's do.
+- **Sounds:** the library's gauss shot (Solenoid Rifle), its nerve pinch shot, short and sharp (Votive Rifle), and its second plasma shot (Glowmouth). None names another source: none of the three carries a tag. The Glowmouth's charges go in with the insert sound, as the Stormlock's do.
+
+**How the models were built:**
+- **Solenoid Rifle:**
+  - **Battery:** the owner's capital-B `Battery` bone: the battery on the receiver's left, a block and a glowing plate on an arm (the main part's 13th to 15th and 18th elements), which the shots and the reload slide out to the left.
+  - **Bolt:** the knob in the slot on the right of the receiver (the 23rd element).
+  - **Magazines:** its own, under the receiver, and the Extended and Speed Magazines (the owner's `ext_mag` and `speed_mag` parts).
+  - **Sights:** the owner's ring on the back of the receiver, a peep, and the post on the muzzle.
+  - **Texture:** its glowing plate's own texture is three frames, one above the other; the gun takes the first (`FRAMED`), so it glows but does not flicker.
+  - **The atlas:** its stocks, grips and bayonets draw on textures it shares with other guns, packed whole into its atlas beside its own. That left the scopes' textures, packed piece by piece, too little room. So for this gun alone pieces of a scope's texture within a pixel of each other go in together, each pair joined wherever that takes no more room (`joined_rects()`, tried only when a gun's pieces do not fit one by one). Every other gun's atlas came out the same as before.
+  - **Empty bones:** `magazine_2`, `default_mag` and `scriptures`, which its animations move but no part of it fits.
+  - **Aiming:** held 1 px further out (`"eye_relief"`): through the aimed shot its kick brought the back of its receiver within a pixel of the eye.
+- **Votive Rifle:**
+  - **Bolt:** the plate along the top of its receiver (the main part's 7th element).
+  - **Vent:** the louvre on the left of its chamber (the 22nd), which the reload lifts out and back.
+  - **Seal:** the owner's `Seal` group, a wax seal and the parchment hanging from it (the 26th and 27th elements, drawn on the owner's `seal_2` texture), on the `scriptures` bone, which swings it about the seal.
+  - **Magazines:** its own, swung down and back out of the well about its top, and the Extended and Speed Magazines.
+  - **Sights:** the channel between the two rails on the back of its receiver, and the post on the muzzle.
+  - **Texture:** its glowing windows' own texture is three frames; the gun takes the first.
+  - **Aiming:** held 2 px further out: through the aimed shot the end of its long grip reached the eye.
+- **Glowmouth:**
+  - **One part:** the owner's gun is a single part of 55 elements.
+  - **Crank:** the owner's group so named (the main part's 52nd to 55th elements), the lever on top of the back of its chamber, pulled back about its axle.
+  - **Charge:** the loop's shell bone carries an Energy Cell (`PROPS`), drawn as the Linesman's: 1.5 × 1.5 × 3 px, a grey cap on a green body. It rests where the loop's last carry brings it into the left side of the chamber and shrinks to nothing there. It shows only while the reload moves it.
+  - **Sights:** the notch between the two posts on top of the chamber's back (the 29th and 30th elements); there is no front post, and the aim runs over the muzzle's bell.
+  - **Aiming:** held 3 px further out: through the aimed shot the end of its long grip came 0.74 px past the eye.
+- **Checked** in first-person and side previews: idle, aimed, fired, through each reload, draw and inspection; the Solenoid and Votive Rifles with each scope, the Laser Sight, each stock, both grips, a bayonet and both magazines; the Glowmouth's charge through its loop and its crank through the reload's end; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **The energy system:** Energy Cells, filled at the Charging Station, as slice 8D's.
+- **Parts:** steel from the steel foundry, advanced circuits from the circuit assembler, copper cable, glass, copper, planks and brass.
+- **Their place:** past steel, with slices 8D's and 9C's.
+
+**Balance:** starting numbers.
+- **Power:** like the other energy weapons, about 0.013 to 0.015 damage to one creature a JE: a full cell (10,000 JE) is 9 Solenoid shots, 50 of the Votive Rifle's (seven and a half seconds of fire) or 13 of the Glowmouth's.
+- **Solenoid Rifle:** 17.5 damage a second to each creature in its line, a little over the Spikedriver's 15, in heavier shots that stray the least of the energy weapons' and reach twice as far; 70 to each creature over a magazine.
+- **Votive Rifle:** 20 a second to each creature in its line, for 4.5 s a magazine, within 48 blocks: more than the Seam Cutter's 15 a second and three times its reach, at the same damage a JE.
+- **Glowmouth:** 10 a second to one creature, 19.6 across three, for four shots; over a magazine and its 3.9 s reload, about 5 a second to one. Its arc seeks nearly as wide as the Linesman's (12° from the hip, against 15°) and hits far harder, more slowly.
+
+**Save compatibility:** new items `jugcraft:solenoid_rifle`, `votive_rifle` and `glowmouth`; nothing saved changes. `guns.enabled=false` or `machines.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Solenoid Rifle's reload** lifts the gun toward the face while the left hand changes the magazine beneath it. In the previews the left arm covers a quarter to a half of the view from 0.5 to 1.7 s into the reload; at the frames measured the same way, the Picket, Kestrel and Garrison Rifles' reloads cover a fifth at most. A search over the arm's direction, still running down to the shoulder, found at best about a seventh less, so the usual direction stayed.
+- **The glowing parts do not flicker:** the owner's three-frame textures for the Solenoid's plate and the Votive's windows show their first frame.
+- **Not played:** none of it has been played yet. The cones, the JE costs and the Solenoid's reach want play to set.
+
+## Slice 10C: the double-barrels
+The third of the gun sets the owner chose on 10 October 2026 ("Double-barrels", offered as the Super Shotgun, Doublet and Handcannon, "heavy shotguns using the existing pellet shots"): three guns that fire a spread of pellets, each loaded all at once.
+
+| | Mule | Fowler | Culverin |
+|---|---|---|---|
+| The owner's gun | Super Shotgun | Doublet | Handcannon |
+| What it is | a sawn-off double-barrel with a wooden pistol grip, which breaks open to load | a double-barrelled flintlock, with the Blunderbuss's hammer on its lock | a stubby iron barrel on a wooden pistol stock, fired one-handed |
+| Fires | 10 pellets a barrel | 8 balls a barrel | 5 heavy balls |
+| Damage | 2.5 a pellet (25 if all land) | 3 a ball (24) | 5 a ball (25) |
+| Rate | the second barrel 0.4 s after the first | 0.5 s after the first | one shot |
+| Holds | 2 | 2 | 1 |
+| Reload | 1.75 s: both shells at once | 4.85 s: a ball rammed down each barrel | 3.7 s |
+| Spread, hip / aimed | 9° / 7° | 8° / 5° | 9° / 7° |
+| Range | 24 blocks | 28 | 18 |
+| The view aimed | narrowed to 0.92 | 0.88 | 0.94 |
+| Round | Buckshot Shell | Paper Cartridge | Paper Cartridge |
+| Takes | nothing | the Light and Vertical Grips and the four bayonets | nothing |
+
+The reload times are the owner's animations'.
+
+**Crafting** (a crafting table; the guns switch, as every gun):
+- **Mule:** two iron ingots and a brass ingot over an iron ingot, a lever and planks (the Coach Gun's materials, with an iron ingot more).
+- **Fowler:** three iron ingots over an iron ingot, a flint and planks.
+- **Culverin:** two iron ingots over a flint and planks.
+
+**How they fire:** as the other pellet guns: each pellet goes from the eye along the look, strayed by the spread, to the first creature or block in its way, and each round loads at the end of the reload. Nothing new is worked out on the server.
+
+**What you see:** the owner's animations.
+- **Mule:** each shot kicks it back and up. To reload, the gun is tipped and its barrels drop open about the hinge, 72.5°, by 0.46 s; the left hand comes in to them, and at about 1.2 s they snap shut. Drawn, it snaps shut; inspected, it is broken open and closed again.
+- **Fowler:** each shot drops the hammer, and a flash of priming fire jumps from the pan, as on the Bellmouth. To reload, the gun is tipped up, a ball drops into each muzzle (by 0.8 s), and the ramrod is drawn out from under the barrels and rams the left barrel (at 2.3 s), then the right (at 3.25 s), and is put back.
+- **Culverin:** held in the right hand alone. Each shot drops the cock and a flash jumps from the pan. To reload, the gun is tipped up, the left hand comes up with the ball to the muzzle (0.7 s), and the gun's own ramrod is drawn from under the barrel, raised to the bore and rammed home.
+- **Spent rounds:** the Mule throws a spent shell with each shot; the Fowler and the Culverin puff smoke from the lock and leave a cloud before the muzzle, as slice 4's muzzle-loaders do.
+- **Sounds:** the library's shotgun blast (the Mule, as the Thunderpipe fires), its black powder shot (the Fowler, as slice 4's flintlocks fire) and its cannon shot, unused till now (the Culverin). The reloads cue the shared reload sounds; the Mule's shells go in with the shell sound, as the Coach Gun's do. The cannon shot carries no tag.
+
+**How the models were built:**
+- **Mule:**
+  - **Breaking open:** its barrels, fore-end and top rib, and the strap under the fore-end (the main part's 1st, 7th and 12th to 16th elements) ride the `barrel` bone, which tips them down about the hinge at the frame's front. The frame, the fences round the breech and the grip stay.
+  - **Empty bones:** `bolt`, and `shell`, which the reload keeps shrunk to nothing: no shells are seen going in.
+  - **Sights:** the top of the frame over the breech, behind the top rib.
+  - **Aiming:** held 2.5 px further out (`"eye_relief"`): through the aimed shot its kick brought the back of its grip 0.53 px past the eye.
+- **Fowler:**
+  - **Hammer:** the owner's own `hammer` part for it, on the lock's right side, drawn on the Blunderbuss's texture and turning about its foot as the Bellmouth's does.
+  - **Balls, ramrod and flash:** the reload drops a ball into each muzzle (`ball` and `ball2`) and moves the ramrod (`ram`) on a bone (`ram2`) that shifts it from the left barrel to the right between the two rammings. None had a part, so each is one box drawn in an empty corner of its atlas copy, as slice 4's are: two 1 px lead balls, a half-pixel iron ramrod with a brass tip, 9 px long, and a 1 px priming flash at the pan. Each shows only while an animation moves it; the renderer now knows the second ball (`GunRenderer.PROPS`).
+  - **The left arm** hangs from a `left_arm2` bone, which the reload slides back, as the Bellmouth's does.
+  - **Sights:** over the raised rib between the barrels, clear of the muzzles' rings.
+  - **The atlas:** its own texture is as big as the largest atlas, so the textures its hammer and grips share with other guns (the Blunderbuss's, and the Musket's grips') could not sit beside it whole. They go in piece by piece, as the scopes' do (`texture_islands()`, tried only when a gun's shared textures do not fit whole). Its bayonets draw on its own texture. Every other gun's atlas came out the same as before.
+  - **Aiming:** held 3 px further out: through the aimed shot its butt plate came 0.82 px past the eye.
+- **Culverin:**
+  - **One-handed:** as the Duelling Pistol, its idle hides the left arm, whose hand is placed at the muzzle, holding the ball, 0.71 s into the reload.
+  - **Cock:** the cock and the jaw on it (the main part's 15th and 16th elements), on the lock's right side, turning about the cock's lowest corner.
+  - **Ramrod:** the owner's own, the rod under the barrel (the 13th element), on the `ram` bone.
+  - **Ball and flash:** drawn here, as the Fowler's: a 1 px lead ball and a 1 px priming flash.
+  - **Sights:** the notch between the two posts on top of the breech, raised to clear the barrel's top edge and the muzzle's swell, which stand higher.
+  - **Aiming:** through the aimed shot its back stays 1.95 px from the eye, so it needs no eye relief.
+- **Checked** in first-person and side previews: idle, aimed, fired, through each reload, draw and inspection; the Mule's barrels through the break; the Fowler's balls into both muzzles and the ramrod down each barrel, and the Fowler with its grips and bayonets, held, aimed, fired, reloading and inspected; the Culverin's ball, ramrod and left arm; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Buckshot Shell (slice 1) and the Paper Cartridge (slice 4); nothing new.
+- **Parts:** iron, brass, flint, a lever and planks.
+- **Their place:** with the iron guns. The Mule beside the Coach Gun; the Fowler and the Culverin beside slice 4's flintlocks.
+
+**Balance:** starting numbers, at point blank with every pellet landing.
+- **Mule:** 25 a shot, the Bellmouth's pellets, two shots 0.4 s apart and both shells back in 1.75 s: 50 every 2.15 s, about 23 a second. That is the most of the shotguns (the Coach Gun's is about 16, the Sledge's about 19), for a wider spread than the Coach Gun's (9° against 6°) and less reach (24 blocks against 32). Its pellets are no heavier than the Bellmouth's because its reload is the owner's quick one.
+- **Fowler:** 24 a shot, two shots, then 4.85 s: about 9 a second, against the Bellmouth's 6.4, reaching 28 blocks against 20 with a tighter spread, for more iron.
+- **Culverin:** the Bellmouth's 25 a shot in five heavy balls, in one hand, every 3.7 s: about 7 a second. Its spread is tighter than the Bellmouth's (9° against 12°), its reach shorter (18 blocks against 20).
+- **A round:** each spends one, as every pellet gun does; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:mule`, `fowler` and `culverin`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Mule's shells are not seen going in:** the owner's model has none, and its reload keeps the bone for them shrunk to nothing.
+- **The Mule sinks to the bottom of the view** while it is open, about 0.5 to 1.2 s into its reload: only the back of its frame shows, the left hand coming in beside it, as the Coach Gun does while it loads.
+- **The Culverin's left arm** comes over the top middle of the view about 0.7 s into its reload, bringing the ball to the muzzle. Of the directions that still run to the shoulder, the one it takes covered the least in the previews, about three-quarters of the usual direction's cover.
+- **Not played:** none of it has been played yet. The spreads and the Mule's damage want play to set.
+
+## Slice 10D: the sculk guns
+The fourth of the gun sets the owner chose on 10 October 2026 ("Sculk guns", offered as the Sculk Resonator, Whispers and Echoes 2, "the teal sculk-coloured set"): three guns grown from the deep dark, on the rounds the other guns fire.
+
+| | Undertone Rifle | Murmur SMG | Reverb |
+|---|---|---|---|
+| The owner's gun | Sculk Resonator | Whispers | Echoes 2 |
+| What it is | a sculk-grown rifle: glowing cells under its barrel, tendrils on its receiver | a sculk-grown machine gun: a glowing crystal in a window of its receiver, tendrils hanging under its barrel | a sculk-grown double-barrel whose barrels turn about their bore to load, tendrils on its receiver |
+| Fires | one shot each pull | for as long as the trigger is held | 10 pellets a barrel |
+| Damage | 9 | 3 | 3.5 a pellet (35 if all land) |
+| Rate | 2.9 a second (every 7 ticks) | 10 a second (every 2 ticks), as fast as any gun | the second barrel 0.4 s after the first |
+| Holds | 12 | 24 | 2 |
+| Reload | 2.4 s: the magazine | 2.4 s: the magazine | 0.8 s, then 0.85 s a shell, then 0.95 s |
+| Spread, hip / aimed | 2.5° / 0.3° | 3.5° / 1.5° | 7° / 5° |
+| Range | 96 blocks | 48 | 32 |
+| The view aimed | narrowed to 0.82 | 0.9 | 0.9 |
+| Round | Rifle Round | Light Round | Buckshot Shell |
+| Takes | the three stocks, the three scopes and the Laser Sight | both magazines, the scopes and the Laser Sight | the Light Grip and the Tactical Grip, the scopes and the Laser Sight |
+
+The reload times are the owner's animations'.
+
+**Crafting** (a crafting table; the guns switch, as every gun). Each takes steel and a lever, as the other steel guns, and an echo shard and sculk from the deep dark:
+- **Undertone Rifle:** three steel ingots over an echo shard, a lever and sculk.
+- **Murmur SMG:** two steel ingots and an echo shard over a lever and sculk.
+- **Reverb:** two steel ingots over an echo shard, a lever and sculk.
+
+**How they fire:** as the other bullet guns: each bullet or pellet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. A magazine loads at the end of its reload, the Reverb a shell after each shell's time. Nothing new is worked out on the server.
+
+**What you see:** the owner's animations. The Sculk Resonator's and the Whispers' are the same but for where the left hand rests.
+- **Undertone Rifle and Murmur SMG:** each shot kicks the gun back, drives the rib along its top back and sways its tendrils. To reload, the gun is tipped and rolled; the magazine is drawn down and back out of the well and a new one pushed home; then the rib is let go. The tendrils sway all through it.
+- **Reverb:** each shot kicks it back and drives its rib back. To reload, the gun is rolled to one side and its barrels turn 67° about their bore; each shell goes in with a nudge of the barrels; then they turn back and the gun comes level.
+- **Spent rounds:** each throws a spent case with each shot, as the other guns firing its round do.
+- **Sounds:** the library's sculk shot, unused till now (the Undertone Rifle), its soft beam shot (the Murmur SMG) and its shulker shot (the Reverb). None names another source: the sculk shot's one tag names its encoder, the beam shot's its container, and the shulker shot's the online video editor it was saved from and its encoder. The Reverb's shells go in with the shell sound, as the Coach Gun's do.
+
+**How the models were built:**
+- **Tendrils:** the owner's flat planes, drawn on the tendril texture (its first of sixteen frames), on the `seal` bone the animations sway. The owner left their edges, which have no area, untextured (`#missing`); those faces are dropped (`flat_face()`).
+- **Glowing parts:** the Undertone Rifle's cells and the Murmur SMG's crystal draw on the Sculk Resonator's glowing texture, the Reverb's crystal on its own; each texture is three frames, and the guns take the first (`FRAMED`), so they glow but do not flicker.
+- **Undertone Rifle:**
+  - **Bolt:** the rib along its top (the main part's 8th element).
+  - **Tendrils:** the four on its receiver (the 37th to 40th), swaying about their middle.
+  - **Magazine:** the flat plate under its well (the 44th), drawn down and out with each reload.
+  - **Sights:** the owner's ring on the back of its receiver, a peep, over the post at the front of its barrel.
+  - **Aiming:** held 2 px further out (`"eye_relief"`): through the aimed shot the back of its bolt came to 0.76 px from the eye, inside the near plane (0.8 px).
+- **Murmur SMG:**
+  - **Bolt:** the rib along its top (the 3rd element).
+  - **Tendrils:** the two hanging under its barrel (the 24th and 25th), swinging fore and aft about their tops.
+  - **Magazine:** its own part, and the Extended and Speed Magazines in its place.
+  - **Sights:** the same ring as the Undertone Rifle's.
+  - **Aiming:** held 1 px further out: through the aimed shot its back came within 1.61 px of the eye.
+- **Reverb:**
+  - **Barrels:** its own part, two barrels with a rib between, a breech block and a muzzle collar, turning about their bore.
+  - **Bolt:** the rib along its top (the 4th element).
+  - **Tendrils:** the four on its receiver (the 24th to 27th).
+  - **Empty bones:** `magazine` and `magazine_2`, which its shots hold still but no part of it fits.
+  - **Sights:** the notch between the two posts on the back of its receiver.
+  - **Aiming:** held 1 px further out: through the aimed shot its back came within 1.61 px of the eye.
+- **The atlases:** the Sculk Resonator's and the Echoes 2's own textures fill only part of their 128-pixel squares, so the textures they share sit whole beside them; the Whispers' atlas grows from 64 to 128 to hold them. Every other gun's atlas came out the same as before.
+- **Checked** in first-person and side previews: idle, aimed (the arms at half size), fired, through each reload, draw and inspection; each gun's bolt, tendrils and magazine or barrels through their animations; each with every attachment it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Rifle Round, the Light Round and the Buckshot Shell; nothing new.
+- **Parts:** steel and a lever, as the steel guns; an echo shard, from the deep dark's ancient cities, and sculk.
+- **Their place:** past steel, a reward for reaching the deep dark.
+
+**Balance:** starting numbers, at point blank with every shot landing.
+- **Undertone Rifle:** 9 a shot, 2.9 a second, for twelve shots; over a magazine and its 2.4 s reload, about 17 a second, as the Garrison Rifle's (17) and more than the Picket Rifle's (14) or the Kestrel Rifle's (12). In return its aimed spread is wider than the marksman rifles' (0.3° against 0.1° to 0.15°) and its reach shorter (96 blocks against 120 to 128).
+- **Murmur SMG:** 30 a second while it fires, for 2.4 s; over a magazine and its reload, about 15 a second, as the Squall Rifle's (15) and the Bronco SMG's (14), above the Riveter SMG's (11). It spends its rounds as fast as any gun.
+- **Reverb:** 35 a shot, the hardest of the shotguns' (the Sledge's is 32), two shots 0.4 s apart and 3.45 s to load both: about 18 a second, as the Sledge's (19), holding two shells to its four.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:undertone_rifle`, `murmur_smg` and `reverb`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The glowing parts and the tendrils do not move on their own:** the owner's frames would make them pulse and curl; the guns take the first frame of each.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 10E: the Cell Rack
+The first of the systems the owner chose on 10 October 2026 to go with the gun sets ("Energy Cell rack (Recommended)", offered as "A block that charges several Energy Cells at once."): a rack of six cradles that charges every Energy Cell standing in it at once, from cables.
+
+| | Cell Rack | Charging Station, for comparison |
+|---|---|---|
+| Holds | six Energy Cells, two shelves of three | one powered tool or Energy Cell |
+| Takes from cables | up to 1,024 JE a tick (256 on copper cable) | the same |
+| Buffer | 50,000 JE | the same |
+| Gives | up to 1,024 JE a tick, shared evenly among the cells not yet full, at most 512 to one cell | up to 512 JE a tick |
+| Six spent cells (60,000 JE) | about 3 s on silver or aluminum cable, 12 s on copper, with power enough | about 6 s and 12 s, a cell at a time |
+| Size | one block | two blocks tall |
+| Charges | Energy Cells only | powered tools and Energy Cells |
+
+**Crafting** (a crafting table; it needs both the guns and the machines switches, as the Energy Cell does): five steel plates, two copper cables, an advanced circuit and a battery box. These are the Charging Station's parts, with a steel plate in place of its redstone lamp.
+
+**Using it:**
+- **Placing:** it faces you, its shelves toward you.
+- **A cell in:** use it holding an Energy Cell. The cell stands in the cradle you point at, or in the nearest free one if that is taken. One cell goes in each use; with all six cradles full, nothing happens.
+- **A cell out:** use it with an empty hand to take the cell from the cradle nearest where you point. A line over the hotbar gives its charge, for example "Energy Cell: 10,000 / 10,000 JE".
+- **Its buffer:** used with an empty hand while it holds no cells, it gives its own charge: "Cell Rack: 20,000 / 50,000 JE".
+- **Power:** cables connect on any side; its ports are on the back and both sides.
+- **Hoppers:** from above or the sides, a hopper stands Energy Cells in its empty cradles and puts in nothing else. From below, a hopper takes out only full cells. So a hopper line can feed it spent cells and carry the full ones away. Item pipes reach it through the same rules (Fabric's item storage wraps it as it does a chest); that is not tested.
+- **Breaking it:** mined with a pickaxe, it drops itself, as the Charging Station does; broken any way, it drops the cells in it, each keeping its charge.
+
+**What you see:**
+- **The block:** the power gear's electric look, the Charging Station's textures: a graphite plinth edged with high-voltage stripes, two shelves each with a glowing strip along its front, and a back panel with vented sides. Each shelf has three cradles: a cup the cell's foot stands in, with contacts on the back panel behind it. A status screen on the cap lights while it charges, and the rack gives off a little light then (5, the Charging Station's 7). It is drawn by `cell_rack_model()` in `tools/guns.py`.
+- **The cells:** each stands upright in its cup, in front of its contacts. They are the Energy Cell's own icon, turned 45° so the cell stands on end with its terminal at the top, about 5 px tall. A charged cell glows as it does in the hand, and a spent one is dark.
+- **Checked** in previews of the block model from the front, from three-quarters on either side, from behind and from above, lit and unlit, with a cell standing in each cradle (the cells drawn as the renderer turns them).
+
+**How it works:**
+- **Sharing:** each tick, the rack counts the cells not yet full. It divides up to 1,024 JE of its buffer between them evenly, no more than 512 to one: one or two cells take 512 each, three 341, six 170. A cell takes no more than fills it. A full cell takes nothing, and a hopper below may take it.
+- **Accounting:** every JE that leaves the buffer goes into a cell. Nothing is lost or gained.
+- **Where you point:** the cradle is worked out on the server from the point you used, turned into the rack's own frame for its facing (`CellRackBlock.cradleAt`). Cradles along a shelf count as nearer than those across the shelves.
+- **The buffer:** fills from cables like the Charging Station's. A rack full of full cells keeps its buffer for the next ones.
+
+**Connections:**
+- **Input producers:** any generator, Battery Box and cable network of the machines (JE), as for the Charging Station.
+- **Output consumers:** the energy weapons, through the Energy Cells they load from (slices 8D, 9C and 10B).
+- **Its place:** the steel tier, with the Charging Station; it needs an advanced circuit and a battery box, from the machines' tree.
+- **Required vs optional:** optional. The Charging Station still fills cells one at a time; the rack is for players who run many energy weapons.
+
+**Balance:** the Cell Rack fills cells at up to twice the Charging Station's rate in all, but only Energy Cells, and costs the station's parts. It cannot make charge: it gives the cells only what it takes from cables. A Battery Box (400,000 JE) still fills forty cells.
+
+**Save compatibility:** a new block `jugcraft:cell_rack`, its item and its block entity type. The block entity saves its buffer (`energy`) and its six cradles (`Items`, with each cell's charge). Nothing saved before changes. `guns.enabled=false` or `machines.enabled=false` turns its recipe off; the block, its item and its block entity stay registered, so a placed rack and its cells survive.
+
+**Known limits:**
+- **Flat cells:** the cells are their icons, as an item frame draws an item, so they are thin seen from the side.
+- **No comparator output** and no charge shown on the block itself; the screen only says whether it is charging.
+- **Not played:** none of it has been played yet.
+
+## Slice 10F: enemies with guns
+The second of the systems the owner chose on 10 October 2026 to go with the gun sets ("Enemies with guns", offered as "Mobs that carry and fire your guns and can drop them."): the **Raider Gunner**, a fourth kind of raider infantry ([raiders.md](raiders.md)), who carries one of the owner's service arms (slice 8B) and fires it.
+
+| | Sentry Pistol | Garrison Rifle | Breacher |
+|---|---|---|---|
+| Carried by | 4 gunners in 10 | 3 in 10 | 3 in 10 |
+| Fired from | up to 16 blocks | 24 | 8 |
+| A shot | 2.5, half the gun's 5 | bursts of three, 2 a round (the gun's 4) | 8 pellets of 1.5 (12 if all land) |
+| Between shots | 1.55 s | 0.2 s in a burst, 1.55 s after it | 1.55 s |
+| Magazine and reload | 8, then 2.35 s | 30, then 2.65 s | 6, then 2.6 s |
+| Over a magazine and its reload, every shot landing | about 1.4 a second | 2.7 | 6 at point blank |
+
+The gunner has 20 health, 2 armour and the grenadier's pace (0.28).
+
+**Where they come from:**
+- **Raids:** gunners march in place of some of the grunts: one at raid levels 1 and 2, two at 3 and 4, three at 5. Each party is as large as before ([raiders.md](raiders.md#raids)).
+- **Camps:** one of the two grunts holding a raider camp is now a gunner.
+- **Summoned:** `/summon jugcraft:raider_gunner`; a summoned one belongs to no raid and despawns like any monster.
+- **The guns switched off** (`guns.enabled=false`): grunts come in the gunners' places, so no gun can be won this way. Gunners already in the world stay.
+
+**How it fights:**
+- **Its quarry:** as every raider's: players and the town's folk, and whatever hurts it.
+- **Closing in:** it goes after its target until it can see it from within its gun's reach, then stands and fires.
+- **A shot:** from its eye at the middle of its target, strayed by the gun's spread from the hip, through the players' bullet code (`GunShots.bullets`). Each bullet goes to the first block or creature in the gun's range.
+- **Its rate:** the Garrison Rifle fires bursts of three at its own interval; the pistol and the shotgun fire one shot. After each, the gunner waits 30 ticks.
+- **Its magazine:** it counts its rounds, and when they run out it reloads for the gun's own reload time. It needs no rounds of its own.
+- **Its side:** its bullets pass through raiders, as raiders' grenades do, and through marker stands and whatever it rides. Anything else in the way is hit.
+- **Difficulty:** the bullet damage type scales against players as any monster's attack does. Easy halves a hit and adds one (at most the whole hit); Hard adds half. Against creatures, a hit is as above.
+
+**What it drops** (to a player's kill):
+- **Its gun,** about one time in twelve: 8.5%, vanilla's chance for a mob's equipment, more with Looting. Nothing is loaded in it.
+- **Rounds:** 0 to 3 of its gun's ammunition: Light Rounds, Rifle Rounds or Buckshot Shells. The loot table picks them by the gun in its hand (`jugcraft:entities/raider_gunner`).
+
+**What you see:**
+- **The gunner:** a grey-green greatcoat, a belt of brass rounds across the chest, a soft field cap and goggles. It is drawn by `tools/raiders.py` beside the other uniforms.
+- **The gun:** held raised along its look as a player holds one (slice 6's hold, now given to any mob holding a gun): the rifle and the shotgun in both hands, the pistol in one.
+- **Its shots:** the clients that see it play the gun's shot and reload animations and its flash, as they do for another player. Everyone near hears the gun's own sound.
+
+**How it works:**
+- **`guns/MobGuns`:** the arms (`ARMS`), the share of damage, the burst, the pause and the drop chance, and the AI goal (`FireGoal`) that fires and reloads. It fires through the bullet code the players' shots now share with it, and tells the clients that see the gunner what its gun does (`GunActionPayload`).
+- **`raiders/RaiderInfantry`:** the gunner's role. It carries a gun picked by the arms' weights. The gun gets its animation id on the server as it is picked, since a mob's equipment is not ticked as an inventory's is.
+- **Its numbers:** in `tools/guns.py` (`MOB_*`). `tools/check_mod_data.py` checks `MobGuns` against them, and that each arm fires bullets. The gunner's stats and the raids' party table are checked against `tools/raiders.py`, as the other raiders' are.
+
+**Connections:**
+- **The raiders** (batch 57): a fourth kind of infantry, in raids and camps.
+- **The guns:** the service arms (slice 8B) and their rounds. The fight is a second way to them, rare beside crafting.
+- **Defences:** as against every raider: the tower guns, the sentries and the town's guards.
+
+**Balance:**
+- **The gunners' rate:** at half the guns' damage, in bursts and with reloads, the pistol and the rifle do less a second than a grunt's blows (at least 5 a hit, once a second). The shotgun does about as much only at point blank; it closes to 8 blocks, where its pellets spread.
+- **No new raiders:** a raid's party is as large as before; raids still come at most once every few days.
+- **The drops:** a gun one time in twelve, empty. Rounds only to a player's kill. Nothing converts back.
+
+**Save compatibility:**
+- A new entity, `jugcraft:raider_gunner`. Its gun is saved with it as any mob's equipment is. Nothing saved before changes.
+- A raid saved in the middle keeps its members.
+- **Going back** to a build from before this slice: that build does not know the gunner. How it loads a world holding one was not tested, so back the world up first.
+
+**Known limits:**
+- **Bullet guns only:** gunners fire only guns that fire bullets. The beam, arc, flame, grenade and rocket guns stay the players' alone.
+- **No tactics:** they stand and fire once they see their target within reach. They do not take cover, flank or strafe.
+- **The owner's gun-mob art:** the owner's library holds textures and sounds for Scorched Guns 2-style gun mobs: the Blunderer, Dissident, Hornlin, Cog Knight and others. It does not hold their models, so they could not be built here. With the models, they could carry the guns by the same code.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 10G: two guns at once
+The third of the systems the owner chose on 10 October 2026 ("Dual pistols", offered as "A pistol in each hand."): a one-handed gun in each hand, and both fire.
+
+**Which guns:** the thirteen held in one hand, those whose owner's idle hides the left arm (`tools/guns.py` `one_handed()`, `JugcraftGuns.ONE_HANDED`).
+- **The guns:** the Warden Pistol, Haymaker, Duelling Pistol, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Beam Pistol, Rattler Pistol, Bronco SMG, Spikedriver, Caisson Pistol and Culverin.
+- **Pairs:** any two, alike or not. Each says in its tooltip that it pairs.
+- **Not these:** a gun held in both hands beside one in the other hand is no pair. The other gun stays as before: carried, not fired.
+
+**Using them:**
+- **The triggers:** left click fires the main hand's gun, as ever. Right click fires the other's: a press for a shot, held for an automatic (the Rattler Pistol, the Bronco SMG).
+- **Each gun its own:** each keeps its own rate, magazine, sound, animations, flash and casings.
+- **No aiming:** right click is the other trigger, so neither gun is aimed down its sights. From the hip each strays half as far again as one gun alone (`DUAL_SPREAD`, 1.5).
+- **Reloading:** G reloads the main hand's gun, or the other's when the main one is full or has nothing to load. An empty gun's trigger reloads that gun.
+- **One reload at a time:** while a magazine is out, neither gun fires. A shot of either cuts a shell-at-a-time reload short.
+- **The other keys:** H inspects both; V stabs with the main gun's bayonet.
+- **The counters:** each gun's counter is on its own side of the hotbar, the other hand's beyond the off-hand slot.
+- **Laser Sight:** both guns point along the look, so one dot shows if either has a Laser Sight.
+- **Doors and villagers:** a right click that opens a door or talks to a villager does that and fires nothing, as with any item in hand.
+
+| | One Sentry Pistol | Two Sentry Pistols |
+|---|---|---|
+| From the hip, strays up to | 2° | 3° each |
+| A magazine, every shot landing | 8 shots, 40 damage | 16 shots, 80 |
+| At the triggers' fastest | 20 a second, for 2 s | 40 a second, for 2 s |
+| Then | 2.35 s of reloading | 4.7 s: one gun after the other |
+| Over a magazine and its reload | about 9 a second | about 12 |
+
+The Garrison Rifle, for comparison, does about 17 a second over its 30 rounds and their reload, aimed.
+
+**What you see:**
+- **First person:** each gun in its own hand, each with that hand's arm. A gun drawn in a left hand is the same model as in the right, not its mirror image. So its grip hand's arm is drawn as the left arm, running out to the left shoulder: the right hand's way to its shoulder, mirrored across the gun.
+- **From outside:** both arms raised along the look, each with its gun.
+
+**How it works:**
+- **`GunItem.dual`:** whether a creature holds a one-handed gun in each hand.
+- **`GunItem.use`:** with two guns it neither aims nor counts the click as used, so neither gun dips out of view and back. On the client, the click that reaches the other hand pulls its trigger (`GunHooks.offTrigger`, `GunsClient`).
+- **The server** (`GunShots.fire` and `reload`, by hand): the trigger and reload payloads say which hand. It fires or reloads the other hand's gun only while the player holds two one-handed guns. Each hand has its own trigger credit, so each gun keeps its own rate. A player reloads one gun at a time, and the other hand's reload stops once the guns are no longer two.
+- **Other clients:** `GunActionPayload` and `GunTracePayload` say which hand's gun, so they play the right gun's shot and draw an energy pistol's beam from its side.
+- **Its numbers:** `ONE_HANDED` and `DUAL_SPREAD` are in `tools/guns.py`; `tools/check_mod_data.py` checks `JugcraftGuns` against them.
+
+**Connections:** the one-handed guns of slices 2 to 10C, with their rounds. No new item, recipe or round.
+
+**Balance:**
+- **More shots, less aim:** two guns fire twice as fast as one, but neither can be aimed, and each strays half as far again.
+- **Reloads:** they reload one after the other, so over a magazine and its reload two pistols do about a third more than one. In a short fight they do twice as much.
+- **Cost:** two guns to craft, and twice the rounds a second.
+- **Against the rifles:** a rifle aimed still does more over time, and from further off.
+
+**Save compatibility:** nothing new is saved: a gun in either hand is the same item as before. The payloads changed (they carry the hand), so a client and a server must be the same build, as with any change to the mod.
+
+**Known limits:**
+- **No mirror image:** a gun in the left hand is the same model as in the right, so its ejection port faces the same way. Its casings fly out to its own side.
+- **The left arms are worked out:** they are mirrored from the right hand's by a rule, not placed by hand. In the CI screenshots the left hand holds its pistol from below, its arm rising from the bottom left of the screen, as the right hand's does on the right.
+- **Left-handed players:** their main gun is drawn in the left hand, so its arms are now mirrored too; before, they ran in across the screen. No screenshot shows a left-handed player.
+- **Reloading both:** that takes two presses of G, or each empty gun's trigger.
+- **Not played:** none of it has been played yet.
+
+## Slice 11A: the Nether guns
+The first of the owner's guns taken up after the round of 10 October 2026 was built (the owner asked "Ok lets continue and do the next thing we need to"): three of the six guns they made in the piglins' crimson, blackstone and gold, the Mangalitsa, Vulcanic Repeater and Trotters. Their bullets set what they hit alight.
+
+| | Tusker | Cinder Repeater | Bastion Rifle |
+|---|---|---|---|
+| The owner's gun | Mangalitsa | Vulcanic Repeater | Trotters |
+| What it is | a pump shotgun: a crimson stock, a long black shroud over its barrel, gold bands and a gold diamond on its receiver | a repeater with a pistol grip: a crimson body, a black shroud over its short barrel, a magazine ahead of its grip, and a gold diamond set with a glowing stone on its side | a long rifle with a crimson fore-end and grip, gold bands, and a trapdoor breech on top of its receiver |
+| Fires | 8 pellets a shot, the pump worked after each | for as long as the trigger is held | one heavy shot each pull, the trapdoor flipped open after each |
+| Damage | 3 a pellet (24 if all land) | 3.5 | 14 |
+| Rate | 1.4 a second (every 14 ticks) | 6.7 a second (every 3 ticks) | 1.1 a second (every 18 ticks) |
+| Holds | 6 | 20 | 5 |
+| Reload | 0.6 s, then 0.6 s a shell, then 0.65 s | 2.4 s: the magazine | 0.75 s, then 0.65 s a round, then 0.8 s |
+| Spread, hip / aimed | 6.5° / 4.5° | 3° / 1.2° | 2° / 0.15° |
+| Range | 28 blocks | 48 | 112 |
+| The view aimed | narrowed to 0.9 | 0.88 | 0.8 |
+| Round | Buckshot Shell | Light Round | Rifle Round |
+| Takes | the silencers, the Muzzle Brake and Extended Barrel, the three stocks, the Light and Tactical Grips, the four bayonets, the scopes and the Laser Sight | the same, and both magazines | the same as the Tusker |
+
+The reload times and the rates are the owner's animations': the Tusker's pump and the Bastion Rifle's trapdoor are worked in full between shots.
+
+**Crafting** (a crafting table; the guns switch, as every gun). Each takes steel and a lever, as the other steel guns, and gold and gilded blackstone, which is found only in the Nether's bastion remnants:
+- **Tusker:** two steel ingots over a gold ingot, a lever and gilded blackstone.
+- **Cinder Repeater:** two steel ingots and a gold ingot over a lever and gilded blackstone.
+- **Bastion Rifle:** three steel ingots over a gold ingot, a lever and gilded blackstone.
+
+**How they fire:** as the other bullet guns: each bullet or pellet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. A magazine loads at the end of its reload, the Tusker and the Bastion Rifle a round after each round's time.
+- **Alight:** each creature their bullets hurt is set alight for 4 seconds, as the Stoker's flame sets it alight (slice 8C, `GunShots.BURN_SECONDS`): fire's own damage, one a second. Fireproof creatures shrug it off, and water puts it out. A shotgun's pellets on one creature set it alight once.
+- **No block** is set alight, by a hit or a miss.
+- The server works it out with the shot (`JugcraftGuns.INCENDIARY`); nothing new is sent to clients.
+
+**What you see:** the owner's animations.
+- **Tusker:** each shot kicks it back and up; then the pump is worked back and home under the left hand, throwing out the spent shell. To reload, the gun is tipped and the pump half drawn; each shell is pushed in from below; then the pump is let home.
+- **Cinder Repeater:** each shot kicks it back a little, snaps the rib along its top back and home, and rocks the gold diamond on its side. To reload, the gun is rolled and lifted; the magazine is swung down out of its well and a new one pushed home and slapped; then the rib is worked.
+- **Bastion Rifle:** each shot kicks it back; then the right hand leaves the grip, flips the trapdoor up and over to the left, throwing out the case, and works the bolt, the gun nudged forward as it does. To reload, the trapdoor is flipped open and the bolt drawn; the left hand brings a round at a time up to the breech; then the trapdoor is shut and the bolt sent home.
+- **Spent rounds:** each throws a spent shell or case with each shot, as the other guns firing its round do: the Tusker's as its pump comes back, the Bastion Rifle's as its trapdoor opens.
+- **Sounds:** the Haymaker's shotgun blast (the Tusker); the library's other Rust Midge shot, unused till now (the Cinder Repeater); the Bulldog Pistol's heavy rifle shot (the Bastion Rifle). None names another source: the new one's only tag is the program it was made with (`Software=FL Studio 20`). The library's other unused shots were passed over: its pistol, revolver, machine gun, gyrojet and second heavy rifle shots carry tags naming an artist or a sound pack, its carbine shot an engine's (`ENCODER=UnrealEngine4`), and its second rocket rifle sound is a quiet whoosh, not a shot. The Tusker's shells and the Bastion Rifle's rounds go in with the shell sound.
+
+**How the models were built:**
+- **Tusker:**
+  - **Bolt:** the pump, its own part, under the barrel.
+  - **Sights:** the owner's ring at the back of its receiver, between two wings, over the post at its front.
+  - **Aiming:** held 1 px further out (`"eye_relief"`): through the pump stroke the top of its grip came to 0.57 px from the eye, inside the near plane (0.8 px).
+- **Cinder Repeater:**
+  - **Bolt:** the rib along its top (the main part's 29th element).
+  - **Seal:** the gold diamond and its glowing stone (the 27th and 28th), rocking about their middle.
+  - **Magazine:** its own part, and the Extended and Speed Magazines in its place. Its `magazine_2` bone, which only its shots hold still, is empty.
+  - **The glowing stone** draws on the Pyroclastic Flow's glowing texture, which is three frames; the gun takes the first (`FRAMED`), so it glows but does not flicker.
+  - **Sights:** the owner's ring at the back of its receiver over the notch at its front.
+  - **Aiming:** held 1 px further out: through the aimed shot its rib came within 1.88 px of the eye.
+- **Bastion Rifle:**
+  - **Trapdoor:** the lid on top of its receiver (the main part's 9th element), hinged along its left edge, which is the only way its animations turn it without its passing through the receiver.
+  - **Bolt:** its own part, the bolt and its handle on the right. Its faces draw on the Turnpike's texture (slice 9D), packed piece by piece, as the scopes' are.
+  - **The round** a reload carries in: a brass case with a lead tip on the `shell` bone (`PROPS`), resting where the loop's last carry brings it into the open breech; it shrinks to nothing there.
+  - **The whole gun** rides `gun_body2`, which each shot pushes 1.2 px forward as the bolt is worked. Its `magazine` bone holds nothing.
+  - **Left out:** the main part's 27th element, the same box as its 1st with no texture on any face.
+  - **Sights:** the owner's ladder on its receiver over the post at the front of its fore-end.
+  - **Aiming:** held 6 px further out, as the Highwayman is: the shot's kick brought the back of its grip 2.61 px past the eye.
+- **The left arms:** chosen in first-person previews to cover as little of the screen as they can through each gun's reload, still running down and back from the hand. The Bastion Rifle's left hand comes right up to the breech with each round, so its arm crosses the view for a moment, as the Highwayman's does.
+- **The atlases:** the Tusker's own texture leaves the scopes' and the Laser Sight's pieces too little room one by one, so for it every group of pieces goes in joined from the first (`pack_groups()`); a gun whose pieces fit as before is packed as before, and every other gun's files came out the same.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the Tusker's pump, the Cinder Repeater's rib, diamond and magazine, and the Bastion Rifle's trapdoor, bolt and round through their animations; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Buckshot Shell, the Light Round and the Rifle Round; nothing new.
+- **Parts:** steel and a lever, as the steel guns; gold, and gilded blackstone from the bastion remnants.
+- **Their place:** past steel, a reward for raiding a bastion.
+- **The fire** is the Stoker's (slice 8C).
+
+**Balance:** starting numbers, at point blank with every shot landing.
+- **Tusker:** 24 a shot, 34 a second while it fires; over its six shells and their reload (4.85 s), about 16 a second, as the Sledge's (16) and above the Throttle's (14) and the Highwayman's (13).
+- **Cinder Repeater:** 23 a second while it fires, for 3 s; over a magazine and its 2.4 s reload, about 13 a second, as the Bronco SMG's (14), below the Murmur SMG's (15).
+- **Bastion Rifle:** 14 a shot, as the Line Musket's ball, five times before a reload: 16 a second while it fires, but its trapdoor is slow to load (4.8 s for five), so over its rounds and their reload about 7.5 a second, below the marksman rifles' (12 to 14). It reaches nearly as far as they do (112 blocks against their 120 to 128) and is as steady aimed as the Solenoid Rifle (0.15°).
+- **The fire** adds about one a second to a creature that burns, and more shots only keep it burning: a shotgun's pellets light it once.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:tusker`, `cinder_repeater` and `bastion_rifle`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The glowing stone does not pulse:** the owner's frames would make it flicker; the gun takes the first.
+- **In the Nether** most creatures are fireproof (blazes, ghasts, striders, magma cubes, wither skeletons, zombified piglins), so there the fire seldom counts; piglins and hoglins do burn.
+- **The Bastion Rifle's loading arm** crosses the view for a moment with each round.
+- **Aimed, the Bastion Rifle's bolt** (a diamond under the sight) and its handle show just under the crosshair, across the lower part of what it aims at.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 11B: the rest of the Nether guns
+The other three of the six guns the owner made in the piglins' crimson, blackstone and gold, taken up after slice 11A in the same round ("Ok lets continue and do the next thing we need to"): the Pyroclastic Flow, Freyr and Ribs Glory. Their bullets set what they hit alight too.
+
+| | Ashfall Pistol | Goldbristle Carbine | Crackling |
+|---|---|---|---|
+| The owner's gun | Pyroclastic Flow | Freyr | Ribs Glory |
+| What it is | a pistol held in one hand: a crimson frame and grip, gold bands, a gold diamond at its back, a long black barrel with a vented jacket, and a tank under the barrel | a short carbine with a pistol grip: a crimson body, a black receiver, a gold ring behind its short barrel, a magazine at its left side, and a diamond set with a glowing stone at its back | a long pump shotgun in gold: a curved dark grip, a dark pump under the barrel, a black shroud over the middle of the barrel and ribs at its muzzle |
+| Held | in one hand: it pairs with another (slice 10G) | in both hands | in both hands |
+| Fires | one shot each pull | one shot each pull | 6 pellets a shot, the pump worked after each |
+| Damage | 6 | 7 | 4 a pellet (24 if all land) |
+| Rate | 2.5 a second (every 8 ticks) | 2.9 a second (every 7 ticks) | 1 a second (every 20 ticks) |
+| Holds | 8 | 12 | 5 |
+| Reload | 2.35 s: the tank | 2.05 s: the magazine | 0.3 s, then 0.5 s a shell, then 0.55 s |
+| Spread, hip / aimed | 2.5° / 0.8° | 2.5° / 0.4° | 5° / 3° |
+| Range | 56 blocks | 88 | 36 |
+| The view aimed | narrowed to 0.9 | 0.85 | 0.9 |
+| Round | Light Round | Rifle Round | Buckshot Shell |
+| Takes | the three stocks, the scopes and the Laser Sight | the silencers, the Muzzle Brake and Extended Barrel, both magazines, the three stocks, the Light and Tactical Grips, the four bayonets, the scopes and the Laser Sight | the three stocks, the Light and Tactical Grips and the four bayonets |
+
+The reload times and the Crackling's rate are the owner's animations': its pump is worked in full between shots.
+
+**Crafting** (a crafting table; the guns switch, as every gun). Each takes steel, gold, a lever and gilded blackstone, as slice 11A's do:
+- **Ashfall Pistol:** a steel ingot and a gold ingot over a lever and gilded blackstone.
+- **Goldbristle Carbine:** two steel ingots and a gold ingot over a gold ingot, a lever and gilded blackstone.
+- **Crackling:** two gold ingots and a steel ingot over a steel ingot, a lever and gilded blackstone.
+
+**How they fire:** as slice 11A's: bullets or pellets from the eye along the look, each creature they hurt set alight for 4 seconds (`JugcraftGuns.INCENDIARY`), no block. A magazine or a tank loads at the end of its reload, the Crackling a shell after each shell's time.
+
+**What you see:** the owner's animations.
+- **Ashfall Pistol:** held out in the right hand; each shot kicks it back and up. To reload, the left hand comes in and pushes the plate at the front of the tank forward; the tank swings out to the left and down, a new one swings in, and the plate is drawn back.
+- **Goldbristle Carbine:** each shot kicks it back a little, snaps the plate along its top back and home, and rocks the diamond at its back. To reload, the gun is rolled; the magazine is pulled out of its left side and a new one pushed home and slapped.
+- **Crackling:** as the Sledge (slice 9D), whose animations its own follow: each shot kicks it back, then the left hand pumps the fore-end back and forward. To reload, the pump is drawn back and held open and the gun rolled onto its side, the left hand pushes each shell in, and the pump is closed.
+- **Spent rounds:** the Ashfall Pistol and the Goldbristle Carbine throw a case with each shot; the Crackling's animations, as the Sledge's, cue none.
+- **Sounds:** the Sentry Pistol's shot (the Ashfall Pistol), the Patchwork Carbine's (the Goldbristle Carbine) and the Coach Gun's (the Crackling). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source (slice 11A), so none was added. The Ashfall Pistol's plate goes with the half pump sound and its tank with the magazine's; the Crackling's shells go in with the shell sound.
+
+**How the models were built:**
+- **Ashfall Pistol:**
+  - **One hand:** its idle hides the left arm, so it is among the one-handed guns (`JugcraftGuns.ONE_HANDED`, slice 10G); the left hand's place is given for the reload's push of the plate (0.4583 s, `"hand_pose"`).
+  - **Slider:** the plate at the front of the tank (the main part's 23rd to 25th elements), as the owner's groups name it.
+  - **Tank:** the tank itself (the 26th and 27th), which the owner's groups hang from the slider, so the plate carries it; it turns about its neck, where it meets the plate.
+  - **No bolt:** its parts have none, so the `bolt` bone each shot moves holds nothing, nor do the magazine bones its shots scale.
+  - **Sights:** the owner's notch at the back of its receiver over the post at its front.
+  - **Aiming:** at the hip's depth: through the aimed shot its back stays 3.83 px from the eye.
+- **Goldbristle Carbine:**
+  - **Bolt:** the plate along its top (the main part's 7th element), which each shot drives 2.6 px back, as the Vulcanic Repeater's rib.
+  - **Seal:** the diamond and its glowing stone (the 19th and 20th), rocking about their middle. The stone draws on the Pyroclastic Flow's glowing texture, its first frame, as the Cinder Repeater's does.
+  - **Magazine:** its own part, at the left side, and the Extended and Speed Magazines in its place.
+  - **Bayonets:** drawn on the Jackhammer's texture, merged into its atlas as shared textures are (slice 7).
+  - **Sights:** the owner's ring at the back of its receiver, between two wings.
+  - **Aiming:** held 1 px further out, as the Cinder Repeater: through the aimed shot its top plate came within 2.81 px of the eye.
+- **Crackling:**
+  - **The Sledge's body:** the owner's Ribs Glory is the Killer 23 (slice 9D) lengthened, with the same grip, receiver and poses, a longer pump and tube, and its own long barrel: a shroud over its middle and ribs at its muzzle.
+  - **Bolt:** the pump, its own part. Its `shell`, `magazine`, `scriptures` and `no_sights` bones hold nothing, as the Sledge's.
+  - **Left out:** its standard barrel part, the Killer 23's, the same box as its own barrel's back two thirds; drawn together, the two flickered.
+  - **No barrel attachments** (`MISFITS`): the owner's barrel parts for it are the Killer 23's, made for a barrel that ends at z −1.2, while its own runs on to −8.2. The silencers and the Muzzle Brake would sit inside its shroud, halfway along it, and the Extended Barrel inside its barrel.
+  - **Sights:** the pair of posts on its receiver, as the Sledge's; its front post was on the Killer 23's standard barrel, so there is none.
+  - **Aiming:** held 6 px further out, as the Sledge: the shot's kick brought the top of its grip 1.8 px past the eye.
+- **The arms:** the Ashfall Pistol's and the Goldbristle Carbine's left arms chosen in first-person previews to cover as little of the screen as they can (the carbine's a third of what it first covered), still running from the hand toward the shoulder. The Crackling's are the Sledge's: its left hand comes up to the port with each shell, so the arm crosses the view for a moment, as the Sledge's does.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the Ashfall Pistol's plate and tank, the Goldbristle Carbine's plate, diamond and magazine, and the Crackling's pump through their animations; each with the attachments it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:** as slice 11A's: the Light Round, the Rifle Round and the Buckshot Shell; steel, gold, a lever and gilded blackstone from the bastion remnants; the Stoker's fire. Nothing new.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Ashfall Pistol:** 6 a shot, 15 a second while it fires; over its tank and its 2.35 s reload about 9 a second, as the Sentry Pistol's (9). A pair (slice 10G) does about 12, as two Sentry Pistols do.
+- **Goldbristle Carbine:** 7 a shot, 20 a second while it fires; over its magazine and its 2.05 s reload about 13 a second: between the Patchwork Carbine's (11) and the Undertone Rifle's (16), as the marksman rifles' (11 to 14), but reaching less far (88 blocks against their 120 to 128) and less steady aimed (0.4° against 0.1° to 0.15°).
+- **Crackling:** 24 a shot, as the Tusker's, but slower: over its five shells and their reload (3.35 s) about 14 a second, as the Throttle's (14), below the Tusker's and the Sledge's (16) and above the Highwayman's (13). From the hip its six heavy pellets keep closer than any other shotgun's; aimed, only the Highwayman's keep closer, and only the Highwayman reaches further (40 blocks).
+- **The fire** adds about one a second to a creature that burns, as slice 11A's.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:ashfall_pistol`, `goldbristle_carbine` and `crackling`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Ashfall Pistol has no moving bolt:** its parts have none.
+- **The Ashfall Pistol's tank** swings out and back in by itself while the left hand holds the plate, as the owner animated it.
+- **The Crackling takes no barrel attachments:** the owner's are too short for its barrel. Parts made for it would fit.
+- **The Crackling has no front sight:** it is aimed by the notch on its receiver over the top of its shroud.
+- **The Crackling's loading arm** crosses the view for a moment with each shell, as the Sledge's does.
+- **The glowing stone does not pulse,** as the Cinder Repeater's.
+- **In the Nether** most creatures are fireproof, as for slice 11A's.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
 ## Connections
 - **Existing input producers:** copper, iron and gunpowder (vanilla); lead nuggets (the lead switch's lead); brass nuggets (brass, from zinc); paper and planks.
 - **Existing output consumer:** combat. The guns kill what drops loot for every branch.
 - **Technology connection:** the rounds are made from the mod's lead and brass; the guns from early metals.
-- **Energy connection (slice 8D):** the energy weapons' Energy Cells fill at the Charging Station, from the machines' energy system (JE). Their recipes need the machines switch, and their parts (steel, advanced circuits, copper cable) come from the machines' tree, so they come after the steel tier.
+- **Energy connection (slice 8D):** the energy weapons' Energy Cells fill at the Charging Station, from the machines' energy system (JE). Their recipes need the machines switch, and their parts (steel, advanced circuits, copper cable) come from the machines' tree, so they come after the steel tier. The Cell Rack (slice 10E) fills six cells at once from the same cables.
 - **Magic connection:** none yet.
 - **Reachable entry path:**
   - copper and iron need only mining and smelting; gunpowder comes from creepers;
@@ -1101,31 +1755,42 @@ A reload of another kind than the Lobber holds first puts the grenades it held b
   - a rifle round costs a quarter of a brass nugget, a lead nugget and a gunpowder;
   - a buckshot shell a quarter of each, plus paper.
 - **Metal accounting:** rounds and guns hold no metal units (`tools/check_mod_data.py`). Nothing turns them back into metal, so there is no conversion loop.
-- **Server-side rate:** each player has a trigger credit refilling at one shot per interval, banking up to two (`GunShots.BURST`). A late packet does not lose a shot, and a fast client gains none.
+- **Server-side rate:** each player has a trigger credit refilling at one shot per interval, banking up to two (`GunShots.BURST`); with two guns, one for each hand (slice 10G). A late packet does not lose a shot, and a fast client gains none.
+- **Charging (slices 8D and 10E):** the Charging Station and the Cell Rack put into a cell exactly the JE they take from cables. Nothing is lost or gained, so charging is no loop.
 - **Starting numbers,** not tuned in play. The owner may want higher-tier guns to outclass these clearly.
 
 ## Multiplayer and persistence
-- **Server authority:** the client only asks, with `GunShotPayload` (one per shot, no data) and `GunReloadPayload` (none). The server (`guns/GunShots`):
-  - checks the gun in the main hand, that the player is alive and not a spectator, the loaded rounds and the trigger credit;
+- **Server authority:** the client only asks, with `GunShotPayload` (one per shot) and `GunReloadPayload`, each saying only which hand's gun (slice 10G). The server (`guns/GunShots`):
+  - checks the gun in that hand (the other hand's only beside a one-handed gun in the main hand, slice 10G), that the player is alive and not a spectator, the loaded rounds and the trigger credit;
   - computes every bullet from the player's server-side position and look;
   - spends rounds, takes them from the inventory and deals the damage.
 - **Ally and protection checks:** a bullet skips allies, the player's own mount and marker stands. It skips anything other code refuses through `AttackEntityCallback`, such as the walled town's protection.
 - **Prediction:** the client plays the shot, sound and kick at once for responsiveness. A refused shot is only a sound. The counter allows for shots not yet answered and writes them off after half a second.
 - **Reloads:**
-  - A reload is held on the server per player and stops if the gun leaves the main hand.
+  - A reload is held on the server per player, one gun at a time, and stops if the gun leaves its hand.
   - A magazine loads at the end of its time.
   - A shell-at-a-time reload loads one shell after each shell's time, and a shot cuts it short.
   - The player's own client times its animation from the same numbers.
 - **Others' animations:** the server tells the clients that see the shooter (not the shooter's own) with `GunActionPayload`, and they play the shot or reload on that gun.
 - **Spin-up (slice 8C):** the Thresher's client sends `GunSpinPayload` (no data) each tick its trigger is held. The server keeps, per player, when the run began and its last word, and refuses the Thresher's shots until the run is 15 ticks old (2 forgiven for uneven packets). A gap of more than 4 ticks ends the run. A client that claims to hold the trigger gains nothing it could not by holding it; the run's age, the rounds and the rate are the server's.
 - **Grenades and flame (slice 8C):** the server spawns the Lobber's Grenade from its own copy of the player's position and look, and works out the Stoker's jet the same way, with the same ally and protection checks as a bullet.
+- **Rockets (slice 10A):** the server spawns the rocket guns' rockets from its own copy of the player's position and look, at the gun's speed and with the gun's fuse; the burst is the server's. A rocket in flight saves what is left of its fuse.
 - **Energy weapons (slice 8D):**
   - The server draws a reload's charge from its own copy of the player's cells.
   - It works out the beam and the arcs from its copy of the player's position and look, with the same ally and protection checks as a bullet. An arc asks other code about the creatures it would strike, in turn, and no others.
   - `GunTracePayload` (the shooter's id, the kind of shot and up to three points) tells the clients that see the shooter, and the shooter's own, where the shot went. It is used only to draw the shot.
-- **Persistence:** the rounds loaded are a data component on the gun, `jugcraft:loaded_rounds` (0 to 64). An Energy Cell's charge is the shared `jugcraft:energy` component (slice 8D). Its attachments are another, `jugcraft:attachments` (a list of up to four attachment ids, oldest first; an id no longer known is ignored). The Trench Lobber's kind of grenade is `jugcraft:loaded_grenade` (slice 9G: an item id, absent for the frag Grenade; one no longer known is read as the frag Grenade). GeckoLib gives each gun a stable animation id the first time the server ticks it. Nothing else is saved.
+- **Persistence:** the rounds loaded are a data component on the gun, `jugcraft:loaded_rounds` (0 to 64). An Energy Cell's charge is the shared `jugcraft:energy` component (slice 8D). Its attachments are another, `jugcraft:attachments` (a list of up to four attachment ids, oldest first; an id no longer known is ignored). The Trench Lobber's and the Bullfrog's kind of grenade is `jugcraft:loaded_grenade` (slice 9G: an item id, absent for the frag Grenade; one no longer known is read as the frag Grenade). GeckoLib gives each gun a stable animation id the first time the server ticks it. Nothing else is saved.
 - **Attachments and authority:** attachments are fitted only by the crafting recipes, which the server runs. The server reads a gun's numbers from its own copy of the stack (`GunItem.spec(stack)`), for the shot, the trigger rate, the reload and the rounds it may load; the client uses the same numbers only to predict.
-- **Disconnect:** clears that player's trigger credit, reload and spin.
+- **Disconnect:** clears that player's trigger credits, reload and spin.
+- **The Cell Rack (slice 10E):**
+  - A cell goes in or comes out only on the server, through the game's own block use: the server checks the player can reach the block before the rack is asked. The client only swings the arm.
+  - The server picks the cradle from the point used and its own copy of the rack's cells, and takes the cell from the player's own hand, one at a time.
+  - Charging runs in the rack's server tick; the clients that see it get its cells, for drawing, when one goes in or out and once a second while it charges.
+  - Hoppers move cells by the container rules above, on the server.
+  - It saves its buffer and its cells; a cell keeps its charge as the shared `jugcraft:energy` component.
+  - Each tick, a rack looks at its six cradles and charges up to six cells; it loads no chunks.
+- **Two guns at once (slice 10G):** the server fires or reloads the other hand's gun only while the player holds a one-handed gun in each hand, with a trigger credit for each hand; one reload at a time. The action and trace payloads say which hand's gun, only to play and draw it.
+- **Raider gunners (slice 10F):** the server alone works out a gunner's shots, from its own position toward its target, with the same bullet code as a player's. The clients that see it are told of each shot and reload (`GunActionPayload`, the gunner's id), only to play them. A gunner's magazine count lives in its AI and is not saved; one loaded from a save starts with a full magazine.
 - **Disable:** a new switch, `guns.enabled` (config `jugcraft.properties`), gates the guns', rounds' and attachments' recipes (twenty-nine with slice 5: sixteen guns and rounds, eleven attachments, and the fitting and removal recipes). Items and the attachments component stay registered, so saved guns, rounds and attachments survive with it off.
 
 ## The shared parts it uses
@@ -1134,6 +1799,7 @@ A reload of another kind than the Lobber holds first puts the grenades it held b
 - **Config:** the `guns` feature switch (`JugcraftConfig.FEATURES`, `tools/materials.py`).
 - **Damage type:** `jugcraft:bullet`, tagged `minecraft:is_projectile` (Projectile Protection works against it) and `minecraft:bypasses_cooldown` (each shot counts). Slice 8C adds `jugcraft:flame`, tagged `minecraft:is_fire`, `minecraft:no_knockback` and `minecraft:bypasses_cooldown`. The field chemistry branch's thermite and chlorine share the first two tag files, so `tools/guns.py` writes those files with their entries included (`field_chemistry.damage_type_tags()`).
 - **Grenades (slice 8C):** the Trench Lobber fires the field chemistry branch's Grenade through its `GrenadeEntity` and `Warhead`, as the grenade launcher does.
+- **Rockets (slice 10A):** the Earthmover and the Skylark Rifle fire the rocketry branch's High-Explosive Rockets as its `CombatRocket`s, the Rocket Launcher's, with a fuse the rocket now carries (`CombatRocket.fuse`), and burst as its do (`Blast`).
 - **Energy (slice 8D):** the Energy Cell is the tools' `Chargeable`: the `jugcraft:energy` component, the capacity modules, the Charging Station, the amber charge bar and the JE tooltip line (`PoweredToolItem`). Slice 8D's damage type, `jugcraft:zap`, joins `minecraft:no_knockback` and `minecraft:bypasses_cooldown`.
 - **Sounds:** in `sounds.json`, through `tools/generate_material_data.py`.
 - **Icons:** the item-icon maps (`tools/item_icons/`, `docs/ITEM_ICONS.md`) for the rounds.
@@ -1866,6 +2532,335 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
 | laser_sight | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
 | laser_beam | `Guns/item/laser.png` | `aac5f06e892e350a` |
 | laser_dot | `Guns/effect/red_dot_reticle.png` | `8ebc215134886a8f` |
+| earthmover | `Guns/models/item/dozier_rl.json` | `63d00eb0a827fb67` |
+| earthmover | `Guns/item/dozier_rl.png` | `5657bbdc3a8a3439` |
+| earthmover | `Guns/item/dozier_rl.animation.json` | `693ac6d3023f7fdb` |
+| earthmover | `Guns/models/special/dozier_rl/main.json` | `9befa3a2d032c594` |
+| earthmover | `Guns/models/special/dozier_rl/light_grip.json` | `60b02278a04d905e` |
+| earthmover | `Guns/models/special/dozier_rl/iron_bayonet.json` | `a09fafdff56a8463` |
+| earthmover | `Guns/models/special/dozier_rl/anthralite_bayonet.json` | `08e43ce44448d9ab` |
+| earthmover | `Guns/models/special/dozier_rl/diamond_bayonet.json` | `00a8d5654bb1c113` |
+| earthmover | `Guns/models/special/dozier_rl/netherite_bayonet.json` | `e90897f94e73cb50` |
+| earthmover | `Guns/models/special/dozier_rl/tact_grip.json` | `3869c5684edd9cf2` |
+| earthmover | `Guns/models/special/dozier_rl/sights.json` | `d4d1e33596063d35` |
+| earthmover | `Guns/models/special/dozier_rl/no_sights.json` | `0f57a68c735f2bce` |
+| earthmover | `Guns/models/special/dozier_rl/drum.json` | `2c83c014c5b5b8b9` |
+| earthmover | `Guns/models/special/dozier_rl/fire.json` | `72926890def3209b` |
+| earthmover | `Guns/sounds/item/bazooka/fire.ogg` | `a9e62ea7c9505223` |
+| earthmover | `Guns/item/makeshift_rifle_bayonets.png` | `dfc93f5032504095` |
+| earthmover | `Guns/item/gyrojet_flames.png` | `43a56fbf383f811d` |
+| earthmover | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| earthmover | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| earthmover | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| skylark_rifle | `Guns/models/item/rocket_rifle.json` | `557660f19086b817` |
+| skylark_rifle | `Guns/item/rocket_rifle.png` | `28052631d94139a0` |
+| skylark_rifle | `Guns/item/rocket_rifle.animation.json` | `d4867634de241831` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/main.json` | `aaa54e882d00e11f` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/stan_grip.json` | `714d2b06d46d861f` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/light_stock.json` | `318acf78ff10c499` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/heavy_stock.json` | `b314e47c26174b39` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/wooden_stock.json` | `bd235dbacdd678c6` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/light_grip.json` | `2654e1e8c2aef143` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/iron_bayonet.json` | `2d1ce950f2bdff7b` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/anthralite_bayonet.json` | `400ff8507b2e7701` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/diamond_bayonet.json` | `b91dc36e220376e3` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/netherite_bayonet.json` | `70ecd0ae5a674313` |
+| skylark_rifle | `Guns/models/special/rocket_rifle/tact_grip.json` | `7805d665908a34da` |
+| skylark_rifle | `Guns/sounds/item/rocket_rifle/fire.ogg` | `556d63860044e3fa` |
+| bullfrog | `Guns/models/item/blooper.json` | `4c1a97aa58a16ed0` |
+| bullfrog | `Guns/item/blooper.png` | `1aa3f8793e2765dd` |
+| bullfrog | `Guns/item/blooper.animation.json` | `0b35dfd6e8f498e5` |
+| bullfrog | `Guns/models/special/blooper/main.json` | `43066e89de7dd35d` |
+| bullfrog | `Guns/models/special/blooper/stan_grip.json` | `02d52ff17856ff7b` |
+| bullfrog | `Guns/models/special/blooper/light_stock.json` | `80f930b8de776f2c` |
+| bullfrog | `Guns/models/special/blooper/heavy_stock.json` | `b0b8ffb348d441d8` |
+| bullfrog | `Guns/models/special/blooper/wooden_stock.json` | `7628d562e8f031a4` |
+| bullfrog | `Guns/models/special/blooper/light_grip.json` | `a0ce087c15e7b2ee` |
+| bullfrog | `Guns/models/special/blooper/iron_bayonet.json` | `60b740d90fb57c8b` |
+| bullfrog | `Guns/models/special/blooper/anthralite_bayonet.json` | `b35fdd4eff7516ac` |
+| bullfrog | `Guns/models/special/blooper/diamond_bayonet.json` | `4ad2349f30c86a0b` |
+| bullfrog | `Guns/models/special/blooper/netherite_bayonet.json` | `cfc3dd242790decf` |
+| bullfrog | `Guns/models/special/blooper/tact_grip.json` | `8302ff80288cf592` |
+| bullfrog | `Guns/models/special/blooper/barrel.json` | `08657d0212eccb9d` |
+| bullfrog | `Guns/sounds/item/airgun/fire_2.ogg` | `bea9865e81d9d5ff` |
+| solenoid_rifle | `Guns/models/item/gauss_rifle.json` | `ca192fcb75dd02db` |
+| solenoid_rifle | `Guns/item/gauss_rifle.png` | `45d0f3d19d57ccc2` |
+| solenoid_rifle | `Guns/item/gauss_rifle.animation.json` | `269a3f8f592f4172` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/main.json` | `37ddce9d5c71b48b` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/light_stock.json` | `a059da7598e902e7` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/heavy_stock.json` | `de18c99c52451169` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/wooden_stock.json` | `dcecc9a6ea92be9b` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/light_grip.json` | `717af25a4f9e5ba4` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/iron_bayonet.json` | `d2a90a9b1c229e44` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/anthralite_bayonet.json` | `4100a6a9ab09d68a` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/diamond_bayonet.json` | `c40a994f9cb54ad9` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/netherite_bayonet.json` | `df8eaee8d97302e1` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/tact_grip.json` | `3263cbf2152a6f58` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/sights.json` | `27cb11fef333465a` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/stan_mag.json` | `c4b6d297e01e3fab` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/ext_mag.json` | `450dc32ae44bea38` |
+| solenoid_rifle | `Guns/models/special/gauss_rifle/speed_mag.json` | `b2f0c4c8a8c7b85d` |
+| solenoid_rifle | `Guns/sounds/item/gauss/fire.ogg` | `1361b447db689391` |
+| solenoid_rifle | `Guns/item/cogloader_stocks.png` | `05014df66161cc85` |
+| solenoid_rifle | `Guns/item/cogloader_grips.png` | `3d9f4d6c23da68dd` |
+| solenoid_rifle | `Guns/item/makeshift_rifle_bayonets.png` | `dfc93f5032504095` |
+| solenoid_rifle | `Guns/item/gauss_rifle_animated.png` | `15c409a7cdb43ae8` |
+| solenoid_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| solenoid_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| solenoid_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| solenoid_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| solenoid_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| votive_rifle | `Guns/models/item/plasgun.json` | `a964b6376649e083` |
+| votive_rifle | `Guns/item/plasgun.png` | `956bb37c4b331cc0` |
+| votive_rifle | `Guns/item/plasgun.animation.json` | `81583df6b14c36e3` |
+| votive_rifle | `Guns/models/special/plasgun/main.json` | `7209fb38ea4d9e61` |
+| votive_rifle | `Guns/models/special/plasgun/light_stock.json` | `364acdc1dcb692fe` |
+| votive_rifle | `Guns/models/special/plasgun/heavy_stock.json` | `5d71023b9fffa627` |
+| votive_rifle | `Guns/models/special/plasgun/wooden_stock.json` | `4fe343c79b826c72` |
+| votive_rifle | `Guns/models/special/plasgun/light_grip.json` | `790a818404c1685c` |
+| votive_rifle | `Guns/models/special/plasgun/iron_bayonet.json` | `ce37cf8b8868b130` |
+| votive_rifle | `Guns/models/special/plasgun/anthralite_bayonet.json` | `fa012df8c358d732` |
+| votive_rifle | `Guns/models/special/plasgun/diamond_bayonet.json` | `1c89f3de5501f255` |
+| votive_rifle | `Guns/models/special/plasgun/netherite_bayonet.json` | `43a2563fccc04d17` |
+| votive_rifle | `Guns/models/special/plasgun/tact_grip.json` | `f06dbf59fd6f3eb4` |
+| votive_rifle | `Guns/models/special/plasgun/sights.json` | `b29d1f9da73c1c98` |
+| votive_rifle | `Guns/models/special/plasgun/stan_mag.json` | `2561195014969f7a` |
+| votive_rifle | `Guns/models/special/plasgun/ext_mag.json` | `10dc25d7222d8d47` |
+| votive_rifle | `Guns/models/special/plasgun/speed_mag.json` | `a823ca7ad785abd3` |
+| votive_rifle | `Guns/sounds/item/nervepinch/fire.ogg` | `ee6701ec0f70a3fc` |
+| votive_rifle | `Guns/item/makeshift_rifle_bayonets.png` | `dfc93f5032504095` |
+| votive_rifle | `Guns/item/plasgun_animated.png` | `d900da41c28da7a5` |
+| votive_rifle | `Guns/item/seal_2.png` | `be02ff1786425224` |
+| votive_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| votive_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| votive_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| votive_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| votive_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| glowmouth | `Guns/models/item/plasmabuss.json` | `6b552335e0fd40a1` |
+| glowmouth | `Guns/item/plasmabuss.png` | `20af21e557f3ad13` |
+| glowmouth | `Guns/item/plasmabuss.animation.json` | `dcf2bbd800298a90` |
+| glowmouth | `Guns/models/special/plasmabuss/main.json` | `7b398da45de8edf4` |
+| glowmouth | `Guns/sounds/item/plasma/fire_2.ogg` | `ef0c65b09e2ccb1f` |
+| mule | `Guns/models/item/super_shotgun.json` | `7f978eed05bab99c` |
+| mule | `Guns/item/super_shotgun.png` | `679f1595d8f6ff61` |
+| mule | `Guns/item/super_shotgun.animation.json` | `1778b2045baa4997` |
+| mule | `Guns/models/special/super_shotgun/main.json` | `3ce941a1af568f73` |
+| mule | `Guns/sounds/item/boomstick/fire.ogg` | `17a57973db433feb` |
+| fowler | `Guns/models/item/doublet.json` | `7d99e9a7cedc85b3` |
+| fowler | `Guns/item/doublet.png` | `07e6674d971b999e` |
+| fowler | `Guns/item/doublet.animation.json` | `2737ae5d5a0e6d41` |
+| fowler | `Guns/models/special/doublet/main.json` | `f2b13d3341de47db` |
+| fowler | `Guns/models/special/doublet/light_grip.json` | `9b57e017c6ec6be9` |
+| fowler | `Guns/models/special/doublet/vert_grip.json` | `1c12cccb8864994d` |
+| fowler | `Guns/models/special/doublet/iron_bayonet.json` | `bc96735d037135d5` |
+| fowler | `Guns/models/special/doublet/anthralite_bayonet.json` | `94b4ab18302ddd6c` |
+| fowler | `Guns/models/special/doublet/diamond_bayonet.json` | `600b360323f7f871` |
+| fowler | `Guns/models/special/doublet/netherite_bayonet.json` | `280a23d8ab84e284` |
+| fowler | `Guns/models/special/doublet/hammer.json` | `9365a5b0b9c90007` |
+| fowler | `Guns/sounds/item/blackpowder/fire.ogg` | `a3d3d49a332d034f` |
+| fowler | `Guns/item/musket_grips.png` | `7f451a500ba89baa` |
+| fowler | `Guns/item/blunderbuss.png` | `4e90eca70ba48802` |
+| culverin | `Guns/models/item/handcannon.json` | `c318d0a476bd45e9` |
+| culverin | `Guns/item/handcannon.png` | `f1665e75eb347c25` |
+| culverin | `Guns/item/handcannon.animation.json` | `7a7de8cc1d0ad440` |
+| culverin | `Guns/models/special/handcannon/main.json` | `92eb04b64a051f0e` |
+| culverin | `Guns/sounds/item/cannon/fire.ogg` | `c114b809e9f48ac7` |
+| undertone_rifle | `Guns/models/item/sculk_resonator.json` | `3ff2ed331d9b94cf` |
+| undertone_rifle | `Guns/item/sculk_resonator.png` | `b35a6aa19f5dfd45` |
+| undertone_rifle | `Guns/item/sculk_resonator.animation.json` | `7a566d034cd616af` |
+| undertone_rifle | `Guns/models/special/sculk_resonator/main.json` | `7a460590a0d01cf2` |
+| undertone_rifle | `Guns/models/special/sculk_resonator/light_stock.json` | `1ac9d3a81f761a60` |
+| undertone_rifle | `Guns/models/special/sculk_resonator/heavy_stock.json` | `3caa4bedab27b9d0` |
+| undertone_rifle | `Guns/models/special/sculk_resonator/wooden_stock.json` | `17403340deb4cb05` |
+| undertone_rifle | `Guns/models/special/sculk_resonator/sights.json` | `b175689484aba3e4` |
+| undertone_rifle | `Guns/sounds/item/sculk/fire.ogg` | `85de3c45c216ac33` |
+| undertone_rifle | `Guns/item/sculk_resonator_animated.png` | `47928bb64fe10405` |
+| undertone_rifle | `Guns/item/sculk_resonator_tendril.png` | `f0308d7adf219ff3` |
+| undertone_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| undertone_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| undertone_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| undertone_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| undertone_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| murmur_smg | `Guns/models/item/whispers.json` | `7c251587fa6a6125` |
+| murmur_smg | `Guns/item/whispers.png` | `14baed2c3daccc19` |
+| murmur_smg | `Guns/item/whispers.animation.json` | `1a4e7aebfcdfdc63` |
+| murmur_smg | `Guns/models/special/whispers/main.json` | `e851766e1fc12454` |
+| murmur_smg | `Guns/models/special/whispers/sights.json` | `c8a9167f4d564c60` |
+| murmur_smg | `Guns/models/special/whispers/stan_mag.json` | `a9a77dbdc2ce0c57` |
+| murmur_smg | `Guns/models/special/whispers/ext_mag.json` | `a89afb7374464cda` |
+| murmur_smg | `Guns/models/special/whispers/speed_mag.json` | `4fd06a95c053fec6` |
+| murmur_smg | `Guns/sounds/item/beam/fire.ogg` | `d91dc843b166ee89` |
+| murmur_smg | `Guns/item/sculk_resonator_animated.png` | `47928bb64fe10405` |
+| murmur_smg | `Guns/item/sculk_resonator_tendril.png` | `f0308d7adf219ff3` |
+| murmur_smg | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| murmur_smg | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| murmur_smg | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| murmur_smg | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| murmur_smg | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| reverb | `Guns/models/item/echoes_2.json` | `e4787c9ac8b6fbb0` |
+| reverb | `Guns/item/echoes_2.png` | `2e641f85ab279f05` |
+| reverb | `Guns/item/echoes_2.animation.json` | `e5de14b2c8b5892a` |
+| reverb | `Guns/models/special/echoes_2/main.json` | `b7d6622f3bd8607f` |
+| reverb | `Guns/models/special/echoes_2/light_grip.json` | `850d49db9a890b0f` |
+| reverb | `Guns/models/special/echoes_2/tact_grip.json` | `9047010470b9de13` |
+| reverb | `Guns/models/special/echoes_2/sights.json` | `4e78164816f69ed2` |
+| reverb | `Guns/models/special/echoes_2/barrels.json` | `3eb29916c81c2f11` |
+| reverb | `Guns/sounds/item/shulker/fire.ogg` | `6c116009b62adfb6` |
+| reverb | `Guns/item/echoes_2_animated.png` | `6676d701518c7e77` |
+| reverb | `Guns/item/sculk_resonator_tendril.png` | `f0308d7adf219ff3` |
+| reverb | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| reverb | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| reverb | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| reverb | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| reverb | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| tusker | `Guns/models/item/mangalitsa.json` | `3b718fdba7e37961` |
+| tusker | `Guns/item/mangalitsa.png` | `5932c3999fe3a79d` |
+| tusker | `Guns/item/mangalitsa.animation.json` | `1653eac0310a6434` |
+| tusker | `Guns/models/special/mangalitsa/main.json` | `65ba9a64b06a42d7` |
+| tusker | `Guns/models/special/mangalitsa/stan_barrel.json` | `57e7209fd7bfb37a` |
+| tusker | `Guns/models/special/mangalitsa/silencer.json` | `caa27d0e191217ee` |
+| tusker | `Guns/models/special/mangalitsa/advanced_silencer.json` | `afd21245d95e8bcb` |
+| tusker | `Guns/models/special/mangalitsa/muzzle_brake.json` | `38be7dd7430ebe87` |
+| tusker | `Guns/models/special/mangalitsa/ext_barrel.json` | `1859adcc0607642b` |
+| tusker | `Guns/models/special/mangalitsa/stan_grip.json` | `4c2ded8896ec5c2a` |
+| tusker | `Guns/models/special/mangalitsa/light_stock.json` | `3d7965a0b2c8b833` |
+| tusker | `Guns/models/special/mangalitsa/heavy_stock.json` | `71ba643205e27425` |
+| tusker | `Guns/models/special/mangalitsa/wooden_stock.json` | `c2ab3a822fc5ae67` |
+| tusker | `Guns/models/special/mangalitsa/light_grip.json` | `b61ea782821149ec` |
+| tusker | `Guns/models/special/mangalitsa/iron_bayonet.json` | `8ea339a612cb3ea0` |
+| tusker | `Guns/models/special/mangalitsa/anthralite_bayonet.json` | `eb6d94e8a189df13` |
+| tusker | `Guns/models/special/mangalitsa/diamond_bayonet.json` | `9fc1ebe93a8e1fd3` |
+| tusker | `Guns/models/special/mangalitsa/netherite_bayonet.json` | `d00e68b8c79f8701` |
+| tusker | `Guns/models/special/mangalitsa/tact_grip.json` | `8a64cfe5bac1d6aa` |
+| tusker | `Guns/models/special/mangalitsa/sights.json` | `8c6b70c2df8e6aa1` |
+| tusker | `Guns/models/special/mangalitsa/bolt.json` | `60747d73758f24c8` |
+| tusker | `Guns/sounds/item/bruiser/fire.ogg` | `b965c68e659f88e3` |
+| tusker | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| tusker | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| tusker | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| tusker | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| tusker | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| cinder_repeater | `Guns/models/item/vulcanic_repeater.json` | `b9125e1f6eea07a9` |
+| cinder_repeater | `Guns/item/vulcanic_repeater.png` | `ac06e87f6e0ce67c` |
+| cinder_repeater | `Guns/item/vulcanic_repeater.animation.json` | `f87e8ccf739df2a2` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/main.json` | `e58651fbad5e20fe` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/stan_barrel.json` | `18f9892432d8f92e` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/silencer.json` | `84047c1e5e38ffae` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/advanced_silencer.json` | `d682900ab6c8e6c7` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/muzzle_brake.json` | `6add479bcc525d07` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/ext_barrel.json` | `94e765ba67ab2029` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/stan_grip.json` | `f4e61a24a73a5211` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/light_stock.json` | `19f8134bc0fbde5b` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/heavy_stock.json` | `46f96c59da0f802e` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/wooden_stock.json` | `22abcb5a5d501c50` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/light_grip.json` | `23b8d9d3042bc7c4` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/iron_bayonet.json` | `de5b918afcf17a6a` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/anthralite_bayonet.json` | `7b04be3fed98386f` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/diamond_bayonet.json` | `b641d0f4424750e2` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/netherite_bayonet.json` | `5d077897c3f61474` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/tact_grip.json` | `2cde178cdc0047b1` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/sights.json` | `d6dadad0b39d780e` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/stan_mag.json` | `d32493eaa5e4dbf5` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/ext_mag.json` | `6c41d1a0a772826e` |
+| cinder_repeater | `Guns/models/special/vulcanic_repeater/speed_mag.json` | `c6787f30e64125dd` |
+| cinder_repeater | `Guns/sounds/item/rusty_gnat/enchanted_fire.ogg` | `98bda9d70ff73b2e` |
+| cinder_repeater | `Guns/item/advanced_silencer.png` | `f94615d5c4cdd84c` |
+| cinder_repeater | `Guns/item/greaser_smg_barrels.png` | `e912ec7c95188909` |
+| cinder_repeater | `Guns/item/makeshift_rifle_bayonets.png` | `dfc93f5032504095` |
+| cinder_repeater | `Guns/item/pyroclastic_flow_animated.png` | `e545c8e219a385dd` |
+| cinder_repeater | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| cinder_repeater | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| cinder_repeater | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| cinder_repeater | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| cinder_repeater | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| bastion_rifle | `Guns/models/item/trotters.json` | `09b5baef810a83a2` |
+| bastion_rifle | `Guns/item/trotters.png` | `d7b58c369c085e79` |
+| bastion_rifle | `Guns/item/trotters.animation.json` | `eedb968a76105c92` |
+| bastion_rifle | `Guns/models/special/trotters/main.json` | `c70596031446de86` |
+| bastion_rifle | `Guns/models/special/trotters/stan_barrel.json` | `5818e254d131f360` |
+| bastion_rifle | `Guns/models/special/trotters/silencer.json` | `222377ec474b548e` |
+| bastion_rifle | `Guns/models/special/trotters/advanced_silencer.json` | `ab2a54d3e36e33cb` |
+| bastion_rifle | `Guns/models/special/trotters/muzzle_brake.json` | `fcbf95b9aecc7b6e` |
+| bastion_rifle | `Guns/models/special/trotters/ext_barrel.json` | `6f8d5284a1533349` |
+| bastion_rifle | `Guns/models/special/trotters/stan_grip.json` | `dd6c9d1d23db8aaf` |
+| bastion_rifle | `Guns/models/special/trotters/light_stock.json` | `9ba9b56ce2d4c751` |
+| bastion_rifle | `Guns/models/special/trotters/heavy_stock.json` | `746dc046b8479f6e` |
+| bastion_rifle | `Guns/models/special/trotters/wooden_stock.json` | `5b61788e4991065c` |
+| bastion_rifle | `Guns/models/special/trotters/light_grip.json` | `83ed5958e4069dbf` |
+| bastion_rifle | `Guns/models/special/trotters/iron_bayonet.json` | `cff3a98dab456107` |
+| bastion_rifle | `Guns/models/special/trotters/anthralite_bayonet.json` | `ff6a7201b70e469c` |
+| bastion_rifle | `Guns/models/special/trotters/diamond_bayonet.json` | `134b49bee0bc39de` |
+| bastion_rifle | `Guns/models/special/trotters/netherite_bayonet.json` | `30660f0094b998f2` |
+| bastion_rifle | `Guns/models/special/trotters/tact_grip.json` | `234bf250031eab84` |
+| bastion_rifle | `Guns/models/special/trotters/sights.json` | `43e0d8daaffc14e5` |
+| bastion_rifle | `Guns/models/special/trotters/bolt.json` | `33eecd726a57a504` |
+| bastion_rifle | `Guns/sounds/item/heavier_rifle/fire.ogg` | `4e17f5a1b2891ee7` |
+| bastion_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| bastion_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| bastion_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| bastion_rifle | `Guns/item/turnpike.png` | `63e9b3911c1b9cd4` |
+| bastion_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| bastion_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| ashfall_pistol | `Guns/models/item/pyroclastic_flow.json` | `0a44299b25d91ca9` |
+| ashfall_pistol | `Guns/item/pyroclastic_flow.png` | `cad666fe4ff7b438` |
+| ashfall_pistol | `Guns/item/pyroclastic_flow.animation.json` | `2154c87cd09ab045` |
+| ashfall_pistol | `Guns/models/special/pyroclastic_flow/main.json` | `d507577566cc3426` |
+| ashfall_pistol | `Guns/models/special/pyroclastic_flow/light_stock.json` | `6edc7c6d7e8d9f14` |
+| ashfall_pistol | `Guns/models/special/pyroclastic_flow/heavy_stock.json` | `c96eff8261605db9` |
+| ashfall_pistol | `Guns/models/special/pyroclastic_flow/wooden_stock.json` | `abbd590274156868` |
+| ashfall_pistol | `Guns/models/special/pyroclastic_flow/sights.json` | `eb9f25722efdc7c7` |
+| ashfall_pistol | `Guns/sounds/item/scrapper/fire.ogg` | `43c9d4ec929bf949` |
+| ashfall_pistol | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| ashfall_pistol | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| ashfall_pistol | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| ashfall_pistol | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| ashfall_pistol | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| goldbristle_carbine | `Guns/models/item/freyr.json` | `4ede6f40b897e035` |
+| goldbristle_carbine | `Guns/item/freyr.png` | `8e782f6171e1932a` |
+| goldbristle_carbine | `Guns/item/freyr.animation.json` | `246889ab5525ade2` |
+| goldbristle_carbine | `Guns/models/special/freyr/main.json` | `209a685fda57aa81` |
+| goldbristle_carbine | `Guns/models/special/freyr/stan_barrel.json` | `da6aea2611ef154f` |
+| goldbristle_carbine | `Guns/models/special/freyr/silencer.json` | `a182c8c5d807a94d` |
+| goldbristle_carbine | `Guns/models/special/freyr/advanced_silencer.json` | `8193f1d0db820e32` |
+| goldbristle_carbine | `Guns/models/special/freyr/muzzle_brake.json` | `0ef1ca8af2c81db8` |
+| goldbristle_carbine | `Guns/models/special/freyr/ext_barrel.json` | `564a329496a675ca` |
+| goldbristle_carbine | `Guns/models/special/freyr/stan_grip.json` | `f3757d0a698ec8a3` |
+| goldbristle_carbine | `Guns/models/special/freyr/light_stock.json` | `f02b0774d36ebb92` |
+| goldbristle_carbine | `Guns/models/special/freyr/heavy_stock.json` | `26ef78e0ad4baef9` |
+| goldbristle_carbine | `Guns/models/special/freyr/wooden_stock.json` | `9e511841276a85bd` |
+| goldbristle_carbine | `Guns/models/special/freyr/light_grip.json` | `c60a5c775d0a12bf` |
+| goldbristle_carbine | `Guns/models/special/freyr/iron_bayonet.json` | `2adfc1bb31888311` |
+| goldbristle_carbine | `Guns/models/special/freyr/anthralite_bayonet.json` | `2616d6c2855560d9` |
+| goldbristle_carbine | `Guns/models/special/freyr/diamond_bayonet.json` | `42a4d915b7d016f1` |
+| goldbristle_carbine | `Guns/models/special/freyr/netherite_bayonet.json` | `b3e5d122bc3b296e` |
+| goldbristle_carbine | `Guns/models/special/freyr/tact_grip.json` | `01ed9f55f20cc7fe` |
+| goldbristle_carbine | `Guns/models/special/freyr/sights.json` | `138c293da67d9e69` |
+| goldbristle_carbine | `Guns/models/special/freyr/stan_mag.json` | `d0d3c69e9f30449f` |
+| goldbristle_carbine | `Guns/models/special/freyr/ext_mag.json` | `e738571809ab0cb3` |
+| goldbristle_carbine | `Guns/models/special/freyr/speed_mag.json` | `1eaa64761a4be46a` |
+| goldbristle_carbine | `Guns/sounds/item/makeshift_rifle/fire.ogg` | `9c4469e45b9b77e4` |
+| goldbristle_carbine | `Guns/item/pyroclastic_flow_animated.png` | `e545c8e219a385dd` |
+| goldbristle_carbine | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| goldbristle_carbine | `Guns/item/jackhammer.png` | `2198cf8cfda3a00b` |
+| goldbristle_carbine | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| goldbristle_carbine | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| goldbristle_carbine | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| goldbristle_carbine | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| crackling | `Guns/models/item/ribs_glory.json` | `09b5baef810a83a2` |
+| crackling | `Guns/item/ribs_glory.png` | `80cc857ba4bed14e` |
+| crackling | `Guns/item/ribs_glory.animation.json` | `6b171cd061b4cf10` |
+| crackling | `Guns/models/special/ribs_glory/main.json` | `21fee5276d1f7f4a` |
+| crackling | `Guns/models/special/ribs_glory/light_stock.json` | `5367eec501f05546` |
+| crackling | `Guns/models/special/ribs_glory/heavy_stock.json` | `3e553ba3e75a264a` |
+| crackling | `Guns/models/special/ribs_glory/wooden_stock.json` | `d7878e4a562097dd` |
+| crackling | `Guns/models/special/ribs_glory/light_grip.json` | `00657cfdd58440cc` |
+| crackling | `Guns/models/special/ribs_glory/iron_bayonet.json` | `f76862e3a29aa4ee` |
+| crackling | `Guns/models/special/ribs_glory/anthralite_bayonet.json` | `934ca6d1a899ab35` |
+| crackling | `Guns/models/special/ribs_glory/diamond_bayonet.json` | `90e057fb4b4f6278` |
+| crackling | `Guns/models/special/ribs_glory/netherite_bayonet.json` | `547e931af27cf393` |
+| crackling | `Guns/models/special/ribs_glory/tact_grip.json` | `e116a28a23644cef` |
+| crackling | `Guns/models/special/ribs_glory/bolt.json` | `650fcf80f52af042` |
+| crackling | `Guns/sounds/item/brass_shotgun/fire.ogg` | `95eee6d27b87d35a` |
 
 - **The bolt sound's tag:** `bolt.ogg` carries Vorbis tags naming another source ("All Epic Infantry Assault Rifle Reload Sounds (Fortnite)"). The owner, asked about the eight tagged sounds in the library, answered "I have the rights", so it is used like the rest. None of the other sounds used here carries such a tag.
 - **The scopes' reticles and lens rims (slice 7b):** the owner uploaded them on 8 October 2026 ("heres reticles and vignette"). Two files in that upload carry embedded Photoshop metadata:
@@ -1874,7 +2869,8 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
 
   Shown this and asked what the scopes should use, the owner answered that they made these files and to use them. Asked the same day whether the "Big Cannons and Mounted Guns" folder is theirs (slice 6's flash frames come from it, and it holds a `wariumlogo.png`), they confirmed it is. The [library README](../../art/owner-library/README.md#effect-textures-8-october-2026) records both.
 - **Names:** Jugcraft's own, under the license policy's fan-homage rules. No `scguns:` reference reaches the game: the converter writes its own files with `jugcraft:` paths, and the animations name no resources.
-- **Drawn here:** the round icons, as maps (`tools/item_icons/light_round.txt`, `rifle_round.txt`, `buckshot_shell.txt`, `paper_cartridge.txt`), and the props' pixels in the atlas copies (the Thunderpipe's and the Highwayman's shells, the Longhorn's cartridge, the muzzle-loaders' balls, ramrods and flashes, the Stoker's fuel can). The Stoker's flame is the owner's pilot flame, copied pixel for pixel into its atlas corner.
+- **Drawn here:** the round icons, as maps (`tools/item_icons/light_round.txt`, `rifle_round.txt`, `buckshot_shell.txt`, `paper_cartridge.txt`), and the props' pixels in the atlas copies (the Thunderpipe's and the Highwayman's shells, the Longhorn's cartridge, slice 4's muzzle-loaders' balls, ramrods and flashes, the Stoker's fuel can, the Linesman's and the Glowmouth's cells, the Skylark Rifle's rocket, the Bullfrog's grenade, the Fowler's balls, ramrod and flash, and the Culverin's ball and flash). The Stoker's flame is the owner's pilot flame, copied pixel for pixel into its atlas corner.
+- **The Cell Rack (slice 10E):** its block model is built here from boxes (`cell_rack_model()` in `tools/guns.py`) on the power gear's electric-look textures, the Charging Station's. Nothing new is drawn, and no owner file is used; the cells in it are the Energy Cell's own icons.
 
 ## Verification
 - **Run locally (7 October 2026):**
@@ -2342,21 +3338,284 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
     - The counter's second line names the grenade the next reload would load: "32 Grenade" held, aimed and fired, "Reloading" mid-reload, "31 Grenade" after it, and "0 Grenade" with the attachment sets, whose test leaves no grenades in the inventory.
     - Fired aimed, the screenshot caught the left sleeve across the lower left corner of the view as the shot works the pump; in slice 9F's run it was small beside the gun. The frame differs from run to run, and this slice changes nothing about how the gun or the arms are drawn.
   - **Not covered by CI:** no client test loads a chemical grenade, so the counter and the tooltip naming one, and a chemical grenade lobbed from the Lobber, were not seen on a client (the server tests check the loading and the chlorine cloud).
+- **Slice 10A, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS, before and after the rebase. Every face of the three guns' parts re-bakes to the owner's, the attachments' included; the Skylark Rifle's atlas is the first frame of the owner's two; the new props are drawn the right way round.
+  - `python3 tools/generate_material_data.py`: wrote the three guns' items, item models, recipes, names and tooltips, and their shots' sounds; after the rebase it changed nothing.
+  - `python3 tools/check_mod_data.py`: PASS, 1933 material IDs on slice 9G's branch and 2152 after the rebase onto `main` (which holds much more since #277), with `check_guns` (the three guns' numbers, shots, rocket speeds and attachments in Java, and their looks and sounds on the client).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Previews** (first person, approximating the game's hands, and from the side):
+    - each gun idle, aimed, fired, through each reload, draw and inspection;
+    - the Earthmover with each scope, the Laser Sight (which runs into its drum), a grip and a bayonet; the Skylark Rifle and the Bullfrog with a stock and a grip, aimed with the stock left out;
+    - the Skylark Rifle's rocket through its carry, and the Bullfrog's grenade through its reload;
+    - the nearest point of each gun to the eye through its aimed shot: the Skylark Rifle's came to 0.78 px with no eye relief and 3.78 px with its 3 px, the Bullfrog's to 2.38 px;
+    - the left arms' directions against others through the reloads (`armfit.py`, and by eye); the usual ones stayed.
+- **Slice 10A game tests (written; they run in CI):**
+  - `LaunchersGameTests`:
+    - `launchersAreRegistered`: each is registered with its numbers and its recipe loads. The rocket guns fire High-Explosive Rockets, a rocket a round, the Skylark Rifle's faster and further and steadier aimed; the Earthmover holds four and the Skylark one. The Bullfrog lobs grenades, one a reload. None takes a barrel or magazine attachment; the Earthmover takes the scopes and the others the stocks.
+    - `rocketsBurstOnWhatTheyHit`: side by side, the Earthmover and the Skylark Rifle each fire at a pig nine blocks off: a round spent, one rocket of the shooter's at the gun's speed, its fuse the range over the speed, not homing. Each pig is hurt; the shooters are not; the floor is whole; no rocket is left flying.
+    - `rocketBurstsWhenItsFuseRunsOut`: a rocket held still over a pig, its fuse set to ten ticks (a later fuse set after it does not put it off), is whole with the pig at seven ticks and has burst, hurting the pig, by fourteen.
+    - `bullfrogLobsAGrenade`: a Bullfrog shot spends its grenade and lobs one of the shooter's, which bursts on the pig seven blocks off and spares the shooter and the floor.
+    - `earthmoverLoadsHighExplosiveRockets`: with only homing rockets an empty Earthmover does not start a reload; with six High-Explosive Rockets it loads four once its reload's time is up, not before, and leaves two.
+  - "Every gun registered" now counts thirty-nine guns. Slice 9E's `tacticalAttachmentsFitTheirGuns` counts the launchers among the guns with the owner's tactical grip parts, and the Earthmover among those the Laser Sight does not fit. Slice 9G's `onlyTheLobberTakesGrenades` is now `onlyTheGrenadeGunsTakeGrenades`: the Lobber and the Bullfrog.
+  - `GunsClientGameTests` takes the three new guns through its steps as it takes every gun: held, aimed, fired at the husk, reloaded from the inventory, inspected, with each set of attachments they take, seen from outside, and in the inventory.
+- **Slice 10A in CI** ([run 38065020714](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38065020714), on 963f4451e merged into `main` at 4b36d2254): every check passed.
+  - **Server game tests** (`mod`, `optional integrations absent`): 1283 passed in each. `main`'s own run of 4b36d2254 ran 1278, so the five more are `LaunchersGameTests`, which compiled and passed in both jobs. That run of `main` failed the javelin test (`javelin_strikes_and_comes_down`) in `optional integrations absent`; here it passed. It is not this slice's test.
+  - **`GunsClientGameTests`** (the client job's first shard; it covers `GunsClient`, which this slice changes). Each of the three guns went through its steps:
+    - its arms drawn at full size held and half size aimed;
+    - aimed, the view narrowed to 0.85 (Earthmover), 0.8 (Skylark Rifle) and 0.92 (Bullfrog);
+    - fired at the husk, each spending a round: the Earthmover's rocket burst took the husk from 663.8 to 644.51, the Skylark Rifle's from 644.51 to 625.14 and the Bullfrog's grenade from 625.14 to 612.19 (6, 7 and 6 flash frames);
+    - reloaded from the inventory: four High-Explosive Rockets into the Earthmover and one into the Skylark Rifle, 31 left each time, and one Grenade into the Bullfrog, 31 left;
+    - where their animations cue a casing, the Earthmover and the Skylark Rifle puffed smoke, once each; the Bullfrog's animations cue none;
+    - with each set of attachments they take; the Skylark Rifle's and the Bullfrog's stocks were drawn held and left out aimed (36 or 37 frames).
+  - **Screenshots** (the guns' own fifteen, the 22 with attachments and the six from outside):
+    - **Earthmover:** held, the tube's back fills the right half of the view below the crosshair, the drum's front beside it; aimed, its sight stands on the husk at the crosshair and the tube still fills the right half; reloading, the launcher lies rolled over across the bottom right; inspected, its drum is turned toward the eye.
+    - **Skylark Rifle:** held at the right of the view; aimed, the back of its receiver stands under the crosshair, its own wooden grip running down from it, and the husk shows above; reloading, the left hand is up by the opened gun with a grey steel shape in it, the rocket.
+    - **Bullfrog:** held at the lower right, its leaf sight standing up; aimed, the leaf sight frames the husk on the crosshair; reloading, the left arm crosses the lower middle of the view as the barrel is racked.
+    - **From outside:** the Earthmover is held on the shoulder, and fired, its backblast flares behind the tube as the flash shows at the muzzle; the Skylark Rifle and the Bullfrog are held at the chest.
+    - **With attachments:** aimed, no fitted stock comes up under the eye.
+- **Slice 10B, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. Every face of the three guns' parts re-bakes to the owner's, the attachments' included; the Solenoid's and the Votive's glowing textures are the first frames of the owner's three; every other gun's files came out unchanged, its atlas included.
+  - `python3 tools/generate_material_data.py`: wrote the three guns' items, item models, recipes, names and tooltips, and their shots' sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2155 material IDs), with `check_guns` (the three guns' numbers, shots, charges and attachments in Java, and their looks, eye relief and sounds on the client).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Previews** (first person, approximating the game's hands, and from the side):
+    - each gun idle, aimed, fired, through each reload, draw and inspection;
+    - the Solenoid and Votive Rifles each with four sets of attachments, together every scope, the Laser Sight, each stock, both grips, two bayonets and both magazines;
+    - the Glowmouth's charge through its loop, and its crank through the reload's end;
+    - the nearest point of each gun to the eye through its aimed shot, with no eye relief and with theirs: the Solenoid's 0.93 px and 1.93 px, the Votive's -0.03 px and 1.97 px, the Glowmouth's -0.74 px and 2.26 px;
+    - how much of the view the left arm covers through the Solenoid's reload, against three other rifles' (above), and the left arm's direction against others through it (`armfit.py`).
+- **Slice 10B game tests (written; they run in CI):**
+  - `CoilPlasmaGunsGameTests`:
+    - `coilAndPlasmaRunOnCells`: each is registered with its numbers, loads a magazine's charge from one Energy Cell, and its recipe loads. The Solenoid and Votive Rifles fire beams and the Glowmouth an arc; only the Votive fires while the trigger is held, and only the Glowmouth is loaded a charge at a time. No other energy weapon reaches as far as the Solenoid. The two rifles take their fifteen attachments; the Glowmouth takes none.
+    - `solenoidDrivesThroughItsLine`: a Solenoid shot takes 14 from each of two pigs in its line and stops at a wall, sparing the pig behind it, and spends a charge; emptied, it then loads five charges from a full cell after its reload's time, and the cell keeps the rest (4,500 JE).
+    - `votiveRifleBurnsWhileHeld`: two shots at once and a third an interval later, each through both pigs in its line, spending three charges.
+    - `glowmouthLoadsAChargeAtATime`: from a cell of 2,000 JE an empty Glowmouth holds one charge halfway through loading its second, then two, and leaves 500 JE.
+    - `glowmouthArcLeapsFromWideOfItsAim`: its arc finds the pig a block off its aim six blocks out, strikes it for 10 and leaps for 6 to the pig two blocks beside it; the pig far off to the side is untouched.
+  - "Every gun registered" now counts forty-two guns, and slice 9E's `tacticalAttachmentsFitTheirGuns` counts the Solenoid and Votive Rifles among the guns with the owner's tactical grip parts.
+  - `GunsClientGameTests` takes the three new guns through its steps as it takes every gun: held, aimed, fired at the husk (each shot drawn, `GunTracePayload`), reloaded from Energy Cells, inspected, with each set of attachments they take, seen from outside, and in the inventory.
+- **Slice 10B in CI, first run** ([run 38068295432](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38068295432), on 452140910): every check passed but one server test outside this slice.
+  - **Server game tests:** 1287 in each job. This branch stands on slice 10A's, which stands on `main` from before https://github.com/jimbozoomer-byte/jugcraft/pull/298, so it holds 1277 of `main`'s tests, slice 10A's five and this slice's five.
+    - All 1287 passed in `optional integrations absent`, `CoilPlasmaGunsGameTests` among them.
+    - In `mod`, all but one passed. The one was the Arms VIII javelin test: "The pig at 1.50 2.00 7.50 is not struck yet (come down at 1.47 2.00 9.58 …)". It failed the same way on `main` at 4b36d2254. Its fix is https://github.com/jimbozoomer-byte/jugcraft/pull/303, and e5c264d25 ports that fix's `ThrownArm` change here.
+  - **`GunsClientGameTests`** (the client job's first shard). Each of the three guns went through its steps:
+    - its arms drawn at full size held and half size aimed;
+    - aimed, the view narrowed to 0.75 (Solenoid Rifle), 0.85 (Votive Rifle) and 0.95 (Glowmouth);
+    - fired at the husk, each drew its shot (a beam or an arc, and 8 flash frames) and spent a round. The Solenoid's beam took the husk from 606.44 to 592.44, the Votive's from 592.44 to 589.44 and the Glowmouth's arc from 589.44 to 579.44: 14, 3 and 10;
+    - reloaded from two full Energy Cells (20,000 JE): the Solenoid's charge left 18,900 JE, the Votive's 19,800 and the Glowmouth's 19,250, so 1,100, 200 and 750 a charge;
+    - where their animations cue a casing, an energy weapon vents sparks: through the shot and the reload, once from the Solenoid and three times each from the Votive and the Glowmouth;
+    - with each set of attachments the two rifles take; their stocks were drawn held and left out aimed (41 to 47 frames).
+  - **Screenshots** (the guns' own fifteen, the 16 with attachments and the six from outside):
+    - **Solenoid Rifle:** held at the right of the view, the battery's glowing plate on its side. Aimed, its rear sight stands under the crosshair on the husk, the back of its stock below and the battery to the left. Reloading, the left arm comes up over the right half of the view (see the known limits). Inspected, the gun is turned up toward the eye, the left hand on it.
+    - **Votive Rifle:** held at the right, its windows glowing green. Aimed, the dark back of its receiver, with a teal window, stands under the crosshair, the husk above. Reloading, it is lowered and turned at the bottom right, the left hand under it. Inspected, it is raised and turned to show its side.
+    - **Glowmouth:** held at the lower right. Aimed, its back stands under the crosshair with the husk above, a green glowing part at each side. Reloading, it lies at the bottom right with its crank, the left hand at it. Inspected, it is tilted toward the eye.
+    - **From outside:** each is held at the chest; fired, a flash shows at the muzzle.
+    - **With attachments:** aimed, no fitted stock comes up under the eye. With the Laser Sight, aimed, its box stands just right of the crosshair, over the husk's side, as on every gun that takes it.
+- **Slice 10B in CI, second run** ([run 38070317842](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38070317842), on e5c264d25, with the javelin fix ported): every check passed. All 1287 server game tests passed in each job, the javelin test's five throws among them, and the four client shards passed.
+- **Slice 10C, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. Every face of the three guns' parts re-bakes to the owner's, the Fowler's grips and bayonets included; every other gun's files came out unchanged, its atlas included.
+  - `python3 tools/generate_material_data.py`: wrote the three guns' items, item models, recipes, names and tooltips, and their shots' sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2158 material IDs), with `check_guns` (the three guns' numbers and attachments in Java, and their looks, eye relief, props and sounds on the client). Its check that the renderer knows every prop bone read only names without digits; it now reads the Fowler's `ball2`.
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Previews** (first person, approximating the game's hands, and from the side):
+    - each gun idle, aimed, fired, through each reload, draw and inspection;
+    - the Mule's barrels through the break, the Fowler's two balls and its ramrod down each barrel, and the Culverin's ball, ramrod and left arm through its reload;
+    - the Fowler with its grips and bayonets, from the side and held, aimed, fired, reloading and inspected;
+    - the nearest point of each gun to the eye through its aimed shot, with no eye relief and with theirs: the Mule's -0.53 px and 1.97 px, the Fowler's -0.82 px and 2.18 px, the Culverin's 1.95 px (it needs none);
+    - the Culverin's left arm through its reload, for how much of the view it covers, against other directions that still run to the shoulder (`armfit_down.py`; see the known limits).
+- **Slice 10C game tests (written; they run in CI):**
+  - `DoubleBarrelGunsGameTests`:
+    - `doubleBarrelsAreRegistered`: each is registered with its numbers, fires a spread of pellets a pull of the trigger at a time, loads all at once, and its recipe loads. The Mule holds two Buckshot Shells, the Fowler two Paper Cartridges and the Culverin one. The Mule loads fastest; the Fowler reaches furthest and takes longest to load; the Culverin's balls hit hardest and reach least far. The Fowler takes the grips and the bayonets; the Mule and the Culverin take nothing.
+    - `doubleBarrelsFireBothBarrelsAndLoad`: side by side, each fires at a pig three blocks off: its pellets land together and a round is spent; the Mule and the Fowler then fire their second barrel. Each then loads from the inventory: halfway through its reload nothing is in yet, and as it ends every round is, two left in the inventory.
+  - "Every gun registered" now counts forty-five guns.
+  - `GunsClientGameTests` takes the three new guns through its steps as it takes every gun: held, aimed, fired at the husk, reloaded from the inventory, inspected, the Fowler with each set of attachments it takes, seen from outside, and in the inventory.
+- **Slice 10C in CI** ([run 38074671680](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38074671680), on a81a06fa7): every check passed.
+  - **Server game tests:** 1289 in each job, slice 10B's 1287 and this slice's two. All passed, `DoubleBarrelGunsGameTests` among them.
+  - **`GunsClientGameTests`** (the client job's first shard). Each of the three guns went through its steps:
+    - its arms drawn at full size held and half size aimed;
+    - aimed, the view narrowed to 0.92 (Mule), 0.88 (Fowler) and 0.94 (Culverin);
+    - fired at the husk, each spending a round: the Mule took it from 588.57 to 571.07 (seven of its ten pellets), the Fowler to 547.07 (all eight balls) and the Culverin to 527.07 (four of its five), with 6, 7 and 6 flash frames;
+    - reloaded from the inventory: two Buckshot Shells into the Mule, two Paper Cartridges into the Fowler and one into the Culverin, 31 left each time;
+    - where their animations cue a casing, the Mule threw spent shells (three through the shot and reload), the Fowler puffed smoke from its lock once and the Culverin three times;
+    - the Fowler with each set of attachments it takes (the Light Grip, the Vertical Grip, the Iron Bayonet), held and aimed.
+  - **Screenshots** (the guns' own fifteen, the Fowler's six with attachments and the six from outside):
+    - **Mule:** held at the lower right, pointing at the husk. Aimed, the back of its frame stands under the crosshair on the husk, its wooden grip below. Reloading, it has sunk out of the view, the left hand coming up at the bottom (see the known limits). Inspected, the left arm fills the right of the view.
+    - **Fowler:** held at the right. Aimed, the back of its barrels and the rib stand under the crosshair, the brass hammer to the right. Fired, a cloud of smoke wraps the gun's back and the priming flash shows above the lock. Reloading, the gun is tipped up and the left hand reaches over the muzzles. Inspected, it is turned to show its side.
+    - **Culverin:** held in the right hand, pointing at the husk. Aimed, its breech stands under the crosshair. Fired, smoke and the flash. Reloading, the gun is tipped up and the left arm comes down from the top right with the ball. Inspected, it is turned to show its cock.
+    - **With attachments:** the grips sit under the fore-end, behind the left hand, and the bayonet does not show from the hip or aimed, as on the Bellmouth and the Line Musket with theirs in the same run.
+    - **From outside:** the Mule and the Fowler are held at the chest in both hands; the Culverin in the right hand, the left arm at the side. Fired, the Fowler and the Culverin wrap themselves in smoke.
+- **Slice 10D, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. Every face of the three guns' parts re-bakes to the owner's, their attachments' included, less the tendrils' edges that have no area; every other gun's files came out unchanged, its atlas included.
+  - `python3 tools/generate_material_data.py`: wrote the three guns' items, item models, recipes, names and tooltips, and their shots' sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2161 material IDs), with `check_guns` (the three guns' numbers and attachments in Java, and their looks, eye relief and sounds on the client).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Previews** (first person, approximating the game's hands, and from the side and front):
+    - each gun idle, aimed (the arms at half size), fired, through each reload, draw and inspection;
+    - each gun's bolt, tendrils and magazine through its shot and reload, and the Reverb's barrels turning;
+    - the Undertone Rifle with each stock, scope and the Laser Sight; the Murmur SMG with both magazines, a scope and the Laser Sight; the Reverb with both grips, a scope and the Laser Sight;
+    - the nearest point of each gun to the eye through its aimed shot, with no eye relief: the Undertone Rifle's 0.76 px, the Murmur SMG's and the Reverb's 1.61 px; with theirs, 2.76 px and 2.61 px.
+- **Slice 10D game tests (written; they run in CI):**
+  - `SculkGunsGameTests`:
+    - `sculkGunsAreRegistered`: each is registered with its numbers, fires bullets, and its recipe loads. The Undertone Rifle fires one rifle round a pull from twelve; the Murmur SMG fires light rounds while the trigger is held, as often as any gun; the Reverb fires ten pellets a barrel from two buckshot shells loaded a shell at a time. Each takes its stocks, magazines or grips, the scopes and the Laser Sight.
+    - `sculkGunsFireAndLoad`: side by side, each fires its last round at a pig three blocks off: the rifle's and the machine gun's shot takes one round's damage, the Reverb's pellets land together. Each then loads from the inventory: the magazines have nothing in halfway through their reload and are full as it ends; the Reverb has one shell in after its first shell's time and both after its reload; two rounds are left each time.
+  - "Every gun registered" now counts forty-eight guns, and slice 9E's `tacticalAttachmentsFitTheirGuns` counts the Reverb among the guns with the owner's tactical grip parts.
+  - `GunsClientGameTests` takes the three new guns through its steps as it takes every gun: held, aimed, fired at the husk, reloaded from the inventory, inspected, with each set of attachments they take, seen from outside, and in the inventory.
+- **Slice 10D in CI** ([run 38076348750](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38076348750), on 2c33aa609: the slice with slice 10C's CI record merged in): every check passed.
+  - **Server game tests:** 1291 in each job, slice 10C's 1289 and this slice's two. All passed, `SculkGunsGameTests` among them.
+  - **`GunsClientGameTests`** (the client job's first shard). Each of the three guns went through its steps:
+    - its arms drawn at full size held and half size aimed;
+    - aimed, the view narrowed to 0.82 (Undertone Rifle), 0.9 (Murmur SMG) and 0.9 (Reverb);
+    - fired at the husk, each spending a round: the Undertone Rifle took it from 523.29 to 514.29 (its 9), the Murmur SMG to 511.29 (its 3) and the Reverb to 483.29 (eight of its ten pellets, 28), with 8 flash frames each;
+    - reloaded from the inventory: twelve Rifle Rounds into the Undertone Rifle, twenty-four Light Rounds into the Murmur SMG and two Buckshot Shells into the Reverb, 31 left each time;
+    - where their animations cue a casing, the Undertone Rifle threw one through its shot and reload, the Murmur SMG three and the Reverb three;
+    - with each set of attachments it takes, held and aimed: the Undertone Rifle's three stocks, each left out aimed (in 44, 44 and 43 frames, none held), and the Laser Sight; the Murmur SMG's Extended Magazine (its counter read 1 / 36), Speed Magazine and Laser Sight; the Reverb's Light Grip, and its Tactical Grip with the Laser Sight.
+  - **Screenshots** (the guns' own fifteen, eighteen with attachments and six from outside):
+    - **Undertone Rifle:** held at the lower right, pointing at the husk. Aimed, the back of its receiver stands under the crosshair, its peep ring just above around the husk's head, the tendrils fanned out to either side. Reloading, the gun is tipped and rolled, the left arm reaching up under it. Inspected, it is turned to show its glowing cells.
+    - **Murmur SMG:** held at the right. Aimed, its back stands under the crosshair, the peep ring above at the husk's head. Reloading, the gun is tipped up, the left arm under it and its crystal glowing in its window. Inspected, it is turned to show its side.
+    - **Reverb:** held at the right. Aimed, its back stands under the crosshair, the husk's head in the notch between its rear posts, thin tendrils to either side and the right hand below. Reloading, the gun is rolled to one side, its barrels turned aside, the left arm reaching up to it. Inspected, it is turned to show its side.
+    - **With attachments:** aimed, no stock comes up under the eye. With the Laser Sight, aimed, its box stands just right of the crosshair, over the husk's side, as on every gun that takes it.
+    - **From outside:** each is held at the chest in both hands; fired, a flash shows at its muzzle.
+- **Slice 10E, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. Every gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the Cell Rack's block models (lit and not), blockstates, item, loot table, recipe and names, and put it in the pickaxe's tag.
+  - `python3 tools/check_mod_data.py`: PASS (2162 material IDs), with `check_guns` (the cradles in `CellRackBlock` and `CellRackRenderer` against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Previews** of the block model: from the front, from three-quarters on either side, from behind and from above, unlit and lit, with an Energy Cell standing in each cradle (its first frame, turned upright as the renderer turns it).
+- **Slice 10E game tests (written; they run in CI):**
+  - `CellRackGameTests`:
+    - `cellRackIsRegistered`: the block, its item and its recipe; cables reach its buffer from all six sides; a point on its front picks the cradle nearest it, facing north, and turned to face south, east and west.
+    - `cellRackChargesSeveralCellsAtOnce`: three spent cells beside a full one, the buffer full. After five ticks the three hold the same charge and the rack is lit; the full cell holds the same. Once they are full it is dark and its buffer holds 50,000 less 30,000 JE: what the cells took. A cell on its own then takes no more than 512 JE a tick.
+    - `playersStandCellsInTheirCradles`: a player, through the server's block use, stands a cell in the upper right cradle, then the next beside it when that is full, a cell from the hand each time; with an empty hand, pointing at the lower left, they take the nearest cell, the upper middle one, into their inventory.
+    - `hoppersLoadCellsAndTakeFullOnes`: a hopper above holding a stick and two cells stands the cells in the first two cradles and keeps the stick; a hopper below takes the full cell and leaves the half-charged one.
+    - `cellRackKeepsAndDropsItsCells`: saved and loaded, it keeps its buffer and each cell's charge; broken, it drops itself and both cells, each with its charge.
+- **Slice 10E in CI** ([run 38080528309](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38080528309), on 773951609: the slice, slice 10D's CI record merged in, and a fix to one of its tests): every check passed.
+  - **Server game tests:** 1296 in each job, slice 10D's 1291 and this slice's five. All passed, `CellRackGameTests` among them.
+  - **The first run** ([run 38079033583](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38079033583), on 2a8fc5985) compiled, and 1295 of the 1296 passed in each job. `hoppersLoadCellsAndTakeFullOnes` failed: it put two Energy Cells in one hopper slot, but cells stack to one, so the hopper held only one. 773951609 gives each cell its own slot, and has the hand test hold one cell at a time.
+  - **Client game tests:** the changed files chose `GunsClientGameTests` and `PeepoCompanionClientTests`, and both passed. Neither has a step for the rack, so no screenshot shows it.
+- **Slice 10F, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. Every gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the gunner's name and its loot table.
+  - The raider uniforms (`tools/raiders.py`): the gunner's drawn; the other three came out byte for byte as before.
+  - `python3 tools/check_mod_data.py`: PASS (2162 material IDs), with `check_guns` (`MobGuns` against tools/guns.py, and each arm a gun that fires bullets) and `check_raiders` (the gunner's stats and the party table against tools/raiders.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Previews:** the four raider uniforms from the front, the gunner's beside the others.
+- **Slice 10F game tests (written; they run in CI):**
+  - `RaiderGunnerGameTests`:
+    - `raiderGunnersAreRegistered`: the gunner is registered with its gunfire and carries one of the arms; a hundred gunners carry all three between them; at every raid level the gunners take the places of grunts, so the party is as large as before; and its loot table loads.
+    - `raiderGunnerShootsWhatItHunts`: a gunner with a Garrison Rifle shoots the pig it hunts, nine blocks off; the pig loses whole hits of half the rifle's damage, and the gunner's magazine goes down.
+    - `raiderGunnersSpareRaiders`: a gunner with a Sentry Pistol hits the pig past a grunt standing in the line of fire, and the grunt is not hurt.
+    - `raiderGunnerReloadsWhenEmpty`: a gunner with a Breacher fires its six shells at the pig, then reloads an empty magazine.
+    - `raiderGunnersGunDropsEmpty`: killed by a player (its drop chance made certain for the test), a gunner drops its Sentry Pistol with nothing loaded, and no rounds but up to three Light Rounds.
+  - `raidIsWonWhenEveryRaiderFalls` (the raiders' test) counts a level 1 party of two grunts, a gunner, a grenadier and an officer.
+  - `GunsClientGameTests`: three gunners, one with each arm, stand four blocks off facing the player with nothing in hand; the test checks that the gun hold posed them, and takes the screenshot `jugcraft_guns_raider_gunners`.
+- **Slice 10F in CI** ([run 38080939471](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38080939471), on f3a8a3b7e: the slice, with slice 10E's test fix merged in): every check passed.
+  - **Server game tests:** 1301 in each job, slice 10E's 1296 and this slice's five. All passed, `RaiderGunnerGameTests` among them, and the raid test with its new party.
+  - **Client game tests:** the changed files chose `GunsClientGameTests`, `JugcraftClientGameTests`, `LairClientGameTests` and `SpindleLoftClientGameTests`, and all four passed. In `GunsClientGameTests` the three gunners were posed holding their guns for 324 frames.
+  - **Screenshot** `jugcraft_guns_raider_gunners`: the three gunners stand before the brick wall facing the player, in grey-green greatcoats with the brass rounds across the chest, field caps and goggles. The left one holds the Sentry Pistol raised in one hand, the middle one the Garrison Rifle at the chest in both hands, the right one the Breacher in both hands, its long barrel running out toward the player.
+- **Slice 10G, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. Every gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the one-handed guns' tooltip line.
+  - `python3 tools/check_mod_data.py`: PASS (2162 material IDs), with `check_guns` (`JugcraftGuns.ONE_HANDED` and `DUAL_SPREAD` against tools/guns.py, and the tooltip's name).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 10G game tests (all passed in CI, below):**
+  - `DualGunsGameTests`:
+    - `oneHandedGunsPair`: the thirteen one-handed guns are guns; a Sentry Pistol is one-handed, a Garrison Rifle and a stick are not; a pistol in each hand is two guns at once, a rifle and a pistol are not, and nor is a pistol in the other hand alone.
+    - `twoGunsAreNotAimed`: with a gun in each hand, using either hand's gun aims neither; with one pistol, it aims.
+    - `bothGunsFireEachAtItsRate`: a Sentry Pistol and a Warden Pistol each fire two shots in one tick and are refused a third, every shot landing, each gun spending its own two rounds.
+    - `otherHandFiresOnlyBesideAOneHandedGun`: a pistol in the other hand neither fires nor reloads beside a rifle, nor fires alone; beside a pistol it fires, landing its shot.
+    - `oneGunReloadsAtATime`: while the main gun's magazine is out the other gun neither fires nor begins its reload; once the first is full the other reloads in its own time, both from the same Light Rounds.
+    - `eitherGunsShotCutsAShellReloadShort`: a shot of the other gun cuts the Marshal Revolver's round-at-a-time reload short.
+    - `otherGunsReloadStopsWithoutTwoGuns`: the other gun's reload stops when a stick takes the main gun's place; nothing is loaded or taken.
+    - `otherHandsBeamPistolFires`: a Beam Pistol in the other hand fires its beam, landing its damage.
+  - `GunsClientGameTests`, through the keys:
+    - with a Sentry Pistol and a Warden Pistol, left click fires the first; right click, held, fires the second once and aims neither;
+    - G pressed twice reloads the main gun, then the other;
+    - right click held fires a Rattler Pistol in the other hand again and again;
+    - seen from outside, both arms are raised;
+    - screenshots: `jugcraft_guns_dual_held`, `_main_fired`, `_other_fired`, `_reloading`, `_third_person` and `_third_person_back`.
+- **Slice 10G in CI** ([run 38083220287](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38083220287), on 0a5aa9392: the slice, with slice 10F's branch merged in): every check passed.
+  - **Server game tests:** 1309 in each job, slice 10F's 1301 and this slice's eight. All passed, `DualGunsGameTests` among them.
+  - **Client game tests:** the changed files chose `GunsClientGameTests` alone, and it passed. Its two-gun step logged:
+    - left click, then right click held: rounds 8 to 7 and 12 to 11, 13 frames of flash, the husk from 45.5 to 36.5 health (the Sentry Pistol's 5 and the Warden Pistol's 4), and neither gun aimed;
+    - G pressed twice: both guns full again (8 and 12), 30 of the 32 Light Rounds left;
+    - right click held for 15 ticks with a Rattler Pistol in the other hand: 20 rounds to 14, six shots;
+    - in third person, the player posed with a gun in each hand for 400 frames.
+  - **Screenshots:**
+    - `jugcraft_guns_dual_held`: a pistol in each hand at the bottom of the screen, the Warden Pistol on the left and the Sentry Pistol on the right, each in its own hand. Each gun's counter is on its own side of the hotbar: 12 / 12 on the left beyond the off-hand slot, 8 / 8 on the right.
+    - `_main_fired`: the Sentry Pistol's flash, its counter at 7 / 8.
+    - `_other_fired`: taken in the tick right click went down, before the shot, so the Warden Pistol's counter still reads 12 / 12. The counts logged above show the shot.
+    - `_reloading`: the Sentry Pistol tipped in its reload, its counter reading "Reloading", the Warden Pistol's at 11 / 12.
+    - `_third_person` and `_third_person_back`: the player from in front, both arms raised with a gun in each hand at the chest, and from behind.
+- **Slice 11A, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations, textures and the Cinder Repeater's shot sound; every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2165 material IDs), with `check_guns` (the numbers, attachments, sound aliases and looks against tools/guns.py, and now `JugcraftGuns.INCENDIARY` and `GunShots.BURN_SECONDS`).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 11A game tests (all passed in CI, below):**
+  - `NetherGunsGameTests`:
+    - `netherGunsAreRegistered`: each is registered with its numbers, its recipe loads, and it fires bullets that set what they hit alight, as no other gun's do; the Tusker is a shotgun of eight pellets and six shells loaded a shell at a time, the Cinder Repeater an automatic of twenty light rounds, the Bastion Rifle a rifle of five rounds loaded a round at a time; each takes the stocks, grips, barrels, bayonets and scopes, the Cinder Repeater the magazines too.
+    - `netherGunsFireAndLoad`: each fires its last round at a pig three blocks off, the Tusker's pellets landing together and the others' one shot taking one round's damage; then each loads from the inventory in its own time, a magazine at a time or a round at a time, two rounds left over.
+    - `netherGunsSetWhatTheyHitAlight`: each Nether gun's shot sets its pig alight and the fire hurts it again within two seconds; an Undertone Rifle's shot leaves its pig unlit and hurts it no more; no block catches fire.
+  - `GunsGameTests` counts 51 guns; `TacticalAttachmentsGameTests` the nineteen that take the Tactical Grip.
+- **Slice 11A in CI** ([run 38086867951](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38086867951), on 38a4d0a99): every check passed.
+  - **Server game tests:** 1312 in each job, slice 10G's 1309 and this slice's three. All passed, `NetherGunsGameTests` among them.
+  - **Client game tests:** the changed files chose eight classes (`ArmorSetsClientGameTests`, `ArmorTiersClientGameTests`, `ArmsVIIClientGameTests`, `ArmsVIIIClientGameTests`, `BlueprintClientGameTests`, `GunsClientGameTests`, `KnightArmorClientGameTests` and `MaterialSetsClientGameTests`), and all eight passed. In `GunsClientGameTests` each new gun, in its turn:
+    - held and aimed, its arms drawn at full size and then half, the view narrowed to 0.9 (Tusker), 0.88 (Cinder Repeater) and 0.8 (Bastion Rifle);
+    - fired at the husk, each spending one round: the Tusker took it from 465.59 to 441.59 (all eight pellets, 24), the Cinder Repeater 3.5 and the Bastion Rifle 14, with 5 or 6 frames of flash;
+    - reloaded from the inventory, 31 rounds left each time, throwing 1, 3 and 1 casings;
+    - with each set of attachments it takes, held and aimed, the stocks left out aimed (in 34 or 35 frames, none held).
+  - **The fire in play:** the husk lost 3 more health between the Tusker's shot and the Cinder Repeater's, and again before the Bastion Rifle's, as it did after the Stoker's burst; after the guns before them it lost none.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar: the Tusker with the left hand on its pump, the Cinder Repeater with the left hand under it, the Bastion Rifle with its ladder sight standing up from the receiver.
+    - **Aimed:** the Tusker's peep ring and the Cinder Repeater's ring on the husk over the crimson backs of their receivers; the Bastion Rifle's ladder over the husk, with its bolt, a gold-lit diamond, and the bolt's handle just under the crosshair.
+    - **Reloading:** the Tusker tipped to take a shell and the Cinder Repeater rolled with its magazine out, the husk burning behind both. The Bastion Rifle's left arm comes up across the view to the breech with its round.
+    - **Inspection, attachments and third person:** each turned over in the hand; each with its stocks, barrel devices, bayonet, Tactical Grip and Laser Sight; and held in both hands seen from outside, flashing as it fires.
+- **Slice 11B, run locally (10 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2168 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns, sound aliases, looks and `JugcraftGuns.INCENDIARY` against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 11B game tests (all passed in CI, below):**
+  - `NetherGunsGameTests`, now for all six Nether guns:
+    - `netherGunsAreRegistered`: each is registered with its numbers, its recipe loads, and it fires bullets that set what they hit alight, as no other gun's do. The Ashfall Pistol is a pistol held in one hand, of eight light rounds; the Goldbristle Carbine a carbine of twelve rifle rounds, one a pull; the Crackling a shotgun of six pellets and five shells loaded a shell at a time. The Goldbristle Carbine takes all that slice 11A's take, and the magazines; the Ashfall Pistol only the stocks, the scopes and the Laser Sight; the Crackling only the stocks, the grips and the bayonets.
+    - `secondNetherGunsFireAndLoad`: as `netherGunsFireAndLoad`, for slice 11B's three.
+    - `secondNetherGunsSetWhatTheyHitAlight`: as `netherGunsSetWhatTheyHitAlight`, for slice 11B's three, beside an Undertone Rifle.
+  - `GunsGameTests` counts 54 guns; `DualGunsGameTests` the fourteen held in one hand; `TacticalAttachmentsGameTests` the twenty-one that take the Tactical Grip.
+- **Slice 11B in CI** ([run 38092224778](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38092224778), on 4aba95d34): every check passed.
+  - **Server game tests:** 1314 in each job, slice 11A's 1312 and this slice's two. All passed, `NetherGunsGameTests` among them.
+  - **Client game tests:** the changed files chose the same eight classes as slice 11A's, and all eight passed. In `GunsClientGameTests` each new gun, in its turn:
+    - held and aimed, its arms drawn at full size and then half, the view narrowed to 0.9 (Ashfall Pistol), 0.85 (Goldbristle Carbine) and 0.9 (Crackling);
+    - fired at the husk, each spending one round, with 6 frames of flash: the Ashfall Pistol took it from 433.92 to 427.92 (6), the Goldbristle Carbine 7, and the Crackling 24 (all six pellets);
+    - reloaded from the inventory, 31 rounds left each time; the Ashfall Pistol and the Goldbristle Carbine threw 3 casings each, the Crackling none, as its animations cue none;
+    - with each set of attachments it takes, held and aimed, the stocks left out aimed (in 35 to 37 frames, none held).
+  - **The fire in play:** the husk lost 3 more health after each Nether gun's shot before the next gun fired: after the Tusker's, the Cinder Repeater's, the Bastion Rifle's (the last gun in slice 11A's run, so its fire showed only now), the Ashfall Pistol's and the Goldbristle Carbine's. The Crackling fired last. After the Reverb's shot, before them, it lost none.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar: the Ashfall Pistol in the right hand alone, the Goldbristle Carbine with its magazine out to the left and the left hand under it, the Crackling with the left hand under its pump.
+    - **Aimed:** the Ashfall Pistol's notch and the Goldbristle Carbine's ring on the husk over the crimson backs of their receivers; the Crackling's posts on the husk over its narrow back and the right hand, as the Sledge's in the same run.
+    - **Reloading:** the Ashfall Pistol and the Goldbristle Carbine tipped in their reloads, the husk burning behind both. The Crackling's left arm comes up across the middle of the view with its shell, as the Sledge's does in the same run.
+    - **Inspection, attachments and third person:** each turned over in the hand; each with the stocks; the Goldbristle Carbine with its barrel devices, magazines, bayonet and grips, the Crackling with its grips and bayonet, the pistol and the carbine with the Laser Sight. Seen from outside, the Ashfall Pistol is raised in one hand and the others in both, each flashing as it fires.
 - **Not run:** the client by hand, a two-client dedicated server, and play.
 
 ## World and event applicability
-Not applicable: no worldgen, loot, structures, bosses or seasonal content. Guns and rounds come only from crafting (and the creative tab).
+No worldgen, structures, bosses or seasonal content. Guns, rounds and the Cell Rack come from crafting (and the creative tab). The one loot is slice 10F's: raider gunners, in raids and raider camps, may drop their service arms (their equipment's drop chance) and rounds (the mob loot table `jugcraft:entities/raider_gunner`).
 
 ## Rollout and open questions
-- **Names:** proposed here (Rust Midge, Patchwork Carbine, Thunderpipe, Warden Pistol, Riveter SMG, Haymaker, Longhorn Rifle, Drover Rifle, Coach Gun, Duelling Pistol, Line Musket, Bellmouth, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Garrison Rifle, Breacher, Trench Lobber, Thresher, Stoker, Beam Pistol, Stormlock Rifle, Linesman, Picket Rifle, Ranger Rifle, Kestrel Rifle, Rattler Pistol, Bronco SMG, Squall Rifle, Spikedriver, Seam Cutter, Caisson Pistol, Sledge, Highwayman, Throttle, Light Round, Rifle Round, Buckshot Shell, Paper Cartridge, Energy Cell; the attachments keep plain names: Silencer, Baffled Silencer, Muzzle Brake, Extended Barrel, Extended Magazine, Speed Magazine, Light Stock, Weighted Stock, Wooden Stock, Light Grip, Vertical Grip, the four bayonets, Long Scope, Medium Scope, Reflex Sight, Tactical Grip, Laser Sight). The owner may rename them before release; IDs are stable only after release.
+- **Names:** proposed here (Rust Midge, Patchwork Carbine, Thunderpipe, Warden Pistol, Riveter SMG, Haymaker, Longhorn Rifle, Drover Rifle, Coach Gun, Duelling Pistol, Line Musket, Bellmouth, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Garrison Rifle, Breacher, Trench Lobber, Thresher, Stoker, Beam Pistol, Stormlock Rifle, Linesman, Picket Rifle, Ranger Rifle, Kestrel Rifle, Rattler Pistol, Bronco SMG, Squall Rifle, Spikedriver, Seam Cutter, Caisson Pistol, Sledge, Highwayman, Throttle, Earthmover, Skylark Rifle, Bullfrog, Solenoid Rifle, Votive Rifle, Glowmouth, Mule, Fowler, Culverin, Undertone Rifle, Murmur SMG, Reverb, Light Round, Rifle Round, Buckshot Shell, Paper Cartridge, Energy Cell, Cell Rack, Raider Gunner; the attachments keep plain names: Silencer, Baffled Silencer, Muzzle Brake, Extended Barrel, Extended Magazine, Speed Magazine, Light Stock, Weighted Stock, Wooden Stock, Light Grip, Vertical Grip, the four bayonets, Long Scope, Medium Scope, Reflex Sight, Tactical Grip, Laser Sight). The owner may rename them before release; IDs are stable only after release.
 - **The arms:** placed from the animations' own evidence, without the models they were made for. The CI screenshots show where they sit; the rest points and arm directions above are the knobs.
 - **The gun sets the owner chose on 8 October 2026** are all built: the revolvers (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C) and the energy weapons (slice 8D).
 - **The gun sets the owner chose on 10 October 2026** are all built, each its own pull request: the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C) and the pump shotguns (slice 9D).
-- **Later slices,** each its own pull request: a rack that charges several Energy Cells at once. The three follow-ups the owner chose on 10 October 2026 are slices 9E, 9F and 9G.
+- **The second round the owner chose on 10 October 2026,** each its own pull request: the launchers (slice 10A), the coil and plasma guns (slice 10B), the double-barrels (slice 10C) and the sculk guns (slice 10D); a rack that charges several Energy Cells at once (slice 10E), enemies with guns (slice 10F) and pistols in both hands (slice 10G). The three follow-ups of the first round are slices 9E, 9F and 9G.
 - **Aimed, the gun hand covered the sights** in the CI screenshots from 8 October, and a fitted stock came up under the eye: slice 9F draws the arms at half size aimed and leaves a fitted stock out ([above](#slice-9f-the-aiming-polish)).
 - **Not yet:**
   - the jam the Gnat's sound suggests;
-  - off-hand guns;
-  - mob use;
+  - other mobs with guns: the owner's Scorched Guns 2-style gun mobs, once their models are in the library (slice 10F gives the raider gunners the service arms);
   - the guns beyond these sets.
 - **Balance:** the numbers are starting points for the owner to set.

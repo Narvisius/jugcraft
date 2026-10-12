@@ -371,10 +371,176 @@ GUNS = {
         "damage": 3.0, "pellets": 8, "interval": 16, "auto": False, "capacity": 6,
         "reload": (10, 13, 22), "spread": (6.5, 4.5), "range": 28, "ammo": "buckshot_shell",
     },
+    # Slice 10A: the launchers.
+    #   shot          "rocket": each shot fires a High-Explosive Rocket (jugcraft:he_rocket, the rocketry branch's, the
+    #                 Rocket Launcher's), straight and untouched by gravity, at "rocket_speed" blocks a tick; it bursts
+    #                 where it hits, or at the end of "range" (its fuse: the range over the speed, in ticks), as the
+    #                 Rocket Launcher's do, hurting living things only. "damage" is that burst's at its centre.
+    # The Earthmover's drum holds four rockets; the Skylark Rifle holds one and fires it faster and steadier. The Bullfrog
+    # lobs a grenade, one a reload, any kind (slice 9G), as the Trench Lobber does.
+    "earthmover": {
+        "display": "Earthmover",
+        "source": "dozier_rl",
+        "tooltip": "A shoulder rocket launcher with a revolving drum of four rockets. Each bursts where it hits, or at "
+                   "the end of its range; none breaks a block. Fires high-explosive rockets.",
+        "damage": 24.0, "pellets": 1, "interval": 20, "auto": False, "capacity": 4,
+        "reload": 61, "spread": (2.5, 1.0), "range": 72, "ammo": "he_rocket", "shot": "rocket", "rocket_speed": 3.0,
+    },
+    "skylark_rifle": {
+        "display": "Skylark Rifle",
+        "source": "rocket_rifle",
+        "tooltip": "A rifle that fires one rocket at a time, fast and flat. It bursts where it hits, or at the end of its "
+                   "range; it never breaks a block. Fires high-explosive rockets.",
+        "damage": 24.0, "pellets": 1, "interval": 20, "auto": False, "capacity": 1,
+        "reload": 48, "spread": (1.5, 0.25), "range": 135, "ammo": "he_rocket", "shot": "rocket", "rocket_speed": 4.5,
+    },
+    "bullfrog": {
+        "display": "Bullfrog",
+        "source": "blooper",
+        "tooltip": "A stubby grenade launcher with a sliding barrel, loaded a grenade at a time. Each shot lobs it to go "
+                   "off where it lands; it never breaks a block. Loads any grenade, the one in the other hand first.",
+        "damage": 16.0, "pellets": 1, "interval": 20, "auto": False, "capacity": 1,
+        "reload": 45, "spread": (3.0, 1.5), "range": 20, "ammo": "grenade", "shot": "grenade",
+    },
+    # Slice 10B: coil and plasma, on Energy Cells and slice 8D's shots like the other energy weapons. The Solenoid Rifle
+    # throws a heavy slug down the rings along its barrel, a beam, the farthest-reaching of them; the Votive Rifle
+    # fires plasma for as long as the trigger is held; the Glowmouth, a plasma blunderbuss loaded a charge at a time,
+    # looses an arc that seeks wide and close.
+    "solenoid_rifle": {
+        "display": "Solenoid Rifle",
+        "source": "gauss_rifle",
+        "tooltip": "A gauss rifle: the rings along its barrel throw a heavy slug through every creature in its line. "
+                   "Runs on Energy Cells.",
+        "damage": 14.0, "pellets": 1, "interval": 16, "auto": False, "capacity": 5,
+        "reload": 52, "spread": (1.5, 0.15), "range": 128, "ammo": "energy_cell", "shot": "beam", "charge": 1100,
+    },
+    "votive_rifle": {
+        "display": "Votive Rifle",
+        "source": "plasgun",
+        "tooltip": "A plasma rifle with a wax seal on its flank. Hold the trigger: each bolt burns through every creature "
+                   "in its line. Runs on Energy Cells.",
+        "damage": 3.0, "pellets": 1, "interval": 3, "auto": True, "capacity": 30,
+        "reload": 50, "spread": (3.0, 1.0), "range": 48, "ammo": "energy_cell", "shot": "beam", "charge": 200,
+    },
+    "glowmouth": {
+        "display": "Glowmouth",
+        "source": "plasmabuss",
+        "tooltip": "A plasma blunderbuss loaded a charge at a time: its burst leaps from the creature nearest the aim to "
+                   "two more close by. Runs on Energy Cells.",
+        "damage": 10.0, "pellets": 1, "interval": 20, "auto": False, "capacity": 4,
+        "reload": (8, 13, 18), "spread": (12.0, 9.0), "range": 14, "ammo": "energy_cell", "shot": "arc", "charge": 750,
+    },
+    # Slice 10C: the double-barrels. The Mule breaks open to load both its shells at once; the Fowler, a double
+    # flintlock, has a ball rammed down each barrel in turn; the Culverin is a stubby hand cannon loaded down its muzzle.
+    # Each fires a spread of pellets. The Mule's quick reload is the owner's animation's, so its pellets are the
+    # Bellmouth's, not heavier: over its two shots and reload it still deals the most a second of the shotguns.
+    "mule": {
+        "display": "Mule",
+        "source": "super_shotgun",
+        "tooltip": "A sawn-off double-barrel that breaks open to load both shells at once. Ten pellets a barrel. Fires "
+                   "buckshot shells.",
+        "damage": 2.5, "pellets": 10, "interval": 8, "auto": False, "capacity": 2,
+        "reload": 35, "spread": (9.0, 7.0), "range": 24, "ammo": "buckshot_shell",
+    },
+    "fowler": {
+        "display": "Fowler",
+        "source": "doublet",
+        "tooltip": "A double-barrelled flintlock, a ball rammed down each barrel. Eight balls a shot, two shots, then a "
+                   "long reload. Fires paper cartridges.",
+        "damage": 3.0, "pellets": 8, "interval": 10, "auto": False, "capacity": 2,
+        "reload": 97, "spread": (8.0, 5.0), "range": 28, "ammo": "paper_cartridge",
+    },
+    "culverin": {
+        "display": "Culverin",
+        "source": "handcannon",
+        "tooltip": "A stubby hand cannon, fired one-handed and loaded down its muzzle: a fist of heavy balls at close "
+                   "range, then a long reload. Fires paper cartridges.",
+        "damage": 5.0, "pellets": 5, "interval": 20, "auto": False, "capacity": 1,
+        "reload": 74, "spread": (9.0, 7.0), "range": 18, "ammo": "paper_cartridge",
+    },
+    # Slice 10D: the sculk guns, grown from the deep dark: a rifle, a machine gun and a double-barrel, each with sculk
+    # tendrils that sway as it is handled, on the rounds the other guns fire.
+    "undertone_rifle": {
+        "display": "Undertone Rifle",
+        "source": "sculk_resonator",
+        "tooltip": "A sculk-grown rifle, its tendrils swaying as it is handled: one hard shot each pull from a magazine of "
+                   "twelve. Fires rifle rounds.",
+        "damage": 9.0, "pellets": 1, "interval": 7, "auto": False, "capacity": 12,
+        "reload": 48, "spread": (2.5, 0.3), "range": 96, "ammo": "rifle_round",
+    },
+    "murmur_smg": {
+        "display": "Murmur SMG",
+        "source": "whispers",
+        "tooltip": "A sculk-grown machine gun: ten shots a second for as long as the trigger is held, from a magazine "
+                   "that empties as fast. Fires light rounds.",
+        "damage": 3.0, "pellets": 1, "interval": 2, "auto": True, "capacity": 24,
+        "reload": 48, "spread": (3.5, 1.5), "range": 48, "ammo": "light_round",
+    },
+    "reverb": {
+        "display": "Reverb",
+        "source": "echoes_2",
+        "tooltip": "A sculk-grown double-barrel whose barrels turn aside to take a shell at a time. Ten pellets a barrel. "
+                   "Fires buckshot shells.",
+        "damage": 3.5, "pellets": 10, "interval": 8, "auto": False, "capacity": 2,
+        "reload": (16, 17, 19), "spread": (7.0, 5.0), "range": 32, "ammo": "buckshot_shell",
+    },
+    # Slice 11A: the Nether guns, forged in the piglins' crimson, blackstone and gold: a pump shotgun, a repeater and a
+    # trapdoor rifle, on the rounds the other guns fire. Their shots set what they hit alight (INCENDIARY).
+    "tusker": {
+        "display": "Tusker",
+        "source": "mangalitsa",
+        "tooltip": "A Nether-forged pump shotgun, its pump worked after every shot: eight pellets that set what they hit "
+                   "alight. Loaded a shell at a time. Fires buckshot shells.",
+        "damage": 3.0, "pellets": 8, "interval": 14, "auto": False, "capacity": 6,
+        "reload": (12, 12, 13), "spread": (6.5, 4.5), "range": 28, "ammo": "buckshot_shell",
+    },
+    "cinder_repeater": {
+        "display": "Cinder Repeater",
+        "source": "vulcanic_repeater",
+        "tooltip": "A Nether-forged repeater, firing for as long as the trigger is held; its shots set what they hit "
+                   "alight. Fires light rounds.",
+        "damage": 3.5, "pellets": 1, "interval": 3, "auto": True, "capacity": 20,
+        "reload": 48, "spread": (3.0, 1.2), "range": 48, "ammo": "light_round",
+    },
+    "bastion_rifle": {
+        "display": "Bastion Rifle",
+        "source": "trotters",
+        "tooltip": "A Nether-forged rifle whose trapdoor breech flips open after every shot: a heavy round that sets what "
+                   "it hits alight. Loaded a round at a time. Fires rifle rounds.",
+        "damage": 14.0, "pellets": 1, "interval": 18, "auto": False, "capacity": 5,
+        "reload": (15, 13, 16), "spread": (2.0, 0.15), "range": 112, "ammo": "rifle_round",
+    },
+    # Slice 11B, the rest of the Nether guns: a pistol held in one hand, the tank under its barrel changed to reload; a
+    # carbine fed from a magazine at its left side; and a long pump shotgun in gold. Their shots set what they hit
+    # alight too (INCENDIARY).
+    "ashfall_pistol": {
+        "display": "Ashfall Pistol",
+        "source": "pyroclastic_flow",
+        "tooltip": "A Nether-forged pistol held in one hand, the tank under its barrel changed to reload: heavy shots that "
+                   "set what they hit alight. Fires light rounds.",
+        "damage": 6.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 8,
+        "reload": 47, "spread": (2.5, 0.8), "range": 56, "ammo": "light_round",
+    },
+    "goldbristle_carbine": {
+        "display": "Goldbristle Carbine",
+        "source": "freyr",
+        "tooltip": "A Nether-forged carbine fed from a magazine at its left side: one hard shot each pull that sets what it "
+                   "hits alight. Fires rifle rounds.",
+        "damage": 7.0, "pellets": 1, "interval": 7, "auto": False, "capacity": 12,
+        "reload": 41, "spread": (2.5, 0.4), "range": 88, "ammo": "rifle_round",
+    },
+    "crackling": {
+        "display": "Crackling",
+        "source": "ribs_glory",
+        "tooltip": "A long Nether-forged pump shotgun in gold: six heavy pellets that keep together and set what they hit "
+                   "alight. Loaded a shell at a time. Fires buckshot shells.",
+        "damage": 4.0, "pellets": 6, "interval": 20, "auto": False, "capacity": 5,
+        "reload": (6, 10, 11), "spread": (5.0, 3.0), "range": 36, "ammo": "buckshot_shell",
+    },
 }
 
 # What a gun fires: bullets, or a slice 8C or 8D gun's "shot".
-SHOTS = ("bullet", "grenade", "flame", "beam", "arc")
+SHOTS = ("bullet", "grenade", "flame", "beam", "arc", "rocket")
 # An arc (slice 8D) leaps on from its first creature to at most this many more, each the nearest within this many
 # blocks of the last that the shooter may strike and that it can reach in a straight line, each taking this share of
 # the damage before it (JugcraftGuns.ARC_HOPS, ARC_REACH, ARC_SHARE).
@@ -400,7 +566,9 @@ CELL_RECIPE = ([" C ", "GRG", " B "], {"C": "jugcraft:copper_cable", "G": "minec
 # (JugcraftGuns.PER_ITEM): the field chemistry branch's Grenade (jugcraft:grenade), a grenade a round; and blaze
 # powder, four bursts of the Stoker's flame. A reload that tops a gun up takes a whole item; what of it does not fit is
 # lost (docs/features/guns.md, slice 8C).
-OTHER_AMMO = {"grenade": 1, "minecraft:blaze_powder": 4}
+OTHER_AMMO = {"grenade": 1, "minecraft:blaze_powder": 4,
+              # Slice 10A: the rocketry branch's High-Explosive Rocket (jugcraft:he_rocket), a rocket a round.
+              "he_rocket": 1}
 
 # The rounds: display name, tooltip, recipe (pattern, key, count). Cheap and early: copper or brass, lead and gunpowder.
 AMMO = {
@@ -495,10 +663,55 @@ RECIPES = {
                                     "B": "#c:ingots/brass"}),
     "throttle": (["SSC", "PLB"], {"S": "#c:ingots/steel", "C": "minecraft:copper_ingot", "P": "#minecraft:planks",
                                   "L": "minecraft:lever", "B": "#c:ingots/brass"}),
+    # Slice 10A: the rocket guns in steel plate, as the Rocket Launcher is, a tripwire hook for the trigger; copper for
+    # the Earthmover's drum, planks and a lever for the Skylark's stock and breech. The Bullfrog is iron and copper.
+    "earthmover": (["PPP", "CTC"], {"P": "#c:plates/steel", "C": "minecraft:copper_ingot", "T": "minecraft:tripwire_hook"}),
+    "skylark_rifle": (["PPP", "WLT"], {"P": "#c:plates/steel", "W": "#minecraft:planks", "L": "minecraft:lever",
+                                       "T": "minecraft:tripwire_hook"}),
+    "bullfrog": (["ICC", "PL "], {"I": "minecraft:iron_ingot", "C": "minecraft:copper_ingot", "P": "#minecraft:planks",
+                                  "L": "minecraft:lever"}),
+    # Slice 10B: steel and an advanced circuit each, as the energy weapons are; copper cable wound into the Solenoid
+    # Rifle's rings, glass for the Votive Rifle's windows, copper for the Glowmouth's bell and planks for its stock.
+    "solenoid_rifle": (["CCS", "SAB"], {"C": "jugcraft:copper_cable", "S": "#c:ingots/steel", "A": "jugcraft:advanced_circuit",
+                                        "B": "#c:ingots/brass"}),
+    "votive_rifle": (["SSS", "GAB"], {"S": "#c:ingots/steel", "G": "minecraft:glass_pane", "A": "jugcraft:advanced_circuit",
+                                      "B": "#c:ingots/brass"}),
+    "glowmouth": (["CSS", "PAB"], {"C": "minecraft:copper_ingot", "S": "#c:ingots/steel", "P": "#minecraft:planks",
+                                   "A": "jugcraft:advanced_circuit", "B": "#c:ingots/brass"}),
+    # Slice 10C: iron for the barrels, as the Coach Gun's and the muzzle-loaders' are; the Mule's lever and brass, as
+    # the Coach Gun's, and flint for the Fowler's and the Culverin's locks.
+    "mule": (["IIB", "ILP"], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass", "L": "minecraft:lever",
+                              "P": "#minecraft:planks"}),
+    "fowler": (["III", "IFP"], {"I": "minecraft:iron_ingot", "F": "minecraft:flint", "P": "#minecraft:planks"}),
+    "culverin": (["II", "FP"], {"I": "minecraft:iron_ingot", "F": "minecraft:flint", "P": "#minecraft:planks"}),
+    # Slice 10D: steel and a lever, as the other steel guns; an echo shard and sculk from the deep dark for each.
+    "undertone_rifle": (["SSS", "ELK"], {"S": "#c:ingots/steel", "E": "minecraft:echo_shard", "L": "minecraft:lever",
+                                         "K": "minecraft:sculk"}),
+    "murmur_smg": (["SSE", " LK"], {"S": "#c:ingots/steel", "E": "minecraft:echo_shard", "L": "minecraft:lever",
+                                    "K": "minecraft:sculk"}),
+    "reverb": (["SS ", "ELK"], {"S": "#c:ingots/steel", "E": "minecraft:echo_shard", "L": "minecraft:lever",
+                                "K": "minecraft:sculk"}),
+    # Slice 11A: steel and a lever, as the other steel guns; gold and gilded blackstone from the piglins' bastions.
+    "tusker": (["SS ", "GLB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
+                                "B": "minecraft:gilded_blackstone"}),
+    "cinder_repeater": (["SSG", " LB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
+                                         "B": "minecraft:gilded_blackstone"}),
+    "bastion_rifle": (["SSS", "GLB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
+                                       "B": "minecraft:gilded_blackstone"}),
+    # Slice 11B, the same: the Ashfall Pistol a steel ingot and a gold ingot, the Goldbristle Carbine two of each, the
+    # Crackling two of each the other way about.
+    "ashfall_pistol": (["SG ", " LB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
+                                        "B": "minecraft:gilded_blackstone"}),
+    "goldbristle_carbine": (["SSG", "GLB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
+                                             "B": "minecraft:gilded_blackstone"}),
+    "crackling": (["GGS", "SLB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
+                                   "B": "minecraft:gilded_blackstone"}),
 }
 # The switches beyond "guns" a gun's recipe needs (separate load conditions, all of which must hold): the energy weapons
 # and their cells are useless without the Charging Station, so they need the machines too (as the leaf blower does).
 RECIPE_SWITCHES = {gun: ("machines",) for gun, spec in GUNS.items() if spec["ammo"] == CELL}
+# The rocket guns (slice 10A) too: their High-Explosive Rockets come from the rocket workshop, a machine.
+RECIPE_SWITCHES.update({gun: ("machines",) for gun, spec in GUNS.items() if spec.get("shot") == "rocket"})
 
 # How each gun is built from the owner's parts, in the owner's model space (Java item-model pixels: x east, y up,
 # z south; the muzzle points north, -z). Each bone: (name, parent, [parts], pivot). The pivots are where the
@@ -1161,6 +1374,344 @@ BUILDS = {
         "sight": (8.0, 6.25, 11.6),
         "eye_relief": 2.0,
     },
+    # Slice 10A, the launchers. The Dozier RL is carried on the shoulder: its owner display holds the tube past the
+    # right of the head, the grip at the hip guns' depth. Its drum (the owner's drum part) is its magazine: the reload
+    # twists it free (cylinder_magazine, about the drum's middle), pulls it out to the left and down, and brings a full
+    # one back to twist home. The fire part is the backblast, on the flame bone: the shot puts it out behind the tube
+    # at twice its size, shrinking back; it turns about its middle, so it starts at the tube's back end (the renderer
+    # shows it only while a shot moves it). Its sight is a frame with a centre dot on a bracket off the left side, and
+    # a scope stands on the rail there (MOUNTS). Its bolt bone, which only the draw names, holds nothing.
+    "earthmover": {
+        "bones": [
+            ("gun_body", None, ["main", "sights"], (8.0, 2.9, 9.1)),
+            ("cylinder_magazine", "gun_body", [], (8.0, 8.0, 5.0)),
+            ("magazine", "cylinder_magazine", ["drum"], (8.0, 8.0, 5.0)),
+            ("flame", "gun_body", ["fire"], (7.95, 6.47, 18.25)),
+            ("bolt", "gun_body", [], (8.0, 6.6, 12.0)),
+        ],
+        "hands": {"right": (8.0, 2.9, 9.1), "left": (8.0, 3.2, 3.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 6.6, -4.3),
+        "sight": (4.875, 7.975, 9.0),
+    },
+    # The Rocket Rifle breaks open: its barrel (the main part's elements the owner named "barrel": the tube, its front
+    # post and the fore-end under it) hinges down about the bottom of the receiver's front, and the reload carries a
+    # rocket in on the shell bone (PROPS) from the left hand and slides it nose first into the breech. Its grips and
+    # bayonets ride the barrel ("mounts"). Its sights are the notch on the back of the receiver and the post at the
+    # muzzle. Its flame bone, which only the shot's scale moves, holds nothing. Aimed, it is held 3 px further out:
+    # through the aimed shot its kick otherwise brought the back of its receiver to the near plane.
+    "skylark_rifle": {
+        "bones": [
+            ("gun_body", None, ["main@gun_body", "stan_grip"], (8.0, 1.2, 15.5)),
+            ("barrel", "gun_body", ["main@barrel"], (8.0, 2.45, 10.43)),
+            ("shell", "gun_body", ["@rocket"], (8.77, 6.95, 13.68)),
+            ("flame", "gun_body", [], (7.89, 4.39, 0.43)),
+        ],
+        "mounts": {"grip": "barrel"},
+        "hands": {"right": (8.0, 1.2, 15.5), "left": (8.0, 2.3, 6.5)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (7.89, 4.39, 0.4),
+        "sight": (8.0, 6.05, 14.2),
+        "eye_relief": 3.0,
+    },
+    # The Blooper's barrel (the owner's barrel part) slides: each shot drives it back along its rod and home
+    # (standard_barrel), and the reload, the gun brought in and tipped up, racks it back under the left hand
+    # (barrels), which then holds the muzzle while a grenade (the shell bone, PROPS) is seated in its mouth. The draw
+    # swings it up shut about the bottom of the receiver's front (barrel), as the Rocket Rifle's does. Its leaf sight
+    # (the main part's elements the owner named "sights") flaps with each shot about its foot; the aim looks through
+    # its ring.
+    "bullfrog": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 1.5, 15.6)),
+            ("gun_body", "gun_body2", ["main@gun_body", "stan_grip"], (8.0, 1.5, 15.6)),
+            ("sights", "gun_body", ["main@sights"], (8.0, 4.92, 13.65)),
+            ("barrel", "gun_body", [], (8.0, 1.7, 10.9)),
+            ("barrels", "barrel", [], (8.0, 3.62, 5.91)),
+            ("standard_barrel", "barrels", ["barrel"], (8.0, 3.62, 5.91)),
+            ("shell", "standard_barrel", ["@grenade"], (8.0, 3.62, 6.45)),
+        ],
+        "hands": {"right": (8.0, 1.5, 15.6), "left": (8.0, 0.9, 8.9)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 3.62, 1.4),
+        "sight": (8.0, 5.55, 13.65),
+    },
+    # Slice 10B, coil and plasma; each gun body turns about the grip in the right hand. The Gauss Rifle's "Battery"
+    # (the owner's capital B: the battery on the receiver's left, a block and a glowing plate on an arm, the main part's
+    # 13th to 15th and 18th elements) slides out to the left with each shot and through the reload, and back; its bolt
+    # (the 23rd, the knob in the slot on the right) is drawn back as each shot fires and as the reload ends. Its
+    # magazine is the standard one under the receiver; magazine_2, default_mag and scriptures hold nothing. Its sight
+    # is the owner's ring on the back of the receiver, its front post on the muzzle.
+    "solenoid_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-#12,13,14,17,22", "sights"], (8.0, 1.8, 15.2)),
+            ("bolt", "gun_body", ["main#22"], (9.13, 4.83, 10.4)),
+            ("Battery", "gun_body", ["main#12,13,14,17"], (6.5, 5.0, 11.75)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 1.5, 9.9)),
+            ("magazine_2", "gun_body", [], (8.0, 1.5, 9.9)),
+            ("default_mag", "gun_body", [], (8.0, 1.5, 9.9)),
+            ("scriptures", "gun_body", [], (8.0, 6.0, 12.0)),
+        ],
+        "hands": {"right": (8.0, 1.8, 15.2), "left": (8.0, 1.8, 6.6)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 5.0, -1.5),
+        "sight": (8.0, 6.5, 14.14),
+        "eye_relief": 1.0,
+    },
+    # The Plasgun's bolt is the plate along the top of its receiver (the main part's 7th element), driven back with
+    # each shot and held back through the reload; its vent (the 22nd, the louvre on the chamber's left) lifts out
+    # through the reload; its scriptures are the owner's "Seal" group (the 26th and 27th: a wax seal and the parchment
+    # hanging from it), swinging about the seal. The reload swings the standard magazine down and back out of the
+    # well, about its top. Its rear sight is the channel between the owner's two rails on the back of the receiver,
+    # its front post on the muzzle.
+    "votive_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-#6,21,25,26", "sights"], (8.0, 2.3, 16.0)),
+            ("bolt", "gun_body", ["main#6"], (8.0, 5.99, 13.46)),
+            ("vent", "gun_body", ["main#21"], (6.75, 3.89, 10.75)),
+            ("scriptures", "gun_body", ["main#25,26"], (6.88, 4.15, 8.25)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 3.0, 10.75)),
+            ("magazine_2", "gun_body", [], (8.0, 3.0, 10.75)),
+        ],
+        "hands": {"right": (8.0, 2.3, 16.0), "left": (8.0, 2.6, 7.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 5.05, -0.04),
+        "sight": (8.0, 6.36, 14.3),
+        "eye_relief": 2.0,
+    },
+    # The Plasmabuss is one part. Its crank (the owner's group so named: the main part's 52nd to 55th elements, the
+    # lever on top of the back of its chamber) is pulled back and over about its axle as the reload ends; each loop of
+    # the reload carries a charge (PROPS) in from the left to the side of its chamber. Its sight is the notch between
+    # the two posts on top of the chamber's back (the 29th and 30th); there is no front post, the aim runs over the
+    # muzzle's bell.
+    "glowmouth": {
+        "bones": [
+            ("gun_body", None, ["main-#51,52,53,54"], (8.0, 2.4, 16.0)),
+            ("crank", "gun_body", ["main#51,52,53,54"], (8.0, 3.75, 13.5)),
+            ("shell", "gun_body", ["@cell"], (7.42, 2.28, 10.07)),
+        ],
+        "hands": {"right": (8.0, 2.4, 16.0), "left": (8.0, 1.0, 7.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 3.8, -0.46),
+        "sight": (8.0, 6.07, 10.74),
+        "eye_relief": 3.0,
+    },
+    # Slice 10C, the double-barrels. The Super Shotgun breaks open: its barrels, fore-end and top rib, and the strap
+    # under the fore-end (the main part's 1st, 7th, 12th to 16th elements), ride the barrel bone, which tips them down
+    # about the hinge at the frame's front; the frame, the fences round the breech and the stock stay.
+    "mule": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 2.2, 14.6)),
+            ("gun_body", "gun_body2", ["main-#0,6,11,12,13,14,15"], (8.0, 2.2, 14.6)),
+            ("barrel", "gun_body", ["main#0,6,11,12,13,14,15"], (8.0, 2.59, 9.93)),
+            ("bolt", "gun_body", [], (8.0, 3.86, 10.35)),
+            ("shell", "gun_body", [], (8.0, 3.86, 10.35)),
+        ],
+        "hands": {"right": (8.0, 2.2, 14.6), "left": (8.0, 1.3, 6.5)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 3.86, -2.82),
+        "sight": (8.0, 5.4, 10.6),
+        "eye_relief": 2.5,
+    },
+    # The Doublet is a double flintlock with the Blunderbuss's hammer (the owner's same hammer part, on the lock's
+    # right side, turning about its foot as the Bellmouth's does). Its reload drops a ball into each muzzle (ball,
+    # ball2), then rams the left barrel and the right: the ramrod (ram) rides a bone (ram2) that shifts it over to the
+    # right barrel between the two. The balls, the ramrod and the priming flash had no parts (PROPS); the rod lies
+    # along the fore-stock between rammings. Its left arm hangs from a "left_arm2" bone the reload slides back, as the
+    # Bellmouth's does. Its sight runs over the raised rib between the barrels, clear of the muzzles' rings.
+    "fowler": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 2.1, 15.0)),
+            ("gun_body", "gun_body2", ["main"], (8.0, 2.1, 15.0)),
+            ("hammer", "gun_body", ["hammer"], (8.96, 3.6, 15.0)),
+            ("bolt", "gun_body", [], (8.0, 3.6, 12.0)),
+            ("flash", "gun_body", ["@flash"], (9.0, 4.9, 13.2)),
+            ("ball", "gun_body", ["@ball"], (6.4, 3.0, 7.3)),
+            ("ball2", "gun_body", ["@ball2"], (8.4, 3.0, 7.3)),
+            ("ram2", "gun_body", [], (8.1, 2.0, 9.5)),
+            ("ram", "ram2", ["@ram"], (8.1, 2.0, 9.5)),
+            ("left_arm2", "gun_body", [], (8.0, 1.3, 7.0)),
+        ],
+        "hands": {"right": (8.0, 2.1, 15.0), "left": (8.0, 1.3, 7.0)},
+        "arm_parents": {"left": "left_arm2"},
+        "arms": {"right": (-0.2762, -0.2276, 0.9338), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 3.6, 2.1),
+        "sight": (8.0, 5.45, 11.5),
+        "eye_relief": 3.0,
+    },
+    # The Handcannon is held in one hand, as the Duelling Pistol is: its idle hides the left arm, whose hand point is
+    # at the muzzle, holding the ball, 0.71 s into the reload. Its cock and the jaw on it (the main part's 15th and
+    # 16th elements, on the lock's right side) turn about the cock's lowest corner; its ramrod is the owner's own, the
+    # rod under the barrel (the 13th element), drawn out, raised to the bore and rammed home. The ball and the priming
+    # flash had no parts (PROPS). Its sight is the notch between the two posts on top of the breech, raised to clear
+    # the barrel's top edge and the muzzle's swell, which stand higher.
+    "culverin": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 1.6, 14.4)),
+            ("gun_body", "gun_body2", ["main-#12,14,15"], (8.0, 1.6, 14.4)),
+            ("hammer", "gun_body", ["main#14,15"], (8.955, 2.404, 11.785)),
+            ("bolt", "gun_body", [], (8.0, 3.853, 11.0)),
+            ("ram", "gun_body", ["main#12"], (8.0, 1.851, 7.144)),
+            ("ball", "gun_body", ["@ball"], (8.0, 3.55, 8.5)),
+            ("flash", "gun_body", ["@flash"], (8.9, 4.5, 11.0)),
+        ],
+        "hands": {"right": (8.0, 1.6, 14.4), "left": (8.0, 3.85, 2.9)},
+        "hand_pose": {"left": ("reload", "0.7083")},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.8586, -0.4957, -0.1305)},
+        "muzzle": (8.0, 3.853, 2.77),
+        "sight": (8.0, 5.55, 12.73),
+    },
+    # Slice 10D, the sculk guns. Each has the owner's sculk tendrils, flat planes on its receiver or barrel, which its
+    # animations sway on the "seal" bone; its bolt is the rib along its top, which each shot drives back. The Sculk
+    # Resonator's magazine is the flat plate under its well (the main part's 44th element); the Whispers' its own
+    # part. Their sight is the owner's ring on the back of the receiver, a peep, over the post on the barrel; the Echoes
+    # 2's the notch between the two posts on the back of its receiver.
+    "undertone_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-#7,36,37,38,39,43", "sights"], (8.0, 2.12, 14.3)),
+            ("bolt", "gun_body", ["main#7"], (8.0, 5.625, 9.1)),
+            ("seal", "gun_body", ["main#36,37,38,39"], (8.0, 5.06, 12.725)),
+            ("magazine", "gun_body", ["main#43"], (8.0, 2.5, 9.35)),
+            ("magazine_2", "gun_body", [], (8.0, 2.5, 9.35)),
+        ],
+        "hands": {"right": (8.0, 2.12, 14.3), "left": (8.0, 1.0, 5.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 4.04, -0.9),
+        "sight": (8.0, 5.85, 15.18),
+        "eye_relief": 2.0,
+    },
+    "murmur_smg": {
+        "bones": [
+            ("gun_body", None, ["main-#2,23,24", "sights"], (8.0, 2.12, 14.3)),
+            ("bolt", "gun_body", ["main#2"], (8.0, 5.625, 10.5)),
+            ("seal", "gun_body", ["main#23,24"], (8.0, 4.06, 3.725)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 2.5, 9.0)),
+            ("magazine_2", "gun_body", [], (8.0, 2.5, 9.0)),
+        ],
+        "hands": {"right": (8.0, 2.12, 14.3), "left": (8.0, 1.0, 9.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 4.04, 1.1),
+        "sight": (8.0, 5.85, 15.18),
+        "eye_relief": 1.0,
+    },
+    # The Echoes 2's barrels (its own part) turn about their bore as its reload takes a shell at a time.
+    "reverb": {
+        "bones": [
+            ("gun_body", None, ["main-#3,23,24,25,26", "sights"], (8.0, 2.7, 14.7)),
+            ("barrels", "gun_body", ["barrels"], (8.0, 4.54, 2.92)),
+            ("bolt", "gun_body", ["main#3"], (8.0, 5.625, 11.1)),
+            ("seal", "gun_body", ["main#23,24,25,26"], (8.0, 4.31, 10.05)),
+            ("magazine", "gun_body", [], (8.0, 2.0, 9.0)),
+            ("magazine_2", "gun_body", [], (8.0, 2.0, 9.0)),
+        ],
+        "hands": {"right": (8.0, 2.7, 14.7), "left": (8.0, 1.5, 5.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 4.54, -1.53),
+        "sight": (8.0, 5.95, 13.6),
+        "eye_relief": 1.0,
+    },
+    # Slice 11A, the Nether guns. The Mangalitsa's pump is its bolt part, the fore-end under its barrel, which each shot
+    # slides back under the left hand.
+    "tusker": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.0, 2.3, 15.5)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 2.375, 5.15)),
+        ],
+        "hands": {"right": (8.0, 2.3, 15.5), "left": (8.0, 1.4, 5.2)},
+        "arms": {"right": (-0.2948, -0.1586, 0.9423), "left": (-0.0795, -0.6036, 0.7934)},
+        "muzzle": (8.0, 4.5, -3.1),
+        "sight": (8.0, 6.37, 14.73),
+        "eye_relief": 1.0,
+    },
+    # The Vulcanic Repeater's bolt is the rib along its top (the main part's 29th element); its seal the gold diamond
+    # with the glowing stone on its side (the 27th and 28th), which each shot rocks.
+    "cinder_repeater": {
+        "bones": [
+            ("gun_body", None, ["main-#26,27,28", "stan_barrel", "sights", "stan_grip"], (8.0, 1.6, 15.6)),
+            ("bolt", "gun_body", ["main#28"], (8.0, 5.18, 13.62)),
+            ("seal", "gun_body", ["main#26,27"], (8.0, 3.775, 13.775)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 0.05, 11.45)),
+            ("magazine_2", "gun_body", [], (8.0, 0.05, 11.45)),
+        ],
+        "hands": {"right": (8.0, 1.6, 15.6), "left": (8.0, 1.8, 9.0)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.1913, -0.3314, 0.9239)},
+        "muzzle": (8.0, 3.648, 2.7),
+        "sight": (8.0, 5.57, 15.23),
+        "eye_relief": 1.0,
+    },
+    # The Trotters' trapdoor is the lid on top of its receiver (the main part's 9th element), hinged along its left
+    # edge; each shot flips it open to throw the case out, and the reload holds it open while a round at a time goes in
+    # (the shell bone, PROPS). Its bolt part is the bolt and its handle on the right. The whole gun rides gun_body2,
+    # which each shot pushes forward as the bolt is worked. Its magazine bone holds nothing. The main part's 27th
+    # element, the same box as its 1st with no texture on any face, is left out.
+    "bastion_rifle": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 2.4, 17.6)),
+            ("gun_body", "gun_body2", ["main-#8,26", "stan_barrel", "sights", "stan_grip"], (8.0, 2.4, 17.6)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 5.35, 12.43)),
+            ("trapdoor", "gun_body", ["main#8"], (7.259, 5.875, 14.4)),
+            ("shell", "gun_body", ["@shell"], (8.707, 6.042, 15.278)),
+            ("magazine", "gun_body", [], (8.0, 3.0, 12.0)),
+        ],
+        "hands": {"right": (8.0, 2.4, 17.6), "left": (8.0, 2.3, 8.0)},
+        "arms": {"right": (-0.2948, -0.1586, 0.9423), "left": (0.9577, -0.2566, 0.1305)},
+        "muzzle": (8.0, 4.92, -4.1),
+        "sight": (8.0, 6.75, 12.4),
+        "eye_relief": 6.0,
+    },
+    # Slice 11B. The Pyroclastic Flow is held in one hand: its idle hides the left arm, which comes in to work the slider
+    # at the front of the tank under its barrel (the main part's 23rd to 25th elements) and change the tank (its 26th
+    # and 27th), which the owner's groups hang from the slider. Its parts have no bolt, so the bolt bone each shot
+    # moves holds nothing, nor do the magazine bones it scales.
+    "ashfall_pistol": {
+        "bones": [
+            ("gun_body", None, ["main-#22,23,24,25,26", "sights"], (8.0, 2.6, 14.3)),
+            ("bolt", "gun_body", [], (8.0, 5.2, 13.0)),
+            ("slider", "gun_body", ["main#22,23,24"], (8.0, 3.0, 4.1)),
+            ("tank2", "slider", ["main#25,26"], (8.0, 2.18, 5.255)),
+            ("magazine", "gun_body", [], (8.0, 2.18, 7.0)),
+            ("magazine_2", "gun_body", [], (8.0, 2.18, 7.0)),
+        ],
+        "hands": {"right": (8.0, 2.6, 14.3), "left": (8.0, 2.2, 2.9)},
+        "hand_pose": {"left": ("reload", "0.4583")},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.6533, -0.2706, 0.7071)},
+        "muzzle": (8.0, 5.05, -1.9),
+        "sight": (8.0, 6.72, 14.03),
+    },
+    # The Freyr's bolt is the plate along its top (the main part's 7th element), as the Vulcanic Repeater's; its seal
+    # the diamond with the glowing stone on its back (the 19th and 20th), which each shot rocks. Its magazine goes in
+    # at its left side.
+    "goldbristle_carbine": {
+        "bones": [
+            ("gun_body", None, ["main-#6,18,19", "stan_barrel", "sights", "stan_grip"], (8.0, 2.95, 14.8)),
+            ("bolt", "gun_body", ["main#6"], (8.0, 6.325, 12.225)),
+            ("seal", "gun_body", ["main#18,19"], (8.0, 5.275, 14.525)),
+            ("magazine", "gun_body", ["stan_mag"], (5.12, 5.06, 11.78)),
+        ],
+        "hands": {"right": (8.0, 2.95, 14.8), "left": (8.0, 1.8, 9.6)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (-0.7934, -0.6088, 0.0)},
+        "muzzle": (8.0, 4.95, 3.9),
+        "sight": (8.0, 6.82, 14.23),
+        "eye_relief": 1.0,
+    },
+    # The Ribs Glory is the Killer 23 (the Sledge) lengthened, with its own long barrel, ribbed at the muzzle: its bolt
+    # part is its pump, its rear notch the pair of posts on the receiver, and its shell, magazine, scriptures and
+    # no_sights bones hold nothing, as the Sledge's. Its standard barrel part is the Killer 23's, the same box as its own
+    # barrel's back two thirds, and is left out (MISFITS).
+    "crackling": {
+        "bones": [
+            ("gun_body", None, ["main"], (8.0, 2.31, 17.65)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 3.2, 4.25)),
+            ("shell", "gun_body", [], (8.0, 3.2, 12.0)),
+            ("magazine", "gun_body", [], (8.0, 3.2, 8.0)),
+            ("scriptures", "gun_body", [], (8.0, 6.0, 12.0)),
+            ("no_sights", "gun_body", [], (8.0, 6.3, 9.5)),
+        ],
+        "hands": {"right": (8.0, 2.31, 17.65), "left": (8.0, 2.0, 2.75)},
+        "arms": {"right": (-0.2948, -0.1586, 0.9423), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 5.1, -8.22),
+        "sight": (8.0, 6.45, 9.1),
+        "eye_relief": 6.0,
+    },
 }
 
 # Props the animations move on bones that had no part ("@<name>" in a bone's parts): the rounds a reload carries in,
@@ -1208,6 +1759,31 @@ PROPS = {
     "linesman": {"cell": {"kind": "cell", "from": (7.73, 0.81, 12.6), "size": (1.5, 1.5, 3.0), "texture_at": (56, 0)}},
     "highwayman": {"shell": {"kind": "buckshot", "from": (8.207, 2.842, 10.878), "size": (1.0, 1.0, 3.0),
                              "texture_at": (120, 123)}},
+    # Slice 10A: the Skylark Rifle's rocket rests where the reload's offsets, scaled and turned, bring its nose to the
+    # opened breech as the reload's carry ends (it shrinks to nothing as it slides in); the Bullfrog's grenade rests in
+    # the barrel, where the reload's offset brings it into the muzzle's mouth.
+    "skylark_rifle": {"rocket": {"kind": "rocket", "from": (8.02, 6.2, 11.18), "size": (1.5, 1.5, 5.0),
+                                 "texture_at": (120, 0)}},
+    "bullfrog": {"grenade": {"kind": "grenade", "from": (7.3, 2.92, 4.95), "size": (1.4, 1.4, 3.0),
+                             "texture_at": (120, 0)}},
+    # Slice 10B: the Glowmouth's charge, an Energy Cell as the Linesman's is. It rests where the loop's last carry
+    # (0.4167 s) brings it into the left side of the chamber, its middle at the shell bone's pivot, and shrinks to
+    # nothing there.
+    "glowmouth": {"cell": {"kind": "cell", "from": (6.67, 1.53, 8.57), "size": (1.5, 1.5, 3.0), "texture_at": (120, 0)}},
+    "fowler": {
+        "ball": {"kind": "ball", "from": (5.9, 2.5, 6.8), "size": (1.0, 1.0, 1.0), "texture_at": (120, 120)},
+        "ball2": {"kind": "ball", "from": (7.9, 2.5, 6.8), "size": (1.0, 1.0, 1.0), "texture_at": (112, 120)},
+        "ram": {"kind": "rod", "from": (7.85, 1.75, 5.0), "size": (0.5, 0.5, 9.0), "texture_at": (96, 104)},
+        "flash": {"kind": "flash", "from": (8.5, 4.4, 12.7), "size": (1.0, 1.0, 1.0), "texture_at": (104, 120)},
+    },
+    "culverin": {
+        "ball": {"kind": "ball", "from": (7.5, 3.05, 8.0), "size": (1.0, 1.0, 1.0), "texture_at": (56, 56)},
+        "flash": {"kind": "flash", "from": (8.4, 4.0, 10.5), "size": (1.0, 1.0, 1.0), "texture_at": (48, 56)},
+    },
+    # Slice 11A: the Bastion Rifle's round rests where the loop's last carry (0.2917 s) brings it into the breech under
+    # the open trapdoor, and shrinks to nothing there.
+    "bastion_rifle": {"shell": {"kind": "cartridge", "from": (8.207, 5.542, 13.778), "size": (1.0, 1.0, 3.0),
+                                "texture_at": (120, 120)}},
 }
 # The owner's pilot flame (Guns/item/spitfire_flame.png): three 8 x 8 frames, one above the other; the first frame's
 # flame is 4 px wide (columns 2 to 5) and 8 tall, its tip at the top.
@@ -1343,7 +1919,8 @@ ATTACHMENTS = {
     # with the owner's short beam out of its front; held, it marks where the gun points with a red dot
     # (client/guns/GunLaser), and aimed, its dot is on the middle of the screen as the Reflex Sight's. "not_on": the
     # guns that do not take it although they take scopes. The Breacher's atlas, holding three scopes' pieces, has no
-    # room left for its pieces. The Trench Lobber's has none either, and its grenades arc below a straight laser.
+    # room left for its pieces. The Trench Lobber's has none either, and its grenades arc below a straight laser. On
+    # the Earthmover's rail, off the left side of its body (slice 10A), its housing would run into the drum.
     "tactical_grip": {
         "display": "Tactical Grip", "slot": "grip", "parts": ["tact_grip"], "replaces": False,
         "effects": {"hip_spread": 0.9, "kick": 0.8}, "model": "vertical_grip", "model_elements": [1, 3, 4],
@@ -1353,7 +1930,7 @@ ATTACHMENTS = {
     "laser_sight": {
         "display": "Laser Sight", "slot": "optic", "mount": True, "parts": [], "replaces": True,
         "effects": {"hip_spread": 0.7}, "model": "laser_sight", "texture": "laser_sight",
-        "more_textures": {"scguns:item/laser": "laser_beam"}, "not_on": ["breacher", "trench_lobber"],
+        "more_textures": {"scguns:item/laser": "laser_beam"}, "not_on": ["breacher", "trench_lobber", "earthmover"],
         "zoom": 0.9, "view": {"dot": "red_dot_reticle"},
         "tooltip": "A laser on the gun's top: a red dot marks where it points, so it is much steadier from the hip.",
     },
@@ -1406,12 +1983,20 @@ ATTACHMENT_RECIPES = {
 # The Netherite Bayonet is a Diamond Bayonet upgraded at a smithing table, as netherite tools are.
 NETHERITE_UPGRADES = {"netherite_bayonet": "diamond_bayonet"}
 
+# Attachments whose parts are among a gun's but do not fit its model (slice 11B): the Ribs Glory's barrel parts are the
+# Killer 23's, made for a barrel that ends at z -1.2. Its own barrel runs on to -8.2, so the silencers and the muzzle
+# brake would sit inside its shroud, halfway along it, and the extended barrel inside the barrel itself.
+MISFITS = {"crackling": ("silencer", "baffled_silencer", "muzzle_brake", "extended_barrel")}
+
 
 def attachment_part(gun, kind):
     """The part entry this gun shows the attachment with, or None. A scope's is its own item model mounted on the gun
     ("%<kind>", optic_part()), on a gun the owner made to take one (takes_optics()). Any other attachment's is the
     first of its "parts" the gun has, if every face draws on a texture in the library (the gun's own or, since slice 7,
-    one the owner shares between guns, merged into the gun's atlas by atlas_layout())."""
+    one the owner shares between guns, merged into the gun's atlas by atlas_layout()), unless it is among the gun's
+    MISFITS."""
+    if kind in MISFITS.get(gun, ()):
+        return None
     if ATTACHMENTS[kind].get("mount"):
         return f"%{kind}" if takes_optics(gun) and gun not in ATTACHMENTS[kind].get("not_on", ()) else None
     for name in ATTACHMENTS[kind]["parts"]:
@@ -1443,8 +2028,9 @@ def attachment_parts(gun, kind):
     return [part]
 
 
-# Where a scope stands on a gun, in owner space, where optic_mount()'s reading of the parts would not do.
-MOUNTS = {}
+# Where a scope stands on a gun, in owner space, where optic_mount()'s reading of the parts would not do: the
+# Earthmover's sight and the rail under it stand off the left side of its body (slice 10A), so a scope stands there too.
+MOUNTS = {"earthmover": (4.875, 7.45, 9.675)}
 
 
 def optic_mount(gun):
@@ -1609,6 +2195,17 @@ ZOOM = {
     "spikedriver": 0.85, "seam_cutter": 0.95, "caisson_pistol": 0.9,
     # The pump shotguns (slice 9D): the Highwayman, made to be aimed, narrows it most.
     "sledge": 0.9, "highwayman": 0.8, "throttle": 0.88,
+    # The launchers (slice 10A): the Skylark Rifle reaches furthest; the Bullfrog lobs its grenades close.
+    "earthmover": 0.85, "skylark_rifle": 0.8, "bullfrog": 0.92,
+    # Coil and plasma (slice 10B): the Solenoid Rifle reaches furthest; the Glowmouth's arc seeks close.
+    "solenoid_rifle": 0.75, "votive_rifle": 0.85, "glowmouth": 0.95,
+    # The double-barrels (slice 10C): shotguns, the Fowler a long gun, the Culverin a hand cannon fired close.
+    "mule": 0.92, "fowler": 0.88, "culverin": 0.94,
+    # The sculk guns (slice 10D): a rifle, a machine gun and a double-barrel.
+    "undertone_rifle": 0.82, "murmur_smg": 0.9, "reverb": 0.9,
+    # The Nether guns (slice 11A): a shotgun, a repeater and a rifle; (slice 11B) a pistol, a carbine and a shotgun.
+    "tusker": 0.9, "cinder_repeater": 0.88, "bastion_rifle": 0.8,
+    "ashfall_pistol": 0.9, "goldbristle_carbine": 0.85, "crackling": 0.9,
 }
 
 
@@ -1647,7 +2244,9 @@ FLASH_SOURCE = BLOCKS / "Big Cannons and Mounted Guns" / "textures"
 # launch and a burst of flame (slice 8C) flash about as wide as buckshot; an energy weapon's discharge (slice 8D) as a
 # light round's.
 FLASH_SIZE = {"light_round": 5.0, "rifle_round": 7.0, "buckshot_shell": 8.0, "paper_cartridge": 10.0, "grenade": 9.0,
-              "minecraft:blaze_powder": 8.0, "energy_cell": 6.0}
+              "minecraft:blaze_powder": 8.0, "energy_cell": 6.0,
+              # Slice 10A: a rocket's launch flares as wide as black powder.
+              "he_rocket": 10.0}
 # The flash's tint, by the round, where it is not the owner's frames' own white-gold (client/guns/GunLooks
 # FLASH_TINTS, multiplied into the frames): an energy weapon's discharge is cyan-white.
 FLASH_TINT = {"energy_cell": 0x9FF4FF}
@@ -1696,7 +2295,21 @@ EVENT_OVERRIDES = {"thunderpipe": {"reload_mag_in": "shell_in"}, "haymaker": {"r
                    "squall_rifle": {"metal": "clank"},
                    # The pump shotguns (slice 9D) push a shell; the Throttle's bulb clanks shut.
                    "sledge": {"reload_mag_in": "shell_in"}, "highwayman": {"reload_mag_in": "shell_in"},
-                   "throttle": {"reload_mag_in": "shell_in", "metal": "clank"}}
+                   "throttle": {"reload_mag_in": "shell_in", "metal": "clank"},
+                   # The launchers (slice 10A): the Earthmover's drum clanks as it twists free and home; the Skylark
+                   # Rifle and the Bullfrog push a round in.
+                   "earthmover": {"metal": "clank"}, "skylark_rifle": {"reload_mag_in": "shell_in"},
+                   "bullfrog": {"reload_mag_in": "shell_in"},
+                   # The Glowmouth (slice 10B) is loaded a charge at a time, as the Stormlock Rifle is.
+                   "glowmouth": {"reload_mag_in": "insert"},
+                   # The Mule (slice 10C) pushes its shells in, as the Coach Gun does.
+                   "mule": {"reload_mag_in": "shell_in"},
+                   # The Reverb (slice 10D) pushes a shell in at a time.
+                   "reverb": {"reload_mag_in": "shell_in"},
+                   # Of the Nether guns (slice 11A), the Tusker pushes a shell in at a time, the Bastion Rifle a round;
+                   # (slice 11B) the Crackling a shell.
+                   "tusker": {"reload_mag_in": "shell_in"}, "bastion_rifle": {"reload_mag_in": "shell_in"},
+                   "crackling": {"reload_mag_in": "shell_in"}}
 SHOT_SOUNDS = {
     "rust_midge": "item/rusty_gnat/fire.ogg",
     "patchwork_carbine": "item/makeshift_rifle/fire.ogg",
@@ -1746,6 +2359,35 @@ SHOT_SOUNDS = {
     "sledge": "item/makeshift_rifle/enchanted_fire.ogg",
     "highwayman": "item/boomstick/enchanted_fire.ogg",
     "throttle": "item/plasma_shotgun/fire.ogg",
+    # Slice 10A: the library's bazooka and rocket rifle shots, and its second air gun shot, a hollow thump for the
+    # Bullfrog's grenade.
+    "earthmover": "item/bazooka/fire.ogg",
+    "skylark_rifle": "item/rocket_rifle/fire.ogg",
+    "bullfrog": "item/airgun/fire_2.ogg",
+    # Slice 10B: the library's gauss shot; its short nerve pinch shot, for the Votive Rifle's quick bolts; and its
+    # second plasma shot.
+    "solenoid_rifle": "item/gauss/fire.ogg",
+    "votive_rifle": "item/nervepinch/fire.ogg",
+    "glowmouth": "item/plasma/fire_2.ogg",
+    # Slice 10C: the library's shotgun blast, as the Thunderpipe fires; the flintlocks' black powder shot; and its cannon
+    # shot, unused till now, for the Culverin.
+    "mule": "item/boomstick/fire.ogg",
+    "fowler": "item/blackpowder/fire.ogg",
+    "culverin": "item/cannon/fire.ogg",
+    # Slice 10D: the library's sculk shot, unused till now; its soft beam shot, for the Murmur; and its shulker shot.
+    "undertone_rifle": "item/sculk/fire.ogg",
+    "murmur_smg": "item/beam/fire.ogg",
+    "reverb": "item/shulker/fire.ogg",
+    # Slice 11A: the Haymaker's shotgun blast; the library's other Rust Midge shot, unused till now; the Bulldog
+    # Pistol's heavy rifle shot.
+    "tusker": "item/bruiser/fire.ogg",
+    "cinder_repeater": "item/rusty_gnat/enchanted_fire.ogg",
+    "bastion_rifle": "item/heavier_rifle/fire.ogg",
+    # Slice 11B: the Sentry Pistol's shot, the Patchwork Carbine's and the Coach Gun's. The library's shots not used
+    # yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source.
+    "ashfall_pistol": "item/scrapper/fire.ogg",
+    "goldbristle_carbine": "item/makeshift_rifle/fire.ogg",
+    "crackling": "item/brass_shotgun/fire.ogg",
 }
 SUBTITLES = {
     "fire": "Gun fires",
@@ -1772,6 +2414,10 @@ SUBTITLES = {
 
 def items():
     return list(GUNS) + list(AMMO) + [CELL] + list(ATTACHMENTS)
+
+
+def blocks():
+    return [RACK]
 
 
 def switches(condition, gun):
@@ -1818,6 +2464,132 @@ DAMAGE_TYPES = {
     "zap": {"effects": None, "tags": ("no_knockback", "bypasses_cooldown"),
             "death": ("%1$s was zapped by %2$s", "%1$s was zapped by %2$s using %3$s", "%1$s was zapped while fighting %2$s")},
 }
+
+
+# ------------------------------------------------------------------ the Cell Rack (slice 10E)
+
+# A block of six cradles, two shelves of three, that charges the Energy Cells standing in it at once from cables
+# (guns/CellRackBlock, CellRackBlockEntity; the cells are drawn by client/guns/CellRackRenderer at the cradles here).
+RACK = "cell_rack"
+RACK_DISPLAY = "Cell Rack"
+# Steel plates for its frame, copper cable for its contacts, an advanced circuit to share the charge out and a battery
+# box for its buffer: the Charging Station's parts, a steel plate in place of its lamp. Its recipe needs the machines
+# too, as the Energy Cell's does (it charges from cables).
+RACK_RECIPE = (["SWS", "SAS", "SBS"], {"S": "#c:plates/steel", "W": f"{MOD}:copper_cable", "A": f"{MOD}:advanced_circuit",
+                                       "B": f"{MOD}:battery_box"})
+# The cradles' columns (left to right seen from the front), the tops of the two shelves and how far back the cells
+# stand, in pixels of the north-facing model; CellRackBlock.COLUMNS and CellRackRenderer use the same.
+RACK_COLUMNS = (12.5, 8.0, 3.5)
+RACK_SHELVES = (2.5, 9.5)
+RACK_DEPTH = 8.5
+# How far above its shelf the middle of a cell's icon stands (CellRackRenderer.ROWS): its foot half a pixel down in its
+# cup, a pixel tall.
+RACK_CELL_MIDDLE = 2.75
+# Its screen lights while it charges, as the Charging Station's does.
+RACK_LIT = ("el_screen", "el_screen_on")
+
+
+# ------------------------------------------------------------------ guns in mobs' hands (slice 10F)
+
+# The raider gunners (tools/raiders.py, raiders/RaiderInfantry) carry the service arms and fire them as guns/MobGuns
+# does. MOB_ARMS: (gun, how many in ten carry it, how near they close to fire it in blocks): the pistol from middle
+# distance, the rifle from further off, the shotgun from close by.
+MOB_ARMS = [("sentry_pistol", 4, 16), ("garrison_rifle", 3, 24), ("breacher", 3, 8)]
+# A mob's shot does MOB_DAMAGE of the gun's damage a pellet (the bullet damage type then scales with the difficulty
+# against players, as a monster's attack does); an automatic gun fires MOB_BURST shots at its interval, any other one,
+# and then the mob waits MOB_PAUSE ticks. A gun not in MOB_ARMS is fired from MOB_REACH blocks (or its range).
+MOB_DAMAGE = 0.5
+MOB_BURST = 3
+MOB_PAUSE = 30
+MOB_REACH = 16
+# The chance a gunner's gun drops to a player's kill (vanilla's for a mob's equipment; Looting adds to it), empty, and
+# the rounds of its gun's ammunition it drops to one (tools/raiders.py writes its loot table).
+MOB_DROP = 0.085
+MOB_ROUNDS = (0, 3)
+
+
+# ------------------------------------------------------------------ two guns at once (slice 10G)
+
+# A player may hold a one-handed gun (two_handed() false: the pistols, revolvers, the Haymaker, the Bronco SMG, the
+# Spikedriver and the Culverin) in each hand; left click fires the main hand's, right click the other's, and neither is
+# aimed down its sights (JugcraftGuns.ONE_HANDED). From the hip, each of two guns strays DUAL_SPREAD times as far as one
+# gun held alone does.
+DUAL_SPREAD = 1.5
+
+
+def one_handed():
+    """The guns a player may hold two of, one in each hand (slice 10G): those held in one hand."""
+    return [gun for gun in GUNS if not two_handed(gun)]
+
+
+# ------------------------------------------------------------------ the Nether guns' fire (slices 11A and 11B)
+
+# Each creature a Nether gun's bullet or pellets hurt is set alight for BURN_SECONDS, as the Stoker's flame sets it
+# alight (slice 8C, GunShots.BURN_SECONDS): fire's own damage, one a second, which fireproof creatures shrug off and
+# water puts out. No block is set alight (JugcraftGuns.INCENDIARY).
+INCENDIARY = ("tusker", "cinder_repeater", "bastion_rifle", "ashfall_pistol", "goldbristle_carbine", "crackling")
+BURN_SECONDS = 4
+
+
+def cell_rack_model():
+    """The Cell Rack in the electric look of the power gear (the Charging Station's textures): a graphite plinth edged
+    with high-voltage stripes, a back panel with vented sides, framing posts either side, two shelves each with a
+    glowing strip along its front and three cradles, each a cup the cell's foot stands in and contacts on the back
+    panel behind it, a status screen on the cap that lights while it charges, and power ports on its back and sides
+    for cables. Faces north (the cells stand on the z = 0 side)."""
+    from steampunk_models import box
+    m = [box((0, 0, 0), (16, 1.5, 16), {"*": "el_frame", "north": "el_hazard"}),
+         box((1, 1.5, 10), (15, 15, 15), {"*": "el_casing", "east": "el_vent", "west": "el_vent"}),
+         box((0.5, 15, 9), (15.5, 16, 15.5), {"*": "el_frame", "up": "el_seams"}),
+         box((4, 15.125, 8.5), (12, 15.875, 9), {"*": "el_frame", "north": "el_screen!"}),
+         box((0, 1.5, 1), (1, 15, 10), "el_frame"),
+         box((15, 1.5, 1), (16, 15, 10), "el_frame")]
+    for top in RACK_SHELVES:
+        if top > 2.5:
+            m.append(box((1, top - 1, 1.5), (15, top, 10), "el_frame"))
+        m.append(box((1.5, top - 0.75, 1.25), (14.5, top - 0.25, 1.5), "el_glow"))
+        for x in RACK_COLUMNS:
+            m.append(box((x - 2, top, RACK_DEPTH - 1.5), (x + 2, top + 1, RACK_DEPTH + 1.5), "el_casing"))
+            m.append(box((x - 1.25, top + 1, 9.5), (x + 1.25, top + 4.5, 10), {"*": "el_frame", "north": "el_port!"}))
+    m.append(box((1, 1.5, 1.5), (15, 2.5, 10), "el_frame"))
+    m.append(box((6, 4, 15), (10, 8, 15.75), {"*": "el_frame", "south": "el_port!"}))
+    m.append(box((0.25, 4, 11), (1, 8, 14), {"*": "el_frame", "west": "el_port!"}))
+    m.append(box((15, 4, 11), (15.75, 8, 14), {"*": "el_frame", "east": "el_port!"}))
+    return m
+
+
+def write_cell_rack(write, assets, data, lang, condition):
+    """The Cell Rack's models (lit and not, turned to each facing), item, loot table, recipe and names."""
+    import model_writer
+    lang[f"block.{MOD}.{RACK}"] = RACK_DISPLAY
+    lang[f"message.{MOD}.{RACK}"] = "Cell Rack: %s / %s JE"
+    lang[f"message.{MOD}.{RACK}.cell"] = "%s: %s / %s JE"
+    elements = cell_rack_model()
+    textures = {name: f"{MOD}:block/{name}" for name in model_writer.texture_names(elements)}
+    textures["particle"] = f"{MOD}:block/el_frame"
+    part = model_writer.split_model(RACK, elements, [(0, 0, 0)])[0]
+    write(assets / "models" / "block" / f"{RACK}.json", {"parent": "minecraft:block/block", "textures": textures,
+                                                         "elements": part})
+    lit_from, lit_to = RACK_LIT
+    write(assets / "models" / "block" / f"{RACK}_lit.json",
+          {"parent": f"{MOD}:block/{RACK}", "textures": {lit_from: f"{MOD}:block/{lit_to}"}})
+    variants = {}
+    for facing, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270)):
+        for lit in (False, True):
+            variant = {"model": f"{MOD}:block/{RACK}{'_lit' if lit else ''}"}
+            if y:
+                variant["y"] = y
+            variants[f"facing={facing},lit={str(lit).lower()}"] = variant
+    write(assets / "blockstates" / f"{RACK}.json", {"variants": variants})
+    write(assets / "items" / f"{RACK}.json", {"model": {"type": "minecraft:model", "model": f"{MOD}:block/{RACK}"}})
+    write(data / "loot_table" / "blocks" / f"{RACK}.json", {
+        "type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"{MOD}:{RACK}"}],
+                                              "condition": {"type": "minecraft:survives_explosion"}}],
+        "random_sequence": f"{MOD}:blocks/{RACK}"})
+    pattern, key = RACK_RECIPE
+    write(data / "recipe" / f"{RACK}.json", {
+        "fabric:load_conditions": condition("guns") + condition("machines"), "type": "minecraft:crafting_shaped",
+        "category": "misc", "pattern": pattern, "key": key, "result": {"id": f"{MOD}:{RACK}"}})
 
 
 def write_all(write, assets, data, lang, condition):
@@ -1881,6 +2653,7 @@ def write_all(write, assets, data, lang, condition):
     # the grid); a gun and shears take its last attachment off (GunAttachmentRecipe).
     for recipe in ("gun_attachment", "gun_attachment_removal"):
         write(data / "recipe" / f"{recipe}.json", {"fabric:load_conditions": condition("guns"), "type": f"{MOD}:{recipe}"})
+    write_cell_rack(write, assets, data, lang, condition)
     for slot in SLOTS:
         # The grip slot also takes the bayonets (slice 7): it is everything under the barrel.
         lang[f"tooltip.{MOD}.guns.slot.{slot}"] = "Under-barrel attachment" if slot == "grip" else f"{slot.capitalize()} attachment"
@@ -1909,6 +2682,8 @@ def write_all(write, assets, data, lang, condition):
     # Slice 9G: a grenade gun loads any grenade, one kind at a time (GunShots.reloadAmmo).
     lang[f"message.{MOD}.guns.no_grenades"] = "No grenades to load."
     lang[f"tooltip.{MOD}.guns.loaded_grenade"] = "Loaded with %s"
+    # Slice 10G: the one-handed guns say they pair (JugcraftGuns.ONE_HANDED).
+    lang[f"tooltip.{MOD}.guns.one_handed"] = "One-handed: with one in each hand, left click fires this one, right click the other"
     for name, info in DAMAGE_TYPES.items():
         body = {"message_id": f"{MOD}.{name}", "exhaustion": 0.1, "scaling": "when_caused_by_living_non_player"}
         if info["effects"]:
@@ -1962,14 +2737,24 @@ def load_part(gun, part):
     textures = data.get("textures", {})
     shift = PART_SHIFTS.get((GUNS[gun]["source"], part_file(part)))
     for element in data.get("elements", []):
-        for face in element.get("faces", {}).values():
+        size = [t - f for f, t in zip(element["from"], element["to"])]
+        for direction, face in list(element.get("faces", {}).items()):
             face["_texture"] = face_texture(textures, face.get("texture", ""))
+            if face["_texture"] is None and flat_face(direction, size):
+                del element["faces"][direction]
         if shift:
             element["from"] = [v + d for v, d in zip(element["from"], shift)]
             element["to"] = [v + d for v, d in zip(element["to"], shift)]
             if element.get("rotation"):
                 element["rotation"]["origin"] = [v + d for v, d in zip(element["rotation"].get("origin", [8, 8, 8]), shift)]
     return data
+
+
+def flat_face(direction, size):
+    """Whether the face of a box of this size has no area: an edge of a flat plane. The owner leaves those untextured
+    ("#missing") on the sculk guns' tendrils (slice 10D); they draw nothing, so they are dropped."""
+    across = {"north": (0, 1), "south": (0, 1), "east": (2, 1), "west": (2, 1), "up": (0, 2), "down": (0, 2)}[direction]
+    return any(abs(size[axis]) < 1e-6 for axis in across)
 
 
 def face_texture(textures, ref):
@@ -2033,7 +2818,11 @@ def atlas_layout(gun):
     side = max(ow, oh)
     while others:
         if side > 128:
-            raise ValueError(f"{gun}: its shared textures do not fit a 128 x 128 atlas")
+            # Slice 10C: the Doublet's own texture is as big as the largest atlas, so the textures its hammer and
+            # grips share with other guns cannot sit beside it whole; they go in piece by piece, as the scopes' do.
+            side = 128
+            islands.update(texture_islands(gun, lambda part, texture: texture in others))
+            break
         taken = {}
         for texture in others:
             w, h = sizes[texture]
@@ -2050,28 +2839,91 @@ def atlas_layout(gun):
         side *= 2
     # The Laser Sight's textures (slice 9E) are packed after the rest, so that adding it moved none of the pieces the
     # scopes before it had placed.
-    for group in ({t: r for t, r in islands.items() if t not in PACK_LATER},
-                  {t: r for t, r in islands.items() if t in PACK_LATER}):
+    groups = ({t: r for t, r in islands.items() if t not in PACK_LATER},
+              {t: r for t, r in islands.items() if t in PACK_LATER})
+    try:
+        side, place = pack_groups(gun, side, place, used, groups, sizes, False)
+    except ValueError:
+        # Slice 11A: the Tusker's own texture leaves the scopes' pieces, one by one, room enough, but then too little
+        # for the Laser Sight's even joined; there every group's pieces close together go in as one from the first.
+        side, place = pack_groups(gun, side, place, used, groups, sizes, True)
+    return (side, side) if len(place) > 1 else (ow, oh), place
+
+
+def pack_groups(gun, side, place, used, groups, sizes, joined_first):
+    """Packs the groups of scope pieces in turn (atlas_layout()), each one by one, or joined (joined_rects()) when one
+    by one they do not fit or `joined_first` says so; the atlas grows to 128 if they need the room. Returns the side and
+    the placements, the given ones with the pieces'."""
+    place = dict(place)
+    for group in groups:
+        joined = joined_first
+        if joined:
+            group = {t: joined_rects(rects) for t, rects in group.items()}
         while group:
             try:
                 place.update(pack_islands(gun, side, place, used, group, sizes))
                 break
             except ValueError:
-                if side >= 128:
+                if side < 128:
+                    side *= 2  # what is placed stays where it is in the bigger atlas
+                elif not joined:
+                    # Slice 10B: the Solenoid Rifle's stocks, grips and bayonets draw on shared textures, which leave
+                    # its scopes' pieces too little room one by one; pieces close together then go in as one.
+                    group, joined = {t: joined_rects(rects) for t, rects in group.items()}, True
+                else:
                     raise
-                side *= 2  # what is placed stays where it is in the bigger atlas
-    return (side, side) if len(place) > 1 else (ow, oh), place
+    return side, place
+
+
+def joined_rects(rects):
+    """Pixel rects (x0, y0, x1, y1) of one texture, any two within a pixel of each other joined into the rect round
+    both wherever that takes no more room, the pixel round each included (atlas_layout()'s last try)."""
+    def room(r):
+        return (r[2] - r[0] + 2) * (r[3] - r[1] + 2)
+    rects = sorted(rects)
+    while True:
+        pair = next(((a, b) for i, a in enumerate(rects) for b in rects[i + 1:]
+                     if a[0] <= b[2] + 1 and b[0] <= a[2] + 1 and a[1] <= b[3] + 1 and b[1] <= a[3] + 1
+                     and room((min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])))
+                     <= room(a) + room(b)), None)
+        if pair is None:
+            return set(rects)
+        a, b = pair
+        rects = sorted([r for r in rects if r not in pair]
+                       + [(min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))])
 
 
 # Scope textures packed piece by piece after all the others (atlas_layout()).
 PACK_LATER = {"scguns:item/laser_sight", "scguns:item/laser"}
 
 
+# Library textures that are an animation's frames, one above the other (slice 10A: the Skylark Rifle's two, its flame
+# flickering in a corner none of its parts draw on). A gun draws on the first frame, the top square: the frames' UVs
+# are a frame's, as the game reads an animated texture's.
+FRAMED = {"scguns:item/rocket_rifle",
+          # Slice 10B: the Solenoid Rifle's and the Votive Rifle's glowing parts, three frames each.
+          "scguns:item/gauss_rifle_animated", "scguns:item/plasgun_animated",
+          # Slice 10D: the sculk guns' glowing parts (three frames) and their tendrils (sixteen).
+          "scguns:item/sculk_resonator_animated", "scguns:item/sculk_resonator_tendril", "scguns:item/echoes_2_animated",
+          # Slice 11A: the Cinder Repeater's glowing stone, three frames (the Pyroclastic Flow's); slice 11B's Goldbristle
+          # Carbine's too.
+          "scguns:item/pyroclastic_flow_animated"}
+
+
 def texture_size(texture):
-    """(width, height) of a library texture."""
+    """(width, height) of a library texture (its first frame's, for one FRAMED)."""
     from PIL import Image
     with Image.open(texture_file(texture)) as image:
-        return image.size
+        width, height = image.size
+    return (width, width) if texture in FRAMED else (width, height)
+
+
+def library_image(texture):
+    """A library texture in RGBA (its first frame, for one FRAMED)."""
+    from PIL import Image
+    with Image.open(texture_file(texture)) as image:
+        rgba = image.convert("RGBA")
+    return rgba.crop((0, 0, rgba.width, rgba.width)) if texture in FRAMED else rgba
 
 
 def island_rect(data, face, lo, hi, size):
@@ -2087,6 +2939,12 @@ def scope_islands(gun):
     """{texture id: the pixel rects the gun's faces draw on it}, for the textures packed piece by piece: those its
     mounted scopes draw on, and any other shared texture as big as the largest atlas, which could never sit whole beside
     the gun's own (slice 8D: the Arc Worker's stocks draw on the Rust Midge's whole 128 px atlas)."""
+    return texture_islands(gun, lambda part, texture: part.startswith("%") or (
+        texture != own_texture(gun) and texture_size(texture) == (128, 128)))
+
+
+def texture_islands(gun, chosen):
+    """{texture id: the pixel rects the gun's faces draw on it}, for the textures chosen(part, texture) picks."""
     found = {}
     for _, _, parts, _ in effective_bones(gun):
         for part in parts:
@@ -2097,7 +2955,7 @@ def scope_islands(gun):
                 hi = [max(a, b) for a, b in zip(element["from"], element["to"])]
                 for face, data in element.get("faces", {}).items():
                     texture = data["_texture"]
-                    if not part.startswith("%") and (texture == own_texture(gun) or texture_size(texture) != (128, 128)):
+                    if not chosen(part, texture):
                         continue
                     found.setdefault(texture, set()).add(island_rect(data, face, lo, hi, texture_size(texture)))
     return found
@@ -2143,7 +3001,12 @@ def face_placement(place, data, face, lo, hi):
     placement = place[data["_texture"]]
     if isinstance(placement, dict):
         _, _, w, h = next(iter(placement.values()))
-        return placement[island_rect(data, face, lo, hi, (w, h))]
+        rect = island_rect(data, face, lo, hi, (w, h))
+        if rect in placement:
+            return placement[rect]
+        # The rect it was joined into (joined_rects()).
+        return next(p for r, p in sorted(placement.items())
+                    if r[0] <= rect[0] and r[1] <= rect[1] and rect[2] <= r[2] and rect[3] <= r[3])
     return placement
 
 
@@ -2151,8 +3014,7 @@ def own_footprint(gun):
     """Which pixels of the gun's own texture are in use: drawn on, under any face's UVs, or a prop's block."""
     import numpy as np
     from PIL import Image
-    with Image.open(LIBRARY / "item" / f"{GUNS[gun]['source']}.png") as image:
-        rgba = np.asarray(image.convert("RGBA"))
+    rgba = np.asarray(library_image(own_texture(gun)))
     used = rgba[:, :, 3] > 0
     height, width = used.shape
     for _, _, parts, _ in effective_bones(gun):
@@ -2188,10 +3050,9 @@ def compose_atlas(gun):
     its attachments draw on, placed by atlas_layout(); None when it is the owner's file unchanged."""
     from PIL import Image
     size, place = atlas_layout(gun)
-    if gun not in PROPS and len(place) == 1:
+    if gun not in PROPS and len(place) == 1 and own_texture(gun) not in FRAMED:
         return None
-    with Image.open(LIBRARY / "item" / f"{GUNS[gun]['source']}.png") as image:
-        own = image.convert("RGBA")
+    own = library_image(own_texture(gun))
     if gun in PROPS:
         own = draw_props(own, gun)
     if len(place) == 1:
@@ -2201,8 +3062,7 @@ def compose_atlas(gun):
         if texture == own_texture(gun):
             atlas.paste(own, placement[:2])
             continue
-        with Image.open(texture_file(texture)) as image:
-            source = image.convert("RGBA")
+        source = library_image(texture)
         if isinstance(placement, dict):
             # A scope's texture, piece by piece: each rect where atlas_layout() packed it.
             for (x0, y0, x1, y1), (x, y, _, _) in placement.items():
@@ -2354,6 +3214,13 @@ def prop_dims(prop):
     return tuple(max(1, int(round(v))) for v in prop["size"])
 
 
+# The props with a front and a back drawn the same way round on every face (slice 10A: a rocket's red nose, a grenade
+# round's steel cap). GeckoLib runs the east face's u and the top's v from back to front (GECKO_CORNERS), so those two
+# faces get blocks of their own, drawn back to front (draw_oriented()). The older props share one block among their
+# four long faces, so their east face and top show it the other way round.
+ORIENTED = ("rocket", "grenade")
+
+
 def prop_cube(gun, name):
     prop = PROPS[gun][name]
     x, y, z = prop["from"]
@@ -2363,6 +3230,12 @@ def prop_cube(gun, name):
     origin = [rnd(8.0 - (x + sx)), rnd(y), rnd(z - 8.0)]
     if prop["kind"] == "flame":
         return {"origin": origin, "size": [sx, sy, sz], "uv": flame_faces(tu, tv, w, h, d)}
+    if prop["kind"] in ORIENTED:
+        # The ends side by side, then the west face, the east face, and the top and bottom side by side.
+        return {"origin": origin, "size": [sx, sy, sz], "uv": {
+            "north": {"uv": [tu, tv], "uv_size": [w, h]}, "south": {"uv": [tu + w, tv], "uv_size": [w, h]},
+            "west": {"uv": [tu, tv + h], "uv_size": [d, h]}, "east": {"uv": [tu, tv + 2 * h], "uv_size": [d, h]},
+            "up": {"uv": [tu, tv + 3 * h], "uv_size": [w, d]}, "down": {"uv": [tu + w, tv + 3 * h], "uv_size": [w, d]}}}
     # One texture block per face (prop_block): the ends side by side, the sides below them, the top and bottom below.
     return {"origin": origin, "size": [sx, sy, sz], "uv": {
         "north": {"uv": [tu, tv], "uv_size": [w, h]}, "south": {"uv": [tu + w, tv], "uv_size": [w, h]},
@@ -2383,7 +3256,7 @@ def flame_faces(tu, tv, w, h, d):
 def prop_block(prop):
     """The atlas block (width, height) a prop's faces take."""
     w, h, d = prop_dims(prop)
-    return max(2 * w, d), 2 * h + d
+    return (max(2 * w, d), 3 * h + d) if prop["kind"] in ORIENTED else (max(2 * w, d), 2 * h + d)
 
 
 def key_value(channel, time=None):
@@ -2714,6 +3587,12 @@ def check():
             problems.append(f"{gun}: its capacity, with a fitted magazine, is more than a gun holds (64)")
         if spec.get("shot") == "flame" and spec["pellets"] != 1:
             problems.append(f"{gun}: a flame is one jet a shot")
+        # Slice 10A: a rocket gun, and only one, fires a High-Explosive Rocket a shot at its own speed.
+        rocket = spec.get("shot") == "rocket"
+        if rocket != ("rocket_speed" in spec) or rocket and not (
+                spec["ammo"] == "he_rocket" and spec["pellets"] == 1 and 0.5 <= spec["rocket_speed"] <= 8.0):
+            problems.append(f"{gun}: a rocket gun, and only one, fires a High-Explosive Rocket a shot, at 0.5 to 8 blocks "
+                            "a tick (rocket_speed)")
     if not all(isinstance(n, int) and n >= 1 for n in OTHER_AMMO.values()):
         problems.append("OTHER_AMMO: each item loads a whole number of rounds, at least one")
     for name, mounts in ((g, b.get("mounts", {})) for g, b in BUILDS.items()):
@@ -2767,7 +3646,8 @@ def draw_props(atlas, gun):
         bw, bh = prop_block(prop)
         if any(atlas.getpixel((tu + x, tv + y))[3] for x in range(max(bw, 8)) for y in range(bh)):
             raise ValueError(f"{gun}: the atlas is not empty at {tu},{tv} for its {name}")
-        {"buckshot": draw_buckshot, "cartridge": draw_cartridge, "flame": draw_flame}.get(prop["kind"], draw_plain)(atlas, prop)
+        draw = {"buckshot": draw_buckshot, "cartridge": draw_cartridge, "flame": draw_flame}.get(prop["kind"], draw_plain)
+        (draw_oriented if prop["kind"] in ORIENTED else draw)(atlas, prop)
     return atlas
 
 
@@ -2844,6 +3724,12 @@ PLAIN = {
     # An Energy Cell (slice 8D), in the owner's cell art's colours: a steel cap, the green glass, a copper cap.
     "cell": (((120, 111, 107, 255), (74, 70, 68, 255)), ((74, 144, 53, 255), (49, 86, 24, 255)),
              ((88, 72, 61, 255), (57, 50, 45, 255))),
+    # Slice 10A: a High-Explosive Rocket, in its item art's colours: the red nose, the steel body, the dark nozzle; and
+    # a grenade round, the field chemistry Grenade's olive with a steel cap at the front.
+    "rocket": (((170, 36, 30, 255), (120, 20, 18, 255)), ((150, 157, 168, 255), (112, 119, 131, 255)),
+               ((82, 88, 99, 255), (58, 62, 72, 255))),
+    "grenade": (((150, 154, 160, 255), (128, 132, 140, 255)), ((96, 110, 62, 255), (70, 82, 44, 255)),
+                ((70, 82, 44, 255), (46, 54, 30, 255))),
 }
 
 
@@ -2865,6 +3751,28 @@ def draw_plain(atlas, prop):
             atlas.putpixel((tu + z, tv + h + y), tone(part, z, y))
         for x in range(2 * w):
             atlas.putpixel((tu + x, tv + 2 * h + z), tone(part, x, z))
+    return atlas
+
+
+def draw_oriented(atlas, prop):
+    """A rocket or a grenade round (ORIENTED): PLAIN's front end, body and back end along its length, light and dark
+    checkered; the ends' faces in their tones, each long face's block the way round GeckoLib reads it (prop_cube())."""
+    tu, tv = prop["texture_at"]
+    w, h, d = prop_dims(prop)
+    front, body, back = PLAIN[prop["kind"]]
+    def part(z):  # z: 0 at the front
+        return front if z == 0 else back if z == d - 1 else body
+    for x in range(w):
+        for y in range(h):
+            atlas.putpixel((tu + x, tv + y), front[(x + y) % 2])
+            atlas.putpixel((tu + w + x, tv + y), back[(x + y) % 2])
+    for z in range(d):
+        for y in range(h):
+            atlas.putpixel((tu + z, tv + h + y), part(z)[(z + y) % 2])               # west: u from the front
+            atlas.putpixel((tu + z, tv + 2 * h + y), part(d - 1 - z)[(z + y) % 2])   # east: u from the back
+        for x in range(w):
+            atlas.putpixel((tu + x, tv + 3 * h + z), part(d - 1 - z)[(x + z) % 2])   # top: v from the back
+            atlas.putpixel((tu + w + x, tv + 3 * h + z), part(z)[(x + z) % 2])       # bottom: v from the front
     return atlas
 
 

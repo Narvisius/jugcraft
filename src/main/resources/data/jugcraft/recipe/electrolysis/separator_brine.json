@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:electrolysis",
+  "capability": "jugcraft:aqueous_electrolysis",
+  "fluids": [
+    {
+      "fluid": "jugcraft:brine",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 250,
+      "tank": 1
+    },
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 500,
+      "tank": 2
+    }
+  ],
+  "time": 400
+}

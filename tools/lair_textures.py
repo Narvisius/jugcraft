@@ -1,7 +1,10 @@
 """Textures for the lairs (tools/lairs.py, docs/features/hollow-acre.md): the Hollow Acre's lair-only blocks (blighted
 soil, black wheat, mown stubble, the soul brazier, the harvest moon and the Grey Mist), the Mourning Wreath and the Death
-Knell; and, from tools/spindle_loft_textures.py, the Spindle Loft's blocks and the Cursed Spindle. Painted here by code, 16 x 16, in the clean style of the Witching Season: a few flat tones per material, crisp
-edges, no noise for its own sake. Called from tools/crop_textures.py. No Mojang texture is read, traced or copied.
+Knell; from tools/spindle_loft_textures.py, the Spindle Loft's blocks and the Cursed Spindle; from
+tools/glacier_hall_textures.py, the Glacier Hall's blocks and the Frost Horn; and from tools/cinder_kiln_textures.py, the
+Cinder Kiln's blocks and the Kiln Seal. Painted here by code, 16 x 16, in the clean
+style of the Witching Season: a few flat tones per material, crisp edges, no noise for its own sake. Called from
+tools/crop_textures.py. No Mojang texture is read, traced or copied.
 """
 import math
 import random
@@ -299,9 +302,13 @@ def death_knell():
 
 
 def lair_textures():
+    from cinder_kiln_textures import cinder_kiln_textures
+    from glacier_hall_textures import glacier_hall_textures
     from spindle_loft_textures import spindle_loft_textures
     return {
         **spindle_loft_textures(),
+        **glacier_hall_textures(),
+        **cinder_kiln_textures(),
         ("block", "blighted_soil_top"): soil(21, top=True),
         ("block", "blighted_soil_side"): soil_side(),
         ("block", "blighted_soil"): soil(23),

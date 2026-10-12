@@ -30,7 +30,7 @@ class ClientTestSelectionTests(unittest.TestCase):
         self.assertIn("PeepoDeliveryClientTests", shown)
 
     def test_full_run_assigns_every_class_exactly_once(self):
-        jobs = selection.share(set(self.tests), self.tests, 4)
+        jobs = selection.share(set(self.tests), self.tests, 5)
         assigned = [name for _, names in jobs for name in names]
         self.assertCountEqual(assigned, self.tests)
         self.assertEqual(len(assigned), len(set(assigned)))

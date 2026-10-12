@@ -302,11 +302,12 @@ FLUID_RECIPES = {
          "results": [("jugcraft:rubber", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
     ],
     # The chlor-alkali process: a bucket of brine splits into chlorine at the anode, hydrogen at the cathode and lye
-    # left in the cell. Electricity-hungry: 256 JE/t for 200 ticks.
+    # left in the cell. Electricity-hungry: 256 JE/t for 400 ticks (102,400 JE), the same as the Electrolytic
+    # Separator (the owner's starter baseline; it was 200 ticks before).
     "electrolytic_cell": [
         {"name": "brine", "fluids": [("jugcraft:brine", 1000)],
          "fluid_results": [("jugcraft:chlorine", 250), ("jugcraft:hydrogen", 250), ("jugcraft:lye", 500)],
-         "ticks": 200, "features": ["salt"]},
+         "ticks": 400, "features": ["salt"]},
         # The Hall-Heroult process: alumina dissolved in molten salt and split with a coke anode, which burns away.
         {"name": "aluminum", "items": [("jugcraft:alumina", 2), ("jugcraft:coke", 1)],
          "results": [("jugcraft:aluminum_ingot", 2)], "ticks": 160, "features": ["aluminum"]},

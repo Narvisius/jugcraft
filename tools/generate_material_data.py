@@ -188,6 +188,8 @@ def assets():
     electroplating.write_all(write, ASSETS, DATA / MOD, lang, condition)
     import gas_storage
     gas_storage.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import industrial_forms
+    industrial_forms.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import concordance
     concordance.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     concordance.advancements(DATA, write, lang)
@@ -745,6 +747,35 @@ def machine_assets(lang):
     lang[f"container.{MOD}.arc_furnace.formed"] = "Arc furnace formed"
     lang[f"container.{MOD}.item_sorter"] = "Item Sorter"
     lang[f"message.{MOD}.wrench.large"] = "Multi-block machines can't be turned; sneak to dismantle"
+    # Industrial machine forms (docs/features/industrial-machine-foundation.md): states, reasons and controls.
+    for state, text in (("unformed", "Unformed"), ("idle", "Idle"), ("waiting_input", "Waiting for input"),
+                        ("waiting_tool", "Waiting for a tool"), ("waiting_energy", "Waiting for power"),
+                        ("warming", "Warming up"), ("processing", "Processing"), ("output_blocked", "Output blocked")):
+        lang[f"container.{MOD}.form.state.{state}"] = text
+    for reason, text in (("part_missing", "Part missing at %1$s"),
+                         ("clearance_blocked", "Something blocks the moving parts at %1$s"), ("paused", "Paused"),
+                         ("empty", "Add inputs"), ("missing_fluid", "%1$s needs %3$s mB more %2$s"),
+                         ("missing_item", "%1$s needs %3$s more %2$s"), ("unused_fluid", "%1$s: nothing here uses %2$s"),
+                         ("unused_item", "%1$s: nothing here uses %2$s"), ("tool_required", "%1$s needs %2$s"),
+                         ("output_full", "%1$s is full"), ("output_other_fluid", "%1$s holds another fluid (%2$s)"),
+                         ("output_slot_full", "%1$s is full"), ("no_energy", "Needs %3$s JE per tick"),
+                         ("no_fuel", "%1$s is empty"), ("power_full", "Power store is full")):
+        lang[f"container.{MOD}.form.reason.{reason}"] = text
+    # A generator form at work (MachineStatus.title).
+    lang[f"container.{MOD}.form.state.generating"] = "Generating"
+    lang[f"container.{MOD}.form.input_slot"] = "Input slot %s"
+    lang[f"container.{MOD}.form.output_slot"] = "Output slot %s"
+    lang[f"container.{MOD}.form.cell"] = "column %s, row %s, layer %s"
+    lang[f"container.{MOD}.form.pause"] = "Pause"
+    lang[f"container.{MOD}.form.resume"] = "Resume"
+    lang[f"container.{MOD}.form.cancel"] = "Cancel"
+    lang[f"container.{MOD}.form.lanes"] = "Batches"
+    lang[f"container.{MOD}.form.reserved"] = "(%s mB reserved)"
+    lang[f"container.{MOD}.form.locked"] = "(in use)"
+    lang[f"message.{MOD}.form.obstructed"] = "%1$s doesn't fit: %2$s is in the way at %3$s, %4$s, %5$s (%6$s)"
+    lang[f"message.{MOD}.form.outside"] = "the edge of the world"
+    lang[f"message.{MOD}.form.cancelled"] = "Cancelled %s batches; their inputs are back"
+    lang[f"message.{MOD}.form.cancel_blocked"] = "Cancelled %s batches; %s kept running: no room to return their inputs"
     lang[f"container.{MOD}.side"] = "%s: %s"
     for face, name in (("front", "Front"), ("back", "Back"), ("left", "Left"), ("right", "Right"),
                        ("top", "Top"), ("bottom", "Bottom")):
@@ -1333,6 +1364,9 @@ def tags():
         tags.add("block", f"minecraft:mineable/{tool}", rid(block))
     import fortifications
     fortifications.add_tags(tags)
+    import guns
+    # The Cell Rack (slice 10E) is mined like the other machines.
+    tags.add("block", "minecraft:mineable/pickaxe", rid(guns.RACK))
     import bunkerworks
     bunkerworks.add_tags(tags)
     import fire_control

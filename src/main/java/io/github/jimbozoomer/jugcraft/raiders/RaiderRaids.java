@@ -65,10 +65,11 @@ public final class RaiderRaids {
 	/** Ticks between a raid's own updates (its bar, whether it is won or abandoned). */
 	private static final int UPDATE_TICKS = 10;
 	/**
-	 * Who comes at each raid level (1 to {@value #MAX_LEVEL}): grunts, grenadiers, officers, blimps and walkers. Keep in
-	 * sync with party() in tools/raiders.py; tools/check_mod_data.py checks it.
+	 * Who comes at each raid level (1 to {@value #MAX_LEVEL}): grunts, grenadiers, officers, blimps, walkers and (slice 10F
+	 * of the guns) gunners, who march in place of some of the grunts. Keep in sync with party() in tools/raiders.py;
+	 * tools/check_mod_data.py checks it.
 	 */
-	public static final int[][] PARTY = {{3, 1, 1, 0, 0}, {4, 1, 1, 1, 0}, {5, 2, 1, 1, 1}, {6, 2, 1, 1, 1}, {7, 3, 1, 2, 1}};
+	public static final int[][] PARTY = {{2, 1, 1, 0, 0, 1}, {3, 1, 1, 1, 0, 1}, {3, 2, 1, 1, 1, 2}, {4, 2, 1, 1, 1, 2}, {4, 3, 1, 2, 1, 3}};
 
 	private RaiderRaids() {
 	}
@@ -148,13 +149,13 @@ public final class RaiderRaids {
 		Raid raid = new Raid(UUID.randomUUID(), objective.immutable(), raidLevel, level.getGameTime(), 0, 0, List.of());
 		int[] party = PARTY[raidLevel - 1];
 		List<EntityType<? extends Mob>> kinds = List.of(JugcraftRaiders.GRUNT, JugcraftRaiders.GRENADIER, JugcraftRaiders.OFFICER,
-				JugcraftRaiders.BLIMP, JugcraftRaiders.WALKER);
+				JugcraftRaiders.BLIMP, JugcraftRaiders.WALKER, JugcraftRaiders.GUNNER);
 		for (int kind = 0; kind < kinds.size(); kind++) {
 			if (kind == 3 && !on("raiders.blimps") || kind == 4 && !on("raiders.walkers")) {
 				continue;
 			}
 			for (int n = 0; n < party[kind]; n++) {
-				Mob raider = kinds.get(kind).create(level, EntitySpawnReason.EVENT);
+				Mob raider = JugcraftRaiders.armed(kinds.get(kind)).create(level, EntitySpawnReason.EVENT);
 				if (raider == null) {
 					continue;
 				}

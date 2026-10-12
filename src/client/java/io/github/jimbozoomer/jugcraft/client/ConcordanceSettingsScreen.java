@@ -18,7 +18,7 @@ public final class ConcordanceSettingsScreen {
 
 	public static Screen create(@Nullable Screen parent) {
 		boolean[] values = {ConcordanceClientOptions.hud(), ConcordanceClientOptions.reducedMotion(), ConcordanceClientOptions.exactValues(),
-				ConcordanceClientOptions.simpleJournal()};
+				ConcordanceClientOptions.simpleJournal(), ConcordanceClientOptions.wornTrinkets()};
 		ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent)
 				.setTitle(Component.translatable("screen.jugcraft.concordance.config.title"));
 		ConfigEntryBuilder entries = builder.entryBuilder();
@@ -43,6 +43,11 @@ public final class ConcordanceSettingsScreen {
 				.setTooltip(Component.translatable("screen.jugcraft.concordance.config.simple_journal.tooltip"))
 				.setSaveConsumer(value -> values[3] = value)
 				.build());
+		display.addEntry(entries.startBooleanToggle(Component.translatable("screen.jugcraft.concordance.config.worn_trinkets"), values[4])
+				.setDefaultValue(true)
+				.setTooltip(Component.translatable("screen.jugcraft.concordance.config.worn_trinkets.tooltip"))
+				.setSaveConsumer(value -> values[4] = value)
+				.build());
 		Presentation.Intensity[] intensity = {ConcordanceClientOptions.intensity()};
 		display.addEntry(entries.startSelector(Component.translatable("screen.jugcraft.concordance.config.intensity"),
 						Presentation.Intensity.values(), intensity[0])
@@ -51,7 +56,7 @@ public final class ConcordanceSettingsScreen {
 				.setTooltip(Component.translatable("screen.jugcraft.concordance.config.intensity.tooltip"))
 				.setSaveConsumer(value -> intensity[0] = value)
 				.build());
-		builder.setSavingRunnable(() -> ConcordanceClientOptions.set(values[0], values[1], values[2], values[3], intensity[0]));
+		builder.setSavingRunnable(() -> ConcordanceClientOptions.set(values[0], values[1], values[2], values[3], values[4], intensity[0]));
 		return builder.build();
 	}
 }

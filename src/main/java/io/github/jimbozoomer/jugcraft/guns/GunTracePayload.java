@@ -11,9 +11,10 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Server to client (slice 8D): where the player with this entity id's energy weapon shot went, so every client that sees
  * them, theirs too, draws it from the gun ({@code GunEffects}): a beam to its end, or an arc to each creature it leapt to
- * in turn (or to where it struck, having found none). Only the server knows what a shot met.
+ * in turn (or to where it struck, having found none). Only the server knows what a shot met. {@code offHand}: the shot was
+ * the gun's in their other hand (slice 10G, two guns at once), so it is drawn from that side.
  */
-public record GunTracePayload(int shooter, int kind, List<Vec3> points) implements CustomPacketPayload {
+public record GunTracePayload(int shooter, int kind, List<Vec3> points, boolean offHand) implements CustomPacketPayload {
 	public static final int BEAM = 0;
 	public static final int ARC = 1;
 	/** Most points a trace carries: an arc's first mark and each of its leaps. */
@@ -28,6 +29,7 @@ public record GunTracePayload(int shooter, int kind, List<Vec3> points) implemen
 			ByteBufCodecs.VAR_INT, GunTracePayload::shooter,
 			ByteBufCodecs.VAR_INT, GunTracePayload::kind,
 			POINT.apply(ByteBufCodecs.list(MAX_POINTS)), GunTracePayload::points,
+			ByteBufCodecs.BOOL, GunTracePayload::offHand,
 			GunTracePayload::new);
 
 	@Override

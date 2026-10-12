@@ -906,6 +906,8 @@ Use the owner's [shared asset library](../../art/owner-library/README.md) for di
 
 These are reference candidates, not a claim that their pixels have been installed on any new model. Record exact source paths and recolour/crop changes when making actual textures, preserve applicable animation sidecars, and inspect the frame layout. For example, the casing top source is a **16×416 strip** and a sawmill back source is **16×48**; neither should be stretched as one whole stationary machine face. Owner art can inspire other specialties as well as machinery.
 
+The [factory implementation plan](industrial-factory-implementation-plan.md), [construction and operation record](industrial-machine-construction-and-operation.md) and [production lines and layouts](industrial-production-lines-and-factory-layouts.md) develop the functional handoff from these art briefs. They retain the 2–6-block envelopes and distinguish new operating defaults from owner-selected directions.
+
 ## Model handoff and verification
 
 For every built form, prepare a front/side/top block-grid plan first, then a detailed model with named moving groups, finished UVs, closed geometry and all parts inside the chosen envelope. Include the scale in the model handoff. Bulk variants preserve proportions and the familiar family mechanism; added bays and modules use their explicitly described arrangement. Keep separate surfaces slightly offset to avoid coplanar flicker, and make visible vessel interiors credible.

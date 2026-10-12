@@ -23,7 +23,10 @@ import org.jspecify.annotations.Nullable;
 /**
  * The gate of grey mist a ritual opens at its site: for {@code lairs.gate_seconds} anyone who uses it follows into the
  * instance, while there is room. Nobody is pulled in by standing near it. It is never saved (a restart closes the
- * instance too), cannot be harmed, and is drawn only as its mist (particles the server sends).
+ * instance too), cannot be harmed, and is drawn only as its mist (particles the server sends): over the Last Rites' grave
+ * grey mist and soul flames; in the Frost Horn's snow a whirl of white mist and snowflakes, through which followers fall
+ * into the Glacier Hall as the horn's blower did ({@link FrostHornRite#follow}); on the Kiln Seal's magma a vent of sparks
+ * and smoke, through which followers sink into the Cinder Kiln ({@link KilnSealRite#follow}).
  */
 public class MistGateEntity extends Entity {
 	private @Nullable Lair lair;
@@ -51,6 +54,11 @@ public class MistGateEntity extends Entity {
 		return gate;
 	}
 
+	/** The lair this gate leads into (null only for a gate that was never opened). */
+	public @Nullable Lair lair() {
+		return lair;
+	}
+
 	/** The instance this gate leads into, while it is open. */
 	public @Nullable LairInstance instance() {
 		LairInstance open = lair == null ? null : Lairs.instance(lair, slot);
@@ -63,17 +71,50 @@ public class MistGateEntity extends Entity {
 		if (!(level() instanceof ServerLevel level)) {
 			return;
 		}
+		boolean snow = lair == Lair.GLACIER_HALL;
+		boolean vent = lair == Lair.CINDER_KILN;
 		if (instance() == null || level.getGameTime() >= until) {
-			level.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1.2, getZ(), 24, 0.4, 0.8, 0.4, 0.02);
+			if (vent) {
+				level.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY() + 0.6, getZ(), 24, 0.4, 0.6, 0.4, 0.03);
+			} else {
+				level.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1.2, getZ(), 24, 0.4, 0.8, 0.4, 0.02);
+			}
+			if (snow) {
+				level.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + 0.6, getZ(), 30, 0.6, 0.5, 0.6, 0.05);
+			}
 			discard();
 			return;
 		}
-		if (tickCount % 2 == 0) {
-			level.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1.2, getZ(), 3, 0.35, 0.9, 0.35, 0.0);
-			level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY() + 0.1, getZ(), 1, 0.45, 0.05, 0.45, 0.0);
+		if (vent) {
+			// A vent: smoke welling up from the cracked magma, sparks thrown up out of it.
+			level.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY() + 0.2, getZ(), 1, 0.25, 0.1, 0.25, 0.03);
+			if (tickCount % 3 == 0) {
+				level.sendParticles(ParticleTypes.LAVA, getX(), getY() + 0.1, getZ(), 1, 0.3, 0.05, 0.3, 0.0);
+				level.sendParticles(ParticleTypes.FLAME, getX(), getY() + 0.1, getZ(), 2, 0.3, 0.05, 0.3, 0.02);
+			}
+		} else if (tickCount % 2 == 0) {
+			if (snow) {
+				// A whirl: three flakes circling and rising round it, white mist welling up in it.
+				for (int i = 0; i < 3; i++) {
+					double angle = tickCount * 0.35 + i * (Math.PI * 2.0 / 3.0);
+					double rise = (tickCount % 30) / 15.0;
+					level.sendParticles(ParticleTypes.SNOWFLAKE, getX() + Math.cos(angle) * 0.9, getY() + 0.1 + rise, getZ() + Math.sin(angle) * 0.9,
+							1, 0.0, 0.0, 0.0, 0.0);
+				}
+				level.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 0.4, getZ(), 2, 0.3, 0.3, 0.3, 0.01);
+			} else {
+				level.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1.2, getZ(), 3, 0.35, 0.9, 0.35, 0.0);
+				level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY() + 0.1, getZ(), 1, 0.45, 0.05, 0.45, 0.0);
+			}
 		}
 		if (tickCount % 40 == 0) {
-			level.playSound(null, blockPosition(), SoundEvents.SOUL_ESCAPE.value(), SoundSource.AMBIENT, 0.6F, 0.6F);
+			if (snow) {
+				level.playSound(null, blockPosition(), SoundEvents.BREEZE_IDLE_AIR, SoundSource.AMBIENT, 0.8F, 0.6F);
+			} else if (vent) {
+				level.playSound(null, blockPosition(), SoundEvents.FIRE_AMBIENT, SoundSource.AMBIENT, 1.0F, 0.5F);
+			} else {
+				level.playSound(null, blockPosition(), SoundEvents.SOUL_ESCAPE.value(), SoundSource.AMBIENT, 0.6F, 0.6F);
+			}
 		}
 	}
 
@@ -87,7 +128,13 @@ public class MistGateEntity extends Entity {
 			server.sendOverlayMessage(Component.translatable("message.jugcraft.lair.gate_closed"));
 			return InteractionResult.SUCCESS;
 		}
-		Lairs.enter(server, open);
+		if (open.lair == Lair.GLACIER_HALL) {
+			FrostHornRite.follow(server, open);
+		} else if (open.lair == Lair.CINDER_KILN) {
+			KilnSealRite.follow(server, open);
+		} else {
+			Lairs.enter(server, open);
+		}
 		return InteractionResult.SUCCESS;
 	}
 

@@ -1,0 +1,125 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.falling_cinder",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.0,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "cinder",
+          "pivot": [
+            0.0,
+            5.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -3.5,
+                1.0,
+                -3.5
+              ],
+              "size": [
+                7,
+                7,
+                7
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -2.0,
+                7.5,
+                -1.0
+              ],
+              "size": [
+                3,
+                3,
+                3
+              ],
+              "rotation": [
+                20.0,
+                0.0,
+                25.0
+              ],
+              "pivot": [
+                -0.5,
+                7.5,
+                0.5
+              ],
+              "uv": [
+                44,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1.0,
+                -1.0,
+                -2.0
+              ],
+              "size": [
+                3,
+                2,
+                3
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "name": "trail",
+          "pivot": [
+            0.0,
+            9.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -2.0,
+                9.0,
+                -2.0
+              ],
+              "size": [
+                4,
+                10,
+                4
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

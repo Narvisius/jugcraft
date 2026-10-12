@@ -299,7 +299,7 @@ STATS = {
     "gas_turbine": {"capacity": 120_000, "output_per_tick": 2_048, "generation_per_tick": 512, "tank": 16_000},
     # 2x2x3. 96 JE/t; a bucket of refinery gas per 100 ticks.
     "polymerization_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
-    # 3x3x2. 256 JE/t; a bucket of brine per 200 ticks (51,200 JE).
+    # 3x3x2. 256 JE/t; a bucket of brine per 400 ticks (102,400 JE).
     "electrolytic_cell": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 256, "tank": 8_000},
     # 2x2x2. 96 JE/t; a bucket of sulfuric acid per 100 ticks.
     "chemical_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},

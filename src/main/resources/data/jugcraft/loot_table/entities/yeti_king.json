@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:gift",
+  "random_sequence": "jugcraft:entities/yeti_king",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:yeti_fur",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 4,
+              "max": 8
+            }
+          }
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.15
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:glacier_maul"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:rimeclaw"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:yeti_mitten"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:yeti_king_crown"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

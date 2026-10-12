@@ -1,6 +1,7 @@
 # Arcane Concordance: Ember, part 2 (the Hearthbinder's regalia)
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#295](https://github.com/jimbozoomer-byte/jugcraft/pull/295), integrated by
+[#277](https://github.com/jimbozoomer-byte/jugcraft/pull/277)); see Verification for what has run.
 Proposal issue: none; the owner asked for their supplied magic content to be built into Jugcraft (9 October 2026) and
 authorized it at the top of [CLAUDE.md](../../CLAUDE.md). This part follows [Ember, part 1](arcane-concordance-ember.md).
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.

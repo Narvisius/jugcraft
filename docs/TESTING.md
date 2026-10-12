@@ -4,7 +4,7 @@
 
 Run `python scripts/check_repository.py` with Python 3.11+. The Foundation / repository job checks required files, relative Markdown links, and the phase declaration. It is not a Java compiler, mod test, security audit, or gameplay approval. In the `bootstrap` phase, Java/Gradle sources are allowed. The Build workflow compiles the mod (`./gradlew build`), checks generated JSON is current and runs `tools/check_mod_data.py`, which validates material data and audits recipes offline. None of these is a game test.
 
-Game tests run in the Build workflow too. The `mod` job's `./gradlew build` runs every server game test on every change. The client game tests start a real game and photograph showrooms, which costs each of the three client jobs 20 to 30 minutes for the whole set, so:
+Game tests run in the Build workflow too. The `mod` job's `./gradlew build` runs every server game test on every change. The client game tests start a real game and photograph showrooms, which costs each of the five client jobs 20 to 30 minutes for the whole set, so:
 
 - **A pull request runs only the client test classes that show what it changed.** The `choose client tests` job runs `tools/select_client_tests.py`, which compares the pull request with its base:
   - Docs, Markdown, `tools/` and `scripts/`, the art sources in `art/`, data, the language file, the optional resource packs, unit tests and `.claude/` pick nothing. The generators' output is committed and judged as the files it writes.
@@ -15,7 +15,7 @@ Game tests run in the Build workflow too. The `mod` job's `./gradlew build` runs
   - The job's log says why each file picked what it did.
 - **`main` (after each merge) and a manual run of the Build workflow run every class.** Run it on a branch from the Actions tab ("Run workflow") to test a pull request in full.
 
-Four client jobs share the chosen classes out by their rough running time (`./gradlew runClientGameTest -PclientTests=<Class,Class,...>`). Sources are resolved from each registered class's full package, including `local.peepo`; timed companion AI suites have explicit runtime estimates. A job with nothing to run passes at once. The `client` job passes only when the choice and all four jobs pass. Each job may run for 60 minutes. `python -m unittest discover -s scripts/tests -p test_client_test_selection.py -v` verifies source discovery, companion selection and complete, duplicate-free sharding.
+Five client jobs share the chosen classes out by their rough running time (`./gradlew runClientGameTest -PclientTests=<Class,Class,...>`). Sources are resolved from each registered class's full package, including `local.peepo`; timed companion AI suites have explicit runtime estimates. A job with nothing to run passes at once. The `client` job passes only when the choice and all five jobs pass. Each job may run for 60 minutes. `python -m unittest discover -s scripts/tests -p test_client_test_selection.py -v` verifies source discovery, companion selection and complete, duplicate-free sharding.
 
 Locally:
 - Companion-only: `./gradlew runClientGameTest -PclientTests=PeepoCompanionClientTests`. See [coverage and results](features/companion-tests.md), including the one-client dedicated-server check and explicit limits.

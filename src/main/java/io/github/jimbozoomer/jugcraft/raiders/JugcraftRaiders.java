@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.raiders;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.ChatFormatting;
@@ -11,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
@@ -59,6 +61,8 @@ public final class JugcraftRaiders {
 	public static EntityType<RaiderInfantry> GRUNT;
 	public static EntityType<RaiderInfantry> GRENADIER;
 	public static EntityType<RaiderInfantry> OFFICER;
+	/** Slice 10F of the guns: the gunner, who carries and fires one of the owner's service arms. */
+	public static EntityType<RaiderInfantry> GUNNER;
 	public static EntityType<RaiderWalker> WALKER;
 	public static EntityType<RaiderBlimp> BLIMP;
 	public static EntityType<RaiderBomb> BOMB;
@@ -73,6 +77,7 @@ public final class JugcraftRaiders {
 		GRUNT = infantry("raider_grunt", 24, 5, 4, 0.30);
 		GRENADIER = infantry("raider_grenadier", 20, 3, 2, 0.28);
 		OFFICER = infantry("raider_officer", 32, 6, 6, 0.30);
+		GUNNER = infantry("raider_gunner", 20, 3, 2, 0.28);
 		WALKER = entity("raider_walker", EntityType.Builder.<RaiderWalker>of(RaiderWalker::new, MobCategory.MONSTER)
 				.sized(2.6F, 4.6F).eyeHeight(3.5F).notInPeaceful().clientTrackingRange(10));
 		FabricDefaultAttributeRegistry.register(WALKER, machine("raider_walker", 120, 14, 14, 0.22, RaiderWalker::attributes));
@@ -99,6 +104,14 @@ public final class JugcraftRaiders {
 		// Raider camps (raider extras): rare, out in the plains, savanna and badlands.
 		RaiderCamps.register();
 		RaiderRaids.register();
+	}
+
+	/**
+	 * The kind to send: the gunner, or a grunt in its place while the guns are switched off ({@code guns.enabled=false}),
+	 * since a gunner's gun may drop.
+	 */
+	static EntityType<? extends Mob> armed(EntityType<? extends Mob> type) {
+		return type == GUNNER && !JugcraftConfig.isFeatureEnabled("guns") ? GRUNT : type;
 	}
 
 	/** An infantry kind: (max health, attack damage, armour, movement speed). */

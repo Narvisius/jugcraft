@@ -13,7 +13,8 @@ public class RaiderRenderer extends HumanoidMobRenderer<RaiderInfantry, RaiderRe
 	private static final Map<RaiderInfantry.Role, Identifier> TEXTURES = Map.of(
 			RaiderInfantry.Role.GRUNT, Jugcraft.id("textures/entity/raider/raider_grunt.png"),
 			RaiderInfantry.Role.GRENADIER, Jugcraft.id("textures/entity/raider/raider_grenadier.png"),
-			RaiderInfantry.Role.OFFICER, Jugcraft.id("textures/entity/raider/raider_officer.png"));
+			RaiderInfantry.Role.OFFICER, Jugcraft.id("textures/entity/raider/raider_officer.png"),
+			RaiderInfantry.Role.GUNNER, Jugcraft.id("textures/entity/raider/raider_gunner.png"));
 
 	public static class State extends HumanoidRenderState {
 		RaiderInfantry.Role role = RaiderInfantry.Role.GRUNT;

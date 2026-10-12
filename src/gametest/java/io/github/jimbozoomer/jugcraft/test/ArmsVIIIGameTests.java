@@ -26,7 +26,8 @@ import net.minecraft.world.phys.Vec3;
 /**
  * In-game tests for Arms VIII (batch 59): every thrown arm is registered with its kind's thrown numbers; and a mock
  * player's real throws (the item's own release, after a full wind) strike as the server works them. The javelin hits a
- * still pig for its damage and comes down as itself, worn by a throw; the chakram cuts two pigs in line on its way out
+ * still pig for its damage and comes down as itself, worn by a throw, and one that ends a tick a hair short of a pig
+ * still strikes it; the chakram cuts two pigs in line on its way out
  * and again on its way back, and is caught into its thrower's inventory; the harpoon hauls its pig towards the thrower;
  * the francisca knocks a raised shield down; and a creative throw leaves the thrower's arm in hand and nothing behind.
  * Throwers face south (+z) and aim so that their throw's arc comes to their foe's middle.
@@ -73,6 +74,43 @@ public class ArmsVIIIGameTests {
 			helper.assertTrue(landed.size() == 1, "The javelin has not come down as an item (" + landed.size() + ")");
 			helper.assertTrue(landed.getFirst().getItem().getDamageValue() == JugcraftArms.THROW_WEAR,
 					"The javelin is worn by " + landed.getFirst().getItem().getDamageValue() + ", not " + JugcraftArms.THROW_WEAR);
+		});
+	}
+
+	/**
+	 * A javelin that ends a tick a hair short of a still pig strikes it on the next. From a flight's third tick, the sweep
+	 * that finds what a thrown thing hits widens each foe's box (by 0.05, and more each tick), but finds only the boxes it
+	 * enters. So a javelin that ended its second tick inside the widening, short of the pig itself, started its third
+	 * inside and flew on through: the throw above did now and then, and came down past the pig, 9.58 and 9.85 blocks along
+	 * the arena to the pig's 7.5. This javelin is set going slowly, straight at the pig, to end its second tick 0.02 short.
+	 */
+	@GameTest(structure = ARENA, padding = ARENA_PADDING, maxTicks = 40)
+	public void javelinStrikesWhatItStopsJustShortOf(GameTestHelper helper) {
+		floor(helper);
+		Mob pig = pig(helper, new BlockPos(1, 2, 7));
+		pig.setNoAi(true);
+		ServerPlayer thrower = helper.makeMockServerPlayerInLevel();
+		thrower.setGameMode(GameType.SURVIVAL);
+		BlockPos stand = helper.absolutePos(new BlockPos(1, 2, 1));
+		thrower.setPos(stand.getX() + 0.5, stand.getY(), stand.getZ() + 0.5);
+		ThrownArm javelin = new ThrownArm(helper.getLevel(), thrower, new ItemStack(JugcraftArms.ITEMS.get("steel_javelin")));
+		// Each tick in air, the drag, then the move (as ThrowableProjectile flies it): two ticks take it this far.
+		double speed = 0.5;
+		double run = speed * AIR_INERTIA + speed * AIR_INERTIA * AIR_INERTIA;
+		double middle = pig.getZ();
+		javelin.setPos(pig.getX(), pig.getY() + 0.6, pig.getBoundingBox().minZ - 0.02 - run);
+		javelin.setDeltaMovement(0.0, 0.0, speed);
+		helper.getLevel().addFreshEntity(javelin);
+		JugcraftArms.Thrown thrown = JugcraftArms.thrown("javelin", "steel");
+		float max = pig.getMaxHealth();
+		helper.succeedWhen(() -> {
+			helper.assertTrue(pig.getHealth() < max, "The pig at " + where(helper, pig) + " is not struck ("
+					+ flight(helper, "steel_javelin") + "; bounds " + pig.getBoundingBox() + ")");
+			helper.assertTrue(Math.abs(max - pig.getHealth() - thrown.damage()) < 1.0E-3F,
+					"The javelin took " + (max - pig.getHealth()) + " from the pig, not " + thrown.damage());
+			List<ItemEntity> landed = items(helper, "steel_javelin");
+			helper.assertTrue(landed.size() == 1 && landed.getFirst().getZ() < middle,
+					"The javelin has not come down on the pig's near side (" + flight(helper, "steel_javelin") + ")");
 		});
 	}
 

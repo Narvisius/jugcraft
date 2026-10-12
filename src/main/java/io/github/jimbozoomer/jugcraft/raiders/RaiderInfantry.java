@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.raiders;
 
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
+import io.github.jimbozoomer.jugcraft.guns.MobGuns;
 import io.github.jimbozoomer.jugcraft.town.Townsfolk;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
@@ -34,7 +35,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Raider infantry (batch 57): three kinds, by entity type ({@link Role}).
+ * Raider infantry (batch 57): four kinds, by entity type ({@link Role}).
  * <ul>
  * <li>The <b>grunt</b> charges in with a cleaver (an iron axe).</li>
  * <li>The <b>grenadier</b> lobs small grenades ({@link RaiderBomb}) from up to {@value JugcraftRaiders#GRENADE_MAX_RANGE}
@@ -42,14 +43,17 @@ import org.jspecify.annotations.Nullable;
  * clubs instead.</li>
  * <li>The <b>officer</b> rallies the raiders near them (Speed and Strength). When an officer falls, the raiders around
  * lose heart (Weakness and Slowness), and a player who struck them down takes their insignia.</li>
+ * <li>The <b>gunner</b> (slice 10F of the guns) carries one of the owner's service arms and fires it
+ * ({@link MobGuns}): it closes to the gun's reach, fires in bursts and reloads; its bullets pass through raiders.</li>
  * </ul>
  * All of them march on their raid's objective ({@link MarchGoal}) and fight players and the town's folk on the way
- * (and whatever hurts them); town guards and sentry guns fight back (they are hostile mobs). They never drop what they carry.
+ * (and whatever hurts them); town guards and sentry guns fight back (they are hostile mobs). They never drop what they
+ * carry, but for a gunner's gun, which a player's kill may win ({@link MobGuns#DROP}), empty.
  */
-public class RaiderInfantry extends Monster implements RangedAttackMob, Raider {
+public class RaiderInfantry extends Monster implements RangedAttackMob, Raider, MobGuns.Gunner {
 	/** Which kind of infantry, by entity type. */
 	public enum Role {
-		GRUNT, GRENADIER, OFFICER
+		GRUNT, GRENADIER, OFFICER, GUNNER
 	}
 
 	private final RaidMember member = new RaidMember();
@@ -58,6 +62,8 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider {
 	private int stuck;
 	/** The closest it has come to where it is going since it last got stuck. */
 	private double closest = Double.MAX_VALUE;
+	/** A gunner's gunfire (set as its goals are, by the constructor of Mob; so no initialiser here). */
+	private MobGuns.@Nullable FireGoal gunfire;
 
 	public RaiderInfantry(EntityType<? extends RaiderInfantry> type, Level level) {
 		super(type, level);
@@ -66,10 +72,11 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider {
 			case GRUNT -> new ItemStack(Items.IRON_AXE);
 			case GRENADIER -> new ItemStack(PetroItems.GRENADE);
 			case OFFICER -> new ItemStack(Items.IRON_SWORD);
+			case GUNNER -> MobGuns.arm(level, random);
 		};
 		setItemSlot(EquipmentSlot.MAINHAND, held);
-		// What they carry stays with them: their loot is the loot table's.
-		setDropChance(EquipmentSlot.MAINHAND, 0.0F);
+		// What they carry stays with them (their loot is the loot table's), but for a gunner's gun.
+		setDropChance(EquipmentSlot.MAINHAND, role() == Role.GUNNER ? MobGuns.DROP : 0.0F);
 	}
 
 	public static AttributeSupplier.Builder attributes(double health, double damage, double armour, double speed) {
@@ -79,7 +86,19 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider {
 
 	public Role role() {
 		EntityType<?> type = getType();
-		return type == JugcraftRaiders.GRENADIER ? Role.GRENADIER : type == JugcraftRaiders.OFFICER ? Role.OFFICER : Role.GRUNT;
+		return type == JugcraftRaiders.GRENADIER ? Role.GRENADIER : type == JugcraftRaiders.OFFICER ? Role.OFFICER
+				: type == JugcraftRaiders.GUNNER ? Role.GUNNER : Role.GRUNT;
+	}
+
+	/** A gunner's gunfire: its magazine and whether it is reloading (null for the other kinds). */
+	public MobGuns.@Nullable FireGoal gunfire() {
+		return gunfire;
+	}
+
+	/** Raiders' bullets pass through raiders, as their grenades do. */
+	@Override
+	public boolean spares(LivingEntity other) {
+		return other instanceof Raider;
 	}
 
 	@Override
@@ -87,6 +106,9 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider {
 		goalSelector.addGoal(1, new FloatGoal(this));
 		if (role() == Role.GRENADIER) {
 			goalSelector.addGoal(2, new RangedAttackGoal(this, 1.0, JugcraftRaiders.GRENADE_COOLDOWN, JugcraftRaiders.GRENADE_MAX_RANGE));
+		} else if (role() == Role.GUNNER) {
+			gunfire = new MobGuns.FireGoal(this, 1.0);
+			goalSelector.addGoal(2, gunfire);
 		} else {
 			goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false));
 		}

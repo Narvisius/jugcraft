@@ -560,7 +560,7 @@ Two more arms and a war kit in bronze and steel. Shot for shot the longbow and a
 
 ### Arms VII (batch 56): variant arms, crafted styles and boss trophies
 
-35 named arms, each a variant of a kind above that fights as its kind does, in steel. Sixteen are crafted at a smithing table: a style's pattern, a steel arm of the kind and the style's material, keeping its enchantments and wear. Sixteen are trophies of eight bosses still to be made ([branches/BOSSES.md](branches/BOSSES.md)): no recipe, each boss's loot table ready; creative only until then. Two are the trophies of the Witching Season's bosses and drop from them: the Vesper Scythe, Vesperine's ([features/vesperine.md](features/vesperine.md)), and the Needle Rapier, Madame Tatterlace's ([features/tatterlace.md](features/tatterlace.md)). One, the Hades Scythe, is the Hades Armor set's arm: no recipe and no loot table yet, creative only until the owner settles how the sets are won. No variant deals as much a second as a netherite sword.
+35 named arms, each a variant of a kind above that fights as its kind does, in steel. Sixteen are crafted at a smithing table: a style's pattern, a steel arm of the kind and the style's material, keeping its enchantments and wear. Sixteen are trophies of eight bosses ([branches/BOSSES.md](branches/BOSSES.md)): no recipe, each boss's loot table ready. The Yeti King's two drop from him ([features/yeti-king.md](features/yeti-king.md)) and the Cinder Tyrant's from him ([features/cinder-tyrant.md](features/cinder-tyrant.md)); the other twelve are creative only until their bosses are made. Two are the trophies of the Witching Season's bosses and drop from them: the Vesper Scythe, Vesperine's ([features/vesperine.md](features/vesperine.md)), and the Needle Rapier, Madame Tatterlace's ([features/tatterlace.md](features/tatterlace.md)). One, the Hades Scythe, is the Hades Armor set's arm: no recipe and no loot table yet, creative only until the owner settles how the sets are won. No variant deals as much a second as a netherite sword.
 
 | Line | Arms | Perk or boon | Made from |
 | --- | --- | --- | --- |
@@ -568,8 +568,8 @@ Two more arms and a war kit in bronze and steel. Shot for shot the longbow and a
 | Ironclad | zweihander, maul, war pick, battle axe | lasts twice as long | Ironclad Pattern (dyes, steel plate) + steel plate |
 | Bonecarved | dagger, flail, glaive, labrys | Gravebane: 20% harder against the undead | Bonecarver's Pattern (bone, flint, leather, paper) + bone block |
 | Runebound | nodachi, moonblade, staff, war hammer | Mark: a struck foe glows for 4 s | Runecarver's Pattern (amethyst, ectoplasm, paper) + ectoplasm |
-| The Yeti King | Glacier Maul, Rimeclaw | Frost: Slowness II, 3 s | trophy |
-| The Cinder Tyrant | Cinderbrand, Magmaw | Ember: alight 3 s | trophy |
+| The Yeti King | Glacier Maul, Rimeclaw | Frost: Slowness II, 3 s | his loot (15% for one of the two; one certain on a first kill) |
+| The Cinder Tyrant | Cinderbrand, Magmaw | Ember: alight 3 s | his loot (15% for one of the two; one certain on a first kill) |
 | The Mire Hag | Hagthorn, Bogfang | Venom: Poison, 4 s | trophy |
 | The Crypt Lich | Soulreaver, Gravewarden | Drain: heals half a heart a hit; Wither, 3 s | trophy |
 | The Iron Dreadnought | Dynamo Halberd, Piston Hammer | Shock: arcs to a foe within 4 blocks for 30% of the blow | trophy |
@@ -668,7 +668,7 @@ Salt, sulfur, phosphate and bauxite get their real reactions ([feature record](f
 | --- | --- | --- | --- |
 | Brine, Lye | Fluids with buckets: salt water, and sodium hydroxide solution | `c:brine`, `c:lye` | chemical reactor (2 salt + 1,000 mB water → 1,000 mB brine), electrolytic cell |
 | Chlorine, Hydrogen | Gases: tanks and pipes only | `c:chlorine`, `c:hydrogen` | electrolytic cell |
-| Electrolytic Cell | 3 wide, 3 tall, 2 deep; splits brine | 1,000 mB brine → 250 chlorine (top row), 250 hydrogen (middle row), 500 lye (bottom row); 200 ticks at 256 JE/t; batch 24: 1,000 mB water → 500 hydrogen (middle row) + 250 oxygen (top row), 800 ticks | 4 steel plates, 2 aluminum cables, 2 steel tanks, advanced circuit, casing |
+| Electrolytic Cell | 3 wide, 3 tall, 2 deep; splits brine | 1,000 mB brine → 250 chlorine (top row), 250 hydrogen (middle row), 500 lye (bottom row); 400 ticks at 256 JE/t (200 before the industrial starter baseline); batch 24: 1,000 mB water → 500 hydrogen (middle row) + 250 oxygen (top row), 800 ticks | 4 steel plates, 2 aluminum cables, 2 steel tanks, advanced circuit, casing |
 | Sulfuric Acid | A fluid with a bucket | `c:sulfuric_acid` | chemical reactor |
 | Titanium | A metal mined as rutile-bearing ore (Y −64 to −8, iron pickaxe); no furnace smelts it | raw titanium + coke + 250 mB chlorine → titanium sponge (chemical reactor); sponge → ingot (arc furnace) | – |
 | Leaching | Lepidolite or monazite dissolved in sulfuric acid | 1 lepidolite + 250 mB acid → 2 lithium carbonate; 1 monazite + 250 mB acid → 2 rare earth oxide (chemical reactor) | – |
@@ -849,11 +849,11 @@ The content (`assets/jugcraft/handbook/en_us.json`) is **generated by `tools/han
 - speed and efficiency upgrades, the "high" redstone mode, comparator output and upgrade-slot isolation;
 - cable tiers setting a network's rate, and the high-pressure extractor.
 
-**Client game tests** (`JugcraftClientGameTests`) start a real game client with software rendering in CI (four `client (shard n of 4)` jobs share the test classes out; the `client` job passes when all four do). They:
+**Client game tests** (`JugcraftClientGameTests`) start a real game client with software rendering in CI (five `client (shard n of 5)` jobs share the test classes out; the `client` job passes when all five do). They:
 
 - build a showroom of every machine;
 - open a machine screen and the handbook;
-- save screenshots, kept as the `client-screenshots-0` to `-2` artifacts of each CI run (one per shard).
+- save screenshots, kept as the `client-screenshots-0` to `-4` artifacts of each CI run (one per shard).
 
 `PixelHollowsGameTests` adds the Pixel Hollows and Retro Trader tests: cluster and block drops, the lamp, cabinet and stonecutter recipes, the biome in the Overworld's climate table, the Overworld's feature order, the map, the trader's trades and no-profit rule, the cabinet as a job site, a villager claiming it, and the shop template.
 

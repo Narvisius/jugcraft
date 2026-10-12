@@ -1,0 +1,28 @@
+{
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft-test:test_split",
+  "tool": "minecraft:iron_block",
+  "items": [
+    {
+      "ingredient": "minecraft:coal"
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:charcoal"
+    }
+  ],
+  "time": 20
+}

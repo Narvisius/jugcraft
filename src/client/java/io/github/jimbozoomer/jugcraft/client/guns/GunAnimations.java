@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,11 @@ public final class GunAnimations {
 	public static final Map<String, String> SOUND_ALIASES = Map.of("rustle", "gun_rustle");
 	/**
 	 * The same, per gun: the shell-at-a-time guns' loops push a shell or a round, not a magazine; the Squall Rifle's
-	 * canister clanks, it is no ramrod (slice 9B), and so does the Throttle's bulb as it is twisted shut (slice 9D).
+	 * canister clanks, it is no ramrod (slice 9B), and so does the Throttle's bulb as it is twisted shut (slice 9D), and
+	 * the Earthmover's drum as it twists free and home; the Skylark Rifle and the Bullfrog push a round in (slice 10A); the
+	 * Glowmouth is loaded a charge at a time, as the Stormlock Rifle is (slice 10B); the Mule pushes its shells in, as the
+	 * Coach Gun does (slice 10C), and the Reverb a shell at a time (slice 10D); of the Nether guns, the Tusker pushes a shell
+	 * in at a time and the Bastion Rifle a round (slice 11A), and the Crackling a shell (slice 11B).
 	 */
 	public static final Map<String, Map<String, String>> GUN_SOUND_ALIASES = Map.ofEntries(
 			Map.entry("thunderpipe", Map.of("reload_mag_in", "shell_in")),
@@ -47,7 +52,16 @@ public final class GunAnimations {
 			Map.entry("squall_rifle", Map.of("metal", "clank")),
 			Map.entry("sledge", Map.of("reload_mag_in", "shell_in")),
 			Map.entry("highwayman", Map.of("reload_mag_in", "shell_in")),
-			Map.entry("throttle", Map.of("reload_mag_in", "shell_in", "metal", "clank")));
+			Map.entry("throttle", Map.of("reload_mag_in", "shell_in", "metal", "clank")),
+			Map.entry("earthmover", Map.of("metal", "clank")),
+			Map.entry("skylark_rifle", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("bullfrog", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("glowmouth", Map.of("reload_mag_in", "insert")),
+			Map.entry("mule", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("reverb", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("tusker", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("bastion_rifle", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("crackling", Map.of("reload_mag_in", "shell_in")));
 
 	private GunAnimations() {
 	}
@@ -75,7 +89,7 @@ public final class GunAnimations {
 		controller.setParticleKeyframeHandler(event -> {
 			Integer owner = event.renderState().getGeckolibData(GunRenderer.OWNER);
 			if (owner != null && EJECT_CUE.equals(event.keyframeData().getEffect())) {
-				GunEffects.eject(gun, owner);
+				GunEffects.eject(gun, owner, event.renderState().getGeckolibData(GunRenderer.LEFT));
 			}
 		});
 		registrar.add(controller);
@@ -92,7 +106,12 @@ public final class GunAnimations {
 
 	/** Plays this gun animation on the gun in this entity's main hand (on this client only). */
 	public static void trigger(LivingEntity holder, String animation) {
-		ItemStack stack = holder.getMainHandItem();
+		trigger(holder, InteractionHand.MAIN_HAND, animation);
+	}
+
+	/** Plays this gun animation on the gun in this hand of this entity (slice 10G: a gun in each hand; this client only). */
+	public static void trigger(LivingEntity holder, InteractionHand hand, String animation) {
+		ItemStack stack = holder.getItemInHand(hand);
 		if (stack.getItem() instanceof GunItem gun) {
 			long id = GeoItem.getId(stack);
 			AnimatableManager<GunItem> manager = gun.getAnimatableInstanceCache().getManagerForId(id);

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "MCT",
+    "PKP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "jugcraft:steel_gear",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "T": "jugcraft:fluid_tank",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:gas_burning_generator",
+    "count": 1
+  }
+}

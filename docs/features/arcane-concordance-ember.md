@@ -1,6 +1,7 @@
 # Arcane Concordance: Ember, part 1 (Hearthbinding and four fire spells)
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#295](https://github.com/jimbozoomer-byte/jugcraft/pull/295), integrated by
+[#277](https://github.com/jimbozoomer-byte/jugcraft/pull/277)); see Verification for what has run.
 Proposal issue: none; the owner asked for the magic content to continue on 9 October 2026 and chose to build the
 elemental schools with their own supplied magic art. This part needs none of that art; part 2 brings it in.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.

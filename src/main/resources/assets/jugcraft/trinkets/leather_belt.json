@@ -2,14 +2,23 @@
   "target": "jugcraft:leather_belt",
   "render": [
     {
-      "type": "minecraft:model",
-      "model_part": "body",
-      "offset": [
-        0,
-        -1,
-        0
+      "type": "jugcraft:unless_covered",
+      "armour": [
+        "chest",
+        "legs"
       ],
-      "model": "jugcraft:item/leather_belt_worn"
+      "then": [
+        {
+          "type": "minecraft:model",
+          "model_part": "body",
+          "offset": [
+            0,
+            -1,
+            0
+          ],
+          "model": "jugcraft:item/leather_belt_worn"
+        }
+      ]
     }
   ]
 }

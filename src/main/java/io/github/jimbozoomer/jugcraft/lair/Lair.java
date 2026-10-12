@@ -12,13 +12,18 @@ import org.jspecify.annotations.Nullable;
 /**
  * A lair: a pocket dimension of its own, into whose instance slots its structure template is placed fresh by
  * {@link Lairs}. Every position here is relative to the template's corner; the numbers are its layout tool's
- * (tools/hollow_acre.py, tools/spindle_loft.py; checked by tools/check_mod_data.py).
+ * (tools/hollow_acre.py, tools/spindle_loft.py, tools/glacier_hall.py, tools/cinder_kiln.py; checked by
+ * tools/check_mod_data.py).
  */
 public enum Lair {
 	/** Vesperine's lair (docs/features/hollow-acre.md). */
 	HOLLOW_ACRE("hollow_acre", 64, 48, 76, new Vec3(32.0, 17.0, 66.5), 180.0F, 32.0, 38.0, 44, -8, new BlockPos(32, 46, -30), 13),
 	/** Madame Tatterlace's lair (docs/features/spindle-loft.md): indoors, so no moon. */
-	SPINDLE_LOFT("spindle_loft", 81, 64, 100, new Vec3(40.5, 38.0, 82.5), 180.0F, 40.5, 56.5, 48, 22, null, 0);
+	SPINDLE_LOFT("spindle_loft", 81, 64, 100, new Vec3(40.5, 38.0, 82.5), 180.0F, 40.5, 56.5, 48, 22, null, 0),
+	/** The Yeti King's lair (docs/features/glacier-hall.md): a cavern in a glacier, so no moon. */
+	GLACIER_HALL("glacier_hall", 80, 44, 88, new Vec3(39.5, 15.0, 81.5), 180.0F, 39.5, 43.5, 46, 2, null, 0),
+	/** The Cinder Tyrant's lair (docs/features/cinder-kiln.md): a kiln under a volcano, its vent open to a smoky sky. */
+	CINDER_KILN("cinder_kiln", 72, 46, 80, new Vec3(41.5, 13.0, 63.5), 165.0F, 35.5, 38.5, 40, 1, null, 0);
 
 	/** Blocks between one instance slot and the next, along X (tools/lairs.py SPACING). */
 	public static final int SPACING = 1024;

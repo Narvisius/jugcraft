@@ -25,7 +25,11 @@ own; numbers the Java repeats are checked by tools/check_mod_data.py.
 Part 1b draws the Leather Belt and the Amphibian Boot on the wearer. The owner drew a worn sheet for each (a box-UV net,
 supplied without its geometry); the sheets are imported as supplied (OWNER_FILES), WORN below fits boxes to them, and
 write_worn writes their block models and Trinkets' render definitions (assets/jugcraft/trinkets/<item>.json), which
-Trinkets' data-driven renderer draws in third person. No Java. The Ice Breaker has no worn sheet, so it is not drawn.
+Trinkets' data-driven renderer draws in third person. The Ice Breaker has no worn sheet, so it is not drawn. Each
+definition wraps its models in Jugcraft's own render element, jugcraft:unless_covered (client:
+trinket/UnlessCoveredTrinketElement.java), so the belt is hidden under a chestplate or leggings and the boots under boots
+(WORN_COVERED_BY), and both on a wearer whose "Show my worn trinkets" setting is off (their client tells the server, which
+tells everyone who sees them: concordance/trinket/WornDisplay.java).
 """
 import json
 from pathlib import Path
@@ -249,6 +253,21 @@ WORN_PLANE_LIFT = 0.05
 # (8 + x, 20 - y, 8 - z) in the model: Trinkets draws it with up up, south to the wearer's front and east to their left.
 WORN_OFFSET = [0, -1, 0]
 WORN_ANCHOR_Y = 12
+# The armour slots whose armour hides each worn item (the owner's choice, 10 October 2026: "belt and boots should hide under
+# armor"): the belt lies on the waist, which vanilla's chestplates and leggings both cover (a chestplate would hide the
+# strap and leave the buckle standing out); the boots on the feet, which boots cover. Leggings over the boots' tops do not
+# hide them. Any piece for those slots counts, so a few of Jugcraft's 3D pieces that stop short of the waist hide the belt
+# too (the feature record's part 1c limits).
+WORN_COVERED_BY = {"leather_belt": ["chest", "legs"], "amphibian_boot": ["feet"]}
+# Jugcraft's render element that draws its own elements only while those slots are bare and the player's setting is on.
+WORN_ELEMENT = rid("unless_covered")
+# The client setting's words (ConcordanceClientOptions, ConcordanceSettingsScreen). Each player's choice is their own
+# and everyone who sees them sees it (WornDisplay).
+CLIENT = {
+    "screen.jugcraft.concordance.config.worn_trinkets": "Show my worn trinkets",
+    "screen.jugcraft.concordance.config.worn_trinkets.tooltip": "Draw your Leather Belt and Amphibian Boots on you. "
+        "Everyone who sees you sees your choice, and each player chooses for themselves. Armour worn over them hides them.",
+}
 
 # Every owner file this slice uses, copied as supplied by tools/owner_art.py: runtime path under assets/jugcraft -> path
 # under originals/Magic (or, for OWNER_BLOCKS_FILES, under originals/Blocks). The only changes are the names and, for an
@@ -392,10 +411,10 @@ def worn_models():
 
 def worn_render(item):
     """Trinkets' render definition for `item`: its model on each part, anchored at WORN_OFFSET (one block-model unit is
-    one pixel of the player model)."""
-    return {"target": rid(item), "render": [
+    one pixel of the player model), all inside one WORN_ELEMENT that hides them under WORN_COVERED_BY's armour."""
+    return {"target": rid(item), "render": [{"type": WORN_ELEMENT, "armour": WORN_COVERED_BY.get(item, []), "then": [
         {"type": "minecraft:model", "model_part": part, "offset": WORN_OFFSET, "model": rid(f"item/{model}")}
-        for part, model in WORN[item]["parts"].items()]}
+        for part, model in WORN[item]["parts"].items()]}]}
 
 
 def write_worn(write, assets):
@@ -409,6 +428,7 @@ def write_worn(write, assets):
 def lang_entries(lang):
     for slot, info in TRINKET_SLOTS.items():
         lang[f"trinkets.slot.{slot.replace('/', '.')}"] = info["name"]
+    lang.update(CLIENT)
 
 
 def codex():
@@ -420,7 +440,9 @@ def codex():
                 ("text", "Belts, Charms and Boots",
                  "Once you understand **Relic Lore**, you can wear these: a belt in the Belt slot, a charm in a Charm "
                  f"slot (a Leather Belt gives a second) and up to {FEET_SLOTS} on your feet. They hold no Focus or charge "
-                 "and need no pylon. Two of a kind never add up; a second vial only waits its turn."),
+                 "and need no pylon. Two of a kind never add up; a second vial only waits its turn. The Leather Belt and "
+                 "the Amphibian Boots show on you unless armour covers them, and the Concordance settings can hide them "
+                 "from everyone."),
                 ("crafting_recipe", "Leather Belt",
                  "One more Charm slot. Take the second charm off before the belt.", rid("leather_belt")),
                 ("crafting_recipe", "Angelic Feather",

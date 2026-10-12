@@ -28,7 +28,8 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * A gun ({@link JugcraftGuns}). Held right click aims down the sights (using the item, so the server and the other
- * players know); the trigger and reload come as payloads ({@link GunShots}). GeckoLib draws it from
+ * players know); the trigger and reload come as payloads ({@link GunShots}). Slice 10G: with a one-handed gun in each
+ * hand ({@link #dual}), right click is the other gun's trigger instead. GeckoLib draws it from
  * assets/jugcraft/geckolib (models and the owner's animations, tools/guns.py) through the client's renderer.
  * <p>
  * Its attachments ({@link JugcraftGuns#FITTED}, fitted in a crafting grid by {@link GunAttachmentRecipe}) change its
@@ -170,14 +171,38 @@ public class GunItem extends Item implements GeoItem {
 		stack.set(JugcraftGuns.LOADED, Math.max(0, Math.min(capacity, rounds)));
 	}
 
-	/** Aims down the sights while held (main hand only: the trigger is the attack button). */
+	/**
+	 * Aims down the sights while held (main hand only: the trigger is the attack button). Slice 10G: with a one-handed gun
+	 * in each hand ({@link #dual}) nothing is aimed, and right click pulls the other gun's trigger: the client pulls it as
+	 * vanilla hands it the click for that hand (GunsClient, through {@link GunHooks#offTrigger}), so a click that opens a
+	 * door or talks to a villager fires nothing. Neither hand counts as used, so neither gun dips out of view and back.
+	 */
 	@Override
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
+		if (dual(player)) {
+			if (hand == InteractionHand.OFF_HAND && level.isClientSide()) {
+				GunHooks.offTrigger.run();
+			}
+			return InteractionResult.PASS;
+		}
 		if (hand != InteractionHand.MAIN_HAND) {
 			return InteractionResult.PASS;
 		}
 		player.startUsingItem(hand);
 		return InteractionResult.CONSUME;
+	}
+
+	/** Whether this is a gun held in one hand (slice 10G, {@link JugcraftGuns#ONE_HANDED}). */
+	public static boolean oneHanded(ItemStack stack) {
+		return stack.getItem() instanceof GunItem gun && JugcraftGuns.ONE_HANDED.contains(gun.name);
+	}
+
+	/**
+	 * Whether this creature holds a one-handed gun in each hand, so fires both (slice 10G, two guns at once): left click
+	 * the main hand's, right click the other's.
+	 */
+	public static boolean dual(LivingEntity holder) {
+		return oneHanded(holder.getMainHandItem()) && oneHanded(holder.getOffhandItem());
 	}
 
 	@Override
@@ -236,6 +261,10 @@ public class GunItem extends Item implements GeoItem {
 		tooltip.accept(Component.translatable("tooltip.jugcraft.guns.stats", String.format(Locale.ROOT, "%.1f", fitted.damage()),
 				fitted.pellets(), String.format(Locale.ROOT, "%.1f", 20.0F / fitted.interval()), fitted.range())
 				.withStyle(ChatFormatting.BLUE));
+		if (JugcraftGuns.ONE_HANDED.contains(name)) {
+			// Slice 10G: it pairs with another in the other hand.
+			tooltip.accept(Component.translatable("tooltip.jugcraft.guns.one_handed").withStyle(ChatFormatting.DARK_GREEN));
+		}
 		int charge = JugcraftGuns.charge(this);
 		if (charge > 0) {
 			// Slice 8D: an energy weapon's rounds are charge from Energy Cells.

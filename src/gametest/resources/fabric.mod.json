@@ -7,7 +7,13 @@
 	"license": "MIT",
 	"environment": "*",
 	"entrypoints": {
+		"main": [
+			"io.github.jimbozoomer.jugcraft.test.TestForms"
+		],
 		"fabric-gametest": [
+			"io.github.jimbozoomer.jugcraft.test.IndustrialFoundationGameTests",
+			"io.github.jimbozoomer.jugcraft.test.ElectrolyticSeparatorGameTests",
+			"io.github.jimbozoomer.jugcraft.test.GasBurningGeneratorGameTests",
 			"io.github.jimbozoomer.jugcraft.test.FrameworkGameTests",
 			"io.github.jimbozoomer.jugcraft.test.LairGameTests",
 			"io.github.jimbozoomer.jugcraft.test.ConcordanceGameTests",
@@ -135,6 +141,14 @@
 			"io.github.jimbozoomer.jugcraft.test.PumpGunsGameTests",
 			"io.github.jimbozoomer.jugcraft.test.TacticalAttachmentsGameTests",
 			"io.github.jimbozoomer.jugcraft.test.LobberGrenadesGameTests",
+			"io.github.jimbozoomer.jugcraft.test.LaunchersGameTests",
+			"io.github.jimbozoomer.jugcraft.test.CoilPlasmaGunsGameTests",
+			"io.github.jimbozoomer.jugcraft.test.DoubleBarrelGunsGameTests",
+			"io.github.jimbozoomer.jugcraft.test.SculkGunsGameTests",
+			"io.github.jimbozoomer.jugcraft.test.CellRackGameTests",
+			"io.github.jimbozoomer.jugcraft.test.RaiderGunnerGameTests",
+			"io.github.jimbozoomer.jugcraft.test.DualGunsGameTests",
+			"io.github.jimbozoomer.jugcraft.test.NetherGunsGameTests",
 			"io.github.jimbozoomer.jugcraft.test.ArmorSetsGameTests",
 			"io.github.jimbozoomer.jugcraft.test.ThalliteGameTests",
 			"io.github.jimbozoomer.jugcraft.test.ThalliteGearGameTests",
@@ -155,9 +169,16 @@
 			"io.github.jimbozoomer.jugcraft.test.VegetablesHerbsSpicesGameTests",
 			"io.github.jimbozoomer.jugcraft.test.VesperineGameTests",
 			"io.github.jimbozoomer.jugcraft.test.SpindleLoftGameTests",
-			"io.github.jimbozoomer.jugcraft.test.TatterlaceGameTests"
+			"io.github.jimbozoomer.jugcraft.test.TatterlaceGameTests",
+			"io.github.jimbozoomer.jugcraft.test.GlacierHallGameTests",
+			"io.github.jimbozoomer.jugcraft.test.YetiKingGameTests",
+			"io.github.jimbozoomer.jugcraft.test.CinderKilnGameTests",
+			"io.github.jimbozoomer.jugcraft.test.CinderTyrantGameTests"
 		],
 		"fabric-client-gametest": [
+			"io.github.jimbozoomer.jugcraft.test.IndustrialFoundationClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.ElectrolyticSeparatorClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.GasBurningGeneratorClientGameTests",
 			"local.peepo.PeepoCompanionClientTests",
 			"local.peepo.PeepoHearthClientTests",
 			"local.peepo.PeepoKitchenAnimationClientTests",
@@ -285,7 +306,11 @@
 			"io.github.jimbozoomer.jugcraft.test.LairClientGameTests",
 			"io.github.jimbozoomer.jugcraft.test.VesperineClientGameTests",
 			"io.github.jimbozoomer.jugcraft.test.SpindleLoftClientGameTests",
-			"io.github.jimbozoomer.jugcraft.test.TatterlaceClientGameTests"
+			"io.github.jimbozoomer.jugcraft.test.TatterlaceClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.GlacierHallClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.YetiKingClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.CinderKilnClientGameTests",
+			"io.github.jimbozoomer.jugcraft.test.CinderTyrantClientGameTests"
 		]
 	},
 	"depends": {

@@ -13,7 +13,10 @@ import io.github.jimbozoomer.jugcraft.guns.GunItem;
 import io.github.jimbozoomer.jugcraft.guns.JugcraftGuns;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.item.ItemDisplayContext;
 import java.util.List;
@@ -46,6 +49,10 @@ import org.joml.Vector3f;
  * Slice 9F, the aiming polish: as a gun is slid onto its sights, its holder's arms are drawn smaller
  * ({@link GunArmsLayer#AIMED_SIZE}), and past halfway a fitted stock is left out ({@link #SHOULDERED}): held where the
  * hip view holds them, the grip hand and the Light and Weighted Stocks came up under the crosshair.
+ * <p>
+ * Slice 10G, two guns at once: a gun drawn in a left hand has its holder's arms drawn as their mirror image
+ * ({@link View#left}); the other hand's gun has its own flash and only its grip hand's arm, and is never slid onto its
+ * sights or thrust ({@link View#offHand}).
  */
 public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	/** The entity holding the gun (for where its sounds play). */
@@ -58,6 +65,8 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	public static final DataTicket<Flash> FLASH = DataTicket.create("jugcraft_gun_flash", Flash.class);
 	/** How far a rotary gun's barrels have turned (radians, slice 8C). */
 	public static final DataTicket<Float> BARREL_TURN = DataTicket.create("jugcraft_gun_barrel_turn", Float.class);
+	/** Whether the gun is drawn in a left hand (slice 10G: its casings fly out to that side). */
+	public static final DataTicket<Boolean> LEFT = DataTicket.create("jugcraft_gun_left", Boolean.class);
 	/** How far the gun drops, out of sight, while the view through its scope fills the screen (blocks). */
 	private static final float PUT_AWAY = 1.5F;
 	/** How far a bayonet stab drives the gun forward, and down, on screen at full thrust (blocks). */
@@ -87,30 +96,38 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	public void addRenderData(GunItem gun, RenderData data, GeoRenderState state, float partialTick) {
 		List<String> fitted = GunItem.attachments(data.itemStack());
 		state.addGeckolibData(FITTED, new Fitted(fitted));
+		ItemDisplayContext context = data.renderPerspective();
+		boolean left = context == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || context == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+		state.addGeckolibData(LEFT, left);
 		Entity owner = data.itemOwner() instanceof Entity entity ? entity : null;
+		// Slice 10G: the gun in the hand that is not the holder's main one is the other hand's.
+		InteractionHand hand = owner instanceof LivingEntity holder && left != (holder.getMainArm() == HumanoidArm.LEFT)
+				? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
 		if (owner != null) {
 			state.addGeckolibData(OWNER, owner.getId());
 			int spinUp = JugcraftGuns.spinUp(gun);
 			if (spinUp > 0) {
 				state.addGeckolibData(BARREL_TURN, GunEffects.barrelTurn(owner.getId(), owner.level().getGameTime(), partialTick, spinUp));
 			}
-			float age = GunEffects.flashAge(owner.getId(), owner.level().getGameTime(), partialTick);
-			if (age >= 0.0F && inHand(data.renderPerspective()) && fitted.stream().noneMatch(GunLooks.HIDE_FLASH::contains)) {
+			float age = GunEffects.flashAge(owner.getId(), hand, owner.level().getGameTime(), partialTick);
+			if (age >= 0.0F && inHand(context) && fitted.stream().noneMatch(GunLooks.HIDE_FLASH::contains)) {
 				// From the muzzle, or from the front of a barrel attachment that lengthens it.
 				String locator = fitted.stream().filter(name -> JugcraftGuns.ATTACHMENTS.get(name).slot().equals("barrel")).findFirst()
 						.map(name -> "muzzle_" + name).orElse("muzzle");
-				state.addGeckolibData(FLASH, new Flash(age, GunEffects.lastShot(owner.getId()),
+				state.addGeckolibData(FLASH, new Flash(age, GunEffects.lastShot(owner.getId(), hand),
 						GunLooks.FLASH_SIZES.getOrDefault(gun.spec().ammo(), 6.0F), GunLooks.FLASH_TINTS.getOrDefault(gun.spec().ammo(), 0xFFFFFF),
 						locator));
 			}
 		}
 		Minecraft client = Minecraft.getInstance();
-		if (data.renderPerspective().firstPerson() && owner instanceof AbstractClientPlayer player && player == client.player) {
+		if (context.firstPerson() && owner instanceof AbstractClientPlayer player && player == client.player) {
 			boolean slim = player.getSkin().model() == PlayerModelType.SLIM;
 			String optic = GunItem.inSlot(data.itemStack(), "optic");
-			state.addGeckolibData(VIEW, new View(player.getSkin().body().texturePath(), slim, GunView.aim(partialTick),
-					GunEffects.thrust(player.getId(), player.level().getGameTime(), partialTick), optic == null ? "sight" : "sight_" + optic,
-					GunScope.viewing(partialTick)));
+			// Slice 10G: only the main hand's gun is aimed and thrust; a scope's view puts both away.
+			boolean offHand = hand == InteractionHand.OFF_HAND;
+			state.addGeckolibData(VIEW, new View(player.getSkin().body().texturePath(), slim, offHand ? 0.0F : GunView.aim(partialTick),
+					offHand ? 0.0F : GunEffects.thrust(player.getId(), player.level().getGameTime(), partialTick),
+					optic == null ? "sight" : "sight_" + optic, GunScope.viewing(partialTick), left, offHand));
 		}
 	}
 
@@ -133,8 +150,11 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 				|| context == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || context == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
 	}
 
-	/** The props the animations move on bones of their own (tools/guns.py PROPS); slice 8C's jet of flame. */
-	private static final List<String> PROPS = List.of("shell", "ball", "ram", "flash", "flame");
+	/**
+	 * The props the animations move on bones of their own (tools/guns.py PROPS); slice 8C's jet of flame, and the
+	 * Fowler's second ball (slice 10C), one rammed down each barrel.
+	 */
+	private static final List<String> PROPS = List.of("shell", "ball", "ball2", "ram", "flash", "flame");
 
 	/**
 	 * A prop (a shell, a ball, a ramrod, a priming flash) rests out of place: an animation's offsets bring it where it
@@ -208,9 +228,11 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	 * @param thrust  how far into a bayonet stab's thrust (0 to 1; {@link GunEffects#thrust})
 	 * @param sight   the locator aiming puts on the middle of the screen: "sight", or a fitted scope's "sight_&lt;scope&gt;"
 	 * @param putAway whether the view through a scope fills the screen, so the gun is out of sight ({@link GunScope})
+	 * @param left    whether the gun is drawn in the left hand, so the arms are drawn as their mirror image (slice 10G)
+	 * @param offHand whether it is the other hand's gun, beside the main one (slice 10G): only its grip hand's arm is drawn
 	 */
 	public record View(net.minecraft.resources.Identifier skin, boolean slim, float aim, float thrust, String sight,
-			boolean putAway) {
+			boolean putAway, boolean left, boolean offHand) {
 	}
 
 	/** @param attachments the attachments fitted to the gun drawn ({@link GunItem#attachments}) */

@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:gift",
+  "random_sequence": "jugcraft:entities/cinder_tyrant",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:tyrant_scale",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 3,
+              "max": 6
+            }
+          }
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.15
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cinderbrand"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:magmaw"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:salamander_charm"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:tyrant_crest"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

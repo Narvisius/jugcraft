@@ -21,7 +21,8 @@ import org.jspecify.annotations.Nullable;
  * fitted, a red dot ({@link GunLaserParticle}) each tick where their look first meets a block or a creature within the
  * gun's range. That is where an unstrayed shot lands, since every shot leaves the eye along the look (guns/GunShots), so
  * from the hip it shows where the shots will go; others see it too. It changes nothing in the world and is drawn on the
- * client only: one ray and one particle a tick for each such player within {@link #SEEN_WITHIN} blocks.
+ * client only: one ray and one particle a tick for each such player within {@link #SEEN_WITHIN} blocks. Slice 10G: with a
+ * gun in each hand, both point along the look, so one dot shows if either has a Laser Sight (the main hand's, if both).
  */
 public final class GunLaser {
 	/** How near the viewer a player must be for their laser to be drawn, in blocks. */
@@ -51,8 +52,8 @@ public final class GunLaser {
 			if (player.isSpectator() || player.isInvisible() || player.distanceToSqr(viewer) > SEEN_WITHIN * SEEN_WITHIN) {
 				continue;
 			}
-			ItemStack stack = player.getMainHandItem();
-			if (!(stack.getItem() instanceof GunItem) || !GunItem.attachments(stack).contains(JugcraftGuns.LASER_SIGHT)) {
+			ItemStack stack = lasered(player);
+			if (stack == null) {
 				continue;
 			}
 			Vec3 at = point(level, player, GunItem.spec(stack).range());
@@ -66,6 +67,19 @@ public final class GunLaser {
 				lastOwn = at;
 			}
 		}
+	}
+
+	/**
+	 * The gun whose Laser Sight draws this player's dot: the main hand's, else (slice 10G) with a gun in each hand the
+	 * other's; null if neither has one.
+	 */
+	static @Nullable ItemStack lasered(Player player) {
+		for (ItemStack stack : new ItemStack[] {player.getMainHandItem(), GunItem.dual(player) ? player.getOffhandItem() : ItemStack.EMPTY}) {
+			if (stack.getItem() instanceof GunItem && GunItem.attachments(stack).contains(JugcraftGuns.LASER_SIGHT)) {
+				return stack;
+			}
+		}
+		return null;
 	}
 
 	/**

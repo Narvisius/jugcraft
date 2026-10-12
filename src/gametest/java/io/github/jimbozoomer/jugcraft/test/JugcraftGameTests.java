@@ -1482,8 +1482,9 @@ public class JugcraftGameTests {
 	}
 
 	/**
-	 * Batch 57: a level 1 raid gathers its party (three grunts, a grenadier and an officer) bound for its objective; when
-	 * every raider has fallen the raid is won and the world's raid level goes up by one (to at most five).
+	 * Batch 57: a level 1 raid gathers its party (two grunts, a grenadier, an officer and, slice 10F of the guns, a
+	 * gunner) bound for its objective; when every raider has fallen the raid is won and the world's raid level goes up by
+	 * one (to at most five).
 	 */
 	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 200, skyAccess = true)
 	public void raidIsWonWhenEveryRaiderFalls(GameTestHelper helper) {
@@ -1494,14 +1495,15 @@ public class JugcraftGameTests {
 		var raid = io.github.jimbozoomer.jugcraft.raiders.RaiderRaids.start(level, objective, helper.absolutePos(new BlockPos(35, 1, 35)), 1,
 				level.getRandom());
 		helper.assertTrue(raid.total() == 5 && raid.members().size() == 5, "A level 1 raid should bring five raiders, not " + raid.total());
-		int[] kinds = new int[3];
+		int[] kinds = new int[io.github.jimbozoomer.jugcraft.raiders.RaiderInfantry.Role.values().length];
 		for (java.util.UUID id : raid.members()) {
 			if (level.getEntity(id) instanceof io.github.jimbozoomer.jugcraft.raiders.RaiderInfantry raider) {
 				kinds[raider.role().ordinal()]++;
 				helper.assertTrue(objective.equals(raider.objective()) && raid.id().equals(raider.raid()), "Each raider should know its raid");
 			}
 		}
-		helper.assertTrue(kinds[0] == 3 && kinds[1] == 1 && kinds[2] == 1, "Three grunts, a grenadier and an officer, not " + java.util.Arrays.toString(kinds));
+		helper.assertTrue(kinds[0] == 2 && kinds[1] == 1 && kinds[2] == 1 && kinds[3] == 1,
+				"Two grunts, a grenadier, an officer and a gunner, not " + java.util.Arrays.toString(kinds));
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.raiders.RaiderRaids.active(level, raid.id()), "The raid should be under way");
 		helper.runAfterDelay(5, () -> {
 			for (java.util.UUID id : raid.members()) {

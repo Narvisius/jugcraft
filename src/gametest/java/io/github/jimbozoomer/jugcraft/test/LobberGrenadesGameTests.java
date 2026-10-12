@@ -28,14 +28,15 @@ import net.minecraft.world.phys.AABB;
  */
 public class LobberGrenadesGameTests {
 	/**
-	 * Only the Trench Lobber takes grenades. One that has only held frag Grenades holds those and carries no record of
-	 * its kind; one recorded as holding chlorine grenades holds those; and one whose record names an item no longer
-	 * known, or one that is not a grenade, holds frag Grenades again.
+	 * Only the grenade guns take grenades: the Trench Lobber and (slice 10A) the Bullfrog. A Lobber that has only held
+	 * frag Grenades holds those and carries no record of its kind; one recorded as holding chlorine grenades holds those;
+	 * and one whose record names an item no longer known, or one that is not a grenade, holds frag Grenades again.
 	 */
 	@GameTest
-	public void onlyTheLobberTakesGrenades(GameTestHelper helper) {
-		JugcraftGuns.SPECS.forEach((name, spec) -> helper.assertTrue(JugcraftGuns.takesGrenades(spec) == name.equals("trench_lobber"),
-				"The " + name + (name.equals("trench_lobber") ? " does not take" : " takes") + " grenades"));
+	public void onlyTheGrenadeGunsTakeGrenades(GameTestHelper helper) {
+		List<String> grenadeGuns = List.of("trench_lobber", "bullfrog");
+		JugcraftGuns.SPECS.forEach((name, spec) -> helper.assertTrue(JugcraftGuns.takesGrenades(spec) == grenadeGuns.contains(name),
+				"The " + name + (grenadeGuns.contains(name) ? " does not take" : " takes") + " grenades"));
 		GunSpec lobber = JugcraftGuns.SPECS.get("trench_lobber");
 		ItemStack gun = new ItemStack(JugcraftGuns.GUNS.get("trench_lobber"));
 		helper.assertTrue(JugcraftGuns.loadedAmmo(gun, lobber) == PetroItems.GRENADE && !gun.has(JugcraftGuns.LOADED_GRENADE),

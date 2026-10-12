@@ -67,6 +67,8 @@ import org.jspecify.annotations.Nullable;
  * <li>The Amphibian Boot and the Ice Breaker are worn on the feet; a fall that hurts an Ice Breaker's wearer sends a wave
  * through the ground ({@link #wave}) at hostile creatures only, through the shared effect boundary (which lets anyone
  * fight them; its tolerance tags still keep a few great foes from being thrown or slowed).</li>
+ * <li>Whether the belt and boots are drawn on a wearer, for everyone who sees them, is that player's own choice
+ * ({@link WornDisplay}); armour over them hides them too (client: trinket/UnlessCoveredTrinketElement).</li>
  * </ul>
  * Nothing here ticks: the attributes are Trinkets modifiers, and the rest answers three damage events. With the
  * Concordance switched off the items, slots and modifiers stay, but nothing answers the events.
@@ -174,6 +176,7 @@ public final class Wayfaring {
 				(entity, source, amount) -> !(entity instanceof ServerPlayer player) || !save(player, source));
 		ServerLivingEntityEvents.AFTER_DAMAGE.register(Wayfaring::afterDamage);
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> ITEMS.values().forEach(output::accept));
+		WornDisplay.register();
 	}
 
 	private static Item item(String id, String kind, Map<String, Double> modifiers, Rarity rarity, boolean fireResistant) {

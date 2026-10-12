@@ -942,12 +942,19 @@ public class PetroGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(reactor.tanks().output(0).has(PetroFluids.BRINE.source(), 1000), "No brine"));
 	}
 
-	/** The electrolytic cell splits a bucket of brine into 250 mB of chlorine, 250 mB of hydrogen and 500 mB of lye. */
-	@GameTest(maxTicks = 400)
+	/**
+	 * The electrolytic cell splits a bucket of brine into 250 mB of chlorine, 250 mB of hydrogen and 500 mB of lye after
+	 * 400 ticks, the same as the Electrolytic Separator.
+	 */
+	@GameTest(maxTicks = 600)
 	public void cellSplitsBrine(GameTestHelper helper) {
-		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, new BlockPos(4, 1, 2));
+		BlockPos master = new BlockPos(4, 1, 2);
+		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, master);
 		cell.tanks().input(0).fill(PetroFluids.BRINE.source(), 1000);
+		// A bucket takes 102,400 JE, more than the cell's 60,000 JE battery holds: keep it charged, as a cable would.
+		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
 		helper.succeedWhen(() -> {
+			energy.setAmount(energy.getCapacity());
 			helper.assertTrue(cell.tanks().output(0).has(PetroFluids.CHLORINE.fluid(), 250), "Chlorine: " + cell.tanks().output(0).millibuckets());
 			helper.assertTrue(cell.tanks().output(1).has(PetroFluids.HYDROGEN.fluid(), 250), "Hydrogen: " + cell.tanks().output(1).millibuckets());
 			helper.assertTrue(cell.tanks().output(2).has(PetroFluids.LYE.source(), 500), "Lye: " + cell.tanks().output(2).millibuckets());

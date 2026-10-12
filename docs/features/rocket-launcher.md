@@ -21,7 +21,7 @@ Primary specialty and supported player role: combat (a heavy ranged weapon besid
 
 ## Connections
 - Input producer: the rocket workshop, guncotton (field chemistry), solid propellant, guidance units.
-- Output consumer: none (combat).
+- Output consumer: combat. Since guns slice 10A, the guns' Earthmover and Skylark Rifle fire High-Explosive Rockets too, as rockets with a fuse set to the gun's range ([guns, slice 10A](guns.md#slice-10a-the-launchers)); homing rockets stay the launcher's.
 - Technology connection: batch 38 rockets, and batches 18 and 31 grenades (the same blast). Magic connection: none.
 - Required vs optional: optional.
 
@@ -33,7 +33,7 @@ Primary specialty and supported player role: combat (a heavy ranged weapon besid
 ## Multiplayer and persistence
 - Server-authoritative: rockets are server entities; the launcher's cooldown is per player.
 - The burst hurts players as well as mobs, including the one who fired it if they stand too close. The game's PvP setting still applies.
-- Rockets in flight are saved like any projectile.
+- Rockets in flight are saved like any projectile, with what is left of their fuse (since guns slice 10A; one saved before then gets the full lifetime).
 
 ## Dependencies and assets
 - No new dependencies.

@@ -40,7 +40,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
  * marked; the camp is built at its centre on the next server tick, if the ground there is flat and dry, the town is
  * not there and it is at least {@value #SPAWN_CLEARANCE} blocks from the world spawn. Inside a ring of sandbags (with
  * four gaps) a campfire burns between two olive tents, with a supply barrel (loot table
- * {@code jugcraft:chests/raider_camp}), held by an officer, two grunts and a grenadier who stay put until someone comes. Its raiders belong to no raid, never despawn and do not come back once killed. Chunks generated
+ * {@code jugcraft:chests/raider_camp}), held by an officer, a grunt, a gunner (a grunt while the guns are switched off) and a grenadier who stay put until someone comes. Its raiders belong to no raid, never despawn and do not come back once killed. Chunks generated
  * before this existed (or with the raiders feature off) never get one.
  */
 public final class RaiderCamps {
@@ -140,7 +140,7 @@ public final class RaiderCamps {
 		// The garrison.
 		garrison(level, JugcraftRaiders.OFFICER, origin.offset(0, 0, 2), random);
 		garrison(level, JugcraftRaiders.GRUNT, origin.offset(-2, 0, 0), random);
-		garrison(level, JugcraftRaiders.GRUNT, origin.offset(2, 0, 0), random);
+		garrison(level, JugcraftRaiders.armed(JugcraftRaiders.GUNNER), origin.offset(2, 0, 0), random);
 		garrison(level, JugcraftRaiders.GRENADIER, origin.offset(0, 0, -1), random);
 		return true;
 	}

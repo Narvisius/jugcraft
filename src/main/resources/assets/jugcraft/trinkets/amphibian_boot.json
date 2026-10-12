@@ -2,24 +2,32 @@
   "target": "jugcraft:amphibian_boot",
   "render": [
     {
-      "type": "minecraft:model",
-      "model_part": "right_leg",
-      "offset": [
-        0,
-        -1,
-        0
+      "type": "jugcraft:unless_covered",
+      "armour": [
+        "feet"
       ],
-      "model": "jugcraft:item/amphibian_boot_worn_right"
-    },
-    {
-      "type": "minecraft:model",
-      "model_part": "left_leg",
-      "offset": [
-        0,
-        -1,
-        0
-      ],
-      "model": "jugcraft:item/amphibian_boot_worn_left"
+      "then": [
+        {
+          "type": "minecraft:model",
+          "model_part": "right_leg",
+          "offset": [
+            0,
+            -1,
+            0
+          ],
+          "model": "jugcraft:item/amphibian_boot_worn_right"
+        },
+        {
+          "type": "minecraft:model",
+          "model_part": "left_leg",
+          "offset": [
+            0,
+            -1,
+            0
+          ],
+          "model": "jugcraft:item/amphibian_boot_worn_left"
+        }
+      ]
     }
   ]
 }

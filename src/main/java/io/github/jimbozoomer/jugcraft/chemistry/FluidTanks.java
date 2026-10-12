@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.chemistry;
 
+import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,13 @@ public class FluidTanks {
 		return tank.variant.isBlank() ? 0 : BuiltInRegistries.FLUID.getId(tank.variant.getFluid());
 	}
 
+	/** The saved key naming the layout the tanks were saved by (see {@link FluidMachineSpec#layout()}); absent for 0. */
+	public static final String LAYOUT_KEY = "tank_layout";
+
 	public void save(ValueOutput output) {
+		if (spec.layout() > 0) {
+			output.putInt(LAYOUT_KEY, spec.layout());
+		}
 		for (int i = 0; i < tanks.size(); i++) {
 			FluidTank tank = tanks.get(i);
 			output.store("tank" + i + "_fluid", FluidVariant.CODEC, tank.variant);
@@ -108,11 +115,27 @@ public class FluidTanks {
 		}
 	}
 
+	/**
+	 * Loads the tanks. Tanks saved by an earlier layout load through its {@link FluidMachineSpec.Migration}, each into
+	 * the tank with its role; their whole amount is kept even where a new tank is smaller, so nothing is destroyed.
+	 */
 	public void load(ValueInput input) {
-		for (int i = 0; i < tanks.size(); i++) {
-			FluidTank tank = tanks.get(i);
+		int saved = input.getIntOr(LAYOUT_KEY, 0);
+		FluidMachineSpec.Migration migration = saved == spec.layout() ? null : spec.migration(saved);
+		if (saved != spec.layout() && migration == null) {
+			Jugcraft.LOGGER.warn("Tanks saved by unknown layout {} (expected {}); loading them by position", saved, spec.layout());
+		}
+		for (FluidTank tank : tanks) {
+			tank.variant = FluidVariant.blank();
+			tank.amount = 0;
+		}
+		int stored = migration == null ? tanks.size() : migration.oldTanks();
+		for (int i = 0; i < stored; i++) {
+			int target = migration == null ? i : migration.target(i);
+			FluidTank tank = tanks.get(target);
 			tank.variant = input.read("tank" + i + "_fluid", FluidVariant.CODEC).orElseGet(FluidVariant::blank);
-			tank.amount = Math.min(tank.getCapacity(), Math.max(0, input.getLongOr("tank" + i + "_amount", 0L)));
+			long amount = Math.max(0, input.getLongOr("tank" + i + "_amount", 0L));
+			tank.amount = migration == null ? Math.min(tank.getCapacity(), amount) : amount;
 			if (tank.variant.isBlank()) {
 				tank.amount = 0;
 			}

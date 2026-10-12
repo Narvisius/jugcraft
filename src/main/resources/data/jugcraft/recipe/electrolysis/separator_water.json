@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:electrolysis",
+  "capability": "jugcraft:aqueous_electrolysis",
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:oxygen",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 500,
+      "tank": 1
+    }
+  ],
+  "time": 800
+}

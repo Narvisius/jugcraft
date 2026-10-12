@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "TCT",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "W": "jugcraft:copper_cable",
+    "T": "jugcraft:steel_tank",
+    "C": "jugcraft:basic_circuit",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:electrolytic_separator",
+    "count": 1
+  }
+}

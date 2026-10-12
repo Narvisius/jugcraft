@@ -5701,7 +5701,7 @@
             ]
           ],
           "results": [],
-          "ticks": 200
+          "ticks": 400
         },
         {
           "items": [
@@ -7204,6 +7204,58 @@
           ],
           "results": [],
           "ticks": 80
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:electrolytic_separator",
+      "type": "electrolytic_separator",
+      "recipes": [
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:brine",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:chlorine",
+              250
+            ],
+            [
+              "jugcraft:hydrogen",
+              250
+            ],
+            [
+              "jugcraft:lye",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 400
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "minecraft:water",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:oxygen",
+              250
+            ],
+            [
+              "jugcraft:hydrogen",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 800
         }
       ]
     }

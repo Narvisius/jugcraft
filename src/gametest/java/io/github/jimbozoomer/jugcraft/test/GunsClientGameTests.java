@@ -14,6 +14,7 @@ import io.github.jimbozoomer.jugcraft.guns.GunItem;
 import io.github.jimbozoomer.jugcraft.guns.GunShots;
 import io.github.jimbozoomer.jugcraft.guns.GunSpec;
 import io.github.jimbozoomer.jugcraft.guns.JugcraftGuns;
+import io.github.jimbozoomer.jugcraft.guns.MobGuns;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -361,6 +362,96 @@ public class GunsClientGameTests implements FabricClientGameTest {
 			Jugcraft.LOGGER.info("[guns] in third person the player was posed holding a gun for {} frames", posedFrames);
 			if (posedFrames <= 0) {
 				throw new AssertionError("In third person the player was never posed holding a gun (GunPose)");
+			}
+
+			// Slice 10F: three raider gunners, one with each of the service arms they carry, four blocks off and facing the
+			// player, each posed holding its gun as a player holds one. The player's hands are empty, so only theirs pose.
+			server.runCommand("clear @p");
+			long unposed = context.computeOnClient(client -> GunPose.posed());
+			for (int i = 0; i < MobGuns.ARMS.size(); i++) {
+				String tag = "jugcraft_gunner_" + i;
+				server.runCommand(String.format(Locale.ROOT, "summon jugcraft:raider_gunner %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,"
+						+ "Rotation:[0f,0f],Tags:[\"%s\"]}", x - 1.5 + 2 * i, y, z - 3.5, tag));
+				server.runCommand("item replace entity @e[tag=%s] weapon.mainhand with jugcraft:%s".formatted(tag, MobGuns.ARMS.get(i).gun()));
+			}
+			server.runCommand(String.format(Locale.ROOT, "tp @p %.1f %d %.1f 180 5", x + 0.5, y, z + 0.5));
+			context.waitTicks(20);
+			context.takeScreenshot("jugcraft_guns_raider_gunners");
+			long gunnerFrames = context.computeOnClient(client -> GunPose.posed()) - unposed;
+			Jugcraft.LOGGER.info("[guns] the raider gunners were posed holding their guns for {} frames", gunnerFrames);
+			server.runCommand("kill @e[type=jugcraft:raider_gunner]");
+			if (gunnerFrames <= 0) {
+				throw new AssertionError("The raider gunners were never posed holding their guns (GunPose)");
+			}
+
+			// Slice 10G: two guns at once. A Sentry Pistol in the main hand and a Warden Pistol in the other, both loaded, and
+			// Light Rounds to reload them: left click fires the first; right click, held, fires the second once and aims
+			// neither; then the other hand holds a Rattler Pistol, which fires for as long as right click is held. G reloads
+			// the main gun, then (it being full) the other. Seen from outside, both arms are raised, each with its gun.
+			server.runCommand("clear @p");
+			server.runCommand(String.format(Locale.ROOT, "tp @p %.1f %d %.1f 180 5", x + 0.5, y, z + 0.5));
+			server.runCommand("item replace entity @p weapon.mainhand with jugcraft:sentry_pistol[jugcraft:loaded_rounds=8]");
+			server.runCommand("item replace entity @p weapon.offhand with jugcraft:warden_pistol[jugcraft:loaded_rounds=12]");
+			server.runCommand("give @p jugcraft:light_round 32");
+			context.waitTicks(30);
+			context.takeScreenshot("jugcraft_guns_dual_held");
+			float dualBefore = health(server, x, y, z);
+			long dualFlashes = context.computeOnClient(client -> GunEffects.flashes());
+			context.getInput().pressKey(options -> options.keyAttack);
+			context.takeScreenshot("jugcraft_guns_dual_main_fired");
+			context.waitTicks(10);
+			context.getInput().holdKey(options -> options.keyUse);
+			context.takeScreenshot("jugcraft_guns_dual_other_fired");
+			context.waitTicks(10);
+			boolean dualAimed = context.computeOnClient(client -> client.player.isUsingItem());
+			context.getInput().releaseKey(options -> options.keyUse);
+			context.waitTicks(5);
+			long dualFlashed = context.computeOnClient(client -> GunEffects.flashes()) - dualFlashes;
+			int mainLeft = server.computeOnServer(minecraft -> GunItem.loaded(player(minecraft).getMainHandItem()));
+			int otherLeft = server.computeOnServer(minecraft -> GunItem.loaded(player(minecraft).getOffhandItem()));
+			Jugcraft.LOGGER.info("[guns] two guns fired, left click then right click held: rounds 8 -> {} and 12 -> {}, {} flash frames, "
+					+ "husk {} -> {}, aimed: {}", mainLeft, otherLeft, dualFlashed, dualBefore, health(server, x, y, z), dualAimed);
+			if (mainLeft != 7 || otherLeft != 11 || dualFlashed <= 0 || dualAimed) {
+				throw new AssertionError("Two guns did not each fire one shot, flash and stay unaimed: rounds 8 -> " + mainLeft + " and 12 -> "
+						+ otherLeft + ", " + dualFlashed + " flash frames, aimed: " + dualAimed);
+			}
+			context.getInput().pressKey(options -> GunsClient.reloadKey());
+			context.waitTicks(JugcraftGuns.SPECS.get("sentry_pistol").reload() / 2);
+			context.takeScreenshot("jugcraft_guns_dual_reloading");
+			context.waitTicks(JugcraftGuns.SPECS.get("sentry_pistol").reload() / 2 + 10);
+			context.getInput().pressKey(options -> GunsClient.reloadKey());
+			context.waitTicks(JugcraftGuns.SPECS.get("warden_pistol").reload() + 10);
+			int mainReloaded = server.computeOnServer(minecraft -> GunItem.loaded(player(minecraft).getMainHandItem()));
+			int otherReloaded = server.computeOnServer(minecraft -> GunItem.loaded(player(minecraft).getOffhandItem()));
+			int roundsLeft = server.computeOnServer(minecraft -> GunShots.count(player(minecraft).getInventory(), JugcraftGuns.ROUNDS.get("light_round")));
+			Jugcraft.LOGGER.info("[guns] G pressed twice with two guns: rounds {} and {}, {} Light Rounds left", mainReloaded, otherReloaded, roundsLeft);
+			if (mainReloaded != 8 || otherReloaded != 12 || roundsLeft != 30) {
+				throw new AssertionError("G did not reload the main gun and then the other: rounds " + mainReloaded + " and " + otherReloaded
+						+ ", " + roundsLeft + " Light Rounds left");
+			}
+			server.runCommand("item replace entity @p weapon.offhand with jugcraft:rattler_pistol[jugcraft:loaded_rounds=20]");
+			context.waitTicks(20);
+			context.getInput().holdKey(options -> options.keyUse);
+			context.waitTicks(15);
+			context.getInput().releaseKey(options -> options.keyUse);
+			context.waitTicks(5);
+			int rattlerLeft = server.computeOnServer(minecraft -> GunItem.loaded(player(minecraft).getOffhandItem()));
+			Jugcraft.LOGGER.info("[guns] right click held for 15 ticks with a Rattler Pistol in the other hand: rounds 20 -> {}", rattlerLeft);
+			if (rattlerLeft > 18) {
+				throw new AssertionError("Right click held fired the other hand's Rattler Pistol only " + (20 - rattlerLeft) + " times");
+			}
+			long posedDual = context.computeOnClient(client -> GunPose.posedDual());
+			context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
+			context.waitTicks(20);
+			context.takeScreenshot("jugcraft_guns_dual_third_person");
+			context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+			context.waitTicks(20);
+			context.takeScreenshot("jugcraft_guns_dual_third_person_back");
+			context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+			long dualFrames = context.computeOnClient(client -> GunPose.posedDual()) - posedDual;
+			Jugcraft.LOGGER.info("[guns] in third person the player was posed holding a gun in each hand for {} frames", dualFrames);
+			if (dualFrames <= 0) {
+				throw new AssertionError("In third person the player was never posed holding a gun in each hand (GunPose)");
 			}
 
 			// The icons, in two inventories (they no longer fit one): the guns and rounds, then the attachments.

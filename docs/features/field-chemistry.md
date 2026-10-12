@@ -17,7 +17,7 @@ Primary specialty and supported player role: combat, escape and survival.
 - **Smoke grenade:** a 4-block smoke screen for 15 s. Mobs inside forget their target, and so do mobs outside hunting someone inside, so you can break off a fight or cross a skeleton's line of fire. Players inside without a mask are blinded. Reactor: a steel plate and two sugar with 250 mB of ammonia make two.
 - **Thermite grenade:** a white-hot pool on the floor for 6 s. Whatever stands in it takes 4 damage a second through armor and is set alight for 5 s. Fire-immune mobs and fire resistance are immune. It never places fire or lights a block. Thermite (an aluminum ingot and two iron dust make three) fills grenades in the frag grenade's shape.
 - **Flashbang:** a flash and a bang, no damage. Within 10 blocks, players who can see it are blinded and dizzy for 4 s (a third of that if they look away; not at all in a gas mask); mobs that can see it lose their target and are slowed and weakened for 3 s. Walls shield. Crafted: two steel plates, an iron nugget, an aluminum nugget and glowstone dust make four.
-- **Grenade launcher:** fires any grenade (the other hand first, then the inventory). The guns' Trench Lobber loads them too, one kind a magazine ([guns, slice 9G](guns.md#slice-9g-the-trench-lobbers-grenades)).
+- **Grenade launcher:** fires any grenade (the other hand first, then the inventory). The guns' Trench Lobber loads them too, one kind a magazine ([guns, slice 9G](guns.md#slice-9g-the-trench-lobbers-grenades)), and so does the Bullfrog, one at a time ([guns, slice 10A](guns.md#slice-10a-the-launchers)).
 - **Gas mask:** a helmet (one point of armor). Keeps out chlorine and smoke; its tinted lenses keep out the flash. The filter wears one point a second in gas or smoke (220 s in all); repair it with charcoal on an anvil. Crafted from rubber, glass panes, a steel plate and charcoal.
 - **Scuba mask + tank:** with oxygen in the tank, they keep out chlorine and smoke too, using 20 mB a second.
 - **First aid kit:** heals four hearts (Instant Health II) after a 1.5 s use, then a 10 s cooldown. Reactor: two cotton and a soap in 250 mB of bioethanol make two. A stackable heal without brewing.
@@ -28,7 +28,7 @@ Primary specialty and supported player role: combat, escape and survival.
 ## Connections
 - Input producer: chlorine and lye (electrolytic cell), ammonia (synthesis converter), bioethanol (fermentation), aluminum, iron dust, steel plates, rubber, cotton, soap.
 - Output consumer: the player. New sinks for chlorine, ammonia, lye and bioethanol.
-- Technology connection: the grenade launcher (batch 18), the guns' Trench Lobber (guns slice 9G), scuba gear (batch 27), the shared party API.
+- Technology connection: the grenade launcher (batch 18), the guns' Trench Lobber and Bullfrog (guns slices 9G and 10A), scuba gear (batch 27), the shared party API.
 - Magic connection: none. Required vs optional: optional.
 
 ## Balance and automation

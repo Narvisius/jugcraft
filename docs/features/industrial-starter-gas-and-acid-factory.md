@@ -39,7 +39,7 @@ The table lists **outer construction ingredients**, not a flattened raw-material
 | Absorption and ordinary reactions | Initially reuse the existing Chemical Reactor and its construction | HCl absorption, ordinary sulfuric-acid supply and other compatible wet reactions. Its future capacity/interface changes must be explicit |
 | Coal Gasifier | 4 steel plates, 2 bricks, 1 furnace, 1 steel fluid pipe, 1 Machine Casing | Coal/steam preparation with paid heat, dirty CO/H2 mixture and substantial numeric pollution |
 | Gas Cleanup and Separation | 4 steel plates, 1 Steel Tank, 2 Tinplate Tanks, 1 electric motor, 1 basic circuit | Cleans and divides the gasifier mixture into CO and H2, with accounted residues; neither gas is created again by separation |
-| Shared Gas Generator | 4 steel plates, 1 electric motor, 1 steel gear, 1 Tinplate Tank, 1 basic circuit, 1 Machine Casing | Burns H2 or pure methane; fits the earlier electrical network. Biogas and ethanol remain in the separate lower-output Bio-Generator |
+| Shared Gas Generator | 4 steel plates, 1 electric motor, 1 steel gear, 1 Tinplate Tank, 1 basic circuit, 1 Machine Casing | Burns H2 or pure methane; fits the earlier electrical network. Biogas and ethanol remain in the separate lower-output Bio-Generator. Implemented for hydrogen with this bill as the [Gas Burning Generator](industrial-gas-burning-generator.md); methane follows its Infuser |
 | Ordinary Rotary Condensator | 4 steel plates, 1 Tinplate Tank, 1 electric motor, 1 copper cable, 1 basic circuit, 1 Machine Casing | Ordinary phase conversion when a consumer needs it; optional for the first hydrogen installation. Rocket cryogenics remains later |
 | Reusable nickel catalyst bed | 1 existing nickel ingot + 2 ordinary fired bricks/compatible clay ceramic pieces | One permanent methanation bed per Infuser; no routine consumption or replacement. Existing nickel refining/trade must remain available |
 
@@ -58,7 +58,7 @@ For these new gas recipes, equal gas mB represent equal reaction amounts. The ex
 | Proposed operation | Inputs -> outputs | Base processing proposal |
 | --- | --- | --- |
 | Water electrolysis | 1,000 mB water -> 500 mB H2 + 250 mB O2 | Retain 800 ticks x 256 JE/t = 204,800 JE |
-| Ordinary brine electrolysis | Retain 1,000 mB brine -> 250 mB H2 + 250 mB chlorine + 500 mB lye | Increase to 400 ticks x 256 JE/t = 102,400 JE; changes the current 200-tick recipe and requires review |
+| Ordinary brine electrolysis | Retain 1,000 mB brine -> 250 mB H2 + 250 mB chlorine + 500 mB lye | Increase to 400 ticks x 256 JE/t = 102,400 JE. The owner selected this change to the existing 200-tick Electrolytic Cell recipe on 11 October 2026; it is implemented with the [Electrolytic Separator](industrial-electrolytic-separator.md) |
 | Hydrogen chloride synthesis | 250 gas mB H2 + 250 gas mB chlorine -> 500 gas mB HCl | 100 ticks x 96 JE/t = 9,600 JE |
 | Aqueous HCl preparation | 500 gas mB HCl + 1,000 liquid mB water -> 1,000 mB ordinary aqueous HCl | 100 ticks x 96 JE/t = 9,600 JE. Solution volume is an abstraction with retained solute/water accounting, not a free condensator swap |
 | CO2 methanation | 100 gas mB CO2 + 400 gas mB H2 -> 100 gas mB CH4 + 400 liquid mB water | 200 ticks x 128 JE/t = 25,600 JE; reusable nickel bed, paid heat |

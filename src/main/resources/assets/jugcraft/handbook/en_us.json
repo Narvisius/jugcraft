@@ -3783,7 +3783,7 @@
           "title": "Electrolytic Cell",
           "icon": "jugcraft:electrolytic_cell",
           "text": [
-            "Three wide, three tall and two deep. Splits brine with electricity: a bucket gives 250 mB of chlorine (out of the top row), 250 mB of hydrogen (the middle row) and 500 mB of lye (the bottom row), every 10 seconds at 256 JE/t. Make brine in the chemical reactor from two salt and a bucket of water. It also splits plain water, slowly: a bucket gives 500 mB of hydrogen (middle row) and 250 mB of oxygen (top row) every 40 seconds, an early fuel for the fuel cell.",
+            "Three wide, three tall and two deep. Splits brine with electricity: a bucket gives 250 mB of chlorine (out of the top row), 250 mB of hydrogen (the middle row) and 500 mB of lye (the bottom row), every 20 seconds at 256 JE/t. Make brine in the chemical reactor from two salt and a bucket of water. It also splits plain water, slowly: a bucket gives 500 mB of hydrogen (middle row) and 250 mB of oxygen (top row) every 40 seconds, an early fuel for the fuel cell.",
             "Uses 256 JE/t while working. Holds 60,000 JE."
           ],
           "craft": {
@@ -3799,6 +3799,30 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:electrolytic_cell",
+            "count": 1
+          }
+        },
+        {
+          "title": "Electrolytic Separator",
+          "icon": "jugcraft:electrolytic_separator",
+          "text": [
+            "Two wide, two deep and three tall: the first of the big industrial machines, built from steel, copper cable and a basic circuit, before the Electrolytic Cell's aluminum cable and advanced circuit. It is placed from the front; every block it fills must be free, or it says what is in the way and where.",
+            "Pipe water or brine into the inlet low at the back. A bucket of water gives 500 mB of hydrogen (the top left collar) and 250 mB of oxygen (top right) in 40 seconds; a bucket of brine gives 250 mB of hydrogen, 250 mB of chlorine (top right) and 500 mB of lye (the return on the right) in 20 seconds. It draws 256 JE/t through the socket at the foot of the right tower.",
+            "It keeps its lye: when the lye tank is full, brine stops until the lye is piped away. Its screen says what it is waiting for, and upgrade cards fit its terminal."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:electrolytic_separator",
             "count": 1
           }
         },
@@ -3845,6 +3869,30 @@
               "jugcraft:aluminum_plate"
             ],
             "result": "jugcraft:fuel_cell",
+            "count": 1
+          }
+        },
+        {
+          "title": "Gas Burning Generator",
+          "icon": "jugcraft:gas_burning_generator",
+          "text": [
+            "Four wide, five deep and four tall: a gas engine turning a generator on a steel skid, built from steel plates, an electric motor, a steel gear, a Tinplate Tank and a basic circuit. Every block it fills must be free when it is placed; the corners above the skid at the front stay open.",
+            "Pipe hydrogen into the capped inlet low on its right side. It burns a millibucket a tick, 128 JE each, and sends 128 JE/t out of the socket on the terminal cabinet at the back: a bucket lasts 50 seconds. Its coupling and intake fan spin up as it starts.",
+            "It makes only as much as its store has room for, so no fuel is wasted when nothing draws its power, and its screen says when the fuel tank is empty or the store is full. Methane, at 256 JE/t, comes with the methane Infuser."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:gas_burning_generator",
             "count": 1
           }
         },

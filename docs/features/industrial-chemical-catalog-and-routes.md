@@ -210,6 +210,8 @@ The fourth batch chooses **general storage progression first**, deferring portab
 
 ## Existing foundations and delivery boundaries
 
+The [factory implementation plan](industrial-factory-implementation-plan.md) and companion [construction/operation](industrial-machine-construction-and-operation.md) and [production/layout](industrial-production-lines-and-factory-layouts.md) records now turn the selected chemical network into proposed delivery packages, construction profiles and connected factories. New defaults preserve the existing six-process-tank limit, independently reachable controls/catalysts and distinct solution/phase ledgers. No new exact chemistry receipt is approved merely by its route card.
+
 At main snapshot `8ca8aee59`, inspected sources already include water/brine electrolysis, sulfuric/nitric chemistry, simplified phosphate fertilizer/leaching, PVC/polymerization, lithography, lithium storage, vanadium electrolyte/Flow Battery, kerosene/RP-1 and liquid oxygen. These are source observations, not new gameplay tests:
 
 - [Chemistry source data](../../tools/petro.py): current vanadium electrolyte comes from sulfuric-acid treatment of an asphalt-binder input; current lithography has sulfuric/nitric alternatives. Named VOSO4 processing and the new wafer stages are future expansions.

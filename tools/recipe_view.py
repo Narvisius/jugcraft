@@ -49,6 +49,9 @@ def build():
                  "ticks": recipe["ticks"]} for recipe in recipes]
         fluid_machines.append({"block": f"{MOD}:{block}", "type": petro.FLUID_MACHINES[block]["recipe_type"],
                                "recipes": rows})
+    # Industrial forms run their own capability recipes, so each form is its own category.
+    import industrial_forms
+    fluid_machines += industrial_forms.recipe_view()
     import concordance
     return {"machines": machines, "fluid_machines": fluid_machines, "concordance": concordance.recipe_view(),
             "concordance_stations": concordance.recipe_stations(),

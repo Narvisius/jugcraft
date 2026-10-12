@@ -1,7 +1,8 @@
 """The raider faction (batch 57, docs/features/raiders.md): dieselpunk raiders who come for players' bases.
 
-- Infantry: the Raider Grunt (a cleaver), the Raider Grenadier (lobs small grenades from range) and the Raider Officer
-  (rallies the raiders near them; when they fall, the rest lose heart).
+- Infantry: the Raider Grunt (a cleaver), the Raider Grenadier (lobs small grenades from range), the Raider Officer
+  (rallies the raiders near them; when they fall, the rest lose heart) and, slice 10F of the guns, the Raider Gunner
+  (fires one of the owner's service arms; tools/guns.py MOB_ARMS).
 - The Raider Walker: the Armoured Walker (batch 58, the owner's model) in raider paint. It wades in and rams with its
   piston, and lobs grenades from its hull gun.
 - The Raider Blimp: a small airship that cruises over its target and drops bombs. Flak brings it down.
@@ -28,11 +29,12 @@ MOD = "jugcraft"
 FEATURE = "raiders"
 
 # id: (display name, max health, attack damage, armour, movement speed). The officer and grunts fight hand to hand;
-# the grenadier keeps its distance.
+# the grenadier and the gunner keep their distance.
 INFANTRY = {
     "raider_grunt": ("Raider Grunt", 24, 5, 4, 0.30),
     "raider_grenadier": ("Raider Grenadier", 20, 3, 2, 0.28),
     "raider_officer": ("Raider Officer", 32, 6, 6, 0.30),
+    "raider_gunner": ("Raider Gunner", 20, 3, 2, 0.28),
 }
 # The walker and the blimp: (display name, max health, attack damage, armour, movement speed, width, height).
 MACHINES = {
@@ -94,9 +96,12 @@ OPTIONS = {"raiders.raids": "on", "raiders.grace_days": "3", "raiders.interval_d
 
 
 def party(level):
-    """Who comes at a raid level (1 to MAX_LEVEL): the counts of each kind. Kept the same in raiders/RaiderRaids.java."""
-    return {"raider_grunt": 2 + level, "raider_grenadier": (level + 1) // 2, "raider_officer": 1,
-            "raider_blimp": 0 if level < 2 else 1 if level < 5 else 2, "raider_walker": 0 if level < 3 else 1}
+    """Who comes at a raid level (1 to MAX_LEVEL): the counts of each kind. Kept the same in raiders/RaiderRaids.java.
+    The gunners (slice 10F of the guns) march in place of some of the grunts, so a party is as large as before."""
+    gunners = (level + 1) // 2
+    return {"raider_grunt": 2 + level - gunners, "raider_grenadier": (level + 1) // 2, "raider_officer": 1,
+            "raider_blimp": 0 if level < 2 else 1 if level < 5 else 2, "raider_walker": 0 if level < 3 else 1,
+            "raider_gunner": gunners}
 
 
 ENTITIES = {**{k: v[0] for k, v in INFANTRY.items()}, **{k: v[0] for k, v in MACHINES.items()}, BOMB: "Raider Bomb"}
@@ -195,6 +200,20 @@ def write_all(write, assets, data, lang, condition):
         write(assets / "blockstates" / f"{block}.json", {"variants": {
             f"facing={f}": ({"model": ref, "y": y} if y else {"model": ref})
             for f, y in {"north": 0, "east": 90, "south": 180, "west": 270}.items()}})
+    # The gunner (slice 10F of the guns): a few rounds of the ammunition its gun fires, to a player's kill. Its gun itself
+    # may drop as any mob's equipment does (tools/guns.py MOB_DROP).
+    import guns
+    low, high = guns.MOB_ROUNDS
+    write(data / "loot_table" / "entities" / "raider_gunner.json", {
+        "type": "minecraft:entity", "random_sequence": f"{MOD}:entities/raider_gunner",
+        "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"{MOD}:{guns.GUNS[gun]['ammo']}",
+                                            "modifier": {"type": "minecraft:set_count",
+                                                         "count": {"type": "minecraft:uniform", "min": low, "max": high}}}],
+                   "condition": {"type": "minecraft:all_of", "terms": [
+                       {"type": "minecraft:killed_by_player"},
+                       {"type": "minecraft:entity_properties", "entity": "this",
+                        "predicate": {"equipment": {"mainhand": {"items": f"{MOD}:{gun}"}}}}]}}
+                  for gun, _, _ in guns.MOB_ARMS]})
     write(data / "loot_table" / "chests" / "raider_camp.json", {
         "type": "minecraft:chest", "random_sequence": f"{MOD}:chests/raider_camp",
         "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": item,
@@ -299,6 +318,31 @@ def bandolier(s):
         s.dot("jacket", "back", 7 - i, j, LEATHER)
 
 
+def cartridge_belt(s):
+    """A leather strap across the chest, brass rounds in its loops, and a pouch on the belt."""
+    for j in range(12):
+        i = 7 - j * 7 // 11
+        s.dot("jacket", "front", i, j, LEATHER)
+        if j % 2 == 0:
+            s.dot("jacket", "front", max(0, i - 1), j, BRASS)
+        s.dot("jacket", "back", 7 - i, j, LEATHER)
+    for i in (1, 2):
+        for j in (8, 9):
+            s.dot("jacket", "front", i, j, ts.darker(LEATHER, 0.8))
+
+
+def field_cap(s):
+    """A soft grey field cap with a short black peak."""
+    grey = (88, 92, 90)
+    s.fill("hat", grey, sides=["top"], noise=3)
+    for side in ("front", "back", "right", "left"):
+        for i in range(8):
+            s.dot("hat", side, i, 0, grey)
+            s.dot("hat", side, i, 1, ts.darker(grey, 0.85))
+    for i in range(8):
+        s.dot("hat", "front", i, 2, BLACK)
+
+
 def peaked_cap(s):
     s.fill("hat", BLACK, sides=["top"], noise=3)
     for side in ("back", "right", "left"):
@@ -317,6 +361,7 @@ SKINS = {
     "raider_grunt": (71, ts.combine(greatcoat(OLIVE, OLIVE_DARK), helmet((70, 74, 66)), goggles, respirator)),
     "raider_grenadier": (72, ts.combine(greatcoat((96, 84, 60), LEATHER), helmet(LEATHER), goggles, bandolier)),
     "raider_officer": (73, ts.combine(greatcoat(BLACK, RED), peaked_cap, armband)),
+    "raider_gunner": (74, ts.combine(greatcoat((76, 82, 76), OLIVE_DARK), field_cap, goggles, cartridge_belt)),
 }
 
 

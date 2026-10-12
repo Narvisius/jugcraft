@@ -11,10 +11,13 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 /**
  * What a shot shows besides the gun's own animation (slice 6), on this client only:
@@ -32,6 +35,7 @@ import net.minecraft.world.phys.Vec3;
  * <li>slice 8D: an energy weapon's shot, where the server says it went ({@link #trace}): a beam of cyan light from the
  * muzzle to its end, or an arc of sparks jagging from the muzzle to each creature it leapt to. Its casing cue vents
  * sparks.</li>
+ * <li>slice 10G, two guns at once: each hand's gun has its own flash, and its shots and casings come from its side.</li>
  * </ul>
  */
 public final class GunEffects {
@@ -42,8 +46,11 @@ public final class GunEffects {
 	static final float FLASH_TICKS = 3.0F;
 	/** A shot older than this is forgotten. */
 	private static final long FORGET_TICKS = 20;
-	/** Each shooter's last shot: entity id to game time. Pruned once it holds more than a few. */
-	private static final Map<Integer, Long> SHOTS = new HashMap<>();
+	/**
+	 * Each shooter's last shot, by entity id and hand ({@link #key}; slice 10G: a gun in each hand flashes on its own), to
+	 * game time. Pruned once it holds more than a few.
+	 */
+	private static final Map<Long, Long> SHOTS = new HashMap<>();
 	/** Ticks a bayonet thrust takes, out and back (slice 7). */
 	static final float THRUST_TICKS = 6.0F;
 	/** Each stabber's last stab, the same way. */
@@ -74,19 +81,25 @@ public final class GunEffects {
 
 	/** The gun this entity holds fired, now. */
 	public static void shot(LivingEntity shooter) {
+		shot(shooter, InteractionHand.MAIN_HAND);
+	}
+
+	/** The gun in this hand of this entity fired, now (slice 10G: a gun in each hand). */
+	public static void shot(LivingEntity shooter, InteractionHand hand) {
 		long now = shooter.level().getGameTime();
 		if (SHOTS.size() > 32) {
 			SHOTS.values().removeIf(time -> now - time > FORGET_TICKS || time > now);
 		}
-		SHOTS.put(shooter.getId(), now);
-		if (shooter.getMainHandItem().getItem() instanceof GunItem gun && JugcraftGuns.spinUp(gun) > 0) {
+		SHOTS.put(key(shooter.getId(), hand), now);
+		ItemStack held = shooter.getItemInHand(hand);
+		if (hand == InteractionHand.MAIN_HAND && held.getItem() instanceof GunItem gun && JugcraftGuns.spinUp(gun) > 0) {
 			drive(shooter, now + SHOT_DRIVES);
 		}
-		if (shooter.getMainHandItem().getItem() instanceof GunItem gun && JugcraftGuns.shot(gun).equals(JugcraftGuns.FLAME)
+		if (held.getItem() instanceof GunItem gun && JugcraftGuns.shot(gun).equals(JugcraftGuns.FLAME)
 				&& shooter.level() instanceof ClientLevel level) {
 			flames(level, shooter, gun);
 		}
-		if (shooter.getMainHandItem().getItem() instanceof GunItem gun && gun.spec().ammo().equals("paper_cartridge")
+		if (held.getItem() instanceof GunItem gun && gun.spec().ammo().equals("paper_cartridge")
 				&& shooter.level() instanceof ClientLevel level) {
 			Vec3 eye = shooter.getEyePosition();
 			Vec3 look = shooter.getLookAngle();
@@ -134,7 +147,7 @@ public final class GunEffects {
 		}
 		traced++;
 		RandomSource random = shooter.getRandom();
-		Vec3 from = muzzle(shooter);
+		Vec3 from = muzzle(shooter, payload.offHand());
 		for (Vec3 to : payload.points()) {
 			if (payload.kind() == GunTracePayload.BEAM) {
 				motes(level, from, to);
@@ -176,13 +189,16 @@ public final class GunEffects {
 		}
 	}
 
-	/** About where the shooter's muzzle is: ahead of the eye, a little right (the gun hand's side) and down. */
-	private static Vec3 muzzle(LivingEntity shooter) {
+	/**
+	 * About where the shooter's muzzle is: ahead of the eye, a little to the side of the hand holding the gun and down
+	 * (slice 10G: the other hand's gun is on the other side).
+	 */
+	private static Vec3 muzzle(LivingEntity shooter, boolean offHand) {
 		Vec3 eye = shooter.getEyePosition();
 		Vec3 look = shooter.getLookAngle();
 		Vec3 right = look.cross(new Vec3(0.0, 1.0, 0.0));
 		right = right.lengthSqr() < 1.0E-6 ? new Vec3(1.0, 0.0, 0.0) : right.normalize();
-		if (shooter.getMainArm() == HumanoidArm.LEFT) {
+		if ((shooter.getMainArm() == HumanoidArm.LEFT) != offHand) {
 			right = right.scale(-1.0);
 		}
 		return eye.add(look.scale(0.9)).add(right.scale(0.2)).add(0.0, -0.2, 0.0);
@@ -252,9 +268,9 @@ public final class GunEffects {
 		return age < THRUST_TICKS ? (float) Math.sin(Math.PI * age / THRUST_TICKS) : 0.0F;
 	}
 
-	/** Ticks since this entity's last shot, if its flash still shows; otherwise -1. */
-	static float flashAge(int entityId, long gameTime, float partialTick) {
-		Long shot = SHOTS.get(entityId);
+	/** Ticks since the last shot of the gun in this hand of this entity, if its flash still shows; otherwise -1. */
+	static float flashAge(int entityId, InteractionHand hand, long gameTime, float partialTick) {
+		Long shot = SHOTS.get(key(entityId, hand));
 		if (shot == null || shot > gameTime) {
 			return -1.0F;
 		}
@@ -262,9 +278,14 @@ public final class GunEffects {
 		return age < FLASH_TICKS ? age : -1.0F;
 	}
 
-	/** The game time of this entity's last shot (picks the flash's frame and turn), or 0. */
-	static long lastShot(int entityId) {
-		return SHOTS.getOrDefault(entityId, 0L);
+	/** The game time of the last shot of the gun in this hand of this entity (picks the flash's frame and turn), or 0. */
+	static long lastShot(int entityId, InteractionHand hand) {
+		return SHOTS.getOrDefault(key(entityId, hand), 0L);
+	}
+
+	/** A shot's key: the shooter's entity id and the hand its gun is in. */
+	private static long key(int entityId, InteractionHand hand) {
+		return (long) entityId << 1 | (hand == InteractionHand.OFF_HAND ? 1L : 0L);
 	}
 
 	static void flashDrawn() {
@@ -283,9 +304,11 @@ public final class GunEffects {
 
 	/**
 	 * An animation's "eject_casing" cue on this gun, held by this entity (the player's own when unknown): the round's
-	 * spent case flies from the ejection port out to the gun's right and a little up, tumbling.
+	 * spent case flies from the ejection port out to the gun's side and a little up, tumbling. {@code left}: whether the gun
+	 * is drawn in a left hand (slice 10G: the other hand's gun throws its cases out to its own side); when unknown, the
+	 * holder's main arm decides.
 	 */
-	static void eject(GunItem gun, int ownerId) {
+	static void eject(GunItem gun, int ownerId, @Nullable Boolean left) {
 		Minecraft client = Minecraft.getInstance();
 		ClientLevel level = client.level;
 		if (level == null) {
@@ -299,7 +322,7 @@ public final class GunEffects {
 		Vec3 look = holder.getLookAngle();
 		Vec3 right = look.cross(new Vec3(0.0, 1.0, 0.0));
 		right = right.lengthSqr() < 1.0E-6 ? new Vec3(1.0, 0.0, 0.0) : right.normalize();
-		if (holder.getMainArm() == HumanoidArm.LEFT) {
+		if (left != null ? left : holder.getMainArm() == HumanoidArm.LEFT) {
 			right = right.scale(-1.0);
 		}
 		Vec3 port = eye.add(look.scale(0.5)).add(right.scale(0.3)).add(0.0, -0.3, 0.0);

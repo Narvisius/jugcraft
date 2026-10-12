@@ -2,41 +2,169 @@
 
 Every change to Jugcraft, newest first, grouped by pull request. For what each thing does in game, see [docs/TECH_TREE.md](docs/TECH_TREE.md). For a full inventory with APIs and file locations, see [docs/WHAT_EXISTS.md](docs/WHAT_EXISTS.md).
 
-**Testing so far:** everything compiles in CI, and the in-game tests (from #14 on) pass on a headless server. Nothing has been play-tested in a client or with two players on a dedicated server yet.
+**Testing:** automated server and rendered-client game tests run in CI. See the exact feature/integration commit for results; human two-client playtesting and release readiness remain unverified.
 
 ## Unreleased
 
 No numbered release yet. Entries on feature branches remain proposed until their pull requests merge.
 
-### Unmerged: Arcane Concordance, Wayfaring part 1b (the belt and boot drawn on the body)
+### Added: The Cinder Tyrant (boss 4, part 2)
+- **The Cinder Tyrant,** the Cinder Kiln's boss: a salamander lord the size of a cart, armoured in obsidian plates with magma glowing in their seams. He waits sunk in the crucible, only his crest over the slag, and wakes when a player steps down onto the bowl's floor or strikes him: 440 health scaled for the party, armour 10, never hurt by fire. Left alone, he sinks back, healed, and the kiln resets.
+- **His rule, the heat is his:** hot, he takes half of every blow. Turn a sluice and bait his Body Slam into its flooded trough, and the steam quenches him for 8 seconds: his seams go dark, blows do a quarter more and he slows.
+- **The Kiln:** Tail Sweep, Ember Spit (gobs of magma that leave fire), Body Slam, Kiln Breath and Mantle Shed (Cinderlings, little salamanders of slag that gutter out in water). **At half health, the Eruption:** he roars from the forge's lip while the heat channel surges over its banks; then Cinder Rain and the Lava Wave (jump it or stand on a shelf), a sluice at a time choked with slag, and a surge every 30 seconds. **Below a fifth, the Molten Heart:** faster, five gobs, a wider breath. Fire Resistance stops his fire, never his blows.
+- **His loot, each participant's own:** Tyrant Scales (into magma cream, or a cheaper Kiln Seal), one of Arms VII's Cinderbrand or Magmaw (now dropping; certain on a first kill), the Salamander Charm (in the offhand, hot ground never burns you) and the Tyrant's Crest (a costume), with shared experience and **Tempered**. When he falls the crucible cools to obsidian and Grey Mist opens in the bowl. Record: [cinder-tyrant.md](docs/features/cinder-tyrant.md).
+
+### Added: The Cinder Kiln and the Kiln Seal (boss 4, the Cinder Tyrant, part 1)
+- **The Cinder Kiln,** a fourth lair: a kiln under a volcano, a dome of kiln brick ribbed with blackstone over a bowl of cracked basalt 44 blocks across, its vent open to a smoky sky. A forge mouth in the north wall pours molten slag over its lip, down a heat channel to a crucible three blocks deep where the Cinder Tyrant will wait. The slag burns whoever stands in it (Fire Resistance stops it).
+- **Three sluice gates** in the walls, the kiln's working fixture: turn any gate's wheel and its trough floods for 10 seconds, then drains while the gate fills again for 20. A flooded trough puts out the burning. Four raised shelves round the bowl stay out of the slag's reach. You arrive on a ledge in the south wall and walk down a curving stair with no step over half a block; the Grey Mist home hangs behind the ledge.
+- **The Kiln Seal** (four obsidian, a magma block, two blaze powder, two gold) opens it: press it into a magma block in the Nether, or in the Volcano or the Cinder Barrens, at any hour. The magma cracks open into a vent of sparks and smoke that others can follow through for a minute. Refused, it says why and is kept. The Tyrant himself and his loot are part 2. Record: [cinder-kiln.md](docs/features/cinder-kiln.md).
+- **CI: the client tests share five jobs instead of four.** With the kiln's client test the estimate for the busiest of four jobs passed the 25 minutes the sharing check allows; with five it is about 20 a job ([docs/TESTING.md](docs/TESTING.md)).
+
+### Added: The boss playbook (how a boss is built)
+- **[docs/branches/BOSS_PLAYBOOK.md](docs/branches/BOSS_PLAYBOOK.md)** writes down, at the owner's request, the order the Yeti King was built in, as the plan for building every boss.
+- Each boss is two pull requests: its lair and the summoning that opens it, then the boss, his adds and his loot. The steps run from the survey and the plan to the numbers, model, art, data, Java, audit, tests and record, then CI and the pictures. Each step names the files the Yeti King made at it.
+- It also records what the Yeti King taught: checking every API against 26.3 before CI, porting an open fix for a flaky test, and aiming the cameras from where the boss is. It carries the planning pack's shared lair contract and what "done" means for a boss. Docs only.
+
+### Added: Arms VIII fix (a thrown arm no longer flies through a foe it stops just short of)
+- **A thrown arm strikes a foe it ends a tick just short of.** Before, it sometimes flew through. From a flight's third tick, the sweep that finds what a thrown thing hits widens each box it looks for, but finds only the boxes it enters. An arm that ended a tick inside the next tick's widening, short of the foe itself, started that tick inside the box and flew on. Now each tick but the first starts by striking a foe whose widened box the arm is already inside.
+- This made the steel javelin's game test fail now and then, on `main` and on pull requests that do not touch the thrown arms. A new test sets a javelin going slowly at a still pig to end a tick 0.02 short of it, and it must strike. Record: [arms-viii.md](docs/features/arms-viii.md).
+
+### Added: Arcane Concordance, Wayfaring part 1c (the belt and boots hidden under armour, and a setting)
+- **Armour hides the worn belt and boots,** as the owner asked: the belt under a chestplate or leggings, the boots under boots. An elytra hides nothing. They come back as soon as the armour comes off.
+- **A new setting, Show my worn trinkets** (Concordance settings, on by default), hides your own belt and boots, and everyone who sees you sees your choice; you see theirs.
+- A small render element does both, inside the same render definitions. Your client sends the setting to the server when you join a world and whenever you save it; the server keeps it on you (not saved: it is sent again each time you join), shows it to everyone who sees you and takes a change at most twice a second. Record: [arcane-concordance-trinkets.md](docs/features/arcane-concordance-trinkets.md).
+
+### Added: Guns, slice 11B (the rest of the Nether guns)
+- **Three more Nether guns** from the owner's crimson, blackstone and gold models and animations, whose bullets set what they hit alight as slice 11A's do: the **Ashfall Pistol**, held in one hand (so it pairs with another one-handed gun), the tank under its barrel changed to reload; the **Goldbristle Carbine**, one rifle round a pull from a magazine at its left side; and the **Crackling**, a long gold pump shotgun of six heavy pellets, loaded a shell at a time.
+- Each is made from steel, gold, a lever and gilded blackstone. The Ashfall Pistol takes the stocks, scopes and Laser Sight; the Goldbristle Carbine everything slice 11A's guns take, and the magazines; the Crackling the stocks, grips and bayonets, its owner-made barrel attachments being too short for its barrel.
+- Record: [guns.md, slice 11B](docs/features/guns.md#slice-11b-the-rest-of-the-nether-guns).
+
+### Added: Guns, slice 11A (the Nether guns)
+- **Three new guns** from the owner's crimson, blackstone and gold models and animations, whose bullets set what they hit alight for four seconds (never a block): the **Tusker**, a pump shotgun of eight pellets loaded a shell at a time; the **Cinder Repeater**, an automatic firing light rounds from a magazine of twenty; and the **Bastion Rifle**, a heavy rifle whose trapdoor breech flips open after every shot, loaded a round at a time.
+- Each is made from steel, a lever, gold and gilded blackstone from the Nether's bastion remnants. Each takes the stocks, grips, barrel attachments, bayonets, scopes and the Laser Sight; the Cinder Repeater the magazines too.
+- Record: [guns.md, slice 11A](docs/features/guns.md#slice-11a-the-nether-guns).
+
+### Added: Guns, slice 10G (two guns at once)
+- **A pistol in each hand:** with a one-handed gun in each hand (thirteen of the guns: the pistols, revolvers, the Haymaker, the Bronco SMG, the Spikedriver and the Culverin), left click fires the main hand's and right click the other's, a press a shot, held for an automatic. Each keeps its own rate, magazine, sound and flash; neither is aimed, and each strays half as far again from the hip.
+- G reloads the main gun, or the other when the main one is full; one gun reloads at a time. Each gun's counter shows on its own side of the hotbar. Seen from outside both arms are raised; in first person the other hand's gun has its own arm, drawn mirrored. The one-handed guns say in their tooltips that they pair.
+- The shot, reload, action and trace payloads now carry the hand.
+- Record: [guns.md, slice 10G](docs/features/guns.md#slice-10g-two-guns-at-once).
+
+### Added: Guns, slice 10F (enemies with guns)
+- **A new raider, the Raider Gunner,** who carries one of the owner's service arms (the Sentry Pistol, Garrison Rifle or Breacher) and fires it: the gun's own bullets at half their damage, in bursts, with the gun's magazine and reload time. Its bullets pass through raiders.
+- Gunners march in raids in place of some of the grunts (parties are as large as before), and one holds each raider camp. While the guns are switched off, grunts come in their places.
+- A player's kill may win its gun (8.5%, empty) and a few of its rounds. Mobs holding a gun are now posed holding it as players are.
+- The raiders' record: the party table, the camp's garrison, the gunner's loot, and the level 5 party's size (14, not 15).
+- Record: [guns.md, slice 10F](docs/features/guns.md#slice-10f-enemies-with-guns); [raiders.md](docs/features/raiders.md).
+
+### Added: Guns, slice 10E (the Cell Rack)
+- **A new block, the Cell Rack:** two shelves of three cradles that charge every Energy Cell standing in them at once from cables, sharing up to 1,024 JE a tick evenly, no more than the Charging Station's 512 to one cell. Stand a cell in the cradle you point at, take one out with an empty hand; hoppers above or beside it put cells in, and a hopper below takes out only full ones.
+- Made from the Charging Station's parts, a steel plate in place of its lamp; it needs the guns and machines switches, as the Energy Cell does. It is drawn in the power gear's electric look, the cells standing upright in it.
+- Also corrects the record's Charging Station time for a cell (slice 8D): 20 to 40 ticks, not seconds.
+- Record: [guns.md, slice 10E](docs/features/guns.md#slice-10e-the-cell-rack).
+
+### Added: Guns, slice 10D (the sculk guns)
+- **Three new guns** from the owner's sculk-teal models and animations, each with sculk tendrils that sway as it is handled: the **Undertone Rifle**, one hard shot a pull from a magazine of twelve rifle rounds; the **Murmur SMG**, ten light rounds a second while the trigger is held; and the **Reverb**, a double-barrel of ten-pellet buckshot whose barrels turn aside to take a shell at a time.
+- Each is made from steel, a lever, sculk and an echo shard from the deep dark's ancient cities. Each takes the scopes and the Laser Sight; the Undertone Rifle the stocks, the Murmur SMG the magazines, the Reverb the light and tactical grips.
+- Record: [guns.md, slice 10D](docs/features/guns.md#slice-10d-the-sculk-guns).
+
+### Added: Guns, slice 10C (the double-barrels)
+- **Three new guns** from the owner's models and animations, each firing a spread of pellets and loaded all at once: the **Mule**, a sawn-off double-barrel that breaks open to load both shells; the **Fowler**, a double-barrelled flintlock with a ball rammed down each barrel; and the **Culverin**, a stubby hand cannon fired one-handed.
+- The Mule fires Buckshot Shells, the Fowler and the Culverin Paper Cartridges. The Fowler takes the grips and the bayonets; the others take nothing.
+- Record: [guns.md, slice 10C](docs/features/guns.md#slice-10c-the-double-barrels).
+
+### Added: Guns, slice 10B (coil and plasma)
+- **Three new energy weapons** from the owner's models and animations, on the Energy Cells: the **Solenoid Rifle**, a coil rifle whose heavy beam passes through every creature in its line and reaches the farthest of the energy weapons; the **Votive Rifle**, a plasma rifle that burns for as long as the trigger is held; and the **Glowmouth**, a plasma blunderbuss loaded a charge at a time, whose arc leaps from its mark to two more creatures close by.
+- The two rifles take magazines, stocks, grips, bayonets, the scopes and the Laser Sight; the Glowmouth takes nothing.
+- Record: [guns.md, slice 10B](docs/features/guns.md#slice-10b-coil-and-plasma).
+
+### Added: Guns, slice 10A (the launchers)
+- **Three new guns** from the owner's models and animations: the **Earthmover**, a shoulder rocket launcher with a drum of four rockets; the **Skylark Rifle**, a break-open rifle that fires one rocket at a time, faster and further; and the **Bullfrog**, a stubby grenade launcher loaded a grenade at a time.
+- The rocket guns fire the rocketry branch's High-Explosive Rockets, which burst where they hit, or at the end of the gun's range, as the Rocket Launcher's do; they hurt living things only and break no block. The Bullfrog loads any grenade, as the Trench Lobber does.
+- A rocket in flight now saves what is left of its fuse.
+- Record: [guns.md, slice 10A](docs/features/guns.md#slice-10a-the-launchers).
+### Added: Industrial factory package 2, part 2 (the Gas Burning Generator)
+- **The Gas Burning Generator**, the starter factory's hydrogen generator: four wide, five deep and four tall, from the owner's art brief. A gas engine and generator sit on a steel skid: the round intake with its fan, an arched pale heat shield over the olive combustion section, a guarded coupling, the ribbed generator housing, and a tall terminal cabinet with mint lamps and the power socket.
+- **Burns hydrogen at the owner's selected 128 JE/t**: a millibucket a tick, 128 JE each, so a bucket lasts 50 seconds. It is piped in at the capped inlet low on its right side, and its power leaves at the cabinet's socket at the back.
+- **Wastes nothing**: it makes only what its store has room for, so its fuel follows the demand, and its screen says when the fuel tank is empty or the store is full.
+- **Built from steel**: 4 steel plates, a steel gear, an electric motor, a basic circuit, a Tinplate Tank and a Machine Casing. Unlike the Fuel Cell, it needs no aluminum.
+- Its coupling and fan spin up and run down; its lamps and sight glasses light while it runs. Methane, at 256 JE/t, comes with the methane Infuser.
+- **Machine forms can now be generators**: a form can list the fuels it burns and give power out of a power port. The Gas Turbine itself still never burns hydrogen. Record: [industrial-gas-burning-generator.md](docs/features/industrial-gas-burning-generator.md).
+
+### Added: Industrial factory package 2, part 1 (the Electrolytic Separator)
+- **The Electrolytic Separator**, the first big industrial machine: two wide, two deep and three tall, from the owner's art brief. A tall olive cell housing stands between two white collection towers, with its control box, bus connection, lye return and outlet collars.
+- **Built from steel and copper**: 4 steel plates, 2 Steel Tanks, copper cable, a basic circuit and a Machine Casing, 20 steel plates in all. It needs none of the Electrolytic Cell's aluminum or advanced circuit, so hydrogen and chlorine come earlier.
+- **What it splits**, at 256 JE/t:
+  - a bucket of water gives 500 mB of hydrogen and 250 mB of oxygen in 40 s;
+  - a bucket of brine gives 250 mB of hydrogen, 250 mB of chlorine and 500 mB of lye in 20 s.
+- **Ports where the model shows them**: water or brine in low at the back; hydrogen, oxygen or chlorine, and lye out at their collars on the front; power at the bus connection.
+- **It keeps its lye**: a full lye tank stops brine while water still runs, and the screen says "Lye tank is full".
+- The Electrolytic Cell keeps its own recipes, but **its brine now also takes 20 s** (102,400 JE a bucket, was 10 s), the owner's choice to match the Separator. JEI shows the Separator's recipes in their own category, and the Engineer's Handbook has its page.
+- **Machine forms**: each now numbers only its own blocks (12 for the Separator), and a working form lights its lamps and strips on every block, not just its controller. The formed-machine screen wraps a long state and fits its power line. Record: [industrial-electrolytic-separator.md](docs/features/industrial-electrolytic-separator.md).
+
+### Added: Industrial factory package 1 (the shared machine foundation)
+- **The groundwork for the industrial factory's big machines** (package 1 of the owner's roadmap in PR #302); nothing new to craft yet. A machine **form** describes one installation within 2 to 6 blocks on each axis: its parts, the clearance its moving parts need, its open access space, its ports, its tool sockets and what it can process. Placing one checks every position first and names whatever is in the way; breaking any part removes it all and drops it once.
+- **Pipes, cables, conveyors and hoppers reach a form only at its ports.** Tool sockets (catalyst beds, patterns, molds) are never reachable from outside, and a tool cannot be taken out while a batch needs it.
+- **Batches are atomic and saved.** Inputs move into the batch and room for every result is reserved before anything is spent; restarts, unloads and recipe reloads carry on the same batch; Cancel returns only the untransformed inputs. Larger profiles run two or four batches side by side at 90 or 80 percent of the energy each.
+- **A screen that says what to fix:** one of eight states (unformed, idle, waiting for input, a tool or power, warming, processing, output blocked) and the tank, slot or socket concerned, such as "Hydrogen tank is full".
+- Fluid recipes can now ask for a capability or a reusable tool; the original machines keep exactly the recipes they had. Machines that later add tanks can declare how old saves map onto the new tanks, so an output never loads into an input. Record: [industrial-machine-foundation.md](docs/features/industrial-machine-foundation.md).
+
+### Added: Arcane Concordance, Wayfaring part 1b (the belt and boot drawn on the body)
 - **The Leather Belt and the Amphibian Boot now show when worn,** as the owner drew them: a leather strap round the waist with a gold buckle in front, and on each foot a green boot with a white cuff, a grey toe cap and a fin on the heel. You see them in third person and on the inventory's figure; other players should see them too (not yet tried with two clients). The charms and the Ice Breaker (the owner drew no worn sheet for it) are not drawn.
 - The owner's two worn sheets are imported byte for byte, with their sources and checksums recorded; the boxes are fitted to them (the sheets came without geometry) and kept off the skin's layers and vanilla armour by the same gaps as Jugcraft's 3D armour, so they should not flicker against them up close (armour, drawn a little toward the camera, shows through them from far off). Trinkets' data-driven renderer draws them: no Java. Record: [arcane-concordance-trinkets.md](docs/features/arcane-concordance-trinkets.md).
 
-### Unmerged: Arcane Concordance, Wayfaring (the owner's belt, boots and charms; trinkets part 1)
+### Added: Arcane Concordance, Wayfaring (the owner's belt, boots and charms; trinkets part 1)
 - **Eight worn things from the owner's relic and reliquary art,** put on once you understand Relic Lore: the **Leather Belt** (a second **Charm** slot), the **Angelic Feather**, **Kraken Shell** and **Infernal Claws** (a fall's, drowning's or fire's harm taken from your food instead of your health, half a food point a point, when your food bar can pay; the feather also jumps a little higher), the **Angelheart Vial** (a death save on 2 hearts, used up) and the **Phoenix Down** (a death save at full health; it becomes an Angelic Feather), and on your feet the **Amphibian Boot** (faster swimming, longer breath) and the **Ice Breaker** (a little knockback resistance, and a hard landing throws back and slows the hostile creatures round you).
 - Two new Trinkets slots with the owner's icons, **Charm** and **Feet** (two), and Trinkets' Belt slot. Two of a kind never add up. A death save never answers the void, a held totem or a death in a dream.
 - The kinetic belt that links pulleys is now called the **Drive Belt** (its id is unchanged), so the two belts are told apart.
 - The icons and slot icons are the owner's files byte for byte (the three animation sidecars with their line ends made LF), with their sources and checksums recorded; the item models and names are taken from the owner's files. Record: [arcane-concordance-trinkets.md](docs/features/arcane-concordance-trinkets.md).
 
-### Unmerged: Arcane Concordance, Ember part 2 (the Hearthbinder's regalia, from the owner's fire art)
+### Added: Arcane Concordance, Ember part 2 (the Hearthbinder's regalia, from the owner's fire art)
 - **Lesser Focus of Fire and Focus of Fire,** the owner's own: worn in a new **Spell Focus** slot, +2 and +4 fire Spell Power, so Cinderbolt and Hearthflare burn hotter.
 - **Fire Bangle:** worn in one of two new **Bracelet** slots; once you understand Hearthbinding, your melee blows leave the creature smouldering for 3 seconds, wherever you may harm it.
 - **Two fire sets, worn as the owner's 3D model** (Jugcraft's first GeckoLib armour), half a point of fire Spell Power a piece: the **Pyromaniac's Hood, Tunic, Pants and Shoes** (cloth, wool alone, in the owner's light fire texture) and the **Pyromancer's Hat, Robes, Leggings and Boots** (wool and gold, leather's protection). At most the regalia gives +6 fire: Cinderbolt 6, Hearthflare 7. Spell Power's Sunfire cannot be put on either set.
 - Hearthflare now plays the owner's fire recordings. Every file is the owner's, copied as supplied, with its source and checksum recorded. The heavy fire set, the Caster Tome and the fire familiar wait for later slices. Record: [arcane-concordance-ember-regalia.md](docs/features/arcane-concordance-ember-regalia.md).
 - **Combat baselines:** a geared Hearthbinder (+6 fire) joins the benchmark and wins all five fights; the same spells with no fire gear win three. The benchmark now lets Hearthguard's Fire Resistance land as it does in game; before, it kept restarting the cast instead of fighting. Record: [arcane-concordance-baselines.md](docs/features/arcane-concordance-baselines.md).
 
-### Unmerged: Arcane Concordance, Ember part 1 (Hearthbinding and four fire spells)
+### Added: Arcane Concordance, Ember part 1 (Hearthbinding and four fire spells)
 - **A new research entry, Hearthbinding** (the Hearthbinders' Principle, Ember): examine coal, charcoal, a torch or other things that hold fire once First Light is understood; study one at the Lampwright's Bench. Mastered by lighting three kinds of hearth with Hearthspark.
 - **Four fire invocations,** cast with any Concordance instrument: **Hearthspark** lights an unlit campfire, candle or candle cake up to 16 blocks away (never placing fire); **Hearthguard** gives 30 s of Fire Resistance; **Cinderbolt** deals fire damage that grows with fire Spell Power and leaves the target **smouldering**; **Hearthflare** (mastered) bursts round you. Every one obeys claims, towns, spawn protection and the PvP rules.
 - **Smoulder,** a new status: the creature burns at vanilla's pace while it lasts; water, rain, Fire Resistance and milk answer it.
 - Original spell icons, a status icon and five synthesised sounds; a new Hearth codex category. Record: [arcane-concordance-ember.md](docs/features/arcane-concordance-ember.md).
 
-### Unmerged: Guns, slice 7 (bayonets and the shared-texture guns)
+### Added: Guns, slice 7 (bayonets and the shared-texture guns)
 - **Four bayonets,** each the owner's art: **Iron**, **Steel** (the owner's anthralite one), **Diamond** and **Netherite** (a smithing upgrade). Under the barrel, in place of a grip. **V stabs** for 4 to 6 damage within reach, every 12 ticks; the server deals the blow. Seven guns take them.
 - **Five more guns take attachments:** the Drover Rifle, Coach Gun, Duelling Pistol, Line Musket and Bellmouth. The owner drew their parts on shared textures; each gun's atlas now packs those into its free room, never over 128 × 128.
 - Scopes wait for the owner's reticle textures. Record: [guns.md, slice 7](docs/features/guns.md#slice-7-bayonets-and-the-shared-texture-guns).
 
-### Unmerged: Madame Tatterlace (boss 2, part 2)
+### Added: The Yeti King (boss 3, part 2)
+- **The Yeti King**, a great white ape of the glacier with a crown of blue ice, waits slumped on his throne in the Glacier Hall and leaps down onto the frozen lake when a player steps onto it. He has 420 health, scaled up for a party.
+- **His rule, the snow is his:** his Ground Slam blasts the lake's drift snow bare to slick glare ice round where he lands, for 12 seconds before it drifts back; never the trampled snow round the columns, at the ramp's foot or before his dais.
+- **Phase 1, the Hunt:** Maul Swipe, Boulder Throw, Ground Slam, Frost Breath and the Avalanche Charge. Charge him into an ice column and he reels for 3 seconds, taking a third more damage.
+- **At half health, the King's Roar:** he roars from his dais, a blizzard chills everyone near and two Yeti Whelps climb out of the dens. Then come Icicle Fall, Glacial Spikes and Kin Call.
+- **Below a fifth, the Fury of the Peaks:** his crown blazes and his eyes burn blue, his cooldowns are a third shorter, his slam bares a wider ring and a charge that misses the columns is followed by another.
+- **Left alone for 10 seconds** he climbs back onto his throne, healed, and the snow drifts back.
+- **His loot is each participant's own:**
+  - Yeti Fur, which makes a cheaper Frost Horn or two white wool;
+  - one of Arms VII's two Yeti King trophies, the **Glacier Maul** or the **Rimeclaw**, with their Frost boon, certain on a first kill;
+  - the Yeti Mitten, which keeps its wearer from freezing from the offhand;
+  - the Yeti King's Crown, a costume;
+  - shared experience and the advancement Abominable.
+- When he falls, the snow drifts back over his lake and Grey Mist opens in its middle. Animated with GeckoLib. Record: [yeti-king.md](docs/features/yeti-king.md).
+
+### Added: The Glacier Hall and the Frost Horn (boss 3, the Yeti King, part 1)
+- **The Frost Horn** (a goat horn, two gold ingots, two leather and two snow blocks) opens the Glacier Hall:
+  - blow it at night in the Overworld, standing on snow or ice. A roar answers, the snow at your feet splits, and you fall through and land on the hall's ledge with frost on your skin. The horn is used up;
+  - for 60 seconds a whirl of white mist stays open in the snow, and anyone who uses it follows;
+  - by day, off the snow, outside the Overworld, where a whirl is already open or with every hall taken, it says why and is kept. It works all year: the Yeti King is no Witching Season boss.
+- **The Glacier Hall** is a vast cavern in the heart of a glacier:
+  - a ledge high in the south wall under a snow-choked crevasse, where you land, with Grey Mist in an arch of blue ice beside you as the way home;
+  - a snow ramp down to a frozen lake 41 blocks across, crusted with drift snow, scoured to slick glare ice at its shore and middle, with trampled snow round four great ice columns;
+  - the King's throne of ice on a dais of blue ice steps, under an arch of two mammoth tusks, with his frozen hoard heaped about it;
+  - two dens in the side walls, giant icicles on the vault and a crack open to the pale sky.
+- Six lair-only blocks: unbreakable, no items, no drops. The Mist Gate draws a whirl of snow for the hall. Record: [glacier-hall.md](docs/features/glacier-hall.md).
+
+### Added: Madame Tatterlace (boss 2, part 2)
 - **Madame Tatterlace**, a great spider seamstress, waits sewing on the white silk over the Spindle Loft's doily and lowers herself onto it when a player steps onto the lace. She has 360 health, scaled up for a party.
 - **Her rule, the floor is her work:** she unravels rings and wedges of the doily, which drop away into the dark and are knitted back 12 seconds later; never the band round a spool or the tape's foot.
 - **Phase 1, the Fitting:** Needlepoint, Thimble Toss, the Binding Thread (strike it to snap it), the Lace Snare and the Spool Roll.
@@ -52,7 +180,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - When she falls, her doily is whole again and Grey Mist opens in its middle.
 - What every lair boss shares (who may fight one, party health, the damage and health settings) is now one class for both bosses. Animated with GeckoLib. Record: [tatterlace.md](docs/features/tatterlace.md).
 
-### Unmerged: The Spindle Loft and the Cursed Spindle (boss 2, part 1)
+### Added: The Spindle Loft and the Cursed Spindle (boss 2, part 1)
 - **The Cursed Spindle** (two gold ingots, an amethyst shard, two spider eyes, three string and a stick) opens the Spindle Loft:
   - use it on a **Spinning Wheel** at night in the Overworld. You prick your finger, fall asleep and wake on the loft's pincushion, blind for a moment. The spindle is used up;
   - for 60 seconds the wheel spins wild, and anyone who uses it with an empty hand follows;
@@ -65,7 +193,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Twelve lair-only blocks: unbreakable, no items, no drops.
 - The lair framework now takes a second lair: a lair with no moon, hooks run as an instance closes, and words for coming into each lair. Record: [spindle-loft.md](docs/features/spindle-loft.md).
 
-### Unmerged: Vesperine, the Last Reaper (boss 1, part 2)
+### Added: Vesperine, the Last Reaper (boss 1, part 2)
 - **Vesperine** waits on the Bone Throne of every Hollow Acre and rises when a player steps into the Mown Circle. She has 400 health, scaled up for a party.
 - **Her skulls, Dirge and Requiem**, halve every blow she takes while both live. They fire homing Grief Bolts that a player can strike back.
 - **Phase 1:** the Reaping Arc, the Harvest Lunge, the Scythe Throw (unarmed, she takes a quarter more) and the Grave Call's thralls.
@@ -81,7 +209,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - When she falls, Grey Mist opens in the circle.
 - Settings: `lairs.boss_health`, `lairs.boss_damage`, `lairs.event_loot`. Animated with GeckoLib, which was already pinned. Record: [vesperine.md](docs/features/vesperine.md).
 
-### Unmerged: The Hollow Acre: the lairs and the Last Rites (boss 1, part 1)
+### Added: The Hollow Acre: the lairs and the Last Rites (boss 1, part 1)
 - **The Last Rites** open the Hollow Acre:
   - at night, at any Jugcraft headstone in the Overworld, with four lit candles round it and a **Mourning Wreath** (four mourning flowers round a vine) laid on it;
   - ring the **Death Knell** (a gold ingot over an iron nugget over a bone) beside it.
@@ -97,7 +225,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - empty instances close after 30 seconds, and a restart closes all of them.
 - Settings: `lairs.instances`, `lairs.party_size`, `lairs.gate_seconds`, `lairs.off_season`. Record: [hollow-acre.md](docs/features/hollow-acre.md).
 
-### Unmerged: Armor in Blockbench, and the owner's sets rebuilt from their renders
+### Added: Armor in Blockbench, and the owner's sets rebuilt from their renders
 - **Blockbench projects for the armor sets:** `tools/bbmodel.py` writes any 3D armor set as a Blockbench project and reads one back into the game's worn models and atlas. A set can now *be* a project (`art/armor/<set>.bbmodel`): the owner opens it in Blockbench, edits it there, and what they save is what the game draws. Every set round-trips exactly (`python3 tools/bbmodel.py check`).
 - **The Sentinel rebuilt to match the owner's three renders:** its helm is now the owner's 9×9×9 box with their keyhole and meander art copied texel for texel; its right pauldron is their bent plate measured off the front and back views; its boots rise in teeth like a crown; the coat, gorget and thigh plates follow the renders. The texture is drawn two texels to a pixel, as the owner's is. 42 parts where it had 96, and no part of the wearer shows.
 - **The Frost Knight rebuilt to match the owner's front render:** its helm is now the owner's 9×9×9 box with their face copied texel for texel (the eye band turning up at its ends, the nose bar, the grille), crowned with their crystals as measured and coloured, a tall one rising 14 pixels; the round mane of feathers gave way to the compact frost the render shows, a big tuft flaring out on the left and spikes down the right, carrying its texels; an ice cross on the back of the helm; the legs' fronts carry the owner's texels. 102 parts where it had 139.
@@ -111,13 +239,13 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - `/jugcraft design export` supplies the editor and live mod catalog. Its exported datapack adds the **Jugcraft Designed** preset for new worlds; existing generated chunks are not edited.
 - Reuses native generation and Jugcraft's town systems. Read the [guide](docs/WORLD_DESIGNER.md) and [actual test evidence and limits](docs/features/world-designer.md).
 
-### Unmerged: Thallite, slice 2: gear
+### Added: Thallite, slice 2: gear
 - **Thallite tools and armor:** a sword, pickaxe, axe, shovel and hoe, and a helmet, chestplate, leggings and boots, crafted from thallite ingots like iron's and repaired with them. They mine and protect as iron does, last a little less (200 uses a tool) and enchant best of all (18).
 - **Regrowth:** thallite gear you wear or hold gets back one use every 5 seconds while you stand on living soil (grass, dirt, podzol, moss, mud, rooted dirt or farmland), up to 75% of full, with a faint green sparkle. It never brings back a broken piece.
 - **Earthbound armor:** an Earthbinding Template (rooted dirt, four thallite nuggets and four gold nuggets), a thallite piece and a gold ingot at a smithing table bind the piece into its gold-trimmed Earthbound twin, for good, keeping its enchantments, wear and name. Earthbound pieces are **Rooted**: on natural ground (soil, stone, sand or gravel) each takes 7.5% off knockback, 30% for a full set, and with two or more worn Regrowth works on stone, sand and gravel too.
 - Both traits are named in the tooltip and described while Shift is held. Two handbook pages. Arms, the arrow, horse armor and magic come in later slices. Record: [thallite.md](docs/features/thallite.md).
 
-### Unmerged: Armor designs of 8 October (Berserker, Paladin, Templar, Sentinel, Frost Knight, Wight King, Reaper, Banana, Scarab), three swords, a scythe and a shield
+### Added: Armor designs of 8 October (Berserker, Paladin, Templar, Sentinel, Frost Knight, Wight King, Reaper, Banana, Scarab), three swords, a scythe and a shield
 - **Nine more armor sets from the owner's own designs,** each worn as a detailed 3D model (most of them 80 to 110 parts) with four 16×16 icons of its own:
   - **Berserker:** an open white cap with a red crest spilling over the brow, a square horn standing up from each side and a toothed jaw frame; a white keyed breastplate with raised red bands, stepped red pauldrons with white trim, flanged and studded bracers; thigh guards in four bands of white and red stepping out over dark mail; grey boots with red soles.
   - **Paladin:** a white great helm with a raised H on its visor, a comb and a purple sprig; a shield-shaped breastplate with a raised cross, spiralled square pauldrons with fanning lames, elbow fans, cuffs and gloves; hinged tassets with spiral bosses and blue gems over flaring purple cloth; banded greaves with knee cops and layered sabatons.
@@ -132,7 +260,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Beside the owner's other sets, in other strengths** (helmet to boots): Berserker 3, 8, 7, 3, mended with quartz; Paladin 4, 8, 6, 3, long wear and good enchanting, mended with amethyst shards; Templar 3, 9, 7, 3, fire resistant, mended with netherite; Sentinel 4, 8, 7, 3, tough, mended with gold; Frost Knight 3, 8, 7, 3, mended with blue ice; Wight King 4, 8, 7, 3, the steadiest of the cold sets, mended with packed ice; Reaper 3, 8, 6, 3, good enchanting but less toughness, mended with bone; Banana 2, 6, 5, 2 (a costume: iron's defense, the best enchanting), mended with yellow wool; Scarab 3, 8, 6, 3, gold's enchanting but less toughness, mended with lapis lazuli.
 - **No recipe or drop yet:** creative tab (Combat) only, until the owner decides. The names are placeholders. Record: [armor-designs-8-october.md](docs/features/armor-designs-8-october.md).
 
-### Unmerged: Four armor designs (Dread Knight, Valkyrie, Wayfarer, Spartan)
+### Added: Four armor designs (Dread Knight, Valkyrie, Wayfarer, Spartan)
 - **Four new armor sets from the owner's own designs,** each worn as a 3D model with four 16×16 icons of its own:
   - **Dread Knight:** a near-black great helm crowned with light grey merlons, banded pauldrons with small spikes, a mottled muscle plate, a riveted strip skirt and banded greaves.
   - **Valkyrie:** a gold laurel wreath with a white feathered wing at each temple (the face shows), a white muscle cuirass with red cloth wound on the shoulders and red streamers, gold-banded bracers, a studded leather skirt and winged greaves.
@@ -141,33 +269,33 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Beside the owner's other sets, in other strengths** (helmet to boots): Dread Knight 4, 9, 7, 3, toughness 3.5, fire resistant, mended with netherite; Valkyrie 3, 8, 7, 3, enchantability 24, mended with phantom membranes; Wayfarer 3, 8, 6, 3, the best enchanting (30) and longest wear, mended with leather; Spartan 4, 8, 7, 3, toughness 3.5, mended with bronze ingots. Starting numbers for the owner to set.
 - **No recipe or drop yet:** creative tab (Combat) only, until the owner decides. The names are placeholders. Record: [four-armor-designs.md](docs/features/four-armor-designs.md).
 
-### Unmerged: Pharaoh Armor
+### Added: Pharaoh Armor
 - **Pharaoh Armor, the last of the owner's five new armor tiers:** gold and teal plate with red gems over tan linen, worn as a 3D model in the owner's own design: a nemes headdress whose striped side flaps rise into rounded teal humps above the crown, with the uraeus on the brow over a tan face plate; a broad collar with a red gem, a breastplate framing a teal square and gold-framed teal bracers; a skirt of striped lames dipping in a V; sandal-greaves. Four 16×16 icons of its own.
 - **Beside the others, in other strengths:** defense 4, 9, 6 and 3 (helmet to boots), toughness 3.0, knockback resistance 0.1, durability 451, 656, 615 and 533, enchantability 22. Fire resistant, and repaired with gold ingots.
 - **No recipe or drop yet:** creative tab only, until the owner decides. Record: [pharaoh-armor.md](docs/features/pharaoh-armor.md).
 
-### Unmerged: Sunset Gem Armor
+### Added: Sunset Gem Armor
 - **Sunset Gem Armor, the fourth of the owner's new armor tiers:** a set in a sunset gradient, cream at the crown to coral at the feet, worn as a 3D model in the owner's own design: a crown of gem shards trailing sparkles, shard wings rising from the shoulders, a striped breastplate, and a striped skirt with red flaps and shards at the hips.
 - **Beside the others, in other strengths:** defense 3, 8, 7 and 3 (helmet to boots), toughness 3.0, knockback resistance 0.1, durability 528, 768, 720 and 624, enchantability 25: it lasts longest and enchants best of all. Not fire resistant, and repaired with amethyst shards.
 - **No recipe or drop yet:** creative tab only, until the owner decides. Record: [sunset-gem-armor.md](docs/features/sunset-gem-armor.md).
 
-### Unmerged: Hades Armor and the Hades Scythe
+### Added: Hades Armor and the Hades Scythe
 - **Hades Armor, the third of the owner's new armor tiers:** dark slate plate worn as a 3D model in the owner's own design: a narrow helm with a beaked visor and two great horns, layered pauldrons rising toward the outside, a V of bars on the breastplate, a flared plate skirt, and a blood-red tabard from chest to hem.
 - **Beside the other two, in other strengths:** defense 3, 8, 7 and 3 (helmet to boots), toughness 4.0, knockback resistance 0.2, durability 462, 672, 630 and 546, enchantability 12. Fire resistant, and repaired with netherite ingots.
 - **The Hades Scythe,** its weapon: a scythe in the owner's design (a near-black snath, red grip wraps, a diamond pommel and a curved slate blade) that fights as every scythe does and withers what it strikes. It is the first arm of a new line, the owner's armor sets.
 - **No recipe or drop yet:** creative tab only, until the owner decides. Record: [hades-armor.md](docs/features/hades-armor.md).
 
-### Unmerged: Reforged White Diamond Armor
+### Added: Reforged White Diamond Armor
 - **Reforged White Diamond Armor, the second of the owner's new armor tiers:** an icy white and pale cyan set worn as a 3D model in the owner's own design: a big V crest and rising wing bars over a charcoal face plate, wide winged pauldrons over a lavender-edged V on the chest, a long skirt of tassets in an A over light and lavender stripes, and diamond plates on the toes.
 - **Beside Bloodthorn, in other strengths:** defense 4, 8, 7 and 3 (helmet to boots), toughness 3.0, knockback resistance 0.1, durability 495, 720, 675 and 585, enchantability 20. Not fire resistant, and repaired with diamonds.
 - **No recipe or drop yet:** creative tab only, until the owner decides. Record: [reforged-white-diamond-armor.md](docs/features/reforged-white-diamond-armor.md).
 
-### Unmerged: Bloodthorn Armor
+### Added: Bloodthorn Armor
 - **Bloodthorn Armor, the first of the owner's new armor tiers:** a crimson plate set worn as a 3D model in the owner's own design, with a fan of thorn-like spikes behind the helm, layered pauldrons and diamond plates on the forearms and knees.
 - **A step above netherite:** defense 3, 9, 7 and 3 (helmet to boots), toughness 3.5, knockback resistance 0.15, durability 440, 640, 600 and 520, enchantability 15. Fire resistant, and repaired with netherite ingots.
 - **No recipe or drop yet:** the owner will decide later whether bosses drop it or it is crafted, so for now it is in the creative tab only. Record: [bloodthorn-armor.md](docs/features/bloodthorn-armor.md).
 
-### Unmerged: Knight armor for bronze and steel
+### Added: Knight armor for bronze and steel
 - **Bronze and steel armor wear the owner's own knight design,** as real 3D models much bigger than vanilla armor, with many parts sticking out:
   - a helm wider than the head, with a big tilted crest plate in chevrons, horn and cheek fins, a nasal bar, eye slits and a gold collar;
   - a forward-angled chevron plate over the chest, layered pauldrons, and vambraces with flared cuffs;
@@ -184,7 +312,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Optional Jade support displays shared machines' energy and processing progress from server data. Fabric Loader is raised to 0.19.5 to satisfy the selected actual artifacts; Minecraft stays 26.3.
 - Actual verification and unperformed playtests are recorded in [framework-foundation.md](docs/features/framework-foundation.md). Publication on Modrinth remains a maintainer release step.
 
-### Unmerged: The fall fair in Minecraft's own look
+### Added: The fall fair in Minecraft's own look
 - The owner found that nothing in the fall fair looked like Minecraft (its eyes, mouths, brass and bulbs). Every fair texture is now drawn at vanilla's density, 16 texels to a block, and scaled up to its file's size, so models and UVs are unchanged.
 - **High Striker:** painted planks, a brass rail and bell lit like a gold block, flat glass lamps, a plain scale with ticks and a pixel-star sign. **Ring Toss:** a plank crate banded in red and white, bottles lit like vanilla glass and a striped ring.
 - **The plushes** (pumpkin, jumbo pumpkin, ghost, bat, black cat, squirrel and werewolf, and their acorn, bow, leaf, rosette and stem) are wool-like felt with square pixel faces.
@@ -193,14 +321,14 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Items:** the striker, mallet, ring, piñatas, stick, blindfold, three balloons, burner and pibal are 16-by-16 pixel icons.
 - The Ferris wheel is left to the art-fix work (#219). Before and after: [fall_fair_minecraft.jpg](docs/images/fall_fair_minecraft.jpg).
 
-### Unmerged: Clean textures, set 15: the Witching Season's last noisy props
+### Added: Clean textures, set 15: the Witching Season's last noisy props
 - The dark wood of the broom rack, curiosity cabinet, iron-bound coffin, ribcage bookcase, haunted dining chair, silk spool stack and grandfather clock is long-grain planks, as vanilla planks, in place of blotches.
 - Flat, without speckle: the coffin's and chair's velvet, the brain vat console's brass, the lightning harness's copper, the dustpan's tin, the witch's lantern's violet glass and both pillar candles' wax.
 - The effigy ashes and the hearth ash item are soft clumped ash with a few charred flecks and embers set in place. The egg sacs' web mat is drawn as threads.
 - The workshop's tinted brew, fume and wax textures (the cauldron's brew, its fumes and the candelabra's candles) are smooth, without per-pixel grain.
 - The props are drawn in the clean style (`flora_art.QUIET`), switched on for just these builders. The Beating Heart Jar keeps its original look, which the owner loves. The 25 props the owner's art review redid (#219), the faces, moons, webs, pumpkins, plushes, garlands and glows are unchanged. IDs and models are unchanged. Before and after: [clean_textures_set15.jpg](docs/images/clean_textures_set15.jpg).
 
-### Unmerged: Clean textures, set 14: the town and the Pixel Hollows
+### Added: Clean textures, set 14: the town and the Pixel Hollows
 - The 18 townsfolk wear clean cloth in the manner of the vanilla skins: lit in its upper half, a shade darker below and at the hem, with no speckle. Their hair is flat with neat strands. Each keeps the face, hair style and outfit it had. The raiders, which share the painter, are unchanged.
 - The Retro Trader keeps his buffalo-check flannel. His hair and beard are drawn in strands, not a checkerboard, his trousers are a plain navy plaid and his sneakers are plain black.
 - Circuitstone is dark slate in thin streaks, as vanilla deepslate, under the same copper traces. The bricks are laid as deepslate bricks and polished circuitstone is smooth.
@@ -208,19 +336,19 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - The Pixel Hollows map is plain parchment with its folds.
 - The arcade cabinet parts, crystals, pixel lamp, shard and map marker were already flat and are unchanged. So are the guide screenshots, the tower outlines and the machine screens, which are pictures rather than textures. IDs and models are unchanged. Before and after: [clean_textures_set14.jpg](docs/images/clean_textures_set14.jpg).
 
-### Unmerged: Clean textures, set 13: tower and drones (the noisy few)
+### Added: Clean textures, set 13: tower and drones (the noisy few)
 - The control screen and holo table, loose and formed, are flat navy glass behind their grid lines and glows, with plain steel sides lit along the top.
 - The cargo packager's white panels are flat with a short sheen.
 - Reinforced concrete keeps its soft mottling, seam and tie holes, with a few spaced pores in place of a per-pixel jitter.
 - The survey stake is straight-grained wood under its red band.
 - Silicon carbide armour is left to the art fixes PR (#219), which redraws the tower's armour plates. The hangar and landing pads, drones and other tower blocks were already clean. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 12: dieselpunk war machines (the noisy few)
+### Added: Clean textures, set 12: dieselpunk war machines (the noisy few)
 - Kaiserworks marble (plain, fluted and the column end) is calm cream in soft clumps with one smooth grey vein, like vanilla calcite. The black station tiles are flat with a lit edge, and their cream tiles are clumped marble.
 - The glass tank's fluid is near-white in soft clumps with even diagonal ripples. Construction foam is clumped with evenly spaced pores.
 - The artillery deck and wicker are left to the art fixes PR (#219), which reworks their painters, along with the 22 textures it fixes. The other war-machine tiles were already clean. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 11: weapons and armour (the powders)
+### Added: Clean textures, set 11: weapons and armour (the powders)
 - Four noisy powders are clean 16×16 heaps in the manner of the set 9 dusts, following the item icon rules (#201): ammonium perchlorate, iodine, silver iodide and cement mix.
 - Left to other work:
   - the arms icons, which #201 redraws;
@@ -228,7 +356,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - the bronze and steel armour, which gets the owner's new 3D knight look in #215's follow-up.
 - The exosuits, the rocketry items and the construction items are already clean pixel art and are unchanged. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 10: machines
+### Added: Clean textures, set 10: machines
 - Every bronze-framed machine front loses its speckle.
   - The steel plate is one tone with a few soft clumps, recessed under the frame's lit top and left edge.
   - Windows are recessed, with their contents in soft clumps instead of random pixels.
@@ -242,7 +370,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - bauxite, oil sand and tincal are evenly speckled rock.
 - The owner's library (#207) was used as a style reference only: many of its machine files match other mods' textures, so none is copied. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 9: metal parts, petrochemistry and deposits
+### Added: Clean textures, set 9: metal parts, petrochemistry and deposits
 - The ores, storage blocks, raw ores, ingots and nuggets are left to the material sets (#218), as the owner chose on 6 October 2026. This set cleans the rest of the materials.
 - Metal parts are drawn in `tools/material_style.py`:
   - dusts are clean heaps;
@@ -257,7 +385,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - Guncotton, PVC resin, alumina, titanium sponge, asphalt, asphalt binder, fertilizer, the cracking catalyst and the turbocharger lose their random speckle.
 - The four resource deposits are packed rubble of stone and ore lumps, in the manner of gravel. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 8: crops (outside the tree work)
+### Added: Clean textures, set 8: crops (outside the tree work)
 - Only the crop textures that open PRs #195 (wood repaint) and #206 (new trees) don't touch are changed. Trees, logs, wood, leaves, planks and saplings are left to those PRs.
   - The squash and gourd skins vary in soft clumps with even stripes; the warty gourd keeps its warts.
   - The cooking-pot soup is a clumped surface with a few glints.
@@ -265,7 +393,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - The sauerkraut's shreds run in even lines.
 - `gourd_side` now paints cleanly by default. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 7: the fall fair
+### Added: Clean textures, set 7: the fall fair
 - The fall fair's high-resolution textures (the midway games and plush prizes, the piñatas and the hot-air balloons) lose their soft mottling and fine noise. They are painted in the clean, cartoon style of the werewolves:
   - Every tone sits in a few flat bands. Brass, glass and glowing bulbs shade in clean steps, and felt, enamel, canvas and wood are even.
   - Piñata fringes hang at even lengths, and the torn holes are round.
@@ -273,7 +401,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - `tools/fur_paint.py` gains `clean_painter` and `clean_ramp`, used only by the fair's modules. Faces, stitches, stripes and painted designs keep their drawn detail. IDs and models are unchanged.
 - The Ferris wheel is left to the art fixes PR (#219), which redraws it so it no longer flashes; its textures are main's here.
 
-### Unmerged: Clean textures, set 6: fall food and kitchen
+### Added: Clean textures, set 6: fall food and kitchen
 - The pies and hearth oven, the Harvest Feast Table, the candy kitchen, the cider mill, the preserves pantry and autumn foraging lose their per-pixel speckle and are painted in the manner of the vanilla blocks with `tools/block_style.py`.
   - The oven is vanilla-style bricks, its stone is stone and its embers a heap of glowing coals.
   - Pie tops are a woven lattice, each strip lit along one edge, over a clumped filling, and the cut side has clean crust layers.
@@ -282,7 +410,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - Raw pies, slices, dough, rock candy and burnt sugar are lit at their upper left instead of speckled.
 - IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 5: the Halloween harvest and festivities
+### Added: Clean textures, set 5: the Halloween harvest and festivities
 - The Halloween harvest and festivities lose their per-pixel speckle and are painted in the manner of the vanilla blocks with `tools/block_style.py`. That covers the giant pumpkins and the heirloom pumpkins, the Harvest Scale, scarecrow, corn shocks and ornamental corn, gourd birdhouse and mums, the regatta and trick-or-treat costumes, the Judging Stand, festivity candles and ghosts, the Headless Horseman, wisps and trebuchet, the corn maze and ghost hunting, and the knitting, chandlery, firework launcher, spirit board, theremin, ofrenda, mooncakes and broomstick.
   - Pumpkin skins vary in soft clumps; the giant pumpkin stays mirror-symmetric.
   - Wood is planks, and straw and bark are streaks. The gravestone is stone and the trebuchet's counterweight cobblestone.
@@ -290,7 +418,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - Sugar skulls, pan de muerto, popcorn balls, guts and fizz rocks are drawn as shapes instead of scattered pixels.
 - `gourd_side` in `tools/festival_textures.py` gains an opt-in `clean` mode, used here only, so the festival gourds of a later set are unchanged until that set. Faces, letters and cut-outs keep their drawn detail. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 4: Halloween decorations, batches 8 to 14
+### Added: Clean textures, set 4: Halloween decorations, batches 8 to 14
 - The next seven batches lose their per-pixel speckle and are painted in the manner of the vanilla blocks with `tools/block_style.py`: the mad scientist's lab, the yard inflatables, porch witch, poseable skeleton, grasping hands, spooky sign and dead tree, the archway and lanterns, the brazier and the shadow-puppet lamp's wood, the party games (jump-scare trap, costume runway, bowling, scoreboard, candy cache, ghost bell, fortune teller), the bonfire and hayride, the treats, and the costumes and costume trunk.
   - Surfaces are one ground tone with small clumps of its neighbours. Wood is planks.
   - Bark, hair, straw and brushed steel are streaks.
@@ -300,7 +428,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Faces, letters, cards and cut-outs keep their drawn detail. IDs and models are unchanged.
 - The Shadow Puppet Lamp's brass, candle and paper panels, the floating witch hat's candle (it shares the lamp's candle) and the Specimen Jar's eye are left to the art fixes PR (#219), which redraws them.
 
-### Unmerged: Clean textures, set 3: Halloween decorations, batches 1 to 7
+### Added: Clean textures, set 3: Halloween decorations, batches 1 to 7
 - The first seven batches of Halloween decorations lose their per-pixel speckle and are painted in the manner of the vanilla blocks, with `bs.fill` and the other painters in `tools/block_style.py`. This covers the string lights, candy bowl, coffin, haunted portraits, fog machine, luminaria, floating candles, sconce, bunting, cauldron and hex brews, apothecary shelf, crystal ball, grimoire, broom, bobbing tub, pumpkin crate, hay bale seat, autumn wreath, leaf piles, rocking chair, lurking eyes, silhouette windows, music box, giant spider, chandelier, pipe organ, suit of armour, dust sheet, spirit mirror, curtains and creepy doll.
   - Each surface is one ground tone with small clumps of its neighbours.
   - Wood is planks; straw, husk and bristles are streaks.
@@ -308,13 +436,13 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - Leaves are shaded along their lower edges; lace is eyelets; the plume is feathers in bands.
 - Faces, cut-outs and portraits keep their drawn detail. Every pattern tiles, and IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 2: the graveyard
+### Added: Clean textures, set 2: the graveyard
 - The memorial stones (marble, slate, granite and sandstone in all four weathering stages, their carved, rough and knotwork faces), the chippings and flower beds, bronze and iron, oak and roof slates, the crypt set, the grave mound, the Mourning Angel, the Pop-Up Skeleton (its skull now cute, with no nose hole) and the graveyard flora, painted in the manner of the vanilla blocks so they sit beside them: stone as stone (granite speckled like vanilla granite, rough granite like cobblestone), oak as planks, chippings as gravel, beds as dirt, and moss and lichen in clumps as on mossy cobblestone; no salt-and-pepper speckle and no flat fills. Every pattern tiles, so blocks still join up. IDs and models are unchanged.
 
-### Unmerged: Clean textures, set 1: the fall creatures
+### Added: Clean textures, set 1: the fall creatures
 - The owner asked for every texture to lose its noise and look cleaner, flatter and cuter, set by set (15 sets, after the reference pictures). Set 1 is the fall creatures: the **werewolves**, their rugs and pelts (big flat locks of fur in neat rows instead of fine hairs), the **turkeys** and the roast turkey dinner, **squirrels** and acorns, the **crow**, the **Pumpkling**, the **Hay Golem** and the **Bat House**: flat tones and regular patterns, no random speckle. The Bat House's planks and guano, the turkey's bone and skin and the silver platter are painted in the manner of the vanilla blocks (`tools/block_style.py`). IDs and models are unchanged.
 
-### Unmerged: Arms icons in the owner's 16×16 style
+### Added: Arms icons in the owner's 16×16 style
 - **Every arm's inventory icon is redrawn at 16×16** in the owner's manner: on the diagonal, a one-pixel outline in each part's own dark tone, flat tones lit from the top left, chunky parts that read at a glance. Each kind is one map of letters in `tools/arms_icons/` that the owner can edit.
 - **The big arms show the whole weapon**: the longsword, greatsword, zweihander, executioner, battleblade, moonblade, sabre, nodachi and halberd fit the full diagonal whole, every part present, instead of cropped.
 - **The 3D models in the hand stay**; bronze becomes the owner's tan bronze and steel a dark blue-grey, in the icons and models alike, which also re-tints the bows, arbalests, shields and some variants. Record: [arms-icons-16.md](docs/features/arms-icons-16.md).
@@ -325,7 +453,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 ### Rules: fan homages allowed
 - Jugcraft may now include fan homages: creatures, characters and things inspired by films, shows, cartoons and games, with changed names and the owner's approval. Their textures, models, sounds and code must still be made for Jugcraft or licensed; nothing ripped or copied from the source. See [LICENSE_POLICY.md](LICENSE_POLICY.md#fan-homages).
 
-### Unmerged: New trees, batch 1
+### Added: New trees, batch 1
 - **Ten new trees, from the tree roster** ([TREES.md](docs/branches/TREES.md)):
   - **Firs:** stunted firs and thin bog firs, narrow subalpine fir spires and low fir bushes.
   - **The tamarack:** a thin larch, gold in autumn and bare in winter, over the Muskeg, Bog and Fen.
@@ -337,7 +465,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **A wood's recipes follow any switch that grows it:** `jugcraft:feature_enabled` takes an `"or"` list, so the larch's recipes stay on with either Alpine Spawn or the biomes, and the chestnut's with either agriculture or the biomes.
 - New chunks only; nothing saved is renamed or removed. Record: [trees-batch-1.md](docs/features/trees-batch-1.md). Not yet played.
 
-### Unmerged: Wood repaint
+### Added: Wood repaint
 - **Every wood the mod adds is redrawn** in its colour from the owner's 24 painted woods, matched to the closest painting: bark, log ends, stripped logs and planks, so its stairs, slabs, fences and gates follow too.
 - **Drawn as vanilla draws wood:**
   - **Bark:** long vertical furrows, with no rings across the trunk.
@@ -349,19 +477,19 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **[NATURAL_TEXTURES.md](docs/NATURAL_TEXTURES.md):** how these woods were drawn, as the rule for every future wood and natural texture.
 - Original textures drawn by code (`tools/wood_style.py`); nothing of vanilla's is recoloured. Record: [wood-repaint.md](docs/features/wood-repaint.md).
 
-### Unmerged: Thallite, slice 1
+### Added: Thallite, slice 1
 - **Thallite, the Earth school's green metal** (the owner's chartreuse set): Thallite Ore and Deepslate Thallite Ore in every Overworld biome (veins of 7, 4 a chunk, Y −32 to 48), and rich pockets in Lush Caves and the Glowcap Grotto (6 more veins of 9 a chunk) that show in the cave walls. A stone pickaxe mines it; each ore drops one raw thallite, with Fortune as on vanilla's ores.
 - **Smelt it** in a furnace or blast furnace (0.7 xp) into **Thallite Ingots**, which say "Green as a new shoot." Nuggets, ingots and blocks, and raw thallite and raw blocks, go 9 to 1 both ways. No alloy, on purpose.
 - **Through the machines:** the Crusher and Pulverizer give 2 a block (the Pulverizer a 10% iron dust too), the Ore Washer 3 and acid leaching 4. The Ore Drill and Prospector find it. **Thallite plates** come from the Metal Press, or by hand at 2 ingots a plate.
 - Its own switch, `thallite`: off stops its worldgen and recipes and keeps every block and item. Worldgen reaches new chunks only. A metal's worldgen entry may now name its biomes (as rocks do), placed through a `jugcraft:has_ore/<feature>` biome tag. Gear, arms, the arrow, horse armor and magic come in later slices. Record: [thallite.md](docs/features/thallite.md).
 
-### Unmerged: Material sets: tools, ingots and ores redrawn
+### Added: Material sets: tools, ingots and ores redrawn
 - **Every metal's ingot and nugget in vanilla's form:** the ingot is the owner's own, recoloured for each metal and never redrawn, and the nugget a shard drawn fresh from memory; one shared ingot and nugget for all fourteen metals, each in its own five-tone ramp, meant to sit beside vanilla's in an inventory as one set. A client test sets them beside vanilla's iron, gold and copper for the owner to judge. Bronze and steel take the owner's chosen palettes; the other twelve stand on the same ladder, each kept clear of the others and of vanilla's iron, gold and copper.
 - **Storage blocks** in the owner's four-panel inlay; **raw ores and raw blocks** as lumpy chunks and packed lumps in each ore's own tones.
 - **Ores on vanilla's own stone and deepslate**: each ore block is now vanilla's rock, referenced by name and never copied, with our ore's chunky blobs as a cut-out layer on top, so it matches the rock round it. Three blob layouts take turns.
 - **Bronze and steel tools** (sword, pickaxe, axe, shovel, hoe, paxel) redrawn in the same style. Art only: IDs, recipes, drops and worldgen are unchanged and worlds need no migration; the maps are `tools/material_icons/`. Record: [material-sets.md](docs/features/material-sets.md).
 
-### Unmerged: Steampunk Armor and Kaiser Armor
+### Added: Steampunk Armor and Kaiser Armor
 - **The stylized armor looks return as two sets of their own:**
   - **Steampunk Armor:** an aviator cap with teal goggles, a pressure gauge and a copper boiler on the back.
   - **Kaiser Armor:** a black spiked helmet, a field-grey tunic over a steel cuirass, and jackboots: the parade dress of the Winged Cog.
@@ -374,7 +502,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Bronze and steel armor keep their current look in this PR,** so for now each looks exactly like its Steampunk or Kaiser twin. Their IDs, stats and recipes are unchanged, and nothing needs converting. Their new 3D look comes in a following PR.
 - The **Goggles On** and **On Parade** advancements (a Kaiser piece also counts for Suited Up), and two handbook pages. Record: [steampunk-and-kaiser-armor.md](docs/features/steampunk-and-kaiser-armor.md).
 
-### Unmerged: Arms VIII, batch 59
+### Added: Arms VIII, batch 59
 - **Thrown arms** in bronze and steel, each an arm in the hand that you can also throw: hold use to wind it back and let go, as you throw a trident. What it strikes takes its damage (up to 8, the trident's), more with Sharpness and the like, and it comes down where it struck as itself, enchantments and wear kept, to be picked up again.
   - **Javelin:** flies far and straight.
   - **Francisca:** a throwing axe that tumbles end over end and knocks a raised shield down for 3 seconds; chops wood in the hand.
@@ -382,7 +510,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - **Harpoon:** keeps its speed underwater and hauls what it strikes towards you, out of the saddle.
 - Each flies as its own 3D model, with its own moves in the hand and a wind-up pose. Handbook page, the **Let Fly** advancement, six game tests and a client test with real throws. Record: [arms-viii.md](docs/features/arms-viii.md).
 
-### Unmerged: Trait details on Shift
+### Added: Trait details on Shift
 - **Shorter tooltips, with details on Shift:** gear with traits now lists each trait by name, then "Hold Shift for details". Holding Shift expands the tooltip with a brief description under each name. See [trait-details.md](docs/features/trait-details.md).
 - **The arms use it first:** every kind's trait (Backstab, Parry, Execute and the rest), Two-Handed, the weapon arts, and the Arms VII boons, lines and trophies. The longbows, arbalests and shields use it too. Thallite's gear is next.
 
@@ -552,7 +680,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 
 ### Arms IV, batch 47 (#170)
 
-### Unmerged: The Armoured Walker, batch 58
+### Added: The Armoured Walker, batch 58
 - **Armoured Walker:** a heavy walker made from the owner's own Blender model:
   - an octagonal riveted blue-grey hull with a framed gun port and cannon
   - amber lamps, a chain slung across the front and a roof pouch
@@ -566,7 +694,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - The **Raider Walker** now uses the same model in raider paint. It rams with its piston and lobs grenades from its hull gun.
 - Three game tests and a screenshot scene. Record: [armoured-walker.md](docs/features/armoured-walker.md).
 
-### Unmerged: The raider faction, batch 57
+### Added: The raider faction, batch 57
 - **Raiders:**
   - the **Grunt** (cleaver)
   - the **Grenadier** (lobs small grenades from range)
@@ -583,7 +711,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Raider camps:** rare sandbagged camps in the plains, savanna and badlands, never within 512 blocks of the world spawn. Each has tents, a campfire, a supply barrel and a garrison of four to clear.
 - Ten game tests and a screenshot scene. Record: [raiders.md](docs/features/raiders.md).
 
-### Unmerged: Fire control, batch 56
+### Added: Fire control, batch 56
 - **Fire Control Table:** link up to 8 guns to it with **Fire Control Wire**. It lays every linked gun that has nobody at its controls. Its modes:
   - **Hold:** the guns stand still.
   - **Converge:** every gun lays on the table's target (your Range Finder mark), and a redstone pulse into the table fires one round from each.
@@ -594,7 +722,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Guns the table fires use shells from ready racks only. A comparator reads how many linked guns are ready. A ringing field telephone can give the order to fire.
 - Five game tests and a screenshot scene. Record: [fire-control.md](docs/features/fire-control.md).
 
-### Unmerged: Fortifications, batch 55
+### Added: Fortifications, batch 55
 - **Bastion Concrete** (block, slab, stairs and Jugcraft's first **wall**, which joins diagonally like vanilla's), the crenellated **Bastion Parapet**, the **Steel Ladder** and a redstone-only **Blast Door**.
 - **Ammo Hoist:** stack hoists into a shaft. What goes in climbs to the top and into the container on or beside it. Nothing can pull items back out.
 - **Ready Rack:** holds shells beside a gun. A gunner with no shells draws from any rack within 2 blocks of the gun. It shows how full it is.
@@ -605,7 +733,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
   - a **Bastion Embrasure** with a gun slit
 - Five game tests and a screenshot scene. Record: [fortifications.md](docs/features/fortifications.md).
 
-### Unmerged: Tower guns, batch 54
+### Added: Tower guns, batch 54
 - Five heavy emplacements for the top of a tower, after the owner's reference picture of a heavy mortar on a turntable mount: a concrete plinth, a railed turntable, a yellow cradle and a fat black barrel.
   - For a 3x3 top: the **Bastion Mortar** and the twin-barrelled **Bastion Autocannon**.
   - For a 5x5 top: the **Grand Mortar**, the long **Fortress Rifle** (out to about 210 blocks) and the three-barrelled **Triple Battery**.
@@ -613,27 +741,27 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - The Grand Mortar fires the new **Great Shell** (2 Heavy Shells and TNT). Its burst reaches 7 blocks; like every shell, it hurts creatures and never breaks blocks.
 - Three game tests and a screenshot scene. Record: [tower-guns.md](docs/features/tower-guns.md).
 
-### Unmerged: Clean steampunk textures, batch 53
+### Added: Clean steampunk textures, batch 53
 - The steampunk textures (`sp_*`) get the same clean style as the dieselpunk ones: flat fills, bevelled plates with rivets, banded sheens, and wear only as a few placed marks. Iron and brass plates, wrought iron, brass, copper, tanks, planks, firebrick, glass, red iron, the hopper inside, water, lava, leaves, bark and soil lose their per-pixel noise.
 - Record: [clean-steampunk-textures.md](docs/features/clean-steampunk-textures.md).
 
-### Unmerged: Clean dieselpunk textures, batch 52
+### Added: Clean dieselpunk textures, batch 52
 - Every dieselpunk texture is redrawn in a cleaner style: flat fills from short palettes, bevelled panels, recessed insets and two-by-two bolts, with wear only as a few small marks at corners and seams. No more per-pixel noise, and rust is now a small stain under a bolt rather than the whole surface. This covers the giants, Dieselworks blocks, zeppelin, Diesel Walker, Landship, trench works, big guns and the dieselpunk machine textures. The mechs and vehicles also get a clean soot texture for their smokestacks and openings, and the kaiserpunk brass and black lacquer lose their specks.
 - Rust Plate, Riveted Rust Plate, Ribbed Rust Pillar and Rust Grating are now called Weathered Steel Plate, Riveted Steel Plate, Ribbed Steel Pillar and Steel Grating. Their IDs are unchanged, so placed blocks and items keep working.
 - Record: [clean-dieselpunk-textures.md](docs/features/clean-dieselpunk-textures.md).
 
-### Unmerged: Big guns, batch 51
+### Added: Big guns, batch 51
 - **Siege Mortar**, **Self-Propelled Howitzer**, **Flak Gun** and **Observation Balloon**, with Heavy Shells, Flak Shells and a **Range Finder** to mark targets up to 256 blocks away.
 - Guns turn to a marked target (the gunner's, or a nearby spotter's) and work out the elevation that lands the shell there. Without a mark they fire where the gunner looks. Flak bursts beside flyers.
 - Every burst hurts creatures and never breaks blocks. Five game tests and a screenshot scene. Record: [big-guns.md](docs/features/big-guns.md).
 
-### Unmerged: Trench works, batch 50
+### Added: Trench works, batch 50
 - Sandbags, timber revetment, duckboards and barbed wire. The wire slows and cuts whatever pushes through it; sneak to cross carefully.
 - **Field telephones:** power one's back and every telephone on its dye channel within 256 blocks rings and gives a redstone signal from its front.
 - **Searchlights:** a turning, tilting lamp that throws a long beam. Redstone switches it off.
 - Three game tests and a screenshot scene. Record: [trench-works.md](docs/features/trench-works.md).
 
-### Unmerged: Arms IV, batch 47
+### Added: Arms IV, batch 47
 - **Five ornate arms** in bronze and steel, drawn after the owner's reference sheets (nothing of them is copied): set stones (a garnet in bronze, a lit green phosphor stone in steel), flat-toned heads with bright edges, winged guards, lit rims and glints of light.
   - **labrys** (two-handed): its finishing blow whirls right round, striking up to 6 foes about you;
   - **battleblade** (two-handed): each hit wears every piece of the foe's armor;
@@ -757,29 +885,29 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Neglected graves stir restless spirits more often**; a well-kept churchyard is quiet.
 - Two advancements, four game tests, client screenshots. Record: [graveyard.md](docs/features/graveyard.md).
 
-### Unmerged: Landship, batch 49
+### Added: Landship, batch 49
 - **Landship:** a rideable kaiserpunk crawler tank for three. It has a rhomboid hull with animated tracks running round each side, a crest-bearing hub, sponson guns, smokestacks, and a turret whose cannon follows where the driver looks.
 - Drive with the movement keys; it climbs steps and bridges narrow trenches. Attack fires the cannon, using cannon shells; hold use for the side guns. It burns diesel or kerosene.
 - The shells' burst hurts creatures and never breaks blocks. Three game tests and a screenshot scene. Record: [landship.md](docs/features/landship.md).
 
-### Unmerged: Kaiserworks, batch 48
+### Added: Kaiserworks, batch 48
 - 26 imperial building blocks to go with the dieselpunk set: black lacquer, riveted black and gilt-trimmed plate, polished brass, a gilt key-pattern frieze, an imperial crest (our own made-up empire), fluted marble and black iron columns, polished marble, station tiles, see-through wrought-iron lattice, leaded glass and gas lamps.
 - Made from plates, calcite, glass and gold trim, never back into metal. Game test and a screenshot scene. Record: [kaiserworks.md](docs/features/kaiserworks.md).
 
-### Unmerged: Diesel Walker, batch 47
+### Added: Diesel Walker, batch 47
 - **Diesel Walker:** a rideable dieselpunk mech, about four blocks tall, with an open cockpit, a glowing core, a big fist and a drill arm. Walk with the movement keys (it climbs one-block steps), jump, hold use to drill the block you look at and press attack to punch. It burns diesel or kerosene from buckets. The server drives it from the pilot's keys.
 - The drill breaks one block at a time as the pilot would by hand, so protected land and break checks still apply. It is no quarry.
 - Four game tests and a screenshot scene. Record: [diesel-walker.md](docs/features/diesel-walker.md).
 
-### Unmerged: Zeppelin, batch 46
+### Added: Zeppelin, batch 46
 - **Zeppelin:** a rideable dieselpunk airship for four. You steer it with the movement keys, jump to climb and sprint to sink. It burns diesel or kerosene from buckets and has a 27-slot cargo hold. It hovers where it is left and sinks gently when out of fuel. The server flies it from the pilot's keys.
 - Two game tests and a screenshot scene. Record: [zeppelin.md](docs/features/zeppelin.md).
 
-### Unmerged: Dieselworks, batch 45
+### Added: Dieselworks, batch 45
 - 25 building blocks in the giants' look: rust, riveted, patina, perforated, red iron and copper dome plate (most with slabs and stairs), riveted band, skid iron, ribbed pillars, see-through rust grating for catwalks, steel I-beams, porthole windows and amber cage lamps.
 - Made from metal plates (one plate per block), never back into metal. Game test and a screenshot scene. Record: [dieselworks.md](docs/features/dieselworks.md).
 
-### Unmerged: Dieselpunk giants, batch 44
+### Added: Dieselpunk giants, batch 44
 - Sixteen one-block machines are now big, detailed multi-blocks (from 2x2x2 up to the 5x3x3 rocket workshop, with long ones like the 2x2x5 sawmill and the 4x1x2 wire drawer) in a weathered dieselpunk look: rust, patina, perforated covers, ribbed coil stacks, banded domes, copper pipes with hex fittings and amber glow.
 - Machines already built in a world stay one block and keep working (`compact` state); placing the item builds the full machine.
 - Game tests for forming, the compact copies and breaking. Record: [dieselpunk-giants.md](docs/features/dieselpunk-giants.md).
@@ -787,7 +915,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 ### Test fix: each giant tree's own fewest logs (#157)
 - `BiomeGameTests.bigTreesGrow` holds each giant to the fewest logs it can grow: a giant redwood 85, a giant mahogany 37 (a trunk two wide and at least 22 or 10 tall). #134's single floor of 30 let a stunted redwood pass. Test only; nothing in game changes. Record: [big-trees-and-rainforests.md](docs/features/big-trees-and-rainforests.md).
 
-### Unmerged: Arms motion, batch 43
+### Added: Arms motion, batch 43
 - **New animations for every arm of batch 42**, seen by everyone and in first person.
   - Each kind has a guard: the side-on stance, two hands on the greatswords, hammers and polearms, the rapier en garde. Each kind also has a combo of attacks with anticipation, the blow, follow-through and a settle. The torso turns and bends, the head counters, and the feet step.
   - In first person, the held arm takes a guard and a stroke for each attack.
@@ -795,50 +923,50 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Keys joined by Hermite splines so the motion flows through them. Timed on vanilla's own swing, so there is no networking. Client only, with no allocation per frame and the arms only beyond 32 blocks; four client mixins.
 - Learned from the combat animation mods and packs the owner sent (Better Combat, Malfu, Player Animation Library, Fresh Animations and Fresh Moves, Mo' Bends, NdRz's weapons); nothing of theirs is used. Record: [arms-motion.md](docs/features/arms-motion.md).
 
-### Unmerged: Liquid fuels, batch 43
+### Added: Liquid fuels, batch 43
 - **RP-1 kerosene**, hydrocracked from heavy fuel oil and hydrogen in the catalytic cracker. It is jet fuel too, burning in the gas turbine and the advanced engine.
 - **Cryogenic Liquefier**: condenses oxygen into **liquid oxygen**.
 - **Kerosene and liquid oxygen tanks** (chemical reactor) make **liquid rocket motors**: three rocket motors from a tank of each and two nozzles, with no solid propellant.
 - Advancement, handbook pages, game test. Record: [liquid-fuels.md](docs/features/liquid-fuels.md).
 
-### Unmerged: Booster rails, batch 42
+### Added: Booster rails, batch 42
 - **Booster rail:** a powered rail with rocket thrusters, loaded with solid propellant (8 boosts each). It kicks a minecart to full speed, from a standstill or uphill, and holds it there for 10 seconds, so long tracks and climbs need far fewer powered rails. Minecarts keep their normal speed limit.
 - Handbook page, game test. Record: [booster-rails.md](docs/features/booster-rails.md).
 
-### Unmerged: Rocket launcher, batch 41
+### Added: Rocket launcher, batch 41
 - **Rocket launcher** with **high-explosive** and **homing rockets** (rocket workshop). Rockets fly straight, burst on impact and hurt living things only: no block is ever broken. Homing rockets lock on to the hostile mob nearest the crosshair and steer into it.
 - Handbook page, two game tests. Record: [rocket-launcher.md](docs/features/rocket-launcher.md).
 
-### Unmerged: Zipline, batch 40
+### Added: Zipline, batch 40
 - **Zipline anchors** and the **line-throwing rocket:** fire a steel line between two anchors up to 96 blocks apart with a clear path, then use an anchor to ride the line to the other end. Steeper lines are faster; sneak to let go.
 - Handbook page, game test. Record: [zipline.md](docs/features/zipline.md).
 
-### Unmerged: Rocket post, batch 39
+### Added: Rocket post, batch 39
 - **Rocket pads** send up to nine stacks to another pad up to 4096 blocks away: a **delivery rocket** (used up) and a **flight plan** (kept) naming the target pad. Launch from the pad's screen or with a redstone pulse.
 - Deliveries are saved with the world. One whose target area isn't loaded waits and lands when the area loads again; nothing is force-loaded.
 - Handbook page, game test. Record: [rocket-post.md](docs/features/rocket-post.md).
 
-### Unmerged: Rocketry, batch 38
+### Added: Rocketry, batch 38
 - **Rocket Workshop** and propellant chemistry: ammonium perchlorate, iodine (from kelp), silver iodide and solid propellant; rocket casings, nozzles, guidance units and motors.
 - **Survey rocket:** surveys ores and oil under 7x7 chunks. **Cloud-seeding** and **clear-sky rockets:** five minutes of rain or clear sky, with a shared cooldown. **Signal flares:** tell nearby players where you are. **Illumination flares:** make hostile mobs glow.
 - Advancements, a Rocketry handbook chapter, game test. Record: [rocketry.md](docs/features/rocketry.md).
 
-### Unmerged: Arms, batch 42
+### Added: Arms, batch 42
 - **Nine kinds of arms in bronze and steel:** longsword (parries 60% of a blow from in front), greatsword (two-handed, long reach), rapier (quick thrusts, a light parry), flanged mace and war hammer (break a shield's guard for 3 and 5 seconds; the hammer knocks back), glaive (sweeps at 4.25 blocks), halberd (thrusts through every target in line at 4.5), spear and lance (charge like vanilla's spears; the lance hits harder and unhorses riders).
 - Each has its own swing (26.3's whack and stab, from 5 to 12 ticks), reach and in-hand size; holding use parries or charges. Every trait is a vanilla item component, so the server runs and checks them as it does its own weapons, with no per-tick code.
 - 64x64 sprites, shared in-hand models, handbook pages, an advancement, three game tests and client screenshots. After studying Epic Knights and Simply Swords; nothing of theirs is used. Record: [arms.md](docs/features/arms.md).
 
-### Unmerged: Control room, batch 37
+### Added: Control room, batch 37
 - **Control Monitor:** six panels form a 3x2 wall screen. Cabled to a logic controller, it shows every channel's reading, a bar, a two-minute graph and ON/OFF.
 - **Alarm Klaxon:** a controller switches it like a relay; it lights and sounds.
 - **Control Remote:** bind it to a controller and flip a channel by hand from up to 256 blocks away.
 - Advancement, handbook page, game test. Record: [control-electronics.md](docs/features/control-electronics.md).
 
-### Unmerged: Tall sides on diagonal walls
+### Added: Tall sides on diagonal walls
 - **Diagonal walls rise to meet what is above them.** When the block above covers all of a diagonal wall's sides and arms (another wall, a full block, a slab), they rise to the top of the block as a vanilla wall's sides do, so a diagonal wall two high has no slot between its layers. A tall straight diagonal run has no post, as a tall straight wall has none.
 - One property, `tall`, on the diagonal walls: 2,048 states each, 32,768 more in all. Two more server game tests.
 
-### Unmerged: Diagonal walls
+### Added: Diagonal walls
 - **Walls join diagonally.** All 32 of vanilla's walls join a wall a diagonal step away with a low wall side at 45 degrees, on the same rule as fences: neither may join straight into the corner between them, so a block in the corner keeps them apart.
 - **Posts follow vanilla's rule.** A wall that runs straight on along a diagonal has no post, as a straight wall has none, unless something above calls for one (a torch, a block, a wall's post). Ends, corners and junctions keep their posts.
 - **Swapped, not enlarged** (the Diagonal Fences mod's approach, in Jugcraft's own code). Vanilla's walls keep their own states. A wall that joins diagonally becomes `jugcraft:diagonal_<wall>` while it does, and turns back when its last diagonal goes. It drops, picks and is named as the vanilla wall, and is in `#minecraft:walls`. Its sides are low or none, never tall. This adds 32,768 block states instead of the 155,520 that diagonal properties on vanilla's walls would add.
@@ -846,50 +974,50 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Shapes are worked out once for each set of straight sides, not once per state, and blocks with alike shapes share their diagonal shapes. This applies to fences, panes and bars too.
 - Five more server game tests and three wall screenshots. Record: [diagonal-connections.md](docs/features/diagonal-connections.md).
 
-### Unmerged: Control electronics, batch 36
+### Added: Control electronics, batch 36
 - **Data Cable**, **Sensor**, **Relay** and **Logic Controller**. Sensors read how full a tank, battery, machine or chest is and report on a dye-colour channel. The controller's eight rules ("IF red above 90% THEN blue OFF") switch relays, whose redstone runs machines. It gives a dead band when two rules pair up.
 - Advancement, handbook pages, game test. Record: [control-electronics.md](docs/features/control-electronics.md).
 
-### Unmerged: Gas storage, batch 35
+### Added: Gas storage, batch 35
 - **Gas Cylinder:** carries 8 buckets of one gas. Use it on a tank, pipe or machine to fill it, sneak to empty it; used in the air it tops up a scuba tank or grapple in the other hand. Machines and the fluid filter treat it like a bucket.
 - **Ammonia Chiller:** freezes a bucket of water into ice with 5 mB of ammonia, anywhere (even the Nether), and presses four ice into packed ice and four packed ice into blue ice.
 - Advancement, handbook pages, game tests. Record: [gas-storage.md](docs/features/gas-storage.md).
 
-### Unmerged: Electroplating, batch 34
+### Added: Electroplating, batch 34
 - **Electroplating Bath:** plates a tool, weapon or piece of armor with an ingot in sulfuric acid, repairing it fully without experience. **Nickel** makes it half as durable again, **silver** gives a sword or axe Smite III, **gold** makes armor count as gold for piglins. Plating again with the same metal repairs it again.
 - Advancement, handbook page, tooltips, game test. Record: [electroplating.md](docs/features/electroplating.md).
 
-### Unmerged: Hydroponics, batch 33
+### Added: Hydroponics, batch 33
 - **Hydroponic Bay:** grows a seed or cutting into a harvest every 30 seconds on power and **nutrient solution** (fertilizer in water, from the chemical reactor), giving the seed back. It needs no soil, sunlight or water source, so it works underground or in any dimension. It grows the vanilla crops, cotton and every agriculture crop.
 - Advancement, handbook page, game test. Record: [hydroponics.md](docs/features/hydroponics.md).
 
-### Unmerged: Construction chemistry, batch 32
+### Added: Construction chemistry, batch 32
 - **Foam Sprayer:** fills up to 12 open blocks (air, water, lava, plants) where you aim, from 16 blocks away, with construction foam from foam canisters (chemical reactor: plastic and ammonia). Bridge gaps, seal caves, stop floods and lava. Respects spawn protection and the walled town.
 - **Cement** (calcite or bone block, clay and sand, smelted) sets foam into **concrete**; concrete also crafts from cement, gravel and water. **Blast-proof concrete** (concrete round a rebar) is as blast-proof as obsidian. Both come as slabs and stairs.
 - Two advancements, two handbook pages, a game test. Record: [construction-chemistry.md](docs/features/construction-chemistry.md).
 
-### Unmerged: Diagonal connections (framework)
+### Added: Diagonal connections (framework)
 - **Fences, glass panes and bars join diagonally.** Two of a kind a diagonal step apart join with a rail, pane or bars at 45 degrees, as long as neither joins straight into the corner between them. This covers vanilla's 14 fences, 17 panes and 9 iron and copper bars, and all 14 Jugcraft fences, including the wrought-iron cemetery fence.
 - Diagonals update live (placing, breaking, filling the corner), are part of the outline and collision, and turn with rotated or mirrored structures. Switch: `diagonal_connections.enabled`.
 - The framework: four block-state properties on every fence and bars block, the tag `#jugcraft:connects_diagonally`, and a generator (`tools/diagonal_connections.py`) that gives any tagged block its 45-degree arm model from its own side model. Seven game tests and a client screenshot test. Record: [diagonal-connections.md](docs/features/diagonal-connections.md).
 
-### Unmerged: Field chemistry, batch 31
+### Added: Field chemistry, batch 31
 - **Chemical grenades** for hand or launcher: **chlorine** (a cloud that hurts what breathes, through armor), **smoke** (mobs lose their target; players inside can't see), **thermite** (a burning pool that never lights blocks) and the **flashbang** (blinds players, staggers mobs, no damage). None breaks a block; other players only where PvP is on, never party members.
 - **Gas mask:** keeps out chlorine, smoke and the flash; the filter wears in gas and is repaired with charcoal. A sealed scuba set also works while it has oxygen.
 - **Medicines** from the chemical reactor: **first aid kit** (four hearts, 10 s cooldown), **antidote** (clears harmful effects, keeps good ones), **stimulant** (Speed II and Haste II for a minute, with hunger).
 - Three advancements, three handbook pages, five game tests. Record: [field-chemistry.md](docs/features/field-chemistry.md).
 
-### Unmerged: Pneumatic grapple, batch 30
+### Added: Pneumatic grapple, batch 30
 - **Pneumatic Grapple:** a harpoon gun on compressed nitrogen (fill it at the air separation unit or a gas holder; 25 mB a shot). The hook flies up to 32 blocks: in a block it reels you in with no fall damage and a hop at the end; in a mob it drags the mob to you (not bosses or golems, never party members). Use it again to let go.
 - Advancement, handbook page, four game tests, a screenshot. Record: [pneumatic-grapple.md](docs/features/pneumatic-grapple.md).
 
-### Unmerged: Refinery upgrades, batch 29
+### Added: Refinery upgrades, batch 29
 - **Hydrotreater:** diesel + hydrogen → **premium diesel** (a quarter more power everywhere diesel burns) + hydrogen sulfide; gasoline + a tenth bioethanol → **premium gasoline** (448,000 JE a bucket in the gas turbine).
 - **Sulfur recovery:** the chemical reactor turns 200 mB of hydrogen sulfide into a sulfur dust, so oil feeds the acid recipes.
 - **Heat Recovery Unit:** set against a running diesel generator or gas turbine, it makes 30% of their power again from the exhaust, using water and a little lubricant.
 - Two advancements, handbook pages, six game tests. Record: [refinery-upgrades.md](docs/features/refinery-upgrades.md).
 
-### Unmerged: Room for the Retro Game Shop in every village (fix for #53)
+### Added: Room for the Retro Game Shop in every village (fix for #53)
 - **Every new village gets its Retro Game Shop.** Village houses are built inside their street's plot, and some villages were laid out with no plot big enough for the 9 by 8 shop (roughly one village in thirty, going by CI runs and a model of the placer). Such a village is now laid out again, up to 8 layouts; a world seed still makes the same village.
 - The village shop test now generates four rounds of the five village types (20 villages) instead of five. In the last round the shop is withheld from each village's first layout (a test-only switch), so every one of those villages must be laid out again and still get exactly one shop.
 
@@ -900,7 +1028,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Jugs**, the town's credit, kept per player by the server: the General Store buys farm and mine goods, and the Seasonal Stall, Curiosities and the Florist sell decoration and fun items. **Jug Tellers** (ATMs) in the bank send Jugs to other players. There is no profit loop between the shops.
 - Commands: `/jugcraft town`, `/jugcraft jugs`, and for operators `town place`, `town theme`, `jugs give|take`. Record: [walled-town.md](docs/features/walled-town.md).
 
-### Unmerged: Parties finished (from #31)
+### Added: Parties finished (from #31)
 - **Party screen** on the P key: members with online lights, the leader and you marked; LEAD, KICK, DISBAND or LEAVE; invite by name; accept or decline the latest invite. Every button runs the ordinary `/party` command.
 - **Clickable [Accept] and [Decline]** on invites in chat.
 - **`/party admin list | kick | leader | disband`** for operators (level 2), on any party.
@@ -1221,7 +1349,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - Also: composting, pig, chicken and parrot feed, `c:` crop, seed and food tags, and a new `agriculture` feature switch.
 - Original textures from `tools/crop_textures.py`. Twelve game tests, plus a client game test with screenshots of a corn maze, the fields and every growth stage.
 
-### Unmerged: biomes branch, Jugcraft regions and nine batches of biomes (stacked on Alpine Spawn)
+### Added: biomes branch, Jugcraft regions and nine batches of biomes (stacked on Alpine Spawn)
 - **Remaking the Biomes O' Plenty catalog in Jugcraft**, with original art and names: the roster in [docs/branches/BIOMES.md](docs/branches/BIOMES.md) plans 98 biomes in nine batches.
 - **Jugcraft regions:** about half the Overworld, in regions about 1 km across, grows the new biomes in place of some vanilla ones; the rest stays vanilla. New settings: `biomes.enabled`, `biomes.region_size`, `biomes.region_share`.
 - **Batch 1, the seasonal forests:** Coniferous Forest, Snowy Coniferous Forest, Maple Woods, Seasonal Forest, Aspen Glade, Dead Forest, Tundra, Snowy Forest and Muskeg.
@@ -1240,7 +1368,7 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - **Batch 8, the Nether:** Ashfall Wastes, Blighted Sands, Frost Rift, Fungal Thicket, Magma Fields, Marrow Heap, Netherbrush, Quartz Rift and Withered Hollow, rarer than vanilla's five. **New plant:** brambles.
 - **Batch 9, the End:** Chorus Reef, Ender Wilds, Outer Flats, Phantom Garden and Rotted Expanse on the outer islands. With it, every biome on the roster is built.
 
-### Unmerged: Alpine Spawn, parts 1 and 2 (stacked on the agriculture pull requests, #53 and #80)
+### Added: Alpine Spawn, parts 1 and 2 (stacked on the agriculture pull requests, #53 and #80)
 - **New worlds start in Alpine Spawn, at an alpine village.** Alpine Spawn is a large, cool alpine meadow on mountain plateaus; it takes the place of every vanilla meadow and of the cool plateau's forest and taiga. The server moves a new world's spawn to the alpine village nearest the origin, or into the biome when there is no alpine village within 6,400 blocks.
 - **Alpine villages are common:** vanilla's taiga villages on a 16-chunk grid (vanilla's is 34), only in this biome.
 - **Larches** (part 2): a conifer that changes with the seasons. Its needles are green in spring and summer, turn gold in autumn and fall in winter, leaving bare twigs, then bud green again; each block turns within a week either side, so crowns change gradually. Larches grow among spruces in Alpine Spawn. The tree drops larch saplings, and comes with a full larch wood set (logs, wood, stripped forms, planks, stairs, slab, fence and gate). Larch logs saw into planks in the sawmill, and saplings grow in the tree farm.
@@ -1248,12 +1376,12 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - New settings: `alpine_spawn.enabled` (generation, and the larch's hand recipes) and `alpine_spawn.start` (`on` or `off`: start there).
 - Server game tests for its climate entries, tags and villages, and a client test in a real world that it is where the world starts.
 
-### Unmerged: Powered exosuit, batch 28
+### Added: Powered exosuit, batch 28
 - Four JE-powered armor pieces (netherite protection, unbreakable): night vision, an energy shield and jetpack, speed, and fall immunity with step assist.
 - Two liveries: Vanguard (gunmetal with teal lights) and Ronin (crimson and silver, conical hat, red eyes), with 3D shoulder plates, skirts and hat. Smithing liveries switch between them and keep the charge.
 - The crimson Ronin katana. Inspired by Mekanism's MekaSuit (MIT); looks follow the owner's reference images; all art original.
 
-### Unmerged: Gear, weapons and plastic blocks, batch 27
+### Added: Gear, weapons and plastic blocks, batch 27
 - **Scuba mask and tank:** breathe under water on oxygen (8,000 mB, 400 s); fill the tank from a gas holder or machine.
 - **Free runners:** boots with no fall damage and a one-block step.
 - **Power katana and power bow:** JE-powered weapons charged at the charging station; the bow fires energy arrows without ammo.
@@ -1261,18 +1389,18 @@ No numbered release yet. Entries on feature branches remain proposed until their
 - High-detail art: an animated 32x32 energy katana, and double-resolution scuba gear and free runners.
 - Four advancements and handbook pages. Inspired by Mekanism and Mekanism: Additions (MIT); all code and art original.
 
-### Unmerged: Four-ingot ore and bioethanol, batch 26
+### Added: Four-ingot ore and bioethanol, batch 26
 - **Acid leaching:** an ore and 250 mB of sulfuric acid in the chemical reactor give 4 washed ores (the best ore route).
 - **Bioethanol:** 8 crops and a bucket of water ferment into 250 mB in the chemical reactor; it burns in the gas turbine and the advanced engine.
 - Inspired by Mekanism (MIT); no new machines.
 
-### Unmerged: Tools, armor and paxels, batch 25
+### Added: Tools, armor and paxels, batch 25
 - Bronze and steel swords, pickaxes, axes, shovels, hoes and armor (bronze iron-tier, steel between iron and diamond).
 - Paxels (pickaxe, axe and shovel in one) for every tier from wood to netherite, bronze and steel.
 - Bronze armor is steampunk (goggles, pressure gauge, boiler); steel armor is kaiserpunk (Pickelhaube, field-grey tunic, jackboots).
 - Two advancements and handbook pages. Inspired by Mekanism: Tools (MIT); all code and art original.
 
-### Unmerged: Fewer chemistry machines, batch 24
+### Added: Fewer chemistry machines, batch 24
 - Five single-job machines folded into ones that already exist (65 machines down to 60):
   - the distillation tower vacuum-distils heavy fuel oil (was the vacuum distillation unit);
   - the catalytic cracker reforms naphtha, using a catalyst (was the catalytic reformer);

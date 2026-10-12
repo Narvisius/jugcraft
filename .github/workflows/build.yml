@@ -61,7 +61,7 @@ jobs:
       - name: Build and run server tests without optional integrations
         run: ./gradlew build --no-daemon -PjugcraftOptionalIntegrations=false
 
-  # Which client game test classes to run, shared out between four client jobs (tools/select_client_tests.py).
+  # Which client game test classes to run, shared out between five client jobs (tools/select_client_tests.py).
   # A pull request runs the classes that show what it changed; main and a manual run of this workflow run them all.
   plan:
     name: choose client tests
@@ -72,6 +72,7 @@ jobs:
       shard1: ${{ steps.choose.outputs.shard1 }}
       shard2: ${{ steps.choose.outputs.shard2 }}
       shard3: ${{ steps.choose.outputs.shard3 }}
+      shard4: ${{ steps.choose.outputs.shard4 }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -84,17 +85,17 @@ jobs:
         run: |
           if [ "$EVENT" = pull_request ]; then
             # The pull request's merge commit against its first parent, the base branch.
-            python3 tools/select_client_tests.py --base HEAD^1 --shards 4 --github-output "$GITHUB_OUTPUT"
+            python3 tools/select_client_tests.py --base HEAD^1 --shards 5 --github-output "$GITHUB_OUTPUT"
           else
-            python3 tools/select_client_tests.py --all --shards 4 --github-output "$GITHUB_OUTPUT"
+            python3 tools/select_client_tests.py --all --shards 5 --github-output "$GITHUB_OUTPUT"
           fi
 
   # A real game client with software rendering (Mesa): runs the chosen client game tests in src/gametest
-  # (JugcraftClientGameTests and the rest), which build showrooms and worlds and take screenshots. Four jobs share
+  # (JugcraftClientGameTests and the rest), which build showrooms and worlds and take screenshots. Five jobs share
   # them out (the plan job above), so every chosen class runs once; the "client" job below passes only when the plan
-  # and all four do. A job with no classes passes at once.
+  # and all five do. A job with no classes passes at once.
   client-shard:
-    name: client (shard ${{ matrix.shard }} of 4)
+    name: client (shard ${{ matrix.shard }} of 5)
     needs: plan
     runs-on: ubuntu-24.04
     # Running every class takes a job 20 to 30 minutes; the limit leaves room for that to grow.
@@ -102,7 +103,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3]
+        shard: [0, 1, 2, 3, 4]
     env:
       CLASSES: ${{ needs.plan.outputs[format('shard{0}', matrix.shard)] }}
       LIBGL_ALWAYS_SOFTWARE: 'true'
@@ -132,7 +133,7 @@ jobs:
           # Test options are written by runClientGameTest after Loom cleans its run directory.
           mkdir -p run
           echo "eula=true" > run/eula.txt
-      - name: Run client game tests (shard ${{ matrix.shard }} of 4)
+      - name: Run client game tests (shard ${{ matrix.shard }} of 5)
         if: env.CLASSES != ''
         run: ./gradlew runClientGameTest --no-daemon "-PclientTests=$CLASSES"
       - name: Print small previews of the screenshots

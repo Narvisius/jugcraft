@@ -51,7 +51,28 @@ Owner-requested 10 October 2026. Independent art specification: [industrial mach
 - [ ] Turn the briefs into detailed models and textures in focused implementation work, preserving the familiar family appearance in larger variants and the specified 2–6-block envelopes.
 - [ ] Reuse or recolour suitable owner-library art with exact source/transform provenance and preserved animation metadata. Finish backs, undersides, interior surfaces and UVs.
 - [ ] Define actual multiblock occupancy, entry parts, placement/formation and moving-group bounds alongside independently reachable construction recipes. Keep shared processing roles rather than compulsory duplicate machines for every product.
+- [x] Build the shared form foundation, package 1 of the [factory implementation plan (PR #302)](https://github.com/jimbozoomer-byte/jugcraft/pull/302): validated 2–6-block envelopes with structure/clearance/access positions, placement that names obstructions, port-only transfers, protected tool sockets, eight-state status, durable batch escrow with reserved outputs, entry/expanded/bulk lanes and legacy tank-layout migration. See [industrial machine foundation](features/industrial-machine-foundation.md); tested on test-mod forms only.
+- [x] Package 2, first slice: the Electrolytic Separator, the first real form, with its sliced model from the art brief, the selected 20-plate construction, capability recipes for water and brine at the selected baseline, and lye kept with brine stopping when full. See [Electrolytic Separator](features/industrial-electrolytic-separator.md).
+- [x] Package 2, second slice: the Gas Burning Generator, the shared hydrogen/methane generator and the first generator form, burning hydrogen at the selected 128 JE/t from the plan's steel bill, with its turning coupling and fan. Generator forms join the foundation: fuels listed on the form and power-out ports. See [Gas Burning Generator](features/industrial-gas-burning-generator.md).
+- [ ] Package 2, the rest of the starter gas and acid factory:
+  - the Chemical Infuser: HCl, and methanation with its nickel bed and the selected water drain, then methane as the generator's second fuel (256 JE/t);
+  - the Chemical Oxidizer and contact conversion, for the sulfuric acid chain;
+  - the Coal Gasifier with Gas Cleanup and Separation;
+  - portable handling.
+
+  Enforce the electrolysis energy floor before any expanded or bulk Separator.
 - [ ] Inspect every completed form from all sides in-game, including idle/running states, module arrangements and lighting; verify bounds, placement and persistence. The current brief provides descriptions only.
+
+## Industrial factory implementation planning
+
+Owner-requested autonomous planning pass, 10 October 2026. [Delivery blueprint](features/industrial-factory-implementation-plan.md), [construction and operation](features/industrial-machine-construction-and-operation.md), and [production lines and layouts](features/industrial-production-lines-and-factory-layouts.md). New numeric defaults and layout choices are proposals; earlier owner selections remain authoritative.
+
+- [x] Prepare a substantial connected plan with nine delivery packages, entry/expanded/bulk operating profiles, shared machine construction patterns, protected tooling/atomic work, 36 production routes and eight sample factories with 71 machine placements.
+- [ ] Review the proposed package order, profile savings/buffer sizes, large-plant construction investment and one-pair reference flow-bank arrangement with the owner.
+- [ ] Implement the shared form/port/tool/work foundation and legacy mappings before expanding incompatible machine layouts. Preserve the six-process-tank limit unless a separate reviewed schema change is needed.
+- [ ] Complete explicit mineral/solution/fuel/precursor ledgers and independently reachable construction receipts, then deliver the starter gas/acid slice with rollback/restart/upgrade checks.
+- [ ] Continue the selected useful metals/fertilizers/polymers, agricultural manufacture, large fuels, precision chips, grid storage and cryogenic consumer packages through focused tested changes. Integrate recovery, pollution measurement and Encyclopedia guidance alongside relevant packages.
+- [ ] Build and measure the proposed small/medium/stress factory fixtures; validate art, transfers, persistent work/storage and all supported module combinations. Layout and arithmetic checks are documentation checks, not gameplay evidence.
 
 ## Industrial chemistry, gas fuels and advanced materials
 
