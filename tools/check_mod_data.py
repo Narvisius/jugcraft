@@ -10108,7 +10108,8 @@ def check_diagonal_connections():
             continue
         parts = (load(path) or {}).get("multipart", [])
         sides = {next(iter(p["when"])) for p in parts if len(p.get("when", {})) == 1 and list(p["when"].values()) == ["true"]}
-        if {"north", "east", "south", "west"} <= sides and not sides & {"up", "down"} and f"{MOD}:{path.stem}" not in tag:
+        if {"north", "east", "south", "west"} <= sides and not sides & {"up", "down"} and f"{MOD}:{path.stem}" not in tag \
+                and f"{MOD}:{path.stem}" not in STRAIGHT_ONLY:
             err(f"{MOD}:{path.stem} joins like a fence but is not in #{dg.TAG}; add it to tools/diagonal_connections.py")
         heights = {next(iter(p["when"])) for p in parts
                    if len(p.get("when", {})) == 1 and list(p["when"].values())[0] in ("low", "tall")}
@@ -10694,6 +10695,12 @@ def check_invocations(co, root, lang, research):
         for key in re.findall(r'"(tooltip\.jugcraft\.concordance\.[a-z_.]+[a-z_])"', java(name)):
             if key not in lang:
                 err(f"concordance/{name}: missing lang {key}")
+
+
+# Blocks that join like a fence but never diagonally, on purpose: the plant safety railing (nuclear/RailingBlock, a
+# CrossCollisionBlock, not a FenceBlock) joins only railings and railing gates, so a blueprint's railing comes out
+# exactly as drawn.
+STRAIGHT_ONLY = {f"{MOD}:railing"}
 
 
 def check_game_test_entrypoints():
