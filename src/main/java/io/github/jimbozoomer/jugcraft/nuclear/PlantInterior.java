@@ -112,10 +112,10 @@ public final class PlantInterior {
 			// The control building's DC system (tools/plant_panels.py, round 18): the station battery (a four-block step
 			// rack of 30 cells), its distribution switchboard, the vital inverter, and the cables from battery to switchboard.
 			{"station_battery", 0, "battery:4:2:p", "metal", null},
-			{"dc_switchboard", 0, "live:2:2:p", "metal", null},
-			{"vital_inverter", 0, "live:1:2:p", "metal", null},
+			{"dc_switchboard", 0, "live:2:2:p:2", "metal", null},
+			{"vital_inverter", 0, "live:1:2:p:4", "metal", null},
 			// The DC rooms' own battery chargers (round 26, 8b): live like the diesel rooms', a model of their own.
-			{"station_charger", 0, "live:1:2:p", "metal", null},
+			{"station_charger", 0, "live:1:2:p:4", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
@@ -196,7 +196,7 @@ public final class PlantInterior {
 				} else if (kind.equals("status")) {
 					return new StatusScreenBlock(p);
 				} else if (k[0].equals("live")) {
-					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]));
+					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), k.length > 4 ? Integer.parseInt(k[4]) : 1);
 				} else if (k[0].equals("battery")) {
 					// A station battery that holds charge (round 25).
 					return new StationBatteryBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]));

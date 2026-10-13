@@ -50,13 +50,19 @@ public final class EquipmentPlacement {
 
 	/** Places equipment from its item. Returns false (telling the player why) if there is no room. */
 	public static boolean place(ServerLevel level, BlockPos anchor, EquipmentKind kind, Direction facing, @Nullable Player player) {
+		return place(level, anchor, kind, facing, player, 0);
+	}
+
+	/** As above, the anchor its labelled version {@code variant} (EquipmentAnchorBlock.VARIANT; a blueprint's). */
+	public static boolean place(ServerLevel level, BlockPos anchor, EquipmentKind kind, Direction facing, @Nullable Player player, int variant) {
 		if (!fits(level, anchor, kind, facing)) {
 			if (player != null) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.no_room", kind.wide, kind.deep, kind.tall));
 			}
 			return false;
 		}
-		level.setBlock(anchor, JugcraftNuclear.EQUIPMENT.get(kind).defaultBlockState().setValue(EquipmentAnchorBlock.FACING, facing), Block.UPDATE_ALL);
+		level.setBlock(anchor, JugcraftNuclear.EQUIPMENT.get(kind).defaultBlockState().setValue(EquipmentAnchorBlock.FACING, facing)
+				.setValue(EquipmentAnchorBlock.VARIANT, variant), Block.UPDATE_ALL);
 		BlockState frame = JugcraftNuclear.FRAME.defaultBlockState();
 		for (BlockPos offset : kind.frames(facing)) {
 			BlockPos local = EquipmentKind.toLocal(offset, facing);

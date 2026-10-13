@@ -375,13 +375,16 @@ class Building(Part):
             self.p(x, y + k, z, furniture(name, facing, up=k < n - 1, down=k > 0))
         self.seats.append((name, x, y, z, facing))
 
-    def panel(self, name, x, y, z, facing, width):
+    def panel(self, name, x, y, z, facing, width, label=None):
         """A floor-standing panel two blocks high and width wide (plant_panels.py), its left block (as you face it) at
-        x, z."""
+        x, z; label: which of its train labels it wears (round 26, 8c: plant_panels PANELS "labels")."""
+        import plant_panels
+        labels = plant_panels.PANELS.get(name, {}).get("labels")
+        variant = labels.index(label) if labels and label else None
         rx, rz = P.DIRS[P.CLOCKWISE[facing]]
         for c in range(width):
             for row in range(2):
-                self.p(x + rx * c, y + row, z + rz * c, multi_state(name, facing, row * width + c))
+                self.p(x + rx * c, y + row, z + rz * c, multi_state(name, facing, row * width + c, variant or None))
             self.seats.append((name, x + rx * c, y, z + rz * c, facing))
 
     def desk(self, x, y, z, facing, name="office_desk"):
@@ -426,8 +429,8 @@ class Building(Part):
                 self.p(x - 2, y, z + k, furniture("operator_chair", "east"))
                 self.p(x + 2, y, z + k, furniture("operator_chair", "west"))
 
-    def prop(self, kind, x0, y, z0, facing="north"):
-        super().prop(kind, x0, y + self.base, z0, facing)
+    def prop(self, kind, x0, y, z0, facing="north", variant=None):
+        super().prop(kind, x0, y + self.base, z0, facing, variant)
 
     def rail(self, x, y, z, facing=None):
         """A length of yellow safety railing standing at y (it joins the railing beside it like a fence; facing is
@@ -1036,11 +1039,13 @@ def ground_floor(b, W, D):
     # come down into it), the chargers and the vital inverters, a charger never beside a charger (their feeds in the
     # slab would join); along the south wall the 480 V motor control centre feeding the chargers (round 26, 8a; its
     # first section, the incoming, at x 17).
-    b.panel("dc_switchboard", 11, 1, 1, "north", 2)
-    b.panel("station_charger", 13, 1, 1, "north", 1)
-    b.panel("vital_inverter", 14, 1, 1, "north", 1)
-    b.panel("station_charger", 15, 1, 1, "north", 1)
-    b.panel("vital_inverter", 16, 1, 1, "north", 1)
+    # Their nameplates by train and number (round 26, 8c): charger 1A-1 is the one MCC 1A's CHGR 1 feeds, inverter
+    # 1A-1 the one its REG XF 1 backs (the first along the MCC's front).
+    b.panel("dc_switchboard", 11, 1, 1, "north", 2, "1A")
+    b.panel("station_charger", 13, 1, 1, "north", 1, "1A-2")
+    b.panel("vital_inverter", 14, 1, 1, "north", 1, "1A-2")
+    b.panel("station_charger", 15, 1, 1, "north", 1, "1A-1")
+    b.panel("vital_inverter", 16, 1, 1, "north", 1, "1A-1")
     for z in (4, 5):
         b.stack("relay_cabinet", 19, 1, z, "east", n=2)
     b.prop("mcc_lineup", 14, 1, 13, "south")
@@ -1122,12 +1127,12 @@ def ground_floor(b, W, D):
     b.door(16, 1, 18, "south", label="locker_room")
     # ---- DC Equipment Room 1B (x 19..28) and Battery Room 1B (x 30..38): as Train A, along the south wall; MCC 1B
     # along the north wall (its incoming section at x 24, over the feed from load centre B).
-    b.panel("dc_switchboard", 28, 1, D - 2, "south", 2)
-    b.panel("station_charger", 26, 1, D - 2, "south", 1)
-    b.panel("vital_inverter", 25, 1, D - 2, "south", 1)
-    b.panel("station_charger", 24, 1, D - 2, "south", 1)
-    b.panel("vital_inverter", 23, 1, D - 2, "south", 1)
-    b.prop("mcc_lineup", 24, 1, 19, "north")
+    b.panel("dc_switchboard", 28, 1, D - 2, "south", 2, "1B")
+    b.panel("station_charger", 26, 1, D - 2, "south", 1, "1B-1")
+    b.panel("vital_inverter", 25, 1, D - 2, "south", 1, "1B-2")
+    b.panel("station_charger", 24, 1, D - 2, "south", 1, "1B-2")
+    b.panel("vital_inverter", 23, 1, D - 2, "south", 1, "1B-1")
+    b.prop("mcc_lineup", 24, 1, 19, "north", variant=1)
     for z in (22, 23):
         b.stack("relay_cabinet", 19, 1, z, "west", n=2)
     b.door(22, 1, 18, "south", double=True, label="dc_equipment_1b")

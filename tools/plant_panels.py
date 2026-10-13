@@ -51,10 +51,10 @@ PANELS = {
     # The control building's DC system (round 18): the station battery, its distribution switchboard and the vital
     # inverter (the battery chargers are the EDG rooms' charger panel).
     "station_battery": {"display": "Station Battery (125 VDC, 30 Cells)", "width": 4},
-    "dc_switchboard": {"display": "125 VDC Distribution Switchboard", "width": 2},
-    "vital_inverter": {"display": "Vital AC Inverter", "width": 1, "item3d": True},
+    "dc_switchboard": {"display": "125 VDC Distribution Switchboard", "width": 2, "labels": ["1A", "1B"]},
+    "vital_inverter": {"display": "Vital AC Inverter", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
     # The DC equipment rooms' own battery chargers (round 26, 8b): station_charger below.
-    "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True},
+    "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
 }
 for _k, _v in PANELS.items():
     _v["multi"] = (_v["width"], 2, "panel")
@@ -524,14 +524,14 @@ def battery_charger():
     return f
 
 
-def dc_switchboard():
+def dc_switchboard(label="1A"):
     """The 125 VDC distribution switchboard a station battery and its chargers feed (two sections): the bus meters, the
     ground detector (a lamp on each side of the bus to ground, both lit while neither side is grounded), the main
     breaker, and the feeder breakers to everything that runs on the battery, each labelled."""
     f = Front(2, 407)
     f.door(0.4, 16.0, handle=False)
     f.door(16.0, 31.6)
-    f.nameplate(16, 29.0, 21, ["125 VDC DISTRIBUTION SWITCHBOARD", "DC BUS 1A    1200 A    FROM BATTERY 1A"])
+    f.nameplate(16, 29.0, 21, ["125 VDC DISTRIBUTION SWITCHBOARD " + label, f"DC BUS {label}    1200 A    FROM BATTERY {label}"])
     f.meter(2.0, 21.4, 7.6, 25.6, "BUS VOLTS", (0, 150), 132, "V", live="dc_v")
     f.meter(8.6, 21.4, 14.2, 25.6, "BATT AMPS", (0, 200), 12, "A", live="dc_a")
     # The ground detector.
@@ -547,14 +547,16 @@ def dc_switchboard():
     f.R(4.0, 6.0, 12.2, 12.8, fill=(22, 22, 24, 255))
     f.R(6.4, 10.6, 9.8, 11.8, fill=(200, 40, 34, 255))
     f.T(8.1, 11.2, "CLOSED", 7, fill=(255, 255, 255, 255), bold=True)
-    f.T(8.1, 9.4, "MAIN 72-1A", 8, fill=(236, 236, 230, 255), bold=True)
+    f.T(8.1, 9.4, f"MAIN 72-{label}", 8, fill=(236, 236, 230, 255), bold=True)
     f.T(8.1, 8.4, "1200 A  250 VDC", 7, fill=(200, 200, 196, 255), bold=True)
     f.proud(4.0, 6.0, 12.2, 12.8, 0.4)
     f.proud(7.3, 6.6, 8.9, 7.8, 0.9)
     f.warning(8.1, 2.9, "125 VDC")
     # The feeders: two columns of moulded-case breakers, each with its handle up (on) and its label.
-    feeders = ["INVERTER 1A", "CHARGER 1A", "4160V SWGR 1A CTL", "480V LC 1A CTL", "EDG 1A CONTROL", "MCR PANELS TRAIN A",
-               "RELAY RM CAB 1-6", "TURB AUX OIL PUMP", "EMERG LIGHTING", "AFW TURB CONTROL", "COMPUTER UPS 1A", "SPARE"]
+    train = label[-1]
+    feeders = [f"INVERTER {label}-1", f"INVERTER {label}-2", f"4160V SWGR {label} CTL", f"480V LC {label} CTL", f"EDG {label} CONTROL",
+               f"MCR PANELS TRAIN {train}", "RELAY RM CAB 1-6" if train == "A" else "RELAY RM CAB 7-12", "TURB AUX OIL PUMP" if train == "A"
+               else "MD AFW PUMP CTL", "EMERG LIGHTING", "AFW TURB CONTROL" if train == "A" else "DIESEL FUEL XFER", f"COMPUTER UPS {label}", "SPARE"]
     for i, name in enumerate(feeders):
         c, r = i % 2, i // 2
         x0, y1 = 17.4 + c * 7.3, 26.4 - r * 3.7
@@ -579,10 +581,21 @@ def layout():
     return {key: {"width": PANELS[key]["width"], "elements": front(key).live} for key in DRAWINGS}
 
 
-def front(key):
-    if key not in _FRONTS:
-        _FRONTS[key] = DRAWINGS[key]()
-    return _FRONTS[key]
+def front(key, v=0):
+    """A panel's drawing; for a panel labelled by train (round 26, 8c: PANELS "labels"), variant v's."""
+    if (key, v) not in _FRONTS:
+        labels = PANELS[key].get("labels")
+        _FRONTS[(key, v)] = DRAWINGS[key](labels[v]) if labels else DRAWINGS[key]()
+    return _FRONTS[(key, v)]
+
+
+def texture_key(key, v):
+    """The textures' stem for variant v of a panel (variant 0 keeps the plain name)."""
+    return key if v == 0 else f"{key}_v{v}"
+
+
+def variants(key):
+    return len(PANELS[key].get("labels") or [None])
 
 
 # ------------------------------------------------------------------------------------------------ the models
@@ -868,8 +881,9 @@ def _see_through(colour, alpha, seed):
 def makers():
     out = {}
     for key in DRAWINGS:
-        for name, img in front(key).cut(key).items():
-            out[name] = (lambda img=img: img)
+        for v in range(variants(key)):
+            for name, img in front(key, v).cut(texture_key(key, v)).items():
+                out[name] = (lambda img=img: img)
     out.update({
         "pi_pnl_black": lambda: _solid((30, 30, 32), 411), "pi_pnl_red": lambda: _solid((196, 38, 32), 412),
         "pi_pnl_green": lambda: _solid((40, 160, 70), 413), "pi_pnl_yellow": lambda: _solid((236, 196, 30), 414),
@@ -895,7 +909,7 @@ def makers():
 
 
 # Kept at full size so the writing reads.
-SHARP = {f"pi_{key}_f_{p}" for key in DRAWINGS for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front",
+SHARP = {f"pi_{texture_key(key, v)}_f_{p}" for key in DRAWINGS for v in range(variants(key)) for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front",
                                                                                            "pi_sb_tag"}
 
 
@@ -1284,15 +1298,15 @@ SC_GLASS = "pi_meter_glass"
 SEE_THROUGH.add(SC_GLASS)
 
 
-def station_charger():
+def station_charger(label="1A-1"):
     f = Front(1, 520)
     T = f.T
     WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
     # The door's edge and its gasket line, the nameplate.
     f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
     f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
-    T(8.0, 29.4, "125 VDC BATTERY CHARGER", 11, fill=WHITE, bold=True)
-    T(8.0, 28.75, "480 VAC 3 PH IN    150 A DC OUT", 7, fill=WHITE, bold=True)
+    T(8.0, 29.4, f"BATTERY CHARGER {label}", 11, fill=WHITE, bold=True)
+    T(8.0, 28.75, "125 VDC 150 A OUT   480 VAC 3 PH IN", 7, fill=WHITE, bold=True)
     # The meters' faces (the case and glass are real): white, a quarter-arc scale, the unit; the needles are live.
     w, y0, y1 = SC_METER
     for x0, label, scale, unit, ch in SC_METERS:
@@ -1452,7 +1466,7 @@ VI_WINDOWS = [("INV|FAIL", "inv_fail"), ("LOW|DC", "inv_low_dc"), ("BYP SRC|FAIL
               ("ON|BYPASS", "inv_byp"), ("OUT OF|SYNC", "inv_sync"), ("FAN|FAIL", "inv_fan")]
 
 
-def vital_inverter():
+def vital_inverter(label="1A-1"):
     """The vital inverter's door, drawn (the case, glass, lamps and handles are real: vital_inverter_boxes)."""
     f = Front(1, 540)
     T = f.T
@@ -1460,7 +1474,7 @@ def vital_inverter():
     D = SC_DOOR
     f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
     f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
-    T(8.0, 29.4, "VITAL AC INVERTER", 11, fill=WHITE, bold=True)
+    T(8.0, 29.4, f"VITAL AC INVERTER {label}", 11, fill=WHITE, bold=True)
     T(8.0, 28.75, "125 VDC IN    120 VAC 60 HZ 10 KVA", 7, fill=WHITE, bold=True)
     w, y0, y1 = VI_METER
     for x0, label, scale, unit, ch in VI_METERS:

@@ -158,6 +158,11 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   - It only reads its battery; it draws nothing from it.
 - The 125 VDC Distribution Switchboard's ground detector lamps are live: both lit while the bus is alive (no ground
   faults are modelled).
+- **Train labels** (round 26): the DC rooms' equipment says which train and which one it is. The chargers and the
+  inverters are 1A-1, 1A-2, 1B-1 and 1B-2 (charger 1A-1 is the one MCC 1A's CHGR 1 feeds; inverter 1A-1 the one its
+  REG XF 1 backs), the DC switchboards 1A and 1B (their feeders labelled for their train), the motor control centres
+  MCC 1A and MCC 1B. The panels carry it as their variant and the MCC as its anchor's; one put down by hand is the
+  first (1A-1, 1A).
 - **Refuelling:**
   - Shut the reactor down (rods fully in, core below 120 °C), then press REFUEL. The vessel's head comes off and the
     core glows blue under its water.

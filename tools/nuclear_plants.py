@@ -109,9 +109,10 @@ class Part:
         if 0 <= x < w and 0 <= y < h and 0 <= z < d:
             self.g[x, y, z] = m
 
-    def prop(self, kind, x0, y, z0, facing="north"):
+    def prop(self, kind, x0, y, z0, facing="north", variant=None):
         """Decor equipment (drawn by the client, placed whole) with its footprint's corner nearest the origin at
-        (x0, z0): its body is emptied and its anchor written. Props go in last."""
+        (x0, z0): its body is emptied and its anchor written. Props go in last. variant: which of its labelled
+        versions (round 26, 8c: a DC room's MCC 1A or 1B)."""
         _, w, d, _ = EQUIPMENT_SIZES[kind]
         if facing == "north":
             anchor = (x0, y, z0 + d - 1)
@@ -125,7 +126,7 @@ class Part:
             assert 0 <= c[0] < self.size[0] and 0 <= c[1] < self.size[1] and 0 <= c[2] < self.size[2], (self.key, kind, c)
             self.g[c] = 0
             self.extras.pop(c, None)
-        self.extras[anchor] = f"jugcraft:{kind}[facing={facing}]"
+        self.extras[anchor] = f"jugcraft:{kind}[facing={facing}" + (f",variant={variant}]" if variant else "]")
         self.props.append((kind, *anchor, facing))
 
 

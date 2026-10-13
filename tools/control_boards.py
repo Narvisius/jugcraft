@@ -66,8 +66,8 @@ NAMEPLATES = {
     "nameplates3": ["MAIN BKR", "XFMR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "DC MCC", "INVERTER",
                     "HVAC", "LIGHTING", "SPARE", "LOAD CTR", "CHARGE", "BUS V", "480 V", "4160 V"],
     # The DC rooms' motor control centres (round 26, 8a).
-    "nameplates4": ["MCC", "CHGR 1", "CHGR 2", "REG XF 1", "REG XF 2", "EXH FAN", "DC AHU", "SPACE",
-                    "INCOMING", "METERING", "ON", "START", "STOP", "HAND", "AUTO", "RESET"],
+    "nameplates4": ["MCC 1A", "CHGR 1", "CHGR 2", "REG XF 1", "REG XF 2", "EXH FAN", "DC AHU", "SPACE",
+                    "INCOMING", "METERING", "MCC 1B", "START", "STOP", "HAND", "AUTO", "RESET"],
 }
 # The red and yellow plates among the instruments' (a reactor trip's, a warning's).
 PLATE_COLOURS = {("nameplates_inst", 12): "red", ("nameplates_inst", 13): "red", ("nameplates3", 14): "red", ("nameplates3", 15): "red"}
@@ -1279,7 +1279,9 @@ def motor_control_center(seed=131):
             fastener(k + 0.86, fy)
     # The lineup's name on the first two sections' top wireway.
     legend_plate(0.5, 2.14, "480 V", 0.2, 0.05)
-    legend_plate(1.5, 2.14, "MCC", 0.26, 0.05)
+    # Its name by train (round 26, 8c): drawn by state, "v0" MCC 1A, "v1" MCC 1B (the anchor's variant).
+    for v, name in enumerate(("MCC 1A", "MCC 1B")):
+        b.face_box(1.5, 2.14, 0.3, 0.05, 0.02, named(name), sw("white"), b.state(f"v{v}")["still"])
     for k, x0, y0, x1, y1, legend, kind, breaker in mcc_units():
         cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
         door(x0, x1, y0, y1)

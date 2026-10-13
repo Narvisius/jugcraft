@@ -224,6 +224,9 @@ def textures_used():
 
 TEXTURES = {t for t in textures_used() if not t.startswith("mc_")} | set(CUBES) | {"hvac_duct", "hvac_duct_top", "pi_roller_slats", "pi_sign"} | \
     {"steel_door_top", "steel_door_bottom"}
+# The labelled panels' other drawings (round 26, 8c: their variants' models name them, not the boxes).
+TEXTURES |= {f"pi_{plant_office2.PN.texture_key(k, v)}_f_{p}" for k, info in plant_office2.PN.PANELS.items() if info.get("labels")
+             for v in range(1, len(info["labels"])) for p in range(2 * info["width"])}
 FRAMED_TEXTURES = set(framed_glass.draw_textures())   # the framed glass and the glass door (tools/framed_glass.py)
 GATE_TEXTURES = set(speed_gate.TEXTURES)              # the speed gate (tools/speed_gate.py)
 HI_RES = TEXTURES | set(ITEM_TEXTURES) | FRAMED_TEXTURES | GATE_TEXTURES
@@ -429,9 +432,22 @@ def write_assets(write, rid, assets, lang):
             for part, boxes in plant_office2.multi_parts(info):
                 g = [b[6]["south"].rstrip("!") for b in boxes if isinstance(b[6], dict) and "south" in b[6]] if vertical is True else []
                 write(models / f"{block}_{part}.json", model(boxes, g, rid))
-            write(assets / "blockstates" / f"{block}.json", {"variants": {
-                f"facing={face},part={part}": {"model": rid(f"block/{block}_{part}"), **({"y": y} if y else {})}
-                for face, y in TURN for part in range(w * rows)}})
+            labels = info.get("labels")
+            if labels:
+                # A panel labelled by train (round 26, 8c): each variant's parts are the first's with its own drawing.
+                PN = plant_office2.PN
+                for v in range(1, len(labels)):
+                    for part in range(w * rows):
+                        write(models / f"{block}_v{v}_{part}.json", {"parent": rid(f"block/{block}_{part}"), "textures": {
+                            f"pi_{block}_f_{part}": rid(f"block/pi_{PN.texture_key(block, v)}_f_{part}")}})
+                write(assets / "blockstates" / f"{block}.json", {"variants": {
+                    f"facing={face},part={part},variant={v}": {"model": rid(f"block/{block}_{part}" if v == 0 else f"block/{block}_v{v}_{part}"),
+                                                               **({"y": y} if y else {})}
+                    for face, y in TURN for part in range(w * rows) for v in range(len(labels))}})
+            else:
+                write(assets / "blockstates" / f"{block}.json", {"variants": {
+                    f"facing={face},part={part}": {"model": rid(f"block/{block}_{part}"), **({"y": y} if y else {})}
+                    for face, y in TURN for part in range(w * rows)}})
             if info.get("item3d"):
                 # The piece itself in the slot, in 3D (round 26: the station charger; docs/ITEM_ICONS.md leaves block
                 # models out of the flat icons' rules).

@@ -113,6 +113,11 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock implements S
 		return part;
 	}
 
+	/** The piece's variant property (its labelled or random versions), or null. */
+	public @org.jspecify.annotations.Nullable IntegerProperty variantProperty() {
+		return variant;
+	}
+
 	/** The part placed where you click. */
 	public int origin() {
 		return vertical ? width / 2 : (rows / 2) * width + width / 2;

@@ -19,7 +19,22 @@ import org.jspecify.annotations.Nullable;
  */
 public class LivePanelBlock extends MultiFurnitureBlock implements EntityBlock {
 	public LivePanelBlock(Properties properties, int width, int rows) {
-		super(properties, width, rows, true, 1, true, false, 15.6);
+		this(properties, width, rows, 1);
+	}
+
+	/**
+	 * variants: a panel labelled by train (round 26, 8c: the DC rooms' chargers, inverters and switchboards say 1A-1,
+	 * 1B-2 and so on; tools/plant_panels.py PANELS "labels"). The plants place their own; one put down by hand is the
+	 * first.
+	 */
+	public LivePanelBlock(Properties properties, int width, int rows, int variants) {
+		super(properties, width, rows, true, variants, true, false, 15.6);
+	}
+
+	@Override
+	public net.minecraft.world.level.block.state.@Nullable BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext context) {
+		BlockState state = super.getStateForPlacement(context);
+		return state == null || variantProperty() == null ? state : state.setValue(variantProperty(), 0);
 	}
 
 	@Override

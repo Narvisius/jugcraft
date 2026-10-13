@@ -173,6 +173,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		float power, output, temperature;
 		/** A load centre: its breakers (a bit each, closed when set), its bus's charge (0..1), each breaker's flow (JE/t). */
 		int breakers = Switchgear.DEFAULT_BREAKERS;
+		/** Which labelled version it is (its anchor's variant: MCC 1A or 1B; round 26, 8c). */
+		int variant;
 		float charge;
 		final int[] flows = new int[Switchgear.BREAKERS];
 	}
@@ -223,6 +225,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			state.output = equipment.core.electric / (float) Math.max(1, equipment.core.design.ratedJe());
 			state.temperature = (float) equipment.core.temperature;
 		}
+		state.variant = equipment.getBlockState().hasProperty(io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.VARIANT)
+				? equipment.getBlockState().getValue(io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.VARIANT) : 0;
 		if (state.kind.board() && equipment.bus != null) {
 			state.breakers = equipment.breakers;
 			state.charge = equipment.bus.getAmount() / (float) equipment.busCapacity();
@@ -405,7 +409,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				// stand.
 				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				if (detail) {
-					Mesh[] live = loadCentreMesh(state.kind, state.breakers);
+					Mesh[] live = loadCentreMesh(state.kind, state.breakers, state.variant);
 					live[0].replay(p, consumer, state.facing, state.lightLevel);
 					live[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				}
@@ -437,10 +441,13 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	/** The load centre's breaker lamps and flags by its breakers (still, lit), and its meters' dark glass. */
 	private static final java.util.Map<Integer, Mesh[]> LOAD_CENTRE = new java.util.HashMap<>();
 
-	static Mesh[] loadCentreMesh(EquipmentKind kind, int breakers) {
-		return LOAD_CENTRE.computeIfAbsent(kind.ordinal() << 16 | breakers, b -> {
+	static Mesh[] loadCentreMesh(EquipmentKind kind, int breakers, int variant) {
+		return LOAD_CENTRE.computeIfAbsent(kind.ordinal() << 18 | variant << 14 | breakers, b -> {
 			Mesh still = new Mesh(), lit = new Mesh();
 			loadCentreLive(new Frame(still, true), new Frame(lit, true), kind, breakers);
+			// Its name by its variant (a motor control centre's MCC 1A or 1B), where the board draws one.
+			ControlBoards.state(kind, "v" + variant, new Frame(still, true), false);
+			ControlBoards.state(kind, "v" + variant, new Frame(lit, true), true);
 			return new Mesh[] {still, lit};
 		});
 	}
@@ -720,6 +727,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				ControlBoards.lit(kind, new Frame(lit, true));
 				loadCentreLive(new Frame(still, true), new Frame(lit, true), kind,
 						kind == EquipmentKind.MCC_LINEUP ? io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.DEFAULT_BREAKERS : Switchgear.DEFAULT_BREAKERS);
+				ControlBoards.state(kind, "v0", new Frame(still, true), false);
 			} else if (kind.decor()) {
 				PlantDecor.glow(kind, new Frame(lit, true));
 				PlantDecor.blink(kind, new Frame(lit, true), 0);

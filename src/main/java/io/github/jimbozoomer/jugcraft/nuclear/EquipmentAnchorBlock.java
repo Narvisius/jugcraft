@@ -32,17 +32,23 @@ import org.jspecify.annotations.Nullable;
  */
 public class EquipmentAnchorBlock extends BaseEntityBlock {
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+	/**
+	 * Which labelled version of a piece this is (round 26, 8c: the DC rooms' motor control centres, MCC 1A or 1B; the
+	 * client draws its name by it). 0 for everything else.
+	 */
+	public static final net.minecraft.world.level.block.state.properties.IntegerProperty VARIANT =
+			net.minecraft.world.level.block.state.properties.IntegerProperty.create("variant", 0, 3);
 	public final EquipmentKind kind;
 
 	public EquipmentAnchorBlock(EquipmentKind kind, Properties properties) {
 		super(properties);
 		this.kind = kind;
-		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(VARIANT, 0));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING);
+		builder.add(FACING, VARIANT);
 	}
 
 	/** Turns with a blueprint (or a structure) like any facing block. */

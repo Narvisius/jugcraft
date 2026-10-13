@@ -128,7 +128,7 @@ public final class PlantBuilder {
 					level.setBlock(cell, Blocks.AIR.defaultBlockState(), flags);
 				}
 			}
-			if (!EquipmentPlacement.place(level, pos, kind, face, null)) {
+			if (!EquipmentPlacement.place(level, pos, kind, face, null, state.getValue(EquipmentAnchorBlock.VARIANT))) {
 				continue;
 			}
 			equipment++;
