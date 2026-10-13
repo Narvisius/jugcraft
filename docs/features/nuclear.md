@@ -755,6 +755,8 @@ day ("silo design sheet looks fine").
 - **Stage 2 and later:** the spent fuel pool, dry casks and hardened drones; cooling towers and the water intake port;
   HALEU and MOX; meltdown, blast, fallout and corium; the small modular and EPR plants.
 - **Operator commands:** `/nuclear showcase` builds a running unit; `/nuclear build <blueprint> [fuelled]` builds any
-  blueprint at once; `/radiation dose|check` are for testing.
+  blueprint at once where you stand; `/nuclear plant small|medium|large [fuelled]` builds that pre-made plant as it is
+  now just in front of you (turned the way you face, its near side four blocks ahead, centred on you, its ground at your
+  feet); `/radiation dose|check` are for testing.
 - **Not yet:** the plants' transformer yards and switchyards are scenery: connect the main transformers (or the small
   turbines) to power lines yourself. Basins are dry.

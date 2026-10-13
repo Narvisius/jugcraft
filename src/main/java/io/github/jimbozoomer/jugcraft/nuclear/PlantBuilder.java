@@ -29,10 +29,20 @@ import org.jspecify.annotations.Nullable;
  *   linked to the nearest reactor. With {@code fuelled} the reactors are also loaded (rods fully in: start them from
  *   the console).</li>
  *   <li>{@code /nuclear showcase} builds the stage-1 running unit ({@link ReactorShowcase}).</li>
+ *   <li>{@code /nuclear plant <small|medium|large> [fuelled]} (Justin, 2026-10-13: "make a command so someone can load
+ *   in the current medium nuclear plant in game in front of them") builds that pre-made plant as its blueprint has it
+ *   now, just in front of the player: turned the way they face, its near side {@link #AHEAD} blocks ahead of them and
+ *   centred on them, its ground at their feet.</li>
  * </ul>
  * A whole plant is a third of a million blocks: the command takes a few seconds and loads the chunks it builds in.
  */
 public final class PlantBuilder {
+	/** The pre-made plants by the name the plant command takes. */
+	public static final java.util.Map<String, String> PLANTS = java.util.Map.of("small", "nuclear_small_modular", "medium", "nuclear_medium_pwr",
+			"large", "nuclear_large_epr");
+	/** How far in front of the player a plant built by the plant command starts (blocks). */
+	public static final int AHEAD = 4;
+
 	private PlantBuilder() {
 	}
 
@@ -45,6 +55,11 @@ public final class PlantBuilder {
 								.executes(context -> build(context.getSource(), StringArgumentType.getString(context, "blueprint"), false))
 								.then(Commands.literal("fuelled")
 										.executes(context -> build(context.getSource(), StringArgumentType.getString(context, "blueprint"), true)))))
+						.then(Commands.literal("plant").then(Commands.argument("size", StringArgumentType.word())
+								.suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of("small", "medium", "large"), builder))
+								.executes(context -> plant(context.getSource(), StringArgumentType.getString(context, "size"), false))
+								.then(Commands.literal("fuelled")
+										.executes(context -> plant(context.getSource(), StringArgumentType.getString(context, "size"), true)))))
 						.then(Commands.literal("showcase").then(Commands.literal("plants").executes(context -> {
 							ServerPlayer player = context.getSource().getPlayerOrException();
 							PlantShowcase.build(player.level(), player, player.blockPosition());
@@ -84,6 +99,51 @@ public final class PlantBuilder {
 		source.sendSuccess(() -> Component.translatable("message.jugcraft.nuclear.built", blueprint.name, String.format("%,d", result.blocks()),
 				result.equipment(), result.reactors(), ms / 1000.0), true);
 		return 1;
+	}
+
+	/** The plant command: a pre-made plant built just in front of the player. */
+	private static int plant(CommandSourceStack source, String size, boolean fuelled) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+		ServerPlayer player = source.getPlayerOrException();
+		String id = PLANTS.get(size.toLowerCase(java.util.Locale.ROOT));
+		Blueprint blueprint = id == null ? null : Blueprint.get(id, false);
+		if (blueprint == null) {
+			source.sendFailure(Component.translatable("message.jugcraft.nuclear.plant_unknown", size));
+			return 0;
+		}
+		Direction facing = player.getDirection();
+		Rotation rotation = BlueprintItem.rotationFor(facing);
+		BlockPos stake = inFront(blueprint, rotation, player.blockPosition(), facing);
+		long started = System.currentTimeMillis();
+		Result result = build(player.level(), blueprint, stake, rotation, player.getUUID(), fuelled);
+		long ms = System.currentTimeMillis() - started;
+		source.sendSuccess(() -> Component.translatable("message.jugcraft.nuclear.built", blueprint.name, String.format("%,d", result.blocks()),
+				result.equipment(), result.reactors(), ms / 1000.0), true);
+		return 1;
+	}
+
+	/**
+	 * Where to put a blueprint's stake, turned by {@code rotation}, so it stands in front of a player at {@code at} facing
+	 * {@code facing}: its near side {@link #AHEAD} blocks ahead, centred across their view, its ground at their feet.
+	 */
+	public static BlockPos inFront(Blueprint blueprint, Rotation rotation, BlockPos at, Direction facing) {
+		int minX = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
+		for (int i = 0; i < blueprint.size(); i++) {
+			BlockPos o = blueprint.offset(i, rotation);
+			minX = Math.min(minX, o.getX());
+			maxX = Math.max(maxX, o.getX());
+			minZ = Math.min(minZ, o.getZ());
+			maxZ = Math.max(maxZ, o.getZ());
+		}
+		if (minX > maxX) {
+			return at.relative(facing, AHEAD);
+		}
+		int midX = Math.floorDiv(minX + maxX, 2), midZ = Math.floorDiv(minZ + maxZ, 2);
+		return switch (facing) {
+			case NORTH -> new BlockPos(at.getX() - midX, at.getY(), at.getZ() - AHEAD - maxZ);
+			case SOUTH -> new BlockPos(at.getX() - midX, at.getY(), at.getZ() + AHEAD - minZ);
+			case EAST -> new BlockPos(at.getX() + AHEAD - minX, at.getY(), at.getZ() - midZ);
+			default -> new BlockPos(at.getX() - AHEAD - maxX, at.getY(), at.getZ() - midZ);
+		};
 	}
 
 	/** What a build placed. */

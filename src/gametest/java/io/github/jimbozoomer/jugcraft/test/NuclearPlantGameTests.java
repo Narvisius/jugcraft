@@ -1117,4 +1117,38 @@ public class NuclearPlantGameTests {
 				&& "01:15".equals(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.span(1_250)), "the clocks: the game's day from 06:00, an hour a 1,000 ticks");
 		helper.succeed();
 	}
+
+	/**
+	 * The plant command (Justin, 2026-10-13: "load in the current medium nuclear plant in game in front of them"): facing
+	 * each way, the medium plant's stake puts the whole plant in front of the player, its near side four blocks ahead and
+	 * centred across their view.
+	 */
+	@GameTest
+	public void plantCommandBuildsInFrontOfThePlayer(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		Blueprint print = Blueprint.get(PlantBuilder.PLANTS.get("medium"), false);
+		helper.assertTrue(print != null, "the medium plant's blueprint");
+		BlockPos at = new BlockPos(100, 64, -40);
+		for (Direction facing : Direction.Plane.HORIZONTAL) {
+			Rotation rotation = io.github.jimbozoomer.jugcraft.blueprint.BlueprintItem.rotationFor(facing);
+			BlockPos stake = PlantBuilder.inFront(print, rotation, at, facing);
+			int near = Integer.MAX_VALUE, left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
+			for (int i = 0; i < print.size(); i++) {
+				BlockPos p = stake.offset(print.offset(i, rotation));
+				int ahead = (p.getX() - at.getX()) * facing.getStepX() + (p.getZ() - at.getZ()) * facing.getStepZ();
+				Direction side = facing.getClockWise();
+				int across = (p.getX() - at.getX()) * side.getStepX() + (p.getZ() - at.getZ()) * side.getStepZ();
+				near = Math.min(near, ahead);
+				left = Math.min(left, across);
+				right = Math.max(right, across);
+			}
+			helper.assertTrue(near == PlantBuilder.AHEAD, facing + ": the plant's near side " + near + " blocks ahead, not " + PlantBuilder.AHEAD);
+			helper.assertTrue(Math.abs(left + right) <= 1, facing + ": centred across the view (" + left + " to " + right + ")");
+			helper.assertTrue(stake.getY() == at.getY(), facing + ": its ground at the player's feet");
+		}
+		helper.succeed();
+	}
 }

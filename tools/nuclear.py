@@ -224,6 +224,7 @@ LANG = {
     "message.jugcraft.nuclear.condenser_water": "Cooling water: %s of %s mB",
     "message.jugcraft.nuclear.showcase": "Built a running reactor unit (vessel at %s)",
     "message.jugcraft.nuclear.built": "Built %s: %s blocks, %s pieces of equipment, %s reactor(s), in %s s",
+    "message.jugcraft.nuclear.plant_unknown": "No pre-made plant called %s: try small, medium or large",
 }
 
 R = "screen.jugcraft.reactor."
