@@ -98,6 +98,13 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
     switchgear room's load centres. Each one's **CHARGER** breaker (the lower breaker of its third section) feeds its
     train's two battery chargers by a cable in the floor slab. A plant built with `fuelled` starts with every load
     center and station battery full.
+- **Station Battery** (rebuilt in round 25b): a two-step seismic rack four blocks long holding 30 flooded lead-acid
+  cells, every part modelled. Each cell is a clear jar on its foot, and you can see in: the plates standing in the
+  acid (brown positives, grey negatives) on the sediment space, the acid's level with its MAX and MIN marks, the
+  lead bus bars and the posts rising from them. On top are the black cover, a flame-arrester vent, the posts with
+  red and black collars and bolts, and bolted intercell links; rubber spacers sit between the jars. Restraint rails
+  run along the front and back of both steps, and the engraved nameplate reads 125 VDC STATION BATTERY, 60 CELLS -
+  NO SMOKING.
 - **Station batteries hold charge** (round 25): a Station Battery rack holds 1,500,000 JE. Any cable touching it can
   charge it or draw on it (4,096 JE/t). Right-click it to see its charge and whether it is charging, discharging or
   on float.
@@ -211,7 +218,7 @@ blueprint (for players who lay out their own plant).
 - **The medium plant's control building** (round 18, `tools/medium_plant.py` `control_building`), four floors laid
   out like a real plant's (NRC fire hazards analyses of TMI, Susquehanna and Peach Bottom; IEEE 484 battery rooms):
   - Grade: Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (Station Battery, four
-    blocks long, 30 cells in clear jars), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
+    blocks long, 30 cells in clear jars, below), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room
     (both trains' 480 V load centers face to face across an aisle of rubber mats, fed from the main transformer and

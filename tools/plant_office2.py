@@ -1172,7 +1172,7 @@ def makers():
 
 # Kept see-through (translucent) instead of cut out.
 TRANSLUCENT = O4.TRANSLUCENT | {"pi_glass_top", "pi_glass_edge", "pi_lab_glass", "pi_liquid_blue", "pi_liquid_amber", "pi_liquid_green",
-               "pi_liquid_clear", "pi_amber_glass", "pi_bottle_plastic", "pi_bottle_water"}
+               "pi_liquid_clear", "pi_amber_glass", "pi_bottle_plastic", "pi_bottle_water"} | PN.SEE_THROUGH
 RICH = {"pi_medicine_front", "pi_binder_spines", "pi_vitals", "pi_circuit", "pi_pc_inside", "pi_folders", "pi_aed",
         "pi_plant_screen_a", "pi_plant_screen_b", "pi_plant_screen_c"} | \
     {f"pi_blueprint_{i}" for i in range(6)} | {f"pi_plant_top_{i}" for i in range(8)} | \

@@ -657,6 +657,14 @@ SB_POST = 0.9                                     # how far the posts stand up o
 # Where the two main cables rise out of the rack's back at its right-hand end (red: positive, black: negative), as the
 # riser above it (dc_cable_riser) carries them on: x across the block they rise in, z.
 SB_RISE_RED, SB_RISE_BLACK, SB_RISE_Z = (6.2, 7.8), (8.6, 10.2), (0.5, 2.1)
+# The station battery's clear parts (kept translucent: plant_office2.TRANSLUCENT).
+SEE_THROUGH = {"pi_sb_jar_glass", "pi_sb_acid"}
+# The nameplate (round 25b): where it is (x0, y0, x1, y1, on the lower step's front rail, in the first block) and the
+# band of its texture it shows, so the texture's pixel letters stay square on it (128 texels across its 12 pixels,
+# 15 texel rows down its 1.4).
+SB_TAG = (2.5, 2.0, 14.5, 3.4)
+SB_TAG_ROWS = 15
+SB_TAG_UV = [0, 0, 16, round(16 * SB_TAG_ROWS / 128, 4)]
 
 
 def station_battery():
@@ -688,26 +696,18 @@ def station_battery():
         boxes.append((0.8, hy0 - 1.2, z0, 63.2, hy0, z0 + 0.8, "pi_sb_rail"))
     for z0 in (lz0 + 0.2, lz1 - 1.0):
         boxes.append((0.8, ly0 - 1.2, z0, 63.2, ly0, z0 + 0.8, "pi_sb_rail"))
-    # The cells.
-    for (z0, z1, y0, y1), jar in ((SB_LOW, "pi_sb_jar_low"), (SB_HIGH, "pi_sb_jar_high")):
-        zc = (z0 + z1) / 2
+    # The seismic restraint (round 25b): on each step a rail along the front and the back of the cells at two thirds of
+    # their height, held by posts at the ends and in the middle, so an earthquake can't walk the cells off the rack.
+    for (z0, z1, y0, y1) in (SB_LOW, SB_HIGH):
+        ry = y0 + 6.4
+        for rz0, rz1 in ((z1 + 0.1, z1 + 0.6), (z0 - 0.6, z0 - 0.1)):
+            boxes.append((0.8, ry, rz0, 63.2, ry + 0.6, rz1, "pi_sb_rail"))
+            for px in (0.9, 31.7, 62.5):
+                boxes.append((px, y0 - 1.2 if px != 31.7 else y0, rz0 + 0.05, px + 0.6, ry, rz1 - 0.05, B))
+    # The cells: each a clear jar with its plates, bus bars and acid inside (sb_cell).
+    for step in (SB_LOW, SB_HIGH):
         for k in range(SB_CELLS):
-            x0 = SB_X0 + k * SB_PITCH
-            x1 = x0 + SB_W
-            boxes.append((x0, y0, z0, x1, y1, z1, jar))
-            boxes.append((x0 - 0.05, y1, z0 - 0.05, x1 + 0.05, y1 + SB_COVER, z1 + 0.05, "pi_sb_cover"))
-            top = y1 + SB_COVER
-            # The flame-arrester vent in the middle of the cover.
-            xm = (x0 + x1) / 2
-            boxes.append((xm - 0.45, top, zc - 1.6, xm + 0.45, top + 0.7, zc - 0.7, {"*": "pi_sb_vent", "up": "pi_sb_vent_top"}))
-            # Posts: positive (red collar) and negative, alternating so each connector runs straight to the next cell.
-            for px, plus in ((x0 + 0.6, k % 2 == 0), (x1 - 1.3, k % 2 == 1)):
-                boxes.append((px - 0.1, top, zc - 0.45, px + 0.8, top + 0.25, zc + 0.45, "pi_pnl_red" if plus else "pi_pnl_black"))
-                boxes.append((px, top + 0.25, zc - 0.35, px + 0.7, top + SB_POST, zc + 0.35, "pi_sb_post"))
-            if k < SB_CELLS - 1:
-                # The intercell connector, from this cell's right post to the next cell's left post (centre to centre,
-                # its ends inside the posts), under the posts' tops.
-                boxes.append((x1 - 0.95, top + 0.45, zc - 0.5, x1 + SB_PITCH - SB_W + 0.95, top + 0.75, zc + 0.5, "pi_link"))
+            boxes += sb_cell(SB_X0 + k * SB_PITCH, step, k, k < SB_CELLS - 1)
     # The jumper from the lower step's first cell up to the upper step's first cell, round the left end.
     lt, ht = ly1 + SB_COVER, hy1 + SB_COVER
     lzc, hzc = (lz0 + lz1) / 2, (hz0 + hz1) / 2
@@ -736,9 +736,55 @@ def station_battery():
               (62.0, ht + 2.6, rz0 + 0.4, 62.8, ht + 3.4, lzc - 0.4, black),
               (bx0 + 0.4, ht + 2.6, rz0 + 0.4, 62.0, ht + 3.4, rz1 - 0.4, black),
               (bx0, ht + 2.4, rz0, bx1, 32, rz1, black)]
-    # The battery's nameplate on the lower step's front rail, at the left.
-    boxes.append((3.0, ly0 - 1.1, lz1 - 0.2, 15.0, ly0 - 0.1, lz1 - 0.12, {"*": "pi_pnl_white", "south": "pi_sb_tag!"}))
+    # The battery's nameplate on the lower step's front rail, at the left: engraved, sized so its pixel letters stay
+    # square (Justin, round 25b: the old one was too blurry to read).
+    boxes.append((SB_TAG[0], SB_TAG[1], lz1 + 0.02, SB_TAG[2], SB_TAG[3], lz1 + 0.14, {"*": "pi_pnl_white", "south": ("pi_sb_tag", SB_TAG_UV)}))
     return boxes
+
+
+def sb_cell(x0, step, k, linked):
+    """One flooded lead-acid cell in its clear jar (round 25b; Justin: "I want the battery racks to look better"): the jar
+    on its foot; through it the plates standing in the acid, dark brown positives and grey negatives, on the sediment at
+    the bottom, the lead bus bars across their tops and the posts rising from them; the MAX and MIN lines on the jar; on
+    top the black cover, the flame-arrester vent, the two posts with their colour collars and bolts, and the
+    intercell connector bolted across to the next cell; a rubber spacer between it and the next."""
+    z0, z1, y0, y1 = step
+    x1 = x0 + SB_W
+    zc = (z0 + z1) / 2
+    acid = y1 - 1.6
+    plates_top = y1 - 2.4
+    top = y1 + SB_COVER
+    out = [(x0 + 0.1, y0, z0 + 0.1, x1 - 0.1, y0 + 0.4, z1 - 0.1, "pi_sb_jar_foot"),
+           (x0, y0 + 0.4, z0, x1, y1, z1, "pi_sb_jar_glass"),
+           (x0 + 0.15, y0 + 0.7, z0 + 0.15, x1 - 0.15, acid, z1 - 0.15, "pi_sb_acid"),
+           (x0 + 0.3, y0 + 0.55, z0 + 0.3, x1 - 0.3, y0 + 1.0, z1 - 0.3, "pi_sb_sediment")]
+    for i in range(6):
+        px = x0 + 0.4 + i * 0.5
+        out.append((px, y0 + 1.0, z0 + 0.4, px + 0.28, plates_top, z1 - 0.4, "pi_sb_plate_pos" if i % 2 == 0 else "pi_sb_plate_neg"))
+    # The bus bars across the plates' lugs (positive behind, negative in front), the posts down to them.
+    out += [(x0 + 0.35, plates_top, zc - 0.5, x1 - 0.35, plates_top + 0.4, zc, "pi_sb_post"),
+            (x0 + 0.35, plates_top, zc, x1 - 0.35, plates_top + 0.4, zc + 0.5, "pi_sb_lead")]
+    posts = ((x0 + 0.6, k % 2 == 0), (x1 - 1.3, k % 2 == 1))
+    for px, plus in posts:
+        out.append((px, plates_top + 0.4, zc - 0.35, px + 0.7, y1 - 0.15, zc + 0.35, "pi_sb_post"))
+    # The MAX and MIN lines moulded on the jar's front.
+    for ly in (acid + 0.45, acid - 0.45):
+        out.append((x0 + 0.3, ly - 0.06, z1, x0 + 1.4, ly + 0.06, z1 + 0.12, "pi_pnl_white"))
+    # The cover, the vent (its collar and white ceramic flame arrester), the posts, their collars and bolts.
+    xm = (x0 + x1) / 2
+    out += [(x0 - 0.05, y1, z0 - 0.05, x1 + 0.05, top, z1 + 0.05, "pi_sb_cover"),
+            (xm - 0.5, top, zc - 1.7, xm + 0.5, top + 0.25, zc - 0.7, "pi_sb_frame"),
+            (xm - 0.35, top + 0.25, zc - 1.55, xm + 0.35, top + 1.0, zc - 0.85, "pi_sb_vent_top"),
+            (xm - 0.42, top + 1.0, zc - 1.62, xm + 0.42, top + 1.15, zc - 0.78, "pi_sb_frame")]
+    for px, plus in posts:
+        out += [(px - 0.1, top, zc - 0.45, px + 0.8, top + 0.25, zc + 0.45, "pi_pnl_red" if plus else "pi_pnl_black"),
+                (px, top + 0.25, zc - 0.35, px + 0.7, top + SB_POST, zc + 0.35, "pi_sb_post"),
+                (px + 0.12, top + SB_POST, zc - 0.23, px + 0.58, top + SB_POST + 0.2, zc + 0.23, "pi_steel")]
+    if linked:
+        # The intercell connector to the next cell's left post, under the posts' tops; a rubber spacer between the jars.
+        out += [(x1 - 0.95, top + 0.45, zc - 0.5, x1 + SB_PITCH - SB_W + 0.95, top + 0.75, zc + 0.5, "pi_link"),
+                (x1, y0 + 3.5, zc - 1.2, x1 + SB_PITCH - SB_W, y0 + 6.5, zc + 1.2, "pi_sb_cover")]
+    return out
 
 
 def part(key, c, r):
@@ -754,6 +800,15 @@ def part(key, c, r):
         t = b[6]
         if isinstance(t, dict):
             t = {k: (f"{F}_{r * width + c}" if v == F else v) for k, v in t.items()}
+        # Where a see-through box goes on into the next block, its face on the cut is inside it: left out (round 25b: a
+        # clear jar cut in two showed a pane of glass across its middle). Solid boxes keep theirs (the art check counts
+        # a solid box without them as a hole).
+        cut = [f for f, inside in (("west", b[0] < x0 - 1e-6), ("east", b[3] > x1 + 1e-6), ("down", b[1] < y0 - 1e-6), ("up", b[4] > y1 + 1e-6))
+               if inside] if isinstance(t, str) and t in SEE_THROUGH else []
+        if cut:
+            t = dict(t) if isinstance(t, dict) else {"*": t}
+            for f in cut:
+                t[f] = None
         out.append((x0 - c * 16, y0 - r * 16, b[2], x1 - c * 16, y1 - r * 16, b[5], t) + tuple(b[7:]))
     return out
 
@@ -804,40 +859,24 @@ def _battery_tag():
     return img.resize((128, 128))
 
 
-def _sb_jar(low):
-    """A cell's clear jar as the face it is on shows it (by position, so cells can straddle blocks): through the jar
-    the plates (dark brown positive, grey negative, white separators between), the electrolyte line, the MIN and MAX
-    lines, the bus bar joining the plates' lugs under the cover, the clear space above the acid. The lower step's jars
-    stand 3.4 to 14.4 pixels up their block, the upper step's 0.4 to 11.4 in the block above."""
-    y0, y1 = (3.4, 14.4) if low else (0.4, 11.4)
-    S = 128
-    img = Image.new("RGBA", (S, S), (210, 222, 226, 255))
+def _sb_tag():
+    """The battery's engraved nameplate in the pixel font (tools/control_boards.py), one texel a font pixel, in the
+    texture's top band (SB_TAG_UV): its name, and the warning in red."""
+    import control_boards as CB
+    img = Image.new("RGBA", (128, 128), (236, 236, 230, 255))
     d = ImageDraw.Draw(img)
-    v = lambda y: int(round((16 - y) * S / 16))
-    plates_top, acid = y1 - 2.2, y1 - 1.6
-    d.rectangle([0, v(acid), S - 1, v(y0)], fill=(70, 74, 72, 255))
-    for x in range(0, S, 6):
-        d.rectangle([x, v(plates_top), x + 2, v(y0 + 0.9)], fill=(98, 72, 56, 255))
-        d.rectangle([x + 3, v(plates_top), x + 4, v(y0 + 0.9)], fill=(118, 122, 126, 255))
-        d.line([(x + 5, v(plates_top)), (x + 5, v(y0 + 0.9))], fill=(228, 228, 222, 255))
-    # The sediment space at the bottom, the jar's foot.
-    d.rectangle([0, v(y0 + 0.9), S - 1, v(y0)], fill=(56, 58, 58, 255))
-    d.rectangle([0, v(y0 + 0.3), S - 1, v(y0)], fill=(150, 160, 164, 255))
-    # The electrolyte's surface and the clear space above it, the bus bar.
-    d.rectangle([0, v(y1), S - 1, v(acid)], fill=(196, 212, 218, 255))
-    d.rectangle([0, v(acid) - 1, S - 1, v(acid) + 1], fill=(120, 170, 200, 255))
-    d.rectangle([0, v(y1 - 0.5), S - 1, v(y1 - 1.1)], fill=(120, 124, 128, 255))
-    for y, colour in ((acid - 0.45, (230, 60, 50, 255)), (acid + 0.3, (230, 60, 50, 255))):
-        d.line([(0, v(y)), (S - 1, v(y))], fill=colour, width=1)
+    rows = SB_TAG_ROWS
+    d.rectangle([0, 0, 127, rows - 1], fill=(238, 238, 232, 255), outline=(60, 60, 60, 255))
+    for line, y, ink in (("125 VDC STATION BATTERY", 2, (24, 24, 26, 255)), ("60 CELLS - NO SMOKING", 8, (190, 28, 24, 255))):
+        CB.text(d, (128 - CB.text_width(line)) // 2, y, line, ink)
     return img
 
 
-def _sb_tag():
-    img = Image.new("RGBA", (384, 32), (240, 240, 234, 255))
-    d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, 383, 31], outline=(30, 30, 30, 255), width=2)
-    d.text((192, 16), "125 VDC STATION BATTERY  -  NO SMOKING", font=cfont(17, True), fill=INK, anchor="mm")
-    return img.resize((256, 256))
+def _see_through(colour, alpha, seed):
+    """A clear material (a cell's jar, its acid): a faint tint, mostly see-through (kept translucent: plant_office2)."""
+    img = _solid(colour, seed, 0.02).convert("RGBA")
+    img.putalpha(alpha)
+    return img
 
 
 def makers():
@@ -854,9 +893,12 @@ def makers():
         # The station battery.
         "pi_sb_frame": lambda: _solid((34, 36, 38), 420, 0.08), "pi_sb_rail": lambda: _solid((44, 46, 50), 421, 0.1),
         "pi_sb_pan": lambda: _solid((52, 54, 56), 422, 0.06), "pi_sb_pan_top": lambda: _solid((40, 42, 44), 423, 0.15),
-        "pi_sb_jar_low": lambda: _sb_jar(True), "pi_sb_jar_high": lambda: _sb_jar(False),
+        "pi_sb_jar_glass": lambda: _see_through((218, 230, 232), 70, 431), "pi_sb_acid": lambda: _see_through((176, 206, 222), 46, 432),
+        "pi_sb_jar_foot": lambda: _solid((168, 178, 180), 433, 0.05), "pi_sb_sediment": lambda: _solid((72, 64, 58), 434, 0.1),
+        "pi_sb_plate_pos": lambda: _solid((96, 66, 50), 435, 0.08), "pi_sb_plate_neg": lambda: _solid((124, 128, 132), 436, 0.08),
+        "pi_sb_lead": lambda: _solid((112, 114, 116), 437, 0.05),
         "pi_sb_cover": lambda: _solid((26, 26, 28), 424, 0.04), "pi_sb_post": lambda: _solid((150, 150, 146), 425, 0.05),
-        "pi_sb_vent": lambda: _solid((232, 120, 40), 426, 0.03), "pi_sb_vent_top": lambda: _solid((200, 200, 196), 427, 0.03),
+        "pi_sb_vent_top": lambda: _solid((200, 200, 196), 427, 0.03),
         "pi_sb_cable": lambda: _solid((24, 24, 26), 428, 0.02), "pi_sb_cable_red": lambda: _solid((168, 30, 26), 429, 0.02),
         "pi_sb_copper": lambda: _solid((196, 120, 70), 430, 0.04), "pi_sb_tag": _sb_tag,
     })
@@ -865,7 +907,7 @@ def makers():
 
 # Kept at full size so the writing reads.
 SHARP = {f"pi_{key}_f_{p}" for key in DRAWINGS for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front",
-                                                                                           "pi_sb_tag", "pi_sb_jar_low", "pi_sb_jar_high"}
+                                                                                           "pi_sb_tag"}
 
 
 def icon(key):
