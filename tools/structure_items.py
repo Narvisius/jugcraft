@@ -22,7 +22,7 @@ from PIL import Image
 
 MOD = "jugcraft"
 # The material sheets drawn by Java with 64-pixel regions, and their flat item versions (8 pixels a region).
-ITEM_SHEETS = {"nuclear_equipment": 64, "power_lines": 64}
+ITEM_SHEETS = {"nuclear_equipment": 128, "power_lines": 64}   # nuclear_equipment's cells 128 px since round 26 (8e)
 ITEM_REGION = 8
 # Regions whose parts are used on their own (tools/control_boards.py: the colour swatches, the annunciator windows,
 # meter scales, dials and charts): each part keeps its own average, (columns, rows) of parts.

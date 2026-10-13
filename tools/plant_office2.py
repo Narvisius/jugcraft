@@ -474,7 +474,34 @@ def _tray_bend():
     return out
 
 
+# A feeder conduit up a wall (round 26, 8e: from a vital panel's top to the tray over it): 1-1/4-inch rigid conduit
+# a little off the wall (z 0 for a piece facing north), held by a one-hole strap; and the tray's drop on the wall side,
+# where it ends under the near rail in a bushing and its cable goes up over the rail into the tray.
+WALL_CONDUIT_Z, WALL_CONDUIT_R = 2.6, 0.7
+
+
+def _wall_conduit(y0, y1):
+    return _oct_y(8, WALL_CONDUIT_Z, y0, y1, WALL_CONDUIT_R, "pi_chrome")
+
+
+def _strap(y):
+    """A one-hole conduit strap: round the conduit's front, its foot screwed to the wall."""
+    z = WALL_CONDUIT_Z
+    r = WALL_CONDUIT_R + 0.12
+    return [(8 - r, y - 0.35, z - 0.05, 8 + r, y + 0.35, z + r, "pi_steel"), (8 + r, y - 0.35, 0, 9.9, y + 0.35, 0.2, "pi_steel"),
+            (8 + r, y - 0.35, 0.2, 8 + r + 0.15, y + 0.35, z, "pi_steel"), (9.2, y - 0.2, 0.2, 9.6, y + 0.2, 0.35, "pi_steel_dark")]
+
+
+def _tray_drop_wall():
+    z = WALL_CONDUIT_Z
+    return (_wall_conduit(0, 10.0) + _oct_y(8, z, 10.0, 10.5, 1.05, _GALV_DARK)
+            + _oct_y(8, z, 10.5, 14.3, 0.5, _JACKET) + _oct_z(8, 14.3, z, 4.6, 0.5, _JACKET))
+
+
 PIECES.update({
+    "wall_conduit": {"display": "Wall Conduit", "boxes": _wall_conduit(0, 16) + _strap(8)},
+    "ladder_tray_drop_wall": {"display": "Ladder Cable Tray (Wall Conduit Drop)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop_wall()},
     "ladder_tray": {"display": "Ladder Cable Tray", "boxes": _tray_rails() + _tray_rungs() + _tray_cables()},
     "ladder_tray_hanger": {"display": "Ladder Cable Tray (Hanger)", "boxes": _tray_rails() + _tray_rungs() + _tray_cables() + _trapeze()},
     "ladder_tray_bend": {"display": "Ladder Cable Tray (Bend)", "boxes": _tray_bend()},
@@ -510,6 +537,8 @@ CRAFTING = {
     "ladder_tray_drop": (["P P", "PPP", " S "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "ladder_tray_drop_pair": (["P P", "PPP", "S S"], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "conduit_pair": (["P P", "P P"], {"P": "#c:plates/steel"}, 4),
+    "wall_conduit": (["PN", "P ", "PN"], {"P": "#c:plates/steel", "N": "minecraft:iron_nugget"}, 8),
+    "ladder_tray_drop_wall": (["P P", "PPP", "S  "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "emergency_light_conduit": (["P", "P", "P"], {"P": "#c:plates/iron"}, 8),
     "emergency_light": (["G G", "PRP"], {"G": "minecraft:glowstone_dust", "P": "#c:plates/iron", "R": "minecraft:redstone"}, 2),
     "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),
@@ -592,7 +621,8 @@ def lprint_texture(v):
     return {f"pi_lprint_{v}_{c}": img.crop((c * S, 0, c * S + S, S)) for c in range(2)}
 
 
-def multi_parts(info, version=0):
+def multi_parts(info, version=0, open_=False):
+    """Each block of a multi-block piece: (part, boxes). open_: a panel with a door, open (PANELS "door")."""
     w, rows, vertical = info["multi"]
     items = O4.O5.meeting_items(version) if info.get("versions") else []
     for p in range(w * rows):
@@ -606,7 +636,7 @@ def multi_parts(info, version=0):
         elif info.get("copier"):
             yield p, O3.copier_part(c, r)
         elif info.get("panel"):
-            yield p, PN.part(info["panel"], c, r)
+            yield p, PN.part(info["panel"], c, r, open_)
         elif vertical:
             yield p, screen_boxes(info["screen"], c, r, w, rows)
         else:

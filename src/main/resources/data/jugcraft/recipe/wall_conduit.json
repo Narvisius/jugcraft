@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PN",
+    "P ",
+    "PN"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:wall_conduit",
+    "count": 8
+  }
+}

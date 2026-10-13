@@ -68,6 +68,9 @@ public final class EdgTelemetry {
 		 */
 		public boolean xfOn;
 		public double xfInV, xfOutV, xfOutA, xfTemp;
+		/** A vital panel (round 26, 8e): POWER ON, and its breakers (bit 0 the main, 1 to 12 its circuits, set closed). */
+		public boolean vbOn;
+		public int vbBreakers;
 		/** Sequencer steps done, and the one whose motor is starting now (-1 none). */
 		public int steps, starting = -1;
 		public String avr1 = "", avr2 = "", sequence = "";
@@ -161,7 +164,9 @@ public final class EdgTelemetry {
 				case "inv_sync" -> invRun && !invBypassOk ? 1 : 0;
 				// A regulating transformer's POWER ON lamp.
 				case "xf_on" -> xfOn ? 1 : 0;
-				default -> 0;
+				// A vital panel's POWER ON lamp; its breakers' handles (1 closed: ON).
+				case "vb_on" -> vbOn ? 1 : 0;
+				default -> channel.startsWith("vb_") ? vbBreakers >> Integer.parseInt(channel.substring(3)) & 1 : 0;
 			};
 		}
 
@@ -323,7 +328,12 @@ public final class EdgTelemetry {
 			o.invAcV = 0;
 			o.invHz = 0;
 		}
-		o.invAcA = o.invOnInv || o.invOnBypass ? 46 + 3 * noise(t * 0.4, seed, 3) : 0;
+		// Its load (round 26, 8e): what its vital panel's closed breakers draw, with a real meter's small wander; with no
+		// panel linked, the 46 A it always carried.
+		double load = panel.panel != null && level.getBlockEntity(panel.panel) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity vb
+				&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isVitalPanel(vb.getBlockState())
+				? io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.load(vb.breakers) : 46;
+		o.invAcA = o.invOnInv || o.invOnBypass ? load * (1 + 0.06 * noise(t * 0.4, seed, 3)) : 0;
 		if (!o.invDc) {
 			o.dcV = Math.min(o.dcV, 105);
 		}
@@ -340,6 +350,23 @@ public final class EdgTelemetry {
 	 * slowly (a time constant of about 90 s of game time): room temperature dead, about 58 degrees on no load, 96
 	 * carrying the load.
 	 */
+	/**
+	 * A 120 VAC vital panel (round 26, 8e; Justin: "Switchable breakers"): POWER ON lit while its inverter's output is
+	 * alive (on its battery or on its bypass) and its main is closed; its breakers' handles as they are set.
+	 */
+	public static void vitalPanel(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
+			double now) {
+		o.vbBreakers = panel.breakers;
+		boolean alive = false;
+		if (panel.inverter != null && level.getBlockEntity(panel.inverter) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity inv
+				&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(inv.getBlockState())) {
+			Snapshot feed = new Snapshot();
+			inverter(feed, inv, level, now);
+			alive = feed.invOnInv || feed.invOnBypass;
+		}
+		o.vbOn = alive && (panel.breakers & 1) != 0;
+	}
+
 	public static void transformer(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
 			double now) {
 		boolean on = panel.energized(level), loaded = false;

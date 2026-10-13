@@ -179,6 +179,8 @@ LANG = {
     "message.jugcraft.nuclear.breaker_open": "open",
     "message.jugcraft.nuclear.breaker_closed": "closed",
     "message.jugcraft.nuclear.breaker_not_owner": "This switchgear belongs to someone else",
+    "message.jugcraft.nuclear.vital_breaker": "Circuit %s, %s: %s",
+    "message.jugcraft.nuclear.vital_main": "Main breaker: %s",
     "message.jugcraft.nuclear.station_battery": "Station battery: %s%% charged (%s of %s JE), %s",
     "message.jugcraft.nuclear.battery_charging": "charging at %s JE/t",
     "message.jugcraft.nuclear.battery_discharging": "discharging at %s JE/t",
@@ -1058,8 +1060,8 @@ def geiger_item(rid):
 # client/NuclearRenderer.java reads these regions by name, in this order (checked by tools/check_mod_data.py).
 # Textures are drawn the right way up: the renderer puts the top of a cell at the top of every vertical face.
 # Eight cells across; nine rows since round 24 (512 x 576: client/NuclearRenderer.java ROWS).
-EQ_SHEET = 512
-EQ_CELL = 64
+EQ_SHEET = 1024
+EQ_CELL = 128          # round 26, 8e: 128 px cells (the lettered ones drawn at that size; the rest at 64, doubled)
 EQ_ROWS = 10
 EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
                 "concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey",
@@ -1359,11 +1361,20 @@ def draw_equipment_sheet():
     sheet = Image.new("RGBA", (EQ_SHEET, EQ_CELL * EQ_ROWS), (0, 0, 0, 0))
     for name in EQ_MATERIALS:
         col, row = eq_slot(name)
-        if name in control_boards.MAKERS:
-            sheet.paste(M.stylize(makers[name](), control_boards.COLOURS[name]), (col * EQ_CELL, row * EQ_CELL))
+        if name in control_boards.LETTERED_CELLS:
+            # Drawn at the cell's full size, its letters kept sharp (a small palette, no resizing).
+            img = makers[name]().convert("RGBA")
+            rgb = img.convert("RGB").quantize(colors=control_boards.COLOURS[name], method=Image.Quantize.MEDIANCUT,
+                                              dither=Image.Dither.NONE).convert("RGBA")
+            sheet.paste(rgb, (col * EQ_CELL, row * EQ_CELL))
             continue
-        many = ("mimic", "display", "fuel_rack", "switchgear", "gauge_board", "sign_autostart", "stencil_edg")
-        sheet.paste(M.stylize(makers[name](), 24 if name in many else 12 if name in ("screen", "desk", "lamp_red", "lamp_green", "cherenkov") else 10), (col * EQ_CELL, row * EQ_CELL))
+        if name in control_boards.MAKERS:
+            small = M.stylize(makers[name](), control_boards.COLOURS[name])
+        else:
+            many = ("mimic", "display", "fuel_rack", "switchgear", "gauge_board", "sign_autostart", "stencil_edg")
+            small = M.stylize(makers[name](), 24 if name in many else 12 if name in ("screen", "desk", "lamp_red", "lamp_green", "cherenkov") else 10)
+        # The game's 64 px look, each texel doubled to the sheet's 128 px cells.
+        sheet.paste(small.resize((EQ_CELL, EQ_CELL), Image.NEAREST), (col * EQ_CELL, row * EQ_CELL))
     return sheet
 
 

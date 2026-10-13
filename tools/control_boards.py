@@ -1677,24 +1677,52 @@ def _plate(d, x0, y0, w, h, legend, colour, alpha=255):
     text(d, x0 + (w - text_width(legend)) // 2, y0 + (h - 5) // 2, legend, ink + (alpha,))
 
 
+# The lettered cells (the nameplates and the titles) are drawn at 128 px a cell, twice the sheet's other cells, in
+# bold condensed letters (round 26, 8e; Justin: "Make sure all the text is clearly legible ... that applies to
+# everything": the 3 x 5 pixel font at 64 px was too coarse to read).
+LETTERED = 128
+_LETTER_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
+
+
+def _fit_text(d, x0, y0, w, h, legend, ink, size):
+    """The legend centred in a box, in the largest bold letters up to size that fit its width."""
+    from PIL import ImageFont
+    while True:
+        f = ImageFont.truetype(_LETTER_FONT, size)
+        if d.textlength(legend, font=f) <= w - 4 or size <= 7:
+            break
+        size -= 1
+    d.text((x0 + w / 2, y0 + h / 2 + 0.5), legend, font=f, fill=ink, anchor="mm")
+
+
+def _plate_hi(d, x0, y0, w, h, legend, colour):
+    bg, ink = INK[colour]
+    d.rectangle([x0, y0, x0 + w - 1, y0 + h - 1], fill=bg + (255,))
+    edge = tuple(max(0, c - 40) for c in bg)
+    d.rectangle([x0, y0, x0 + w - 1, y0 + h - 1], outline=edge + (255,))
+    _fit_text(d, x0, y0, w, h, legend, ink + (255,), 13)
+
+
 def _nameplate_cell(cell):
-    def make(seed, size=64):
+    def make(seed, size=LETTERED):
         img = Image.new("RGBA", (size, size), (0, 0, 0, 255))
         d = ImageDraw.Draw(img)
+        pw, ph = size // 2, size // 8
         for i, legend in enumerate(NAMEPLATES[cell]):
-            _plate(d, (i % 2) * 32, (i // 2) * 8, 32, 8, legend, PLATE_COLOURS.get((cell, i), "white"))
+            _plate_hi(d, (i % 2) * pw, (i // 2) * ph, pw, ph, legend, PLATE_COLOURS.get((cell, i), "white"))
         return img
     return make
 
 
-def titles(seed, size=64):
+def titles(seed, size=LETTERED):
     img = Image.new("RGBA", (size, size), (0, 0, 0, 255))
     d = ImageDraw.Draw(img)
+    rh = size // 8
     for i, (legend, colour) in enumerate(TITLES):
         bg, ink = INK[colour]
-        d.rectangle([0, i * 8, 63, i * 8 + 7], fill=bg + (255,))
-        # One line in the middle of its row; the panel's two-line title a little apart from each other.
-        text(d, (64 - text_width(legend)) // 2, i * 8 + (2 if i == 0 else 1), legend, ink + (255,))
+        d.rectangle([0, i * rh, size - 1, i * rh + rh - 1], fill=bg + (255,))
+        # One line in the middle of its row.
+        _fit_text(d, 0, i * rh, size, rh, legend, ink + (255,), 13)
     return img
 
 
@@ -1712,51 +1740,68 @@ def digital(seed, size=64):
     return img
 
 
-def placards(seed, size=64):
-    """A caution placard (top), the panel's number plate (bottom left) and a voltage warning (bottom right)."""
+def placards(seed, size=LETTERED):
+    """A caution placard (top), the panel's number plate (bottom left) and a voltage warning (bottom right); drawn at
+    128 px in bold letters (round 26, 8e: legible)."""
+    q = size / 64
+
+    def R(x0, y0, x1, y1, **kw):
+        d.rectangle([round(x0 * q), round(y0 * q), round((x1 + 1) * q) - 1, round((y1 + 1) * q) - 1], **kw)
+
+    def T(x0, y0, w, h, legend, ink, size_):
+        _fit_text(d, x0 * q, y0 * q, w * q, h * q, legend, ink, size_)
+
     img = Image.new("RGBA", (size, size), (240, 240, 234, 255))
     d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, 63, 31], fill=(244, 244, 238, 255), outline=(30, 30, 32, 255))
-    d.rectangle([1, 1, 62, 10], fill=(236, 196, 36, 255))
-    text(d, (64 - text_width("CAUTION")) // 2, 3, "CAUTION", (20, 20, 22, 255))
+    R(0, 0, 63, 31, fill=(244, 244, 238, 255), outline=(30, 30, 32, 255))
+    R(1, 1, 62, 10, fill=(236, 196, 36, 255))
+    T(0, 1, 64, 10, "CAUTION", (20, 20, 22, 255), 15)
     for k, line in enumerate(("TRANSFER PER", "AOP-8 ONLY")):
-        text(d, (64 - text_width(line)) // 2, 13 + k * 8, line, (20, 20, 22, 255))
-    d.rectangle([0, 32, 31, 63], fill=(24, 24, 26, 255))
-    d.rectangle([2, 34, 29, 61], outline=(200, 200, 196, 255))
+        T(0, 12 + k * 9, 64, 9, line, (20, 20, 22, 255), 14)
+    R(0, 32, 31, 63, fill=(24, 24, 26, 255))
+    R(2, 34, 29, 61, outline=(200, 200, 196, 255))
     for k, line in enumerate(("PNL", "RSP-1")):
-        text(d, (32 - text_width(line)) // 2, 40 + k * 9, line, (232, 232, 226, 255))
-    d.rectangle([32, 32, 63, 63], fill=(244, 244, 238, 255), outline=(30, 30, 32, 255))
-    d.rectangle([33, 33, 62, 42], fill=(188, 32, 28, 255))
-    text(d, 32 + (32 - text_width("DANGER")) // 2, 35, "DANGER", (250, 244, 236, 255))
+        T(2, 38 + k * 10, 28, 10, line, (232, 232, 226, 255), 15)
+    R(32, 32, 63, 63, fill=(244, 244, 238, 255), outline=(30, 30, 32, 255))
+    R(33, 33, 62, 42, fill=(188, 32, 28, 255))
+    T(32, 33, 32, 10, "DANGER", (250, 244, 236, 255), 14)
     for k, line in enumerate(("125 V", "DC")):
-        text(d, 32 + (32 - text_width(line)) // 2, 46 + k * 8, line, (20, 20, 22, 255))
+        T(32, 44 + k * 9, 32, 9, line, (20, 20, 22, 255), 14)
     return img
 
 
-def binders(seed, size=64):
+def binders(seed, size=LETTERED):
     """Procedure binders: four spines (left half, 8 x 64 each) and an open binder's two pages (right half, one above
-    the other): the procedure's number, its steps and their check boxes."""
+    the other): the procedure's number, its steps and their check boxes; drawn at 128 px (round 26, 8e)."""
+    q = size / 64
     img = Image.new("RGBA", (size, size), (240, 240, 234, 255))
     d = ImageDraw.Draw(img)
+
+    def R(x0, y0, x1, y1, **kw):
+        d.rectangle([round(x0 * q), round(y0 * q), round((x1 + 1) * q) - 1, round((y1 + 1) * q) - 1], **kw)
+
+    def L(x0, y0, x1, ink):
+        d.rectangle([round(x0 * q), round(y0 * q), round((x1 + 1) * q) - 1, round((y0 + 1) * q) - 1], fill=ink)
+
     r = random.Random(seed)
     for k, colour in enumerate(((168, 30, 28), (34, 70, 150), (230, 230, 224), (28, 28, 30))):
         x0 = k * 8
-        d.rectangle([x0, 0, x0 + 7, 63], fill=colour + (255,))
-        d.rectangle([x0 + 1, 8, x0 + 6, 30], fill=(244, 244, 238, 255))
+        R(x0, 0, x0 + 7, 63, fill=colour + (255,))
+        R(x0 + 1, 8, x0 + 6, 30, fill=(244, 244, 238, 255))
         for y in range(10, 29, 3):
-            d.line([(x0 + 2, y), (x0 + 2 + r.randint(1, 3), y)], fill=(40, 40, 44, 255))
+            L(x0 + 2, y, x0 + 2 + r.randint(1, 3), (40, 40, 44, 255))
         for y in (4, 56):
-            d.rectangle([x0 + 2, y, x0 + 5, y + 2], fill=(150, 150, 154, 255))
+            R(x0 + 2, y, x0 + 5, y + 2, fill=(150, 150, 154, 255))
     for page in range(2):
         y0 = page * 32
-        d.rectangle([32, y0, 63, y0 + 31], fill=(246, 246, 240, 255))
-        d.line([(32, y0), (32, y0 + 31)], fill=(170, 170, 166, 255))
+        R(32, y0, 63, y0 + 31, fill=(246, 246, 240, 255))
+        L(32, y0, 32, (170, 170, 166, 255))
         if page == 0:
-            text(d, 35, y0 + 2, "AOP-8", (20, 20, 22, 255))
-            d.line([(35, y0 + 8), (60, y0 + 8)], fill=(20, 20, 22, 255))
+            _fit_text(d, 34 * q, (y0 + 1) * q, 28 * q, 7 * q, "AOP-8", (20, 20, 22, 255), 13)
+            L(35, y0 + 8, 60, (20, 20, 22, 255))
         for y in range(y0 + (11 if page == 0 else 3), y0 + 30, 3):
-            d.rectangle([35, y, 36, y + 1], outline=(60, 60, 64, 255))
-            d.line([(38, y + 1), (38 + r.randint(10, 22), y + 1)], fill=(80, 80, 86, 255))
+            R(35, y, 36, y + 1, outline=(60, 60, 64, 255))
+            L(38, y + 1, 38 + r.randint(10, 22), (80, 80, 86, 255))
     return img
 
 
@@ -1766,8 +1811,9 @@ MAKERS = {"lamp_white": lamp_white, "lamp_amber": lamp_amber, "annunciator": ann
           "nameplates_inst": _nameplate_cell("nameplates_inst"), "titles": titles, "digital": digital,
           "placards": placards, "binders": binders, "nameplates3": _nameplate_cell("nameplates3"),
           "nameplates4": _nameplate_cell("nameplates4")}
-# Colours kept when stylizing (the swatches keep every patch's colour exactly; the lettered cells are drawn at the
-# sheet's own 64 px and keep theirs too).
+# Colours kept when stylizing (the swatches keep every patch's colour exactly; the lettered cells keep theirs too).
+# The lettered cells are drawn at 128 px and kept so (tools/nuclear.py draw_equipment_sheet).
+LETTERED_CELLS = {"nameplates", "nameplates2", "nameplates_inst", "nameplates3", "nameplates4", "titles", "placards", "binders"}
 COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 24, "drpi": 16, "lamp_white": 12, "lamp_amber": 12,
            "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32, "nameplates3": 32,
            "nameplates4": 32}

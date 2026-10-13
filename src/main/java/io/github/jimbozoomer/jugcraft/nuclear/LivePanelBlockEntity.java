@@ -65,6 +65,16 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * Synced; the client reads the bypass from that transformer.
 	 */
 	public @Nullable BlockPos xf;
+	/**
+	 * A vital inverter (round 26, 8e): the 120 VAC vital panel it feeds (the nearest with its label in reach), whose
+	 * closed breakers are its load. Synced. (A vital panel keeps its inverter in {@link #inverter}.)
+	 */
+	public @Nullable BlockPos panel;
+	/**
+	 * A vital panel (round 26, 8e): its breakers, bit 0 the main and bits 1 to 12 its circuits, set closed
+	 * (VitalPanelBlock). Saved and synced.
+	 */
+	public int breakers;
 	/** The linked generator's anchor, or null. */
 	public @Nullable BlockPos generator;
 	/**
@@ -76,6 +86,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 
 	public LivePanelBlockEntity(BlockPos pos, BlockState state) {
 		super(PlantInterior.LIVE_PANEL_ENTITY, pos, state);
+		breakers = isVitalPanel(state) ? VitalPanelBlock.DEFAULT_BREAKERS : 0;
 		input = isCharger(state) ? new io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage(CHARGER_BUFFER, 4_096, 0, this::setChanged) {
 			@Override
 			public long insert(long maxAmount, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext transaction) {
@@ -106,9 +117,53 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return state.getBlock() == PlantInterior.BLOCKS.get("reg_transformer");
 	}
 
-	/** The DC equipment rooms' panels: the station charger, the DC switchboard, the vital inverter, its transformer. */
+	public static boolean isVitalPanel(BlockState state) {
+		return state.getBlock() instanceof VitalPanelBlock;
+	}
+
+	/**
+	 * The DC equipment rooms' panels: the station charger, the DC switchboard, the vital inverter, its transformer and
+	 * its vital panel.
+	 */
 	static boolean dcRoom(BlockState state) {
-		return state.getBlock() == PlantInterior.BLOCKS.get("station_charger") || isSwitchboard(state) || isInverter(state) || isTransformer(state);
+		return state.getBlock() == PlantInterior.BLOCKS.get("station_charger") || isSwitchboard(state) || isInverter(state) || isTransformer(state)
+				|| isVitalPanel(state);
+	}
+
+	/** A vital panel's breakers switched (VitalPanelBlock): saved, and sent to the players. */
+	void changedBreakers(ServerLevel level) {
+		sync(level);
+	}
+
+	/**
+	 * A vital inverter keeps to the vital panel it feeds, and a vital panel to its inverter (round 26, 8e): the nearest
+	 * with the same label in reach, else the nearest.
+	 */
+	private @Nullable BlockPos labelled(ServerLevel level, Block kind) {
+		int mine = variant(getBlockState());
+		List<LivePanelBlockEntity> found = around(level, kind);
+		for (LivePanelBlockEntity other : found) {
+			if (variant(other.getBlockState()) == mine) {
+				return other.getBlockPos();
+			}
+		}
+		return found.isEmpty() ? null : found.get(0).getBlockPos();
+	}
+
+	private void linkPanel(ServerLevel level) {
+		BlockPos found = labelled(level, PlantInterior.BLOCKS.get("vital_panel"));
+		if (found == null ? panel != null : !found.equals(panel)) {
+			panel = found == null ? null : found.immutable();
+			sync(level);
+		}
+	}
+
+	private void linkFeed(ServerLevel level) {
+		BlockPos found = labelled(level, PlantInterior.BLOCKS.get("vital_inverter"));
+		if (found == null ? inverter != null : !found.equals(inverter)) {
+			inverter = found == null ? null : found.immutable();
+			sync(level);
+		}
 	}
 
 	/** A panel's label (round 26, 8c: 0 to 3 for 1A-1, 1A-2, 1B-1, 1B-2; one put down by hand is 0). */
@@ -268,8 +323,12 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState())) {
 			linkBattery(level);
 		}
+		if (isVitalPanel(getBlockState())) {
+			linkFeed(level);
+		}
 		if (isInverter(getBlockState())) {
 			linkTransformer(level);
+			linkPanel(level);
 			if (mcc != null) {
 				// Its MCC link from round 26's 8g (an inverter now reads its transformer instead).
 				mcc = null;
@@ -489,6 +548,12 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (xf != null) {
 			out.store("xf", BlockPos.CODEC, xf);
 		}
+		if (panel != null) {
+			out.store("panel", BlockPos.CODEC, panel);
+		}
+		if (isVitalPanel(getBlockState())) {
+			out.putInt("breakers", breakers);
+		}
 	}
 
 	@Override
@@ -503,6 +568,8 @@ public class LivePanelBlockEntity extends BlockEntity {
 		regXf = in.getIntOr("reg_xf", 1);
 		inverter = in.read("inverter", BlockPos.CODEC).orElse(null);
 		xf = in.read("xf", BlockPos.CODEC).orElse(null);
+		panel = in.read("panel", BlockPos.CODEC).orElse(null);
+		breakers = in.getIntOr("breakers", isVitalPanel(getBlockState()) ? VitalPanelBlock.DEFAULT_BREAKERS : 0);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}

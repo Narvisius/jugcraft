@@ -26,18 +26,52 @@ from PIL import Image, ImageDraw, ImageFont
 
 import nuclear_materials as M
 
-U = 16  # image px a model pixel
+# Image px a model pixel: the drawings are 512 px a block (round 26, 8e; Justin: "Make sure all the text is clearly
+# legible ... that applies to everything", the 256 px drawings' smallest letters were a blur). Sizes and line widths
+# in the drawings are given as they were at 16 px a model pixel; K scales them (fonts, widths) to U.
+U = 32
+K = U // 16
 PAINT = (196, 198, 192)
 INK = (24, 24, 26)
 FONT_DIR = "/usr/share/fonts/truetype/dejavu/"
 
 
 def font(size, bold=False):
-    return ImageFont.truetype(FONT_DIR + ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"), size)
+    return ImageFont.truetype(FONT_DIR + ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"), round(size * K))
 
 
 def cfont(size, bold=False):
-    return ImageFont.truetype(FONT_DIR + ("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf"), size)
+    return ImageFont.truetype(FONT_DIR + ("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf"), round(size * K))
+
+
+def rfont(size, bold=False):
+    """The condensed font at a size in the image's own pixels (for textures drawn outside the 16 px a pixel kit)."""
+    return ImageFont.truetype(FONT_DIR + ("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf"), round(size))
+
+
+class _Draw(ImageDraw.ImageDraw):
+    """ImageDraw with line widths given at 16 px a model pixel (scaled by K)."""
+
+    def _w(self, kw):
+        if "width" in kw:
+            kw["width"] = max(1, round(kw["width"] * K))
+        return kw
+
+    def rectangle(self, xy, **kw):
+        return super().rectangle(xy, **self._w(kw))
+
+    def ellipse(self, xy, **kw):
+        return super().ellipse(xy, **self._w(kw))
+
+    def line(self, xy, *a, **kw):
+        if a:
+            kw["fill"] = a[0]
+            if len(a) > 1:
+                kw["width"] = a[1]
+        return super().line(xy, **self._w(kw))
+
+    def polygon(self, xy, **kw):
+        return super().polygon(xy, **self._w(kw))
 
 
 PANELS = {
@@ -57,6 +91,9 @@ PANELS = {
     "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
     # Each inverter's standby source (round 26, 8d): reg_transformer below.
     "reg_transformer": {"display": "Regulating Transformer", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
+    # Each inverter's 120 VAC vital instrument panel (round 26, 8e): vital_panel below. Hung on a wall, its door opens.
+    "vital_panel": {"display": "120 VAC Vital Instrument Panel", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"],
+                    "door": True},
 }
 for _k, _v in PANELS.items():
     _v["multi"] = (_v["width"], 2, "panel")
@@ -102,6 +139,7 @@ CRAFTING = {
                                                "R": "minecraft:redstone"}, 1),
     "station_charger": (["PMP", "CRC", "PLP"], {"P": "#c:plates/steel", "M": "minecraft:clock", "C": "jugcraft:basic_circuit",
                                                 "R": "minecraft:redstone", "L": "minecraft:lever"}, 1),
+    "vital_panel": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:paper", "C": "minecraft:copper_ingot", "R": "minecraft:redstone"}, 1),
     "reg_transformer": (["PCP", "CIC", "PCP"], {"P": "#c:plates/steel", "C": "minecraft:copper_ingot", "I": "minecraft:iron_block"}, 1),
     "dc_cable_tray": (["P P", "CPC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser": (["PC", "P ", "PC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
@@ -120,12 +158,12 @@ class Front:
         rng = np.random.default_rng(seed)
         base = np.ones((h, w, 3)) * np.array(PAINT, float)
         # Faint mottling and a few scuffs, like the painted cabinets beside them.
-        small = rng.normal(0, 1, (h // 32 + 1, w // 32 + 1))
-        noise = np.kron(small, np.ones((32, 32)))[:h, :w]
+        small = rng.normal(0, 1, (h // (2 * U) + 1, w // (2 * U) + 1))
+        noise = np.kron(small, np.ones((2 * U, 2 * U)))[:h, :w]
         base += noise[..., None] * 2.2 + rng.normal(0, 1.2, (h, w))[..., None]
         img = np.clip(base, 0, 255).astype(np.uint8)
         self.img = Image.fromarray(np.dstack([img, np.full((h, w), 255, np.uint8)]), "RGBA")
-        self.d = ImageDraw.Draw(self.img)
+        self.d = _Draw(self.img)
         self.boxes = []  # what stands proud of the door: (x0, y0, x1, y1, depth, side texture)
         self.live = []   # what moves (client/LivePanelRenderer.java draws it from the generator's state)
 
@@ -170,7 +208,7 @@ class Front:
     def tag(self, cx, cy, text, size=9, w=None):
         """An engraved label: white plastic, black letters."""
         f = cfont(size, True)
-        tw = (self.d.textlength(text, font=f) + 10) / U if w is None else w
+        tw = (self.d.textlength(text, font=f) + 10 * K) / U if w is None else w
         self.R(cx - tw / 2, cy - 0.38, cx + tw / 2, cy + 0.38, fill=(240, 240, 234, 255), outline=(90, 90, 92, 255), width=1)
         self.d.text(self.px(cx, cy), text, font=f, fill=INK, anchor="mm")
 
@@ -574,7 +612,7 @@ def dc_switchboard(label="1A"):
 
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
             "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
-            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None}
+            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None, "vital_panel": None}
 _FRONTS = {}
 
 
@@ -615,6 +653,8 @@ def cabinet(key):
         return vital_inverter_boxes()
     if key == "reg_transformer":
         return reg_transformer_boxes()
+    if key == "vital_panel":
+        return vital_panel_boxes(False)
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -791,19 +831,21 @@ def sb_cell(x0, step, k, linked):
     return out
 
 
-def part(key, c, r):
-    """Block (c, r)'s share of the piece (r 0 at the floor), its front texture the drawing's slice for that block."""
+def part(key, c, r, open_=False):
+    """Block (c, r)'s share of the piece (r 0 at the floor), its front texture the drawing's slice for that block.
+    open_: a panel with a door (PANELS "door"), its door open (round 26, 8e: the vital panel)."""
     width = PANELS[key]["width"]
     F = f"pi_{key}_f"
+    drawn = {F, f"pi_{key}_i", f"pi_{key}_o"}
     out = []
-    for b in cabinet(key):
+    for b in (vital_panel_boxes(open_) if key == VP_KEY else cabinet(key)):
         x0, x1 = max(b[0], c * 16), min(b[3], c * 16 + 16)
         y0, y1 = max(b[1], r * 16), min(b[4], r * 16 + 16)
         if x1 - x0 < 0.01 or y1 - y0 < 0.01:
             continue
         t = b[6]
         if isinstance(t, dict):
-            t = {k: (f"{F}_{r * width + c}" if v == F else v) for k, v in t.items()}
+            t = {k: (f"{v}_{r * width + c}" if isinstance(v, str) and v in drawn else v) for k, v in t.items()}
         # Where a see-through box goes on into the next block, its face on the cut is inside it: left out (round 25b: a
         # clear jar cut in two showed a pane of glass across its middle). Solid boxes keep theirs (the art check counts
         # a solid box without them as a hole).
@@ -844,11 +886,12 @@ def _cell():
 
 
 def _cell_front():
-    img = _cell()
+    """A diesel room battery cell's front: its tag at twice the cell's resolution, so it reads (round 26, 8e)."""
+    img = _cell().resize((256, 256), Image.NEAREST)
     d = ImageDraw.Draw(img)
-    d.rectangle([36, 62, 92, 90], fill=(240, 240, 234, 255), outline=(30, 30, 30, 255), width=2)
-    d.text((64, 70), "2.20 V", font=cfont(14, True), fill=INK, anchor="mm")
-    d.text((64, 83), "CELL", font=cfont(10, True), fill=INK, anchor="mm")
+    d.rectangle([72, 124, 184, 180], fill=(240, 240, 234, 255), outline=(30, 30, 30, 255), width=4)
+    d.text((128, 140), "2.20 V", font=rfont(28, True), fill=INK, anchor="mm")
+    d.text((128, 166), "CELL", font=rfont(20, True), fill=INK, anchor="mm")
     return img
 
 
@@ -862,24 +905,26 @@ def _cell_top():
 
 
 def _battery_tag():
-    img = Image.new("RGBA", (256, 64), (240, 240, 234, 255))
+    """The diesel room battery's nameplate: drawn at its plate's shape (4 to 1), at 512 px across (round 26, 8e: so it
+    reads), stretched to a square texture."""
+    img = Image.new("RGBA", (512, 128), (240, 240, 234, 255))
     d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, 255, 63], outline=(30, 30, 30, 255), width=3)
-    d.text((128, 22), "125 VDC BATTERY 1A", font=cfont(24, True), fill=INK, anchor="mm")
-    d.text((128, 46), "NO SMOKING  NO SPARKS", font=cfont(16, True), fill=(200, 30, 30, 255), anchor="mm")
-    return img.resize((128, 128))
+    d.rectangle([0, 0, 511, 127], outline=(30, 30, 30, 255), width=6)
+    d.text((256, 44), "125 VDC BATTERY 1A", font=rfont(48, True), fill=INK, anchor="mm")
+    d.text((256, 92), "NO SMOKING  NO SPARKS", font=rfont(32, True), fill=(200, 30, 30, 255), anchor="mm")
+    return img.resize((512, 512), Image.BICUBIC)
 
 
 def _sb_tag():
-    """The battery's engraved nameplate in the pixel font (tools/control_boards.py), one texel a font pixel, in the
-    texture's top band (SB_TAG_UV): its name, and the warning in red."""
-    import control_boards as CB
-    img = Image.new("RGBA", (128, 128), (236, 236, 230, 255))
+    """The battery's engraved nameplate in the texture's top band (SB_TAG_UV): its name, and the warning in red; drawn
+    at 512 px across (round 26, 8e; Justin: all the text clearly legible), the band the same share of it."""
+    size = 512
+    img = Image.new("RGBA", (size, size), (236, 236, 230, 255))
     d = ImageDraw.Draw(img)
-    rows = SB_TAG_ROWS
-    d.rectangle([0, 0, 127, rows - 1], fill=(238, 238, 232, 255), outline=(60, 60, 60, 255))
-    for line, y, ink in (("125 VDC STATION BATTERY", 2, (24, 24, 26, 255)), ("60 CELLS - NO SMOKING", 8, (190, 28, 24, 255))):
-        CB.text(d, (128 - CB.text_width(line)) // 2, y, line, ink)
+    rows = SB_TAG_ROWS * size // 128
+    d.rectangle([0, 0, size - 1, rows - 1], fill=(238, 238, 232, 255), outline=(60, 60, 60, 255), width=3)
+    for line, y, ink in (("125 VDC STATION BATTERY", rows * 0.3, (24, 24, 26, 255)), ("60 CELLS - NO SMOKING", rows * 0.72, (190, 28, 24, 255))):
+        d.text((size / 2, y), line, font=rfont(22, True), fill=ink, anchor="mm")
     return img
 
 
@@ -915,6 +960,7 @@ def makers():
         "pi_sb_copper": lambda: _solid((196, 120, 70), 430, 0.04), "pi_sb_tag": _sb_tag,
     })
     out.update(relay_cabinet_textures())
+    out.update(vital_panel_textures())
     out.update({"pi_lens_green": lambda: _solid((26, 84, 40), 530, 0.02), "pi_lens_white": lambda: _solid((150, 150, 144), 531, 0.02),
                 "pi_lens_amber": lambda: _solid((130, 84, 20), 532, 0.02), SC_GLASS: lambda: _see_through((220, 232, 236), 40, 533)})
     return out
@@ -1044,10 +1090,9 @@ def relay_cabinet_front():
         f.d.rectangle([px0, py0, max(px0, px1), max(py0, py1)], **kw)
 
     def pix(cx, cy, s, ink, scale=1):
-        """Pixel-font letters (crisp, one font pixel `scale` texels) centred on (cx, cy)."""
-        w, h = CB.text_width(s, scale), 5 * scale
-        x, y = f.px(cx, cy)
-        CB.text(f.d, int(round(x - w / 2)), int(round(y - h / 2)), s, ink, scale)
+        """A small legend centred on (cx, cy): bold letters the old pixel font's height (5 texels at 16 px a model
+        pixel, a scale's worth more), now drawn at the drawings' 512 px a block so they read."""
+        T(cx, cy, s, 7 * scale, fill=ink, bold=True)
 
     WHITE, BLACK = (238, 238, 232, 255), (26, 26, 28, 255)
     # The door: its edge, the nameplate on the top rail.
@@ -1540,18 +1585,25 @@ def vital_inverter(label="1A-1"):
     return f
 
 
-def _cabinet_shell(F):
+def _cabinet_shell(F, hub=False):
     """The station charger's and the inverter's cabinet: plinth, body, door, cap, exhaust hood, hinges, T-handle,
-    louvred inlet."""
+    louvred inlet. hub: the inverter's output conduit comes out of the top's middle (round 26, 8e: up to the tray, on
+    to its vital panel), so its hood is in two halves either side of the hub."""
     D = SC_DOOR
     b = [(0.8, 0, 2.6, 15.2, 1.2, 14.0, "pi_toe_kick"),
          (0.4, 1.2, 1.6, 15.6, 30.4, 14.6, "pi_cabinet"),
          (0.6, 1.4, 14.6, 15.4, 30.2, D, {"*": "pi_cabinet", "south": F}),
          (0.2, 30.4, 1.4, 15.8, 31.2, 15.2, "pi_cabinet_dark")]
-    b += [(2.5, 31.9, 4.0, 13.5, 32.0, 12.4, "pi_cabinet_dark"), (2.5, 31.2, 4.0, 2.9, 31.9, 12.4, "pi_cabinet_dark"),
-          (13.1, 31.2, 4.0, 13.5, 31.9, 12.4, "pi_cabinet_dark"), (2.9, 31.2, 4.0, 13.1, 31.9, 4.4, "pi_pnl_black")]
-    for k in range(3):
-        b.append((2.9, 31.25 + k * 0.22, 12.0, 13.1, 31.37 + k * 0.22, 12.4, "pi_cabinet_dark"))
+    for hx0, hx1 in (((2.5, 6.3), (9.7, 13.5)) if hub else ((2.5, 13.5),)):
+        b += [(hx0, 31.9, 4.0, hx1, 32.0, 12.4, "pi_cabinet_dark"), (hx0, 31.2, 4.0, hx0 + 0.4, 31.9, 12.4, "pi_cabinet_dark"),
+              (hx1 - 0.4, 31.2, 4.0, hx1, 31.9, 12.4, "pi_cabinet_dark"), (hx0 + 0.4, 31.2, 4.0, hx1 - 0.4, 31.9, 4.4, "pi_pnl_black")]
+        for k in range(3):
+            b.append((hx0 + 0.4, 31.25 + k * 0.22, 12.0, hx1 - 0.4, 31.37 + k * 0.22, 12.4, "pi_cabinet_dark"))
+    if hub:
+        # The hub and its locknut, the conduit's square stub (the conduit above it is the plant's).
+        b += [(6.6, 31.2, 6.6, 9.4, 31.5, 9.4, "pi_steel_dark"),
+              (6.6, 31.2, 6.6, 9.4, 31.45, 9.4, "pi_steel_dark", {"rotation": {"angle": 45, "axis": "y", "origin": [8, 31.2, 8]}}),
+              (7.0, 31.4, 7.0, 9.0, 32.0, 9.0, "pi_chrome")]
     for y in (4.0, 26.0):
         b.append((0.15, y, 14.5, 0.6, y + 2.0, 15.25, "pi_chrome"))
     b += [(13.7, 12.4, D, 14.7, 17.4, D + 0.15, "pi_pnl_black"), (14.0, 13.0, D + 0.15, 14.4, 16.6, D + 0.5, "pi_chrome"),
@@ -1601,7 +1653,7 @@ def vital_inverter_boxes():
     D = SC_DOOR
     face = {"*": "pi_pnl_black", "south": F}
     blk = "pi_pnl_black"
-    b = _cabinet_shell(F)
+    b = _cabinet_shell(F, hub=True)
     b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
     w, y0, y1 = VI_METER
     for x0, *_ in VI_METERS:
@@ -1697,7 +1749,7 @@ def reg_transformer(label="1A-1"):
     for v in (0, 50, 100, 150):
         a = math.radians(start - sweep * v / 150)
         T(cx + math.cos(a) * r * 0.52, cy + math.sin(a) * r * 0.52, f"{v}", 7, bold=True)
-    T(cx, cy - r * 0.5, "\u00b0C", 7, bold=True)
+    T(cx, cy + r * 0.4, "\u00b0C", 7, bold=True)
     T(cx, cy - r - 0.75, "WINDING TEMP", 7, bold=True)
     f.live.append({"t": "dial", "x": cx, "y": cy, "r": r, "z": D + 0.4, "lo": lo, "hi": hi, "start": start, "sweep": sweep,
                    "ch": "xf_temp"})
@@ -1864,7 +1916,251 @@ def _rx_ring(cx, cy, r0, r1, z0, z1, tex):
     return out
 
 
+# ------------------------------------------------------------------------------------------------ the vital panel
+
+# Each vital inverter's 120 VAC vital instrument panel (round 26, 8e; Justin: "Side wall, under the tray", "Switchable
+# breakers", "Door that opens"): a surface-mounted panelboard hung on the DC room's side wall, its feeder conduit up
+# the wall into the tray from its top. Closed: the hinged door with its latch, the circuit directory in a clear holder
+# and a WARNING 120 VAC label; over the door the engraved nameplate and the POWER ON lamp (live: its inverter's output
+# alive and the main closed). Open (the block's "open" state, its door swung out on its hinges): the dead front, the
+# two-pole main breaker at the top and twelve branch breakers in two columns, odd on the left and even on the right as
+# in any panelboard, each with its name beside it; their handles are the game's (live: ON toward the middle, OFF
+# outward; the main up ON). Each closed breaker carries its share of the inverter's load (nuclear/VitalPanel.java).
+# Model pixels, the piece facing north: the wall behind it at z 0, its front out at z 5.3.
+VP_KEY = "vital_panel"
+VP_BOX = (2.5, 8.4, 13.5, 31.6)              # the enclosure: x0, y0, x1, y1
+VP_FRONT, VP_DOOR = 5.3, 5.6                 # the enclosure's front, the closed door's face
+VP_OPENING = (2.8, 8.7, 13.2, 28.3)          # the door's opening
+VP_DOORLEAF = (2.85, 8.75, 13.15, 28.25)     # the door leaf
+VP_HINGE = (2.85, VP_DOOR)                   # its hinge line (x, z): it swings out to the left
+VP_DEAD = (4.4, 4.8)                         # the dead front (z)
+VP_LAMP = (12.1, 30.15)
+VP_PLATE = (3.1, 28.75, 10.9, 31.0)
+VP_CARD = (3.9, 12.6, 11.3, 26.8)            # the directory's clear holder on the door
+VP_LATCH = (12.0, 17.2, 12.6, 20.4)
+VP_WARN = (5.2, 9.3, 10.8, 11.6)
+VP_MAIN = (6.3, 24.5, 9.7, 27.3)             # the main breaker's body
+VP_ROWS = [22.7 - i * 2.15 for i in range(6)]
+VP_BODY = ((6.4, 7.95), (8.05, 9.6))         # the branch breakers' bodies, left and right column (x)
+VP_HANDLE = (0.5, 0.55, 0.3)                 # a branch handle: x, y, z size
+VP_CHANNELS = {"1A-1": ("I", "N41"), "1A-2": ("III", "N43"), "1B-1": ("II", "N42"), "1B-2": ("IV", "N44")}
+
+
+def vp_circuits(label):
+    """The twelve branch circuits of panel label: (name's two lines), circuit k + 1 (odd on the left)."""
+    ch, nis = VP_CHANNELS[label]
+    return [("NIS PWR RANGE", nis), ("PROCESS PROT", f"RACK {ch}"), ("SSPS INPUT", f"CH {ch}"), ("SG LEVEL", f"XMTRS CH {ch}"),
+            ("PZR PRESS/LVL", f"CH {ch}"), ("RCS FLOW", f"XMTRS CH {ch}"), ("STM GEN PRESS", f"CH {ch}"), ("RVLIS / ICCM", f"CH {ch}"),
+            ("PAM INDICATION", f"CH {ch}"), ("AFW FLOW IND", f"CH {ch}"), ("SPARE", ""), ("SPARE", "")]
+
+
+def vp_short(label):
+    """Each branch circuit's short name, as marked beside its breaker (the directory has them in full)."""
+    ch, nis = VP_CHANNELS[label]
+    return [f"NIS {nis}", f"PROT RACK {ch}", f"SSPS CH {ch}", f"SG LVL CH {ch}", f"PZR P/L CH {ch}", f"RCS FLOW {ch}", f"SG PRESS {ch}",
+            f"RVLIS CH {ch}", f"PAM CH {ch}", f"AFW FLOW {ch}", "SPARE", "SPARE"]
+
+
+def vp_breaker(k):
+    """Branch breaker k (0..11, circuit k + 1): its column (0 left, 1 right), its row's middle (y)."""
+    return k % 2, VP_ROWS[k // 2]
+
+
+def vp_handles():
+    """Each breaker's handle, ON and OFF: [(on box, off box)], the main first (x0, y0, z0, x1, y1, z1)."""
+    z0 = VP_DEAD[1] + 0.35
+    mx = (VP_MAIN[0] + VP_MAIN[2]) / 2
+    out = [((mx - 0.45, 25.95, z0, mx + 0.45, 26.95, z0 + 0.4), (mx - 0.45, 24.85, z0, mx + 0.45, 25.85, z0 + 0.4))]
+    hx, hy, hz = VP_HANDLE
+    for k in range(12):
+        col, y = vp_breaker(k)
+        bx0, bx1 = VP_BODY[col]
+        inner, outer = (bx1 - 0.15 - hx, bx0 + 0.15) if col == 0 else (bx0 + 0.15, bx1 - 0.15 - hx)
+        out.append(((inner, y - hy / 2, z0, inner + hx, y + hy / 2, z0 + hz), (outer, y - hy / 2, z0, outer + hx, y + hy / 2, z0 + hz)))
+    return out
+
+
+def vital_panel(label="1A-1"):
+    """The closed panel's front, drawn: the nameplate strip over the door, the door with its directory card and
+    warning label. Its live parts: the POWER ON lamp, and (drawn only with the door open) the breakers' handles."""
+    f = Front(1, 580)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    ch, _ = VP_CHANNELS[label]
+    x0, y0, x1, y1 = VP_BOX
+    # The door's seam round it, the strip over it.
+    dx0, dy0, dx1, dy1 = VP_DOORLEAF
+    f.R(dx0, dy0, dx1, dy1, outline=(120, 122, 118, 255), width=2)
+    # The nameplate: engraved black, white letters.
+    px0, py0, px1, py1 = VP_PLATE
+    f.R(px0, py0, px1, py1, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T((px0 + px1) / 2, py1 - 0.7, f"VITAL INST PANEL {label}", 9, fill=WHITE, bold=True)
+    T((px0 + px1) / 2, py0 + 0.6, f"120 VAC 1 PH   CH {ch}   FROM INV {label}", 6, fill=WHITE, bold=True)
+    lx, ly = VP_LAMP
+    T(lx, ly - 1.05, "POWER ON", 6, bold=True)
+    f.live.append({"t": "lamp", "x": lx, "y": ly, "r": 0.4, "z": VP_FRONT + 0.56, "colour": [240, 240, 230], "ch": "vb_on"})
+    # The circuit directory in its holder: typed on a white card.
+    cx0, cy0, cx1, cy1 = VP_CARD
+    f.R(cx0, cy0, cx1, cy1, fill=(246, 246, 240, 255), outline=(60, 60, 62, 255), width=2)
+    T((cx0 + cx1) / 2, cy1 - 0.65, "CIRCUIT DIRECTORY", 7, bold=True)
+    T((cx0 + cx1) / 2, cy1 - 1.35, f"VITAL PANEL {label}   CH {ch}", 6, bold=True)
+    f.line([(cx0 + 0.3, cy1 - 1.8), (cx1 - 0.3, cy1 - 1.8)], INK, 2)
+    T(cx0 + 0.4, cy1 - 2.35, "MAIN  60 A  2 POLE", 6, bold=True, anchor="lm")
+    for k, (a, b) in enumerate(vp_circuits(label)):
+        y = cy1 - 3.15 - k * 0.88
+        T(cx0 + 0.4, y, f"{k + 1:>2}", 6, bold=True, anchor="lm")
+        T(cx0 + 1.2, y, (a + " " + b).strip(), 6, bold=k < 10, anchor="lm")
+        f.line([(cx0 + 0.3, y - 0.44), (cx1 - 0.3, y - 0.44)], (190, 196, 210, 255), 1)
+    # The warning label.
+    wx0, wy0, wx1, wy1 = VP_WARN
+    f.R(wx0, wy0, wx1, wy1, fill=(244, 200, 30, 255), outline=(24, 24, 26, 255), width=2)
+    f.R(wx0 + 0.15, wy1 - 0.95, wx1 - 0.15, wy1 - 0.15, fill=BLACK)
+    T((wx0 + wx1) / 2, wy1 - 0.55, "WARNING", 7, fill=(244, 200, 30, 255), bold=True)
+    T((wx0 + wx1) / 2, wy0 + 0.6, "120 VAC  KEEP CLOSED", 6, bold=True)
+    # The breakers' handles (live, with the door open: "open").
+    for i, (on, off) in enumerate(vp_handles()):
+        f.live.append({"t": "toggle", "on": [round(v, 3) for v in on], "off": [round(v, 3) for v in off], "colour": [118, 120, 124],
+                       "ch": f"vb_{i}", "open": True})
+    return f
+
+
+def vital_panel_interior(label="1A-1"):
+    """The open panel's dead front, drawn: each breaker's name and number beside it, the main's legend, the gutters'
+    lines; the breakers' bodies stand through it (vital_panel_boxes)."""
+    f = Front(1, 581)
+    T = f.T
+    ox0, oy0, ox1, oy1 = VP_OPENING
+    f.R(ox0, oy0, ox1, oy1, fill=(176, 178, 172, 255))
+    # The dead front's plate edge and its screws' places; the breakers' slots.
+    f.R(ox0 + 0.2, oy0 + 0.2, ox1 - 0.2, oy1 - 0.2, outline=(120, 122, 118, 255), width=2)
+    f.R(VP_BODY[0][0] - 0.15, VP_ROWS[-1] - 1.1, VP_BODY[1][1] + 0.15, VP_ROWS[0] + 1.1, fill=(40, 40, 42, 255))
+    f.R(VP_MAIN[0] - 0.15, VP_MAIN[1] - 0.15, VP_MAIN[2] + 0.15, VP_MAIN[3] + 0.15, fill=(40, 40, 42, 255))
+    T(4.6, 26.4, "MAIN", 7, bold=True)
+    T(4.6, 25.5, "60 A 2P", 6, bold=True)
+    T(11.4, 26.4, "ON", 6, bold=True)
+    T(11.4, 25.3, "OFF", 6, bold=True)
+    for k, name in enumerate(vp_short(label)):
+        col, y = vp_breaker(k)
+        # The circuit's number by its breaker, its short name beyond it, the breaker's rating under the name.
+        if col == 0:
+            T(6.2, y + 0.25, f"{k + 1}", 7, bold=True, anchor="rm")
+            T(5.4, y + 0.25, name, 6, bold=True, anchor="rm")
+            T(5.4, y - 0.4, "20 A" if name != "SPARE" else "15 A", 6, anchor="rm")
+        else:
+            T(9.75, y + 0.25, f"{k + 1}", 7, bold=True, anchor="lm")
+            T(10.65, y + 0.25, name, 6, bold=True, anchor="lm")
+            T(10.65, y - 0.4, "20 A" if name != "SPARE" else "15 A", 6, anchor="lm")
+    T(8.0, VP_ROWS[-1] - 1.6, "ON  → MIDDLE      OFF → OUT", 6, bold=True)
+    return f
+
+
+def vp_door_outside(label="1A-1"):
+    """The open door's outside (its west face once swung): the closed front's door, moved along to where the leaf's
+    face lies (z = x + the hinge's 2.75 px)."""
+    src = front(VP_KEY, PANELS[VP_KEY]["labels"].index(label)).img
+    out = Image.new("RGBA", src.size, (0, 0, 0, 0))
+    dx0, dy0, dx1, dy1 = VP_DOORLEAF
+    shift = VP_HINGE[1] - VP_HINGE[0]
+    region = src.crop((int(dx0 * U), int((32 - dy1) * U), int(dx1 * U), int((32 - dy0) * U)))
+    out.paste(region, (int(round((dx0 + shift) * U)), int((32 - dy1) * U)))
+    # Elsewhere the steel (never seen: the faces there are the leaf's edges).
+    base = Front(1, 582).img
+    return Image.alpha_composite(base, out)
+
+
+def _vp_open_box(b):
+    """A closed door's box swung open on its hinge: x along the door goes out along z, the door's outward z goes to -x;
+    its faces turn with it (south to west, east to south, north to east, west to north)."""
+    hx, hz = VP_HINGE
+    x0, y0, z0, x1, y1, z1, tex = b[:7]
+    turn = {"south": "west", "east": "south", "north": "east", "west": "north", "up": "up", "down": "down"}
+    if isinstance(tex, dict):
+        tex = {("*" if k == "*" else turn[k]): v for k, v in tex.items()}
+    return (hx - (z1 - hz), y0, hz + (x0 - hx), hx - (z0 - hz), y1, hz + (x1 - hx), tex) + tuple(b[7:])
+
+
+def _vp_door(open_):
+    """The door leaf and what is on it: its hinges' knuckles, the latch and its key, the directory's clear holder, the
+    warning label (closed: on the front; open: swung out)."""
+    D = VP_DOOR
+    F = f"pi_{VP_KEY}_f"
+    O = f"pi_{VP_KEY}_o"
+    dx0, dy0, dx1, dy1 = VP_DOORLEAF
+    leaf = (dx0, dy0, VP_FRONT, dx1, dy1, D, {"*": "pi_cabinet", "south": O if open_ else F})
+    on = [leaf]
+    lx0, ly0, lx1, ly1 = VP_LATCH
+    on += [(lx0, ly0, D, lx1, ly1, D + 0.15, "pi_pnl_black"), (lx0 + 0.15, ly0 + 0.3, D + 0.15, lx1 - 0.15, ly1 - 0.3, D + 0.45, "pi_chrome")]
+    on += _sc_round(12.3, 16.4, D, D + 0.2, 0.42, "pi_chrome")
+    cx0, cy0, cx1, cy1 = VP_CARD
+    frame = "pi_pnl_black"
+    on += [(cx0 - 0.25, cy0 - 0.25, D, cx1 + 0.25, cy0, D + 0.18, frame), (cx0 - 0.25, cy1, D, cx1 + 0.25, cy1 + 0.25, D + 0.18, frame),
+           (cx0 - 0.25, cy0, D, cx0, cy1, D + 0.18, frame), (cx1, cy0, D, cx1 + 0.25, cy1, D + 0.18, frame),
+           (cx0, cy0, D + 0.12, cx1, cy1, D + 0.14, {"south": SC_GLASS, "north": SC_GLASS})]
+    wx0, wy0, wx1, wy1 = VP_WARN
+    on.append((wx0, wy0, D, wx1, wy1, D + 0.06, {"*": "pi_pnl_yellow", "south": O if open_ else F}))
+    if open_:
+        on = [_vp_open_box(b) for b in on]
+    # The hinges' knuckles stay on the hinge line.
+    hx, hz = VP_HINGE
+    for y in (11.0, 25.0):
+        on.append((hx - 0.35, y, hz - 0.35, hx + 0.05, y + 1.6, hz + 0.05, "pi_chrome"))
+    return on
+
+
+def vital_panel_boxes(open_=False):
+    """The panel, closed or open: the enclosure on the wall, the nameplate and the lamp over the door, the door; open,
+    the dead front and the breakers' bodies behind it (their handles are the game's)."""
+    F = f"pi_{VP_KEY}_f"
+    I = f"pi_{VP_KEY}_i"
+    face = {"*": "pi_pnl_black", "south": F}
+    x0, y0, x1, y1 = VP_BOX
+    ox0, oy0, ox1, oy1 = VP_OPENING
+    cab = "pi_cabinet"
+    b = [(x0, y0, 0, x1, y1, 0.4, cab),
+         (x0, y0, 0.4, ox0, y1, VP_FRONT, cab), (ox1, y0, 0.4, x1, y1, VP_FRONT, cab),
+         (ox0, oy1, 0.4, ox1, y1, VP_FRONT, {"*": cab, "south": F}), (ox0, y0, 0.4, ox1, oy0, VP_FRONT, cab)]
+    # Its feeder conduit's hub on the top, at the wall (the conduit goes on up the wall: plant_office2 wall_conduit).
+    b += [(7.0, y1, 1.6, 9.0, y1 + 0.3, 3.6, "pi_steel_dark"), (7.3, y1 + 0.3, 1.9, 8.7, 32.0, 3.3, "pi_chrome")]
+    # The nameplate, the lamp in its bezel.
+    px0, py0, px1, py1 = VP_PLATE
+    b.append((px0, py0, VP_FRONT, px1, py1, VP_FRONT + 0.12, face))
+    lx, ly = VP_LAMP
+    b += _sc_round(lx, ly, VP_FRONT, VP_FRONT + 0.3, 0.6, "pi_chrome") + _sc_round(lx, ly, VP_FRONT + 0.3, VP_FRONT + 0.5, 0.42, "pi_lens_white")
+    b += _vp_door(open_)
+    if open_:
+        dz0, dz1 = VP_DEAD
+        b.append((ox0, oy0, dz0, ox1, oy1, dz1, {"*": cab, "south": I}))
+        # Behind the dead front, the box's inside (dark).
+        b.append((ox0, oy0, 0.4, ox1, oy1, 0.5, "pi_pnl_black"))
+        mx0, my0, mx1, my1 = VP_MAIN
+        b.append((mx0, my0, dz1, mx1, my1, dz1 + 0.35, "pi_pnl_black"))
+        b.append((mx0 + 0.2, my0 + 0.25, dz1 + 0.35, mx1 - 0.2, my1 - 0.25, dz1 + 0.4, "pi_pnl_black"))
+        for k in range(12):
+            col, y = vp_breaker(k)
+            bx0, bx1 = VP_BODY[col]
+            b.append((bx0, y - 0.85, dz1, bx1, y + 0.85, dz1 + 0.35, "pi_pnl_black"))
+    return b
+
+
+def vital_panel_textures():
+    """The open panel's drawings (dead front, the door's outside swung) for each label: pi_<stem>_i_<part>,
+    pi_<stem>_o_<part>."""
+    out = {}
+    for v, label in enumerate(PANELS[VP_KEY]["labels"]):
+        stem = texture_key(VP_KEY, v)
+        inside, door = vital_panel_interior(label).img, vp_door_outside(label)
+        for r in range(2):
+            box = (0, (1 - r) * 16 * U, 16 * U, (2 - r) * 16 * U)
+            out[f"pi_{stem}_i_{r}"] = (lambda img=inside.crop(box): img)
+            out[f"pi_{stem}_o_{r}"] = (lambda img=door.crop(box): img)
+    return out
+
+
+SHARP |= {f"pi_{texture_key(VP_KEY, v)}_{k}_{r}" for v in range(len(PANELS[VP_KEY]["labels"])) for k in "io" for r in range(2)}
+
+
 # The drawings defined after the table (DRAWINGS holds their keys from the start, so SHARP has them).
 DRAWINGS["station_charger"] = station_charger
 DRAWINGS["vital_inverter"] = vital_inverter
 DRAWINGS["reg_transformer"] = reg_transformer
+DRAWINGS["vital_panel"] = vital_panel

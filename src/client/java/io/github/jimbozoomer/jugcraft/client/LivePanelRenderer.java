@@ -58,7 +58,8 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 	private final Font font;
 
 	record Element(String type, double x, double y, double z, double r, double x0, double y0, double x1, double y1, double lo, double hi,
-			double start, double sweep, int colour, int colour2, double alpha, double size, String channel, String align, String[] label) {
+			double start, double sweep, int colour, int colour2, double alpha, double size, String channel, String align, String[] label,
+			double[] on, double[] off, boolean open) {
 	}
 
 	record Layout(int width, List<Element> elements) {
@@ -76,6 +77,10 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 	record Text(double x, double y, double z, double size, int colour, FormattedCharSequence text, boolean centre, boolean glow) {
 	}
 
+	/** A small solid box in the panel's frame (a breaker's handle: round 26, 8e). */
+	record Box(double[] b, int colour) {
+	}
+
 	public static final class State extends BlockEntityRenderState {
 		Direction facing = Direction.NORTH;
 		int column;
@@ -83,6 +88,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		final List<Disc> discs = new ArrayList<>();
 		final List<Rect> rects = new ArrayList<>();
 		final List<Text> texts = new ArrayList<>();
+		final List<Box> boxes = new ArrayList<>();
 	}
 
 	public LivePanelRenderer(BlockEntityRendererProvider.Context context) {
@@ -107,6 +113,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		state.discs.clear();
 		state.rects.clear();
 		state.texts.clear();
+		state.boxes.clear();
 		Level level = panel.getLevel();
 		if (level == null || !(panel.getBlockState().getBlock() instanceof LivePanelBlock block)) {
 			return;
@@ -127,11 +134,21 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(panel.getBlockState())) {
 				// A regulating transformer (round 26, 8d): its MCC breaker and its inverter's load.
 				EdgTelemetry.transformer(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isVitalPanel(panel.getBlockState())) {
+				// A vital panel (round 26, 8e): its inverter's output, its breakers.
+				EdgTelemetry.vitalPanel(snap, panel, level, now);
 			}
 		}
+		// What shows only with a panel's door open (a vital panel's breaker handles).
+		boolean open = panel.getBlockState().hasProperty(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.OPEN)
+				&& panel.getBlockState().getValue(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.OPEN);
 		boolean blink = ((long) (now / 5)) % 2 == 0;
 		for (Element e : layout.elements()) {
+			if (e.open() && !open) {
+				continue;
+			}
 			switch (e.type()) {
+				case "toggle" -> state.boxes.add(new Box(snap.lit(e.channel()) > 0 ? e.on() : e.off(), e.colour()));
 				case "dial" -> {
 					double v = clamp(snap.number(e.channel()), e.lo(), e.hi());
 					double a = Math.toRadians(e.start() - e.sweep() * (v - e.lo()) / (e.hi() - e.lo()));
@@ -191,7 +208,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
-		if (state.needles.isEmpty() && state.discs.isEmpty() && state.rects.isEmpty() && state.texts.isEmpty()) {
+		if (state.needles.isEmpty() && state.discs.isEmpty() && state.rects.isEmpty() && state.texts.isEmpty() && state.boxes.isEmpty()) {
 			return;
 		}
 		int light = state.lightCoords;
@@ -220,6 +237,10 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 				g.light = d.glow() ? LightCoordsUtil.FULL_BRIGHT : light;
 				g.color = 0xFF000000 | d.colour();
 				square(g, d.x(), d.y(), d.z() + 0.05, d.r(), LENS);
+			}
+			g.light = light;
+			for (Box b : state.boxes) {
+				box(g, b.b(), b.colour());
 			}
 			g.light = LightCoordsUtil.FULL_BRIGHT;
 			for (Rect r : state.rects) {
@@ -260,6 +281,30 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			pose.popPose();
 		}
 		pose.popPose();
+	}
+
+	/**
+	 * A solid box (x0, y0, z0, x1, y1, z1): its six faces, each wound anticlockwise seen from outside, shaded as a block
+	 * is (the top full, the sides less, the bottom least).
+	 */
+	private static void box(Geometry g, double[] b, int rgb) {
+		float x0 = (float) b[0], y0 = (float) b[1], z0 = (float) b[2], x1 = (float) b[3], y1 = (float) b[4], z1 = (float) b[5];
+		g.color = shade(rgb, 1.0);
+		g.quad(x1, y0, z1, x1, y1, z1, x0, y1, z1, x0, y0, z1, 0, 0, 1, WHITE);
+		g.quad(x0, y0, z0, x0, y1, z0, x1, y1, z0, x1, y0, z0, 0, 0, -1, WHITE);
+		g.color = shade(rgb, 0.8);
+		g.quad(x1, y0, z0, x1, y1, z0, x1, y1, z1, x1, y0, z1, 1, 0, 0, WHITE);
+		g.quad(x0, y0, z1, x0, y1, z1, x0, y1, z0, x0, y0, z0, -1, 0, 0, WHITE);
+		g.color = shade(rgb, 1.0);
+		g.quad(x1, y1, z1, x1, y1, z0, x0, y1, z0, x0, y1, z1, 0, 1, 0, WHITE);
+		g.color = shade(rgb, 0.55);
+		g.quad(x1, y0, z0, x1, y0, z1, x0, y0, z1, x0, y0, z0, 0, -1, 0, WHITE);
+		g.color = 0xFFFFFFFF;
+	}
+
+	private static int shade(int rgb, double k) {
+		int r = (int) Math.round((rgb >> 16 & 0xFF) * k), gr = (int) Math.round((rgb >> 8 & 0xFF) * k), b = (int) Math.round((rgb & 0xFF) * k);
+		return 0xFF000000 | r << 16 | gr << 8 | b;
 	}
 
 	/** A small square facing the front (+z), centred on (x, y), half-size r, showing texture region uv. */
@@ -306,7 +351,19 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		return new Element(o.get("t").getAsString(), num(o, "x"), num(o, "y"), num(o, "z"), num(o, "r"), num(o, "x0"), num(o, "y0"), num(o, "x1"),
 				num(o, "y1"), num(o, "lo"), num(o, "hi"), num(o, "start"), num(o, "sweep"), rgb(o, "colour"), rgb(o, "colour2"),
 				o.has("alpha") ? num(o, "alpha") : 0.6, num(o, "size"), o.get("ch").getAsString(), o.has("align") ? o.get("align").getAsString() : "left",
-				label(o));
+				label(o), nums(o, "on"), nums(o, "off"), o.has("open") && o.get("open").getAsBoolean());
+	}
+
+	private static double[] nums(JsonObject o, String key) {
+		if (!o.has(key)) {
+			return new double[0];
+		}
+		JsonArray a = o.getAsJsonArray(key);
+		double[] out = new double[a.size()];
+		for (int i = 0; i < out.length; i++) {
+			out[i] = a.get(i).getAsDouble();
+		}
+		return out;
 	}
 
 	private static String[] label(JsonObject o) {

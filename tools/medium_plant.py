@@ -915,38 +915,50 @@ MCC_DEEP_RUNS = ([(27, -1, 18), (27, -2, 18), (26, -2, 18), (25, -2, 18), (24, -
 TRAY_Y = 5
 
 
-def _tray_line(cells, facing, drops=(), pairs=()):
+def _tray_line(cells, facing, drops=(), pairs=(), walls=()):
     out = []
     for i, (x, z) in enumerate(cells):
         key = (x, z)
-        kind = ("ladder_tray_drop" if key in drops else "ladder_tray_drop_pair" if key in pairs
+        kind = ("ladder_tray_drop" if key in drops else "ladder_tray_drop_pair" if key in pairs else "ladder_tray_drop_wall" if key in walls
                 else "ladder_tray_hanger" if i % 2 == 0 or i == len(cells) - 1 else "ladder_tray")
-        out.append((x, z, kind, facing))
+        out.append((x, z, kind, (walls.get(key, facing) if isinstance(walls, dict) else facing)))
     return out
 
 
-DC_TRAY_1A = (_tray_line([(x, 1) for x in range(13, 19)], "north", drops={(15, 1), (18, 1)}) + [(19, 1, "ladder_tray_bend", "north")]
-              + _tray_line([(19, z) for z in range(2, 13)], "east") + [(19, 13, "ladder_tray_bend", "east")]
+# The 120 VAC vital panels (round 26, 8e; Justin: "Side wall, under the tray"): each room's two on its relay cabinets'
+# wall, under the tray's run along it, (x, z, facing, label); their conduits go straight up the wall into the tray's
+# wall drops over them, and each inverter's output conduit up from its top into a drop over the row.
+VITAL_PANELS_1A = [(19, 10, "east", "1A-1"), (19, 11, "east", "1A-2")]
+VITAL_PANELS_1B = [(19, 24, "west", "1B-1"), (19, 25, "west", "1B-2")]
+DC_TRAY_1A = (_tray_line([(x, 1) for x in range(13, 19)], "north", drops={(14, 1), (15, 1), (17, 1), (18, 1)})
+              + [(19, 1, "ladder_tray_bend", "north")]
+              + _tray_line([(19, z) for z in range(2, 13)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1A})
+              + [(19, 13, "ladder_tray_bend", "east")]
               + _tray_line([(x, 13) for x in range(18, 13, -1)], "north", pairs={(16, 13)}))
-DC_TRAY_1B = (_tray_line([(x, 28) for x in range(26, 19, -1)], "north", drops={(24, 28), (21, 28)}) + [(19, 28, "ladder_tray_bend", "south")]
-              + _tray_line([(19, z) for z in range(27, 19, -1)], "east") + [(19, 19, "ladder_tray_bend", "west")]
+DC_TRAY_1B = (_tray_line([(x, 28) for x in range(26, 19, -1)], "north", drops={(25, 28), (24, 28), (22, 28), (21, 28)})
+              + [(19, 28, "ladder_tray_bend", "south")]
+              + _tray_line([(19, z) for z in range(27, 19, -1)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1B})
+              + [(19, 19, "ladder_tray_bend", "west")]
               + _tray_line([(x, 19) for x in range(20, 28)], "north", pairs={(25, 19)}))
-# The feeders' conduits under the drops: (x, z, from y, to y, piece).
-TRAY_CONDUITS = ([(15, 1, 3, 4, "feeder_conduit"), (18, 1, 3, 4, "feeder_conduit"), (16, 13, 4, 4, "conduit_pair")]
-                 + [(24, 28, 3, 4, "feeder_conduit"), (21, 28, 3, 4, "feeder_conduit"), (25, 19, 4, 4, "conduit_pair")])
+# The feeders' conduits under the drops: (x, z, from y, to y, piece, facing): the transformers' and the inverters'
+# from their tops, the MCC's pair from its top, the vital panels' up the wall.
+TRAY_CONDUITS = ([(x, 1, 3, 4, "feeder_conduit", "north") for x in (14, 15, 17, 18)] + [(16, 13, 4, 4, "conduit_pair", "north")]
+                 + [(x, 28, 3, 4, "feeder_conduit", "north") for x in (25, 24, 22, 21)] + [(25, 19, 4, 4, "conduit_pair", "north")]
+                 + [(x, z, 3, 4, "wall_conduit", f) for x, z, f, _ in VITAL_PANELS_1A + VITAL_PANELS_1B])
 
 
 def dc_room_tray(b, tray):
-    """A DC room's ladder tray and its feeders' conduits down to the transformers and the MCC."""
+    """A DC room's ladder tray and its feeders' conduits down to the transformers, the inverters, the MCC and the
+    vital panels."""
     for x, z, kind, facing in tray:
         assert b.get(x, TRAY_Y, z) == 0, (kind, x, z)
         b.p(x, TRAY_Y, z, furniture(kind, facing))
     cells = {(x, z) for x, z, _, _ in tray}
-    for x, z, y0, y1, piece in TRAY_CONDUITS:
+    for x, z, y0, y1, piece, facing in TRAY_CONDUITS:
         if (x, z) in cells:
             for y in range(y0, y1 + 1):
                 assert b.get(x, y, z) == 0, (piece, x, y, z)
-                b.p(x, y, z, furniture(piece, "north"))
+                b.p(x, y, z, furniture(piece, facing))
 
 
 def control_building_mcc_runs(s, ox, oz, sink=1):
@@ -1091,6 +1103,8 @@ def ground_floor(b, W, D):
     for z in (4, 5):
         b.stack("relay_cabinet", 19, 1, z, "east", n=2)
     b.prop("mcc_lineup", 14, 1, 13, "south")
+    for x, z, facing, label in VITAL_PANELS_1A:
+        b.panel("vital_panel", x, 1, z, facing, 1, label)
     dc_room_tray(b, DC_TRAY_1A)
     b.door(11, 1, 14, "north", label="dc_equipment_1a")
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
@@ -1176,6 +1190,8 @@ def ground_floor(b, W, D):
         b.panel("vital_inverter", x - 1, 1, D - 2, "south", 1, label)
         b.panel("reg_transformer", x - 2, 1, D - 2, "south", 1, label)
     b.prop("mcc_lineup", 24, 1, 19, "north", variant=1)
+    for x, z, facing, label in VITAL_PANELS_1B:
+        b.panel("vital_panel", x, 1, z, facing, 1, label)
     dc_room_tray(b, DC_TRAY_1B)
     for z in (22, 23):
         b.stack("relay_cabinet", 19, 1, z, "west", n=2)

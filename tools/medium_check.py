@@ -289,7 +289,8 @@ def check(site, quiet=False):
     # cable tray: base over the lineup, up to the ceiling, through the slab, up through the floor, into the tray.
     problems += feeder_conduits(site, g)
     # 9. Regulating transformers (round 26, 8d): each beside the inverter of its label, fed from its train's MCC, the
-    # conduits up from its top and from the MCC's REG XF section reaching the same ladder tray.
+    # conduits up from its top and from the MCC's REG XF section reaching the same ladder tray; and (8e) each inverter's
+    # vital panel, their conduits into the same tray.
     problems += regulating_transformers(site, g)
     if not quiet:
         for p in problems:
@@ -420,6 +421,41 @@ def regulating_transformers(site, g):
         for d in tray_drops.get(anchor, []):
             if d not in seen:
                 problems.append(f"the MCC at {anchor}: its tray does not reach the transformer drop at {d}")
+    # The 120 VAC vital panels (round 26, 8e): one for each inverter, of its label; the inverter's output conduit up from
+    # its top to a drop in the tray, the panel's up the wall to a wall drop in the same tray.
+    vps = panels("vital_panel")
+    for vp, v in vps.items():
+        same = [i for i, iv in invs.items() if iv == v]
+        inv = nearest(vp, same)
+        if inv is None or sum((a - b) ** 2 for a, b in zip(inv, vp)) > 24 ** 2:
+            problems.append(f"vital panel {labels[v]} at {vp} has no inverter of its label in reach")
+            continue
+        x, y, z = vp
+        k = y + 2
+        while at(x, k, z) == "wall_conduit":
+            k += 1
+        if k == y + 2 or at(x, k, z) != "ladder_tray_drop_wall":
+            problems.append(f"vital panel {labels[v]} at {vp}: its conduit does not reach a tray drop ({at(x, k, z)} at y {k})")
+            continue
+        ix, iy, iz = inv
+        j = iy + 2
+        while at(ix, j, iz) == "feeder_conduit":
+            j += 1
+        if j == iy + 2 or at(ix, j, iz) != "ladder_tray_drop":
+            problems.append(f"inverter {labels[v]} at {inv}: its output conduit does not reach a tray drop ({at(ix, j, iz)} at y {j})")
+            continue
+        seen, todo = {(x, k, z)}, deque([(x, k, z)])
+        while todo:
+            cx, cy, cz = todo.popleft()
+            for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n = (cx + dx, cy, cz + dz)
+                if n not in seen and at(*n).startswith("ladder_tray"):
+                    seen.add(n)
+                    todo.append(n)
+        if (ix, j, iz) not in seen:
+            problems.append(f"vital panel {labels[v]} at {vp}: the tray from its conduit does not reach its inverter's at {(ix, j, iz)}")
+    if len(vps) != len(invs):
+        problems.append(f"{len(invs)} vital inverters but {len(vps)} vital panels")
     return problems
 
 

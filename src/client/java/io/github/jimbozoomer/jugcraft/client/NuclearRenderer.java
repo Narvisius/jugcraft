@@ -32,14 +32,18 @@ import net.minecraft.world.phys.Vec3;
  *
  * <p>Geometry is written in the equipment's own frame: x to the placer's right, y up, z away from the placer, in
  * blocks from the anchor's corner. Every face is tiled about a block to a texture so nothing looks stretched.
- * Materials are 64-pixel regions of textures/entity/nuclear_equipment.png (tools/nuclear.py EQ_MATERIALS).
+ * Materials are 128-pixel regions of textures/entity/nuclear_equipment.png (tools/nuclear.py EQ_MATERIALS).
  */
 public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity, NuclearRenderer.State> {
 	public static final Identifier TEXTURE = Jugcraft.id("textures/entity/nuclear_equipment.png");
 	private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
-	/** The sheet's rows of 64-pixel cells (eight across): 512 x 640 since round 26 (tools/nuclear.py EQ_ROWS). */
+	/**
+	 * The sheet's rows of 128-pixel cells (eight across): 1024 x 1280 since round 26 (tools/nuclear.py EQ_ROWS, EQ_CELL;
+	 * 8e: the lettered cells drawn at 128 px so their nameplates read, the others' 64 px texels doubled).
+	 */
 	static final int ROWS = 10;
-	private static final float PX = 1 / 512F, PX_V = 1 / (64F * ROWS);
+	private static final int CELL = 128;
+	private static final float PX = 1F / (8 * CELL), PX_V = 1F / (CELL * ROWS);
 
 	static final float[] STAINLESS = region(0, 0);
 	static final float[] STAINLESS_DARK = region(1, 0);
@@ -141,7 +145,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	}
 
 	private static float[] region(int col, int row) {
-		return new float[] {(col * 64 + 0.5F) * PX, (row * 64 + 0.5F) * PX_V, (col * 64 + 63.5F) * PX, (row * 64 + 63.5F) * PX_V};
+		return new float[] {(col * CELL + 0.5F) * PX, (row * CELL + 0.5F) * PX_V, (col * CELL + CELL - 0.5F) * PX, (row * CELL + CELL - 0.5F) * PX_V};
 	}
 
 	private final Font font;

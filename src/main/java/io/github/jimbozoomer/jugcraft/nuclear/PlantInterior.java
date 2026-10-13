@@ -119,6 +119,9 @@ public final class PlantInterior {
 			// Each vital inverter's regulating transformer, its bypass (round 26, 8d): beside its inverter, live, reading its
 			// MCC's REG XF breaker.
 			{"reg_transformer", 0, "live:1:2:p:4", "metal", null},
+			// Each inverter's 120 VAC vital instrument panel (round 26, 8e): hung on a wall, its door opens and its breakers
+			// switch (VitalPanelBlock).
+			{"vital_panel", 0, "vital", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
@@ -136,6 +139,9 @@ public final class PlantInterior {
 			{"ladder_tray_drop", 0, "plain", "metal", new double[] {0, 0, 3, 16, 14, 13}},
 			{"ladder_tray_drop_pair", 0, "plain", "metal", new double[] {0, 0, 3, 16, 14, 13}},
 			{"conduit_pair", 0, "plain", "metal", new double[] {3, 0, 6.5, 13, 16, 9.5}},
+			// A vital panel's conduit up the wall to the tray, and the tray's drop over it (round 26, 8e): the wall at z 0.
+			{"wall_conduit", 0, "plain", "metal", new double[] {7.2, 0, 1.8, 8.8, 16, 3.4}},
+			{"ladder_tray_drop_wall", 0, "plain", "metal", new double[] {0, 0, 1.8, 16, 14.8, 13}},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};
@@ -206,6 +212,8 @@ public final class PlantInterior {
 					return new StackingFurnitureBlock(p, shape).group(k[1]);
 				} else if (kind.equals("status")) {
 					return new StatusScreenBlock(p);
+				} else if (kind.equals("vital")) {
+					return new VitalPanelBlock(p);
 				} else if (k[0].equals("live")) {
 					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), k.length > 4 ? Integer.parseInt(k[4]) : 1);
 				} else if (k[0].equals("battery")) {

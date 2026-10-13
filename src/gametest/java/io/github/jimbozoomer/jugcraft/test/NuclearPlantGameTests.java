@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340979"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341003"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -527,6 +527,7 @@ public class NuclearPlantGameTests {
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> chargers = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> inverters = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> regXfs = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> vitals = new java.util.ArrayList<>();
 		EquipmentBlockEntity transformer = null;
 		for (int i = 0; i < print.size(); i++) {
 			BlockState state = print.state(i, Rotation.NONE);
@@ -552,6 +553,9 @@ public class NuclearPlantGameTests {
 			} else if (state.is(PlantInterior.BLOCKS.get("reg_transformer"))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity xf) {
 				regXfs.add(xf);
+			} else if (state.is(PlantInterior.BLOCKS.get("vital_panel"))
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity vb) {
+				vitals.add(vb);
 			} else if ((state.is(PlantInterior.BLOCKS.get("edg_battery_charger")) || state.is(PlantInterior.BLOCKS.get("station_charger")))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
 				chargers.add(panel);
@@ -566,10 +570,27 @@ public class NuclearPlantGameTests {
 		// are its train's, fed by its REG XF 1 and 2, and each backs the inverter that links it.
 		helper.assertTrue(inverters.size() == 4 && regXfs.size() == 4, "four vital inverters and four regulating transformers: " + inverters.size()
 				+ ", " + regXfs.size());
+		helper.assertTrue(vitals.size() == 4, "four 120 VAC vital panels: " + vitals.size());
 		for (int t = 0; t < 90; t++) {
 			for (var inv : inverters) inv.serverTick(level);
 			for (var xf : regXfs) xf.serverTick(level);
+			for (var vb : vitals) vb.serverTick(level);
 		}
+		// Round 26 (8e): each inverter feeds the vital panel of its label and each panel knows it; a panel starts with its
+		// main and circuits 1 to 10 closed (the spares open), which draw the inverter's 46 A; a circuit opened takes its
+		// share off, the main opened all of it.
+		for (var vb : vitals) {
+			int label = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(vb.getBlockState());
+			String at = vb.getBlockPos().subtract(stake).toShortString();
+			helper.assertTrue(vb.inverter != null && level.getBlockEntity(vb.inverter) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity inv
+					&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(inv.getBlockState()) == label && vb.getBlockPos().equals(inv.panel),
+					"a vital panel and the inverter of its label link each other: " + at);
+			helper.assertTrue(vb.breakers == io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.DEFAULT_BREAKERS
+					&& io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.load(vb.breakers) == 46, "a vital panel's breakers as built: " + at);
+		}
+		int full = io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.DEFAULT_BREAKERS;
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.load(full & ~(1 << 3)) == 41
+				&& io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.load(full & ~1) == 0, "a vital panel's circuits carry the load");
 		for (var inv : inverters) {
 			int label = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(inv.getBlockState());
 			helper.assertTrue(inv.battery != null && inv.xf != null && inv.xf.distManhattan(inv.getBlockPos()) == 1

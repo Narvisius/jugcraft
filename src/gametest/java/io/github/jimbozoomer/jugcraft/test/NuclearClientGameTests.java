@@ -832,6 +832,10 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				// transformer alive on no load (POWER ON, 480 V in, 120 V out, 0 A) while its inverter runs on its battery.
 				shotAt(context, singleplayer, wx.applyAsInt(153), y + 1, wz.applyAsInt(94), wx.applyAsInt(153), y + 2, wz.applyAsInt(89),
 						"jugcraft_plant_medium_r26_dc_1a_xf_group");
+				// Round 26 (8e): DC room 1A's two 120 VAC vital panels on its east wall (building x 19, z 10 and 11), their
+				// conduits up into the tray, POWER ON lit.
+				shotAt(context, singleplayer, wx.applyAsInt(151), y + 1, wz.applyAsInt(98), wx.applyAsInt(155), y + 2, wz.applyAsInt(99),
+						"jugcraft_plant_medium_r26_dc_1a_vital_panels");
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {
