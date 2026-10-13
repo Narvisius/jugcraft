@@ -43,6 +43,13 @@ public class LivePanelBlockEntity extends BlockEntity {
 	public int charging;
 	public final io.github.jimbozoomer.jugcraft.energy.@Nullable SimpleEnergyStorage input;
 	private long received, put;
+	/**
+	 * A vital inverter (round 26, 8g): the motor control centre its bypass comes from (the nearest in reach), and which
+	 * of its REG XF breakers feeds this inverter's regulating transformer (1 or 2: the inverters by that MCC in order
+	 * along its front, left to right). Synced; the client reads the bypass from that MCC's breakers and bus.
+	 */
+	public @Nullable BlockPos mcc;
+	public int regXf = 1;
 	/** The linked generator's anchor, or null. */
 	public @Nullable BlockPos generator;
 	/**
@@ -76,6 +83,55 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return state.getBlock() == PlantInterior.BLOCKS.get("dc_switchboard");
 	}
 
+	public static boolean isInverter(BlockState state) {
+		return state.getBlock() == PlantInterior.BLOCKS.get("vital_inverter");
+	}
+
+	/** An inverter keeps to the nearest motor control centre in reach, and finds which REG XF breaker is its. */
+	private void linkBypass(ServerLevel level) {
+		BlockPos here = getBlockPos(), best = null;
+		double bestD = Double.MAX_VALUE;
+		for (Map.Entry<BlockPos, EquipmentRegistry.Entry> e : EquipmentRegistry.of(level).anchors().entrySet()) {
+			double d = e.getKey().distSqr(here);
+			if (e.getValue().kind() == EquipmentKind.MCC_LINEUP && d <= (double) REACH * REACH && d < bestD) {
+				bestD = d;
+				best = e.getKey().immutable();
+			}
+		}
+		int rank = 1;
+		if (best != null) {
+			// Its place among the inverters fed from that MCC (the others that found it too), along the MCC's front from
+			// its left (the side its first section is on): the first is fed by REG XF 1, the next by REG XF 2.
+			net.minecraft.core.Direction right = EquipmentRegistry.of(level).anchors().get(best).facing().getClockWise();
+			double mine = along(here, best, right);
+			int r = (REACH >> 4) + 1;
+			for (int cx = (best.getX() >> 4) - r; cx <= (best.getX() >> 4) + r; cx++) {
+				for (int cz = (best.getZ() >> 4) - r; cz <= (best.getZ() >> 4) + r; cz++) {
+					LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+					if (chunk == null) {
+						continue;
+					}
+					for (BlockEntity be : chunk.getBlockEntities().values()) {
+						if (be != this && be instanceof LivePanelBlockEntity other && isInverter(other.getBlockState())
+								&& best.equals(other.mcc) && along(other.getBlockPos(), best, right) < mine) {
+							rank++;
+						}
+					}
+				}
+			}
+		}
+		int xf = Math.min(2, rank);
+		if (best == null ? mcc != null : !best.equals(mcc) || xf != regXf) {
+			mcc = best;
+			regXf = xf;
+			sync(level);
+		}
+	}
+
+	private static double along(BlockPos p, BlockPos origin, net.minecraft.core.Direction right) {
+		return (p.getX() - origin.getX()) * right.getStepX() + (p.getZ() - origin.getZ()) * right.getStepZ();
+	}
+
 	public void serverTick(ServerLevel level) {
 		if (input != null) {
 			charge(level);
@@ -84,8 +140,11 @@ public class LivePanelBlockEntity extends BlockEntity {
 			return;
 		}
 		timer = 40;
-		if (input != null || isSwitchboard(getBlockState())) {
+		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState())) {
 			linkBattery(level);
+		}
+		if (isInverter(getBlockState())) {
+			linkBypass(level);
 		}
 		if (generator != null && isGenerator(level, generator) && generator.distSqr(getBlockPos()) <= (double) REACH * REACH) {
 			if (hoursBase < 0 && level.getBlockEntity(generator) instanceof EquipmentBlockEntity edg) {
@@ -276,6 +335,10 @@ public class LivePanelBlockEntity extends BlockEntity {
 		}
 		out.putBoolean("ac", ac);
 		out.putInt("charging", charging);
+		if (mcc != null) {
+			out.store("mcc", BlockPos.CODEC, mcc);
+			out.putInt("reg_xf", regXf);
+		}
 	}
 
 	@Override
@@ -286,6 +349,8 @@ public class LivePanelBlockEntity extends BlockEntity {
 		battery = in.read("battery", BlockPos.CODEC).orElse(null);
 		ac = in.getBooleanOr("ac", false);
 		charging = in.getIntOr("charging", 0);
+		mcc = in.read("mcc", BlockPos.CODEC).orElse(null);
+		regXf = in.getIntOr("reg_xf", 1);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}

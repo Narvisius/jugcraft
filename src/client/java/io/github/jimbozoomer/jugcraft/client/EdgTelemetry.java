@@ -49,6 +49,12 @@ public final class EdgTelemetry {
 		public double rpm, air, lube, jacket, kv, amps, kw, kvar, hz, pf, fieldV, fieldA, dcV, dcA, hours;
 		/** A station charger's equalize timer: the hours of its equalize charge left (0 on float; round 26). */
 		public double eqHours;
+		/**
+		 * A vital inverter (round 26, 8g): its DC in (the battery not flat), running, the load on it or on the bypass,
+		 * the bypass there to take it; its output volts, amps and frequency.
+		 */
+		public boolean invDc, invRun, invOnInv, invOnBypass, invBypassOk;
+		public double invAcV, invAcA, invHz;
 		/** Sequencer steps done, and the one whose motor is starting now (-1 none). */
 		public int steps, starting = -1;
 		public String avr1 = "", avr2 = "", sequence = "";
@@ -75,6 +81,9 @@ public final class EdgTelemetry {
 				case "dc_v" -> dcV;
 				case "dc_a" -> dcA;
 				case "eq_hours" -> eqHours;
+				case "inv_dc_v" -> dcV;
+				case "inv_ac_v" -> invAcV;
+				case "inv_ac_a" -> invAcA;
 				default -> 0;
 			};
 		}
@@ -119,6 +128,20 @@ public final class EdgTelemetry {
 				// high; no ground faults are modelled, so that window stays dark.
 				case "chg_dc_low" -> dcV < 124 ? 1 : 0;
 				case "chg_dc_high" -> dcV > 140 ? 1 : 0;
+				// A DC switchboard's ground detector: a lamp each side of the bus to ground, both lit while the bus is
+				// alive and neither side grounded (no ground faults are modelled).
+				case "gnd_lamp" -> dcV > 20 ? 1 : 0;
+				// A vital inverter's lamps, mimic and annunciator.
+				case "inv_dc", "inv_seg_dc" -> invDc ? 1 : 0;
+				case "inv_run", "inv_seg_inv" -> invRun ? 1 : 0;
+				case "inv_on" -> invOnInv ? 1 : 0;
+				case "inv_byp" -> invOnBypass ? 1 : 0;
+				case "inv_seg_byp" -> invBypassOk ? 1 : 0;
+				case "inv_seg_out" -> invOnInv ? 1 : invOnBypass ? 2 : 0;
+				case "inv_fail" -> invRun ? 0 : 1;
+				case "inv_low_dc" -> dcV < 112 ? 1 : 0;
+				case "inv_byp_fail" -> invBypassOk ? 0 : 1;
+				case "inv_sync" -> invRun && !invBypassOk ? 1 : 0;
 				default -> 0;
 			};
 		}
@@ -133,6 +156,10 @@ public final class EdgTelemetry {
 			}
 			if (channel.startsWith("relay")) {
 				return relays[channel.charAt(5) - '0'];
+			}
+			if (channel.equals("inv_hz")) {
+				// The frequency display goes dark with the inverter's own control power (its DC) and no bypass.
+				return invOnInv || invOnBypass ? String.format(Locale.ROOT, "%.2f", invHz) : "";
 			}
 			return switch (channel) {
 				case "avr1" -> avr1;
@@ -236,6 +263,47 @@ public final class EdgTelemetry {
 			o.dcV = 105 + 24 * soc;
 		}
 		o.alarms[7] = o.chargerAc ? 0 : 1;
+	}
+
+	/**
+	 * A vital inverter (round 26, 8g; Justin: "any meters and such are actually animated to work realistically"): on its
+	 * station battery's DC it runs and carries the vital bus, 120 V at about 46 A and 60.00 Hz, each with a real meter's
+	 * small wander. With the battery flat its static switch puts the load on the bypass (the regulating transformer, fed
+	 * from its MCC's REG XF breaker), about 118 V on the grid's frequency; with that gone too, the output is dead and the
+	 * display dark. The annunciator shows the inverter failed, low DC, the bypass source failed, the load on bypass, and
+	 * the inverter running out of sync with no bypass to follow. Called after battery(), which reads the DC bus.
+	 */
+	public static void inverter(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
+			double now) {
+		double soc = 0;
+		boolean charging = false;
+		if (panel.battery != null && level.getBlockEntity(panel.battery) instanceof io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity bank) {
+			soc = bank.charge();
+			charging = bank.flow > 0;
+		} else {
+			o.dcV = 0;
+		}
+		o.invDc = soc > 0.005 || charging;
+		o.invRun = o.invDc;
+		o.invBypassOk = panel.mcc != null && level.getBlockEntity(panel.mcc) instanceof EquipmentBlockEntity mcc && mcc.bus != null
+				&& mcc.bus.getAmount() > 0 && (mcc.breakers & 1 << panel.regXf) != 0;
+		o.invOnInv = o.invRun;
+		o.invOnBypass = !o.invRun && o.invBypassOk;
+		double t = now / 20.0, seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		if (o.invOnInv) {
+			o.invAcV = 120 + 0.4 * noise(t * 0.3, seed, 1);
+			o.invHz = 60 + 0.01 * noise(t * 0.2, seed, 2);
+		} else if (o.invOnBypass) {
+			o.invAcV = 118 + 1.2 * noise(t * 0.3, seed, 1);
+			o.invHz = 60 + 0.03 * noise(t * 0.1, seed, 2);
+		} else {
+			o.invAcV = 0;
+			o.invHz = 0;
+		}
+		o.invAcA = o.invOnInv || o.invOnBypass ? 46 + 3 * noise(t * 0.4, seed, 3) : 0;
+		if (!o.invDc) {
+			o.dcV = Math.min(o.dcV, 105);
+		}
 	}
 
 	/** Nothing running, all settled. */

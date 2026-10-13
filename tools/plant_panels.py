@@ -52,7 +52,7 @@ PANELS = {
     # inverter (the battery chargers are the EDG rooms' charger panel).
     "station_battery": {"display": "Station Battery (125 VDC, 30 Cells)", "width": 4},
     "dc_switchboard": {"display": "125 VDC Distribution Switchboard", "width": 2},
-    "vital_inverter": {"display": "Vital AC Inverter", "width": 1},
+    "vital_inverter": {"display": "Vital AC Inverter", "width": 1, "item3d": True},
     # The DC equipment rooms' own battery chargers (round 26, 8b): station_charger below.
     "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True},
 }
@@ -537,8 +537,8 @@ def dc_switchboard():
     # The ground detector.
     f.R(2.0, 15.6, 14.2, 19.6, fill=(52, 54, 58, 255))
     f.T(8.1, 18.8, "GROUND DETECTOR", 7, fill=(236, 236, 230, 255), bold=True)
-    f.lamp(5.0, 17.0, (240, 240, 230), True, None, r=0.5)
-    f.lamp(11.2, 17.0, (240, 240, 230), True, None, r=0.5)
+    f.lamp(5.0, 17.0, (240, 240, 230), True, None, r=0.5, live="gnd_lamp")
+    f.lamp(11.2, 17.0, (240, 240, 230), True, None, r=0.5, live="gnd_lamp")
     f.T(5.0, 15.95, "+ BUS", 6, fill=(236, 236, 230, 255), bold=True)
     f.T(11.2, 15.95, "- BUS", 6, fill=(236, 236, 230, 255), bold=True)
     f.proud(2.0, 15.6, 14.2, 19.6, 0.25)
@@ -567,31 +567,9 @@ def dc_switchboard():
     return f
 
 
-def vital_inverter():
-    """A 120 VAC vital bus inverter: the battery's DC made into steady AC for the instrument and control buses, with
-    its static transfer switch to the bypass supply."""
-    f = Front(1, 408)
-    f.door(0.4, 15.6)
-    f.nameplate(8, 29.0, 13.4, ["VITAL AC INVERTER 1A", "125 VDC IN  120 VAC 60 HZ 10 KVA"])
-    f.meter(1.6, 22.0, 7.6, 26.2, "AC VOLTS", (0, 150), 120, "V")
-    f.meter(8.4, 22.0, 14.4, 26.2, "AC AMPS", (0, 100), 46, "A")
-    # The frequency meter: a small digital readout.
-    f.R(4.0, 18.0, 12.0, 20.2, fill=(26, 26, 28, 255))
-    f.R(4.4, 18.4, 11.6, 19.8, fill=(18, 40, 26, 255))
-    f.T(8.0, 19.1, "60.00 Hz", 9, fill=(120, 250, 150, 255), bold=True)
-    f.proud(4.0, 18.0, 12.0, 20.2, 0.3)
-    for i, (name, col, lit) in enumerate((("DC IN", (40, 180, 70), True), ("INVERTER", (40, 180, 70), True),
-                                          ("ON INV", (240, 240, 230), True), ("BYPASS", (240, 170, 30), False))):
-        f.lamp(3.0 + i * 3.35, 15.0, col, lit, name, r=0.45)
-    f.knob(5.0, 9.6, ["INV", "BYPASS"], 0, "MANUAL BYPASS")
-    f.button(11.4, 10.0, (240, 240, 230), "ALARM RESET", "pi_pnl_white")
-    f.vent(2.0, 2.4, 14.0, 6.6)
-    return f
-
-
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
             "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
-            "dc_switchboard": dc_switchboard, "vital_inverter": vital_inverter, "station_charger": None}
+            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None}
 _FRONTS = {}
 
 
@@ -617,6 +595,8 @@ def cabinet(key):
         return station_battery()
     if key == "station_charger":
         return station_charger_boxes()
+    if key == "vital_inverter":
+        return vital_inverter_boxes()
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -1321,7 +1301,7 @@ def station_charger():
     # The lamps' legends, the annunciator's windows (unlit), the controls' legends.
     for x, label, colour, ch, _ in SC_LAMPS:
         T(x, SC_LAMP_Y - 1.25, label, 7, bold=True)
-        f.live.append({"t": "lamp", "x": x, "y": SC_LAMP_Y, "r": 0.5, "z": SC_DOOR + 0.52, "colour": list(colour), "ch": ch})
+        f.live.append({"t": "lamp", "x": x, "y": SC_LAMP_Y, "r": 0.5, "z": SC_DOOR + 0.56, "colour": list(colour), "ch": ch})
     ax, ay, cols, rows, ww, wh = SC_ANN
     f.R(ax - 0.3, ay - 0.3, ax + cols * ww + 0.3, ay + rows * wh + 0.3, fill=(30, 30, 32, 255))
     for i, (text, ch) in enumerate(SC_WINDOWS):
@@ -1333,7 +1313,7 @@ def station_charger():
         for k, word in enumerate(words):
             T((wx0 + wx1) / 2, (wy0 + wy1) / 2 + (len(words) - 1) * 0.28 - k * 0.56, word, 7, bold=True)
         if ch:
-            f.live.append({"t": "window", "x0": wx0, "y0": wy0, "x1": wx1, "y1": wy1, "z": SC_DOOR + 0.27,
+            f.live.append({"t": "window", "x0": wx0, "y0": wy0, "x1": wx1, "y1": wy1, "z": SC_DOOR + 0.33,
                            "colour": [255, 200, 80], "ch": ch, "alpha": 1.0, "label": words})
     T(12.1, 14.95, "TEST", 6, bold=True)
     T(12.1, 12.95, "RESET", 6, bold=True)
@@ -1444,4 +1424,188 @@ def station_charger_boxes():
                   {"rotation": {"angle": -22.5, "axis": "x", "origin": [8.0, yc, D + 0.15]}}))
     return b
 
+
+
+# ------------------------------------------------------------------------------------------------ the vital inverter
+
+# The DC rooms' vital AC inverters, rebuilt to match the station chargers (round 26, 8g; Justin: rebuild them "to
+# match", every meter live). A 10 kVA inverter: the station battery's 125 VDC made into steady 120 VAC for the vital
+# instrument buses, with its static transfer switch onto the bypass (the regulating transformer the MCC's REG XF
+# breaker feeds) when its DC fails, and the manual bypass switch. Its door: the nameplate; DC VOLTS, AC VOLTS and AC
+# AMPS meters behind glass; the output frequency's green digits; the mimic of its power path (DC in, the inverter, the
+# static switch, the load; the bypass into the static switch), its lines lit by what carries the load; DC IN, INVERTER,
+# ON INV and BYPASS lamps; a six-window annunciator and ALARM RESET; the manual bypass switch's handle (NORMAL); the DC
+# input breaker; the louvred inlet, the exhaust hood, hinges and the T-handle. All of it moves with the battery and the
+# bypass (client/EdgTelemetry.java inverter).
+VI_KEY = "vital_inverter"
+VI_METERS = [(1.15, "DC VOLTS", (0, 150), "V", "inv_dc_v"), (5.85, "AC VOLTS", (0, 150), "V", "inv_ac_v"),
+             (10.55, "AC AMPS", (0, 100), "A", "inv_ac_a")]
+VI_METER = (4.3, 22.8, 27.4)
+VI_FREQ = (5.6, 20.0, 12.6, 21.6)            # the frequency display's bezel
+VI_MIMIC = (1.4, 15.6, 12.6, 19.4)           # its mimic panel
+VI_MAIN_Y, VI_BYP_Y = 18.4, 16.6             # the mimic's lines
+VI_LAMPS = [(2.6, "DC IN", (40, 180, 70), "inv_dc", "pi_lens_green"), (5.6, "INVERTER", (40, 180, 70), "inv_run", "pi_lens_green"),
+            (8.6, "ON INV", (240, 240, 230), "inv_on", "pi_lens_white"), (11.6, "BYPASS", (240, 170, 30), "inv_byp", "pi_lens_amber")]
+VI_LAMP_Y = 14.4
+VI_ANN = (1.4, 8.8, 3, 2, 2.9, 1.7)
+VI_WINDOWS = [("INV|FAIL", "inv_fail"), ("LOW|DC", "inv_low_dc"), ("BYP SRC|FAIL", "inv_byp_fail"),
+              ("ON|BYPASS", "inv_byp"), ("OUT OF|SYNC", "inv_sync"), ("FAN|FAIL", "inv_fan")]
+
+
+def vital_inverter():
+    """The vital inverter's door, drawn (the case, glass, lamps and handles are real: vital_inverter_boxes)."""
+    f = Front(1, 540)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    D = SC_DOOR
+    f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
+    f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T(8.0, 29.4, "VITAL AC INVERTER", 11, fill=WHITE, bold=True)
+    T(8.0, 28.75, "125 VDC IN    120 VAC 60 HZ 10 KVA", 7, fill=WHITE, bold=True)
+    w, y0, y1 = VI_METER
+    for x0, label, scale, unit, ch in VI_METERS:
+        f.meter(x0, y0, x0 + w, y1, label, scale, 0, unit, live=ch)
+        f.live[-1]["z"] = D + 0.3
+    # The frequency display: dark green glass; its digits are live.
+    bx0, by0, bx1, by1 = VI_FREQ
+    f.R(bx0 + 0.3, by0 + 0.3, bx1 - 0.3, by1 - 0.3, fill=(14, 34, 22, 255))
+    T(3.3, (by0 + by1) / 2 + 0.25, "OUTPUT", 7, bold=True)
+    T(3.3, (by0 + by1) / 2 - 0.35, "FREQ HZ", 7, bold=True)
+    f.text((bx0 + bx1) / 2, (by0 + by1) / 2, D + 0.2, 0.75, (120, 250, 150), "inv_hz", "center")
+    # The mimic: its lines and labels drawn light on the dark panel (lit over live), the inverter and static switch
+    # boxes (real) labelled.
+    mx0, my0, mx1, my1 = VI_MIMIC
+    f.R(mx0, my0, mx1, my1, fill=(52, 54, 58, 255))
+    LINE = (170, 172, 168, 255)
+    for x0, x1, y in ((1.9, 4.6, VI_MAIN_Y), (6.6, 8.6, VI_MAIN_Y), (10.2, 12.2, VI_MAIN_Y), (1.9, 8.6, VI_BYP_Y)):
+        f.R(x0, y - 0.1, x1, y + 0.1, fill=LINE)
+    for x, y, label in ((3.25, VI_MAIN_Y + 0.5, "DC IN"), (3.25, VI_BYP_Y + 0.5, "BYPASS"), (11.2, VI_MAIN_Y + 0.5, "LOAD"),
+                        (5.6, VI_MAIN_Y, "INV"), (9.4, (VI_MAIN_Y + VI_BYP_Y) / 2, "SS")):
+        T(x, y, label, 6, fill=WHITE if label in ("INV", "SS") else (220, 222, 216, 255), bold=True)
+    for x0, x1, y, ch, c1, c2 in ((1.9, 4.6, VI_MAIN_Y, "inv_seg_dc", (90, 230, 120), None), (6.6, 8.6, VI_MAIN_Y, "inv_seg_inv", (90, 230, 120), None),
+                                  (1.9, 8.6, VI_BYP_Y, "inv_seg_byp", (250, 190, 70), None),
+                                  (10.2, 12.2, VI_MAIN_Y, "inv_seg_out", (90, 230, 120), (250, 190, 70))):
+        f.glow(x0, y - 0.1, x1, y + 0.1, D + 0.21, c1, ch, alpha=1.0, colour2=c2)
+    # The lamps' legends; the annunciator (live); ALARM RESET.
+    for x, label, colour, ch, _ in VI_LAMPS:
+        T(x, VI_LAMP_Y - 1.15, label, 6, bold=True)
+        f.live.append({"t": "lamp", "x": x, "y": VI_LAMP_Y, "r": 0.5, "z": D + 0.56, "colour": list(colour), "ch": ch})
+    ax, ay, cols, rows, ww, wh = VI_ANN
+    f.R(ax - 0.3, ay - 0.3, ax + cols * ww + 0.3, ay + rows * wh + 0.3, fill=(30, 30, 32, 255))
+    for i, (text, ch) in enumerate(VI_WINDOWS):
+        c, r = i % cols, i // cols
+        wx0, wy1 = ax + c * ww + 0.12, ay + (rows - r) * wh - 0.12
+        wx1, wy0 = wx0 + ww - 0.24, wy1 - wh + 0.24
+        f.R(wx0, wy0, wx1, wy1, fill=(232, 232, 222, 255))
+        words = text.split("|")
+        for k, word in enumerate(words):
+            T((wx0 + wx1) / 2, (wy0 + wy1) / 2 + (len(words) - 1) * 0.28 - k * 0.56, word, 6, bold=True)
+        f.live.append({"t": "window", "x0": wx0, "y0": wy0, "x1": wx1, "y1": wy1, "z": D + 0.33,
+                       "colour": [255, 200, 80], "ch": ch, "alpha": 1.0, "label": words})
+    T(12.1, 9.55, "ALARM", 6, bold=True)
+    T(12.1, 9.0, "RESET", 6, bold=True)
+    # The manual bypass switch's positions and name; the DC input breaker's.
+    T(4.0, 7.9, "NORMAL", 6, bold=True)
+    T(6.6, 6.1, "BYPASS", 6, bold=True)
+    T(4.0, 4.25, "MANUAL BYPASS", 6, bold=True)
+    T(11.5, 7.65, "DC INPUT", 7, bold=True)
+    T(11.5, 4.15, "125 V  150 A", 6, bold=True)
+    f.R(2.0, 1.6, 14.0, 3.6, fill=(22, 22, 24, 255))
+    return f
+
+
+def _cabinet_shell(F):
+    """The station charger's and the inverter's cabinet: plinth, body, door, cap, exhaust hood, hinges, T-handle,
+    louvred inlet."""
+    D = SC_DOOR
+    b = [(0.8, 0, 2.6, 15.2, 1.2, 14.0, "pi_toe_kick"),
+         (0.4, 1.2, 1.6, 15.6, 30.4, 14.6, "pi_cabinet"),
+         (0.6, 1.4, 14.6, 15.4, 30.2, D, {"*": "pi_cabinet", "south": F}),
+         (0.2, 30.4, 1.4, 15.8, 31.2, 15.2, "pi_cabinet_dark")]
+    b += [(2.5, 31.9, 4.0, 13.5, 32.0, 12.4, "pi_cabinet_dark"), (2.5, 31.2, 4.0, 2.9, 31.9, 12.4, "pi_cabinet_dark"),
+          (13.1, 31.2, 4.0, 13.5, 31.9, 12.4, "pi_cabinet_dark"), (2.9, 31.2, 4.0, 13.1, 31.9, 4.4, "pi_pnl_black")]
+    for k in range(3):
+        b.append((2.9, 31.25 + k * 0.22, 12.0, 13.1, 31.37 + k * 0.22, 12.4, "pi_cabinet_dark"))
+    for y in (4.0, 26.0):
+        b.append((0.15, y, 14.5, 0.6, y + 2.0, 15.25, "pi_chrome"))
+    b += [(13.7, 12.4, D, 14.7, 17.4, D + 0.15, "pi_pnl_black"), (14.0, 13.0, D + 0.15, 14.4, 16.6, D + 0.5, "pi_chrome"),
+          (13.85, 15.8, D + 0.5, 14.55, 16.4, D + 0.75, "pi_chrome"), (14.05, 12.7, D + 0.15, 14.35, 12.95, D + 0.3, "pi_brass")]
+    b += [(1.8, 1.4, D, 14.2, 1.6, D + 0.3, "pi_cabinet_dark"), (1.8, 3.6, D, 14.2, 3.8, D + 0.3, "pi_cabinet_dark"),
+          (1.8, 1.6, D, 2.0, 3.6, D + 0.3, "pi_cabinet_dark"), (14.0, 1.6, D, 14.2, 3.6, D + 0.3, "pi_cabinet_dark")]
+    for k in range(4):
+        yc = 1.95 + k * 0.5
+        b.append((2.0, yc - 0.06, D - 0.1, 14.0, yc + 0.06, D + 0.4, "pi_cabinet_dark",
+                  {"rotation": {"angle": -22.5, "axis": "x", "origin": [8.0, yc, D + 0.15]}}))
+    return b
+
+
+def _meter_case(x0, y0, x1, y1, face):
+    """A switchboard meter's black case out of the door, its face set back inside it, the glass in front, the zero
+    adjuster under the glass."""
+    D = SC_DOOR
+    blk = "pi_pnl_black"
+    xm = (x0 + x1) / 2
+    return [(x0, y0, D, x0 + 0.4, y1, D + 0.7, blk), (x1 - 0.4, y0, D, x1, y1, D + 0.7, blk),
+            (x0 + 0.4, y0, D, x1 - 0.4, y0 + 0.4, D + 0.7, blk), (x0 + 0.4, y1 - 0.4, D, x1 - 0.4, y1, D + 0.7, blk),
+            (x0 + 0.4, y0 + 0.4, D, x1 - 0.4, y1 - 0.4, D + 0.15, face),
+            (x0 + 0.4, y0 + 0.4, D + 0.55, x1 - 0.4, y1 - 0.4, D + 0.6, {"south": SC_GLASS, "north": SC_GLASS}),
+            (xm - 0.25, y0 + 0.05, D + 0.7, xm + 0.25, y0 + 0.35, D + 0.85, "pi_cap_black")]
+
+
+def _annunciator(ax, ay, cols, rows, ww, wh, face):
+    """An annunciator's black grid out of the door, its windows set back in it."""
+    D = SC_DOOR
+    blk = "pi_pnl_black"
+    gx0, gy0, gx1, gy1 = ax - 0.3, ay - 0.3, ax + cols * ww + 0.3, ay + rows * wh + 0.3
+    b = [(gx0, gy0, D, gx1, gy1, D + 0.25, face)]
+    for c in range(cols + 1):
+        x = ax + c * ww
+        b.append((x - (0.3 if c in (0, cols) else 0.12), gy0, D + 0.25, x + (0.3 if c in (0, cols) else 0.12), gy1, D + 0.5, blk))
+    for r in range(rows + 1):
+        y = ay + r * wh
+        for c in range(cols):
+            xa = ax + c * ww + (0.3 if c == 0 else 0.12)
+            xb = ax + (c + 1) * ww - (0.3 if c + 1 == cols else 0.12)
+            b.append((xa, y - (0.3 if r in (0, rows) else 0.12), D + 0.25, xb, y + (0.3 if r in (0, rows) else 0.12), D + 0.5, blk))
+    return b
+
+
+def vital_inverter_boxes():
+    F = f"pi_{VI_KEY}_f"
+    D = SC_DOOR
+    face = {"*": "pi_pnl_black", "south": F}
+    blk = "pi_pnl_black"
+    b = _cabinet_shell(F)
+    b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
+    w, y0, y1 = VI_METER
+    for x0, *_ in VI_METERS:
+        b += _meter_case(x0, y0, x0 + w, y1, face)
+    # The frequency display: its bezel round the glass, the glass set back.
+    bx0, by0, bx1, by1 = VI_FREQ
+    b += [(bx0, by0, D, bx0 + 0.3, by1, D + 0.4, blk), (bx1 - 0.3, by0, D, bx1, by1, D + 0.4, blk),
+          (bx0 + 0.3, by0, D, bx1 - 0.3, by0 + 0.3, D + 0.4, blk), (bx0 + 0.3, by1 - 0.3, D, bx1 - 0.3, by1, D + 0.4, blk),
+          (bx0 + 0.3, by0 + 0.3, D, bx1 - 0.3, by1 - 0.3, D + 0.1, face)]
+    # The mimic panel; its inverter and static switch boxes standing out of it.
+    mx0, my0, mx1, my1 = VI_MIMIC
+    b.append((mx0, my0, D, mx1, my1, D + 0.15, face))
+    b += [(4.6, VI_MAIN_Y - 0.6, D + 0.15, 6.6, VI_MAIN_Y + 0.6, D + 0.35, face),
+          (8.6, VI_BYP_Y - 0.5, D + 0.15, 10.2, VI_MAIN_Y + 0.5, D + 0.35, face)]
+    for x, _, _, _, lens in VI_LAMPS:
+        b += _sc_round(x, VI_LAMP_Y, D, D + 0.3, 0.7, "pi_chrome") + _sc_round(x, VI_LAMP_Y, D + 0.3, D + 0.5, 0.5, lens)
+    b += _annunciator(*VI_ANN, face)
+    b += [(11.6, 10.0, D, 12.6, 11.0, D + 0.12, blk)] + _sc_round(12.1, 10.5, D + 0.12, D + 0.5, 0.42, "pi_cap_black")
+    # The manual bypass switch: its plate, the hub and the pistol-grip handle up at NORMAL.
+    b += [(2.6, 4.7, D, 5.4, 7.5, D + 0.15, "pi_chrome")] + _sc_round(4.0, 6.1, D + 0.15, D + 0.5, 0.65, "pi_cap_black")
+    b += [(3.7, 6.1, D + 0.5, 4.3, 7.3, D + 0.85, blk), (3.6, 7.3, D + 0.5, 4.4, 7.55, D + 0.95, blk)]
+    # The DC input breaker through its cut-out, its toggle up (ON).
+    cx = 11.5
+    b += [(cx - 2.0, 4.6, D, cx + 2.0, 7.2, D + 0.15, "pi_cabinet_dark"),
+          (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, "pi_pnl_black"),
+          (cx - 0.35, 5.6, D + 0.45, cx + 0.35, 6.6, D + 0.75, "pi_pnl_black"),
+          (cx - 0.45, 6.6, D + 0.45, cx + 0.45, 6.85, D + 0.95, "pi_cab_white")]
+    return b
+
+
+# The drawings defined after the table (DRAWINGS holds their keys from the start, so SHARP has them).
 DRAWINGS["station_charger"] = station_charger
+DRAWINGS["vital_inverter"] = vital_inverter

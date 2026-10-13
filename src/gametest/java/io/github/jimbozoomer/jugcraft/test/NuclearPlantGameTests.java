@@ -524,6 +524,7 @@ public class NuclearPlantGameTests {
 		java.util.List<EquipmentBlockEntity> gear = new java.util.ArrayList<>(), mccs = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity> banks = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> chargers = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> inverters = new java.util.ArrayList<>();
 		EquipmentBlockEntity transformer = null;
 		for (int i = 0; i < print.size(); i++) {
 			BlockState state = print.state(i, Rotation.NONE);
@@ -543,6 +544,9 @@ public class NuclearPlantGameTests {
 				if (bank != null && !banks.contains(bank)) {
 					banks.add(bank);
 				}
+			} else if (state.is(PlantInterior.BLOCKS.get("vital_inverter"))
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity inv) {
+				inverters.add(inv);
 			} else if ((state.is(PlantInterior.BLOCKS.get("edg_battery_charger")) || state.is(PlantInterior.BLOCKS.get("station_charger")))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
 				chargers.add(panel);
@@ -551,6 +555,19 @@ public class NuclearPlantGameTests {
 		helper.assertTrue(transformer != null && transformer.output != null, "the main transformer");
 		helper.assertTrue(banks.size() == 4 && chargers.size() == 4, "four station batteries and four chargers: " + banks.size() + ", " + chargers.size());
 		helper.assertTrue(mccs.size() == 2, "a motor control centre in each DC equipment room: " + mccs.size());
+		// Round 26 (8g): each vital inverter finds its battery and its MCC, and the two by each MCC take REG XF 1 and 2
+		// (twice round, so each sees the other's link).
+		helper.assertTrue(inverters.size() == 4, "four vital inverters: " + inverters.size());
+		for (int t = 0; t < 90; t++) {
+			for (var inv : inverters) inv.serverTick(level);
+		}
+		java.util.Map<BlockPos, java.util.Set<Integer>> fedBy = new java.util.HashMap<>();
+		for (var inv : inverters) {
+			helper.assertTrue(inv.battery != null && inv.mcc != null, "an inverter links its battery and its MCC: " + inv.getBlockPos().subtract(stake).toShortString());
+			fedBy.computeIfAbsent(inv.mcc, k -> new java.util.HashSet<>()).add(inv.regXf);
+		}
+		helper.assertTrue(fedBy.size() == 2 && fedBy.values().stream().allMatch(v -> v.equals(java.util.Set.of(1, 2))),
+				"the two inverters by each MCC are fed by its REG XF 1 and 2: " + fedBy);
 		long cap = io.github.jimbozoomer.jugcraft.nuclear.Switchgear.CAPACITY;
 		for (EquipmentBlockEntity g : gear) {
 			helper.assertTrue(g.bus != null && g.bus.getAmount() == cap, "a fuelled build's load centres start full");

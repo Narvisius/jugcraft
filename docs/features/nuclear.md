@@ -142,6 +142,22 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
     work realistically"): the needles read the volts and amps, the AC ON, DC ON, FLOAT and EQUALIZE lamps light, the
     timer's pointer shows the hours of equalize left, and the windows come in for AC FAIL and CHGR FAIL (no supply),
     DC LOW (the battery run down), DC HIGH and EQUALIZING (GND FAULT stays dark: no ground faults are modelled).
+- **Vital AC Inverter** (rebuilt in round 26 to match the Station Battery Charger): the station battery's 125 VDC
+  made into 120 VAC for the vital instrument buses, one block wide and two high. Its door: DC VOLTS, AC VOLTS and AC
+  AMPS meters behind glass, the output frequency in green digits, a mimic of its power path (DC in, the inverter, the
+  static switch and the load; the bypass into the static switch), DC IN, INVERTER, ON INV and BYPASS lamps, a
+  six-window annunciator with ALARM RESET, the manual bypass switch (at NORMAL), the DC input breaker, the louvred
+  inlet, the exhaust hood, hinges and a T-handle. All of it is live, with a real meter's small wander:
+  - On its battery's DC it runs and carries the load: 120 V, about 46 A, 60.00 Hz; the mimic's DC, inverter and load
+    lines lit green.
+  - With the battery flat its static switch moves the load onto the bypass, the regulating transformer fed from the
+    nearest motor control centre's REG XF breaker (the inverters by an MCC take REG XF 1 and 2 in order along its
+    front): about 118 V on the grid's frequency, BYPASS and ON BYPASS lit, INV FAIL and LOW DC in, the load line amber.
+  - With that breaker open too, the output is dead: the meters drop to zero and the display goes dark. BYP SRC FAIL
+    comes in whenever the bypass is gone, and OUT OF SYNC while the inverter runs with no bypass to follow.
+  - It only reads its battery; it draws nothing from it.
+- The 125 VDC Distribution Switchboard's ground detector lamps are live: both lit while the bus is alive (no ground
+  faults are modelled).
 - **Refuelling:**
   - Shut the reactor down (rods fully in, core below 120 °C), then press REFUEL. The vessel's head comes off and the
     core glows blue under its water.

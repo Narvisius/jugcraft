@@ -113,7 +113,7 @@ public final class PlantInterior {
 			// rack of 30 cells), its distribution switchboard, the vital inverter, and the cables from battery to switchboard.
 			{"station_battery", 0, "battery:4:2:p", "metal", null},
 			{"dc_switchboard", 0, "live:2:2:p", "metal", null},
-			{"vital_inverter", 0, "multi:1:2:p", "metal", null},
+			{"vital_inverter", 0, "live:1:2:p", "metal", null},
 			// The DC rooms' own battery chargers (round 26, 8b): live like the diesel rooms', a model of their own.
 			{"station_charger", 0, "live:1:2:p", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},

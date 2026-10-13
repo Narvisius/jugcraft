@@ -122,6 +122,9 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		EdgTelemetry.Snapshot snap = EdgTelemetry.of(panel, edg, now);
 		if (edg == null) {
 			EdgTelemetry.battery(snap, panel, level);
+			if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
+				EdgTelemetry.inverter(snap, panel, level, now);
+			}
 		}
 		boolean blink = ((long) (now / 5)) % 2 == 0;
 		for (Element e : layout.elements()) {
