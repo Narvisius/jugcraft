@@ -37,8 +37,8 @@ import net.minecraft.world.phys.Vec3;
 public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity, NuclearRenderer.State> {
 	public static final Identifier TEXTURE = Jugcraft.id("textures/entity/nuclear_equipment.png");
 	private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
-	/** The sheet's rows of 64-pixel cells (eight across): 512 x 576 since round 24 (tools/nuclear.py EQ_ROWS). */
-	static final int ROWS = 9;
+	/** The sheet's rows of 64-pixel cells (eight across): 512 x 640 since round 26 (tools/nuclear.py EQ_ROWS). */
+	static final int ROWS = 10;
 	private static final float PX = 1 / 512F, PX_V = 1 / (64F * ROWS);
 
 	static final float[] STAINLESS = region(0, 0);
@@ -114,6 +114,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] PLACARDS = region(5, 8);
 	static final float[] BINDERS = region(6, 8);
 	static final float[] NAMEPLATES3 = region(7, 8);
+	static final float[] NAMEPLATES4 = region(0, 9);
 	/** Every material on the sheet by name, in the sheet's order (tools/nuclear.py EQ_MATERIALS). */
 	static final String[] SHEET = {
 			"stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
@@ -124,7 +125,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			"gunmetal", "red_iron", "pipe_green", "pipe_brown", "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board",
 			"sign_autostart", "stencil_edg", "turbo", "black", "lamp_white", "lamp_amber", "annunciator", "meter", "dial",
 			"chart", "drpi", "swatches", "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards",
-			"binders", "nameplates3"};
+			"binders", "nameplates3", "nameplates4"};
 	private static final java.util.Map<String, float[]> BY_NAME = new java.util.HashMap<>();
 
 	static {
@@ -222,9 +223,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			state.output = equipment.core.electric / (float) Math.max(1, equipment.core.design.ratedJe());
 			state.temperature = (float) equipment.core.temperature;
 		}
-		if (state.kind == EquipmentKind.SWITCHGEAR_LINEUP && equipment.bus != null) {
+		if (state.kind.board() && equipment.bus != null) {
 			state.breakers = equipment.breakers;
-			state.charge = equipment.bus.getAmount() / (float) Switchgear.CAPACITY;
+			state.charge = equipment.bus.getAmount() / (float) equipment.busCapacity();
 			System.arraycopy(equipment.flows, 0, state.flows, 0, state.flows.length);
 		}
 		state.time = (level.getGameTime() % 24_000) + partialTick;
@@ -399,11 +400,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				panelLive(new Frame(still, detail), new Frame(lit, detail), state);
 				if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
 				if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
-			} else if (state.kind == EquipmentKind.SWITCHGEAR_LINEUP) {
-				// The load centre's lit parts, and its breakers' lamps and flags as they stand.
+			} else if (state.kind.board()) {
+				// A load centre's or motor control centre's lit parts, and its breakers' lamps, flags and handles as they
+				// stand.
 				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				if (detail) {
-					Mesh[] live = loadCentreMesh(state.breakers);
+					Mesh[] live = loadCentreMesh(state.kind, state.breakers);
 					live[0].replay(p, consumer, state.facing, state.lightLevel);
 					live[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				}
@@ -425,7 +427,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL && detail) {
 			panelScreen(state, pose, collector);
 		}
-		if (state.kind == EquipmentKind.SWITCHGEAR_LINEUP && detail) {
+		if (state.kind.board() && detail) {
 			loadCentreMeters(state, pose, collector);
 		}
 	}
@@ -435,27 +437,28 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	/** The load centre's breaker lamps and flags by its breakers (still, lit), and its meters' dark glass. */
 	private static final java.util.Map<Integer, Mesh[]> LOAD_CENTRE = new java.util.HashMap<>();
 
-	static Mesh[] loadCentreMesh(int breakers) {
-		return LOAD_CENTRE.computeIfAbsent(breakers, b -> {
+	static Mesh[] loadCentreMesh(EquipmentKind kind, int breakers) {
+		return LOAD_CENTRE.computeIfAbsent(kind.ordinal() << 16 | breakers, b -> {
 			Mesh still = new Mesh(), lit = new Mesh();
-			loadCentreLive(new Frame(still, true), new Frame(lit, true), b);
+			loadCentreLive(new Frame(still, true), new Frame(lit, true), kind, breakers);
 			return new Mesh[] {still, lit};
 		});
 	}
 
 	/**
-	 * A load centre's live parts (where they are: tools/control_boards.py load_center's "live"): over each breaker its
+	 * A load centre's or motor control centre's live parts (where they are: tools/control_boards.py load_center's and
+	 * motor_control_center's "live"): over each breaker its
 	 * red lamp lit while it is closed, its green lamp while it is open (the other lens unlit); in its window the
 	 * breaker's flag, red for closed, green for open; the meters' dark glass, their readings drawn over it.
 	 */
-	static void loadCentreLive(Frame still, Frame lit, int breakers) {
-		com.google.gson.JsonObject live = ControlBoards.live(EquipmentKind.SWITCHGEAR_LINEUP);
+	static void loadCentreLive(Frame still, Frame lit, EquipmentKind kind, int breakers) {
+		com.google.gson.JsonObject live = ControlBoards.live(kind);
 		if (live == null) {
 			return;
 		}
 		Vec3 n = v(0, 0, -1);
 		com.google.gson.JsonArray list = live.getAsJsonArray("breakers");
-		for (int i = 0; i < list.size() && i < Switchgear.BREAKERS; i++) {
+		for (int i = 0; i < list.size() && i < 31; i++) {
 			com.google.gson.JsonObject b = list.get(i).getAsJsonObject();
 			boolean closed = (breakers & 1 << i) != 0;
 			double h = b.get("lamp").getAsDouble() / 2 + 0.005, z = b.get("lamp_z").getAsDouble();
@@ -467,11 +470,17 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				double x = lamps.get(k).getAsJsonArray().get(0).getAsDouble(), y = lamps.get(k).getAsJsonArray().get(1).getAsDouble();
 				(on ? lit : still).quad(v(x - h, y + h, z), v(x - h, y - h, z), v(x + h, y - h, z), v(x + h, y + h, z), n, uv[0], uv[1], uv[2], uv[3]);
 			}
-			com.google.gson.JsonArray fl = b.getAsJsonArray("flag");
-			double x0 = fl.get(0).getAsDouble(), y0 = fl.get(1).getAsDouble(), x1 = fl.get(2).getAsDouble(), y1 = fl.get(3).getAsDouble();
-			double fz = b.get("flag_z").getAsDouble();
-			float[] uv = closed ? swatch(0, 0) : swatch(3, 0);
-			still.quad(v(x0, y1, fz), v(x0, y0, fz), v(x1, y0, fz), v(x1, y1, fz), n, uv[0], uv[1], uv[2], uv[3]);
+			if (b.has("flag")) {
+				com.google.gson.JsonArray fl = b.getAsJsonArray("flag");
+				double x0 = fl.get(0).getAsDouble(), y0 = fl.get(1).getAsDouble(), x1 = fl.get(2).getAsDouble(), y1 = fl.get(3).getAsDouble();
+				double fz = b.get("flag_z").getAsDouble();
+				float[] uv = closed ? swatch(0, 0) : swatch(3, 0);
+				still.quad(v(x0, y1, fz), v(x0, y0, fz), v(x1, y0, fz), v(x1, y1, fz), n, uv[0], uv[1], uv[2], uv[3]);
+			}
+			// A motor control centre's operating handle: up while its breaker is on, down while off.
+			if (b.has("on")) {
+				ControlBoards.ops(still, b.getAsJsonArray(closed ? "on" : "off"));
+			}
 		}
 		float[] glass = swatch(0, 2);
 		for (com.google.gson.JsonElement e : live.getAsJsonArray("meters")) {
@@ -488,7 +497,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	 * charge), each feeder's amps (its flow in JE/t over four).
 	 */
 	private void loadCentreMeters(State s, PoseStack pose, SubmitNodeCollector collector) {
-		com.google.gson.JsonObject live = ControlBoards.live(EquipmentKind.SWITCHGEAR_LINEUP);
+		com.google.gson.JsonObject live = ControlBoards.live(s.kind);
 		if (live == null) {
 			return;
 		}
@@ -707,9 +716,10 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				ControlBoards.state(kind, "mcr", new Frame(still, true), false);
 				ControlBoards.state(kind, "mcr", new Frame(lit, true), true);
 				panelLive(new Frame(still, true), new Frame(lit, true), new State());
-			} else if (kind == EquipmentKind.SWITCHGEAR_LINEUP) {
+			} else if (kind.board()) {
 				ControlBoards.lit(kind, new Frame(lit, true));
-				loadCentreLive(new Frame(still, true), new Frame(lit, true), Switchgear.DEFAULT_BREAKERS);
+				loadCentreLive(new Frame(still, true), new Frame(lit, true), kind,
+						kind == EquipmentKind.MCC_LINEUP ? io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.DEFAULT_BREAKERS : Switchgear.DEFAULT_BREAKERS);
 			} else if (kind.decor()) {
 				PlantDecor.glow(kind, new Frame(lit, true));
 				PlantDecor.blink(kind, new Frame(lit, true), 0);

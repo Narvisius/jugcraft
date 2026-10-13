@@ -816,9 +816,12 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						// cable spreading room, up through the floor and into the trays.
 						{163, 2, 95, 164, 4, 89}, {162, 2, 92, 160, 4, 98}, {163, 8, 95, 164, 8, 89}, {160, 8, 93, 160, 9, 98},
 						// Round 25b: the rebuilt emergency light on the west wall, its heads aimed down at the floor.
-						{160, 2, 94, 157, 3, 92}};
+						{160, 2, 94, 157, 3, 92},
+						// Round 26 (8a): the DC rooms' motor control centres, whole and up close.
+						{153, 1, 97, 151, 1, 101}, {152, 1, 99, 152, 1, 101}, {161, 1, 111, 162, 1, 107}};
 				String[] gearNames = {"switchgear_room", "switchgear_north", "switchgear_south", "switchgear_charger_breaker", "dc_1a_chargers",
-						"conduits_north", "conduits_south", "spreading_conduits_north", "spreading_conduits_south", "emergency_light"};
+						"conduits_north", "conduits_south", "spreading_conduits_north", "spreading_conduits_south", "emergency_light",
+						"dc_1a_mcc", "dc_1a_mcc_close", "dc_1b_mcc"};
 				for (int i = 0; i < gearShots.length; i++) {
 					int[] t = gearShots[i];
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
@@ -835,10 +838,20 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 							}
 						}
 					}
+					// MCC 1A's CHGR 1 opened too (round 26): its handle down, its green lamp lit.
+					for (int gx = 150; gx <= 154; gx++) {
+						if (level.getBlockEntity(new BlockPos(wx.applyAsInt(gx), baseY, wz.applyAsInt(101))) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity mcc
+								&& mcc.kind() == io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.MCC_LINEUP) {
+							mcc.breakers &= ~(1 << 4);
+							mcc.changed();
+						}
+					}
 				});
 				context.waitTicks(40);
 				shotAt(context, singleplayer, wx.applyAsInt(163), y + 1, wz.applyAsInt(93), wx.applyAsInt(163), y, wz.applyAsInt(90),
 						"jugcraft_plant_medium_r25_switchgear_breakers_open");
+				shotAt(context, singleplayer, wx.applyAsInt(152), y + 1, wz.applyAsInt(99), wx.applyAsInt(152), y + 1, wz.applyAsInt(101),
+						"jugcraft_plant_medium_r26_dc_1a_mcc_chgr1_open");
 				// Diesel room A's generator started (it turns over, fires and runs up to speed: the coupling and fan
 				// turning, the gauges up, smoke at the stack); its day tank drawn down so the storage tank refills it, and
 				// the day tank's screen showing it filling.

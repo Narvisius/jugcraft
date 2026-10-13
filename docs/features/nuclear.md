@@ -82,7 +82,7 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   draw-out breakers behind hinged doors and a pair of digital ammeters on top. Each breaker door shows the breaker's
   front through its cut-out (open and close buttons, the open/closed flag, the spring-charged flag, the charging
   handle and the racking slot), a red and a green lamp, and an engraved nameplate naming its feeder: MCC 1 to 4,
-  INVERTER, CHARGER, HVAC, LIGHTING and two spares. The breaker lifting trolley rides rails along the top; the
+  INVERTER, DC MCC, HVAC, LIGHTING and two spares. The breaker lifting trolley rides rails along the top; the
   transformer section's top is its ventilation screen (the supply comes up from below). Each upper feeder in use has a
   conduit hub on top of its section; a spare's knockout is a blank cover.
   - Its bus holds **2,000,000 JE** and keeps it.
@@ -95,9 +95,27 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   - The lamps, flags and meters are live. A closed breaker has its red lamp lit and a red flag; an open one has its
     green lamp lit and a green flag. The meters read the charge (%), the bus volts, and each feeder's amps.
   - In the medium plant, a buried cable from the main transformer comes up through the floor under each of the
-    switchgear room's load centres. Each one's **CHARGER** breaker (the lower breaker of its third section) feeds its
-    train's two battery chargers by a cable in the floor slab. A plant built with `fuelled` starts with every load
-    center and station battery full.
+    switchgear room's load centres. Each one's **DC MCC** breaker (the lower breaker of its third section) feeds its
+    train's motor control centre in the DC equipment room by a cable in the floor slab (round 26). A plant built with
+    `fuelled` starts with every load center, motor control center and station battery full.
+- **The 480 V motor control center** (480 V Motor Control Center, round 26): four sections, four blocks long, one deep
+  and three high, standing in a DC equipment room. Each section has a top and a bottom wireway cover and a column of
+  plug-in units, with a tall narrow vertical wireway door at its right.
+  - The first section is the incoming section: the main breaker's unit (its trip unit window and rating plug), the
+    metering unit (the bus's charge and volts, live, and the phase selector) and the incoming cables' bolted cover.
+  - Then the feeders: REG XF 1 and REG XF 2 (the inverters' regulating transformers), a SPARE, CHGR 1 and CHGR 2 (the
+    battery chargers), and two combination starters, EXH FAN and DC AHU, with START and STOP buttons, a HAND-OFF-AUTO
+    switch and an overload reset.
+  - Every breaker's unit door has its operating handle in a slotted escutcheon (up ON, down OFF), a red and a green
+    pilot lamp, an engraved nameplate and quarter-turn fasteners. The handles and lamps are live.
+  - Its bus holds **500,000 JE**. **In:** a cable under its first section charges the bus while the main breaker is
+    closed (up to 4,096 JE/t). **Out:** each closed feeder sends up to 1,024 JE/t out of its own terminal: CHGR 1 down
+    through the floor under the third section, CHGR 2 out of the back of the fourth section's bottom block (the others
+    out of their sections' tops or backs). **Right-click a unit's door** to switch its breaker (the owner, or their
+    party in Party mode); anywhere else shows the bus's charge, the main breaker's state and what is coming in.
+  - In the medium plant each DC equipment room has one, fed from its train's load centre's DC MCC breaker. Its CHGR 1
+    and CHGR 2 breakers each feed one of the room's two battery chargers by its own cable in the floor (in Room 1B,
+    CHGR 2's cable is buried a level deeper where it passes under the others).
 - **Station Battery** (rebuilt in round 25b): a two-step seismic rack four blocks long holding 30 flooded lead-acid
   cells, every part modelled. Each cell is a clear jar on its foot, and you can see in: the plates standing in the
   acid (brown positives, grey negatives) on the sediment space, the acid's level with its MAX and MIN marks, the
@@ -220,7 +238,8 @@ blueprint (for players who lay out their own plant).
   - Grade: Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (Station Battery, four
     blocks long, 30 cells in clear jars, below), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
-    beside the battery chargers and Vital AC Inverters, with the 480 V load centre feeding them; the switchgear room
+    beside the battery chargers and Vital AC Inverters, with the room's 480 V motor control centre feeding the
+    chargers; the switchgear room
     (both trains' 480 V load centers face to face across an aisle of rubber mats, fed from the main transformer and
     feeding the chargers, above; their feeder conduits up through the ceiling into the cable spreading room's trays;
     emergency lights, an extinguisher);

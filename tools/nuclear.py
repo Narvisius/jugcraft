@@ -63,6 +63,8 @@ EQUIPMENT = {
     "radiation_control_board": ("Radiation and Ventilation Control Board", 6, 2, 3),
     # The control building's remote shutdown panel (round 24, tools/control_boards.py remote_shutdown_panel).
     "remote_shutdown_panel": ("Remote Shutdown Panel", 6, 1, 3),
+    # The DC equipment rooms' 480 V motor control centres (round 26, 8a; tools/control_boards.py motor_control_center).
+    "mcc_lineup": ("480 V Motor Control Center", 4, 1, 3),
 }
 # The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
 TOWER_CONTROLLER = "cooling_tower_controller"
@@ -148,6 +150,7 @@ LANG = {
     "tooltip.jugcraft.nuclear.electrical_control_board": "Offsite power, the station busses and the diesel generators (for show)",
     "tooltip.jugcraft.nuclear.radiation_control_board": "The radiation monitors, ventilation and fire detection (for show)",
     "tooltip.jugcraft.nuclear.remote_shutdown_panel": "Trips the nearest reactor and takes its controls from the control room's console (no link card needed)",
+    "tooltip.jugcraft.nuclear.mcc_lineup": "A 480 V motor control center that holds 500,000 JE: cable in under its first section, take power out of its units' terminals (the chargers' down through the floor or out of the back); right-click a unit to switch its breaker",
     "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
     "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
     "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
@@ -171,6 +174,7 @@ LANG = {
     "message.jugcraft.nuclear.card_empty": "Use the card on a reactor vessel first",
     "message.jugcraft.nuclear.not_owner": "This reactor belongs to someone else",
     "message.jugcraft.nuclear.load_center": "Load center bus: %s of %s JE (%s%%), main breaker %s, %s JE/t coming in",
+    "message.jugcraft.nuclear.mcc": "Motor control center bus: %s of %s JE (%s%%), main breaker %s, %s JE/t coming in",
     "message.jugcraft.nuclear.breaker": "%s breaker %s",
     "message.jugcraft.nuclear.breaker_open": "open",
     "message.jugcraft.nuclear.breaker_closed": "closed",
@@ -294,6 +298,7 @@ CRAFTING = {
                           ("radiation_control_board", "light_blue"))},
     "remote_shutdown_panel": (["RGR", "CKC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit",
                                                      "K": "minecraft:tripwire_hook", "S": "#c:plates/steel"}, 1),
+    "mcc_lineup": (["SLS", "CAC", "SSS"], {"S": "#c:plates/steel", "L": "minecraft:lever", "C": "minecraft:copper_ingot", "A": "jugcraft:aluminum_cable"}, 1),
     "cooling_tower_fill": (["PPP", "SSS", "PPP"], {"P": "jugcraft:plastic_sheet", "S": "minecraft:stick"}, 8),
     "conduit_trench": (["CCC", "PPP", "CCC"], {"C": "minecraft:smooth_stone", "P": "jugcraft:circulating_water_conduit"}, 3),
     TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
@@ -1055,7 +1060,7 @@ def geiger_item(rid):
 # Eight cells across; nine rows since round 24 (512 x 576: client/NuclearRenderer.java ROWS).
 EQ_SHEET = 512
 EQ_CELL = 64
-EQ_ROWS = 9
+EQ_ROWS = 10
 EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
                 "concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey",
                 "radiator", "glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green",
@@ -1070,8 +1075,8 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 # The remote shutdown panel (round 24): engraved nameplates and titles, digital indicators, placards,
                 # procedure binders (tools/control_boards.py TEXT_MATERIALS).
                 "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders",
-                # The 480 V load centre's legends (round 25).
-                "nameplates3"]
+                # The 480 V load centre's legends (round 25), the DC rooms' motor control centres' (round 26).
+                "nameplates3", "nameplates4"]
 
 
 def eq_slot(name):

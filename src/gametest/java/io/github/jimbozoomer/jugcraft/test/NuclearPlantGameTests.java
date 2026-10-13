@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340894"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340911"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -495,8 +495,9 @@ public class NuclearPlantGameTests {
 	/**
 	 * Round 25 (Justin: "make sure they actually hold charge in game, I want it to actually work"): in a built medium
 	 * plant the main transformer feeds the control building's two load centres by its buried cable (and no other), each
-	 * load centre's CHARGER breaker feeds its train's two battery chargers, the chargers charge the four station
-	 * batteries, and opening the breakers stops it while everything keeps its charge. The pieces are ticked by hand, in
+	 * load centre's DC MCC breaker feeds its train's motor control centre, whose CHGR 1 and CHGR 2 breakers each feed one
+	 * of the train's battery chargers (round 26), the chargers charge the four station batteries, and opening the
+	 * breakers stops it while everything keeps its charge. The pieces are ticked by hand, in
 	 * the order the server ticks them.
 	 */
 	@GameTest(maxTicks = 40)
@@ -509,13 +510,18 @@ public class NuclearPlantGameTests {
 		// Where a breaker's door is, as the game finds it from a click (the main, an upper and a lower feeder).
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.48, 0.9, 0.1) == 0, "main breaker's door");
 		double w = (7.96 - 2.98) / 5;
-		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.98 + 2.5 * w, 0.6, 0.1) == 6, "CHARGER breaker's door");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.98 + 2.5 * w, 0.6, 0.1) == 6, "DC MCC breaker's door");
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(2.98 + 2.5 * w, 1.5, 0.1) == 5, "INVERTER breaker's door");
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.breakerAt(1.0, 1.0, 0.1) == -1, "the transformer section has no breaker");
+		// The motor control centre's unit doors (round 26): the main, CHGR 1, DC AHU; the incoming cover has none.
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.breakerAt(0.4, 1.5, 0.05) == 0, "MCC main breaker's door");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.breakerAt(2.4, 1.6, 0.05) == 4, "MCC CHGR 1 door");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.breakerAt(3.4, 1.0, 0.05) == 7, "MCC DC AHU door");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.breakerAt(0.4, 0.5, 0.05) == -1, "the incoming cover has no breaker");
 		BlockPos stake = helper.absolutePos(BlockPos.ZERO).offset(-5_000, 0, -5_000);
 		Blueprint print = Blueprint.get("nuclear_medium_pwr", false);
 		PlantBuilder.build(level, print, stake, Rotation.NONE, null, true);
-		java.util.List<EquipmentBlockEntity> gear = new java.util.ArrayList<>();
+		java.util.List<EquipmentBlockEntity> gear = new java.util.ArrayList<>(), mccs = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity> banks = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> chargers = new java.util.ArrayList<>();
 		EquipmentBlockEntity transformer = null;
@@ -526,6 +532,8 @@ public class NuclearPlantGameTests {
 				if (level.getBlockEntity(pos) instanceof EquipmentBlockEntity e) {
 					if (anchor.kind == EquipmentKind.SWITCHGEAR_LINEUP) {
 						gear.add(e);
+					} else if (anchor.kind == EquipmentKind.MCC_LINEUP) {
+						mccs.add(e);
 					} else if (anchor.kind == EquipmentKind.MAIN_TRANSFORMER) {
 						transformer = e;
 					}
@@ -542,9 +550,14 @@ public class NuclearPlantGameTests {
 		}
 		helper.assertTrue(transformer != null && transformer.output != null, "the main transformer");
 		helper.assertTrue(banks.size() == 4 && chargers.size() == 4, "four station batteries and four chargers: " + banks.size() + ", " + chargers.size());
+		helper.assertTrue(mccs.size() == 2, "a motor control centre in each DC equipment room: " + mccs.size());
 		long cap = io.github.jimbozoomer.jugcraft.nuclear.Switchgear.CAPACITY;
 		for (EquipmentBlockEntity g : gear) {
 			helper.assertTrue(g.bus != null && g.bus.getAmount() == cap, "a fuelled build's load centres start full");
+		}
+		for (EquipmentBlockEntity m : mccs) {
+			helper.assertTrue(m.bus != null && m.bus.getAmount() == io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.CAPACITY,
+					"a fuelled build's motor control centres start full");
 		}
 		for (var bank : banks) {
 			helper.assertTrue(bank.charge() == 1.0, "a fuelled build's batteries start full");
@@ -552,6 +565,9 @@ public class NuclearPlantGameTests {
 		// 1. The transformer's output reaches the switchgear room's two load centres, and only them.
 		for (EquipmentBlockEntity g : gear) {
 			g.bus.setAmount(0);
+		}
+		for (EquipmentBlockEntity m : mccs) {
+			m.bus.setAmount(0);
 		}
 		transformer.output.setAmount(1_000_000);
 		for (int t = 0; t < 10; t++) {
@@ -562,7 +578,11 @@ public class NuclearPlantGameTests {
 			fed += g.bus.getAmount() > 0 ? 1 : 0;
 		}
 		helper.assertTrue(fed == 2, "the transformer feeds the two load centres it is cabled to: " + fed + " of " + gear.size());
-		// 2. Full load centres charge the empty batteries through their chargers.
+		for (EquipmentBlockEntity m : mccs) {
+			helper.assertTrue(m.bus.getAmount() == 0, "the transformer does not reach the motor control centres directly");
+		}
+		// 2. Full load centres charge the empty batteries through the motor control centres (DC MCC breaker, MCC, its
+		// CHGR 1 and CHGR 2 breakers) and the chargers.
 		for (EquipmentBlockEntity g : gear) {
 			g.bus.setAmount(cap);
 		}
@@ -571,6 +591,7 @@ public class NuclearPlantGameTests {
 		}
 		Runnable tick = () -> {
 			for (EquipmentBlockEntity g : gear) g.serverTick(level);
+			for (EquipmentBlockEntity m : mccs) m.serverTick(level);
 			for (var c : chargers) c.serverTick(level);
 			for (var bank : banks) bank.serverTick(level);
 		};
@@ -585,9 +606,14 @@ public class NuclearPlantGameTests {
 			helper.assertTrue(bank.energy.getAmount() > 100_000, "the battery at " + bank.getBlockPos().subtract(stake).toShortString() + " charges: "
 					+ bank.energy.getAmount());
 		}
-		// 3. With the CHARGER breakers open the chargers run down their buffers and stop; the batteries keep their charge.
-		for (EquipmentBlockEntity g : gear) {
-			g.breakers &= ~(1 << 6);
+		for (EquipmentBlockEntity m : mccs) {
+			helper.assertTrue(m.flows[0] > 0 && m.flows[4] > 0 && m.flows[6] > 0, "each MCC takes power in and feeds both its chargers: "
+					+ m.flows[0] + ", " + m.flows[4] + ", " + m.flows[6]);
+		}
+		// 3. With the MCCs' CHGR breakers open the chargers run down their buffers and stop; the batteries keep their
+		// charge.
+		for (EquipmentBlockEntity m : mccs) {
+			m.breakers &= ~(1 << 4 | 1 << 6);
 		}
 		for (int t = 0; t < 60; t++) {
 			tick.run();
@@ -599,8 +625,8 @@ public class NuclearPlantGameTests {
 		for (int k = 0; k < banks.size(); k++) {
 			helper.assertTrue(banks.get(k).energy.getAmount() == held[k], "the breaker open, the battery holds: " + held[k] + " -> " + banks.get(k).energy.getAmount());
 		}
-		for (EquipmentBlockEntity g : gear) {
-			helper.assertTrue(g.flows[6] == 0, "an open breaker's feeder carries nothing");
+		for (EquipmentBlockEntity m : mccs) {
+			helper.assertTrue(m.flows[4] == 0 && m.flows[6] == 0, "an open breaker's feeder carries nothing");
 		}
 		helper.succeed();
 	}

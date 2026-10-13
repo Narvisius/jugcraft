@@ -7314,6 +7314,24 @@ def check_nuclear():
                 err("control board switchgear_lineup: needs a live lamp pair and flag for each of its 11 breakers")
             if [m.get("kind") for m in live.get("meters", [])] != ["charge", "volts"] + ["amps"] * 10:
                 err("control board switchgear_lineup: its live meters must be the charge, the volts, then each feeder's amps in order")
+        if name == "mcc_lineup":
+            # The motor control centre's live parts (round 26): a unit for each breaker in the game's order
+            # (nuclear/MotorControlCenter.java NAMES), its door where the game finds a click (DOORS), its lamps and its
+            # handle up and down; its meters the charge and the volts.
+            live = ops.get("live", {})
+            src = (JAVA_ROOT / "nuclear" / "MotorControlCenter.java").read_text(encoding="utf-8")
+            java_names = re.findall(r'"([A-Z0-9 ]+)"', (re.search(r"NAMES = \{(.*?)\};", src, re.S) or [None, ""])[1])
+            units = sorted((u for u in control_boards.mcc_units() if u[7] is not None), key=lambda u: u[7])
+            if java_names != [u[5] for u in units]:
+                err(f"control board mcc_lineup: its units {[u[5] for u in units]} are not nuclear/MotorControlCenter.java NAMES {java_names}")
+            doors = [[float(v) for v in re.findall(r"[-0-9.]+", row)] for row in re.findall(r"\{([-0-9., ]+)\}", (re.search(r"DOORS = \{(.*?)\};", src, re.S) or [None, ""])[1])]
+            if doors != [[round(v, 3) for v in u[1:5]] for u in units]:
+                err(f"control board mcc_lineup: nuclear/MotorControlCenter.java DOORS {doors} are not its unit doors")
+            breakers = live.get("breakers", [])
+            if len(breakers) != len(java_names) or any(len(b.get("lamps", [])) != 2 or not b.get("on") or not b.get("off") for b in breakers):
+                err("control board mcc_lineup: needs a live lamp pair and a handle up and down for each breaker")
+            if [m.get("kind") for m in live.get("meters", [])] != ["charge", "volts"]:
+                err("control board mcc_lineup: its live meters must be the charge and the volts")
         if name == "remote_shutdown_panel" and set(ops.get("states", {})) != {"mcr", "rsp"}:
             err("control board remote_shutdown_panel: its transfer switches need both states, mcr and rsp (client/NuclearRenderer.java)")
         bad = control_boards.overlaps(ops)

@@ -139,7 +139,7 @@ public final class PlantBuilder {
 				vessels.add(pos);
 			} else if (kind == EquipmentKind.CONTROL_CONSOLE) {
 				consoles.add(pos);
-			} else if (kind == EquipmentKind.SWITCHGEAR_LINEUP) {
+			} else if (kind.board()) {
 				loadCentres.add(pos);
 			}
 		}
@@ -202,12 +202,12 @@ public final class PlantBuilder {
 				}
 			}
 		}
-		// A fuelled plant's electrical system is live: its load centres' buses and its station batteries start full
-		// (round 25).
+		// A fuelled plant's electrical system is live: its load centres' and motor control centres' buses and its station
+		// batteries start full (round 25, 26).
 		if (fuelled) {
 			for (BlockPos pos : loadCentres) {
 				if (level.getBlockEntity(pos) instanceof EquipmentBlockEntity gear && gear.bus != null) {
-					gear.bus.setAmount(Switchgear.CAPACITY);
+					gear.bus.setAmount(gear.busCapacity());
 					gear.changed();
 				}
 			}

@@ -32,7 +32,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 	public static final int REACH = 24;
 	/**
 	 * A battery charger (round 25): what it holds of its AC supply (JE; a cable into any block of it fills it, from a
-	 * load centre's CHARGER breaker), and what it charges its battery with at most (JE/t, its 150 A limit).
+	 * motor control centre's CHGR breaker), and what it charges its battery with at most (JE/t, its 150 A limit).
 	 */
 	public static final long CHARGER_BUFFER = 40_000, CHARGER_RATE = 1_024;
 	/** A battery charger's or the DC switchboard's station battery (the placing block of the rack), or null (synced). */

@@ -105,6 +105,13 @@ final class ControlBoards {
 		return board != null && board.has("live") ? board.getAsJsonObject("live") : null;
 	}
 
+	/** A list of operations (a live part drawn by state: a motor control centre's handle up or down). */
+	static void ops(Frame f, JsonArray list) {
+		for (JsonElement e : list) {
+			op(f, e.getAsJsonArray());
+		}
+	}
+
 	/** The alarm windows flashing now and then, lit in front of their unlit faces. */
 	static void blink(EquipmentKind kind, Frame f, float time) {
 		JsonObject board = boards().get(kind.id);

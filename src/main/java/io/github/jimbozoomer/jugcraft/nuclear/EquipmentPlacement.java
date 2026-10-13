@@ -146,6 +146,14 @@ public final class EquipmentPlacement {
 				Switchgear.use(level, equipment, player, hit);
 				return InteractionResult.SUCCESS;
 			}
+			case MCC_LINEUP -> {
+				// A unit's door switches its breaker; elsewhere, the bus's state (round 26). A block in hand is placed.
+				if (stack.getItem() instanceof net.minecraft.world.item.BlockItem) {
+					return InteractionResult.PASS;
+				}
+				MotorControlCenter.use(level, equipment, player, hit);
+				return InteractionResult.SUCCESS;
+			}
 			case REMOTE_SHUTDOWN_PANEL -> {
 				// It finds the nearest reactor itself; with none in range it says so.
 				if (!level.isClientSide()) {

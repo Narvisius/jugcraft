@@ -352,12 +352,28 @@ def lineup_role(lx, ly, lz):
     return None
 
 
+def mcc_role(lx, ly, lz):
+    """What a cable touching this cell of a motor control centre finds (nuclear/MotorControlCenter.java storageAt): its
+    incoming side (the first section's bottom cell), a feeder's terminal, or nothing."""
+    if (lx, ly, lz) == (0, 0, 0):
+        return "incoming"
+    for f, cell in MCC_TERMINALS.items():
+        if (lx, ly, lz) == cell:
+            return f"feeder{f}"
+    return None
+
+
+# nuclear/MotorControlCenter.java TERMINALS: each feeder's terminal cell (section, height, 0).
+MCC_TERMINALS = {1: (1, 2, 0), 2: (1, 1, 0), 4: (2, 0, 0), 5: (2, 2, 0), 6: (3, 0, 0), 7: (3, 2, 0)}
+
+
 def cable_networks(site, g, quiet=True):
     """The plant's power cables as the game joins them: every network found, with what it touches that holds or moves
-    power. A network may join the main transformer to load centres' incoming sides, or one load centre's feeder to the
-    chargers (and nothing else): a feeder and an incoming side on one network would feed a load centre back into
-    itself. The control building must have the transformer's feed to both its load centres and each CHARGER breaker's
-    run to its train's two chargers."""
+    power. A network may join the main transformer to load centres' incoming sides, a load centre's feeder to a motor
+    control centre's incoming side, or a board's feeder to a charger; never a board's feeder to its own incoming side
+    (it would feed itself), the transformer to a feeder, or two feeders together. The control building must have the
+    transformer's feed to both its load centres, each load centre's DC MCC breaker's run to its train's motor control
+    centre, and each motor control centre's CHGR 1 and CHGR 2 breakers' runs to one charger each (round 26)."""
     cable = table(lambda st: st.split("[")[0].endswith("_cable") and "data_cable" not in st)
     cells = set(map(tuple, np.argwhere(cable[g])))
     if not cells:
@@ -403,6 +419,8 @@ def cable_networks(site, g, quiet=True):
                         role = "out"
                     elif kind == "switchgear_lineup":
                         role = lineup_role(*local)
+                    elif kind == "mcc_lineup":
+                        role = mcc_role(*local)
                     if role:
                         touches.add((kind, anchor, role))
                     continue
@@ -412,10 +430,12 @@ def cable_networks(site, g, quiet=True):
                         touches.add((st.split(":")[1], (n[0], n[1] - B, n[2] - O), "block"))
         nets.append((net, touches))
         feeders = {t for t in touches if t[2].startswith("feeder")}
-        sources = {t for t in touches if t[2] in ("incoming", "out")}
+        incomings = {t for t in touches if t[2] == "incoming"}
         cell = (int(net[0][0]), int(net[0][1]) - B, int(net[0][2]) - O)
-        if feeders and sources:
-            problems.append(f"power cable at {cell}: a feeder and a supply on one network (it would feed itself): {sorted(touches)}")
+        if any(f[1] == i[1] for f in feeders for i in incomings):
+            problems.append(f"power cable at {cell}: a board's feeder and its own incoming side on one network (it would feed itself): {sorted(touches)}")
+        if feeders and any(t[2] == "out" for t in touches):
+            problems.append(f"power cable at {cell}: the transformer and a feeder on one network: {sorted(touches)}")
         if len(feeders) > 1:
             problems.append(f"power cable at {cell}: two feeders on one network: {sorted(feeders)}")
         if any(t[0] == "station_battery" for t in touches):
@@ -426,9 +446,19 @@ def cable_networks(site, g, quiet=True):
     feed = [t for net, t in nets if any(x[2] == "out" for x in t)]
     if not feed or sum(1 for x in feed[0] if x[2] == "incoming") < 2:
         problems.append("the main transformer does not feed both of the control building's load centres")
-    chargers = [t for net, t in nets if any(x[2] == "feeder6" for x in t)]
-    if len(chargers) != 2 or any(sum(1 for x in t if x[0] == "edg_battery_charger") < 1 for t in chargers):
-        problems.append(f"each CHARGER breaker must reach its train's chargers: {[sorted(t) for t in chargers]}")
+    if any(x[0] != "switchgear_lineup" for x in feed[0] if x[2] == "incoming") if feed else False:
+        problems.append("the main transformer's feed reaches something besides the load centres' incoming sides")
+    to_mcc = [t for net, t in nets if any(x[0] == "switchgear_lineup" and x[2] == "feeder6" for x in t)]
+    if len(to_mcc) != 2 or any(sum(1 for x in t if x[0] == "mcc_lineup" and x[2] == "incoming") != 1 for t in to_mcc):
+        problems.append(f"each load centre's DC MCC breaker must reach its train's motor control centre: {[sorted(t) for t in to_mcc]}")
+    fed = []
+    for f in (4, 6):
+        runs = [t for net, t in nets if any(x[0] == "mcc_lineup" and x[2] == f"feeder{f}" for x in t)]
+        if len(runs) != 2 or any(sum(1 for x in t if x[0] == "edg_battery_charger") != 1 for t in runs):
+            problems.append(f"each motor control centre's CHGR {f // 2 - 1} breaker must reach one charger: {[sorted(t) for t in runs]}")
+        fed += [x[1] for t in runs for x in t if x[0] == "edg_battery_charger"]
+    if len(set(fed)) != 4:
+        problems.append(f"the four chargers must each have their own breaker: {sorted(fed)}")
     return problems
 
 

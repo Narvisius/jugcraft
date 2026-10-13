@@ -51,7 +51,8 @@ BLINK_DEPTH = 0.004                     # how far behind a flashing window its u
 NEW_MATERIALS = ["lamp_white", "lamp_amber", "annunciator", "meter", "dial", "chart", "drpi", "swatches"]
 # Row 8 (round 24, the remote shutdown panel; Justin: "make it look more realistic with detail"): engraved nameplates
 # with real legends in a 3 x 5 pixel font, the panel's title plates, digital indicators, placards and procedure binders.
-TEXT_MATERIALS = ["nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders", "nameplates3"]
+TEXT_MATERIALS = ["nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders", "nameplates3",
+                  "nameplates4"]
 
 # The nameplates' legends: each cell holds 16 plates (2 across, 8 down, 32 x 8 pixels), read left to right.
 NAMEPLATES = {
@@ -62,8 +63,11 @@ NAMEPLATES = {
     "nameplates_inst": ["PZR PRES", "PZR LVL", "RCS TH", "RCS TC", "SG1 LVL", "SG2 LVL", "SG3 LVL", "SG4 LVL",
                         "AFW FLOW", "CST LVL", "SR FLUX", "SUR", "TRIP A", "TRIP B", "SG PRES", "BAT LVL"],
     # The 480 V load centre (round 25): its breakers' feeders, its meters, its warnings.
-    "nameplates3": ["MAIN BKR", "XFMR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "CHARGER", "INVERTER",
+    "nameplates3": ["MAIN BKR", "XFMR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "DC MCC", "INVERTER",
                     "HVAC", "LIGHTING", "SPARE", "LOAD CTR", "CHARGE", "BUS V", "480 V", "4160 V"],
+    # The DC rooms' motor control centres (round 26, 8a).
+    "nameplates4": ["MCC", "CHGR 1", "CHGR 2", "REG XF 1", "REG XF 2", "EXH FAN", "DC AHU", "SPACE",
+                    "INCOMING", "METERING", "ON", "START", "STOP", "HAND", "AUTO", "RESET"],
 }
 # The red and yellow plates among the instruments' (a reactor trip's, a warning's).
 PLATE_COLOURS = {("nameplates_inst", 12): "red", ("nameplates_inst", 13): "red", ("nameplates3", 14): "red", ("nameplates3", 15): "red"}
@@ -1045,7 +1049,7 @@ def remote_shutdown_panel(seed=89):
 # Its breakers, in the order the game numbers them: the main (incoming) breaker, then the feeders, two to a section
 # (upper, lower) from the left. The upper feeders send their power up out of the top of their section, the lower ones
 # down through the floor; the transformer section takes it in (client/NuclearRenderer.java, nuclear/Switchgear.java).
-LC_FEEDERS = ["MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "CHARGER", "HVAC", "LIGHTING", "SPARE", "SPARE"]
+LC_FEEDERS = ["MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "DC MCC", "HVAC", "LIGHTING", "SPARE", "SPARE"]
 LC_FACE = 0.12          # the doors' plane (z)
 # The feeder conduits (round 25b): where each in-use upper feeder's conduit leaves the top of its section (its hub, z in
 # the lineup's frame: the middle of the back row, so the conduit stands in the middle of the block above), the hub's
@@ -1195,10 +1199,155 @@ def load_center(seed=97):
     out.live = live
     return out
 
+# ---------------------------------------------------------------- the 480 V motor control centre (round 26, 8a)
+
+# A DC equipment room's MCC (Justin, #8: the DC rooms' 480 V lineup was the switchgear room's load centre copied in):
+# four sections a block wide, each a column of plug-in units behind their doors (heights in 0.2-block spaces, top
+# down) and a vertical wireway door at its right. Breaker 0 is the main; the feeders follow, numbered as the game
+# numbers them (nuclear/MotorControlCenter.java). (spaces, legend, kind, breaker)
+MCC_FACE = 0.1          # the doors' plane (z)
+MCC_DEEP = 0.92         # the back
+MCC_TOP = 2.3           # the cabinets' top
+MCC_UNITS_Y = (0.38, 1.98)
+MCC_SPACE = 0.2
+MCC_SECTIONS = [
+    [(4, "MAIN BKR", "main", 0), (2, "METERING", "meter", None), (2, "INCOMING", "blank", None)],
+    [(2, "REG XF 1", "feeder", 1), (2, "REG XF 2", "feeder", 2), (2, "SPARE", "feeder", 3), (2, "SPACE", "blank", None)],
+    [(3, "CHGR 1", "feeder", 4), (3, "EXH FAN", "starter", 5), (2, "SPACE", "blank", None)],
+    [(3, "CHGR 2", "feeder", 6), (3, "DC AHU", "starter", 7), (2, "SPACE", "blank", None)],
+]
+MCC_BREAKERS = 8
+
+
+def mcc_units():
+    """Every unit: (section, x0, y0, x1, y1, legend, kind, breaker), the door's rectangle in the lineup's frame."""
+    out = []
+    for k, units in enumerate(MCC_SECTIONS):
+        y = MCC_UNITS_Y[1]
+        for spaces, legend, kind, breaker in units:
+            y0 = y - spaces * MCC_SPACE
+            out.append((k, k + 0.04, y0 + 0.006, k + 0.74, y - 0.006, legend, kind, breaker))
+            y = y0
+    return out
+
+
+def motor_control_center(seed=131):
+    """A 480 V motor control centre as it stands in a plant's DC equipment room (round 26, 8a): four steel sections
+    bolted together on a black sill, each with a top and a bottom horizontal wireway, a column of plug-in units and a
+    tall narrow vertical wireway door. Section 1 is the incoming section: the main breaker's unit, the metering unit
+    (the bus volts and charge, live) and the incoming cables' bolted cover. Then the feeders: the two battery chargers,
+    the two regulating transformers (the inverters' standby source), a spare, and two combination starters (the battery
+    room's exhaust fan, the DC room's air handler) with their START and STOP buttons, HAND-OFF-AUTO switch and overload
+    reset. Each breaker's unit door has its operating handle in a slotted escutcheon (up ON, down OFF), red and green
+    pilot lamps, an engraved nameplate and quarter-turn fasteners; the handle and lamps are the game's (live)."""
+    b = Board(4, seed, face=MCC_FACE)
+    e, dark, grey, black = body(), sw("dgrey"), sw("mgrey"), sw("black")
+    b.box(0.02, 0.08, MCC_FACE, 3.98, MCC_TOP, MCC_DEEP, [dark, e, e, e, None, None])
+    b.box(0.02, 0, MCC_FACE + 0.03, 3.98, 0.08, MCC_DEEP, [black, None, black, black, None, None])
+    b.box(0.0, MCC_TOP, MCC_FACE - 0.02, 4.0, MCC_TOP + 0.03, MCC_DEEP + 0.02, [TRIM] * 6)
+    b.core = len(b.still)
+    live = {"breakers": [None] * MCC_BREAKERS, "meters": []}
+
+    def door(x0, x1, y0, y1, d=0.012):
+        b.face_box((x0 + x1) / 2, (y0 + y1) / 2, x1 - x0, y1 - y0, d, e, grey)
+
+    def screws(x0, x1, y0, y1, inset=0.035):
+        for sx in (x0 + inset, x1 - inset):
+            for sy in (y0 + inset, y1 - inset):
+                b.cyl((sx, sy, MCC_FACE - 0.012), (sx, sy, MCC_FACE - 0.02), 0.009, dark, grey, 6)
+
+    def fastener(x, y):
+        """A quarter-turn door fastener: its round head and slot."""
+        b.cyl((x, y, MCC_FACE - 0.012), (x, y, MCC_FACE - 0.024), 0.014, dark, grey, 8)
+        b.box(x - 0.011, y - 0.002, MCC_FACE - 0.026, x + 0.011, y + 0.002, MCC_FACE - 0.024, [black] * 6)
+
+    def legend_plate(x, y, legend, w=0.26, h=0.035):
+        b.nameplate(x, y, named(legend), w, h, 0.02)
+
+    for k in range(4):
+        # The seam between sections; the top and bottom wireways' covers; the vertical wireway's door.
+        if k:
+            b.face_box(k, (0.08 + MCC_TOP) / 2, 0.01, MCC_TOP - 0.1, 0.004, black, black)
+        door(k + 0.04, k + 0.96, 2.0, MCC_TOP - 0.02)
+        screws(k + 0.04, k + 0.96, 2.0, MCC_TOP - 0.02)
+        door(k + 0.04, k + 0.96, 0.1, 0.36)
+        screws(k + 0.04, k + 0.96, 0.1, 0.36)
+        for j in range(3):
+            b.face_box(k + 0.5, 0.16 + j * 0.06, 0.6, 0.02, 0.018, dark, dark)
+        door(k + 0.76, k + 0.96, MCC_UNITS_Y[0], MCC_UNITS_Y[1])
+        for fy in (0.6, 1.76):
+            fastener(k + 0.86, fy)
+    # The lineup's name on the first two sections' top wireway.
+    legend_plate(0.5, 2.14, "480 V", 0.2, 0.05)
+    legend_plate(1.5, 2.14, "MCC", 0.26, 0.05)
+    for k, x0, y0, x1, y1, legend, kind, breaker in mcc_units():
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        door(x0, x1, y0, y1)
+        if kind == "blank":
+            # A blank filler plate or the incoming cables' cover: bolted, no handle.
+            screws(x0, x1, y0, y1, 0.03)
+            legend_plate(cx, y1 - 0.06, legend)
+            continue
+        legend_plate(cx + 0.04, y1 - 0.055, legend)
+        fastener(x1 - 0.04, y1 - 0.06)
+        fastener(x1 - 0.04, y0 + 0.06)
+        if kind == "meter":
+            # The bus's meters (live): its charge and volts, and the voltmeter's phase selector.
+            for mx, mk in ((cx - 0.15, "charge"), (cx + 0.12, "volts")):
+                b.face_box(mx, cy - 0.01, 0.2, 0.08, 0.035, black, dark)
+                live["meters"].append({"kind": mk, "box": list(_r(mx - 0.085, cy - 0.035, mx + 0.085, cy + 0.015)), "z": _r(MCC_FACE - 0.039)[0]})
+            b.face_box(cx - 0.02, cy - 0.11, 0.07, 0.07, 0.02, dark, black)
+            b.cyl((cx - 0.02, cy - 0.11, MCC_FACE - 0.02), (cx - 0.02, cy - 0.11, MCC_FACE - 0.045), 0.02, black, dark, 8)
+            continue
+        # The operating handle's escutcheon (a slot down the plate, ON at its top, OFF at its bottom), the lamps.
+        big = kind == "main"
+        hx, hy = x0 + 0.08, y1 - (0.24 if big else 0.2)
+        reach = 0.14 if big else 0.1
+        b.face_box(hx, hy, 0.075, 2 * reach + 0.06, 0.016, dark, black)
+        b.face_box(hx, hy, 0.016, 2 * reach, 0.024, black, black)
+        lamps = [(x1 - 0.17, y1 - 0.12), (x1 - 0.1, y1 - 0.12)]
+        for lx, ly in lamps:
+            b.lamp_rim(lx, ly, 0.03, MCC_FACE - 0.012)
+        z0 = MCC_FACE - 0.024
+        on, off = [], []
+        for ops, up in ((on, True), (off, False)):
+            # The lever from its pivot in the slot's middle, up or down, its grip square to the door.
+            ly0, ly1 = (hy, hy + reach) if up else (hy - reach, hy)
+            ops.append(["b", *_r(hx - 0.014, ly0, z0 - 0.03, hx + 0.014, ly1, z0), [black] * 6])
+            gy = ly1 - 0.03 if up else ly0
+            ops.append(["b", *_r(hx - 0.03, gy, z0 - 0.075, hx + 0.03, gy + 0.03, z0 - 0.03), [black] * 6])
+        if kind == "starter":
+            # START (black), STOP (red), the HAND-OFF-AUTO selector, the overload reset (blue).
+            by = cy - 0.01
+            for bx, colour, legend in ((cx - 0.04, "black", "START"), (cx + 0.07, "red", "STOP")):
+                b.face_box(bx, by, 0.06, 0.06, 0.01, dark, black)
+                b.cyl((bx, by, MCC_FACE - 0.01), (bx, by, MCC_FACE - 0.035), 0.022, sw(colour), sw(colour), 10)
+                b.nameplate(bx, by - 0.06, named(legend), 0.09, 0.022, 0.016)
+            b.face_box(cx + 0.2, by, 0.07, 0.07, 0.01, dark, black)
+            b.box(cx + 0.19, by - 0.03, MCC_FACE - 0.04, cx + 0.21, by + 0.03, MCC_FACE - 0.01, [black] * 6)
+            b.nameplate(cx + 0.2, by - 0.06, named("AUTO"), 0.09, 0.022, 0.016)
+            b.cyl((cx + 0.07, y0 + 0.06, MCC_FACE - 0.004), (cx + 0.07, y0 + 0.06, MCC_FACE - 0.022), 0.016, sw("blue"), sw("blue"), 8)
+            b.nameplate(cx + 0.17, y0 + 0.06, named("RESET"), 0.09, 0.022, 0.016)
+        elif big:
+            # The main breaker's trip unit window and its rating plug.
+            b.face_box(cx + 0.06, cy - 0.06, 0.24, 0.16, 0.02, black, dark)
+            b.face_box(cx + 0.02, cy - 0.06, 0.08, 0.05, 0.03, grey, black)
+            b.face_box(cx + 0.12, cy - 0.05, 0.05, 0.03, 0.03, sw("yellow"), black)
+        live["breakers"][breaker] = {"door": list(_r(x0, y0, x1, y1)), "lamps": [list(_r(*l)) for l in lamps], "lamp": 0.03,
+                                     "lamp_z": _r(MCC_FACE - 0.024)[0], "on": on, "off": off}
+    # The lifting angles along the top, front and back.
+    for z0 in (MCC_FACE + 0.02, MCC_DEEP - 0.08):
+        b.box(0.1, MCC_TOP + 0.03, z0, 3.9, MCC_TOP + 0.09, z0 + 0.04, [dark] * 5 + [None])
+    out = b
+    out.live = live
+    return out
+
+
 SECTIONS = {"esf_control_board": esf_board, "rcs_control_board": rcs_board, "secondary_control_board": secondary_board,
             "turbine_control_board": turbine_board, "electrical_control_board": electrical_board,
             "radiation_control_board": radiation_board, CONSOLE: reactor_console,
-            "remote_shutdown_panel": remote_shutdown_panel, "switchgear_lineup": load_center}
+            "remote_shutdown_panel": remote_shutdown_panel, "switchgear_lineup": load_center,
+            "mcc_lineup": motor_control_center}
 
 
 def all_ops():
@@ -1607,8 +1756,10 @@ MAKERS = {"lamp_white": lamp_white, "lamp_amber": lamp_amber, "annunciator": ann
           "dial": dial, "chart": chart, "drpi": drpi, "swatches": swatches,
           "nameplates": _nameplate_cell("nameplates"), "nameplates2": _nameplate_cell("nameplates2"),
           "nameplates_inst": _nameplate_cell("nameplates_inst"), "titles": titles, "digital": digital,
-          "placards": placards, "binders": binders, "nameplates3": _nameplate_cell("nameplates3")}
+          "placards": placards, "binders": binders, "nameplates3": _nameplate_cell("nameplates3"),
+          "nameplates4": _nameplate_cell("nameplates4")}
 # Colours kept when stylizing (the swatches keep every patch's colour exactly; the lettered cells are drawn at the
 # sheet's own 64 px and keep theirs too).
 COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 24, "drpi": 16, "lamp_white": 12, "lamp_amber": 12,
-           "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32, "nameplates3": 32}
+           "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32, "nameplates3": 32,
+           "nameplates4": 32}

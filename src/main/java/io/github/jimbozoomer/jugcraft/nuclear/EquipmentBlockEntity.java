@@ -84,7 +84,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 	private int intakeVersion = -1;
 	// Main transformer.
 	public final @Nullable SimpleEnergyStorage output;
-	// The 480 V load centre (nuclear/Switchgear.java): its bus's charge, its breakers (a bit each, closed when set),
+	// The 480 V load centre (nuclear/Switchgear.java) or motor control centre (MotorControlCenter.java): its bus's charge,
+	// its breakers (a bit each, closed when set),
 	// each breaker's flow last tick (JE/t: the main's what came in, a feeder's what went out), synced for the meters.
 	public final @Nullable SimpleEnergyStorage bus;
 	public int breakers = Switchgear.DEFAULT_BREAKERS;
@@ -113,22 +114,40 @@ public class EquipmentBlockEntity extends BlockEntity {
 		long room = kind == EquipmentKind.SMALL_TURBINE ? ReactorCore.Design.SMALL_MODULAR.ratedJe() * 2 : ReactorCore.RATED_JE * 2;
 		output = kind.powerOut() ? new SimpleEnergyStorage(room, 0, room, this::setChanged) : null;
 		bus = kind == EquipmentKind.SWITCHGEAR_LINEUP
-				? new SimpleEnergyStorage(Switchgear.CAPACITY, Switchgear.INCOMING_RATE, Switchgear.FEEDER_RATE * 10, this::setChanged) : null;
+				? new SimpleEnergyStorage(Switchgear.CAPACITY, Switchgear.INCOMING_RATE, Switchgear.FEEDER_RATE * 10, this::setChanged)
+				: kind == EquipmentKind.MCC_LINEUP
+				? new SimpleEnergyStorage(MotorControlCenter.CAPACITY, MotorControlCenter.INCOMING_RATE, MotorControlCenter.FEEDER_RATE * 10, this::setChanged)
+				: null;
+		breakers = defaultBreakers(kind);
 		core.design = kind.design();
 	}
 
-	/** The load centre's incoming side as a cable sees it (one object, so a network counts it once). */
+	/** A power board's breakers as it is built: a load centre's or a motor control centre's (round 26). */
+	static int defaultBreakers(EquipmentKind kind) {
+		return kind == EquipmentKind.MCC_LINEUP ? MotorControlCenter.DEFAULT_BREAKERS : Switchgear.DEFAULT_BREAKERS;
+	}
+
+	/** A power board's bus capacity (JE): a load centre's or a motor control centre's. */
+	public long busCapacity() {
+		return kind() == EquipmentKind.MCC_LINEUP ? MotorControlCenter.CAPACITY : Switchgear.CAPACITY;
+	}
+
+	/** The board's incoming side as a cable sees it (one object, so a network counts it once). */
 	EnergyStorage incomingView() {
 		if (incomingView == null) {
-			incomingView = new Switchgear.Incoming(this);
+			incomingView = kind() == EquipmentKind.MCC_LINEUP
+					? new Switchgear.Incoming(this, MotorControlCenter.CAPACITY, MotorControlCenter.INCOMING_RATE)
+					: new Switchgear.Incoming(this, Switchgear.CAPACITY, Switchgear.INCOMING_RATE);
 		}
 		return incomingView;
 	}
 
-	/** A load centre feeder's terminal as a cable sees it. */
+	/** A board feeder's terminal as a cable sees it. */
 	EnergyStorage feederView(int f) {
 		if (feederViews[f] == null) {
-			feederViews[f] = new Switchgear.Feeder(this, f);
+			feederViews[f] = kind() == EquipmentKind.MCC_LINEUP
+					? new Switchgear.Feeder(this, f, MotorControlCenter.CAPACITY, MotorControlCenter.FEEDER_RATE)
+					: new Switchgear.Feeder(this, f, Switchgear.CAPACITY, Switchgear.FEEDER_RATE);
 		}
 		return feederViews[f];
 	}
@@ -194,11 +213,15 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
 			tickShutdownPanel(level);
 		}
-		if (kind == EquipmentKind.SWITCHGEAR_LINEUP) {
-			Switchgear.tick(level, this);
+		if (kind.board()) {
+			if (kind == EquipmentKind.MCC_LINEUP) {
+				MotorControlCenter.tick(level, this);
+			} else {
+				Switchgear.tick(level, this);
+			}
 			// Its meters are synced each second while what they show changes.
 			if (++ticks % 20 == 0 && bus != null) {
-				int now = java.util.Objects.hash(breakers, bus.getAmount() * 1000 / Switchgear.CAPACITY, java.util.Arrays.hashCode(flows));
+				int now = java.util.Objects.hash(breakers, bus.getAmount() * 1000 / busCapacity(), java.util.Arrays.hashCode(flows));
 				if (now != shown) {
 					shown = now;
 					changed();
@@ -667,7 +690,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 		if (bus != null) {
 			bus.setAmount(in.getLongOr("bus", 0));
-			breakers = in.getIntOr("breakers", Switchgear.DEFAULT_BREAKERS);
+			breakers = in.getIntOr("breakers", defaultBreakers(kind()));
 			in.getIntArray("flows").ifPresent(f -> System.arraycopy(f, 0, flows, 0, Math.min(f.length, flows.length)));
 		}
 	}

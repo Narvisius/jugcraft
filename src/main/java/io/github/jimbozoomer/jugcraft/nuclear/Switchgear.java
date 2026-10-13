@@ -24,7 +24,8 @@ import org.jspecify.annotations.Nullable;
  * breaker's door opens or closes it (the owner, or their party in Party mode); anywhere else tells you the bus's state.
  * Its lamps, flags and meters are drawn live (client/NuclearRenderer.java) from what is synced here: the breakers, the
  * charge and each feeder's flow. In the medium plant both load centres in the control building are fed from the main
- * transformer by a buried cable, and their CHARGER breakers feed the DC rooms' battery chargers.
+ * transformer by a buried cable, and their DC MCC breakers feed the DC rooms' motor control centres, which feed the
+ * battery chargers (round 26: nuclear/MotorControlCenter.java).
  *
  * <p>The layout matches tools/control_boards.py load_center: in the lineup's frame (x to the right as you face it,
  * y up, z away from you), the transformer section is x 0..2, the main breaker's section x 2..3, then five feeder
@@ -37,7 +38,7 @@ public final class Switchgear {
 	public static final long FEEDER_RATE = 2_048, INCOMING_RATE = 16_384;
 	/** The main breaker, then the ten feeders (upper and lower of each section, from the left). */
 	public static final int BREAKERS = 11;
-	public static final String[] NAMES = {"MAIN BKR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "CHARGER", "HVAC", "LIGHTING", "SPARE",
+	public static final String[] NAMES = {"MAIN BKR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "DC MCC", "HVAC", "LIGHTING", "SPARE",
 			"SPARE"};
 	/** Every breaker closed but the two spares. */
 	public static final int DEFAULT_BREAKERS = (1 << BREAKERS) - 1 & ~(1 << 9) & ~(1 << 10);
@@ -103,12 +104,18 @@ public final class Switchgear {
 		return null;
 	}
 
-	/** The incoming side: takes power into the bus while the main breaker is closed. */
+	/**
+	 * The incoming side: takes power into the bus while the main breaker is closed (a load centre's, or a motor control
+	 * centre's with its own size and rate: nuclear/MotorControlCenter.java).
+	 */
 	static final class Incoming implements EnergyStorage {
 		private final EquipmentBlockEntity e;
+		private final long capacity, rate;
 
-		Incoming(EquipmentBlockEntity e) {
+		Incoming(EquipmentBlockEntity e, long capacity, long rate) {
 			this.e = e;
+			this.capacity = capacity;
+			this.rate = rate;
 		}
 
 		@Override
@@ -121,7 +128,7 @@ public final class Switchgear {
 			if (!closed(e, 0) || e.bus == null) {
 				return 0;
 			}
-			long in = e.bus.insert(Math.min(maxAmount, INCOMING_RATE), transaction);
+			long in = e.bus.insert(Math.min(maxAmount, rate), transaction);
 			if (in > 0) {
 				transaction.addCloseCallback((t, result) -> {
 					if (result.wasCommitted()) e.incoming += in;
@@ -147,7 +154,7 @@ public final class Switchgear {
 
 		@Override
 		public long getCapacity() {
-			return CAPACITY;
+			return capacity;
 		}
 	}
 
@@ -155,10 +162,13 @@ public final class Switchgear {
 	static final class Feeder implements EnergyStorage {
 		private final EquipmentBlockEntity e;
 		private final int f;
+		private final long capacity, rate;
 
-		Feeder(EquipmentBlockEntity e, int f) {
+		Feeder(EquipmentBlockEntity e, int f, long capacity, long rate) {
 			this.e = e;
 			this.f = f;
+			this.capacity = capacity;
+			this.rate = rate;
 		}
 
 		@Override
@@ -178,7 +188,7 @@ public final class Switchgear {
 
 		@Override
 		public long extract(long maxAmount, TransactionContext transaction) {
-			return closed(e, f) && e.bus != null ? e.bus.extract(Math.min(maxAmount, FEEDER_RATE), transaction) : 0;
+			return closed(e, f) && e.bus != null ? e.bus.extract(Math.min(maxAmount, rate), transaction) : 0;
 		}
 
 		@Override
@@ -188,7 +198,7 @@ public final class Switchgear {
 
 		@Override
 		public long getCapacity() {
-			return CAPACITY;
+			return capacity;
 		}
 	}
 

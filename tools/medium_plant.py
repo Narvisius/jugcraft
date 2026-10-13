@@ -889,10 +889,27 @@ def feeder_conduits(b, ax, ay, az, facing, upper):
 
 
 # The control building's electrical runs (building coordinates; the slab is y 0): where the main transformer's buried
-# feed comes up under each load centre's transformer section, and the CHARGER breakers' runs to the chargers.
+# feed comes up under each load centre's transformer section; the DC MCC breakers' runs to the DC rooms' motor control
+# centres (round 26, 8a: under MCC 1A's incoming section at (17, 13), MCC 1B's at (24, 19)); and the MCCs' charger
+# runs. MCC 1A faces south (its sections x 17, 16, 15, 14), MCC 1B north (x 24..27). CHGR 1 is the third section's
+# bottom terminal, straight down; CHGR 2 the fourth's, out of the back into the wall behind it. In 1B, CHGR 2's run
+# goes down under the others (two and three blocks below the slab: MCC_DEEP_RUNS, laid by the site).
 SLAB_RISERS = [(22, 1), (28, 10)]
-CHARGER_RUNS = ([(27, 0, 1), (27, 0, 2)] + [(x, 0, 3) for x in range(15, 28)] + [(15, 0, 2), (15, 0, 1), (14, 0, 1)]
-                + [(24, 0, z) for z in range(10, 29)] + [(25, 0, 28)])
+CHARGER_RUNS = ([(27, 0, 1), (27, 0, 2)] + [(x, 0, 3) for x in range(19, 28)] + [(19, 0, z) for z in range(4, 14)] + [(18, 0, 13), (17, 0, 13)]
+                + [(24, 0, z) for z in range(10, 20)])
+MCC_RUNS = ([(15, 0, z) for z in range(1, 14)]                                       # 1A CHGR 1 to the charger at x 15
+            + [(14, 1, 14), (14, 0, 14), (13, 0, 14)] + [(13, 0, z) for z in range(1, 14)]   # 1A CHGR 2, x 13
+            + [(26, 0, z) for z in range(19, 29)]                                    # 1B CHGR 1 to the charger at x 26
+            + [(27, 1, 18), (27, 0, 18), (24, 0, 28)])                               # 1B CHGR 2 into the wall, down; up at x 24
+MCC_DEEP_RUNS = ([(27, -1, 18), (27, -2, 18), (26, -2, 18), (25, -2, 18), (24, -2, 18)]
+                 + [(24, -2, z) for z in range(19, 29)] + [(24, -1, 28)])
+
+
+def control_building_mcc_runs(s, ox, oz, sink=1):
+    """MCC 1B's CHGR 2 run where it passes under the others, below the slab (round 26): in the site's ground, the
+    building sunk a block (its slab is the site's y -1)."""
+    for x, y, z in MCC_DEEP_RUNS:
+        s.decor[(ox + x, y - sink, oz + z)] = CABLE
 
 
 def control_building_feed(s, ox, oz):
@@ -1016,15 +1033,17 @@ def ground_floor(b, W, D):
     b.door(5, 1, 14, "north", label="remote_shutdown")
     b.furniture("fire_extinguisher", 1, 2, 13, "west")
     # ---- DC Equipment Room 1A (x 11..19, z 1..13): along the north wall the 125 VDC switchboard (the battery's cables
-    # come down into it), the vital inverters and the chargers; along the south the 480 V load centre feeding them.
+    # come down into it), the chargers and the vital inverters, a charger never beside a charger (their feeds in the
+    # slab would join); along the south wall the 480 V motor control centre feeding the chargers (round 26, 8a; its
+    # first section, the incoming, at x 17).
     b.panel("dc_switchboard", 11, 1, 1, "north", 2)
-    b.panel("vital_inverter", 13, 1, 1, "north", 1)
-    b.panel("edg_battery_charger", 14, 1, 1, "north", 1)
+    b.panel("edg_battery_charger", 13, 1, 1, "north", 1)
+    b.panel("vital_inverter", 14, 1, 1, "north", 1)
     b.panel("edg_battery_charger", 15, 1, 1, "north", 1)
     b.panel("vital_inverter", 16, 1, 1, "north", 1)
     for z in (4, 5):
         b.stack("relay_cabinet", 19, 1, z, "east", n=2)
-    b.prop("switchgear_lineup", 12, 1, 12, "south")
+    b.prop("mcc_lineup", 14, 1, 13, "south")
     b.door(11, 1, 14, "north", label="dc_equipment_1a")
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
     # ---- Switchgear Room (x 21..29, z 1..13; round 25): the 480 V load centres of both trains, face to face across the
@@ -1042,13 +1061,15 @@ def ground_floor(b, W, D):
     b.door(26, 1, 14, "north", double=True, label="switchgear_room")
     b.furniture("fire_extinguisher", 21, 2, 6, "west")
     # Their supply comes up through the slab into the back of each transformer section (from the main transformer,
-    # buried: control_building_feed), and each one's CHARGER breaker (the lower breaker of its third section) feeds its
-    # train's battery chargers by a cable in the slab: train A west along the aisle's mat and through the wall into DC
-    # Equipment Room 1A, train B south under the corridor into 1B (nuclear/Switchgear.java). The runs keep a block clear
-    # of every other terminal, so the feeds never meet.
+    # buried: control_building_feed), and each one's DC MCC breaker (the lower breaker of its third section) feeds its
+    # train's motor control centre by a cable in the slab: train A west along the aisle's mat, through the wall into DC
+    # Equipment Room 1A and along its east side to under the MCC's incoming section; train B south under the corridor
+    # to under MCC 1B's (nuclear/Switchgear.java, MotorControlCenter.java). Each MCC's CHGR 1 and CHGR 2 breakers feed
+    # one charger each (MCC_RUNS; the deeper parts, control_building_mcc_runs). The runs keep a block clear of every
+    # other terminal and of each other, so the feeds never meet.
     for x, z in SLAB_RISERS:
         b.p(x, 0, z, WALL_CABLE)
-    for x, y, z in CHARGER_RUNS:
+    for x, y, z in CHARGER_RUNS + MCC_RUNS:
         b.p(x, y, z, WALL_CABLE)
 
     # ---- The entrance hall (x 1..12, z 19..28): in through the glass doors to a vestibule, a second pair of glass doors,
@@ -1099,12 +1120,14 @@ def ground_floor(b, W, D):
             b.stack("locker", 14, 1, z, "west", n=2)
     b.row(("locker_bench", 5), 15, 1, 22, "east")
     b.door(16, 1, 18, "south", label="locker_room")
-    # ---- DC Equipment Room 1B (x 19..28) and Battery Room 1B (x 30..38): as Train A, along the south wall.
+    # ---- DC Equipment Room 1B (x 19..28) and Battery Room 1B (x 30..38): as Train A, along the south wall; MCC 1B
+    # along the north wall (its incoming section at x 24, over the feed from load centre B).
     b.panel("dc_switchboard", 28, 1, D - 2, "south", 2)
-    b.panel("vital_inverter", 26, 1, D - 2, "south", 1)
-    b.panel("edg_battery_charger", 25, 1, D - 2, "south", 1)
+    b.panel("edg_battery_charger", 26, 1, D - 2, "south", 1)
+    b.panel("vital_inverter", 25, 1, D - 2, "south", 1)
     b.panel("edg_battery_charger", 24, 1, D - 2, "south", 1)
     b.panel("vital_inverter", 23, 1, D - 2, "south", 1)
+    b.prop("mcc_lineup", 24, 1, 19, "north")
     for z in (22, 23):
         b.stack("relay_cabinet", 19, 1, z, "west", n=2)
     b.door(22, 1, 18, "south", double=True, label="dc_equipment_1b")
@@ -1886,6 +1909,7 @@ def medium_site():
     fuel_building(s, 100, 95)
     ctrl = control_building(s, 136, 88)
     control_building_feed(s, 136, 88)
+    control_building_mcc_runs(s, 136, 88)
     cx, cz, cy = ctrl
     s.eq("reactor_control_console", cx, cz, "north", y=cy)
     diesel, fills = diesel_building(s, 180, 90)
