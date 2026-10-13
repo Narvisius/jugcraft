@@ -543,7 +543,7 @@ public class NuclearPlantGameTests {
 				if (bank != null && !banks.contains(bank)) {
 					banks.add(bank);
 				}
-			} else if (state.is(PlantInterior.BLOCKS.get("edg_battery_charger"))
+			} else if ((state.is(PlantInterior.BLOCKS.get("edg_battery_charger")) || state.is(PlantInterior.BLOCKS.get("station_charger")))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
 				chargers.add(panel);
 			}

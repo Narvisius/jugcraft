@@ -138,7 +138,8 @@ SIGNS = {
 }
 
 OTHER["conference_table"] = "Round Meeting Table"
-MULTI = [k for k, v in FURNITURE.items() if "multi" in v]
+# The multi-block pieces with a flat inventory icon (one shown in 3D in the slot, "item3d", has none).
+MULTI = [k for k, v in FURNITURE.items() if "multi" in v and not v.get("item3d")]
 BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table",
                                                                           framed_glass.BLOCK, speed_gate.GATE, speed_gate.PEDESTAL]
 # Blocks with no item and no drop of their own: a speed gate's pedestals come and go with the gates beside them
@@ -338,6 +339,37 @@ def model(boxes, glow, rid, under=()):
 TURN = (("north", 0), ("east", 90), ("south", 180), ("west", 270))
 
 
+def item_model_3d(info, rid):
+    """A multi-block piece's whole body as one item model (its blocks side by side and stacked, each face keeping its
+    block's own texture area), scaled down to sit in a slot, a hand and a frame, its front (the south face) to the
+    viewer."""
+    w, rows, _ = info["multi"]
+    elements, used = [], set()
+    for part, boxes in plant_office2.multi_parts(info):
+        c, r = part % w, part // w
+        els, names = _elements(separate(boxes), [])
+        used |= names
+        for e in els:
+            for fname, f in e["faces"].items():
+                f.setdefault("uv", _auto_uv(fname, *e["from"], *e["to"]))
+            e["from"] = [round(e["from"][0] + 16 * c, 4), round(e["from"][1] + 16 * r, 4), e["from"][2]]
+            e["to"] = [round(e["to"][0] + 16 * c, 4), round(e["to"][1] + 16 * r, 4), e["to"][2]]
+            if "rotation" in e:
+                o = e["rotation"]["origin"]
+                e["rotation"] = dict(e["rotation"], origin=[o[0] + 16 * c, o[1] + 16 * r, o[2]])
+            elements.append(e)
+    textures = {t: rid(f"block/{t}") for t in sorted(used)}
+    textures["particle"] = textures[sorted(used)[0]]
+    k = 1.0 / max(w, rows)
+    return {"textures": textures, "elements": elements, "display": {
+        "gui": {"rotation": [30, 45, 0], "translation": [0, -4.5, 0], "scale": [0.62 * k, 0.62 * k, 0.62 * k]},
+        "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.25 * k, 0.25 * k, 0.25 * k]},
+        "fixed": {"rotation": [0, 180, 0], "translation": [0, -4, 0], "scale": [0.5 * k, 0.5 * k, 0.5 * k]},
+        "thirdperson_righthand": {"rotation": [75, 225, 0], "translation": [0, 2.5, 0], "scale": [0.375 * k, 0.375 * k, 0.375 * k]},
+        "firstperson_righthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.4 * k, 0.4 * k, 0.4 * k]},
+        "firstperson_lefthand": {"rotation": [0, 45, 0], "translation": [0, 0, 0], "scale": [0.4 * k, 0.4 * k, 0.4 * k]}}}
+
+
 def write_assets(write, rid, assets, lang):
     import zfight
     write = zfight.unfighting(write)  # no two faces of a model in the same place (Justin: never any z-fighting)
@@ -400,7 +432,12 @@ def write_assets(write, rid, assets, lang):
             write(assets / "blockstates" / f"{block}.json", {"variants": {
                 f"facing={face},part={part}": {"model": rid(f"block/{block}_{part}"), **({"y": y} if y else {})}
                 for face, y in TURN for part in range(w * rows)}})
-            write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            if info.get("item3d"):
+                # The piece itself in the slot, in 3D (round 26: the station charger; docs/ITEM_ICONS.md leaves block
+                # models out of the flat icons' rules).
+                write(assets / "models" / "item" / f"{block}.json", item_model_3d(info, rid))
+            else:
+                write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
             item_model = rid(f"item/{block}")
         elif "row" in info:
             write(models / f"{block}.json", model(info["boxes"], glow, rid))

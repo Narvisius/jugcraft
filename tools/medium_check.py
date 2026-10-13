@@ -363,6 +363,8 @@ def mcc_role(lx, ly, lz):
     return None
 
 
+# The blocks that charge a station battery (nuclear/LivePanelBlockEntity.java isCharger).
+CHARGERS = ("edg_battery_charger", "station_charger")
 # nuclear/MotorControlCenter.java TERMINALS: each feeder's terminal cell (section, height, 0).
 MCC_TERMINALS = {1: (1, 2, 0), 2: (1, 1, 0), 4: (2, 0, 0), 5: (2, 2, 0), 6: (3, 0, 0), 7: (3, 2, 0)}
 
@@ -426,7 +428,7 @@ def cable_networks(site, g, quiet=True):
                     continue
                 if 0 <= n[0] < g.shape[0] and 0 <= n[1] < g.shape[1] and 0 <= n[2] < g.shape[2] and g[n]:
                     st = P.MATERIALS[int(g[n])][0].split("[")[0]
-                    if st in ("jugcraft:edg_battery_charger", "jugcraft:station_battery"):
+                    if st in ("jugcraft:edg_battery_charger", "jugcraft:station_charger", "jugcraft:station_battery"):
                         touches.add((st.split(":")[1], (n[0], n[1] - B, n[2] - O), "block"))
         nets.append((net, touches))
         feeders = {t for t in touches if t[2].startswith("feeder")}
@@ -454,9 +456,9 @@ def cable_networks(site, g, quiet=True):
     fed = []
     for f in (4, 6):
         runs = [t for net, t in nets if any(x[0] == "mcc_lineup" and x[2] == f"feeder{f}" for x in t)]
-        if len(runs) != 2 or any(sum(1 for x in t if x[0] == "edg_battery_charger") != 1 for t in runs):
+        if len(runs) != 2 or any(sum(1 for x in t if x[0] in CHARGERS) != 1 for t in runs):
             problems.append(f"each motor control centre's CHGR {f // 2 - 1} breaker must reach one charger: {[sorted(t) for t in runs]}")
-        fed += [x[1] for t in runs for x in t if x[0] == "edg_battery_charger"]
+        fed += [x[1] for t in runs for x in t if x[0] in CHARGERS]
     if len(set(fed)) != 4:
         problems.append(f"the four chargers must each have their own breaker: {sorted(fed)}")
     return problems

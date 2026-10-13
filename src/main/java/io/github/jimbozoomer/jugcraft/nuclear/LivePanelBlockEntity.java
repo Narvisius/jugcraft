@@ -69,7 +69,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 	}
 
 	static boolean isCharger(BlockState state) {
-		return state.getBlock() == PlantInterior.BLOCKS.get("edg_battery_charger");
+		return state.getBlock() == PlantInterior.BLOCKS.get("edg_battery_charger") || state.getBlock() == PlantInterior.BLOCKS.get("station_charger");
 	}
 
 	static boolean isSwitchboard(BlockState state) {

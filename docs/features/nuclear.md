@@ -126,12 +126,22 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
 - **Station batteries hold charge** (round 25): a Station Battery rack holds 1,500,000 JE. Any cable touching it can
   charge it or draw on it (4,096 JE/t). Right-click it to see its charge and whether it is charging, discharging or
   on float.
-  - A **Battery Charger** takes AC from a cable into any block of it (it keeps a 40,000 JE buffer). It charges the
-    nearest station battery within 24 blocks that no other charger has, at up to 1,024 JE/t (its 150 A limit).
+  - A **Battery Charger** or **Station Battery Charger** takes AC from a cable into any block of it (it keeps a
+    40,000 JE buffer). It charges the nearest station battery within 24 blocks that no other charger has, at up to
+    1,024 JE/t (its 150 A limit).
   - Away from a diesel generator, the chargers' and the DC switchboard's meters read their battery:
     - Charging: up to 150 A, and the volts rise towards 135 V (equalize).
     - Full: float at 132 V.
     - With no AC: the AC lamp goes out, CHARGER FAIL comes in, and the volts fall with the charge.
+  - **Station Battery Charger** (round 26): the DC equipment rooms' own charger, one block wide and two high, every
+    part that stands out of its door modelled: hinges and a locking T-handle, the engraved nameplate, DC VOLTS and DC
+    AMPS meters in black cases with the scale behind glass, four pilot lamps in chrome bezels, a six-window alarm
+    annunciator with TEST and RESET buttons, the FLOAT/EQUAL mode switch, the equalize timer, the float and equalize
+    voltage adjusters, the AC input and DC output breakers through their door cut-outs, the louvred air inlet's
+    slats and the exhaust hood on top. Everything on it works (Justin: "any meters and such are actually animated to
+    work realistically"): the needles read the volts and amps, the AC ON, DC ON, FLOAT and EQUALIZE lamps light, the
+    timer's pointer shows the hours of equalize left, and the windows come in for AC FAIL and CHGR FAIL (no supply),
+    DC LOW (the battery run down), DC HIGH and EQUALIZING (GND FAULT stays dark: no ground faults are modelled).
 - **Refuelling:**
   - Shut the reactor down (rods fully in, core below 120 °C), then press REFUEL. The vessel's head comes off and the
     core glows blue under its water.

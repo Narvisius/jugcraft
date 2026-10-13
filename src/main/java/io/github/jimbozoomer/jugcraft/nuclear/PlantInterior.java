@@ -114,6 +114,8 @@ public final class PlantInterior {
 			{"station_battery", 0, "battery:4:2:p", "metal", null},
 			{"dc_switchboard", 0, "live:2:2:p", "metal", null},
 			{"vital_inverter", 0, "multi:1:2:p", "metal", null},
+			// The DC rooms' own battery chargers (round 26, 8b): live like the diesel rooms', a model of their own.
+			{"station_charger", 0, "live:1:2:p", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
@@ -264,7 +266,7 @@ public final class PlantInterior {
 		io.github.jimbozoomer.jugcraft.energy.EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) ->
 				StationBatteryBlock.storage(level, pos), BLOCKS.get("station_battery"));
 		io.github.jimbozoomer.jugcraft.energy.EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) ->
-				LivePanelBlockEntity.chargerInput(level, pos), BLOCKS.get("edg_battery_charger"));
+				LivePanelBlockEntity.chargerInput(level, pos), BLOCKS.get("edg_battery_charger"), BLOCKS.get("station_charger"));
 		RACK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("storage_rack"),
 				FabricBlockEntityTypeBuilder.create(StorageRackBlockEntity::new, BLOCKS.get("storage_rack")).build());
 		ROLLER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("roller_door"),

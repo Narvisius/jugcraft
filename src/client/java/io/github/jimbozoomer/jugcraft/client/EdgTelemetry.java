@@ -47,6 +47,8 @@ public final class EdgTelemetry {
 	public static final class Snapshot {
 		public boolean running, breaker, chargerAc, equalize, ready;
 		public double rpm, air, lube, jacket, kv, amps, kw, kvar, hz, pf, fieldV, fieldA, dcV, dcA, hours;
+		/** A station charger's equalize timer: the hours of its equalize charge left (0 on float; round 26). */
+		public double eqHours;
 		/** Sequencer steps done, and the one whose motor is starting now (-1 none). */
 		public int steps, starting = -1;
 		public String avr1 = "", avr2 = "", sequence = "";
@@ -72,6 +74,7 @@ public final class EdgTelemetry {
 				case "field_a" -> fieldA;
 				case "dc_v" -> dcV;
 				case "dc_a" -> dcA;
+				case "eq_hours" -> eqHours;
 				default -> 0;
 			};
 		}
@@ -112,6 +115,10 @@ public final class EdgTelemetry {
 				case "chg_dc" -> 1;
 				case "chg_float" -> chargerAc && !equalize ? 1 : 0;
 				case "chg_equal" -> chargerAc && equalize ? 1 : 0;
+				// A station charger's annunciator (round 26): the DC bus low (the battery running down with no charger) or
+				// high; no ground faults are modelled, so that window stays dark.
+				case "chg_dc_low" -> dcV < 124 ? 1 : 0;
+				case "chg_dc_high" -> dcV > 140 ? 1 : 0;
 				default -> 0;
 			};
 		}
@@ -217,6 +224,8 @@ public final class EdgTelemetry {
 			o.dcA = rate / 8.0;
 			o.equalize = o.dcA > 35;
 			o.dcV = 129 + 6 * soc;
+			// The equalize timer runs down as the battery fills: up to a day's equalize for a flat battery.
+			o.eqHours = o.equalize ? 2 + 22 * (1 - soc) : 0;
 		} else if (o.chargerAc) {
 			o.dcA = 2;
 			o.equalize = false;

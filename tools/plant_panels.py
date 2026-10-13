@@ -53,6 +53,8 @@ PANELS = {
     "station_battery": {"display": "Station Battery (125 VDC, 30 Cells)", "width": 4},
     "dc_switchboard": {"display": "125 VDC Distribution Switchboard", "width": 2},
     "vital_inverter": {"display": "Vital AC Inverter", "width": 1},
+    # The DC equipment rooms' own battery chargers (round 26, 8b): station_charger below.
+    "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True},
 }
 for _k, _v in PANELS.items():
     _v["multi"] = (_v["width"], 2, "panel")
@@ -96,6 +98,8 @@ CRAFTING = {
                                                "R": "minecraft:redstone"}, 1),
     "vital_inverter": (["PCP", "PXP", "PRP"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "X": "jugcraft:processor",
                                                "R": "minecraft:redstone"}, 1),
+    "station_charger": (["PMP", "CRC", "PLP"], {"P": "#c:plates/steel", "M": "minecraft:clock", "C": "jugcraft:basic_circuit",
+                                                "R": "minecraft:redstone", "L": "minecraft:lever"}, 1),
     "dc_cable_tray": (["P P", "CPC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser": (["PC", "P ", "PC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser_top": (["PCP", "PC "], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
@@ -587,7 +591,7 @@ def vital_inverter():
 
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
             "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
-            "dc_switchboard": dc_switchboard, "vital_inverter": vital_inverter}
+            "dc_switchboard": dc_switchboard, "vital_inverter": vital_inverter, "station_charger": None}
 _FRONTS = {}
 
 
@@ -611,6 +615,8 @@ def cabinet(key):
         return battery_rack()
     if key == "station_battery":
         return station_battery()
+    if key == "station_charger":
+        return station_charger_boxes()
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -903,6 +909,8 @@ def makers():
         "pi_sb_copper": lambda: _solid((196, 120, 70), 430, 0.04), "pi_sb_tag": _sb_tag,
     })
     out.update(relay_cabinet_textures())
+    out.update({"pi_lens_green": lambda: _solid((26, 84, 40), 530, 0.02), "pi_lens_white": lambda: _solid((150, 150, 144), 531, 0.02),
+                "pi_lens_amber": lambda: _solid((130, 84, 20), 532, 0.02), SC_GLASS: lambda: _see_through((220, 232, 236), 40, 533)})
     return out
 
 
@@ -1269,3 +1277,171 @@ def relay_cabinet_textures():
 
 
 SHARP |= {f"{RC_F}_0", f"{RC_F}_1"}
+
+
+# ------------------------------------------------------------------------------------------------ the station charger
+
+# The DC equipment rooms' battery chargers (round 26, 8b; Justin: they reused the diesel room's charger, they get a
+# model of their own): a 125 VDC Class 1E station battery charger (an SCR charger, 480 VAC three-phase in, 150 A out),
+# one block wide and two high, every part that stands out of its door modelled: the hinges and the locking T-handle,
+# the engraved nameplate, two switchboard meters (square black cases, the scale behind glass, the needle live), four
+# pilot lamps in chrome bezels (lit live), the alarm annunciator (six windows in a black grid, CHARGER FAIL and
+# EQUALIZE live) with its TEST and RESET buttons, the FLOAT/EQUALIZE selector, the equalize timer, the float and
+# equalize voltage adjusters, the AC input and DC output breakers through their door cut-outs (toggles up, ON), the
+# louvred air inlet at the bottom (real slats) and the exhaust hood on top. Model pixels, the piece facing north: x
+# across, y up 0..32, its door's face at z 15.
+SC_KEY = "station_charger"
+SC_DOOR = 15.0                      # the door's face
+SC_METERS = [(1.4, "DC VOLTS", (0, 150), "V", "dc_v"), (8.6, "DC AMPS", (0, 200), "A", "dc_a")]
+SC_METER = (6.0, 21.6, 27.2)        # a meter's width, bottom, top
+SC_LAMPS = [(2.9, "AC ON", (40, 180, 70), "chg_ac", "pi_lens_green"), (6.3, "DC ON", (40, 180, 70), "chg_dc", "pi_lens_green"),
+            (9.7, "FLOAT", (240, 240, 230), "chg_float", "pi_lens_white"), (13.1, "EQUALIZE", (240, 170, 30), "chg_equal", "pi_lens_amber")]
+SC_LAMP_Y = 19.0
+SC_ANN = (1.4, 13.0, 3, 2, 2.9, 1.7)   # the annunciator: x0, y0, columns, rows, window width, height
+SC_WINDOWS = [("AC|FAIL", "ann_charger_fail"), ("DC|LOW", "chg_dc_low"), ("DC|HIGH", "chg_dc_high"),
+              ("CHGR|FAIL", "ann_charger_fail"), ("GND|FAULT", "chg_gnd"), ("EQUAL|IZING", "chg_equal")]
+SC_GLASS = "pi_meter_glass"
+SEE_THROUGH.add(SC_GLASS)
+
+
+def station_charger():
+    f = Front(1, 520)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    # The door's edge and its gasket line, the nameplate.
+    f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
+    f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T(8.0, 29.4, "125 VDC BATTERY CHARGER", 11, fill=WHITE, bold=True)
+    T(8.0, 28.75, "480 VAC 3 PH IN    150 A DC OUT", 7, fill=WHITE, bold=True)
+    # The meters' faces (the case and glass are real): white, a quarter-arc scale, the unit; the needles are live.
+    w, y0, y1 = SC_METER
+    for x0, label, scale, unit, ch in SC_METERS:
+        f.meter(x0, y0, x0 + w, y1, label, scale, 0, unit, live=ch)
+        f.live[-1]["z"] = SC_DOOR + 0.3
+    # The lamps' legends, the annunciator's windows (unlit), the controls' legends.
+    for x, label, colour, ch, _ in SC_LAMPS:
+        T(x, SC_LAMP_Y - 1.25, label, 7, bold=True)
+        f.live.append({"t": "lamp", "x": x, "y": SC_LAMP_Y, "r": 0.5, "z": SC_DOOR + 0.52, "colour": list(colour), "ch": ch})
+    ax, ay, cols, rows, ww, wh = SC_ANN
+    f.R(ax - 0.3, ay - 0.3, ax + cols * ww + 0.3, ay + rows * wh + 0.3, fill=(30, 30, 32, 255))
+    for i, (text, ch) in enumerate(SC_WINDOWS):
+        c, r = i % cols, i // cols
+        wx0, wy1 = ax + c * ww + 0.12, ay + (rows - r) * wh - 0.12
+        wx1, wy0 = wx0 + ww - 0.24, wy1 - wh + 0.24
+        f.R(wx0, wy0, wx1, wy1, fill=(232, 232, 222, 255))
+        words = text.split("|")
+        for k, word in enumerate(words):
+            T((wx0 + wx1) / 2, (wy0 + wy1) / 2 + (len(words) - 1) * 0.28 - k * 0.56, word, 7, bold=True)
+        if ch:
+            f.live.append({"t": "window", "x0": wx0, "y0": wy0, "x1": wx1, "y1": wy1, "z": SC_DOOR + 0.27,
+                           "colour": [255, 200, 80], "ch": ch, "alpha": 1.0, "label": words})
+    T(12.1, 14.95, "TEST", 6, bold=True)
+    T(12.1, 12.95, "RESET", 6, bold=True)
+    # MODE: the selector's two positions; the equalize timer's dial; the adjusters.
+    T(2.2, 11.55, "FLOAT", 6, bold=True)
+    T(4.6, 11.55, "EQUAL", 6, bold=True)
+    T(3.4, 8.35, "MODE", 7, bold=True)
+    f.E(7.4, 10.0, 1.35, fill=(238, 238, 232, 255), outline=(40, 40, 42, 255), width=2)
+    for k in range(13):
+        a = math.radians(225 - 270 * k / 12)
+        r0 = 1.0 if k % 3 else 0.85
+        f.line([(7.4 + math.cos(a) * r0, 10.0 + math.sin(a) * r0), (7.4 + math.cos(a) * 1.25, 10.0 + math.sin(a) * 1.25)], INK, 2)
+    T(7.4, 8.35, "EQ TIMER (H)", 7, bold=True)
+    # Its pointer is live: the hours of equalize left, from 0 at the bottom left round to 24 (Justin: "any meters and
+    # such are actually animated to work realistically").
+    f.live.append({"t": "dial", "x": 7.4, "y": 10.0, "r": 1.35, "z": SC_DOOR + 0.62, "lo": 0, "hi": 24, "start": 225, "sweep": 270,
+                   "ch": "eq_hours"})
+    for x, label in ((10.9, "FLOAT ADJ"), (13.5, "EQ ADJ")):
+        T(x, 8.35, label, 6, bold=True)
+    # The breakers' cut-outs and legends.
+    for cx, label, rating in ((4.5, "AC INPUT", "480 V  100 A"), (11.5, "DC OUTPUT", "125 V  225 A")):
+        T(cx, 7.65, label, 7, bold=True)
+        T(cx, 4.15, rating, 6, bold=True)
+    # The louvred inlet's opening: dark behind the slats.
+    f.R(2.0, 1.6, 14.0, 3.6, fill=(22, 22, 24, 255))
+    return f
+
+
+def _sc_round(cx, cy, z0, z1, r, tex):
+    """A round part facing out of the door, as touching columns (tools/zfight.py)."""
+    return [(cx + a0 * r, cy - h * r, z0, cx + a1 * r, cy + h * r, z1, tex)
+            for a0, a1, h in ((-1.0, -0.75, 0.45), (-0.75, -0.35, 0.8), (-0.35, 0.35, 1.0), (0.35, 0.75, 0.8), (0.75, 1.0, 0.45))]
+
+
+def station_charger_boxes():
+    """The whole charger (both blocks): body, door and everything on it; F is the drawing."""
+    F = f"pi_{SC_KEY}_f"
+    D = SC_DOOR
+    face = {"*": "pi_pnl_black", "south": F}
+    blk = "pi_pnl_black"
+    b = [(0.8, 0, 2.6, 15.2, 1.2, 14.0, "pi_toe_kick"),
+         (0.4, 1.2, 1.6, 15.6, 30.4, 14.6, "pi_cabinet"),
+         (0.6, 1.4, 14.6, 15.4, 30.2, D, {"*": "pi_cabinet", "south": F}),
+         (0.2, 30.4, 1.4, 15.8, 31.2, 15.2, "pi_cabinet_dark")]
+    # The exhaust hood on top: its roof, its sides, and the slats across its open front.
+    b += [(2.5, 31.9, 4.0, 13.5, 32.0, 12.4, "pi_cabinet_dark"), (2.5, 31.2, 4.0, 2.9, 31.9, 12.4, "pi_cabinet_dark"),
+          (13.1, 31.2, 4.0, 13.5, 31.9, 12.4, "pi_cabinet_dark"), (2.9, 31.2, 4.0, 13.1, 31.9, 4.4, "pi_pnl_black")]
+    for k in range(3):
+        b.append((2.9, 31.25 + k * 0.22, 12.0, 13.1, 31.37 + k * 0.22, 12.4, "pi_cabinet_dark"))
+    # Hinges; the locking T-handle in its escutcheon.
+    for y in (4.0, 26.0):
+        b.append((0.15, y, 14.5, 0.6, y + 2.0, 15.25, "pi_chrome"))
+    b += [(13.7, 12.4, D, 14.7, 17.4, D + 0.15, blk), (14.0, 13.0, D + 0.15, 14.4, 16.6, D + 0.5, "pi_chrome"),
+          (13.85, 15.8, D + 0.5, 14.55, 16.4, D + 0.75, "pi_chrome"), (14.05, 12.7, D + 0.15, 14.35, 12.95, D + 0.3, "pi_brass")]
+    # The nameplate.
+    b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
+    # The meters: the black case standing out of the door, its face set back inside, the glass in front.
+    w, y0, y1 = SC_METER
+    for x0, *_ in SC_METERS:
+        x1 = x0 + w
+        b += [(x0, y0, D, x0 + 0.4, y1, D + 0.7, blk), (x1 - 0.4, y0, D, x1, y1, D + 0.7, blk),
+              (x0 + 0.4, y0, D, x1 - 0.4, y0 + 0.4, D + 0.7, blk), (x0 + 0.4, y1 - 0.4, D, x1 - 0.4, y1, D + 0.7, blk),
+              (x0 + 0.4, y0 + 0.4, D, x1 - 0.4, y1 - 0.4, D + 0.15, face),
+              (x0 + 0.4, y0 + 0.4, D + 0.55, x1 - 0.4, y1 - 0.4, D + 0.6, {"south": SC_GLASS, "north": SC_GLASS}),
+              # The zero adjuster under the glass.
+              (x0 + w / 2 - 0.25, y0 + 0.05, D + 0.7, x0 + w / 2 + 0.25, y0 + 0.35, D + 0.85, "pi_cap_black")]
+    # The pilot lamps: a chrome bezel and the lens (unlit; the light is the game's, live).
+    for x, _, _, _, lens in SC_LAMPS:
+        b += _sc_round(x, SC_LAMP_Y, D, D + 0.3, 0.75, "pi_chrome") + _sc_round(x, SC_LAMP_Y, D + 0.3, D + 0.5, 0.5, lens)
+    # The annunciator: its black grid standing out, the windows set back in it; TEST and RESET.
+    ax, ay, cols, rows, ww, wh = SC_ANN
+    gx0, gy0, gx1, gy1 = ax - 0.3, ay - 0.3, ax + cols * ww + 0.3, ay + rows * wh + 0.3
+    b.append((gx0, gy0, D, gx1, gy1, D + 0.25, face))
+    for c in range(cols + 1):
+        x = ax + c * ww
+        b.append((x - (0.3 if c in (0, cols) else 0.12), gy0, D + 0.25, x + (0.3 if c in (0, cols) else 0.12), gy1, D + 0.5, blk))
+    for r in range(rows + 1):
+        y = ay + r * wh
+        for c in range(cols):
+            xa = ax + c * ww + (0.3 if c == 0 else 0.12)
+            xb = ax + (c + 1) * ww - (0.3 if c + 1 == cols else 0.12)
+            b.append((xa, y - (0.3 if r in (0, rows) else 0.12), D + 0.25, xb, y + (0.3 if r in (0, rows) else 0.12), D + 0.5, blk))
+    for y in (15.8, 13.8):
+        b += [(11.6, y - 0.5, D, 12.6, y + 0.5, D + 0.12, blk)] + _sc_round(12.1, y, D + 0.12, D + 0.5, 0.42, "pi_cap_black")
+    # MODE selector: its plate, the knob, the pointer ridge (up: FLOAT).
+    b += [(2.6, 9.2, D, 4.2, 10.8, D + 0.12, blk)] + _sc_round(3.4, 10.0, D + 0.12, D + 0.5, 0.6, "pi_cap_black")
+    b.append((3.3, 10.0, D + 0.5, 3.5, 10.55, D + 0.62, "pi_pnl_white"))
+    # The equalize timer: its dial face set in a bezel, the knob and its pointer (at 0).
+    b += _sc_round(7.4, 10.0, D, D + 0.12, 1.5, "pi_chrome")
+    b += [(x, y0_, D + 0.12, x1_, y1_, D + 0.25, face) for x, y0_, _, x1_, y1_, _, _ in _sc_round(7.4, 10.0, 0, 0, 1.35, None)]
+    b += _sc_round(7.4, 10.0, D + 0.25, D + 0.6, 0.45, "pi_cap_black")
+    # The adjusters: a slotted shaft in a lock ring.
+    for x in (10.9, 13.5):
+        b += _sc_round(x, 10.0, D, D + 0.15, 0.6, "pi_chrome") + _sc_round(x, 10.0, D + 0.15, D + 0.45, 0.42, "pi_brass")
+        b.append((x - 0.25, 9.95, D + 0.45, x + 0.25, 10.05, D + 0.56, "pi_pnl_black"))
+    # The breakers: the door's cut-out frame, the breaker's moulded front inside it, its toggle up (ON) with its grip.
+    for cx in (4.5, 11.5):
+        b += [(cx - 2.0, 4.6, D, cx + 2.0, 7.2, D + 0.15, "pi_cabinet_dark"),
+              (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, "pi_pnl_black"),
+              (cx - 0.35, 5.6, D + 0.45, cx + 0.35, 6.6, D + 0.75, "pi_pnl_black"),
+              (cx - 0.45, 6.6, D + 0.45, cx + 0.45, 6.85, D + 0.95, "pi_cab_white")]
+    # The louvred inlet: its frame, the slats tilted down to the front.
+    b += [(1.8, 1.4, D, 14.2, 1.6, D + 0.3, "pi_cabinet_dark"), (1.8, 3.6, D, 14.2, 3.8, D + 0.3, "pi_cabinet_dark"),
+          (1.8, 1.6, D, 2.0, 3.6, D + 0.3, "pi_cabinet_dark"), (14.0, 1.6, D, 14.2, 3.6, D + 0.3, "pi_cabinet_dark")]
+    for k in range(4):
+        yc = 1.95 + k * 0.5
+        b.append((2.0, yc - 0.06, D - 0.1, 14.0, yc + 0.06, D + 0.4, "pi_cabinet_dark",
+                  {"rotation": {"angle": -22.5, "axis": "x", "origin": [8.0, yc, D + 0.15]}}))
+    return b
+
+DRAWINGS["station_charger"] = station_charger

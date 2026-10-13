@@ -1037,9 +1037,9 @@ def ground_floor(b, W, D):
     # slab would join); along the south wall the 480 V motor control centre feeding the chargers (round 26, 8a; its
     # first section, the incoming, at x 17).
     b.panel("dc_switchboard", 11, 1, 1, "north", 2)
-    b.panel("edg_battery_charger", 13, 1, 1, "north", 1)
+    b.panel("station_charger", 13, 1, 1, "north", 1)
     b.panel("vital_inverter", 14, 1, 1, "north", 1)
-    b.panel("edg_battery_charger", 15, 1, 1, "north", 1)
+    b.panel("station_charger", 15, 1, 1, "north", 1)
     b.panel("vital_inverter", 16, 1, 1, "north", 1)
     for z in (4, 5):
         b.stack("relay_cabinet", 19, 1, z, "east", n=2)
@@ -1123,9 +1123,9 @@ def ground_floor(b, W, D):
     # ---- DC Equipment Room 1B (x 19..28) and Battery Room 1B (x 30..38): as Train A, along the south wall; MCC 1B
     # along the north wall (its incoming section at x 24, over the feed from load centre B).
     b.panel("dc_switchboard", 28, 1, D - 2, "south", 2)
-    b.panel("edg_battery_charger", 26, 1, D - 2, "south", 1)
+    b.panel("station_charger", 26, 1, D - 2, "south", 1)
     b.panel("vital_inverter", 25, 1, D - 2, "south", 1)
-    b.panel("edg_battery_charger", 24, 1, D - 2, "south", 1)
+    b.panel("station_charger", 24, 1, D - 2, "south", 1)
     b.panel("vital_inverter", 23, 1, D - 2, "south", 1)
     b.prop("mcc_lineup", 24, 1, 19, "north")
     for z in (22, 23):
