@@ -56,7 +56,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * Pipes and cables inside made walls, as in RimWorld (docs/features/wall_runs.md). Sneak-right-click a made block (a
+ * Pipes and cables inside made walls, as in RimWorld (docs/features/wall-runs.md). Sneak-right-click a made block (a
  * full, solid, man-made block: concrete, bricks, planks, metal; not dirt, stone, sand, ores) holding a pipe or cable
  * and the run goes inside it; sneak-right-click a laid pipe or cable holding a made block and the block goes round it.
  * The wall keeps its look (any block, drawn from its own model) and how hard it is to break; where the run comes out
