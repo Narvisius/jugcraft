@@ -1217,6 +1217,7 @@ MCC_SECTIONS = [
     [(3, "CHGR 2", "feeder", 6), (3, "DC AHU", "starter", 7), (2, "SPACE", "blank", None)],
 ]
 MCC_BREAKERS = 8
+MCC_CONDUITS = (1 + 4.5 / 16, 1 + 11.5 / 16)   # the REG XF conduits on the second section's top (x)
 
 
 def mcc_units():
@@ -1340,6 +1341,11 @@ def motor_control_center(seed=131):
     # The lifting angles along the top, front and back.
     for z0 in (MCC_FACE + 0.02, MCC_DEEP - 0.08):
         b.box(0.1, MCC_TOP + 0.03, z0, 3.9, MCC_TOP + 0.09, z0 + 0.04, [dark] * 5 + [None])
+    # The REG XF feeders' hubs (round 26, 8d): two on the top of the second section, side by side, where the plant's
+    # conduits come down into it from the tray (plant_office2 conduit_pair reaches down to them, as a load centre's
+    # feeder conduit does to its hub; a lineup put down by hand shows only the hubs).
+    for cx in MCC_CONDUITS:
+        b.cyl((cx, MCC_TOP + 0.03, 0.5), (cx, MCC_TOP + 0.06, 0.5), 0.09, dark, dark, 8)
     out = b
     out.live = live
     return out

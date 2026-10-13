@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340911"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "340979"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -497,7 +497,8 @@ public class NuclearPlantGameTests {
 	 * plant the main transformer feeds the control building's two load centres by its buried cable (and no other), each
 	 * load centre's DC MCC breaker feeds its train's motor control centre, whose CHGR 1 and CHGR 2 breakers each feed one
 	 * of the train's battery chargers (round 26), the chargers charge the four station batteries, and opening the
-	 * breakers stops it while everything keeps its charge. The pieces are ticked by hand, in
+	 * breakers stops it while everything keeps its charge; each vital inverter's regulating transformer reads its MCC's
+	 * REG XF breaker (round 26, 8d). The pieces are ticked by hand, in
 	 * the order the server ticks them.
 	 */
 	@GameTest(maxTicks = 40)
@@ -525,6 +526,7 @@ public class NuclearPlantGameTests {
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity> banks = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> chargers = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> inverters = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> regXfs = new java.util.ArrayList<>();
 		EquipmentBlockEntity transformer = null;
 		for (int i = 0; i < print.size(); i++) {
 			BlockState state = print.state(i, Rotation.NONE);
@@ -547,6 +549,9 @@ public class NuclearPlantGameTests {
 			} else if (state.is(PlantInterior.BLOCKS.get("vital_inverter"))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity inv) {
 				inverters.add(inv);
+			} else if (state.is(PlantInterior.BLOCKS.get("reg_transformer"))
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity xf) {
+				regXfs.add(xf);
 			} else if ((state.is(PlantInterior.BLOCKS.get("edg_battery_charger")) || state.is(PlantInterior.BLOCKS.get("station_charger")))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
 				chargers.add(panel);
@@ -555,19 +560,49 @@ public class NuclearPlantGameTests {
 		helper.assertTrue(transformer != null && transformer.output != null, "the main transformer");
 		helper.assertTrue(banks.size() == 4 && chargers.size() == 4, "four station batteries and four chargers: " + banks.size() + ", " + chargers.size());
 		helper.assertTrue(mccs.size() == 2, "a motor control centre in each DC equipment room: " + mccs.size());
-		// Round 26 (8g): each vital inverter finds its battery and its MCC, and the two by each MCC take REG XF 1 and 2
-		// (twice round, so each sees the other's link).
-		helper.assertTrue(inverters.size() == 4, "four vital inverters: " + inverters.size());
+		// Round 26 (8g, 8d): each vital inverter finds its battery and its bypass, the regulating transformer beside it with
+		// its own label (charger, inverter, transformer in a row for each number); each transformer finds its MCC and
+		// takes the REG XF breaker its label says (1A-1 and 1B-1 REG XF 1, 1A-2 and 1B-2 REG XF 2), so the two by each MCC
+		// are its train's, fed by its REG XF 1 and 2, and each backs the inverter that links it.
+		helper.assertTrue(inverters.size() == 4 && regXfs.size() == 4, "four vital inverters and four regulating transformers: " + inverters.size()
+				+ ", " + regXfs.size());
 		for (int t = 0; t < 90; t++) {
 			for (var inv : inverters) inv.serverTick(level);
+			for (var xf : regXfs) xf.serverTick(level);
 		}
-		java.util.Map<BlockPos, java.util.Set<Integer>> fedBy = new java.util.HashMap<>();
 		for (var inv : inverters) {
-			helper.assertTrue(inv.battery != null && inv.mcc != null, "an inverter links its battery and its MCC: " + inv.getBlockPos().subtract(stake).toShortString());
-			fedBy.computeIfAbsent(inv.mcc, k -> new java.util.HashSet<>()).add(inv.regXf);
+			int label = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(inv.getBlockState());
+			helper.assertTrue(inv.battery != null && inv.xf != null && inv.xf.distManhattan(inv.getBlockPos()) == 1
+					&& level.getBlockEntity(inv.xf) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity xf
+					&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(xf.getBlockState())
+					&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(xf.getBlockState()) == label,
+					"an inverter links its battery and the transformer beside it, of its own label: " + inv.getBlockPos().subtract(stake).toShortString()
+							+ " (label " + label + ") -> " + (inv.xf == null ? "none" : inv.xf.subtract(stake).toShortString()));
 		}
-		helper.assertTrue(fedBy.size() == 2 && fedBy.values().stream().allMatch(v -> v.equals(java.util.Set.of(1, 2))),
-				"the two inverters by each MCC are fed by its REG XF 1 and 2: " + fedBy);
+		java.util.Map<BlockPos, java.util.Set<Integer>> fedBy = new java.util.HashMap<>(), trains = new java.util.HashMap<>();
+		for (var xf : regXfs) {
+			int label = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(xf.getBlockState());
+			String at = xf.getBlockPos().subtract(stake).toShortString();
+			helper.assertTrue(xf.mcc != null && xf.regXf == label % 2 + 1, "a transformer links its MCC and the REG XF its label says: " + at + " (label "
+					+ label + ") REG XF " + xf.regXf);
+			helper.assertTrue(xf.inverter != null && level.getBlockEntity(xf.inverter) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity inv
+					&& xf.getBlockPos().equals(inv.xf), "a transformer backs the inverter that links it: " + at);
+			helper.assertTrue(xf.energized(level), "with its MCC full and its REG XF closed a transformer is alive: " + at);
+			fedBy.computeIfAbsent(xf.mcc, k -> new java.util.HashSet<>()).add(xf.regXf);
+			trains.computeIfAbsent(xf.mcc, k -> new java.util.HashSet<>()).add(label / 2);
+		}
+		helper.assertTrue(fedBy.size() == 2 && fedBy.values().stream().allMatch(v -> v.equals(java.util.Set.of(1, 2)))
+				&& trains.values().stream().allMatch(v -> v.size() == 1),
+				"the two transformers by each MCC are its train's, fed by its REG XF 1 and 2: " + fedBy + ", trains " + trains);
+		// The chain (8d): one MCC's REG XF 1 opened, the transformer it feeds goes dead and no other; then closed again.
+		EquipmentBlockEntity opened = mccs.get(0);
+		opened.breakers &= ~(1 << 1);
+		for (var xf : regXfs) {
+			boolean cut = opened.getBlockPos().equals(xf.mcc) && xf.regXf == 1;
+			helper.assertTrue(xf.energized(level) != cut, "REG XF 1 open, only the transformer it feeds is dead: " + xf.getBlockPos().subtract(stake).toShortString()
+					+ (cut ? " (fed from it) is alive" : " is dead"));
+		}
+		opened.breakers |= 1 << 1;
 		long cap = io.github.jimbozoomer.jugcraft.nuclear.Switchgear.CAPACITY;
 		for (EquipmentBlockEntity g : gear) {
 			helper.assertTrue(g.bus != null && g.bus.getAmount() == cap, "a fuelled build's load centres start full");
@@ -597,6 +632,10 @@ public class NuclearPlantGameTests {
 		helper.assertTrue(fed == 2, "the transformer feeds the two load centres it is cabled to: " + fed + " of " + gear.size());
 		for (EquipmentBlockEntity m : mccs) {
 			helper.assertTrue(m.bus.getAmount() == 0, "the transformer does not reach the motor control centres directly");
+		}
+		// (Round 26, 8d: with their MCCs' buses empty the regulating transformers are dead, their breakers closed or not.)
+		for (var xf : regXfs) {
+			helper.assertTrue(!xf.energized(level), "a regulating transformer on an empty MCC is dead: " + xf.getBlockPos().subtract(stake).toShortString());
 		}
 		// 2. Full load centres charge the empty batteries through the motor control centres (DC MCC breaker, MCC, its
 		// CHGR 1 and CHGR 2 breakers) and the chargers.

@@ -116,6 +116,9 @@ public final class PlantInterior {
 			{"vital_inverter", 0, "live:1:2:p:4", "metal", null},
 			// The DC rooms' own battery chargers (round 26, 8b): live like the diesel rooms', a model of their own.
 			{"station_charger", 0, "live:1:2:p:4", "metal", null},
+			// Each vital inverter's regulating transformer, its bypass (round 26, 8d): beside its inverter, live, reading its
+			// MCC's REG XF breaker.
+			{"reg_transformer", 0, "live:1:2:p:4", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
@@ -125,6 +128,14 @@ public final class PlantInterior {
 			{"feeder_conduit_ceiling", 0, "plain", "metal", new double[] {6.7, 0, 6.7, 9.3, 16, 9.3}},
 			{"feeder_conduit_floor", 0, "plain", "metal", new double[] {5.6, 0, 0, 10.4, 16, 10.4}},
 			{"feeder_conduit_tray", 0, "plain", "metal", new double[] {6.5, 0, 6.5, 9.5, 8.8, 16}},
+			// The DC rooms' overhead ladder tray and the REG XF feeders' conduits (round 26, 8d). Facing north a piece runs
+			// along x; the bend joins the west side to the south side.
+			{"ladder_tray", 0, "plain", "metal", new double[] {0, 11.2, 3, 16, 14, 13}},
+			{"ladder_tray_hanger", 0, "plain", "metal", new double[] {0, 9.6, 1.4, 16, 16, 14.6}},
+			{"ladder_tray_bend", 0, "plain", "metal", new double[] {0, 11.2, 3, 13, 14, 16}},
+			{"ladder_tray_drop", 0, "plain", "metal", new double[] {0, 0, 3, 16, 14, 13}},
+			{"ladder_tray_drop_pair", 0, "plain", "metal", new double[] {0, 0, 3, 16, 14, 13}},
+			{"conduit_pair", 0, "plain", "metal", new double[] {3, 0, 6.5, 13, 16, 9.5}},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};

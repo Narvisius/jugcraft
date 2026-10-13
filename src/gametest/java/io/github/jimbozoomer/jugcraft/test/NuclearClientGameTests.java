@@ -827,6 +827,11 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
 							"jugcraft_plant_medium_r25_" + gearNames[i]);
 				}
+				// Round 26 (8d): DC room 1A's 1A-1 group, charger, inverter and regulating transformer side by side (building x
+				// 16..18 on the north wall), the transformer's conduit up from its top to the ladder tray overhead; the
+				// transformer alive on no load (POWER ON, 480 V in, 120 V out, 0 A) while its inverter runs on its battery.
+				shotAt(context, singleplayer, wx.applyAsInt(153), y + 1, wz.applyAsInt(94), wx.applyAsInt(153), y + 2, wz.applyAsInt(89),
+						"jugcraft_plant_medium_r26_dc_1a_xf_group");
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {

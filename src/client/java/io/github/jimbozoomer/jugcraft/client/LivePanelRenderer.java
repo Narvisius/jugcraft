@@ -124,6 +124,9 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			EdgTelemetry.battery(snap, panel, level);
 			if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
 				EdgTelemetry.inverter(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(panel.getBlockState())) {
+				// A regulating transformer (round 26, 8d): its MCC breaker and its inverter's load.
+				EdgTelemetry.transformer(snap, panel, level, now);
 			}
 		}
 		boolean blink = ((long) (now / 5)) % 2 == 0;

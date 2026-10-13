@@ -900,12 +900,53 @@ def feeder_conduits(b, ax, ay, az, facing, upper):
 SLAB_RISERS = [(22, 1), (28, 10)]
 CHARGER_RUNS = ([(27, 0, 1), (27, 0, 2)] + [(x, 0, 3) for x in range(19, 28)] + [(19, 0, z) for z in range(4, 14)] + [(18, 0, 13), (17, 0, 13)]
                 + [(24, 0, z) for z in range(10, 20)])
-MCC_RUNS = ([(15, 0, z) for z in range(1, 14)]                                       # 1A CHGR 1 to the charger at x 15
+MCC_RUNS = ([(15, 0, z) for z in range(2, 14)] + [(16, 0, 2), (16, 0, 1)]           # 1A CHGR 1 to the charger at x 16
             + [(14, 1, 14), (14, 0, 14), (13, 0, 14)] + [(13, 0, z) for z in range(1, 14)]   # 1A CHGR 2, x 13
             + [(26, 0, z) for z in range(19, 29)]                                    # 1B CHGR 1 to the charger at x 26
-            + [(27, 1, 18), (27, 0, 18), (24, 0, 28)])                               # 1B CHGR 2 into the wall, down; up at x 24
+            + [(27, 1, 18), (27, 0, 18), (23, 0, 28)])                               # 1B CHGR 2 into the wall, down; up at x 23
 MCC_DEEP_RUNS = ([(27, -1, 18), (27, -2, 18), (26, -2, 18), (25, -2, 18), (24, -2, 18)]
-                 + [(24, -2, z) for z in range(19, 29)] + [(24, -1, 28)])
+                 + [(24, -2, z) for z in range(19, 29)] + [(23, -2, 28), (23, -1, 28)])
+
+# The DC rooms' overhead ladder tray (round 26, 8d; Justin: "Overhead tray now"), under the ceiling (y 5): over the
+# equipment row, along the side wall over the relay cabinets, and over the MCC, each piece (x, z, kind, facing). The
+# regulating transformers' feeders leave it by the drops: one over each transformer, its conduit down into the
+# transformer's top (TRAY_CONDUITS), and two side by side over the MCC's REG XF section (its second section, x 16 in
+# 1A, x 25 in 1B), down into its top. A trapeze hanger every other block and at each run's end.
+TRAY_Y = 5
+
+
+def _tray_line(cells, facing, drops=(), pairs=()):
+    out = []
+    for i, (x, z) in enumerate(cells):
+        key = (x, z)
+        kind = ("ladder_tray_drop" if key in drops else "ladder_tray_drop_pair" if key in pairs
+                else "ladder_tray_hanger" if i % 2 == 0 or i == len(cells) - 1 else "ladder_tray")
+        out.append((x, z, kind, facing))
+    return out
+
+
+DC_TRAY_1A = (_tray_line([(x, 1) for x in range(13, 19)], "north", drops={(15, 1), (18, 1)}) + [(19, 1, "ladder_tray_bend", "north")]
+              + _tray_line([(19, z) for z in range(2, 13)], "east") + [(19, 13, "ladder_tray_bend", "east")]
+              + _tray_line([(x, 13) for x in range(18, 13, -1)], "north", pairs={(16, 13)}))
+DC_TRAY_1B = (_tray_line([(x, 28) for x in range(26, 19, -1)], "north", drops={(24, 28), (21, 28)}) + [(19, 28, "ladder_tray_bend", "south")]
+              + _tray_line([(19, z) for z in range(27, 19, -1)], "east") + [(19, 19, "ladder_tray_bend", "west")]
+              + _tray_line([(x, 19) for x in range(20, 28)], "north", pairs={(25, 19)}))
+# The feeders' conduits under the drops: (x, z, from y, to y, piece).
+TRAY_CONDUITS = ([(15, 1, 3, 4, "feeder_conduit"), (18, 1, 3, 4, "feeder_conduit"), (16, 13, 4, 4, "conduit_pair")]
+                 + [(24, 28, 3, 4, "feeder_conduit"), (21, 28, 3, 4, "feeder_conduit"), (25, 19, 4, 4, "conduit_pair")])
+
+
+def dc_room_tray(b, tray):
+    """A DC room's ladder tray and its feeders' conduits down to the transformers and the MCC."""
+    for x, z, kind, facing in tray:
+        assert b.get(x, TRAY_Y, z) == 0, (kind, x, z)
+        b.p(x, TRAY_Y, z, furniture(kind, facing))
+    cells = {(x, z) for x, z, _, _ in tray}
+    for x, z, y0, y1, piece in TRAY_CONDUITS:
+        if (x, z) in cells:
+            for y in range(y0, y1 + 1):
+                assert b.get(x, y, z) == 0, (piece, x, y, z)
+                b.p(x, y, z, furniture(piece, "north"))
 
 
 def control_building_mcc_runs(s, ox, oz, sink=1):
@@ -1040,15 +1081,17 @@ def ground_floor(b, W, D):
     # slab would join); along the south wall the 480 V motor control centre feeding the chargers (round 26, 8a; its
     # first section, the incoming, at x 17).
     # Their nameplates by train and number (round 26, 8c): charger 1A-1 is the one MCC 1A's CHGR 1 feeds, inverter
-    # 1A-1 the one its REG XF 1 backs (the first along the MCC's front).
+    # 1A-1 the one its REG XF 1 backs. Each inverter has its regulating transformer beside it (8d; Justin: "Beside
+    # their inverters"), so the row is in groups, charger, inverter, transformer, by number.
     b.panel("dc_switchboard", 11, 1, 1, "north", 2, "1A")
-    b.panel("station_charger", 13, 1, 1, "north", 1, "1A-2")
-    b.panel("vital_inverter", 14, 1, 1, "north", 1, "1A-2")
-    b.panel("station_charger", 15, 1, 1, "north", 1, "1A-1")
-    b.panel("vital_inverter", 16, 1, 1, "north", 1, "1A-1")
+    for x, label in ((13, "1A-2"), (16, "1A-1")):
+        b.panel("station_charger", x, 1, 1, "north", 1, label)
+        b.panel("vital_inverter", x + 1, 1, 1, "north", 1, label)
+        b.panel("reg_transformer", x + 2, 1, 1, "north", 1, label)
     for z in (4, 5):
         b.stack("relay_cabinet", 19, 1, z, "east", n=2)
     b.prop("mcc_lineup", 14, 1, 13, "south")
+    dc_room_tray(b, DC_TRAY_1A)
     b.door(11, 1, 14, "north", label="dc_equipment_1a")
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
     # ---- Switchgear Room (x 21..29, z 1..13; round 25): the 480 V load centres of both trains, face to face across the
@@ -1128,11 +1171,12 @@ def ground_floor(b, W, D):
     # ---- DC Equipment Room 1B (x 19..28) and Battery Room 1B (x 30..38): as Train A, along the south wall; MCC 1B
     # along the north wall (its incoming section at x 24, over the feed from load centre B).
     b.panel("dc_switchboard", 28, 1, D - 2, "south", 2, "1B")
-    b.panel("station_charger", 26, 1, D - 2, "south", 1, "1B-1")
-    b.panel("vital_inverter", 25, 1, D - 2, "south", 1, "1B-2")
-    b.panel("station_charger", 24, 1, D - 2, "south", 1, "1B-2")
-    b.panel("vital_inverter", 23, 1, D - 2, "south", 1, "1B-1")
+    for x, label in ((26, "1B-1"), (23, "1B-2")):
+        b.panel("station_charger", x, 1, D - 2, "south", 1, label)
+        b.panel("vital_inverter", x - 1, 1, D - 2, "south", 1, label)
+        b.panel("reg_transformer", x - 2, 1, D - 2, "south", 1, label)
     b.prop("mcc_lineup", 24, 1, 19, "north", variant=1)
+    dc_room_tray(b, DC_TRAY_1B)
     for z in (22, 23):
         b.stack("relay_cabinet", 19, 1, z, "west", n=2)
     b.door(22, 1, 18, "south", double=True, label="dc_equipment_1b")

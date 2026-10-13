@@ -55,6 +55,8 @@ PANELS = {
     "vital_inverter": {"display": "Vital AC Inverter", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
     # The DC equipment rooms' own battery chargers (round 26, 8b): station_charger below.
     "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
+    # Each inverter's standby source (round 26, 8d): reg_transformer below.
+    "reg_transformer": {"display": "Regulating Transformer", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
 }
 for _k, _v in PANELS.items():
     _v["multi"] = (_v["width"], 2, "panel")
@@ -100,6 +102,7 @@ CRAFTING = {
                                                "R": "minecraft:redstone"}, 1),
     "station_charger": (["PMP", "CRC", "PLP"], {"P": "#c:plates/steel", "M": "minecraft:clock", "C": "jugcraft:basic_circuit",
                                                 "R": "minecraft:redstone", "L": "minecraft:lever"}, 1),
+    "reg_transformer": (["PCP", "CIC", "PCP"], {"P": "#c:plates/steel", "C": "minecraft:copper_ingot", "I": "minecraft:iron_block"}, 1),
     "dc_cable_tray": (["P P", "CPC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser": (["PC", "P ", "PC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser_top": (["PCP", "PC "], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
@@ -571,7 +574,7 @@ def dc_switchboard(label="1A"):
 
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
             "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
-            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None}
+            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None}
 _FRONTS = {}
 
 
@@ -610,6 +613,8 @@ def cabinet(key):
         return station_charger_boxes()
     if key == "vital_inverter":
         return vital_inverter_boxes()
+    if key == "reg_transformer":
+        return reg_transformer_boxes()
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -808,7 +813,14 @@ def part(key, c, r):
             t = dict(t) if isinstance(t, dict) else {"*": t}
             for f in cut:
                 t[f] = None
-        out.append((x0 - c * 16, y0 - r * 16, b[2], x1 - c * 16, y1 - r * 16, b[5], t) + tuple(b[7:]))
+        extra = tuple(b[7:])
+        if extra and isinstance(extra[0], dict) and "rotation" in extra[0] and (c or r):
+            # A turned box's pivot moves with it into the block's own frame.
+            rot = dict(extra[0]["rotation"])
+            ox, oy, oz = rot["origin"]
+            rot["origin"] = [ox - c * 16, oy - r * 16, oz]
+            extra = ({**extra[0], "rotation": rot},) + extra[1:]
+        out.append((x0 - c * 16, y0 - r * 16, b[2], x1 - c * 16, y1 - r * 16, b[5], t) + extra)
     return out
 
 
@@ -1620,6 +1632,239 @@ def vital_inverter_boxes():
     return b
 
 
+# ------------------------------------------------------------------------------------------------ the regulating transformer
+
+# Each vital inverter's standby source (round 26, 8d; Justin: "Beside their inverters", "Read the MCC breaker", "Meters
+# and a lamp", "Overhead tray now"): a 10 kVA constant-voltage (ferroresonant) regulating transformer, 480 V single
+# phase in from its MCC's REG XF breaker, a steady 120 V out to its inverter's static switch and manual bypass. It
+# stands in the lineup beside its inverter, the same cabinet (plinth, cap, grey) but a transformer's: no door, a
+# bolted front cover with two lifting handles, a big louvred air inlet low down, louvred vents in both sides up high
+# and two on the top, the hub its feeder conduit comes down into from the overhead tray. Its cover: the engraved
+# nameplate; INPUT VOLTS, OUTPUT VOLTS and OUTPUT AMPS behind glass; the winding temperature gauge; the POWER ON lamp;
+# a FED FROM tag; the DANGER 480 VOLTS sign and the riveted data plate. All of it moves with its MCC breaker and its
+# inverter (client/EdgTelemetry.java transformer): 480 V in and 120 V out when the breaker is closed and the MCC's bus
+# alive, no load until its inverter goes to bypass, the windings warming up and cooling down slowly.
+RX_KEY = "reg_transformer"
+RX_METERS = [(1.15, "INPUT VOLTS", (0, 600), "V", "xf_in_v"), (5.85, "OUTPUT VOLTS", (0, 150), "V", "xf_out_v"),
+             (10.55, "OUTPUT AMPS", (0, 100), "A", "xf_out_a")]
+RX_DIAL = (3.6, 19.75, 1.7)                  # the winding temperature gauge: centre, radius
+RX_LAMP = (8.3, 20.4)                        # POWER ON
+RX_TAG = (10.2, 18.3, 14.9, 21.5)            # FED FROM
+RX_SIGN = (1.2, 11.7, 7.0, 16.7)             # DANGER 480 VOLTS
+RX_DATA = (8.0, 11.7, 14.8, 16.7)            # the data plate
+RX_LOUVRE = (2.0, 2.6, 14.0, 10.0)           # the air inlet
+RX_HANDLES = [(2.6, 5.6), (10.4, 13.4)]
+RX_HANDLE_Y = (10.75, 11.25)
+RX_BOLTS = [(0.95, 1.95), (8.0, 1.95), (15.05, 1.95), (0.95, 6.3), (15.05, 6.3), (0.95, 14.5), (15.05, 14.5), (0.95, 19.4),
+            (15.05, 19.4), (0.95, 29.6), (15.05, 29.6)]
+RX_SIDE_VENT = (21.6, 28.0, 4.2, 11.8)       # each side's vent: y0, y1, z0, z1
+
+
+def _rx_feed(label):
+    """Where it is fed from: train 1A's MCC 1A, REG XF 1 for transformer 1A-1."""
+    train, number = label.split("-")
+    return f"MCC {train}", f"REG XF {number}"
+
+
+def reg_transformer(label="1A-1"):
+    """The transformer's cover, drawn (the meter cases, glass, gauge bezel, lamp, plates, handles and louvres are
+    real: reg_transformer_boxes)."""
+    f = Front(1, 560)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    D = SC_DOOR
+    # The cover's edge, the nameplate.
+    f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
+    f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T(8.0, 29.4, f"REGULATING XFMR {label}", 11, fill=WHITE, bold=True)
+    T(8.0, 28.75, "480 V 1 PH IN    120 V 60 HZ 10 KVA OUT", 7, fill=WHITE, bold=True)
+    w, y0, y1 = VI_METER
+    for x0, name, scale, unit, ch in RX_METERS:
+        f.meter(x0, y0, x0 + w, y1, name, scale, 0, unit, live=ch)
+        f.live[-1]["z"] = D + 0.3
+    # The winding temperature gauge: its face (the bezel is real), the red band from 130 C, the pointer live.
+    cx, cy, r = RX_DIAL
+    f.E(cx, cy, r, fill=(246, 246, 240, 255))
+    lo, hi, start, sweep = 0, 150, 225, 270
+    for k in range(16):
+        a = math.radians(start - sweep * k / 15)
+        r0 = r * (0.72 if k % 5 == 0 else 0.8)
+        f.line([(cx + math.cos(a) * r0, cy + math.sin(a) * r0), (cx + math.cos(a) * r * 0.93, cy + math.sin(a) * r * 0.93)],
+               INK, 3 if k % 5 == 0 else 2)
+    for k in range(14):
+        a = math.radians(start - sweep * (130 + 20 * k / 13) / 150)
+        f.E(cx + math.cos(a) * r * 0.86, cy + math.sin(a) * r * 0.86, r * 0.07, fill=(200, 40, 34, 255))
+    for v in (0, 50, 100, 150):
+        a = math.radians(start - sweep * v / 150)
+        T(cx + math.cos(a) * r * 0.52, cy + math.sin(a) * r * 0.52, f"{v}", 7, bold=True)
+    T(cx, cy - r * 0.5, "\u00b0C", 7, bold=True)
+    T(cx, cy - r - 0.75, "WINDING TEMP", 7, bold=True)
+    f.live.append({"t": "dial", "x": cx, "y": cy, "r": r, "z": D + 0.4, "lo": lo, "hi": hi, "start": start, "sweep": sweep,
+                   "ch": "xf_temp"})
+    # POWER ON (live), its legend.
+    lx, ly = RX_LAMP
+    T(lx, ly - 1.25, "POWER ON", 7, bold=True)
+    f.live.append({"t": "lamp", "x": lx, "y": ly, "r": 0.5, "z": D + 0.56, "colour": [240, 240, 230], "ch": "xf_on"})
+    # FED FROM: an engraved tag, black with white letters.
+    tx0, ty0, tx1, ty1 = RX_TAG
+    f.R(tx0, ty0, tx1, ty1, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    mcc, breaker = _rx_feed(label)
+    for k, line in enumerate(("FED FROM", mcc, breaker)):
+        T((tx0 + tx1) / 2, ty1 - 0.68 - k * 0.92, line, 8 if k else 7, fill=WHITE, bold=True)
+    # DANGER 480 VOLTS: the red oval on its black band, the white body, the black legend.
+    sx0, sy0, sx1, sy1 = RX_SIGN
+    f.R(sx0, sy0, sx1, sy1, fill=(246, 246, 240, 255), outline=(40, 40, 42, 255), width=2)
+    f.R(sx0 + 0.15, sy1 - 1.65, sx1 - 0.15, sy1 - 0.15, fill=BLACK)
+    f.d.ellipse([(sx0 + 0.55) * U, (32 - (sy1 - 0.3)) * U, (sx1 - 0.55) * U, (32 - (sy1 - 1.5)) * U], fill=(206, 32, 30, 255),
+                outline=(246, 246, 240, 255), width=3)
+    T((sx0 + sx1) / 2, sy1 - 0.9, "DANGER", 11, fill=(246, 246, 240, 255), bold=True)
+    T((sx0 + sx1) / 2, sy0 + 2.15, "480 VOLTS", 12, fill=BLACK, bold=True)
+    T((sx0 + sx1) / 2, sy0 + 0.95, "KEEP COVERS ON", 7, fill=BLACK, bold=True)
+    # The data plate: brushed aluminium, stamped.
+    dx0, dy0, dx1, dy1 = RX_DATA
+    f.R(dx0, dy0, dx1, dy1, fill=(200, 202, 200, 255), outline=(120, 122, 124, 255), width=2)
+    rows = ["CONSTANT VOLTAGE XFMR", "KVA 10    PHASE 1    HZ 60", "PRI 480 V    20.8 A", "SEC 120 V    83.3 A",
+            "INSULATION CLASS H  RISE 115 C", "SERIAL 26-4471-" + label.replace("-", "")]
+    for k, line in enumerate(rows):
+        T((dx0 + dx1) / 2, dy1 - 0.75 - k * 0.7, line, 6, fill=(30, 30, 32, 255), bold=k == 0)
+    # The air inlet's opening: dark behind the slats.
+    lx0, ly0, lx1, ly1 = RX_LOUVRE
+    f.R(lx0, ly0, lx1, ly1, fill=(22, 22, 24, 255))
+    return f
+
+
+def _rx_bolt(x, y, z):
+    """A hex bolt head standing out of the cover: a square and the same square turned 45 degrees, a little shallower."""
+    return [(x - 0.26, y - 0.26, z, x + 0.26, y + 0.26, z + 0.2, "pi_steel"),
+            (x - 0.26, y - 0.26, z, x + 0.26, y + 0.26, z + 0.14, "pi_steel", {"rotation": {"angle": 45, "axis": "z", "origin": [x, y, z]}})]
+
+
+def reg_transformer_boxes():
+    F = f"pi_{RX_KEY}_f"
+    D = SC_DOOR
+    face = {"*": "pi_pnl_black", "south": F}
+    blk, dark = "pi_pnl_black", "pi_cabinet_dark"
+    # The plinth, the body, the cover (its face the drawing), the cap.
+    b = [(0.8, 0, 2.6, 15.2, 1.2, 14.0, "pi_toe_kick"),
+         (0.4, 1.2, 1.6, 15.6, 30.4, 14.6, "pi_cabinet"),
+         (0.6, 1.4, 14.6, 15.4, 30.2, D, {"*": "pi_cabinet", "south": F}),
+         (0.2, 30.4, 1.4, 15.8, 31.2, 15.2, dark)]
+    # On top: two louvred vents either side of the feeder conduit's hub (the conduit itself is the plant's, up to the
+    # tray: plant_office2 tray_* pieces), its locknut and the conduit's stub.
+    for z0, z1 in ((2.6, 5.8), (10.2, 13.4)):
+        b += [(2.0, 31.2, z0, 14.0, 31.3, z1, blk),
+              (2.0, 31.3, z0, 14.0, 31.8, z0 + 0.2, dark), (2.0, 31.3, z1 - 0.2, 14.0, 31.8, z1, dark),
+              (2.0, 31.3, z0 + 0.2, 2.2, 31.8, z1 - 0.2, dark), (13.8, 31.3, z0 + 0.2, 14.0, 31.8, z1 - 0.2, dark)]
+        for k in range(5):
+            zc = z0 + 0.55 + k * 0.52
+            b.append((2.2, 31.5 - 0.05, zc - 0.17, 13.8, 31.5 + 0.05, zc + 0.17, dark,
+                      {"rotation": {"angle": 22.5, "axis": "x", "origin": [8.0, 31.5, zc]}}))
+    # (The stub is square, as the conduit above it is at its foot: a turned stub would share the turned conduit's faces.)
+    b += [(6.5, 31.2, 6.5, 9.5, 31.5, 9.5, "pi_steel_dark"),
+          (6.5, 31.2, 6.5, 9.5, 31.45, 9.5, "pi_steel_dark", {"rotation": {"angle": 45, "axis": "y", "origin": [8, 31.2, 8]}}),
+          (7.0, 31.4, 7.0, 9.0, 32.0, 9.0, "pi_chrome")]
+    # Each side's vent high up: the dark opening, the slats tilted down to the outside.
+    y0, y1, z0, z1 = RX_SIDE_VENT
+    for x_in, x_out, sgn in ((0.4, 0.3, -1), (15.6, 15.7, 1)):
+        lo, hi = min(x_in, x_out), max(x_in, x_out)
+        b.append((lo, y0, z0, hi, y1, z1, blk))
+        fx0, fx1 = (0.1, 0.3) if sgn < 0 else (15.7, 15.9)
+        b += [(fx0, y0 - 0.2, z0 - 0.2, fx1, y0, z1 + 0.2, dark), (fx0, y1, z0 - 0.2, fx1, y1 + 0.2, z1 + 0.2, dark),
+              (fx0, y0, z0 - 0.2, fx1, y1, z0, dark), (fx0, y0, z1, fx1, y1, z1 + 0.2, dark)]
+        for k in range(9):
+            yc = y0 + 0.4 + k * 0.7
+            xm = (fx0 + fx1) / 2
+            b.append((xm - 0.22, yc - 0.05, z0, xm + 0.22, yc + 0.05, z1, dark,
+                      {"rotation": {"angle": -22.5 * sgn, "axis": "z", "origin": [xm, yc, (z0 + z1) / 2]}}))
+    # The nameplate; the meters.
+    b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
+    w, my0, my1 = VI_METER
+    for x0, *_ in RX_METERS:
+        b += _meter_case(x0, my0, x0 + w, my1, face)
+    # The winding temperature gauge: a chrome back plate, the bezel's ring standing out of it, the face set back inside
+    # the ring, the glass across the ring's mouth (the pointer is live, between the face and the glass). Ring, face
+    # and glass share their columns, so the ring's inside is the face's edge.
+    cx, cy, r = RX_DIAL
+    b += _rx_disc(cx, cy, r + 0.35, D, D + 0.15, "pi_chrome", r + 0.35)
+    b += _rx_ring(cx, cy, r, r + 0.35, D + 0.15, D + 0.62, "pi_chrome")
+    b += _rx_disc(cx, cy, r, D + 0.15, D + 0.3, face, r + 0.35)
+    b += _rx_disc(cx, cy, r, D + 0.55, D + 0.58, {"south": SC_GLASS, "north": SC_GLASS}, r + 0.35)
+    # POWER ON: a chrome bezel and the white lens.
+    lx, ly = RX_LAMP
+    b += _sc_round(lx, ly, D, D + 0.3, 0.7, "pi_chrome") + _sc_round(lx, ly, D + 0.3, D + 0.5, 0.5, "pi_lens_white")
+    # The FED FROM tag, the danger sign and the data plate stand off the cover, each riveted at its corners.
+    for x0, y0_, x1, y1_ in (RX_TAG, RX_SIGN, RX_DATA):
+        side = "pi_pnl_black" if (x0, y0_) == RX_TAG[:2] else ("pi_pnl_white" if (x0, y0_) == RX_SIGN[:2] else "pi_chrome")
+        b.append((x0, y0_, D, x1, y1_, D + 0.12, {"*": side, "south": F}))
+        for rx, ry in ((x0 + 0.3, y0_ + 0.3), (x1 - 0.3, y0_ + 0.3), (x0 + 0.3, y1_ - 0.3), (x1 - 0.3, y1_ - 0.3)):
+            if (x0, y0_) == RX_SIGN[:2] and ry > y0_ + 1:
+                continue    # the sign's top corners are in its black band: riveted lower down only
+            b.append((rx - 0.13, ry - 0.13, D + 0.12, rx + 0.13, ry + 0.13, D + 0.2, "pi_chrome"))
+    # The lifting handles: a bar on two standoffs.
+    hy0, hy1 = RX_HANDLE_Y
+    for x0, x1 in RX_HANDLES:
+        b += [(x0, hy0, D, x0 + 0.5, hy1, D + 0.8, "pi_chrome"), (x1 - 0.5, hy0, D, x1, hy1, D + 0.8, "pi_chrome"),
+              (x0, hy0 + 0.05, D + 0.8, x1, hy1 - 0.05, D + 1.15, "pi_chrome")]
+    # The cover's bolts.
+    for x, y in RX_BOLTS:
+        b += _rx_bolt(x, y, D)
+    # The air inlet: its frame, the slats tilted down to the front.
+    lx0, ly0, lx1, ly1 = RX_LOUVRE
+    b += [(lx0 - 0.2, ly0 - 0.2, D, lx1 + 0.2, ly0, D + 0.3, dark), (lx0 - 0.2, ly1, D, lx1 + 0.2, ly1 + 0.2, D + 0.3, dark),
+          (lx0 - 0.2, ly0, D, lx0, ly1, D + 0.3, dark), (lx1, ly0, D, lx1 + 0.2, ly1, D + 0.3, dark)]
+    k = 0
+    while ly0 + 0.35 + k * 0.52 < ly1 - 0.15:
+        yc = ly0 + 0.35 + k * 0.52
+        b.append((lx0, yc - 0.06, D - 0.1, lx1, yc + 0.06, D + 0.4, dark,
+                  {"rotation": {"angle": -22.5, "axis": "x", "origin": [8.0, yc, D + 0.15]}}))
+        k += 1
+    return b
+
+
+RX_COLUMNS = 11
+
+
+def _rx_columns(r_out):
+    """The columns a round part is built of, across its outer radius: (x0, x1, middle) offsets from the centre."""
+    w = 2 * r_out / RX_COLUMNS
+    return [(-r_out + k * w, -r_out + (k + 1) * w, -r_out + (k + 0.5) * w) for k in range(RX_COLUMNS)]
+
+
+def _rx_half(r, mid, r_out):
+    """A circle of radius r's half height over a column (its middle at mid), the outermost columns a little fuller."""
+    m = min(abs(mid), r_out - r_out / RX_COLUMNS * 0.5)
+    return math.sqrt(r * r - m * m) if m < r else 0.0
+
+
+def _rx_disc(cx, cy, r, z0, z1, tex, r_out):
+    """A disc of radius r facing out of the cover, as touching columns laid out over radius r_out (tools/zfight.py)."""
+    out = []
+    for x0, x1, mid in _rx_columns(r_out):
+        h = _rx_half(r, mid, r_out)
+        if h > 0.05:
+            out.append((cx + max(x0, -r), cy - h, z0, cx + min(x1, r), cy + h, z1, tex))
+    return out
+
+
+def _rx_ring(cx, cy, r0, r1, z0, z1, tex):
+    """A ring between radius r0 and r1 in the same columns as _rx_disc(r0), so its inside is the disc's edge."""
+    out = []
+    for x0, x1, mid in _rx_columns(r1):
+        ho, hi = _rx_half(r1, mid, r1), _rx_half(r0, mid, r1)
+        if hi <= 0.05:
+            out.append((cx + x0, cy - ho, z0, cx + x1, cy + ho, z1, tex))
+            continue
+        xa, xb = cx + x0, cx + x1
+        out += [(xa, cy + hi, z0, xb, cy + ho, z1, tex), (xa, cy - ho, z0, xb, cy - hi, z1, tex)]
+        # Where the disc is narrower than its column (its outermost), the ring fills the column's rest.
+        if -r0 > x0:
+            out.append((xa, cy - hi, z0, cx - r0, cy + hi, z1, tex))
+        if r0 < x1:
+            out.append((cx + r0, cy - hi, z0, xb, cy + hi, z1, tex))
+    return out
+
+
 # The drawings defined after the table (DRAWINGS holds their keys from the start, so SHARP has them).
 DRAWINGS["station_charger"] = station_charger
 DRAWINGS["vital_inverter"] = vital_inverter
+DRAWINGS["reg_transformer"] = reg_transformer

@@ -27,6 +27,10 @@ import org.jspecify.annotations.Nullable;
  * generator panel, one regulator and so on; a second set of panels put down by a second generator takes that one. The
  * link is kept while the generator stands (checked every two seconds), saved, and sent to the players, whose
  * client/LivePanelRenderer.java draws the panel from that generator's state.
+ *
+ * <p>The DC rooms' panels link what they read the same way (rounds 25 and 26): a charger, the DC switchboard and a
+ * vital inverter their station battery; an inverter its regulating transformer; a regulating transformer its motor
+ * control centre and its inverter (8d).
  */
 public class LivePanelBlockEntity extends BlockEntity {
 	public static final int REACH = 24;
@@ -44,12 +48,23 @@ public class LivePanelBlockEntity extends BlockEntity {
 	public final io.github.jimbozoomer.jugcraft.energy.@Nullable SimpleEnergyStorage input;
 	private long received, put;
 	/**
-	 * A vital inverter (round 26, 8g): the motor control centre its bypass comes from (the nearest in reach), and which
-	 * of its REG XF breakers feeds this inverter's regulating transformer (1 or 2: the inverters by that MCC in order
-	 * along its front, left to right). Synced; the client reads the bypass from that MCC's breakers and bus.
+	 * A regulating transformer (round 26, 8d): the motor control centre it is fed from (the nearest in reach), and which
+	 * of its REG XF breakers feeds it (1 or 2, by its label: 1A-1 and 1B-1 are REG XF 1, 1A-2 and 1B-2 REG XF 2). It
+	 * draws nothing (Justin: "Read the MCC breaker", as an inverter reads its battery): it is alive while that breaker is
+	 * closed and the MCC's bus charged ({@link #energized}). Synced.
 	 */
 	public @Nullable BlockPos mcc;
 	public int regXf = 1;
+	/**
+	 * A regulating transformer: the vital inverter it backs (the nearest in reach), so the client can tell whether it
+	 * carries that inverter's load on bypass (synced).
+	 */
+	public @Nullable BlockPos inverter;
+	/**
+	 * A vital inverter (round 26, 8g; 8d): its bypass, the regulating transformer beside it (the nearest in reach).
+	 * Synced; the client reads the bypass from that transformer.
+	 */
+	public @Nullable BlockPos xf;
 	/** The linked generator's anchor, or null. */
 	public @Nullable BlockPos generator;
 	/**
@@ -87,8 +102,29 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return state.getBlock() == PlantInterior.BLOCKS.get("vital_inverter");
 	}
 
-	/** An inverter keeps to the nearest motor control centre in reach, and finds which REG XF breaker is its. */
-	private void linkBypass(ServerLevel level) {
+	public static boolean isTransformer(BlockState state) {
+		return state.getBlock() == PlantInterior.BLOCKS.get("reg_transformer");
+	}
+
+	/** The DC equipment rooms' panels: the station charger, the DC switchboard, the vital inverter, its transformer. */
+	static boolean dcRoom(BlockState state) {
+		return state.getBlock() == PlantInterior.BLOCKS.get("station_charger") || isSwitchboard(state) || isInverter(state) || isTransformer(state);
+	}
+
+	/** A panel's label (round 26, 8c: 0 to 3 for 1A-1, 1A-2, 1B-1, 1B-2; one put down by hand is 0). */
+	public static int variant(BlockState state) {
+		net.minecraft.world.level.block.state.properties.IntegerProperty v = state.getBlock() instanceof MultiFurnitureBlock block
+				? block.variantProperty() : null;
+		return v == null ? 0 : state.getValue(v);
+	}
+
+	/**
+	 * A regulating transformer keeps to the nearest motor control centre in reach; its REG XF breaker is the one its
+	 * label says (round 26, 8d: no longer the inverters' order along the MCC's front), REG XF 1 for 1A-1 and 1B-1, REG XF
+	 * 2 for 1A-2 and 1B-2. Two by one MCC with the same number (put down by hand, both 1A-1) share the breakers in their
+	 * order along the MCC's front from its left: the first keeps its own, the next takes the other.
+	 */
+	private void linkMcc(ServerLevel level) {
 		BlockPos here = getBlockPos(), best = null;
 		double bestD = Double.MAX_VALUE;
 		for (Map.Entry<BlockPos, EquipmentRegistry.Entry> e : EquipmentRegistry.of(level).anchors().entrySet()) {
@@ -98,38 +134,127 @@ public class LivePanelBlockEntity extends BlockEntity {
 				best = e.getKey().immutable();
 			}
 		}
-		int rank = 1;
+		int number = variant(getBlockState()) % 2, before = 0;
 		if (best != null) {
-			// Its place among the inverters fed from that MCC (the others that found it too), along the MCC's front from
-			// its left (the side its first section is on): the first is fed by REG XF 1, the next by REG XF 2.
 			net.minecraft.core.Direction right = EquipmentRegistry.of(level).anchors().get(best).facing().getClockWise();
 			double mine = along(here, best, right);
-			int r = (REACH >> 4) + 1;
-			for (int cx = (best.getX() >> 4) - r; cx <= (best.getX() >> 4) + r; cx++) {
-				for (int cz = (best.getZ() >> 4) - r; cz <= (best.getZ() >> 4) + r; cz++) {
-					LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
-					if (chunk == null) {
-						continue;
-					}
-					for (BlockEntity be : chunk.getBlockEntities().values()) {
-						if (be != this && be instanceof LivePanelBlockEntity other && isInverter(other.getBlockState())
-								&& best.equals(other.mcc) && along(other.getBlockPos(), best, right) < mine) {
-							rank++;
-						}
-					}
+			for (LivePanelBlockEntity other : around(level, PlantInterior.BLOCKS.get("reg_transformer"))) {
+				double theirs = along(other.getBlockPos(), best, right);
+				if (best.equals(other.mcc) && variant(other.getBlockState()) % 2 == number
+						&& (theirs < mine || theirs == mine && other.getBlockPos().compareTo(here) < 0)) {
+					before++;
 				}
 			}
 		}
-		int xf = Math.min(2, rank);
-		if (best == null ? mcc != null : !best.equals(mcc) || xf != regXf) {
+		int breaker = (number + before) % 2 + 1;
+		if ((best == null ? mcc != null : !best.equals(mcc)) || breaker != regXf) {
 			mcc = best;
-			regXf = xf;
+			regXf = breaker;
 			sync(level);
 		}
 	}
 
 	private static double along(BlockPos p, BlockPos origin, net.minecraft.core.Direction right) {
 		return (p.getX() - origin.getX()) * right.getStepX() + (p.getZ() - origin.getZ()) * right.getStepZ();
+	}
+
+	/**
+	 * An inverter keeps to a regulating transformer in reach, its bypass (round 26, 8d: in the plants the one beside it;
+	 * Justin: transformers beside their inverters): the one that names it, else the nearest no other inverter has, else
+	 * the nearest. So in a row of inverters and transformers each pairs with its own, not two with one.
+	 */
+	private void linkTransformer(ServerLevel level) {
+		List<LivePanelBlockEntity> xfs = around(level, PlantInterior.BLOCKS.get("reg_transformer"));
+		BlockPos found = null;
+		for (LivePanelBlockEntity t : xfs) {
+			if (getBlockPos().equals(t.inverter)) {
+				found = t.getBlockPos();
+				break;
+			}
+		}
+		if (found == null) {
+			List<LivePanelBlockEntity> inverters = around(level, PlantInterior.BLOCKS.get("vital_inverter"));
+			for (LivePanelBlockEntity t : xfs) {
+				if (inverters.stream().noneMatch(i -> t.getBlockPos().equals(i.xf))) {
+					found = t.getBlockPos();
+					break;
+				}
+			}
+		}
+		if (found == null && !xfs.isEmpty()) {
+			found = xfs.get(0).getBlockPos();
+		}
+		if (found == null ? xf != null : !found.equals(xf)) {
+			xf = found == null ? null : found.immutable();
+			sync(level);
+		}
+	}
+
+	/**
+	 * A regulating transformer keeps to the vital inverter whose load it takes on bypass: the one that names it, else the
+	 * nearest that names no other transformer, else the nearest.
+	 */
+	private void linkInverter(ServerLevel level) {
+		List<LivePanelBlockEntity> inverters = around(level, PlantInterior.BLOCKS.get("vital_inverter"));
+		BlockPos found = null;
+		for (LivePanelBlockEntity i : inverters) {
+			if (getBlockPos().equals(i.xf)) {
+				found = i.getBlockPos();
+				break;
+			}
+		}
+		if (found == null) {
+			for (LivePanelBlockEntity i : inverters) {
+				if (i.xf == null) {
+					found = i.getBlockPos();
+					break;
+				}
+			}
+		}
+		if (found == null && !inverters.isEmpty()) {
+			found = inverters.get(0).getBlockPos();
+		}
+		if (found == null ? inverter != null : !found.equals(inverter)) {
+			inverter = found == null ? null : found.immutable();
+			sync(level);
+		}
+	}
+
+	/**
+	 * The live panels of the given kind within {@link #REACH} blocks (their placing blocks), nearest first; ties by
+	 * position, so every panel sees them in the same order.
+	 */
+	private List<LivePanelBlockEntity> around(ServerLevel level, Block kind) {
+		BlockPos here = getBlockPos();
+		List<LivePanelBlockEntity> out = new ArrayList<>();
+		int r = (REACH >> 4) + 1;
+		for (int cx = (here.getX() >> 4) - r; cx <= (here.getX() >> 4) + r; cx++) {
+			for (int cz = (here.getZ() >> 4) - r; cz <= (here.getZ() >> 4) + r; cz++) {
+				LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+				if (chunk == null) {
+					continue;
+				}
+				for (BlockEntity be : chunk.getBlockEntities().values()) {
+					if (be != this && be instanceof LivePanelBlockEntity other && other.getBlockState().getBlock() == kind
+							&& other.getBlockPos().distSqr(here) <= (double) REACH * REACH) {
+						out.add(other);
+					}
+				}
+			}
+		}
+		out.sort(java.util.Comparator.<LivePanelBlockEntity>comparingDouble(o -> o.getBlockPos().distSqr(here))
+				.thenComparing(LivePanelBlockEntity::getBlockPos));
+		return out;
+	}
+
+	/**
+	 * Whether a regulating transformer is alive (round 26, 8d): its motor control centre there with its bus charged and
+	 * its REG XF breaker closed. It reads the breaker and draws nothing (Justin: "Read the MCC breaker"). Its meters and
+	 * lamp (client/EdgTelemetry.java transformer) and its inverter's bypass follow this.
+	 */
+	public boolean energized(net.minecraft.world.level.Level level) {
+		return isTransformer(getBlockState()) && mcc != null && level.getBlockEntity(mcc) instanceof EquipmentBlockEntity board && board.bus != null
+				&& board.bus.getAmount() > 0 && (board.breakers & 1 << regXf) != 0;
 	}
 
 	public void serverTick(ServerLevel level) {
@@ -144,7 +269,26 @@ public class LivePanelBlockEntity extends BlockEntity {
 			linkBattery(level);
 		}
 		if (isInverter(getBlockState())) {
-			linkBypass(level);
+			linkTransformer(level);
+			if (mcc != null) {
+				// Its MCC link from round 26's 8g (an inverter now reads its transformer instead).
+				mcc = null;
+				sync(level);
+			}
+		}
+		if (isTransformer(getBlockState())) {
+			linkMcc(level);
+			linkInverter(level);
+		}
+		if (dcRoom(getBlockState())) {
+			// The DC rooms' panels read their battery, MCC or transformer, never a diesel generator (one in reach would
+			// put their meters on the generator's).
+			if (generator != null) {
+				generator = null;
+				hoursBase = -1;
+				sync(level);
+			}
+			return;
 		}
 		if (generator != null && isGenerator(level, generator) && generator.distSqr(getBlockPos()) <= (double) REACH * REACH) {
 			if (hoursBase < 0 && level.getBlockEntity(generator) instanceof EquipmentBlockEntity edg) {
@@ -339,6 +483,12 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.store("mcc", BlockPos.CODEC, mcc);
 			out.putInt("reg_xf", regXf);
 		}
+		if (inverter != null) {
+			out.store("inverter", BlockPos.CODEC, inverter);
+		}
+		if (xf != null) {
+			out.store("xf", BlockPos.CODEC, xf);
+		}
 	}
 
 	@Override
@@ -351,6 +501,8 @@ public class LivePanelBlockEntity extends BlockEntity {
 		charging = in.getIntOr("charging", 0);
 		mcc = in.read("mcc", BlockPos.CODEC).orElse(null);
 		regXf = in.getIntOr("reg_xf", 1);
+		inverter = in.read("inverter", BlockPos.CODEC).orElse(null);
+		xf = in.read("xf", BlockPos.CODEC).orElse(null);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}

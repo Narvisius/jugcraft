@@ -365,6 +365,129 @@ PIECES.update({
         + _oct_y(8, 24, 9.0, 11.3, _CONDUIT, "pi_chrome") + _oct_y(8, 24, 11.3, 12, 1.7, "pi_steel_dark")},
 })
 
+
+# ---------------------------------------------------------------------------------------------- ladder tray
+# The DC equipment rooms' overhead cable tray (round 26, 8d; Justin: "Overhead tray now"): 24-inch galvanized ladder
+# tray hung under the ceiling on trapeze hangers (a length of strut under it on two threaded rods), over the equipment
+# row and the motor control centre and along the side wall between them, a bundle of black power cables laid on its
+# rungs. Where a feeder leaves it, a rigid conduit comes up under it and ends in a bushing, the cable dropping out of
+# the bundle into it (the regulating transformers' feeders: up from each transformer's top, and two side by side from
+# the top of the MCC's REG XF section). Pieces facing north run along x (the tray across z 3..13, its rails 11.2..14 up
+# the block); the bend facing north joins the west side to the south side.
+TRAY_Y = (11.2, 14.0)                   # the rails' bottom and top
+TRAY_RAIL = (3.0, 3.4)                  # the near rail's web (the far one mirrored about z 8)
+TRAY_RUNGS = (2.0, 6.0, 10.0, 14.0)     # rung centres along the run (9 inches apart)
+TRAY_CABLES = (4.6, 6.2, 8.0, 9.8, 11.4)
+TRAY_CABLE_R, TRAY_CABLE_Y = 0.7, 12.55
+MCC_HUB_Y = -10.3                       # an MCC's REG XF hubs' tops, from the block over the lineup (2.36 - 3 blocks, a hair into the hub)
+_GALV, _GALV_DARK, _JACKET = "pi_steel", "pi_steel_dark", "pi_sb_cable"
+
+
+def _oct_x(z, y, x0, x1, half, tex):
+    """A round-ish run along x (as _oct_y)."""
+    return [(x0, y - half, z - half, x1, y + half, z + half, tex),
+            (x0 + 0.05, y - half, z - half, x1 - 0.05, y + half, z + half, tex, {"rotation": {"angle": 45, "axis": "x", "origin": [x0, y, z]}})]
+
+
+def _tray_rails(x0=0.0, x1=16.0):
+    y0, y1 = TRAY_Y
+    out = []
+    for w0, w1, f0, f1 in ((3.0, 3.4, 3.4, 4.1), (12.6, 13.0, 11.9, 12.6)):
+        out += [(x0, y0, w0, x1, y1, w1, _GALV), (x0, y0, f0, x1, y0 + 0.3, f1, _GALV), (x0, y1 - 0.3, f0, x1, y1, f1, _GALV)]
+    return out
+
+
+def _tray_rungs(skip=()):
+    return [(c - 0.45, TRAY_Y[0] + 0.05, 3.4, c + 0.45, 11.85, 12.6, _GALV) for c in TRAY_RUNGS if c not in skip]
+
+
+def _tray_cables(x0=0.0, x1=16.0, lanes=TRAY_CABLES):
+    out = []
+    for z in lanes:
+        out += _oct_x(z, TRAY_CABLE_Y, x0, x1, TRAY_CABLE_R, _JACKET)
+    return out
+
+
+def _trapeze(x=8.0):
+    """A trapeze hanger at x: the strut under the rails, two threaded rods up to the ceiling outside them, the nuts
+    under the strut, the rods' anchor plates on the ceiling."""
+    out = [(x - 0.8, 10.2, 1.4, x + 0.8, TRAY_Y[0], 14.6, _GALV)]
+    for z in (2.0, 14.0):
+        out += [(x - 0.2, 9.6, z - 0.2, x + 0.2, 16.0, z + 0.2, _GALV_DARK), (x - 0.4, 9.75, z - 0.4, x + 0.4, 10.2, z + 0.4, _GALV_DARK),
+                (x - 0.7, 15.7, z - 0.7, x + 0.7, 16.0, z + 0.7, _GALV_DARK)]
+    return out
+
+
+def _tray_drop(x):
+    """A feeder leaving the tray at x: its conduit up under the tray, the bushing, the cable dropping into it."""
+    return (_oct_y(x, 8, 0, 10.0, _CONDUIT, "pi_chrome") + _oct_y(x, 8, 3.5, 5.5, _COUPLING, "pi_steel") + _oct_y(x, 8, 10.0, 10.6, 1.45, _GALV_DARK)
+            + _oct_y(x, 8, 10.6, TRAY_CABLE_Y, 0.6, _JACKET))
+
+
+def _seg(cx, cz, phi, length, width, y0, y1, tex):
+    """A box along a direction in the plan (phi degrees from +x toward +z: 0, +-22.5, +-45, +-67.5 or 90), centred at
+    (cx, cz): built along x or z and turned about y."""
+    if abs(phi) > 45:
+        base = 90 if phi > 0 else -90
+        box = (cx - width / 2, y0, cz - length / 2, cx + width / 2, y1, cz + length / 2, tex)
+        turn = phi - base
+    else:
+        box = (cx - length / 2, y0, cz - width / 2, cx + length / 2, y1, cz + width / 2, tex)
+        turn = phi
+    if turn == 0:
+        return [box]
+    # The game turns +x toward -z for a positive angle about y (seen from above, anticlockwise): phi's opposite.
+    return [box + ({"rotation": {"angle": -turn, "axis": "y", "origin": [cx, (y0 + y1) / 2, cz]}},)]
+
+
+def _arc(radius, y0, y1, width, tex, round_=None):
+    """A run bent round the corner at radius from (0, 16): along x from the west edge, a 45-degree chamfer, along z
+    to the south edge (the octagon round the quarter circle)."""
+    a = radius * math.tan(math.radians(22.5))
+    zr = 16 - radius
+    out = []
+    if round_:
+        out += _oct_x(zr, (y0 + y1) / 2, 0, a, round_, tex) + _oct_z(radius, (y0 + y1) / 2, 16 - a, 16, round_, tex)
+    else:
+        out += [(0, y0, zr - width / 2, a, y1, zr + width / 2, tex), (radius - width / 2, y0, 16 - a, radius + width / 2, y1, 16, tex)]
+    diag = math.sqrt(2) * (radius - a)
+    out += _seg((a + radius) / 2, (zr + 16 - a) / 2, 45, diag + (0.2 if not round_ else 0), width if not round_ else 2 * round_,
+                y0 if not round_ else (y0 + y1) / 2 - round_, y1 if not round_ else (y0 + y1) / 2 + round_, tex)
+    return out
+
+
+def _tray_bend():
+    y0, y1 = TRAY_Y
+    out = []
+    # The rails: the outer one round the corner at radius 12.8, the inner at 3.2, each web with its flanges inward.
+    for r_web, r_flange in ((12.8, 12.25), (3.2, 3.75)):
+        out += _arc(r_web, y0, y1, 0.4, _GALV)
+        out += _arc(r_flange, y0, y0 + 0.3, 0.7, _GALV) + _arc(r_flange, y1 - 0.3, y1, 0.7, _GALV)
+    # The rungs, across the corner from the inner rail to the outer.
+    for theta in (22.5, 45.0, 67.5):
+        t = math.radians(theta)
+        out += _seg(8 * math.sin(t), 16 - 8 * math.cos(t), theta - 90, 9.2, 0.9, y0 + 0.05, 11.85, _GALV)
+    out += [(1.55, y0 + 0.05, 3.4, 2.45, 11.85, 12.6, _GALV), (3.4, y0 + 0.05, 13.55, 12.6, 11.85, 14.45, _GALV)]
+    # The cables round the bend.
+    for z in TRAY_CABLES:
+        out += _arc(16 - z, TRAY_CABLE_Y - TRAY_CABLE_R, TRAY_CABLE_Y + TRAY_CABLE_R, 2 * TRAY_CABLE_R, _JACKET, round_=TRAY_CABLE_R)
+    return out
+
+
+PIECES.update({
+    "ladder_tray": {"display": "Ladder Cable Tray", "boxes": _tray_rails() + _tray_rungs() + _tray_cables()},
+    "ladder_tray_hanger": {"display": "Ladder Cable Tray (Hanger)", "boxes": _tray_rails() + _tray_rungs() + _tray_cables() + _trapeze()},
+    "ladder_tray_bend": {"display": "Ladder Cable Tray (Bend)", "boxes": _tray_bend()},
+    "ladder_tray_drop": {"display": "Ladder Cable Tray (Conduit Drop)", "boxes": _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(8.0)},
+    "ladder_tray_drop_pair": {"display": "Ladder Cable Tray (Two Conduit Drops)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(4.5) + _tray_drop(11.5)},
+    # Two feeder conduits side by side, up from their hubs on the top of an MCC section (in the block below, its top
+    # 2.36 blocks up the lineup: tools/control_boards.py MCC_CONDUITS) to the tray's drops.
+    "conduit_pair": {"display": "Feeder Conduits (Pair)", "boxes":
+        _oct_y(4.5, 8, MCC_HUB_Y, 16, _CONDUIT, "pi_chrome") + _oct_y(11.5, 8, MCC_HUB_Y, 16, _CONDUIT, "pi_chrome")
+        + _oct_y(4.5, 8, 7, 9, _COUPLING, "pi_steel") + _oct_y(11.5, 8, 7, 9, _COUPLING, "pi_steel")},
+})
+
 CRAFTING = {
     "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),
     "executive_desk": (["SSS", "PPP", "P P"], {"S": "minecraft:dark_oak_slab", "P": "minecraft:dark_oak_planks"}, 2),
@@ -381,6 +504,12 @@ CRAFTING = {
     "feeder_conduit_ceiling": (["R", "P", "P"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
     "feeder_conduit_floor": (["P", "P", "R"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
     "feeder_conduit_tray": (["PP", "P "], {"P": "#c:plates/steel"}, 4),
+    "ladder_tray": (["P P", "PPP"], {"P": "#c:plates/iron"}, 8),
+    "ladder_tray_hanger": (["N N", "P P", "PPP"], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron"}, 4),
+    "ladder_tray_bend": (["P  ", "P P", "PPP"], {"P": "#c:plates/iron"}, 4),
+    "ladder_tray_drop": (["P P", "PPP", " S "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "ladder_tray_drop_pair": (["P P", "PPP", "S S"], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "conduit_pair": (["P P", "P P"], {"P": "#c:plates/steel"}, 4),
     "emergency_light_conduit": (["P", "P", "P"], {"P": "#c:plates/iron"}, 8),
     "emergency_light": (["G G", "PRP"], {"G": "minecraft:glowstone_dust", "P": "#c:plates/iron", "R": "minecraft:redstone"}, 2),
     "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),

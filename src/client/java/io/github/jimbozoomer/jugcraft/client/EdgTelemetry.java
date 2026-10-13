@@ -39,6 +39,13 @@ public final class EdgTelemetry {
 	/** The chargers come back with the sequence's last step. */
 	static final double CHARGERS = BREAKER + 7 * STEP;
 	private static final Map<BlockPos, Memory> MEMORY = new HashMap<>();
+	/**
+	 * A regulating transformer's winding temperature (round 26, 8d; degrees C): dead (room temperature), alive on no
+	 * load, carrying its inverter's load; and how fast it gets there (game ticks).
+	 */
+	static final double XF_ROOM = 25, XF_NO_LOAD = 58, XF_LOADED = 96, XF_TAU = 1800;
+	/** Each regulating transformer's winding temperature as last drawn, and when (game ticks). */
+	private static final Map<BlockPos, double[]> WINDING = new HashMap<>();
 
 	private EdgTelemetry() {
 	}
@@ -55,6 +62,12 @@ public final class EdgTelemetry {
 		 */
 		public boolean invDc, invRun, invOnInv, invOnBypass, invBypassOk;
 		public double invAcV, invAcA, invHz;
+		/**
+		 * A regulating transformer (round 26, 8d): POWER ON; its input and output volts, output amps and winding
+		 * temperature (degrees C).
+		 */
+		public boolean xfOn;
+		public double xfInV, xfOutV, xfOutA, xfTemp;
 		/** Sequencer steps done, and the one whose motor is starting now (-1 none). */
 		public int steps, starting = -1;
 		public String avr1 = "", avr2 = "", sequence = "";
@@ -84,6 +97,10 @@ public final class EdgTelemetry {
 				case "inv_dc_v" -> dcV;
 				case "inv_ac_v" -> invAcV;
 				case "inv_ac_a" -> invAcA;
+				case "xf_in_v" -> xfInV;
+				case "xf_out_v" -> xfOutV;
+				case "xf_out_a" -> xfOutA;
+				case "xf_temp" -> xfTemp;
 				default -> 0;
 			};
 		}
@@ -142,6 +159,8 @@ public final class EdgTelemetry {
 				case "inv_low_dc" -> dcV < 112 ? 1 : 0;
 				case "inv_byp_fail" -> invBypassOk ? 0 : 1;
 				case "inv_sync" -> invRun && !invBypassOk ? 1 : 0;
+				// A regulating transformer's POWER ON lamp.
+				case "xf_on" -> xfOn ? 1 : 0;
 				default -> 0;
 			};
 		}
@@ -268,10 +287,11 @@ public final class EdgTelemetry {
 	/**
 	 * A vital inverter (round 26, 8g; Justin: "any meters and such are actually animated to work realistically"): on its
 	 * station battery's DC it runs and carries the vital bus, 120 V at about 46 A and 60.00 Hz, each with a real meter's
-	 * small wander. With the battery flat its static switch puts the load on the bypass (the regulating transformer, fed
-	 * from its MCC's REG XF breaker), about 118 V on the grid's frequency; with that gone too, the output is dead and the
-	 * display dark. The annunciator shows the inverter failed, low DC, the bypass source failed, the load on bypass, and
-	 * the inverter running out of sync with no bypass to follow. Called after battery(), which reads the DC bus.
+	 * small wander. With the battery flat its static switch puts the load on the bypass (its regulating transformer
+	 * beside it, alive while its MCC's REG XF breaker is closed: round 26, 8d), the transformer's 119 V or so on the
+	 * grid's frequency; with that gone too, the output is dead and the display dark. The annunciator shows the inverter
+	 * failed, low DC, the bypass source failed, the load on bypass, and the inverter running out of sync with no bypass to
+	 * follow. Called after battery(), which reads the DC bus.
 	 */
 	public static void inverter(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
 			double now) {
@@ -285,8 +305,9 @@ public final class EdgTelemetry {
 		}
 		o.invDc = soc > 0.005 || charging;
 		o.invRun = o.invDc;
-		o.invBypassOk = panel.mcc != null && level.getBlockEntity(panel.mcc) instanceof EquipmentBlockEntity mcc && mcc.bus != null
-				&& mcc.bus.getAmount() > 0 && (mcc.breakers & 1 << panel.regXf) != 0;
+		// The bypass is there while its regulating transformer is alive (round 26, 8d: the transformer reads the breaker).
+		o.invBypassOk = panel.xf != null && level.getBlockEntity(panel.xf) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity xf
+				&& xf.energized(level);
 		o.invOnInv = o.invRun;
 		o.invOnBypass = !o.invRun && o.invBypassOk;
 		double t = now / 20.0, seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
@@ -294,7 +315,9 @@ public final class EdgTelemetry {
 			o.invAcV = 120 + 0.4 * noise(t * 0.3, seed, 1);
 			o.invHz = 60 + 0.01 * noise(t * 0.2, seed, 2);
 		} else if (o.invOnBypass) {
-			o.invAcV = 118 + 1.2 * noise(t * 0.3, seed, 1);
+			// On bypass its output is its regulating transformer's, so its AC VOLTS reads what the transformer's OUTPUT
+			// VOLTS does (round 26, 8d: the same sag and wander, transformerVolts).
+			o.invAcV = transformerVolts(panel.xf, true, now);
 			o.invHz = 60 + 0.03 * noise(t * 0.1, seed, 2);
 		} else {
 			o.invAcV = 0;
@@ -304,6 +327,68 @@ public final class EdgTelemetry {
 		if (!o.invDc) {
 			o.dcV = Math.min(o.dcV, 105);
 		}
+	}
+
+	/**
+	 * A regulating transformer (round 26, 8d; Justin: "Meters and a lamp", animated to work realistically): a 480 V to
+	 * 120 V constant-voltage (ferroresonant) transformer, its inverter's standby source. It reads its MCC's REG XF breaker
+	 * and draws nothing (Justin: "Read the MCC breaker"); alive (LivePanelBlockEntity.energized), POWER ON is lit, its
+	 * input reads about 480 V with a slow wander and its output a very steady 120 V. While its inverter runs on
+	 * its battery it carries no load (0 A); with the battery flat the inverter's static switch puts the load on it, and
+	 * its output amps read what the inverter's AC AMPS meter does (about 46 A, the same wander) while the output sags a
+	 * little, to about 119.3 V. Dead: every meter at zero, the lamp out. Its winding temperature follows its losses
+	 * slowly (a time constant of about 90 s of game time): room temperature dead, about 58 degrees on no load, 96
+	 * carrying the load.
+	 */
+	public static void transformer(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
+			double now) {
+		boolean on = panel.energized(level), loaded = false;
+		double amps = 0;
+		if (on && panel.inverter != null && level.getBlockEntity(panel.inverter) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity inv
+				&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(inv.getBlockState()) && panel.getBlockPos().equals(inv.xf)) {
+			// Its inverter as that inverter's own panel reads it: on bypass, the load is this transformer's.
+			Snapshot load = new Snapshot();
+			inverter(load, inv, level, now);
+			loaded = load.invOnBypass;
+			amps = load.invAcA;
+		}
+		double t = now / 20.0, seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		o.xfOn = on;
+		if (on) {
+			o.xfInV = 480 + 2 * noise(t * 0.1, seed, 1);
+			o.xfOutV = transformerVolts(panel.getBlockPos(), loaded, now);
+			o.xfOutA = loaded ? amps : 0;
+		} else {
+			o.xfInV = 0;
+			o.xfOutV = 0;
+			o.xfOutA = 0;
+		}
+		double target = !on ? XF_ROOM : loaded ? XF_LOADED : XF_NO_LOAD;
+		double[] w = WINDING.get(panel.getBlockPos());
+		if (w == null && WINDING.size() > 256) {
+			// Positions from worlds and places left behind: forgotten (each starts again at its target).
+			WINDING.clear();
+		}
+		if (w == null) {
+			w = new double[] {target, now};
+			WINDING.put(panel.getBlockPos().immutable(), w);
+		}
+		// A long gap (its chunk unloaded and loaded again) counts as one time constant at most, so the needle carries on
+		// from where it was rather than jumping to its end; time going back (another world) counts as none.
+		double dt = Math.max(0, Math.min(XF_TAU, now - w[1]));
+		w[0] = target + (w[0] - target) * Math.exp(-dt / XF_TAU);
+		w[1] = now;
+		o.xfTemp = w[0];
+	}
+
+	/**
+	 * A live regulating transformer's output volts (round 26, 8d): a very steady 120 V (ferroresonant), sagging to about
+	 * 119.3 V carrying its inverter's load; its wander seeded by its position, so its own meter and its inverter's on
+	 * bypass read the same.
+	 */
+	static double transformerVolts(@org.jspecify.annotations.Nullable BlockPos xf, boolean loaded, double now) {
+		double seed = xf == null ? 0 : (xf.hashCode() & 0xFFFF) * 0.0137;
+		return (loaded ? 119.3 : 120) + 0.15 * noise(now / 20.0 * 0.3, seed, 2);
 	}
 
 	/** Nothing running, all settled. */

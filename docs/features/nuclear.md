@@ -150,17 +150,38 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   inlet, the exhaust hood, hinges and a T-handle. All of it is live, with a real meter's small wander:
   - On its battery's DC it runs and carries the load: 120 V, about 46 A, 60.00 Hz; the mimic's DC, inverter and load
     lines lit green.
-  - With the battery flat its static switch moves the load onto the bypass, the regulating transformer fed from the
-    nearest motor control centre's REG XF breaker (the inverters by an MCC take REG XF 1 and 2 in order along its
-    front): about 118 V on the grid's frequency, BYPASS and ON BYPASS lit, INV FAIL and LOW DC in, the load line amber.
-  - With that breaker open too, the output is dead: the meters drop to zero and the display goes dark. BYP SRC FAIL
-    comes in whenever the bypass is gone, and OUT OF SYNC while the inverter runs with no bypass to follow.
+  - With the battery flat its static switch moves the load onto the bypass, the Regulating Transformer beside it (the
+    nearest in reach): the transformer's 119 V or so on the grid's frequency, BYPASS and ON BYPASS lit, INV FAIL and
+    LOW DC in, the load line amber.
+  - With the transformer dead too (its MCC breaker open or the MCC empty), the output is dead: the meters drop to zero
+    and the display goes dark. BYP SRC FAIL comes in whenever the bypass is gone, and OUT OF SYNC while the inverter
+    runs with no bypass to follow.
   - It only reads its battery; it draws nothing from it.
+- **Regulating Transformer** (round 26): each Vital AC Inverter's standby source, a 10 kVA constant-voltage
+  transformer, 480 V in from a motor control centre's REG XF breaker and a steady 120 V out to the inverter's static
+  switch. One block wide and two high, it stands beside its inverter in the same cabinet but a transformer's: a bolted
+  front cover with two lifting handles and its bolts, a big louvred air inlet low down, louvred vents in both sides and
+  on the top, the hub its feeder conduit comes down into. Its cover: the engraved nameplate; INPUT VOLTS, OUTPUT VOLTS
+  and OUTPUT AMPS meters behind glass; the WINDING TEMP gauge (a red band from 130 °C); the POWER ON lamp; a FED FROM
+  tag (MCC 1A, REG XF 1 and so on); a DANGER 480 VOLTS sign and a riveted data plate. It links the nearest motor
+  control centre in reach and the REG XF breaker its label says (1A-1 and 1B-1 REG XF 1, 1A-2 and 1B-2 REG XF 2; one
+  put down by hand is 1A-1), and the nearest Vital AC Inverter. It only reads the breaker; it draws nothing.
+  - Breaker closed and the MCC's bus charged: POWER ON lit, about 480 V in (with a slow wander), a very steady
+    120 V out, 0 A while its inverter runs on its battery.
+  - Its inverter on bypass: the output amps read the inverter's load (about 46 A, the same as the inverter's AC AMPS)
+    and the output sags a little, to about 119.3 V.
+  - Breaker open or the MCC empty: every meter at zero, the lamp out, and its inverter has no bypass.
+  - The winding temperature follows slowly (two thirds of the way in about a minute and a half, settled in a few
+    minutes): room temperature (25 °C) dead, about 58 °C alive on no load, 96 °C carrying the load.
+- **Ladder Cable Tray** (round 26): 24-inch galvanized ladder tray (rails, rungs, black power cables on them) hung under
+  the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend, and drops where a
+  conduit comes up under it and a cable goes down into it (one or two). **Feeder Conduits (Pair)**: two conduits side
+  by side, up from a motor control centre section's top.
 - The 125 VDC Distribution Switchboard's ground detector lamps are live: both lit while the bus is alive (no ground
   faults are modelled).
-- **Train labels** (round 26): the DC rooms' equipment says which train and which one it is. The chargers and the
-  inverters are 1A-1, 1A-2, 1B-1 and 1B-2 (charger 1A-1 is the one MCC 1A's CHGR 1 feeds; inverter 1A-1 the one its
-  REG XF 1 backs), the DC switchboards 1A and 1B (their feeders labelled for their train), the motor control centres
+- **Train labels** (round 26): the DC rooms' equipment says which train and which one it is. The chargers, the
+  inverters and the regulating transformers are 1A-1, 1A-2, 1B-1 and 1B-2 (charger 1A-1 is the one MCC 1A's CHGR 1
+  feeds; transformer 1A-1 the one its REG XF 1 feeds, and inverter 1A-1 the one beside it), the DC switchboards 1A and 1B (their feeders labelled for their train), the motor control centres
   MCC 1A and MCC 1B. The panels carry it as their variant and the MCC as its anchor's; one put down by hand is the
   first (1A-1, 1A).
 - **Refuelling:**
@@ -269,8 +290,10 @@ blueprint (for players who lay out their own plant).
   - Grade: Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (Station Battery, four
     blocks long, 30 cells in clear jars, below), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
-    beside the battery chargers and Vital AC Inverters, with the room's 480 V motor control centre feeding the
-    chargers; the switchgear room
+    beside the battery chargers, Vital AC Inverters and Regulating Transformers (in groups by number: charger, inverter,
+    transformer), with the room's 480 V motor control centre feeding the chargers by cables in the slab and the
+    transformers by the ladder tray under the ceiling (over the row, along the relay cabinets' wall and over the MCC,
+    a conduit down into each transformer's top and two up from the MCC's REG XF section); the switchgear room
     (both trains' 480 V load centers face to face across an aisle of rubber mats, fed from the main transformer and
     feeding the chargers, above; their feeder conduits up through the ceiling into the cable spreading room's trays;
     emergency lights, an extinguisher);

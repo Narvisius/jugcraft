@@ -288,6 +288,9 @@ def check(site, quiet=False):
     # 8. Feeder conduits (round 25b): none stops in mid-air. Each column stands on a load centre's hub and reaches a
     # cable tray: base over the lineup, up to the ceiling, through the slab, up through the floor, into the tray.
     problems += feeder_conduits(site, g)
+    # 9. Regulating transformers (round 26, 8d): each beside the inverter of its label, fed from its train's MCC, the
+    # conduits up from its top and from the MCC's REG XF section reaching the same ladder tray.
+    problems += regulating_transformers(site, g)
     if not quiet:
         for p in problems:
             print(p)
@@ -338,6 +341,85 @@ def feeder_conduits(site, g):
             k += 1
         if at(x, k, z) != "feeder_conduit_tray" or not at(x, k, z + 1).startswith("cable_tray"):
             problems.append(f"feeder conduit from {(x, y, z)} does not end in a cable tray ({at(x, k, z)} at y {k}, {at(x, k, z + 1)} beside it)")
+    return problems
+
+
+def regulating_transformers(site, g):
+    """Each regulating transformer stands beside the vital inverter of its own label (each the other's nearest), the
+    nearest motor control centre feeds one transformer of each number of one train, and a conduit column runs up from
+    each transformer's top, and two from the MCC's REG XF section (its second section), to drops in one ladder tray."""
+    import plant_panels as PN
+    labels = PN.PANELS["reg_transformer"]["labels"]
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+
+    def at(x, y, z):
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+
+    def panels(kind):
+        """Each panel's bottom block: (x, y, z) -> its label index."""
+        out = {}
+        for k, (st, _) in P.MATERIALS.items():
+            if st.startswith(f"jugcraft:{kind}[") and "part=0" in st:
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                for x, y, z in np.argwhere(g == k):
+                    out[(int(x), int(y) - B, int(z) - O)] = v
+        return out
+
+    def nearest(p, cells):
+        return min(cells, key=lambda c: (c[0] - p[0]) ** 2 + (c[1] - p[1]) ** 2 + (c[2] - p[2]) ** 2, default=None)
+
+    problems = []
+    xfs, invs = panels("reg_transformer"), panels("vital_inverter")
+    mccs = []
+    for part, px, pz, rot in site.parts:
+        for kind, ax, ay, az, facing in part.props:
+            if kind == "mcc_lineup":
+                rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+                mccs.append(((ax + px, ay - part.sink, az + pz), (ax + px + rx, ay - part.sink + P.EQUIPMENT_SIZES[kind][3], az + pz + rz)))
+    fed = {}
+    tray_drops = {}
+    for xf, v in xfs.items():
+        inv = nearest(xf, list(invs))
+        if inv is None or abs(inv[0] - xf[0]) + abs(inv[2] - xf[2]) != 1 or inv[1] != xf[1] or invs[inv] != v or nearest(inv, list(xfs)) != xf:
+            problems.append(f"regulating transformer {labels[v]} at {xf} is not beside the inverter of its label (nearest {inv})")
+        mcc = nearest(xf, [m[0] for m in mccs])
+        if mcc is None or sum((a - b) ** 2 for a, b in zip(mcc, xf)) > 24 ** 2:
+            problems.append(f"regulating transformer {labels[v]} at {xf} has no MCC in reach")
+            continue
+        fed.setdefault(mcc, []).append(v)
+        # Its conduit: up from its top (two blocks up) to a drop in the tray.
+        x, y, z = xf
+        k = y + 2
+        while at(x, k, z) == "feeder_conduit":
+            k += 1
+        if k == y + 2 or at(x, k, z) != "ladder_tray_drop":
+            problems.append(f"regulating transformer {labels[v]} at {xf}: its conduit does not reach a tray drop ({at(x, k, z)} at y {k})")
+        else:
+            tray_drops.setdefault(mcc, []).append((x, k, z))
+    for mcc, vs in fed.items():
+        if sorted(v % 2 for v in vs) != [0, 1] or len({v // 2 for v in vs}) != 1:
+            problems.append(f"the MCC at {mcc} feeds transformers {[labels[v] for v in vs]}, not one of each number of one train")
+    for anchor, (x, y, z) in mccs:
+        if anchor not in fed:
+            continue
+        if at(x, y, z) != "conduit_pair" or at(x, y + 1, z) != "ladder_tray_drop_pair":
+            problems.append(f"the MCC at {anchor}: no REG XF conduits from its second section's top to the tray ({at(x, y, z)}, {at(x, y + 1, z)})")
+            continue
+        # The tray from the MCC's drops reaches each of its transformers' drops.
+        seen, todo = {(x, y + 1, z)}, deque([(x, y + 1, z)])
+        while todo:
+            cx, cy, cz = todo.popleft()
+            for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n = (cx + dx, cy, cz + dz)
+                if n not in seen and at(*n).startswith("ladder_tray"):
+                    seen.add(n)
+                    todo.append(n)
+        for d in tray_drops.get(anchor, []):
+            if d not in seen:
+                problems.append(f"the MCC at {anchor}: its tray does not reach the transformer drop at {d}")
     return problems
 
 
