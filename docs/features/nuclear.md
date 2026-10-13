@@ -284,6 +284,20 @@ blueprint (for players who lay out their own plant).
   of the cabinet through a connector.
 - **Emergency Light Conduit** (round 25b): the light's 3/4-inch conduit down the wall from the ceiling, with a one-hole
   strap and a coupling; it lines up with the light's own conduit stub.
+- **Relay Cabinet** (rebuilt in round 26, `tools/plant_panels.py` `relay_cabinet_boxes`): a steel cabinet that stacks
+  two high, every part modelled, with a glass-front door (hinges, a black gasket, a locking handle and an engraved
+  RELAY CABINET nameplate). The block at the bottom of a stack shows the wiring and the plinth; every block above it
+  shows the relay panel; the top block also gets the lid.
+  - The relay panel holds three protective relays (50/51 phase overcurrent, 51N ground overcurrent, 27 undervoltage).
+    Each sits in its drawout case with a cover frame and latches, a tap block with its tap screw, a time dial, the
+    induction disc standing out of its slot between the drag magnet's jaws, a target, a seal-in unit and a target
+    reset rod. An engraved nameplate is under each, then its test switch: a row of knife blades with red grips on
+    the trip circuit and black on the rest. Below are the 86 lockout relay with its handle and the 125 VDC and
+    TRIP CKT pilot lamps.
+  - The wiring: two numbered strips of terminal blocks on DIN rails (TB1 and TB2, a blue return terminal every
+    sixth). Each terminal is wired through the gaps of a slotted wiring duct. Two control cables come up through the
+    floor into a clamp, and their cores fan out into the ducts. There are also two miniature breakers on a rail and
+    the wireway along the top.
 - **Speed Gate** (`nuclear/SpeedGateBlock.java`, `SpeedGatePedestalBlock.java`, `SpeedGateBlockEntity.java`,
   `client/SpeedGateRenderer.java`, `tools/speed_gate.py`; Justin, 8 October 2026, after the sliding glass fare gates
   at Grand Central): a one-way security lane. Placed looking the way through, it stands on the block you come in by,

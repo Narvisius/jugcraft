@@ -1,34 +1,26 @@
 {
   "textures": {
     "pi_cabinet": "jugcraft:block/pi_cabinet",
-    "pi_chrome": "jugcraft:block/pi_chrome",
-    "pi_relay_front": "jugcraft:block/pi_relay_front",
     "particle": "jugcraft:block/pi_cabinet"
   },
   "elements": [
     {
       "from": [
-        1,
+        1.0,
         0,
-        2
+        2.0
       ],
       "to": [
-        15,
+        1.6,
         16,
-        15
+        14.6
       ],
       "faces": {
         "north": {
           "texture": "#pi_cabinet"
         },
         "south": {
-          "texture": "#pi_relay_front",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+          "texture": "#pi_cabinet"
         },
         "east": {
           "texture": "#pi_cabinet"
@@ -42,38 +34,69 @@
         "down": {
           "texture": "#pi_cabinet"
         }
-      },
-      "light_emission": 12
+      }
     },
     {
       "from": [
-        13.2,
-        6.5,
-        15
+        14.4,
+        0,
+        2.0
       ],
       "to": [
-        13.8,
-        9.5,
-        15.5
+        15.0,
+        16,
+        14.6
       ],
       "faces": {
         "north": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_cabinet"
         },
         "south": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_cabinet"
         },
         "east": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_cabinet"
         },
         "west": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_cabinet"
         },
         "up": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_cabinet"
         },
         "down": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        1.6,
+        0,
+        2.0
+      ],
+      "to": [
+        14.4,
+        16,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_cabinet"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
         }
       }
     }

@@ -32,11 +32,10 @@ FURNITURE = {
         "cap": [(0.8, 15.3, 0.8, 15.2, 16, 15.6, {"*": "pi_rack_body", "up": "pi_rack_top!"}),
                 (13.2, 0.5, 15.4, 13.8, 5.5, 15.9, "pi_chrome")],
         "plinth": [(0.8, 0, 0.8, 15.2, 0.8, 15.6, "pi_rack_body")]},
-    "relay_cabinet": {"display": "Relay Cabinet", "stacks": True, "boxes": [
-        (1, 0, 2, 15, 16, 15, {"*": "pi_cabinet", "south": "pi_relay_front!"}),
-        (13.2, 6.5, 15, 13.8, 9.5, 15.5, "pi_chrome")],
-        "cap": [(0.8, 15.4, 1.8, 15.2, 16, 15.2, "pi_cabinet_dark")],
-        "plinth": [(0.8, 0, 1.8, 15.2, 1, 15.2, "pi_cabinet_dark")]},
+    # Real 3D (round 26, 7e: tools/plant_panels.py relay_cabinet_boxes): what is the same in every block of a stack,
+    # the upper block's relays (any block with the cabinet going on below it), the lower block's wiring and plinth.
+    "relay_cabinet": dict(zip(("boxes", "upper", "lower", "cap", "plinth"), plant_office2.PN.relay_cabinet_boxes()),
+                          display="Relay Cabinet", stacks=True),
     "locker": {"display": "Locker", "stacks": True, "boxes": [
         (1, 0, 2, 15, 16, 15, {"*": "pi_locker_side", "south": "pi_locker_front!"})],
         "cap": [(0.8, 15.4, 1.8, 15.2, 16, 15.2, "pi_cabinet_dark")],
@@ -96,7 +95,7 @@ FURNITURE = {
         (0, 8, 0.8, 16, 9, 1.6, "pi_rail_yellow"), (0, 0, 0.6, 16, 2, 1.0, "pi_rail_yellow")]},
 }
 FURNITURE["server_rack"]["glow"] = ["pi_server_face"]
-FURNITURE["relay_cabinet"]["glow"] = ["pi_relay_front"]
+FURNITURE["relay_cabinet"]["glow"] = ["pi_pnl_white", "pi_pnl_yellow"]   # its pilot lamps
 # Pallet racking with drums on it (the turbine building's oil store): the racking's frame, drums on the pallet.
 FURNITURE["pallet_rack_drums"] = dict(FURNITURE["pallet_rack"], display="Pallet Racking (Drums)",
                                       boxes=FURNITURE["pallet_rack"]["boxes"][:8] + plant_office.O4.O7.DRUM_LOAD[1:])
@@ -198,7 +197,7 @@ def _box_textures(boxes):
 def textures_used():
     names = set()
     for info in FURNITURE.values():
-        for part in ("boxes", "cap", "plinth", "left", "right"):
+        for part in ("boxes", "cap", "plinth", "left", "right", "upper", "lower"):
             names |= _box_textures(info.get(part, []))
         for top in info.get("tops", []):
             names |= _box_textures(top)
@@ -424,16 +423,20 @@ def write_assets(write, rid, assets, lang):
             item_model = rid(f"block/{block}_inventory")
         elif info.get("stacks"):
             write(models / f"{block}.json", model(info["boxes"], glow, rid))
-            write(models / f"{block}_cap.json", model(info["cap"], glow, rid, under=info["boxes"]))
-            write(models / f"{block}_plinth.json", model(info["plinth"], glow, rid, under=info["boxes"]))
-            # The item shows the whole unit: body, cap and plinth.
-            write(models / f"{block}_inventory.json", model(info["boxes"] + info["cap"] + info["plinth"], glow, rid))
+            # A piece with an upper and a lower part (the relay cabinet): the lower part (with the plinth) at the
+            # bottom of a stack, the upper part in every block above.
+            when = {"cap": {"up": "false"}, "plinth": {"down": "false"}, "upper": {"down": "true"}, "lower": {"down": "false"}}
+            shown = [p for p in ("cap", "plinth", "upper", "lower") if info.get(p)]
+            for p in shown:
+                write(models / f"{block}_{p}.json", model(info[p], glow, rid, under=info["boxes"]))
+            # The item shows the whole unit: body (the upper part's, for a piece in two parts), cap and plinth.
+            write(models / f"{block}_inventory.json", model(info["boxes"] + info.get("upper", []) + info["cap"] + info["plinth"], glow, rid))
             parts = []
             for face, y in TURN:
                 rot = {"y": y} if y else {}
                 parts.append({"when": {"facing": face}, "apply": {"model": rid(f"block/{block}"), **rot}})
-                parts.append({"when": {"facing": face, "up": "false"}, "apply": {"model": rid(f"block/{block}_cap"), **rot}})
-                parts.append({"when": {"facing": face, "down": "false"}, "apply": {"model": rid(f"block/{block}_plinth"), **rot}})
+                for p in shown:
+                    parts.append({"when": {"facing": face, **when[p]}, "apply": {"model": rid(f"block/{block}_{p}"), **rot}})
             write(assets / "blockstates" / f"{block}.json", {"multipart": parts})
             item_model = rid(f"block/{block}_inventory")
         else:
@@ -611,25 +614,6 @@ def _rack_top():
 
 def _cabinet(colour=(196, 198, 192), seed=304):
     return M.painted(colour, seed, seams=(("v", 64),), chip_count=1, drip_count=0, dirt=0.1)
-
-
-def _relay_front():
-    """A relay panel cabinet door: a glass window over rows of relays and terminal blocks, a label holder."""
-    img = _cabinet()
-    d = ImageDraw.Draw(img)
-    r = random.Random(305)
-    d.rectangle([12, 10, S - 13, 22], fill=(240, 240, 232, 255), outline=(90, 92, 90, 255))
-    d.line([(18, 16), (80, 16)], fill=(40, 40, 44, 255), width=2)
-    d.rectangle([12, 28, S - 13, S - 14], fill=(28, 34, 40, 255), outline=(90, 92, 90, 255), width=3)
-    for row in range(5):
-        y = 34 + row * 17
-        d.rectangle([18, y + 12, S - 19, y + 14], fill=(70, 74, 78, 255))  # DIN rail
-        for x in range(18, S - 24, 10):
-            d.rectangle([x, y, x + 7, y + 11], fill=r.choice([(60, 64, 70, 255), (200, 200, 194, 255), (90, 120, 160, 255)]))
-            if r.random() < 0.35:
-                d.rectangle([x + 2, y + 2, x + 4, y + 3], fill=r.choice([(250, 80, 60), (80, 230, 110)]) + (254,))
-    d.line([(20, 30), (S - 20, S - 20)], fill=(70, 90, 104, 255))   # glass reflection
-    return img
 
 
 def _locker_front():
@@ -925,7 +909,7 @@ def _sign_particle():
 def draw_block_textures():
     makers = {
         "pi_rack_body": _rack_body, "pi_server_face": _server_face, "pi_server_mesh": _server_mesh, "pi_rack_top": _rack_top,
-        "pi_cabinet": _cabinet, "pi_cabinet_dark": lambda: _cabinet((112, 116, 118), 330), "pi_relay_front": _relay_front,
+        "pi_cabinet": _cabinet, "pi_cabinet_dark": lambda: _cabinet((112, 116, 118), 330),
         "pi_locker_side": lambda: _cabinet((120, 132, 150), 331), "pi_locker_front": _locker_front,
         "pi_upright": _upright, "pi_beam": _beam, "pi_wire_deck": _wire_deck, "pi_pallet": _pallet, "pi_pallet_top": _pallet_top,
         "pi_carton": _carton, "pi_laminate": _laminate, "pi_desk_panel": lambda: _cabinet((150, 152, 150), 332),
@@ -945,7 +929,7 @@ def draw_block_textures():
     assert not missing, missing
     out = {}
     for name, make in makers.items():
-        rich = name in ("pi_server_face", "pi_relay_front", "pi_office_screen", "pi_carton") or name in plant_office.RICH or name in plant_office2.RICH
+        rich = name in ("pi_server_face", "pi_office_screen", "pi_carton") or name in plant_office.RICH or name in plant_office2.RICH
         colours = 64 if name in plant_office2.PAINTINGS else 24 if rich else 14
         src = make()
         out[name] = M.stylize(src, colours)

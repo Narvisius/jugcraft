@@ -902,6 +902,7 @@ def makers():
         "pi_sb_cable": lambda: _solid((24, 24, 26), 428, 0.02), "pi_sb_cable_red": lambda: _solid((168, 30, 26), 429, 0.02),
         "pi_sb_copper": lambda: _solid((196, 120, 70), 430, 0.04), "pi_sb_tag": _sb_tag,
     })
+    out.update(relay_cabinet_textures())
     return out
 
 
@@ -958,3 +959,313 @@ def live_sheet():
     a = np.asarray(img).copy()
     a[..., 3] = np.where(a[..., 3] >= 128, 255, 0)
     return Image.fromarray(a, "RGBA")
+
+
+# ------------------------------------------------------------------------------------------------ the relay cabinet
+
+# The relay cabinet (round 26, 7e; plant_interior.FURNITURE "relay_cabinet", a stacking piece two blocks high in the
+# DC rooms and the relay room), in real 3D instead of a picture on a box (Justin: "those look too simple"). A steel
+# cabinet with a glass-front door; through the glass:
+# - above (the upper block): the relay panel, a row of three protective relays (each in its drawout case: the black
+#   cover frame, the relay's face, its tap block and tap screw, the time dial, the induction disc standing out of its
+#   slot between the drag magnet's jaws, the target and seal-in unit, the cover latches and the target reset), the
+#   engraved nameplate under each, its test switch (a row of levers, red for the trip circuit), the lockout relay (86)
+#   with its handle, and two pilot lamps;
+# - below (the lower block): the wiring, two strips of terminal blocks on DIN rails, each wired across into a slotted
+#   wiring duct (wires through the gaps between its fingers), the control cables up through the floor into a clamp,
+#   their cores fanning into the ducts, two miniature breakers, and the wireway along the top.
+# Like the panels above, the front is drawn whole (16 image px a model pixel, RC_KEY's two textures, row 0 the lower
+# block) and every box's front shows the drawing where it stands; the rest of a box is a plain material. Built in
+# model pixels for the piece facing north over its two blocks (y 0..32), then cut into the blocks: what is the same in
+# every block of a stack (the sides and back), the upper block's, the lower block's (with the plinth) and the cap.
+RC_KEY = "relay_cab"
+RC_F = f"pi_{RC_KEY}_f"
+RC_GLASS = "pi_relay_glass"
+SEE_THROUGH.add(RC_GLASS)
+RC_RELAYS = [  # left side of the case, the device's number and name, the tap screw's place on the tap block (0..1)
+    (2.7, "50/51", "PHASE O/C", 0.55),
+    (6.3, "51N", "GROUND O/C", 0.3),
+    (9.9, "27", "UNDERVOLT", 0.75),
+]
+RC_W, RC_Y0, RC_Y1 = 3.4, 22.4, 28.2      # a relay case's width, bottom, top
+RC_RIM = 0.35                             # its cover frame
+RC_WINDOW = (2.1, 3.0, 13.9, 29.0)        # the door's window (x0, y0, x1, y1)
+RC_GLASS_Z = 14.8                         # its glass (0.1 thick)
+RC_PANEL_Z = 11.2                         # the relay panel's front: the relays close behind the glass
+RC_FACE_Z = RC_PANEL_Z + 0.7              # a relay's face, inside its frame
+RC_FRAME_Z = RC_PANEL_Z + 1.8             # the frame's front
+RC_PLATE_Z = 9.0                          # the lower mounting plate's front
+RC_TS = (19.0, 21.0)                      # the test switches' bases (bottom, top)
+RC_TAG = (21.3, 22.2)                     # the nameplates (two lines of the pixel font)
+RC_LOR = (8.0, 17.75, 0.95)               # the lockout relay's round face: centre, radius
+RC_LAMPS = [(4.4, 17.9, "pi_pnl_white", "125 VDC"), (11.6, 17.9, "pi_pnl_yellow", "TRIP CKT")]
+RC_TERM = (3.7, 0.56, 0.5, 18)            # terminal blocks: the first's bottom, pitch, height, how many
+RC_STRIPS = [(2.8, 4.6, 5.2, 5.4, "TB1"), (11.4, 13.2, 10.6, 10.8, "TB2")]   # x0, x1, duct finger wall x0, x1
+RC_DUCTS = [(5.2, 6.8), (9.2, 10.8)]
+RC_WIRES = ["pi_sb_cable", "pi_cab_white", "pi_pnl_red", "pi_cap_blue"]
+
+
+def _round_z(cx, cy, z0, z1, r, tex):
+    """A round part facing the front (a dial, a lamp, a hub) as five columns side by side across x: a stepped circle of
+    radius r about (cx, cy). They touch but never overlap (tools/zfight.py)."""
+    return [(cx + a0 * r, cy - h * r, z0, cx + a1 * r, cy + h * r, z1, tex)
+            for a0, a1, h in ((-1.0, -0.75, 0.45), (-0.75, -0.35, 0.8), (-0.35, 0.35, 1.0), (0.35, 0.75, 0.8), (0.75, 1.0, 0.45))]
+
+
+def _rc_terminals(strip):
+    """One strip's terminal blocks: (y0, y1, side material) from the bottom; every sixth is a blue return terminal."""
+    y, pitch, h, n = RC_TERM
+    return [(y + k * pitch, y + k * pitch + h, "pi_cap_blue" if k % 6 == 5 else "pi_relay_term") for k in range(n)]
+
+
+def relay_cabinet_front():
+    """The drawing: the door (its frame and nameplate), and through the window everything inside as seen from the front."""
+    f = Front(1, 520)
+    T = f.T
+    import control_boards as CB
+
+    def R(x0, y0, x1, y1, **kw):
+        """A rectangle at least a texel each way (a thin seam)."""
+        px0, py0, px1, py1 = round(x0 * U), round((32 - y1) * U), round(x1 * U) - 1, round((32 - y0) * U) - 1
+        f.d.rectangle([px0, py0, max(px0, px1), max(py0, py1)], **kw)
+
+    def pix(cx, cy, s, ink, scale=1):
+        """Pixel-font letters (crisp, one font pixel `scale` texels) centred on (cx, cy)."""
+        w, h = CB.text_width(s, scale), 5 * scale
+        x, y = f.px(cx, cy)
+        CB.text(f.d, int(round(x - w / 2)), int(round(y - h / 2)), s, ink, scale)
+
+    WHITE, BLACK = (238, 238, 232, 255), (26, 26, 28, 255)
+    # The door: its edge, the nameplate on the top rail.
+    R(1.0, 1.2, 15.0, 31.4, outline=(130, 132, 128, 255), width=3)
+    R(1.1, 1.3, 14.9, 31.3, outline=(214, 216, 210, 255), width=1)
+    wx0, wy0, wx1, wy1 = RC_WINDOW
+    R(wx0 - 0.12, wy0 - 0.12, wx1 + 0.12, wy1 + 0.12, outline=(150, 152, 148, 255), width=2)
+    R(4.4, 29.5, 11.6, 30.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T(8.0, 30.42, "RELAY CABINET", 12, fill=WHITE, bold=True)
+    T(8.0, 29.86, "125 VDC CONTROL", 8, fill=WHITE, bold=True)
+    # Upper: the relay panel.
+    R(1.6, 16.0, 14.4, 29.0, fill=(204, 206, 200, 255))
+    for x0, num, name, tap in RC_RELAYS:
+        x1 = x0 + RC_W
+        ix0, ix1, iy0, iy1 = x0 + RC_RIM, x1 - RC_RIM, RC_Y0 + RC_RIM, RC_Y1 - RC_RIM
+        cx = (x0 + x1) / 2
+        R(ix0, iy0, ix1, iy1, fill=(226, 222, 204, 255))                       # the relay's face
+        R(ix0 + 0.3, iy1 - 1.0, ix1 - 0.3, iy1 - 0.35, fill=BLACK)              # tap block
+        for k in range(5):
+            tx = ix0 + 0.5 + k * (ix1 - ix0 - 1.0) / 4
+            f.E(tx, iy1 - 0.55, 0.07, fill=(140, 140, 136, 255))
+            pix(tx, iy1 - 0.83, str((1, 2, 3, 4, 6)[k]), WHITE)
+        dy = iy1 - 1.75                                                       # the time dial
+        f.E(cx, dy, 0.55, fill=(236, 236, 230, 255), outline=(60, 60, 60, 255), width=2)
+        for k in range(11):
+            a = math.radians(210 - 24 * k)
+            f.line([(cx + math.cos(a) * 0.4, dy + math.sin(a) * 0.4), (cx + math.cos(a) * 0.52, dy + math.sin(a) * 0.52)], INK, 1)
+        f.line([(cx, dy), (cx + 0.3, dy + 0.25)], (190, 30, 26, 255), 2)
+        yd = iy0 + 2.0                                                        # the disc's slot
+        R(cx - 1.15, yd - 0.08, cx + 1.15, yd + 0.2, fill=(20, 20, 22, 255))
+        pix(cx, iy0 + 1.55, "TIME", (60, 60, 60, 255))
+        R(ix0 + 0.3, iy0 + 0.3, ix0 + 1.3, iy0 + 1.2, fill=BLACK)              # target
+        R(ix0 + 0.45, iy0 + 0.5, ix0 + 1.15, iy0 + 0.95, fill=(236, 236, 230, 255))
+        R(ix0 + 0.45, iy0 + 0.5, ix0 + 0.8, iy0 + 0.95, fill=BLACK)
+        R(ix1 - 1.2, iy0 + 0.3, ix1 - 0.3, iy0 + 1.2, fill=(60, 62, 66, 255))  # seal-in unit
+        pix(ix1 - 0.75, iy0 + 0.75, "SI", WHITE)
+        # Its nameplate (engraved: white letters through black) and its test switch.
+        R(x0 + 0.2, RC_TAG[0], x1 - 0.2, RC_TAG[1], fill=BLACK, outline=(150, 150, 150, 255), width=1)
+        pix(cx, RC_TAG[1] - 0.3, num, WHITE)
+        pix(cx, RC_TAG[0] + 0.28, name, WHITE)
+        R(x0 + 0.1, RC_TS[0], x1 - 0.1, RC_TS[1], fill=(54, 56, 60, 255))
+        R(x0 + 0.3, RC_TS[0] + 0.05, x1 - 0.3, RC_TS[0] + 0.48, fill=(236, 236, 230, 255))
+        pix(cx, RC_TS[0] + 0.27, "TS-" + num.split("/")[-1], BLACK)
+        for k in range(7):
+            xs = x0 + 0.3 + k * (RC_W - 0.6) / 6
+            f.line([(xs, RC_TS[0] + 0.55), (xs, RC_TS[1] - 0.15)], (120, 120, 116, 255), 1)
+    # The lockout relay: its plate, the round face with TRIP and RESET.
+    lx, ly, lr = RC_LOR
+    R(6.4, 16.45, 9.6, 19.0, fill=BLACK)
+    f.E(lx, ly, lr, fill=(222, 222, 216, 255))
+    f.E(lx, ly, lr * 0.45, fill=(200, 200, 196, 255))
+    for k in range(2):                                                       # its two positions' marks
+        a = math.radians(135 - 90 * k)
+        f.line([(lx + math.cos(a) * lr * 0.62, ly + math.sin(a) * lr * 0.62), (lx + math.cos(a) * lr * 0.92, ly + math.sin(a) * lr * 0.92)],
+               (190, 30, 26, 255) if k else INK, 3)
+    pix(6.85, 18.66, "RST", WHITE)
+    pix(9.15, 18.66, "TRP", (236, 70, 60, 255))
+    pix(6.8, 16.75, "86", WHITE)
+    pix(lx, 16.2, "LOCKOUT", BLACK)
+    for cx, cy, _, label in RC_LAMPS:
+        pix(cx, cy - 0.95, label, BLACK)
+    # Lower: the mounting plate, its terminal strips, ducts, breakers and the wireway.
+    R(1.6, 1.2, 14.4, 14.6, fill=(222, 224, 220, 255))
+    for s in RC_STRIPS:
+        x0, x1 = s[0], s[1]
+        R(x0, 13.82, x1, 14.2, fill=BLACK)                                    # the top end stop carries the strip's name
+        pix((x0 + x1) / 2, 14.01, s[4], WHITE)
+        for k, (y0, y1, side) in enumerate(_rc_terminals(s)):
+            body = (70, 110, 180, 255) if side == "pi_cap_blue" else (178, 180, 176, 255)
+            R(x0, y0, x1, y1, fill=body)
+            R(x0, y0, x1, y0 + 0.06, fill=(120, 122, 118, 255))
+            for sx in (x0 + 0.28, x1 - 0.28):
+                f.E(sx, (y0 + y1) / 2, 0.14, fill=(110, 112, 110, 255))
+                f.line([(sx - 0.1, (y0 + y1) / 2), (sx + 0.1, (y0 + y1) / 2)], (40, 40, 40, 255), 1)
+            R(x0 + 0.55, y0 + 0.08, x1 - 0.55, y1 - 0.06, fill=(244, 244, 240, 255))
+            pix((x0 + x1) / 2, (y0 + y1) / 2 + 0.01, str(k + 1), BLACK)
+    for x0, x1 in RC_DUCTS:
+        R(x0, 3.2, x1, 14.6, fill=(202, 204, 200, 255))
+        R((x0 + x1) / 2 - 0.05, 3.2, (x0 + x1) / 2 + 0.05, 14.6, fill=(184, 186, 182, 255))
+    R(1.6, 14.6, 14.4, 16.0, fill=(202, 204, 200, 255))
+    R(1.6, 15.25, 14.4, 15.35, fill=(184, 186, 182, 255))
+    for i, x0 in enumerate((7.05, 8.05)):
+        R(x0, 10.5, x0 + 0.9, 13.5, fill=(240, 240, 236, 255))
+        R(x0 + 0.25, 11.9, x0 + 0.65, 13.0, fill=(60, 60, 62, 255))
+        R(x0 + 0.3, 11.2, x0 + 0.6, 11.5, fill=(200, 40, 34, 255))
+        pix(x0 + 0.45, 10.85, f"CB{i + 1}", BLACK)
+        pix(x0 + 0.45, 13.25, "C6", BLACK)
+    return f
+
+
+def relay_cabinet_boxes():
+    """The whole cabinet over its two blocks: (always, upper, lower, cap, plinth), each a list of boxes; F stands for
+    the drawing (the block's slice of it)."""
+    F = RC_F
+    always = [(1.0, 0, 2.0, 1.6, 16, 14.6, "pi_cabinet"), (14.4, 0, 2.0, 15.0, 16, 14.6, "pi_cabinet"),
+              (1.6, 0, 2.0, 14.4, 16, 2.6, "pi_cabinet")]
+    front = {"*": "pi_cabinet", "south": F}
+    blk = {"*": "pi_pnl_black", "south": F}
+    (wx0, wy0, wx1, wy1), gz = RC_WINDOW, RC_GLASS_Z
+    b = []
+    # The door: stiles, rails, the glass behind a black gasket, hinges, the handle, the nameplate.
+    b += [(1.0, 1.2, 14.6, wx0, 31.4, 15.2, front), (wx1, 1.2, 14.6, 15.0, 31.4, 15.2, front),
+          (wx0, 1.2, 14.6, wx1, wy0, 15.2, front), (wx0, wy1, 14.6, wx1, 31.4, 15.2, front),
+          (wx0, wy0, gz, wx1, wy1, gz + 0.1, {"south": RC_GLASS, "north": RC_GLASS}),
+          (wx0, wy0, gz + 0.1, wx0 + 0.2, wy1, 15.1, "pi_pnl_black"), (wx1 - 0.2, wy0, gz + 0.1, wx1, wy1, 15.1, "pi_pnl_black"),
+          (wx0 + 0.2, wy0, gz + 0.1, wx1 - 0.2, wy0 + 0.2, 15.1, "pi_pnl_black"), (wx0 + 0.2, wy1 - 0.2, gz + 0.1, wx1 - 0.2, wy1, 15.1, "pi_pnl_black"),
+          (0.6, 5.0, 14.7, 1.0, 7.0, 15.1, "pi_chrome"), (0.6, 25.0, 14.7, 1.0, 27.0, 15.1, "pi_chrome"),
+          (14.05, 16.8, 15.2, 14.85, 21.6, 15.35, "pi_pnl_black"), (14.2, 17.4, 15.35, 14.7, 20.8, 15.8, "pi_chrome"),
+          (14.3, 21.0, 15.35, 14.6, 21.35, 15.5, "pi_brass"),
+          (4.4, 29.5, 15.2, 11.6, 30.9, 15.34, blk)]
+    # Upper: the relay panel and what is on it.
+    z0 = RC_PANEL_Z
+    b.append((1.6, 16.0, z0 - 0.6, 14.4, 31.4, z0, front))
+    for x0, num, name, tap in RC_RELAYS:
+        x1 = x0 + RC_W
+        ix0, ix1, iy0, iy1 = x0 + RC_RIM, x1 - RC_RIM, RC_Y0 + RC_RIM, RC_Y1 - RC_RIM
+        cx = (x0 + x1) / 2
+        fz, rz = RC_FACE_Z, RC_FRAME_Z
+        b += [(x0, RC_Y0, z0, ix0, RC_Y1, rz, "pi_pnl_black"), (ix1, RC_Y0, z0, x1, RC_Y1, rz, "pi_pnl_black"),
+              (ix0, RC_Y0, z0, ix1, iy0, rz, "pi_pnl_black"), (ix0, iy1, z0, ix1, RC_Y1, rz, "pi_pnl_black"),
+              (ix0, iy0, z0, ix1, iy1, fz, blk)]
+        # Tap block and its screw; the time dial, its pointer; the disc out of its slot, the drag magnet's jaws.
+        b.append((ix0 + 0.3, iy1 - 1.0, fz, ix1 - 0.3, iy1 - 0.35, fz + 0.35, blk))
+        tx = ix0 + 0.5 + tap * (ix1 - ix0 - 1.0)
+        b.append((tx - 0.17, iy1 - 0.85, fz + 0.35, tx + 0.17, iy1 - 0.5, fz + 0.6, "pi_brass"))
+        dy = iy1 - 1.75
+        b += [box[:6] + ({"*": "pi_chrome", "south": F},) for box in _round_z(cx, dy, fz, fz + 0.3, 0.55, None)]
+        yd = iy0 + 2.0
+        b += [(cx - 1.1, yd, fz, cx + 1.1, yd + 0.12, fz + 0.4, "pi_chrome"), (cx - 0.8, yd, fz + 0.4, cx + 0.8, yd + 0.12, fz + 0.7, "pi_chrome"),
+              (cx - 0.4, yd, fz + 0.7, cx + 0.4, yd + 0.12, fz + 0.85, "pi_chrome"),
+              (cx - 1.0, yd + 0.12, fz, cx - 0.45, yd + 0.42, fz + 0.55, "pi_pnl_black"),
+              (cx - 1.0, yd - 0.3, fz, cx - 0.45, yd, fz + 0.55, "pi_pnl_black"),
+              (cx - 0.06, yd + 0.12, fz + 0.12, cx + 0.06, dy - 0.55, fz + 0.24, "pi_chrome")]
+        # Target, seal-in unit; the reset rod out of the frame's bottom, the cover latches.
+        b += [(ix0 + 0.3, iy0 + 0.3, fz, ix0 + 1.3, iy0 + 1.2, fz + 0.3, blk), (ix1 - 1.2, iy0 + 0.3, fz, ix1 - 0.3, iy0 + 1.2, fz + 0.45, blk),
+              (cx - 0.17, RC_Y0 + 0.05, rz, cx + 0.17, RC_Y0 + 0.3, rz + 0.25, "pi_chrome"),
+              (x0 + 0.05, RC_Y1 - 0.6, rz, x0 + 0.3, RC_Y1 - 0.15, rz + 0.15, "pi_chrome"),
+              (x1 - 0.3, RC_Y1 - 0.6, rz, x1 - 0.05, RC_Y1 - 0.15, rz + 0.15, "pi_chrome")]
+        # Nameplate; the test switch: its base, the levers (each a blade and its grip, red on the trip circuit's).
+        b.append((x0 + 0.2, RC_TAG[0], z0, x1 - 0.2, RC_TAG[1], z0 + 0.12, blk))
+        b.append((x0 + 0.1, RC_TS[0], z0, x1 - 0.1, RC_TS[1], z0 + 0.6, blk))
+        for k in range(6):
+            xs = x0 + 0.3 + (k + 0.5) * (RC_W - 0.6) / 6
+            b += [(xs - 0.12, RC_TS[0] + 0.6, z0 + 0.6, xs + 0.12, RC_TS[1] - 0.35, z0 + 0.85, "pi_chrome"),
+                  (xs - 0.17, RC_TS[1] - 0.9, z0 + 0.85, xs + 0.17, RC_TS[1] - 0.35, z0 + 1.2, "pi_pnl_red" if k in (0, 5) else "pi_sb_cable")]
+    lx, ly, lr = RC_LOR
+    b.append((6.4, 16.45, z0, 9.6, 19.0, z0 + 0.15, blk))
+    b += [box[:6] + ({"*": "pi_chrome", "south": F},) for box in _round_z(lx, ly, z0 + 0.15, z0 + 0.35, lr, None)]
+    b += _round_z(lx, ly, z0 + 0.35, z0 + 0.75, 0.45, "pi_pnl_black")
+    b += [(6.95, ly - 0.2, z0 + 0.75, lx, ly + 0.2, z0 + 1.2, "pi_pnl_black"), (6.5, ly - 0.3, z0 + 0.75, 6.95, ly + 0.3, z0 + 1.25, "pi_pnl_black")]
+    for cx, cy, lens, _ in RC_LAMPS:
+        b += _round_z(cx, cy, z0, z0 + 0.25, 0.6, "pi_chrome") + _round_z(cx, cy, z0 + 0.25, z0 + 0.55, 0.4, lens)
+    # Lower: the mounting plate, the wireway along its top (out to the relay panel's front).
+    lz = RC_PLATE_Z
+    b += [(1.6, 1.2, lz - 0.6, 14.4, 14.6, lz, front), (1.6, 14.6, lz - 0.6, 14.4, 16.0, z0, {"*": "pi_relay_duct", "south": F})]
+    y, pitch, h, n = RC_TERM
+    for (sx0, sx1, fx0, fx1, _), (dx0, dx1) in zip(RC_STRIPS, RC_DUCTS):
+        rx = (sx0 + sx1) / 2
+        b += [(rx - 0.4, 3.2, lz, rx + 0.4, 14.2, lz + 0.3, "pi_chrome"),
+              (sx0, 3.2, lz + 0.3, sx1, 3.6, lz + 1.6, "pi_pnl_black"), (sx0, 13.82, lz + 0.3, sx1, 14.2, lz + 1.6, blk)]
+        left = sx1 < dx0    # the duct is to the strip's right
+        for k, (ty0, ty1, side) in enumerate(_rc_terminals(None)):
+            b.append((sx0, ty0, lz + 0.3, sx1, ty1, lz + 1.9, {"*": side, "south": F}))
+            yc = (ty0 + ty1) / 2
+            wx0_, wx1_ = (sx1, fx1) if left else (fx0, sx0)
+            b.append((wx0_, yc - 0.08, lz + 1.0, wx1_, yc + 0.08, lz + 1.16, RC_WIRES[k % 4]))
+        # The duct: fingers on the strip's side (a wire through each gap), the far wall (open where the cores come
+        # in), the bundle inside, the cover.
+        gaps = [y + k * pitch + h / 2 for k in range(n)]
+        edges = [3.2] + [g for c in gaps for g in (c - 0.13, c + 0.13)] + [14.6]
+        for e0, e1 in zip(edges[0::2], edges[1::2]):
+            b.append((fx0, e0, lz, fx1, e1, lz + 2.4, "pi_relay_duct"))
+        ox0, ox1 = (dx1 - 0.2, dx1) if left else (dx0, dx0 + 0.2)
+        b += [(ox0, 3.2, lz, ox1, 9.6, lz + 2.4, "pi_relay_duct"), (ox0, 10.2, lz, ox1, 14.6, lz + 2.4, "pi_relay_duct"),
+              (dx0 + 0.3, 3.2, lz + 0.1, dx1 - 0.3, 14.6, lz + 2.2, "pi_relay_bundle"),
+              (dx0, 3.2, lz + 2.4, dx1, 14.6, lz + 2.65, {"*": "pi_relay_duct", "south": F})]
+    # The control cables up through the floor, clamped to a strut, their cores fanning out into the ducts.
+    b += [(7.2, 1.2, lz + 0.2, 7.8, 9.6, lz + 0.8, "pi_sb_cable"), (8.2, 1.2, lz + 0.2, 8.8, 9.6, lz + 0.8, "pi_cabinet_dark"),
+          (7.1, 9.3, lz + 0.1, 7.9, 9.75, lz + 0.95, "pi_pnl_black"), (8.1, 9.3, lz + 0.1, 8.9, 9.75, lz + 0.95, "pi_pnl_black"),
+          (6.7, 9.6, lz + 0.25, 7.8, 10.1, lz + 0.75, "pi_relay_bundle"), (8.2, 9.6, lz + 0.25, 9.3, 10.1, lz + 0.75, "pi_relay_bundle"),
+          (6.9, 5.0, lz, 9.1, 5.7, lz + 1.1, "pi_chrome")]
+    # The miniature breakers on their rail.
+    b.append((7.0, 11.7, lz, 9.0, 12.3, lz + 0.3, "pi_chrome"))
+    for x0 in (7.05, 8.05):
+        b += [(x0, 10.5, lz + 0.3, x0 + 0.9, 13.5, lz + 2.0, {"*": "pi_cab_white", "south": F}),
+              (x0 + 0.28, 12.1, lz + 2.0, x0 + 0.62, 12.85, lz + 2.4, "pi_pnl_black")]
+    cap = [(0.8, 15.4, 1.8, 15.2, 16, 15.4, "pi_cabinet_dark")]
+    plinth = [(0.8, 0, 1.8, 15.2, 1.2, 15.2, "pi_cabinet_dark")]
+    upper, lower = [], []
+    for box in b:
+        y0, y1 = box[1], box[4]
+        if y0 < 16 - 1e-6:
+            lower.append(_rc_cut(box, y0, min(y1, 16), 0, y1 > 16 + 1e-6, "up"))
+        if y1 > 16 + 1e-6:
+            upper.append(_rc_cut(box, max(y0, 16), y1, 1, y0 < 16 - 1e-6, "down"))
+    return always, upper, lower, cap, plinth
+
+
+def _rc_cut(box, y0, y1, row, cut, face):
+    """A box's share of one block (row 0 the lower): moved into the block, its front the block's slice of the drawing;
+    a see-through box cut by the block line loses its face there."""
+    t = box[6]
+    if isinstance(t, dict):
+        t = {k: (f"{RC_F}_{row}" if v == RC_F else v) for k, v in t.items()}
+    if cut and (t == RC_GLASS or (isinstance(t, dict) and RC_GLASS in t.values())):
+        t = dict(t) if isinstance(t, dict) else {"*": t}
+        t[face] = None
+    return (box[0], y0 - 16 * row, box[2], box[3], y1 - 16 * row, box[5], t) + tuple(box[7:])
+
+
+def relay_cabinet_textures():
+    tex = relay_cabinet_front().cut(RC_KEY)
+
+    def bundle():
+        img = Image.new("RGBA", (64, 64), (30, 30, 32, 255))
+        d = ImageDraw.Draw(img)
+        cols = [(30, 30, 32), (236, 236, 230), (190, 36, 30), (50, 80, 170), (30, 30, 32), (236, 236, 230)]
+        for i, x in enumerate(range(0, 64, 4)):
+            d.rectangle([x, 0, x + 3, 63], fill=cols[(i * 5) % len(cols)] + (255,))
+            d.line([(x, 0), (x, 63)], fill=(16, 16, 18, 255))
+        return img
+
+    def glass():
+        img = Image.new("RGBA", (128, 128), (200, 214, 220, 34))
+        d = ImageDraw.Draw(img)
+        for x0, w in ((18, 10), (40, 4), (84, 14)):
+            d.polygon([(x0, 127), (x0 + w, 127), (x0 + w + 60, 0), (x0 + 60, 0)], fill=(236, 244, 248, 58))
+        return img
+    out = {name: (lambda img=img: img) for name, img in tex.items()}
+    out.update({"pi_relay_term": lambda: _solid((178, 180, 176), 521, 0.03), "pi_relay_duct": lambda: _solid((204, 206, 202), 522, 0.03),
+                "pi_relay_bundle": bundle, RC_GLASS: glass})
+    return out
+
+
+SHARP |= {f"{RC_F}_0", f"{RC_F}_1"}
