@@ -4,6 +4,32 @@ Owner-approved implementation by OpenAI Codex (GPT-6), 8 October 2026. Scope: th
 
 9 October update: new towers use layout 5 with two 9-wide, 6-deep, 5-tall inputs and supported outer side pads. The Energy Exchange now matches the tower's charcoal, gray and concrete palette. Saved layout 4 remains frozen. See [the large-input revision](tower-large-inputs.md) for the current dimensions, placement and compatibility behavior; the earlier revision history below describes the preceding layouts.
 
+## Packaging for upstream (13 October 2026)
+
+This work was written by OpenAI Codex (GPT-6) in Narvisius's local play checkout and was never committed there.
+Claude (Opus 5.5) packaged it for this pull request at Narvisius's request without changing its design:
+
+- **Deletion Stick left out**, at Narvisius's request. Its item, jobs, preview, payload, structure helper, art,
+  feature record and the `DeletionGameTests` / `DeletionClientGameTests` classes are not included. Two tests that
+  drove the stick were removed (`MasterConsoleGameTests.deletionRefusesPartialConsoleAndErasesWholeWithoutDrops` and
+  `TowerApronGameTests.deletionOfAnOptionalCornerLeavesTheTowerOperational`), as was one assertion in
+  `kitPlacesSixPartsInEveryFacingAndBreaksAsOne` that used its structure helper.
+- **Generator integration.** `tools/generate_material_data.py` now adds `jugcraft:tower_ladder` to
+  `minecraft:climbable` (the hand-written tag entry was overwritten on a full regeneration), and the committed data
+  is the full generator's output. `model_writer.split_model` leaves out split pieces with every face cut away
+  (118 in the exchanges' part models, which Minecraft 26.3 refuses), with no visible change, and the stale
+  `cargo_exchange_part60` to `part63` models (the cargo exchange has 60 parts) are gone.
+- `TowerUtilityClientChecks`, a helper the tower client tests call, moved to the gametest `client` package beside
+  `TowerRenderChecks`, so the test-registration check no longer takes it for an unregistered test class.
+- **Depends on the nuclear update pull request.** The exchanges and master console use its placement ghosts
+  (`placement/StructureGhost`, `StructureReach`, `client/MbsPreview`), its live-panel textures
+  (`client/LivePanelRenderer`) and the test focus switch (`test/TestFocus`).
+- `IndustrialFoundationGameTests` and `IndustrialFoundationClientGameTests` are present but were not registered in
+  the test manifest in the play checkout; they are left unregistered here too.
+
+The validation results quoted below are Codex's own runs in that play checkout, with the Deletion Stick
+included. They have not been repeated on this branch; CI on this pull request is the first full build of it.
+
 ## Visual revision status
 
 The owner approved the [new concrete/steel material and native model sample](../../art/tower-v3-sample/README.md), then asked for detailed physical components throughout the tower. This branch applies that direction to the complete architecture, machinery, control room and landing infrastructure. The first runtime visual pass was rejected as too toy-like and has been superseded. Visual quality is checked against actual exported models and Minecraft captures.
@@ -74,4 +100,4 @@ The verified installed candidate is `build/drone_tower/jugcraft-tower-refined-de
 
 A two-client dedicated-server playtest remains outstanding. The unrelated full repository audit was not rerun; earlier baseline owner-library catalog and Linux-only font-path findings are not represented as passing. Source remains on `feature/tower-realism` above imported handoff base `124c1f6ac6e4cad46149a059f4e99f207e350601`.
 
-Reproduce with `python -B tools/test_tower_industrial.py`, `JUGCRAFT_TEST_FOCUS=tower,drones,blueprints,deletion`, `JUGCRAFT_TOWER_VISUAL_REVIEW=true`, and `./gradlew assemble runGameTest runClientGameTest -PclientTests=TowerClientGameTests,DeletionClientGameTests -PserverTests=TowerGameTests,IndustrialTowerGameTests,ExchangeStationGameTests,DroneGameTests,BlueprintGameTests,DeletionGameTests,MasterConsoleGameTests,ReviewWorldGameTests,TowerFixturesGameTests`. Quote arguments containing commas in PowerShell. Visual review selects 1280x720 tower captures at GUI scale 2. These test worlds are separate from the owner's review saves.
+Reproduce with `python -B tools/test_tower_industrial.py`, `JUGCRAFT_TEST_FOCUS=tower,drones,blueprints`, `JUGCRAFT_TOWER_VISUAL_REVIEW=true`, and `./gradlew assemble runGameTest runClientGameTest -PclientTests=TowerClientGameTests -PserverTests=TowerGameTests,IndustrialTowerGameTests,ExchangeStationGameTests,DroneGameTests,BlueprintGameTests,MasterConsoleGameTests,ReviewWorldGameTests,TowerFixturesGameTests`. Quote arguments containing commas in PowerShell. Visual review selects 1280x720 tower captures at GUI scale 2. These test worlds are separate from the owner's review saves.

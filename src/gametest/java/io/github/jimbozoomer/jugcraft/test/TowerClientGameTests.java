@@ -305,7 +305,7 @@ public class TowerClientGameTests implements FabricClientGameTest {
 		context.waitTicks(40);
 		reviewPhoto(context, server, core, -27.5, 2, 4.5, core.offset(-22, 2, 0), "jugcraft_tower_power_socket_connected");
 		reviewPhoto(context, server, core, 26.5, 2, 4.5, core.offset(20, 2, 0), "jugcraft_tower_cargo_socket_connected");
-		TowerUtilityClientChecks.cableSockets(context, server, core);
+		io.github.jimbozoomer.jugcraft.client.TowerUtilityClientChecks.cableSockets(context, server, core);
 		reviewPhoto(context, server, core, 24.5, 144, 26.5, core.offset(12, 139, 12), "jugcraft_tower_upper_supply_supports");
 		reviewPhoto(context, server, core, 35.5, 194, 38.5, core.offset(0, 191, 0), "jugcraft_tower_closed_shoulders_crown");
 		server.runCommand("time set midnight");

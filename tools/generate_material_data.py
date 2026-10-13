@@ -1521,6 +1521,8 @@ def tags():
     nuclear.write_tags(tags, rid)
     import wall_runs
     wall_runs.write_tags(tags, rid)
+    # The Drone Tower's caged maintenance ladder (tools/tower_realism_art.py) climbs like a ladder.
+    tags.add("block", "minecraft:climbable", rid("tower_ladder"))
     # Biomes whose grass and leaves change colour with the seasons (client/SeasonColors).
     import seasons
     for biome in seasons.BIOMES:

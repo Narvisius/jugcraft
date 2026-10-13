@@ -735,7 +735,10 @@ def split_model(name, elements, footprint):
     separated_bounds before the cut, slice_model, then separate_parts with the pieces of each cut element linked."""
     sources = []
     parts = slice_model(name, elements, footprint, separated_bounds(elements, footprint), sources=sources)
-    return separate_parts(parts, footprint, sources)
+    parts = separate_parts(parts, footprint, sources)
+    # A piece with every face cut away (wholly inside the structure) draws nothing, and Minecraft 26.3 refuses a model
+    # element with no faces (tools/check_mod_data.py): leave such pieces out.
+    return [[element for element in part if element.get("faces")] for part in parts]
 
 
 def _placement(frm, to, rotation, footprint):

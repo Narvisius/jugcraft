@@ -1,4 +1,4 @@
-package io.github.jimbozoomer.jugcraft.test;
+package io.github.jimbozoomer.jugcraft.client;
 
 import io.github.jimbozoomer.jugcraft.energy.CableBlock;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
