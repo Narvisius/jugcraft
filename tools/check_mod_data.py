@@ -123,7 +123,7 @@ EXTERNAL_TAGS = ({"c:ingots/copper", "c:ingots/iron", "minecraft:stone_ore_repla
                   "c:is_snowy",
                   # Vanilla's Overworld stone (stone, granite, diorite, andesite, tuff, deepslate): thallite's natural
                   # ground (tools/gear.py EARTHEN_GROUND).
-                  "minecraft:base_stone_overworld"}
+                  "minecraft:base_stone_overworld", "minecraft:base_stone_nether", "minecraft:nylium"}
                  | {f"minecraft:{tag}" for tag in WOODS.values()})
 
 errors = []

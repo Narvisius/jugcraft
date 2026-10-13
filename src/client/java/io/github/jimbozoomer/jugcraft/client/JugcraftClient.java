@@ -71,6 +71,9 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftKinetics.SHAFT_ENTITY, KineticRotorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftLogistics.CONVEYOR_ENTITY, ConveyorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftTools.CHARGING_STATION_ENTITY, ChargingStationRenderer::new);
+		// Pipes and cables inside made walls draw as the wall; the overlay outlines what is inside (wallrun/WallRuns.java).
+		WallRunModel.register();
+		WallRunOverlay.register();
 		RocketPackClient.register();
 		BroomstickClient.register();
 		BalloonClient.register();
