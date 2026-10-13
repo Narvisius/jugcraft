@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PLP",
+    " I "
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "L": "minecraft:blue_dye",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:sign_relay_row_d",
+    "count": 2
+  }
+}

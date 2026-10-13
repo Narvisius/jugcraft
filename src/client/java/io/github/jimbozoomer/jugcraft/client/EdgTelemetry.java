@@ -106,6 +106,10 @@ public final class EdgTelemetry {
 		/** Alarm windows: 0 dark, 1 lit, 2 flashing (new). */
 		public final int[] alarms = new int[12];
 		public double time;
+		/** A relay room cabinet (round 26, #10): its meters (0 to 100 of their scales), lamps (bit k: rr_l<k>), name. */
+		public final double[] rr = new double[2];
+		public int rrLamps;
+		public String label = "";
 
 		/** A meter's or gauge's reading. */
 		public double number(String channel) {
@@ -139,12 +143,17 @@ public final class EdgTelemetry {
 				case "gd_pos_v" -> gdPos;
 				case "gd_neg_v" -> gdNeg;
 				case "ef_spin" -> fanAngle;
+				case "rr_m0" -> rr[0];
+				case "rr_m1" -> rr[1];
 				default -> 0;
 			};
 		}
 
 		/** A lamp's or window's state: 0 dark, 1 lit (its colour), 2 its second colour or flashing. */
 		public int lit(String channel) {
+			if (channel.startsWith("rr_l")) {
+				return rrLamps >> Integer.parseInt(channel.substring(4)) & 1;
+			}
 			if (channel.startsWith("ann_")) {
 				int i = switch (channel) {
 					case "ann_low_lube" -> 0;
@@ -253,6 +262,7 @@ public final class EdgTelemetry {
 				return invOnInv || invOnBypass ? String.format(Locale.ROOT, "%.2f", invHz) : "";
 			}
 			return switch (channel) {
+				case "label" -> label;
 				case "avr1" -> avr1;
 				case "avr2" -> avr2;
 				case "seq_head" -> sequence;
@@ -793,6 +803,25 @@ public final class EdgTelemetry {
 	}
 
 	/** A slow, smooth wander between -1 and 1 (a real meter's restlessness), different for each reading. */
+	/**
+	 * A relay room cabinet (round 26, #10): a relay panel's name on its nameplate; the others what they read of the
+	 * reactor (nuclear/RelayRoom.java readings), each meter with its own small wander while there is a reactor to read.
+	 */
+	public static void relayRoom(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, double now) {
+		int kind = io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.kind(panel.getBlockState());
+		int variant = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(panel.getBlockState());
+		if (kind == io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.RELAY) {
+			o.label = io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.label(kind, variant);
+			return;
+		}
+		io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.Readings r = io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.readings(kind, variant, panel.reactor());
+		double t = now / 20.0, seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		double wander = panel.rxStatus != 0 ? 0.35 : 0;
+		o.rr[0] = r.m0() + wander * noise(t * 0.3, seed, 11);
+		o.rr[1] = r.m1() + wander * noise(t * 0.25, seed, 12);
+		o.rrLamps = r.lamps();
+	}
+
 	static double noise(double t, double seed, int channel) {
 		double c = seed + channel * 1.913;
 		return (Math.sin(t * 2.31 + c) + Math.sin(t * 5.17 + c * 2.7) * 0.6 + Math.sin(t * 11.3 + c * 4.1) * 0.3) / 1.9;

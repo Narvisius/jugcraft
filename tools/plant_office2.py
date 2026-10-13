@@ -530,6 +530,124 @@ PIECES.update({
         + _oct_y(4.5, 8, 7, 9, _COUPLING, "pi_steel") + _oct_y(11.5, 8, 7, 9, _COUPLING, "pi_steel")},
 })
 
+# ---------------------------------------------------------------------------------------- control cable tray
+# The relay room's overhead tray (round 26, #10; Justin: "Overhead trays and cable entry"): the same ladder tray, full of
+# control cables, a flat layer of them on its rungs with a few laid over it; over every cabinet a drop-out fitting under
+# the tray and the cabinet's bundle of control cables coming down out of it, tied, into a gland on the cabinet's top;
+# a cross where a row's run meets the run along the aisle, a tee where that run leaves the cable spreading room's tray,
+# and fire-stopped where it goes through a wall. Pieces facing north run along x (as the ladder tray); the tee's branch
+# leaves to the south; the fire stop's wall is across x (a piece facing east goes through a wall along x).
+CTRL_LAYER_Y = (11.9, 12.75)
+CTRL_Z = (3.45, 12.55)
+CTRL_OVER = (5.6, 8.2, 10.9)          # the cables laid over the layer (z)
+CTRL_OVER_R = 0.36
+CTRL_CABLE_R = 0.32
+# The bundle: seven cables, far enough apart that no two of their (star-shaped) sections overlap.
+_HEX = 0.84
+CTRL_BUNDLE = [(0, 0, "pi_ctrl_black"), (_HEX, 0, "pi_ctrl_grey"), (-_HEX, 0, "pi_ctrl_light"),
+               (_HEX / 2, _HEX * 0.866, "pi_ctrl_black"), (-_HEX / 2, _HEX * 0.866, "pi_ctrl_grey"),
+               (_HEX / 2, -_HEX * 0.866, "pi_ctrl_light"), (-_HEX / 2, -_HEX * 0.866, "pi_ctrl_black")]
+CTRL_TIE = (1.36, 1.52)
+_LAYER_X = {"*": "pi_ctrl_ends", "up": "pi_ctrl_layer", "down": "pi_ctrl_layer", "north": "pi_ctrl_layer", "south": "pi_ctrl_layer"}
+_LAYER_Z = {"*": "pi_ctrl_ends", "up": "pi_ctrl_layer_z", "down": "pi_ctrl_layer_z", "east": "pi_ctrl_layer", "west": "pi_ctrl_layer"}
+
+
+def _ctrl_layer(x0=0.0, x1=16.0):
+    """The control cables along the run: the layer on the rungs and the few cables laid on it."""
+    out = [(x0, CTRL_LAYER_Y[0], CTRL_Z[0], x1, CTRL_LAYER_Y[1], CTRL_Z[1], _LAYER_X)]
+    r = CTRL_OVER_R
+    for z in CTRL_OVER:
+        out.append((x0, CTRL_LAYER_Y[1], z - r, x1, CTRL_LAYER_Y[1] + 2 * r, z + r, "pi_ctrl_black" if z != 8.2 else "pi_ctrl_grey"))
+    return out
+
+
+def _ctrl_branch(z0, z1):
+    """The control cables of a run along z (a cross's or a tee's branch), laid over the run along x where they cross it."""
+    return [(CTRL_Z[0], CTRL_LAYER_Y[0] + 0.15, z0, CTRL_Z[1], CTRL_LAYER_Y[1] + 0.3, z1, _LAYER_Z)]
+
+
+def _ctrl_bundle(y0, y1, ties=()):
+    """A cabinet's bundle of seven control cables down the middle of the block, tied at the heights given."""
+    out = []
+    for dx, dz, tex in CTRL_BUNDLE:
+        out += PN.star_y(8 + dx, 8 + dz, CTRL_CABLE_R, y0, y1, tex)
+    for y in ties:
+        out += PN.ring_y(8, 8, CTRL_TIE[0], CTRL_TIE[1], y, y + 0.4, "pi_cable_tie")
+    return out
+
+
+def _dropout():
+    """The drop-out fitting under the rung gap where a bundle leaves the tray: a collar hung from the rungs either
+    side of the gap by a strap."""
+    return PN.ring_y(8, 8, 1.62, 1.92, 10.4, 11.0, _GALV) + [(5.75, 10.5, 7.65, 6.2, 11.25, 8.35, _GALV), (9.8, 10.5, 7.65, 10.25, 11.25, 8.35, _GALV)]
+
+
+def _ctrl_waterfall():
+    """A run with a cabinet's bundle leaving it: its cables down out of the layer through the drop-out, out of the
+    block's bottom."""
+    return _tray_rails() + _tray_rungs() + _ctrl_layer() + _dropout() + _ctrl_bundle(0, CTRL_LAYER_Y[0] + 0.3, ties=(3.0, 8.0))
+
+
+def _ctrl_cross():
+    """Four ways: the run along x and one along z across it, the rails turning in at the corners."""
+    y0, y1 = TRAY_Y
+    out = []
+    for a0, a1 in ((0.0, 3.4), (12.6, 16.0)):
+        for w0, w1, f0, f1 in ((3.0, 3.4, 3.4, 4.1), (12.6, 13.0, 11.9, 12.6)):
+            # Along x at the corners (z w0..w1), and along z (x w0..w1).
+            out += [(a0, y0, w0, a1, y1, w1, _GALV), (a0, y0, f0, a1, y0 + 0.3, f1, _GALV), (a0, y1 - 0.3, f0, a1, y1, f1, _GALV)]
+            zb0, zb1 = (a0, min(a1, w0)) if a0 == 0 else (max(a0, w1), a1)
+            out += [(w0, y0, zb0, w1, y1, zb1, _GALV), (f0, y0, zb0, f1, y0 + 0.3, zb1, _GALV), (f0, y1 - 0.3, zb0, f1, y1, zb1, _GALV)]
+    # (The rungs' undersides 0.15 over the rails' bottom flanges: tools/zfight.py never has to move them.)
+    out += [(c - 0.45, y0 + 0.15, 3.4, c + 0.45, 11.85, 12.6, _GALV) for c in (2.0, 14.0)]
+    out += [(3.4, y0 + 0.15, c - 0.45, 12.6, 11.85, c + 0.45, _GALV) for c in (2.0, 6.0, 10.0, 14.0)]
+    return out + _ctrl_layer() + _ctrl_branch(0.0, 16.0)
+
+
+def _ctrl_tee():
+    """Three ways: the run along x, a branch leaving it to the south (+z), the south rail turning into the branch."""
+    y0, y1 = TRAY_Y
+    out = [(0, y0, 3.0, 16, y1, 3.4, _GALV), (0, y0, 3.4, 16, y0 + 0.3, 4.1, _GALV), (0, y1 - 0.3, 3.4, 16, y1, 4.1, _GALV)]
+    for a0, a1 in ((0.0, 3.4), (12.6, 16.0)):
+        out += [(a0, y0, 12.6, a1, y1, 13.0, _GALV), (a0, y0, 11.9, a1, y0 + 0.3, 12.6, _GALV), (a0, y1 - 0.3, 11.9, a1, y1, 12.6, _GALV)]
+    for w0, w1, f0, f1 in ((3.0, 3.4, 3.4, 4.1), (12.6, 13.0, 11.9, 12.6)):
+        out += [(w0, y0, 13.0, w1, y1, 16, _GALV), (f0, y0, 13.0, f1, y0 + 0.3, 16, _GALV), (f0, y1 - 0.3, 13.0, f1, y1, 16, _GALV)]
+    out += _tray_rungs()
+    out += [(3.4, y0 + 0.15, 13.55, 12.6, 11.85, 14.45, _GALV)]
+    return out + _ctrl_layer() + _ctrl_branch(8.0, 16.0)
+
+
+def _firestop():
+    """The run through a wall (across x: the wall's faces at x 0 and 16), in its opening sealed with fire-stop mortar
+    either side of a steel sleeve's lining; the wall's own blocks round it."""
+    W = "painted_wall"
+    y0, y1, z0, z1 = 10.4, 14.6, 2.2, 13.8
+    out = [(0, 0, 0, 16, y0, 16, W), (0, y1, 0, 16, 16, 16, W), (0, y0, 0, 16, y1, z0, W), (0, y0, z1, 16, y1, 16, W)]
+    for a0, a1 in ((0, 1.0), (15.0, 16)):
+        out += [(a0, y0, z0, a1, y0 + 0.2, z1, _GALV), (a0, y1 - 0.2, z0, a1, y1, z1, _GALV),
+                (a0, y0 + 0.2, z0, a1, y1 - 0.2, z0 + 0.2, _GALV), (a0, y0 + 0.2, z1 - 0.2, a1, y1 - 0.2, z1, _GALV)]
+    out.append((1.0, y0 + 0.2, z0 + 0.2, 15.0, y1 - 0.2, z1 - 0.2, "pi_firestop"))
+    return out + _tray_rails() + _tray_rungs() + _ctrl_layer()
+
+
+PIECES.update({
+    "control_tray": {"display": "Control Cable Tray", "boxes": _tray_rails() + _tray_rungs() + _ctrl_layer()},
+    "control_tray_hanger": {"display": "Control Cable Tray (Hanger)", "boxes": _tray_rails() + _tray_rungs() + _ctrl_layer() + _trapeze()},
+    "control_tray_waterfall": {"display": "Control Cable Tray (Cable Drop)", "boxes": _ctrl_waterfall()},
+    "control_tray_waterfall_hanger": {"display": "Control Cable Tray (Cable Drop, Hanger)", "boxes": _ctrl_waterfall() + _trapeze(2.0)},
+    "control_tray_cross": {"display": "Control Cable Tray (Cross)", "boxes": _ctrl_cross()},
+    "control_tray_tee": {"display": "Control Cable Tray (Tee)", "boxes": _ctrl_tee()},
+    "control_tray_firestop": {"display": "Control Cable Tray (Fire-Stopped Wall Penetration)", "boxes": _firestop()},
+    # A cabinet's bundle on its way down (a block of it), and its last block: into the gland on the cabinet's top (the
+    # block under it), the gland's plate on the cap.
+    "control_cable_drop": {"display": "Control Cable Bundle", "boxes": _ctrl_bundle(0, 16, ties=(2.0, 10.0))},
+    "control_cable_entry": {"display": "Control Cable Bundle (Cabinet Entry)", "boxes":
+        [(5.2, 0, 5.2, 10.8, 0.3, 10.8, _GALV_DARK)] + PN.round_y(8, 8, 1.95, 0.3, 1.4, _GALV)
+        + PN.star_y(8, 8, 1.7, 1.4, 2.1, _GALV_DARK) + _ctrl_bundle(1.75, 16, ties=(6.0, 12.0))
+        + [(x, 0.3, z, x + 0.5, 0.6, z + 0.5, _GALV) for x in (5.45, 10.05) for z in (5.45, 10.05)]},
+})
+
+
 CRAFTING = {
     "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),
     "executive_desk": (["SSS", "PPP", "P P"], {"S": "minecraft:dark_oak_slab", "P": "minecraft:dark_oak_planks"}, 2),
@@ -580,6 +698,15 @@ CRAFTING = {
     "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 1),
     "large_print": (["SSS", "SPS", "SSS"], {"S": "minecraft:dark_oak_planks", "P": "minecraft:painting"}, 1),
     "glass_coffee_table": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "minecraft:iron_nugget"}, 1),
+    "control_tray": (["P P", "PWP"], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 8),
+    "control_tray_hanger": (["N N", "P P", "PWP"], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "W": "#c:wires/copper"}, 4),
+    "control_tray_waterfall": (["P P", "PWP", " W "], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 4),
+    "control_tray_waterfall_hanger": (["N N", "PWP", " W "], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "W": "#c:wires/copper"}, 4),
+    "control_tray_cross": ([" P ", "PWP", " P "], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 2),
+    "control_tray_tee": (["PPP", "PWP", " P "], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 2),
+    "control_tray_firestop": (["CCC", "PWP", "CCC"], {"C": "minecraft:clay_ball", "P": "#c:plates/iron", "W": "#c:wires/copper"}, 2),
+    "control_cable_drop": (["W", "W", "W"], {"W": "#c:wires/copper"}, 4),
+    "control_cable_entry": (["W", "W", "P"], {"W": "#c:wires/copper", "P": "#c:plates/steel"}, 2),
 }
 
 
@@ -1002,6 +1129,43 @@ def _cable():
     return _img((60, 140, 220))
 
 
+def _ctrl_cables(along_z):
+    """A layer of control cables seen from above (round 26, #10): a row of texels a cable (a column, along z), their
+    jackets black and greys with a highlight down each."""
+    rng = random.Random(911)
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., 3] = 255
+    k = 0
+    while k < S:
+        w = rng.choice((2, 2, 3))
+        c = rng.choice(((34, 34, 36), (40, 40, 44), (92, 94, 98), (150, 152, 150), (28, 28, 30), (70, 72, 76)))
+        a[k:k + w, :, :3] = c
+        a[k, :, :3] = [min(255, v + 40) for v in c]
+        a[min(S - 1, k + w - 1), :, :3] = [v // 2 for v in c]
+        k += w
+    img = Image.fromarray(a, "RGBA")
+    return img.transpose(Image.Transpose.TRANSPOSE) if along_z else img
+
+
+def _ctrl_ends():
+    """Control cables' cut ends: round jackets packed close, their cores showing."""
+    rng = random.Random(912)
+    img = Image.new("RGBA", (S, S), (20, 20, 22, 255))
+    d = ImageDraw.Draw(img)
+    r = max(2, S // 22)
+    for y in range(r, S, 2 * r):
+        for x in range(r + (y // (2 * r)) % 2 * r, S, 2 * r):
+            c = rng.choice(((34, 34, 36), (92, 94, 98), (150, 152, 150)))
+            d.ellipse([x - r, y - r, x + r - 1, y + r - 1], fill=c + (255,))
+            d.ellipse([x - r // 2, y - r // 2, x + r // 2 - 1, y + r // 2 - 1], fill=(184, 112, 60, 255))
+    return img
+
+
+def _firestop_mortar():
+    """Fire-stop mortar: grey, troweled, flecked."""
+    return M.painted((176, 174, 168), 914, seams=(), chip_count=0, drip_count=0, dirt=0.25)
+
+
 def _tinted(colour, alpha):
     a = np.zeros((S, S, 4), np.uint8)
     a[..., :3] = colour
@@ -1326,6 +1490,9 @@ def makers():
         "pi_cooler_lower": _cooler_lower, "pi_cooler_badge": _cooler_badge, "pi_drip_grate": _drip_grate,
         "pi_bottle_plastic": lambda: _tinted((120, 180, 230), 90), "pi_bottle_water": lambda: _tinted((70, 140, 220), 120),
         "pi_cup_stack": _cup_stack,
+        "pi_ctrl_layer": lambda: _ctrl_cables(False), "pi_ctrl_layer_z": lambda: _ctrl_cables(True), "pi_ctrl_ends": _ctrl_ends,
+        "pi_ctrl_black": lambda: _img((34, 34, 36)), "pi_ctrl_grey": lambda: _img((92, 94, 98)), "pi_ctrl_light": lambda: _img((150, 152, 150)),
+        "pi_cable_tie": lambda: _img((22, 22, 24)), "pi_firestop": _firestop_mortar,
         "pi_console_top": lambda: _console("top"), "pi_console_edge": lambda: _console("edge"),
         "pi_console_body": lambda: _console("body"), "pi_plant_screen_a": lambda: _plant_screen("a"),
         "pi_plant_screen_b": lambda: _plant_screen("b"), "pi_plant_screen_c": lambda: _plant_screen("c"),

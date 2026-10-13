@@ -22,7 +22,8 @@ B, O = P.BELOW, P.OVER
 # them), and what may stand on a piece's user side (its chair, a coffee table in front of a sofa).
 SEATED = {"sofa", "locker_bench", "stretcher"}
 WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
-             "fire_extinguisher", "exhaust_fan", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash"}
+             "fire_extinguisher", "exhaust_fan", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash",
+             "sign_relay_row_a", "sign_relay_row_b", "sign_relay_row_c", "sign_relay_row_d"}
 USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
 
 
@@ -294,6 +295,7 @@ def check(site, quiet=False):
     problems += regulating_transformers(site, g)
     # 10. The battery rooms (round 26, #9): their second strings, sense cable risers and fittings.
     problems += battery_rooms(site, g)
+    problems += relay_room(site, g)
     if not quiet:
         for p in problems:
             print(p)
@@ -545,6 +547,54 @@ def battery_rooms(site, g):
                     k2 += 1
                 if at(x, k2, z) != "h2_sensor":
                     problems.append(f"hydrogen monitor at {(x, y, z)}: its conduit does not reach a sensor head ({at(x, k2, z)} at y {k2})")
+    return problems
+
+
+RELAY_KINDS = ("protection_rack", "ssps_cabinet", "nis_cabinet", "relay_panel")
+RELAY_DROP_TRAYS = ("control_tray_waterfall", "control_tray_waterfall_hanger")
+
+
+def relay_room(site, g):
+    """The relay room (round 26, #10): its cabinets by kind (12 protection racks, 6 SSPS bays, 5 NIS racks, 29 relay
+    panels, every relay panel's name once), each with its control cable bundle from a drop in the tray over it down
+    into its top; the header from a tee in the cable spreading room's top tray, through both corridor walls in fire
+    stops, to the rows' crosses."""
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+
+    def at(x, y, z):
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+
+    problems = []
+    found = {k: [] for k in RELAY_KINDS}
+    for k, (st, _) in P.MATERIALS.items():
+        name = kinds[k]
+        if name in RELAY_KINDS and "part=1" in st:
+            v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+            found[name] += [(int(x), int(y) - B, int(z) - O, v) for x, y, z in np.argwhere(g == k)]
+    for name, n in zip(RELAY_KINDS, (12, 6, 5, 29)):
+        if len(found[name]) != n:
+            problems.append(f"{len(found[name])} {name} in the relay room, not {n}")
+        if len({v for *_, v in found[name]}) != len(found[name]):
+            problems.append(f"the relay room's {name}s don't each have their own label")
+    for name in RELAY_KINDS:
+        for x, y, z, v in found[name]:
+            column = [at(x, y + k, z) for k in (1, 2, 3)]
+            if column[0] != "control_cable_entry" or column[1] != "control_cable_drop" or column[2] not in RELAY_DROP_TRAYS:
+                problems.append(f"{name} at {(x, y, z)}: no cable bundle down from a tray drop into its top ({column})")
+    header = [(x, y, z) for k, (st, _) in P.MATERIALS.items() if kinds[k] == "control_tray_firestop" for x, y, z in np.argwhere(g == k)]
+    if len(header) != 2:
+        problems.append(f"{len(header)} fire-stopped tray penetrations, not 2 (the corridor's walls)")
+    tees = sum(int((g == k).sum()) for k in P.MATERIALS if kinds[k] == "control_tray_tee")
+    if tees != 2:
+        problems.append(f"{tees} control tray tees, not 2 (out of the spreading room's tray, into row D's run)")
+    for name, n in (("sign_relay_row_a", 1), ("sign_relay_row_b", 1), ("sign_relay_row_c", 1), ("sign_relay_row_d", 1), ("soe_printer", 1),
+                    ("drawing_rack", 1), ("smoke_detector", 6)):
+        m = sum(int((g == k).sum()) for k in P.MATERIALS if kinds[k] == name)
+        if m != n:
+            problems.append(f"{m} {name} in the relay room, not {n}")
     return problems
 
 

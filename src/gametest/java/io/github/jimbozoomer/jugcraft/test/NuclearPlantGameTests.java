@@ -11,6 +11,7 @@ import io.github.jimbozoomer.jugcraft.nuclear.PlantInterior;
 import io.github.jimbozoomer.jugcraft.nuclear.PlantBuilder;
 import io.github.jimbozoomer.jugcraft.nuclear.ReactorCore;
 import io.github.jimbozoomer.jugcraft.nuclear.ReactorUnit;
+import io.github.jimbozoomer.jugcraft.nuclear.RelayRoom;
 import io.github.jimbozoomer.jugcraft.nuclear.SpeedGateBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.SpeedGateBlockEntity;
 import io.github.jimbozoomer.jugcraft.nuclear.SpeedGatePedestalBlock;
@@ -42,7 +43,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341118"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341304"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -830,6 +831,85 @@ public class NuclearPlantGameTests {
 			}
 		}
 		helper.assertTrue(gates == 1 && others == 0, "one speed gate dropped and nothing else: " + gates + " gates, " + others + " others");
+		helper.succeed();
+	}
+
+	/**
+	 * Round 26, #10 (Justin: "Real cabinet types", "Unique labels", "Yes, read the reactor"): the medium plant's relay
+	 * room holds 12 protection racks, 6 SSPS bays, 5 nuclear instrument racks and 29 relay panels, each kind's labels all
+	 * different; ticked, every cabinet but the relay panels reads the plant's reactor (shut down, unfuelled). What they
+	 * show: a full-power, a tripped, a cold and an unprotected reactor's meters, bistables, permissives and actuations
+	 * (nuclear/RelayRoom.java readings).
+	 */
+	@GameTest(maxTicks = 40)
+	public void mediumPlantRelayRoomReadsTheReactor(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		BlockPos stake = helper.absolutePos(BlockPos.ZERO).offset(5_000, 0, -5_000);
+		Blueprint print = Blueprint.get("nuclear_medium_pwr", false);
+		PlantBuilder.build(level, print, stake, Rotation.NONE, null, true);
+		java.util.Map<Integer, java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity>> kinds = new java.util.HashMap<>();
+		for (int i = 0; i < print.size(); i++) {
+			BlockState state = print.state(i, Rotation.NONE);
+			int kind = RelayRoom.kind(state);
+			BlockPos pos = stake.offset(print.offset(i, Rotation.NONE));
+			if (kind >= 0 && level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity cabinet) {
+				kinds.computeIfAbsent(kind, k -> new java.util.ArrayList<>()).add(cabinet);
+			}
+		}
+		int[] expect = {12, 6, 5, 29};
+		for (int kind = 0; kind < 4; kind++) {
+			var found = kinds.getOrDefault(kind, java.util.List.of());
+			java.util.Set<Integer> labels = new java.util.HashSet<>();
+			for (var c : found) {
+				labels.add(io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(c.getBlockState()));
+			}
+			helper.assertTrue(found.size() == expect[kind] && labels.size() == expect[kind], "the relay room's " + RelayRoom.KEYS[kind] + "s, each its own label: "
+					+ found.size() + " cabinets, " + labels.size() + " labels");
+		}
+		for (int kind = 0; kind < 3; kind++) {
+			for (var c : kinds.get(kind)) {
+				c.serverTick(level);
+				helper.assertTrue(c.rxStatus == 2 && c.generator == null, "a " + RelayRoom.KEYS[kind] + " reads the plant's reactor, shut down: "
+						+ c.getBlockPos().subtract(stake).toShortString() + " status " + c.rxStatus);
+			}
+		}
+		for (var c : kinds.get(RelayRoom.RELAY)) {
+			c.serverTick(level);
+			helper.assertTrue(c.rxStatus == 0 && c.generator == null, "a relay panel reads nothing but its name");
+		}
+		// Full power, steady: Tavg 572 F, PZR 2235 psig, nothing tripped; the permissives of power lit; the source
+		// range blocked; the power range at 100 %.
+		RelayRoom.Reactor full = new RelayRoom.Reactor(1, 1.0, 1.0, 300, 0, 0, true, 0);
+		RelayRoom.Readings tavg = RelayRoom.readings(RelayRoom.PROTECTION, 0, full), pzr = RelayRoom.readings(RelayRoom.PROTECTION, 1, full);
+		helper.assertTrue(Math.abs(tavg.m0() - 42) < 0.01 && Math.abs(pzr.m0() - 66.875) < 0.01 && tavg.lamps() == 1 << 4 && pzr.lamps() == 1 << 4,
+				"at full power the protection racks read Tavg 572 F and 2235 psig, nothing tripped: " + tavg + ", " + pzr);
+		int logic = RelayRoom.readings(RelayRoom.SSPS, 1, full).lamps();
+		helper.assertTrue((logic & 0xFFFF) == 0b10111110 && (logic & 1 << 17) != 0 && (logic & 1 << 16) == 0,
+				"at power the logic bay shows P-6, P-7, P-8, P-10, P-11, P-13: " + Integer.toBinaryString(logic));
+		helper.assertTrue(RelayRoom.readings(RelayRoom.NIS, 0, full).lamps() == (1 << 2 | 1 << 5)
+				&& Math.abs(RelayRoom.readings(RelayRoom.NIS, 2, full).m0() - 100 / 1.2) < 0.01, "at power the source range is blocked, the power range reads 100 %");
+		// Tripped: the reactor trip, turbine trip, feedwater isolation and auxiliary feed in the logic bay, the trip
+		// breakers' undervoltage and shunt coils and the turbine trip relay in the output bay.
+		RelayRoom.Reactor trip = new RelayRoom.Reactor(3, 0, 0.06, 290, 100, ReactorCore.A_SCRAM, true, -0.5);
+		int tripped = RelayRoom.readings(RelayRoom.SSPS, 1, trip).lamps(), out = RelayRoom.readings(RelayRoom.SSPS, 2, trip).lamps();
+		helper.assertTrue((tripped & (1 | 1 << 8 | 1 << 10 | 1 << 14 | 1 << 15)) == (1 | 1 << 8 | 1 << 10 | 1 << 14 | 1 << 15)
+				&& (out & (1 | 1 << 11 | 1 << 14)) == (1 | 1 << 11 | 1 << 14), "a trip lights P-4, REACTOR TRIP, FW ISOLATION, AFW START, TURBINE TRIP and K601, K612, K615: "
+				+ Integer.toBinaryString(tripped) + " / " + Integer.toBinaryString(out));
+		// Cold and shut down: Tavg low-low, pressurizer pressure low and low (SI) tripped; the input bay shows the low
+		// pressure on all four channels.
+		RelayRoom.Reactor cold = new RelayRoom.Reactor(2, 0, 0, 30, 100, 0, true, 0);
+		helper.assertTrue(RelayRoom.readings(RelayRoom.PROTECTION, 0, cold).lamps() == (1 << 2 | 1 << 4)
+				&& RelayRoom.readings(RelayRoom.PROTECTION, 1, cold).lamps() == (1 | 1 << 3 | 1 << 4)
+				&& (RelayRoom.readings(RelayRoom.SSPS, 0, cold).lamps() & 0xF) == 0xF, "cold, Tavg low-low and PZR pressure low trip on every channel");
+		// The console's protection off: GENERAL WARNING.
+		RelayRoom.Reactor bypassed = new RelayRoom.Reactor(1, 0.5, 0.5, 300, 30, ReactorCore.A_PROTECTION_OFF, false, 0);
+		helper.assertTrue((RelayRoom.readings(RelayRoom.SSPS, 4, bypassed).lamps() & 1 << 16) != 0, "protection off lights GENERAL WARNING");
+		helper.assertTrue(RelayRoom.label(RelayRoom.RELAY, 0).equals("RCP 1A 1B MOTORS") && RelayRoom.label(RelayRoom.PROTECTION, 11).equals("CH IV RACK 3"),
+				"the cabinets' names by label");
 		helper.succeed();
 	}
 }

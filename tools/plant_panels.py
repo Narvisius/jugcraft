@@ -688,7 +688,10 @@ def layout():
 
 
 def front(key, v=0):
-    """A panel's drawing; for a panel labelled by train (round 26, 8c: PANELS "labels"), variant v's."""
+    """A panel's drawing; for a panel labelled by train (round 26, 8c: PANELS "labels"), variant v's (one drawing for
+    all of a "shared" panel's: round 26, #10, the relay panels, their names lettered live)."""
+    if PANELS[key].get("shared"):
+        v = 0
     if (key, v) not in _FRONTS:
         labels = PANELS[key].get("labels")
         _FRONTS[(key, v)] = DRAWINGS[key](labels[v]) if labels else DRAWINGS[key]()
@@ -696,8 +699,9 @@ def front(key, v=0):
 
 
 def texture_key(key, v):
-    """The textures' stem for variant v of a panel (variant 0 keeps the plain name)."""
-    return key if v == 0 else f"{key}_v{v}"
+    """The textures' stem for variant v of a panel (variant 0 keeps the plain name; a "shared" panel's variants all
+    have it)."""
+    return key if v == 0 or PANELS[key].get("shared") else f"{key}_v{v}"
 
 
 def variants(key):
@@ -706,8 +710,15 @@ def variants(key):
 
 # ------------------------------------------------------------------------------------------------ the models
 
+# Pieces whose boxes come from elsewhere (round 26, #10: tools/relay_room.py's cabinets), by key; and more textures.
+CABINETS = {}
+EXTRA_MAKERS = []
+
+
 def cabinet(key):
     """The whole piece: plinth, body (its front the drawing), top, and what stands proud of the door."""
+    if key in CABINETS:
+        return CABINETS[key]()
     if key == "edg_battery_rack":
         return battery_rack()
     if key == "station_battery":
@@ -1051,7 +1062,7 @@ def _see_through(colour, alpha, seed):
 def makers():
     out = {}
     for key in DRAWINGS:
-        for v in range(variants(key)):
+        for v in range(1 if PANELS[key].get("shared") else variants(key)):
             for name, img in front(key, v).cut(texture_key(key, v)).items():
                 out[name] = (lambda img=img: img)
     out.update({
@@ -1084,6 +1095,8 @@ def makers():
                 "pi_lens_amber": lambda: _solid((130, 84, 20), 532, 0.02), SC_GLASS: lambda: _see_through((220, 232, 236), 40, 533),
                 "pi_lens_red": lambda: _solid((110, 22, 18), 534, 0.02)})
     out.update({f"pi_{k}": (lambda k=k: _sign_image(k)) for k in SIGNS})
+    for extra in EXTRA_MAKERS:
+        out.update(extra())
     return out
 
 
@@ -1201,8 +1214,9 @@ def _rc_terminals(strip):
     return [(y + k * pitch, y + k * pitch + h, "pi_cap_blue" if k % 6 == 5 else "pi_relay_term") for k in range(n)]
 
 
-def relay_cabinet_front():
-    """The drawing: the door (its frame and nameplate), and through the window everything inside as seen from the front."""
+def relay_cabinet_front(nameplate=True):
+    """The drawing: the door (its frame and nameplate), and through the window everything inside as seen from the front.
+    nameplate: False leaves the plate off (round 26, #10: the relay room's panels have a wider one, lettered live)."""
     f = Front(1, 520)
     T = f.T
     import control_boards as CB
@@ -1223,9 +1237,10 @@ def relay_cabinet_front():
     R(1.1, 1.3, 14.9, 31.3, outline=(214, 216, 210, 255), width=1)
     wx0, wy0, wx1, wy1 = RC_WINDOW
     R(wx0 - 0.12, wy0 - 0.12, wx1 + 0.12, wy1 + 0.12, outline=(150, 152, 148, 255), width=2)
-    R(4.4, 29.5, 11.6, 30.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
-    T(8.0, 30.42, "RELAY CABINET", 12, fill=WHITE, bold=True)
-    T(8.0, 29.86, "125 VDC CONTROL", 8, fill=WHITE, bold=True)
+    if nameplate:
+        R(4.4, 29.5, 11.6, 30.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+        T(8.0, 30.42, "RELAY CABINET", 12, fill=WHITE, bold=True)
+        T(8.0, 29.86, "125 VDC CONTROL", 8, fill=WHITE, bold=True)
     # Upper: the relay panel.
     R(1.6, 16.0, 14.4, 29.0, fill=(204, 206, 200, 255))
     for x0, num, name, tap in RC_RELAYS:
@@ -2524,6 +2539,34 @@ def _oct_ring_y(cx, cz, a_in, a_out, y0, y1, tex):
     return out
 
 
+# Round parts standing up (round 26, #10) whose faces facing the same way are never within tools/zfight.py's reach of
+# each other (0.1 px apart), so it never has to move them: an octagon (two crossing boxes, the same pair turned 45
+# degrees, each a step of 0.1 shorter at both ends: taller than 0.7), an eight-pointed star (a square and the same
+# turned, the second 0.1 shorter at both ends: a thin round part, a cable), and a ring of eight bars.
+def round_y(cx, cz, a, y0, y1, tex):
+    s = a * math.tan(math.radians(22.5))
+    rot = {"rotation": {"angle": 45, "axis": "y", "origin": [cx, y0, cz]}}
+    return [(cx - a, y0, cz - s, cx + a, y1, cz + s, tex), (cx - s, y0 + 0.1, cz - a, cx + s, y1 - 0.1, cz + a, tex),
+            (cx - a, y0 + 0.2, cz - s, cx + a, y1 - 0.2, cz + s, tex, rot), (cx - s, y0 + 0.3, cz - a, cx + s, y1 - 0.3, cz + a, tex, rot)]
+
+
+def star_y(cx, cz, r, y0, y1, tex, inset=0.1):
+    rot = {"rotation": {"angle": 45, "axis": "y", "origin": [cx, y0, cz]}}
+    return [(cx - r, y0, cz - r, cx + r, y1, cz + r, tex), (cx - r, y0 + inset, cz - r, cx + r, y1 - inset, cz + r, tex, rot)]
+
+
+def ring_y(cx, cz, a_in, a_out, y0, y1, tex):
+    half = a_out * math.tan(math.radians(22.5)) + 0.05
+    out = [(cx + a_in, y0, cz - half, cx + a_out, y1, cz + half, tex), (cx - a_out, y0, cz - half, cx - a_in, y1, cz + half, tex),
+           (cx - half, y0, cz + a_in, cx + half, y1, cz + a_out, tex), (cx - half, y0, cz - a_out, cx + half, y1, cz - a_in, tex)]
+    rot = {"rotation": {"angle": 45, "axis": "y", "origin": [cx, y0, cz]}}
+    out += [(cx + a_in, y0 + 0.1, cz - half, cx + a_out, y1 - 0.1, cz + half, tex, rot),
+            (cx - a_out, y0 + 0.1, cz - half, cx - a_in, y1 - 0.1, cz + half, tex, rot),
+            (cx - half, y0 + 0.1, cz + a_in, cx + half, y1 - 0.1, cz + a_out, tex, rot),
+            (cx - half, y0 + 0.1, cz - a_out, cx + half, y1 - 0.1, cz - a_in, tex, rot)]
+    return out
+
+
 def eyewash_boxes():
     cx, cz = EW_C
     y0, y1 = EW_BOWL_Y
@@ -2776,3 +2819,7 @@ DRAWINGS["vital_panel"] = vital_panel
 DRAWINGS["dc_ground_detector"] = ground_detector
 DRAWINGS["h2_monitor"] = h2_monitor
 DRAWINGS["exhaust_fan"] = exhaust_fan
+
+
+# The relay room's cabinets and pieces (round 26, #10): they register themselves here.
+import relay_room  # noqa: E402,F401

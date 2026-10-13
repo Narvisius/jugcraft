@@ -32,6 +32,8 @@ import org.jspecify.annotations.Nullable;
  * vital inverter their station battery; an inverter its regulating transformer; a regulating transformer its motor
  * control centre and its inverter (8d); the ground detector its station battery (8f); the battery rooms' hydrogen
  * monitor and exhaust fan their battery and each other, and the DC switchboard all its racks, which it keeps even (#9).
+ *
+ * <p>The relay room's cabinets (round 26, #10: RelayRoom) read the nearest reactor once a second instead.
  */
 public class LivePanelBlockEntity extends BlockEntity {
 	public static final int REACH = 24;
@@ -105,6 +107,14 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 */
 	public long hoursBase = -1;
 	private int timer, balanceTimer;
+	/**
+	 * A relay room cabinet (round 26, #10): what it last read of the nearest reactor in StatusScreenBlockEntity.RANGE
+	 * (RelayRoom.Reactor: status 0 none), and the fission a second before (for the startup rate). Synced, not saved.
+	 */
+	public int rxStatus, rxAlarms;
+	public double rxFission, rxHeat, rxTemp = 30, rxRods = 100, rxSur;
+	public boolean rxProtection = true;
+	private double lastFission = -1;
 
 	public LivePanelBlockEntity(BlockPos pos, BlockState state) {
 		super(PlantInterior.LIVE_PANEL_ENTITY, pos, state);
@@ -462,6 +472,15 @@ public class LivePanelBlockEntity extends BlockEntity {
 	}
 
 	public void serverTick(ServerLevel level) {
+		int relay = RelayRoom.kind(getBlockState());
+		if (relay >= 0) {
+			// A relay room cabinet reads the reactor (a relay panel nothing: its name is its label), never a generator.
+			if (relay != RelayRoom.RELAY && timer-- <= 0) {
+				timer = 19;
+				relayTick(level);
+			}
+			return;
+		}
 		if (input != null) {
 			charge(level);
 		}
@@ -531,6 +550,60 @@ public class LivePanelBlockEntity extends BlockEntity {
 			hoursBase = found != null && level.getBlockEntity(found) instanceof EquipmentBlockEntity edg ? edg.runTicksAt(level.getGameTime()) : -1;
 			sync(level);
 		}
+	}
+
+	/** What a relay room cabinet last read of its reactor. */
+	public RelayRoom.Reactor reactor() {
+		return new RelayRoom.Reactor(rxStatus, rxFission, rxHeat, rxTemp, rxRods, rxAlarms, rxProtection, rxSur);
+	}
+
+	/**
+	 * A relay room cabinet, once a second: the nearest reactor vessel in range (as a status screen finds it), its state
+	 * and the startup rate since the last look; sent to the players when it has moved.
+	 */
+	private void relayTick(ServerLevel level) {
+		EquipmentBlockEntity vessel = nearestVessel(level, getBlockPos());
+		RelayRoom.Reactor now;
+		if (vessel == null) {
+			now = RelayRoom.Reactor.NONE;
+			lastFission = -1;
+		} else {
+			double f = vessel.core.fission;
+			now = RelayRoom.Reactor.of(vessel.core, lastFission < 0 ? 0 : RelayRoom.startupRate(lastFission, f));
+			lastFission = f;
+		}
+		boolean moved = now.status() != rxStatus || now.alarms() != rxAlarms || now.protection() != rxProtection
+				|| Math.abs(now.fission() - rxFission) > Math.max(0.002, Math.abs(rxFission) * 0.05) || Math.abs(now.heat() - rxHeat) > 0.002
+				|| Math.abs(now.temperature() - rxTemp) > 0.2 || Math.abs(now.rods() - rxRods) > 0.2 || Math.abs(now.sur() - rxSur) > 0.05;
+		if (moved) {
+			rxStatus = now.status();
+			rxAlarms = now.alarms();
+			rxProtection = now.protection();
+			rxFission = now.fission();
+			rxHeat = now.heat();
+			rxTemp = now.temperature();
+			rxRods = now.rods();
+			rxSur = now.sur();
+			sync(level);
+		}
+	}
+
+	/** The nearest reactor vessel (any kind) within StatusScreenBlockEntity.RANGE whose chunk is loaded, or null. */
+	static @Nullable EquipmentBlockEntity nearestVessel(ServerLevel level, BlockPos here) {
+		EquipmentBlockEntity best = null;
+		double bestDistance = (double) StatusScreenBlockEntity.RANGE * StatusScreenBlockEntity.RANGE;
+		for (Map.Entry<BlockPos, EquipmentRegistry.Entry> e : EquipmentRegistry.of(level).anchors().entrySet()) {
+			EquipmentKind kind = e.getValue().kind();
+			if (kind != EquipmentKind.REACTOR_VESSEL && kind != EquipmentKind.EPR_VESSEL && kind != EquipmentKind.SMALL_MODULAR_REACTOR) {
+				continue;
+			}
+			double d = e.getKey().distSqr(here);
+			if (d < bestDistance && level.isLoaded(e.getKey()) && level.getBlockEntity(e.getKey()) instanceof EquipmentBlockEntity v) {
+				best = v;
+				bestDistance = d;
+			}
+		}
+		return best;
 	}
 
 	/** A charger: every tick it charges its battery from what its supply gave it, up to its rate. */
@@ -755,6 +828,14 @@ public class LivePanelBlockEntity extends BlockEntity {
 		racks.addAll(in.read("racks", BlockPos.CODEC.listOf()).orElse(List.of()));
 		mode = in.getIntOr("mode", isExhaustFan(getBlockState()) ? ExhaustFanBlock.AUTO : 0);
 		page = in.getIntOr("page", 0);
+		rxStatus = in.getIntOr("rx_status", 0);
+		rxAlarms = in.getIntOr("rx_alarms", 0);
+		rxProtection = in.getBooleanOr("rx_protection", true);
+		rxFission = in.getDoubleOr("rx_fission", 0);
+		rxHeat = in.getDoubleOr("rx_heat", 0);
+		rxTemp = in.getDoubleOr("rx_temp", 30);
+		rxRods = in.getDoubleOr("rx_rods", 100);
+		rxSur = in.getDoubleOr("rx_sur", 0);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}
@@ -773,6 +854,17 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.putLong("hours_base", hoursBase);
 		}
 		saveBattery(out);
+		if (rxStatus != 0) {
+			// A relay room cabinet's reading (not saved: it reads again after a load).
+			out.putInt("rx_status", rxStatus);
+			out.putInt("rx_alarms", rxAlarms);
+			out.putBoolean("rx_protection", rxProtection);
+			out.putDouble("rx_fission", rxFission);
+			out.putDouble("rx_heat", rxHeat);
+			out.putDouble("rx_temp", rxTemp);
+			out.putDouble("rx_rods", rxRods);
+			out.putDouble("rx_sur", rxSur);
+		}
 		return out.buildResult();
 	}
 }

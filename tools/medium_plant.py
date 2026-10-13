@@ -1280,6 +1280,90 @@ def ground_floor(b, W, D):
     battery_room_fittings(b, BATTERY_ROOM_1B)
 
 
+# The relay room (round 26, #10; Justin: "Real cabinet types", "Unique labels", "Overhead trays and cable entry", "Room
+# extras"): four rows back to back either side of the aisle under the door (x 8 and 9), each cabinet (tools/
+# relay_room.py) by its label, as you read the row facing it. Row A faces the north aisle, row B and C the middle
+# aisle, row D the south one; rows C and D stop short of the east wall for the sequence of events recorder's desk.
+RELAY_ROWS = {
+    # row: (z, facing, its cabinets from the reader's left: (piece, label))
+    "a": (21, "south", [("protection_rack", f"CH {c} RACK {r}") for c in ("I", "II") for r in (1, 2, 3)]
+          + [("relay_panel", "RCP 1A 1B MOTORS"), ("relay_panel", "RCP 1C 1D MOTORS")]
+          + [("protection_rack", f"CH {c} RACK {r}") for c in ("III", "IV") for r in (1, 2, 3)]),
+    "b": (22, "north", [("ssps_cabinet", f"TRAIN {t} {bay} BAY") for t in "AB" for bay in ("INPUT", "LOGIC", "OUTPUT")]
+          + [("nis_cabinet", n) for n in ("N31 N32", "N35 N36", "N41 N42", "N43 N44", "NC41 NM41")]
+          + [("relay_panel", n) for n in ("MAIN GENERATOR", "MAIN TRANSFORMER", "UNIT AUX XFMR")]),
+    "c": (25, "south", [("relay_panel", n) for n in ("4160V BUS 1A", "4160V BUS 1B", "4160V BUS 1C", "4160V BUS 1D", "EDG 1A", "EDG 1B",
+                                                    "480V LC 1A", "480V LC 1B", "STARTUP XFMR", "345KV BREAKERS", "MAIN STEAM ISOL",
+                                                    "FEEDWATER ISOL")]),
+    "d": (26, "north", [("relay_panel", n) for n in ("SI PUMPS", "RHR PUMPS", "CONT SPRAY PUMPS", "CHARGING PUMPS", "CCW PUMPS",
+                                                    "SERVICE WATER", "AFW PUMPS", "CONDENSATE PUMPS", "FEEDWATER PUMPS",
+                                                    "CIRC WATER PUMPS", "DIESEL SEQ A", "DIESEL SEQ B")]),
+}
+RELAY_AISLE = (8, 9)          # the aisle under the door: the trays' header runs over x 8
+RELAY_HEADER_X = 8
+RELAY_HANGERS = (3, 6, 9, 12, 15)
+RELAY_SMOKE = ((4, 20), (13, 20), (4, 24), (13, 24), (4, 28), (12, 28))
+
+
+def relay_row_xs(row):
+    """The x of each of a row's cabinets in the order RELAY_ROWS lists them (from the reader's left: west for a row
+    read facing north, east for one read facing south); every row starts at the west wall's aisle."""
+    z, facing, cabinets = RELAY_ROWS[row]
+    xs = [x for x in range(2, 18) if x not in RELAY_AISLE][:len(cabinets)]
+    return xs[::-1] if facing == "south" else xs
+
+
+def relay_room(b, y0, y1):
+    """The relay room's fit-out: the cabinets; over each row its control cable tray at the ceiling, a drop over every
+    cabinet and its bundle down into the cabinet's top; the header along the aisle from the cable spreading room's top
+    tray (a tee in it), through both walls of the corridor in fire-stopped penetrations, crossing the rows' runs; the
+    row signs, smoke detectors, the drawing rack, the SOE recorder's desk and printer, an extinguisher."""
+    tray = y1
+    for row, (z, facing, cabinets) in RELAY_ROWS.items():
+        xs = relay_row_xs(row)
+        for x, (piece, label) in zip(xs, cabinets):
+            b.panel(piece, x, y0, z, facing, 1, label)
+            b.p(x, y0 + 2, z, furniture("control_cable_entry", "north"))
+            for k in range(y0 + 3, tray):
+                b.p(x, k, z, furniture("control_cable_drop", "north"))
+        for x in range(min(xs), max(xs) + 1):
+            if x == RELAY_HEADER_X:
+                piece = "control_tray_cross"
+            elif x in xs:
+                piece = "control_tray_waterfall_hanger" if x in RELAY_HANGERS else "control_tray_waterfall"
+            else:
+                piece = "control_tray_hanger" if x in RELAY_HANGERS else "control_tray"
+            b.p(x, tray, z, furniture(piece, "north"))
+    # The header: out of the spreading room's top tray at z 11 (a tee), south over the corridor, the rows' crosses, its
+    # end a tee into row D's run.
+    x = RELAY_HEADER_X
+    last = max(z for z, _, _ in RELAY_ROWS.values())
+    b.p(x, tray, 11, furniture("control_tray_tee", "north"))
+    for z in range(12, last):
+        if b.get(x, tray, z) and z not in (14, 18):
+            continue
+        piece = "control_tray_firestop" if z in (14, 18) else "control_tray_hanger" if z in (16, 23) else "control_tray"
+        b.p(x, tray, z, furniture(piece, "east"))
+    b.p(x, tray, last, furniture("control_tray_tee", "south"))
+    # The row signs on the west wall at eye level, at the end of the aisle each row's cabinets face (read down it).
+    for row, (z, facing, _) in RELAY_ROWS.items():
+        b.furniture(f"sign_relay_row_{row}", 1, y0 + 1, z - 1 if facing == "south" else z + 1, "west")
+    # The lights down the aisles (the ceiling grid's places are under the trays: finish_lights finds few), the smoke
+    # detectors between them.
+    for z in (20, 23, 27):
+        for x in (2, 6, 11, 15):
+            b.p(x, tray, z, LIGHT)
+    for x, z in RELAY_SMOKE:
+        b.p(x, tray, z, furniture("smoke_detector", "north"))
+    b.furniture("drawing_rack", 1, y0, 24, "west")
+    # The sequence of events recorder: its console three wide against the east wall past rows C and D, a chair, the
+    # printer beside it.
+    b.row(("operator_console", 3), 18, y0, 25, "east", tops=[0, 2, 3])
+    b.p(17, y0, 26, furniture("operator_chair", "east"))
+    b.furniture("soe_printer", 18, y0, 28, "east")
+    b.furniture("fire_extinguisher", 18, y0 + 1, 20, "east")
+
+
 def first_floor(b, W, D, y):
     """The first floor (walked at y + 1): the cable spreading room under the control room (tiers of cable tray, risers
     up into the floor above), and south of the corridor the relay room and the plant computer room on its raised floor."""
@@ -1302,12 +1386,8 @@ def first_floor(b, W, D, y):
             b.p(x, y1, z, LIGHT)
     b.door(15, y0, 14, "north", double=True, label="cable_spreading_room")
     b.furniture("fire_extinguisher", 1, y0 + 1, 12, "west")
-    # ---- Relay room (x 1..18, z 19..28): relay cabinets back to back in rows.
-    for x in range(2, 18):
-        if x in (8, 9):
-            continue
-        for z, f in ((21, "south"), (22, "north"), (25, "south"), (26, "north")):
-            b.stack("relay_cabinet", x, y0, z, f, n=2)
+    # ---- Relay room (x 1..18, z 19..28): its cabinets back to back in rows (round 26, #10: relay_room).
+    relay_room(b, y0, y1)
     b.door(9, y0, 18, "south", double=True, label="relay_room")
     # ---- Plant computer room (x 20..38, z 19..28): racks in hot and cold aisles on the raised floor.
     b.b(20, y, 19, W - 2, y, D - 2, ACCESS_FLOOR)

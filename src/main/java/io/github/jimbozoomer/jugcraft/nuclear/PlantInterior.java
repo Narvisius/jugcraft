@@ -138,6 +138,29 @@ public final class PlantInterior {
 			{"sign_hydrogen", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
 			{"sign_eyewash", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
+			// The relay room (round 26, #10: RelayRoom): its cabinets labelled and reading the reactor; its control cable
+			// tray, the bundles down into the cabinets, the fire stops, the row signs, the smoke detectors, the drawing
+			// rack and the sequence of events recorder's printer.
+			{"protection_rack", 0, "relay:12", "metal", null},
+			{"ssps_cabinet", 0, "relay:6", "metal", null},
+			{"nis_cabinet", 0, "relay:5", "metal", null},
+			{"relay_panel", 0, "relay:29", "metal", null},
+			{"control_tray", 0, "plain", "metal", new double[] {0, 11.2, 3, 16, 14, 13}},
+			{"control_tray_hanger", 0, "plain", "metal", new double[] {0, 10.2, 1.4, 16, 14, 14.6}},
+			{"control_tray_waterfall", 0, "plain", "metal", new double[] {0, 10.4, 3, 16, 14, 13}},
+			{"control_tray_waterfall_hanger", 0, "plain", "metal", new double[] {0, 10.2, 1.4, 16, 14, 14.6}},
+			{"control_tray_cross", 0, "plain", "metal", new double[] {0, 11.2, 0, 16, 14, 16}},
+			{"control_tray_tee", 0, "plain", "metal", new double[] {0, 11.2, 3, 16, 14, 16}},
+			{"control_tray_firestop", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"control_cable_drop", 0, "plain", "metal", new double[] {6.6, 0, 6.6, 9.4, 16, 9.4}},
+			{"control_cable_entry", 0, "plain", "metal", new double[] {5.2, 0, 5.2, 10.8, 16, 10.8}},
+			{"smoke_detector", 0, "plain", "metal", new double[] {5.3, 13.6, 5.3, 10.7, 16, 10.7}},
+			{"drawing_rack", 0, "plain", "metal", new double[] {0.6, 0, 2, 15.4, 15.2, 14}},
+			{"soe_printer", 0, "plain", "metal", new double[] {0.5, 0, 1.5, 15.5, 14.6, 14.5}},
+			{"sign_relay_row_a", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
+			{"sign_relay_row_b", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
+			{"sign_relay_row_c", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
+			{"sign_relay_row_d", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
 			{"dc_cable_riser_sense", 0, "plain", "metal", new double[] {5, 0, 0, 13, 16, 3}},
@@ -245,6 +268,8 @@ public final class PlantInterior {
 					return new ExhaustFanBlock(p);
 				} else if (kind.equals("eyewash")) {
 					return new EyewashBlock(p, shape);
+				} else if (k[0].equals("relay")) {
+					return new RelayCabinetBlock(p, Integer.parseInt(k[1]));
 				} else if (k[0].equals("wall")) {
 					return new WallLivePanelBlock(p, Integer.parseInt(k[1]), Double.parseDouble(k[2]));
 				} else if (k[0].equals("live")) {

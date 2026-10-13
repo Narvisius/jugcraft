@@ -133,7 +133,10 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		EdgTelemetry.Snapshot snap = EdgTelemetry.of(panel, edg, now);
 		if (edg == null) {
 			EdgTelemetry.battery(snap, panel, level);
-			if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
+			if (io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.kind(panel.getBlockState()) >= 0) {
+				// A relay room cabinet (round 26, #10): the reactor, or its name.
+				EdgTelemetry.relayRoom(snap, panel, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
 				EdgTelemetry.inverter(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(panel.getBlockState())) {
 				// A regulating transformer (round 26, 8d): its MCC breaker and its inverter's load.

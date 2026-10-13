@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PMP",
+    "CXC",
+    "PRP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "M": "minecraft:clock",
+    "C": "jugcraft:basic_circuit",
+    "X": "minecraft:observer",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:nis_cabinet",
+    "count": 1
+  }
+}

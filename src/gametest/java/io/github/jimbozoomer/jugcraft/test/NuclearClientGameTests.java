@@ -857,6 +857,17 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						"jugcraft_plant_medium_r26_battery_room_1a_second_string");
 				shotAt(context, singleplayer, wx.applyAsInt(142), y + 1, wz.applyAsInt(92), wx.applyAsInt(137), y + 2, wz.applyAsInt(92),
 						"jugcraft_plant_medium_r26_battery_room_1a_fittings");
+				// Round 26 (#10): the relay room (building x 1..18, z 19..28, its floor at building y 8): row A's protection
+				// racks from the north aisle, row B's SSPS bays and nuclear instrument drawers, row C's relay panels' names,
+				// the SOE recorder's corner, the header tray in over the door through its fire stop to the rows' crosses.
+				int[][] relayShots = {{17, 8, 19, 13, 9, 21}, {4, 8, 24, 3, 9, 22}, {12, 8, 24, 12, 9, 22}, {13, 8, 23, 13, 9, 25},
+						{15, 8, 27, 18, 8, 25}, {9, 8, 20, 8, 12, 18}};
+				String[] relayNames = {"row_a", "ssps", "nis", "relay_panels", "soe", "header"};
+				for (int i = 0; i < relayShots.length; i++) {
+					int[] t = relayShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(136 + t[0]), y + t[1], wz.applyAsInt(88 + t[2]), wx.applyAsInt(136 + t[3]), y + t[4],
+							wz.applyAsInt(88 + t[5]), "jugcraft_plant_medium_r26_relay_room_" + relayNames[i]);
+				}
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {

@@ -444,7 +444,10 @@ def write_assets(write, rid, assets, lang):
             if labels:
                 # A panel labelled by train (round 26, 8c): each variant's parts are the first's with its own drawing.
                 PN = plant_office2.PN
-                for v in range(1, len(labels)):
+                # One drawing for all of a "shared" panel's labels (round 26, #10: the relay panels, their names live):
+                # every variant has the first's model.
+                shared = bool(info.get("shared"))
+                for v in range(1, 1 if shared else len(labels)):
                     for part in range(w * rows):
                         tex = {f"pi_{block}_{d}_{part}": rid(f"block/pi_{PN.texture_key(block, v)}_{d}_{part}") for d in ("fio" if door else "f")}
                         write(models / f"{block}_v{v}_{part}.json", {"parent": rid(f"block/{block}_{part}"), "textures": tex})
@@ -453,7 +456,7 @@ def write_assets(write, rid, assets, lang):
                 opens = (("false", ""), ("true", "open_")) if door else ((None, ""),)
                 write(assets / "blockstates" / f"{block}.json", {"variants": {
                     f"facing={face},part={part},variant={v}" + (f",open={o}" if o else ""): {
-                        "model": rid(f"block/{block}_{tag}{part}" if v == 0 else f"block/{block}_v{v}_{tag}{part}"), **({"y": y} if y else {})}
+                        "model": rid(f"block/{block}_{tag}{part}" if v == 0 or shared else f"block/{block}_v{v}_{tag}{part}"), **({"y": y} if y else {})}
                     for face, y in TURN for part in range(w * rows) for v in range(len(labels)) for o, tag in opens}})
             else:
                 write(assets / "blockstates" / f"{block}.json", {"variants": {

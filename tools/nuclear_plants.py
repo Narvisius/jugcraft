@@ -829,7 +829,10 @@ def verify(site):
 
 BLUEPRINT_OUT = Path(__file__).resolve().parents[1] / "src" / "main" / "resources" / "data" / "jugcraft" / "blueprint"
 KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&*+-/:;<=>?@^_|~" + "".join(chr(c) for c in range(0x100, 0x250))
-# (More block kinds than ASCII keys: Latin Extended-A letters, which are never digits.)
+# (More block kinds than ASCII keys: Latin Extended-A letters, which are never digits.) And more again (round 26, #10:
+# the relay room's labelled cabinets): the IPA block and Cyrillic, their letters only (no digits, no combining marks).
+KEYS += "".join(chr(c) for c in list(range(0x250, 0x2B0)) + list(range(0x400, 0x530))
+                if __import__("unicodedata").category(chr(c)) not in ("Nd", "Cn", "Mn", "Me", "Mc"))
 TURN180 = {"north": "south", "south": "north", "east": "west", "west": "east"}
 
 

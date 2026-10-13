@@ -231,6 +231,36 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
     Warning Sign** and **Emergency Eyewash Sign**, each a plate on four stand-off screws.
   - **DC Cable Tray (Bend)** and **(Tee)**, and the riser and its top **(With Sense Cable)**: a second string's run
     turning a corner and joining the first's on its way to the switchboard.
+- **The relay room's cabinets** (round 26, #10), one block wide and two high, each labelled (sneak and right-click one
+  with an empty hand to step it to its next label; right-click it for its name and what it reads). All but the relay
+  panels read the nearest reactor within 512 blocks once a second:
+  - **Process Protection Rack**: the 7300 process protection, four channels of three racks (CH I RACK 1 to CH IV RACK
+    3), the band across the top in the channel's colour (I red, II white, III blue, IV yellow). On its test panel two
+    switchboard meters (rack 1 Tavg and delta T, rack 2 pressurizer pressure and level, rack 3 steam generator level
+    and reactor coolant flow), four bistable lamps (lit tripped: overtemperature and overpower delta T, Tavg low-low,
+    high flux; pressurizer pressure low and high, level high, pressure low SI; steam generator level low-low and
+    high-high, flow low, RCP underfrequency), POWER and the channel test switch; behind the glass two card cages of
+    printed circuit cards, each with its ejector and status light. At full power Tavg reads 572 F and the pressurizer
+    2235 psig; cold, Tavg low-low and pressure low trip.
+  - **Solid State Protection System Cabinet**: trains A and B, each an INPUT, LOGIC and OUTPUT bay, a 4 by 4 block of
+    legend windows on each (lit amber: the input relays by channel; the permissives P-4 to P-13 and the reactor trip,
+    safety injection, feedwater and steam line isolation, containment isolation and spray, auxiliary feed start and
+    turbine trip; the master and slave relays K601 to K616), INPUT ERROR / GENERAL WARNING (protection off) / OUTPUT
+    TEST and POWER ON lamps, the logic test selector, its cards behind the glass.
+  - **Nuclear Instrumentation Drawer Rack**: N31 N32 source range (counts a second on a log scale; its high voltage off
+    and BLOCKED above P-10), N35 N36 intermediate range (amps, 1E-11 to 1E-3), N41 N42 and N43 N44 power range (0 to
+    120 %), NC41 NM41 comparator and startup rate (decades a minute): drawers with their meters, lamps, bypass switches
+    and handles, the high voltage supply and cooling fan panel below.
+  - **Protective Relay Panel**: the relay cabinet (below) whole, its nameplate lettered with its name (29 of them: the
+    RCP motors, main generator and transformers, 4160 V buses, diesels, load centres, switchyard breakers, isolations
+    and the pumps' motors).
+- **The relay room's pieces** (round 26, #10): **Control Cable Tray** (the ladder tray full of control cables, as a
+  straight length with or without a hanger, a **Cable Drop** over a cabinet (a drop-out fitting under the rungs, the
+  cabinet's tied bundle of seven cables down out of it), a **Cross**, a **Tee** and a **Fire-Stopped Wall
+  Penetration** (the wall's own blocks round a steel-lined opening sealed with fire-stop mortar)); **Control Cable
+  Bundle** and **(Cabinet Entry)** (the bundle into a gland on the cabinet's top); the **Relay Room Row A to D Signs**;
+  the **Smoke Detector**; the **Drawing Stick File** (the room's prints hanging from it); the **Sequence of Events
+  Recorder Printer** on its stand with its fanfold paper.
 - **Ladder Cable Tray** (round 26): 24-inch galvanized ladder tray (rails, rungs, black power cables on them) hung under
   the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend (with or without a
   drop in it), and drops where a conduit comes up under it and a cable goes down into it (one or two, each with or
@@ -373,7 +403,12 @@ blueprint (for players who lay out their own plant).
     walls). Hydrogen exhaust louvres high in the battery rooms' outside walls. The vestibule, the glass along the speed
     gates and the shift supervisor's office are Framed Glass (below).
   - First floor: the cable spreading room under the control room (three tiers of tray, risers up into it), the relay
-    room, the server room on its raised floor.
+    room (round 26, #10: four rows back to back either side of the aisle under its door, A the protection racks and
+    the RCP relays, B the SSPS bays, nuclear instruments and generator relays, C the electrical relays, D the pumps'
+    relays; a control cable tray over every row with a bundle down into every cabinet, the header in from a tee in the
+    spreading room's top tray through both corridor walls in fire stops; the row signs at the aisles' ends, lights and
+    smoke detectors along the aisles, the drawing rack, the SOE recorder's console three wide and its printer in the
+    south-east corner), the server room on its raised floor.
   - Second floor: the main control room (round 23), laid out as a Westinghouse four-loop plant's horseshoe: along the
     north wall the Safety Systems, Reactor Coolant, the reactor control console in the middle (in line with the
     boards), Steam and Feedwater and Turbine Generator boards; down the west wall the Electrical board, down the east
