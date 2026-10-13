@@ -203,6 +203,8 @@ LANG = {
     "message.jugcraft.nuclear.hvac_mode": "CR HVAC mode: %s",
     "message.jugcraft.nuclear.hvac_damper": "%s (sneak and right-click with an empty hand to change its tag)",
     "message.jugcraft.nuclear.hvac_monitor": "%s",
+    "message.jugcraft.nuclear.tsc": "%s",
+    "message.jugcraft.nuclear.tsc_relabel": "Now showing: %s",
     "message.jugcraft.nuclear.hvac_running": "%s: running, as the HVAC panel has it (sneak and right-click with an empty hand for the other train's tag)",
     "message.jugcraft.nuclear.hvac_standby": "%s: on standby, as the HVAC panel has it (sneak and right-click with an empty hand for the other train's tag)",
     "message.jugcraft.nuclear.station_battery": "Station battery: %s%% charged (%s of %s JE), %s",

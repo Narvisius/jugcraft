@@ -241,6 +241,20 @@ public final class PlantInterior {
 			{"hv_rad_monitor", 0, "hvmon:2:4.2", "metal", null},
 			{"hv_tox_monitor", 0, "hvmon:2:4.2", "metal", null},
 			{"hv_refrig_monitor", 0, "hvmon:1:4.2", "metal", null},
+			// The Technical Support Center (round 26, #12: TscRoom, tools/tsc_room.py): its classification board, video wall
+			// displays, consoles, communications console, NRC desk, status boards, area radiation monitor and frisking
+			// station (live: tsc:width:rows:variants), its procedure shelves, flat file of drawings and card reader.
+			{"tsc_class_board", 0, "tsc:3:2:1", "metal", null},
+			{"tsc_video_wall", 0, "tsc:2:2:3", "metal", null},
+			{"tsc_console", 0, "tsc:3:1:7", "metal", null},
+			{"tsc_comms_console", 0, "tsc:3:1:1", "metal", null},
+			{"tsc_nrc_desk", 0, "tsc:3:1:1", "metal", null},
+			{"tsc_status_board", 0, "tsc:3:2:4", "metal", null},
+			{"tsc_area_monitor", 0, "tsc:1:2:1", "metal", null},
+			{"tsc_frisker", 0, "tsc:1:2:1", "metal", null},
+			{"tsc_procedure_shelf", 0, "plain", "metal", new double[] {0.6, 0, 2.0, 15.4, 16, 14.8}},
+			{"tsc_plan_file", 0, "plain", "metal", new double[] {0.4, 0, 1.0, 15.6, 13.6, 15.6}},
+			{"tsc_card_reader", 0, "plain", "metal", new double[] {5.6, 6.0, 0.0, 10.4, 13.4, 1.0}},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};
@@ -327,6 +341,8 @@ public final class PlantInterior {
 					return new HvacMonitorBlock(p, Integer.parseInt(k[1]), Double.parseDouble(k[2]));
 				} else if (kind.equals("damper")) {
 					return DamperBlock.create(p, shape);
+				} else if (k[0].equals("tsc")) {
+					return new TscPanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), Integer.parseInt(k[3]));
 				} else if (k[0].equals("wall")) {
 					return new WallLivePanelBlock(p, Integer.parseInt(k[1]), Double.parseDouble(k[2]));
 				} else if (k[0].equals("live")) {

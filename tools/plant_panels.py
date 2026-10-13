@@ -684,7 +684,16 @@ _FRONTS = {}
 def layout():
     """What moves on each panel (assets/jugcraft/live_panels.json, read by client/LivePanelRenderer.java): positions in
     model pixels on the piece facing north (x across to the right, y up from the floor, z out to the front)."""
-    return {key: {"width": PANELS[key]["width"], "elements": front(key).live} for key in DRAWINGS}
+    out = {}
+    for key in DRAWINGS:
+        out[key] = {"width": PANELS[key]["width"], "elements": front(key).live}
+        # A panel whose labels are different drawings (round 26, #12: the TSC's video wall displays and status boards)
+        # moves differently by variant: each variant's elements.
+        if variants(key) > 1 and not PANELS[key].get("shared"):
+            each = [front(key, v).live for v in range(variants(key))]
+            if any(e != each[0] for e in each):
+                out[key]["variants"] = each
+    return out
 
 
 def front(key, v=0):
@@ -955,19 +964,47 @@ def sb_cell(x0, step, k, linked):
     return out
 
 
+def _cut_uv(b, x0, x1, y0, y1):
+    """A box's faces where it is cut at a block's edge: a picture stretched over its whole front or back ("name!": a
+    monitor's screen, a sign) keeps to its share of the picture on each piece (round 26, #12), instead of the whole
+    picture squeezed onto each."""
+    t = b[6]
+    whole = x0 <= b[0] + 1e-6 and x1 >= b[3] - 1e-6 and y0 <= b[1] + 1e-6 and y1 >= b[4] - 1e-6
+
+    def fix(face, name):
+        if whole or not isinstance(name, str) or not name.endswith("!"):
+            return name
+        u0, u1 = (x0 - b[0]) / (b[3] - b[0]) * 16, (x1 - b[0]) / (b[3] - b[0]) * 16
+        if face == "north":
+            u0, u1 = 16 - u1, 16 - u0
+        v0, v1 = (b[4] - y1) / (b[4] - b[1]) * 16, (b[4] - y0) / (b[4] - b[1]) * 16
+        return (name[:-1], [round(u0, 4), round(v0, 4), round(u1, 4), round(v1, 4)])
+    if whole:
+        return t
+    spec = dict(t) if isinstance(t, dict) else {"*": t}
+    for face in ("south", "north"):
+        name = spec.get(face, spec.get("*"))
+        fixed = fix(face, name)
+        if fixed is not name:
+            spec[face] = fixed
+    return spec if isinstance(t, dict) or len(spec) > 1 else t
+
+
 def part(key, c, r, open_=False):
     """Block (c, r)'s share of the piece (r 0 at the floor), its front texture the drawing's slice for that block.
     open_: a panel with a door (PANELS "door"), its door open (round 26, 8e: the vital panel)."""
     width = PANELS[key]["width"]
+    top = PANELS[key].get("rows", 2) - 1
     F = f"pi_{key}_f"
     drawn = {F, f"pi_{key}_i", f"pi_{key}_o"}
     out = []
     for b in (vital_panel_boxes(open_) if key == VP_KEY else cabinet(key)):
         x0, x1 = max(b[0], c * 16), min(b[3], c * 16 + 16)
-        y0, y1 = max(b[1], r * 16), min(b[4], r * 16 + 16)
+        # The top row keeps what stands up out of it (round 26, #12: a one-row console's monitors).
+        y0, y1 = max(b[1], r * 16), (min(b[4], r * 16 + 16) if r < top else b[4])
         if x1 - x0 < 0.01 or y1 - y0 < 0.01:
             continue
-        t = b[6]
+        t = _cut_uv(b, x0, x1, y0, y1)
         if isinstance(t, dict):
             t = {k: (f"{v}_{r * width + c}" if isinstance(v, str) and v in drawn else v) for k, v in t.items()}
         # Where a see-through box goes on into the next block, its face on the cut is inside it: left out (round 25b: a
@@ -2824,3 +2861,4 @@ DRAWINGS["exhaust_fan"] = exhaust_fan
 # The relay room's cabinets and pieces (round 26, #10): they register themselves here.
 import relay_room  # noqa: E402,F401
 import hvac_room  # noqa: E402,F401  (round 26, #11: the control room HVAC equipment room's pieces)
+import tsc_room  # noqa: E402,F401  (round 26, #12: the Technical Support Center's consoles, displays and boards)

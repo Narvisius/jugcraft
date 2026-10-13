@@ -382,8 +382,9 @@ class Building(Part):
         labels = plant_panels.PANELS.get(name, {}).get("labels")
         variant = labels.index(label) if labels and label else None
         rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+        rows = plant_panels.PANELS.get(name, {}).get("rows", 2)      # (round 26, #12: a console is one row)
         for c in range(width):
-            for row in range(2):
+            for row in range(rows):
                 self.p(x + rx * c, y + row, z + rz * c, multi_state(name, facing, row * width + c, variant or None))
             self.seats.append((name, x + rx * c, y, z + rz * c, facing))
 
@@ -1478,25 +1479,18 @@ def second_floor(b, W, D, y):
     # ---- The corridor (z 18..20) and the stairs' landing (x 31..38, z 15..17).
     b.furniture("fire_extinguisher", 1, y0 + 1, 19, "west")
     b.furniture("water_cooler", W - 2, y0, 19, "east")
-    # ---- South of the corridor, with windows: the Technical Support Center (x 1..13), the kitchen (x 15..24),
+    # ---- South of the corridor, with windows: the Technical Support Center (x 1..18), the kitchen (x 20..24),
     # the washroom (x 26..29), the operations office (x 31..38).
-    for x in (14, 25, 30):
+    for x in (19, 25, 30):
         b.wall_z(x, 22, D - 2, y0, top)
-    # Technical Support Center: the meeting table, the plant's status on screens, a whiteboard.
-    b.b(1, y, 22, 13, y, D - 2, CARPET)
-    b.round_table(7, y0, 25)
-    wall_screen(b, "status_screen", 10, y0 + 1, 22, "north")
-    wall_screen(b, "plant_map_screen", 1, y0 + 1, 26, "west")
-    b.varied("whiteboard", 13, y0 + 1, 24, "east", 24)
-    b.door(7, y0, 21, "south", double=True, label="support_center")
-    # Kitchen: counters under the windows, the fridge, tables.
-    b.row(["kitchen_counter", "kitchen_sink", "coffee_counter", "microwave_counter", "kitchen_counter"], 20, y0, D - 2, "south")
-    b.stack("fridge", 22, y0, D - 2, "south", n=2)
-    for x, z in ((17, 24), (21, 24)):
-        b.varied("cafe_table", x, y0, z, "north", 6)
-        b.p(x - 1, y0, z, furniture("cafe_chair", "east"))
-        b.p(x + 1, y0, z, furniture("cafe_chair", "west"))
-    b.door(19, y0, 21, "south", double=True, label="break_room")
+    tsc(b, y, y0, top, D)
+    # Kitchen (round 26, #12: the TSC took its west half): the counters under the windows, the fridge, a table.
+    b.row(["kitchen_counter", "kitchen_sink", "coffee_counter", "microwave_counter", "kitchen_counter"], 24, y0, D - 2, "south")
+    b.stack("fridge", 24, y0, 22, "north", n=2)
+    b.varied("cafe_table", 22, y0, 25, "north", 6)
+    b.p(21, y0, 25, furniture("cafe_chair", "east"))
+    b.p(23, y0, 25, furniture("cafe_chair", "west"))
+    b.door(22, y0, 21, "south", double=True, label="break_room")
     # Washroom.
     b.row(("kitchen_sink", 2), 27, y0, D - 2, "south")
     b.door(27, y0, 21, "south", label="washroom")
@@ -1508,6 +1502,62 @@ def second_floor(b, W, D, y):
     b.furniture("filing_cabinet", W - 2, y0, 23, "east")
     b.door(34, y0, 21, "south", label="operations")
     return console
+
+
+# The Technical Support Center (round 26, #12; tools/tsc_room.py): x 1..18 of the second floor's south side, its door
+# from the corridor at x 12..13. The video wall and the emergency classification board on the west wall; three rows of
+# consoles facing them, each two consoles (z 26..28 and 22..24) either side of the aisle at z 25; the command desk behind
+# them; the NRC's room in the north-east corner behind a glazed partition; the communications console under the
+# windows in the south-east corner; the status boards over the consoles' ends on the north wall; the procedure shelves
+# and the flat file of drawings by the front wall; the frisker and the area radiation monitor inside the door, the card
+# reader outside it.
+TSC_ROWS = [(4, 28, 0), (4, 24, 1), (7, 28, 2), (7, 24, 3), (10, 28, 4), (10, 24, 5), (13, 28, 6)]
+
+
+def tsc(b, y, y0, top, D):
+    import tsc_room as T
+    b.b(1, y, 22, 18, y, D - 2, CARPET)
+    # The video wall (its displays two blocks square, clear of the procedure shelves), the classification board over it.
+    for z, label in ((28, "SPDS"), (26, "RAD MET"), (24, "ELEC EVENTS")):
+        b.panel("tsc_video_wall", 1, y0 + 1, z, "west", 2, label=label)
+    b.panel("tsc_class_board", 1, y0 + 3, 26, "west", 3)
+    # The consoles, their positions' chairs.
+    for x, z, v in TSC_ROWS:
+        b.panel("tsc_console", x, y0, z, "west", 3, label=T.PANELS["tsc_console"]["labels"][v])
+        for dz in (0, -2):
+            b.p(x + 1, y0, z + dz, furniture("operator_chair", "west"))
+    # The NRC's room: a solid pier with its sign, its glass door, the glazed partition round it; the site team's desk
+    # (its monitors and phones), chairs, and their board on the wall.
+    for k in range(y0, top + 1):
+        b.p(15, k, 22, PAINTED)
+        b.p(15, k, 23, PAINTED) if k > y0 + 1 else None
+        for x, z, f in ((15, 24, "east"), (15, 25, "east"), (16, 25, "north"), (17, 25, "north"), (18, 25, "north")):
+            b.p(x, k, z, FGLASS[f] if k <= y0 + 2 else PAINTED)
+    b.door(15, y0, 23, "east", kind="glass")
+    b.p(14, y0 + 2, 22, sign("nrc_room", "west"))
+    b.panel("tsc_nrc_desk", 18, y0, 22, "east", 3)
+    for z in (22, 23, 24):
+        b.p(17, y0, z, furniture("operator_chair", "east"))
+    b.panel("tsc_status_board", 16, y0 + 2, 22, "north", 3, label="NRC")
+    # The communications console under the windows.
+    b.panel("tsc_comms_console", 18, y0, 28, "south", 3)
+    for x in (16, 17, 18):
+        b.p(x, y0, 27, furniture("operator_chair", "south"))
+    b.furniture("printer", 15, y0, 28, "south")
+    # The status boards over the consoles' ends.
+    for x, label in ((2, "STAFFING"), (5, "PRIORITIES"), (8, "EVENTS")):
+        b.panel("tsc_status_board", x, y0 + 2, 22, "north", 3, label=label)
+    # Records: the procedure shelves by the front wall, the flat file of drawings under the windows.
+    for x in (2, 3):
+        for k in range(2):
+            b.furniture("tsc_procedure_shelf", x, y0 + k, 22, "north")
+        b.furniture("tsc_plan_file", x, y0, D - 2, "south")
+    # At the door: the frisker, the area radiation monitor; outside it, the accountability card reader.
+    b.panel("tsc_frisker", 14, y0, 22, "north", 1)
+    b.panel("tsc_area_monitor", 11, y0 + 1, 22, "north", 1)
+    b.p(14, y0 + 1, 20, furniture("tsc_card_reader", "south"))
+    b.furniture("fire_extinguisher", 18, y0 + 1, 26, "east")
+    b.door(12, y0, 21, "south", double=True, label="support_center")
 
 
 # The Control Room HVAC Equipment Room (round 26, #11; Justin: "Control Room HVAC Equipment Room", all four kinds of

@@ -127,6 +127,21 @@ public class LivePanelBlockEntity extends BlockEntity {
 	/** The panel's dampers as last found, and the seconds until it looks again (not saved). */
 	@Nullable List<BlockPos> hvDampers;
 	int hvRescan;
+	/**
+	 * The Technical Support Center (round 26, #12: TscRoom). Its classification board: the emergency class (0 none to 4),
+	 * when it was declared, when the event began and the TSC was activated (day time, -1 none), the log (each entry its
+	 * day time shifted left 5 bits, its TscRoom.EVENTS index below), what it found and read of the plant
+	 * (TscRoom.B_*, TscRoom.N_*), the conditions as last seen and how long they have been clear. An area monitor or
+	 * frisker: the dose rate where it stands (mSv/h). Synced; the class, clocks, log and conditions saved.
+	 */
+	public int tsClass, tsBits, tsFlags, tsClear;
+	public long tsDeclared = -1, tsStart = -1, tsActivated = -1;
+	public final double[] tsNums = new double[TscRoom.NUMS];
+	public final List<Long> tsEvents = new ArrayList<>();
+	public double tsValue;
+	/** What the board found of the plant, and the seconds until it looks again (not saved). */
+	TscRoom.@Nullable Found tsFound;
+	int tsRescan;
 
 	public LivePanelBlockEntity(BlockPos pos, BlockState state) {
 		super(PlantInterior.LIVE_PANEL_ENTITY, pos, state);
@@ -457,13 +472,22 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 */
 	/** The HVAC room's panels and monitors find each other (HvacRoom): as {@link #around}. */
 	List<LivePanelBlockEntity> panelsAround(ServerLevel level, Block kind) {
-		return around(level, kind);
+		return around(level, kind, REACH);
+	}
+
+	/** As {@link #panelsAround(ServerLevel, Block)} within {@code reach} blocks (round 26, #12: the TSC's board). */
+	List<LivePanelBlockEntity> panelsAround(ServerLevel level, Block kind, int reach) {
+		return around(level, kind, reach);
 	}
 
 	private List<LivePanelBlockEntity> around(ServerLevel level, Block kind) {
+		return around(level, kind, REACH);
+	}
+
+	private List<LivePanelBlockEntity> around(ServerLevel level, Block kind, int reach) {
 		BlockPos here = getBlockPos();
 		List<LivePanelBlockEntity> out = new ArrayList<>();
-		int r = (REACH >> 4) + 1;
+		int r = (reach >> 4) + 1;
 		for (int cx = (here.getX() >> 4) - r; cx <= (here.getX() >> 4) + r; cx++) {
 			for (int cz = (here.getZ() >> 4) - r; cz <= (here.getZ() >> 4) + r; cz++) {
 				LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
@@ -472,7 +496,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 				}
 				for (BlockEntity be : chunk.getBlockEntities().values()) {
 					if (be != this && be instanceof LivePanelBlockEntity other && other.getBlockState().getBlock() == kind
-							&& other.getBlockPos().distSqr(here) <= (double) REACH * REACH) {
+							&& other.getBlockPos().distSqr(here) <= (double) reach * reach) {
 						out.add(other);
 					}
 				}
@@ -494,6 +518,15 @@ public class LivePanelBlockEntity extends BlockEntity {
 	}
 
 	public void serverTick(ServerLevel level) {
+		int tsc = TscRoom.kind(getBlockState());
+		if (tsc >= 0) {
+			// The Technical Support Center's panels (round 26, #12) read the plant, or their board, once a second.
+			if (timer-- <= 0) {
+				timer = 19;
+				TscRoom.tick(this, level, tsc);
+			}
+			return;
+		}
 		int hvac = HvacRoom.kind(getBlockState());
 		if (hvac >= 0) {
 			// The control room HVAC's panel and monitors (round 26, #11) read the plant once a second, never a generator.
@@ -847,6 +880,20 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.putInt("mode", mode);
 			out.putInt("page", page);
 		}
+		if (TscRoom.kind(getBlockState()) == TscRoom.HUB) {
+			saveTsc(out);
+		}
+	}
+
+	/** The TSC board's class, clocks and log (saved and sent). */
+	private void saveTsc(ValueOutput out) {
+		out.putInt("ts_class", tsClass);
+		out.putLong("ts_declared", tsDeclared);
+		out.putLong("ts_start", tsStart);
+		out.putLong("ts_activated", tsActivated);
+		out.store("ts_events", com.mojang.serialization.Codec.LONG.listOf(), List.copyOf(tsEvents));
+		out.putInt("ts_flags", tsFlags);
+		out.putInt("ts_clear", tsClear);
 	}
 
 	@Override
@@ -881,6 +928,20 @@ public class LivePanelBlockEntity extends BlockEntity {
 		rxTemp = in.getDoubleOr("rx_temp", 30);
 		rxRods = in.getDoubleOr("rx_rods", 100);
 		rxSur = in.getDoubleOr("rx_sur", 0);
+		tsClass = in.getIntOr("ts_class", 0);
+		tsDeclared = in.getLongOr("ts_declared", -1L);
+		tsStart = in.getLongOr("ts_start", -1L);
+		tsActivated = in.getLongOr("ts_activated", -1L);
+		tsEvents.clear();
+		tsEvents.addAll(in.read("ts_events", com.mojang.serialization.Codec.LONG.listOf()).orElse(List.of()));
+		tsFlags = in.getIntOr("ts_flags", 0);
+		tsClear = in.getIntOr("ts_clear", 0);
+		tsBits = in.getIntOr("ts_bits", 0);
+		List<Double> nums = in.read("ts_nums", com.mojang.serialization.Codec.DOUBLE.listOf()).orElse(List.of());
+		for (int i = 0; i < tsNums.length; i++) {
+			tsNums[i] = i < nums.size() ? nums.get(i) : 0;
+		}
+		tsValue = in.getDoubleOr("ts_value", 0);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}
@@ -916,6 +977,19 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.putInt("hv_alarms", hvAlarms);
 			out.putDouble("hv_value", hvValue);
 			out.putLong("hv_since", hvSince);
+		}
+		int tsc = TscRoom.kind(getBlockState());
+		if (tsc == TscRoom.HUB) {
+			// The TSC board's class, clocks, log and what it read of the plant (read again after a load).
+			saveTsc(out);
+			out.putInt("ts_bits", tsBits);
+			java.util.List<Double> nums = new ArrayList<>();
+			for (double d : tsNums) {
+				nums.add(d);
+			}
+			out.store("ts_nums", com.mojang.serialization.Codec.DOUBLE.listOf(), nums);
+		} else if (tsc == TscRoom.AREA || tsc == TscRoom.FRISKER) {
+			out.putDouble("ts_value", tsValue);
 		}
 		return out.buildResult();
 	}

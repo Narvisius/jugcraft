@@ -134,7 +134,7 @@ SIGNS = {
     "inspection_corridor": "Inspection Corridor",
     "battery_room_1a": "Battery Room 1A", "battery_room_1b": "Battery Room 1B", "dc_equipment_1a": "DC Equipment 1A",
     "dc_equipment_1b": "DC Equipment 1B", "remote_shutdown": "Remote Shutdown", "support_center": "Technical Support Center",
-    "emergency_filtration": "Emergency Filtration", "cr_hvac_room": "Control Room HVAC Equipment Room",
+    "emergency_filtration": "Emergency Filtration", "cr_hvac_room": "Control Room HVAC Equipment Room", "nrc_room": "NRC Site Team",
 }
 
 OTHER["conference_table"] = "Round Meeting Table"
@@ -244,8 +244,10 @@ def _faces(t, glow):
         name = spec.get(face, spec.get("*"))
         if name is None:                     # no face there (the inside cuts of a glass top in strips)
             continue
-        if isinstance(name, tuple):          # (texture, uv): a region of a sheet (the book spines)
+        if isinstance(name, tuple):          # (texture, uv[, turn]): a region of a sheet (the book spines)
             out[face] = {"texture": f"#{name[0]}", "uv": [round(v, 4) for v in name[1]]}
+            if len(name) > 2:
+                out[face]["rotation"] = name[2]
             continue
         name, _, turn = name.partition("@")       # "name!@180": the picture turned (paper read from the far side)
         full = name.endswith("!")

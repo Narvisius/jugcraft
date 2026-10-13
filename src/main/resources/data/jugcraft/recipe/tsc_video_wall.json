@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GGG",
+    "GCG",
+    " P "
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "W": "minecraft:gray_wool"
+  },
+  "result": {
+    "id": "jugcraft:tsc_video_wall",
+    "count": 1
+  }
+}

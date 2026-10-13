@@ -45,7 +45,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341520"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341637"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -1015,6 +1015,106 @@ public class NuclearPlantGameTests {
 		helper.assertTrue(HvacRoom.emergency(HvacRoom.AUTO, off, true) && !HvacRoom.emergency(HvacRoom.NORMAL, off, true), "high radiation at an intake: emergency on AUTO, not on NORMAL");
 		helper.assertTrue(HvacRoom.countRate(0, off) == HvacRoom.RAD_BACKGROUND && HvacRoom.countRate(0.05, off) > HvacRoom.RAD_HIGH,
 				"the radiation monitors read background, and 50 uSv/h above their HIGH");
+		helper.succeed();
+	}
+
+	/**
+	 * Round 26 (#12; Justin: "Emergency class board", "Plant data video wall", "Desk screens and clocks"): the medium
+	 * plant's Technical Support Center has its classification board, the video wall's three displays, the seven consoles,
+	 * the communications console, the NRC desk, the four status boards, the area monitor and the frisker, each finding the
+	 * board. The board reads the plant: its CR HVAC panel and both intake monitors, both 480 V load centres. With the
+	 * reactor shut down there is no emergency; a trip is an UNUSUAL EVENT, the core over its high temperature alarm an
+	 * ALERT (the TSC activated), each logged; the class never steps down while it lasts, and once everything has been
+	 * clear for five minutes the emergency is terminated. Damaged fuel is a SITE AREA EMERGENCY, with the core at its
+	 * damage temperature a GENERAL EMERGENCY.
+	 */
+	@GameTest(maxTicks = 40)
+	public void mediumPlantTscClassifiesTheEmergency(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		BlockPos stake = helper.absolutePos(BlockPos.ZERO).offset(-6_000, 0, 6_000);
+		Blueprint print = Blueprint.get("nuclear_medium_pwr", false);
+		PlantBuilder.build(level, print, stake, Rotation.NONE, null, true);
+		java.util.Map<Integer, java.util.List<Integer>> found = new java.util.HashMap<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> panels = new java.util.ArrayList<>();
+		io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity hub = null;
+		BlockPos vessel = null;
+		for (int i = 0; i < print.size(); i++) {
+			BlockState state = print.state(i, Rotation.NONE);
+			BlockPos pos = stake.offset(print.offset(i, Rotation.NONE));
+			int kind = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(state);
+			if (kind >= 0 && level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel) {
+				found.computeIfAbsent(kind, k -> new java.util.ArrayList<>()).add(io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(state));
+				if (kind == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB) {
+					hub = panel;
+				} else {
+					panels.add(panel);
+				}
+			}
+			if (level.getBlockEntity(pos) instanceof EquipmentBlockEntity e && e.getBlockPos().equals(pos) && e.kind().reactor()) {
+				vessel = pos;
+			}
+		}
+		java.util.Map<Integer, java.util.List<Integer>> want = java.util.Map.of(0, java.util.List.of(0), 1, java.util.List.of(0, 1, 2), 2,
+				java.util.List.of(0, 1, 2, 3, 4, 5, 6), 3, java.util.List.of(0), 4, java.util.List.of(0), 5, java.util.List.of(0, 1, 2, 3), 6, java.util.List.of(0), 7,
+				java.util.List.of(0));
+		for (var e : want.entrySet()) {
+			java.util.List<Integer> got = new java.util.ArrayList<>(found.getOrDefault(e.getKey(), java.util.List.of()));
+			java.util.Collections.sort(got);
+			helper.assertTrue(got.equals(e.getValue()), io.github.jimbozoomer.jugcraft.nuclear.TscRoom.KEYS[e.getKey()] + ": labels " + got + ", not " + e.getValue());
+		}
+		helper.assertTrue(hub != null && vessel != null, "the TSC's board and the plant's reactor");
+		EquipmentBlockEntity reactor = (EquipmentBlockEntity) level.getBlockEntity(vessel);
+		for (var p : panels) {
+			io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(p, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(p.getBlockState()));
+			int kind = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(p.getBlockState());
+			helper.assertTrue(kind >= io.github.jimbozoomer.jugcraft.nuclear.TscRoom.AREA || hub.getBlockPos().equals(p.panel),
+					io.github.jimbozoomer.jugcraft.nuclear.TscRoom.KEYS[kind] + " at " + p.getBlockPos() + " finds the board");
+		}
+		// No emergency; the board finds the CR HVAC panel, both intakes and both load centres.
+		io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(hub, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB);
+		int need = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.B_HVAC | io.github.jimbozoomer.jugcraft.nuclear.TscRoom.B_INTAKE_A
+				| io.github.jimbozoomer.jugcraft.nuclear.TscRoom.B_INTAKE_B | io.github.jimbozoomer.jugcraft.nuclear.TscRoom.B_LC_A
+				| io.github.jimbozoomer.jugcraft.nuclear.TscRoom.B_LC_B;
+		helper.assertTrue((hub.tsBits & need) == need, "the board finds the CR HVAC, its intakes and the load centres: " + Integer.toBinaryString(hub.tsBits));
+		helper.assertTrue(hub.tsClass == 0 && hub.tsDeclared < 0, "no emergency with the reactor shut down: class " + hub.tsClass);
+		// A trip: an UNUSUAL EVENT; over the high temperature alarm: an ALERT, the TSC activated.
+		reactor.core.scrammed = true;
+		io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(hub, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB);
+		helper.assertTrue(hub.tsClass == 1 && hub.tsDeclared >= 0 && hub.tsStart >= 0, "a trip: an UNUSUAL EVENT, class " + hub.tsClass);
+		reactor.core.temperature = io.github.jimbozoomer.jugcraft.nuclear.ReactorCore.ALARM_TEMP + 5;
+		io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(hub, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB);
+		helper.assertTrue(hub.tsClass == 2 && hub.tsActivated >= 0, "the core over its alarm: an ALERT, the TSC activated: class " + hub.tsClass);
+		java.util.List<String> log = new java.util.ArrayList<>();
+		for (long e : hub.tsEvents) {
+			log.add(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.EVENTS[(int) (e & 31)]);
+		}
+		helper.assertTrue(log.containsAll(java.util.List.of("REACTOR TRIP", "NOUE DECLARED", "HIGH CORE TEMP", "ALERT DECLARED", "TSC ACTIVATED")), "the log: " + log);
+		var view = new io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View(hub, level.getOverworldClockTime(), false, false, new int[] {0, 0});
+		helper.assertTrue(view.csf[1] == 2 && view.priorities.contains("RESTORE CORE COOLING") && !view.brief.isEmpty() && "NONE".equals(view.par[0]),
+				"core cooling challenged, its priority, the next brief, no PAR at an ALERT");
+		// The reactor reset and cooled: still an ALERT until everything has been clear five minutes, then terminated.
+		reactor.core.scrammed = false;
+		reactor.core.temperature = 30;
+		io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(hub, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB);
+		helper.assertTrue(hub.tsClass == 2, "the class doesn't step down while the event lasts");
+		for (int i = 0; i < io.github.jimbozoomer.jugcraft.nuclear.TscRoom.TERMINATE / 20 + 1; i++) {
+			io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(hub, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB);
+		}
+		helper.assertTrue(hub.tsClass == 0 && hub.tsDeclared < 0 && (hub.tsEvents.get(hub.tsEvents.size() - 1) & 31) == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.E_TERMINATED,
+				"clear five minutes: the emergency terminated");
+		// Damaged fuel: a SITE AREA EMERGENCY; at the damage temperature a GENERAL EMERGENCY.
+		RelayRoom.Reactor damaged = new RelayRoom.Reactor(3, 0, 0, 400, 100, io.github.jimbozoomer.jugcraft.nuclear.ReactorCore.A_FUEL_DAMAGED, true, 0);
+		RelayRoom.Reactor melting = new RelayRoom.Reactor(3, 0, 0, io.github.jimbozoomer.jugcraft.nuclear.ReactorCore.DAMAGE_TEMP, 100,
+				io.github.jimbozoomer.jugcraft.nuclear.ReactorCore.A_FUEL_DAMAGED, true, 0);
+		double[] calm = new double[io.github.jimbozoomer.jugcraft.nuclear.TscRoom.NUMS];
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.condition(damaged, 0, calm) == 3
+				&& io.github.jimbozoomer.jugcraft.nuclear.TscRoom.condition(melting, 0, calm) == 4, "damaged fuel: SAE; at its damage temperature: GE");
+		helper.assertTrue("06:00".equals(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.clock(0)) && "12:30".equals(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.clock(6_500))
+				&& "01:15".equals(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.span(1_250)), "the clocks: the game's day from 06:00, an hour a 1,000 ticks");
 		helper.succeed();
 	}
 }

@@ -111,8 +111,9 @@ public final class EdgTelemetry {
 		public int rrLamps;
 		public String label = "";
 		/**
-		 * The control room HVAC's panel and monitors (round 26, #11: {@link #hvac}): their meters (0 to 100 of their
-		 * scales), lamps and windows (0 dark, 1 lit, 2 its second colour or flashing) and displays, by channel (hv_...).
+		 * The control room HVAC's panel and monitors (round 26, #11: {@link #hvac}) and the Technical Support Center's
+		 * panels (#12: {@link #tsc}): their meters (0 to 100 of their scales), lamps and windows (0 dark, 1 lit, 2 its
+		 * second colour or flashing) and displays, by channel (hv_..., ts_...).
 		 */
 		public final Map<String, Double> hvNumbers = new HashMap<>();
 		public final Map<String, Integer> hvLit = new HashMap<>();
@@ -124,7 +125,7 @@ public final class EdgTelemetry {
 				int i = Integer.parseInt(channel.substring(4));
 				return bmOn && i >= 0 && i < cells.length ? cells[i] : 0;
 			}
-			if (channel.startsWith("hv_")) {
+			if (channel.startsWith("hv_") || channel.startsWith("ts_")) {
 				return hvNumbers.getOrDefault(channel, 0.0);
 			}
 			return switch (channel) {
@@ -164,7 +165,7 @@ public final class EdgTelemetry {
 			if (channel.startsWith("rr_l")) {
 				return rrLamps >> Integer.parseInt(channel.substring(4)) & 1;
 			}
-			if (channel.startsWith("hv_")) {
+			if (channel.startsWith("hv_") || channel.startsWith("ts_")) {
 				return hvLit.getOrDefault(channel, 0);
 			}
 			if (channel.startsWith("ann_")) {
@@ -252,7 +253,7 @@ public final class EdgTelemetry {
 			if (channel.startsWith("relay")) {
 				return relays[channel.charAt(5) - '0'];
 			}
-			if (channel.startsWith("hv_")) {
+			if (channel.startsWith("hv_") || channel.startsWith("ts_")) {
 				return hvText.getOrDefault(channel, "");
 			}
 			if (channel.startsWith("bm_")) {
@@ -958,6 +959,359 @@ public final class EdgTelemetry {
 				o.hvLit.put("hv_a" + k, now - came[k] < HV_FLASH ? 2 : 1);
 			}
 		}
+	}
+
+	// ------------------------------------------------------------------------------------------------ the TSC (#12)
+	/** Each TSC board's view of the plant, worked out once a tick (its game tick, the view). */
+	private static final Map<BlockPos, Object[]> TSC_VIEWS = new HashMap<>();
+
+	/**
+	 * The Technical Support Center's panels (round 26, #12; nuclear/TscRoom.java): each draws its board's view of the
+	 * plant (the class and its clocks, the reactor, the CR HVAC and its intakes, the dose rate in the TSC, the electrical
+	 * plant, the log), the game's clock and weather and the players about. The area radiation monitor and the frisker
+	 * read the dose rate where they are (the frisker's count scattering as a real one's does).
+	 */
+	public static void tsc(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level, double now) {
+		int kind = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(panel.getBlockState());
+		int variant = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(panel.getBlockState());
+		Map<String, String> t = o.hvText;
+		Map<String, Integer> lit = o.hvLit;
+		double seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		if (kind == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.AREA) {
+			double mr = Math.max(0, panel.tsValue) * 100;
+			o.hvNumbers.put("ts_am_m", (Math.log10(Math.max(0.01, mr)) + 2) / 5 * 100);
+			t.put("ts_am_v", mr < 10 ? String.format(Locale.ROOT, "%.2f", mr) : mr < 1000 ? String.format(Locale.ROOT, "%.0f", mr) : String.format(Locale.ROOT, "%.1E", mr));
+			boolean high = panel.tsValue >= io.github.jimbozoomer.jugcraft.nuclear.TscRoom.AREA_HIGH;
+			boolean alert = panel.tsValue >= io.github.jimbozoomer.jugcraft.nuclear.TscRoom.AREA_ALERT;
+			lit.put("ts_am_ok", alert ? 0 : 1);
+			lit.put("ts_am_alert", alert && !high ? 1 : 0);
+			lit.put("ts_am_high", high ? 1 : 0);
+			return;
+		}
+		if (kind == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.FRISKER) {
+			double cpm = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.FRISK_BACKGROUND
+					+ Math.max(0, panel.tsValue) * 100 * io.github.jimbozoomer.jugcraft.nuclear.TscRoom.FRISK_PER_MR;
+			long bucket = (long) Math.floor(now / 10);
+			double shown = cpm + Math.sqrt(cpm) * scatter(bucket, seed);
+			o.hvNumbers.put("ts_fr_m", Math.max(0, shown) / 1000 * 100);
+			return;
+		}
+		io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity hub = kind == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB ? panel
+				: panel.panel != null && level.getBlockEntity(panel.panel) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity h
+						&& io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(h.getBlockState()) == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB ? h : null;
+		long day = level.getOverworldClockTime();
+		t.put("ts_clock", io.github.jimbozoomer.jugcraft.nuclear.TscRoom.clock(day));
+		if (hub == null) {
+			// No board in reach: the screens say so; nothing else lights.
+			for (int k = 0; k < 3; k++) {
+				t.put("ts_p" + k + "_m0_t", "NO DATA");
+				t.put("ts_c" + k + "_t", "NO DATA");
+				t.put("ts_n" + k + "_t", "NO DATA");
+			}
+			return;
+		}
+		io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v = view(hub, level, day);
+		switch (kind) {
+			case io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB -> {
+				for (int i = 0; i < 5; i++) {
+					lit.put("ts_cls" + i, v.cls == i ? 1 : 0);
+				}
+				t.put("ts_event", v.event);
+				t.put("ts_declared", v.declared);
+			}
+			case io.github.jimbozoomer.jugcraft.nuclear.TscRoom.VIDEO -> videoWall(o, v, variant);
+			case io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CONSOLE -> {
+				for (int k = 0; k < 2; k++) {
+					int pos = Math.floorMod(variant, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.POSITIONS.length);
+					t.put("ts_name" + k, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.POSITIONS[pos][k]);
+					for (int m = 0; m < 2; m++) {
+						screen(t, "ts_p" + k + "_m" + m, page(v, pos * 2 + k, m));
+					}
+				}
+			}
+			case io.github.jimbozoomer.jugcraft.nuclear.TscRoom.COMMS_DESK -> {
+				for (int k = 0; k < 3; k++) {
+					t.put("ts_cname" + k, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.COMMS[k]);
+					screen(t, "ts_c" + k, comms(v, k));
+				}
+			}
+			case io.github.jimbozoomer.jugcraft.nuclear.TscRoom.NRC -> {
+				for (int k = 0; k < 2; k++) {
+					screen(t, "ts_n" + k, nrc(v, k));
+				}
+			}
+			case io.github.jimbozoomer.jugcraft.nuclear.TscRoom.BOARD -> statusBoard(t, v, hub, variant);
+			default -> {
+			}
+		}
+	}
+
+	private static io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View view(io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity hub,
+			net.minecraft.world.level.Level level, long day) {
+		long tick = level.getGameTime();
+		Object[] cached = TSC_VIEWS.get(hub.getBlockPos());
+		if (cached != null && (long) cached[0] == tick && cached[2] == hub) {
+			return (io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View) cached[1];
+		}
+		if (TSC_VIEWS.size() > 64) {
+			TSC_VIEWS.clear();
+		}
+		io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v = new io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View(hub, day, level.isRaining(),
+				level.isThundering(), io.github.jimbozoomer.jugcraft.nuclear.TscRoom.players(level, hub.getBlockPos()));
+		TSC_VIEWS.put(hub.getBlockPos().immutable(), new Object[] {tick, v, hub});
+		return v;
+	}
+
+	private static String f0(double d) {
+		return String.format(Locale.ROOT, "%.0f", d);
+	}
+
+	/** A count rate, or dashes for a monitor not found. */
+	private static String cpm(double d) {
+		return d < 0 ? "----" : d < 1e6 ? f0(d) : String.format(Locale.ROOT, "%.1E", d);
+	}
+
+	private static String hvacMode(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v) {
+		return !v.hvac ? "----" : v.hvacEmerg ? "EMERG" : "NORMAL";
+	}
+
+	private static void videoWall(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v, int variant) {
+		Map<String, String> t = o.hvText;
+		switch (variant) {
+			case 0 -> {
+				for (int i = 0; i < 6; i++) {
+					o.hvLit.put("ts_csf" + i, v.csf[i]);
+				}
+				String[] spds = {String.format(Locale.ROOT, "%.1f", v.power), f0(v.tavg), f0(v.pzrP), f0(v.pzrL), f0(v.sg), f0(v.flow), f0(v.rods), f0(v.cet)};
+				for (int i = 0; i < spds.length; i++) {
+					t.put("ts_spds" + i, v.present ? spds[i] : "----");
+				}
+				o.hvLit.put("ts_rx_band", !v.present ? 0 : v.tripped ? 2 : 1);
+				t.put("ts_rx_state", v.rxState);
+			}
+			case 1 -> {
+				String[] rad = {cpm(v.intakeA), cpm(v.intakeB), hvacMode(v), String.format(Locale.ROOT, "%.2f", v.areaMr), v.vent,
+						String.format(Locale.ROOT, "%.1f", v.windSpeed), f0(v.windFrom), v.stability};
+				for (int i = 0; i < rad.length; i++) {
+					t.put("ts_rad" + i, rad[i]);
+				}
+				t.put("ts_downwind", "DOWNWIND  " + v.downwind);
+				o.hvLit.put("ts_release_band", v.release ? 2 : 1);
+				t.put("ts_release", v.release ? "RELEASE IN PROGRESS" : "NO RELEASE");
+			}
+			default -> {
+				for (int i = 0; i < 6; i++) {
+					t.put("ts_elec" + i, v.elec[i]);
+				}
+				soe(t, v);
+				t.put("ts_class", io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CLASS_SHORT[v.cls]);
+			}
+		}
+	}
+
+	/** The last six entries of the log. */
+	private static void soe(Map<String, String> t, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v) {
+		int n = v.events.size(), from = Math.max(0, n - 6);
+		for (int i = 0; i < 6; i++) {
+			int k = from + i;
+			t.put("ts_soe_t" + i, k < n ? v.times.get(k) : "");
+			t.put("ts_soe_e" + i, k < n ? v.events.get(k) : "");
+		}
+	}
+
+	private static void statusBoard(Map<String, String> t, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v,
+			io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity hub, int variant) {
+		switch (variant) {
+			case 0 -> {
+				// The positions' T-cards: the plant's roster (the IN column waits for its staff).
+				String[] names = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.roster(hub.getBlockPos(), 8, 0);
+				for (int i = 0; i < 8; i++) {
+					t.put("ts_staff" + i, names[i]);
+					t.put("ts_in" + i, "");
+				}
+			}
+			case 1 -> {
+				for (int i = 0; i < 7; i++) {
+					t.put("ts_pri" + i, v.priority(i));
+				}
+				t.put("ts_brief", v.brief);
+			}
+			case 2 -> {
+				soe(t, v);
+				for (int i = 0; i < 3; i++) {
+					t.put("ts_par" + i, v.par[i]);
+				}
+				t.put("ts_wind", String.format(Locale.ROOT, "%.0f DEG  %.0f MPH", v.windFrom, v.windSpeed));
+			}
+			default -> {
+				String due = v.emergency && hub.tsDeclared >= 0
+						? io.github.jimbozoomer.jugcraft.nuclear.TscRoom.clock(hub.tsDeclared + io.github.jimbozoomer.jugcraft.nuclear.TscRoom.NRC_DUE) : "--:--";
+				String[] fields = {io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CLASS_SHORT[v.cls], v.declared, due, v.event};
+				for (int i = 0; i < fields.length; i++) {
+					t.put("ts_nrc" + i, fields[i]);
+				}
+				String[] team = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.roster(hub.getBlockPos(), 2, 1);
+				t.put("ts_nrc_t0", "LEAD  " + team[0]);
+				t.put("ts_nrc_t1", "RESIDENT  " + team[1]);
+				for (int i = 0; i < 4; i++) {
+					int k = i + (v.emergency ? 1 : 0);
+					t.put("ts_nrc_f" + i, k < v.priorities.size() ? v.priorities.get(k) : "");
+				}
+			}
+		}
+	}
+
+	/** A screen: its title, then each line's name (left) and value (right). */
+	private static void screen(Map<String, String> t, String stem, String[] page) {
+		t.put(stem + "_t", page[0]);
+		for (int i = 0; i < 6; i++) {
+			t.put(stem + "_l" + i, page[1 + 2 * i]);
+			t.put(stem + "_r" + i, page[2 + 2 * i]);
+		}
+	}
+
+	/** A page: its title and up to six lines, each a name and a value (with its unit). */
+	private static String[] lines(String title, String... rows) {
+		String[] out = new String[13];
+		java.util.Arrays.fill(out, "");
+		out[0] = title;
+		for (int i = 0; i < Math.min(12, rows.length); i++) {
+			out[1 + i] = rows[i];
+		}
+		return out;
+	}
+
+	private static String[] csfPage(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v, String title) {
+		String[] rows = new String[12];
+		for (int i = 0; i < 6; i++) {
+			rows[2 * i] = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CSF_SHORT[i];
+			rows[2 * i + 1] = v.csf[i] == 0 ? "----" : v.csf[i] == 2 ? "RED" : "SAT";
+		}
+		return lines(title, rows);
+	}
+
+	private static String[] logPage(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v, String title) {
+		String[] rows = new String[12];
+		java.util.Arrays.fill(rows, "");
+		int n = v.events.size(), from = Math.max(0, n - 6);
+		for (int i = 0; from + i < n; i++) {
+			rows[2 * i] = v.times.get(from + i) + " " + v.events.get(from + i);
+		}
+		if (n == 0) {
+			rows[0] = "NO ENTRIES";
+		}
+		return lines(title, rows);
+	}
+
+	private static String[] clockPage(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v) {
+		return lines("CLOCK", "LOCAL", v.clock, "EVENT", v.event, "DECLARED", v.declared);
+	}
+
+	private static String bus(double pct) {
+		return pct < 0 ? "----" : f0(pct) + " %";
+	}
+
+	/** A console position's (0 to 13) monitor m. */
+	static String[] page(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v, int pos, int m) {
+		String cls = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CLASS_SHORT[v.cls];
+		String rx = !v.present ? "----" : v.tripped ? "TRIPPED" : v.r.status() == 2 ? "SHUTDOWN" : "AT POWER";
+		String state = v.stateDue.isEmpty() ? "--:--" : v.stateDue, nrc = v.nrcDue.isEmpty() ? "--:--" : v.nrcDue;
+		int steps = (int) Math.round(228 * (1 - v.rods / 100));
+		String stp = v.present ? steps + " STP" : "----";
+		return switch (pos * 2 + m) {
+			// OPS COORDINATOR
+			case 0 -> lines("PLANT STATUS", "REACTOR", rx, "POWER", String.format(Locale.ROOT, "%.1f %%", v.power), "TAVG", f0(v.tavg) + " F",
+					"PZR PRESS", f0(v.pzrP) + " PSIG", "PZR LEVEL", f0(v.pzrL) + " %", "SG LEVEL", f0(v.sg) + " %");
+			case 1 -> csfPage(v, "CSF STATUS");
+			// OPS RECORDER
+			case 2 -> logPage(v, "OPS LOG");
+			case 3 -> lines("TRENDS", "TAVG", f0(v.tavg) + " F", "CORE EXIT", f0(v.cet) + " F", "RODS IN", f0(v.rods) + " %", "RCS FLOW",
+					f0(v.flow) + " %", "PZR PRESS", f0(v.pzrP) + " PSIG", "SUR", String.format(Locale.ROOT, "%.2f DPM", v.r.sur()));
+			// RAD COORDINATOR
+			case 4 -> lines("RAD MONITORS", "INTAKE A", cpm(v.intakeA) + " CPM", "INTAKE B", cpm(v.intakeB) + " CPM", "TSC AREA",
+					String.format(Locale.ROOT, "%.2f MR", v.areaMr), "PLANT VENT", v.vent, "CR HVAC", hvacMode(v), "RELEASE", v.release ? "YES" : "NONE");
+			case 5 -> lines("HABITABILITY", "TSC AREA", String.format(Locale.ROOT, "%.2f MR", v.areaMr), "FRISKER BKG",
+					f0(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.FRISK_BACKGROUND + v.areaMr * io.github.jimbozoomer.jugcraft.nuclear.TscRoom.FRISK_PER_MR) + " CPM",
+					"CR HVAC", hvacMode(v), "INTAKE HIGH", Math.max(v.intakeA, v.intakeB) >= io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.RAD_HIGH ? "YES" : "NO",
+					"AREA LIMIT", "15 MR");
+			// DOSE ASSESSMENT
+			case 6 -> lines("MET DATA", "WIND FROM", f0(v.windFrom) + " DEG", "SPEED", String.format(Locale.ROOT, "%.1f MPH", v.windSpeed), "STABILITY",
+					v.stability, "DOWNWIND", v.downwind, "SKY", v.sky);
+			case 7 -> lines("RELEASE", "FUEL", v.fuel ? "DAMAGED" : "INTACT", "RELEASE", v.release ? "IN PROGRESS" : "NONE", "PLANT VENT", v.vent,
+					"PAR", v.par[0]);
+			// ENGINEERING COORD
+			case 8 -> lines("CORE", "CORE EXIT", f0(v.cet) + " F", "TAVG", f0(v.tavg) + " F", "DECAY HEAT", String.format(Locale.ROOT, "%.1f %%", v.decay),
+					"RODS IN", f0(v.rods) + " %", "SUBCOOLING", f0(v.subcooling) + " F", "FUEL", v.fuel ? "DAMAGED" : "INTACT");
+			case 9 -> csfPage(v, "CSF STATUS");
+			// REACTOR ENGINEER
+			case 10 -> lines("NUCLEAR INST", "SOURCE RNG", !v.present ? "----" : v.r.p10() ? "OFF" : String.format(Locale.ROOT, "%.1E CPS", v.r.srCps()),
+					"INTERM RNG", v.present ? String.format(Locale.ROOT, "%.1E A", v.r.irAmps()) : "----", "POWER RNG", String.format(Locale.ROOT, "%.1f %%", v.power),
+					"SUR", String.format(Locale.ROOT, "%.2f DPM", v.r.sur()), "SHUTDOWN", v.present && v.r.status() != 1 ? "YES" : "NO");
+			case 11 -> lines("ROD POSITION", "CONTROL A", stp, "CONTROL B", stp, "CONTROL C", stp, "CONTROL D", stp, "SHUTDOWN", stp);
+			// ELECTRICAL ENGINEER
+			case 12 -> lines("ELECTRICAL", "MAIN GEN", v.elec[0] + " MWE", "MAIN XFMR", v.elec[1], "LC 1A", v.elec[2], "LC 1B", v.elec[3], "EDG 1A",
+					v.elec[4], "EDG 1B", v.elec[5]);
+			case 13 -> lines("BUSES", "LC 1A BUS", bus(v.buses[0]), "LC 1B BUS", bus(v.buses[1]), "MCC 1A BUS", bus(v.buses[2]), "MCC 1B BUS", bus(v.buses[3]));
+			// MECHANICAL ENGINEER
+			case 14 -> lines("SECONDARY", "SG LEVEL", f0(v.sg) + " %", "RCS FLOW", f0(v.flow) + " %", "TURBINE",
+					!v.present ? "----" : v.tripped ? "TRIPPED" : v.r.status() == 1 ? "ON LINE" : "OFF LINE", "MAIN GEN", v.elec[0] + " MWE", "HEAT SINK",
+					v.csf[2] == 2 ? "RED" : v.csf[2] == 1 ? "SAT" : "----");
+			case 15 -> lines("CORE COOLING", "CORE EXIT", f0(v.cet) + " F", "TAVG", f0(v.tavg) + " F", "SUBCOOLING", f0(v.subcooling) + " F", "HEAT SINK",
+					v.csf[2] == 2 ? "RED" : v.csf[2] == 1 ? "SAT" : "----");
+			// MAINTENANCE COORD
+			case 16 -> lines("EQUIPMENT", "EDG 1A", v.elec[4], "EDG 1B", v.elec[5], "LC 1A BUS", bus(v.buses[0]), "LC 1B BUS", bus(v.buses[1]),
+					"MCC 1A BUS", bus(v.buses[2]), "MCC 1B BUS", bus(v.buses[3]));
+			case 17 -> lines("CR HVAC", "MODE", hvacMode(v), "CREFS A", !v.hvac ? "----" : v.hvacEmerg ? "RUNNING" : "STBY", "CREFS B",
+					!v.hvac ? "----" : v.hvacEmerg ? "RUNNING" : "STBY", "INTAKE A", cpm(v.intakeA) + " CPM", "INTAKE B", cpm(v.intakeB) + " CPM");
+			// MAINT PLANNER
+			case 18 -> {
+				String[] rows = new String[12];
+				java.util.Arrays.fill(rows, "");
+				for (int i = 0; i < 6 && i < v.priorities.size(); i++) {
+					rows[2 * i] = v.priority(i);
+				}
+				yield lines("PRIORITIES", rows);
+			}
+			case 19 -> clockPage(v);
+			// ADMIN COORDINATOR
+			case 20 -> lines("NOTIFICATIONS", "CLASS", cls, "DECLARED", v.declared, "STATE/LOCAL BY", state, "NRC ENS BY", nrc);
+			case 21 -> lines("TSC", "ACTIVATED", v.activated, "IN TSC NOW", String.valueOf(v.inTsc), "LOCAL", v.clock);
+			// SECURITY COORD
+			case 22 -> lines("SECURITY", "CLASS", cls, "IN TSC NOW", String.valueOf(v.inTsc), "ON SITE NOW", String.valueOf(v.onSite));
+			case 23 -> clockPage(v);
+			// SITE EMERGENCY MGR
+			case 24 -> lines("EMERGENCY", "CLASS", cls, "DECLARED", v.declared, "EVENT TIME", v.event, "STATE/LOCAL BY", state, "NRC ENS BY", nrc,
+					"PAR", v.par[0]);
+			case 25 -> csfPage(v, "CSF SUMMARY");
+			// TSC LOG KEEPER
+			case 26 -> logPage(v, "TSC LOG");
+			default -> clockPage(v);
+		};
+	}
+
+	/** The communications console's screens: the ENS, HPN and offsite communicators'. */
+	static String[] comms(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v, int k) {
+		String cls = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CLASS_SHORT[v.cls];
+		String state = v.stateDue.isEmpty() ? "--:--" : v.stateDue, nrc = v.nrcDue.isEmpty() ? "--:--" : v.nrcDue;
+		return switch (k) {
+			case 0 -> lines("ENS - NRC OPS CENTER", "CLASS", cls, "DECLARED", v.declared, "NOTIFY BY", nrc, "EVENT TIME", v.event);
+			case 1 -> lines("HPN - NRC HEALTH PHYS", "LINE", v.cls >= 3 ? "OPEN" : "STANDBY", "RELEASE", v.release ? "IN PROGRESS" : "NONE", "INTAKE A",
+					cpm(v.intakeA) + " CPM", "WIND FROM", f0(v.windFrom) + " DEG");
+			default -> lines("OFFSITE NOTIFICATIONS", "CLASS", cls, "DECLARED", v.declared, "STATE/LOCAL BY", state, "PAR", v.par[0], "WIND FROM",
+					f0(v.windFrom) + " DEG");
+		};
+	}
+
+	/** The NRC desk's two screens. */
+	static String[] nrc(io.github.jimbozoomer.jugcraft.nuclear.TscRoom.View v, int k) {
+		String cls = io.github.jimbozoomer.jugcraft.nuclear.TscRoom.CLASS_SHORT[v.cls];
+		if (k == 0) {
+			return lines("NRC SITE TEAM", "CLASS", cls, "DECLARED", v.declared, "ENS CALL BY", v.nrcDue.isEmpty() ? "--:--" : v.nrcDue, "EVENT TIME", v.event,
+					"PAR", v.par[0]);
+		}
+		return lines("PLANT STATUS", "REACTOR", !v.present ? "----" : v.tripped ? "TRIPPED" : v.r.status() == 2 ? "SHUTDOWN" : "AT POWER", "CORE EXIT",
+				f0(v.cet) + " F", "CORE COOLING", v.csf[1] == 2 ? "RED" : v.csf[1] == 1 ? "SAT" : "----", "PZR PRESS", f0(v.pzrP) + " PSIG", "CR HVAC",
+				hvacMode(v), "RELEASE", v.release ? "IN PROGRESS" : "NONE");
 	}
 
 	/** A count's scatter, about -1.7 to 1.7 (a sum of three uniform draws), the same for every player for a bucket. */

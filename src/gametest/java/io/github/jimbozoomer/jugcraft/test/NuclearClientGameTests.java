@@ -896,6 +896,63 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						"jugcraft_plant_medium_r26_hvac_panel_emergency");
 				shotAt(context, singleplayer, wx.applyAsInt(136 + 6), y + 24, wz.applyAsInt(88 + 6), wx.applyAsInt(136 + 4), y + 25, wz.applyAsInt(88 + 6),
 						"jugcraft_plant_medium_r26_hvac_efu_a_emergency");
+				// Round 26 (#12): the Technical Support Center (the second floor, walked at building y 15): the room from the
+				// NRC room's corner, the video wall, a console from behind its chair, the status boards, the communications
+				// console, the NRC desk, the door with the frisker and area monitor; then on an ALERT (the reactor tripped
+				// over its high temperature alarm) the video wall, the classification board and the boards again.
+				int[][] tscShots = {{17, 15, 23, 1, 17, 26}, {7, 15, 25, 1, 17, 25}, {6, 15, 27, 3, 15, 27}, {6, 15, 25, 6, 17, 21},
+						{17, 15, 26, 17, 15, 29}, {16, 15, 24, 19, 15, 23}, {12, 15, 25, 13, 16, 21}};
+				String[] tscNames = {"room", "video_wall", "console", "boards", "comms", "nrc", "door"};
+				java.util.concurrent.atomic.AtomicReference<BlockPos> tripped = new java.util.concurrent.atomic.AtomicReference<>();
+				for (int i = 0; i < tscShots.length; i++) {
+					int[] t = tscShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(136 + t[0]), y + t[1], wz.applyAsInt(88 + t[2]), wx.applyAsInt(136 + t[3]), y + t[4],
+							wz.applyAsInt(88 + t[5]), "jugcraft_plant_medium_r26_tsc_" + tscNames[i]);
+				}
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity hub = null;
+					for (BlockPos at : BlockPos.betweenClosed(new BlockPos(wx.applyAsInt(136), y + 14, wz.applyAsInt(88 + 21)),
+							new BlockPos(wx.applyAsInt(136 + 3), y + 20, wz.applyAsInt(88 + 29)))) {
+						if (level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity p
+								&& io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(p.getBlockState()) == io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB) {
+							hub = p;
+						}
+					}
+					if (hub == null) {
+						return;
+					}
+					BlockPos here = hub.getBlockPos();
+					io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity vessel = null;
+					for (var e : io.github.jimbozoomer.jugcraft.nuclear.EquipmentRegistry.of(level).anchors().entrySet()) {
+						if (e.getValue().kind().reactor() && level.getBlockEntity(e.getKey()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v
+								&& (vessel == null || e.getKey().distSqr(here) < vessel.getBlockPos().distSqr(here))) {
+							vessel = v;
+						}
+					}
+					if (vessel != null) {
+						tripped.set(vessel.getBlockPos());
+						vessel.core.scrammed = true;
+						vessel.core.temperature = io.github.jimbozoomer.jugcraft.nuclear.ReactorCore.ALARM_TEMP + 5;
+					}
+					io.github.jimbozoomer.jugcraft.nuclear.TscRoom.tick(hub, level, io.github.jimbozoomer.jugcraft.nuclear.TscRoom.HUB);
+				});
+				context.waitTicks(60);
+				shotAt(context, singleplayer, wx.applyAsInt(136 + 7), y + 15, wz.applyAsInt(88 + 25), wx.applyAsInt(136 + 1), y + 17, wz.applyAsInt(88 + 25),
+						"jugcraft_plant_medium_r26_tsc_video_wall_alert");
+				shotAt(context, singleplayer, wx.applyAsInt(136 + 6), y + 16, wz.applyAsInt(88 + 25), wx.applyAsInt(136 + 1), y + 18, wz.applyAsInt(88 + 25),
+						"jugcraft_plant_medium_r26_tsc_class_board_alert");
+				shotAt(context, singleplayer, wx.applyAsInt(136 + 6), y + 15, wz.applyAsInt(88 + 25), wx.applyAsInt(136 + 6), y + 17, wz.applyAsInt(88 + 21),
+						"jugcraft_plant_medium_r26_tsc_boards_alert");
+				shotAt(context, singleplayer, wx.applyAsInt(136 + 6), y + 15, wz.applyAsInt(88 + 27), wx.applyAsInt(136 + 3), y + 15, wz.applyAsInt(88 + 27),
+						"jugcraft_plant_medium_r26_tsc_console_alert");
+				// The reactor reset (the TSC's ALERT stays declared until it is terminated) for the shots after these.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					if (tripped.get() != null && level.getBlockEntity(tripped.get()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v) {
+						v.core.scrammed = false;
+					}
+				});
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {

@@ -62,7 +62,11 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			double[] on, double[] off, boolean open, double warn, int blades, double width) {
 	}
 
-	record Layout(int width, List<Element> elements) {
+	/** A panel's moving parts; a panel whose labels are different drawings has each variant's (round 26, #12). */
+	record Layout(int width, List<Element> elements, List<List<Element>> variants) {
+		List<Element> elements(int variant) {
+			return variant > 0 && variant < variants.size() ? variants.get(variant) : elements;
+		}
 	}
 
 	record Needle(double x, double y, double z, double angle, double length, double tail, double width, double hub, int colour) {
@@ -139,6 +143,9 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.kind(panel.getBlockState()) >= 0) {
 				// The control room HVAC's panel and monitors (round 26, #11): the room as its panel found it.
 				EdgTelemetry.hvac(snap, panel, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(panel.getBlockState()) >= 0) {
+				// The Technical Support Center (round 26, #12): the plant as its classification board found it.
+				EdgTelemetry.tsc(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
 				EdgTelemetry.inverter(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(panel.getBlockState())) {
@@ -162,7 +169,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		boolean open = panel.getBlockState().hasProperty(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.OPEN)
 				&& panel.getBlockState().getValue(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.OPEN);
 		boolean blink = ((long) (now / 5)) % 2 == 0;
-		for (Element e : layout.elements()) {
+		for (Element e : layout.elements(io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(panel.getBlockState()))) {
 			if (e.open() && !open) {
 				continue;
 			}
@@ -380,7 +387,17 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 						for (JsonElement el : panel.getAsJsonArray("elements")) {
 							elements.add(element(el.getAsJsonObject()));
 						}
-						out.put(entry.getKey(), new Layout(panel.get("width").getAsInt(), elements));
+						List<List<Element>> variants = new ArrayList<>();
+						if (panel.has("variants")) {
+							for (JsonElement v : panel.getAsJsonArray("variants")) {
+								List<Element> each = new ArrayList<>();
+								for (JsonElement el : v.getAsJsonArray()) {
+									each.add(element(el.getAsJsonObject()));
+								}
+								variants.add(each);
+							}
+						}
+						out.put(entry.getKey(), new Layout(panel.get("width").getAsInt(), elements, variants));
 					}
 				} catch (Exception e) {
 					Jugcraft.LOGGER.warn("Could not read {}", LAYOUT, e);

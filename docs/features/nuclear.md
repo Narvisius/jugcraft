@@ -304,6 +304,46 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
     hangers and trapezes, riser, elbows, tee, tap, CHWS and CHWR labels), **Chilled Water Expansion Tank**, **Chemical
     Feed Pot**, **Refrigerant Sensor**, **Small Pipe** and the **Spare Filter Rack** (HEPA cells, charcoal trays,
     prefilters in their cartons).
+- **The Technical Support Center** (round 26, #12; `nuclear/TscRoom.java`, `nuclear/TscPanelBlock.java`,
+  `tools/tsc_room.py`). Its **Emergency Classification Board** is the room's hub: once a second it reads the plant (the
+  nearest reactor; the control room HVAC panel and its intake radiation monitors within 48 blocks; the TSC's area
+  monitor; the emergency diesel generators, 480 V load centres, motor control centres and main transformer within 192
+  blocks), works out the emergency class and keeps the event's clocks and log. Every other TSC panel links to its
+  nearest board within 24 blocks.
+  - **The class** (a simplified set of emergency action levels): UNUSUAL EVENT on a reactor trip or the CR HVAC in
+    emergency; ALERT on the core at its high temperature alarm (350 degrees), HIGH radiation at a CR intake or the
+    TSC's area monitor at its alert (2.5 mR/hr); SITE AREA EMERGENCY on damaged fuel; GENERAL EMERGENCY on damaged fuel
+    with the core at its damage temperature or 100 mR/hr in the TSC. The class only goes up while the event lasts; once
+    every condition has been clear for five minutes the emergency is terminated. The TSC is activated at an ALERT.
+    Times are the game's clock (the day starts at 06:00, an hour a 1,000 ticks): the state and local notifications are
+    due 15 minutes after the declaration, the NRC's an hour, a briefing every half hour.
+  - The board lights the class (NO EMERGENCY to GENERAL EMERGENCY) with the local time, the event clock and when it
+    was declared. The **TSC Video Wall Displays** (three, each two blocks square): the safety parameter display (the
+    six critical safety functions green or red, the reactor's parameters, REACTOR AT POWER or TRIPPED), radiological
+    and met data (the intakes, CR HVAC mode, the TSC's dose rate, the plant vent, the wind and the downwind sector, the
+    release), electrical and events (the main generator, main transformer, both load centres and both diesels, the
+    last six entries of the log, the class).
+  - **TSC Consoles** (call-centre desks three blocks wide, two positions each with two live monitors, keyboards,
+    phones, headsets, binders, logs, the position names on plates): Ops Coordinator and Recorder, Rad Coordinator and
+    Dose Assessment, Engineering Coordinator and Reactor Engineer, Electrical and Mechanical Engineers, Maintenance
+    Coordinator and Planner, Admin and Security Coordinators, Site Emergency Manager and TSC Log Keeper. Each
+    position's screens show its own pages (plant status, CSF status, the log, trends, rad monitors, habitability, met
+    data, release, core, nuclear instruments, rod positions, electrical, buses, secondary, core cooling, equipment, CR
+    HVAC, priorities, notifications, the clocks). The **TSC Communications Console**: the ENS (to the NRC), HPN and
+    offsite communicators, each with its phones and screen, and the radio base station. The **NRC Site Team Desk** in
+    the glass-walled NRC room: a glass desk with two live monitors, phones and a speakerphone.
+  - **TSC Status Boards** (whiteboards): STAFFING (the positions and the plant's roster of names on T-cards; the IN
+    column waits for the plant's staff), PRIORITIES (worked out from the plant: the TSC activated, each challenged
+    safety function, the CR HVAC, the notifications still due, the next briefing), EVENTS (the sequence of events, the
+    protective action recommendation and the wind), NRC (the class, its clocks, the NRC team, what they follow up).
+  - **Area Radiation Monitor** (RM-TSC-1): the dose rate where it hangs on a log meter (0.01 to 1,000 mR/hr) and a
+    display; NORMAL, ALERT (2.5 mR/hr) and HIGH (15 mR/hr). **Frisking Station**: the ratemeter's count (40 cpm
+    background, 3,300 cpm a mR/hr, scattering as a real count does) under its FRISK HERE sign.
+  - Right-click a TSC panel for the class, when it was declared, the reactor and the CR HVAC (a monitor for its dose
+    rate); sneak and right-click one with labels (a video wall display, a status board, a console) with an empty hand
+    to step it to its next.
+  - The pieces: **Procedure Shelf** (the emergency plan's binders, procedures and technical specifications, their
+    spines labelled), **Drawing Flat File**, **Accountability Card Reader**.
 - **Ladder Cable Tray** (round 26): 24-inch galvanized ladder tray (rails, rungs, black power cables on them) hung under
   the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend (with or without a
   drop in it), and drops where a conduit comes up under it and a cable goes down into it (one or two, each with or
@@ -459,7 +499,10 @@ blueprint (for players who lay out their own plant).
     blocks wide (the reactor operator's, the balance of plant operator's and the senior reactor operator's behind
     them), each with its own screens, keyboards and phone; the shift supervisor's glazed office with the executive
     desks along its glass; procedures on shelves along the back wall and the office copier. Across the corridor the
-    Technical Support Center, kitchen, washroom and operations office, with windows.
+    Technical Support Center (round 26, #12, enlarged into the old kitchen: the video wall and classification board on
+    its west wall, seven consoles in rows, the communications console under the south windows, the glass-walled NRC
+    room, the status boards and procedure shelves on its north wall, the frisker, area monitor and card reader at its
+    door), the smaller kitchen, washroom and operations office, with windows.
   - Top floor: the Control Room HVAC Equipment Room (round 26, #11; its sign at the stair door). Each train (A west,
     B east) has its intake plenum against its louvres in the north wall (with the radiation monitor's sample point,
     access door and the monitors on the wall beside it), its emergency filtration unit and air handler, the ducts

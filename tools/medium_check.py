@@ -23,7 +23,8 @@ B, O = P.BELOW, P.OVER
 SEATED = {"sofa", "locker_bench", "stretcher"}
 WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
              "fire_extinguisher", "exhaust_fan", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash",
-             "sign_relay_row_a", "sign_relay_row_b", "sign_relay_row_c", "sign_relay_row_d", "hv_rad_monitor", "hv_tox_monitor", "hv_refrig_monitor"}
+             "sign_relay_row_a", "sign_relay_row_b", "sign_relay_row_c", "sign_relay_row_d", "hv_rad_monitor", "hv_tox_monitor", "hv_refrig_monitor",
+             "tsc_video_wall", "tsc_class_board", "tsc_status_board", "tsc_area_monitor", "tsc_card_reader"}
 USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
 
 
@@ -299,6 +300,7 @@ def check(site, quiet=False):
     problems += battery_rooms(site, g)
     problems += relay_room(site, g)
     problems += hvac_room(site, g)
+    problems += tsc_room(site, g)
     if not quiet:
         for p in problems:
             print(p)
@@ -676,6 +678,41 @@ def hvac_room(site, g):
             if fam == "small" and name_at(n) in small_ends:
                 continue
             problems.append(f"{name} at {c}: its {f} opening meets {name_at(n) or 'air'}")
+    return problems
+
+
+def tsc_room(site, g):
+    """The Technical Support Center (round 26, #12): its classification board, the video wall's three displays, the
+    seven consoles (each pair of positions once), the communications console, the NRC desk, the four status boards,
+    the area radiation monitor and the frisker, each within reach of the board (nuclear/TscRoom.REACH); its sign and the
+    NRC room's."""
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+    problems = []
+
+    def blocks(name, part=0):
+        out = []
+        for k, (st, _) in P.MATERIALS.items():
+            if kinds[k] == name and (f"part={part}," in st or f"part={part}]" in st):
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                out += [(int(x), int(y) - B, int(z) - O, v) for x, y, z in np.argwhere(g == k)]
+        return out
+    hubs = blocks("tsc_class_board")
+    if len(hubs) != 1:
+        problems.append(f"{len(hubs)} TSC classification boards, not 1")
+        return problems
+    hx, hy, hz, _ = hubs[0]
+    for name, want in (("tsc_video_wall", [0, 1, 2]), ("tsc_console", list(range(7))), ("tsc_comms_console", [0]), ("tsc_nrc_desk", [0]),
+                       ("tsc_status_board", [0, 1, 2, 3]), ("tsc_area_monitor", [0]), ("tsc_frisker", [0])):
+        got = blocks(name)
+        if sorted(v for *_, v in got) != want:
+            problems.append(f"{name}: labels {sorted(v for *_, v in got)}, not {want}")
+        for x, y, z, v in got:
+            if (x - hx) ** 2 + (y - hy) ** 2 + (z - hz) ** 2 > 24 ** 2:
+                problems.append(f"{name} {v} at {(x, y, z)} is out of its board's reach")
+    for label, what in (("support_center", "Technical Support Center"), ("nrc_room", "NRC Site Team")):
+        signs = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if f"label={label}" in st)
+        if signs < 1:
+            problems.append(f"no {what} sign")
     return problems
 
 
