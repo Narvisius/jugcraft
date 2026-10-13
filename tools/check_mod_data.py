@@ -176,7 +176,8 @@ def texture(ref):
 
 
 # The special item renderers registered by client/StructureItemRenderers.java.
-SPECIAL_ITEM_RENDERERS = {f"{MOD}:equipment", f"{MOD}:power_line", f"{MOD}:drone"}
+# The special item models: the 3D miniatures (client/StructureItemRenderers.java), and GeckoLib's animated items.
+SPECIAL_ITEM_RENDERERS = {f"{MOD}:equipment", f"{MOD}:power_line", f"{MOD}:drone", "geckolib:geckolib"}
 
 
 def model(ref):
