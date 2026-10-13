@@ -212,6 +212,26 @@ public final class EquipmentPlacement {
 				}
 				return InteractionResult.SUCCESS;
 			}
+			case CR_FILTRATION_UNIT, CR_AIR_HANDLER, CR_CHILLER, CHW_PUMP -> {
+				// A control room HVAC machine (round 26, #11): its tag and state; sneaking with an empty hand, its other
+				// train's tag. A block in hand is placed against it.
+				if (stack.getItem() instanceof net.minecraft.world.item.BlockItem) {
+					return InteractionResult.PASS;
+				}
+				if (!level.isClientSide()) {
+					net.minecraft.world.level.block.state.BlockState state = level.getBlockState(anchor);
+					int train = HvacRoom.train(state);
+					if (player.isShiftKeyDown() && stack.isEmpty()) {
+						train = 1 - train;
+						level.setBlock(anchor, state.setValue(EquipmentAnchorBlock.VARIANT, train), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+						player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.relay_relabel", HvacRoom.tag(HvacRoom.part(kind), train)));
+					} else {
+						player.sendOverlayMessage(Component.translatable(equipment.running ? "message.jugcraft.nuclear.hvac_running"
+								: "message.jugcraft.nuclear.hvac_standby", HvacRoom.tag(HvacRoom.part(kind), train)));
+					}
+				}
+				return InteractionResult.SUCCESS;
+			}
 			default -> {
 				return InteractionResult.PASS;
 			}

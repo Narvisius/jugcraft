@@ -110,12 +110,22 @@ public final class EdgTelemetry {
 		public final double[] rr = new double[2];
 		public int rrLamps;
 		public String label = "";
+		/**
+		 * The control room HVAC's panel and monitors (round 26, #11: {@link #hvac}): their meters (0 to 100 of their
+		 * scales), lamps and windows (0 dark, 1 lit, 2 its second colour or flashing) and displays, by channel (hv_...).
+		 */
+		public final Map<String, Double> hvNumbers = new HashMap<>();
+		public final Map<String, Integer> hvLit = new HashMap<>();
+		public final Map<String, String> hvText = new HashMap<>();
 
 		/** A meter's or gauge's reading. */
 		public double number(String channel) {
 			if (channel.startsWith("bm_c")) {
 				int i = Integer.parseInt(channel.substring(4));
 				return bmOn && i >= 0 && i < cells.length ? cells[i] : 0;
+			}
+			if (channel.startsWith("hv_")) {
+				return hvNumbers.getOrDefault(channel, 0.0);
 			}
 			return switch (channel) {
 				case "rpm" -> rpm;
@@ -153,6 +163,9 @@ public final class EdgTelemetry {
 		public int lit(String channel) {
 			if (channel.startsWith("rr_l")) {
 				return rrLamps >> Integer.parseInt(channel.substring(4)) & 1;
+			}
+			if (channel.startsWith("hv_")) {
+				return hvLit.getOrDefault(channel, 0);
 			}
 			if (channel.startsWith("ann_")) {
 				int i = switch (channel) {
@@ -238,6 +251,9 @@ public final class EdgTelemetry {
 			}
 			if (channel.startsWith("relay")) {
 				return relays[channel.charAt(5) - '0'];
+			}
+			if (channel.startsWith("hv_")) {
+				return hvText.getOrDefault(channel, "");
 			}
 			if (channel.startsWith("bm_")) {
 				// The battery monitor's screen, dark with no DC.
@@ -820,6 +836,143 @@ public final class EdgTelemetry {
 		o.rr[0] = r.m0() + wander * noise(t * 0.3, seed, 11);
 		o.rr[1] = r.m1() + wander * noise(t * 0.25, seed, 12);
 		o.rrLamps = r.lamps();
+	}
+
+	// ------------------------------------------------------------------ the control room HVAC (round 26, #11)
+
+	/**
+	 * The control room's differential pressure (inches of water) normally (the air handlers' outside air) and on
+	 * filtered air (the filtration units' booster fans: 1/8 inch, a little more with both); its temperature (deg F)
+	 * cooled, with an air handler but no chilled water, and with no air moving; chilled water supply (deg F) with a
+	 * chiller running and without; and how fast each follows (game ticks).
+	 */
+	static final double HV_DP_NORMAL = 0.06, HV_DP_EMERGENCY = 0.125, HV_TEMP = 72.5, HV_TEMP_WARM = 82, HV_TEMP_HOT = 86, HV_CHW = 44.2,
+			HV_CHW_WARM = 58;
+	static final double HV_TAU_DP = 60, HV_TAU_FLOW = 80, HV_TAU_TEMP = 2400, HV_TAU_CHW = 900;
+	/** An alarm window flashes this long after it comes in, then stays lit (game ticks). */
+	static final double HV_FLASH = 200;
+	/** Each HVAC panel's readings as last drawn (pressure, temperature, chilled water, flow, when), and when each window came in. */
+	private static final Map<BlockPos, double[]> HVAC = new HashMap<>();
+	private static final Map<BlockPos, double[]> HVAC_ALARMS = new HashMap<>();
+
+	/**
+	 * The control room HVAC's panel and wall monitors (round 26, #11; nuclear/HvacRoom.java): the panel's mimic and
+	 * annunciator as the server found its room, its selector and lamps, and its meters following what runs; a radiation
+	 * monitor's count rate (its scatter, a 30 second count's, new every two seconds); the toxic gas analysers' and the
+	 * refrigerant monitor's clean air.
+	 */
+	public static void hvac(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, double now) {
+		int kind = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.kind(panel.getBlockState());
+		int variant = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(panel.getBlockState());
+		o.label = variant == 1 ? "B" : "A";
+		double seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		long bucket = (long) Math.floor(now / 40);
+		double frac = now / 40 - bucket;
+		switch (kind) {
+			case io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.CONTROL -> hvacPanel(o, panel, now, seed);
+			case io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.RAD -> {
+				double cpm = Math.max(io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.RAD_BACKGROUND, panel.hvValue);
+				double sd = 1 / Math.sqrt(Math.max(1, cpm * 0.5));
+				double a = Math.max(1, cpm * (1 + sd * scatter(bucket, seed))), b = Math.max(1, cpm * (1 + sd * scatter(bucket + 1, seed)));
+				double needle = a + (b - a) * frac;
+				o.hvNumbers.put("hv_rad_m", (Math.log10(Math.max(10, needle)) - 1) / 5 * 100);
+				o.hvText.put("hv_rad_cpm", a < 999_999.5 ? String.format(Locale.ROOT, "%.0f", a) : String.format(Locale.ROOT, "%.2E", a));
+				boolean high = cpm >= io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.RAD_HIGH;
+				boolean alert = cpm >= io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.RAD_ALERT;
+				o.hvLit.put("hv_rad_ok", alert ? 0 : 1);
+				o.hvLit.put("hv_rad_alert", alert && !high ? 1 : 0);
+				o.hvLit.put("hv_rad_high", high ? 1 : 0);
+			}
+			case io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.TOX -> {
+				// Clean air: chlorine and ammonia at the analyser's zero, now and then its last digit.
+				o.hvText.put("hv_cl2", String.format(Locale.ROOT, "%.1f", Math.max(0, 0.02 + 0.04 * scatter(bucket, seed + 3))));
+				o.hvText.put("hv_nh3", String.format(Locale.ROOT, "%.0f", Math.max(0, 0.2 + 0.3 * scatter(bucket, seed + 7))));
+				o.hvLit.put("hv_tox_ok", 1);
+			}
+			default -> {
+				// No leak: each chiller's sensor reads the room's few ppm of R-134a.
+				o.hvText.put("hv_rf_a", String.format(Locale.ROOT, "%.0f", Math.max(0, 1.2 + 0.8 * scatter(bucket, seed + 11))));
+				o.hvText.put("hv_rf_b", String.format(Locale.ROOT, "%.0f", Math.max(0, 1.0 + 0.8 * scatter(bucket, seed + 13))));
+				o.hvLit.put("hv_rf_ok", 1);
+			}
+		}
+	}
+
+	private static void hvacPanel(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, double now, double seed) {
+		int s = panel.hvState, a = panel.hvAlarms;
+		boolean emergency = (a & io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.EMERGENCY_ON) != 0;
+		int efus = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.running(s, io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.EFU);
+		int ahus = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.running(s, io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.AHU);
+		int chillers = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.running(s, io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.CH);
+		boolean cooled = false;
+		for (int t = 0; t < 2; t++) {
+			cooled |= io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.on(s, io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.AHU, t)
+					&& io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.on(s, io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.CH, t);
+		}
+		double dp = emergency ? (efus > 0 ? HV_DP_EMERGENCY + 0.01 * (efus - 1) : 0.02) : ahus > 0 ? HV_DP_NORMAL : 0;
+		double temp = cooled ? HV_TEMP : ahus > 0 ? HV_TEMP_WARM : HV_TEMP_HOT;
+		double chw = chillers > 0 ? HV_CHW : HV_CHW_WARM;
+		double flow = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.EFU_CFM * efus;
+		BlockPos at = panel.getBlockPos().immutable();
+		double[] m = HVAC.computeIfAbsent(at, k -> new double[] {dp, temp, chw, flow, now});
+		double dt = Math.max(0, Math.min(400, now - m[4]));
+		m[4] = now;
+		m[0] += (dp - m[0]) * (1 - Math.exp(-dt / HV_TAU_DP));
+		m[1] += (temp - m[1]) * (1 - Math.exp(-dt / HV_TAU_TEMP));
+		m[2] += (chw - m[2]) * (1 - Math.exp(-dt / HV_TAU_CHW));
+		m[3] += (flow - m[3]) * (1 - Math.exp(-dt / HV_TAU_FLOW));
+		double t = now / 20.0;
+		o.hvNumbers.put("hv_m_dp", m[0] / 0.25 * 100 + (m[0] > 0.005 ? 0.6 * noise(t * 0.4, seed, 21) : 0));
+		o.hvNumbers.put("hv_m_temp", (m[1] - 60) / 30 * 100 + 0.4 * noise(t * 0.1, seed, 22));
+		o.hvNumbers.put("hv_m_chw", (m[2] - 30) / 40 * 100 + 0.3 * noise(t * 0.15, seed, 23));
+		o.hvNumbers.put("hv_m_flow", m[3] / 3000 * 100 + (m[3] > 10 ? 0.5 * noise(t * 0.3, seed, 24) : 0));
+		// The selector's pointer, the mode lamps.
+		for (int k = 0; k < 3; k++) {
+			o.hvLit.put("hv_sel" + k, Math.floorMod(panel.mode, 3) == k ? 1 : 0);
+		}
+		o.hvLit.put("hv_l_normal", !emergency && ahus > 0 ? 1 : 0);
+		o.hvLit.put("hv_l_emerg", emergency ? 1 : 0);
+		o.hvLit.put("hv_l_press", (a & io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.A_LOW_DP) == 0 ? 1 : 0);
+		// The mimic: red running (open), green stopped (shut), dark where there is none.
+		for (int train = 0; train < 2; train++) {
+			for (int part = 0; part < io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.PARTS.length; part++) {
+				int lit = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.on(s, part, train) ? 1
+						: io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.present(s, part, train) ? 2 : 0;
+				o.hvLit.put("hv_" + io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.PARTS[part] + "_" + (train == 0 ? "a" : "b"), lit);
+			}
+		}
+		// The annunciator: a window flashes when it comes in, then stays lit.
+		double[] came = HVAC_ALARMS.computeIfAbsent(at, k -> {
+			double[] c = new double[8];
+			java.util.Arrays.fill(c, -1);
+			return c;
+		});
+		for (int k = 0; k < 8; k++) {
+			if ((a >> k & 1) == 0) {
+				came[k] = -1;
+				o.hvLit.put("hv_a" + k, 0);
+			} else {
+				if (came[k] < 0) {
+					came[k] = now;
+				}
+				o.hvLit.put("hv_a" + k, now - came[k] < HV_FLASH ? 2 : 1);
+			}
+		}
+	}
+
+	/** A count's scatter, about -1.7 to 1.7 (a sum of three uniform draws), the same for every player for a bucket. */
+	static double scatter(long bucket, double seed) {
+		long x = bucket * 0x9E3779B97F4A7C15L + (long) (seed * 1_000_003);
+		double sum = 0;
+		for (int i = 0; i < 3; i++) {
+			x += 0x9E3779B97F4A7C15L;
+			long z = x;
+			z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+			z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+			z ^= z >>> 31;
+			sum += (z >>> 11) * 0x1.0p-53;
+		}
+		return (sum - 1.5) * 2;
 	}
 
 	static double noise(double t, double seed, int channel) {

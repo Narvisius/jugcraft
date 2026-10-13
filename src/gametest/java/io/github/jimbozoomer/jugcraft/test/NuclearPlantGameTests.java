@@ -3,9 +3,11 @@ package io.github.jimbozoomer.jugcraft.test;
 import io.github.jimbozoomer.jugcraft.blueprint.Blueprint;
 import io.github.jimbozoomer.jugcraft.blueprint.BuildSite;
 import io.github.jimbozoomer.jugcraft.nuclear.CoolingTowerBlockEntity;
+import io.github.jimbozoomer.jugcraft.nuclear.DamperBlock;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity;
 import io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind;
 import io.github.jimbozoomer.jugcraft.nuclear.FramedGlassBlock;
+import io.github.jimbozoomer.jugcraft.nuclear.HvacRoom;
 import io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear;
 import io.github.jimbozoomer.jugcraft.nuclear.PlantInterior;
 import io.github.jimbozoomer.jugcraft.nuclear.PlantBuilder;
@@ -43,7 +45,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341304"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341520"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -910,6 +912,109 @@ public class NuclearPlantGameTests {
 		helper.assertTrue((RelayRoom.readings(RelayRoom.SSPS, 4, bypassed).lamps() & 1 << 16) != 0, "protection off lights GENERAL WARNING");
 		helper.assertTrue(RelayRoom.label(RelayRoom.RELAY, 0).equals("RCP 1A 1B MOTORS") && RelayRoom.label(RelayRoom.PROTECTION, 11).equals("CH IV RACK 3"),
 				"the cabinets' names by label");
+		helper.succeed();
+	}
+
+	/**
+	 * Round 26, #11 (Justin: "Control Room HVAC Equipment Room", all four machines, "Switch to emergency mode", "Real ducts
+	 * with dampers"): the medium plant's HVAC room has its control panel, each train's radiation monitor and toxic gas
+	 * analyser, the refrigerant monitor, its six dampers (each tag once) and both trains' filtration units, air handlers,
+	 * chillers and pumps. Ticked on AUTO with the plant's reactor shut down it runs normally: train A's air handler,
+	 * chiller and pump, its normal outside air damper open, the rest shut or on standby, no alarms. On EMERGENCY both
+	 * trains go to filtered air; back on AUTO a reactor trip does the same, and the reset brings it back.
+	 */
+	@GameTest(maxTicks = 40)
+	public void mediumPlantHvacRoomSwitchesToEmergency(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		BlockPos stake = helper.absolutePos(BlockPos.ZERO).offset(6_000, 0, -6_000);
+		Blueprint print = Blueprint.get("nuclear_medium_pwr", false);
+		PlantBuilder.build(level, print, stake, Rotation.NONE, null, true);
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> panels = new java.util.ArrayList<>();
+		java.util.Map<Integer, java.util.Set<Integer>> monitors = new java.util.HashMap<>();
+		java.util.List<BlockPos> dampers = new java.util.ArrayList<>();
+		java.util.Set<Integer> tags = new java.util.HashSet<>();
+		java.util.List<EquipmentBlockEntity> machines = new java.util.ArrayList<>();
+		BlockPos vessel = null;
+		for (int i = 0; i < print.size(); i++) {
+			BlockState state = print.state(i, Rotation.NONE);
+			BlockPos pos = stake.offset(print.offset(i, Rotation.NONE));
+			int kind = HvacRoom.kind(state);
+			if (kind >= 0 && level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel) {
+				if (kind == HvacRoom.CONTROL) {
+					panels.add(panel);
+				} else {
+					monitors.computeIfAbsent(kind, k -> new java.util.HashSet<>()).add(io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(state));
+				}
+			}
+			if (state.getBlock() instanceof DamperBlock) {
+				dampers.add(pos);
+				tags.add(state.getValue(DamperBlock.VARIANT) / 2);
+			}
+			if (level.getBlockEntity(pos) instanceof EquipmentBlockEntity e && e.getBlockPos().equals(pos)) {
+				if (e.kind().hvac()) {
+					machines.add(e);
+				} else if (e.kind().reactor()) {
+					vessel = pos;
+				}
+			}
+		}
+		helper.assertTrue(panels.size() == 1, "one HVAC control panel: " + panels.size());
+		helper.assertTrue(monitors.getOrDefault(HvacRoom.RAD, java.util.Set.of()).size() == 2 && monitors.getOrDefault(HvacRoom.TOX, java.util.Set.of()).size() == 2
+				&& monitors.getOrDefault(HvacRoom.REFRIG, java.util.Set.of()).size() == 1, "each intake's radiation monitor and toxic gas analyser (A and B), the refrigerant monitor: " + monitors);
+		helper.assertTrue(dampers.size() == 6 && tags.size() == 6, "six dampers, each tag once: " + dampers.size() + " dampers, tags " + tags);
+		java.util.Map<String, Integer> count = new java.util.HashMap<>();
+		for (EquipmentBlockEntity m : machines) {
+			count.merge(m.kind().id + HvacRoom.train(m.getBlockState()), 1, Integer::sum);
+		}
+		helper.assertTrue(count.size() == 8 && count.values().stream().allMatch(n -> n == 1), "each train's filtration unit, air handler, chiller and pump: " + count);
+		helper.assertTrue(vessel != null && level.getBlockEntity(vessel) instanceof EquipmentBlockEntity, "the plant's reactor");
+		EquipmentBlockEntity reactor = (EquipmentBlockEntity) level.getBlockEntity(vessel);
+		var panel = panels.get(0);
+		helper.assertTrue(panel.mode == HvacRoom.AUTO, "the panel comes on AUTO");
+		// Normal: train A runs, B stands by; only CR-D-1A open.
+		HvacRoom.tick(panel, level, HvacRoom.CONTROL);
+		for (EquipmentBlockEntity m : machines) {
+			int train = HvacRoom.train(m.getBlockState());
+			boolean want = m.kind() != EquipmentKind.CR_FILTRATION_UNIT && train == 0;
+			helper.assertTrue(m.running == want, "normal: " + HvacRoom.tag(HvacRoom.part(m.kind()), train) + (want ? " runs" : " stands by"));
+		}
+		for (BlockPos d : dampers) {
+			int v = level.getBlockState(d).getValue(DamperBlock.VARIANT);
+			helper.assertTrue(((v & 1) != 0) == (v / 2 == 0), "normal: " + HvacRoom.describeDamper(v));
+		}
+		helper.assertTrue((panel.hvAlarms & 0x1FF) == 0 && Integer.bitCount(panel.hvState >> HvacRoom.PRESENT) == 14,
+				"normal: no alarms, every damper and machine found: alarms " + Integer.toBinaryString(panel.hvAlarms) + ", state " + Integer.toBinaryString(panel.hvState));
+		// The selector to EMERGENCY: both trains on filtered air.
+		panel.mode = HvacRoom.EMERGENCY;
+		HvacRoom.tick(panel, level, HvacRoom.CONTROL);
+		helper.assertTrue(machines.stream().allMatch(m -> m.running), "emergency: every machine runs");
+		for (BlockPos d : dampers) {
+			int v = level.getBlockState(d).getValue(DamperBlock.VARIANT);
+			helper.assertTrue(((v & 1) != 0) == (v / 2 >= 2), "emergency: " + HvacRoom.describeDamper(v));
+		}
+		helper.assertTrue((panel.hvAlarms & (HvacRoom.EMERGENCY_ON | HvacRoom.A_EMERGENCY)) == (HvacRoom.EMERGENCY_ON | HvacRoom.A_EMERGENCY)
+				&& (panel.hvAlarms & (HvacRoom.A_LOW_FLOW | HvacRoom.A_LOW_DP | HvacRoom.A_CHILLER)) == 0, "emergency: EMERG MODE lit, the room pressurized");
+		// Back to AUTO: a reactor trip puts it in emergency, the reset brings it back.
+		panel.mode = HvacRoom.AUTO;
+		reactor.core.scrammed = true;
+		HvacRoom.tick(panel, level, HvacRoom.CONTROL);
+		helper.assertTrue((panel.hvAlarms & (HvacRoom.EMERGENCY_ON | HvacRoom.A_RX_TRIP)) == (HvacRoom.EMERGENCY_ON | HvacRoom.A_RX_TRIP), "AUTO: a trip goes to emergency");
+		reactor.core.scrammed = false;
+		HvacRoom.tick(panel, level, HvacRoom.CONTROL);
+		helper.assertTrue((panel.hvAlarms & HvacRoom.EMERGENCY_ON) == 0 && machines.stream().noneMatch(m -> m.running && m.kind() == EquipmentKind.CR_FILTRATION_UNIT),
+				"AUTO: reset, back to normal");
+		// What the annunciator makes of a missing chiller, a dead room, high radiation at an intake.
+		int noChiller = 1 << HvacRoom.PRESENT + HvacRoom.AHU | 1 << HvacRoom.AHU;
+		RelayRoom.Reactor off = new RelayRoom.Reactor(2, 0, 0, 30, 100, 0, true, 0);
+		helper.assertTrue((HvacRoom.alarms(off, false, false, noChiller) & HvacRoom.A_CHILLER) != 0, "an air handler running without its chiller: CHILLER TRIP");
+		helper.assertTrue((HvacRoom.alarms(off, false, false, 0) & HvacRoom.A_LOW_DP) != 0, "no air handler running: CR LOW DIFF PRESS");
+		helper.assertTrue(HvacRoom.emergency(HvacRoom.AUTO, off, true) && !HvacRoom.emergency(HvacRoom.NORMAL, off, true), "high radiation at an intake: emergency on AUTO, not on NORMAL");
+		helper.assertTrue(HvacRoom.countRate(0, off) == HvacRoom.RAD_BACKGROUND && HvacRoom.countRate(0.05, off) > HvacRoom.RAD_HIGH,
+				"the radiation monitors read background, and 50 uSv/h above their HIGH");
 		helper.succeed();
 	}
 }

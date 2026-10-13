@@ -1817,3 +1817,7 @@ LETTERED_CELLS = {"nameplates", "nameplates2", "nameplates_inst", "nameplates3",
 COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 24, "drpi": 16, "lamp_white": 12, "lamp_amber": 12,
            "nameplates": 32, "nameplates2": 32, "nameplates_inst": 32, "titles": 32, "digital": 16, "placards": 32, "binders": 32, "nameplates3": 32,
            "nameplates4": 32}
+
+# The control room's ventilation plant (round 26, #11): its filtration units, air handlers, chillers and pumps, their
+# lettered cells (tools/hvac_boards.py registers them here).
+import hvac_boards  # noqa: E402,F401

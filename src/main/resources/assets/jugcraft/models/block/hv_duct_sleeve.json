@@ -1,0 +1,101 @@
+{
+  "textures": {
+    "epoxy_floor": "jugcraft:block/epoxy_floor",
+    "pi_hv_galv_dark": "jugcraft:block/pi_hv_galv_dark",
+    "particle": "jugcraft:block/epoxy_floor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        1.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#epoxy_floor"
+        },
+        "down": {
+          "texture": "#epoxy_floor"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        14.5
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#epoxy_floor"
+        },
+        "down": {
+          "texture": "#epoxy_floor"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        1.5
+      ],
+      "to": [
+        1.5,
+        16,
+        14.5
+      ],
+      "faces": {
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#epoxy_floor"
+        },
+        "down": {
+          "texture": "#epoxy_floor"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        0,
+        1.5
+      ],
+      "to": [
+        16,
+        16,
+        14.5
+      ],
+      "faces": {
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#epoxy_floor"
+        },
+        "down": {
+          "texture": "#epoxy_floor"
+        }
+      }
+    }
+  ]
+}

@@ -125,6 +125,27 @@ final class ControlBoards {
 		}
 	}
 
+	// ------------------------------------------------------------------ live parts drawn by the renderer
+
+	/** A box (x0..x1, y0..y1, z0..z1) all over in one material (a live part: an HVAC station's lamp lens). */
+	static void box(Frame f, double x0, double y0, double z0, double x1, double y1, double z1, JsonElement mat) {
+		box(f, mat, (a, b, c) -> v(a == 0 ? x0 : x1, b == 0 ? y0 : y1, c == 0 ? z0 : z1));
+	}
+
+	/**
+	 * A box about c with its long side along u (half hu), its thickness along w0 (half hv) and its width across both
+	 * (half hw): a needle ("o" in tools/control_boards.py).
+	 */
+	static void oriented(Frame f, Vec3 c, Vec3 u, Vec3 w0, double hu, double hv, double hw, JsonElement mat) {
+		Vec3 w = u.cross(w0);
+		box(f, mat, (a, b, k) -> c.add(u.scale(hu * (2 * a - 1))).add(w0.scale(hv * (2 * b - 1))).add(w.scale(hw * (2 * k - 1))));
+	}
+
+	/** One quad (top-left, bottom-left, bottom-right, top-right seen from outside) in a material, not tiled. */
+	static void face(Frame f, Vec3 tl, Vec3 bl, Vec3 br, Vec3 tr, JsonElement mat) {
+		quad(f, tl, bl, br, tr, mat, false);
+	}
+
 	// ------------------------------------------------------------------ the operations
 
 	private static void op(Frame f, JsonArray op) {

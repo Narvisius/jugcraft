@@ -136,6 +136,9 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			if (io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.kind(panel.getBlockState()) >= 0) {
 				// A relay room cabinet (round 26, #10): the reactor, or its name.
 				EdgTelemetry.relayRoom(snap, panel, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.kind(panel.getBlockState()) >= 0) {
+				// The control room HVAC's panel and monitors (round 26, #11): the room as its panel found it.
+				EdgTelemetry.hvac(snap, panel, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
 				EdgTelemetry.inverter(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(panel.getBlockState())) {

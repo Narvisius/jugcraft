@@ -65,6 +65,12 @@ EQUIPMENT = {
     "remote_shutdown_panel": ("Remote Shutdown Panel", 6, 1, 3),
     # The DC equipment rooms' 480 V motor control centres (round 26, 8a; tools/control_boards.py motor_control_center).
     "mcc_lineup": ("480 V Motor Control Center", 4, 1, 3),
+    # The control room's ventilation plant (round 26, #11; tools/hvac_boards.py): they run as the room's HVAC control
+    # panel has them (nuclear/HvacRoom.java), normal or emergency.
+    "cr_filtration_unit": ("Control Room Emergency Filtration Unit", 3, 7, 3),
+    "cr_air_handling_unit": ("Control Room Air Handling Unit", 3, 7, 3),
+    "cr_chiller": ("Control Room Water Chiller", 3, 5, 3),
+    "chw_pump": ("Chilled Water Pump", 1, 3, 2),
 }
 # The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
 TOWER_CONTROLLER = "cooling_tower_controller"
@@ -151,6 +157,10 @@ LANG = {
     "tooltip.jugcraft.nuclear.radiation_control_board": "The radiation monitors, ventilation and fire detection (for show)",
     "tooltip.jugcraft.nuclear.remote_shutdown_panel": "Trips the nearest reactor and takes its controls from the control room's console (no link card needed)",
     "tooltip.jugcraft.nuclear.mcc_lineup": "A 480 V motor control center that holds 500,000 JE: cable in under its first section, take power out of its units' terminals (the chargers' down through the floor or out of the back); right-click a unit to switch its breaker",
+    "tooltip.jugcraft.nuclear.cr_filtration_unit": "Charcoal and HEPA filters the control room's outside air when the HVAC panel goes to emergency (a reactor trip or high temperature); its booster fan starts on its own",
+    "tooltip.jugcraft.nuclear.cr_air_handling_unit": "Cools and circulates the control room's air (its filters, chilled water coil and supply fan); runs as the HVAC panel has it",
+    "tooltip.jugcraft.nuclear.cr_chiller": "Chills the water for the control room's air handlers; its panel shows its temperatures and load",
+    "tooltip.jugcraft.nuclear.chw_pump": "Pumps chilled water from the air handlers' coils through its chiller",
     "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
     "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
     "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
@@ -189,6 +199,12 @@ LANG = {
     "message.jugcraft.nuclear.relay_cabinet": "%s (sneak and right-click with an empty hand to change its label)",
     "message.jugcraft.nuclear.relay_no_reactor": "%s: no reactor in range to read",
     "message.jugcraft.nuclear.relay_relabel": "Label: %s",
+    "message.jugcraft.nuclear.hvac_panel": "Control room HVAC, %s (right-click the mode selector to turn it, sneaking to turn it back)",
+    "message.jugcraft.nuclear.hvac_mode": "CR HVAC mode: %s",
+    "message.jugcraft.nuclear.hvac_damper": "%s (sneak and right-click with an empty hand to change its tag)",
+    "message.jugcraft.nuclear.hvac_monitor": "%s",
+    "message.jugcraft.nuclear.hvac_running": "%s: running, as the HVAC panel has it (sneak and right-click with an empty hand for the other train's tag)",
+    "message.jugcraft.nuclear.hvac_standby": "%s: on standby, as the HVAC panel has it (sneak and right-click with an empty hand for the other train's tag)",
     "message.jugcraft.nuclear.station_battery": "Station battery: %s%% charged (%s of %s JE), %s",
     "message.jugcraft.nuclear.battery_charging": "charging at %s JE/t",
     "message.jugcraft.nuclear.battery_discharging": "discharging at %s JE/t",
@@ -309,6 +325,11 @@ CRAFTING = {
     "remote_shutdown_panel": (["RGR", "CKC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit",
                                                      "K": "minecraft:tripwire_hook", "S": "#c:plates/steel"}, 1),
     "mcc_lineup": (["SLS", "CAC", "SSS"], {"S": "#c:plates/steel", "L": "minecraft:lever", "C": "minecraft:copper_ingot", "A": "jugcraft:aluminum_cable"}, 1),
+    "cr_filtration_unit": (["SBS", "CMC", "SSS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "C": "minecraft:charcoal", "M": "jugcraft:electric_motor"}, 1),
+    "cr_air_handling_unit": (["SBS", "WMW", "SPS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "W": "minecraft:white_wool", "M": "jugcraft:electric_motor",
+                                                     "P": "jugcraft:steel_fluid_pipe"}, 1),
+    "cr_chiller": (["SMS", "PCP", "SSS"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "C": "minecraft:copper_block"}, 1),
+    "chw_pump": (["PMP", " S "], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "M": "jugcraft:electric_motor"}, 1),
     "cooling_tower_fill": (["PPP", "SSS", "PPP"], {"P": "jugcraft:plastic_sheet", "S": "minecraft:stick"}, 8),
     "conduit_trench": (["CCC", "PPP", "CCC"], {"C": "minecraft:smooth_stone", "P": "jugcraft:circulating_water_conduit"}, 3),
     TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
@@ -1086,7 +1107,11 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 # procedure binders (tools/control_boards.py TEXT_MATERIALS).
                 "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards", "binders",
                 # The 480 V load centre's legends (round 25), the DC rooms' motor control centres' (round 26).
-                "nameplates3", "nameplates4"]
+                "nameplates3", "nameplates4",
+                # The control room's ventilation plant (round 26, #11: tools/hvac_boards.py): its units' title plates by
+                # train, the stage and part plates, the warnings and the gauges' faces.
+                "hvac_titles_efu", "hvac_titles_ahu", "hvac_titles_chiller", "hvac_titles_pump", "nameplates5", "nameplates6",
+                "hvac_placards"]
 
 
 def eq_slot(name):

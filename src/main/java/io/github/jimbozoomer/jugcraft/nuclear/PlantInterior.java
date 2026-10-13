@@ -190,6 +190,57 @@ public final class PlantInterior {
 			// A vital panel's conduit up the wall to the tray, and the tray's drop over it (round 26, 8e): the wall at z 0.
 			{"wall_conduit", 0, "plain", "metal", new double[] {7.2, 0, 1.8, 8.8, 16, 3.4}},
 			{"ladder_tray_drop_wall", 0, "plain", "metal", new double[] {0, 0, 1.8, 16, 14.8, 13}},
+			// The Control Room HVAC Equipment Room (round 26, #11: HvacRoom, tools/hvac_room.py): its ducts, dampers (opened and
+			// shut by its panel), intake plenums, chilled water pipes, the south bay's tanks, feed pots, sensors and spare filters,
+			// the HVAC control panel and the wall monitors.
+			{"hv_duct", 0, "plain", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_duct_hanger", 0, "plain", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_duct_riser", 0, "plain", "metal", new double[] {1.5, 0, 1.5, 14.5, 16, 14.5}},
+			{"hv_duct_elbow", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_elbow_down", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_elbow_up", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_tee", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_tee_down", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_sleeve", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_riser_fd", 0, "plain", "metal", new double[] {1.5, 0, 1.5, 14.5, 16, 14.5}},
+			{"hv_supply_diffuser", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_return_grille", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_chw_pipe", 0, "plain", "metal", new double[] {6, 6, 0, 10, 10, 16}},
+			{"hv_chw_pipe_hanger", 0, "plain", "metal", new double[] {6, 6, 0, 10, 10, 16}},
+			{"hv_chw_pipe_trapeze", 0, "plain", "metal", new double[] {6, 6, 0, 10, 10, 16}},
+			{"hv_chw_riser", 0, "plain", "metal", new double[] {6, 0, 6, 10, 16, 10}},
+			{"hv_chw_elbow", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_chw_elbow_down", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_chw_elbow_up", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_chw_tee", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 16}},
+			{"hv_duct_label_oa", 0, "plain", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_duct_label_filtered", 0, "plain", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_duct_label_supply", 0, "plain", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_duct_label_return", 0, "plain", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_duct_riser_label_supply", 0, "plain", "metal", new double[] {1.5, 0, 1.5, 14.5, 16, 14.5}},
+			{"hv_duct_riser_label_return", 0, "plain", "metal", new double[] {1.5, 0, 1.5, 14.5, 16, 14.5}},
+			{"hv_chw_label_chws", 0, "plain", "metal", new double[] {6, 6, 0, 10, 10, 16}},
+			{"hv_chw_label_chwr", 0, "plain", "metal", new double[] {6, 6, 0, 10, 10, 16}},
+			{"hv_plenum_base", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum_outlet", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum_door_a", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum_door_b", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum_detector", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum_top", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_plenum_top_outlet", 0, "row:hv_plenum", "metal", new double[] {0, 0, 0, 16, 16, 15.8}},
+			{"hv_expansion_tank", 0, "plain", "metal", new double[] {2.6, 0, 2.6, 13.4, 16, 13.4}},
+			{"hv_expansion_tank_top", 0, "plain", "metal", new double[] {3, 0, 3, 13, 16, 13}},
+			{"hv_small_pipe", 0, "plain", "metal", new double[] {6.6, 0, 6.6, 9.4, 16, 9.4}},
+			{"hv_chw_pipe_tap", 0, "plain", "metal", new double[] {6, 0, 0, 10, 10, 16}},
+			{"hv_chem_feeder", 0, "plain", "metal", new double[] {5, 0, 5, 11, 16, 11}},
+			{"hv_refrig_sensor", 0, "plain", "metal", new double[] {5, 0, 5, 11, 16, 11}},
+			{"hv_filter_rack", 0, "variant:4", "metal", new double[] {0.5, 0, 1, 15.5, 16, 13.8}},
+			{"hv_damper", 0, "damper", "metal", new double[] {1.5, 1.5, 0, 14.5, 14.5, 16}},
+			{"hv_control_panel", 0, "hvpanel", "metal", null},
+			{"hv_rad_monitor", 0, "hvmon:2:4.2", "metal", null},
+			{"hv_tox_monitor", 0, "hvmon:2:4.2", "metal", null},
+			{"hv_refrig_monitor", 0, "hvmon:1:4.2", "metal", null},
 	};
 	/** Plain full blocks: suspended ceiling, floors, walls, tank plate, louvres. */
 	public static final String[] CUBES = {"ceiling_tile", "vinyl_floor", "epoxy_floor", "painted_wall", "tank_plate", "intake_louvre"};
@@ -270,6 +321,12 @@ public final class PlantInterior {
 					return new EyewashBlock(p, shape);
 				} else if (k[0].equals("relay")) {
 					return new RelayCabinetBlock(p, Integer.parseInt(k[1]));
+				} else if (kind.equals("hvpanel")) {
+					return new HvacPanelBlock(p);
+				} else if (k[0].equals("hvmon")) {
+					return new HvacMonitorBlock(p, Integer.parseInt(k[1]), Double.parseDouble(k[2]));
+				} else if (kind.equals("damper")) {
+					return DamperBlock.create(p, shape);
 				} else if (k[0].equals("wall")) {
 					return new WallLivePanelBlock(p, Integer.parseInt(k[1]), Double.parseDouble(k[2]));
 				} else if (k[0].equals("live")) {

@@ -868,6 +868,34 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 					shotAt(context, singleplayer, wx.applyAsInt(136 + t[0]), y + t[1], wz.applyAsInt(88 + t[2]), wx.applyAsInt(136 + t[3]), y + t[4],
 							wz.applyAsInt(88 + t[5]), "jugcraft_plant_medium_r26_relay_room_" + relayNames[i]);
 				}
+				// Round 26 (#11): the Control Room HVAC Equipment Room (the top floor, walked at building y 24): the room from
+				// the stair door, the HVAC panel, train A's filtration unit and air handler from their operating sides, its
+				// chiller's panel, the dampers over its plenum, its intake and monitors, the south bay; then on EMERGENCY
+				// (both trains on filtered air) the panel and the filtration unit again.
+				int[][] hvacShots = {{33, 24, 15, 12, 25, 6}, {15, 24, 5, 15, 25, 1}, {6, 24, 6, 4, 25, 6}, {12, 24, 6, 10, 25, 6},
+						{11, 24, 20, 8, 25, 20}, {9, 25, 5, 7, 28, 2}, {5, 24, 6, 5, 26, 1}, {14, 24, 24, 22, 25, 28}};
+				String[] hvacNames = {"room", "panel", "efu_a", "ahu_a", "chiller_a", "dampers_a", "intake_a", "south_bay"};
+				for (int i = 0; i < hvacShots.length; i++) {
+					int[] t = hvacShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(136 + t[0]), y + t[1], wz.applyAsInt(88 + t[2]), wx.applyAsInt(136 + t[3]), y + t[4],
+							wz.applyAsInt(88 + t[5]), "jugcraft_plant_medium_r26_hvac_" + hvacNames[i]);
+				}
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					for (BlockPos at : BlockPos.betweenClosed(new BlockPos(wx.applyAsInt(136 + 18), y + 22, wz.applyAsInt(88 + 4)),
+							new BlockPos(wx.applyAsInt(136 + 12), y + 27, wz.applyAsInt(88 - 1)))) {
+						if (level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity hv
+								&& io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.kind(hv.getBlockState()) == io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.CONTROL) {
+							hv.mode = io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.EMERGENCY;
+							io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.tick(hv, level, io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.CONTROL);
+						}
+					}
+				});
+				context.waitTicks(100);
+				shotAt(context, singleplayer, wx.applyAsInt(136 + 15), y + 24, wz.applyAsInt(88 + 5), wx.applyAsInt(136 + 15), y + 25, wz.applyAsInt(88 + 1),
+						"jugcraft_plant_medium_r26_hvac_panel_emergency");
+				shotAt(context, singleplayer, wx.applyAsInt(136 + 6), y + 24, wz.applyAsInt(88 + 6), wx.applyAsInt(136 + 4), y + 25, wz.applyAsInt(88 + 6),
+						"jugcraft_plant_medium_r26_hvac_efu_a_emergency");
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {

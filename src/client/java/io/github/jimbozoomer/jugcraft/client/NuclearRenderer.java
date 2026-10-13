@@ -119,6 +119,14 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] BINDERS = region(6, 8);
 	static final float[] NAMEPLATES3 = region(7, 8);
 	static final float[] NAMEPLATES4 = region(0, 9);
+	// The control room HVAC machines (round 26, #11; tools/hvac_boards.py): title plates by train, nameplates, placards.
+	static final float[] HVAC_TITLES_EFU = region(1, 9);
+	static final float[] HVAC_TITLES_AHU = region(2, 9);
+	static final float[] HVAC_TITLES_CHILLER = region(3, 9);
+	static final float[] HVAC_TITLES_PUMP = region(4, 9);
+	static final float[] NAMEPLATES5 = region(5, 9);
+	static final float[] NAMEPLATES6 = region(6, 9);
+	static final float[] HVAC_PLACARDS = region(7, 9);
 	/** Every material on the sheet by name, in the sheet's order (tools/nuclear.py EQ_MATERIALS). */
 	static final String[] SHEET = {
 			"stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
@@ -129,7 +137,9 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			"gunmetal", "red_iron", "pipe_green", "pipe_brown", "pipe_yellow", "pipe_lblue", "crankcase_door", "gauge_board",
 			"sign_autostart", "stencil_edg", "turbo", "black", "lamp_white", "lamp_amber", "annunciator", "meter", "dial",
 			"chart", "drpi", "swatches", "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards",
-			"binders", "nameplates3", "nameplates4"};
+			"binders", "nameplates3", "nameplates4",
+			// The control room HVAC machines' title plates by train, nameplates and placards (round 26, #11).
+			"hvac_titles_efu", "hvac_titles_ahu", "hvac_titles_chiller", "hvac_titles_pump", "nameplates5", "nameplates6", "hvac_placards"};
 	private static final java.util.Map<String, float[]> BY_NAME = new java.util.HashMap<>();
 
 	static {
@@ -179,6 +189,8 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		int breakers = Switchgear.DEFAULT_BREAKERS;
 		/** Which labelled version it is (its anchor's variant: MCC 1A or 1B; round 26, 8c). */
 		int variant;
+		/** A control room HVAC machine (round 26, #11): where it is (its gauges' wander), as {@link #running}, {@link #speed}. */
+		int seed;
 		float charge;
 		final int[] flows = new int[Switchgear.BREAKERS];
 	}
@@ -237,6 +249,13 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			System.arraycopy(equipment.flows, 0, state.flows, 0, state.flows.length);
 		}
 		state.time = (level.getGameTime() % 24_000) + partialTick;
+		if (state.kind.hvac()) {
+			// Its fan or pump comes up to speed (and its readings with it) over three seconds, and runs down as long.
+			float since = level.getGameTime() - equipment.runningSince + partialTick;
+			state.running = equipment.running;
+			state.speed = equipment.running ? Math.min(1F, since / HVAC_RAMP) : Math.max(0F, 1F - since / HVAC_RAMP);
+			state.seed = pos.hashCode();
+		}
 		if (state.kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
 			diesel(equipment, state, level, partialTick);
 		}
@@ -417,6 +436,19 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 					live[0].replay(p, consumer, state.facing, state.lightLevel);
 					live[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				}
+			} else if (state.kind.hvac()) {
+				// A control room HVAC machine (round 26, #11): its lit parts, its name by its train, and close up its gauges'
+				// needles, its station's lamps and the chiller's display glass as it runs.
+				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				if (detail) {
+					Mesh[] named = hvacStateMesh(state.kind, state.variant);
+					named[0].replay(p, consumer, state.facing, state.lightLevel);
+					named[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+					Mesh still = new Mesh(), lit = new Mesh();
+					hvacLive(new Frame(still, true), new Frame(lit, true), state.kind, state.running, state.speed, state.time, state.seed);
+					if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
+					if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				}
 			} else if (state.kind.decor()) {
 				// The lit parts (screens, lamps, the glow over spent fuel), and whatever blinks.
 				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
@@ -438,6 +470,159 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		if (state.kind.board() && detail) {
 			loadCentreMeters(state, pose, collector);
 		}
+		if (state.kind == EquipmentKind.CR_CHILLER && detail) {
+			chillerScreen(state, pose, collector);
+		}
+	}
+
+	// ------------------------------------------------------------------ the control room HVAC machines (nuclear/HvacRoom.java)
+
+	/** How long a machine takes to come up to speed or run down (game ticks). */
+	static final float HVAC_RAMP = 60;
+	/** Each machine's name by its train (still, lit), by kind and variant. */
+	private static final java.util.Map<Integer, Mesh[]> HVAC_NAMED = new java.util.HashMap<>();
+
+	static Mesh[] hvacStateMesh(EquipmentKind kind, int variant) {
+		return HVAC_NAMED.computeIfAbsent(kind.ordinal() << 4 | variant, k -> {
+			Mesh still = new Mesh(), lit = new Mesh();
+			ControlBoards.state(kind, "v" + Math.min(1, variant), new Frame(still, true), false);
+			ControlBoards.state(kind, "v" + Math.min(1, variant), new Frame(lit, true), true);
+			return new Mesh[] {still, lit};
+		});
+	}
+
+	/**
+	 * A gauge's reading (a fraction of its dial) stopped and running (tools/hvac_boards.py: the filters' differential
+	 * pressures on 0 to 4 inches of water, nothing across them without flow; chilled water pressures on 0 to 100 psig,
+	 * the loop's static 30 psig from its expansion tank when its pump is stopped).
+	 */
+	static double[] hvacGauge(String name) {
+		return switch (name) {
+			case "PREFLTR DP" -> new double[] {0, 0.55 / 4};
+			case "HEPA DP" -> new double[] {0, 1.4 / 4};
+			case "CHAR DP" -> new double[] {0, 1.1 / 4};
+			case "POST DP" -> new double[] {0, 0.9 / 4};
+			case "FILTER DP" -> new double[] {0, 0.7 / 4};
+			case "CHWS P" -> new double[] {0.30, 0.62};
+			case "CHWR P" -> new double[] {0.30, 0.48};
+			case "EVAP IN" -> new double[] {0.30, 0.45};
+			case "EVAP OUT" -> new double[] {0.30, 0.40};
+			case "SUCTION" -> new double[] {0.30, 0.22};
+			case "DISCH" -> new double[] {0.30, 0.68};
+			default -> new double[] {0, 0.5};
+		};
+	}
+
+	/**
+	 * A machine's live parts (where they are: tools/hvac_boards.py "live"): each gauge's needle at its reading (swept
+	 * from 225 degrees round to -45 across its dial, wandering a little while it runs), its local station's RUNNING
+	 * (red) and STOPPED (green) lamps, the chiller's display glass (its readings drawn over it).
+	 */
+	static void hvacLive(Frame still, Frame lit, EquipmentKind kind, boolean running, float ramp, float time, int seed) {
+		com.google.gson.JsonObject live = ControlBoards.live(kind);
+		if (live == null || !live.has("mats")) {
+			return;
+		}
+		com.google.gson.JsonObject mats = live.getAsJsonObject("mats");
+		com.google.gson.JsonElement needle = mats.get("needle");
+		if (live.has("gauges")) {
+			int i = 0;
+			for (com.google.gson.JsonElement e : live.getAsJsonArray("gauges")) {
+				com.google.gson.JsonObject g = e.getAsJsonObject();
+				double[] read = hvacGauge(g.get("name").getAsString());
+				double f = read[0] + (read[1] - read[0]) * ramp;
+				if (ramp > 0) {
+					f += ramp * (0.006 * Math.sin(time * 0.05 + i * 1.7 + seed % 97) + 0.003 * Math.sin(time * 0.23 + i * 2.3));
+				}
+				f = Math.max(-0.02, Math.min(1.02, f));
+				double a = Math.toRadians(225 - 270 * f);
+				com.google.gson.JsonArray c = g.getAsJsonArray("c");
+				double side = g.get("side").getAsDouble(), len = g.get("len").getAsDouble();
+				Vec3 centre = v(c.get(0).getAsDouble(), c.get(1).getAsDouble(), c.get(2).getAsDouble());
+				Vec3 d = v(0, Math.sin(a), side * Math.cos(a));
+				Vec3 across = v(side, 0, 0);
+				ControlBoards.oriented(still, centre.add(d.scale(len * 0.4)).add(side * 0.006, 0, 0), d, across, len * 0.6, 0.004, 0.006, needle);
+				ControlBoards.oriented(still, centre.add(side * 0.008, 0, 0), v(0, 1, 0), across, 0.01, 0.004, 0.01, needle);
+				i++;
+			}
+		}
+		if (live.has("stations")) {
+			for (com.google.gson.JsonElement e : live.getAsJsonArray("stations")) {
+				com.google.gson.JsonObject st = e.getAsJsonObject();
+				double side = st.get("side").getAsDouble(), r = st.get("r").getAsDouble();
+				com.google.gson.JsonArray lamps = st.getAsJsonArray("lamps");
+				for (int k = 0; k < 2 && k < lamps.size(); k++) {
+					com.google.gson.JsonArray at = lamps.get(k).getAsJsonArray();
+					boolean on = k == 0 ? running : !running;
+					String mat = k == 0 ? (on ? "red" : "off_red") : (on ? "green" : "off_green");
+					double x = at.get(0).getAsDouble(), y = at.get(1).getAsDouble(), z = at.get(2).getAsDouble();
+					ControlBoards.box(on ? lit : still, Math.min(x, x + side * 0.006), y - r, z - r, Math.max(x, x + side * 0.006), y + r, z + r, mats.get(mat));
+				}
+			}
+		}
+		if (live.has("display")) {
+			com.google.gson.JsonObject d = live.getAsJsonObject("display");
+			double x = d.get("x").getAsDouble(), z0 = d.get("z0").getAsDouble(), z1 = d.get("z1").getAsDouble();
+			double y0 = d.get("y0").getAsDouble(), y1 = d.get("y1").getAsDouble();
+			ControlBoards.face(lit, v(x, y1, z1), v(x, y0, z1), v(x, y0, z0), v(x, y1, z0), mats.get("glass"));
+		}
+	}
+
+	/**
+	 * The chiller's display (on its control panel, on its left side), in green, as the approved mockup has it: its tag,
+	 * state and load; leaving and entering chilled water (deg F); evaporator and condenser pressures (psig); motor amps
+	 * and oil pressure (standing by: ready to start). Each comes up or down with the machine and wanders a little.
+	 */
+	private void chillerScreen(State s, PoseStack pose, SubmitNodeCollector collector) {
+		com.google.gson.JsonObject live = ControlBoards.live(s.kind);
+		if (live == null || !live.has("display")) {
+			return;
+		}
+		com.google.gson.JsonObject d = live.getAsJsonObject("display");
+		double x = d.get("x").getAsDouble() - 0.004, z0 = d.get("z0").getAsDouble(), z1 = d.get("z1").getAsDouble();
+		double y0 = d.get("y0").getAsDouble(), y1 = d.get("y1").getAsDouble();
+		float f = s.speed;
+		double w = Math.sin(s.time * 0.031 + s.seed % 89) * 0.5 + Math.sin(s.time * 0.113) * 0.3;
+		String tag = "CH-1" + (s.variant == 1 ? "B" : "A");
+		String state = s.running ? (f >= 1 ? "RUNNING" : "STARTING") : f > 0 ? "STOPPING" : "STANDBY";
+		java.util.Locale r = java.util.Locale.ROOT;
+		String[] lines = {
+				f > 0 ? String.format(r, "%s  %s  %.0f%%", tag, state, 62 * f + w * f) : tag + "  STANDBY  AUTO",
+				String.format(r, "LCHWT %.1fF  ECHWT %.1fF", 55.2 - 11.1 * f + 0.15 * w * f, 55.4 - 1.4 * f + 0.1 * w * f),
+				String.format(r, "EVAP %.0f PSIG  COND %.0f", 62 - 24 * f + w * f, 70 + 58 * f + 1.5 * w * f),
+				f > 0 ? String.format(r, "AMPS %.0f  OIL %.0f PSID", 71 * f + 1.5 * w * f, 52 * f + 0.5 * w * f) : "READY TO START"};
+		int green = 0xFF78FF96, amber = 0xFFF0B030;
+		double margin = 0.03, lineHeight = (y1 - y0 - 2 * margin) / lines.length;
+		int widest = 0;
+		for (String line : lines) {
+			widest = Math.max(widest, font.width(line));
+		}
+		// As large as the lines fit: across the glass, and a line's 7-pixel letters with a gap.
+		double k = Math.min(lineHeight / 10.0, (z1 - z0 - 2 * margin) / Math.max(1, widest));
+		pose.pushPose();
+		pose.translate(0.5F, 0.0F, 0.5F);
+		pose.rotateDegrees(Axis.YP, -yRotation(s.facing));
+		pose.translate(-0.5F, 0.0F, -0.5F);
+		for (int i = 0; i < lines.length; i++) {
+			double y = y1 - margin - (i + 1) * lineHeight + (lineHeight - 7 * k) / 2;
+			int colour = i == 0 && (state.equals("STARTING") || state.equals("STOPPING")) ? amber : green;
+			sideText(pose, collector, lines[i], x, y, z1 - margin, k, colour);
+		}
+		pose.popPose();
+	}
+
+	/**
+	 * Text on a face on the equipment's left side (facing out to its left, at x in its frame), its baseline at y, starting
+	 * at z and running toward the front (smaller z: to the right of whoever stands there).
+	 */
+	private void sideText(PoseStack pose, SubmitNodeCollector collector, String s, double x, double y, double z, double k, int colour) {
+		pose.pushPose();
+		pose.translate((float) x, (float) y, (float) (1 - z));
+		pose.rotateDegrees(Axis.YP, -90);
+		pose.scale((float) k, (float) -k, (float) k);
+		collector.submitText(pose, 0, -7, Component.literal(s).getVisualOrderText(), false, Font.DisplayMode.POLYGON_OFFSET,
+				LightCoordsUtil.FULL_BRIGHT, colour, 0, 0);
+		pose.popPose();
 	}
 
 	// ------------------------------------------------------------------ the 480 V load centre (nuclear/Switchgear.java)
@@ -732,6 +917,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				loadCentreLive(new Frame(still, true), new Frame(lit, true), kind,
 						kind == EquipmentKind.MCC_LINEUP ? io.github.jimbozoomer.jugcraft.nuclear.MotorControlCenter.DEFAULT_BREAKERS : Switchgear.DEFAULT_BREAKERS);
 				ControlBoards.state(kind, "v0", new Frame(still, true), false);
+			} else if (kind.hvac()) {
+				ControlBoards.lit(kind, new Frame(lit, true));
+				ControlBoards.state(kind, "v0", new Frame(still, true), false);
+				ControlBoards.state(kind, "v0", new Frame(lit, true), true);
+				hvacLive(new Frame(still, true), new Frame(lit, true), kind, false, 0, 0, 0);
 			} else if (kind.decor()) {
 				PlantDecor.glow(kind, new Frame(lit, true));
 				PlantDecor.blink(kind, new Frame(lit, true), 0);

@@ -134,7 +134,7 @@ SIGNS = {
     "inspection_corridor": "Inspection Corridor",
     "battery_room_1a": "Battery Room 1A", "battery_room_1b": "Battery Room 1B", "dc_equipment_1a": "DC Equipment 1A",
     "dc_equipment_1b": "DC Equipment 1B", "remote_shutdown": "Remote Shutdown", "support_center": "Technical Support Center",
-    "emergency_filtration": "Emergency Filtration",
+    "emergency_filtration": "Emergency Filtration", "cr_hvac_room": "Control Room HVAC Equipment Room",
 }
 
 OTHER["conference_table"] = "Round Meeting Table"
@@ -350,6 +350,8 @@ def item_model_3d(info, rid):
     block's own texture area), scaled down to sit in a slot, a hand and a frame, its front (the south face) to the
     viewer."""
     w, rows, _ = info["multi"]
+    # Three wide (round 26, #11: the HVAC control panel): centred on the middle block, so it stays inside -16..32.
+    shift = -16 if w > 2 else 0
     elements, used = [], set()
     for part, boxes in plant_office2.multi_parts(info):
         c, r = part % w, part // w
@@ -358,12 +360,21 @@ def item_model_3d(info, rid):
         for e in els:
             for fname, f in e["faces"].items():
                 f.setdefault("uv", _auto_uv(fname, *e["from"], *e["to"]))
-            e["from"] = [round(e["from"][0] + 16 * c, 4), round(e["from"][1] + 16 * r, 4), e["from"][2]]
-            e["to"] = [round(e["to"][0] + 16 * c, 4), round(e["to"][1] + 16 * r, 4), e["to"][2]]
+            e["from"] = [round(e["from"][0] + 16 * c + shift, 4), round(e["from"][1] + 16 * r, 4), e["from"][2]]
+            e["to"] = [round(e["to"][0] + 16 * c + shift, 4), round(e["to"][1] + 16 * r, 4), e["to"][2]]
             if "rotation" in e:
                 o = e["rotation"]["origin"]
-                e["rotation"] = dict(e["rotation"], origin=[o[0] + 16 * c, o[1] + 16 * r, o[2]])
+                e["rotation"] = dict(e["rotation"], origin=[o[0] + 16 * c + shift, o[1] + 16 * r, o[2]])
             elements.append(e)
+    if shift:
+        # Its conduit hubs stand a little above its top: down under 32 with them (clear of the model writer's nudges).
+        dy = min(0.0, 31.6 - max(max(e["from"][1], e["to"][1]) for e in elements))
+        for e in elements:
+            e["from"][1] = round(e["from"][1] + dy, 4)
+            e["to"][1] = round(e["to"][1] + dy, 4)
+            if "rotation" in e:
+                o = e["rotation"]["origin"]
+                e["rotation"] = dict(e["rotation"], origin=[o[0], round(o[1] + dy, 4), o[2]])
     textures = {t: rid(f"block/{t}") for t in sorted(used)}
     textures["particle"] = textures[sorted(used)[0]]
     k = 1.0 / max(w, rows)

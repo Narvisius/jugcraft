@@ -2823,3 +2823,4 @@ DRAWINGS["exhaust_fan"] = exhaust_fan
 
 # The relay room's cabinets and pieces (round 26, #10): they register themselves here.
 import relay_room  # noqa: E402,F401
+import hvac_room  # noqa: E402,F401  (round 26, #11: the control room HVAC equipment room's pieces)

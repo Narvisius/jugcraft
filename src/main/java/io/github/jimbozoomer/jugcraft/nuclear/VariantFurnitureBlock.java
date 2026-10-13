@@ -49,7 +49,12 @@ public class VariantFurnitureBlock extends FurnitureBlock {
 		return new VariantFurnitureBlock(properties, count, boxes);
 	}
 
-	private VariantFurnitureBlock(Properties properties, int count, double[]... boxes) {
+	/** Before a subclass is made: its variant count (its state definition is made while it is built). */
+	protected static void preparing(int count) {
+		building = count;
+	}
+
+	protected VariantFurnitureBlock(Properties properties, int count, double[]... boxes) {
 		super(properties, boxes);
 		this.count = count;
 		this.variant = property(count);

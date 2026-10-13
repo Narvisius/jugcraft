@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LGL",
+    "CXC",
+    "PRP"
+  ],
+  "key": {
+    "L": "minecraft:redstone_lamp",
+    "G": "minecraft:glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "X": "minecraft:comparator",
+    "P": "#c:plates/steel",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:hv_control_panel",
+    "count": 1
+  }
+}

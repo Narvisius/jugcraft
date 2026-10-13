@@ -1,0 +1,129 @@
+{
+  "textures": {
+    "pi_hv_galv": "jugcraft:block/pi_hv_galv",
+    "pi_hv_plenum": "jugcraft:block/pi_hv_plenum",
+    "pi_steel_dark": "jugcraft:block/pi_steel_dark",
+    "particle": "jugcraft:block/pi_hv_galv"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        15.3
+      ],
+      "to": [
+        16,
+        16,
+        15.8
+      ],
+      "faces": {
+        "south": {
+          "texture": "#pi_hv_plenum"
+        },
+        "up": {
+          "texture": "#pi_hv_plenum"
+        },
+        "down": {
+          "texture": "#pi_hv_plenum"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        15.8
+      ],
+      "to": [
+        0.4,
+        16,
+        16.1
+      ],
+      "faces": {
+        "south": {
+          "texture": "#pi_hv_plenum"
+        },
+        "east": {
+          "texture": "#pi_hv_plenum",
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_hv_plenum",
+          "uv": [
+            15.7,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_hv_plenum",
+          "uv": [
+            0.0,
+            15.7,
+            0.4,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_hv_plenum",
+          "uv": [
+            0.0,
+            0.0,
+            0.4,
+            0.3
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.03,
+        0.13,
+        0.2
+      ],
+      "to": [
+        15.97,
+        1.2,
+        15.93
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.2,
+        0.2
+      ],
+      "to": [
+        16,
+        1.6,
+        15.3
+      ],
+      "faces": {
+        "up": {
+          "texture": "#pi_hv_galv"
+        }
+      }
+    }
+  ]
+}

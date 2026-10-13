@@ -56,7 +56,13 @@ public enum EquipmentKind {
 	// state, trips it, and takes control from the control room's console with its transfer switches.
 	REMOTE_SHUTDOWN_PANEL("remote_shutdown_panel", 6, 1, 3),
 	// The DC equipment rooms' 480 V motor control centres (round 26, 8a): they work (nuclear/MotorControlCenter.java).
-	MCC_LINEUP("mcc_lineup", 4, 1, 3);
+	MCC_LINEUP("mcc_lineup", 4, 1, 3),
+	// The control room's ventilation plant (round 26, #11; tools/hvac_boards.py): they run as the room's HVAC control panel
+	// has them (HvacRoom), normal or emergency, labelled by train (their anchor's variant: 0 train A, 1 train B).
+	CR_FILTRATION_UNIT("cr_filtration_unit", 3, 7, 3),
+	CR_AIR_HANDLER("cr_air_handling_unit", 3, 7, 3),
+	CR_CHILLER("cr_chiller", 3, 5, 3),
+	CHW_PUMP("chw_pump", 1, 3, 2);
 
 	public final String id;
 	public final int wide, deep, tall;
@@ -82,7 +88,12 @@ public enum EquipmentKind {
 
 	/** Plant equipment that only has to look right: it takes no pipes and does no work. */
 	public boolean decor() {
-		return ordinal() >= POLAR_CRANE.ordinal() && this != REMOTE_SHUTDOWN_PANEL && this != SWITCHGEAR_LINEUP && this != MCC_LINEUP;
+		return ordinal() >= POLAR_CRANE.ordinal() && this != REMOTE_SHUTDOWN_PANEL && this != SWITCHGEAR_LINEUP && this != MCC_LINEUP && !hvac();
+	}
+
+	/** The control room's HVAC machines (round 26, #11): run and stopped by the room's HVAC control panel (HvacRoom). */
+	public boolean hvac() {
+		return this == CR_FILTRATION_UNIT || this == CR_AIR_HANDLER || this == CR_CHILLER || this == CHW_PUMP;
 	}
 
 	/** A working power board: a load centre or a motor control centre (a bus, breakers, feeders). */

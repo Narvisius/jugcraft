@@ -261,6 +261,49 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   Bundle** and **(Cabinet Entry)** (the bundle into a gland on the cabinet's top); the **Relay Room Row A to D Signs**;
   the **Smoke Detector**; the **Drawing Stick File** (the room's prints hanging from it); the **Sequence of Events
   Recorder Printer** on its stand with its fanfold paper.
+- **The control room HVAC** (round 26, #11; `nuclear/HvacRoom.java`, `tools/hvac_boards.py`, `tools/hvac_room.py`). Its
+  HVAC control panel runs the room it stands in (32 blocks either way, 3 below and 10 above): once a second it reads
+  the nearest reactor and its radiation monitors, then opens and shuts its dampers and starts and stops its machines.
+  - **Normal**: train A runs (its air handler, chiller and chilled water pump, its normal outside air damper CR-D-1A
+    open); train B stands by with its dampers shut; the filtration units are stopped.
+  - **Emergency**: both trains go to filtered air. The normal outside air dampers shut; the emergency intake dampers
+    (CR-D-2A, 2B) and the filtration units' outlet dampers (CR-D-3A, 3B) open; both filtration units' booster fans
+    start and every air handler, chiller and pump runs. The control room is held at 1/8 inch of water.
+  - The panel's **mode selector** (right-click it to turn it right, sneaking to turn it back): NORMAL, AUTO or
+    EMERGENCY. On AUTO it goes to emergency on a reactor trip, the reactor's high temperature (350 degrees and up),
+    damaged fuel, or HIGH radiation at either intake, and back when that clears (a trip once the reactor is reset).
+    Right-click anywhere else on it for the room's state.
+  - The panel is live: the mimic of both trains (each damper lit red open or green shut, each fan, chiller and pump red
+    running or green stopped, dark where there is none), the NORMAL, EMERG and PRESS OK lamps, the control room's
+    differential pressure, temperature, chilled water supply and filtered air flow meters (following what runs), and
+    the annunciator (REACTOR TRIP, RX HIGH TEMP, INTAKE HIGH RAD, TOXIC GAS, EMERG MODE, CREFS LOW FLOW, CHILLER TRIP,
+    CR LOW DIFF PRESS; a window flashes when it comes in, then stays lit).
+  - **Control Room Emergency Filtration Unit** (3 wide, 7 deep, 3 tall): moisture separator, heater, prefilter, HEPA,
+    charcoal adsorber and post HEPA in a row with their access doors, differential pressure gauges and test ports, the
+    booster fan blowing up out of its far end. **Control Room Air Handling Unit** (3 x 7 x 3): mixing box with its
+    return and outside air dampers, filters, chilled water coil (its risers and pressure gauges), supply fan, the
+    discharge out of its far end. **Control Room Water Chiller** (3 x 5 x 3): evaporator and condenser shells, the
+    compressor on top, its control panel with a live display (its tag, RUNNING or STANDBY, leaving and entering chilled
+    water, load and amps), keypad and emergency stop. **Chilled Water Pump** (1 x 3 x 2): the end-suction pump and
+    motor on their pad with suction and discharge gauges. The filtration unit, air handler and pump each have a local
+    station with RUNNING (red) and STOPPED (green) lamps; every gauge reads as its machine runs, coming up and down
+    with it. Labelled by train (CRF-1A, AHU-1B, CH-1A,
+    CHP-1B): right-click one for its tag and state, sneak and right-click it with an empty hand for its other train's.
+  - **HVAC Isolation Damper**: a section of duct with its blades, actuator, position plates (the pointer to OPEN or
+    SHUT) and its tag hanging under it (CR-D-1A to CR-D-3B). Right-click it for its tag, duty and position; sneak and
+    right-click it with an empty hand to step its tag.
+  - **Air Intake Radiation Monitor** (A and B): reads the dose rate at itself (a GM detector: 40 cpm background, 3,300
+    cpm a mR/h) and the plume from a reactor's damaged fuel, on a log meter and a count rate display; NORMAL, ALERT
+    (1,000 cpm) and HIGH (10,000 cpm: the HVAC goes to emergency on AUTO). **Air Intake Toxic Gas Analyzer** (A and
+    B): chlorine and ammonia (clean air: no toxic gas is modelled). **Refrigerant Monitor**: R-134a at each chiller
+    (a few ppm: no leaks are modelled). Sneak and right-click a monitor with an empty hand for its other train's label.
+  - The pieces: **HVAC Duct** (straight, with a trapeze hanger, riser, elbows, tees, the labelled lengths with flow
+    arrows: OUTSIDE AIR, FILTERED AIR, CR SUPPLY AIR, CR RETURN AIR), **HVAC Duct Floor Sleeve**, **HVAC Duct Riser (Fire
+    Damper)**, **Ceiling Supply Diffuser**, **Ceiling Return Grille**, the **Air Intake Plenum** (joining side by side:
+    base, outlet, access doors, monitor sample point, top and top outlet), **Chilled Water Pipe** (insulated, with
+    hangers and trapezes, riser, elbows, tee, tap, CHWS and CHWR labels), **Chilled Water Expansion Tank**, **Chemical
+    Feed Pot**, **Refrigerant Sensor**, **Small Pipe** and the **Spare Filter Rack** (HEPA cells, charcoal trays,
+    prefilters in their cartons).
 - **Ladder Cable Tray** (round 26): 24-inch galvanized ladder tray (rails, rungs, black power cables on them) hung under
   the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend (with or without a
   drop in it), and drops where a conduit comes up under it and a cable goes down into it (one or two, each with or
@@ -417,8 +460,14 @@ blueprint (for players who lay out their own plant).
     them), each with its own screens, keyboards and phone; the shift supervisor's glazed office with the executive
     desks along its glass; procedures on shelves along the back wall and the office copier. Across the corridor the
     Technical Support Center, kitchen, washroom and operations office, with windows.
-  - Top floor: the control room's emergency filtration and air conditioning (air handling units, chillers, chilled
-    water pumps, ducts, louvres).
+  - Top floor: the Control Room HVAC Equipment Room (round 26, #11; its sign at the stair door). Each train (A west,
+    B east) has its intake plenum against its louvres in the north wall (with the radiation monitor's sample point,
+    access door and the monitors on the wall beside it), its emergency filtration unit and air handler, the ducts
+    between them with their dampers, and the supply and return ducts down through the floor (sleeves, fire dampers)
+    to diffusers and return grilles in the control room's ceiling. In the south bay each train's chiller and chilled
+    water pump, the mains overhead on trapezes, each loop's expansion tank and chemical feed pot, a refrigerant sensor
+    by each chiller and the refrigerant monitor on the west wall; spare filters on racks along the south wall; the
+    HVAC control panel on the north wall between the trains; smoke detectors, extinguishers and a drawing rack.
   - The stair tower serves all four floors; it is laid last so no floor cuts into it. The switchboard's and chargers'
     meters are live panels: with no diesel generator within 24 blocks they read the battery on float (132 V, 12 A).
 - **Framed Glass** (`nuclear/FramedGlassBlock.java`, `tools/framed_glass.py`; Justin, 8 October 2026: the vanilla

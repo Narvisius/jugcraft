@@ -600,7 +600,10 @@ public class EquipmentBlockEntity extends BlockEntity {
 	/** Synced: water held in the unit's condensers (mB). */
 	public int syncedWater;
 
-	/** An emergency diesel generator: running (started from its panel), and the game time it was started. */
+	/**
+	 * An emergency diesel generator: running (started from its panel), and the game time it was started (or stopped). A
+	 * control room HVAC machine (round 26, #11): running as its HVAC panel has it (HvacRoom), and since when.
+	 */
 	public boolean running;
 	public long runningSince;
 	/** An emergency diesel generator: game ticks run before this run (its panel's hour meter: 1,000 ticks an hour). */
@@ -619,6 +622,11 @@ public class EquipmentBlockEntity extends BlockEntity {
 
 	/** Starts or stops an emergency diesel generator (its panel, tests): the hour meter keeps the run's time. */
 	public void setDieselRunning(long now, boolean run) {
+		setRunning(now, run);
+	}
+
+	/** Starts or stops a machine that runs (a diesel generator, an HVAC machine), sent to the players when it changes. */
+	public void setRunning(long now, boolean run) {
 		if (run == running) {
 			return;
 		}

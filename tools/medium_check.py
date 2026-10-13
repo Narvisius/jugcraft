@@ -23,7 +23,7 @@ B, O = P.BELOW, P.OVER
 SEATED = {"sofa", "locker_bench", "stretcher"}
 WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
              "fire_extinguisher", "exhaust_fan", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash",
-             "sign_relay_row_a", "sign_relay_row_b", "sign_relay_row_c", "sign_relay_row_d"}
+             "sign_relay_row_a", "sign_relay_row_b", "sign_relay_row_c", "sign_relay_row_d", "hv_rad_monitor", "hv_tox_monitor", "hv_refrig_monitor"}
 USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
 
 
@@ -117,7 +117,9 @@ def check(site, quiet=False):
                 continue
             # The user's side: behind a desk or cabinet (they look the way it faces), but in front of a seat.
             dx, dz = P.DIRS[facing if name in SEATED else MP.OPPOSITE[facing]]
-            if name in ("whiteboard", "large_print", "office_plant", "coffee_table", "cafe_table", "cubicle_panel", "vitals_monitor", "stretcher", "glass_coffee_table"):
+            # (An intake plenum's outlet opens into its duct.)
+            if name in ("whiteboard", "large_print", "office_plant", "coffee_table", "cafe_table", "cubicle_panel", "vitals_monitor", "stretcher", "glass_coffee_table",
+                        "hv_plenum_outlet"):
                 continue
             front = g[sx + dx, sy + B, sz + dz + O]
             fst = state_of(front)
@@ -296,6 +298,7 @@ def check(site, quiet=False):
     # 10. The battery rooms (round 26, #9): their second strings, sense cable risers and fittings.
     problems += battery_rooms(site, g)
     problems += relay_room(site, g)
+    problems += hvac_room(site, g)
     if not quiet:
         for p in problems:
             print(p)
@@ -590,11 +593,89 @@ def relay_room(site, g):
     tees = sum(int((g == k).sum()) for k in P.MATERIALS if kinds[k] == "control_tray_tee")
     if tees != 2:
         problems.append(f"{tees} control tray tees, not 2 (out of the spreading room's tray, into row D's run)")
+    # The room's fittings, counted in the room (the cabinets' extent, out to its walls).
+    cells = [c for name in RELAY_KINDS for c in found[name]]
+    x0, x1 = min(c[0] for c in cells) - 3, max(c[0] for c in cells) + 3
+    z0, z1 = min(c[2] for c in cells) - 3, max(c[2] for c in cells) + 3
+    y0, y1 = min(c[1] for c in cells) - 1, max(c[1] for c in cells) + 6
+    room = g[x0:x1 + 1, y0 + B:y1 + B + 1, z0 + O:z1 + O + 1]
     for name, n in (("sign_relay_row_a", 1), ("sign_relay_row_b", 1), ("sign_relay_row_c", 1), ("sign_relay_row_d", 1), ("soe_printer", 1),
                     ("drawing_rack", 1), ("smoke_detector", 6)):
-        m = sum(int((g == k).sum()) for k in P.MATERIALS if kinds[k] == name)
+        m = sum(int((room == k).sum()) for k in P.MATERIALS if kinds[k] == name)
         if m != n:
             problems.append(f"{m} {name} in the relay room, not {n}")
+    return problems
+
+
+def hvac_room(site, g):
+    """The Control Room HVAC Equipment Room (round 26, #11): its HVAC control panel, six dampers (each tag once, open as
+    the panel has them in normal: only CR-D-1A), each intake's radiation monitor and toxic gas analyser (A and B), the
+    refrigerant monitor, the room's sign; every duct and chilled water piece joined at each opening to what it faces."""
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+    problems = []
+
+    def blocks(name, part=None):
+        out = []
+        for k, (st, _) in P.MATERIALS.items():
+            if kinds[k] == name and (part is None or f"part={part}" in st):
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                out += [(int(x), int(y) - B, int(z) - O, v) for x, y, z in np.argwhere(g == k)]
+        return out
+    panels = blocks("hv_control_panel", 1)
+    if len(panels) != 1:
+        problems.append(f"{len(panels)} HVAC control panels, not 1")
+    dampers = blocks("hv_damper")
+    if len(dampers) != 6 or len({v // 2 for *_, v in dampers}) != 6:
+        problems.append(f"{len(dampers)} HVAC dampers with tags {sorted(v // 2 for *_, v in dampers)}, not CR-D-1A to 3B once each")
+    if sorted(v for *_, v in dampers) != [1, 2, 4, 6, 8, 10]:
+        problems.append(f"the dampers aren't as the panel sets them in normal (only CR-D-1A open): {sorted(v for *_, v in dampers)}")
+    for name, want in (("hv_rad_monitor", [0, 1]), ("hv_tox_monitor", [0, 1]), ("hv_refrig_monitor", [0])):
+        got = sorted(v for *_, v in blocks(name, 0))
+        if got != want:
+            problems.append(f"{name}: labels {got}, not {want}")
+    signs = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if "label=cr_hvac_room" in st)
+    if signs != 1:
+        problems.append(f"{signs} Control Room HVAC Equipment Room signs, not 1")
+    # Every opening of a duct or chilled water piece meets a piece of its own kind opening back, a machine, or (a duct)
+    # the intake plenum; a small pipe its tank, tap or feed pot.
+    import hvac_room as H
+    machines = set()
+    for part, px, pz, rot in site.parts:
+        if isinstance(part, MP.Building):
+            for kind, ax, ay, az, facing in part.props:
+                if kind in ("cr_filtration_unit", "cr_air_handling_unit", "cr_chiller", "chw_pump"):
+                    machines |= {(x + px, y + part.base - part.sink, z + pz) for x, y, z in P.equipment_cells(kind, ax, ay, az, facing)}
+    family = {}
+    for k, (st, _) in P.MATERIALS.items():
+        name = kinds[k]
+        if name in H.PIECES and "conn" in H.PIECES[name]:
+            facing = st.split("facing=")[1].split(",")[0].rstrip("]")
+            fam = "pipe" if name.startswith("hv_chw") else "small" if name == "hv_small_pipe" else "duct"
+            for x, y, z in np.argwhere(g == k):
+                family[(int(x), int(y) - B, int(z) - O)] = (name, fam, H.turned(H.PIECES[name]["conn"], facing))
+    opposite = {"n": "s", "s": "n", "e": "w", "w": "e", "u": "d", "d": "u"}
+    small_ends = ("hv_chw_pipe_tap", "hv_expansion_tank", "hv_expansion_tank_top", "hv_chem_feeder", "hv_small_pipe")
+
+    def name_at(c):
+        x, y, z = c
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+    for c, (name, fam, opens) in family.items():
+        for f in opens:
+            d = H.DIRS[f]
+            n = (c[0] + d[0], c[1] + d[1], c[2] + d[2])
+            other = family.get(n)
+            if other and other[1] == fam and opposite[f] in other[2]:
+                continue
+            if fam != "small" and n in machines:
+                continue
+            if fam == "duct" and name_at(n).startswith("hv_plenum"):
+                continue
+            if fam == "small" and name_at(n) in small_ends:
+                continue
+            problems.append(f"{name} at {c}: its {f} opening meets {name_at(n) or 'air'}")
     return problems
 
 

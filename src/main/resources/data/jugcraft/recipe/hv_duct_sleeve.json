@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "C C",
+    "CPC",
+    "C C"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "C": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:hv_duct_sleeve",
+    "count": 2
+  }
+}

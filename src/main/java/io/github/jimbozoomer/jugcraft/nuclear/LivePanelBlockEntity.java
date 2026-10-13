@@ -115,11 +115,23 @@ public class LivePanelBlockEntity extends BlockEntity {
 	public double rxFission, rxHeat, rxTemp = 30, rxRods = 100, rxSur;
 	public boolean rxProtection = true;
 	private double lastFission = -1;
+	/**
+	 * The control room HVAC (round 26, #11: HvacRoom). The control panel: its mimic (HvacRoom.PARTS running or open, and
+	 * there), its annunciator and emergency (HvacRoom.A_*), and when the room last went in or out of emergency (game
+	 * time); its selector is {@link #mode} (HvacRoom.NORMAL, AUTO, EMERGENCY). A radiation monitor: its count rate
+	 * (cpm). Synced; the selector saved.
+	 */
+	public int hvState, hvAlarms;
+	public double hvValue;
+	public long hvSince;
+	/** The panel's dampers as last found, and the seconds until it looks again (not saved). */
+	@Nullable List<BlockPos> hvDampers;
+	int hvRescan;
 
 	public LivePanelBlockEntity(BlockPos pos, BlockState state) {
 		super(PlantInterior.LIVE_PANEL_ENTITY, pos, state);
 		breakers = isVitalPanel(state) ? VitalPanelBlock.DEFAULT_BREAKERS : 0;
-		mode = isExhaustFan(state) ? ExhaustFanBlock.AUTO : 0;
+		mode = defaultMode(state);
 		input = isCharger(state) ? new io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage(CHARGER_BUFFER, 4_096, 0, this::setChanged) {
 			@Override
 			public long insert(long maxAmount, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext transaction) {
@@ -132,6 +144,11 @@ public class LivePanelBlockEntity extends BlockEntity {
 				return in;
 			}
 		} : null;
+	}
+
+	/** A selector's position as built: an exhaust fan's AUTO, the HVAC panel's AUTO. */
+	private static int defaultMode(BlockState state) {
+		return isExhaustFan(state) ? ExhaustFanBlock.AUTO : HvacRoom.kind(state) == HvacRoom.CONTROL ? HvacRoom.AUTO : 0;
 	}
 
 	static boolean isCharger(BlockState state) {
@@ -438,6 +455,11 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * The live panels of the given kind within {@link #REACH} blocks (their placing blocks), nearest first; ties by
 	 * position, so every panel sees them in the same order.
 	 */
+	/** The HVAC room's panels and monitors find each other (HvacRoom): as {@link #around}. */
+	List<LivePanelBlockEntity> panelsAround(ServerLevel level, Block kind) {
+		return around(level, kind);
+	}
+
 	private List<LivePanelBlockEntity> around(ServerLevel level, Block kind) {
 		BlockPos here = getBlockPos();
 		List<LivePanelBlockEntity> out = new ArrayList<>();
@@ -472,6 +494,15 @@ public class LivePanelBlockEntity extends BlockEntity {
 	}
 
 	public void serverTick(ServerLevel level) {
+		int hvac = HvacRoom.kind(getBlockState());
+		if (hvac >= 0) {
+			// The control room HVAC's panel and monitors (round 26, #11) read the plant once a second, never a generator.
+			if (timer-- <= 0) {
+				timer = 19;
+				HvacRoom.tick(this, level, hvac);
+			}
+			return;
+		}
 		int relay = RelayRoom.kind(getBlockState());
 		if (relay >= 0) {
 			// A relay room cabinet reads the reactor (a relay panel nothing: its name is its label), never a generator.
@@ -561,6 +592,16 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * A relay room cabinet, once a second: the nearest reactor vessel in range (as a status screen finds it), its state
 	 * and the startup rate since the last look; sent to the players when it has moved.
 	 */
+	/** The HVAC panel and radiation monitors read the nearest reactor as a relay room cabinet does. */
+	void readReactor(ServerLevel level) {
+		relayTick(level);
+	}
+
+	/** Sends this panel's state to the players (and marks it to be saved). */
+	void syncNow(ServerLevel level) {
+		sync(level);
+	}
+
 	private void relayTick(ServerLevel level) {
 		EquipmentBlockEntity vessel = nearestVessel(level, getBlockPos());
 		RelayRoom.Reactor now;
@@ -802,7 +843,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (!racks.isEmpty()) {
 			out.store("racks", BlockPos.CODEC.listOf(), List.copyOf(racks));
 		}
-		if (isExhaustFan(getBlockState()) || isGroundDetector(getBlockState())) {
+		if (isExhaustFan(getBlockState()) || isGroundDetector(getBlockState()) || HvacRoom.kind(getBlockState()) == HvacRoom.CONTROL) {
 			out.putInt("mode", mode);
 			out.putInt("page", page);
 		}
@@ -826,7 +867,11 @@ public class LivePanelBlockEntity extends BlockEntity {
 		testUntil = in.getLongOr("test_until", 0L);
 		racks.clear();
 		racks.addAll(in.read("racks", BlockPos.CODEC.listOf()).orElse(List.of()));
-		mode = in.getIntOr("mode", isExhaustFan(getBlockState()) ? ExhaustFanBlock.AUTO : 0);
+		mode = in.getIntOr("mode", defaultMode(getBlockState()));
+		hvState = in.getIntOr("hv_state", 0);
+		hvAlarms = in.getIntOr("hv_alarms", 0);
+		hvValue = in.getDoubleOr("hv_value", 0);
+		hvSince = in.getLongOr("hv_since", 0L);
 		page = in.getIntOr("page", 0);
 		rxStatus = in.getIntOr("rx_status", 0);
 		rxAlarms = in.getIntOr("rx_alarms", 0);
@@ -864,6 +909,13 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.putDouble("rx_temp", rxTemp);
 			out.putDouble("rx_rods", rxRods);
 			out.putDouble("rx_sur", rxSur);
+		}
+		if (HvacRoom.kind(getBlockState()) >= 0) {
+			// The HVAC panel's mimic and annunciator, a radiation monitor's count rate (read again after a load).
+			out.putInt("hv_state", hvState);
+			out.putInt("hv_alarms", hvAlarms);
+			out.putDouble("hv_value", hvValue);
+			out.putLong("hv_since", hvSince);
 		}
 		return out.buildResult();
 	}

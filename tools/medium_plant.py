@@ -1084,7 +1084,7 @@ def control_building(s, ox, oz):
         b.p(0, 4, z, LOUVRE)
     for z in (23, 26):
         b.p(W - 1, 4, z, LOUVRE)
-    for x in list(range(2, 8)) + list(range(10, 16)):
+    for x in [x for r in HVAC_LOUVRES for x in r]:
         for y in (L3 + 2, L3 + 3, L3 + 4):
             b.p(x, y, 0, LOUVRE)
     for z in range(17, 23):
@@ -1111,6 +1111,7 @@ def control_building(s, ox, oz):
     b.stairwell(W - 9, 1, levels, door_side="s")
     for above in levels[1:] + [L3 + 4]:
         b.p(W - 6, above - 1, 11, LIGHT)
+    top_floor_sign(b, L3)
     s.add(b, ox, oz)
     cx, cz = console
     return (ox + cx, oz + cz, b.site_y(L2 + 1))
@@ -1509,22 +1510,199 @@ def second_floor(b, W, D, y):
     return console
 
 
+# The Control Room HVAC Equipment Room (round 26, #11; Justin: "Control Room HVAC Equipment Room", all four kinds of
+# machine, "Switch to emergency mode", "Real ducts with dampers"): the top floor (walked at y 24, the roof's underside at
+# y 30). Each train's outside air comes in through its louvres in the north wall into its intake plenum; normally
+# through its normal outside air damper (CR-D-1) along the overhead duct down into its air handler's mixing box; in
+# emergency (the HVAC panel's AUTO on a reactor trip or high temperature) that damper shuts, the emergency intake
+# damper (CR-D-2) opens into the filtration unit, its booster fan starts and its outlet damper (CR-D-3) opens, the
+# filtered air going on up and along into the same mixing box. The control room's return air comes up through the
+# floor into the air handler's front; its supply goes out of its far end, up, along and down through the floor at two
+# ceiling diffusers. Chilled water: the return main from each air handler's coil back to its pump, through its chiller,
+# the supply main back to the coil. Train A west, B east (B's machines turned the same way, their operating sides east).
+HVAC_TRAINS = {
+    # efu / ahu: the footprint's corner (x0, z0) facing south; plenum: its x span; the louvres', the dampers', the runs'
+    # cells are worked out from these.
+    "A": {"efu": (2, 3), "ahu": (8, 3), "plenum": (2, 7), "detector": 6, "door": 4, "rad": 8, "tox": 1, "pump": (10, 16),
+          "chiller": (6, 18), "variant": 0},
+    "B": {"efu": (25, 3), "ahu": (20, 3), "plenum": (24, 29), "detector": 25, "door": 27, "rad": 23, "tox": 30, "pump": (18, 16),
+          "chiller": (20, 18), "variant": 1},
+}
+HVAC_LOUVRES = [range(2, 8), range(24, 30)]
+HVAC_PANEL = (14, 1)
+
+
+def hvac_runs(t):
+    """Train t's ducts and pipes: (family, runs, special) for hvac_room.lay: each run a list of cells with the faces
+    it opens on at either end (into a machine, the floor), special the blocks that are a particular piece."""
+    import hvac_room as H
+    c = HVAC_TRAINS[t]
+    y0 = 24
+    ex, ez = c["efu"]
+    ax_, az = c["ahu"]
+    px0, px1 = c["plenum"]
+    efu_in = ex + 1                        # the filtration unit's inlet and outlet column (its middle)
+    ahu_c = ax_ + 1                        # the air handler's middle column
+    chw_x = ax_                            # its coil's chilled water risers (its west column, z 6 supply, 7 return)
+    oa_x = px1 if ahu_c > px1 else px0     # the plenum's top outlet: at its end toward the air handler
+    side = 1 if ahu_c > oa_x else -1       # which way the mixed air duct runs from the tee to the air handler
+    damp = {"A": (0, 2, 4), "B": (1, 3, 5)}[t]
+    duct, pipe = [], []
+    special = {}
+    # Normal outside air: up out of the plenum's top, its damper, the tee, along to the air handler and down into it.
+    oa = [(oa_x, 28, 1), (oa_x, 28, 2), (oa_x, 28, 3)] + [(x, 28, 3) for x in range(oa_x + side, ahu_c + side, side)] + [(ahu_c, 27, 3)]
+    duct.append((oa, "d", "d"))
+    # (Open on train A, which runs; shut on train B, on standby: as the HVAC panel sets them, nuclear/HvacRoom.java.)
+    special[(oa_x, 28, 2)] = ("hv_damper", None, 2 * damp[0] + (1 if t == "A" else 0))
+    special[(oa_x + side, 28, 3)] = ("hv_duct_label_oa", "e" if side > 0 else "w", None)
+    # The filtered air: up out of the filtration unit's fan, its outlet damper, north and along into the tee.
+    fz = ez + 5
+    fa = [(efu_in, 27, fz)] + [(efu_in, 28, z) for z in range(fz, 2, -1)]
+    step = 1 if oa_x > efu_in else -1
+    fa += [(x, 28, 3) for x in range(efu_in + step, oa_x, step)]
+    duct.append((fa + [(oa_x, 28, 3)], "d", None))
+    special[(efu_in, 28, fz - 1)] = ("hv_damper", None, 2 * damp[2])
+    special[(efu_in, 28, fz - 2)] = ("hv_duct_label_filtered", "n", None)
+    special[(efu_in, 28, fz - 3)] = ("hv_duct_hanger", None, None)
+    special[(efu_in + step, 28, 3)] = ("hv_duct_label_filtered", "e" if step > 0 else "w", None)
+    if abs(oa_x - efu_in) > 2:
+        special[(efu_in + 2 * step, 28, 3)] = ("hv_duct_hanger", None, None)
+    # The emergency intake: out of the plenum's lower outlet, its damper, into the filtration unit's inlet.
+    duct.append(([(efu_in, 25, 2)], "n", "s"))
+    special[(efu_in, 25, 2)] = ("hv_damper", None, 2 * damp[1])
+    # The control room's return: up through the floor (grille, sleeve, the fire damper) and into the air handler's front.
+    ret = [(ahu_c, 22, 2), (ahu_c, 23, 2), (ahu_c, 24, 2), (ahu_c, 25, 2)]
+    duct.append((ret, None, "s"))
+    special[(ahu_c, 22, 2)] = ("hv_return_grille", None, None)
+    special[(ahu_c, 23, 2)] = ("hv_duct_sleeve", None, None)
+    special[(ahu_c, 24, 2)] = ("hv_duct_riser_fd", None, None)
+    # The supply: out of the far end, up, a tee either way, down through the floor at two diffusers.
+    sz = az + 7
+    sup = [(ahu_c, 25, sz), (ahu_c, 26, sz), (ahu_c, 27, sz)]
+    duct.append((sup, "n", None))
+    for dx in (-3, 1) if t == "A" else (-3, 1):
+        x1 = ahu_c + dx
+        stp = 1 if dx > 0 else -1
+        run = [(ahu_c, 27, sz)] + [(x, 27, sz) for x in range(ahu_c + stp, x1 + stp, stp)] + [(x1, y, sz) for y in (26, 25, 24, 23, 22)]
+        duct.append((run, None, None))
+        special[(x1, 22, sz)] = ("hv_supply_diffuser", None, None)
+        special[(x1, 23, sz)] = ("hv_duct_sleeve", None, None)
+        special[(x1, 24, sz)] = ("hv_duct_riser_fd", None, None)
+        special[(x1, 25, sz)] = ("hv_duct_riser_label_supply", None, None)
+    special[(ahu_c, 24, 2)] = ("hv_duct_riser_fd", None, None)
+    # Chilled water. The return main: up out of the coil, south at y 28 to over the pump, down into its suction.
+    pxp, pz = c["pump"]
+    chx, chz = c["chiller"]
+    cx_ret, cx_sup = chx + 2, chx + 1      # the chiller's return (in) and supply (out) nozzles' columns
+    stp = 1 if pxp > chw_x else -1
+    chwr = [(chw_x, 27, 7)] + [(chw_x, 28, z) for z in range(7, pz + 1)] + [(x, 28, pz) for x in range(chw_x + stp, pxp + stp, stp)]
+    chwr += [(pxp, 27, pz), (pxp, 26, pz)]
+    pipe.append((chwr, "d", "d"))
+    # The pump's discharge: up out of its top, along at y 27 to over the chiller's return nozzle, down into it.
+    stp2 = 1 if cx_ret > pxp else -1
+    dis = [(pxp, 26, pz + 1), (pxp, 27, pz + 1)] + [(x, 27, pz + 1) for x in range(pxp + stp2, cx_ret + stp2, stp2)] + [(cx_ret, 27, chz)]
+    pipe.append((dis, "d", "d"))
+    # The supply main: up out of the chiller's supply nozzle to y 29, along over the return main, north to the coil.
+    stp3 = 1 if chw_x > cx_sup else -1
+    chws = [(cx_sup, 27, chz), (cx_sup, 28, chz), (cx_sup, 29, chz)] + [(x, 29, chz) for x in range(cx_sup + stp3, chw_x + stp3, stp3)]
+    chws += [(chw_x, 29, z) for z in range(chz - 1, 5, -1)] + [(chw_x, 28, 6), (chw_x, 27, 6)]
+    pipe.append((chws, "d", "d"))
+    for z in (9, 15):
+        special[(chw_x, 29, z)] = ("hv_chw_pipe_hanger", None, None)
+    for z in (10, 14):
+        special[(chw_x, 28, z)] = ("hv_chw_pipe_trapeze", None, None)
+    special[(chw_x, 29, 12)] = ("hv_chw_label_chws", "n", None)
+    special[(chw_x, 28, 12)] = ("hv_chw_label_chwr", "s", None)
+    # The expansion tank's line comes up into the return main over it (between the coil's column and the pump's).
+    special[((chw_x + pxp) // 2, 28, pz)] = ("hv_chw_pipe_tap", None, None)
+    return duct, pipe, special
+
+
+def hvac_south_bay(t):
+    """Train t's loop fittings in the south bay: (piece, x, y, z, facing) for its expansion tank (beside its pump, its
+    line up into the return main's tap), its chemical feed pot across the pump, its chiller's refrigerant sensor."""
+    c = HVAC_TRAINS[t]
+    pxp, pz = c["pump"]
+    chx, chz = c["chiller"]
+    tank_x = (c["ahu"][0] + pxp) // 2      # between the coil's column and the pump's: under the return main
+    return [("hv_expansion_tank", tank_x, 24, pz, "north"), ("hv_expansion_tank_top", tank_x, 25, pz, "north"),
+            ("hv_small_pipe", tank_x, 26, pz, "north"), ("hv_small_pipe", tank_x, 27, pz, "north"),
+            ("hv_chem_feeder", pxp + 1, 24, pz + 1, "north"), ("hv_refrig_sensor", chx + 3, 24, chz + 4, "west")]
+
+
 def top_floor(b, W, D, y):
-    """The top floor (walked at y + 1, under the roof): the control room's emergency filtration and air conditioning,
-    one plant room round the stair tower. Two air handling units with their filter trains, two chillers and their
-    chilled water pumps, the ducts down into the control room, the louvres in the walls."""
+    """The Control Room HVAC Equipment Room (walked at y + 1, under the roof): each train's intake plenum against its
+    louvres with its radiation monitor and toxic gas analyser, its emergency filtration unit and air handler, the ducts
+    between them and down through the floor into the control room, its chilled water pump and chiller in the south
+    bay and their mains overhead; the HVAC control panel on the north wall between the trains."""
+    import hvac_room as H
     y0 = y + 1
-    b.prop("air_handling_unit", 9, y0, 3, "south")
-    b.prop("air_handling_unit", 16, y0, 3, "south")
-    b.prop("heat_exchanger", 22, y0, 2, "south")
-    b.prop("heat_exchanger", 26, y0, 2, "south")
-    b.prop("pump_skid", 6, y0, 18, "south")
-    b.prop("pump_skid", 12, y0, 18, "south")
-    for x in (10, 17):
-        b.duct_up(x, 12, x + 1, 12, y0)
-    for z in (16, 20, 24):
-        b.stack("relay_cabinet", 1, y0, z, "west", n=2)
+    for t, c in HVAC_TRAINS.items():
+        v = c["variant"] or None
+        b.prop("cr_filtration_unit", c["efu"][0], y0, c["efu"][1], "south", variant=v)
+        b.prop("cr_air_handling_unit", c["ahu"][0], y0, c["ahu"][1], "south", variant=v)
+        b.prop("chw_pump", c["pump"][0], y0, c["pump"][1], "south", variant=v)
+        b.prop("cr_chiller", c["chiller"][0], y0, c["chiller"][1], "south", variant=v)
+        # The intake plenum, four high against the louvres: its base, the emergency outlet's row, the access door and
+        # the monitors' sample point, its top with the normal outside air's outlet.
+        px0, px1 = c["plenum"]
+        efu_in = c["efu"][0] + 1
+        oa_x = px1 if c["ahu"][0] + 1 > px1 else px0
+        for row, yy in enumerate(range(y0, y0 + 4)):
+            names = []
+            for x in range(px0, px1 + 1):
+                if row == 0:
+                    names.append("hv_plenum_base")
+                elif row == 1:
+                    names.append("hv_plenum_outlet" if x == efu_in else "hv_plenum")
+                elif row == 2:
+                    names.append(f"hv_plenum_door_{t.lower()}" if x == c["door"] else "hv_plenum_detector" if x == c["detector"] else "hv_plenum")
+                else:
+                    names.append("hv_plenum_top_outlet" if x == oa_x else "hv_plenum_top")
+            b.row(names, px0, yy, 1, "north")
+        b.panel("hv_rad_monitor", c["rad"], y0 + 1, 1, "north", 1, label=t)
+        b.panel("hv_tox_monitor", c["tox"], y0 + 1, 1, "north", 1, label=t)
+        duct, pipe, special = hvac_runs(t)
+        for runs, family in ((duct, H.DUCT_FAMILY), (pipe, H.PIPE_FAMILY)):
+            for (x, yy, z), (name, facing, variant) in H.pieces_for(H.connections(runs), family, special).items():
+                if yy == 22:
+                    assert b.get(x, yy, z) == CEIL, (t, x, yy, z)
+                elif yy == 23:
+                    assert b.get(x, yy, z) == EPOXY, (t, x, yy, z)
+                else:
+                    assert b.get(x, yy, z) == 0, (t, name, x, yy, z)
+                b.p(x, yy, z, variant_state(name, facing, variant) if variant is not None else furniture(name, facing))
+    b.panel("hv_control_panel", HVAC_PANEL[0], y0, HVAC_PANEL[1], "north", 3)
+    # The south bay: each loop's expansion tank, feed pot and refrigerant sensor; the refrigerant monitor on the west
+    # wall by the chillers; the spare filters on their racks along the south wall.
+    for t in HVAC_TRAINS:
+        for name, x, yy, z, facing in hvac_south_bay(t):
+            assert b.get(x, yy, z) == 0, (name, x, yy, z)
+            b.p(x, yy, z, furniture(name, facing))
+    b.panel("hv_refrig_monitor", 1, y0 + 1, 20, "west", 1)
+    for k, x in enumerate(range(18, 28)):
+        for row in range(2):
+            b.p(x, y0 + row, D - 2, variant_state("hv_filter_rack", "south", (k + 2 * row) % 4))
+    # The room's fittings: smoke detectors on the roof's underside clear of the ducts and pipes, the extinguishers.
+    for x, z in ((5, 13), (15, 7), (25, 13), (14, 20), (26, 25), (4, 25), (34, 21)):
+        if b.get(x, y0 + 5, z) == 0:
+            b.p(x, y0 + 5, z, furniture("smoke_detector", "north"))
+    # The spare filters on racks along the south wall (HEPA cells, charcoal trays, prefilters), the room's drawings.
+    b.furniture("drawing_rack", 14, y0, D - 2, "south")
+    b.furniture("fire_extinguisher", 1, y0 + 1, 12, "west")
     b.furniture("fire_extinguisher", W - 2, y0 + 1, 26, "east")
+    b.furniture("fire_extinguisher", 12, y0 + 1, 28, "south")
+
+
+def top_floor_sign(b, y):
+    """The room's name inside the stair tower beside its top floor door (laid after the tower), facing whoever comes
+    up the stairs."""
+    y0 = y + 1
+    for x in (35, 36, 32, 31):
+        if b.get(x, y0 + 1, 14) not in (0,) and b.get(x, y0 + 1, 13) == 0 and b.get(x, y0, 13) == 0:
+            b.p(x, y0 + 1, 13, sign("cr_hvac_room", "north"))
+            return
+    raise AssertionError("no wall for the HVAC room's sign")
 
 
 # ------------------------------------------------------------------------------------------------- auxiliary building
