@@ -899,7 +899,7 @@ def machine_blocks():
     return (list(MACHINES) + list(PARTS) + list(CABLES) + list(PIPES) + list(FLUID_BLOCKS)
             + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS)
             + list(SLOPE_BLOCKS) + list(ELECTRONICS_BLOCKS) + list(FARMING_BLOCKS) + list(CROPS)
-            + drone_blocks() + tower_blocks() + list(__import__('blueprints').STAKE))
+            + drone_blocks() + tower_blocks() + list(__import__('blueprints').STAKE) + __import__('power_lines').blocks())
 
 
 def machine_items():

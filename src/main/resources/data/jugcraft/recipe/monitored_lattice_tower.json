@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CRC",
+    "PLP",
+    "CRC"
+  ],
+  "key": {
+    "C": "jugcraft:advanced_circuit",
+    "R": "minecraft:redstone",
+    "P": "#c:plates/aluminum",
+    "L": "jugcraft:reconductored_lattice_tower"
+  },
+  "result": {
+    "id": "jugcraft:monitored_lattice_tower",
+    "count": 1
+  }
+}

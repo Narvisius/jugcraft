@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PGP",
+    "WSW",
+    "PAP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:green_dye",
+    "W": "#c:wires/copper",
+    "S": "jugcraft:service_pedestal",
+    "A": "jugcraft:aluminum_cable"
+  },
+  "result": {
+    "id": "jugcraft:pad_mount_transformer",
+    "count": 1
+  }
+}

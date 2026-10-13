@@ -3230,6 +3230,45 @@ def check_tower():
         err("missing tower data: run tools/drone_tower.py")
 
 
+def check_power_lines():
+    """powerline/LineKind.java and client/LineRenderer.java match tools/power_lines.py, and the frame block has its data."""
+    import power_lines
+    kinds = re.findall(r'^\s+[A-Z_]+\("([a-z_]+)", Family\.([A-Z]+), (\d+), (\d+), (\d+), ([\d_]+)\)',
+                       (JAVA_ROOT / "powerline" / "LineKind.java").read_text(encoding="utf-8"), re.M)
+    found = {k: (f.lower(), int(t), int(c.replace("_", "")), int(h), int(r)) for k, f, t, h, r, c in kinds}
+    expected = {k: (fam, tier, cap, h, r) for k, (_, fam, tier, cap, h, r) in power_lines.KINDS.items()}
+    if list(found) != list(expected):
+        err(f"LineKind.java kinds {list(found)} != tools/power_lines.py {list(expected)}")
+    for kind, values in expected.items():
+        if kind in found and found[kind] != values:
+            err(f"LineKind {kind}: {found[kind]} in Java, {values} in tools/power_lines.py")
+    renderer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client"
+                / "LineRenderer.java").read_text(encoding="utf-8")
+    for name in power_lines.MATERIALS:
+        col, row = power_lines.slot(name)
+        if f"static final float[] {name.upper()} = region({col}, {row});" not in renderer:
+            err(f"LineRenderer.java: material {name.upper()} is not region({col}, {row})")
+    lang = load(ASSETS / "lang" / "en_us.json") or {}
+    frame = power_lines.FRAME
+    if f"block.{MOD}.{frame}" not in lang:
+        err(f"Missing name for block {frame}")
+    state = load(ASSETS / "blockstates" / f"{frame}.json")
+    if state:
+        for variant in state.get("variants", {}).values():
+            model(variant["model"])
+    if not (DATA / MOD / "loot_table" / "blocks" / f"{frame}.json").is_file():
+        err(f"Missing loot table for {frame}")
+    if not (DATA / MOD / "damage_type" / "electrocution.json").is_file():
+        err("Missing damage type jugcraft:electrocution")
+    for key in power_lines.LANG:
+        if key not in lang:
+            err(f"Missing lang {key}")
+    java = "".join(p.read_text(encoding="utf-8") for p in (JAVA_ROOT / "powerline").glob("*.java"))
+    for key in set(re.findall(r'"((?:message|tooltip)\.jugcraft\.power_line\.[a-z_]+)"', java)):
+        if key not in lang:
+            err(f"powerline/ uses lang key {key} that is not generated")
+
+
 def check_drones():
     """drone/DroneTier.java, JugcraftDrones.PARTS and PlatformLayout match tools/drones.py."""
     java = JAVA_ROOT / "drone"
@@ -13232,6 +13271,7 @@ def main():
     check_machine_rotors()
     check_drones()
     check_tower()
+    check_power_lines()
     check_guide_books()
     check_handbook(registered)
     check_agriculture()

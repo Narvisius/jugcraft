@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XAX",
+    "PMP",
+    "PCP"
+  ],
+  "key": {
+    "X": "jugcraft:plastic_sheet",
+    "A": "jugcraft:aluminum_cable",
+    "P": "#c:plates/steel",
+    "M": "jugcraft:double_circuit_monopole",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:compact_monopole",
+    "count": 1
+  }
+}
