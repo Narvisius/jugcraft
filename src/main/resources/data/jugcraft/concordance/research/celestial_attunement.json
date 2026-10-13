@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "radiance",
+  "tradition": "starwatchers",
+  "stage": "practitioner",
+  "icon": "jugcraft:astrolabe",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:celestial_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:celestial_specimens",
+          "distinct": 3
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:celestial_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:observation",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

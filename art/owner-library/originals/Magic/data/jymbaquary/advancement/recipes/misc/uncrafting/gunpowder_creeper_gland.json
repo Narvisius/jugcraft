@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_catalyzing_gland": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jymbaquary:catalyzing_gland"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "jymbaquary:uncrafting/gunpowder_creeper_gland"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_catalyzing_gland"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jymbaquary:uncrafting/gunpowder_creeper_gland"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:magebloom_crop",
+  "criteria": {
+    "has_alteration_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:alteration_table"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.alteration_table"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:alteration_table"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.alteration_table"
+    }
+  },
+  "requirements": [
+    [
+      "has_alteration_table"
+    ]
+  ]
+}

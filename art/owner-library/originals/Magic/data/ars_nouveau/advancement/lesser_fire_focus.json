@@ -1,0 +1,32 @@
+{
+  "parent": "ars_nouveau:curio_bag",
+  "criteria": {
+    "has_lesser_fire_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jymbaumental:lesser_fire_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jymbaumental.adv.desc.lesser_fire_focus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jymbaumental:lesser_fire_focus"
+    },
+    "title": {
+      "translate": "ars_jymbaumental.adv.title.lesser_fire_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_lesser_fire_focus"
+    ]
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SHS",
+    " B "
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "H": "minecraft:heart_of_the_sea",
+    "B": "minecraft:blaze_powder"
+  },
+  "result": {
+    "id": "jugcraft:hearthstone",
+    "count": 1
+  }
+}

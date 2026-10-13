@@ -1,0 +1,22 @@
+/* The Concordance Journal's GuiLib workspace (src/client/kotlin/.../JournalWorkspace.kt). Light text on a dark
+   panel, a visible focus ring on every control, and no motion with the Concordance's reduced-motion setting. */
+:root { --guilib-accent: #9b86d6; }
+body { display: flex; align-items: center; justify-content: center; }
+.journal {
+  width: min(440px, 94vw); height: 90vh; padding: 8px; display: flex; flex-direction: column;
+  background-color: #141419; border: 1px solid #6f5ba8; border-radius: 4px; color: #f2f0f8;
+}
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.header h2 { color: #ffd98a; margin: 0; }
+.actions { display: flex; gap: 6px; align-items: center; }
+.refresh { padding: 2px 6px; background-color: #2a2833; border: 1px solid #6f5ba8; border-radius: 3px; color: #f2f0f8; }
+.refresh:hover { background-color: #3a3547; }
+button:focus-visible, .guilib-tab:focus-visible, .guilib-switch:focus-visible { outline: 1px solid #ffd98a; outline-offset: 1px; }
+.sections { margin-bottom: 4px; }
+.lines { flex-grow: 1; min-height: 0; padding: 2px 4px; background-color: #1b1a22; border-radius: 3px; }
+.line { padding: 2px 0; line-height: 10px; }
+.line .exact { margin-left: 4px; }
+.status { color: #c9c3d8; flex-grow: 1; }
+.help { color: #c9c3d8; margin-top: 4px; font-size: 7px; }
+.reduced-motion .guilib-tab-indicator { transition: none; }
+.reduced-motion .guilib-switch-thumb { transition: none; }

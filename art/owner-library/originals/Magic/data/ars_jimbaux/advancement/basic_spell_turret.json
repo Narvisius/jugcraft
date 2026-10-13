@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:enchanting_apparatus",
+  "criteria": {
+    "has_basic_spell_turret": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:basic_spell_turret"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.basic_spell_turret"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:basic_spell_turret"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.basic_spell_turret"
+    }
+  },
+  "requirements": [
+    [
+      "has_basic_spell_turret"
+    ]
+  ]
+}

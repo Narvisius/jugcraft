@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "GMG",
+    "SSS"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "M": "minecraft:phantom_membrane",
+    "S": "minecraft:dark_oak_slab"
+  },
+  "result": {
+    "id": "jugcraft:oneiric_censer",
+    "count": 1
+  }
+}

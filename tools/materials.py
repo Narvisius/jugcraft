@@ -14,7 +14,8 @@ MOD = "jugcraft"
 FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "titanium", "thallite", "aluminum",
             "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil", "machines", "deposits",
             "explosives", "agriculture", "parties", "drones",
-            "pixel_hollows", "retro_trader", "alpine_spawn", "biomes", "town", "diagonal_connections", "raiders"]
+            "pixel_hollows", "retro_trader", "alpine_spawn", "biomes", "town", "diagonal_connections", "raiders",
+            "concordance", "guns"]
 
 # Metals use the vanilla form set. "mined" adds ore, deepslate ore, raw item and raw block.
 # cook: which vanilla cookers can smelt the ore/raw form. tool: minimum pickaxe tier.
@@ -261,6 +262,9 @@ def feature_of(entry_id):
     import arms
     if entry_id in arms.items():
         return arms.feature(entry_id)
+    import guns
+    if entry_id in guns.items() or entry_id in guns.blocks():
+        return "guns"
     import arms_variants
     if entry_id in arms_variants.items():
         return arms_variants.FEATURE
@@ -320,6 +324,12 @@ def feature_of(entry_id):
         return "raiders"
     import armoured_walker
     if entry_id in armoured_walker.ITEMS:
+        return "machines"
+    import concordance
+    if entry_id in concordance.items() or entry_id in concordance.blocks() or entry_id in concordance.itemless_blocks():
+        return concordance.FEATURE
+    import industrial_forms
+    if entry_id in industrial_forms.blocks():
         return "machines"
     import pixel_hollows
     return pixel_hollows.feature_of(entry_id)

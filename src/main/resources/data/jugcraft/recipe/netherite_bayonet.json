@@ -1,0 +1,15 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "base": "jugcraft:diamond_bayonet",
+  "addition": "minecraft:netherite_ingot",
+  "result": {
+    "id": "jugcraft:netherite_bayonet"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_runesmithing_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:gold_nugget"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_runesmithing_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_runesmithing_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

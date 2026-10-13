@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:chelicerae",
+    "S": "#c:strings",
+    "T": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:poison"
+        }
+      },
+      "items": "minecraft:potion"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:cave_spider"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

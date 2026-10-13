@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:guardian_spike",
+    "S": "minecraft:prismarine_shard",
+    "T": "minecraft:cod"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:guardian"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

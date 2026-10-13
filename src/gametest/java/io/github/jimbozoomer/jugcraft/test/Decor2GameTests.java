@@ -20,11 +20,13 @@ import java.util.List;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -345,9 +347,23 @@ public class Decor2GameTests {
 		}
 
 		CompoundTag saved = giant.saveWithoutMetadata(level.registryAccess());
+		// World saves add this reserved field after the custom data. It must not
+		// overwrite the pumpkin's persistent contest identity.
+		saved.putString("id", "jugcraft:giant_pumpkin");
 		GiantPumpkinBlockEntity copy = new GiantPumpkinBlockEntity(giant.getBlockPos(), giant.getBlockState());
 		copy.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
 		helper.assertTrue(copy.lit() && copy.soul(), "Its soul flame is saved");
+		helper.assertTrue(copy.id().equals(giant.id()), "World metadata must preserve the pumpkin's identity");
+		CompoundTag legacy = saved.copy();
+		legacy.remove("pumpkin_id");
+		legacy.put("id", UUIDUtil.CODEC.encodeStart(NbtOps.INSTANCE, giant.id()).getOrThrow());
+		GiantPumpkinBlockEntity old = new GiantPumpkinBlockEntity(giant.getBlockPos(), giant.getBlockState());
+		old.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), legacy));
+		helper.assertTrue(old.id().equals(giant.id()) && old.soul(), "A legacy UUID tag must still load");
+		legacy.putString("id", "jugcraft:giant_pumpkin");
+		GiantPumpkinBlockEntity missing = new GiantPumpkinBlockEntity(giant.getBlockPos(), giant.getBlockState());
+		missing.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), legacy));
+		helper.assertTrue(missing.id() != null && missing.soul(), "Older world metadata must retain other pumpkin state");
 
 		player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 		player.gameMode.useItemOn(player, level, player.getMainHandItem(), InteractionHand.MAIN_HAND, face);

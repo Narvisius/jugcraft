@@ -53,7 +53,21 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 
 	public LargeMachineBlock(Properties properties, MachineKind kind) {
 		super(properties, kind);
-		this.registerDefaultState(this.defaultBlockState().setValue(PART, 0));
+		this.registerDefaultState(this.defaultBlockState().setValue(partProperty(), 0));
+	}
+
+	/**
+	 * The property numbering this block's parts: {@link #PART} here, each industrial form's own (see
+	 * {@link io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlock}). The block state definition is built while
+	 * the block is still being constructed, so it must not depend on fields a subclass has yet to set.
+	 */
+	protected IntegerProperty partProperty() {
+		return PART;
+	}
+
+	/** {@code state} as part {@code part}. */
+	protected BlockState withPart(BlockState state, int part) {
+		return state.setValue(partProperty(), part);
 	}
 
 	/** The coke oven's chimney block: only the pipe, which stands at the corner shared by the four blocks below. */
@@ -66,7 +80,7 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		if (kind() == MachineKind.COKE_OVEN && state.getValue(PART) == COKE_OVEN_CHIMNEY) {
+		if (kind() == MachineKind.COKE_OVEN && part(state) == COKE_OVEN_CHIMNEY) {
 			return CHIMNEY.get(state.getValue(FACING));
 		}
 		return super.getShape(state, level, pos, context);
@@ -84,12 +98,12 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 
 	@Override
 	public BlockPos masterPos(BlockPos pos, BlockState state) {
-		return footprint(state).masterPos(pos, state.getValue(FACING), state.getValue(PART));
+		return footprint(state).masterPos(pos, state.getValue(FACING), part(state));
 	}
 
 	@Override
 	public int part(BlockState state) {
-		return state.getValue(PART);
+		return state.getValue(partProperty());
 	}
 
 	/** Hoppers (and Fabric item transfer) reach the master's slots through any part. */
@@ -100,12 +114,12 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 
 	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return state.getValue(PART) == 0 ? super.newBlockEntity(pos, state) : null;
+		return part(state) == 0 ? super.newBlockEntity(pos, state) : null;
 	}
 
 	@Override
 	public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return state.getValue(PART) == 0 ? super.getTicker(level, state, type) : null;
+		return part(state) == 0 ? super.getTicker(level, state, type) : null;
 	}
 
 	@Override
@@ -121,7 +135,7 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 				return null;
 			}
 		}
-		return state.setValue(PART, 0);
+		return withPart(state, 0);
 	}
 
 	/** The whole machine where its item would go (client/MbsPreview.java), the cells in the way marked. */
@@ -154,7 +168,7 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 		}
 		Direction facing = state.getValue(FACING);
 		for (int part = 1; part < footprint(state).size(); part++) {
-			level.setBlock(footprint(state).partPos(pos, facing, part), state.setValue(PART, part), Block.UPDATE_ALL);
+			level.setBlock(footprint(state).partPos(pos, facing, part), withPart(state, part), Block.UPDATE_ALL);
 		}
 	}
 
@@ -168,14 +182,14 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 		// its fluid drops from its master instead (its other parts drop nothing), so the master is broken with drops.
 		Direction facing = state.getValue(FACING);
 		BlockPos master = masterPos(pos, state);
-		if (kind().keepsContents() && state.getValue(PART) != 0 && level.getBlockState(master).is(this)) {
+		if (kind().keepsContents() && part(state) != 0 && level.getBlockState(master).is(this)) {
 			level.destroyBlock(master, true);
 			return;
 		}
 		for (int part = 0; part < footprint(state).size(); part++) {
 			BlockPos partPos = footprint(state).partPos(master, facing, part);
 			BlockState other = level.getBlockState(partPos);
-			if (!partPos.equals(pos) && other.is(this) && other.getValue(FACING) == facing && other.getValue(PART) == part) {
+			if (!partPos.equals(pos) && other.is(this) && other.getValue(FACING) == facing && part(other) == part) {
 				level.removeBlock(partPos, false);
 			}
 		}
@@ -205,6 +219,6 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
-		builder.add(PART);
+		builder.add(partProperty());
 	}
 }

@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_first_light_understood",
+  "display": {
+    "icon": {
+      "id": "minecraft:spyglass"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_celestial_attunement_encountered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_celestial_attunement_encountered.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

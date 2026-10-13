@@ -1,4 +1,4 @@
-# Guns: page 3 of 5
+# Guns: page 3 of 16
 
 [Category index](README.md) · [All categories](../README.md) · [Previous](page-002.md) · [Next](page-004.md)
 
@@ -6,6 +6,24 @@ Paths preserve the supplied collection. Follow the [reuse guide](../../README.md
 
 | File | Type | Image size | Metadata / texture |
 |---|---|---|---|
+| [Guns/item/bomb_lance.animation.json](../../originals/Blocks/Guns/item/bomb_lance.animation.json) | animation JSON | — | — |
+| [Guns/item/bomb_lance.png](../../originals/Blocks/Guns/item/bomb_lance.png) | texture | 64×64 | — |
+| [Guns/item/boomstick.animation.json](../../originals/Blocks/Guns/item/boomstick.animation.json) | animation JSON | — | — |
+| [Guns/item/boomstick.png](../../originals/Blocks/Guns/item/boomstick.png) | texture | 128×128 | — |
+| [Guns/item/boomstick_2.png](../../originals/Blocks/Guns/item/boomstick_2.png) | texture | 128×128 | — |
+| [Guns/item/bouncy_grenade_round.png](../../originals/Blocks/Guns/item/bouncy_grenade_round.png) | texture | 16×16 | — |
+| [Guns/item/brass_bolt.png](../../originals/Blocks/Guns/item/brass_bolt.png) | texture | 16×16 | — |
+| [Guns/item/brass_mask_2d.png](../../originals/Blocks/Guns/item/brass_mask_2d.png) | texture | 16×16 | — |
+| [Guns/item/brawler.animation.json](../../originals/Blocks/Guns/item/brawler.animation.json) | animation JSON | — | — |
+| [Guns/item/brawler.png](../../originals/Blocks/Guns/item/brawler.png) | texture | 64×64 | — |
+| [Guns/item/bruiser.animation.json](../../originals/Blocks/Guns/item/bruiser.animation.json) | animation JSON | — | — |
+| [Guns/item/bruiser.png](../../originals/Blocks/Guns/item/bruiser.png) | texture | 64×64 | — |
+| [Guns/item/buckshot.png](../../originals/Blocks/Guns/item/buckshot.png) | texture | 16×16 | — |
+| [Guns/item/bullet_mold.png](../../originals/Blocks/Guns/item/bullet_mold.png) | texture | 16×16 | — |
+| [Guns/item/callwell.animation.json](../../originals/Blocks/Guns/item/callwell.animation.json) | animation JSON | — | — |
+| [Guns/item/callwell.png](../../originals/Blocks/Guns/item/callwell.png) | texture | 128×128 | — |
+| [Guns/item/callwell_conversion.animation.json](../../originals/Blocks/Guns/item/callwell_conversion.animation.json) | animation JSON | — | — |
+| [Guns/item/callwell_conversion.png](../../originals/Blocks/Guns/item/callwell_conversion.png) | texture | 128×128 | — |
 | [Guns/item/callwell_terminal.animation.json](../../originals/Blocks/Guns/item/callwell_terminal.animation.json) | animation JSON | — | — |
 | [Guns/item/callwell_terminal.png](../../originals/Blocks/Guns/item/callwell_terminal.png) | texture | 128×128 | — |
 | [Guns/item/carabine.png](../../originals/Blocks/Guns/item/carabine.png) | texture | 64×64 | — |
@@ -238,21 +256,3 @@ Paths preserve the supplied collection. Follow the [reuse guide](../../README.md
 | [Guns/item/large_iron_casing.png](../../originals/Blocks/Guns/item/large_iron_casing.png) | texture | 16×16 | — |
 | [Guns/item/laser.png](../../originals/Blocks/Guns/item/laser.png) | texture | 16×16 | — |
 | [Guns/item/laser_musket.animation.json](../../originals/Blocks/Guns/item/laser_musket.animation.json) | animation JSON | — | — |
-| [Guns/item/laser_musket.png](../../originals/Blocks/Guns/item/laser_musket.png) | texture | 64×64 | — |
-| [Guns/item/laser_musket_glass.png](../../originals/Blocks/Guns/item/laser_musket_glass.png) | texture | 16×16 | — |
-| [Guns/item/laser_sight.png](../../originals/Blocks/Guns/item/laser_sight.png) | texture | 32×32 | — |
-| [Guns/item/lasgun.png](../../originals/Blocks/Guns/item/lasgun.png) | texture | 128×128 | — |
-| [Guns/item/leviathan_tooth.png](../../originals/Blocks/Guns/item/leviathan_tooth.png) | texture | 16×16 | — |
-| [Guns/item/libertas.animation.json](../../originals/Blocks/Guns/item/libertas.animation.json) | animation JSON | — | — |
-| [Guns/item/libertas.png](../../originals/Blocks/Guns/item/libertas.png) | texture | 128×128 | — |
-| [Guns/item/light_stock.png](../../originals/Blocks/Guns/item/light_stock.png) | texture | 32×32 | — |
-| [Guns/item/lightning_in_a_bottle.png](../../originals/Blocks/Guns/item/lightning_in_a_bottle.png) | texture | 16×64 | — |
-| [Guns/item/llr_director.animation.json](../../originals/Blocks/Guns/item/llr_director.animation.json) | animation JSON | — | — |
-| [Guns/item/llr_director.png](../../originals/Blocks/Guns/item/llr_director.png) | texture | 128×128 | — |
-| [Guns/item/lockewood.animation.json](../../originals/Blocks/Guns/item/lockewood.animation.json) | animation JSON | — | — |
-| [Guns/item/lockewood.png](../../originals/Blocks/Guns/item/lockewood.png) | texture | 128×128 | — |
-| [Guns/item/locust.animation.json](../../originals/Blocks/Guns/item/locust.animation.json) | animation JSON | — | — |
-| [Guns/item/locust.png](../../originals/Blocks/Guns/item/locust.png) | texture | 128×128 | — |
-| [Guns/item/locust_animated.png](../../originals/Blocks/Guns/item/locust_animated.png) | texture | 64×128 | — |
-| [Guns/item/lone_wonder.animation.json](../../originals/Blocks/Guns/item/lone_wonder.animation.json) | animation JSON | — | — |
-| [Guns/item/lone_wonder.png](../../originals/Blocks/Guns/item/lone_wonder.png) | texture | 128×128 | — |

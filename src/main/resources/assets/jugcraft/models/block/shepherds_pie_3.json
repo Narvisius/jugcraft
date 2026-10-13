@@ -1,0 +1,219 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/shepherds_pie_top",
+    "platter": "jugcraft:block/platter",
+    "leftovers": "jugcraft:block/shepherds_pie_leftovers",
+    "top": "jugcraft:block/shepherds_pie_top",
+    "side": "jugcraft:block/shepherds_pie_side",
+    "inside": "jugcraft:block/shepherds_pie_inside"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        1,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#platter"
+        },
+        "south": {
+          "texture": "#platter"
+        },
+        "east": {
+          "texture": "#platter"
+        },
+        "west": {
+          "texture": "#platter"
+        },
+        "up": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#platter"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        1,
+        8
+      ],
+      "to": [
+        14,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#inside",
+          "uv": [
+            8,
+            9,
+            14,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            8,
+            9,
+            14,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            8,
+            9,
+            14,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#inside",
+          "uv": [
+            8,
+            9,
+            14,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        1,
+        8
+      ],
+      "to": [
+        8,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#inside",
+          "uv": [
+            2,
+            9,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            2,
+            9,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#inside",
+          "uv": [
+            8,
+            9,
+            14,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            8,
+            9,
+            14,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        1,
+        2
+      ],
+      "to": [
+        8,
+        8,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            2,
+            9,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#inside",
+          "uv": [
+            2,
+            9,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#inside",
+          "uv": [
+            2,
+            9,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            2,
+            9,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#side"
+        }
+      }
+    }
+  ]
+}

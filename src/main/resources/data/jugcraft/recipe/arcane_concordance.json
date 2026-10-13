@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "#jugcraft:concordance/luminous_matter"
+  ],
+  "result": {
+    "id": "modonomicon:modonomicon",
+    "count": 1,
+    "components": {
+      "modonomicon:book_id": "jugcraft:arcane_concordance"
+    }
+  }
+}

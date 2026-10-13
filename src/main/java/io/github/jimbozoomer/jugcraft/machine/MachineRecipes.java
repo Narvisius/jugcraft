@@ -30,10 +30,12 @@ public final class MachineRecipes {
 	public static void register() {
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, success) -> clearCache());
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> clearCache());
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> clearCache());
 	}
 
 	private static synchronized void clearCache() {
 		MULTI_CACHE.clear();
+		MachineCompanionPort.clearCatalog();
 	}
 
 	public static Optional<MachineRecipe> find(ServerLevel level, MachineKind kind, ItemStack input) {

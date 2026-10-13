@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:glass_bottle"
+    },
+    {
+      "ingredient": "jugcraft:mint",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:mint_tea"
+  },
+  "time": 200
+}

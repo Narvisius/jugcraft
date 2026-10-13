@@ -1,0 +1,27 @@
+{
+  "parent": "ars_jimbaux:wilden_tribute",
+  "criteria": {
+    "wilden_explosion": {
+      "trigger": "ars_jimbaux:chimera_explosion"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.wilden_explosion"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:wilden_tribute"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.wilden_explosion"
+    }
+  },
+  "requirements": [
+    [
+      "wilden_explosion"
+    ]
+  ]
+}

@@ -221,7 +221,7 @@ its parent so that each PR brings at most one new wood set, or stays small.
 | banyan | banyan | fig (new wood) | fig wood set, leaves, sapling | medium; the first cut candidate | 11b |
 | mango | mango | mango (new wood) | mango wood set, leaves, sapling, mangoes | medium; a cut candidate | 11c |
 | rubber_tree | Pará rubber tree | rubber log on jungle planks, a stand-in | built by agriculture slice 5 | high | 12 |
-| banana | banana | banana stem | stem, leaves, sapling, bunch, bananas | high | 12 |
+| banana | banana | banana stem | built by the fruit crops (agriculture): stem, leaves, sapling, bananas | high | 12 |
 | tree_fern | tree fern | tree fern trunk | trunk, fronds, sapling | medium | 12 |
 | buttressed_mahogany | big-leaf mahogany on buttresses | mahogany | none | medium | 12 |
 | walnut | walnut | walnut (new wood) | walnut wood set, leaves, sapling, walnuts | medium | 13 |
@@ -1501,7 +1501,11 @@ sapling and the tree tap. This roster only places it, as it does the slice-4 fru
 
 #### banana
 Banana (*Musa acuminata*). **High.** The iconic plant of tropical gardens and forest edges, in place of vanilla jungle
-bushes, and it gives food.
+bushes, and it gives food. **The fruit crops build it** (`docs/features/fruit-crops.md`, 8 October 2026) as an orchard
+tree: the `banana_stem`, as below; `banana_leaves`, broad fronds that blossom and hang with bananas as the orchards'
+leaves fruit, in place of the `banana_fronds` and the bunch block; the sapling, planted from a Banana Pup; Tropics 15%
+and Rainforest 10%; a trunk 4 (+2) under cherry foliage radius 3, height 4. This roster only places it in the Lush
+Grassland.
 - **Grows in:** Tropics 15%; Rainforest 10%; Lush Grassland 45%. It replaces vanilla's jungle bush, and is the Lush
   Grassland's default.
 - **Shape:** straight trunk 2 (+1) of a new `banana_stem`, under a broad, drooping crown of cherry foliage (radius 2,

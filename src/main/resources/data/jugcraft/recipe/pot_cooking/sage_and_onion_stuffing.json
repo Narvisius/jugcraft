@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "minecraft:bread"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    },
+    {
+      "ingredient": "jugcraft:sage"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:sage_and_onion_stuffing"
+  },
+  "time": 200
+}

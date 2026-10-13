@@ -505,6 +505,16 @@ public enum MachineKind implements StringRepresentable {
 		};
 	}
 
+	/** Processing jobs, including continuous extraction/separation; never power production or storage. */
+	public boolean supportsCompanionAssistance() {
+		return isProcessor() || switch (this) {
+			case PUMPJACK, FRACKING_RIG, AIR_SEPARATION_UNIT, DISTILLATION_TOWER, CATALYTIC_CRACKER,
+				FLOWBACK_TREATMENT_UNIT, POLYMERIZATION_REACTOR, ELECTROLYTIC_CELL, CHEMICAL_REACTOR,
+				SYNTHESIS_CONVERTER, HYDROTREATER, LITHOGRAPHY_STATION, AMMONIA_CHILLER, CRYOGENIC_LIQUEFIER -> true;
+			default -> false;
+		};
+	}
+
 	/** Generators only produce energy; they never accept it. */
 	public boolean isGenerator() {
 		return this == COAL_GENERATOR || this == SOLAR_PANEL || this == STEAM_GENERATOR

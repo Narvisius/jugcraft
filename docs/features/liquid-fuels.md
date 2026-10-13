@@ -6,6 +6,12 @@ Owner: jimbozoomer-byte
 Target milestone and tier: refinery and electronics tiers, after the batch 38 rocket workshop.
 Primary specialty and supported player role: refining, power and rocketry.
 
+## Owner-requested fuel-family expansion (7 October 2026)
+
+The [industrial chemical catalog](industrial-chemical-catalog-and-routes.md#rocket-families-and-phase-conversion) records future methane/LOX, LH2/LOX and hydrazine/MMH/N2O4 roles alongside existing RP-1/LOX, with station/satellite uses. The owner selects Rotary Condensators for appropriate ordinary phase changes and upgraded Cryogenic Liquefiers for rocket liquids, building on this existing family. Exact per-fluid capabilities, cooling costs, recipes, progression and space compatibility remain to design; this plan preserves existing kerosene, oxygen and motor routes and implements no new launches or dimensions.
+
+The [twelfth owner batch](industrial-chemistry-and-fuels-plan.md#grid-storage-synthetic-fuels-and-cryogenics-decisions-twelfth-batch), recorded 8 October 2026, selects independently obtainable cobalt/ceramic reusable tooling, one synthetic-crude feed for shared refining/upgrading, existing oxygen cooling followed by methane and then a more advanced hydrogen capability, insulated shared-tank variants, and hydrazine before MMH. Exact supplies, recipes, material/energy/conversion receipts, capability tiers and engine/oxidizer compatibility remain to specify. This adds no boil-off/maintenance mechanic, destination, launch or change to the current fuel/rocket behavior below.
+
 ## Player experience
 - **RP-1 kerosene** (a straw-tinted liquid with a bucket), hydrocracked in the **catalytic cracker**.
   - Inputs: heavy fuel oil, and hydrogen in the tank where water normally goes, over the cracking catalyst.

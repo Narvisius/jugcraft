@@ -1,0 +1,32 @@
+{
+  "parent": "ars_nouveau:enchanting_apparatus",
+  "criteria": {
+    "has_everfull_urn": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jymbaumental:everfull_urn"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jymbaumental.adv.desc.everfull_urn"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jymbaumental:everfull_urn"
+    },
+    "title": {
+      "translate": "ars_jymbaumental.adv.title.everfull_urn"
+    }
+  },
+  "requirements": [
+    [
+      "has_everfull_urn"
+    ]
+  ]
+}

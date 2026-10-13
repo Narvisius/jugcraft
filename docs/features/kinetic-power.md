@@ -11,7 +11,8 @@ Primary specialty and supported player role: engineering
 - Run **Iron Shafts** and **Brass Gearboxes** to your machines; they run on the rotation directly, without cables.
 - Put a **Dynamo** on the line to feed the electric network.
 - Shafts, belt pulleys, the hand crank, the motor's output shaft and the steam engine's flywheel really spin while they turn (PR #37); the gearbox's face gears are animated.
-- Link two **Belt Pulleys** with a **Leather Belt** to carry rotation up to 16 blocks without a shaft between them.
+- Link two **Belt Pulleys** with a **Drive Belt** to carry rotation up to 16 blocks without a shaft between them. (It
+  was called the Leather Belt until the owner's worn Leather Belt arrived; the id `jugcraft:belt` is unchanged.)
 - An **Electric Motor** turns JE from cables into rotation.
 
 Details: [TECH_TREE.md → Kinetic power](../TECH_TREE.md#kinetic-power).
@@ -30,7 +31,7 @@ A 2×2×2 steam engine, four times the small one: 256 KE/t out of a shaft at the
 
 ## Belts and the Electric Motor (PR #36)
 
-- **Belt Pulley:** a shaft (placed like a log) that can hold a belt. Use a **Leather Belt** on one pulley, then on another: they must share an axis, sit level with each other along that axis (the belt runs square to it), be at most 16 blocks apart and have no belt yet. The belt is used up; breaking either pulley drops it. Rotation reaching one pulley leaves the other in both directions along its axis. The belt is drawn between the pulleys by a block entity renderer.
+- **Belt Pulley:** a shaft (placed like a log) that can hold a belt. Use a **Drive Belt** on one pulley, then on another: they must share an axis, sit level with each other along that axis (the belt runs square to it), be at most 16 blocks apart and have no belt yet. The belt is used up; breaking either pulley drops it. Rotation reaching one pulley leaves the other in both directions along its axis. The belt is drawn between the pulleys by a block entity renderer.
 - **Electric Motor:** faces the way you look when you place it and drives the block in front. It takes up to 256 JE/t from cables, holds 8,000 JE and puts out up to 96 KE/t at 75%. JE is only used for KE something actually takes, rounded up.
 - **No loop:** motor (75%) then dynamo (75%) returns 56% of the JE.
 - Recipes: pulley = planks, iron shaft, planks; belt = leather, string, leather; motor = iron plates, copper wire, iron shaft, copper cable.

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSM",
+    " AB"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "M": "minecraft:amethyst_shard",
+    "A": "jugcraft:advanced_circuit",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:beam_pistol"
+  }
+}

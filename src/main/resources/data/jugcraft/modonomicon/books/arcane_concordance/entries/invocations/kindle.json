@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:invocations/kindle",
+  "category": "jugcraft:invocations",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.invocations.kindle.name",
+  "description": "book.jugcraft.arcane_concordance.invocations.kindle.description",
+  "icon": "minecraft:glowstone_dust",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/first_light_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.invocations.kindle.p0.title",
+      "text": "book.jugcraft.arcane_concordance.invocations.kindle.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.invocations.kindle.p1.title",
+      "text": "book.jugcraft.arcane_concordance.invocations.kindle.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

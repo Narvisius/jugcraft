@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:rice",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:egg"
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:fried_rice"
+  },
+  "time": 200
+}

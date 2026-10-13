@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "jugcraft:blocks/wild_rice",
+  "pools": [
+    {
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:wild_rice",
+        "state": {
+          "half": "lower"
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:wild_rice",
+              "condition": "minecraft:tool/can_shear"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:rice",
+              "modifier": [
+                {
+                  "type": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "min": 1,
+                    "max": 2
+                  },
+                  "add": false
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_empty_bullet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jymbaquary:bullets/empty_bullet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "jymbaquary:gold_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_empty_bullet"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jymbaquary:gold_nugget"
+    ]
+  }
+}

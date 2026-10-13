@@ -1,0 +1,109 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/oak_planks",
+    "wood": "minecraft:block/oak_planks",
+    "trim": "minecraft:block/stripped_oak_log",
+    "cloth": "minecraft:block/green_wool",
+    "label": "minecraft:block/white_wool",
+    "food": "minecraft:block/hay_block_top"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        15.2,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#cloth"
+        },
+        "down": {
+          "texture": "#cloth"
+        },
+        "north": {
+          "texture": "#cloth"
+        },
+        "south": {
+          "texture": "#cloth"
+        },
+        "east": {
+          "texture": "#cloth"
+        },
+        "west": {
+          "texture": "#cloth"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        15.1,
+        4
+      ],
+      "to": [
+        12,
+        15.2,
+        12
+      ],
+      "faces": {
+        "up": {
+          "texture": "#label"
+        },
+        "down": {
+          "texture": "#label"
+        },
+        "north": {
+          "texture": "#label"
+        },
+        "south": {
+          "texture": "#label"
+        },
+        "east": {
+          "texture": "#label"
+        },
+        "west": {
+          "texture": "#label"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        15,
+        6
+      ],
+      "to": [
+        11,
+        15.1,
+        10
+      ],
+      "faces": {
+        "up": {
+          "texture": "#food"
+        },
+        "down": {
+          "texture": "#food"
+        },
+        "north": {
+          "texture": "#food"
+        },
+        "south": {
+          "texture": "#food"
+        },
+        "east": {
+          "texture": "#food"
+        },
+        "west": {
+          "texture": "#food"
+        }
+      }
+    }
+  ]
+}

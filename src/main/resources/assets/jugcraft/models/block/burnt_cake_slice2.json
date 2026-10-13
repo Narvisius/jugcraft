@@ -1,0 +1,88 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/burnt_cake_front",
+    "top": "jugcraft:block/burnt_cake_top",
+    "front": "jugcraft:block/burnt_cake_front",
+    "side": "jugcraft:block/burnt_cake_side",
+    "inside": "jugcraft:block/burnt_cake_inside"
+  },
+  "elements": [
+    {
+      "from": [
+        8,
+        0,
+        8
+      ],
+      "to": [
+        16,
+        9,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#inside",
+          "uv": [
+            8,
+            15,
+            16,
+            16
+          ],
+          "cullface": "down"
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "north": {
+          "texture": "#inside"
+        },
+        "south": {
+          "texture": "#front",
+          "cullface": "south"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        8,
+        9,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#inside",
+          "uv": [
+            0,
+            15,
+            8,
+            16
+          ],
+          "cullface": "down"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "north": {
+          "texture": "#inside"
+        },
+        "south": {
+          "texture": "#front",
+          "cullface": "south"
+        }
+      }
+    }
+  ]
+}

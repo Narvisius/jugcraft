@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "strata",
+  "tradition": "runesmiths",
+  "stage": "practitioner",
+  "icon": "jugcraft:resonant_ring",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:artifice_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:artifice_specimens",
+          "distinct": 3
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:artifice_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:artifice",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

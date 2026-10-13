@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.walker;
 
+import io.github.jimbozoomer.jugcraft.SmoothFlight;
+import net.minecraft.world.entity.LinearInterpolationHandler;
 import java.util.List;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.core.BlockPos;
@@ -84,7 +86,7 @@ public class DieselWalker extends Entity {
 	private int drillProgress;
 	private float damage;
 	/** Client side: how far it has walked (for the legs' swing) and the tick its fist last swung (for the arm). */
-	private float stride;
+	private final WalkerStride gait = new WalkerStride();
 	private int swungAt = -100;
 
 	public DieselWalker(EntityType<? extends DieselWalker> type, Level level) {
@@ -104,8 +106,12 @@ public class DieselWalker extends Entity {
 	}
 
 	/** Client side: blocks walked so far, which the renderer turns into the legs' swing. */
-	public float stride() {
-		return stride;
+	public float stride(float partialTick) {
+		return gait.phase(partialTick);
+	}
+
+	public float strideWeight(float partialTick) {
+		return gait.weight(partialTick);
 	}
 
 	/** Client side: ticks since the fist last swung. */
@@ -163,12 +169,17 @@ public class DieselWalker extends Entity {
 	}
 
 	@Override
+	public LinearInterpolationHandler createInterpolationHandler() {
+		return SmoothFlight.handler(this);
+	}
+
+	@Override
 	public void tick() {
 		super.tick();
 		if (level() instanceof ServerLevel level) {
 			walk(level);
 		} else {
-			stride += (float) Math.sqrt((getX() - xo) * (getX() - xo) + (getZ() - zo) * (getZ() - zo));
+			gait.tick(this);
 		}
 		if (level().isClientSide() && drilling() && tickCount % 2 == 0) {
 			double yaw = Math.toRadians(getYRot());

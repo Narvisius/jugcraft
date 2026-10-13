@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_celestial_attunement_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_celestial_attunement_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_celestial_attunement_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

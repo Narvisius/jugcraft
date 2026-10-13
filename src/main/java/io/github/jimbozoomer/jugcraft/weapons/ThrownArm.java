@@ -129,6 +129,8 @@ public class ThrownArm extends ThrowableItemProjectile {
 		}
 		if (flight == 0) {
 			launch = getDeltaMovement().length();
+		} else if (level() instanceof ServerLevel && strikeWithin()) {
+			return;
 		}
 		super.tick();
 		if (isRemoved()) {
@@ -147,6 +149,28 @@ public class ThrownArm extends ThrowableItemProjectile {
 				&& (position().distanceTo(from) >= JugcraftArms.CHAKRAM_RANGE || flight > JugcraftArms.CHAKRAM_MAX_TICKS)) {
 			turnBack(level);
 		}
+	}
+
+	/**
+	 * Strikes each foe whose box the arm starts this tick inside, widened by as much as the flight's own sweep widens the
+	 * boxes it looks for this tick, and says whether that ended the tick's flight (the arm came down, or the chakram
+	 * turned back). The sweep only finds the boxes it enters, so an arm that ended a tick a hair short of a foe, inside
+	 * the next tick's widening, flew on through it. Not on the first tick, which starts at the thrower's eye, so a throw
+	 * starts as vanilla's do.
+	 */
+	private boolean strikeWithin() {
+		// ProjectileUtil's margin: none for the first two ticks, then 0.05 more a tick, up to 0.3.
+		float margin = Math.max(0.0F, Math.min(0.3F, (tickCount - 2) / 20.0F));
+		Vec3 at = position();
+		for (Entity foe : level().getEntities(this, getBoundingBox().inflate(1.0), this::canHitEntity)) {
+			if (foe.getBoundingBox().inflate(margin).contains(at)) {
+				onHit(new EntityHitResult(foe, at));
+				if (isRemoved() || isReturning()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/** The chakram turns back to its thrower (or falls where it is, if its thrower is gone). */

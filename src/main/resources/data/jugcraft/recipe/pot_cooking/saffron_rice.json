@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:rice",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:saffron"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:saffron_rice"
+  },
+  "time": 200
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_verdant_husbandry_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:fern"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_verdant_husbandry_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_verdant_husbandry_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

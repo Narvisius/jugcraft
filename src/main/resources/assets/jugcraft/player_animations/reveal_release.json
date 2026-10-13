@@ -1,0 +1,71 @@
+{
+  "name": "reveal_release",
+  "author": "Jugcraft",
+  "description": "Arcane Concordance: reveal_release",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 0,
+    "beginTick": 0,
+    "endTick": 10,
+    "stopTick": 14,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -2.45
+        }
+      },
+      {
+        "tick": 4,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -1.55
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -1.4
+        }
+      },
+      {
+        "tick": 0,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "yaw": -0.55
+        }
+      },
+      {
+        "tick": 4,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "yaw": 0.2
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "yaw": 0.75
+        }
+      },
+      {
+        "tick": 0,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "head": {
+          "yaw": 0.0
+        }
+      }
+    ]
+  }
+}

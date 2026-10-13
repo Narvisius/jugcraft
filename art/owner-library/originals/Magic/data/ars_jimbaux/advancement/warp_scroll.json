@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:magebloom_crop",
+  "criteria": {
+    "has_warp_scroll": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:warp_scroll"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.warp_scroll"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:warp_scroll"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.warp_scroll"
+    }
+  },
+  "requirements": [
+    [
+      "has_warp_scroll"
+    ]
+  ]
+}

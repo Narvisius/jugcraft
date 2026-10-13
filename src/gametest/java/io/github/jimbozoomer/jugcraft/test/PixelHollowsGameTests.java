@@ -487,9 +487,19 @@ public class PixelHollowsGameTests {
 		server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), command);
 	}
 
-	/** Lower halves of arcade cabinets (one per shop), villagers and zombie villagers around a village's start. */
+	/**
+	 * Lower halves of arcade cabinets (one per shop), villagers and zombie villagers around a village's start. The count
+	 * runs up from the ground the village stands on, read at the corners of the area, where no piece stands (they stay
+	 * within 80 blocks of the start piece). Read at the centre, it could be a rooftop: with the desert's 18-block tower
+	 * standing there, the count's floor is 5 blocks above the shop's ground floor, and the shop goes uncounted.
+	 */
 	private static int[] countVillage(ServerLevel level, BlockPos centre) {
-		int surface = level.getHeight(Heightmap.Types.WORLD_SURFACE, centre.getX(), centre.getZ());
+		int surface = Integer.MAX_VALUE;
+		for (int dx = -VILLAGE_REACH; dx <= VILLAGE_REACH; dx += 2 * VILLAGE_REACH) {
+			for (int dz = -VILLAGE_REACH; dz <= VILLAGE_REACH; dz += 2 * VILLAGE_REACH) {
+				surface = Math.min(surface, level.getHeight(Heightmap.Types.WORLD_SURFACE, centre.getX() + dx, centre.getZ() + dz));
+			}
+		}
 		int shops = 0;
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		for (int x = centre.getX() - VILLAGE_REACH + 8; x <= centre.getX() + VILLAGE_REACH - 8; x++) {

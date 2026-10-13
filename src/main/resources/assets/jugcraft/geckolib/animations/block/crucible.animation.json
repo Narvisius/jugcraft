@@ -1,0 +1,79 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.crucible.empty": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {
+        "liquid": {
+          "scale": {
+            "0.0": [
+              1,
+              0,
+              1
+            ]
+          }
+        }
+      }
+    },
+    "animation.crucible.still": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {
+        "liquid": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    },
+    "animation.crucible.simmer": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "liquid": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ],
+            "1.0": [
+              1,
+              1.06,
+              1
+            ],
+            "2.0": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "ladle": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -6
+            ],
+            "1.0": [
+              0,
+              0,
+              6
+            ],
+            "2.0": [
+              0,
+              0,
+              -6
+            ]
+          }
+        }
+      }
+    }
+  }
+}

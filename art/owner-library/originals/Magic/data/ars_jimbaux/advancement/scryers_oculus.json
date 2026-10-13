@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:enchanting_apparatus",
+  "criteria": {
+    "has_scryers_oculus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:scryers_oculus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.scryers_oculus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:scryers_oculus"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.scryers_oculus"
+    }
+  },
+  "requirements": [
+    [
+      "has_scryers_oculus"
+    ]
+  ]
+}

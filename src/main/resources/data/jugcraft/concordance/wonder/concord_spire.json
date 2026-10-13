@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "heart": "jugcraft:spire_heart",
+  "stage": "master",
+  "rite": "jugcraft:spire_kindling",
+  "rite_range": 12,
+  "attendance_days": 7,
+  "pulse": 100,
+  "phases": [
+    {
+      "id": "foundation",
+      "structure": "jugcraft:spire_foundation"
+    },
+    {
+      "id": "shaft",
+      "structure": "jugcraft:spire_shaft",
+      "practices": 2
+    },
+    {
+      "id": "crown",
+      "structure": "crown",
+      "rite": true
+    },
+    {
+      "id": "kindling",
+      "sustain": 3
+    }
+  ]
+}

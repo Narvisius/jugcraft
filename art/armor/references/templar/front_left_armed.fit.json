@@ -1,0 +1,57 @@
+{
+ "cam": {
+  "dist": 60.0,
+  "tx": 0.0,
+  "ty": 16.0,
+  "tz": 0.0,
+  "az": -22.5616,
+  "el": 9.0754,
+  "f": 665.6983,
+  "cx": 341.3848,
+  "cy": 295.2008
+ },
+ "pose": {
+  "right_arm": [
+   -27.886,
+   0.0,
+   14.379
+  ],
+  "left_arm": [
+   3.194,
+   0.0,
+   -0.226
+  ],
+  "head": [
+   0.0,
+   7.063,
+   0.0
+  ]
+ },
+ "exclude": [
+  [
+   [
+    20,
+    255
+   ],
+   [
+    250,
+    285
+   ],
+   [
+    255,
+    340
+   ],
+   [
+    250,
+    530
+   ],
+   [
+    20,
+    530
+   ]
+  ]
+ ],
+ "thresh": 15,
+ "lighting": "blockbench",
+ "note": "fitted to the figure's outline (camera and its own pose; IoU 0.83); exclude: the clawed axe"
+}

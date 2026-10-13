@@ -1,0 +1,33 @@
+{
+  "parent": "ars_nouveau:lesser_fire_focus",
+  "criteria": {
+    "has_fire_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jymbaumental:fire_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jymbaumental.adv.desc.fire_focus"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "ars_jymbaumental:fire_focus"
+    },
+    "title": {
+      "translate": "ars_jymbaumental.adv.title.fire_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_fire_focus"
+    ]
+  ]
+}

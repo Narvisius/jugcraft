@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "strata",
+  "tradition": "balancewrights",
+  "stage": "practitioner",
+  "icon": "jugcraft:assayers_scale",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:assay_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:assay_specimens",
+          "distinct": 2
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:assay_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:assay",
+          "distinct": 5
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

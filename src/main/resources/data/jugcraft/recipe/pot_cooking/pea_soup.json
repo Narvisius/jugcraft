@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:peas",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:pea_soup"
+  },
+  "time": 200
+}

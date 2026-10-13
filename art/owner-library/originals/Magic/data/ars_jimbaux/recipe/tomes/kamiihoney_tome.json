@@ -1,0 +1,188 @@
+{
+  "type": "ars_jimbaux:caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "ars_jimbaux:constant",
+    "r": 255
+  },
+  "flavour_text": "Safely contain your enemies while they wither away. Some say Kamii is still stuck in a bubble somewhere after miscasting this curse.",
+  "name": "Kamii's Curse",
+  "sound": {},
+  "spell": [
+    "ars_jimbaux:glyph_projectile",
+    "ars_jimbaux:glyph_harm",
+    "ars_jimbaux:glyph_amplify",
+    "ars_jimbaux:glyph_amplify",
+    "ars_jimbaux:glyph_wither",
+    "ars_jimbaux:glyph_bubble",
+    "ars_jimbaux:glyph_extend_time",
+    "ars_jimbaux:glyph_extend_time"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "ars_jimbaux:constant",
+      "r": 255
+    },
+    "name": "Kamii's Curse",
+    "particleTimeline": {
+      "ars_jimbaux:projectile": {
+        "type": "ars_jimbaux:projectile",
+        "castSound": {
+          "sound": {}
+        },
+        "flairEffect": {
+          "particleOptions": {
+            "type": "ars_jimbaux:new_glow",
+            "properties": {
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:new_glow",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "ars_jimbaux:constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "onResolvingEffect": {
+          "motion": {
+            "type": "ars_jimbaux:burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:new_glow",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 5,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:emitter": {
+                "age": 0,
+                "rotation": {
+                  "x": 74.28657,
+                  "y": -87.508156
+                }
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:new_glow",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "ars_jimbaux:constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "onSpawnEffect": {
+          "particleOptions": {
+            "type": "ars_jimbaux:new_glow",
+            "properties": {
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:new_glow",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "ars_jimbaux:constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {}
+        },
+        "trailEffect": {
+          "motion": {
+            "type": "ars_jimbaux:helix",
+            "propMap": {
+              "ars_jimbaux:model": {
+                "resource": "ars_jimbaux:empty",
+                "subPropMap": {}
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:new_glow",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 255,
+                      "g": 255,
+                      "id": "ars_jimbaux:constant",
+                      "r": 50
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:new_glow",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 100,
+                "radius": 0.30000001192092896,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:new_glow",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 204,
+                      "g": 193,
+                      "id": "ars_jimbaux:constant",
+                      "r": 255
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              },
+              "ars_jimbaux:speed": {
+                "xzMaxSpeed": 0.0,
+                "xzMinSpeed": 0.0,
+                "yMaxSpeed": 0.0,
+                "yMinSpeed": 0.0
+              }
+            }
+          }
+        }
+      }
+    },
+    "recipe": [
+      "ars_jimbaux:glyph_projectile",
+      "ars_jimbaux:glyph_harm",
+      "ars_jimbaux:glyph_amplify",
+      "ars_jimbaux:glyph_amplify",
+      "ars_jimbaux:glyph_wither",
+      "ars_jimbaux:glyph_bubble",
+      "ars_jimbaux:glyph_extend_time",
+      "ars_jimbaux:glyph_extend_time"
+    ],
+    "sound": {}
+  },
+  "tome_type": "ars_jimbaux:caster_tome"
+}

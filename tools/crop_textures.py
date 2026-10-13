@@ -28,7 +28,6 @@ HUSK = [rgb("6f8a35"), rgb("93ab4b"), rgb("b5c56a"), rgb("d3dc95")]
 KERNEL = [rgb("b9791a"), rgb("dfa42a"), rgb("f2c64a"), rgb("fbe27e")]
 SILK = [rgb("6e3419"), rgb("955029"), rgb("bf7a44")]
 TASSEL = [rgb("7d6231"), rgb("a88945"), rgb("cfb168"), rgb("ead394")]
-TASSEL_GREEN = [rgb("58722e"), rgb("7c9642"), rgb("a2b85c"), rgb("c8d68a")]
 HUSK6 = [rgb("4f6428"), rgb("657e30"), rgb("86a044"), rgb("9db457"), rgb("bccb72"), rgb("dbe2a2")]
 KERNEL6 = [rgb("8f5a10"), rgb("b27416"), rgb("d69722"), rgb("eab43a"), rgb("f8cf52"), rgb("fde88c")]
 SUN_LEAF = [rgb("1f3f17"), rgb("2a5320"), rgb("386b28"), rgb("4a8433"), rgb("5f9c40"), rgb("7fb85a")]
@@ -156,22 +155,6 @@ def leaf(c, x0, y0, direction, length, rise, droop, palette=LEAF, width=2):
     ribbon(c, pts, taper(len(pts), 0.55 + 0.45 * width, 0.3), palette)
 
 
-def upright_leaf(c, x0, y0, direction, height, lean, palette=LEAF):
-    """A young leaf standing up from the stalk and curling outward near its tip."""
-    for i in range(height * 3 + 1):
-        t = i / (height * 3)
-        x = x0 + direction * (lean * t * t + 0.3 * t)
-        y = y0 - t * height
-        c.px(x, y, palette[4] if t > 0.3 else palette[3])
-        if t < 0.6:
-            c.px(x - direction, y, palette[2])
-
-
-def brace_roots(c, x, palette=STALK):
-    for dx, dy in ((-1, 14), (-2, 15), (2, 14), (3, 15)):
-        c.px(x + dx, dy, palette[0])
-
-
 def ear(c, x, y, direction, ripe=True):
     """An ear of corn leaning out from the stalk at (x, y). Ripe: the husk is peeled back at the
     top, showing golden kernels; unripe: a green husk with a tuft of silk."""
@@ -206,116 +189,6 @@ def tassel(c, x, top, palette):
 
 
 # ---------------------------------------------------------------- corn
-
-def corn_sprout():
-    c = Canvas()
-    stalk(c, 7, 12)
-    upright_leaf(c, 7, 13, -1, 3, 1.5)
-    upright_leaf(c, 8, 12, 1, 4, 1.5)
-    return c.img
-
-
-def corn_seedling():
-    c = Canvas()
-    stalk(c, 7, 9, nodes=(12,))
-    leaf(c, 7, 12, -1, 5, 2, 2)
-    leaf(c, 8, 11, 1, 5, 2, 2)
-    upright_leaf(c, 7, 9, -1, 3, 1)
-    upright_leaf(c, 8, 9, 1, 3, 1)
-    return c.img
-
-
-def corn_young():
-    c = Canvas()
-    stalk(c, 7, 4, nodes=(12, 8))
-    leaf(c, 7, 12, -1, 7, 2, 3)
-    leaf(c, 8, 9, 1, 7, 3, 3)
-    leaf(c, 7, 6, -1, 6, 2, 2)
-    upright_leaf(c, 7, 4, -1, 4, 1.5)
-    upright_leaf(c, 8, 4, 1, 4, 1.5)
-    return c.img
-
-
-def corn_stalk(dry=False):
-    c = Canvas()
-    stalk(c, 7, 0, nodes=(12, 7, 2))
-    brace_roots(c, 7)
-    low = DRY if dry else LEAF
-    leaf(c, 7, 12, -1, 7, 2, 3, low)
-    leaf(c, 8, 7, 1, 7, 3, 3, DRY if dry else LEAF)
-    leaf(c, 7, 2, -1, 7, 3, 3)
-    return c.img
-
-
-def corn_young_top():
-    c = Canvas()
-    stalk(c, 7, 9, nodes=(13,))
-    leaf(c, 8, 13, 1, 6, 2, 2)
-    upright_leaf(c, 7, 9, -1, 5, 2)
-    upright_leaf(c, 8, 9, 1, 6, 1.5)
-    return c.img
-
-
-def corn_leafy_top():
-    c = Canvas()
-    stalk(c, 7, 4, nodes=(12, 8))
-    leaf(c, 8, 12, 1, 7, 3, 3)
-    leaf(c, 7, 8, -1, 7, 2, 3)
-    upright_leaf(c, 7, 4, -1, 4, 2)
-    upright_leaf(c, 8, 4, 1, 4, 2)
-    return c.img
-
-
-def corn_stalk_middle(ears=None):
-    c = Canvas()
-    stalk(c, 7, 0, nodes=(13, 8, 3))
-    leaf(c, 8, 13, 1, 7, 3, 3)
-    leaf(c, 7, 8, -1, 7, 3, 3)
-    leaf(c, 8, 3, 1, 7, 2, 3)
-    if ears == "silk":
-        ear(c, 6.5, 13.5, -1, ripe=False)
-    elif ears == "ripe":
-        ear(c, 6.5, 14.5, -1, ripe=True)
-        ear(c, 9.5, 11.5, 1, ripe=True)
-    return c.img
-
-
-def corn_top(stage):
-    """stage: 'leaves' (no tassel), 'green' (young tassel) or 'ripe' (golden tassel)."""
-    c = Canvas()
-    top = 6 if stage != "leaves" else 5
-    stalk(c, 7, top, nodes=(13, 9))
-    leaf(c, 7, 13, -1, 7, 3, 3)
-    leaf(c, 8, 9, 1, 6, 3, 2, DRY if stage == "ripe" else LEAF)
-    if stage == "leaves":
-        upright_leaf(c, 7, 5, -1, 5, 2)
-        upright_leaf(c, 8, 5, 1, 5, 2)
-    else:
-        upright_leaf(c, 7, 7, -1, 3, 2)
-        tassel(c, 7, 0, TASSEL if stage == "ripe" else TASSEL_GREEN)
-    return c.img
-
-
-def corn_wild():
-    """Wild corn: a bushy knee-high clump of thin stems with small tassels, like teosinte."""
-    c = Canvas()
-    for x, top in ((4, 5), (8, 3), (11, 6)):
-        for y in range(top, 16):
-            c.px(x, y, STALK[1] if (x + y) % 3 else STALK[2])
-        tassel_small(c, x, top - 3)
-    leaf(c, 8, 12, -1, 7, 2, 3)
-    leaf(c, 8, 9, 1, 7, 2, 3)
-    leaf(c, 4, 10, -1, 4, 2, 2)
-    leaf(c, 11, 11, 1, 4, 2, 2)
-    return c.img
-
-
-def tassel_small(c, x, top):
-    for y in range(top, top + 3):
-        c.px(x, y, TASSEL[2])
-    c.px(x - 1, top + 1, TASSEL[1])
-    c.px(x + 1, top + 1, TASSEL[3])
-
 
 # ---------------------------------------------------------------- sunflower
 
@@ -629,17 +502,6 @@ def seeds_item(palette, positions, size=(2, 1), stripe=None):
     return c.img
 
 
-def corn_kernels_item():
-    c = Canvas()
-    for x, y in ((4, 6), (8, 5), (11, 8), (6, 10), (9, 11), (3, 11), (12, 12)):
-        c.px(x, y, KERNEL[2])
-        c.px(x + 1, y, KERNEL[3])
-        c.px(x, y + 1, KERNEL[1])
-        c.px(x + 1, y + 1, KERNEL[2])
-        c.px(x, y + 2, KERNEL[0])
-    return c.img
-
-
 def sunflower_seed_item(roasted=False):
     c = Canvas()
     dark = [rgb("3b2616"), rgb("5a3a20")] if roasted else SEED_BLACK
@@ -783,20 +645,6 @@ def sickle_item(blade):
 def crop_textures():
     """(kind, name) -> image for every agriculture texture."""
     out = {
-        ("block", "corn_sprout"): corn_sprout(),
-        ("block", "corn_seedling"): corn_seedling(),
-        ("block", "corn_young"): corn_young(),
-        ("block", "corn_stalk"): corn_stalk(),
-        ("block", "corn_stalk_ripe"): corn_stalk(dry=True),
-        ("block", "corn_young_top"): corn_young_top(),
-        ("block", "corn_leafy_top"): corn_leafy_top(),
-        ("block", "corn_stalk_middle"): corn_stalk_middle(),
-        ("block", "corn_middle_silk"): corn_stalk_middle("silk"),
-        ("block", "corn_middle_ears"): corn_stalk_middle("ripe"),
-        ("block", "corn_top"): corn_top("leaves"),
-        ("block", "corn_tassel"): corn_top("green"),
-        ("block", "corn_tassel_ripe"): corn_top("ripe"),
-        ("block", "corn_wild"): corn_wild(),
         ("block", "sunflower_sprout"): sunflower_sprout(),
         ("block", "sunflower_seedling"): sunflower_seedling(),
         ("block", "sunflower_young"): sunflower_young(),
@@ -807,9 +655,7 @@ def crop_textures():
         ("block", "sunflower_opening"): sunflower_opening(),
         ("block", "sunflower_bloom"): sunflower_bloom(),
         ("block", "sunflower_wild"): sunflower_wild(),
-        ("item", "corn"): corn_item(),
         ("item", "roasted_corn"): corn_item(roasted=True),
-        ("item", "corn_kernels"): corn_kernels_item(),
         ("item", "popcorn"): popcorn_item(),
         ("item", "sunflower_seeds"): sunflower_seed_item(),
         ("item", "roasted_sunflower_seeds"): sunflower_seed_item(roasted=True),
@@ -946,6 +792,32 @@ def crop_textures():
     out.update(laboratory_textures())
     from decor20_data import textures as pumpkin_night_textures  # and Pumpkin Night
     out.update(pumpkin_night_textures())
+    from lair_textures import lair_textures  # and the lairs' blocks, the Mourning Wreath and the Death Knell
+    out.update(lair_textures())
+    from vesperine_art import vesperine_textures  # and Vesperine, her skulls, thralls and scythe, and her loot
+    out.update(vesperine_textures())
+    from tatterlace_art import tatterlace_textures  # and Madame Tatterlace, her thimbles, spools, egg sacs and brood, and her loot
+    out.update(tatterlace_textures())
+    from yeti_king_art import yeti_king_textures  # and the Yeti King, his whelps, blocks of ice, icicles and spikes, and his loot
+    out.update(yeti_king_textures())
+    from cinder_tyrant_art import cinder_tyrant_textures  # and the Cinder Tyrant, his Cinderlings, gobs and cinders, and his loot
+    out.update(cinder_tyrant_textures())
+    from orchard_textures import orchard_textures  # and the orchards' fruit trees
+    out.update(orchard_textures())
+    from cake_art import cake_textures  # and the cakes, rebuilt from the owner's drawing of them
+    out.update(cake_textures())
+    from fruit_crop_textures import fruit_crop_textures  # and the fruit crops' bushes, fruit and seeds
+    out.update(fruit_crop_textures())
+    from pie_tart_art import pie_tart_textures  # and the owner's pies and tarts, rebuilt from their drawing of them
+    out.update(pie_tart_textures())
+    from milkshake_art import milkshake_textures  # and the owner's milkshakes, read off their drawing of them
+    out.update(milkshake_textures())
+    from vegetable_textures import vegetable_textures  # and the garden's vegetables, herbs and spices
+    out.update(vegetable_textures())
+    from herb_textures import herb_textures
+    out.update(herb_textures())
+    from spice_textures import spice_textures
+    out.update(spice_textures())
     from wood_style import wood_textures  # and, last, every tree's woods and leaves, after the owner's paintings
     out.update(wood_textures())
     return out

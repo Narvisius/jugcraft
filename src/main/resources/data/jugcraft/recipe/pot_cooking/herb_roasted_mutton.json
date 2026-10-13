@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "minecraft:mutton"
+    },
+    {
+      "ingredient": "minecraft:potato"
+    },
+    {
+      "ingredient": "jugcraft:rosemary"
+    },
+    {
+      "ingredient": "jugcraft:thyme"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:herb_roasted_mutton"
+  },
+  "time": 300
+}

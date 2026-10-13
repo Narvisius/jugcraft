@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:chicken_cuts",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    },
+    {
+      "ingredient": "jugcraft:cabbage_leaf"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:chicken_soup"
+  },
+  "time": 300
+}

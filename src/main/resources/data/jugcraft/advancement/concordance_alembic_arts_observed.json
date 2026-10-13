@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_alembic_arts_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:sweet_berries"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_alembic_arts_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_alembic_arts_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

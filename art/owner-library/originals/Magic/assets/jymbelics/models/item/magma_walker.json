@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+  "textures": {
+      "layer0": "jymbelics:item/magma_walker"
+  },
+  "overrides": [
+      { "predicate": { "jymbelics:heat": 0 }, "model": "jymbelics:item/magma_walker_0" },
+      { "predicate": { "jymbelics:heat": 1 }, "model": "jymbelics:item/magma_walker_1" }
+  ]
+}

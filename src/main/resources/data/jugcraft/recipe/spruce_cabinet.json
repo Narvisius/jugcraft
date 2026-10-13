@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "T T",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:spruce_slab",
+    "T": "minecraft:spruce_trapdoor"
+  },
+  "result": {
+    "id": "jugcraft:spruce_cabinet",
+    "count": 1
+  }
+}

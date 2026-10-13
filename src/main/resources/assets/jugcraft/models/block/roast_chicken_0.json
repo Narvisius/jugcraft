@@ -1,0 +1,113 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/roast_chicken",
+    "platter": "jugcraft:block/platter",
+    "leftovers": "jugcraft:block/roast_chicken_leftovers",
+    "side_dish": "jugcraft:block/roast_chicken_side_dish",
+    "chicken": "jugcraft:block/roast_chicken",
+    "details": "jugcraft:block/roast_chicken_details"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        1,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#platter"
+        },
+        "south": {
+          "texture": "#platter"
+        },
+        "east": {
+          "texture": "#platter"
+        },
+        "west": {
+          "texture": "#platter"
+        },
+        "up": {
+          "texture": "#leftovers",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#platter"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        1,
+        6
+      ],
+      "to": [
+        11,
+        3,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#details",
+          "uv": [
+            0,
+            9,
+            6,
+            11
+          ]
+        },
+        "south": {
+          "texture": "#details",
+          "uv": [
+            0,
+            9,
+            6,
+            11
+          ]
+        },
+        "east": {
+          "texture": "#details",
+          "uv": [
+            0,
+            11,
+            4,
+            13
+          ]
+        },
+        "west": {
+          "texture": "#details",
+          "uv": [
+            0,
+            11,
+            4,
+            13
+          ]
+        },
+        "up": {
+          "texture": "#details",
+          "uv": [
+            0,
+            0,
+            6,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#details"
+        }
+      }
+    }
+  ]
+}

@@ -1,33 +1,59 @@
 {
-	"schemaVersion": 1,
-	"id": "jugcraft",
-	"version": "${version}",
-	"name": "Jugcraft",
-	"description": "Factories and magical workshops that grow together. First content: tin and bronze.",
-	"authors": ["jimbozoomer-byte", "Jugcraft contributors"],
-	"contact": {
-		"sources": "https://github.com/jimbozoomer-byte/jugcraft",
-		"issues": "https://github.com/jimbozoomer-byte/jugcraft/issues"
-	},
-	"license": "MIT",
-	"icon": "assets/jugcraft/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": ["io.github.jimbozoomer.jugcraft.Jugcraft"],
-		"client": ["io.github.jimbozoomer.jugcraft.client.JugcraftClient"],
-		"jei_mod_plugin": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJeiPlugin"],
-		"jade": ["io.github.jimbozoomer.jugcraft.compat.jade.JugcraftJadePlugin"],
-		"jugcraft:jade_client": ["io.github.jimbozoomer.jugcraft.client.compat.JugcraftJadeClient"]
-	},
-	"mixins": [
-		"jugcraft.mixins.json",
-		"jugcraft.seasons.mixins.json",
-		{"config": "jugcraft.client.mixins.json", "environment": "client"}
-	],
-	"depends": {
-		"fabricloader": ">=0.19.5",
-		"minecraft": "~26.3",
-		"java": ">=25",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "jugcraft",
+  "version": "${version}",
+  "name": "Jugcraft",
+  "description": "Factories and magical workshops that grow together. First content: tin and bronze.",
+  "authors": [
+    "jimbozoomer-byte",
+    "Jugcraft contributors"
+  ],
+  "contact": {
+    "sources": "https://github.com/jimbozoomer-byte/jugcraft",
+    "issues": "https://github.com/jimbozoomer-byte/jugcraft/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/jugcraft/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.jimbozoomer.jugcraft.Jugcraft",
+      "local.peepo.PeepoMod"
+    ],
+    "client": [
+      "io.github.jimbozoomer.jugcraft.client.JugcraftClient",
+      "local.peepo.client.PeepoClient"
+    ],
+    "jei_mod_plugin": [
+      "io.github.jimbozoomer.jugcraft.client.compat.JugcraftJeiPlugin"
+    ],
+    "jade": [
+      "io.github.jimbozoomer.jugcraft.compat.jade.JugcraftJadePlugin"
+    ],
+    "jugcraft:jade_client": [
+      "io.github.jimbozoomer.jugcraft.client.compat.JugcraftJadeClient"
+    ],
+    "modmenu": [
+      "io.github.jimbozoomer.jugcraft.client.compat.ConcordanceModMenu"
+    ]
+  },
+  "mixins": [
+    "jugcraft.mixins.json",
+    "jugcraft.seasons.mixins.json",
+    {
+      "config": "jugcraft.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "custom": {
+    "modmenu": {
+      "update_checker": false
+    }
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
 }

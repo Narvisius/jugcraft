@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_dreamwalking_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:chorus_fruit"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_dreamwalking_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_dreamwalking_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

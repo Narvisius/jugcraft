@@ -44,7 +44,55 @@ public class ArmorTiersGameTests {
 					"minecraft:netherite_ingot", true),
 			// Reforged White Diamond: beside Bloodthorn, a heavier helm, the longest wear and the best enchanting.
 			new Tier("reforged_white_diamond", new int[] {4, 8, 7, 3}, new int[] {495, 720, 675, 585}, 3.0, 0.1, 20,
-					"minecraft:diamond", false));
+					"minecraft:diamond", false),
+			// Hades: the toughest and steadiest, a point less defense, the poorest enchanting; fire resistant.
+			new Tier("hades", new int[] {3, 8, 7, 3}, new int[] {462, 672, 630, 546}, 4.0, 0.2, 12,
+					"minecraft:netherite_ingot", true),
+			// Sunset Gem: the longest wear and the best enchanting of all.
+			new Tier("sunset_gem", new int[] {3, 8, 7, 3}, new int[] {528, 768, 720, 624}, 3.0, 0.1, 25,
+					"minecraft:amethyst_shard", false),
+			// Pharaoh: the heaviest helm and chest, leggings like netherite's, good enchanting; fire resistant.
+			new Tier("pharaoh", new int[] {4, 9, 6, 3}, new int[] {451, 656, 615, 533}, 3.0, 0.1, 22,
+					"minecraft:gold_ingot", true),
+			// Dread Knight: the heaviest plate of all, among the steadiest, the poorest enchanting; fire resistant.
+			new Tier("dread_knight", new int[] {4, 9, 7, 3}, new int[] {484, 704, 660, 572}, 3.5, 0.2, 10,
+					"minecraft:netherite_ingot", true),
+			// Valkyrie: a point over netherite, long wear and good enchanting; mended with phantom membranes.
+			new Tier("valkyrie", new int[] {3, 8, 7, 3}, new int[] {506, 736, 690, 598}, 3.0, 0.1, 24,
+					"minecraft:phantom_membrane", false),
+			// Wayfarer: netherite's defense, the longest wear and the best enchanting, no knockback resistance.
+			new Tier("wayfarer", new int[] {3, 8, 6, 3}, new int[] {550, 800, 750, 650}, 2.5, 0.0, 30,
+					"minecraft:leather", false),
+			// Spartan: the heavier helm, tough and steady, middling enchanting; mended with bronze.
+			new Tier("spartan", new int[] {4, 8, 7, 3}, new int[] {473, 688, 645, 559}, 3.5, 0.15, 18,
+					"jugcraft:bronze_ingot", false),
+			// Berserker: a point over netherite, steady, middling enchanting; mended with quartz.
+			new Tier("berserker", new int[] {3, 8, 7, 3}, new int[] {495, 720, 675, 585}, 3.0, 0.15, 16,
+					"minecraft:quartz", false),
+			// Paladin: the heavier helm, long wear and good enchanting; mended with amethyst shards.
+			new Tier("paladin", new int[] {4, 8, 6, 3}, new int[] {517, 752, 705, 611}, 3.0, 0.1, 22,
+					"minecraft:amethyst_shard", false),
+			// Templar: the heavier chest, tough and steady, poorer enchanting; fire resistant.
+			new Tier("templar", new int[] {3, 9, 7, 3}, new int[] {473, 688, 645, 559}, 3.5, 0.15, 14,
+					"minecraft:netherite_ingot", true),
+			// Sentinel: the heavier helm, tough and steady, good enchanting; mended with gold.
+			new Tier("sentinel", new int[] {4, 8, 7, 3}, new int[] {506, 736, 690, 598}, 3.5, 0.15, 20,
+					"minecraft:gold_ingot", false),
+			// Frost Knight: a point over netherite, steady; mended with blue ice.
+			new Tier("frost_knight", new int[] {3, 8, 7, 3}, new int[] {484, 704, 660, 572}, 3.0, 0.15, 18,
+					"minecraft:blue_ice", false),
+			// Wight King: the heavier helm, the steadiest of the cold sets, middling enchanting; mended with packed ice.
+			new Tier("wight_king", new int[] {4, 8, 7, 3}, new int[] {495, 720, 675, 585}, 3.0, 0.2, 15,
+					"minecraft:packed_ice", false),
+			// Reaper: netherite's defense, good enchanting, less toughness, barely any knockback resistance; mended with bone.
+			new Tier("reaper", new int[] {3, 8, 6, 3}, new int[] {462, 672, 630, 546}, 2.5, 0.05, 24,
+					"minecraft:bone", false),
+			// Banana: a costume: iron's defense, no toughness or knockback resistance, long wear, the best enchanting.
+			new Tier("banana", new int[] {2, 6, 5, 2}, new int[] {275, 400, 375, 325}, 0.0, 0.0, 30,
+					"minecraft:yellow_wool", false),
+			// Scarab: gold and lapis: netherite's defense with gold's enchanting, less toughness; mended with lapis lazuli.
+			new Tier("scarab", new int[] {3, 8, 6, 3}, new int[] {440, 640, 600, 520}, 2.0, 0.1, 25,
+					"minecraft:lapis_lazuli", false));
 
 	/** Every tier's four pieces have its numbers, repair, fire resistance, slot, look and tags. */
 	@GameTest

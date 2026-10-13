@@ -44,7 +44,8 @@ public class RaiderWalker extends Monster implements Raider {
 	private final RaidMember member = new RaidMember();
 	private int launch = JugcraftRaiders.WALKER_LAUNCH_COOLDOWN;
 	/** Client side: blocks walked, for the legs' swing. */
-	private float stride;
+	private final io.github.jimbozoomer.jugcraft.walker.WalkerStride gait = new io.github.jimbozoomer.jugcraft.walker.WalkerStride();
+	private int swungAt = -100;
 
 	public RaiderWalker(EntityType<? extends RaiderWalker> type, Level level) {
 		super(type, level);
@@ -79,7 +80,7 @@ public class RaiderWalker extends Monster implements Raider {
 	public void tick() {
 		super.tick();
 		if (level().isClientSide()) {
-			stride += (float) Math.sqrt((getX() - xo) * (getX() - xo) + (getZ() - zo) * (getZ() - zo));
+			gait.tick(this);
 			if (tickCount % 4 == 0) {
 				// Exhaust from the stacks on its back.
 				Vec3 back = Vec3.directionFromRotation(0, yBodyRot).scale(-1.1);
@@ -115,13 +116,25 @@ public class RaiderWalker extends Monster implements Raider {
 		return super.doHurtTarget(level, target);
 	}
 
-	public float stride() {
-		return stride;
+	public float stride(float partialTick) {
+		return gait.phase(partialTick);
+	}
+
+	public float strideWeight(float partialTick) {
+		return gait.weight(partialTick);
+	}
+
+	@Override
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+		super.onSyncedDataUpdated(key);
+		if (PUNCHED_AT.equals(key) && level().isClientSide() && entityData.get(PUNCHED_AT) >= 0) {
+			swungAt = tickCount;
+		}
 	}
 
 	/** Ticks since it last punched (for the arm's swing). */
 	public int sinceSwing() {
-		return tickCount - entityData.get(PUNCHED_AT);
+		return tickCount - swungAt;
 	}
 
 	@Override

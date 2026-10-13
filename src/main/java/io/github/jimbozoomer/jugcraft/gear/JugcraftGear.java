@@ -95,7 +95,9 @@ public final class JugcraftGear {
 	/** The styled armor's templates, by id, for the Ingredients tab. */
 	public static final Map<String, Item> TEMPLATES = new LinkedHashMap<>();
 	/** Armor-only tiers with numbers of their own, each worn as a 3D model (tools/gear.py: ARMOR_TIERS). */
-	public static final List<String> ARMOR_TIERS = List.of("bloodthorn", "reforged_white_diamond");
+	public static final List<String> ARMOR_TIERS = List.of("bloodthorn", "reforged_white_diamond", "hades", "sunset_gem", "pharaoh",
+			"dread_knight", "valkyrie", "wayfarer", "spartan", "berserker", "paladin", "templar", "sentinel", "frost_knight",
+			"wight_king", "reaper", "banana", "scarab");
 	/** Bloodthorn: a step above netherite (37, 3/6/8/3, 15, 3.0, 0.1) in durability, defense, toughness and knockback. */
 	public static final ArmorMaterial BLOODTHORN_ARMOR = new ArmorMaterial(40, defense(3, 7, 9, 3), 15,
 			SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5F, 0.15F, repairs("bloodthorn"), asset("bloodthorn"));
@@ -103,6 +105,63 @@ public final class JugcraftGear {
 	 * enchanting; netherite's toughness and knockback resistance, and no fire resistance. */
 	public static final ArmorMaterial REFORGED_WHITE_DIAMOND_ARMOR = new ArmorMaterial(45, defense(3, 7, 8, 4), 20,
 			SoundEvents.ARMOR_EQUIP_DIAMOND, 3.0F, 0.1F, repairs("reforged_white_diamond"), asset("reforged_white_diamond"));
+	/** Hades: beside the other two, in other strengths: the toughest and steadiest, a point less defense, the poorest
+	 * enchanting; fire resistant. */
+	public static final ArmorMaterial HADES_ARMOR = new ArmorMaterial(42, defense(3, 7, 8, 3), 12,
+			SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.2F, repairs("hades"), asset("hades"));
+	/** Sunset Gem: beside the others, in other strengths: the longest wear and the best enchanting of all; a point less
+	 * defense than Bloodthorn, netherite's toughness, no fire resistance. */
+	public static final ArmorMaterial SUNSET_GEM_ARMOR = new ArmorMaterial(48, defense(3, 7, 8, 3), 25,
+			SoundEvents.ARMOR_EQUIP_GOLD, 3.0F, 0.1F, repairs("sunset_gem"), asset("sunset_gem"));
+	/** Pharaoh: beside the others, in other strengths: the heaviest helm and chest, leggings like netherite's, good
+	 * enchanting, netherite's toughness; fire resistant. */
+	public static final ArmorMaterial PHARAOH_ARMOR = new ArmorMaterial(41, defense(3, 6, 9, 4), 22,
+			SoundEvents.ARMOR_EQUIP_GOLD, 3.0F, 0.1F, repairs("pharaoh"), asset("pharaoh"));
+	/** Dread Knight: the heaviest plate of all (23 armor for a set) and among the steadiest, the poorest enchanting; fire
+	 * resistant (docs/features/four-armor-designs.md, as the three below). */
+	public static final ArmorMaterial DREAD_KNIGHT_ARMOR = new ArmorMaterial(44, defense(3, 7, 9, 4), 10,
+			SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5F, 0.2F, repairs("dread_knight"), asset("dread_knight"));
+	/** Valkyrie: a point of defense over netherite, its toughness, long wear and good enchanting; mended with phantom
+	 * membranes. */
+	public static final ArmorMaterial VALKYRIE_ARMOR = new ArmorMaterial(46, defense(3, 7, 8, 3), 24,
+			SoundEvents.ARMOR_EQUIP_GOLD, 3.0F, 0.1F, repairs("valkyrie"), asset("valkyrie"));
+	/** Wayfarer: netherite's defense, the longest wear and the best enchanting of all, less toughness and no knockback
+	 * resistance; mended with leather. */
+	public static final ArmorMaterial WAYFARER_ARMOR = new ArmorMaterial(50, defense(3, 6, 8, 3), 30,
+			SoundEvents.ARMOR_EQUIP_LEATHER, 2.5F, 0.0F, repairs("wayfarer"), asset("wayfarer"));
+	/** Spartan: the heavier helm, tough and steady, middling enchanting; mended with bronze. */
+	public static final ArmorMaterial SPARTAN_ARMOR = new ArmorMaterial(43, defense(3, 7, 8, 4), 18,
+			SoundEvents.ARMOR_EQUIP_GOLD, 3.5F, 0.15F, repairs("spartan"), asset("spartan"));
+	/** Berserker: a point of defense over netherite, steady, middling enchanting; mended with quartz
+	 * (docs/features/armor-designs-8-october.md, as the two below). */
+	public static final ArmorMaterial BERSERKER_ARMOR = new ArmorMaterial(45, defense(3, 7, 8, 3), 16,
+			SoundEvents.ARMOR_EQUIP_IRON, 3.0F, 0.15F, repairs("berserker"), asset("berserker"));
+	/** Paladin: the heavier helm, long wear and good enchanting, netherite's toughness; mended with amethyst shards. */
+	public static final ArmorMaterial PALADIN_ARMOR = new ArmorMaterial(47, defense(3, 6, 8, 4), 22,
+			SoundEvents.ARMOR_EQUIP_DIAMOND, 3.0F, 0.1F, repairs("paladin"), asset("paladin"));
+	/** Templar: the heavier chest, tough and steady, poorer enchanting; fire resistant. */
+	public static final ArmorMaterial TEMPLAR_ARMOR = new ArmorMaterial(43, defense(3, 7, 9, 3), 14,
+			SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5F, 0.15F, repairs("templar"), asset("templar"));
+	/** Sentinel: the heavier helm, tough and steady, good enchanting; mended with gold. */
+	public static final ArmorMaterial SENTINEL_ARMOR = new ArmorMaterial(46, defense(3, 7, 8, 4), 20,
+			SoundEvents.ARMOR_EQUIP_GOLD, 3.5F, 0.15F, repairs("sentinel"), asset("sentinel"));
+	/** Frost Knight: a point of defense over netherite, steady; mended with blue ice. */
+	public static final ArmorMaterial FROST_KNIGHT_ARMOR = new ArmorMaterial(44, defense(3, 7, 8, 3), 18,
+			SoundEvents.ARMOR_EQUIP_DIAMOND, 3.0F, 0.15F, repairs("frost_knight"), asset("frost_knight"));
+	/** Wight King: the heavier helm, the steadiest of the cold sets, middling enchanting; mended with packed ice. */
+	public static final ArmorMaterial WIGHT_KING_ARMOR = new ArmorMaterial(45, defense(3, 7, 8, 4), 15,
+			SoundEvents.ARMOR_EQUIP_IRON, 3.0F, 0.2F, repairs("wight_king"), asset("wight_king"));
+	/** Reaper: netherite's defense, good enchanting, less toughness and barely any knockback resistance; mended with
+	 * bone. */
+	public static final ArmorMaterial REAPER_ARMOR = new ArmorMaterial(42, defense(3, 6, 8, 3), 24,
+			SoundEvents.ARMOR_EQUIP_LEATHER, 2.5F, 0.05F, repairs("reaper"), asset("reaper"));
+	/** Banana: a costume: iron's defense, no toughness or knockback resistance, long wear and the best enchanting of
+	 * all; mended with yellow wool. */
+	public static final ArmorMaterial BANANA_ARMOR = new ArmorMaterial(25, defense(2, 5, 6, 2), 30,
+			SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, repairs("banana"), asset("banana"));
+	/** Scarab: gold and lapis: netherite's defense with gold's enchanting, less toughness; mended with lapis lazuli. */
+	public static final ArmorMaterial SCARAB_ARMOR = new ArmorMaterial(40, defense(3, 6, 8, 3), 25,
+			SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.1F, repairs("scarab"), asset("scarab"));
 
 	/** Scuba gear: leather-like protection, repaired with rubber. */
 	public static final ArmorMaterial SCUBA_ARMOR = new ArmorMaterial(10, defense(1, 1, 2, 1), 10,
@@ -144,6 +203,22 @@ public final class JugcraftGear {
 		ThalliteGear.register();
 		armorTier("bloodthorn", BLOODTHORN_ARMOR, true);
 		armorTier("reforged_white_diamond", REFORGED_WHITE_DIAMOND_ARMOR, false);
+		armorTier("hades", HADES_ARMOR, true);
+		armorTier("sunset_gem", SUNSET_GEM_ARMOR, false);
+		armorTier("pharaoh", PHARAOH_ARMOR, true);
+		armorTier("dread_knight", DREAD_KNIGHT_ARMOR, true);
+		armorTier("valkyrie", VALKYRIE_ARMOR, false);
+		armorTier("wayfarer", WAYFARER_ARMOR, false);
+		armorTier("spartan", SPARTAN_ARMOR, false);
+		armorTier("berserker", BERSERKER_ARMOR, false);
+		armorTier("paladin", PALADIN_ARMOR, false);
+		armorTier("templar", TEMPLAR_ARMOR, true);
+		armorTier("sentinel", SENTINEL_ARMOR, false);
+		armorTier("frost_knight", FROST_KNIGHT_ARMOR, false);
+		armorTier("wight_king", WIGHT_KING_ARMOR, false);
+		armorTier("reaper", REAPER_ARMOR, false);
+		armorTier("banana", BANANA_ARMOR, false);
+		armorTier("scarab", SCARAB_ARMOR, false);
 		for (String id : STYLE_TEMPLATES) {
 			ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Jugcraft.id(id));
 			TEMPLATES.put(id, Registry.register(BuiltInRegistries.ITEM, key,

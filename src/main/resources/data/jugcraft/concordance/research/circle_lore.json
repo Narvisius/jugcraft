@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "principle": "tether",
+  "tradition": "circlewrights",
+  "stage": "practitioner",
+  "icon": "minecraft:compass",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:circle_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:circle_specimens",
+          "distinct": 2
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:circle_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:ritual",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {
+    "understood": {
+      "rituals": [
+        "jugcraft:adept_attunement",
+        "jugcraft:lumen_vigil",
+        "jugcraft:spire_kindling"
+      ]
+    }
+  }
+}

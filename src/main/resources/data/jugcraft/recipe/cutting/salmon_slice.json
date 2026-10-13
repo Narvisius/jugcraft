@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:salmon",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "id": "jugcraft:salmon_slice",
+      "count": 2
+    },
+    {
+      "id": "minecraft:bone_meal"
+    }
+  ]
+}

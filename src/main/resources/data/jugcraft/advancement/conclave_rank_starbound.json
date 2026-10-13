@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:conclave_rank_luminary",
+  "display": {
+    "icon": {
+      "id": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.conclave_rank_starbound.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.conclave_rank_starbound.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

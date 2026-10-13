@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CBC",
+    "CRC",
+    "I I"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "B": "minecraft:barrel",
+    "R": "minecraft:redstone",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:clockwork_porter",
+    "count": 1
+  }
+}

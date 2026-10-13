@@ -12,6 +12,8 @@ import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableIt
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -21,7 +23,8 @@ import org.jspecify.annotations.Nullable;
  * A rocket fired from the rocket launcher (batch 41, docs/features/rocket-launcher.md). It flies straight, untouched by
  * gravity, and bursts when it hits anything or after {@link #LIFETIME} ticks. The burst is a {@link Blast}: it hurts
  * living things only and never breaks, moves or burns a block. A homing rocket turns towards the hostile mob it was
- * locked on to, a little each tick.
+ * locked on to, a little each tick. A rocket gun (slice 10A, docs/features/guns.md) fires them too, its fuse set
+ * shorter, to burst at the end of the gun's range ({@link #fuse}).
  */
 public class CombatRocket extends ThrowableItemProjectile {
 	public static final int LIFETIME = 100;
@@ -29,6 +32,8 @@ public class CombatRocket extends ThrowableItemProjectile {
 	private static final double TURN = 0.18;
 
 	private @Nullable UUID target;
+	/** Ticks of flight before it bursts in the air. */
+	private int fuse = LIFETIME;
 
 	public CombatRocket(EntityType<? extends CombatRocket> type, Level level) {
 		super(type, level);
@@ -46,6 +51,16 @@ public class CombatRocket extends ThrowableItemProjectile {
 	/** Locks a homing rocket on to {@code mob}. */
 	public void lockOn(LivingEntity mob) {
 		target = mob.getUUID();
+	}
+
+	/** Sets it to burst after this many ticks of flight (at least one), if that is sooner than it would. */
+	public void fuse(int ticks) {
+		fuse = Math.min(fuse, Math.max(1, ticks));
+	}
+
+	/** Ticks of flight after which it bursts in the air. */
+	public int fuse() {
+		return fuse;
 	}
 
 	public boolean homing() {
@@ -70,7 +85,7 @@ public class CombatRocket extends ThrowableItemProjectile {
 			return;
 		}
 		ServerLevel level = (ServerLevel) level();
-		if (tickCount >= LIFETIME) {
+		if (tickCount >= fuse) {
 			burst(level, position());
 			return;
 		}
@@ -96,6 +111,19 @@ public class CombatRocket extends ThrowableItemProjectile {
 			}
 			burst(server, center);
 		}
+	}
+
+	/** A rocket saved in flight keeps what is left of its fuse (one saved before there was a fuse gets its lifetime). */
+	@Override
+	protected void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putInt("fuse", Math.max(1, fuse - tickCount));
+	}
+
+	@Override
+	protected void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		fuse = input.getIntOr("fuse", LIFETIME);
 	}
 
 	private void burst(ServerLevel level, Vec3 center) {

@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "principle": "ember",
+  "tradition": "hearthbinders",
+  "stage": "practitioner",
+  "icon": "minecraft:campfire",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:ember_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:ember_specimens",
+          "distinct": 3
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:ember_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:hearthkeeping",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {
+    "understood": {
+      "invocations": [
+        "jugcraft:hearthspark",
+        "jugcraft:hearthguard",
+        "jugcraft:cinderbolt"
+      ]
+    },
+    "mastered": {
+      "invocations": [
+        "jugcraft:hearthflare"
+      ]
+    }
+  }
+}

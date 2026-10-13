@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:catalyzing_gland",
+    "S": "#c:gunpowders",
+    "T": "minecraft:bone"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:creeper"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

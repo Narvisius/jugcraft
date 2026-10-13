@@ -174,8 +174,9 @@ def assets(root, write, lang):
     for name, info in OUTFITS.items():
         flat_item(root, write, name)
         lang[f"item.{MOD}.{name}"] = info["display"]
-        # No layers: the armor layer draws nothing and the item isn't drawn on the head; CostumeLayer draws the outfit.
-        write(root / "equipment" / f"{name}.json", {"layers": {}})
+        # Keep the item's equipment asset ID, but omit its file: the missing-asset fallback has no layers.
+        # Minecraft rejects an empty layer map. CostumeLayer draws the outfit, as WornModelLayer draws 3D armor.
+        (root / "equipment" / f"{name}.json").unlink(missing_ok=True)
     write(root / "costumes.json", costume_json())
 
     chest = COSTUME_TRUNK["block"]

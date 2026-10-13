@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:dirt",
+    "jugcraft:straw",
+    "jugcraft:straw",
+    "jugcraft:straw",
+    "jugcraft:straw",
+    "minecraft:bone_meal",
+    "minecraft:bone_meal",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh"
+  ],
+  "result": {
+    "id": "jugcraft:organic_compost",
+    "count": 1
+  }
+}

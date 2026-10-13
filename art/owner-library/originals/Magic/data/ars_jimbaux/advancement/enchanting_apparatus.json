@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:imbuement_chamber",
+  "criteria": {
+    "has_enchanting_apparatus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:enchanting_apparatus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.enchanting_apparatus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:enchanting_apparatus"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.enchanting_apparatus"
+    }
+  },
+  "requirements": [
+    [
+      "has_enchanting_apparatus"
+    ]
+  ]
+}

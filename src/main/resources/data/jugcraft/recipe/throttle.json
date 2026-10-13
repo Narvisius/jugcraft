@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSC",
+    "PLB"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "C": "minecraft:copper_ingot",
+    "P": "#minecraft:planks",
+    "L": "minecraft:lever",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:throttle"
+  }
+}

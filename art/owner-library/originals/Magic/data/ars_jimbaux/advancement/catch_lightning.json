@@ -1,0 +1,27 @@
+{
+  "parent": "ars_jimbaux:mob_jar",
+  "criteria": {
+    "catch_lightning": {
+      "trigger": "ars_jimbaux:catch_lightning"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.catch_lightning"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:lightning_rod"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.catch_lightning"
+    }
+  },
+  "requirements": [
+    [
+      "catch_lightning"
+    ]
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "CLC",
+    "SSS"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "C": "minecraft:copper_ingot",
+    "L": "minecraft:lapis_lazuli",
+    "S": "minecraft:stone_bricks"
+  },
+  "result": {
+    "id": "jugcraft:ley_pylon",
+    "count": 1
+  }
+}

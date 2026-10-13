@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "T T",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:acacia_slab",
+    "T": "minecraft:acacia_trapdoor"
+  },
+  "result": {
+    "id": "jugcraft:acacia_cabinet",
+    "count": 1
+  }
+}

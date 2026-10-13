@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "structure": "jugcraft:lesser_circle",
+  "research": "jugcraft:circle_lore",
+  "stage": "understood",
+  "participants": 2,
+  "focus": 4,
+  "steps": 3,
+  "ley": 1,
+  "conditions": {
+    "max_light": 7
+  },
+  "offerings": [
+    {
+      "item": "minecraft:glow_berries",
+      "count": 4
+    }
+  ],
+  "result": {
+    "effects": [
+      {
+        "target": "participants",
+        "operation": {
+          "effect": "protection",
+          "intent": "helpful",
+          "principle": "radiance",
+          "magnitude": 8,
+          "duration": 2400
+        }
+      },
+      {
+        "target": "creatures",
+        "radius": 16,
+        "targets": 16,
+        "operation": {
+          "effect": "detection",
+          "intent": "harmful",
+          "principle": "radiance",
+          "duration": 1200
+        }
+      }
+    ]
+  },
+  "backlash": 2
+}

@@ -1,0 +1,37 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:mob_drops_craftable"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_snow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:snow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "jymbaquary:frozen_core"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_snow"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jymbaquary:frozen_core"
+    ]
+  }
+}

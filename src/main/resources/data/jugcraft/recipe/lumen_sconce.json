@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " A ",
+    " C ",
+    "CCC"
+  ],
+  "key": {
+    "A": "#jugcraft:concordance/luminous_matter",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:lumen_sconce",
+    "count": 1
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infernal_claw": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jymbaquary:infernal_claw"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "jymbaquary:infernal_claws"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infernal_claw"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jymbaquary:infernal_claws"
+    ]
+  }
+}

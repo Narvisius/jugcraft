@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "verdance",
+  "tradition": "greenwardens",
+  "stage": "practitioner",
+  "icon": "jugcraft:sunpetal",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:verdant_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:verdant_specimens",
+          "distinct": 3
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:verdant_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:cultivation",
+          "distinct": 4
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

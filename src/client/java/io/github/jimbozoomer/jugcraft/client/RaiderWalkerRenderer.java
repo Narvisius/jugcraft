@@ -20,6 +20,7 @@ public class RaiderWalkerRenderer extends EntityRenderer<RaiderWalker, RaiderWal
 	public static final class State extends EntityRenderState {
 		float yRot;
 		float stride;
+		float strideWeight;
 		float ram;
 		float dying;
 	}
@@ -43,7 +44,8 @@ public class RaiderWalkerRenderer extends EntityRenderer<RaiderWalker, RaiderWal
 	public void extractRenderState(RaiderWalker walker, State state, float partialTick) {
 		super.extractRenderState(walker, state, partialTick);
 		state.yRot = Mth.rotLerp(partialTick, walker.yBodyRotO, walker.yBodyRot);
-		state.stride = walker.stride();
+		state.stride = walker.stride(partialTick);
+		state.strideWeight = walker.strideWeight(partialTick);
 		state.ram = ArmouredWalkerParts.ram(walker.sinceSwing() + partialTick);
 		state.dying = walker.deathTime > 0 ? Math.min(1.0F, (walker.deathTime + partialTick) / 20.0F) : 0.0F;
 	}
@@ -55,7 +57,7 @@ public class RaiderWalkerRenderer extends EntityRenderer<RaiderWalker, RaiderWal
 		if (state.dying > 0) {
 			pose.rotateDegrees(Axis.ZP, state.dying * state.dying * 80.0F);
 		}
-		ArmouredWalkerParts.draw("raider_walker", pose, collector, state.lightCoords, state.stride, state.ram);
+		ArmouredWalkerParts.draw("raider_walker", pose, collector, state.lightCoords, state.stride, state.strideWeight, state.ram);
 		pose.popPose();
 		super.submit(state, pose, collector, camera);
 	}

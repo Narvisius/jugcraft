@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PWP",
+    "PDP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "W": "minecraft:water_bucket",
+    "D": "minecraft:dirt"
+  },
+  "result": {
+    "id": "jugcraft:planter_box",
+    "count": 1
+  }
+}

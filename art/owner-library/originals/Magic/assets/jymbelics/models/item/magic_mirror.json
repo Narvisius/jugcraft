@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+    "textures": {
+        "layer0": "jymbelics:item/magic_mirror_1"
+    },
+    "overrides": [
+        { "predicate": { "jymbelics:world": 0 }, "model": "jymbelics:item/magic_mirror_0" },
+        { "predicate": { "jymbelics:world": 1 }, "model": "jymbelics:item/magic_mirror_1" },
+        { "predicate": { "jymbelics:world": 2 }, "model": "jymbelics:item/magic_mirror_2" },
+        { "predicate": { "jymbelics:world": 3 }, "model": "jymbelics:item/magic_mirror_3" }
+    ]
+}

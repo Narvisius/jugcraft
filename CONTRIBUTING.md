@@ -6,7 +6,7 @@ Read the [approved framework catalog](docs/FRAMEWORKS.md) before proposing custo
 
 ## Owner-authorized development
 
-The owner authorized Claude to build the Minecraft 26.3 + Fabric bootstrap without a separate proposal issue or second maintainer. That bootstrap is done: the scaffold, pinned toolchain, Build workflow, base materials, machines and power were merged in PRs #4–#7 (see [docs/PLATFORM.md](docs/PLATFORM.md)). The project license is MIT (see [LICENSE_POLICY.md](LICENSE_POLICY.md)). Still outstanding: running the client and dedicated server, and the two-client playtest.
+The owner authorized Claude to build the Minecraft 26.3 + Fabric bootstrap without a separate proposal issue or second maintainer. That bootstrap is done: the scaffold, pinned toolchain, Build workflow, base materials, machines and power were merged in PRs #4–#7 (see [docs/PLATFORM.md](docs/PLATFORM.md)). The project license is MIT (see [LICENSE_POLICY.md](LICENSE_POLICY.md)). Automated server and rendered-client tests now exist; two independent clients, representative load and release readiness remain to verify. See [the current status](docs/INTEGRATION_STATUS.md).
 
 Main requires a PR and passing checks, but zero independent approvals while there is one maintainer. The owner can merge their own PR after reviewing it. CODEOWNERS routes review; its approval is not mandatory. Keep no-force-push/no-deletion and CI protections. Restore independent review when the owner chooses to add maintainers.
 
@@ -16,6 +16,10 @@ Main requires a PR and passing checks, but zero independent approvals while ther
 **You can start in your own fork now and submit a draft PR.** You do not need collaborator access or an approved issue to propose a focused implementation. See [the fork and AI setup guide](docs/COMMUNITY_QUICKSTART.md). Maintainers decide acceptance during review; submission does not guarantee merging.
 
 ## Shared art, sounds and animations
+
+Read the [owner's provenance clarification](art/owner-library/PROVENANCE.md). The owner says they rebuilt the supplied work from earlier mod bases and left some old labels behind. Names, namespaces, credits and supporter strings alone must not halt the whole implementation or trigger repeated permission requests. Integrate suitable assets, preserve source provenance and applicable notices, and resolve concrete concerns at the specific file. The linked inventory locates leftover metadata for selective runtime cleanup.
+
+**Contributors and their AI SHOULD use suitable files from the [owner's magic collection](art/owner-library/MAGIC_ASSETS.md) as supplied.** Its 7,909 files include textures, models, sounds and gameplay data. The owner has authorized direct project use without another permission request or mandatory redesign/recolor/rename. Preserve originals; technical changes needed to integrate copies into Jugcraft's pinned Fabric platform and shared systems are allowed. Follow the collection guide when older generic art rules would otherwise require changing its authored look.
 
 Before creating assets, browse the [owner asset library](art/owner-library/README.md) and its [complete catalog](art/owner-library/catalog/README.md). The owner explicitly authorizes suitable assets from that supplied collection to be used directly, recolored/adapted, or used as reference. This applies to every content branch: blocks, ores, metals, machines, guns, planes, sounds, animations, weapons, armor, trees, biomes, farming and food. It is not limited to machinery.
 

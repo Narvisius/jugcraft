@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:tomato",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:garlic"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:tomato_sauce"
+  },
+  "time": 200
+}

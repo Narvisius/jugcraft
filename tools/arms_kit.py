@@ -73,10 +73,91 @@ def _cuboid(frm, to, faces):
             "faces": faces}
 
 
+# An armor set's shield in a shape of its own (tools/arms_variants.py SET_SHIELDS): the Sentinel's, after the owner's
+# design, a four-pointed star of gold, a raised diamond frame on it, a dark recess inside the frame and a chequered
+# diamond at its heart with a pale stone at the very middle. Each part is a stack of rows (reach from the middle row,
+# half width; the frame's also its opening's half width), laid out on half-pixel steps about the middle of the block so
+# that every edge falls on the face texture's grid: its plate is 32 pixels tall, 2 texels to a model pixel.
+PLATE["star_shield"] = (1.0, 24.0, 15.0, -8.0)
+STAR = [(0.5, 7.0), (1.5, 6.0), (2.5, 5.0), (3.5, 4.0), (4.5, 3.0), (5.5, 2.5), (6.5, 2.0), (7.5, 1.0), (8.5, 0.5),
+        (9.5, 0.5), (10.5, 0.5)]
+STAR_FRAME = [(0.5, 4.5, 3.0), (1.5, 4.0, 2.5), (2.5, 3.0, 1.5), (3.5, 2.5, 1.0), (4.5, 2.0, 0.5), (5.5, 1.5, 0.0),
+              (6.5, 0.5, 0.0)]
+STAR_CENTRE = [(0.5, 2.0), (1.5, 1.5), (2.5, 1.0), (3.5, 0.5)]
+STAR_STONE = [(0.5, 0.5)]
+# Each raised part's depth on the star's face: (from, to) above FRONT. The stone sits on the chequered centre.
+STAR_RISE = {"frame": (0.0, 0.75), "centre": (0.0, 0.4), "stone": (0.4, 0.7)}
+
+
+def _ring(steps, cx=8.0, cy=8.0):
+    """Boxes (x0, y0, x1, y1) of a shape symmetric about (cx, cy), a row for each step (reach, half width[, opening]):
+    the first is the middle row, the others a row above and below it from the last reach to theirs, each open in the
+    middle where a step has an opening (an opening's half width) and else whole."""
+    out = []
+    last = 0.0
+    for reach, half, *opening in steps:
+        inner = opening[0] if opening else 0.0
+        rows = [(cy - reach, cy + reach)] if last == 0.0 else [(cy + last, cy + reach), (cy - reach, cy - last)]
+        for y0, y1 in rows:
+            if inner > 0.0:
+                out += [(cx - half, y0, cx - inner, y1), (cx + inner, y0, cx + half, y1)]
+            else:
+                out.append((cx - half, y0, cx + half, y1))
+        last = reach
+    return out
+
+
+def _step_at(steps, d):
+    """The step a distance `d` from the middle row lies in, or None past the last."""
+    for step in steps:
+        if d < step[0]:
+            return step
+    return None
+
+
+def star_part(x, y):
+    """Which part of the star shield's face a point (model pixels) lies on: stone, centre, frame, recess (inside the
+    frame), star, or None (off the shield)."""
+    dx, dy = abs(x - 8.0), abs(y - 8.0)
+    for part, steps in (("stone", STAR_STONE), ("centre", STAR_CENTRE)):
+        step = _step_at(steps, dy)
+        if step and dx < step[1]:
+            return part
+    step = _step_at(STAR_FRAME, dy)
+    if step and dx < step[1]:
+        return "frame" if dx >= step[2] else "recess"
+    step = _step_at(STAR, dy)
+    return "star" if step and dx < step[1] else None
+
+
+def star_elements():
+    """The star shield's elements: the stepped star, its front the painted face (#face), its edges plain metal (#trim)
+    and its back the boards (#back); the raised frame, chequered centre and stone, their fronts the same painted face
+    where they lie (so the painting runs on across them) and their sides plain metal; and the handle."""
+    kind = "star_shield"
+    out = []
+    metal = {face: {"texture": "#trim", "uv": PLAIN_UV} for face in ("east", "west", "up", "down")}
+    for x0, y0, x1, y1 in _ring(STAR):
+        out.append(_cuboid((x0, y0, BACK), (x1, y1, FRONT), {
+            "south": {"texture": "#face", "uv": _uv(kind, x0, y0, x1, y1)},
+            "north": {"texture": "#back", "uv": _uv(kind, x0, y0, x1, y1)}, **metal}))
+    for part, steps in (("frame", STAR_FRAME), ("centre", STAR_CENTRE), ("stone", STAR_STONE)):
+        z0, z1 = (FRONT + rise for rise in STAR_RISE[part])
+        for x0, y0, x1, y1 in _ring(steps):
+            out.append(_cuboid((x0, y0, z0), (x1, y1, z1), {
+                "south": {"texture": "#face", "uv": _uv(kind, x0, y0, x1, y1)}, **metal}))
+    for frm, to in HANDLE:
+        out.append(_cuboid(frm, to, {face: {"texture": "#back", "uv": STRAP_UV}
+                                     for face in ("north", "south", "east", "west", "up", "down")}))
+    return out
+
+
 def elements(kind):
     """The shield's elements: textures #face (the painted front), #back (the bare boards, a strap across their middle)
     and #trim (the metal: the rim along its top half, the boss's face at the bottom left, plain metal at the bottom
-    right)."""
+    right). A set's star shield is built by star_elements()."""
+    if kind == "star_shield":
+        return star_elements()
     out = []
     for x0, y0, x1, y1 in body_boxes(kind):
         side = {"texture": "#back", "uv": [0, 0, 1, 16]}
@@ -175,6 +256,21 @@ def write_all(write, assets, lang):
                                                    "entries": [{"threshold": threshold, "model": _model(f"{item}_pulling_{step}")}
                                                                for step, threshold in CROSSBOW_STEPS]}}}
         write(assets / "items" / f"{item}.json", {"model": definition, "swap_animation_scale": arms.RANGED_HELD[kind]})
+
+
+def write_set_shield(write, assets, name, shape):
+    """An armor set's shield (tools/arms_variants.py SET_SHIELDS): its shape's shared model and blocking model (held as
+    vanilla's shield is), its own models with its textures, and its definition, raised while used."""
+    models = assets / "models" / "item"
+    write(models / f"arms_{shape}.json", {"gui_light": "front", "textures": {"particle": "#back"}, "elements": elements(shape),
+                                          "display": DISPLAY})
+    write(models / f"arms_{shape}_blocking.json", {"parent": f"{MOD}:item/arms_{shape}", "display": BLOCKING})
+    textures = {part: f"{MOD}:item/{name}_{part}" for part in ("face", "back", "trim")}
+    for suffix in ("", "_blocking"):
+        write(models / f"{name}{suffix}.json", {"parent": f"{MOD}:item/arms_{shape}{suffix}", "textures": textures})
+    definition = {"type": "minecraft:condition", "property": "minecraft:using_item",
+                  "on_false": _model(name), "on_true": _model(f"{name}_blocking")}
+    write(assets / "items" / f"{name}.json", {"model": definition, "swap_animation_scale": 1.0})
 
 
 # Vanilla 26.3's bow and crossbow hand poses (assets/minecraft/models/item/bow.json and crossbow.json, read in game), which the

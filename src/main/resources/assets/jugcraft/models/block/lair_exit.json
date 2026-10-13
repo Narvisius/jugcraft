@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": {
+      "force_translucent": true,
+      "sprite": "jugcraft:block/lair_exit"
+    },
+    "mist": {
+      "force_translucent": true,
+      "sprite": "jugcraft:block/lair_exit"
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        7
+      ],
+      "to": [
+        16,
+        16,
+        9
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#mist"
+        },
+        "south": {
+          "texture": "#mist"
+        }
+      }
+    }
+  ]
+}

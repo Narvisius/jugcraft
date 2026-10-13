@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_stage_master",
+  "display": {
+    "icon": {
+      "id": "jugcraft:spire_heart"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concord_spire_founded.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concord_spire_founded.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

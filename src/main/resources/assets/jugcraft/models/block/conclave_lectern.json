@@ -1,0 +1,450 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "lectern": "jugcraft:block/conclave_lectern",
+    "particle": "jugcraft:block/conclave_lectern"
+  },
+  "elements": [
+    {
+      "name": "plinth",
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            8,
+            16,
+            10
+          ],
+          "texture": "#lectern"
+        },
+        "south": {
+          "uv": [
+            8,
+            8,
+            16,
+            10
+          ],
+          "texture": "#lectern"
+        },
+        "east": {
+          "uv": [
+            8,
+            8,
+            16,
+            10
+          ],
+          "texture": "#lectern"
+        },
+        "west": {
+          "uv": [
+            8,
+            8,
+            16,
+            10
+          ],
+          "texture": "#lectern"
+        },
+        "up": {
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "texture": "#lectern"
+        },
+        "down": {
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "texture": "#lectern"
+        }
+      }
+    },
+    {
+      "name": "post",
+      "from": [
+        6,
+        2,
+        6
+      ],
+      "to": [
+        10,
+        11.1,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            8
+          ],
+          "texture": "#lectern"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            4,
+            8
+          ],
+          "texture": "#lectern"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            4,
+            8
+          ],
+          "texture": "#lectern"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            4,
+            8
+          ],
+          "texture": "#lectern"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#lectern"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#lectern"
+        }
+      }
+    },
+    {
+      "name": "collar",
+      "from": [
+        5.5,
+        10,
+        5.5
+      ],
+      "to": [
+        10.5,
+        11,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            0,
+            13.0,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "south": {
+          "uv": [
+            8,
+            0,
+            13.0,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            13.0,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            13.0,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            13.0,
+            5.0
+          ],
+          "texture": "#lectern"
+        },
+        "down": {
+          "uv": [
+            8,
+            0,
+            13.0,
+            5.0
+          ],
+          "texture": "#lectern"
+        }
+      }
+    },
+    {
+      "name": "desk",
+      "from": [
+        2,
+        11,
+        3
+      ],
+      "to": [
+        14,
+        13,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            2
+          ],
+          "texture": "#lectern"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            2
+          ],
+          "texture": "#lectern"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            2
+          ],
+          "texture": "#lectern"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            8,
+            2
+          ],
+          "texture": "#lectern"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#lectern"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#lectern"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          12,
+          8
+        ],
+        "axis": "x",
+        "angle": -22.5
+      }
+    },
+    {
+      "name": "chart",
+      "from": [
+        3,
+        13,
+        4
+      ],
+      "to": [
+        13,
+        13.5,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            0.5
+          ],
+          "texture": "#lectern"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            0.5
+          ],
+          "texture": "#lectern"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            0.5
+          ],
+          "texture": "#lectern"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            8,
+            0.5
+          ],
+          "texture": "#lectern"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "texture": "#lectern"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#lectern"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          12,
+          8
+        ],
+        "axis": "x",
+        "angle": -22.5
+      }
+    },
+    {
+      "name": "lip",
+      "from": [
+        2,
+        13,
+        3
+      ],
+      "to": [
+        14,
+        14,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            0,
+            16,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "south": {
+          "uv": [
+            8,
+            0,
+            16,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            9,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            9,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            16,
+            1
+          ],
+          "texture": "#lectern"
+        },
+        "down": {
+          "uv": [
+            8,
+            0,
+            16,
+            1
+          ],
+          "texture": "#lectern"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          12,
+          8
+        ],
+        "axis": "x",
+        "angle": -22.5
+      }
+    }
+  ]
+}

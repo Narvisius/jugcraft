@@ -1,0 +1,43 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:amethyst_shard"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "background": "minecraft:block/amethyst_block"
+  },
+  "criteria": {
+    "has_specimen": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:amethyst_shard",
+              "minecraft:glowstone_dust",
+              "jugcraft:glowcap",
+              "jugcraft:glimmerbloom",
+              "jugcraft:jack_o_lantern_mushroom",
+              "minecraft:glow_ink_sac",
+              "minecraft:glow_lichen",
+              "minecraft:glow_berries"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_specimen"
+    ]
+  ]
+}

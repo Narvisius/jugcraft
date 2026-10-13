@@ -1,0 +1,52 @@
+{
+ "cam": {
+  "dist": 60.7897,
+  "tx": 0.0,
+  "ty": 16.0,
+  "tz": 0.0,
+  "az": 175.2476,
+  "el": 14.8576,
+  "f": 850.2437,
+  "cx": 262.7337,
+  "cy": 351.2223
+ },
+ "pose": {
+  "right_arm": [
+   -10.0,
+   0.0,
+   9.005
+  ],
+  "left_arm": [
+   -36.991,
+   0.0,
+   -7.331
+  ],
+  "head": [
+   0.0,
+   -1.652,
+   0.0
+  ]
+ },
+ "exclude": [
+  [
+   [
+    60,
+    300
+   ],
+   [
+    185,
+    300
+   ],
+   [
+    185,
+    465
+   ],
+   [
+    60,
+    465
+   ]
+  ]
+ ],
+ "lighting": "unlit",
+ "note": "fitted by tools/armor_reference.py: the figure's outline, then the helm's; exclude: the sword and the shield"
+}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSG",
+    " LB"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "G": "minecraft:gold_ingot",
+    "L": "minecraft:lever",
+    "B": "minecraft:gilded_blackstone"
+  },
+  "result": {
+    "id": "jugcraft:cinder_repeater"
+  }
+}

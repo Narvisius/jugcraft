@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:glass_bottle"
+    },
+    {
+      "ingredient": "minecraft:cocoa_beans",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:milk_bucket"
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:hot_cocoa"
+  },
+  "time": 200
+}

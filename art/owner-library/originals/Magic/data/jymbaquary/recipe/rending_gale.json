@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "jymbaquary:bat_wing",
+    "E": "jymbaquary:eye_of_the_storm",
+    "G": "#c:ingots/gold",
+    "S": "minecraft:stick",
+    "V": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "!jymbaquary:enabled": {},
+        "!jymbaquary:oversized_item_container_contents": {}
+      },
+      "items": "jymbaquary:void_tear"
+    }
+  },
+  "pattern": [
+    " BE",
+    "GVB",
+    "SG "
+  ],
+  "result": {
+    "id": "jymbaquary:rending_gale"
+  }
+}

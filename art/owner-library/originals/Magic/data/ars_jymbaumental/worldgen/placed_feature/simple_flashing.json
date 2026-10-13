@@ -1,0 +1,17 @@
+{
+  "feature": "ars_jymbaumental:natural_flashing_tree",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "ars_jymbaumental:yellow_archwood_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    }
+  ]
+}

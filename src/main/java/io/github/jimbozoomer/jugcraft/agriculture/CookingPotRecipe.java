@@ -78,7 +78,28 @@ public class CookingPotRecipe implements Recipe<CookingPotRecipe.Input> {
 			ByteBufCodecs.VAR_INT, CookingPotRecipe::time,
 			CookingPotRecipe::new);
 
-	private static @Nullable List<CookingPotRecipe> cache;
+	private static Object revision = new Object();
+	private static final java.util.Map<MinecraftServer, java.util.Map<net.minecraft.resources.Identifier, CookingPotRecipe>> CATALOGS = new java.util.WeakHashMap<>();
+	public static Object revision() { return revision; }
+	public static java.util.Map<net.minecraft.resources.Identifier, CookingPotRecipe> catalog(MinecraftServer server) {
+		return CATALOGS.computeIfAbsent(server, s -> {
+			var entries = new java.util.TreeMap<net.minecraft.resources.Identifier, CookingPotRecipe>(java.util.Comparator.comparing(Object::toString));
+			for (var holder : s.getRecipeManager().getRecipes()) if (holder.value() instanceof CookingPotRecipe pot)
+				entries.put(holder.id().identifier(), pot);
+			return java.util.Collections.unmodifiableMap(entries);
+		});
+	}
+	public static List<CookingPotPlan> plans(MinecraftServer server) {
+		return catalog(server).entrySet().stream().filter(e -> e.getValue().parts().size() <= 64).limit(CookingPotPlan.LIMIT)
+			.map(e -> new CookingPotPlan(e.getKey(), e.getValue().output(), e.getValue().parts(), e.getValue().time())).toList();
+	}
+	public static Optional<Match> find(MinecraftServer server, List<ItemStack> slots, net.minecraft.resources.@Nullable Identifier selected) {
+		if (selected == null) return find(server, slots);
+		var recipe = catalog(server).get(selected);
+		if (recipe == null) return Optional.empty();
+		var take = recipe.take(new Input(slots));
+		return take == null ? Optional.empty() : Optional.of(new Match(recipe, take));
+	}
 
 	private final Recipe.CommonInfo commonInfo;
 	private final List<Part> parts;
@@ -212,24 +233,14 @@ public class CookingPotRecipe implements Recipe<CookingPotRecipe.Input> {
 	static void registerReloadListener() {
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, success) -> clearCache());
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> clearCache());
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> clearCache());
 	}
 
 	private static synchronized void clearCache() {
-		cache = null;
+		CATALOGS.clear(); revision = new Object();
 	}
 
-	private static synchronized List<CookingPotRecipe> recipes(MinecraftServer server) {
-		if (cache == null) {
-			List<CookingPotRecipe> list = new ArrayList<>();
-			for (RecipeHolder<?> holder : server.getRecipeManager().getRecipes()) {
-				if (holder.value() instanceof CookingPotRecipe recipe) {
-					list.add(recipe);
-				}
-			}
-			cache = List.copyOf(list);
-		}
-		return cache;
-	}
+	private static java.util.Collection<CookingPotRecipe> recipes(MinecraftServer server) { return catalog(server).values(); }
 
 	/** The recipe the pot's ingredient slots hold, if any. */
 	public static Optional<Match> find(MinecraftServer server, List<ItemStack> slots) {

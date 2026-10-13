@@ -1,0 +1,53 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/ice_cream_cake_front",
+    "top": "jugcraft:block/ice_cream_cake_top",
+    "front": "jugcraft:block/ice_cream_cake_front",
+    "side": "jugcraft:block/ice_cream_cake_side",
+    "inside": "jugcraft:block/ice_cream_cake_inside"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        8,
+        9,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#inside",
+          "uv": [
+            0,
+            15,
+            8,
+            16
+          ],
+          "cullface": "down"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#inside"
+        },
+        "north": {
+          "texture": "#inside"
+        },
+        "south": {
+          "texture": "#front",
+          "cullface": "south"
+        }
+      }
+    }
+  ]
+}

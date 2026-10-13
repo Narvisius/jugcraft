@@ -2,7 +2,7 @@
 
 A community-built Minecraft Java 26.3 + Fabric experience about factories, magical workshops, cozy homes, and dangerous frontiers.
 
-**Status: early development.** The Minecraft 26.3 + Fabric mod compiles in CI and contains the base materials, electricity and first machines, but it has not been play-tested yet. Feature proposals and documentation contributions are welcome.
+**Status: active alpha development.** Jugcraft includes factories, magic, agriculture, world content and automated server/client tests. See the [implementation status and next-work checklist](docs/INTEGRATION_STATUS.md) for the current integration, outstanding playtests and owner decisions.
 
 ## The vision
 
@@ -20,6 +20,9 @@ Minecraft remains **26.3 + Fabric**, with **Loader 0.19.5** required by the sele
 
 ## Start here
 
+- [Read the expanded magic, bosses, industry and World Designer plan](docs/plans/concordance-expansion-2026-10-10/START-HERE.md): researched design chapters, a Claude handoff prompt, substantial implementation chunks and owner check-ins.
+
+- [Set up Peepo and Jughead: taming, jobs, supplies, porter routes and care](docs/PEEPO_COMPANION_GUIDE.md).
 - [Design a new world's terrain, biomes, spawn, city and villages with World Designer](docs/WORLD_DESIGNER.md).
 
 - [Start contributing now: fork, connect your AI, and open a PR](docs/COMMUNITY_QUICKSTART.md).
@@ -27,6 +30,7 @@ Minecraft remains **26.3 + Fabric**, with **Loader 0.19.5** required by the sele
 - [Propose an existing mod integration](../../issues/new?template=integration.yml).
 - [Contribute code, art, or documentation](CONTRIBUTING.md).
 - [Browse the shared owner asset library](art/owner-library/README.md): reusable textures, reference sheets, sounds and animations for every content branch, including building, industry, equipment, vehicles, biomes and farming.
+- [Use the owner's magic collection](art/owner-library/MAGIC_ASSETS.md): 7,909 textures, models, sounds and data files. Contributors and AI should use suitable files directly; the owner authorizes their use as supplied, without mandatory redesigns or another per-asset permission request.
 - [Read the connected gameplay design](docs/DESIGN.md).
 - [See everything that exists so far](docs/WHAT_EXISTS.md) (content, APIs and file map, for contributors and AI agents) and [what changed](CHANGELOG.md).
 - [See how the technology tree works](docs/TECH_TREE.md), including the planned [Chemistry branch](docs/branches/CHEMISTRY.md).

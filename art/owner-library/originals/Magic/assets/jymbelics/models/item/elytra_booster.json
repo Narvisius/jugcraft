@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+    "textures": {
+        "layer0": "jymbelics:item/elytra_booster_0"
+    },
+    "overrides": [
+        { "predicate": { "jymbelics:fuel": 0 }, "model": "jymbelics:item/elytra_booster_0" },
+        { "predicate": { "jymbelics:fuel": 1 }, "model": "jymbelics:item/elytra_booster_1" }
+    ]
+}

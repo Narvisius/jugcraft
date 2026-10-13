@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
-import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,15 +22,17 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The turning parts of multi-block machines: the giant sawmill's blade and belt drive and the giant sieve's eccentric
- * weights, from assets/jugcraft/machine_rotor_quads.json (written by tools/machine_rotors.py). The machines' block entity
- * renderer ({@link WindTurbineRenderer}) draws them and their block models leave them out, so they stand still while the
- * machine is idle and turn while its master block is lit.
+ * The turning parts of multi-block machines: the giant sawmill's blade and belt drive, the giant sieve's eccentric
+ * weights and the industrial forms' couplings and fans, from assets/jugcraft/machine_rotor_quads.json (written by
+ * tools/machine_rotors.py). The machines' block entity renderers ({@link WindTurbineRenderer}, {@link FormMachineRenderer})
+ * draw them and their block models leave them out, so they stand still while the machine is idle and turn while its
+ * master block is lit.
  *
  * <p>Each machine's angles are kept here on the client, per block entity, and every speed change is eased over a few
  * ticks: the parts spin up when the machine starts, run down when it stops and never jump, even when weak power makes
@@ -43,7 +44,7 @@ public final class MachineRotors {
 	private static final double MAX_GAP = 40;
 	private static @Nullable Map<String, List<Rotor>> rotors;
 	/** Angles and speeds of the machines drawn lately; entries go when their block entities are unloaded. */
-	private static final Map<MachineBlockEntity, Phase> PHASES = new WeakHashMap<>();
+	private static final Map<BlockEntity, Phase> PHASES = new WeakHashMap<>();
 
 	private MachineRotors() {
 	}
@@ -73,7 +74,7 @@ public final class MachineRotors {
 	}
 
 	/** The rotors of this machine to draw now, turned to their eased angles; empty for machines without any. */
-	public static List<Spin> extract(MachineBlockEntity machine, float partialTick) {
+	public static List<Spin> extract(BlockEntity machine, float partialTick) {
 		Level level = machine.getLevel();
 		if (level == null) {
 			return List.of();

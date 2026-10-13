@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/platter",
+    "platter": "jugcraft:block/platter",
+    "medley": "jugcraft:block/rice_roll_medley"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        1,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "north": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            0,
+            15,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            0,
+            15,
+            1
+          ]
+        },
+        "east": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            0,
+            15,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#platter",
+          "uv": [
+            1,
+            0,
+            15,
+            1
+          ]
+        }
+      }
+    }
+  ]
+}

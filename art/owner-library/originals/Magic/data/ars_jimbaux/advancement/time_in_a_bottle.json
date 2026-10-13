@@ -1,0 +1,27 @@
+{
+  "parent": "ars_jimbaux:mob_jar",
+  "criteria": {
+    "time_in_a_bottle": {
+      "trigger": "ars_jimbaux:time_in_bottle"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.time_in_a_bottle"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.time_in_a_bottle"
+    }
+  },
+  "requirements": [
+    [
+      "time_in_a_bottle"
+    ]
+  ]
+}

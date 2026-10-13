@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "BWB",
+    " S ",
+    " R "
+  ],
+  "key": {
+    "B": "minecraft:sweet_berries",
+    "W": "minecraft:nether_wart",
+    "S": "minecraft:iron_sword",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:thornheart_blade",
+    "count": 1
+  }
+}

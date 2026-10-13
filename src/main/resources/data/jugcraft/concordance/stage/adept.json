@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "order": 3,
+  "routes": [
+    {
+      "id": "specialist",
+      "mastered": 2
+    },
+    {
+      "id": "generalist",
+      "understood": 5,
+      "traditions": 5
+    },
+    {
+      "id": "attuned",
+      "research": [
+        "jugcraft:circle_lore@understood",
+        "jugcraft:first_light@mastered"
+      ]
+    }
+  ]
+}

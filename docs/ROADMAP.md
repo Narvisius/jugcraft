@@ -1,5 +1,7 @@
 # Roadmap
 
+The [Concordance expansion planning pack](plans/concordance-expansion-2026-10-10/START-HERE.md) develops magic, bosses, workshops, pacts and authored worlds into researched designs and substantial Claude implementation chunks with owner checkpoints. It distinguishes current source, existing owner direction and new proposals.
+
 The broad vision is approved as direction, not as a promise that all content is available or a fixed delivery schedule. See the feature documents and current PRs for implementation status.
 
 Concrete owner-requested follow-ups are tracked in the [TODO list](TODO.md), including the independently documented [Jugcraft Encyclopedia](features/jugcraft-encyclopedia.md) and its ten UI reference images. The Encyclopedia's approved direction is a full UI with technology/magic route explanations, detailed pathway guidance and quests, accessed from the inventory or a keybind without an item.

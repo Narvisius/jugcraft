@@ -45,6 +45,25 @@ public final class KineticNetworks {
 	private record Network(List<BlockPos> parts, List<BlockPos> consumers, List<Direction> sides) {
 	}
 
+	/** Read the same bounded, cached topology as push; never probe by inserting energy. */
+	public static int companionDemand(ServerLevel level, BlockPos pos, Direction side, boolean pausedFull) {
+		Network network = CACHE.computeIfAbsent(level, l -> new HashMap<>())
+			.computeIfAbsent(new Key(pos.immutable(), side), key -> discover(level, key.pos(), key.side()));
+		boolean connected = false;
+		for (int i=0;i<network.consumers().size();i++) {
+			var target=network.consumers().get(i);
+			if (!level.hasChunkAt(target)) continue;
+			var block=level.getBlockEntity(target);
+			if (block instanceof FlywheelBlockEntity wheel) {
+				if (network.sides().get(i)==wheel.getBlockState().getValue(FlywheelBlock.FACING)) continue;
+				long threshold=pausedFull?FlywheelBlockEntity.CAPACITY*9/10:FlywheelBlockEntity.CAPACITY*99/100;
+				if (wheel.stored()>=threshold) return 2;
+			}
+			if (block instanceof KineticConsumer) connected=true;
+		}
+		return connected?1:0;
+	}
+
 	private KineticNetworks() {
 	}
 
@@ -75,6 +94,7 @@ public final class KineticNetworks {
 		List<KineticConsumer> consumers = new ArrayList<>();
 		List<Direction> sides = new ArrayList<>();
 		for (int i = 0; i < network.consumers().size(); i++) {
+			if (!level.hasChunkAt(network.consumers().get(i))) continue;
 			if (level.getBlockEntity(network.consumers().get(i)) instanceof KineticConsumer consumer) {
 				consumers.add(consumer);
 				sides.add(network.sides().get(i));
@@ -104,6 +124,7 @@ public final class KineticNetworks {
 		while (!queue.isEmpty() && parts.size() < MAX_PARTS) {
 			BlockPos pos = queue.poll();
 			Direction direction = travel.poll();
+			if (!level.hasChunkAt(pos)) continue;
 			BlockState state = level.getBlockState(pos);
 			if (carries(state, direction)) {
 				if (!seen.add(pos)) {
@@ -122,7 +143,7 @@ public final class KineticNetworks {
 					travel.add(direction);
 					// A belt carries the rotation on to the linked pulley, which passes it both ways along its axis.
 					if (level.getBlockEntity(pos) instanceof BeltPulleyBlockEntity pulley && pulley.link() != null
-							&& seen.add(pulley.link())) {
+							&& level.hasChunkAt(pulley.link()) && seen.add(pulley.link())) {
 						BlockPos other = pulley.link();
 						parts.add(other);
 						Direction.Axis axis = level.getBlockState(other).getValue(ShaftBlock.AXIS);
@@ -136,8 +157,8 @@ public final class KineticNetworks {
 				}
 			} else if (!seen.contains(pos)) {
 				// Any block of a multi-block machine passes power to the machine's master block.
-				MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
-				BlockPos target = machine != null ? machine.getBlockPos() : pos;
+				BlockPos target = state.getBlock() instanceof MachineBlock machine ? machine.masterPos(pos,state) : pos;
+				if (!level.hasChunkAt(target)) continue;
 				if (!consumers.contains(target) && level.getBlockEntity(target) instanceof KineticConsumer) {
 					consumers.add(target);
 					sides.add(direction.getOpposite());
@@ -152,6 +173,7 @@ public final class KineticNetworks {
 		Map<BlockPos, Long> turned = TURNED.computeIfAbsent(level, l -> new HashMap<>());
 		long now = level.getGameTime();
 		for (BlockPos pos : parts) {
+			if (!level.hasChunkAt(pos)) continue;
 			turned.put(pos, now);
 			BlockState state = level.getBlockState(pos);
 			if (state.hasProperty(ShaftBlock.TURNING) && !state.getValue(ShaftBlock.TURNING)) {

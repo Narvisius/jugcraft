@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:salmon_slice",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:tomato"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    },
+    {
+      "ingredient": "jugcraft:garlic"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:fish_stew"
+  },
+  "time": 300
+}

@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "hollow",
+  "tradition": "crimson_vigil",
+  "stage": "practitioner",
+  "icon": "jugcraft:crimson_chalice",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:crimson_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:crimson_specimens",
+          "distinct": 3
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:crimson_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:living_growth",
+          "distinct": 2
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

@@ -4,6 +4,7 @@ import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.gear.JugcraftGear;
 import io.github.jimbozoomer.jugcraft.mixin.AttackStrengthAccessor;
 import io.github.jimbozoomer.jugcraft.weapons.ArmItem;
+import io.github.jimbozoomer.jugcraft.weapons.ArmShieldItem;
 import io.github.jimbozoomer.jugcraft.weapons.ArmVariants;
 import io.github.jimbozoomer.jugcraft.weapons.JugcraftArms;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -42,17 +44,26 @@ import net.minecraft.world.phys.Vec3;
 /**
  * In-game tests for Arms VII (batch 56): every variant is registered as an arm of its kind with its line's perk; each
  * boon does what it says when its arm strikes, as the server works it; each style's smithing recipe and pattern recipe
- * load; and each boss's loot table drops one of its two trophies. Wielders are mock players facing south (+z) with a
- * full attack charge; foes are still pigs (living, not undead, so poison and the rest take) or, for Gravebane, husks.
+ * load; each boss's loot table drops one of its two trophies; an armor set's arm, epic and as hard-wearing as a
+ * trophy, has no recipe and no boss table yet (creative only until the owner settles how a set is won); and an armor
+ * set's shield blocks as its base shield does. Wielders are
+ * mock players facing south (+z) with a full attack charge; foes are still pigs (living, not undead, so poison and the
+ * rest take) or, for Gravebane, husks.
  */
 public class ArmsVIIGameTests {
 	private static final String ARENA = "jugcraft-test:arms_arena";
 	private static final int CHARGED = 100;
 
-	/** Every variant is an arm of its kind, with its line's durability, enchantability and rarity, and its boon. */
+	/**
+	 * Every variant is an arm of its kind, with its line's durability, enchantability and rarity, and its boon; a boss's
+	 * trophy and an armor set's arm alike are epic and last twice as long as steel. Every armor set has its arm.
+	 */
 	@GameTest
 	public void everyVariantIsAnArmOfItsKind(GameTestHelper helper) {
 		int steel = JugcraftGear.STEEL.durability();
+		for (String set : ArmVariants.SETS) {
+			helper.assertTrue(ArmVariants.VARIANTS.stream().anyMatch(v -> v.line().equals(set)), "The " + set + " set has no arm");
+		}
 		for (ArmVariants.Variant variant : ArmVariants.VARIANTS) {
 			Item item = ArmVariants.ITEMS.get(variant.name());
 			helper.assertTrue(item instanceof ArmItem arm && arm.kind().equals(variant.kind()) && arm.boon() == variant.boon(),
@@ -60,6 +71,7 @@ public class ArmsVIIGameTests {
 			ItemStack stack = new ItemStack(item);
 			ItemStack base = new ItemStack(JugcraftArms.ITEMS.get("steel_" + variant.kind()));
 			boolean style = ArmVariants.STYLES.contains(variant.line());
+			// Any other line is a boss's (a trophy) or an armor set's (its arm): both last as a trophy does.
 			int durability = variant.line().equals("ironclad") ? steel * ArmVariants.IRONCLAD_DURABILITY
 					: style ? base.getMaxDamage() : steel * ArmVariants.TROPHY_DURABILITY;
 			helper.assertTrue(stack.getMaxDamage() == durability, variant.name() + " lasts " + stack.getMaxDamage() + ", not " + durability);
@@ -75,6 +87,33 @@ public class ArmsVIIGameTests {
 		helper.succeed();
 	}
 
+	/**
+	 * An armor set's shield is a shield of its own shape in its set, blocks as the steel shield of its base kind does (its
+	 * delay, axe cooldown and cover; both are built by JugcraftArms.shield from the same numbers), lasts twice as long as
+	 * that shield, as a set's arm does against steel, and is epic.
+	 */
+	@GameTest
+	public void setShieldsBlockAsTheirBase(GameTestHelper helper) {
+		for (ArmVariants.SetShield shield : ArmVariants.SET_SHIELDS) {
+			helper.assertTrue(ArmVariants.SETS.contains(shield.line()), shield.name() + " is of no armor set");
+			Item item = ArmVariants.SHIELDS.get(shield.name());
+			helper.assertTrue(item instanceof ArmShieldItem armShield && armShield.kind().equals(shield.shape())
+					&& shield.line().equals(armShield.line()), shield.name() + " is not a " + shield.shape() + " of the " + shield.line() + " set");
+			ItemStack stack = new ItemStack(item);
+			ItemStack base = new ItemStack(JugcraftArms.KIT.get(ArmVariants.SET_SHIELD_METAL + "_" + shield.base()));
+			BlocksAttacks blocks = stack.get(DataComponents.BLOCKS_ATTACKS);
+			BlocksAttacks baseBlocks = base.get(DataComponents.BLOCKS_ATTACKS);
+			helper.assertTrue(blocks != null && baseBlocks != null && blocks.blockDelaySeconds() == baseBlocks.blockDelaySeconds()
+					&& blocks.disableCooldownScale() == baseBlocks.disableCooldownScale()
+					&& blocks.damageReductions().equals(baseBlocks.damageReductions()),
+					shield.name() + " blocks as " + blocks + ", not as its base " + baseBlocks);
+			helper.assertTrue(stack.getMaxDamage() == base.getMaxDamage() * ArmVariants.TROPHY_DURABILITY,
+					shield.name() + " lasts " + stack.getMaxDamage() + ", not twice its base's " + base.getMaxDamage());
+			helper.assertTrue(stack.get(DataComponents.RARITY) == Rarity.EPIC, shield.name() + " is " + stack.get(DataComponents.RARITY));
+		}
+		helper.succeed();
+	}
+
 	/** The effect boons, struck on a still pig: each puts its effect on the foe, at its length and strength. */
 	@GameTest(structure = ARENA)
 	public void effectBoonsTakeOnTheFoe(GameTestHelper helper) {
@@ -84,6 +123,8 @@ public class ArmsVIIGameTests {
 		check(helper, "gravewarden", new BlockPos(5, 2, 2), MobEffects.WITHER, ArmVariants.WITHER_TICKS, ArmVariants.WITHER_AMPLIFIER);
 		check(helper, "moonfang", new BlockPos(7, 2, 2), MobEffects.WEAKNESS, ArmVariants.HOWL_TICKS, ArmVariants.HOWL_AMPLIFIER);
 		check(helper, "runebound_nodachi", new BlockPos(9, 2, 2), MobEffects.GLOWING, ArmVariants.MARK_TICKS, 0);
+		// An armor set's arm: the Hades Scythe withers as the Gravewarden does.
+		check(helper, "hades_scythe", new BlockPos(13, 2, 2), MobEffects.WITHER, ArmVariants.WITHER_TICKS, ArmVariants.WITHER_AMPLIFIER);
 		ServerPlayer player = wielder(helper, "cinderbrand", new BlockPos(11, 2, 0));
 		Mob pig = pig(helper, new BlockPos(11, 2, 2));
 		strike(player, pig);
@@ -150,7 +191,10 @@ public class ArmsVIIGameTests {
 		});
 	}
 
-	/** Every style variant's smithing recipe and every pattern's recipe load; each boss's table drops only its trophies. */
+	/**
+	 * Every style variant's smithing recipe and every pattern's recipe load; each boss's table drops only its trophies;
+	 * an armor set's arm has no recipe, and its set no boss table, yet.
+	 */
 	@GameTest(maxTicks = 20)
 	public void recipesAndTrophyTablesLoad(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
@@ -167,9 +211,21 @@ public class ArmsVIIGameTests {
 			}
 		}
 		helper.assertTrue(missing.isEmpty(), "These recipes did not load: " + missing);
+		// An armor set's arm is creative only until the owner settles how a set is won: no recipe, no boss table.
+		for (ArmVariants.Variant variant : ArmVariants.VARIANTS) {
+			if (!ArmVariants.SETS.contains(variant.line())) {
+				continue;
+			}
+			helper.assertTrue(level.recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Jugcraft.id(variant.name()))).isEmpty(),
+					variant.name() + ", an armor set's arm, has a recipe");
+			LootTable table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE,
+					Jugcraft.id("bosses/" + variant.line())));
+			helper.assertTrue(table == LootTable.EMPTY, "The " + variant.line() + " armor set has a boss's trophy table");
+		}
 		ServerPlayer player = wielder(helper, null, new BlockPos(1, 2, 1));
 		Set<String> bosses = new HashSet<>();
-		ArmVariants.VARIANTS.stream().filter(v -> !ArmVariants.STYLES.contains(v.line())).forEach(v -> bosses.add(v.line()));
+		ArmVariants.VARIANTS.stream().filter(v -> !ArmVariants.STYLES.contains(v.line()) && !ArmVariants.SETS.contains(v.line()))
+				.forEach(v -> bosses.add(v.line()));
 		for (String boss : bosses) {
 			LootTable table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE,
 					Jugcraft.id("bosses/" + boss)));

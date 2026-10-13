@@ -1,0 +1,121 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.hurled_boulder",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.5,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "tumble",
+          "pivot": [
+            0.0,
+            8.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -6.0,
+                2.0,
+                -6.0
+              ],
+              "size": [
+                12,
+                12,
+                12
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -7.5,
+                4.0,
+                -3.0
+              ],
+              "size": [
+                3,
+                7,
+                7
+              ],
+              "uv": [
+                0,
+                24
+              ]
+            },
+            {
+              "origin": [
+                4.5,
+                6.0,
+                -4.0
+              ],
+              "size": [
+                3,
+                7,
+                7
+              ],
+              "mirror": true,
+              "uv": [
+                0,
+                24
+              ]
+            },
+            {
+              "origin": [
+                -5.0,
+                13.0,
+                -5.0
+              ],
+              "size": [
+                10,
+                2,
+                9
+              ],
+              "uv": [
+                20,
+                24
+              ]
+            },
+            {
+              "origin": [
+                -3.0,
+                0.5,
+                -7.0
+              ],
+              "size": [
+                6,
+                5,
+                3
+              ],
+              "uv": [
+                0,
+                38
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

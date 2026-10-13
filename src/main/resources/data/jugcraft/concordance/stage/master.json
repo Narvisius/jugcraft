@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "order": 4,
+  "routes": [
+    {
+      "id": "specialist",
+      "mastered": 5,
+      "traditions": 3
+    },
+    {
+      "id": "generalist",
+      "understood": 9,
+      "traditions": 7,
+      "research": [
+        "jugcraft:first_light@mastered"
+      ]
+    },
+    {
+      "id": "fellowship",
+      "rank": "luminary",
+      "mastered": 2
+    }
+  ]
+}

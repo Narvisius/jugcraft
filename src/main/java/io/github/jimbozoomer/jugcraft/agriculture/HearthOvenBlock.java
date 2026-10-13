@@ -53,6 +53,12 @@ public class HearthOvenBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) {
+		// The partial-height brick shell is still an obstacle, not a passage through the oven.
+		return false;
+	}
+
+	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}

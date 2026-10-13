@@ -8,12 +8,10 @@ way and shown inside the trellis model.
 import math
 import random
 
-from crop_textures import (Canvas, rgb, ribbon, broad_leaf, stalk, heart, outline, seeds_item, LEAF, DRY, STALK, WOOD,
-                           BLUE_GREEN, BEAN, KERNEL)
+from crop_textures import (Canvas, rgb, broad_leaf, stalk, outline, seeds_item, LEAF, DRY, WOOD,
+                           BEAN, KERNEL)
 import block_style as bs
 
-TOMATO = [rgb("6e120e"), rgb("a01e18"), rgb("cc3226"), rgb("e95a43"), rgb("f89a82")]
-TOMATO_GREEN = [rgb("35601a"), rgb("4f8226"), rgb("6fa436"), rgb("98c65a")]
 TOMATO_LEAF = [rgb("1d3d17"), rgb("27511d"), rgb("336a25"), rgb("43822e"), rgb("5a9b3c"), rgb("7db55a")]
 BLOSSOM = [rgb("c89a16"), rgb("f0cc34"), rgb("ffec8e")]
 VINE_STEM = [rgb("2f5a1d"), rgb("447a28"), rgb("5e9936"), rgb("7fb24e")]
@@ -33,96 +31,12 @@ BOWL = WOOD
 
 # ---------------------------------------------------------------- tomato (climbing)
 
-def compound_leaf(c, x, y, direction, size, palette=TOMATO_LEAF):
-    """A tomato leaf: a short stalk with a few jagged leaflets."""
-    for i in range(size + 2):
-        c.px(x + direction * i, y + i * 0.3, VINE_STEM[1])
-    for i in range(1, size + 2, 2):
-        lx, ly = x + direction * i, y + i * 0.3
-        for dx, dy in ((0, -1), (1, -1), (0, 1), (-1, 0), (1, 0)):
-            c.px(lx + dx, ly + dy, palette[4] if dy < 0 else palette[2])
-        c.px(lx, ly, palette[3])
-    c.px(x + direction * (size + 2), y + (size + 2) * 0.3, palette[4])
-
-
 def vine(c, top, bottom=15, sway=1.0):
     """The main climbing stem, winding gently up the middle."""
     for y in range(top, bottom + 1):
         x = 7.5 + math.sin(y * 0.7) * sway
         c.px(x, y, VINE_STEM[1])
         c.px(x + 1, y, VINE_STEM[2])
-
-
-def tomato_fruit(c, x, y, palette, size=1):
-    """A round fruit hanging from (x, y): lit at the upper left, a star of calyx on top."""
-    for dy in range(-size, size + 1):
-        for dx in range(-size, size + 1):
-            if dx * dx + dy * dy <= size * size + size:
-                shade = 3 if dx + dy < 0 else (2 if dx + dy == 0 else 1)
-                c.px(x + dx, y + dy + size, palette[shade])
-    c.px(x - (size > 0), y + (size > 0), palette[-1])
-    c.px(x, y - 1, TOMATO_GREEN[1])
-
-
-def tomato_part(top, leaves, fruit=None, flowers=0, base=True):
-    """One block of tomato plant. fruit: None, 'green' or 'ripe'."""
-    c = Canvas()
-    vine(c, top)
-    rng = random.Random(300 + top * 7 + leaves)
-    spots = [(7, 12, -1), (8, 9, 1), (7, 6, -1), (8, 3, 1), (7, 1, -1), (8, 13, 1)]
-    for x, y, d in spots[:leaves]:
-        if y >= top - 1:
-            compound_leaf(c, x, y, d, 3 + rng.choice([0, 1]))
-    for i in range(flowers):
-        fx, fy = ((4, 5), (11, 8), (5, 11), (12, 3))[i]
-        c.px(fx, fy, BLOSSOM[2])
-        c.px(fx + 1, fy, BLOSSOM[1])
-        c.px(fx, fy + 1, BLOSSOM[1])
-        c.px(fx + 1, fy + 1, BLOSSOM[0])
-    if fruit:
-        palette = TOMATO if fruit == "ripe" else TOMATO_GREEN
-        for fx, fy, size in ((4, 7, 1), (11, 10, 1), (6, 12, 1), (12, 4, 1), (3, 12, 0)):
-            tomato_fruit(c, fx, fy, palette, size)
-    if base:
-        c.px(7, 15, VINE_STEM[0])
-    return c.img
-
-
-def tomato_sprout():
-    c = Canvas()
-    stalk(c, 7, 12, palette=VINE_STEM)
-    compound_leaf(c, 7, 12, -1, 2)
-    compound_leaf(c, 8, 11, 1, 2)
-    return c.img
-
-
-def tomato_seedling():
-    c = Canvas()
-    vine(c, 8, sway=0.5)
-    compound_leaf(c, 7, 12, -1, 3)
-    compound_leaf(c, 8, 10, 1, 3)
-    compound_leaf(c, 7, 8, -1, 2)
-    return c.img
-
-
-def tomato_young():
-    return tomato_part(2, 5)
-
-
-def tomato_top(leaves, fruit=None, flowers=0, top=4):
-    return tomato_part(top, leaves, fruit, flowers, base=False)
-
-
-def tomato_wild():
-    """A wild tomato: a sprawling knee-high plant with tiny red fruit."""
-    c = Canvas()
-    for x0, x1, top in ((7, 3, 7), (8, 12, 6), (7, 8, 4)):
-        c.line(x0, 15, x1, top, VINE_STEM[1])
-    for x, y, d in ((4, 8, -1), (11, 7, 1), (7, 5, -1), (9, 11, 1), (5, 12, -1)):
-        compound_leaf(c, x, y, d, 2)
-    for x, y in ((3, 10), (12, 10), (9, 6), (6, 13)):
-        tomato_fruit(c, x, y, TOMATO, 0)
-    return c.img
 
 
 # ---------------------------------------------------------------- pepper (bush)
@@ -187,17 +101,6 @@ def bulb(c, cx, cy, width, height, palette):
     c.px(cx, cy - height - 1, palette[1])
 
 
-def onion_stage(stage):
-    c = Canvas()
-    tube_leaves(c, (3, 5, 6, 6)[stage], (5, 9, 12, 11)[stage], BLUE_GREEN, bend=2.2, seed=10 + stage)
-    if stage == 3:
-        # Leaves flop over as the bulb swells at the soil.
-        for x in range(9, 14):
-            c.px(x, 8 + (x - 9) // 2, DRY[2])
-        bulb(c, 7.5, 15, 3, 2, ONION)
-    return c.img
-
-
 def garlic_stage(stage):
     c = Canvas()
     tube_leaves(c, (3, 5, 6, 6)[stage], (5, 9, 12, 12)[stage], LEAF, bend=2.4, seed=20 + stage)
@@ -212,37 +115,6 @@ def garlic_stage(stage):
 
 
 # ---------------------------------------------------------------- cabbage
-
-def cabbage_leaf(c, x, y, size, palette=CABBAGE):
-    for dy in range(-size, size + 1):
-        for dx in range(-size - 1, size + 2):
-            if dx * dx / (size + 1.2) ** 2 + dy * dy / (size + 0.3) ** 2 <= 1:
-                c.px(x + dx, y + dy, palette[3 if dy < 0 else 2])
-    c.line(x, y + size, x, y - size, palette[5])
-
-
-def cabbage_stage(stage):
-    c = Canvas()
-    if stage == 0:
-        stalk(c, 7, 12, palette=STALK)
-        cabbage_leaf(c, 5, 11, 1)
-        cabbage_leaf(c, 10, 11, 1)
-        return c.img
-    # Wide outer leaves low on the ground...
-    for x, y in ((3, 12), (12, 12), (7, 13)):
-        cabbage_leaf(c, x, y, 2 if stage > 1 else 1, [CABBAGE[0], CABBAGE[1], CABBAGE[1], CABBAGE[2], CABBAGE[3], CABBAGE[4]])
-    # ...and a round head forming in the middle.
-    radius = (0, 2, 3, 4)[stage]
-    cy = 13 - radius
-    for dy in range(-radius, radius + 1):
-        for dx in range(-radius - 1, radius + 2):
-            if dx * dx / (radius + 1) ** 2 + dy * dy / radius ** 2 <= 1:
-                c.px(7.5 + dx, cy + dy, CABBAGE[5 if dx + dy < -radius else 4 if dx < 0 else 3])
-    if stage == 3:
-        for i in range(-2, 3):
-            c.px(7.5 + i, cy + abs(i) - 1, CABBAGE[2])
-    return c.img
-
 
 # ---------------------------------------------------------------- oats and barley
 
@@ -312,36 +184,6 @@ def trellis_post():
     return c.img
 
 
-def pot_side():
-    c = Canvas()
-    for y in range(16):
-        for x in range(16):
-            c.px(x, y, IRON[2] if y % 5 else IRON[3])
-    for x in range(0, 16, 4):
-        c.px(x + 1, 9, IRON[5])
-        c.px(x + 1, 14, IRON[4])
-    for x in range(16):
-        c.px(x, 8, IRON[4])
-    return c.img
-
-
-def pot_rim():
-    c = Canvas()
-    for y in range(16):
-        for x in range(16):
-            c.px(x, y, IRON[4] if (x + y) % 7 else IRON[5])
-    return c.img
-
-
-def pot_empty():
-    c = Canvas()
-    for y in range(16):
-        for x in range(16):
-            d = math.hypot(x - 7.5, y - 7.5)
-            c.px(x, y, IRON[0] if d < 4 else IRON[1])
-    return c.img
-
-
 def pot_soup():
     c = Canvas()
     bs.fill(c, 0, 0, 15, 15, SOUP_TOMATO[1:3], 77, [3, 1], spread=0.6)
@@ -366,15 +208,6 @@ def round_fruit(c, cx, cy, radius, palette, squash=1.0):
     c.px(cx - radius // 2 - 1, cy - radius // 2, palette[4] if len(palette) > 4 else palette[3])
 
 
-def tomato_item():
-    c = Canvas()
-    round_fruit(c, 8, 9, 5, TOMATO, squash=0.85)
-    for dx, dy in ((0, -5), (-2, -5), (2, -5), (-1, -6), (1, -6), (0, -7)):
-        c.px(8 + dx, 9 + dy, TOMATO_GREEN[2 if dy > -6 else 1])
-    outline(c, rgb("3e0806"))
-    return c.img
-
-
 def pepper_item():
     c = Canvas()
     # A curved chili from upper left to lower right, stem at the top.
@@ -393,20 +226,6 @@ def pepper_item():
     return c.img
 
 
-def onion_item():
-    c = Canvas()
-    round_fruit(c, 8, 10, 4, ONION)
-    for y in range(2, 6):
-        c.px(8, y, ONION[1])
-        c.px(9 - (y < 4), y, ONION[2])
-    for y in range(7, 15):
-        c.px(6 + (y - 7) // 4, y, ONION[1])
-    c.px(7, 15, rgb("f0e6cc"))
-    c.px(9, 15, rgb("f0e6cc"))
-    outline(c, rgb("3a2008"))
-    return c.img
-
-
 def garlic_item():
     c = Canvas()
     round_fruit(c, 8, 10, 4, GARLIC)
@@ -418,19 +237,6 @@ def garlic_item():
     c.px(7, 11, rgb("b48bb6"))
     c.px(9, 12, rgb("b48bb6"))
     outline(c, rgb("4a3f4d"))
-    return c.img
-
-
-def cabbage_item():
-    c = Canvas()
-    round_fruit(c, 8, 8, 6, [CABBAGE[1], CABBAGE[2], CABBAGE[3], CABBAGE[4], CABBAGE[5]])
-    for i in range(-4, 5):
-        c.px(8 + i, 8 + abs(i) * 0.6 - 2, CABBAGE[0])
-    for y in range(4, 14):
-        c.px(8, y, CABBAGE[5])
-    for x, y in ((4, 10), (12, 10), (5, 6), (11, 6)):
-        c.px(x, y, CABBAGE[5])
-    outline(c, rgb("1f3a18"))
     return c.img
 
 
@@ -526,36 +332,14 @@ def cabbage_rolls_item():
 def kitchen_textures():
     """(kind, name) -> image for every Kitchen Garden texture."""
     out = {
-        ("block", "tomato_sprout"): tomato_sprout(),
-        ("block", "tomato_seedling"): tomato_seedling(),
-        ("block", "tomato_young"): tomato_young(),
-        ("block", "tomato_vine"): tomato_part(0, 5),
-        ("block", "tomato_vine_flowers"): tomato_part(0, 5, flowers=3),
-        ("block", "tomato_vine_green"): tomato_part(0, 5, fruit="green"),
-        ("block", "tomato_vine_ripe"): tomato_part(0, 5, fruit="ripe"),
-        ("block", "tomato_climbing_top"): tomato_top(2, top=10),
-        ("block", "tomato_leafy_top"): tomato_top(4, top=5),
-        ("block", "tomato_flowering_top"): tomato_top(5, flowers=4, top=3),
-        ("block", "tomato_green_top"): tomato_top(5, fruit="green", top=3),
-        ("block", "tomato_ripe_top"): tomato_top(5, fruit="ripe", top=3),
-        ("block", "tomato_wild"): tomato_wild(),
         ("block", "trellis"): trellis(),
         ("block", "trellis_post"): trellis_post(),
-        ("block", "cooking_pot_side"): pot_side(),
-        ("block", "cooking_pot_rim"): pot_rim(),
-        ("block", "cooking_pot_empty"): pot_empty(),
+        # The pot itself is the owner's (tools/menu.py COOKING_POT_TEXTURES); the soup that shows in it while it cooks is ours.
         ("block", "cooking_pot_soup"): pot_soup(),
-        ("item", "tomato"): tomato_item(),
-        ("item", "tomato_seeds"): seeds_item([rgb("c9b27a"), rgb("e6d7a4"), rgb("f6eccb")],
-                                             [(4, 5), (9, 4), (6, 9), (11, 9), (3, 11), (8, 12)]),
         ("item", "pepper"): pepper_item(),
         ("item", "pepper_seeds"): seeds_item([rgb("d8c08a"), rgb("ecd9a8"), rgb("faf0d2")],
                                              [(3, 4), (8, 3), (11, 7), (5, 9), (9, 11), (4, 13)]),
-        ("item", "onion"): onion_item(),
         ("item", "garlic"): garlic_item(),
-        ("item", "cabbage"): cabbage_item(),
-        ("item", "cabbage_seeds"): seeds_item([rgb("3a2418"), rgb("5a3a24"), rgb("7a5234")],
-                                              [(4, 4), (9, 5), (6, 9), (11, 10), (3, 12), (8, 13)], size=(1, 1)),
         ("item", "oats"): grain_sprig(OAT, awns=False),
         ("item", "oat_seeds"): seeds_item(OAT[1:], [(4, 5), (9, 4), (6, 9), (11, 9), (3, 11), (8, 12)], size=(2, 1)),
         ("item", "barley"): grain_sprig(BARLEY, awns=True),
@@ -563,8 +347,6 @@ def kitchen_textures():
         ("item", "barley_bread"): bread_item(),
         ("item", "sauerkraut"): sauerkraut_item(),
         ("item", "cabbage_rolls"): cabbage_rolls_item(),
-        ("item", "garden_salad"): bowl_item(CABBAGE[2:], [(TOMATO[2], [(5, 5), (9, 6)]), (PEPPER_GREEN[3], [(7, 5), (11, 6)]),
-                                                         (CABBAGE[5], [(4, 6), (8, 4), (10, 5), (6, 6)])]),
         ("item", "tomato_soup"): bowl_item(SOUP_TOMATO, [(rgb("f4efe6"), [(6, 6), (9, 7)])]),
         ("item", "onion_soup"): bowl_item([rgb("6a3a18"), rgb("8a5224"), rgb("a86c34"), rgb("c48a4c")],
                                           [(ONION[3], [(4, 7), (10, 7)])], crust=BREAD),
@@ -581,9 +363,7 @@ def kitchen_textures():
     for stage in range(6):
         out[("block", f"pepper_stage{stage}")] = pepper_stage(stage)
     for stage in range(4):
-        out[("block", f"onion_stage{stage}")] = onion_stage(stage)
         out[("block", f"garlic_stage{stage}")] = garlic_stage(stage)
-        out[("block", f"cabbage_stage{stage}")] = cabbage_stage(stage)
         out[("block", f"oat_stage{stage}")] = oat_stage(stage)
         out[("block", f"barley_stage{stage}")] = barley_stage(stage)
     return out

@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:invocations/hearthflare",
+  "category": "jugcraft:invocations",
+  "x": 6,
+  "y": 6,
+  "name": "book.jugcraft.arcane_concordance.invocations.hearthflare.name",
+  "description": "book.jugcraft.arcane_concordance.invocations.hearthflare.description",
+  "icon": "minecraft:blaze_powder",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_gold",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/hearthbinding_mastered",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.hearthbinding.mastered"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.invocations.hearthflare.p0.title",
+      "text": "book.jugcraft.arcane_concordance.invocations.hearthflare.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.invocations.hearthflare.p1.title",
+      "text": "book.jugcraft.arcane_concordance.invocations.hearthflare.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

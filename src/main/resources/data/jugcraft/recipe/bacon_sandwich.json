@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bread",
+    "jugcraft:cooked_bacon",
+    "jugcraft:cabbage_leaf",
+    "jugcraft:tomato"
+  ],
+  "result": {
+    "id": "jugcraft:bacon_sandwich",
+    "count": 1
+  }
+}

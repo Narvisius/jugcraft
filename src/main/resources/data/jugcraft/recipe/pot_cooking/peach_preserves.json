@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:mason_jar"
+    },
+    {
+      "ingredient": "jugcraft:peach",
+      "count": 3
+    },
+    {
+      "ingredient": "minecraft:sugar",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:peach_preserves"
+  },
+  "time": 300
+}

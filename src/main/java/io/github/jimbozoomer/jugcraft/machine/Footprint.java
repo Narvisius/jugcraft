@@ -59,7 +59,7 @@ public record Footprint(List<Vec3i> offsets) {
 	}
 
 	/** Turns a north-facing side clockwise (seen from above) to match {@code facing}; up and down stay. */
-	static Direction rotate(Direction side, Direction facing) {
+	public static Direction rotate(Direction side, Direction facing) {
 		if (side.getAxis() == Direction.Axis.Y) {
 			return side;
 		}
@@ -71,7 +71,7 @@ public record Footprint(List<Vec3i> offsets) {
 	}
 
 	/** Turns a north-facing offset clockwise (seen from above) to match {@code facing}. */
-	static Vec3i rotate(Vec3i offset, Direction facing) {
+	public static Vec3i rotate(Vec3i offset, Direction facing) {
 		int turns = switch (facing) {
 			case EAST -> 1;
 			case SOUTH -> 2;

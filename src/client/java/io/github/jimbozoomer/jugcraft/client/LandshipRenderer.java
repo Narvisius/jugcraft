@@ -76,8 +76,8 @@ public class LandshipRenderer extends EntityRenderer<Landship, LandshipRenderer.
 	public void extractRenderState(Landship landship, State state, float partialTick) {
 		super.extractRenderState(landship, state, partialTick);
 		state.yRot = landship.getYRot(partialTick);
-		state.leftTrack = landship.leftTrack();
-		state.rightTrack = landship.rightTrack();
+		state.leftTrack = landship.leftTrack(partialTick);
+		state.rightTrack = landship.rightTrack(partialTick);
 		Entity driver = landship.getFirstPassenger();
 		state.turretYaw = driver != null ? Mth.wrapDegrees(driver.getViewYRot(partialTick) - state.yRot) : 0.0F;
 		state.barrelPitch = driver != null ? Mth.clamp(driver.getViewXRot(partialTick), Landship.BARREL_UP, Landship.BARREL_DOWN) : 0.0F;

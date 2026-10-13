@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.airship;
 
+import io.github.jimbozoomer.jugcraft.SmoothFlight;
+import net.minecraft.world.entity.LinearInterpolationHandler;
 import java.util.List;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -143,6 +145,11 @@ public class Zeppelin extends Entity {
 
 	private int fuelPercent() {
 		return fuel * 100 / FUEL_TANK;
+	}
+
+	@Override
+	public LinearInterpolationHandler createInterpolationHandler() {
+		return SmoothFlight.handler(this);
 	}
 
 	@Override

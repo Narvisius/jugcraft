@@ -289,8 +289,11 @@ public final class TwoHanded {
 				&& !(foe instanceof ArmorStand stand && stand.isMarker()) && foe.getRootVehicle() != player.getRootVehicle();
 	}
 
-	/** Whether other code (AttackEntityCallback: the town's protection, other mods) lets this player strike this foe. */
-	static boolean allowed(ServerPlayer player, ServerLevel level, LivingEntity foe) {
+	/**
+	 * Whether other code (AttackEntityCallback: the town's protection, other mods) lets this player strike this foe.
+	 * The Concordance asks it too, for a spell's or a device's harm (Authority).
+	 */
+	public static boolean allowed(ServerPlayer player, ServerLevel level, LivingEntity foe) {
 		striking = true;
 		try {
 			return AttackEntityCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND, foe, null) == InteractionResult.PASS;

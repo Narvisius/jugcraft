@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:potions_enabled"
+    }
+  ],
+  "type": "jymbaquary:potion_effects",
+  "duration_factor": 0.2,
+  "key": {
+    "B": "jymbaquary:bullets/buster_bullet",
+    "P": "jymbaquary:lingering_potion"
+  },
+  "pattern": [
+    "BBB",
+    "BPB",
+    "BBB"
+  ],
+  "result": {
+    "count": 8,
+    "id": "jymbaquary:bullets/buster_bullet"
+  }
+}

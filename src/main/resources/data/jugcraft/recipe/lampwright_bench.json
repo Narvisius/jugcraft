@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CAC",
+    "PPP",
+    "S S"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "A": "#jugcraft:concordance/luminous_matter",
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:lampwright_bench",
+    "count": 1
+  }
+}

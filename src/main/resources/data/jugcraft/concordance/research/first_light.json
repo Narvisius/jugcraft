@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "principle": "radiance",
+  "tradition": "lampwrights",
+  "stage": "initiate",
+  "icon": "minecraft:amethyst_shard",
+  "requires": [],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:luminous_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:luminous_specimens",
+          "max_light": 4
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:luminous_specimens"
+        },
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:luminous_specimens",
+          "max_light": 4,
+          "distinct": 3
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "invoke",
+          "invocation": "jugcraft:kindle",
+          "distinct_chunks": 8
+        }
+      ]
+    }
+  },
+  "unlocks": {
+    "understood": {
+      "invocations": [
+        "jugcraft:kindle",
+        "jugcraft:aegis",
+        "jugcraft:revelation"
+      ],
+      "workings": [
+        "jugcraft:kindle_lantern",
+        "jugcraft:infuse_lantern",
+        "jugcraft:channel_lantern"
+      ]
+    },
+    "mastered": {
+      "invocations": [
+        "jugcraft:lance",
+        "jugcraft:flashstep",
+        "jugcraft:lanternward"
+      ]
+    }
+  }
+}

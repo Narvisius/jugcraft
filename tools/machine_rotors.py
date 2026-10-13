@@ -1,5 +1,6 @@
-"""Spinning parts of multi-block machines, drawn by client/MachineRotors (through the machines' block entity renderer)
-instead of by their block models: the giant sawmill's blade and belt drive and the giant sieve's eccentric weights.
+"""Spinning parts of multi-block machines, drawn by client/MachineRotors (through the machines' block entity renderers)
+instead of by their block models: the giant sawmill's blade and belt drive, the giant sieve's eccentric weights and the
+industrial forms' turning parts (tools/industrial_forms.py ROTORS, such as the Gas Burning Generator's coupling and fan).
 
 Written to assets/jugcraft/machine_rotor_quads.json by generate_material_data.py. Each entry is one rotor:
 
@@ -181,11 +182,13 @@ def turn_point(point, axis, degrees, origin):
 
 
 def export():
-    """The rotor table for machine_rotor_quads.json (see the module docstring)."""
+    """The rotor table for machine_rotor_quads.json (see the module docstring): the giant machines' and the industrial
+    forms' (tools/industrial_forms.py)."""
     import steampunk_models  # noqa: F401  (loads giant_models after the helpers it builds on)
     import giant_models
+    import industrial_forms
     out = {}
-    for name, rotor in giant_models.ROTORS.items():
+    for name, rotor in {**giant_models.ROTORS, **industrial_forms.ROTORS}.items():
         out[name] = {
             "block": rotor["block"], "axis": rotor["axis"], "center": [round(v, 4) for v in rotor["center"]],
             "property": rotor["property"], "speed": rotor["speed"], "ease": rotor.get("ease", 10),

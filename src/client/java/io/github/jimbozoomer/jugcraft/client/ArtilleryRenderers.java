@@ -147,8 +147,8 @@ public final class ArtilleryRenderers {
 		public void extractRenderState(SelfPropelledHowitzer gun, GunState state, float partialTick) {
 			super.extractRenderState(gun, state, partialTick);
 			extract(gun, state, partialTick, 8.0F);
-			state.leftTrack = gun.leftTrack();
-			state.rightTrack = gun.rightTrack();
+			state.leftTrack = gun.leftTrack(partialTick);
+			state.rightTrack = gun.rightTrack(partialTick);
 		}
 
 		@Override

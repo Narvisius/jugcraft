@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance",
+  "display": {
+    "icon": {
+      "id": "minecraft:amethyst_shard"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_first_light_encountered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_first_light_encountered.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

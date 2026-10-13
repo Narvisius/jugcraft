@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "III",
+    "FPP"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "F": "minecraft:flint",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:line_musket"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GBG",
+    " I ",
+    "SPS"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "B": "minecraft:copper_ingot",
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:smooth_stone_slab",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "jugcraft:assayers_scale",
+    "count": 1
+  }
+}

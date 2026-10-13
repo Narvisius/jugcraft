@@ -7,13 +7,14 @@ Target milestone and tier: steel tier onwards. Raids wait until a player has pla
 Primary specialty and supported player role: base defence, and a reason to build the guns, towers and fire control of batches 51–56
 
 ## Player experience
-Five kinds of raider. All are hostile mobs: sentry guns (batch 56) and town guards fight them.
+Six kinds of raider. All are hostile mobs: sentry guns (batch 56) and town guards fight them.
 
 | Raider | Health / damage / armour | What it does |
 | --- | --- | --- |
 | **Raider Grunt** | 24 / 5 / 4 | Charges in with a cleaver (an iron axe). Olive greatcoat, steel helmet, goggles and a respirator. |
 | **Raider Grenadier** | 20 / 3 / 2 | Lobs small grenades from up to 18 blocks, every 3.5 seconds. Closer than 6 blocks it clubs instead. Brown coat, leather helmet, a bandolier of grenades. |
 | **Raider Officer** | 32 / 6 / 6 | **Rallies** every raider within 12 blocks every 2 seconds (Speed and Strength). **When an officer falls, the raiders round them lose heart**: Weakness II and Slowness for 10 seconds, and the rally's Strength is gone. Black coat, red-banded peaked cap, red armband. |
+| **Raider Gunner** (slice 10F of the guns) | 20 / 3 / 2 | Carries one of the owner's service arms: a Sentry Pistol (4 in 10), Garrison Rifle (3 in 10) or Breacher (3 in 10). It closes until it can see its target from within its gun's reach (16, 24 or 8 blocks), then fires the gun's own bullets at half their damage: one shot, or a burst of three from the rifle, then a pause of 1.5 seconds. It reloads its magazine in the gun's own time. Its bullets pass through raiders. Grey-green greatcoat, field cap, goggles and a belt of brass rounds across the chest. See [guns.md, slice 10F](guns.md#slice-10f-enemies-with-guns). |
 | **Raider Walker** | 120 / 14 / 14 | The Armoured Walker (batch 58, the owner's model) in raider olive and black plate. It wades in and rams with its piston, throwing what it hits. Its hull gun lobs grenades at anything 8 to 24 blocks off, every 5 seconds. It ignores knockback and climbs a block and a half. It has no working drill: **raiders never break blocks**. |
 | **Raider Blimp** | 50 / – / 2 | A small airship, the zeppelin's shape at 55% in charcoal canvas with a red band. It cruises 16 blocks over whoever it hunts (never lower than 8 over the ground under it). When within 3 blocks of overhead it drops a bomb every 2.5 seconds. Flak (batch 51) and arrows bring it down. Dying, it noses over. |
 
@@ -48,13 +49,15 @@ Five kinds of raider. All are hostile mobs: sentry guns (batch 56) and town guar
   - A raid that has lasted 10 minutes, or has had nobody within 160 blocks of its objective for 2 minutes, withdraws.
   - Its raiders leave in a puff of smoke: at once if loaded, otherwise the next time they are.
 
-| Raid level | Grunts | Grenadiers | Officers | Blimps | Walkers |
-| --- | --- | --- | --- | --- | --- |
-| 1 | 3 | 1 | 1 | 0 | 0 |
-| 2 | 4 | 1 | 1 | 1 | 0 |
-| 3 | 5 | 2 | 1 | 1 | 1 |
-| 4 | 6 | 2 | 1 | 1 | 1 |
-| 5 | 7 | 3 | 1 | 2 | 1 |
+| Raid level | Grunts | Gunners | Grenadiers | Officers | Blimps | Walkers |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 2 | 1 | 1 | 1 | 0 | 0 |
+| 2 | 3 | 1 | 1 | 1 | 1 | 0 |
+| 3 | 3 | 2 | 2 | 1 | 1 | 1 |
+| 4 | 4 | 2 | 2 | 1 | 1 | 1 |
+| 5 | 4 | 3 | 3 | 1 | 2 | 1 |
+
+The gunners (slice 10F of the guns) march in place of some of the grunts, so each party is as large as before. While the guns are switched off (`guns.enabled=false`), grunts come in their places.
 
 ### Siege ladders
 - **Walls slow raiders rather than stop them.**
@@ -82,7 +85,7 @@ Five kinds of raider. All are hostile mobs: sentry guns (batch 56) and town guar
   - a ring of sandbags (trench works) with a gap to each side
   - a campfire between two olive tents
   - a cauldron and a **supply barrel**: gunpowder, iron nuggets, Heavy Shells, perhaps a grenade or two, bread and steel plate
-- **Garrison:** an officer, two grunts and a grenadier hold it.
+- **Garrison:** an officer, a grunt, a gunner and a grenadier hold it (a second grunt in the gunner's place while the guns are switched off).
   - They belong to no raid and never despawn.
   - Once killed they are gone for good, and the barrel is looted once.
 - **How they appear:** one newly generated overworld chunk in 400 is picked from the world seed. The camp is built at its centre on the next server tick, but only on flat, dry ground in those biomes, never on the town and never within 512 blocks of the world spawn (so a new player does not start beside one).
@@ -100,6 +103,7 @@ Five kinds of raider. All are hostile mobs: sentry guns (batch 56) and town guar
   - `raiders.walkers=off` and `raiders.blimps=off` leave those out of raids.
   - `raiders.grace_days` and `raiders.interval_days` set the timings, in game days.
 - Raiders already in the world stay until their raid ends.
+- `guns.enabled=false` sends grunts in the gunners' places, in raids and camps; gunners already in the world stay.
 - Raiders can still be summoned with `/summon` (for example `jugcraft:raider_walker`). A summoned raider belongs to no raid and despawns like any hostile mob.
 
 ### Loot
@@ -110,10 +114,11 @@ Loot is small, since a raid comes at most every few days and costs a fight.
 | Grunt | 0–3 iron nuggets |
 | Grenadier | 0–2 gunpowder |
 | Officer | the **Raider Insignia** (a trophy; only to a player's kill) and 0–1 iron ingot |
+| Gunner | 0–3 rounds of the ammunition its gun fires (Light Rounds, Rifle Rounds or Buckshot Shells), only to a player's kill |
 | Walker | 2–4 steel plates and 1–2 steel gears |
 | Blimp | 1–3 rubber and 2–5 string |
 
-Their weapons never drop.
+Their weapons never drop, but for the gunner's gun: a player's kill wins it about one time in twelve (8.5%, more with Looting, as any mob's equipment), with nothing loaded.
 
 ## Connections
 - Input producers: none. Raiders come from raids.
@@ -135,7 +140,7 @@ Their weapons never drop.
   - Raiders do not respawn.
   - Their blasts spare each other, so they cannot be made to kill each other for loot.
   - The insignia drops only to a player's kill.
-- **Escalation is capped at level 5:** 15 raiders at most, two of them blimps.
+- **Escalation is capped at level 5:** 14 raiders at most, two of them blimps. (This said 15 before; the party table has always made 14.)
 - **Peaceful** removes raiders, and no raids start in it.
 
 ## Multiplayer and persistence
@@ -151,18 +156,20 @@ Their weapons never drop.
 
 ## Dependencies and assets
 - No dependencies. All art is original, made by `tools/raiders.py`:
-  - **Uniforms:** three 64 × 64 skins in the player layout, drawn with the townsfolk's skin helpers.
+  - **Uniforms:** four 64 × 64 skins in the player layout, drawn with the townsfolk's skin helpers (the gunner's added with slice 10F of the guns).
   - **Paint:** raider olive paint, dark plate, charcoal canvas (plain, red-banded and red nose) and the insignia, in the clean style.
   - **Walker and blimp models:** the Armoured Walker's (batch 58) and the Zeppelin's shapes repainted, the blimp scaled to 55%, exported to `assets/jugcraft/raider_quads.json`.
 - Sounds are vanilla: the pillager's voice, the raid horn, the iron golem's steps.
 - Code:
   - `raiders/JugcraftRaiders`, `RaiderInfantry`, `RaiderWalker`, `RaiderBlimp`, `RaiderBomb`, `RaiderRaids`, `MarchGoal`, `RaidMember` and `Raider`.
+  - The gunner fires through `guns/MobGuns` (slice 10F of the guns), which shares the players' bullet code.
   - Client: `RaiderRenderer`/`RaiderModel` (the townsfolk's body), `RaiderWalkerRenderer` and `RaiderBlimpRenderer`.
   - `weapons/Blast` gains a version that spares some targets.
   - `JugcraftConfig` gains the `raiders` feature and its options.
 
 ## Verification
 - Later additions:
+  - Slice 10F of the guns, the gunner: `RaiderGunnerGameTests` (in [guns.md](guns.md#slice-10f-enemies-with-guns)), and `raidIsWonWhenEveryRaiderFalls` counts a level 1 party of two grunts, a gunner, a grenadier and an officer.
   - `raidersHuntOnTheirOwn`: a grunt hunts a townsperson down to striking distance, and a grenadier throws at them.
     - It stands in for a player. The test server's mock player always reports creative mode (found with a diagnostic run: `creative=true`, with `canAttack`, enemy and line of sight all true), and no hostile mob targets a creative player.
     - That is why the first player-targeting tests never saw an attack. It was the test, not the raiders.
@@ -174,7 +181,7 @@ Their weapons never drop.
 - Planned in CI:
   - `raidersAreHostileAndSpareEachOther`: grunt, walker and blimp are hostile mobs and raiders. A raider-sparing blast hurts a pig and spares a grunt beside it.
   - `raidIsWonWhenEveryRaiderFalls`:
-    - A level 1 raid brings three grunts, a grenadier and an officer, each knowing its raid and objective.
+    - A level 1 raid brings two grunts, a gunner, a grenadier and an officer (before slice 10F of the guns, three grunts, a grenadier and an officer), each knowing its raid and objective.
     - With every one killed, the raid ends and the raid level goes up.
   - `raidersWithdrawWithTheirRaid`: a withdrawn raid takes its raiders with it, and a raider whose raid no longer exists leaves at its next check.
   - `officerRalliesAndTheirFallRoutsTheRest`: an officer gives a grunt Speed and Strength. The officer's death leaves the grunt with Weakness and without Strength.

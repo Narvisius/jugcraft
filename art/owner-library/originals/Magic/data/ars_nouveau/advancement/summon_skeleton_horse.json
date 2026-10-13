@@ -1,0 +1,37 @@
+{
+  "parent": "ars_nouveau:necrotic_focus",
+  "criteria": {
+    "summon_skeleton_horse": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "ars_jymbaumental:summon_skelehorse"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:summoned_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jymbaumental.adv.desc.summon_skeleton_horse"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "ars_jymbaumental:anima_caster_tome"
+    },
+    "title": {
+      "translate": "ars_jymbaumental.adv.title.summon_skeleton_horse"
+    }
+  },
+  "requirements": [
+    [
+      "summon_skeleton_horse"
+    ]
+  ]
+}

@@ -501,6 +501,22 @@ def merged(designs):
     return out
 
 
+def reverse_edge(design):
+    """Turn a blade over along its length, keeping its grip and tip in place (owner orientation correction)."""
+    out = Design(design.length, design.grip)
+    for shape in design.shapes:
+        shape = dict(shape)
+        test, bevel = shape["test"], shape["bevel"]
+        shape["test"] = lambda s, t, test=test: test(s, -t)
+        shape["bevel"] = None if bevel is None else lambda s, bevel=bevel: -bevel(s)
+        s0, s1, t0, t1 = shape["bounds"]
+        shape["bounds"] = (s0, s1, -t1, -t0)
+        out.shapes.append(shape)
+    out.order = design.order
+    out.glints = [(s, -t) for s, t in design.glints]
+    return out
+
+
 def model_elements(design, texture_size, offset, grip_model, unit, mirrored=False, geometry=None, width=None):
     """The 3D model's elements: the upright design (at `offset` on a `texture_size` texture), each part as thick as its
     `depth`, laid along the diagonal by a 45-degree turn about the hand (`grip_model`, in model pixels), `unit` model

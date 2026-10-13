@@ -14,7 +14,7 @@ import random
 from PIL import Image
 
 from agriculture import GIANT_PUMPKIN, DYE_COLORS, giant_tile
-from crop_textures import Canvas, rgb, outline, seeds_item, corn_stalk_middle, KERNEL6, LEAF
+from crop_textures import Canvas, rgb, outline, seeds_item, LEAF
 from festival_textures import gourd_side, gourd_top, STALK, BARK
 from kitchen_textures import bowl_item
 import block_style as bs
@@ -648,7 +648,6 @@ def halloween_textures():
         ("block", "kabocha_pumpkin_top"): gourd_top(KABOCHA, 8, STALK[1]),
         ("block", "bottle_gourd_side"): gourd_side(BOTTLE, 0, 6503, spot=BOTTLE_SPOT + [BOTTLE_SPOT[0]], clean=True),
         ("block", "bottle_gourd_top"): gourd_top(BOTTLE, 0, STALK[1]),
-        ("block", "ornamental_corn_middle_ears"): ornamental_middle(),
         ("block", "harvest_scale_side"): scale_side(),
         ("block", "harvest_scale_top"): scale_top(),
         ("block", "harvest_scale_dial"): scale_dial(),
@@ -704,14 +703,3 @@ def halloween_textures():
         out[("block", mum)] = mum_bush(colors, 6600 + i)
     return out
 
-
-def ornamental_middle():
-    """Corn's ripe middle block, with the golden kernels of its ears swapped for flint corn's red, every third one gold."""
-    img = corn_stalk_middle("ripe")
-    golden = set(KERNEL6)
-    for y in range(16):
-        for x in range(16):
-            pixel = img.getpixel((x, y))
-            if pixel[3] and pixel[:3] in golden:
-                img.putpixel((x, y), (FLINT[3] if (x + y) % 3 == 0 else FLINT[0]) + (255,))
-    return img

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    " S "
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:skillet",
+    "count": 1
+  }
+}

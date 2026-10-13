@@ -1,0 +1,13 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "jugcraft:block/verdant_bed_wet_top_connected",
+    "side": "jugcraft:block/verdant_bed_wet_side",
+    "bottom": "minecraft:block/dirt"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

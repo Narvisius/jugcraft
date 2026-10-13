@@ -27,6 +27,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -61,6 +62,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
@@ -92,6 +94,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.HayBlock;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.GlowLichenBlock;
@@ -141,7 +144,8 @@ public final class JugcraftAgriculture {
 			"butternut_squash_seeds", "acorn_squash_seeds", "warty_gourd_seeds", "turnip", "cranberries", "chestnut",
 			"giant_pumpkin_seeds", "white_pumpkin_seeds", "jarrahdale_pumpkin_seeds", "cinderella_pumpkin_seeds", "red_kuri_pumpkin_seeds",
 			"kabocha_pumpkin_seeds", "bottle_gourd_seeds",
-			"ornamental_corn_kernels", "mandrake_root");
+			"ornamental_corn_kernels", "mandrake_root", "rice", "strawberry_seeds", "blueberry_seeds", "coffee_seeds",
+			"lettuce_seeds", "spinach_seeds", "radish", "peas", "cucumber_seeds", "eggplant_seeds", "zucchini_seeds");
 	/** The chestnut tree's feature (data/jugcraft/worldgen/feature/chestnut.json), grown by its sapling. */
 	public static final ResourceKey<Feature> CHESTNUT_TREE = ResourceKey.create(Registries.FEATURE, Jugcraft.id("chestnut"));
 	public static final TreeGrower CHESTNUT_GROWER = new TreeGrower(Jugcraft.MOD_ID + "_chestnut", WeightedList.of(CHESTNUT_TREE),
@@ -150,6 +154,8 @@ public final class JugcraftAgriculture {
 	public static final ResourceKey<Feature> APPLE_TREE = ResourceKey.create(Registries.FEATURE, Jugcraft.id("apple_tree"));
 	public static final TreeGrower APPLE_GROWER = new TreeGrower(Jugcraft.MOD_ID + "_apple", WeightedList.of(APPLE_TREE),
 			WeightedList.of(), WeightedList.of(), APPLE_TREE);
+	/** The cinnamon tree's feature (data/jugcraft/worldgen/feature/cinnamon_tree.json, tools/spice_data.py), grown by its sapling. */
+	public static final TreeGrower CINNAMON_GROWER = grower("cinnamon_tree");
 	/** Trees grown from their saplings (data/jugcraft/worldgen/feature/<tree>.json, tools/trees.py). */
 	public static final TreeGrower LARCH_GROWER = grower("larch");
 	public static final TreeGrower MAPLE_GROWER = grower("maple");
@@ -183,6 +189,8 @@ public final class JugcraftAgriculture {
 	public static final Map<TallCrop, TallCropBlock> TALL_CROPS = new EnumMap<>(TallCrop.class);
 	private static final Map<String, Block> BLOCKS = new LinkedHashMap<>();
 	private static final Map<String, Item> ITEMS = new LinkedHashMap<>();
+	/** The mushroom colonies, by the mushroom that plants them (garden crops, tools/garden.py COLONIES). */
+	private static final Map<Item, MushroomColonyBlock> COLONIES = new LinkedHashMap<>();
 	private static final List<Item> SEEDS_TAB = new ArrayList<>();
 	private static final List<Item> FOOD_TAB = new ArrayList<>();
 	private static final List<Item> INGREDIENT_TAB = new ArrayList<>();
@@ -193,6 +201,28 @@ public final class JugcraftAgriculture {
 	public static RecipeType<CookingPotRecipe> POT_COOKING;
 	public static RecipeSerializer<CookingPotRecipe> POT_SERIALIZER;
 	public static BlockEntityType<CookingPotBlockEntity> COOKING_POT_ENTITY;
+	// The Farmhouse Kitchen (tools/kitchen.py): the stove, the skillet, the cutting board and its recipes, the cabinets.
+	public static BlockEntityType<KitchenStoveBlockEntity> KITCHEN_STOVE_ENTITY;
+	public static BlockEntityType<SkilletBlockEntity> SKILLET_ENTITY;
+	public static BlockEntityType<CuttingBoardBlockEntity> CUTTING_BOARD_ENTITY;
+	public static BlockEntityType<KitchenCabinetBlockEntity> KITCHEN_CABINET_ENTITY;
+	/** Soil, compost and storage (tools/soil.py): the baskets' contents. */
+	public static BlockEntityType<BasketBlockEntity> BASKET_ENTITY;
+	public static RecipeType<CuttingRecipe> CUTTING;
+	public static RecipeSerializer<CuttingRecipe> CUTTING_SERIALIZER;
+	/** Everything that cuts on a Cutting Board and slices pies, cakes and the roast turkey: the Carving Knife and the kitchen knives. */
+	public static final TagKey<Item> KNIVES = TagKey.create(Registries.ITEM, Jugcraft.id("knives"));
+	public static final float KNIFE_DAMAGE = 0.5F;
+	public static final float KNIFE_SPEED = -2.0F;
+	/** The use-block event phase that slices cakes: after the default phase, where the town's protection decides. */
+	private static final Identifier KNIFE_PHASE = Jugcraft.id("kitchen_knife");
+	/** The woods the owner drew kitchen cabinets in. */
+	public static final List<String> CABINET_WOODS = List.of("oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry",
+			"bamboo", "crimson", "warped");
+	/** The food displays' block entity (plates, platters and serving trays: {@link FoodDisplayBlock}). */
+	public static BlockEntityType<ShowcaseBlockEntity> FOOD_DISPLAY_ENTITY;
+	/** The use-block event phase that sets a vanilla pie down as a pie: after the default phase, as {@link #KNIFE_PHASE}. */
+	private static final Identifier SET_DOWN_PHASE = Jugcraft.id("set_down_pie");
 	public static BlockEntityType<CarvedPumpkinBlockEntity> CARVED_PUMPKIN_ENTITY;
 	/** A hand-carved pumpkin's design, on its item (copied from and to the block entity). */
 	public static DataComponentType<PumpkinCarving> CARVING;
@@ -334,6 +364,10 @@ public final class JugcraftAgriculture {
 	public static EntityType<Squirrel> SQUIRREL;
 	public static EntityType<Pumpkling> PUMPKLING;
 	public static EntityType<TossRing> TOSS_RING;
+	/** A thrown Rotten Tomato (garden crops, tools/garden.py ROTTEN_TOMATO). */
+	public static EntityType<RottenTomato> ROTTEN_TOMATO;
+	/** The Spice Rack's spices (garden crops, herbs and spices, part b). */
+	public static BlockEntityType<SpiceRackBlockEntity> SPICE_RACK_ENTITY;
 	public static BlockEntityType<HighStrikerBlockEntity> HIGH_STRIKER_ENTITY;
 	public static EntityType<FerrisWheel> FERRIS_WHEEL;
 	public static BlockEntityType<FerrisWheelBlockEntity> FERRIS_WHEEL_BOOTH;
@@ -368,6 +402,8 @@ public final class JugcraftAgriculture {
 	/** Bat guano fertilizes the crops this far round where it is used (a 3x3 patch), with this many doses of bone meal each. */
 	public static final int GUANO_RADIUS = 1;
 	public static final int GUANO_DOSES = 1;
+	/** The kitchen herbs (tools/herbs.py HERBS), each a tall crop, a potted plant and a drying bundle. */
+	public static final List<String> HERBS = List.of("basil", "mint", "rosemary", "thyme", "parsley", "sage", "dill", "chives");
 	/** The five wild autumn mushrooms. */
 	public static final List<String> WILD_MUSHROOMS = List.of("chanterelle", "porcini", "puffball", "fly_agaric", "jack_o_lantern_mushroom");
 	/** The Candy Kettle's own candies (it also makes candy corn and caramel). */
@@ -395,7 +431,7 @@ public final class JugcraftAgriculture {
 	/** What each kind of pumpkin becomes when first carved by hand, and the loot table its seeds come from. */
 	private static final Map<Block, Block> CARVED_FROM = new HashMap<>();
 	private static final Map<Block, ResourceKey<LootTable>> CARVE_LOOT = new HashMap<>();
-	public static ExtendedMenuType<CookingPotMenu, BlockPos> COOKING_POT_MENU;
+	public static net.minecraft.world.inventory.MenuType<CookingPotMenu> COOKING_POT_MENU;
 
 	private JugcraftAgriculture() {
 	}
@@ -427,7 +463,9 @@ public final class JugcraftAgriculture {
 			if (crop.trellis || crop.height(TallCropBlock.MAX_AGE) > 1) {
 				properties = properties.strength(0.2F);
 			}
-			TALL_CROPS.put(crop, (TallCropBlock) registerBlock(crop.blockId, props -> new TallCropBlock(props, crop), properties));
+			TALL_CROPS.put(crop, (TallCropBlock) registerBlock(crop.blockId,
+					props -> crop.paddy ? new PaddyCropBlock(props, crop)
+							: crop == TallCrop.TOMATO ? new TomatoVineBlock(props, crop) : new TallCropBlock(props, crop), properties));
 		}
 		crop("bean_crop", "beans", true);
 		crop("sweet_potato_crop", "sweet_potato", false);
@@ -457,6 +495,7 @@ public final class JugcraftAgriculture {
 				.sound(SoundType.WET_GRASS));
 		registerChestnutTree();
 		registerAppleTree();
+		registerOrchardTrees();
 		// Generated trees' seasonal leaves start in today's look (tools/trees.py DECORATOR).
 		Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, Jugcraft.id("seasonal_leaves"), SeasonalLeavesDecorator.TYPE);
 		registerTree("larch", "larch_needles", LARCH_GROWER, LARCH_LEAVES, Blocks.SPRUCE_SAPLING, Blocks.SPRUCE_LEAVES,
@@ -489,7 +528,9 @@ public final class JugcraftAgriculture {
 		// Seeds, produce and food.
 		food("corn", 3, 0.6F, COMPOST_MEDIUM);
 		seeds("corn_kernels", "corn_crop", COMPOST_LOW);
-		food("roasted_corn", 5, 0.6F, COMPOST_MEDIUM_HIGH);
+		// Corn on the cob gives its cob back when eaten (the menu, tools/menu.py COB_FOODS).
+		plain("corncob", COMPOST_LOW);
+		cob("roasted_corn", 5, 0.6F, COMPOST_MEDIUM_HIGH);
 		food("popcorn", 2, 0.3F, COMPOST_MEDIUM_HIGH);
 		seeds("sunflower_seeds", "sunflower_crop", COMPOST_LOW);
 		food("roasted_sunflower_seeds", 2, 0.3F, COMPOST_MEDIUM_HIGH);
@@ -604,6 +645,11 @@ public final class JugcraftAgriculture {
 		wild("wild_turnip");
 		wild("wild_mandrake");
 		Mandrakes.register();
+		registerFruitCrops();
+		registerGarden();
+		registerVegetables();
+		registerHerbs();
+		registerSpices();
 
 		registerEquipment();
 		registerDecorations();
@@ -614,6 +660,14 @@ public final class JugcraftAgriculture {
 		registerFestivities();
 		registerNight();
 		registerHalloweenDecorations();
+		registerKitchen();
+		registerFeasts();
+		registerMenu();
+		registerRice();
+		registerSoil();
+		registerOrchards();
+		registerMilkshakes();
+		registerPlacedDishes();
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(output -> SEEDS_TAB.forEach(output::accept));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> FOOD_TAB.forEach(output::accept));
@@ -659,7 +713,7 @@ public final class JugcraftAgriculture {
 		COOKING_POT_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("cooking_pot"),
 				FabricBlockEntityTypeBuilder.create(CookingPotBlockEntity::new, pot).build());
 		COOKING_POT_MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("cooking_pot"),
-				new ExtendedMenuType<>((containerId, inventory, pos) -> new CookingPotMenu(containerId, inventory), BlockPos.STREAM_CODEC.cast()));
+				new net.minecraft.world.inventory.MenuType<>(CookingPotMenu::new, net.minecraft.world.flag.FeatureFlags.VANILLA_SET));
 		POT_COOKING = Registry.register(BuiltInRegistries.RECIPE_TYPE, Jugcraft.id("pot_cooking"), new RecipeType<CookingPotRecipe>() {
 			@Override
 			public String toString() {
@@ -669,6 +723,306 @@ public final class JugcraftAgriculture {
 		POT_SERIALIZER = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Jugcraft.id("pot_cooking"),
 				new RecipeSerializer<>(CookingPotRecipe.CODEC, CookingPotRecipe.STREAM_CODEC));
 		CookingPotRecipe.registerReloadListener();
+	}
+
+	/**
+	 * The Farmhouse Kitchen (the kitchen and cooking expansion's slice 1, tools/kitchen.py), in the owner's own textures:
+	 * the Kitchen Stove, the Skillet, the Cutting Board with its cutting recipes, the kitchen knives, the cabinets, and the
+	 * cuts and other foods the board and the stove make.
+	 */
+	private static void registerKitchen() {
+		Block stove = registerBlock("kitchen_stove", KitchenStoveBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_RED)
+				.strength(3.5F).requiresCorrectToolForDrops().sound(SoundType.STONE).lightLevel(KitchenStoveBlock::light));
+		registerItem("kitchen_stove", props -> new BlockItem(stove, props), new Item.Properties().useBlockDescriptionPrefix(), EQUIPMENT_TAB);
+		Block skillet = registerBlock("skillet", SkilletBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.METAL)
+				.strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.LANTERN).noOcclusion());
+		registerItem("skillet", props -> new BlockItem(skillet, props), new Item.Properties().useBlockDescriptionPrefix(), EQUIPMENT_TAB);
+		Block board = registerBlock("cutting_board", CuttingBoardBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+				.strength(0.8F).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+		registerItem("cutting_board", props -> new BlockItem(board, props), new Item.Properties().useBlockDescriptionPrefix(), EQUIPMENT_TAB);
+		List<Block> cabinets = new ArrayList<>();
+		for (String wood : CABINET_WOODS) {
+			Block planks = BuiltInRegistries.BLOCK.getValue(Identifier.withDefaultNamespace(wood + "_planks"));
+			Block cabinet = registerBlock(wood + "_cabinet", KitchenCabinetBlock::new, BlockBehaviour.Properties.ofFullCopy(planks).strength(2.5F));
+			registerItem(wood + "_cabinet", props -> new BlockItem(cabinet, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+			cabinets.add(cabinet);
+		}
+
+		KITCHEN_STOVE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("kitchen_stove"),
+				FabricBlockEntityTypeBuilder.create(KitchenStoveBlockEntity::new, stove).build());
+		SKILLET_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("skillet"),
+				FabricBlockEntityTypeBuilder.create(SkilletBlockEntity::new, skillet).build());
+		CUTTING_BOARD_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("cutting_board"),
+				FabricBlockEntityTypeBuilder.create(CuttingBoardBlockEntity::new, board).build());
+		KITCHEN_CABINET_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("kitchen_cabinet"),
+				FabricBlockEntityTypeBuilder.create(KitchenCabinetBlockEntity::new, cabinets.toArray(Block[]::new)).build());
+		CUTTING = Registry.register(BuiltInRegistries.RECIPE_TYPE, Jugcraft.id("cutting"), new RecipeType<CuttingRecipe>() {
+			@Override
+			public String toString() {
+				return Jugcraft.MOD_ID + ":cutting";
+			}
+		});
+		CUTTING_SERIALIZER = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Jugcraft.id("cutting"),
+				new RecipeSerializer<>(CuttingRecipe.CODEC, CuttingRecipe.STREAM_CODEC));
+		CuttingRecipe.registerReloadListener();
+
+		knife("flint_knife", ToolMaterial.STONE);
+		knife("iron_knife", ToolMaterial.IRON);
+		knife("bronze_knife", io.github.jimbozoomer.jugcraft.gear.JugcraftGear.BRONZE);
+		knife("golden_knife", ToolMaterial.GOLD);
+		knife("steel_knife", io.github.jimbozoomer.jugcraft.gear.JugcraftGear.STEEL);
+		knife("diamond_knife", ToolMaterial.DIAMOND);
+		knife("netherite_knife", ToolMaterial.NETHERITE);
+		// A knife cuts a cake before the cake is tried, so a hungry cook slices it rather than eating it; this runs after the
+		// default phase, where the town's protection decides, so a protected cake is not cut.
+		UseBlockCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, KNIFE_PHASE);
+		UseBlockCallback.EVENT.register(KNIFE_PHASE, (player, level, hand, hit) -> player.getItemInHand(hand).is(KNIVES)
+				? KitchenKnifeItem.sliceCake(player, level, hand, hit.getBlockPos(), hit.getDirection()) : InteractionResult.PASS);
+
+		// The cuts and their cooked forms: each whole's parts add up to no more than the whole (tools/kitchen.py ITEMS).
+		meal("bacon", 1, 0.3F);
+		meal("cooked_bacon", 4, 0.8F);
+		meal("minced_beef", 1, 0.3F);
+		meal("beef_patty", 4, 0.8F);
+		meal("chicken_cuts", 1, 0.3F);
+		meal("cooked_chicken_cuts", 3, 0.6F);
+		meal("mutton_chops", 1, 0.3F);
+		meal("cooked_mutton_chops", 3, 0.8F);
+		meal("cod_slice", 1, 0.1F);
+		meal("cooked_cod_slice", 2, 0.6F);
+		meal("salmon_slice", 1, 0.1F);
+		meal("cooked_salmon_slice", 3, 0.8F);
+		food("cabbage_leaf", 1, 0.5F, COMPOST_MEDIUM);
+		food("pumpkin_slice", 2, 0.3F, COMPOST_MEDIUM);
+		food("cake_slice", 2, 0.1F, COMPOST_MEDIUM_HIGH);
+		meal("fried_egg", 3, 0.6F);
+	}
+
+	/**
+	 * Feasts and food displays (the kitchen and cooking expansion's slice 2, tools/feasts.py), in the owner's own textures:
+	 * vanilla's pumpkin pie set down as a pie and cut in slices; the five feasts, served a bowl at a time; and the plate,
+	 * the platter and the serving tray to show food on. The Hearth Oven's pies in the owner's art (apple, chocolate, the
+	 * sweet berry cheesecake) are with the other pies ({@link PieFilling}).
+	 */
+	private static void registerFeasts() {
+		PlacedPieBlock pumpkinPie = (PlacedPieBlock) registerBlock("pumpkin_pie", props -> new PlacedPieBlock(Items.PUMPKIN_PIE,
+				"pumpkin_pie_slice", 2, 0.3F, props), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.5F)
+				.sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED));
+		food("pumpkin_pie_slice", 2, 0.3F, COMPOST_MEDIUM_HIGH);
+		// A sneaking player sets a pumpkin pie down; this runs after the default phase, where the town's protection decides.
+		UseBlockCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, SET_DOWN_PHASE);
+		UseBlockCallback.EVENT.register(SET_DOWN_PHASE, (player, level, hand, hit) -> PlacedPieBlock.setDown(pumpkinPie, player, level, hand, hit));
+
+		for (FeastDish dish : FeastDish.values()) {
+			Block feast = registerBlock(dish.id, props -> new FeastBlock(dish, props), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE)
+					.strength(0.5F).sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED).lightLevel(FeastBlock.light(dish)));
+			registerItem(dish.id, props -> new BlockItem(feast, props), new Item.Properties().useBlockDescriptionPrefix().stacksTo(1), FOOD_TAB);
+		}
+		// A serving to go from each feast, in a bowl given back when eaten (FeastDish's food; tools/feasts.py FEASTS).
+		stew("bowl_of_roast_chicken", 5, 0.7F);
+		stew("bowl_of_honey_glazed_ham", 7, 0.8F);
+		stew("bowl_of_shepherds_pie", 5, 0.7F);
+		stew("bowl_of_stuffed_pumpkin", 5, 0.6F);
+		stew("bowl_of_gleaming_salad", 3, 0.6F);
+		stew("bowl_of_nachos", 3, 0.6F);
+
+		List<Block> displays = new ArrayList<>();
+		for (FoodDisplay display : FoodDisplay.values()) {
+			boolean plate = display == FoodDisplay.PLATE;
+			BlockBehaviour.Properties properties = plate
+					? BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(0.6F).sound(SoundType.STONE)
+					: BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.8F).sound(SoundType.WOOD).ignitedByLava();
+			Block block = registerBlock(display.id, props -> new FoodDisplayBlock(display, plate ? SoundEvents.STONE_HIT : SoundEvents.WOOD_HIT, props),
+					properties.noOcclusion().pushReaction(PushReaction.POPPED));
+			registerItem(display.id, props -> new BlockItem(block, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+			displays.add(block);
+		}
+		FOOD_DISPLAY_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("food_display"),
+				FabricBlockEntityTypeBuilder.<ShowcaseBlockEntity>create((pos, state) -> new ShowcaseBlockEntity(FOOD_DISPLAY_ENTITY, pos, state),
+						displays.toArray(Block[]::new)).build());
+	}
+
+	/**
+	 * The menu (the kitchen and cooking expansion's slice 3, tools/menu.py), in the owner's own textures: drinks, soups,
+	 * stews and plated meals, sandwiches, sweets, corn on the cob, the doughs and batters they start from, and food for
+	 * a tamed wolf or horse. Every dish (and the soups, cabbage rolls, roasted corn, mulled cider and popcorn Jugcraft
+	 * already had, now in the owner's art) can be set down by a sneaking player as a {@link PlacedDishBlock}
+	 * ({@link MenuDishes}) and taken back with an empty hand.
+	 */
+	private static void registerMenu() {
+		// Drinks in the owner's glass mugs and bottle; milk in a bottle clears effects as a bucket of milk does.
+		drink("hot_cocoa", 3, 0.4F, MobEffects.REGENERATION, 8);
+		drink("creamy_corn_drink", 4, 0.5F, MobEffects.ABSORPTION, 30);
+		drink("melon_juice", 4, 0.4F, MobEffects.SPEED, 45);
+		drink("glow_berry_custard", 6, 0.6F, MobEffects.NIGHT_VISION, 30);
+		milkBottle("milk_bottle");
+		// Soups and stews in a bowl.
+		stew("beef_stew", 11, 0.8F);
+		stew("chicken_soup", 10, 0.8F);
+		stew("baked_cod_stew", 10, 0.8F);
+		stew("fish_stew", 10, 0.8F);
+		stew("bone_broth", 6, 0.6F);
+		stew("corn_soup", 9, 0.6F);
+		stew("noodle_soup", 9, 0.8F);
+		stew("tomato_sauce", 5, 0.5F);
+		stew("fruit_salad", 8, 0.6F);
+		stew("nether_salad", 3, 0.6F, MobEffects.NAUSEA, 4);
+		stew("creamed_corn", 8, 0.6F);
+		// Meals on the owner's wide plate (a bowl, given back).
+		stew("bacon_and_eggs", 10, 0.8F);
+		stew("steak_and_potatoes", 13, 0.8F);
+		stew("roasted_mutton_chops", 11, 0.8F);
+		stew("grilled_salmon", 10, 0.8F);
+		stew("ratatouille", 8, 0.6F);
+		stew("pasta_with_meatballs", 12, 0.8F);
+		stew("pasta_with_mutton_chop", 12, 0.8F);
+		stew("squid_ink_pasta", 10, 0.8F);
+		stew("vegetable_noodles", 9, 0.7F);
+		stew("cornbread_stuffing", 9, 0.7F);
+		// Sandwiches and food in hand.
+		meal("hamburger", 11, 0.8F);
+		meal("bacon_sandwich", 10, 0.8F);
+		meal("chicken_sandwich", 10, 0.8F);
+		meal("egg_sandwich", 8, 0.8F);
+		meal("mutton_wrap", 8, 0.8F);
+		meal("taco", 9, 0.8F);
+		meal("stuffed_potato", 10, 0.8F);
+		meal("dumplings", 4, 0.6F);
+		meal("ham", 5, 0.3F);
+		meal("smoked_ham", 14, 0.8F);
+		treat("barbecue_stick", 7, 0.8F);
+		treat("corn_dog", 8, 0.8F);
+		treat("classic_corn_dog", 10, 0.8F);
+		// Sweets.
+		meal("honey_cookie", 2, 0.2F);
+		meal("sweet_berry_cookie", 2, 0.2F);
+		meal("caramel_popcorn", 6, 0.5F);
+		treat("corn_popsicle", 3, 0.4F);
+		treat("melon_popsicle", 3, 0.4F);
+		// Corn on the cob, cornbread, tortillas and chips.
+		cob("boiled_corn", 5, 0.6F, COMPOST_MEDIUM_HIGH);
+		meal("cornbread", 6, 0.6F);
+		meal("tortilla", 2, 0.4F);
+		meal("tortilla_chip", 1, 0.3F);
+		// What they are made from (the corncob is registered with the corn).
+		plain("wheat_dough", COMPOST_MEDIUM);
+		plain("raw_pasta", COMPOST_MEDIUM);
+		plain("cornbread_batter", COMPOST_MEDIUM);
+		plain("tortilla_raw", COMPOST_MEDIUM);
+		// Food for pets, fed by their owner before the animal's own handling (which would sit a wolf down or mount a horse).
+		petFood("dog_food", EntityTypes.WOLF, 20, true, List.of(new PetFoodItem.Treat(MobEffects.STRENGTH, 300),
+				new PetFoodItem.Treat(MobEffects.SPEED, 300)));
+		petFood("horse_feed", EntityTypes.HORSE, 10, false, List.of(new PetFoodItem.Treat(MobEffects.SPEED, 120),
+				new PetFoodItem.Treat(MobEffects.JUMP_BOOST, 120)));
+		UseEntityCallback.EVENT.register((player, level, hand, entity, hit) -> PetFoodItem.feed(player, level, hand, entity));
+	}
+
+	/**
+	 * Every dish of the menu and the rice slice set down ({@link MenuDishes}): a block named as its food, with no item of its
+	 * own, set down in the same use-block phase as the pie. Registered once all their foods are.
+	 */
+	private static void registerPlacedDishes() {
+		Map<Item, PlacedDishBlock> placed = new HashMap<>();
+		for (MenuDishes.Dish dish : MenuDishes.PLACED) {
+			Item food = item(dish.id());
+			PlacedDishBlock block = (PlacedDishBlock) registerBlock(dish.id(), props -> new PlacedDishBlock(food, dish.shape(), props),
+					BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(0.3F).sound(SoundType.WOOL).noOcclusion()
+							.pushReaction(PushReaction.POPPED));
+			placed.put(food, block);
+		}
+		UseBlockCallback.EVENT.register(SET_DOWN_PHASE, (player, level, hand, hit) -> PlacedDishBlock.setDown(placed, player, level, hand, hit));
+	}
+
+	/**
+	 * Rice and wet farming (the kitchen and cooking expansion's slice 4, tools/rice.py), in the owner's own textures: rice,
+	 * its own seed, planted in shallow water as a paddy crop ({@link PaddyCropBlock}, registered with the other tall crops);
+	 * the panicles a ripe plant gives and the straw cut from them; wild rice in swamp and river shallows; the Bag of Rice and
+	 * the rice and straw bales; tatami woven from the straw; the rice dishes and rolls (set down as the menu's are); and the
+	 * Rice Roll Medley.
+	 */
+	private static void registerRice() {
+		seeds("rice", "rice_crop", COMPOST_LOW);
+		plain("rice_panicle", COMPOST_MEDIUM);
+		plain("straw", COMPOST_LOW);
+		Block wildRice = registerBlock("wild_rice", WildRiceBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.TALL_GRASS)
+				.sound(SoundType.WET_GRASS));
+		registerItem("wild_rice", props -> new DoubleHighBlockItem(wildRice, props), new Item.Properties().useBlockDescriptionPrefix(), SEEDS_TAB);
+
+		// Nine of a thing packed into a block: the owner's sack, and bales that soften a fall as a hay bale does.
+		Block bag = registerBlock("rice_bag", RiceBagBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+				.strength(0.8F).sound(SoundType.WOOL).ignitedByLava());
+		registerItem("rice_bag", props -> new BlockItem(bag, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		for (String bale : List.of("rice_bale", "straw_bale")) {
+			Block block = registerBlock(bale, HayBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.HAY_BLOCK));
+			registerItem(bale, props -> new BlockItem(block, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		}
+		Block tatami = registerBlock("tatami", TatamiBlock::new, woven());
+		registerItem("tatami", props -> new BlockItem(tatami, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		Block fullMat = registerBlock("full_tatami_mat", FullTatamiMatBlock::new, woven().noOcclusion().pushReaction(PushReaction.POPPED));
+		registerItem("full_tatami_mat", props -> new BlockItem(fullMat, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		Block halfMat = registerBlock("half_tatami_mat", TatamiMatBlock::new, woven().noOcclusion().pushReaction(PushReaction.POPPED));
+		registerItem("half_tatami_mat", props -> new BlockItem(halfMat, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+
+		// The dishes, in a bowl (given back) or in hand.
+		stew("cooked_rice", 6, 0.5F);
+		stew("fried_rice", 10, 0.7F);
+		stew("mushroom_rice", 9, 0.6F);
+		meal("salmon_roll", 5, 0.6F);
+		meal("cod_roll", 4, 0.6F);
+		meal("kelp_roll", 12, 0.6F);
+		meal("kelp_roll_slice", 3, 0.6F);
+		Block medley = registerBlock("rice_roll_medley", RollMedleyBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+				.strength(0.5F).sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED));
+		registerItem("rice_roll_medley", props -> new BlockItem(medley, props), new Item.Properties().useBlockDescriptionPrefix().stacksTo(1),
+				FOOD_TAB);
+	}
+
+	/**
+	 * Soil, compost and storage (the kitchen and cooking expansion's slice 5, tools/soil.py), in the owner's own textures:
+	 * Organic Compost, which rots into Rich Soil; Rich Soil and its farmland, which speed what grows on them; seven
+	 * produce crates and the Bag of Corn Kernels, nine to a block; and the wooden and bamboo baskets, storage blocks of
+	 * their own (the Foraging Basket is unchanged, as the owner chose).
+	 */
+	private static void registerSoil() {
+		Block richSoil = registerBlock("rich_soil", RichSoilBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).randomTicks());
+		registerItem("rich_soil", props -> new BlockItem(richSoil, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		registerBlock("rich_soil_farmland", RichFarmlandBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.FARMLAND).randomTicks());
+		Block compost = registerBlock("organic_compost", OrganicCompostBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
+				.mapColor(MapColor.COLOR_BROWN).sound(SoundType.ROOTED_DIRT).randomTicks());
+		registerItem("organic_compost", props -> new BlockItem(compost, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+
+		// Crates of the farm's produce, nine to a crate, and the Bag of Corn Kernels, the owner's sack as the Bag of Rice.
+		for (String crate : List.of("beetroot_crate", "cabbage_crate", "carrot_crate", "corn_crate", "onion_crate", "potato_crate",
+				"tomato_crate")) {
+			Block block = registerBlock(crate, Block::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F)
+					.sound(SoundType.WOOD).ignitedByLava());
+			registerItem(crate, props -> new BlockItem(block, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		}
+		Block kernels = registerBlock("corn_kernel_bag", RiceBagBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+				.strength(0.8F).sound(SoundType.WOOL).ignitedByLava());
+		registerItem("corn_kernel_bag", props -> new BlockItem(kernels, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+
+		// The baskets: storage blocks of their own, woven of wood or bamboo.
+		List<Block> baskets = new ArrayList<>();
+		for (String name : List.of("wooden_basket", "bamboo_basket")) {
+			Block basket = registerBlock(name, BasketBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0F)
+					.sound(SoundType.SCAFFOLDING).noOcclusion().ignitedByLava());
+			registerItem(name, props -> new BlockItem(basket, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+			baskets.add(basket);
+		}
+		BASKET_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("basket"),
+				FabricBlockEntityTypeBuilder.create(BasketBlockEntity::new, baskets.toArray(Block[]::new)).build());
+	}
+
+	/** Woven straw: the tatami's and its mats' properties (a new set each, as block properties are not shared). */
+	private static BlockBehaviour.Properties woven() {
+		return BlockBehaviour.Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.WOOL).ignitedByLava();
+	}
+
+	/** A kitchen knife: a light, quick blade of {@code material} ({@link KitchenKnifeItem}); the netherite one doesn't burn. */
+	private static void knife(String id, ToolMaterial material) {
+		Item.Properties properties = new Item.Properties().sword(material, KNIFE_DAMAGE, KNIFE_SPEED);
+		registerItem(id, KitchenKnifeItem::new, material == ToolMaterial.NETHERITE ? properties.fireResistant() : properties, TOOL_TAB);
 	}
 
 	/** The Turnip Lantern: a carved turnip that gives light, the original jack-o'-lantern. */
@@ -1688,16 +2042,23 @@ public final class JugcraftAgriculture {
 				FabricBlockEntityTypeBuilder.create(HearthOvenBlockEntity::new, oven).build());
 		registerItem("hearth_oven", props -> new BlockItem(oven, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
 		registerItem("pastry_dough", Item::new, new Item.Properties().compostable(COMPOST_MEDIUM), INGREDIENT_TAB);
+		// The cakes the owner drew (tools/cakes.py) are baked the same way, from Cake Batter, and set down as CakeBlocks; so are
+		// the owner's square pies and tarts (tools/pies_and_tarts.py), each at its own height.
+		plain("cake_batter", COMPOST_MEDIUM);
 		for (PieFilling filling : PieFilling.values()) {
 			registerItem(filling.rawPie(), Item::new, new Item.Properties().stacksTo(16).compostable(COMPOST_MEDIUM_HIGH), FOOD_TAB);
-			Block pie = registerBlock(filling.pie(), props -> new PieBlock(filling, props), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE)
-					.strength(0.5F).sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED));
+			Block pie = registerBlock(filling.pie(), props -> filling.height > 0 ? new CakeBlock(filling, filling.height, props) : new PieBlock(filling, props),
+					BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.5F).sound(SoundType.WOOL).noOcclusion()
+							.pushReaction(PushReaction.POPPED));
 			registerItem(filling.pie(), props -> new BlockItem(pie, props), new Item.Properties().useBlockDescriptionPrefix().stacksTo(1), FOOD_TAB);
 			food(filling.slice(), filling.nutrition, filling.saturation, COMPOST_MEDIUM_HIGH);
 		}
 		Block burnt = registerBlock("burnt_pie", props -> new PieBlock(null, props), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK)
 				.strength(0.5F).sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED));
 		registerItem("burnt_pie", props -> new BlockItem(burnt, props), new Item.Properties().useBlockDescriptionPrefix().stacksTo(1), FOOD_TAB);
+		Block burntCake = registerBlock("burnt_cake", props -> new CakeBlock(null, props), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK)
+				.strength(0.5F).sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED));
+		registerItem("burnt_cake", props -> new BlockItem(burntCake, props), new Item.Properties().useBlockDescriptionPrefix().stacksTo(1), FOOD_TAB);
 
 		// Fall additions 17, the Spirit Board: a candlelit séance spells out a restless spirit's name and the one thing it
 		// wishes for; given it, the spirit is laid to rest.
@@ -2541,6 +2902,260 @@ public final class JugcraftAgriculture {
 		FlammableBlockRegistry.getDefaultInstance().add(leaves, 30, 60);
 	}
 
+	/**
+	 * The orchards' fruit trees ({@link OrchardTree}, tools/orchard.py): each one's sapling (planted from its seed) and its
+	 * leaves, which blossom and fruit as the apple tree's do. Their trunks are vanilla oak, so they need no wood of their own,
+	 * but the banana's: its own stem.
+	 */
+	private static void registerOrchardTrees() {
+		// The banana's stem: a log of its own (in #minecraft:logs, so its fronds stay while it stands; no fuel).
+		Block bananaStem = registerBlock("banana_stem", RotatedPillarBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT)
+				.strength(1.0F).sound(SoundType.BAMBOO_WOOD).ignitedByLava());
+		registerItem("banana_stem", props -> new BlockItem(bananaStem, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		for (OrchardTree tree : OrchardTree.values()) {
+			registerBlock(tree.sapling(), props -> new SaplingBlock(tree.grower, props) {
+			}, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING));
+			Block leaves = registerBlock(tree.leaves(), props -> new OrchardLeavesBlock(tree, props),
+					BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).mapColor(MapColor.PLANT));
+			registerItem(tree.leaves(), props -> new BlockItem(leaves, props), new Item.Properties().useBlockDescriptionPrefix(), SEEDS_TAB);
+			FlammableBlockRegistry.getDefaultInstance().add(leaves, 30, 60);
+		}
+	}
+
+	/**
+	 * Orchards (the kitchen and cooking expansion's slice 6, tools/orchard.py), in Jugcraft's own art: the pear, peach,
+	 * lemon and orange, each tree's seed (a fruit crafts into it), the two juices (set down standing, MenuDishes) and the
+	 * three preserves. Their trees are registered with the others ({@link #registerOrchardTrees()}); their pies are
+	 * {@link PieFilling#PEACH} and {@link PieFilling#LEMON}.
+	 */
+	private static void registerOrchards() {
+		food("pear", 4, 0.3F, COMPOST_MEDIUM_HIGH);
+		seeds("pear_seeds", "pear_sapling", COMPOST_LOW);
+		food("peach", 4, 0.3F, COMPOST_MEDIUM_HIGH);
+		seeds("peach_pit", "peach_sapling", COMPOST_LOW);
+		food("lemon", 2, 0.1F, COMPOST_MEDIUM_HIGH);
+		seeds("lemon_seeds", "lemon_sapling", COMPOST_LOW);
+		food("orange", 4, 0.3F, COMPOST_MEDIUM_HIGH);
+		seeds("orange_seeds", "orange_sapling", COMPOST_LOW);
+		drink("orange_juice", 5, 0.5F, MobEffects.HEALTH_BOOST, 60);
+		drink("lemonade", 4, 0.4F, MobEffects.SPEED, 30);
+		preserve("orange_marmalade", 3, 0.4F, null, 0, 0xE0761A);
+		preserve("peach_preserves", 3, 0.4F, null, 0, 0xF09A50);
+		preserve("pear_butter", 4, 0.5F, null, 0, 0xB8923E);
+		food("plum", 4, 0.3F, COMPOST_MEDIUM_HIGH);
+		seeds("plum_pit", "plum_sapling", COMPOST_LOW);
+		food("banana", 4, 0.4F, COMPOST_MEDIUM_HIGH);
+		seeds("banana_pup", "banana_sapling", COMPOST_LOW);
+		preserve("plum_jam", 3, 0.4F, null, 0, 0x6A1E4A);
+	}
+
+	/**
+	 * The owner's milkshakes (tools/milkshakes.py), from their "CAKES &amp; BAKES - 3D MILKSHAKE" page: drinks of the menu's
+	 * kind, each made from a Milk Bottle, a snowball, a sugar and its own flavour, and set down as the owner's 3D glass
+	 * ({@link MenuDishes}, {@link PlacedDishBlock.DishShape#MILKSHAKE}).
+	 */
+	private static void registerMilkshakes() {
+		drink("strawberry_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+		drink("banana_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+		drink("plum_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+		drink("apple_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+		drink("blueberry_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+		drink("pumpkin_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+		drink("chocolate_milkshake", 5, 0.6F, MobEffects.HASTE, 30);
+	}
+
+	/**
+	 * The fruit crops (tools/fruit_crops.py), in Jugcraft's own art: the strawberry, blueberry and coffee bushes' seeds,
+	 * fruit and wild plants (their blocks are {@link TallCrop}s, registered with the others), the roasted coffee beans and
+	 * the two berry jams. The plum and banana trees are orchard trees ({@link OrchardTree}); their fruit, pits and pups
+	 * are registered with the orchards' ({@link #registerOrchards()}).
+	 */
+	private static void registerFruitCrops() {
+		food("strawberry", 2, 0.3F, COMPOST_MEDIUM);
+		seeds("strawberry_seeds", "strawberry_crop", COMPOST_LOW);
+		food("blueberries", 2, 0.2F, COMPOST_MEDIUM);
+		seeds("blueberry_seeds", "blueberry_crop", COMPOST_LOW);
+		plain("coffee_cherries", COMPOST_MEDIUM);
+		seeds("coffee_seeds", "coffee_crop", COMPOST_LOW);
+		plain("coffee_beans", COMPOST_MEDIUM);
+		wild("wild_strawberries");
+		wild("wild_blueberries");
+		wild("wild_coffee");
+		preserve("strawberry_jam", 3, 0.4F, null, 0, 0xD0203A);
+		preserve("blueberry_jam", 3, 0.4F, null, 0, 0x3A2E7A);
+	}
+
+	/**
+	 * Garden crops in the owner's art (tools/garden.py, slice 7a): the Rotten Tomato, thrown or composted, and its entity;
+	 * the wild carrots, potatoes and beetroots; and the brown and red mushroom colonies, which have no item (a mushroom
+	 * plants one on Rich Soil, {@link RichSoilBlock}). The tomato vine that goes over is registered with the other tall
+	 * crops ({@link TomatoVineBlock}).
+	 */
+	private static void registerGarden() {
+		thrown("rotten_tomato", COMPOST_MEDIUM_HIGH);
+		ROTTEN_TOMATO = entity(RottenTomatoItem.ID, EntityType.Builder.<RottenTomato>of(RottenTomato::new, MobCategory.MISC).noLootTable()
+				.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+		wild("wild_carrots");
+		wild("wild_potatoes");
+		wild("wild_beetroots");
+		colony("brown_mushroom_colony", Blocks.BROWN_MUSHROOM, Items.BROWN_MUSHROOM);
+		colony("red_mushroom_colony", Blocks.RED_MUSHROOM, Items.RED_MUSHROOM);
+	}
+
+	/**
+	 * Garden crops, herbs and spices, part b (slice 7b; tools/vegetables.py), in Jugcraft's own art: lettuce, spinach,
+	 * radishes and peas (low crops; peas fix nitrogen as beans do), the cucumber vine and the eggplant and zucchini bushes
+	 * ({@link TallCrop}), what they give, their dishes and their wild plants.
+	 */
+	private static void registerVegetables() {
+		crop("lettuce_crop", "lettuce_seeds", false);
+		crop("spinach_crop", "spinach_seeds", false);
+		crop("radish_crop", "radish", false);
+		crop("pea_crop", "peas", true);
+		food("lettuce", 2, 0.3F, COMPOST_MEDIUM);
+		seeds("lettuce_seeds", "lettuce_crop", COMPOST_LOW);
+		food("spinach", 1, 0.6F, COMPOST_MEDIUM);
+		seeds("spinach_seeds", "spinach_crop", COMPOST_LOW);
+		edibleSeeds("radish", "radish_crop", 1, 0.6F, COMPOST_MEDIUM);
+		edibleSeeds("peas", "pea_crop", 1, 0.3F, COMPOST_MEDIUM);
+		food("cucumber", 2, 0.3F, COMPOST_MEDIUM);
+		trellisSeeds("cucumber_seeds", TallCrop.CUCUMBER, COMPOST_LOW);
+		food("eggplant", 2, 0.3F, COMPOST_MEDIUM);
+		seeds("eggplant_seeds", "eggplant_crop", COMPOST_LOW);
+		food("zucchini", 2, 0.3F, COMPOST_MEDIUM);
+		seeds("zucchini_seeds", "zucchini_crop", COMPOST_LOW);
+		food("roasted_eggplant", 5, 0.6F, COMPOST_MEDIUM_HIGH);
+		food("grilled_zucchini", 5, 0.6F, COMPOST_MEDIUM_HIGH);
+		stew("green_salad", 8, 0.6F);
+		stew("pea_soup", 7, 0.6F);
+		wild("wild_lettuce");
+		wild("wild_spinach");
+		wild("wild_radishes");
+		wild("wild_peas");
+		wild("wild_cucumbers");
+		wild("wild_eggplant");
+		wild("wild_zucchini");
+	}
+
+	/**
+	 * The kitchen herbs (tools/herbs.py): each planted from a sprig of itself ({@link TallCrop}, cut back when grown), potted
+	 * in a flower pot, hung in a bundle to dry ({@link HerbBundleBlock}) into Dried Herbs; the Planter Box they (and any
+	 * crop) grow in ({@link PlanterBoxBlock}); the herb dishes, Mint Tea and Dill Pickles; and the wild herbs.
+	 */
+	private static void registerHerbs() {
+		seeds("basil", "basil_crop", COMPOST_LOW);
+		seeds("mint", "mint_crop", COMPOST_LOW);
+		seeds("rosemary", "rosemary_crop", COMPOST_LOW);
+		seeds("thyme", "thyme_crop", COMPOST_LOW);
+		seeds("parsley", "parsley_crop", COMPOST_LOW);
+		seeds("sage", "sage_crop", COMPOST_LOW);
+		seeds("dill", "dill_crop", COMPOST_LOW);
+		seeds("chives", "chives_crop", COMPOST_LOW);
+		plain("dried_herbs", COMPOST_LOW);
+		stew("pesto_pasta", 6, 0.7F);
+		stew("sage_and_onion_stuffing", 7, 0.6F);
+		stew("herb_roasted_mutton", 10, 0.8F);
+		stew("garden_herb_soup", 6, 0.6F);
+		stew("herb_roasted_potatoes", 12, 0.8F);
+		drink("mint_tea", 2, 0.3F, MobEffects.SPEED, 30);
+		preserve("dill_pickles", 2, 0.4F, null, 0, 0x5A8A2A);
+		wild("wild_basil");
+		wild("wild_mint");
+		wild("wild_rosemary");
+		wild("wild_thyme");
+		wild("wild_parsley");
+		wild("wild_sage");
+		wild("wild_dill");
+		wild("wild_chives");
+		for (String herb : HERBS) {
+			// A sprig on a flower pot plants the herb in it (vanilla's flower pot, keyed by the block its sprig places).
+			registerBlock("potted_" + herb, props -> new FlowerPotBlock(block(herb + "_crop"), props),
+					BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_DANDELION));
+			Block bundle = registerBlock(herb + "_bundle", HerbBundleBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT)
+					.strength(0.2F).sound(SoundType.GRASS).noCollision().noOcclusion().randomTicks().ignitedByLava()
+					.pushReaction(PushReaction.POPPED));
+			registerItem(herb + "_bundle", props -> new BlockItem(bundle, props), new Item.Properties().useBlockDescriptionPrefix()
+					.compostable(COMPOST_MEDIUM), BUILDING_TAB);
+			FlammableBlockRegistry.getDefaultInstance().add(bundle, 60, 100);
+		}
+		Block planter = registerBlock("planter_box", PlanterBoxBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+				.strength(1.0F).sound(SoundType.WOOD).ignitedByLava());
+		registerItem("planter_box", props -> new BlockItem(planter, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+	}
+
+	/**
+	 * The spices (tools/spices.py): the black pepper and vanilla vines ({@link TallCrop}, planted from what they give),
+	 * ginger, mustard and the saffron crocus (low crops), the Cinnamon Tree (its bark peeled by an axe,
+	 * {@link CinnamonLogBlock}), Dried Chili and the Paprika the Mortar and Pestle grinds from it ({@link SpiceGrinding}),
+	 * the spice dishes, the wild plants, and the Spice Rack ({@link SpiceRackBlock}).
+	 */
+	private static void registerSpices() {
+		crop("ginger_crop", "ginger", false);
+		crop("mustard_crop", "mustard_seeds", false);
+		crop("saffron_crop", "crocus_bulb", false);
+		trellisSeeds("peppercorns", TallCrop.PEPPERCORN, COMPOST_LOW);
+		trellisSeeds("vanilla_pods", TallCrop.VANILLA, COMPOST_LOW);
+		seeds("ginger", "ginger_crop", COMPOST_MEDIUM);
+		seeds("mustard_seeds", "mustard_crop", COMPOST_LOW);
+		seeds("crocus_bulb", "saffron_crop", COMPOST_MEDIUM);
+		plain("saffron", COMPOST_LOW);
+		plain("cinnamon", COMPOST_LOW);
+		plain("dried_chili", COMPOST_MEDIUM);
+		plain("paprika", COMPOST_LOW);
+		food("gingerbread_cookie", 2, 0.1F, COMPOST_MEDIUM_HIGH);
+		stew("chicken_curry", 10, 0.8F);
+		stew("saffron_rice", 6, 0.7F);
+		stew("vanilla_custard", 5, 0.6F);
+		wild("wild_peppercorns");
+		wild("wild_vanilla");
+		wild("wild_ginger");
+		wild("wild_mustard");
+		wild("wild_saffron");
+		registerCinnamonTree();
+		Block rack = registerBlock("spice_rack", SpiceRackBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+				.strength(1.5F).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+		SPICE_RACK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("spice_rack"),
+				FabricBlockEntityTypeBuilder.create(SpiceRackBlockEntity::new, rack).build());
+		registerItem("spice_rack", props -> new BlockItem(rack, props), new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+	}
+
+	/**
+	 * The Cinnamon Tree: its sapling and leaves (evergreen, untinted, as the other trees' are) and its two logs. It has no
+	 * wood set: its logs saw into jungle planks (data), and the log strips, with its bark, into the stripped log.
+	 */
+	private static void registerCinnamonTree() {
+		Block sapling = registerBlock("cinnamon_sapling", props -> new SaplingBlock(CINNAMON_GROWER, props) {
+		}, BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_SAPLING));
+		registerItem("cinnamon_sapling", props -> new BlockItem(sapling, props), new Item.Properties().useBlockDescriptionPrefix()
+				.compostable(COMPOST_LOW), SEEDS_TAB);
+		Block leaves = registerBlock("cinnamon_leaves", props -> new TintedParticleLeavesBlock(0.01F, props),
+				BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LEAVES).mapColor(MapColor.PLANT));
+		registerItem("cinnamon_leaves", props -> new BlockItem(leaves, props), new Item.Properties().useBlockDescriptionPrefix(), SEEDS_TAB);
+		FlammableBlockRegistry fire = FlammableBlockRegistry.getDefaultInstance();
+		fire.add(leaves, 30, 60);
+		Block log = registerBlock("cinnamon_log", props -> new CinnamonLogBlock(props, "stripped_cinnamon_log"),
+				BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.TERRACOTTA_GRAY));
+		Block stripped = registerBlock("stripped_cinnamon_log", RotatedPillarBlock::new,
+				BlockBehaviour.Properties.ofFullCopy(Blocks.STRIPPED_JUNGLE_LOG).mapColor(MapColor.TERRACOTTA_ORANGE));
+		for (Block block : List.of(log, stripped)) {
+			String id = BuiltInRegistries.BLOCK.getKey(block).getPath();
+			registerItem(id, props -> new BlockItem(block, props), new Item.Properties().useBlockDescriptionPrefix()
+					.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS), BUILDING_TAB);
+			fire.add(block, 5, 5);
+		}
+	}
+
+	/** The colony {@code mushroom} plants on Rich Soil, or null if it plants none. */
+	public static @Nullable MushroomColonyBlock colony(Item mushroom) {
+		return COLONIES.get(mushroom);
+	}
+
+	/** A mushroom colony with the properties of the mushroom it grows (no item: the mushroom plants it). */
+	private static void colony(String id, Block mushroom, Item item) {
+		COLONIES.put(item, (MushroomColonyBlock) registerBlock(id, props -> new MushroomColonyBlock(props, item),
+				BlockBehaviour.Properties.ofFullCopy(mushroom)));
+	}
+
 	/** Wild plant patches (data/jugcraft/worldgen) in the biomes each crop comes from. New chunks only. */
 	private static void registerWorldgen() {
 		if (!JugcraftConfig.isFeatureEnabled(FEATURE)) {
@@ -2566,8 +3181,47 @@ public final class JugcraftAgriculture {
 		wildPatch("acorn_squash", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_TAIGA);
 		wildPatch("warty_gourd", ConventionalBiomeTags.IS_SWAMP, ConventionalBiomeTags.IS_SPOOKY);
 		wildPatch("cranberry_bush", ConventionalBiomeTags.IS_SWAMP);
+		// Rice and wet farming: wild rice in swamp and river shallows.
+		wildPatch("wild_rice", ConventionalBiomeTags.IS_SWAMP, ConventionalBiomeTags.IS_RIVER);
 		wildPatch("chestnut_tree", ConventionalBiomeTags.IS_FOREST);
 		wildPatch("apple_tree", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
+		// The orchards' fruit trees, in the biomes they grow in (tools/orchard.py TREES "biomes").
+		wildPatch("pear_tree", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_BIRCH_FOREST);
+		wildPatch("peach_tree", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_SAVANNA);
+		wildPatch("lemon_tree", ConventionalBiomeTags.IS_SAVANNA);
+		wildPatch("orange_tree", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_JUNGLE);
+		wildPatch("plum_tree", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_TAIGA);
+		wildPatch("banana_tree", ConventionalBiomeTags.IS_JUNGLE);
+		// The fruit crops' wild bushes (tools/fruit_crops.py WILD).
+		wildPatch("wild_strawberries", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_FLORAL);
+		wildPatch("wild_blueberries", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_HILL);
+		wildPatch("wild_coffee", ConventionalBiomeTags.IS_JUNGLE);
+		// The garden crops' wild plants (tools/garden.py WILD).
+		wildPatch("wild_carrots", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
+		wildPatch("wild_potatoes", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_HILL);
+		wildPatch("wild_beetroots", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_SWAMP);
+		// Garden crops, herbs and spices, part b (tools/vegetables.py, herbs.py, spices.py), and the cinnamon tree.
+		wildPatch("wild_lettuce", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
+		wildPatch("wild_spinach", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_PLAINS);
+		wildPatch("wild_radishes", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_HILL);
+		wildPatch("wild_peas", ConventionalBiomeTags.IS_HILL, ConventionalBiomeTags.IS_FOREST);
+		wildPatch("wild_cucumbers", ConventionalBiomeTags.IS_JUNGLE, ConventionalBiomeTags.IS_SAVANNA);
+		wildPatch("wild_eggplant", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_JUNGLE);
+		wildPatch("wild_zucchini", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_SAVANNA);
+		wildPatch("wild_basil", ConventionalBiomeTags.IS_JUNGLE, ConventionalBiomeTags.IS_SAVANNA);
+		wildPatch("wild_mint", ConventionalBiomeTags.IS_RIVER, ConventionalBiomeTags.IS_SWAMP);
+		wildPatch("wild_rosemary", ConventionalBiomeTags.IS_HILL, ConventionalBiomeTags.IS_SAVANNA);
+		wildPatch("wild_thyme", ConventionalBiomeTags.IS_HILL, ConventionalBiomeTags.IS_PLAINS);
+		wildPatch("wild_parsley", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FOREST);
+		wildPatch("wild_sage", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_PLAINS);
+		wildPatch("wild_dill", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
+		wildPatch("wild_chives", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_TAIGA);
+		wildPatch("wild_peppercorns", ConventionalBiomeTags.IS_JUNGLE);
+		wildPatch("wild_vanilla", ConventionalBiomeTags.IS_JUNGLE);
+		wildPatch("wild_ginger", ConventionalBiomeTags.IS_JUNGLE, ConventionalBiomeTags.IS_SWAMP);
+		wildPatch("wild_mustard", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
+		wildPatch("wild_saffron", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_HILL);
+		wildPatch("cinnamon_tree", ConventionalBiomeTags.IS_JUNGLE);
 		// Halloween harvest: heirloom pumpkins and bottle gourds on grass, and mums in flower-rich places.
 		wildPatch("white_pumpkin", ConventionalBiomeTags.IS_BIRCH_FOREST, ConventionalBiomeTags.IS_SNOWY);
 		wildPatch("jarrahdale_pumpkin", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_WINDSWEPT);
@@ -2730,6 +3384,29 @@ public final class JugcraftAgriculture {
 				.build();
 		registerItem(id, Item::new, new Item.Properties().food(nourishment(nutrition, saturation), eaten).usingConvertsTo(Items.BOWL)
 				.stacksTo(1), FOOD_TAB);
+	}
+
+	/** Corn on the cob: eating it leaves the corncob (the menu, tools/menu.py COB_FOODS). */
+	private static void cob(String id, int nutrition, float saturation, ResourceKey<ContextIntProvider> compost) {
+		registerItem(id, Item::new, new Item.Properties().food(nourishment(nutrition, saturation)).usingConvertsTo(item("corncob"))
+				.compostable(compost), FOOD_TAB);
+	}
+
+	/** Milk in a bottle: drunk as a bucket of milk is (clearing every effect), leaving the bottle. */
+	private static void milkBottle(String id) {
+		registerItem(id, Item::new, new Item.Properties().component(DataComponents.CONSUMABLE, Consumables.MILK_BUCKET)
+				.usingConvertsTo(Items.GLASS_BOTTLE).stacksTo(16), FOOD_TAB);
+	}
+
+	/** Food for a tamed {@code animal} ({@link PetFoodItem}): heals it by {@code heal} and gives it {@code treats}. */
+	private static void petFood(String id, EntityType<?> animal, int heal, boolean bowl, List<PetFoodItem.Treat> treats) {
+		registerItem(id, props -> new PetFoodItem(props, animal, heal, bowl, treats), new Item.Properties().stacksTo(bowl ? 16 : 64),
+				FOOD_TAB);
+	}
+
+	/** An item thrown like a snowball (the garden crops' Rotten Tomato), in stacks of 16. */
+	private static void thrown(String id, ResourceKey<ContextIntProvider> compost) {
+		registerItem(id, RottenTomatoItem::new, new Item.Properties().stacksTo(16).compostable(compost), INGREDIENT_TAB);
 	}
 
 	private static void sickle(String id, int radius, int durability) {

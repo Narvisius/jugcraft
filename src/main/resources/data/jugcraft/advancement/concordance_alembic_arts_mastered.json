@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_alembic_arts_understood",
+  "display": {
+    "icon": {
+      "id": "jugcraft:assay_glass"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_alembic_arts_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_alembic_arts_mastered.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "ars_nouveau:lesser_water_focus",
+  "criteria": {
+    "has_water_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jymbaumental:water_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jymbaumental.adv.desc.water_focus"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "ars_jymbaumental:water_focus"
+    },
+    "title": {
+      "translate": "ars_jymbaumental.adv.title.water_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_water_focus"
+    ]
+  ]
+}

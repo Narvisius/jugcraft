@@ -6,6 +6,12 @@ Owner: jimbozoomer-byte
 Target milestone and tier: late power storage, after the lithium battery bank
 Primary specialty and supported player role: power and chemistry
 
+## Owner-requested major grid-storage expansion (7 October 2026)
+
+The [industrial chemical catalog](industrial-chemical-catalog-and-routes.md#battery-progression-major-grid-storage-and-other-advanced-uses) selects vanadyl-sulfate/formulated vanadium electrolyte chemistry for major grid storage, building on this existing battery. General storage develops before portable/specialty banks. Modular tank additions increase capacity; cell-stack upgrades increase charge/discharge output. Exact electrolyte processing, module sizes, stack tiers and limits remain to design. No routine cycle-degradation upkeep is selected; energy losses, finite capacity and charging requirements still apply. Account for electrolyte/energy once across the connected installation and preserve existing IDs and saved storage behavior during review.
+
+The [twelfth owner batch](industrial-chemistry-and-fuels-plan.md#grid-storage-synthetic-fuels-and-cryogenics-decisions-twelfth-batch), recorded 8 October 2026, selects mineral-derived electrolyte supply alongside refinery residue, attached paired tank modules around a bounded controller/cell stack, and optional local charge/discharge priorities with a minimum-charge reserve setting. Remote control stays later. Exact source/refining, paired-side composition, module geometry/bounds, costs, losses, output and reserve semantics remain to specify. These planning additions preserve the selected capacity/output split and do not change the current battery behavior below.
+
 ## Player experience
 - **Vanadium electrolyte:** two asphalt binder leached in a bucket of sulfuric acid in the chemical reactor make a bucket of deep-blue **vanadium electrolyte**. Heavy oil residue is rich in vanadium. The electrolyte is a liquid with a bucket.
 - **Flow battery** (3 wide, 3 tall, 2 deep, the electric look): two tall electrolyte tanks with blue sight glasses either side of a cell stack.

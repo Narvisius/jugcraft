@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "CLC"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "C": "minecraft:copper_ingot",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:kestrel_rifle"
+  }
+}

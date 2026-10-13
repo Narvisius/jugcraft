@@ -19,13 +19,12 @@ public class CookingPotMenu extends AbstractContainerMenu {
 
 	private final Container container;
 	private final ContainerData data;
+	private final Object revision = CookingPotRecipe.revision();
 
-	/** Client-side constructor: contents arrive through slot and data syncing. */
 	public CookingPotMenu(int containerId, Inventory inventory) {
 		this(containerId, inventory, new SimpleContainer(CookingPotBlockEntity.SLOTS),
-				new SimpleContainerData(CookingPotBlockEntity.DATA_COUNT));
+			new SimpleContainerData(CookingPotBlockEntity.DATA_COUNT));
 	}
-
 	public CookingPotMenu(int containerId, Inventory inventory, Container container, ContainerData data) {
 		super(JugcraftAgriculture.COOKING_POT_MENU, containerId);
 		checkContainerSize(container, CookingPotBlockEntity.SLOTS);
@@ -51,6 +50,8 @@ public class CookingPotMenu extends AbstractContainerMenu {
 		addStandardInventorySlots(inventory, 8, 84);
 		addDataSlots(data);
 	}
+	public boolean assisted() { return data.get(CookingPotBlockEntity.DATA_ASSISTED) != 0; }
+	public local.peepo.CompanionStatus status() { return local.peepo.CompanionStatus.from(data.get(CookingPotBlockEntity.DATA_STATUS)); }
 
 	/** Cooking progress from 0 to {@code width}. */
 	public int progress(int width) {
@@ -65,11 +66,15 @@ public class CookingPotMenu extends AbstractContainerMenu {
 
 	@Override
 	public boolean stillValid(Player player) {
-		return container.stillValid(player);
+		return !player.isSpectator() && container.stillValid(player)
+			&& (!(container instanceof CookingPotBlockEntity pot) || revision == CookingPotRecipe.revision()
+			&& player.level() == pot.getLevel() && (!pot.isLocked() || pot.canOpen(player))
+			&& !io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player, player.level(), pot.getBlockPos()));
 	}
 
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotIndex) {
+		if (!stillValid(player) || slotIndex < 0 || slotIndex >= slots.size()) return ItemStack.EMPTY;
 		int potSlots = CookingPotBlockEntity.SLOTS;
 		Slot slot = slots.get(slotIndex);
 		if (slot == null || !slot.hasItem()) {

@@ -1,4 +1,4 @@
-# Guns: page 2 of 5
+# Guns: page 2 of 16
 
 [Category index](README.md) · [All categories](../README.md) · [Previous](page-001.md) · [Next](page-003.md)
 
@@ -109,6 +109,24 @@ Paths preserve the supplied collection. Follow the [reuse guide](../../README.md
 | [Guns/crosshair/square.png](../../originals/Blocks/Guns/crosshair/square.png) | texture | 16×16 | — |
 | [Guns/crosshair/t.png](../../originals/Blocks/Guns/crosshair/t.png) | texture | 16×16 | — |
 | [Guns/crosshair/tech.png](../../originals/Blocks/Guns/crosshair/tech.png) | texture | 16×16 | — |
+| [Guns/effect/long_scope_reticle.png](../../originals/Blocks/Guns/effect/long_scope_reticle.png) | texture | 128×128 | — |
+| [Guns/effect/long_scope_reticle2.png](../../originals/Blocks/Guns/effect/long_scope_reticle2.png) | texture | 64×64 | — |
+| [Guns/effect/muzzle_flash.png](../../originals/Blocks/Guns/effect/muzzle_flash.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_1.png](../../originals/Blocks/Guns/effect/muzzle_flash_1.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_10.png](../../originals/Blocks/Guns/effect/muzzle_flash_10.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_11.png](../../originals/Blocks/Guns/effect/muzzle_flash_11.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_12.png](../../originals/Blocks/Guns/effect/muzzle_flash_12.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_2.png](../../originals/Blocks/Guns/effect/muzzle_flash_2.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_3.png](../../originals/Blocks/Guns/effect/muzzle_flash_3.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_4.png](../../originals/Blocks/Guns/effect/muzzle_flash_4.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_5.png](../../originals/Blocks/Guns/effect/muzzle_flash_5.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_6.png](../../originals/Blocks/Guns/effect/muzzle_flash_6.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_7.png](../../originals/Blocks/Guns/effect/muzzle_flash_7.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_8.png](../../originals/Blocks/Guns/effect/muzzle_flash_8.png) | texture | 64×32 | — |
+| [Guns/effect/muzzle_flash_9.png](../../originals/Blocks/Guns/effect/muzzle_flash_9.png) | texture | 64×32 | — |
+| [Guns/effect/red_dot_reticle.png](../../originals/Blocks/Guns/effect/red_dot_reticle.png) | texture | 16×16 | — |
+| [Guns/effect/scope_vignette.png](../../originals/Blocks/Guns/effect/scope_vignette.png) | texture | 32×32 | — |
+| [Guns/effect/scope_vignette_circle.png](../../originals/Blocks/Guns/effect/scope_vignette_circle.png) | texture | 32×32 | — |
 | [Guns/entity/adjudicator.png](../../originals/Blocks/Guns/entity/adjudicator.png) | texture | 128×128 | — |
 | [Guns/entity/beacon_beam.png](../../originals/Blocks/Guns/entity/beacon_beam.png) | texture | 16×16 | — |
 | [Guns/entity/blunderer.png](../../originals/Blocks/Guns/entity/blunderer.png) | texture | 256×256 | — |
@@ -238,21 +256,3 @@ Paths preserve the supplied collection. Follow the [reuse guide](../../README.md
 | [Guns/item/blueprint_scrap.png](../../originals/Blocks/Guns/item/blueprint_scrap.png) | texture | 16×16 | — |
 | [Guns/item/blunderbuss.animation.json](../../originals/Blocks/Guns/item/blunderbuss.animation.json) | animation JSON | — | — |
 | [Guns/item/blunderbuss.png](../../originals/Blocks/Guns/item/blunderbuss.png) | texture | 64×64 | — |
-| [Guns/item/bomb_lance.animation.json](../../originals/Blocks/Guns/item/bomb_lance.animation.json) | animation JSON | — | — |
-| [Guns/item/bomb_lance.png](../../originals/Blocks/Guns/item/bomb_lance.png) | texture | 64×64 | — |
-| [Guns/item/boomstick.animation.json](../../originals/Blocks/Guns/item/boomstick.animation.json) | animation JSON | — | — |
-| [Guns/item/boomstick.png](../../originals/Blocks/Guns/item/boomstick.png) | texture | 128×128 | — |
-| [Guns/item/boomstick_2.png](../../originals/Blocks/Guns/item/boomstick_2.png) | texture | 128×128 | — |
-| [Guns/item/bouncy_grenade_round.png](../../originals/Blocks/Guns/item/bouncy_grenade_round.png) | texture | 16×16 | — |
-| [Guns/item/brass_bolt.png](../../originals/Blocks/Guns/item/brass_bolt.png) | texture | 16×16 | — |
-| [Guns/item/brass_mask_2d.png](../../originals/Blocks/Guns/item/brass_mask_2d.png) | texture | 16×16 | — |
-| [Guns/item/brawler.animation.json](../../originals/Blocks/Guns/item/brawler.animation.json) | animation JSON | — | — |
-| [Guns/item/brawler.png](../../originals/Blocks/Guns/item/brawler.png) | texture | 64×64 | — |
-| [Guns/item/bruiser.animation.json](../../originals/Blocks/Guns/item/bruiser.animation.json) | animation JSON | — | — |
-| [Guns/item/bruiser.png](../../originals/Blocks/Guns/item/bruiser.png) | texture | 64×64 | — |
-| [Guns/item/buckshot.png](../../originals/Blocks/Guns/item/buckshot.png) | texture | 16×16 | — |
-| [Guns/item/bullet_mold.png](../../originals/Blocks/Guns/item/bullet_mold.png) | texture | 16×16 | — |
-| [Guns/item/callwell.animation.json](../../originals/Blocks/Guns/item/callwell.animation.json) | animation JSON | — | — |
-| [Guns/item/callwell.png](../../originals/Blocks/Guns/item/callwell.png) | texture | 128×128 | — |
-| [Guns/item/callwell_conversion.animation.json](../../originals/Blocks/Guns/item/callwell_conversion.animation.json) | animation JSON | — | — |
-| [Guns/item/callwell_conversion.png](../../originals/Blocks/Guns/item/callwell_conversion.png) | texture | 128×128 | — |

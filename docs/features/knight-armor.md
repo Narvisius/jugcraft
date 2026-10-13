@@ -73,7 +73,7 @@ Gold stays only at the collar, as drawn.
   - the `humanoid` layer is left out when the helmet, chestplate and boots all have one;
   - the `humanoid_leggings` layer when the leggings have one.
 
-  Bronze and steel now have every piece in 3D, so no layer is left and `gear.py` writes no `equipment/bronze.json` or `steel.json` at all. 26.3 cannot read an empty layer map: it logs "Map must have contents" at start-up, as it does for the costumes' empty assets ([more-halloween.md](more-halloween.md)). A missing asset is read as one with no layers, silently.
+  Bronze and steel now have every piece in 3D, so no layer is left and `gear.py` writes no `equipment/bronze.json` or `steel.json` at all. 26.3 cannot read an empty layer map: it logs "Map must have contents" at start-up, as it did for the costumes' empty assets before their 10 October cleanup ([more-halloween.md](more-halloween.md)). A missing asset is read as one with no layers, silently.
   - What puts a piece in the wearer's render state is the item's equippable component, whose asset ID (`jugcraft:bronze`, `jugcraft:steel`) is unchanged, not the asset file. The vanilla armor layer then finds no asset and draws nothing under the 3D pieces.
 
 ### The toolkit
@@ -83,8 +83,12 @@ Gold stays only at the collar, as drawn.
 | `tools/armor_paint.py` | Paints a set's atlas. Colours are named, never written into a painter: `light` to `void` for the metal, five leathers, four under-layer tones and two gold. So a variant is the same model with another palette (`STEEL`, `BRONZE`). Painters: `plate`, `chevron`, `lames`, `leather`, `strap`, `gold`, `under`, `rivets`, `hammer`, `marks`, `solid` and `edge`, set per face and layered in order. |
 | `tools/knight_armor.py` | The knight armor: `model("steel")` and `model("bronze")`, registered as the sets `steel_knight` and `bronze_knight`. |
 | `tools/armor_preview.py` | Renders worn armor on a grey mannequin from the exported quads, as the client draws them: bone poses, nearest-texel sampling, no culling, lit as entities are or unlit. Poses: stand, walk, sneak, the owner's render pose, and combinations such as `sneak+walk`. With `--wearer` the mannequin's skin is green and its outer layer (the hat 0.5 out, the jacket, sleeves and pants 0.25, as every player skin has) magenta, and it prints how much of the wearer shows through in each image. Images go to `build/armor_preview/` (git-ignored). |
+| `tools/bbmodel.py` | Blockbench projects. Writes any set as a `.bbmodel` (Blockbench 5's Generic Model: a group per bone, a group per piece, cubes with per-face uvs, the atlas embedded) and reads one back: `load_set` makes a set whose parts are the project's cubes, each with texels of its own, and whose atlas is the project's texture. `check` round-trips every set. See [blockbench-armor.md](blockbench-armor.md). |
+| `tools/armor_reference.py` | Matching a set to the owner's renders (`art/armor/references/`): cameras and poses fitted to them, our model drawn from them, texels lifted from them face by face. |
 | `tools/armor_smoke.py` | The toolkit's own test: a small test armor using every helper, rotation, mirror and cutout, checked quad by quad (winding, normals, UVs, mirror images, the paint landing on the right face). Nothing it builds is written into the mod. |
 | `tools/armor_icons.py`, `tools/armor_icons/<piece>.txt` | The 16×16 icons: one hand-drawn map per piece, 16 rows of 16 symbols that say what each pixel is made of (plate tones, outline, trim, leather, under-layer, brass fittings). One map serves both metals, coloured from `STEEL` or `BRONZE`. The owner can edit the maps directly. |
+
+A set can also be a Blockbench project (`art/armor/<set>.bbmodel`, read with `bbmodel.load_set`): its parts then carry their own texels (`Part.uvs`) and the set its atlas (`ArmorSet.image`), which `armor_paint.paint_atlas` gives as it is; every rule below still applies to its cubes.
 
 `tools/generate_material_data.py` writes each registered set's quads into `worn_models.json` under `<item>_<body part>` keys. It refuses a key that is already taken. `tools/generate_textures.py` paints each set's atlas to `textures/entity/equipment/3d/<set>.png` (128 × 128 for each knight set), and `tools/gear_textures.py` writes the eight icons from `armor_icons`.
 

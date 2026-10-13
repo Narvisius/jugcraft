@@ -43,9 +43,9 @@ import net.minecraft.world.item.component.Weapon;
  * kusarigamas, each with a weapon art ({@link #ARTS}, worked by {@link WeaponArts}); and Arms VI (batch 55,
  * docs/features/arms-vi.md): katanas and brazier maces, longbows and arbalests ({@link #RANGED}) and heater and tower
  * shields ({@link #SHIELDS}); and Arms VII (batch 56, docs/features/arms-vii.md): named variants of the kinds, crafted
- * in four styles or dropped by bosses ({@link ArmVariants}); and Arms VIII (batch 59, docs/features/arms-viii.md):
- * javelins, franciscas, chakrams and harpoons, arms that are also thrown ({@link #THROWN}, {@link ThrownArmItem},
- * {@link ThrownArm}).
+ * in four styles, dropped by bosses or carried with an armor set ({@link ArmVariants}); and Arms VIII (batch 59,
+ * docs/features/arms-viii.md): javelins, franciscas, chakrams and harpoons, arms that are also thrown ({@link #THROWN},
+ * {@link ThrownArmItem}, {@link ThrownArm}).
  *
  * <p>After studying how Epic Knights and Simply Swords make, show and animate their weapons (none of their code, models
  * or art is used): every trait here is one of 26.3's own item components, so these are plain items with no per-tick

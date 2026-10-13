@@ -45,7 +45,7 @@ Cook roasted corn, popcorn, baked sweet potatoes and roasted sunflower seeds, or
 - Wild plants generate only in chunks created after this feature is added; grass drops cover older worlds.
 
 ## Dependencies and assets
-No new dependencies. Uses Fabric API's loot, biome modification and creative tab events, which are already required. Every texture is drawn by `tools/crop_textures.py` from fixed seeds; no Mojang texture is read, traced or recolored. The `ingame_*` images are real screenshots from the client game test. The stage lineups and the item strip come from `tools/render_agriculture.py` and are approximate renders.
+No new dependencies. Uses Fabric API's loot, biome modification and creative tab events, which are already required. Every texture is drawn by `tools/crop_textures.py` from fixed seeds; no Mojang texture is read, traced or recolored. Since the [garden crops](garden-crops.md) (9 October 2026), the corn (and ornamental corn), the corn and corn kernel items and the wild corn wear the owner's own textures instead. The `ingame_*` images are real screenshots from the client game test. The stage lineups and the item strip come from `tools/render_agriculture.py` and are approximate renders.
 
 ## Verification
 Actual results (30 September 2026, Minecraft 26.3, Fabric Loader 0.19.3, Fabric API 0.161.0+26.3, Temurin JDK 25.0.4, GitHub Actions):

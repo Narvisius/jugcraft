@@ -1,5 +1,7 @@
 # Natural textures: fitting the vanilla world
 
+**11 October owner correction:** custom logs now use vanilla bark/end-grain with Jugcraft colours, supplied by runtime texture references rather than bundled Minecraft images. See [the visual correction record](features/vehicle-and-vanilla-polish.md). This supersedes conflicting log-art guidance below; existing leaves and planks are unchanged.
+
 How Jugcraft's woods, leaves and other natural textures are drawn so they sit in the vanilla world as if they belonged
 there. Follow it for every new wood, tree, leaf, sapling, plant, stone, soil or ore texture.
 
@@ -8,6 +10,22 @@ how the vanilla textures are" ([features/wood-repaint.md](features/wood-repaint.
 they said: "All the wood looks so so good now ... take note of how you did that ... and then add that in as instructions
 for how we want any additional wood or natural textures to look ingame". This page is that note. The code that does it
 is `tools/wood_style.py`; read it beside this page.
+
+## The owner's own textures are used as drawn
+
+These rules are for textures Jugcraft draws. Textures the owner drew themselves, in the shared library
+([art/owner-library](../art/owner-library/README.md)), are the exception: they are used as the owner drew them, not
+redrawn by code. On 7 October 2026 the owner said of the library's farming and food textures: "I made all of the
+textures in there myself its all mine", and asked for them to be used.
+- Copy them byte-for-byte with `tools/owner_art.py` (an animation `.mcmeta` gets LF line ends, as Git stores text).
+  `tools/generate_textures.py` runs it last so no generator draws over them, and `tools/check_mod_data.py` fails if a
+  copy drifts from its source.
+- Don't "clean up" or restyle an imported owner texture. A recolouring (such as the bronze and steel knives, made from
+  the owner's iron knife) is listed in the feature's `RECOLOURED` table, and an icon put together from the owner's
+  pieces (such as a serving in their bowl) in its `COMPOSED` table; both are recorded in the feature document.
+- Record each imported file's library path in the feature's asset provenance
+  ([features/farmhouse-kitchen.md](features/farmhouse-kitchen.md#dependencies-and-assets) is the first).
+- The Mojang rule still stands: nothing traced, copied or recoloured from Minecraft's own textures.
 
 ## The look
 
@@ -130,6 +148,8 @@ The trees the biomes still need, with their proposed shapes and colours, are pla
    - preview its textures at 1× and 8×, tiled, and as blocks beside vanilla's;
    - add the tree to `WoodClientGameTests` so CI grows it and shoots it in game, beside the others;
    - compare it with the owner's painting.
+
+A tree whose logs are no wood set (no planks: the [cinnamon tree's](features/vegetables-herbs-and-spices.md)) puts its logs in `LOGS` in `tools/wood_style.py` instead: the stripped side's colour and the bark, drawn as every wood's log, end and stripped log are.
 
 ## Checklist
 - [ ] 16×16, drawn by code from a fixed seed; nothing copied or recoloured from Mojang.

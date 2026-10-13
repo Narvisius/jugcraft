@@ -1,0 +1,278 @@
+{
+  "type": "ars_jimbaux:caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "ars_jimbaux:constant",
+    "r": 255
+  },
+  "flavour_text": "The hill has been reassigned as a floor.",
+  "name": "0AKSA's Obliterating Open-Mine",
+  "sound": {},
+  "spell": [
+    "ars_jimbaux:glyph_projectile",
+    "ars_jimbaux:glyph_burst",
+    "ars_jimbaux:glyph_sensitive",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_aoe",
+    "ars_jimbaux:glyph_break",
+    "ars_jimbaux:glyph_extract",
+    "ars_jimbaux:glyph_pickup"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "ars_jimbaux:constant",
+      "r": 255
+    },
+    "name": "0AKSA's Obliterating Open-Mine",
+    "particleTimeline": {
+      "ars_jimbaux:projectile": {
+        "type": "ars_jimbaux:projectile",
+        "castSound": {
+          "sound": {
+            "sound": {
+              "id": "ars_jimbaux:illusioner_cast_spell"
+            }
+          }
+        },
+        "flairEffect": {
+          "motion": {
+            "type": "ars_jimbaux:helix",
+            "propMap": {
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:enchant",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 1,
+                      "g": 216,
+                      "id": "ars_jimbaux:constant",
+                      "r": 255
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              },
+              "ars_jimbaux:speed": {
+                "xzMaxSpeed": 0.0,
+                "xzMinSpeed": 0.0,
+                "yMaxSpeed": 0.0,
+                "yMinSpeed": 0.0
+              }
+            }
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:enchant",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 100,
+                "radius": 1.0,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:emitter": {
+                "age": 39,
+                "rotation": {
+                  "x": 0.0,
+                  "y": 89.99999
+                }
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:enchant",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 204,
+                      "g": 101,
+                      "id": "ars_jimbaux:constant",
+                      "r": 153
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              },
+              "ars_jimbaux:speed": {
+                "xzMaxSpeed": 0.0,
+                "xzMinSpeed": 0.0,
+                "yMaxSpeed": 0.0,
+                "yMinSpeed": 0.0
+              }
+            }
+          }
+        },
+        "onResolvingEffect": {
+          "motion": {
+            "type": "ars_jimbaux:burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:sonic_boom",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 5,
+                "radius": 0.05,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:emitter": {
+                "age": 0,
+                "rotation": {
+                  "x": -35.927013,
+                  "y": -100.465324
+                }
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:sonic_boom",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 226,
+                      "g": 44,
+                      "id": "ars_jimbaux:constant",
+                      "r": 138
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "onSpawnEffect": {
+          "motion": {
+            "type": "ars_jimbaux:burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:ominous_spawning",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 10,
+                "radius": 0.05,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:emitter": {
+                "age": 0,
+                "rotation": {
+                  "x": 0.0,
+                  "y": 89.99999
+                }
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:ominous_spawning",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 255,
+                      "g": 229,
+                      "id": "ars_jimbaux:constant",
+                      "r": 1
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {
+            "sound": {
+              "id": "ars_jimbaux:enderman_teleport"
+            }
+          }
+        },
+        "trailEffect": {
+          "motion": {
+            "type": "ars_jimbaux:helix",
+            "propMap": {
+              "ars_jimbaux:model": {
+                "resource": "ars_jimbaux:empty",
+                "subPropMap": {}
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:electric_spark",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 1,
+                      "g": 140,
+                      "id": "ars_jimbaux:constant",
+                      "r": 255
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              },
+              "ars_jimbaux:speed": {
+                "xzMaxSpeed": 0.0,
+                "xzMinSpeed": 0.0,
+                "yMaxSpeed": 0.0,
+                "yMinSpeed": 0.0
+              }
+            }
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:electric_spark",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 100,
+                "radius": 0.30000001192092896,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:emitter": {
+                "age": 39,
+                "rotation": {
+                  "x": 0.0,
+                  "y": 89.99999
+                }
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:electric_spark",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 255,
+                      "g": 255,
+                      "id": "ars_jimbaux:constant",
+                      "r": 1
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              },
+              "ars_jimbaux:speed": {
+                "xzMaxSpeed": 0.0,
+                "xzMinSpeed": -0.0,
+                "yMaxSpeed": 0.0,
+                "yMinSpeed": 0.0
+              }
+            }
+          }
+        }
+      }
+    },
+    "recipe": [
+      "ars_jimbaux:glyph_projectile",
+      "ars_jimbaux:glyph_burst",
+      "ars_jimbaux:glyph_sensitive",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_aoe",
+      "ars_jimbaux:glyph_break",
+      "ars_jimbaux:glyph_extract",
+      "ars_jimbaux:glyph_pickup"
+    ],
+    "sound": {}
+  },
+  "tome_type": "ars_jimbaux:caster_tome"
+}

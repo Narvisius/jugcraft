@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:dreamglass",
+    "minecraft:ink_sac"
+  ],
+  "result": {
+    "id": "jugcraft:ward_sigil",
+    "count": 1,
+    "components": {
+      "jugcraft:ward": "scrying"
+    }
+  }
+}

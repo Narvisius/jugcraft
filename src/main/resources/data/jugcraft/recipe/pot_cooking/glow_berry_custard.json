@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:glass_bottle"
+    },
+    {
+      "ingredient": "minecraft:glow_berries",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:milk_bucket"
+    },
+    {
+      "ingredient": "minecraft:egg"
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:glow_berry_custard"
+  },
+  "time": 200
+}

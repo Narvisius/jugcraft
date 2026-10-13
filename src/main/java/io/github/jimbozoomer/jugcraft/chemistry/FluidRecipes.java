@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -20,11 +21,21 @@ import net.minecraft.world.item.crafting.RecipeType;
 /**
  * One recipe type and serializer per fluid processing machine, named by {@link MachineKind#recipeType()}, and the
  * lookups the machines use. Recipes come from data packs; the per-machine lists are rebuilt after each reload.
+ * The original one-model machines only see their {@link FluidRecipe#legacy() legacy} recipes; industrial machine
+ * forms choose from all of their family's recipes by capability (see {@link #entries}).
  */
 public final class FluidRecipes {
 	private static final Map<MachineKind, RecipeType<FluidRecipe>> TYPES = new EnumMap<>(MachineKind.class);
 	private static final Map<MachineKind, RecipeSerializer<FluidRecipe>> SERIALIZERS = new EnumMap<>(MachineKind.class);
-	private static final Map<MachineKind, List<FluidRecipe>> CACHE = new EnumMap<>(MachineKind.class);
+	private static final Map<MachineKind, Recipes> CACHE = new EnumMap<>(MachineKind.class);
+
+	/** A recipe and its id. */
+	public record Entry(Identifier id, FluidRecipe recipe) {
+	}
+
+	/** One kind's recipes: all of them, and those its original one-model machine runs. */
+	private record Recipes(List<Entry> all, List<FluidRecipe> legacy) {
+	}
 
 	private FluidRecipes() {
 	}
@@ -59,17 +70,30 @@ public final class FluidRecipes {
 		return SERIALIZERS.get(kind);
 	}
 
-	/** Every recipe of this machine, in load order. */
-	public static synchronized List<FluidRecipe> recipes(MinecraftServer server, MachineKind kind) {
+	private static synchronized Recipes cached(MinecraftServer server, MachineKind kind) {
 		return CACHE.computeIfAbsent(kind, k -> {
-			List<FluidRecipe> list = new ArrayList<>();
+			List<Entry> all = new ArrayList<>();
+			List<FluidRecipe> legacy = new ArrayList<>();
 			for (RecipeHolder<?> holder : server.getRecipeManager().getRecipes()) {
 				if (holder.value() instanceof FluidRecipe recipe && recipe.machine() == k) {
-					list.add(recipe);
+					all.add(new Entry(holder.id().identifier(), recipe));
+					if (recipe.legacy()) {
+						legacy.add(recipe);
+					}
 				}
 			}
-			return List.copyOf(list);
+			return new Recipes(List.copyOf(all), List.copyOf(legacy));
 		});
+	}
+
+	/** Every recipe of this machine kind with its id, in load order, including those only machine forms run. */
+	public static List<Entry> entries(MinecraftServer server, MachineKind kind) {
+		return cached(server, kind).all();
+	}
+
+	/** Every recipe the original one-model machine of this kind runs, in load order. */
+	public static List<FluidRecipe> recipes(MinecraftServer server, MachineKind kind) {
+		return cached(server, kind).legacy();
 	}
 
 	/** The first recipe whose items and fluids are all present. */

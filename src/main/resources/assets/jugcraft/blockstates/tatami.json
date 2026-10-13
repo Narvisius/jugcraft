@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "facing=north,paired=false": {
+      "model": "jugcraft:block/tatami"
+    },
+    "facing=south,paired=false": {
+      "model": "jugcraft:block/tatami",
+      "y": 180
+    },
+    "facing=east,paired=false": {
+      "model": "jugcraft:block/tatami",
+      "y": 90
+    },
+    "facing=west,paired=false": {
+      "model": "jugcraft:block/tatami",
+      "y": 270
+    },
+    "facing=north,paired=true": {
+      "model": "jugcraft:block/tatami_odd",
+      "y": 90
+    },
+    "facing=south,paired=true": {
+      "model": "jugcraft:block/tatami_even",
+      "y": 90
+    },
+    "facing=east,paired=true": {
+      "model": "jugcraft:block/tatami_even"
+    },
+    "facing=west,paired=true": {
+      "model": "jugcraft:block/tatami_odd"
+    }
+  }
+}

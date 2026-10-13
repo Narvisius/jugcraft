@@ -132,6 +132,11 @@ LEAVES = {
     # the fir's (mean dE 14.8 and 16.1); evergreen. Appended last, so every other look keeps its seed.
     "cedar_leaves": (pal("27301a", "343f22", "43522c", "536539", "657a46", "7d9657"), "needles"),
 }
+# Logs of their own that are no wood set (no planks), drawn as the woods are: the Cinnamon Tree's (tools/spices.py
+# CINNAMON). Each: its stripped side's colour and its bark, as in WOOD and BARK. The cinnamon's stripped side is its inner
+# bark, which is the spice, so it takes the spice's colour, not one of the owner's paintings; its bark is the smooth
+# grey-brown a cinnamon tree's is.
+LOGS = {"cinnamon": ("b8743a", (pal("3a302a", "4e433b", "62564c", "776a5e", "8c7e70"), "plated"))}
 # Bare deciduous leaves (twigs in the bark's colour), and the chestnut's fruit.
 BARE = {"larch_needles_bare": "larch", "maple_leaves_bare": "maple", "aspen_leaves_bare": "aspen",
         "willow_leaves_bare": "willow"}
@@ -142,7 +147,11 @@ NUT = pal("3e2416", "5a3420", "76462a")
 
 
 def wood_ramp(wood):
-    return ramp(rgb(WOOD[wood][1]))
+    return ramp(rgb(WOOD[wood][1] if wood in WOOD else LOGS[wood][0]))
+
+
+def bark_of(wood):
+    return BARK[wood] if wood in BARK else LOGS[wood][1]
 
 
 # ---------------------------------------------------------------- bark
@@ -150,7 +159,7 @@ def wood_ramp(wood):
 
 def bark(wood, seed):
     """A log's side: vertical furrows in the bark's darkest tones, ridges between, tiling top to bottom."""
-    p, kind = BARK[wood]
+    p, kind = bark_of(wood)
     rng = random.Random(seed)
     c = Canvas()
     # Ridges: each column a tone, in runs of two or three, so the bark reads as raised strips.
@@ -230,7 +239,7 @@ def rings(wood, seed, rim):
 
 
 def log_top(wood, seed):
-    bark_p = BARK[wood][0]
+    bark_p = bark_of(wood)[0]
     return rings(wood, seed, lambda x, y: bark_p[1] if (x + y) % 3 else bark_p[0])
 
 
@@ -306,6 +315,12 @@ def planks(wood, seed):
 def leaves(name, seed):
     """Vanilla's speckle: one- and two-pixel leaves in four tones, light on top of each clump, with gaps."""
     p, kind = LEAVES[name]
+    return paint_leaves(p, kind, seed)
+
+
+def paint_leaves(p, kind, seed):
+    """Leaves of six tones `p` (dark to light) in the manner `kind` ("leaves", "needles", "blossom" or "fronds"), as
+    leaves() paints each tree's; the orchards' fruit trees (tools/orchard_textures.py) are painted with it too."""
     rng = random.Random(seed)
     c = Canvas()
     for y in range(16):
@@ -411,6 +426,11 @@ def wood_textures():
         out[("block", f"stripped_{wood}_log")] = stripped_side(wood, 740 + index)
         out[("block", f"stripped_{wood}_log_top")] = stripped_top(wood, 760 + index)
         out[("block", f"{wood}_planks")] = planks(wood, 780 + index)
+    for index, wood in enumerate(LOGS):
+        out[("block", f"{wood}_log")] = bark(wood, 860 + index)
+        out[("block", f"{wood}_log_top")] = log_top(wood, 870 + index)
+        out[("block", f"stripped_{wood}_log")] = stripped_side(wood, 880 + index)
+        out[("block", f"stripped_{wood}_log_top")] = stripped_top(wood, 890 + index)
     for index, name in enumerate(LEAVES):
         out[("block", name)] = leaves(name, 800 + index)
     for index, name in enumerate(BARE):

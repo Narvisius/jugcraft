@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/cutting_board",
+    "board": "jugcraft:block/cutting_board"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        0.5
+      ],
+      "to": [
+        15,
+        1,
+        15.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#board",
+          "uv": [
+            1,
+            1,
+            15,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#board",
+          "uv": [
+            1,
+            1,
+            15,
+            16
+          ],
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#board",
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#board",
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#board",
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#board",
+          "uv": [
+            1,
+            15,
+            15,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

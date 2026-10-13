@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:invocations/flashstep",
+  "category": "jugcraft:invocations",
+  "x": 4,
+  "y": 2,
+  "name": "book.jugcraft.arcane_concordance.invocations.flashstep.name",
+  "description": "book.jugcraft.arcane_concordance.invocations.flashstep.description",
+  "icon": "minecraft:feather",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_gold",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/first_light_mastered",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.mastered"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.invocations.flashstep.p0.title",
+      "text": "book.jugcraft.arcane_concordance.invocations.flashstep.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.invocations.flashstep.p1.title",
+      "text": "book.jugcraft.arcane_concordance.invocations.flashstep.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

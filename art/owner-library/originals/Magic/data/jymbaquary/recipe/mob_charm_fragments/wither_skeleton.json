@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:withered_rib",
+    "S": "minecraft:bone",
+    "T": "minecraft:wither_skeleton_skull"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:wither_skeleton"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

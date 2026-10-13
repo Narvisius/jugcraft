@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:cooked_chicken",
+    "minecraft:baked_potato",
+    "minecraft:carrot",
+    "jugcraft:onion",
+    "minecraft:bread"
+  ],
+  "result": {
+    "id": "jugcraft:roast_chicken",
+    "count": 1
+  }
+}

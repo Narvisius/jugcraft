@@ -1,0 +1,66 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:garden/organisms",
+  "category": "jugcraft:garden",
+  "x": 4,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.garden.organisms.name",
+  "description": "book.jugcraft.arcane_concordance.garden.organisms.description",
+  "icon": "jugcraft:gloamcap",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/verdant_husbandry_observed",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.verdant_husbandry.observed"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.garden.organisms.p0.title",
+      "text": "book.jugcraft.arcane_concordance.garden.organisms.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.garden.organisms.p1.title",
+      "text": "book.jugcraft.arcane_concordance.garden.organisms.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p2",
+      "title1": "book.jugcraft.arcane_concordance.garden.organisms.p2.title",
+      "recipe_id_1": "jugcraft:sunpetal",
+      "text": "book.jugcraft.arcane_concordance.garden.organisms.p2.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p3",
+      "title1": "book.jugcraft.arcane_concordance.garden.organisms.p3.title",
+      "recipe_id_1": "jugcraft:dewmoss",
+      "text": "book.jugcraft.arcane_concordance.garden.organisms.p3.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p4",
+      "title1": "book.jugcraft.arcane_concordance.garden.organisms.p4.title",
+      "recipe_id_1": "jugcraft:gloamcap",
+      "text": "book.jugcraft.arcane_concordance.garden.organisms.p4.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p5",
+      "title1": "book.jugcraft.arcane_concordance.garden.organisms.p5.title",
+      "recipe_id_1": "jugcraft:mendvetch",
+      "text": "book.jugcraft.arcane_concordance.garden.organisms.p5.text"
+    }
+  ]
+}

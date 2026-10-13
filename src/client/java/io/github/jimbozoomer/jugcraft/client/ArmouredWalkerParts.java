@@ -31,10 +31,10 @@ final class ArmouredWalkerParts {
 	}
 
 	/** Draws the walker facing +z in the current pose, with {@code prefix} naming its parts' paint. */
-	static void draw(String prefix, PoseStack pose, SubmitNodeCollector collector, int light, float stride, float ram) {
+	static void draw(String prefix, PoseStack pose, SubmitNodeCollector collector, int light, float stride, float strideWeight, float ram) {
 		draw(prefix + "_hull", pose, collector, light);
 		draw(prefix + "_lamps", pose, collector, FULL_BRIGHT);
-		float swing = Mth.sin(stride * STRIDE_RATE) * LEG_SWING;
+		float swing = Mth.sin(stride * STRIDE_RATE) * LEG_SWING * strideWeight;
 		for (int i = 0; i < HIPS.length; i++) {
 			pose.pushPose();
 			at(pose, HIPS[i]);

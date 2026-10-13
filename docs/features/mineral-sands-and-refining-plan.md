@@ -1,6 +1,6 @@
 # Mineral sands and shared chemical refining
 
-Status: owner-endorsed planning direction, recorded 6 October 2026. This document records choices for planning steps 4 and 5. Proposed deposit profiles, machine names, recipe stages and consumer examples are designs to develop, not claims of implemented gameplay. Quantities, worldgen frequency, capacities, energy costs and individual recipe behavior are not finalized.
+Status: owner-endorsed planning direction, recorded 6 October and updated 10 October 2026. This document records choices for planning steps 4 and 5 and the linked tenth and thirteenth chemistry batches. Proposed deposit profiles, machine names, recipe stages and consumer examples are designs to develop, not claims of implemented gameplay. Quantities, worldgen frequency, capacities, energy costs and individual recipe behavior are not finalized.
 
 Primary specialties: regional mining, mineral processing, ceramics, chemical refining and precision materials.
 Related documentation: [chemistry](../branches/CHEMISTRY.md), [machine roadmap](../MACHINE_ROADMAP.md), [current technology](../TECH_TREE.md), [resource deposits](resource-deposits.md), [industrial chemistry](industrial-chemistry.md).
@@ -78,19 +78,33 @@ A line uses the operations it actually needs. Small batches stay practical. Larg
 
 Connections to earlier industries include ceramic linings/insulators, suitable agricultural filter cloth and seals, basic metal vessels and later compatible materials. Essential components need a reachable hand/solo/trade route. These connections must not require every farmer or engineer to complete every specialty.
 
+The [twelfth chemistry batch](industrial-chemistry-and-fuels-plan.md#grid-storage-synthetic-fuels-and-cryogenics-decisions-twelfth-batch) selects mineral-derived vanadium electrolyte alongside refinery residue and independent cobalt stock for reusable synthetic-fuel tooling. The [thirteenth batch](industrial-chemistry-and-fuels-plan.md#resource-reagent-and-residue-decisions-thirteenth-batch) now selects galena lead, spodumene-bearing rock first with natural lithium brines later, **separate primary cobalt ore**, regional chromite concentrate and specifically vanadium-bearing iron concentrates. Cobalt mineral identity and new source regions/refining receipts remain open. Preserve current feeds and independently reachable earlier vanadium preparation for the first acid catalyst; ordinary iron does not universally yield vanadium.
+
+The thirteenth batch also selects an optional **gypsum-rich phosphate-refining residue -> paid game purification/preparation -> suitable plaster/board ingredients** branch on compatible shared construction equipment. Define reagent/energy/yield/loss receipts and useful finished products before implementation. Raw residue is not the finished ingredient; this fictional route is distinct from stabilized coal-cleaning and bauxite filler stocks.
+
 ## Initial refining lines and finished products
 
 ### Alumina and aluminum
 
 Candidate route: bauxite preparation, alkaline digestion, clarification/filtration, recovery of a precipitate and calcination into alumina. Alumina then branches into appropriate ceramic products or aluminum electrolysis.
 
+The [7 October material planning follow-up](industrial-chemistry-and-fuels-plan.md#material-production-decisions-third-batch) selects aluminum's broad first product range: electrical parts, structural stock, building panels and vehicle components. Initial refining stations are compact functional installations, with optional larger bulk plants. Exact recipes/capacities remain to design; oxide/ceramic and metal consumers keep independently useful roles.
+
 This gives the refinery a useful oxide output as well as a metal consumer. Preserve existing alumina/aluminum identities and keep prior reachable recipes until their replacement route works. The inspected electrolytic-cell recipe uses aluminum cable while producing aluminum. In the [7 October chemistry planning follow-up](industrial-chemistry-and-fuels-plan.md#machinery-and-operation-decisions-second-batch), the owner selected **earlier copper conductors for entry aluminum-processing equipment**, with aluminum improvements later. Exact construction recipes remain to design; verify this bootstrap before the current starting route is removed.
+
+The [tenth chemistry batch](industrial-chemistry-and-fuels-plan.md#magnesium-aluminum-and-titanium-processing-decisions-tenth-batch) selects powered recovery/reuse of most digestion lye with makeup losses, consumed coke/carbon for electrolysis and optional CO2 capture. Stabilize the distinct bauxite residue into modest road/filler stock through shared construction equipment. Exact binder, yields, quantities and energy remain pending; this is not raw residue placement or routine electrode replacement.
+
+### Magnesium feed and recovery
+
+The owner selects **seawater pumped from beach or ocean biomes -> concentration -> magnesium-bearing brine -> magnesium hydroxide -> HCl-based preparation/conditioning -> dry prepared MgCl2 item -> internally heated molten-salt electrolysis -> magnesium/chlorine**. Beach and ocean are both eligible source categories. Exact source tags, intake validation, pumping/preparation quantities, reagent/water receipts, drying and losses remain to specify. A freshwater intake does not become mineral feed because the machine stands near a beach. This pumped route does not require stripping shorelines or introduce finite ocean depletion through the mineral-sand deposit rules.
+
+Use earlier materials/ceramics for the first equipment and magnesium batch. Returning titanium-reduction salts can supplement that supply from the first titanium installation, with paid recovery and makeup losses; it cannot bootstrap the initial magnesium. Dry item feed melts inside the cell, without a separately transported molten-chloride requirement or player pressure management.
 
 ### Titanium materials
 
-Separated titanium-bearing minerals can branch into pigment products or a metal-refining route. A candidate metal route is chlorination, purification, reduction into titanium sponge and appropriate melting.
+Separated titanium-bearing minerals can branch into pigment products or a metal-refining route. The owner selected **mineral treatment -> crude titanium chloride -> purification -> magnesium reduction -> titanium sponge -> melting**, using compatible shared equipment. The tenth batch selects shared chemical distillation for chloride purification and paid automatic sponge cleanup inside the reduction equipment, returning salts separately before melting. Exact quantities, conditioning and construction remain to design. Destinations include advanced process/precision equipment, vehicle components and a stronger titanium tool/armor tier above steel.
 
-The current titanium recipe compresses chemical recovery into one conversion. If the expanded route uses magnesium reduction, magnesium must have an independently obtainable feedstock and equipment built before titanium. A recovery loop can later return some magnesium/chlorine from spent salts, with explicit energy and losses; it cannot be the source of the very first batch of magnesium.
+The current titanium recipe compresses chemical recovery into one conversion. The selected magnesium reduction needs an independently obtainable feedstock and equipment built before titanium. The owner selects recovery of magnesium/chlorine from spent MgCl2 salts from the first titanium installation, with explicit energy, conditioning and losses; it cannot supply the very first magnesium batch.
 
 Maintain existing titanium/sponge consumers and define the purpose of any introduced intermediate. The retort, purifier and melting equipment cannot require their own titanium output to be constructed. Exact chemistry simplifications and coexistence with current recipes need a focused implementation design.
 
@@ -109,6 +123,10 @@ Form, purity, grade and actual recipes remain to be designed. Not every named ma
 ### Direct mineral uses
 
 Zircon and garnet retain suitable direct preparation routes for ceramic materials and abrasives. New advanced zirconium or other metal products should be introduced with real consumers, rather than adding every possible element simply because a mineral contains it.
+
+The later material batches select powder preparation -> shaping blanks -> firing -> shared grinding/polishing where needed, with clay foundation, porcelain-style insulators and alumina components, then specialist zirconia. Shared finishing also serves metal and optical consumers. Compact refining entry does not erase the substantial first digester or clay-based first steel casting. The selected initial alloys are chromium/nickel stainless steel and aluminum-magnesium structural alloy; titanium alloys come later and exact compositions remain to design. Regional chromium-bearing ore deposits now feed named chromite concentrate and shared refining; regions, producer recipes and stock forms remain open. The selected beach/ocean seawater and dry-chloride route supplies titanium reduction and aluminum alloying. Whole-ingot batches are selected for both first alloys; numerical ratios and certified grades remain unselected. Exact source validation, preparation receipts and compatible early hardware remain to design. This metal expansion follows the selected first gas/acid factory. Larger chemical/refining machines gain throughput and lower energy per unit, with useful upgraded small stations.
+
+The [expanded chemical catalog](industrial-chemical-catalog-and-routes.md#fluorite-hydrofluoric-acid-and-phosphate-wet-processing) requests fluorite/concentrated-sulfuric HF production and phosphate-rock wet/hydrometallurgical processing into phosphoric acid. The owner selects substantial underground fluorite deposits in snow biomes with occasional surface outcrops; exact eligible biome IDs/tags, abundance/depth, extraction and outcrop placement remain to design. This is a game resource-distribution choice and implements no worldgen or changes to generated chunks. Shared dissolution/filtration/recovery and reagent purification use specific recipes, independently obtainable feeds and explicit residues; water conditioning is accounted within recipes. Named nitrogen/phosphate fertilizers use broad crop groups and optional mixed-farm blends. PTFE parts enter advanced-machine construction recipes rather than lining retrofits. The catalog links these minerals to advanced wafers, fertilizers and later LiPF6 storage; ordinary sands do not all become fluorite/phosphate sources.
 
 ## Rare-earth expansion is a planned follow-up
 

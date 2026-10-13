@@ -1,0 +1,84 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.gleaner.idle": {
+      "loop": true,
+      "animation_length": 4.0,
+      "bones": {
+        "arm": {
+          "rotation": {
+            "0.0": [
+              0,
+              -10,
+              0
+            ],
+            "2.0": [
+              0,
+              10,
+              0
+            ],
+            "4.0": [
+              0,
+              -10,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "animation.gleaner.reaching": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "arm": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.5": [
+              20,
+              120,
+              0
+            ],
+            "1.0": [
+              20,
+              240,
+              0
+            ],
+            "1.5": [
+              10,
+              330,
+              0
+            ],
+            "2.0": [
+              0,
+              360,
+              0
+            ]
+          }
+        },
+        "hand": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "1.0": [
+              -30,
+              0,
+              0
+            ],
+            "2.0": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

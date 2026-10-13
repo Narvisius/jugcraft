@@ -30,19 +30,26 @@ import org.jspecify.annotations.Nullable;
  * {@value #TURNS} turns the skein is {@value Knitting#YARN_PER_WOOL} balls of yarn in the wool's colour, set out in front of
  * the wheel (where a hopper can take them). Knitwear used on it is unravelled into a ball of yarn a row, less one
  * ({@value #UNRAVEL_LOSS}) for the yarn too worn to use again. Clients get the skein's colour and when the wheel last turned,
- * so it is drawn spinning ({@link #spin}).
+ * so it is drawn spinning ({@link #spin}). While a Cursed Spindle's gate to the Spindle Loft is open here (lair/SpindleRite)
+ * the wheel spins wild, {@value #WILD_SPEED} times as fast with nobody at the treadle; that is told to clients but never
+ * saved, as a restart shuts the gate.
  */
 public class SpinningWheelBlockEntity extends BlockEntity {
 	public static final int TURNS = 4;
 	/** How long (ticks) the wheel runs on after a turn of the treadle. */
 	public static final int SPIN_TICKS = 20;
 	public static final int UNRAVEL_LOSS = 1;
+	/** How many times faster than the treadle drives it the wheel spins while it is a gate. */
+	public static final float WILD_SPEED = 3.0F;
 
 	private @Nullable DyeColor wool;
 	private int turns;
 	/** Ticks the wheel had spun before its latest turn, and the game time of that turn (for drawing it). */
 	private long spun;
 	private long turnedAt = Long.MIN_VALUE / 2;
+	/** The game times the wheel began to spin wild and stops (never saved). */
+	private long wildFrom = Long.MIN_VALUE / 2;
+	private long wildUntil = Long.MIN_VALUE / 2;
 
 	public SpinningWheelBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftAgriculture.SPINNING_WHEEL_ENTITY, pos, state);
@@ -73,7 +80,37 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	/** How far round the wheel is at {@code time} (ticks of spinning, fractional), for drawing it. */
 	public float spin(long time, float partialTick) {
 		float since = Math.min(SPIN_TICKS, Math.max(0.0F, time - turnedAt + partialTick));
-		return spun + since;
+		return spun + since + wildSpin(time, partialTick);
+	}
+
+	/** The ticks of spinning the wheel's wild spell has added by {@code time}. */
+	private float wildSpin(long time, float partialTick) {
+		long end = Math.min(time, wildUntil);
+		if (end < wildFrom) {
+			return 0.0F;
+		}
+		return ((end - wildFrom) + (time < wildUntil ? partialTick : 0.0F)) * WILD_SPEED;
+	}
+
+	/** Whether the wheel is spinning wild at {@code time}. */
+	public boolean isWild(long time) {
+		return time >= wildFrom && time < wildUntil;
+	}
+
+	/** Sets the wheel spinning wild from {@code now} for {@code ticks} (a Cursed Spindle's gate is open here). */
+	public void spinWild(long now, int ticks) {
+		spun += (long) wildSpin(now, 0.0F);
+		wildFrom = now;
+		wildUntil = now + ticks;
+		changed();
+	}
+
+	/** The gate here has shut early: the wheel stops spinning wild. */
+	public void calm() {
+		if (level != null && isWild(level.getGameTime())) {
+			wildUntil = level.getGameTime();
+			changed();
+		}
 	}
 
 	/**
@@ -154,6 +191,9 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 		turns = Math.clamp(input.getIntOr("turns", 0), 0, TURNS - 1);
 		spun = input.getLongOr("spun", 0L);
 		turnedAt = input.getLongOr("turned_at", Long.MIN_VALUE / 2);
+		// Only in the update clients are sent: a saved wheel is never wild.
+		wildFrom = input.getLongOr("wild_from", Long.MIN_VALUE / 2);
+		wildUntil = input.getLongOr("wild_until", Long.MIN_VALUE / 2);
 	}
 
 	@Override
@@ -172,6 +212,9 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		return saveCustomOnly(registries);
+		CompoundTag tag = saveCustomOnly(registries);
+		tag.putLong("wild_from", wildFrom);
+		tag.putLong("wild_until", wildUntil);
+		return tag;
 	}
 }

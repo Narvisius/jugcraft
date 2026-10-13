@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    },
+    {
+      "ingredient": "minecraft:potato"
+    },
+    {
+      "ingredient": "jugcraft:parsley"
+    },
+    {
+      "ingredient": "jugcraft:chives"
+    },
+    {
+      "ingredient": "jugcraft:dill"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:garden_herb_soup"
+  },
+  "time": 200
+}

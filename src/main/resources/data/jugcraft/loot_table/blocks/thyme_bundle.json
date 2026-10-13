@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "jugcraft:blocks/thyme_bundle",
+  "pools": [
+    {
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:dried_herbs",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:thyme_bundle",
+                "state": {
+                  "dried": "true"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 4,
+                "add": false
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:thyme_bundle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

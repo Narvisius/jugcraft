@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:root",
+  "criteria": {
+    "has_imbuement_chamber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:imbuement_chamber"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.imbuement_chamber"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:imbuement_chamber"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.imbuement_chamber"
+    }
+  },
+  "requirements": [
+    [
+      "has_imbuement_chamber"
+    ]
+  ]
+}

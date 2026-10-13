@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "BLP",
+    " P "
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "B": "#c:ingots/brass",
+    "L": "minecraft:lever",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:ranger_rifle"
+  }
+}

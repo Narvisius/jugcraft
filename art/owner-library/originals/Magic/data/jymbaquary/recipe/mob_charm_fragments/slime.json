@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:slime_pearl",
+    "S": "#c:slime_balls"
+  },
+  "pattern": [
+    "PPP",
+    "SSS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:slime"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

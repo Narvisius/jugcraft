@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_hearthbinding_understood",
+  "display": {
+    "icon": {
+      "id": "minecraft:blaze_powder"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_hearthbinding_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_hearthbinding_mastered.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -117,6 +117,7 @@ public class CanningKettleBlock extends BaseEntityBlock {
 		if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof CanningKettleBlockEntity kettle)) {
 			return InteractionResult.SUCCESS;
 		}
+		kettle.collectReturnedBucket(player);
 		List<ItemStack> out = player.isSecondaryUseActive() ? kettle.takeAll() : kettle.takeSealed();
 		if (out.isEmpty()) {
 			if (!kettle.water()) {

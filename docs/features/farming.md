@@ -47,7 +47,7 @@ King Cotton (cotton), Make It Rain (sprinkler) and Reaping What You Sow (crop ha
 
 ## Connections
 - Existing input producer: vanilla crops on farmland; fertilizer (batch 5) ripens them faster.
-- Existing output consumer: food and seeds for players, the auto-crafter, and anything that takes wheat; cotton makes string (and so wool, bows, leads and the leather belt's string).
+- Existing output consumer: food and seeds for players, the auto-crafter, and anything that takes wheat; cotton makes string (and so wool, bows, leads and the drive belt's string).
 - Technology connection: power, item logistics.
 - Magic connection: none.
 - Reachable entry path: steel tier; no circular unlock.

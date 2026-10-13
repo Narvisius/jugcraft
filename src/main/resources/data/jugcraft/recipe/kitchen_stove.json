@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "BCB",
+    "BBB"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "B": "minecraft:brick",
+    "C": "minecraft:campfire"
+  },
+  "result": {
+    "id": "jugcraft:kitchen_stove",
+    "count": 1
+  }
+}

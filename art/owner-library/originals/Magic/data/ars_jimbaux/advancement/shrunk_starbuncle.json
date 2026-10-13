@@ -1,0 +1,27 @@
+{
+  "parent": "ars_jimbaux:mob_jar",
+  "criteria": {
+    "shrunk_starbuncle": {
+      "trigger": "ars_jimbaux:shrunk_starby"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.shrunk_starbuncle"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:starbuncle_charm"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.shrunk_starbuncle"
+    }
+  },
+  "requirements": [
+    [
+      "shrunk_starbuncle"
+    ]
+  ]
+}

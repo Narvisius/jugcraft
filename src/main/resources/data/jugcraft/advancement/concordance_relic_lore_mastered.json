@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_relic_lore_understood",
+  "display": {
+    "icon": {
+      "id": "jugcraft:reliquary_shrine"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_relic_lore_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_relic_lore_mastered.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

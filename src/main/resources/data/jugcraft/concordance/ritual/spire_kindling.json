@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "structure": "jugcraft:lesser_circle",
+  "research": "jugcraft:circle_lore",
+  "stage": "understood",
+  "participants": 1,
+  "focus": 8,
+  "steps": 6,
+  "ley": 2,
+  "offerings": [
+    {
+      "item": "minecraft:glowstone_dust",
+      "count": 8
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 2
+    },
+    {
+      "item": "minecraft:ender_pearl",
+      "count": 1
+    }
+  ],
+  "result": {
+    "effects": [
+      {
+        "target": "participants",
+        "operation": {
+          "effect": "protection",
+          "intent": "helpful",
+          "principle": "radiance",
+          "magnitude": 8,
+          "duration": 2400
+        }
+      }
+    ]
+  },
+  "backlash": 4
+}

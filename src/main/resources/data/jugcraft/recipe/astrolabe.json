@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " G ",
+    "GCG",
+    " A "
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:compass",
+    "A": "minecraft:amethyst_shard"
+  },
+  "result": {
+    "id": "jugcraft:astrolabe",
+    "count": 1
+  }
+}

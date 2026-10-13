@@ -1,0 +1,143 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/stuffed_pumpkin_side",
+    "side": "jugcraft:block/stuffed_pumpkin_side",
+    "top": "jugcraft:block/stuffed_pumpkin_top",
+    "top_eaten": "jugcraft:block/stuffed_pumpkin_top_eaten",
+    "bottom": "jugcraft:block/stuffed_pumpkin_bottom",
+    "details": "jugcraft:block/stuffed_pumpkin_details"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            2,
+            8,
+            14,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            2,
+            8,
+            14,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            2,
+            8,
+            14,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            2,
+            8,
+            14,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#top_eaten",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#bottom",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        8,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#details",
+          "uv": [
+            0,
+            6,
+            8,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#details",
+          "uv": [
+            0,
+            6,
+            8,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#details",
+          "uv": [
+            0,
+            6,
+            8,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#details",
+          "uv": [
+            0,
+            6,
+            8,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#details",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#details"
+        }
+      }
+    }
+  ]
+}

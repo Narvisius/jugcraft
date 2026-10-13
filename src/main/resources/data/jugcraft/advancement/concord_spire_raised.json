@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concord_spire_founded",
+  "display": {
+    "icon": {
+      "id": "minecraft:beacon"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concord_spire_raised.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concord_spire_raised.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

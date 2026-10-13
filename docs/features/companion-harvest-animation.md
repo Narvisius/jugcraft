@@ -1,0 +1,17 @@
+# Companion hoe harvesting animation
+
+Owner-requested animation, implemented with OpenAI Codex (GPT-6) on `peepo-companion`, 8 October 2026.
+
+An equipped hoe now gets a dedicated two-handed crop-gathering clip. The companion lifts the actual held item above its head, leans back during the wind-up, then drives it down toward the selected soil with a forward torso bend, hip dip and braced legs. Both hands follow the tool handle. The item uses its existing model and components at 65% of native size, independently of the companion's short arm bones. Peepo, Jughead and the pumpkin costume share the pose. Planting and working without a hoe keep the ordinary interaction clip.
+
+Garden animation targets name the active soil cell, not the plot anchor. A small shared job hook defaults other workstations to their existing station position. Hoe harvesters prefer a clear position beside the crop and finish the last fraction of their approach before starting the swing. Crop changes, inventory, permission checks, energy and durability remain server-owned and retain the 40-tick hoe work cycle. Only action/target/start timing are synchronized; pose interpolation and tool rendering run on clients, with no additional per-tick animation packet or world scan. The action ID is appended to preserve existing wire IDs.
+
+This extends the existing procedural companion rig and item render layers rather than introducing another animation owner. The approved framework guide permits retaining simple existing renderers. The owner library and full catalog were searched for hoe/harvest/swing material; no supplied clip matched this companion rig. No source-library files or new textures are used: the equipped item's existing model renders directly.
+
+## Validation
+
+On 9 October 2026, OpenAI Codex (GPT-6) corrected the hoe's reversed facing at the owner's request. The hoe now has its own item transform: its working end is turned 180 degrees around the handle relative to the knife, and its size is reduced to 65%. Grip spacing and contact reach use the same scale, preserving the forward/downward soil strike. Knife size and orientation are unchanged. The owner asset catalog was inspected again; this revision continues to use the equipped item's existing model without new assets or server work. Common/client compilation and assembly succeeded, and the local pack was rebuilt. The existing hoe check was updated for the new transform and size but not executed. No tests were run for this revision, per the owner; the earlier test evidence below describes the original full-size clip. The corrected appearance still needs in-game review.
+
+`PeepoHarvestClientTests` passed 103 assertions, covering hand-to-tool attachment and native size across both variants/costumes, ground contact, body and leg movement, real crop gathering on a non-anchor plot cell, client item synchronization, actual crop output and single durability use. Assembly and repository/link checks passed. Log: `build/companion-harvest-final.log`.
+
+Wind-up and contact screenshots for Peepo, Jughead and pumpkin Peepo were captured in a disposable flat world and visually inspected from the side. Evidence is preserved in `build/companion-harvest-evidence/`. The final run used Minecraft 26.3, Fabric Loader 0.19.5 and the pinned pack on 8 October 2026. No broad unrelated-mod tests, dedicated-server/two-client test or server-load benchmark were run. No player world was changed.

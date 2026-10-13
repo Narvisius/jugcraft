@@ -252,7 +252,8 @@ public class AgricultureGameTests {
 				"onion", "garlic", "cabbage_seeds", "oat_seeds", "barley_seeds", "butternut_squash_seeds", "acorn_squash_seeds",
 				"warty_gourd_seeds", "turnip", "cranberries", "chestnut", "giant_pumpkin_seeds", "white_pumpkin_seeds", "jarrahdale_pumpkin_seeds",
 				"cinderella_pumpkin_seeds", "red_kuri_pumpkin_seeds", "kabocha_pumpkin_seeds", "bottle_gourd_seeds", "ornamental_corn_kernels",
-				"mandrake_root"};
+				"mandrake_root", "rice", "strawberry_seeds", "blueberry_seeds", "coffee_seeds", "lettuce_seeds", "spinach_seeds", "radish",
+				"peas", "cucumber_seeds", "eggplant_seeds", "zucchini_seeds"};
 		int[] found = new int[seeds.length];
 		int breaks = 4000;
 		int total = 0;

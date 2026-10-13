@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:conclave_oath",
+  "display": {
+    "icon": {
+      "id": "minecraft:paper"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.conclave_rank_fellow.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.conclave_rank_fellow.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

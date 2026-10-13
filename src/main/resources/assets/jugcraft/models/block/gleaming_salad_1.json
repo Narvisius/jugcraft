@@ -1,0 +1,148 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/gleaming_salad",
+    "bowl": "jugcraft:block/salad_bowl",
+    "top": "jugcraft:block/gleaming_salad",
+    "leftovers": "jugcraft:block/gleaming_salad_leftovers",
+    "details": "jugcraft:block/gleaming_salad_details"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        1,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bowl",
+          "uv": [
+            3,
+            14,
+            13,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#bowl",
+          "uv": [
+            3,
+            14,
+            13,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#bowl",
+          "uv": [
+            3,
+            14,
+            13,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#bowl",
+          "uv": [
+            3,
+            14,
+            13,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#bowl",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        },
+        "down": {
+          "texture": "#bowl",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        1,
+        2
+      ],
+      "to": [
+        14,
+        5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bowl",
+          "uv": [
+            2,
+            10,
+            14,
+            14
+          ]
+        },
+        "south": {
+          "texture": "#bowl",
+          "uv": [
+            2,
+            10,
+            14,
+            14
+          ]
+        },
+        "east": {
+          "texture": "#bowl",
+          "uv": [
+            2,
+            10,
+            14,
+            14
+          ]
+        },
+        "west": {
+          "texture": "#bowl",
+          "uv": [
+            2,
+            10,
+            14,
+            14
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#bowl",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ]
+        }
+      }
+    }
+  ]
+}

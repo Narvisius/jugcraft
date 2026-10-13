@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tin"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PBP",
+    "CMC",
+    "PBP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "B": "#c:ingots/bronze",
+    "C": "jugcraft:copper_cable",
+    "M": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "peepo_companion:generator_wheel",
+    "count": 1
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_runesmithing_understood",
+  "display": {
+    "icon": {
+      "id": "jugcraft:artificer_bench"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_runesmithing_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_runesmithing_mastered.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+  "textures": {
+      "layer0": "jymbelics:item/aqua_walker"
+  },
+  "overrides": [
+      { "predicate": { "jymbelics:drench": 0 }, "model": "jymbelics:item/aqua_walker_0" },
+      { "predicate": { "jymbelics:drench": 1 }, "model": "jymbelics:item/aqua_walker_1" }
+  ]
+}

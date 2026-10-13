@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_celestial_attunement_understood",
+  "display": {
+    "icon": {
+      "id": "jugcraft:astrolabe"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_celestial_attunement_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_celestial_attunement_mastered.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

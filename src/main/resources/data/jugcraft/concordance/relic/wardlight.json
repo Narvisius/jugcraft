@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "item": "jugcraft:wardlight",
+  "capacity": 64,
+  "owned": false,
+  "modes": [
+    {
+      "id": "reveal",
+      "contexts": [
+        "off_hand"
+      ],
+      "target": "hostiles",
+      "status": "minecraft:glowing",
+      "amplifier": 0,
+      "duration": 60,
+      "range": 12,
+      "interval": 40,
+      "cost": 1,
+      "needs": {
+        "sky": false,
+        "night": false,
+        "calm": false,
+        "wounded": false,
+        "dimensions": []
+      }
+    },
+    {
+      "id": "watch",
+      "contexts": [
+        "installed"
+      ],
+      "target": "hostiles",
+      "status": "minecraft:glowing",
+      "amplifier": 0,
+      "duration": 60,
+      "range": 24,
+      "interval": 40,
+      "cost": 1,
+      "needs": {
+        "sky": false,
+        "night": false,
+        "calm": false,
+        "wounded": false,
+        "dimensions": []
+      }
+    }
+  ]
+}

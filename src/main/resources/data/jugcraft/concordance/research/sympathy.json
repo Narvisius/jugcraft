@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "tether",
+  "tradition": "hexweavers",
+  "stage": "practitioner",
+  "icon": "jugcraft:taglock",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:sympathy_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:sympathy_specimens",
+          "distinct": 2
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:sympathy_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:sympathy",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

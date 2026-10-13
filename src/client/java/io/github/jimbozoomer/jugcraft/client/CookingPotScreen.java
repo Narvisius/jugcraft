@@ -53,7 +53,7 @@ public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> {
 			slotFrame(graphics, x + CookingPotMenu.RESULT_X + (index % 2) * 18, y + CookingPotMenu.RESULT_Y + (index / 2) * 18);
 		}
 		graphics.fill(x + ARROW_X, y + ARROW_Y, x + ARROW_X + ARROW_WIDTH, y + ARROW_Y + 4, DARK);
-		graphics.fill(x + ARROW_X, y + ARROW_Y, x + ARROW_X + menu.progress(ARROW_WIDTH), y + ARROW_Y + 4, PROGRESS);
+		graphics.fill(x + ARROW_X, y + ARROW_Y, x + ARROW_X + menu.progress(ARROW_WIDTH), y + ARROW_Y + 4, menu.assisted()?0xFF4C9B48:PROGRESS);
 		// A small flame under the arrow: bright with heat below the pot, grey without.
 		int color = menu.heated() ? FLAME : COLD;
 		int fx = x + ARROW_X + ARROW_WIDTH / 2;
@@ -66,7 +66,10 @@ public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> {
 	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractLabels(graphics, mouseX, mouseY);
-		if (!menu.heated()) {
+		if(menu.assisted()) {
+			String hint="+50% speed";
+			graphics.text(font,hint,imageWidth-8-font.width(hint),72,0xFF276C27);
+		} else if (!menu.heated()) {
 			String hint = Component.translatable("container.jugcraft.cooking_pot.cold").getString();
 			graphics.text(font, hint, imageWidth - 8 - font.width(hint), 72, TEXT);
 		}

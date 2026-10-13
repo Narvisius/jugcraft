@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_dreamwalking_understood",
+  "display": {
+    "icon": {
+      "id": "jugcraft:dreamglass"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_dreamwalking_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_dreamwalking_mastered.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

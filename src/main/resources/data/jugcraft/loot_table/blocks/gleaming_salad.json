@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:gleaming_salad"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:gleaming_salad",
+            "state": {
+              "servings": "4"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/gleaming_salad"
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:conclave_oath",
+  "display": {
+    "icon": {
+      "id": "minecraft:book"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.conclave_project_starward_chart.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.conclave_project_starward_chart.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

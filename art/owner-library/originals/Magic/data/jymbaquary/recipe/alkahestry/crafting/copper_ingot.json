@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/copper"
+      }
+    },
+    {
+      "type": "jymbaquary:alkahestry_enabled"
+    }
+  ],
+  "type": "jymbaquary:alkahestry_crafting",
+  "charge": 8,
+  "ingredient": "#c:ingots/copper",
+  "result_count": 5
+}

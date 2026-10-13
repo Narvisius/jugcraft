@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "tradition": "starwatchers",
+  "renown": 30,
+  "reward": "minecraft:diamond",
+  "reward_count": 2,
+  "stages": [
+    {
+      "id": "lenses",
+      "renown": 8,
+      "contributors": 2,
+      "days": 2,
+      "requirements": [
+        {
+          "id": "panes",
+          "deliver": "minecraft:glass_pane",
+          "count": 32
+        },
+        {
+          "id": "amethyst",
+          "deliver": "minecraft:amethyst_shard",
+          "count": 8
+        },
+        {
+          "id": "attuned",
+          "research": "jugcraft:celestial_attunement"
+        }
+      ]
+    },
+    {
+      "id": "vigils",
+      "renown": 10,
+      "contributors": 2,
+      "days": 3,
+      "requirements": [
+        {
+          "id": "watches",
+          "practice": "jugcraft:observation",
+          "count": 3
+        },
+        {
+          "id": "circle",
+          "practice": "jugcraft:ritual",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "chart",
+      "renown": 12,
+      "contributors": 3,
+      "days": 3,
+      "requirements": [
+        {
+          "id": "paper",
+          "deliver": "minecraft:paper",
+          "count": 16
+        },
+        {
+          "id": "gold",
+          "deliver": "minecraft:gold_ingot",
+          "count": 4
+        },
+        {
+          "id": "compass",
+          "deliver": "minecraft:compass",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

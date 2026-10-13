@@ -139,7 +139,7 @@ TOOLS = {"brass_wrench": "Brass Wrench", "engineers_handbook": "Engineer's Handb
          # Mining & prospecting: a vague 3x3-chunk ore survey (prospecting/OreSurvey).
          "prospector": "Geo-Resonance Prospector",
          # Kinetic: links two belt pulleys.
-         "belt": "Leather Belt"}
+         "belt": "Drive Belt"}
 # Kinetic power (kinetic/): rotation in KE per tick, carried by shafts and gearboxes. Models: tools/kinetic_models.py.
 # "axis": placed like a log; "facing": six directions; "horizontal": four.
 KINETIC_BLOCKS = {
@@ -302,7 +302,7 @@ STATS = {
     "gas_turbine": {"capacity": 120_000, "output_per_tick": 2_048, "generation_per_tick": 512, "tank": 16_000},
     # 2x2x3. 96 JE/t; a bucket of refinery gas per 100 ticks.
     "polymerization_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},
-    # 3x3x2. 256 JE/t; a bucket of brine per 200 ticks (51,200 JE).
+    # 3x3x2. 256 JE/t; a bucket of brine per 400 ticks (102,400 JE).
     "electrolytic_cell": {"capacity": 60_000, "input_per_tick": 1_024, "use_per_tick": 256, "tank": 8_000},
     # 2x2x2. 96 JE/t; a bucket of sulfuric acid per 100 ticks.
     "chemical_reactor": {"capacity": 30_000, "input_per_tick": 512, "use_per_tick": 96, "tank": 8_000},

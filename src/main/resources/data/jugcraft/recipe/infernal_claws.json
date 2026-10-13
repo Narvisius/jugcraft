@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "M M",
+    "LGL"
+  ],
+  "key": {
+    "M": "minecraft:magma_block",
+    "L": "minecraft:leather",
+    "G": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "jugcraft:infernal_claws",
+    "count": 1
+  }
+}

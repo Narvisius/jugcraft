@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "tradition": "lampwrights",
+  "renown": 30,
+  "reward": "minecraft:experience_bottle",
+  "reward_count": 8,
+  "stages": [
+    {
+      "id": "shelves",
+      "renown": 8,
+      "contributors": 2,
+      "days": 2,
+      "requirements": [
+        {
+          "id": "books",
+          "deliver": "minecraft:book",
+          "count": 12
+        },
+        {
+          "id": "planks",
+          "deliver": "minecraft:oak_planks",
+          "count": 32
+        }
+      ]
+    },
+    {
+      "id": "readings",
+      "renown": 10,
+      "contributors": 2,
+      "days": 2,
+      "requirements": [
+        {
+          "id": "first_light",
+          "research": "jugcraft:first_light"
+        },
+        {
+          "id": "alembic",
+          "research": "jugcraft:alembic_arts"
+        },
+        {
+          "id": "mixtures",
+          "practice": "jugcraft:alchemy",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "catalogue",
+      "renown": 12,
+      "contributors": 3,
+      "days": 3,
+      "requirements": [
+        {
+          "id": "paper",
+          "deliver": "minecraft:paper",
+          "count": 16
+        },
+        {
+          "id": "ink",
+          "deliver": "minecraft:ink_sac",
+          "count": 8
+        },
+        {
+          "id": "quills",
+          "deliver": "minecraft:feather",
+          "count": 4
+        }
+      ]
+    }
+  ]
+}

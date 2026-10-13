@@ -39,6 +39,7 @@ public class Seat extends Entity {
 
 	/** Sits {@code player} on the seat at {@code pos}, unless someone already sits there. Server side only. */
 	public static boolean sit(ServerLevel level, BlockPos pos, BlockState state, Player player) {
+		if (local.peepo.CompanionSeats.isReserved(level,pos)) return false;
 		if (!(state.getBlock() instanceof Sittable sittable) || player.isPassenger() || player.isSecondaryUseActive()) {
 			return false;
 		}

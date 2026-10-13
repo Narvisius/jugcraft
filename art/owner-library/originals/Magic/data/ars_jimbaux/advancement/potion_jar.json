@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:enchanting_apparatus",
+  "criteria": {
+    "has_potion_jar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:potion_jar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.potion_jar"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:potion_jar"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.potion_jar"
+    }
+  },
+  "requirements": [
+    [
+      "has_potion_jar"
+    ]
+  ]
+}

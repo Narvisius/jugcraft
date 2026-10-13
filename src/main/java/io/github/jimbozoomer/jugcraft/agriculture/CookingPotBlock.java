@@ -32,8 +32,9 @@ import org.jspecify.annotations.Nullable;
  */
 public class CookingPotBlock extends BaseEntityBlock {
 	public static final BooleanProperty COOKING = BooleanProperty.create("cooking");
-	private static final VoxelShape SHAPE = Shapes.or(Block.box(3.0, 0.0, 3.0, 13.0, 8.5, 13.0),
-			Block.box(1.0, 5.0, 7.0, 15.0, 6.0, 9.0));
+	/** The owner's pot (tools/menu_data.py): its body and the lugs each side; the bail handle above is left out. */
+	private static final VoxelShape SHAPE = Shapes.or(Block.box(2.0, 0.0, 2.0, 14.0, 10.0, 14.0),
+			Block.box(0.5, 6.0, 6.5, 15.5, 8.0, 9.5));
 
 	public CookingPotBlock(Properties properties) {
 		super(properties);

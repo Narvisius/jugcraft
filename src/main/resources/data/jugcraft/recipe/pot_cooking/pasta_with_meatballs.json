@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:raw_pasta"
+    },
+    {
+      "ingredient": "jugcraft:minced_beef",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:tomato"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:pasta_with_meatballs"
+  },
+  "time": 300
+}

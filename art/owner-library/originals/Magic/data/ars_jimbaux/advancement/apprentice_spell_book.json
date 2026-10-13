@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:novice_spell_book",
+  "criteria": {
+    "has_apprentice_spell_book": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:apprentice_spell_book"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.apprentice_spell_book"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:apprentice_spell_book"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.apprentice_spell_book"
+    }
+  },
+  "requirements": [
+    [
+      "has_apprentice_spell_book"
+    ]
+  ]
+}

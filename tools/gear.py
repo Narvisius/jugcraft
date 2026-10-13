@@ -139,6 +139,69 @@ ARMOR_TIERS = {
     # wear and the best enchanting, but netherite's toughness and no fire resistance; mended with diamonds.
     "reforged_white_diamond": {"display": "Reforged White Diamond", "armor": (45, (3, 7, 8, 4), 20, 3.0, 0.1),
                                "repair": "minecraft:diamond", "fire_resistant": False},
+    # Hades: the underworld's plate, beside the other two in other strengths: the toughest and steadiest, but a point
+    # less defense and the poorest enchanting; fire resistant, mended with netherite.
+    "hades": {"display": "Hades", "armor": (42, (3, 7, 8, 3), 12, 4.0, 0.2),
+              "repair": "minecraft:netherite_ingot", "fire_resistant": True},
+    # Sunset Gem: beside the others in other strengths: the longest wear and the best enchanting of all, but a point
+    # less defense than Bloodthorn's and netherite's toughness; mended with amethyst shards.
+    "sunset_gem": {"display": "Sunset Gem", "armor": (48, (3, 7, 8, 3), 25, 3.0, 0.1),
+                   "repair": "minecraft:amethyst_shard", "fire_resistant": False},
+    # Pharaoh: beside the others in other strengths: the heaviest helm and chest (but leggings like netherite's),
+    # good enchanting, netherite's toughness; fire resistant, as the desert sun asks; mended with gold.
+    "pharaoh": {"display": "Pharaoh", "armor": (41, (3, 6, 9, 4), 22, 3.0, 0.1),
+                "repair": "minecraft:gold_ingot", "fire_resistant": True},
+    # The four designs the owner sent on 7 October 2026 ("just create the armors... we can figure that out later"),
+    # beside the others in other strengths, each after its look (docs/features/four-armor-designs.md).
+    # Dread Knight: the heaviest plate of all and among the steadiest, but the poorest enchanting; fire resistant, as
+    # its dark forge asks; mended with netherite.
+    "dread_knight": {"display": "Dread Knight", "armor": (44, (3, 7, 9, 4), 10, 3.5, 0.2),
+                     "repair": "minecraft:netherite_ingot", "fire_resistant": True},
+    # Valkyrie: the light plate of a winged rider: netherite's toughness, long wear and good enchanting, a point of
+    # defense over netherite; mended with phantom membranes, as wings are.
+    "valkyrie": {"display": "Valkyrie", "armor": (46, (3, 7, 8, 3), 24, 3.0, 0.1),
+                 "repair": "minecraft:phantom_membrane", "fire_resistant": False},
+    # Wayfarer: a traveller's cloak and leathers: netherite's defense, the longest wear and the best enchanting of all,
+    # but less toughness and no knockback resistance; mended with leather.
+    "wayfarer": {"display": "Wayfarer", "armor": (50, (3, 6, 8, 3), 30, 2.5, 0.0),
+                 "repair": "minecraft:leather", "fire_resistant": False},
+    # Spartan: a hoplite's bronze: the heavier helm, tough and steady, middling enchanting; mended with bronze.
+    "spartan": {"display": "Spartan", "armor": (43, (3, 7, 8, 4), 18, 3.5, 0.15),
+                "repair": "jugcraft:bronze_ingot", "fire_resistant": False},
+    # The designs the owner sent on 8 October 2026, likewise (docs/features/armor-designs-8-october.md).
+    # Berserker: horned white plate: a point of defense over netherite, steady, middling enchanting; mended with quartz,
+    # white as its plate.
+    "berserker": {"display": "Berserker", "armor": (45, (3, 7, 8, 3), 16, 3.0, 0.15),
+                  "repair": "minecraft:quartz", "fire_resistant": False},
+    # Paladin: the white knight: the heavier helm, long wear and good enchanting, netherite's toughness; mended with
+    # amethyst shards, purple as its cloth.
+    "paladin": {"display": "Paladin", "armor": (47, (3, 6, 8, 4), 22, 3.0, 0.1),
+                "repair": "minecraft:amethyst_shard", "fire_resistant": False},
+    # Templar: the dark knight of the pair: the heavier chest, tough and steady, poorer enchanting; fire resistant,
+    # mended with netherite.
+    "templar": {"display": "Templar", "armor": (43, (3, 7, 9, 3), 14, 3.5, 0.15),
+                "repair": "minecraft:netherite_ingot", "fire_resistant": True},
+    # Sentinel: the gold-and-black guard: the heavier helm, tough and steady, good enchanting; mended with gold.
+    "sentinel": {"display": "Sentinel", "armor": (46, (3, 7, 8, 4), 20, 3.5, 0.15),
+                 "repair": "minecraft:gold_ingot", "fire_resistant": False},
+    # Frost Knight: the white knight crowned with ice: a point of defense over netherite, steady; mended with blue ice.
+    "frost_knight": {"display": "Frost Knight", "armor": (44, (3, 7, 8, 3), 18, 3.0, 0.15),
+                     "repair": "minecraft:blue_ice", "fire_resistant": False},
+    # Wight King: the slate knight crowned with icicles and antlers: the heavier helm and the steadiest of the cold
+    # sets, middling enchanting, netherite's toughness; mended with packed ice.
+    "wight_king": {"display": "Wight King", "armor": (45, (3, 7, 8, 4), 15, 3.0, 0.2),
+                   "repair": "minecraft:packed_ice", "fire_resistant": False},
+    # Reaper: a robe over bone-white plates: netherite's defense, good enchanting, but less toughness and barely any
+    # knockback resistance; mended with bone.
+    "reaper": {"display": "Reaper", "armor": (42, (3, 6, 8, 3), 24, 2.5, 0.05),
+               "repair": "minecraft:bone", "fire_resistant": False},
+    # Banana: a costume, not plate: iron's defense, no toughness or knockback resistance, but long wear and the best
+    # enchanting of all; mended with yellow wool.
+    "banana": {"display": "Banana", "armor": (25, (2, 5, 6, 2), 30, 0.0, 0.0),
+               "repair": "minecraft:yellow_wool", "fire_resistant": False},
+    # Scarab: gold and lapis: netherite's defense with gold's enchanting, less toughness; mended with lapis lazuli.
+    "scarab": {"display": "Scarab", "armor": (40, (3, 6, 8, 3), 25, 2.0, 0.1),
+               "repair": "minecraft:lapis_lazuli", "fire_resistant": False},
 }
 
 
@@ -345,6 +408,10 @@ def write_all(write, assets, data, lang, condition):
     import nuclear  # the hazmat suit (tools/nuclear.py)
     for tag, item in nuclear.HAZMAT_TAGS.items():
         by_tag[tag].append(f"{MOD}:{item}")
+    # The two fire sets (tools/concordance_ember.py ARMOR): armor of their slots, so they enchant and equip as any armor.
+    import concordance_ember
+    for item, piece in concordance_ember.ARMOR.items():
+        by_tag[ITEM_TAGS[piece]].append(f"{MOD}:{item}")
     by_tag["swords"].append(f"{MOD}:power_katana")
     # Fall addition 23's silver dagger is a sword too. It is added here, not by tools/werewolf_data.py's tags, because
     # the shared tag writer replaces a whole file and would drop every sword above.
@@ -360,6 +427,11 @@ def write_all(write, assets, data, lang, condition):
     import arms_variants  # batch 56: each variant joins its kind's tags
     for tag, values in arms_variants.item_tags().items():
         by_tag.setdefault(tag, []).extend(values)
+    # One writer owns shared vanilla equipment tags. The later kitchen tag pass
+    # must not replace every mace, shield and variant with only its knives.
+    from kitchen import KNIVES
+    for tag in ("enchantable/melee_weapon", "enchantable/durability"):
+        by_tag.setdefault(tag, []).extend(f"{MOD}:{knife}" for knife in KNIVES)
     for tag, values in by_tag.items():
         write(tags / f"{tag}.json", {"replace": False, "values": values})
     for tier, info in GEAR_TIERS.items():

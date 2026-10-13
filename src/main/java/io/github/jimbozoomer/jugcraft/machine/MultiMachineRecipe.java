@@ -43,13 +43,19 @@ public class MultiMachineRecipe implements Recipe<MachineInput> {
 	private final List<Part> parts;
 	private final ItemStackTemplate result;
 	private final int time;
+	private final int companionEffort;
 
 	public MultiMachineRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, List<Part> parts, ItemStackTemplate result, int time) {
+		this(machine, commonInfo, parts, result, time, 0);
+	}
+
+	public MultiMachineRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, List<Part> parts, ItemStackTemplate result, int time, int companionEffort) {
 		this.machine = machine;
 		this.commonInfo = commonInfo;
 		this.parts = List.copyOf(parts);
 		this.result = result;
 		this.time = time;
+		this.companionEffort = Math.clamp(companionEffort, 0, MachineCompanionEffort.MAX_PER_QUARTER);
 	}
 
 	public List<Part> parts() {
@@ -63,6 +69,8 @@ public class MultiMachineRecipe implements Recipe<MachineInput> {
 	public int time() {
 		return time;
 	}
+
+	public int companionEffort() { return companionEffort; }
 
 	/**
 	 * How many items to take from each input slot for one operation, or null when the slots don't
@@ -157,14 +165,16 @@ public class MultiMachineRecipe implements Recipe<MachineInput> {
 				Recipe.CommonInfo.MAP_CODEC.forGetter(recipe -> recipe.commonInfo),
 				Part.CODEC.listOf().fieldOf("ingredients").forGetter(MultiMachineRecipe::parts),
 				ItemStackTemplate.CODEC.fieldOf("result").forGetter(MultiMachineRecipe::output),
-				ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(MultiMachineRecipe::time)
-		).apply(i, (info, parts, result, time) -> new MultiMachineRecipe(machine, info, parts, result, time)));
+				ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(MultiMachineRecipe::time),
+				MachineCompanionEffort.CODEC.optionalFieldOf("companion_effort_per_quarter", 0).forGetter(MultiMachineRecipe::companionEffort)
+		).apply(i, (info, parts, result, time, effort) -> new MultiMachineRecipe(machine, info, parts, result, time, effort)));
 		StreamCodec<RegistryFriendlyByteBuf, MultiMachineRecipe> stream = StreamCodec.composite(
 				Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
 				Part.STREAM_CODEC.apply(ByteBufCodecs.list()), MultiMachineRecipe::parts,
 				ItemStackTemplate.STREAM_CODEC, MultiMachineRecipe::output,
 				ByteBufCodecs.VAR_INT, MultiMachineRecipe::time,
-				(info, parts, result, time) -> new MultiMachineRecipe(machine, info, parts, result, time));
+				ByteBufCodecs.VAR_INT, MultiMachineRecipe::companionEffort,
+				(info, parts, result, time, effort) -> new MultiMachineRecipe(machine, info, parts, result, time, effort));
 		return new RecipeSerializer<>(codec, stream);
 	}
 }

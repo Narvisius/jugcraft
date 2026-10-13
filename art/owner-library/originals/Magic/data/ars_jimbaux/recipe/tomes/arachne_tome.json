@@ -1,0 +1,40 @@
+{
+  "type": "ars_jimbaux:caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "ars_jimbaux:constant",
+    "r": 255
+  },
+  "flavour_text": "Creates three snaring projectiles.",
+  "name": "Arachne's Weaving",
+  "sound": {},
+  "spell": [
+    "ars_jimbaux:glyph_projectile",
+    "ars_jimbaux:glyph_split",
+    "ars_jimbaux:glyph_split",
+    "ars_jimbaux:glyph_snare",
+    "ars_jimbaux:glyph_extend_time",
+    "ars_jimbaux:glyph_extend_time"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "ars_jimbaux:constant",
+      "r": 255
+    },
+    "name": "Arachne's Weaving",
+    "particleTimeline": {},
+    "recipe": [
+      "ars_jimbaux:glyph_projectile",
+      "ars_jimbaux:glyph_split",
+      "ars_jimbaux:glyph_split",
+      "ars_jimbaux:glyph_snare",
+      "ars_jimbaux:glyph_extend_time",
+      "ars_jimbaux:glyph_extend_time"
+    ],
+    "sound": {}
+  },
+  "tome_type": "ars_jimbaux:caster_tome"
+}

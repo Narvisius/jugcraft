@@ -1,0 +1,87 @@
+{
+  "name": "reveal_cast",
+  "author": "Jugcraft",
+  "description": "Arcane Concordance: reveal_cast",
+  "emote": {
+    "isLoop": "true",
+    "returnTick": 0,
+    "beginTick": 0,
+    "endTick": 20,
+    "stopTick": 24,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -2.45
+        }
+      },
+      {
+        "tick": 0,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "yaw": -0.55
+        }
+      },
+      {
+        "tick": 0,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "head": {
+          "yaw": -0.35
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -2.45
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "yaw": -0.55
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "head": {
+          "yaw": 0.35
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "pitch": -2.45
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "rightArm": {
+          "yaw": -0.55
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "head": {
+          "yaw": -0.35
+        }
+      }
+    ]
+  }
+}

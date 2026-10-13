@@ -1,0 +1,92 @@
+JUGCRAFT CONCORDANCE EXPANSION — CLAUDE IMPLEMENTATION PROMPT
+Prepared by OpenAI Codex, 10 October 2026.
+
+You are continuing an existing Minecraft mod, not starting a new magic mod. Work in the actual Jugcraft repository and use this handoff pack as a researched design brief.
+
+STARTING SCOPE
+Implement Chunk A from 09-claude-delivery-chunks.md unless the owner selects another chunk. If the owner asks only for planning or review, honor that narrower scope instead. Do a substantial coherent chunk, including the user-facing result and verification, then stop for owner input before the next chunk. Do not interpret the whole roadmap as one giant implementation request.
+
+READ FIRST
+1. Current AGENTS.md, CLAUDE.md, CONTRIBUTING.md and docs/TESTING.md.
+2. docs/INTEGRATION_STATUS.md, docs/WHAT_EXISTS.md, docs/FRAMEWORKS.md and distribution/frameworks.lock.json.
+3. START-HERE.md and 01-current-state-and-integration-map.md in this pack.
+4. The selected chunk in 09-claude-delivery-chunks.md and its relevant design chapters.
+5. For Chunk A, 12-detailed-first-chunk-tickets.md.
+6. Relevant current source, generators, data and tests.
+
+This pack audited main at 4b36d2254fd76e7db2a4cfa6ec488d746a999f1f. Refresh main and relevant open PRs before changing anything. PR300 was the Glacier Hall/Frost Horn contribution; PR299 and PR301 concerned new guns. They may since have merged or changed. Do not recreate them or overwrite another agent's ongoing work. Preserve local changes and follow the current branch/review workflow.
+
+SOURCE OF TRUTH
+User decisions and current repository rules take priority. Current code and registrations establish what is implemented. Old feature records can contain stale “unbuilt/unmerged” status. New designs in this pack are proposals, and numeric values are starting tuning targets.
+
+Use status labels: MAIN, OPEN CONTRIBUTION, OWNER DIRECTION, PROPOSAL and UNVERIFIED. Report discrepancies rather than silently claiming the plan matches changed code. Do not invent existing classes or pretend a conceptual proposed schema already exists.
+
+REUSE WHAT EXISTS
+Concordance already includes research, typed resources, composed spell grammar, a Spell Engine bridge, authoritative effects/protections, rituals, alchemy, gardens, sky occurrences, workers, artifice, relics, equivalence, hex/dream state, Conclaves and wonders. Ember and Thallite exist. Vesperine and Madame Tatterlace exist. The World Designer exists.
+
+Extend these systems; do not replace them with a second mana economy, player-progression store, spell engine, logistics ledger, team system, global map singleton or universal boss scripting framework.
+
+APPROVED LIBRARIES
+Use the pinned libraries wherever they serve a real feature:
+- Fabric API for platform/network/transaction hooks.
+- GeckoLib for authored creatures, bosses, machines and equipment.
+- Player Animation Library where compatible with existing pose ownership.
+- Spell Engine and Spell Power through Jugcraft's existing bridge.
+- SmartBrainLib for suitable sensors/decisions.
+- Trinkets Updated for accessory slots.
+- Modonomicon for guides/reference.
+- GuiLib for rich client workspaces, with the supported absence fallback.
+- Jade for concise inspection and JEI for actual recipes/uses.
+- Fusion and LambDynamicLights for optional presentation.
+- Cloth Config/Mod Menu for appropriate settings.
+- Validate Sodium/Iris and ordinary renderer paths.
+
+Do not force all libraries into each feature. Do not add researched inspiration mods as dependencies. Read exact locked-release APIs. The Modrinth pack handles installation; never implement a runtime JAR downloader. Keep client-only classes and optional integrations out of common initialization. Kotlin is currently provisioned for optional client UI, not undeclared server runtime code.
+
+CRITICAL CONTRACTS
+- Server validates intent, knowledge, authority, resources, target and output.
+- Existing cast settlement spends once. Delayed/continuous casts need explicit cast identity and cancellation semantics.
+- All composition branches/pulses share bounded work and an effect ledger.
+- Pylon baseline is 1000 JE to 1 Ley, 64 Ley storage and 64 JE/t intake; 3 Radiance essence to 2 Ley; no reverse conversion.
+- Keep seven distinct resources. Bound Will is agreement identity, not fluid.
+- Use Fabric transactions and exact item/fluid variants. Courier cargo has one authoritative ledger.
+- Preserve restricted equivalence and audit all conversion/salvage/byproduct loops.
+- No force-loading for ordinary workers or region scans.
+- Lair sessions currently do not resume after restart; return/grave-goods records do.
+- Bosses and seasons do not gate core farming, electricity or ordinary magic.
+- Existing owner industrial choices stay intact: steel/electricity parallel, automatic gas pressure, no routine machine maintenance, pollution-driven raiders without crop death/smog/biome recoloring.
+- Stolas is the first pact, not automatically an enemy. Transformation is voluntary and separate from Vitae.
+- Reuse authorized owner assets with provenance; do not redraw them merely to differ.
+- Respect generator ownership and preserve stable IDs/saves.
+- Do not advertise hypothetical tests as passed.
+
+WORK METHOD
+1. Produce a short current-state delta and a chunk contract.
+2. Split the selected chunk into three to five reviewable units with a visible player outcome.
+3. Build one end-to-end path before adding variants.
+4. Reuse actual interfaces and extend only seams needed by working content.
+5. Add meaningful regression tests for new correctness risks.
+6. Run required and relevant checks; inspect real client output for visual features.
+7. Fix discovered issues inside the authorized scope.
+8. Update feature documentation, source map, acquisition/progression guidance and provenance.
+9. Keep a technical handoff with exact commit, schema changes, commands/results, known gaps and next work.
+10. Return the owner checkpoint; wait for input before beginning the next chunk.
+
+CHECKPOINT FORMAT
+Use 300–500 words for the owner:
+- What the player can now do.
+- The meaningful changes.
+- What was verified, with exact commit and honest limits.
+- Two to four evidence links and a short demo route.
+- At most three consequential choices, each with a recommendation.
+- The next proposed chunk in two sentences.
+
+Do not stop every few edits to ask ordinary implementation questions. Do not deliver only a plan when the selected task authorizes implementation. Do not run through the whole roadmap without the requested check-ins.
+
+IF USING MULTIPLE AGENTS
+Use them only when authorized by the owner or applicable environment instructions. Give each a bounded task and agreed interface. One integrator owns shared registries, generators and cross-cutting schemas. Avoid concurrent edits to the same files. Record actual model attribution; preserve OpenAI Codex attribution for this planning pack and original authors of existing features.
+
+COMPLETION
+A chunk is complete when its promised player experience works, relevant validation is recorded, documentation is accurate and the owner can review a concrete result. A placeholder UI, rendered model, creative-only item or passing compiler does not by itself satisfy that standard.
+
+No public server needs to be running for development. Use isolated local/staging tests where available. Mark two-account human tests unverified if unavailable; do not pretend a one-client automated test substitutes for them. Publication/deployment follows the current owner authorization and repository release rules.

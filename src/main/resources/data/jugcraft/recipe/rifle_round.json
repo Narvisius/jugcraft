@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "B",
+    "L",
+    "G"
+  ],
+  "key": {
+    "B": "#c:nuggets/brass",
+    "L": "#c:nuggets/lead",
+    "G": "minecraft:gunpowder"
+  },
+  "result": {
+    "id": "jugcraft:rifle_round",
+    "count": 4
+  }
+}

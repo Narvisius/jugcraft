@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GBG",
+    " L ",
+    "SSS"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "B": "minecraft:book",
+    "L": "minecraft:dark_oak_log",
+    "S": "minecraft:dark_oak_slab"
+  },
+  "result": {
+    "id": "jugcraft:conclave_lectern",
+    "count": 1
+  }
+}

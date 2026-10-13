@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " V ",
+    "VHV",
+    " P "
+  ],
+  "key": {
+    "V": "minecraft:vine",
+    "H": "minecraft:hopper",
+    "P": "minecraft:flower_pot"
+  },
+  "result": {
+    "id": "jugcraft:gleaner",
+    "count": 1
+  }
+}

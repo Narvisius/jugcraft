@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSE",
+    " LK"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "E": "minecraft:echo_shard",
+    "L": "minecraft:lever",
+    "K": "minecraft:sculk"
+  },
+  "result": {
+    "id": "jugcraft:murmur_smg"
+  }
+}

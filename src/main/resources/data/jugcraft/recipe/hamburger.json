@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bread",
+    "jugcraft:beef_patty",
+    "jugcraft:cabbage_leaf",
+    "jugcraft:tomato",
+    "jugcraft:onion"
+  ],
+  "result": {
+    "id": "jugcraft:hamburger",
+    "count": 1
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "jugcraft:parsley",
+  "result": {
+    "id": "jugcraft:parsley",
+    "count": 2
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:parsley",
+        "count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "result": {
+        "id": "jugcraft:parsley",
+        "count": 1
+      },
+      "chance": 0.5
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:witch_hat",
+    "S": "minecraft:glass_bottle",
+    "T": "minecraft:spider_eye"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:witch"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

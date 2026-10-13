@@ -1,11 +1,29 @@
-# Guns: page 5 of 5
+# Guns: page 5 of 16
 
-[Category index](README.md) · [All categories](../README.md) · [Previous](page-004.md)
+[Category index](README.md) · [All categories](../README.md) · [Previous](page-004.md) · [Next](page-006.md)
 
 Paths preserve the supplied collection. Follow the [reuse guide](../../README.md) when importing assets.
 
 | File | Type | Image size | Metadata / texture |
 |---|---|---|---|
+| [Guns/item/syringe.png](../../originals/Blocks/Guns/item/syringe.png) | texture | 16×16 | — |
+| [Guns/item/syringe_3d.png](../../originals/Blocks/Guns/item/syringe_3d.png) | texture | 16×16 | — |
+| [Guns/item/target_tracker_module.png](../../originals/Blocks/Guns/item/target_tracker_module.png) | texture | 16×48 | — |
+| [Guns/item/team_log.png](../../originals/Blocks/Guns/item/team_log.png) | texture | 16×16 | — |
+| [Guns/item/tension_spring.png](../../originals/Blocks/Guns/item/tension_spring.png) | texture | 16×16 | — |
+| [Guns/item/terra_incognita.animation.json](../../originals/Blocks/Guns/item/terra_incognita.animation.json) | animation JSON | — | — |
+| [Guns/item/terra_incognita.png](../../originals/Blocks/Guns/item/terra_incognita.png) | texture | 128×256 | — |
+| [Guns/item/teslock_rifle.animation.json](../../originals/Blocks/Guns/item/teslock_rifle.animation.json) | animation JSON | — | — |
+| [Guns/item/teslock_rifle.png](../../originals/Blocks/Guns/item/teslock_rifle.png) | texture | 128×128 | — |
+| [Guns/item/the_pact.png](../../originals/Blocks/Guns/item/the_pact.png) | texture | 16×16 | — |
+| [Guns/item/thunderhead.animation.json](../../originals/Blocks/Guns/item/thunderhead.animation.json) | animation JSON | — | — |
+| [Guns/item/thunderhead.png](../../originals/Blocks/Guns/item/thunderhead.png) | texture | 128×128 | — |
+| [Guns/item/tl_runner.animation.json](../../originals/Blocks/Guns/item/tl_runner.animation.json) | animation JSON | — | — |
+| [Guns/item/tl_runner.png](../../originals/Blocks/Guns/item/tl_runner.png) | texture | 64×64 | — |
+| [Guns/item/treated_brass_blend.png](../../originals/Blocks/Guns/item/treated_brass_blend.png) | texture | 16×16 | — |
+| [Guns/item/treated_brass_blueprint.png](../../originals/Blocks/Guns/item/treated_brass_blueprint.png) | texture | 16×16 | — |
+| [Guns/item/treated_brass_boots.png](../../originals/Blocks/Guns/item/treated_brass_boots.png) | texture | 16×16 | — |
+| [Guns/item/treated_brass_chestplate.png](../../originals/Blocks/Guns/item/treated_brass_chestplate.png) | texture | 16×16 | — |
 | [Guns/item/treated_brass_flare.png](../../originals/Blocks/Guns/item/treated_brass_flare.png) | texture | 16×16 | — |
 | [Guns/item/treated_brass_gun_frame.png](../../originals/Blocks/Guns/item/treated_brass_gun_frame.png) | texture | 16×16 | — |
 | [Guns/item/treated_brass_helmet.png](../../originals/Blocks/Guns/item/treated_brass_helmet.png) | texture | 16×16 | — |
@@ -95,115 +113,146 @@ Paths preserve the supplied collection. Follow the [reuse guide](../../README.md
 | [Guns/item/wrecker_flare.png](../../originals/Blocks/Guns/item/wrecker_flare.png) | texture | 16×16 | — |
 | [Guns/item/zilk_45.animation.json](../../originals/Blocks/Guns/item/zilk_45.animation.json) | animation JSON | — | — |
 | [Guns/item/zilk_45.png](../../originals/Blocks/Guns/item/zilk_45.png) | texture | 128×128 | — |
-| [Guns/sounds/bullet/flyby1.ogg](../../originals/Blocks/Guns/sounds/bullet/flyby1.ogg) | sound | — | — |
-| [Guns/sounds/entity/dissident/die.ogg](../../originals/Blocks/Guns/sounds/entity/dissident/die.ogg) | sound | — | — |
-| [Guns/sounds/entity/dissident/hurt.ogg](../../originals/Blocks/Guns/sounds/entity/dissident/hurt.ogg) | sound | — | — |
-| [Guns/sounds/entity/dissident/idle.ogg](../../originals/Blocks/Guns/sounds/entity/dissident/idle.ogg) | sound | — | — |
-| [Guns/sounds/entity/knight/hurt.ogg](../../originals/Blocks/Guns/sounds/entity/knight/hurt.ogg) | sound | — | — |
-| [Guns/sounds/entity/praetor/die.ogg](../../originals/Blocks/Guns/sounds/entity/praetor/die.ogg) | sound | — | — |
-| [Guns/sounds/entity/praetor/hurt.ogg](../../originals/Blocks/Guns/sounds/entity/praetor/hurt.ogg) | sound | — | — |
-| [Guns/sounds/entity/praetor/idle.ogg](../../originals/Blocks/Guns/sounds/entity/praetor/idle.ogg) | sound | — | — |
-| [Guns/sounds/entity/praetor/roar.ogg](../../originals/Blocks/Guns/sounds/entity/praetor/roar.ogg) | sound | — | — |
-| [Guns/sounds/entity/scamp/die.ogg](../../originals/Blocks/Guns/sounds/entity/scamp/die.ogg) | sound | — | — |
-| [Guns/sounds/entity/scamp/hurt.ogg](../../originals/Blocks/Guns/sounds/entity/scamp/hurt.ogg) | sound | — | — |
-| [Guns/sounds/entity/scamp/move.ogg](../../originals/Blocks/Guns/sounds/entity/scamp/move.ogg) | sound | — | — |
-| [Guns/sounds/entity/stun_grenade/explosion.ogg](../../originals/Blocks/Guns/sounds/entity/stun_grenade/explosion.ogg) | sound | — | — |
-| [Guns/sounds/entity/stun_grenade/ring.ogg](../../originals/Blocks/Guns/sounds/entity/stun_grenade/ring.ogg) | sound | — | — |
-| [Guns/sounds/entity/sulfurhead/death.ogg](../../originals/Blocks/Guns/sounds/entity/sulfurhead/death.ogg) | sound | — | — |
-| [Guns/sounds/entity/sulfurhead/hurt.ogg](../../originals/Blocks/Guns/sounds/entity/sulfurhead/hurt.ogg) | sound | — | — |
-| [Guns/sounds/entity/sulfurhead/idle.ogg](../../originals/Blocks/Guns/sounds/entity/sulfurhead/idle.ogg) | sound | — | — |
-| [Guns/sounds/item/airgun/fire.ogg](../../originals/Blocks/Guns/sounds/item/airgun/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/airgun/fire_2.ogg](../../originals/Blocks/Guns/sounds/item/airgun/fire_2.ogg) | sound | — | — |
-| [Guns/sounds/item/bazooka/fire.ogg](../../originals/Blocks/Guns/sounds/item/bazooka/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/beam/fire.ogg](../../originals/Blocks/Guns/sounds/item/beam/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/blackpowder/fire.ogg](../../originals/Blocks/Guns/sounds/item/blackpowder/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/bolt/bolt.ogg](../../originals/Blocks/Guns/sounds/item/bolt/bolt.ogg) | sound | — | — |
-| [Guns/sounds/item/bolt_pull/bolt_pull.ogg](../../originals/Blocks/Guns/sounds/item/bolt_pull/bolt_pull.ogg) | sound | — | — |
-| [Guns/sounds/item/bolt_release/bolt_release.ogg](../../originals/Blocks/Guns/sounds/item/bolt_release/bolt_release.ogg) | sound | — | — |
-| [Guns/sounds/item/boomstick/enchanted_fire.ogg](../../originals/Blocks/Guns/sounds/item/boomstick/enchanted_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/boomstick/fire.ogg](../../originals/Blocks/Guns/sounds/item/boomstick/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/boomstick/silenced_fire.ogg](../../originals/Blocks/Guns/sounds/item/boomstick/silenced_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/brass_pistol/fire.ogg](../../originals/Blocks/Guns/sounds/item/brass_pistol/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/brass_revolver/fire.ogg](../../originals/Blocks/Guns/sounds/item/brass_revolver/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/brass_shotgun/fire.ogg](../../originals/Blocks/Guns/sounds/item/brass_shotgun/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/bruiser/fire.ogg](../../originals/Blocks/Guns/sounds/item/bruiser/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/bruiser/silenced_fire.ogg](../../originals/Blocks/Guns/sounds/item/bruiser/silenced_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/cannon/fire.ogg](../../originals/Blocks/Guns/sounds/item/cannon/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/cannon/reload.ogg](../../originals/Blocks/Guns/sounds/item/cannon/reload.ogg) | sound | — | — |
-| [Guns/sounds/item/carabine/fire.ogg](../../originals/Blocks/Guns/sounds/item/carabine/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/combat_shotgun/fire.ogg](../../originals/Blocks/Guns/sounds/item/combat_shotgun/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/combat_shotgun/silenced_fire.ogg](../../originals/Blocks/Guns/sounds/item/combat_shotgun/silenced_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/cowboy/fire.ogg](../../originals/Blocks/Guns/sounds/item/cowboy/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/flamethrower/fire.ogg](../../originals/Blocks/Guns/sounds/item/flamethrower/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/flamethrower/fire_2.ogg](../../originals/Blocks/Guns/sounds/item/flamethrower/fire_2.ogg) | sound | — | — |
-| [Guns/sounds/item/flamethrower/pre_fire.ogg](../../originals/Blocks/Guns/sounds/item/flamethrower/pre_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/flamethrower/reload.ogg](../../originals/Blocks/Guns/sounds/item/flamethrower/reload.ogg) | sound | — | — |
-| [Guns/sounds/item/gauss/fire.ogg](../../originals/Blocks/Guns/sounds/item/gauss/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/gauss/pre_fire.ogg](../../originals/Blocks/Guns/sounds/item/gauss/pre_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/gauss/reload.ogg](../../originals/Blocks/Guns/sounds/item/gauss/reload.ogg) | sound | — | — |
-| [Guns/sounds/item/greaser_smg/fire.ogg](../../originals/Blocks/Guns/sounds/item/greaser_smg/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/grenade/pin.ogg](../../originals/Blocks/Guns/sounds/item/grenade/pin.ogg) | sound | — | — |
-| [Guns/sounds/item/grenade_launcher/fire.ogg](../../originals/Blocks/Guns/sounds/item/grenade_launcher/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/gun_rustle/gun_rustle.ogg](../../originals/Blocks/Guns/sounds/item/gun_rustle/gun_rustle.ogg) | sound | — | — |
-| [Guns/sounds/item/gun_sounds/hiss.ogg](../../originals/Blocks/Guns/sounds/item/gun_sounds/hiss.ogg) | sound | — | — |
-| [Guns/sounds/item/gun_sounds/insert.ogg](../../originals/Blocks/Guns/sounds/item/gun_sounds/insert.ogg) | sound | — | — |
-| [Guns/sounds/item/gun_sounds/metal.ogg](../../originals/Blocks/Guns/sounds/item/gun_sounds/metal.ogg) | sound | — | — |
-| [Guns/sounds/item/gun_sounds/pump.ogg](../../originals/Blocks/Guns/sounds/item/gun_sounds/pump.ogg) | sound | — | — |
-| [Guns/sounds/item/gun_sounds/pump_half.ogg](../../originals/Blocks/Guns/sounds/item/gun_sounds/pump_half.ogg) | sound | — | — |
-| [Guns/sounds/item/gyrojet/fire.ogg](../../originals/Blocks/Guns/sounds/item/gyrojet/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/heavier_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/heavier_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/heavy_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/heavy_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/heavy_rifle_2/fire.ogg](../../originals/Blocks/Guns/sounds/item/heavy_rifle_2/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/iron_pistol/fire.ogg](../../originals/Blocks/Guns/sounds/item/iron_pistol/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/iron_rifle/enchanted_fire.ogg](../../originals/Blocks/Guns/sounds/item/iron_rifle/enchanted_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/iron_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/iron_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/jetpack/fire.ogg](../../originals/Blocks/Guns/sounds/item/jetpack/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/jetpack/loop.ogg](../../originals/Blocks/Guns/sounds/item/jetpack/loop.ogg) | sound | — | — |
-| [Guns/sounds/item/laser/fire.ogg](../../originals/Blocks/Guns/sounds/item/laser/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/laser/fire_2.ogg](../../originals/Blocks/Guns/sounds/item/laser/fire_2.ogg) | sound | — | — |
-| [Guns/sounds/item/laser/reload.ogg](../../originals/Blocks/Guns/sounds/item/laser/reload.ogg) | sound | — | — |
-| [Guns/sounds/item/lever/lever.ogg](../../originals/Blocks/Guns/sounds/item/lever/lever.ogg) | sound | — | — |
-| [Guns/sounds/item/machine_gun/fire.ogg](../../originals/Blocks/Guns/sounds/item/machine_gun/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/mag_in/mag_in.ogg](../../originals/Blocks/Guns/sounds/item/mag_in/mag_in.ogg) | sound | — | — |
-| [Guns/sounds/item/mag_out/mag_out.ogg](../../originals/Blocks/Guns/sounds/item/mag_out/mag_out.ogg) | sound | — | — |
-| [Guns/sounds/item/makeshift_rifle/cock.ogg](../../originals/Blocks/Guns/sounds/item/makeshift_rifle/cock.ogg) | sound | — | — |
-| [Guns/sounds/item/makeshift_rifle/enchanted_fire.ogg](../../originals/Blocks/Guns/sounds/item/makeshift_rifle/enchanted_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/makeshift_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/makeshift_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/makeshift_rifle/silenced_fire.ogg](../../originals/Blocks/Guns/sounds/item/makeshift_rifle/silenced_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/nervepinch/fire.ogg](../../originals/Blocks/Guns/sounds/item/nervepinch/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/new_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/new_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/new_rifle/fire_2.ogg](../../originals/Blocks/Guns/sounds/item/new_rifle/fire_2.ogg) | sound | — | — |
-| [Guns/sounds/item/old_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/old_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/ping/ping.ogg](../../originals/Blocks/Guns/sounds/item/ping/ping.ogg) | sound | — | — |
-| [Guns/sounds/item/pistol/cock.ogg](../../originals/Blocks/Guns/sounds/item/pistol/cock.ogg) | sound | — | — |
-| [Guns/sounds/item/pistol/enchanted_fire.ogg](../../originals/Blocks/Guns/sounds/item/pistol/enchanted_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/pistol/fire.ogg](../../originals/Blocks/Guns/sounds/item/pistol/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/pistol/reload.ogg](../../originals/Blocks/Guns/sounds/item/pistol/reload.ogg) | sound | — | — |
-| [Guns/sounds/item/pistol/silenced_fire.ogg](../../originals/Blocks/Guns/sounds/item/pistol/silenced_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/plasma/fire.ogg](../../originals/Blocks/Guns/sounds/item/plasma/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/plasma/fire_2.ogg](../../originals/Blocks/Guns/sounds/item/plasma/fire_2.ogg) | sound | — | — |
-| [Guns/sounds/item/plasma_shotgun/fire.ogg](../../originals/Blocks/Guns/sounds/item/plasma_shotgun/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/rack/rack.ogg](../../originals/Blocks/Guns/sounds/item/rack/rack.ogg) | sound | — | — |
-| [Guns/sounds/item/rail/fire.ogg](../../originals/Blocks/Guns/sounds/item/rail/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/raygun/fire.ogg](../../originals/Blocks/Guns/sounds/item/raygun/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/reload_end/reload_end.ogg](../../originals/Blocks/Guns/sounds/item/reload_end/reload_end.ogg) | sound | — | — |
-| [Guns/sounds/item/revolver/fire.ogg](../../originals/Blocks/Guns/sounds/item/revolver/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/rocket/fire.ogg](../../originals/Blocks/Guns/sounds/item/rocket/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/rocket_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/rocket_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/rocket_rifle/fire_2.ogg](../../originals/Blocks/Guns/sounds/item/rocket_rifle/fire_2.ogg) | sound | — | — |
-| [Guns/sounds/item/rusty_gnat/copper_jam.ogg](../../originals/Blocks/Guns/sounds/item/rusty_gnat/copper_jam.ogg) | sound | — | — |
-| [Guns/sounds/item/rusty_gnat/enchanted_fire.ogg](../../originals/Blocks/Guns/sounds/item/rusty_gnat/enchanted_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/rusty_gnat/fire.ogg](../../originals/Blocks/Guns/sounds/item/rusty_gnat/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/rusty_gnat/silenced_fire.ogg](../../originals/Blocks/Guns/sounds/item/rusty_gnat/silenced_fire.ogg) | sound | — | — |
-| [Guns/sounds/item/scorched_rifle/fire.ogg](../../originals/Blocks/Guns/sounds/item/scorched_rifle/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/scorched_sniper/fire.ogg](../../originals/Blocks/Guns/sounds/item/scorched_sniper/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/scrapper/fire.ogg](../../originals/Blocks/Guns/sounds/item/scrapper/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/sculk/fire.ogg](../../originals/Blocks/Guns/sounds/item/sculk/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/shock/fire.ogg](../../originals/Blocks/Guns/sounds/item/shock/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/shulker/fire.ogg](../../originals/Blocks/Guns/sounds/item/shulker/fire.ogg) | sound | — | — |
-| [Guns/sounds/item/slap/slap.ogg](../../originals/Blocks/Guns/sounds/item/slap/slap.ogg) | sound | — | — |
-| [Guns/sounds/item/wither/wither.ogg](../../originals/Blocks/Guns/sounds/item/wither/wither.ogg) | sound | — | — |
-| [Guns/sounds/mass_destruction.ogg](../../originals/Blocks/Guns/sounds/mass_destruction.ogg) | sound | — | — |
-| [Guns/sounds/mass_destruction_extended.ogg](../../originals/Blocks/Guns/sounds/mass_destruction_extended.ogg) | sound | — | — |
-| [Guns/sounds/mass_production.ogg](../../originals/Blocks/Guns/sounds/mass_production.ogg) | sound | — | — |
-| [Guns/sounds/ui/weapon/attach.ogg](../../originals/Blocks/Guns/sounds/ui/weapon/attach.ogg) | sound | — | — |
+| [Guns/models/block/advanced_composter.json](../../originals/Blocks/Guns/models/block/advanced_composter.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents1.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents1.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents2.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents2.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents3.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents3.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents4.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents4.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents5.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents5.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents6.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents6.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents7.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents7.json) | model JSON | — | — |
+| [Guns/models/block/advanced_composter_contents_ready.json](../../originals/Blocks/Guns/models/block/advanced_composter_contents_ready.json) | model JSON | — | — |
+| [Guns/models/block/ammo_box.json](../../originals/Blocks/Guns/models/block/ammo_box.json) | model JSON | — | — |
+| [Guns/models/block/ammo_box_open.json](../../originals/Blocks/Guns/models/block/ammo_box_open.json) | model JSON | — | — |
+| [Guns/models/block/ammo_turret_module.json](../../originals/Blocks/Guns/models/block/ammo_turret_module.json) | model JSON | — | — |
+| [Guns/models/block/ammo_turret_module_connected.json](../../originals/Blocks/Guns/models/block/ammo_turret_module_connected.json) | model JSON | — | — |
+| [Guns/models/block/ancient_brass_block.json](../../originals/Blocks/Guns/models/block/ancient_brass_block.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_block.json](../../originals/Blocks/Guns/models/block/anthralite_block.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_grate.json](../../originals/Blocks/Guns/models/block/anthralite_grate.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_grate_pane_noside.json](../../originals/Blocks/Guns/models/block/anthralite_grate_pane_noside.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_grate_pane_noside_alt.json](../../originals/Blocks/Guns/models/block/anthralite_grate_pane_noside_alt.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_grate_pane_post.json](../../originals/Blocks/Guns/models/block/anthralite_grate_pane_post.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_grate_pane_side.json](../../originals/Blocks/Guns/models/block/anthralite_grate_pane_side.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_grate_pane_side_alt.json](../../originals/Blocks/Guns/models/block/anthralite_grate_pane_side_alt.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_lamp.json](../../originals/Blocks/Guns/models/block/anthralite_lamp.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_ore.json](../../originals/Blocks/Guns/models/block/anthralite_ore.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_pillar.json](../../originals/Blocks/Guns/models/block/anthralite_pillar.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_plates.json](../../originals/Blocks/Guns/models/block/anthralite_plates.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_tiles.json](../../originals/Blocks/Guns/models/block/anthralite_tiles.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_tiles_slab.json](../../originals/Blocks/Guns/models/block/anthralite_tiles_slab.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_tiles_slab_top.json](../../originals/Blocks/Guns/models/block/anthralite_tiles_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_tiles_stairs.json](../../originals/Blocks/Guns/models/block/anthralite_tiles_stairs.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_tiles_stairs_inner.json](../../originals/Blocks/Guns/models/block/anthralite_tiles_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/anthralite_tiles_stairs_outer.json](../../originals/Blocks/Guns/models/block/anthralite_tiles_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_slab.json](../../originals/Blocks/Guns/models/block/asgharian_brick_slab.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_slab_top.json](../../originals/Blocks/Guns/models/block/asgharian_brick_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_stairs.json](../../originals/Blocks/Guns/models/block/asgharian_brick_stairs.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_stairs_inner.json](../../originals/Blocks/Guns/models/block/asgharian_brick_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_stairs_outer.json](../../originals/Blocks/Guns/models/block/asgharian_brick_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_wall_inventory.json](../../originals/Blocks/Guns/models/block/asgharian_brick_wall_inventory.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_wall_post.json](../../originals/Blocks/Guns/models/block/asgharian_brick_wall_post.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_wall_side.json](../../originals/Blocks/Guns/models/block/asgharian_brick_wall_side.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_brick_wall_side_tall.json](../../originals/Blocks/Guns/models/block/asgharian_brick_wall_side_tall.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_bricks.json](../../originals/Blocks/Guns/models/block/asgharian_bricks.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_pillar.json](../../originals/Blocks/Guns/models/block/asgharian_pillar.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_pillar_horizontal.json](../../originals/Blocks/Guns/models/block/asgharian_pillar_horizontal.json) | model JSON | — | — |
+| [Guns/models/block/asgharian_tiles.json](../../originals/Blocks/Guns/models/block/asgharian_tiles.json) | model JSON | — | — |
+| [Guns/models/block/auto_turret.json](../../originals/Blocks/Guns/models/block/auto_turret.json) | model JSON | — | — |
+| [Guns/models/block/basic_turret.json](../../originals/Blocks/Guns/models/block/basic_turret.json) | model JSON | — | — |
+| [Guns/models/block/basic_turret_base.json](../../originals/Blocks/Guns/models/block/basic_turret_base.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height10.json](../../originals/Blocks/Guns/models/block/bat_guano_height10.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height12.json](../../originals/Blocks/Guns/models/block/bat_guano_height12.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height14.json](../../originals/Blocks/Guns/models/block/bat_guano_height14.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height16.json](../../originals/Blocks/Guns/models/block/bat_guano_height16.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height2.json](../../originals/Blocks/Guns/models/block/bat_guano_height2.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height4.json](../../originals/Blocks/Guns/models/block/bat_guano_height4.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height6.json](../../originals/Blocks/Guns/models/block/bat_guano_height6.json) | model JSON | — | — |
+| [Guns/models/block/bat_guano_height8.json](../../originals/Blocks/Guns/models/block/bat_guano_height8.json) | model JSON | — | — |
+| [Guns/models/block/black_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/black_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/blue_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/blue_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/brown_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/brown_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/charged_amethyst_relay_off.json](../../originals/Blocks/Guns/models/block/charged_amethyst_relay_off.json) | model JSON | — | — |
+| [Guns/models/block/charged_amethyst_relay_on.json](../../originals/Blocks/Guns/models/block/charged_amethyst_relay_on.json) | model JSON | — | — |
+| [Guns/models/block/chiseled_anthralite_block.json](../../originals/Blocks/Guns/models/block/chiseled_anthralite_block.json) | model JSON | — | — |
+| [Guns/models/block/chiseled_anthralite_block_lit.json](../../originals/Blocks/Guns/models/block/chiseled_anthralite_block_lit.json) | model JSON | — | — |
+| [Guns/models/block/chiseled_asgharian_bricks.json](../../originals/Blocks/Guns/models/block/chiseled_asgharian_bricks.json) | model JSON | — | — |
+| [Guns/models/block/chiseled_diamond_steel_block.json](../../originals/Blocks/Guns/models/block/chiseled_diamond_steel_block.json) | model JSON | — | — |
+| [Guns/models/block/chiseled_treated_brass_block.json](../../originals/Blocks/Guns/models/block/chiseled_treated_brass_block.json) | model JSON | — | — |
+| [Guns/models/block/chiseled_treated_iron_block.json](../../originals/Blocks/Guns/models/block/chiseled_treated_iron_block.json) | model JSON | — | — |
+| [Guns/models/block/cracked_asgharian_bricks.json](../../originals/Blocks/Guns/models/block/cracked_asgharian_bricks.json) | model JSON | — | — |
+| [Guns/models/block/cracked_asgharian_tiles.json](../../originals/Blocks/Guns/models/block/cracked_asgharian_tiles.json) | model JSON | — | — |
+| [Guns/models/block/cracked_phosphorite_bricks.json](../../originals/Blocks/Guns/models/block/cracked_phosphorite_bricks.json) | model JSON | — | — |
+| [Guns/models/block/cryoniter.json](../../originals/Blocks/Guns/models/block/cryoniter.json) | model JSON | — | — |
+| [Guns/models/block/cut_anthralite.json](../../originals/Blocks/Guns/models/block/cut_anthralite.json) | model JSON | — | — |
+| [Guns/models/block/cut_anthralite_slab.json](../../originals/Blocks/Guns/models/block/cut_anthralite_slab.json) | model JSON | — | — |
+| [Guns/models/block/cut_anthralite_slab_top.json](../../originals/Blocks/Guns/models/block/cut_anthralite_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/cut_anthralite_stairs.json](../../originals/Blocks/Guns/models/block/cut_anthralite_stairs.json) | model JSON | — | — |
+| [Guns/models/block/cut_anthralite_stairs_inner.json](../../originals/Blocks/Guns/models/block/cut_anthralite_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/cut_anthralite_stairs_outer.json](../../originals/Blocks/Guns/models/block/cut_anthralite_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/cut_diamond_steel.json](../../originals/Blocks/Guns/models/block/cut_diamond_steel.json) | model JSON | — | — |
+| [Guns/models/block/cut_diamond_steel_slab.json](../../originals/Blocks/Guns/models/block/cut_diamond_steel_slab.json) | model JSON | — | — |
+| [Guns/models/block/cut_diamond_steel_slab_top.json](../../originals/Blocks/Guns/models/block/cut_diamond_steel_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/cut_diamond_steel_stairs.json](../../originals/Blocks/Guns/models/block/cut_diamond_steel_stairs.json) | model JSON | — | — |
+| [Guns/models/block/cut_diamond_steel_stairs_inner.json](../../originals/Blocks/Guns/models/block/cut_diamond_steel_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/cut_diamond_steel_stairs_outer.json](../../originals/Blocks/Guns/models/block/cut_diamond_steel_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_brass.json](../../originals/Blocks/Guns/models/block/cut_treated_brass.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_brass_slab.json](../../originals/Blocks/Guns/models/block/cut_treated_brass_slab.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_brass_slab_top.json](../../originals/Blocks/Guns/models/block/cut_treated_brass_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_brass_stairs.json](../../originals/Blocks/Guns/models/block/cut_treated_brass_stairs.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_brass_stairs_inner.json](../../originals/Blocks/Guns/models/block/cut_treated_brass_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_brass_stairs_outer.json](../../originals/Blocks/Guns/models/block/cut_treated_brass_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_iron.json](../../originals/Blocks/Guns/models/block/cut_treated_iron.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_iron_slab.json](../../originals/Blocks/Guns/models/block/cut_treated_iron_slab.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_iron_slab_top.json](../../originals/Blocks/Guns/models/block/cut_treated_iron_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_iron_stairs.json](../../originals/Blocks/Guns/models/block/cut_treated_iron_stairs.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_iron_stairs_inner.json](../../originals/Blocks/Guns/models/block/cut_treated_iron_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/cut_treated_iron_stairs_outer.json](../../originals/Blocks/Guns/models/block/cut_treated_iron_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/cyan_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/cyan_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/damage_turret_module.json](../../originals/Blocks/Guns/models/block/damage_turret_module.json) | model JSON | — | — |
+| [Guns/models/block/damage_turret_module_connected.json](../../originals/Blocks/Guns/models/block/damage_turret_module_connected.json) | model JSON | — | — |
+| [Guns/models/block/deepslate_anthralite_ore.json](../../originals/Blocks/Guns/models/block/deepslate_anthralite_ore.json) | model JSON | — | — |
+| [Guns/models/block/deepslate_sulfur_ore.json](../../originals/Blocks/Guns/models/block/deepslate_sulfur_ore.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_bars_cap.json](../../originals/Blocks/Guns/models/block/diamond_steel_bars_cap.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_bars_cap_alt.json](../../originals/Blocks/Guns/models/block/diamond_steel_bars_cap_alt.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_bars_post.json](../../originals/Blocks/Guns/models/block/diamond_steel_bars_post.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_bars_post_ends.json](../../originals/Blocks/Guns/models/block/diamond_steel_bars_post_ends.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_bars_side.json](../../originals/Blocks/Guns/models/block/diamond_steel_bars_side.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_bars_side_alt.json](../../originals/Blocks/Guns/models/block/diamond_steel_bars_side_alt.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_block.json](../../originals/Blocks/Guns/models/block/diamond_steel_block.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_grate.json](../../originals/Blocks/Guns/models/block/diamond_steel_grate.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_grate_pane_noside.json](../../originals/Blocks/Guns/models/block/diamond_steel_grate_pane_noside.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_grate_pane_noside_alt.json](../../originals/Blocks/Guns/models/block/diamond_steel_grate_pane_noside_alt.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_grate_pane_post.json](../../originals/Blocks/Guns/models/block/diamond_steel_grate_pane_post.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_grate_pane_side.json](../../originals/Blocks/Guns/models/block/diamond_steel_grate_pane_side.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_grate_pane_side_alt.json](../../originals/Blocks/Guns/models/block/diamond_steel_grate_pane_side_alt.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_lamp.json](../../originals/Blocks/Guns/models/block/diamond_steel_lamp.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_panel.json](../../originals/Blocks/Guns/models/block/diamond_steel_panel.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_pillar.json](../../originals/Blocks/Guns/models/block/diamond_steel_pillar.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_tiles.json](../../originals/Blocks/Guns/models/block/diamond_steel_tiles.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_tiles_slab.json](../../originals/Blocks/Guns/models/block/diamond_steel_tiles_slab.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_tiles_slab_top.json](../../originals/Blocks/Guns/models/block/diamond_steel_tiles_slab_top.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_tiles_stairs.json](../../originals/Blocks/Guns/models/block/diamond_steel_tiles_stairs.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_tiles_stairs_inner.json](../../originals/Blocks/Guns/models/block/diamond_steel_tiles_stairs_inner.json) | model JSON | — | — |
+| [Guns/models/block/diamond_steel_tiles_stairs_outer.json](../../originals/Blocks/Guns/models/block/diamond_steel_tiles_stairs_outer.json) | model JSON | — | — |
+| [Guns/models/block/enemy_turret.json](../../originals/Blocks/Guns/models/block/enemy_turret.json) | model JSON | — | — |
+| [Guns/models/block/exo_suit_bench.json](../../originals/Blocks/Guns/models/block/exo_suit_bench.json) | model JSON | — | — |
+| [Guns/models/block/felix_memorial.json](../../originals/Blocks/Guns/models/block/felix_memorial.json) | model JSON | — | — |
+| [Guns/models/block/fire_rate_turret_module.json](../../originals/Blocks/Guns/models/block/fire_rate_turret_module.json) | model JSON | — | — |
+| [Guns/models/block/fire_rate_turret_module_connected.json](../../originals/Blocks/Guns/models/block/fire_rate_turret_module_connected.json) | model JSON | — | — |
+| [Guns/models/block/geothermal_vent.json](../../originals/Blocks/Guns/models/block/geothermal_vent.json) | model JSON | — | — |
+| [Guns/models/block/geothermal_vent_middle.json](../../originals/Blocks/Guns/models/block/geothermal_vent_middle.json) | model JSON | — | — |
+| [Guns/models/block/geothermal_vent_top.json](../../originals/Blocks/Guns/models/block/geothermal_vent_top.json) | model JSON | — | — |
+| [Guns/models/block/gray_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/gray_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/green_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/green_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/guano_candle.json](../../originals/Blocks/Guns/models/block/guano_candle.json) | model JSON | — | — |
+| [Guns/models/block/guano_candle_lit.json](../../originals/Blocks/Guns/models/block/guano_candle_lit.json) | model JSON | — | — |
+| [Guns/models/block/gun_bench.json](../../originals/Blocks/Guns/models/block/gun_bench.json) | model JSON | — | — |
+| [Guns/models/block/gun_shelf.json](../../originals/Blocks/Guns/models/block/gun_shelf.json) | model JSON | — | — |
+| [Guns/models/block/hostile_turret_targeting_module.json](../../originals/Blocks/Guns/models/block/hostile_turret_targeting_module.json) | model JSON | — | — |
+| [Guns/models/block/hostile_turret_targeting_module_connected.json](../../originals/Blocks/Guns/models/block/hostile_turret_targeting_module_connected.json) | model JSON | — | — |
+| [Guns/models/block/light_blue_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/light_blue_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/light_gray_niter_glass_opaque.json](../../originals/Blocks/Guns/models/block/light_gray_niter_glass_opaque.json) | model JSON | — | — |
+| [Guns/models/block/lightning_battery_high_power.json](../../originals/Blocks/Guns/models/block/lightning_battery_high_power.json) | model JSON | — | — |
+| [Guns/models/block/lightning_battery_low_power.json](../../originals/Blocks/Guns/models/block/lightning_battery_low_power.json) | model JSON | — | — |
+| [Guns/models/block/lightning_battery_mid_power.json](../../originals/Blocks/Guns/models/block/lightning_battery_mid_power.json) | model JSON | — | — |
+| [Guns/models/block/lightning_battery_no_power.json](../../originals/Blocks/Guns/models/block/lightning_battery_no_power.json) | model JSON | — | — |

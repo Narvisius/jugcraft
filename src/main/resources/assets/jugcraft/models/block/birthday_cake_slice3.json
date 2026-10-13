@@ -1,0 +1,172 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/birthday_cake_front",
+    "top": "jugcraft:block/birthday_cake_top",
+    "front": "jugcraft:block/birthday_cake_front",
+    "side": "jugcraft:block/birthday_cake_side",
+    "inside": "jugcraft:block/birthday_cake_inside",
+    "toppings": "jugcraft:block/birthday_cake_toppings"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        8,
+        9,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#inside",
+          "uv": [
+            0,
+            15,
+            8,
+            16
+          ],
+          "cullface": "down"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#inside"
+        },
+        "north": {
+          "texture": "#inside"
+        },
+        "south": {
+          "texture": "#front",
+          "cullface": "south"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        9,
+        14
+      ],
+      "to": [
+        7,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#toppings",
+          "uv": [
+            3,
+            0,
+            4,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#toppings",
+          "uv": [
+            3,
+            0,
+            4,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#toppings",
+          "uv": [
+            3,
+            0,
+            4,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#toppings",
+          "uv": [
+            3,
+            0,
+            4,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#toppings",
+          "uv": [
+            3,
+            4,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        9,
+        11
+      ],
+      "to": [
+        3,
+        13,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            0,
+            1,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            0,
+            1,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            0,
+            1,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            0,
+            1,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            4,
+            1,
+            5
+          ]
+        }
+      }
+    }
+  ]
+}

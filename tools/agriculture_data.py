@@ -54,6 +54,11 @@ import leaf_blower_data
 import decor15_data
 import decor16_data
 import decor17_data
+import lair_data
+import tatterlace_data
+import yeti_king_data
+import cinder_tyrant_data
+import vesperine_data
 import decor18_data
 import decor19_data
 import decor20_data
@@ -63,6 +68,19 @@ import regatta_data
 import flora_data
 import plants_data
 import trees_data
+import kitchen_data
+import feasts_data
+import menu_data
+import rice_data
+import soil_data
+import orchard_data
+import cake_data
+import pie_tart_data
+import milkshake_data
+import garden_data
+import herb_data
+import spice_data
+import milkshakes
 from agriculture import (FEATURE, TALL_CROPS, TALL_SECTIONS, CROPS, WILD_CROPS, WILD_PATCH, ITEMS, SICKLES,
                          SICKLE_PATTERN, COOKING, COOK_TIMES, SHAPELESS, SHAPED, POT_RECIPES, EQUIPMENT,
                          HEAT_TAG, HEAT_SOURCES, LEGUME_TAG, STALKS, WILD_BONUS, crop_blocks)
@@ -129,23 +147,6 @@ def trellis_crop_model():
             "textures": {"particle": "#crop"}, "elements": trellis_elements() + crop}
 
 
-def cooking_pot_model(contents):
-    """An iron pot: body, a raised rim around the contents, and a handle on each side."""
-    elements = [
-        box((3, 0, 3), (13, 7.5, 13), "#side", faces=("north", "south", "east", "west", "down")),
-        box((3.5, 7, 3.5), (12.5, 7, 12.5), "#contents", faces=("up",)),
-    ]
-    for lo, hi in (((2.5, 7, 2.5), (13.5, 8.5, 3.5)), ((2.5, 7, 12.5), (13.5, 8.5, 13.5)),
-                   ((2.5, 7, 3.5), (3.5, 8.5, 12.5)), ((12.5, 7, 3.5), (13.5, 8.5, 12.5))):
-        elements.append(box(lo, hi, "#rim", faces=("north", "south", "east", "west", "up")))
-    for lo, hi in (((1, 5, 7), (3, 6, 9)), ((13, 5, 7), (15, 6, 9))):
-        elements.append(box(lo, hi, "#rim"))
-    return {"parent": "minecraft:block/block",
-            "textures": {"particle": rid("block/cooking_pot_side"), "side": rid("block/cooking_pot_side"),
-                         "rim": rid("block/cooking_pot_rim"), "contents": rid(f"block/cooking_pot_{contents}")},
-            "elements": elements}
-
-
 # ---------------------------------------------------------------- assets
 
 def assets(root, write, lang):
@@ -157,23 +158,33 @@ def assets(root, write, lang):
     for info in TALL_CROPS.values():
         block = info["block"]
         variants = {}
-        for age, textures in enumerate(info["textures"]):
+        overripe = info.get("overripe")
+        for age, textures in enumerate(info["textures"] + ([overripe["textures"]] if overripe else [])):
             for texture in textures:
                 if info.get("trellis"):
                     write(root / "models" / "block" / f"{texture}.json", {"parent": rid("block/trellis_crop"), "textures": {
                         "crop": rid(f"block/{texture}"), "trellis": rid("block/trellis"), "post": rid("block/trellis_post")}})
                 else:
                     crop_model(texture)
+        for age, textures in enumerate(info["textures"]):
             for section in range(TALL_SECTIONS):
                 # Sections above the plant's height never exist; they reuse its top model.
-                variants[f"age={age},section={section}"] = {"model": rid(f"block/{textures[min(section, len(textures) - 1)]}")}
+                model = {"model": rid(f"block/{textures[min(section, len(textures) - 1)]}")}
+                if not overripe:
+                    variants[f"age={age},section={section}"] = model
+                    continue
+                # A vine that can go over (tools/garden.py OVERRIPE) only does once ripe; it shows withered then.
+                gone = overripe["textures"]
+                variants[f"age={age},{overripe['property']}=false,section={section}"] = model
+                variants[f"age={age},{overripe['property']}=true,section={section}"] = (
+                    {"model": rid(f"block/{gone[min(section, len(gone) - 1)]}")} if age == 7 else model)
         write(root / "blockstates" / f"{block}.json", {"variants": variants})
         lang[f"block.{MOD}.{block}"] = info["display"]
 
     for crop, info in CROPS.items():
         if info.get("sculpted"):
             # The mandrake: its crop, wild plant and root are sculpted (tools/flora_data.py).
-            wild = next(w for w, winfo in WILD_CROPS.items() if winfo["crop"] == crop)
+            wild = next(w for w, winfo in WILD_CROPS.items() if winfo.get("crop") == crop)
             flora_data.mandrake_assets(root, write, info["block"], wild, info["seed"], info["stages"])
             lang[f"block.{MOD}.{info['block']}"] = info["display"]
             continue
@@ -200,12 +211,16 @@ def assets(root, write, lang):
         "textures": {"particle": rid("block/trellis_post"), "trellis": rid("block/trellis"), "post": rid("block/trellis_post")},
         "elements": trellis_elements()})
     write(root / "blockstates" / "trellis.json", {"variants": {"": {"model": rid("block/trellis")}}})
-    write(root / "models" / "block" / "cooking_pot.json", cooking_pot_model("empty"))
-    write(root / "models" / "block" / "cooking_pot_cooking.json", cooking_pot_model("soup"))
+    # The Cooking Pot's models are the owner's pot (tools/menu_data.py cooking_pot_model), written with the menu.
     write(root / "blockstates" / "cooking_pot.json", {"variants": {
         "cooking=false": {"model": rid("block/cooking_pot")}, "cooking=true": {"model": rid("block/cooking_pot_cooking")}}})
     for block, info in EQUIPMENT.items():
-        write(root / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+        if block == "cooking_pot":
+            # the owner's pot icon (tools/menu.py COOKING_POT_TEXTURES)
+            write(root / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            write(root / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{block}")}})
+        else:
+            write(root / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
         lang[f"block.{MOD}.{block}"] = info["display"]
     lang[f"container.{MOD}.cooking_pot"] = "Cooking Pot"
     lang[f"container.{MOD}.cooking_pot.cold"] = "Needs heat below"
@@ -245,8 +260,9 @@ def assets(root, write, lang):
 
     sculpted_seeds = {info["seed"] for info in CROPS.values() if info.get("sculpted")}
     for item, info in list(ITEMS.items()) + list(SICKLES.items()):
-        if item in sculpted_seeds:
-            # Drawn as a sculpted model by flora_data.mandrake_assets above.
+        if item in sculpted_seeds or item in milkshakes.SHAKES:
+            # Drawn as a sculpted model by flora_data.mandrake_assets above, or a milkshake's 3D glass
+            # (milkshake_data.assets below).
             lang[f"item.{MOD}.{item}"] = info["display"]
             continue
         parent = "minecraft:item/handheld" if item in SICKLES else "minecraft:item/generated"
@@ -278,8 +294,25 @@ def assets(root, write, lang):
     decor18_data.assets(root, write, lang)
     decor19_data.assets(root, write, lang)
     decor20_data.assets(root, write, lang)
+    lair_data.assets(root, write, lang)
+    vesperine_data.assets(root, write, lang)
+    tatterlace_data.assets(root, write, lang)
+    yeti_king_data.assets(root, write, lang)
+    cinder_tyrant_data.assets(root, write, lang)
     ofrenda_data.assets(root, write, lang)
     graveyard_data.assets(root, write, lang)
+    kitchen_data.assets(root, write, lang)
+    feasts_data.assets(root, write, lang)
+    menu_data.assets(root, write, lang)
+    rice_data.assets(root, write, lang)
+    soil_data.assets(root, write, lang)
+    orchard_data.assets(root, write, lang)
+    cake_data.assets(root, write, lang)
+    pie_tart_data.assets(root, write, lang)
+    milkshake_data.assets(root, write)
+    garden_data.assets(root, write, lang)
+    herb_data.assets(root, write, lang)
+    spice_data.assets(root, write, lang)
 
 
 # ---------------------------------------------------------------- loot tables
@@ -329,9 +362,15 @@ def loot(data, write):
         block, pick = info["block"], info["pick"]
         # Only the bottom section has loot, so a broken plant drops once: its seed back, plus the
         # same harvest as picking if it was ripe.
+        overripe = info.get("overripe")
+        ripe = {overripe["property"]: "false"} if overripe else {}
         pools = [pool(entry(info["seed"]), condition=match_block(block, section=0)),
                  pool(entry(pick["item"], uniform(pick["min"], pick["max"]), FORTUNE_UNIFORM),
-                      condition=match_block(block, section=0, age=7))]
+                      condition=match_block(block, section=0, age=7, **ripe))]
+        if overripe:
+            # A vine gone over (tools/garden.py OVERRIPE) gives rotten tomatoes instead, as many.
+            pools.append(pool(entry(overripe["item"], uniform(pick["min"], pick["max"]), FORTUNE_UNIFORM),
+                              condition=match_block(block, section=0, age=7, **{overripe["property"]: "true"})))
         if info["seed"] in [TALL_CROPS[c]["seed"] for c in STALKS["crops"]]:
             # A plant three blocks tall (picked or not) gives dry stalks for corn shocks.
             pools.append(pool(entry(STALKS["item"], uniform(STALKS["min"], STALKS["max"])), condition={
@@ -353,7 +392,8 @@ def loot(data, write):
                 pool({"type": "minecraft:alternatives", "children": [entry(produce, condition=ripe), entry(seed)]}),
                 pool(entry(seed, FORTUNE_BINOMIAL), condition=ripe)))
     for wild, info in WILD_CROPS.items():
-        seed = TALL_CROPS[info["crop"]]["seed"] if info["crop"] in TALL_CROPS else CROPS[info["crop"]]["seed"]
+        # What the plant gives: its own `seed` (a vanilla crop's: tools/garden.py WILD), or its crop's planting item.
+        seed = info.get("seed") or (TALL_CROPS[info["crop"]]["seed"] if info["crop"] in TALL_CROPS else CROPS[info["crop"]]["seed"])
         pools = [pool({"type": "minecraft:alternatives", "children": [
             entry(wild, condition="minecraft:tool/can_shear"),
             entry(seed, uniform(1, 2), {"type": "minecraft:explosion_decay"}),
@@ -410,6 +450,11 @@ def loot(data, write):
     decor18_data.loot(out, write)
     decor19_data.loot(out, write)
     decor20_data.loot(out, write)
+    lair_data.loot(out, write)
+    vesperine_data.loot(out, write)
+    tatterlace_data.loot(out, write)
+    yeti_king_data.loot(out, write)
+    cinder_tyrant_data.loot(out, write)
     ferris_wheel_data.loot(out, write)
     hot_air_balloon_data.loot(out, write)
     theremin_data.loot(out, write)
@@ -419,6 +464,17 @@ def loot(data, write):
     firework_data.loot(out, write)
     feast_data.loot(out, write)
     maze_data.loot(out, write)
+    kitchen_data.loot(out, write)
+    feasts_data.loot(out, write)
+    menu_data.loot(out, write)
+    rice_data.loot(out, write)
+    soil_data.loot(out, write)
+    orchard_data.loot(out, write)
+    garden_data.loot(out, write)
+    herb_data.loot(out, write)
+    spice_data.loot(out, write)
+    cake_data.loot(out, write)
+    pie_tart_data.loot(out, write)
 
 
 # ---------------------------------------------------------------- recipes
@@ -477,6 +533,12 @@ def recipes(out, write):
     decor3_data.recipes(out, write, conditions)
     graveyard_data.recipes(out, write, conditions)
     decor18_data.recipes(out, write, conditions)
+    lair_data.recipes(out, write, conditions)
+    vesperine_data.recipes(out, write, conditions)
+    tatterlace_data.recipes(out, write, conditions)
+    yeti_king_data.recipes(out, write, conditions)
+    cinder_tyrant_data.recipes(out, write, conditions)
+    kitchen_data.recipes(out, write, conditions)
 
 
 # ---------------------------------------------------------------- tags
@@ -513,6 +575,11 @@ def tags(tags):
     decor18_data.tags(tags)
     decor19_data.tags(tags)
     decor20_data.tags(tags)
+    lair_data.tags(tags)
+    vesperine_data.tags(tags)
+    tatterlace_data.tags(tags)
+    yeti_king_data.tags(tags)
+    cinder_tyrant_data.tags(tags)
     ferris_wheel_data.tags(tags)
     hot_air_balloon_data.tags(tags)
     regatta_data.tags(tags)
@@ -550,12 +617,26 @@ def tags(tags):
     theremin_data.tags(tags)
     ofrenda_data.tags(tags)
     graveyard_data.tags(tags)
+    kitchen_data.tags(tags)
+    feasts_data.tags(tags)
+    menu_data.tags(tags)
+    rice_data.tags(tags)
+    soil_data.tags(tags)
+    orchard_data.tags(tags)
+    cake_data.tags(tags)
+    pie_tart_data.tags(tags)
+    herb_data.tags(tags)
+    spice_data.tags(tags)
 
 
 # ---------------------------------------------------------------- worldgen
 
 def advancements(data, write):
     regatta_data.advancements(data, write)
+    vesperine_data.advancements(data, write)
+    tatterlace_data.advancements(data, write)
+    yeti_king_data.advancements(data, write)
+    cinder_tyrant_data.advancements(data, write)
 
 
 def worldgen(data, write):
@@ -566,6 +647,9 @@ def worldgen(data, write):
     halloween_data.worldgen(data, write)
     foraging_data.worldgen(data, write)
     werewolf_data.worldgen(data, write)
+    rice_data.worldgen(data, write)
+    orchard_data.worldgen(data, write)
+    spice_data.worldgen(data, write)
     spread = WILD_PATCH["spread_xz"]
     for wild in WILD_CROPS:
         write(data / MOD / "worldgen" / "feature" / f"{wild}.json",
@@ -588,3 +672,4 @@ def worldgen(data, write):
                 ]}},
             ],
         })
+    lair_data.worldgen(data, write)

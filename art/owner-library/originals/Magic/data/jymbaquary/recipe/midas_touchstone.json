@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:anvil",
+    "#c:storage_blocks/gold",
+    "#c:storage_blocks/gold",
+    "jymbaquary:molten_core",
+    "jymbaquary:molten_core",
+    "jymbaquary:molten_core",
+    "jymbaquary:catalyzing_gland",
+    "jymbaquary:catalyzing_gland",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "!jymbaquary:enabled": {},
+        "!jymbaquary:oversized_item_container_contents": {}
+      },
+      "items": "jymbaquary:void_tear"
+    }
+  ],
+  "result": {
+    "id": "jymbaquary:midas_touchstone"
+  }
+}

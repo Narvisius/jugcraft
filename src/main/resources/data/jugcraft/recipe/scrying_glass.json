@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "GPG",
+    " S "
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "G": "minecraft:gold_ingot",
+    "P": "minecraft:glass_pane",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:scrying_glass",
+    "count": 1
+  }
+}

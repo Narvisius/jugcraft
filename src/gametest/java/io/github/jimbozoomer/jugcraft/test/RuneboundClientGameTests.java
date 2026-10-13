@@ -14,16 +14,15 @@ import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.BlockPos;
 
 /**
- * Client game test for the Runebound arms' smooth meshes (tools/arms_mesh.py, client/MeshItemModels.java;
- * docs/features/arms-vii.md "Runebound meshes"): the four on a close rack of armor stands by day and at midnight (their
- * runes and crystals glowing), each held from the front by day, the Moonblade and Nodachi in first person by day and
- * the Staff at night, and a Moonblade with the enchantment glint on its mesh (CI job {@code client}). Before the shots
- * it checks that the mesh model loader is registered, that at least the four arms were baked as meshes and that no
- * mesh model fell back to its box model, so the meshes, not their box fallbacks, are what the shots show.
+ * Client game test for all four Runebound arms: day/night racks, held views and enchantment glint.
+ * Nodachi, Staff and War Hammer retain smooth meshes (tools/arms_mesh.py, client/MeshItemModels.java);
+ * the owner's vanilla-style correction gives the Moonblade a pixel item model instead. Before the shots,
+ * check that the mesh loader is registered, all three remaining meshes baked and none used a box fallback.
  */
 public class RuneboundClientGameTests implements FabricClientGameTest {
 	private static final List<String> ARMS = List.of("runebound_nodachi", "runebound_moonblade", "runebound_staff",
 			"runebound_war_hammer");
+	private static final int EXPECTED_MESHES = 3; // Moonblade intentionally uses vanilla item extrusion now.
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
@@ -35,8 +34,8 @@ public class RuneboundClientGameTests implements FabricClientGameTest {
 		if (!registered) {
 			throw new AssertionError("The jugcraft:mesh model loader is not registered: the Runebound arms would draw as boxes");
 		}
-		if (baked < ARMS.size()) {
-			throw new AssertionError("Only " + baked + " mesh item models were baked, expected at least " + ARMS.size());
+		if (baked < EXPECTED_MESHES) {
+			throw new AssertionError("Only " + baked + " mesh item models were baked, expected at least " + EXPECTED_MESHES);
 		}
 		if (fallbacks != 0) {
 			throw new AssertionError(fallbacks + " mesh item models fell back to their box models (see the log)");
@@ -76,7 +75,7 @@ public class RuneboundClientGameTests implements FabricClientGameTest {
 				ready(context, server, x + 4, y, z, "jugcraft:" + arm);
 				context.takeScreenshot("jugcraft_runebound_held_" + arm.substring("runebound_".length()));
 			}
-			// The glint on the mesh: a Moonblade made to shine as an enchanted one does.
+			// The glint on the pixel Moonblade: it must still shine as an enchanted one does.
 			ready(context, server, x + 4, y, z, "jugcraft:runebound_moonblade[minecraft:enchantment_glint_override=true]");
 			context.takeScreenshot("jugcraft_runebound_held_glint");
 

@@ -1,0 +1,24 @@
+{
+  "structures": [
+    {
+      "structure": "ars_jimbaux:hunter_wilden_den",
+      "weight": 1
+    },{
+      "structure": "ars_jimbaux:guardian_wilden_den",
+      "weight": 25
+    },{
+      "structure": "ars_jimbaux:stalker_wilden_den",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1224466880,
+    "spacing": 36,
+    "separation": 10,
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "minecraft:villages"
+    }
+  }
+}

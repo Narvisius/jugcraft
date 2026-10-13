@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:hydroponics",
+  "ingredient": "jugcraft:coffee_seeds",
+  "result": {
+    "id": "jugcraft:coffee_cherries",
+    "count": 2
+  },
+  "time": 600,
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:coffee_seeds",
+        "count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "result": {
+        "id": "jugcraft:coffee_seeds",
+        "count": 1
+      },
+      "chance": 0.5
+    }
+  ]
+}

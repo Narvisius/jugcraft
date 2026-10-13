@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:glacier_maul"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.abominable.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.abominable.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

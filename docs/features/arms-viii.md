@@ -61,6 +61,7 @@ Four new kinds of arm in bronze and steel. Each fights in the hand like any arm,
 - **Game tests (`ArmsVIIIGameTests`)**, written for CI, with mock players' real throws (the item's own release after a full wind):
   - every thrown arm is a `ThrownArmItem` with its numbers;
   - a steel javelin strikes a still pig for 8 and comes down as itself, worn by one;
+  - a steel javelin set going slowly at a still pig, to end a tick 0.02 short of it, strikes it as the next tick starts (set going rather than thrown, so its flight is the same every time);
   - a bronze chakram cuts two pigs in line on its way out and again on its way back (8 each), and is caught into its thrower's inventory;
   - a steel harpoon strikes a pig 8 blocks off for 6 and hauls it more than 2 blocks in;
   - a francisca's blow knocks a raised shield down (it goes on cooldown and is lowered);
@@ -80,6 +81,18 @@ Four new kinds of arm in bronze and steel. Each fights in the hand like any arm,
     - its shots show the javelin wound back over the shoulder and let go, the francisca raised in first person, the javelin come down by the struck pig, and the chakram on its way out. The four in flight are drawn, but small at that distance.
   - **36506e23 and 0570f0d0, with main (#184 and #192) merged in:** the server tests failed once, on both commits. The chakram took 8 from the near pig and only 4 from the far one: its way back missed the far pig. The hit cooldown was ruled out: the field the return pass resets is the one 26.3's `LivingEntity.hurtServer` checks. Each cut knocks its pig back, which can carry it off the walk or out of the chakram's way back. 39f1f6c3 holds the test's pigs still (knockback resistance 1), clears the corridor the chakram flies along, and names where the pigs ended up if it fails.
   - **39f1f6c3: all green.** The build, all 777 server tests (the chakram took both pigs from 10 to 2) and the three client shards passed.
+  - **The harpoon test, now and then:** it failed on #268 ([run 37737290079](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/37737290079)), which doesn't touch the thrown arms: "The harpoon took 0.0, not 6.0 (come down at 1.57 2.00 8.93)".
+    - Aimed straight at its pig's middle, the harpoon's arc came to the pig only a tenth of a block above the floor. The throw's spread (up to about a degree) then put it into the floor just short of the pig.
+    - A simulation of the flight gives that landing for a spread of 0.016 down, and a miss in about one throw in forty.
+    - 0379ba3d2 has the tests' thrower aim so that the arm's own arc comes to the foe's middle. In the simulation, none of 200,000 throws then misses, for any of the four throw tests.
+  - **The javelin test, now and then:** it failed on `main` at 4b36d2254 ([run 38064998964](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38064998964)) and on https://github.com/jimbozoomer-byte/jugcraft/pull/301 ([run 38068295432](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38068295432)), neither of which touches the thrown arms: "The pig at 1.50 2.00 7.50 is not struck yet (come down at 1.47 2.00 9.85 …)", and the same with 9.58. Both times the javelin came down past the pig, so it had flown through it.
+    - From a flight's third tick, the sweep that finds what a thrown thing hits (vanilla's `ProjectileUtil`) widens each box it looks for by 0.05, and 0.05 more each tick, up to 0.3. It finds only the boxes it enters.
+    - The test's throw ends its second tick about 0.1 short of the pig. Its spread can carry it 0.05 to 0.1 further: into the third tick's widening, but not to the pig. The third tick then starts inside the box and flies on through.
+    - The simulation above left the widening out. With it, the javelin goes through the pig in about one throw in nine and comes down 9.2 to 10.7 along the arena; the two failures came down at 9.58 and 9.85. The bronze javelin's and the harpoon's throws never end a tick in the widening.
+    - CI has seen it less often than the simulation gives: two of the latest ten Build runs that ran to the end failed on it. So the simulation overstates how often, but the landings show the cause.
+    - **The fix:** at the start of each tick but the first, a thrown arm strikes any foe whose box, widened as the sweep widens it that tick, it is already inside (`ThrownArm.strikeWithin`). With it, none of 200,000 simulated throws misses in the steel javelin's, the bronze javelin's or the harpoon's test.
+    - A new test sets a javelin going slowly, straight at a still pig, to end its second tick 0.02 short. In the simulation, it flew through without the fix and came down 8.67 along; with it, it strikes the pig as its third tick starts.
+    - **Known limit:** a foe that turns projectiles aside (the breeze) is struck, not turned aside, when the arm starts a tick inside it. Before, the arm flew through it.
 - **Not run:** play; two players; how the throws feel against real mobs; the harpoon underwater (only its code path, which undoes water's drag).
 
 ## World and event applicability

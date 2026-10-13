@@ -1,0 +1,52 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:garden/habitats",
+  "category": "jugcraft:garden",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.garden.habitats.name",
+  "description": "book.jugcraft.arcane_concordance.garden.habitats.description",
+  "icon": "jugcraft:verdant_bed",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/verdant_husbandry_encountered",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.verdant_husbandry.encountered"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.garden.habitats.p0.title",
+      "recipe_id_1": "jugcraft:verdant_bed",
+      "text": "book.jugcraft.arcane_concordance.garden.habitats.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.garden.habitats.p1.title",
+      "text": "book.jugcraft.arcane_concordance.garden.habitats.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.garden.habitats.p2.title",
+      "text": "book.jugcraft.arcane_concordance.garden.habitats.p2.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.garden.habitats.p3.title",
+      "text": "book.jugcraft.arcane_concordance.garden.habitats.p3.text",
+      "show_title_separator": true
+    }
+  ]
+}

@@ -18,6 +18,7 @@ public class ArmouredWalkerRenderer extends EntityRenderer<ArmouredWalker, Armou
 	public static final class State extends EntityRenderState {
 		float yRot;
 		float stride;
+		float strideWeight;
 		float ram;
 	}
 
@@ -41,7 +42,8 @@ public class ArmouredWalkerRenderer extends EntityRenderer<ArmouredWalker, Armou
 	public void extractRenderState(ArmouredWalker walker, State state, float partialTick) {
 		super.extractRenderState(walker, state, partialTick);
 		state.yRot = walker.getYRot(partialTick);
-		state.stride = walker.stride();
+		state.stride = walker.stride(partialTick);
+		state.strideWeight = walker.strideWeight(partialTick);
 		state.ram = ArmouredWalkerParts.ram(walker.sinceSwing() + partialTick);
 	}
 
@@ -49,7 +51,7 @@ public class ArmouredWalkerRenderer extends EntityRenderer<ArmouredWalker, Armou
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
 		pose.pushPose();
 		pose.rotateDegrees(Axis.YP, -state.yRot);
-		ArmouredWalkerParts.draw("armoured_walker", pose, collector, state.lightCoords, state.stride, state.ram);
+		ArmouredWalkerParts.draw("armoured_walker", pose, collector, state.lightCoords, state.stride, state.strideWeight, state.ram);
 		pose.popPose();
 		super.submit(state, pose, collector, camera);
 	}

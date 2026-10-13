@@ -1,0 +1,269 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.cinderling",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.2,
+        "visible_bounds_height": 0.8,
+        "visible_bounds_offset": [
+          0,
+          0.4,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "ling",
+          "pivot": [
+            0.0,
+            4.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -3.5,
+                2.0,
+                -5.0
+              ],
+              "size": [
+                7,
+                5,
+                10
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1.0,
+                7.0,
+                -4.0
+              ],
+              "size": [
+                2,
+                2,
+                8
+              ],
+              "uv": [
+                0,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ling_head",
+          "pivot": [
+            0.0,
+            4.5,
+            -5.0
+          ],
+          "parent": "ling",
+          "cubes": [
+            {
+              "origin": [
+                -3.0,
+                2.5,
+                -10.0
+              ],
+              "size": [
+                6,
+                4,
+                5
+              ],
+              "uv": [
+                20,
+                15
+              ]
+            },
+            {
+              "origin": [
+                1.5,
+                6.5,
+                -8.5
+              ],
+              "size": [
+                2,
+                1,
+                2
+              ],
+              "uv": [
+                56,
+                15
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                6.5,
+                -8.5
+              ],
+              "size": [
+                2,
+                1,
+                2
+              ],
+              "mirror": true,
+              "uv": [
+                56,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ling_tail",
+          "pivot": [
+            0.0,
+            4.5,
+            5.0
+          ],
+          "parent": "ling",
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                3.0,
+                5.0
+              ],
+              "size": [
+                3,
+                3,
+                8
+              ],
+              "uv": [
+                34,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ling_leg_fl",
+          "pivot": [
+            3.5,
+            3.0,
+            -3.0
+          ],
+          "parent": "ling",
+          "cubes": [
+            {
+              "origin": [
+                3.5,
+                0.0,
+                -4.5
+              ],
+              "size": [
+                4,
+                3,
+                3
+              ],
+              "uv": [
+                42,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ling_leg_fr",
+          "pivot": [
+            -3.5,
+            3.0,
+            -3.0
+          ],
+          "parent": "ling",
+          "cubes": [
+            {
+              "origin": [
+                -7.5,
+                0.0,
+                -4.5
+              ],
+              "size": [
+                4,
+                3,
+                3
+              ],
+              "mirror": true,
+              "uv": [
+                42,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ling_leg_bl",
+          "pivot": [
+            3.5,
+            3.0,
+            3.0
+          ],
+          "parent": "ling",
+          "cubes": [
+            {
+              "origin": [
+                3.5,
+                0.0,
+                1.5
+              ],
+              "size": [
+                4,
+                3,
+                3
+              ],
+              "uv": [
+                42,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ling_leg_br",
+          "pivot": [
+            -3.5,
+            3.0,
+            3.0
+          ],
+          "parent": "ling",
+          "cubes": [
+            {
+              "origin": [
+                -7.5,
+                0.0,
+                1.5
+              ],
+              "size": [
+                4,
+                3,
+                3
+              ],
+              "mirror": true,
+              "uv": [
+                42,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:circles/rituals",
+  "category": "jugcraft:circles",
+  "x": 0,
+  "y": 2,
+  "name": "book.jugcraft.arcane_concordance.circles.rituals.name",
+  "description": "book.jugcraft.arcane_concordance.circles.rituals.description",
+  "icon": "jugcraft:initiate_wand",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/circle_lore_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.circle_lore.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.circles.rituals.p0.title",
+      "text": "book.jugcraft.arcane_concordance.circles.rituals.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.circles.rituals.p1.title",
+      "text": "book.jugcraft.arcane_concordance.circles.rituals.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.circles.rituals.p2.title",
+      "text": "book.jugcraft.arcane_concordance.circles.rituals.p2.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.circles.rituals.p3.title",
+      "text": "book.jugcraft.arcane_concordance.circles.rituals.p3.text",
+      "show_title_separator": true
+    }
+  ]
+}

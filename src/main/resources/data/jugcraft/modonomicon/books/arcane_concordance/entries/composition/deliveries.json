@@ -1,0 +1,45 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:composition/deliveries",
+  "category": "jugcraft:composition",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.composition.deliveries.name",
+  "description": "book.jugcraft.arcane_concordance.composition.deliveries.description",
+  "icon": "minecraft:spectral_arrow",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/first_light_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.composition.deliveries.p0.title",
+      "text": "book.jugcraft.arcane_concordance.composition.deliveries.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.composition.deliveries.p1.title",
+      "text": "book.jugcraft.arcane_concordance.composition.deliveries.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.composition.deliveries.p2.title",
+      "text": "book.jugcraft.arcane_concordance.composition.deliveries.p2.text",
+      "show_title_separator": true
+    }
+  ]
+}

@@ -1,14 +1,15 @@
 """Original textures for pie baking (fall additions 16) (requires Pillow): the Hearth Oven's red bricks with pale mortar,
-its sooty inside, glowing embers and stone hearth; the pies' lattice tops (golden pastry strips over each filling), the
-fillings where a pie is cut, the fluted crust edge and the tin; the near-white crust the oven's renderer tints as a pie
-bakes; and the raw pies, slices and pastry dough as items.
+its sooty inside, glowing embers and stone hearth; the pies' lattice tops (golden pastry strips over each filling; the
+orchards' lemon meringue pie wears toasted meringue instead), the fillings where a pie is cut, the fluted crust edge and
+the tin; the near-white crust the oven's renderer tints as a pie bakes; and the raw pies, slices and pastry dough as
+items.
 
 Called from crop_textures.crop_textures(). Every pixel is drawn here by code, from a fixed seed; no Mojang texture is
 read, traced or recoloured.
 """
 from PIL import Image
 
-from agriculture import PIES
+from agriculture import PIES, pie_name
 from crop_textures import Canvas, rgb, outline
 from halloween_textures import shade
 import block_style as bs
@@ -22,6 +23,10 @@ CRUST = [rgb("c8862e"), rgb("d89a40"), rgb("e8b058"), rgb("f0c470")]
 RAW = [rgb("e6d0a0"), rgb("eedcb0"), rgb("f4e6c0"), rgb("faeed0")]
 TIN = [rgb("8a8c90"), rgb("a0a2a6"), rgb("b4b6ba")]
 BURNT = [rgb("1c120c"), rgb("2a1a10"), rgb("3a2616"), rgb("4a3020")]
+# Meringue (the orchards' lemon meringue pie, tools/orchard.py): cream to white, and its tips toasted gold.
+MERINGUE = [rgb("d6c6a4"), rgb("ebe0c8"), rgb("f7f0e0"), rgb("fffbf2")]
+TOAST = [rgb("b27a36"), rgb("d4a45e")]
+PEAKS = [(3, 3), (8, 2), (12, 4), (5, 7), (10, 8), (2, 11), (7, 12), (12, 11)]
 
 
 def noise(palette, seed, weights=None):
@@ -74,12 +79,29 @@ def lattice_top(filling, crust=CRUST, seed=16200):
     return img
 
 
-def inside(filling, seed):
-    """The filling where a pie is cut, under a line of top crust and over the bottom crust."""
+def meringue_top(seed, crust=CRUST):
+    """A meringue pie's top: swirled meringue in peaks, each toasted gold at its tip and shadowed below, in a crust rim."""
+    img = noise(MERINGUE, seed, [1, 2, 4, 3])
+    for x, y in PEAKS:
+        for px, py, colour in ((x, y, TOAST[1]), (x - 1, y + 1, MERINGUE[3]), (x, y + 1, TOAST[0]), (x + 1, y + 1, MERINGUE[2]),
+                               (x + 1, y + 2, MERINGUE[0]), (x, y + 2, MERINGUE[1])):
+            if 0 < px < 15 and 0 < py < 15:
+                img.putpixel((px, py), colour + (255,))
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                img.putpixel((x, y), crust[1] + (255,))
+    return img
+
+
+def inside(filling, seed, meringue=False):
+    """The filling where a pie is cut, under a line of top crust (or a deep layer of meringue) and over the bottom crust."""
     img = noise(filling, seed, [1, 3, 3, 1])
+    top = ((0, MERINGUE[3]), (1, MERINGUE[2]), (2, MERINGUE[2]), (3, MERINGUE[1]), (4, MERINGUE[0])) if meringue else \
+        ((0, CRUST[3]), (1, CRUST[2]), (2, CRUST[2]), (3, CRUST[1]))
     for x in range(16):
-        for y, tone in ((0, 3), (1, 2), (2, 2), (3, 1), (12, 2), (13, 1), (14, 1), (15, 0)):
-            img.putpixel((x, y), CRUST[tone] + (255,))
+        for y, colour in top + ((12, CRUST[2]), (13, CRUST[1]), (14, CRUST[1]), (15, CRUST[0])):
+            img.putpixel((x, y), colour + (255,))
     return img
 
 
@@ -105,12 +127,17 @@ def crust_white():
     return img
 
 
-def raw_pie_item(filling):
-    """A raw pie seen from above: pale pastry lattice over the filling, in a tin."""
+def raw_pie_item(filling, meringue=False):
+    """A raw pie seen from above: pale pastry lattice over the filling (or dollops of white meringue), in a tin."""
     c = Canvas()
     for y in range(2, 14):
         for x in range(2, 14):
             if (x - 7.5) ** 2 + (y - 7.5) ** 2 <= 36:
+                if meringue:
+                    dollop = (x % 4 in (1, 2)) and (y % 4 in (1, 2))
+                    c.px(x, y, MERINGUE[3] if dollop and x + y < 14 else MERINGUE[2] if dollop
+                         else filling[3] if x + y < 12 else filling[2])
+                    continue
                 strip = x % 4 == 1 or y % 4 == 1
                 c.px(x, y, RAW[2] if strip else filling[3] if x + y < 12 else filling[2])
     for y in range(2, 14):
@@ -121,13 +148,15 @@ def raw_pie_item(filling):
     return c.img
 
 
-def slice_item(filling):
-    """A wedge of pie: golden lattice on top, the filling and the bottom crust on its cut side."""
+def slice_item(filling, meringue=False):
+    """A wedge of pie: golden lattice (or toasted meringue) on top, the filling and the bottom crust on its cut side."""
     c = Canvas()
     for y in range(3, 13):
         width = int((y - 3) * 1.1) + 2
         for x in range(8 - width // 2, 8 + width // 2 + 1):
-            if y < 6:
+            if y < 6 and meringue:
+                c.px(x, y, TOAST[1] if y == 3 else MERINGUE[3] if x % 3 else MERINGUE[2])
+            elif y < 6:
                 c.px(x, y, CRUST[2] if x % 3 else CRUST[3])
             elif y < 11:
                 c.px(x, y, filling[3] if y == 6 else filling[2] if y < 9 else filling[1])
@@ -158,8 +187,12 @@ def pie_textures():
            ("item", PIES["dough"]): dough_item()}
     for i, (filling, info) in enumerate(PIES["fillings"].items()):
         palette = filling_palette(info["color"])
-        out[("block", f"{filling}_pie_top")] = lattice_top(palette, seed=16200 + 10 * i)
-        out[("block", f"{filling}_pie_inside")] = inside(palette, 16201 + 10 * i)
-        out[("item", f"raw_{filling}_pie")] = raw_pie_item(palette)
-        out[("item", f"{filling}_pie_slice")] = slice_item(palette)
+        name = pie_name(filling)
+        meringue = info.get("top") == "meringue"
+        out[("item", f"raw_{name}")] = raw_pie_item(palette, meringue)
+        if info.get("owner"):
+            continue  # its top, filling and slice are the owner's own art (tools/feasts.py, tools/owner_art.py)
+        out[("block", f"{name}_top")] = meringue_top(16200 + 10 * i) if meringue else lattice_top(palette, seed=16200 + 10 * i)
+        out[("block", f"{name}_inside")] = inside(palette, 16201 + 10 * i, meringue)
+        out[("item", f"{name}_slice")] = slice_item(palette, meringue)
     return out

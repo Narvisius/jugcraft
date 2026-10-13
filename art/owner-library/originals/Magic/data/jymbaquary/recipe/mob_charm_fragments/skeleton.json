@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:rib_bone",
+    "S": "minecraft:bone",
+    "T": "minecraft:flint"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:skeleton"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "school": "spell_power:arcane",
+  "range": 32.0,
+  "tier": 1,
+  "group": "concordance",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0.5,
+      "animation": {
+        "id": "jugcraft:kindle_cast"
+      },
+      "start_sound": {
+        "id": "jugcraft:concordance.kindle_gather"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:kindle_release"
+    },
+    "sound": {
+      "id": "jugcraft:concordance.kindle"
+    }
+  },
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:composed",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 0.5,
+      "hosting_item": false
+    }
+  }
+}

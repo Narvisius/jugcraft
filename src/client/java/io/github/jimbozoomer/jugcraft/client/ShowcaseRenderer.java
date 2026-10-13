@@ -5,6 +5,8 @@ import com.mojang.math.Axis;
 import io.github.jimbozoomer.jugcraft.agriculture.BellJarBlock;
 import io.github.jimbozoomer.jugcraft.agriculture.BroomRackBlock;
 import io.github.jimbozoomer.jugcraft.agriculture.CuriosityCabinetBlock;
+import io.github.jimbozoomer.jugcraft.agriculture.FoodDisplay;
+import io.github.jimbozoomer.jugcraft.agriculture.FoodDisplayBlock;
 import io.github.jimbozoomer.jugcraft.agriculture.ShowcaseBlockEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -17,6 +19,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,7 +29,8 @@ import org.jspecify.annotations.Nullable;
 /**
  * Draws what is on show in the Witch's Workshop's displays: the Curiosity Cabinet's nine things on its three shelves,
  * behind glazed doors that swing open while someone reaches in; the Bell Jar's one thing, turning slowly on its plinth;
- * and the brooms hung from the Broom Rack's pegs.
+ * the brooms hung from the Broom Rack's pegs; and the food set on the food displays (the plate, the platter and the serving
+ * tray), lying flat where it was set, or standing if it is a block (a pie, a cake).
  */
 public class ShowcaseRenderer implements BlockEntityRenderer<ShowcaseBlockEntity, ShowcaseRenderer.State> {
 	/** The cabinet's nine places, {x, y, z} pixels (the thing's bottom middle), row by row from the bottom (tools/decor17_data.py). */
@@ -42,6 +46,7 @@ public class ShowcaseRenderer implements BlockEntityRenderer<ShowcaseBlockEntity
 
 	public static final class State extends BlockEntityRenderState {
 		final ItemStackRenderState[] things = new ItemStackRenderState[CuriosityCabinetBlock.PLACES];
+		final boolean[] standing = new boolean[CuriosityCabinetBlock.PLACES];
 		int places;
 		Block block;
 		Direction facing = Direction.NORTH;
@@ -78,6 +83,7 @@ public class ShowcaseRenderer implements BlockEntityRenderer<ShowcaseBlockEntity
 		for (int i = 0; i < state.places; i++) {
 			itemModels.updateForTopItem(state.things[i], showcase.get(i), ItemDisplayContext.FIXED, showcase.getLevel(), null,
 					(int) showcase.getBlockPos().asLong() + i);
+			state.standing[i] = showcase.get(i).getItem() instanceof BlockItem;
 		}
 		float since = now - showcase.opened() + partialTick;
 		int ticks = CuriosityCabinetBlock.DOOR_TICKS;
@@ -111,6 +117,18 @@ public class ShowcaseRenderer implements BlockEntityRenderer<ShowcaseBlockEntity
 				pose.translate(0.0F, 0.5F, 0.0F);
 				state.things[i].submit(pose, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 				pose.popPose();
+			}
+		} else if (state.block instanceof FoodDisplayBlock block) {
+			// The pose is already turned with the display, so its layout is drawn as for one facing north.
+			FoodDisplay display = block.display();
+			for (int i = 0; i < Math.min(state.places, display.places()); i++) {
+				float[] at = display.layout[i];
+				if (state.standing[i]) {
+					thing(state.things[i], new float[] {at[0], display.height, at[1]}, display.scale, 180.0F, pose, collector, state.lightCoords);
+				} else if (!state.things[i].isEmpty()) {
+					KitchenDraw.flat(pose, collector, state.things[i], Direction.NORTH, at[0], display.height, at[1], display.scale, i * 25.0F,
+							state.lightCoords);
+				}
 			}
 		}
 		pose.popPose();

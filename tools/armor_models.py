@@ -79,6 +79,7 @@ SET_TARGET = 600
 SKIN_SHELLS = {bone: (0.0, 0.5) if bone == "head" else (0.0, 0.25) for bone in BONES}
 SKIN_GAP = 0.15
 COPLANAR_GAP = 0.1
+EPS = 1e-9          # float slack: a gap of exactly COPLANAR_GAP, read back from a Blockbench project, still passes
 VANILLA_SHELLS = {"chestplate": {"body": 0.5}, "leggings": {b: 1.0 for b in ("body", "right_leg", "left_leg")},
                   "boots": {"right_leg": 0.5, "left_leg": 0.5}}
 # Parts beyond these (body space, standing) may pop out at the screen edge (the entity's cull box): warned, not refused.
@@ -87,7 +88,22 @@ REACH_X, REACH_UP, FLOOR = 12.0, -14.0, 25.0   # FLOOR: 1 px into the ground, as
 # Modules that define armor sets, each with a SETS list.
 SET_MODULES = ("knight_armor",         # the knight armor: the owner's steel design and its bronze variant
                "bloodthorn_armor",     # Bloodthorn Armor: the owner's crimson design
-               "white_diamond_armor")  # Reforged White Diamond: the owner's icy design
+               "white_diamond_armor",  # Reforged White Diamond: the owner's icy design
+               "hades_armor",          # Hades Armor: the owner's underworld design
+               "sunset_gem_armor",     # Sunset Gem: the owner's sunset design
+               "pharaoh_armor",        # Pharaoh: the owner's golden design
+               "dread_knight_armor",   # Dread Knight: the owner's dark crowned knight
+               "valkyrie_armor",       # Valkyrie: the owner's white and gold winged design
+               "wayfarer_armor",       # Wayfarer: the owner's blue hooded cloak
+               "spartan_armor",        # Spartan: the owner's gold plumed design
+               "berserker_armor",      # Berserker: the owner's horned red and white design
+               "crusader_armor",       # Paladin and Templar: the owner's two crusader knights
+               "sentinel_armor",       # Sentinel: the owner's gold-and-black knight
+               "frost_knight_armor",   # Frost Knight: the owner's white knight crowned with ice
+               "wight_king_armor",     # Wight King: the owner's slate knight crowned with icicles and antlers
+               "reaper_armor",         # Reaper: the owner's hooded reaper
+               "banana_armor",         # Banana: the owner's banana costume
+               "scarab_armor")         # Scarab: the owner's gold-and-lapis Egyptian set
 
 
 def face_name(name):
@@ -174,7 +190,9 @@ class Part:
     rotation; it may be any size and stick out anywhere. paint says what tools/armor_paint.py draws on it: one spec for
     the whole box or a dict per face (see armor_paint). skip lists faces not drawn (pressed against another plate,
     inside the body). net names another part whose texture region this one shows (mirrored copies share it); mirror
-    draws the region mirrored, as vanilla's mirror flag. cutout lets the paint leave see-through texels."""
+    draws the region mirrored, as vanilla's mirror flag. cutout lets the paint leave see-through texels. uvs, when
+    given, are the part's own texels instead of a net: ((face, ((u, v) x 4)), ...) in atlas texels on the face's
+    corners in part_faces' order, faces left out not drawn (a part read from a Blockbench project, tools/bbmodel.py)."""
     name: str
     origin: tuple
     size: tuple
@@ -187,6 +205,7 @@ class Part:
     skip: frozenset = frozenset()
     net: str = ""
     cutout: bool = False
+    uvs: tuple = ()
 
     def __post_init__(self):
         if not self.name or "/" in self.name:
@@ -397,7 +416,9 @@ def rivets(name, start, step, count, size=(0.75, 0.75, 0.5), face="front", paint
 @dataclass
 class ArmorSet:
     """One look: the worn models of its items, one atlas texture and one palette. pieces maps an item id path
-    ("steel_helmet") to {bone: [Part]}; any piece may put parts on any bone. Part names are unique in the set."""
+    ("steel_helmet") to {bone: [Part]}; any piece may put parts on any bone. Part names are unique in the set.
+    image: an atlas of its own (a PIL image, as a Blockbench project carries it) instead of one armor_paint paints;
+    its parts then give their texels (Part.uvs) and atlas_size is the image's size."""
     name: str
     palette: dict
     pieces: dict
@@ -405,6 +426,8 @@ class ArmorSet:
     density: int = 1
     pad: int = 1
     texture: str = field(default="")
+    image: object = None
+    atlas_size: tuple = ()
 
     def __post_init__(self):
         if not self.texture:
@@ -449,6 +472,10 @@ def check(s):
         if part.name in names:
             raise ValueError(f"{s.name}: part name {part.name!r} is used twice")
         names.add(part.name)
+        if part.uvs:
+            if not s.atlas_size:
+                raise ValueError(f"{s.name}: {part.name} gives its own texels, but the set has no atlas_size")
+            continue
         size = net_size(part, s.density)
         if nets.setdefault(part.key, size) != size:
             raise ValueError(f"{s.name}: {part.name} shares net {part.key} but its size is {size}, not {nets[part.key]}")
@@ -472,6 +499,10 @@ def layout(s):
             x, y, row = 0, y + row, 0
         out[key] = (x, y, w, h, d)
         x, row = x + nw, max(row, nh)
+    if s.atlas_size:
+        if out:
+            raise ValueError(f"{s.name}: an atlas of its own (atlas_size) holds no packed nets")
+        return out, tuple(s.atlas_size)
     height = 1
     while height < y + row:
         height *= 2
@@ -485,7 +516,9 @@ _CORNERS = {"top": (6, 5, 1, 2), "bottom": (3, 4, 8, 7), "right": (1, 5, 8, 4), 
 
 
 def part_faces(part, density=1):
-    """The part's drawn faces in bone space: [(face, 4 points, 4 (u, v) texel coordinates in its net, normal)]."""
+    """The part's drawn faces in bone space: [(face, 4 points, 4 (u, v) texel coordinates in its net, normal)]. A part
+    with texels of its own (uvs) gives them, in atlas texels."""
+    own = dict(part.uvs)
     w, h, d = net_size(part, density)
     rects = face_rects(w, h, d)
     g = part.inflate
@@ -498,13 +531,13 @@ def part_faces(part, density=1):
     r, t = transform(part)
     out = []
     for face in FACES:
-        if face in part.skip:
+        if face in part.skip or (part.uvs and face not in own):
             continue
         u1, v1, u2, v2 = rects[face]
         if face == "bottom":
             v1, v2 = v2, v1
         pts = [c[i] for i in _CORNERS[face]]
-        uvs = [(u2, v1), (u1, v1), (u1, v2), (u2, v2)]
+        uvs = list(own[face]) if part.uvs else [(u2, v1), (u1, v1), (u1, v2), (u2, v2)]
         normal = NORMALS[face]
         if part.mirror:
             pts, uvs = pts[::-1], uvs[::-1]
@@ -543,15 +576,24 @@ def set_quads(s):
     out = {}
     for item, bones in s.pieces.items():
         for bone, parts in bones.items():
-            out[f"{item}_{bone}"] = [q for p in parts for q in part_quads(p, nets[p.key], atlas, s.texture, s.density)]
+            out[f"{item}_{bone}"] = [q for p in parts for q in part_quads(p, nets.get(p.key, (0, 0)), atlas, s.texture,
+                                                                         s.density)]
     for message in budget(s, out):
         raise ValueError(message)
     return out
 
 
+def _drawn_faces(part):
+    """How many faces a part draws: six less those it skips, and for a part with its own texels (from a Blockbench
+    project) only the faces it has texels for."""
+    if part.uvs:
+        return sum(1 for face in dict(part.uvs) if face not in part.skip)
+    return 6 - len(part.skip)
+
+
 def budget(s, quads=None):
     """Over-cap messages: per worn entry, per piece (by its kind) and per set."""
-    quads = quads if quads is not None else {f"{i}_{b}": [None] * sum(6 - len(p.skip) for p in ps)
+    quads = quads if quads is not None else {f"{i}_{b}": [None] * sum(_drawn_faces(p) for p in ps)
                                               for i, bs in s.pieces.items() for b, ps in bs.items()}
     out = []
     for key, qs in quads.items():
@@ -782,7 +824,7 @@ def problems(s):
                 if a.part is b.part or abs(facing) < 1 - 1e-5:
                     continue
                 gap = abs(_dot(a.n, b.pts[0]) - a.d)
-                if gap >= COPLANAR_GAP:
+                if gap >= COPLANAR_GAP - EPS:
                     continue
                 pb = [(_dot(p, a.basis[0]), _dot(p, a.basis[1])) for p in b.pts]
                 if not _overlap(a.poly, pb):
@@ -819,7 +861,7 @@ def problems(s):
                 continue
             if not (a.bone in still and b.bone in still) and not (a.flat and a.axis == 2):
                 continue
-            if abs(_dot(a.n, b.pts[0]) - a.d) >= COPLANAR_GAP:
+            if abs(_dot(a.n, b.pts[0]) - a.d) >= COPLANAR_GAP - EPS:
                 continue
             if _overlap(a.poly, [(_dot(p, a.basis[0]), _dot(p, a.basis[1])) for p in b.pts]):
                 hint = (f" (stop the right leg's at x <= 1.8 or move one out {COPLANAR_GAP} px)"

@@ -1,0 +1,38 @@
+{
+  "type": "ars_jimbaux:caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "ars_jimbaux:constant",
+    "r": 255
+  },
+  "flavour_text": "Launches the caster into the air and grants temporary elytra flight!",
+  "name": "Takeoff!",
+  "sound": {},
+  "spell": [
+    "ars_jimbaux:glyph_self",
+    "ars_jimbaux:glyph_launch",
+    "ars_jimbaux:glyph_launch",
+    "ars_jimbaux:glyph_glide",
+    "ars_jimbaux:glyph_duration_down"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "ars_jimbaux:constant",
+      "r": 255
+    },
+    "name": "Takeoff!",
+    "particleTimeline": {},
+    "recipe": [
+      "ars_jimbaux:glyph_self",
+      "ars_jimbaux:glyph_launch",
+      "ars_jimbaux:glyph_launch",
+      "ars_jimbaux:glyph_glide",
+      "ars_jimbaux:glyph_duration_down"
+    ],
+    "sound": {}
+  },
+  "tome_type": "ars_jimbaux:caster_tome"
+}

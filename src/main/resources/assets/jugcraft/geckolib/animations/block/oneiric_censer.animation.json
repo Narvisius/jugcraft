@@ -1,0 +1,85 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.oneiric_censer.idle": {
+      "loop": true,
+      "animation_length": 4.0,
+      "bones": {
+        "censer": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "plume": {
+          "scale": {
+            "0.0": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "animation.oneiric_censer.smoking": {
+      "loop": true,
+      "animation_length": 4.0,
+      "bones": {
+        "censer": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -6
+            ],
+            "2.0": [
+              0,
+              0,
+              6
+            ],
+            "4.0": [
+              0,
+              0,
+              -6
+            ]
+          }
+        },
+        "plume": {
+          "scale": {
+            "0.0": [
+              1,
+              0.8,
+              1
+            ],
+            "2.0": [
+              1,
+              1.2,
+              1
+            ],
+            "4.0": [
+              1,
+              0.8,
+              1
+            ]
+          },
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "4.0": [
+              0,
+              360,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

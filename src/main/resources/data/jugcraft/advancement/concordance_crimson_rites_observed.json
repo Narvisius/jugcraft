@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_crimson_rites_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:crimson_roots"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_crimson_rites_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_crimson_rites_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

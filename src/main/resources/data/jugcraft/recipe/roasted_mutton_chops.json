@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "jugcraft:cooked_mutton_chops",
+    "jugcraft:cooked_mutton_chops",
+    "minecraft:baked_potato"
+  ],
+  "result": {
+    "id": "jugcraft:roasted_mutton_chops",
+    "count": 1
+  }
+}

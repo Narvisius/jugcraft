@@ -1,0 +1,34 @@
+{
+ "cam": {
+  "dist": 60.0,
+  "tx": 0.0,
+  "ty": 16.0,
+  "tz": 0.0,
+  "az": 32.3396,
+  "el": 14.5615,
+  "f": 855.6915,
+  "cx": 311.621,
+  "cy": 387.2082
+ },
+ "pose": {
+  "right_arm": [
+   15.315,
+   0.0,
+   -8.5
+  ],
+  "left_arm": [
+   14.085,
+   0.0,
+   -12.269
+  ],
+  "head": [
+   0.0,
+   -10.807,
+   0.0
+  ]
+ },
+ "exclude": [],
+ "thresh": 15,
+ "lighting": "blockbench",
+ "note": "fitted by tools/armor_reference.py to the figure's outline (camera and its own pose; IoU 0.92); lit as Blockbench draws"
+}

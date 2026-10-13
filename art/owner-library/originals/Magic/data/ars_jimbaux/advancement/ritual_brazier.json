@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:root",
+  "criteria": {
+    "has_ritual_brazier": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:ritual_brazier"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.ritual_brazier"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:ritual_brazier"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.ritual_brazier"
+    }
+  },
+  "requirements": [
+    [
+      "has_ritual_brazier"
+    ]
+  ]
+}

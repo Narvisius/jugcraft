@@ -1,0 +1,197 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.requiem",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 2.0,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "skull",
+          "pivot": [
+            0.0,
+            10.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -8.0,
+                7.0,
+                -8.0
+              ],
+              "size": [
+                16,
+                12,
+                16
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -8.0,
+                14.0,
+                -9.0
+              ],
+              "size": [
+                16,
+                2,
+                1
+              ],
+              "uv": [
+                94,
+                28
+              ]
+            },
+            {
+              "origin": [
+                -6.0,
+                3.5,
+                -8.5
+              ],
+              "size": [
+                12,
+                4,
+                12
+              ],
+              "uv": [
+                0,
+                28
+              ]
+            }
+          ]
+        },
+        {
+          "name": "jaw",
+          "pivot": [
+            0.0,
+            4.0,
+            2.0
+          ],
+          "parent": "skull",
+          "cubes": [
+            {
+              "origin": [
+                -6.0,
+                0.5,
+                -8.5
+              ],
+              "size": [
+                12,
+                3,
+                11
+              ],
+              "uv": [
+                48,
+                28
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wisps",
+          "pivot": [
+            0.0,
+            13.0,
+            8.0
+          ],
+          "parent": "skull",
+          "cubes": [
+            {
+              "origin": [
+                0.0,
+                6.0,
+                8.0
+              ],
+              "size": [
+                0,
+                12,
+                14
+              ],
+              "uv": [
+                64,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wisp_right",
+          "pivot": [
+            -5.0,
+            13.0,
+            8.0
+          ],
+          "parent": "wisps",
+          "cubes": [
+            {
+              "origin": [
+                -5.0,
+                8.0,
+                8.0
+              ],
+              "size": [
+                0,
+                10,
+                12
+              ],
+              "uv": [
+                92,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wisp_left",
+          "pivot": [
+            5.0,
+            13.0,
+            8.0
+          ],
+          "parent": "wisps",
+          "cubes": [
+            {
+              "origin": [
+                5.0,
+                8.0,
+                8.0
+              ],
+              "size": [
+                0,
+                10,
+                12
+              ],
+              "mirror": true,
+              "uv": [
+                92,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

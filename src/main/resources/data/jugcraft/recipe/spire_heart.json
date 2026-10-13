@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GAG",
+    "SCS",
+    "SSS"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "A": "#jugcraft:concordance/luminous_matter",
+    "C": "jugcraft:circle_anchor",
+    "S": "minecraft:polished_deepslate"
+  },
+  "result": {
+    "id": "jugcraft:spire_heart",
+    "count": 1
+  }
+}

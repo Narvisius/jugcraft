@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:rotten_flesh",
+    "minecraft:bone_meal",
+    "jugcraft:cooked_chicken_cuts"
+  ],
+  "result": {
+    "id": "jugcraft:dog_food",
+    "count": 1
+  }
+}

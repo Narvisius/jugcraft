@@ -1,0 +1,67 @@
+{
+  "school": "spell_power:fire",
+  "range": 16.0,
+  "tier": 1,
+  "group": "concordance",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0.5,
+      "animation": {
+        "id": "jugcraft:lance_cast"
+      },
+      "start_sound": {
+        "id": "jugcraft:concordance.ember_gather"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:lance_release"
+    },
+    "visuals": {
+      "particles": [
+        {
+          "id": "minecraft:flame",
+          "appearance": {},
+          "batch": {
+            "count": 12.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.6,
+            "min_speed": 0.05,
+            "max_speed": 0.15
+          }
+        }
+      ]
+    },
+    "sound": {
+      "id": "jugcraft:concordance.cinderbolt"
+    }
+  },
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:invocation",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 2.0,
+      "hosting_item": false
+    }
+  }
+}

@@ -367,7 +367,10 @@ public class GiantPumpkinBlockEntity extends BlockEntity {
 		lit = input.getBooleanOr("lit", false);
 		soul = input.getBooleanOr("soul", false);
 		wateredUntil = input.getLongOr("watered_until", 0L);
-		id = input.read("id", UUIDUtil.CODEC).orElse(id);
+		// "id" is reserved for the block-entity type in full world saves. Accept an
+		// old UUID-only update tag without trying to decode a namespaced type as a UUID.
+		id = input.read("pumpkin_id", UUIDUtil.CODEC)
+				.or(() -> input.read("id", Codec.PASSTHROUGH).flatMap(legacy -> UUIDUtil.CODEC.parse(legacy).result())).orElse(id);
 		for (Direction side : Direction.Plane.HORIZONTAL) {
 			faces[side.get2DDataValue()] = input.read("carving_" + side.getName(), FACE_CODEC)
 					.filter(face -> CarvingFace.isValid(face, FACE_SIZE)).orElse(null);
@@ -388,7 +391,7 @@ public class GiantPumpkinBlockEntity extends BlockEntity {
 			output.putBoolean("soul", true);
 		}
 		output.putLong("watered_until", wateredUntil);
-		output.store("id", UUIDUtil.CODEC, id);
+		output.store("pumpkin_id", UUIDUtil.CODEC, id);
 		for (Direction side : Direction.Plane.HORIZONTAL) {
 			int[] face = faces[side.get2DDataValue()];
 			if (face != null && !CarvingFace.isBlank(face)) {
@@ -446,7 +449,7 @@ public class GiantPumpkinBlockEntity extends BlockEntity {
 	@Override
 	public void removeComponentsFromTag(ValueOutput output) {
 		super.removeComponentsFromTag(output);
-		for (String key : List.of("points", "weight", "lit", "soul", "id", "carved_by", "carved_by_name")) {
+		for (String key : List.of("points", "weight", "lit", "soul", "pumpkin_id", "carved_by", "carved_by_name")) {
 			output.discard(key);
 		}
 		for (Direction side : Direction.Plane.HORIZONTAL) {

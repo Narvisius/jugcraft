@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "GKG",
+    "CCC"
+  ],
+  "key": {
+    "S": "minecraft:spyglass",
+    "G": "minecraft:gold_ingot",
+    "K": "minecraft:clock",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:observatory",
+    "count": 1
+  }
+}

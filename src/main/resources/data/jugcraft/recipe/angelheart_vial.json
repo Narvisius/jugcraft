@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " A ",
+    "PHP",
+    " B "
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "P": "minecraft:phantom_membrane",
+    "H": "minecraft:golden_apple",
+    "B": "minecraft:glass_bottle"
+  },
+  "result": {
+    "id": "jugcraft:angelheart_vial",
+    "count": 1
+  }
+}

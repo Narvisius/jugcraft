@@ -1,0 +1,108 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.verdant_heart.dormant": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {
+        "heart": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    },
+    "animation.verdant_heart.beating": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "heart": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ],
+            "0.3": [
+              1.08,
+              1.1,
+              1.08
+            ],
+            "1.0": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "leaves": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "1.0": [
+              0,
+              0,
+              4
+            ],
+            "2.0": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "animation.verdant_heart.thriving": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {
+        "heart": {
+          "scale": {
+            "0.0": [
+              1,
+              1,
+              1
+            ],
+            "0.15": [
+              1.08,
+              1.1,
+              1.08
+            ],
+            "0.5": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "leaves": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.5": [
+              0,
+              0,
+              4
+            ],
+            "1.0": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

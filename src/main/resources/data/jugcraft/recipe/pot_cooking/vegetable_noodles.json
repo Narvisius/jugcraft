@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:raw_pasta"
+    },
+    {
+      "ingredient": "jugcraft:cabbage_leaf"
+    },
+    {
+      "ingredient": "minecraft:carrot"
+    },
+    {
+      "ingredient": "jugcraft:pepper"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:vegetable_noodles"
+  },
+  "time": 200
+}

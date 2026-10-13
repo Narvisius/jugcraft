@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:zombie_heart",
+    "S": "minecraft:rotten_flesh",
+    "T": "minecraft:bone"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:zombie"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

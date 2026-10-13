@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:pastry_dough",
+    "minecraft:sugar",
+    "jugcraft:coffee_beans",
+    "minecraft:milk_bucket"
+  ],
+  "result": {
+    "id": "jugcraft:raw_coffee_tart",
+    "count": 1
+  }
+}

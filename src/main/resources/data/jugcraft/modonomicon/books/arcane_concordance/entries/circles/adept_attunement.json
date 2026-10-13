@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:circles/adept_attunement",
+  "category": "jugcraft:circles",
+  "x": 2,
+  "y": 2,
+  "name": "book.jugcraft.arcane_concordance.circles.adept_attunement.name",
+  "description": "book.jugcraft.arcane_concordance.circles.adept_attunement.description",
+  "icon": "jugcraft:adept_wand",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/circle_lore_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.circle_lore.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.circles.adept_attunement.p0.title",
+      "text": "book.jugcraft.arcane_concordance.circles.adept_attunement.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.circles.adept_attunement.p1.title",
+      "text": "book.jugcraft.arcane_concordance.circles.adept_attunement.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

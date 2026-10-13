@@ -7,7 +7,8 @@ SHAPELESS; the advancement in HALLOWEEN_ADVANCEMENTS.
 
 Called from agriculture_data.py (assets, loot, tags). Formats follow vanilla Minecraft 26.3's own files.
 """
-from agriculture import PIES
+from agriculture import PIES, pie_name, pie_display
+import feasts
 from decor_data import MOD, rid, box, block_model, self_drop, turned, flat_item
 
 OVEN_TEXTURES = {"brick": "oven_brick", "soot": "oven_soot", "stone": "oven_stone", "embers": "oven_embers"}
@@ -39,10 +40,11 @@ def oven(lit):
     return block_model(OVEN_TEXTURES, elements, OVEN_TEXTURES["brick"])
 
 
-def pie(name, bites):
+def pie(name, bites, owner=False):
     """A pie in its tin with the first `bites` quarters gone: the lattice top, the crust's edge, the tin, and the filling on
-    the faces where it is cut."""
-    textures = {"top": f"{name}_top", "side": "pie_side", "bottom": "pie_tin", "inside": f"{name}_inside"}
+    the faces where it is cut. A pie in the owner's art (`owner`) wears their shared crust side and bottom."""
+    crust, bottom = (feasts.PIE_SIDE, feasts.PIE_BOTTOM) if owner else ("pie_side", "pie_tin")
+    textures = {"top": f"{name}_top", "side": crust, "bottom": bottom, "inside": f"{name}_inside"}
     elements = []
     for quarter in range(bites, len(QUARTERS)):
         lo, hi = QUARTERS[quarter]
@@ -53,7 +55,7 @@ def pie(name, bites):
             if inner:
                 faces[side] = "#inside"
         elements.append(box(lo, hi, "#side", textures={"up": "#top", "down": "#bottom", **faces}))
-    return block_model(textures, elements, "pie_side")
+    return block_model(textures, elements, crust)
 
 
 def assets(root, write, lang):
@@ -68,25 +70,30 @@ def assets(root, write, lang):
     lang[f"block.{MOD}.{name}"] = PIES["oven_display"]
     flat_item(root, write, PIES["dough"])
     lang[f"item.{MOD}.{PIES['dough']}"] = PIES["dough_display"]
-    pies = [(f"{f}_pie", f"{info['display']} Pie") for f, info in PIES["fillings"].items()] + [(PIES["burnt"], PIES["burnt_display"])]
+    owner = set(feasts.owner_pies())
+    pies = [(pie_name(f), pie_display(f)) for f in PIES["fillings"]] + [(PIES["burnt"], PIES["burnt_display"])]
     for block, display in pies:
         for bites in range(PIES["slices"]):
-            write(models / (f"{block}.json" if bites == 0 else f"{block}_slice{bites}.json"), pie(block, bites))
+            write(models / (f"{block}.json" if bites == 0 else f"{block}_slice{bites}.json"), pie(block, bites, block in owner))
         write(states / f"{block}.json", {"variants": {
             f"bites={b}": {"model": rid(f"block/{block}" + ("" if b == 0 else f"_slice{b}"))} for b in range(PIES["slices"])}})
-        write(root / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+        if block in owner:
+            flat_item(root, write, block)  # the owner's whole-pie icon
+        else:
+            write(root / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
         lang[f"block.{MOD}.{block}"] = display
-    for filling, info in PIES["fillings"].items():
-        flat_item(root, write, f"raw_{filling}_pie")
-        lang[f"item.{MOD}.raw_{filling}_pie"] = f"Raw {info['display']} Pie"
-        flat_item(root, write, f"{filling}_pie_slice")
-        lang[f"item.{MOD}.{filling}_pie_slice"] = f"Slice of {info['display']} Pie"
+    for filling in PIES["fillings"]:
+        name = pie_name(filling)
+        flat_item(root, write, f"raw_{name}")
+        lang[f"item.{MOD}.raw_{name}"] = f"Raw {pie_display(filling)}"
+        flat_item(root, write, f"{name}_slice")
+        lang[f"item.{MOD}.{name}_slice"] = f"Slice of {pie_display(filling)}"
     lang.update(TEXT)
 
 
 def loot(out, write):
     write(out / f"{PIES['oven']}.json", self_drop(PIES["oven"]))
-    for block in [f"{f}_pie" for f in PIES["fillings"]] + [PIES["burnt"]]:
+    for block in [pie_name(f) for f in PIES["fillings"]] + [PIES["burnt"]]:
         write(out / f"{block}.json", self_drop(block, {"type": "minecraft:match_block", "blocks": rid(block), "state": {"bites": "0"}}))
 
 
@@ -95,5 +102,5 @@ def tags(tags):
     for wood in PIES["wood"]:
         tags.add("item", PIES["wood_tag"], wood)
     for filling in PIES["fillings"]:
-        tags.add("item", "c:foods", rid(f"{filling}_pie_slice"))
-        tags.add("item", "c:foods/pie", rid(f"{filling}_pie_slice"))
+        tags.add("item", "c:foods", rid(f"{pie_name(filling)}_slice"))
+        tags.add("item", "c:foods/pie", rid(f"{pie_name(filling)}_slice"))

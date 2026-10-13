@@ -359,7 +359,6 @@ public class HotAirBalloon extends Entity {
 			serverTick(server);
 			return;
 		}
-		SmoothFlight.step(this);
 		if (burning()) {
 			// The burner's roar: flame and heat shimmer at its jets.
 			double yaw = Math.toRadians(-getYRot());

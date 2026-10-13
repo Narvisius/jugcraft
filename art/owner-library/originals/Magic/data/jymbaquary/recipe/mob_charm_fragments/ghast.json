@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "minecraft:ghast_tear",
+    "S": "#c:gunpowders",
+    "T": "jymbaquary:catalyzing_gland"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:ghast"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/nacho_top",
+    "top": "jugcraft:block/nacho_top",
+    "side": "jugcraft:block/nacho_side",
+    "inside": "jugcraft:block/nacho_inner",
+    "chip": "jugcraft:block/nacho_chip",
+    "eaten": "jugcraft:block/nacho_chip_eaten"
+  },
+  "elements": [
+    {
+      "from": [
+        4.5,
+        0,
+        8
+      ],
+      "to": [
+        11.5,
+        7,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#eaten",
+          "uv": [
+            11,
+            9,
+            4,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#eaten",
+          "uv": [
+            4,
+            9,
+            11,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

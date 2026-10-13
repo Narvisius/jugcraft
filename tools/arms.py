@@ -664,12 +664,18 @@ def held_model(kind):
     """The 3D model a kind's arms are held as (tools/arms_art.py model: the same in both metals, textured #tex), posed
     as vanilla's sword (or, for the spear and lance, the spear) is held, larger by the kind's `held` and moved so the hand
     stays on the grip. It lies over the kind's icon exactly, so these poses hold it as they would the icon."""
+    import vanilla_arms
+    if kind in vanilla_arms.KINDS:
+        return vanilla_arms.held_model(kind, "#tex")
     charging = kind in CHARGING
     base, base_grip = (SPEAR_IN_HAND, SPEAR_GRIP) if charging else (HANDHELD, SWORD_GRIP)
     grip, factor = _grip(kind, mirrored=charging)
     display = {}
     for context, (rotation, translation, scale) in base.items():
-        right, left = _pose(rotation, translation, scale, grip, scale, base_grip, round(KINDS[kind]["held"] * factor, 4))
+        hand_size = round(KINDS[kind]["held"] * factor, 4)
+        if kind == "nodachi" and context.startswith("firstperson"):
+            hand_size = min(hand_size, 1.15)
+        right, left = _pose(rotation, translation, scale, grip, scale, base_grip, hand_size)
         display[context] = right
         display[context.replace("righthand", "lefthand")] = left
     _texture, elements = arms_art.model(kind, "bronze", KINDS[kind]["held"], mirrored=charging)
@@ -711,8 +717,10 @@ def write_all(write, assets, data, lang, condition):
         info = KINDS[kind]
         # The icon in inventories, frames, on the ground and on shelves; in the hand (and on a head), the 3D model.
         write(models / f"{item}.json", {"parent": "minecraft:item/handheld", "textures": {"layer0": f"{MOD}:item/{item}"}})
+        import vanilla_arms
+        hand_texture = item if kind in vanilla_arms.KINDS else f"{item}_model"
         write(models / f"{item}_in_hand.json", {"parent": f"{MOD}:item/arms_{kind}",
-                                                "textures": {"tex": f"{MOD}:item/{item}_model"}})
+                                                "textures": {"tex": f"{MOD}:item/{hand_texture}"}})
         model = {"type": "minecraft:select", "property": "minecraft:display_context",
                  "cases": [{"when": ["gui", "ground", "fixed", "on_shelf"],
                             "model": {"type": "minecraft:model", "model": f"{MOD}:item/{item}"}}],

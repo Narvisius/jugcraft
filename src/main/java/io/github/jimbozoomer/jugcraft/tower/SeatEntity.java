@@ -35,6 +35,7 @@ public class SeatEntity extends Entity {
 
 	/** As {@link #sit(Level, BlockPos, Player, Direction)}, for a seat whose top is {@code height} up the block. */
 	public static boolean sit(Level level, BlockPos pos, Player player, Direction facing, double height) {
+		if (local.peepo.CompanionSeats.isReserved(level,pos)) return false;
 		if (player.isPassenger() || player.isShiftKeyDown()) {
 			return false;
 		}

@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
@@ -24,7 +25,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 /**
  * The things on show in a display (Halloween decorations batch 17): the Curiosity Cabinet's nine places, the Bell Jar's
- * one, the Broom Rack's three pegs. One of a thing to a place; a place is chosen by where it is used ({@link Showcase}).
+ * one, the Broom Rack's three pegs; and the food displays' (the kitchen and cooking expansion's slice 2, their own type):
+ * the plate's one, the platter's and the serving tray's four. One of a thing to a place; a place is chosen by where it is
+ * used ({@link Showcase}).
  * Saved, and sent to clients to draw them; broken, it spills them. A comparator reads how full it is.
  */
 public class ShowcaseBlockEntity extends BlockEntity {
@@ -42,7 +45,12 @@ public class ShowcaseBlockEntity extends BlockEntity {
 	}
 
 	public ShowcaseBlockEntity(BlockPos pos, BlockState state) {
-		super(JugcraftAgriculture.SHOWCASE_ENTITY, pos, state);
+		this(JugcraftAgriculture.SHOWCASE_ENTITY, pos, state);
+	}
+
+	/** A display of its own block entity type (the food displays). */
+	public ShowcaseBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
 		items = NonNullList.withSize(state.getBlock() instanceof Showcase showcase ? showcase.places() : 1, ItemStack.EMPTY);
 	}
 

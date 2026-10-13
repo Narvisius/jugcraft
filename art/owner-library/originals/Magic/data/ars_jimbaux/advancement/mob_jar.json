@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:ritual_brazier",
+  "criteria": {
+    "has_mob_jar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:mob_jar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.mob_jar"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:mob_jar"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.mob_jar"
+    }
+  },
+  "requirements": [
+    [
+      "has_mob_jar"
+    ]
+  ]
+}

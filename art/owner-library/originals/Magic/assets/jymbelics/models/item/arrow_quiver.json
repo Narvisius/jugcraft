@@ -1,0 +1,13 @@
+{
+  "parent": "item/generated",
+    "textures": {
+        "layer0": "jymbelics:item/arrow_quiver_0"
+    },
+    "overrides": [
+        { "predicate": { "jymbelics:fullness": 0 }, "model": "jymbelics:item/arrow_quiver_0" },
+        { "predicate": { "jymbelics:fullness": 1 }, "model": "jymbelics:item/arrow_quiver_1" },
+        { "predicate": { "jymbelics:fullness": 2 }, "model": "jymbelics:item/arrow_quiver_2" },
+        { "predicate": { "jymbelics:fullness": 3 }, "model": "jymbelics:item/arrow_quiver_3" }
+    ]
+}
+

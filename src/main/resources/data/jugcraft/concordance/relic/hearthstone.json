@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "item": "jugcraft:hearthstone",
+  "capacity": 48,
+  "owned": true,
+  "modes": [
+    {
+      "id": "mend",
+      "contexts": [
+        "trinket"
+      ],
+      "target": "self",
+      "status": "minecraft:regeneration",
+      "amplifier": 0,
+      "duration": 100,
+      "range": 0,
+      "interval": 200,
+      "cost": 2,
+      "needs": {
+        "sky": false,
+        "night": false,
+        "calm": true,
+        "wounded": true,
+        "dimensions": []
+      }
+    },
+    {
+      "id": "hearth",
+      "contexts": [
+        "installed"
+      ],
+      "target": "allies",
+      "status": "minecraft:regeneration",
+      "amplifier": 0,
+      "duration": 100,
+      "range": 8,
+      "interval": 200,
+      "cost": 1,
+      "needs": {
+        "sky": false,
+        "night": false,
+        "calm": false,
+        "wounded": true,
+        "dimensions": []
+      }
+    }
+  ]
+}

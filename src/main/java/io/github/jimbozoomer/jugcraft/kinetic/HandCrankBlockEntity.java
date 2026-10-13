@@ -19,6 +19,10 @@ public class HandCrankBlockEntity extends BlockEntity {
 	public static final float EXHAUSTION = 0.5F;
 
 	private int ticksLeft;
+	private long companionTurn=-1000;
+	public final local.peepo.CrankJob companionJob=new local.peepo.CrankJob(this);
+	public boolean manualTurning(){return ticksLeft>0;}
+	public void companionTurned(){if(level!=null)companionTurn=level.getGameTime();}
 
 	public HandCrankBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftKinetics.HAND_CRANK_ENTITY, pos, state);
@@ -40,8 +44,8 @@ public class HandCrankBlockEntity extends BlockEntity {
 	}
 
 	void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
-		boolean turning = ticksLeft > 0;
-		if (turning) {
+		boolean turning = ticksLeft > 0 || companionTurn>=level.getGameTime()-1;
+		if (ticksLeft>0) {
 			ticksLeft--;
 			KineticNetworks.push(level, pos, state.getValue(HandCrankBlock.FACING), OUTPUT);
 			setChanged();
@@ -50,6 +54,7 @@ public class HandCrankBlockEntity extends BlockEntity {
 			level.setBlock(pos, state.setValue(ShaftBlock.TURNING, turning), Block.UPDATE_CLIENTS);
 		}
 	}
+	@Override public void setRemoved(){companionJob.removed();super.setRemoved();}
 
 	@Override
 	protected void loadAdditional(ValueInput input) {

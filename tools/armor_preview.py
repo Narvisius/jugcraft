@@ -10,6 +10,9 @@ flat as Minecraft lights entities (two fixed lights: top 1.0, front and back 0.7
     python3 tools/armor_preview.py --set steel_knight --compare path/to/owner_design.png
     python3 tools/armor_preview.py --set bloodthorn --compare path/to/owner_design.png
     python3 tools/armor_preview.py --set reforged_white_diamond --compare path/to/owner_design.png
+    python3 tools/armor_preview.py --set hades --compare path/to/owner_design.png
+    python3 tools/armor_preview.py --set sunset_gem --compare path/to/owner_design.png
+    python3 tools/armor_preview.py --set pharaoh --compare path/to/owner_design.png
                                                            a set with a REFERENCES layout gets each of the reference's
                                                            views beside ours from the same camera and in the same pose,
                                                            lit as the reference is (Blockbench's shading, or unlit) and
@@ -23,7 +26,9 @@ Images go to build/armor_preview/ (git-ignored). Views: front, back, right (the 
 three_quarter (front-right, from a little above), top, bottom, and the Bloodthorn render's two: front_left (front
 three-quarter from the model's left) and back_right (from behind, a little to its right). Poses: stand, walk (arms and
 legs swung), sneak, owner (the owner's knight and White Diamond renders: arms 20 degrees out, head turned 17
-degrees), joined with "+" (sneak+walk).
+degrees), hades (the owner's Hades render: arms 25 degrees out, head straight), sunset (the owner's Sunset Gem render:
+arms 12 degrees out, head straight), pharaoh (the owner's Pharaoh render: arms 12 degrees out, head turned 13), joined
+with "+" (sneak+walk).
 """
 import argparse
 import functools
@@ -123,8 +128,18 @@ def pose_bones(pose="stand", phase=0.0, amount=WALK):
             bones["right_arm"][1][2] += math.radians(20)
             bones["left_arm"][1][2] -= math.radians(20)
             bones["head"][1][1] -= math.radians(17)
+        elif name == "hades":
+            bones["right_arm"][1][2] += math.radians(25)
+            bones["left_arm"][1][2] -= math.radians(25)
+        elif name == "sunset":
+            bones["right_arm"][1][2] += math.radians(12)
+            bones["left_arm"][1][2] -= math.radians(12)
+        elif name == "pharaoh":
+            bones["right_arm"][1][2] += math.radians(12)
+            bones["left_arm"][1][2] -= math.radians(12)
+            bones["head"][1][1] -= math.radians(13)
         else:
-            raise ValueError(f"unknown pose {name!r}: stand, walk, sneak, owner")
+            raise ValueError(f"unknown pose {name!r}: stand, walk, sneak, owner, hades, sunset, pharaoh")
     return bones
 
 
@@ -330,8 +345,10 @@ def render_all(name, entries, textures, out_dir, views=DEFAULT_VIEWS, poses=DEFA
 # Reference renders in more than one view, for --compare: set -> panels, each (label, crop box (x0, y0, x1, y1) of the
 # reference image, view (azimuth, elevation), camera distance, camera target height above the feet, image px per
 # model px at the target, (u, v) where the target lands in the image), then optionally a dict: the pose the reference
-# shows ("pose", default compare_panels' own), how it is lit ("lighting": "blockbench", the default, or "unlit") and the
-# colour behind ours ("background"). A set with none gets compare()'s front view.
+# shows ("pose", default compare_panels' own), how it is lit ("lighting": "blockbench", the default, or "unlit"), the
+# colour behind ours ("background") and how far the camera's target lies toward the model's right, in model px
+# ("across", default 0: a render whose viewport was cropped off-centre looks at a point beside the figure, so its
+# perspective pushes the figure's front faces away from that point). A set with none gets compare()'s front view.
 REFERENCES = {
     # the owner's Bloodthorn render (671 x 633): a front three-quarter from the model's front left at about head
     # height, and the back from a little to the model's right; perspective cameras fitted to its two silhouettes
@@ -342,6 +359,23 @@ REFERENCES = {
     # offset to its silhouette
     "reforged_white_diamond": (("front", (30, 85, 420, 649), (0, 0), 60, 30, 12.645, (222.94, 219.94),
                                 {"pose": "owner", "lighting": "unlit", "background": (117, 130, 188)}),),
+    # the owner's Hades render (680 x 637): the figure seen from a little to its right and above, unlit, the arms 25
+    # degrees out and the head straight; the camera fitted to its silhouette (the horns, the helm, the pauldrons, the
+    # arms and the skirt), behind ours the render's mean background
+    "hades": (("front", (0, 160, 306, 630), (15.5, 14.75), 60, 24, 10.0, (153.0, 370.0),
+               {"pose": "hades", "lighting": "unlit", "background": (37, 40, 49)}),),
+    # the owner's Sunset Gem render (676 x 631): one front view, unlit, the figure with its arms 12 degrees out and its
+    # head straight; the viewport was cropped off-centre, so the camera looks at a point 18 px to the model's right (the
+    # breastplate, face and skirt sit 14 image px right of the arms' and wings' centre, and the right sides show); the
+    # target height and distance are White Diamond's, the scale and offsets fitted to the crown's top, the boots' soles,
+    # the forearms and the silhouette
+    "sunset_gem": (("front", (28, 125, 425, 631), (0, 0), 60, 30, 11.7, (-2.6, 237.0),
+                    {"pose": "sunset", "lighting": "unlit", "background": (176, 52, 89), "across": 18.0}),),
+    # the owner's Pharaoh render (686 x 627): one front view from a little above, unlit, the arms 12 degrees out and the
+    # head turned 13; the camera's distance and target height are White Diamond's, its elevation, scale and offset
+    # fitted to the silhouette (the skirt, the arms and the headdress), behind ours the render's mean background
+    "pharaoh": (("front", (150, 25, 540, 540), (0, 7), 60, 30, 13.1, (344.0, 116.375),
+                 {"pose": "pharaoh", "lighting": "unlit", "background": (56, 73, 64)}),),
 }
 
 
@@ -357,7 +391,7 @@ def compare_panels(entries, textures, owner, path, panels, pose="stand"):
         shown = options.get("pose", pose)
         if shown not in posed:
             posed[shown] = world_quads(entries, shown, textures)
-        lift = np.array([0.0, height - 16.0, 0.0])   # project() aims at (0, 16, 0)
+        lift = np.array([options.get("across", 0.0), height - 16.0, 0.0])   # project() aims at (0, 16, 0)
         quads = [(pts - lift, uv, n, tex) for pts, uv, n, tex in posed[shown]]
         left, top = -u / k, 16.0 + v / k
         frame = (left + x0 / k, left + x1 / k, top - y1 / k, top - y0 / k)

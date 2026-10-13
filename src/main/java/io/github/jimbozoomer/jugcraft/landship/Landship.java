@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.landship;
 
+import io.github.jimbozoomer.jugcraft.SmoothFlight;
+import net.minecraft.world.entity.LinearInterpolationHandler;
 import java.util.List;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -85,6 +87,8 @@ public class Landship extends Entity {
 	/** Client side: how far each track has run (blocks; the left track is on the +x side) and the tick of the last shot. */
 	private float leftTrack;
 	private float rightTrack;
+	private float previousLeftTrack;
+	private float previousRightTrack;
 	private int shotAt = -100;
 
 	public Landship(EntityType<? extends Landship> type, Level level) {
@@ -105,12 +109,12 @@ public class Landship extends Entity {
 	}
 
 	/** Client side: how far the left (+x) and right tracks have run, in blocks. */
-	public float leftTrack() {
-		return leftTrack;
+	public float leftTrack(float partialTick) {
+		return Mth.lerp(partialTick, previousLeftTrack, leftTrack);
 	}
 
-	public float rightTrack() {
-		return rightTrack;
+	public float rightTrack(float partialTick) {
+		return Mth.lerp(partialTick, previousRightTrack, rightTrack);
 	}
 
 	/** Client side: ticks since the cannon last fired. */
@@ -159,6 +163,11 @@ public class Landship extends Entity {
 	}
 
 	@Override
+	public LinearInterpolationHandler createInterpolationHandler() {
+		return SmoothFlight.handler(this);
+	}
+
+	@Override
 	public void tick() {
 		super.tick();
 		if (level() instanceof ServerLevel level) {
@@ -169,6 +178,12 @@ public class Landship extends Entity {
 		double yaw = Math.toRadians(getYRot());
 		double moved = (getX() - xo) * -Math.sin(yaw) + (getZ() - zo) * Math.cos(yaw);
 		float turned = (float) Math.toRadians(Mth.wrapDegrees(getYRot() - yRotO)) * TRACK_HALF_SPAN;
+		previousLeftTrack = leftTrack;
+		previousRightTrack = rightTrack;
+		if (Math.hypot(getX() - xo, getZ() - zo) > 1.0 || Math.abs(Mth.wrapDegrees(getYRot() - yRotO)) > 45.0F) {
+			moved = 0;
+			turned = 0;
+		}
 		leftTrack += (float) moved + turned;
 		rightTrack += (float) moved - turned;
 		if (Math.abs(moved) + Math.abs(turned) > 0.01 && tickCount % 3 == 0) {

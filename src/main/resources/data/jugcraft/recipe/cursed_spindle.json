@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ESE",
+    "GAG",
+    "STS"
+  ],
+  "key": {
+    "E": "minecraft:spider_eye",
+    "S": "minecraft:string",
+    "G": "minecraft:gold_ingot",
+    "A": "minecraft:amethyst_shard",
+    "T": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:cursed_spindle",
+    "count": 1
+  }
+}

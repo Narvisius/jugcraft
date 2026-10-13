@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:corn",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:milk_bucket"
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:creamed_corn"
+  },
+  "time": 200
+}

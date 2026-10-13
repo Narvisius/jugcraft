@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:molten_core",
+    "S": "#c:rods/blaze",
+    "T": "minecraft:blaze_powder"
+  },
+  "pattern": [
+    "PPP",
+    "STS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:blaze"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

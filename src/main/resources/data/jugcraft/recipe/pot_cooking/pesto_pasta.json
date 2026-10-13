@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:raw_pasta"
+    },
+    {
+      "ingredient": "jugcraft:basil",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:garlic"
+    },
+    {
+      "ingredient": "jugcraft:tomato"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:pesto_pasta"
+  },
+  "time": 200
+}

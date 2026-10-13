@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:cod_slice",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:potato"
+    },
+    {
+      "ingredient": "jugcraft:tomato"
+    },
+    {
+      "ingredient": "minecraft:egg"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:baked_cod_stew"
+  },
+  "time": 300
+}

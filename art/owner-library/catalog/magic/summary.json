@@ -1,0 +1,111 @@
+{
+  "source": "Project owner upload, 2026-10-08",
+  "original_archive_name": "MAGIC ITEMS BLOCKS TEXTURES SOUNDS MODELS I MADE.rar",
+  "archive": "archives/magic-owner-2026-10-08.rar",
+  "archive_bytes": 15991398,
+  "archive_sha256": "07a1a1ccc5d540286afcbc30635151b358397cc40a948b2964a905d2d6ee3989",
+  "source_root_in_archive": "MAGIC ITEMS BLOCKS TEXTURES SOUNDS MODELS I MADE",
+  "source_files": 7909,
+  "source_bytes": 26398780,
+  "unique_source_contents": 6649,
+  "extensions": {
+    ".bbmodel": 12,
+    ".fsh": 3,
+    ".gif": 3,
+    ".json": 4906,
+    ".mcmeta": 153,
+    ".nbt": 7,
+    ".ogg": 79,
+    ".png": 2742,
+    ".properties": 1,
+    ".vsh": 3
+  },
+  "kinds": {
+    "Blockbench project": 12,
+    "JSON data": 2615,
+    "animated image": 3,
+    "animated texture": 152,
+    "animation JSON": 54,
+    "blockstate JSON": 315,
+    "fragment shader": 3,
+    "language JSON": 82,
+    "model JSON": 1840,
+    "properties": 1,
+    "sound": 79,
+    "structure NBT": 7,
+    "texture": 2590,
+    "texture metadata": 153,
+    "vertex shader": 3
+  },
+  "collections": {
+    "FILES I NEED MCDATA REMOVED FROM FOR BUG FIXING": 576,
+    "assets/ars_arsenal": 22,
+    "assets/ars_jimbaux": 2210,
+    "assets/ars_jymbaumental": 540,
+    "assets/ars_nouveau": 94,
+    "assets/curios": 2,
+    "assets/emi": 2,
+    "assets/jymbaquary": 487,
+    "assets/jymbelics": 444,
+    "assets/minecraft": 3,
+    "blockstates": 44,
+    "data/accessories": 4,
+    "data/allthearcanistgear": 4,
+    "data/ars_additions": 2,
+    "data/ars_jimbaux": 1397,
+    "data/ars_jymbaumental": 324,
+    "data/ars_nouveau": 35,
+    "data/botany_pots": 1,
+    "data/c": 54,
+    "data/carryon": 1,
+    "data/cobblemon": 2,
+    "data/curios": 17,
+    "data/forge": 1,
+    "data/jymbaquary": 479,
+    "data/jymbelics": 10,
+    "data/malum": 4,
+    "data/minecraft": 101,
+    "data/neoforge": 6,
+    "data/sable": 5,
+    "data/sauce": 3,
+    "data/sereneseasons": 4,
+    "entity": 82,
+    "gui": 192,
+    "kappa": 3,
+    "lang": 23,
+    "mob_effect": 20,
+    "model": 3,
+    "models": 368,
+    "painting": 3,
+    "particle": 22,
+    "particle_config": 13,
+    "sounds": 44,
+    "textures": 258
+  },
+  "verification": [
+    "7-Zip extraction completed with CRC verification",
+    "Every extracted file copied with matching SHA-256",
+    "All PNG and GIF images verified",
+    "All OggS container signatures verified",
+    "JSON, MCMETA and Blockbench projects parsed; supplied exceptions listed below"
+  ],
+  "validation_issues": [
+    {
+      "path": "originals/Magic/data/ars_jymbaumental/worldgen/structure/starbuncle_shrine.json",
+      "issue": "Supplied file is not strict JSON: Expecting property name enclosed in double quotes: line 2 column 3 (char 4)"
+    },
+    {
+      "path": "originals/Magic/data/ars_jymbaumental/worldgen/structure_set/starbuncle_shrine.json",
+      "issue": "Supplied file is not strict JSON: Expecting property name enclosed in double quotes: line 2 column 3 (char 4)"
+    },
+    {
+      "path": "originals/Magic/data/ars_jymbaumental/worldgen/template_pool/starbuncle_shrine/shrine.json",
+      "issue": "Supplied file is not strict JSON: Expecting property name enclosed in double quotes: line 2 column 3 (char 4)"
+    },
+    {
+      "path": "originals/Magic/assets/jymbelics/textures/item/arrow_quiver.png.mcmeta",
+      "issue": "Supplied PNG metadata has no adjacent PNG; preserve the original and resolve when importing."
+    }
+  ],
+  "runtime_integration": "Not imported into the running mod; each feature must port and test its chosen resources."
+}

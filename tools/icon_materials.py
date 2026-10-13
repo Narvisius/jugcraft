@@ -42,7 +42,56 @@ KHAKI = Material((38, 34, 20), (70, 62, 40), (100, 90, 58), (140, 128, 86), (176
 LACQUER = Material((16, 16, 22), (30, 30, 40), (50, 50, 62), (70, 70, 86), (102, 102, 122), (156, 156, 178))
 RED_PAINT = Material((52, 14, 12), (90, 22, 18), (132, 30, 24), (180, 48, 36), (220, 84, 62), (246, 150, 120))
 
+# The Arcane Concordance's (tools/item_icons/: the wands, the Kindled Lantern, the Research Notes and the codex).
+# Amethyst is its crystals' and the codex's violet: a stone, never a metal, so it is kept far from copper, iron and gold
+# by its hue. Paper is a pale material (its outline may be a third of its mid tone's luma), for the notes and the
+# codex's page edges.
+AMETHYST = Material((44, 20, 64), (70, 36, 100), (98, 54, 140), (140, 88, 190), (186, 138, 228), (228, 198, 250))
+# Smoked glass, the unlit Kindled Lantern's dark panes: a blue-violet dark glass, so that it never reads as iron.
+SMOKED_GLASS = Material((14, 14, 28), (28, 28, 50), (44, 46, 80), (66, 70, 112), (104, 110, 160), (168, 176, 222))
+# Reaper's Shade, Vesperine's night-black cloth (tools/item_icons/: the Reaper's Shade and the Reaper's Hood): a black
+# with a violet cast, its light and highlight carrying the read as lacquer's do. A cloth, so it does not shine.
+SHADE = Material((18, 12, 26), (34, 24, 48), (52, 40, 72), (72, 56, 98), (100, 80, 134), (150, 126, 196), shine=False)
+# Her robe's crimson lining (the Reaper's Hood's): a deep cloth red, darker and duller than garnet.
+CRIMSON_CLOTH = Material((34, 6, 12), (62, 12, 22), (100, 22, 38), (134, 32, 50), (170, 48, 64), (206, 84, 96),
+                         shine=False)
+# The Frost Horn's goat horn (tools/item_icons/frost_horn.txt, the Glacier Hall's ritual): a warm grey ivory. A horn,
+# not a metal, so it does not shine.
+HORN = Material((48, 40, 30), (80, 68, 50), (112, 94, 68), (158, 138, 102), (200, 180, 140), (234, 220, 186),
+                shine=False)
+# The Yeti King's white fur (tools/item_icons/yeti_fur.txt and yeti_mitten.txt): white with blue-grey shadows, as his
+# body is painted (tools/yeti_king_art.py FUR). Fur, so it does not shine.
+YETI_FUR = Material((40, 50, 76), (70, 84, 114), (112, 136, 184), (174, 198, 234), (216, 230, 250), (246, 250, 255),
+                    shine=False)
+# The Kiln Seal's (tools/item_icons/kiln_seal.txt, the Cinder Kiln's ritual): obsidian, a glassy violet-black whose light
+# and highlight carry the read as lacquer's do; and magma, the glowing orange of its eye's blaze-powder marks, only ever
+# an accent.
+OBSIDIAN = Material((14, 8, 24), (30, 20, 46), (50, 36, 76), (72, 54, 106), (104, 84, 148), (156, 134, 206))
+MAGMA = Material((60, 14, 6), (96, 28, 10), (124, 40, 12), (178, 66, 16), (230, 116, 30), (250, 176, 70), shine=False)
+PAPER = Material((80, 64, 40), (124, 104, 74), (170, 152, 116), (214, 200, 166), (236, 226, 198), (250, 246, 230),
+                 shine=False)
+# The Greenwardens' garden (roadmap step 14; tools/item_icons/: the four crops, Verdant Chaff and the living devices).
+# Leaf is the plants' green and moss a blue-green; gloam is the Gloamcap's dusky violet cap, and stem its pale stalk;
+# petal is the Sunpetal's warm yellow, a flower and never a metal, so it is only a second material and is not tested
+# against gold; straw is the chaff's dry stalks; terracotta is the devices' clay pots (a second material only, beside
+# the green); dew is the moss's drops, an accent. Drawn fresh for these icons.
+LEAF = Material((22, 46, 18), (40, 72, 30), (46, 92, 34), (70, 128, 48), (106, 166, 62), (156, 206, 96), shine=False)
+MOSS = Material((16, 44, 40), (30, 70, 62), (34, 86, 72), (52, 124, 100), (84, 164, 128), (150, 212, 180), shine=False)
+GLOAM = Material((36, 20, 52), (60, 36, 86), (72, 44, 110), (104, 70, 150), (142, 104, 190), (196, 164, 232),
+                 shine=False)
+STEM = Material((64, 56, 44), (100, 90, 72), (150, 140, 116), (206, 196, 170), (236, 228, 206), (250, 246, 232),
+                shine=False)
+PETAL = Material((82, 50, 8), (130, 84, 14), (184, 116, 22), (232, 176, 40), (250, 214, 88), (252, 236, 160),
+                 shine=False)
+STRAW = Material((54, 42, 12), (84, 66, 26), (120, 96, 40), (170, 140, 66), (206, 180, 96), (232, 214, 150), shine=False)
+TERRACOTTA = Material((52, 24, 14), (86, 40, 24), (130, 62, 38), (172, 90, 56), (204, 124, 80), (230, 166, 120),
+                      shine=False)
+DEW = Material((30, 60, 90), (60, 100, 140), (90, 140, 190), (126, 192, 232), (206, 238, 255), (240, 250, 255))
+
 MATERIALS = {
+    # the Greenwardens' garden
+    "leaf": LEAF, "moss": MOSS, "gloam": GLOAM, "stem": STEM, "petal": PETAL, "straw": STRAW, "terracotta": TERRACOTTA,
+    "dew": DEW,
     # the approved metals ("I like the alternate versions for steel and bronze")
     "bronze": px.BRONZE, "steel": px.STEEL,
     # the arms' other materials (leather, rubber and cloth are wraps: their own outline and dark tones are never drawn,
@@ -55,6 +104,14 @@ MATERIALS = {
     # the war machines' (tools/item_icons/)
     "hazard_yellow": HAZARD_YELLOW, "concrete": CONCRETE, "canvas": CANVAS, "khaki": KHAKI, "red_paint": RED_PAINT,
     "lacquer": LACQUER,
+    # the Arcane Concordance's
+    "amethyst": AMETHYST, "paper": PAPER, "smoked_glass": SMOKED_GLASS,
+    # Vesperine's loot
+    "shade": SHADE, "crimson_cloth": CRIMSON_CLOTH,
+    # the Glacier Hall's, and the Yeti King's loot
+    "horn": HORN, "yeti_fur": YETI_FUR,
+    # the Cinder Kiln's
+    "obsidian": OBSIDIAN, "magma": MAGMA,
 }
 
 # Materials meant to be vanilla's own metal: the distance test against copper, iron and gold is skipped for them.
@@ -63,4 +120,4 @@ VANILLA = {"copper", "iron", "gold"}
 # Palettes the owner approved although they sit close to copper, iron or gold, by name (a material here, an arms style
 # in arms_pixel.STYLES or an Arms VII line in arms_variants_art.LINE_STYLES), with the owner's words and the date. The
 # distance test is skipped for them; the other palette rules still hold. None so far: the chosen bronze and steel pass.
-OWNER_APPROVED = {}
+OWNER_APPROVED = {"gilded": "11 October owner request: rapiers should match vanilla equipment. Retain the existing pale steel blade with its gold hilt."}

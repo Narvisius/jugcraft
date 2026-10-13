@@ -436,6 +436,29 @@ def check_render(check, s):
     check("render: the grille's cut-out texel shows the helm behind it", got == T["t_front"], f"{got}")
 
 
+def check_blockbench(check, sets):
+    """The Blockbench bridge (tools/bbmodel.py): each smoke set written as a project and read back, both as raw entries
+    and as a set of its own (load_set), gives the same quads and atlas; and a set read from a project exports again."""
+    import bbmodel
+    for s in sets:
+        problems, exact = bbmodel.roundtrip(s)
+        check(f"{s.name}: through a Blockbench project and back, the same quads and atlas", not problems,
+              "; ".join(problems[:2]))
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "smoke.bbmodel"
+        path.write_text(bbmodel.dumps(bbmodel.export(sets[0])), encoding="utf-8")
+        loaded = bbmodel.load_set(sets[0].name, sets[0].palette, path, items=list(sets[0].pieces), texture=sets[0].texture)
+        again = json.loads(json.dumps(am.set_quads(loaded)))
+        problems, _ = bbmodel.roundtrip(loaded)
+        check("a set read from a project exports again unchanged", not problems, "; ".join(problems[:2]))
+        check("a set read from a project has the flicker and skin findings of the set it was written from",
+              len(am.problems(loaded)) == len(am.problems(sets[0])),
+              f"{len(am.problems(loaded))} against {len(am.problems(sets[0]))}")
+        check("a set read from a project draws the same quads as the set it was written from",
+              not bbmodel.compare(json.loads(json.dumps(am.set_quads(sets[0]))), again, cyclic=True))
+
+
 def check_poses(check, s):
     textures = pv.Textures({s.texture: armor_paint.paint_atlas(s)})
     entries = {k: v for k, v in set_json(s).items()}
@@ -497,6 +520,7 @@ def main():
           json.dumps(am.set_quads(steel)).replace(steel.texture, "T") ==
           json.dumps(am.set_quads(bronze)).replace(bronze.texture, "T"))
     check_problems(check)
+    check_blockbench(check, [uv, steel])
     check_render(check, uv)
     check_poses(check, uv)
     check_legacy(check)

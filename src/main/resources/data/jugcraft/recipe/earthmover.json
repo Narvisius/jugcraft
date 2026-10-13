@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "CTC"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "minecraft:copper_ingot",
+    "T": "minecraft:tripwire_hook"
+  },
+  "result": {
+    "id": "jugcraft:earthmover"
+  }
+}

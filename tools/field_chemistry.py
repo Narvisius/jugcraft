@@ -109,13 +109,19 @@ def write_all(write, assets, data, lang, condition):
         write(data / "damage_type" / f"{name}.json", body)
         lang[f"death.attack.{info['message_id']}"] = info["death"]
         lang[f"death.attack.{info['message_id']}.player"] = info["death_player"]
+    # The guns' flame joins two of these tags; tools/guns.py writes those files again with its own entries added.
+    for tag, values in damage_type_tags().items():
+        write(data.parent / "minecraft" / "tags" / "damage_type" / f"{tag}.json", {"replace": False, "values": values})
+    write(data / "tags" / "item" / "repairs_gas_mask.json", {"values": ["minecraft:charcoal"]})
+
+
+def damage_type_tags():
+    """The vanilla damage type tags these damage types join: {tag: [jugcraft:<type>, ...]}."""
     tags = {}
     for name, info in DAMAGE_TYPES.items():
         for tag in info["tags"]:
             tags.setdefault(tag, []).append(f"{MOD}:{name}")
-    for tag, values in tags.items():
-        write(data.parent / "minecraft" / "tags" / "damage_type" / f"{tag}.json", {"replace": False, "values": values})
-    write(data / "tags" / "item" / "repairs_gas_mask.json", {"values": ["minecraft:charcoal"]})
+    return tags
 
 
 # ------------------------------------------------------------------ art

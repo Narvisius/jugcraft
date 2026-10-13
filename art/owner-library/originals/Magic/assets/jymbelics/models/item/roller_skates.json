@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+    "textures": {
+        "layer0": "jymbelics:item/roller_skates_0"
+    },
+    "overrides": [
+        { "predicate": { "jymbelics:active": 0 }, "model": "jymbelics:item/roller_skates_0" },
+        { "predicate": { "jymbelics:active": 1 }, "model": "jymbelics:item/roller_skates_1" }
+    ]
+}
+

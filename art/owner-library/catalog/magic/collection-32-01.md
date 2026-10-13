@@ -1,0 +1,90 @@
+# Magic / entity
+
+[Collection index](README.md) · [Use these assets](../../MAGIC_ASSETS.md)
+
+Files 1–82 of 82. Paths are relative to the supplied collection root.
+
+| File | Kind | Dimensions | Bytes |
+|---|---|---|---:|
+| [entity/alakarkinos.png](../../originals/Magic/entity/alakarkinos.png) | texture | 128 × 128 | 1127 |
+| [entity/amethyst_golem.png](../../originals/Magic/entity/amethyst_golem.png) | texture | 64 × 64 | 695 |
+| [entity/anim_block.png](../../originals/Magic/entity/anim_block.png) | texture | 64 × 64 | 672 |
+| [entity/banner/abjuration.png](../../originals/Magic/entity/banner/abjuration.png) | texture | 64 × 64 | 160 |
+| [entity/banner/air.png](../../originals/Magic/entity/banner/air.png) | texture | 64 × 64 | 157 |
+| [entity/banner/conjuration.png](../../originals/Magic/entity/banner/conjuration.png) | texture | 64 × 64 | 159 |
+| [entity/banner/earth.png](../../originals/Magic/entity/banner/earth.png) | texture | 64 × 64 | 163 |
+| [entity/banner/fire.png](../../originals/Magic/entity/banner/fire.png) | texture | 64 × 64 | 530 |
+| [entity/banner/manipulation.png](../../originals/Magic/entity/banner/manipulation.png) | texture | 64 × 64 | 148 |
+| [entity/banner/spirals.png](../../originals/Magic/entity/banner/spirals.png) | texture | 64 × 64 | 224 |
+| [entity/banner/water.png](../../originals/Magic/entity/banner/water.png) | texture | 64 × 64 | 156 |
+| [entity/blazing_weald_waddler.png](../../originals/Magic/entity/blazing_weald_waddler.png) | texture | 64 × 64 | 977 |
+| [entity/blazing_weald_walker.png](../../originals/Magic/entity/blazing_weald_walker.png) | texture | 128 × 128 | 2048 |
+| [entity/boat/archwood.png](../../originals/Magic/entity/boat/archwood.png) | texture | 128 × 64 | 1077 |
+| [entity/book_wyrm_black.png](../../originals/Magic/entity/book_wyrm_black.png) | texture | 64 × 64 | 529 |
+| [entity/book_wyrm_blue.png](../../originals/Magic/entity/book_wyrm_blue.png) | texture | 64 × 64 | 529 |
+| [entity/book_wyrm_green.png](../../originals/Magic/entity/book_wyrm_green.png) | texture | 64 × 64 | 529 |
+| [entity/book_wyrm_purple.png](../../originals/Magic/entity/book_wyrm_purple.png) | texture | 64 × 64 | 529 |
+| [entity/book_wyrm_red.png](../../originals/Magic/entity/book_wyrm_red.png) | texture | 64 × 64 | 529 |
+| [entity/book_wyrm_white.png](../../originals/Magic/entity/book_wyrm_white.png) | texture | 64 × 64 | 522 |
+| [entity/bubble.png](../../originals/Magic/entity/bubble.png) | texture | 16 × 16 | 142 |
+| [entity/bubble_pop1.png](../../originals/Magic/entity/bubble_pop1.png) | texture | 16 × 16 | 128 |
+| [entity/bubble_pop2.png](../../originals/Magic/entity/bubble_pop2.png) | texture | 16 × 16 | 107 |
+| [entity/bubble_pop3.png](../../originals/Magic/entity/bubble_pop3.png) | texture | 16 × 16 | 138 |
+| [entity/bubble_pop4.png](../../originals/Magic/entity/bubble_pop4.png) | texture | 16 × 16 | 101 |
+| [entity/bubble_pop5.png](../../originals/Magic/entity/bubble_pop5.png) | texture | 16 × 16 | 96 |
+| [entity/carbuncle_shades.png](../../originals/Magic/entity/carbuncle_shades.png) | texture | 16 × 16 | 78 |
+| [entity/cascading_weald_waddler.png](../../originals/Magic/entity/cascading_weald_waddler.png) | texture | 64 × 64 | 1095 |
+| [entity/cascading_weald_walker.png](../../originals/Magic/entity/cascading_weald_walker.png) | texture | 128 × 128 | 2023 |
+| [entity/chimera_spike.png](../../originals/Magic/entity/chimera_spike.png) | texture | 16 × 16 | 155 |
+| [entity/cube.png](../../originals/Magic/entity/cube.png) | texture | 16 × 16 | 70 |
+| [entity/drygmy_brown.png](../../originals/Magic/entity/drygmy_brown.png) | texture | 32 × 32 | 513 |
+| [entity/drygmy_cyan.png](../../originals/Magic/entity/drygmy_cyan.png) | texture | 32 × 32 | 557 |
+| [entity/drygmy_orange.png](../../originals/Magic/entity/drygmy_orange.png) | texture | 32 × 32 | 510 |
+| [entity/flourishing_weald_waddler.png](../../originals/Magic/entity/flourishing_weald_waddler.png) | texture | 128 × 128 | 1278 |
+| [entity/flourishing_weald_walker.png](../../originals/Magic/entity/flourishing_weald_walker.png) | texture | 128 × 128 | 1957 |
+| [entity/gift_starby.png](../../originals/Magic/entity/gift_starby.png) | texture | 32 × 32 | 531 |
+| [entity/lily.png](../../originals/Magic/entity/lily.png) | texture | 64 × 64 | 710 |
+| [entity/nook.png](../../originals/Magic/entity/nook.png) | texture | 64 × 64 | 610 |
+| [entity/particle_mote.png](../../originals/Magic/entity/particle_mote.png) | texture | 16 × 16 | 306 |
+| [entity/signs/archwood.png](../../originals/Magic/entity/signs/archwood.png) | texture | 64 × 32 | 388 |
+| [entity/signs/hanging/archwood.png](../../originals/Magic/entity/signs/hanging/archwood.png) | texture | 64 × 32 | 392 |
+| [entity/sir_squirrely.png](../../originals/Magic/entity/sir_squirrely.png) | texture | 64 × 64 | 700 |
+| [entity/spike.png](../../originals/Magic/entity/spike.png) | texture | 10 × 8 | 119 |
+| [entity/starbuncle_black.png](../../originals/Magic/entity/starbuncle_black.png) | texture | 32 × 32 | 543 |
+| [entity/starbuncle_blue.png](../../originals/Magic/entity/starbuncle_blue.png) | texture | 32 × 32 | 532 |
+| [entity/starbuncle_brown.png](../../originals/Magic/entity/starbuncle_brown.png) | texture | 32 × 32 | 543 |
+| [entity/starbuncle_cyan.png](../../originals/Magic/entity/starbuncle_cyan.png) | texture | 32 × 32 | 543 |
+| [entity/starbuncle_goo.png](../../originals/Magic/entity/starbuncle_goo.png) | texture | 64 × 64 | 633 |
+| [entity/starbuncle_gray.png](../../originals/Magic/entity/starbuncle_gray.png) | texture | 32 × 32 | 557 |
+| [entity/starbuncle_green.png](../../originals/Magic/entity/starbuncle_green.png) | texture | 32 × 32 | 543 |
+| [entity/starbuncle_jarva.png](../../originals/Magic/entity/starbuncle_jarva.png) | texture | 32 × 32 | 568 |
+| [entity/starbuncle_light_blue.png](../../originals/Magic/entity/starbuncle_light_blue.png) | texture | 32 × 32 | 544 |
+| [entity/starbuncle_light_gray.png](../../originals/Magic/entity/starbuncle_light_gray.png) | texture | 32 × 32 | 546 |
+| [entity/starbuncle_lime.png](../../originals/Magic/entity/starbuncle_lime.png) | texture | 32 × 32 | 542 |
+| [entity/starbuncle_magenta.png](../../originals/Magic/entity/starbuncle_magenta.png) | texture | 32 × 32 | 544 |
+| [entity/starbuncle_mask.png](../../originals/Magic/entity/starbuncle_mask.png) | texture | 32 × 32 | 327 |
+| [entity/starbuncle_orange.png](../../originals/Magic/entity/starbuncle_orange.png) | texture | 32 × 32 | 546 |
+| [entity/starbuncle_pink.png](../../originals/Magic/entity/starbuncle_pink.png) | texture | 32 × 32 | 543 |
+| [entity/starbuncle_purple.png](../../originals/Magic/entity/starbuncle_purple.png) | texture | 32 × 32 | 544 |
+| [entity/starbuncle_red.png](../../originals/Magic/entity/starbuncle_red.png) | texture | 32 × 32 | 544 |
+| [entity/starbuncle_white.png](../../originals/Magic/entity/starbuncle_white.png) | texture | 32 × 32 | 537 |
+| [entity/starbuncle_yellow.png](../../originals/Magic/entity/starbuncle_yellow.png) | texture | 32 × 32 | 546 |
+| [entity/vexing_weald_waddler.png](../../originals/Magic/entity/vexing_weald_waddler.png) | texture | 64 × 64 | 1077 |
+| [entity/vexing_weald_walker.png](../../originals/Magic/entity/vexing_weald_walker.png) | texture | 128 × 128 | 1845 |
+| [entity/villager/profession/shady_wizard.png](../../originals/Magic/entity/villager/profession/shady_wizard.png) | texture | 64 × 64 | 1047 |
+| [entity/whirlisprig_autumn.png](../../originals/Magic/entity/whirlisprig_autumn.png) | texture | 32 × 32 | 353 |
+| [entity/whirlisprig_spring.png](../../originals/Magic/entity/whirlisprig_spring.png) | texture | 32 × 32 | 409 |
+| [entity/whirlisprig_summer.png](../../originals/Magic/entity/whirlisprig_summer.png) | texture | 32 × 32 | 361 |
+| [entity/whirlisprig_winter.png](../../originals/Magic/entity/whirlisprig_winter.png) | texture | 32 × 32 | 355 |
+| [entity/wilden_chimera.png](../../originals/Magic/entity/wilden_chimera.png) | texture | 256 × 256 | 6812 |
+| [entity/wilden_guardian.png](../../originals/Magic/entity/wilden_guardian.png) | texture | 128 × 128 | 2081 |
+| [entity/wilden_hunter.png](../../originals/Magic/entity/wilden_hunter.png) | texture | 64 × 64 | 1361 |
+| [entity/wilden_stalker.png](../../originals/Magic/entity/wilden_stalker.png) | texture | 128 × 128 | 1475 |
+| [entity/wixie_black.png](../../originals/Magic/entity/wixie_black.png) | texture | 64 × 64 | 719 |
+| [entity/wixie_blue.png](../../originals/Magic/entity/wixie_blue.png) | texture | 64 × 64 | 716 |
+| [entity/wixie_green.png](../../originals/Magic/entity/wixie_green.png) | texture | 64 × 64 | 639 |
+| [entity/wixie_red.png](../../originals/Magic/entity/wixie_red.png) | texture | 64 × 64 | 661 |
+| [entity/wixie_white.png](../../originals/Magic/entity/wixie_white.png) | texture | 64 × 64 | 654 |
+| [entity/xacris.png](../../originals/Magic/entity/xacris.png) | texture | 32 × 32 | 493 |
+| [entity/zieg.png](../../originals/Magic/entity/zieg.png) | texture | 64 × 64 | 697 |
+| [entity/zombie_villager/profession/shady_wizard.png](../../originals/Magic/entity/zombie_villager/profession/shady_wizard.png) | texture | 64 × 64 | 1047 |

@@ -1,0 +1,26 @@
+{
+  "parent": "ars_jimbaux:ritual_brazier",
+  "criteria": {
+    "familiar": {
+      "trigger": "ars_jimbaux:familiar"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.familiar"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:ritual_binding"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.familiar"
+    }
+  },
+  "requirements": [
+    [
+      "familiar"
+    ]
+  ]
+}

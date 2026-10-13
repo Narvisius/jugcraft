@@ -1,0 +1,31 @@
+{
+  "parent": "ars_jimbaux:ritual_brazier",
+  "criteria": {
+    "gravity_effect": {
+      "conditions": {
+        "effects": {
+          "ars_jimbaux:gravity": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.ritual_gravity"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:ritual_gravity"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.ritual_gravity"
+    }
+  },
+  "requirements": [
+    [
+      "gravity_effect"
+    ]
+  ]
+}

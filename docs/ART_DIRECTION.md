@@ -1,8 +1,12 @@
 # Art direction
 
+**11 October owner correction:** the reported rapiers, Moonblades and Soulreaver now follow vanilla's simple pixel silhouettes; Nodachi/Bogfang orientation and vehicle motion are corrected. Custom logs use recoloured vanilla texture references. See [scope, sources and validation](features/vehicle-and-vanilla-polish.md); this owner request supersedes older ornate/high-resolution requirements for those items.
+
 Jugcraft's look changes with its tiers, the way real technology did: the early game is brass-and-steam, the later tiers move towards dieselpunk, and electrical power gear and the high-tech tiers to come are graphite and glowing light. Production art uses the generators in `tools/` and suitable assets from the [shared owner library](../art/owner-library/README.md).
 
 ## Shared assets for every content branch
+
+**Owner instruction, 8 October 2026:** use suitable files from the [magic collection](../art/owner-library/MAGIC_ASSETS.md) as supplied. Preserve their authored appearance, palette, resolution, geometry, UVs, animation and sound; do not redraw, recolor or remodel them merely to satisfy the generic rules below. This specific instruction takes precedence for this collection. Necessary rendering/format/namespace repairs belong in runtime copies and should be documented. The library originals stay unchanged. No new per-asset permission request is required.
 
 The owner supplied a [reusable asset collection](../art/owner-library/README.md) on 6 October 2026 and explicitly permits direct use, recoloring/adaptation, or reference when an asset fits the feature. Browse the [complete catalog](../art/owner-library/catalog/README.md) before making new assets. It includes blocks, ores, metals, machinery, guns, planes, sounds, animations, weapons, armor, trees, biomes, farming and food. Its supplied stone sheets are useful for the building and ceramics branch as well as industrial settings.
 

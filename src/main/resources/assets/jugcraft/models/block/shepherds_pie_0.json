@@ -1,0 +1,51 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/shepherds_pie_top",
+    "platter": "jugcraft:block/platter",
+    "leftovers": "jugcraft:block/shepherds_pie_leftovers",
+    "top": "jugcraft:block/shepherds_pie_top",
+    "side": "jugcraft:block/shepherds_pie_side",
+    "inside": "jugcraft:block/shepherds_pie_inside"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        1,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#platter"
+        },
+        "south": {
+          "texture": "#platter"
+        },
+        "east": {
+          "texture": "#platter"
+        },
+        "west": {
+          "texture": "#platter"
+        },
+        "up": {
+          "texture": "#leftovers",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#platter"
+        }
+      }
+    }
+  ]
+}

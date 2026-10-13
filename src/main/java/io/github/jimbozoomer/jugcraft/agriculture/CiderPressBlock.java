@@ -114,6 +114,7 @@ public class CiderPressBlock extends BaseEntityBlock {
 			return InteractionResult.SUCCESS;
 		}
 		if (player.isSecondaryUseActive() || press.apples() == 0 && press.pulp() == 0) {
+			if (player.isSecondaryUseActive() && player.getMainHandItem().isEmpty()) press.collectCompanionOutput(player);
 			player.sendOverlayMessage(Component.translatable(MESSAGES + "status", press.apples(), press.pulp(), press.juice(),
 					CiderPressBlockEntity.TROUGH));
 			return InteractionResult.SUCCESS;

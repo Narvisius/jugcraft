@@ -1,0 +1,67 @@
+{
+  "school": "spell_power:arcane",
+  "range": 0.0,
+  "tier": 1,
+  "group": "concordance",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0.8,
+      "animation": {
+        "id": "jugcraft:reveal_cast"
+      },
+      "start_sound": {
+        "id": "jugcraft:concordance.kindle_gather"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:reveal_release"
+    },
+    "visuals": {
+      "particles": [
+        {
+          "id": "minecraft:glow",
+          "appearance": {},
+          "batch": {
+            "count": 12.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.6,
+            "min_speed": 0.05,
+            "max_speed": 0.15
+          }
+        }
+      ]
+    },
+    "sound": {
+      "id": "jugcraft:concordance.revelation"
+    }
+  },
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:invocation",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 8.0,
+      "hosting_item": false
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:charm_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "jymbaquary:molten_core",
+    "S": "minecraft:magma_cream"
+  },
+  "pattern": [
+    "PPP",
+    "SSS",
+    "PPP"
+  ],
+  "result": {
+    "components": {
+      "jymbaquary:entity_name": "minecraft:magma_cube"
+    },
+    "id": "jymbaquary:mob_charm_fragment"
+  }
+}

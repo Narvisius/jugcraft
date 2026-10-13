@@ -1,0 +1,59 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:artifice/enhancing",
+  "category": "jugcraft:artifice",
+  "x": 4,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.artifice.enhancing.name",
+  "description": "book.jugcraft.arcane_concordance.artifice.enhancing.description",
+  "icon": "jugcraft:resonant_ring",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/runesmithing_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.runesmithing.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.artifice.enhancing.p0.title",
+      "text": "book.jugcraft.arcane_concordance.artifice.enhancing.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.artifice.enhancing.p1.title",
+      "text": "book.jugcraft.arcane_concordance.artifice.enhancing.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.artifice.enhancing.p2.title",
+      "text": "book.jugcraft.arcane_concordance.artifice.enhancing.p2.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.artifice.enhancing.p3.title",
+      "text": "book.jugcraft.arcane_concordance.artifice.enhancing.p3.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p4",
+      "title": "book.jugcraft.arcane_concordance.artifice.enhancing.p4.title",
+      "text": "book.jugcraft.arcane_concordance.artifice.enhancing.p4.text",
+      "show_title_separator": true
+    }
+  ]
+}

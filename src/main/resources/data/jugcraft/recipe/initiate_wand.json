@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  A",
+    " S ",
+    "C  "
+  ],
+  "key": {
+    "A": "#jugcraft:concordance/luminous_matter",
+    "S": "minecraft:stick",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:initiate_wand",
+    "count": 1
+  }
+}

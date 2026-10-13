@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:radiance/lumen_sconce",
+  "category": "jugcraft:radiance",
+  "x": 0,
+  "y": 4,
+  "name": "book.jugcraft.arcane_concordance.radiance.lumen_sconce.name",
+  "description": "book.jugcraft.arcane_concordance.radiance.lumen_sconce.description",
+  "icon": "jugcraft:lumen_sconce",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/first_light_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.radiance.lumen_sconce.p0.title",
+      "recipe_id_1": "jugcraft:lumen_sconce",
+      "text": "book.jugcraft.arcane_concordance.radiance.lumen_sconce.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.radiance.lumen_sconce.p1.title",
+      "text": "book.jugcraft.arcane_concordance.radiance.lumen_sconce.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

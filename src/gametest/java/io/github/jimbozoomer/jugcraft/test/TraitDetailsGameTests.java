@@ -18,9 +18,9 @@ import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * In-game tests for the trait details on Shift (docs/features/trait-details.md): the wrapping of descriptions; every
  * arm's tooltip folded (its traits' names and a "hold Shift" line) and expanded (each name with its description under
- * it, indented, and no "hold Shift" line); a variant's five traits; a boss trophy's line, a name with no description;
- * and the bows, crossbows and shields through their own tooltips. The texts are compared as the server's language
- * renders them, so the test holds whether or not it has the mod's English.
+ * it, indented, and no "hold Shift" line); a variant's five traits; a boss trophy's line and an armor set's arm's line,
+ * each a name with no description; and the bows, crossbows and shields through their own tooltips. The texts are
+ * compared as the server's language renders them, so the test holds whether or not it has the mod's English.
  */
 public class TraitDetailsGameTests {
 	private static final String INDENT = "  ";
@@ -77,7 +77,8 @@ public class TraitDetailsGameTests {
 
 	/**
 	 * A runebound nodachi has five traits (its kind, two-handed, its weapon art, the Mark boon and the Runebound line),
-	 * each described; the Crypt Lich's soulreaver ends with its trophy line, a name with nothing under it.
+	 * each described; the Crypt Lich's soulreaver ends with its trophy line, a name with nothing under it; and the Hades
+	 * Scythe, an armor set's arm, ends with its set's line in the same way.
 	 */
 	@GameTest
 	public void variantsShowEveryTrait(GameTestHelper helper) {
@@ -100,6 +101,12 @@ public class TraitDetailsGameTests {
 		String last = trophy.get(trophy.size() - 1);
 		helper.assertTrue(last.equals(Component.translatable("tooltip.jugcraft.arms.line.crypt_lich.trait").getString()),
 				"The soulreaver's expanded tooltip should end with its trophy line and nothing under it: " + trophy);
+
+		ArmItem scythe = (ArmItem) ArmVariants.ITEMS.get("hades_scythe");
+		List<String> set = lines(scythe, true);
+		String end = set.get(set.size() - 1);
+		helper.assertTrue(end.equals(Component.translatable("tooltip.jugcraft.arms.line.hades.trait").getString()),
+				"The Hades Scythe's expanded tooltip should end with its armor set's line and nothing under it: " + set);
 		helper.succeed();
 	}
 

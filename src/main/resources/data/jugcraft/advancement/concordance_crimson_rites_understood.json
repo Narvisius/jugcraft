@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_crimson_rites_observed",
+  "display": {
+    "icon": {
+      "id": "jugcraft:crimson_chalice"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_crimson_rites_understood.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_crimson_rites_understood.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -164,7 +164,7 @@ ABOUT = {
                         "(128,000 JE a bucket). It refuses crude oil and other fluids.",
     "electrolytic_cell": "Three wide, three tall and two deep. Splits brine with electricity: a bucket gives 250 mB of "
                          "chlorine (out of the top row), 250 mB of hydrogen (the middle row) and 500 mB of lye (the "
-                         "bottom row), every 10 seconds at 256 JE/t. Make brine in the chemical reactor from two salt "
+                         "bottom row), every 20 seconds at 256 JE/t. Make brine in the chemical reactor from two salt "
                          "and a bucket of water. It also splits plain water, slowly: a bucket gives 500 mB of hydrogen "
                          "(middle row) and 250 mB of oxygen (top row) every 40 seconds, an early fuel for the fuel cell.",
     "chemical_reactor": "Two by two by two, lined with lead against the acid: the general chemistry vessel, with two "
@@ -259,7 +259,7 @@ ABOUT = {
     "large_steam_engine": "Two by two by two. Four times the small steam engine: 256 KE/t out of a shaft at the back of "
                           "its upper right block, using 40 mB of water per tick and fuel four times as fast. It has a "
                           "screen like the steam generator's, and a water source under it refills it.",
-    "belt_pulley": "A shaft with a grooved wheel. Use a Leather Belt on two pulleys with the same axis (level with each "
+    "belt_pulley": "A shaft with a grooved wheel. Use a Drive Belt on two pulleys with the same axis (level with each "
                    "other along it, up to 16 blocks apart) and the second turns with the first: power jumps gaps and "
                    "walls.",
     "belt": "Links two belt pulleys: use it on one, then on the other. Breaking a pulley drops the belt.",
@@ -382,6 +382,16 @@ def block_page(block, display):
 
 def machine_page(block):
     return block_page(block, MACHINES[block]["display"])
+
+
+def form_page(form):
+    """An industrial form's page (tools/industrial_forms.py): its text and construction recipe."""
+    import industrial_forms
+    info = industrial_forms.FORMS[form]
+    pattern, key = info["recipe"]
+    grid = [item_for(key[ch]) if ch != " " else None for row in pattern for ch in row.ljust(3)]
+    return {"title": info["display"], "icon": f"{MOD}:{form}", "text": list(industrial_forms.HANDBOOK[form]),
+            "craft": {"grid": grid, "result": f"{MOD}:{form}", "count": 1}}
 
 
 def arms_pages():
@@ -530,7 +540,7 @@ def arms_pages():
 
 
 def variant_pages():
-    """Arms VII (batch 56): the styles' patterns and the bosses' trophies."""
+    """Arms VII (batch 56): the styles' patterns, the bosses' trophies and the armor sets' arms."""
     import arms_variants as av
     rows, key = av.STYLES["gilded"]["pattern_recipe"]
     grid = [item_for(key[ch]) if ch in key else None for row in rows for ch in row.ljust(3)]
@@ -552,7 +562,32 @@ def variant_pages():
                  + " and ".join(av.BY_ID[name][3] for name in av.trophies(boss)) + "."
                  for boss, info in av.BOSSES.items()] + [
             "Trophies last twice as long as steel, and fight as their kinds do."]},
-    ]
+    ] + set_pages()
+
+
+def set_pages():
+    """The armor sets' arms and shields (tools/arms_variants.py SETS and SET_SHIELDS). None drops from a foe yet, so the
+    page says so rather than where to win one."""
+    import arms
+    import arms_variants as av
+    sets = [(info["display"], av.set_arms(armor_set) + av.set_shields(armor_set)) for armor_set, info in av.SETS.items()
+            if av.set_arms(armor_set)]
+    if not sets:
+        return []
+
+    def named(name):
+        if name in av.SET_SHIELDS:
+            info = av.SET_SHIELDS[name]
+            return f"{info['display']} (a shield)"
+        _kind, _line, boon, display = av.BY_ID[name]
+        return f"{display} ({av.trait(av.BOONS[boon])[0]})" if boon else display
+    shields = ", ".join(sorted({f"a {av.SET_SHIELD_METAL} {arms.SHIELD_KINDS[info['base']]['display'].lower()}"
+                                for info in av.SET_SHIELDS.values()}))
+    return [{"title": "Arms: Armor Sets", "icon": f"{MOD}:{sets[0][1][0]}", "text": [
+        "Some armor sets have an arm of their own, made in the set's look, with a boon, and some a shield:",
+        ] + [f"{display}: " + " and ".join(named(name) for name in names) + "." for display, names in sets] + [
+        "How they are won is still to be settled; until then they are found only in creative. They last twice as long "
+        f"as steel, and fight as their kinds do; a set's shield blocks as {shields} does."]}]
 
 
 def thallite_gear_pages():
@@ -942,8 +977,10 @@ def build():
                 "Dissolve salt in water to make brine (chemical reactor), then split it in the electrolytic cell into "
                 "chlorine, hydrogen and lye. Gases live only in tanks, pipes and gas cylinders."]},
             machine_page("electrolytic_cell"),
+            form_page("electrolytic_separator"),
             machine_page("chemical_reactor"),
             machine_page("fuel_cell"),
+            form_page("gas_burning_generator"),
             machine_page("electroplating_bath"),
             {"title": "Rubber", "icon": f"{MOD}:rubber", "text": [
                 "Crack a bucket of naphtha in the chemical reactor: 500 mB of butadiene. The polymerization reactor "

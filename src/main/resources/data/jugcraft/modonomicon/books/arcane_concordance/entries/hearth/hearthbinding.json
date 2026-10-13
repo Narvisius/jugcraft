@@ -1,0 +1,69 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:hearth/hearthbinding",
+  "category": "jugcraft:hearth",
+  "x": 0,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.hearth.hearthbinding.name",
+  "description": "book.jugcraft.arcane_concordance.hearth.hearthbinding.description",
+  "icon": "minecraft:campfire",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p0.title",
+      "text": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p1.title",
+      "text": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p1.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/hearthbinding_observed",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.hearthbinding.observed"
+        }
+      }
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p2.title",
+      "text": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p2.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/hearthbinding_understood",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.hearthbinding.understood"
+        }
+      }
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p3.title",
+      "text": "book.jugcraft.arcane_concordance.hearth.hearthbinding.p3.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/hearthbinding_mastered",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.hearthbinding.mastered"
+        }
+      }
+    }
+  ]
+}

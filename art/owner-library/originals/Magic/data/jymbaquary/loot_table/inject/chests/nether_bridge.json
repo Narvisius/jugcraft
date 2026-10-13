@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 2,
+              "min": 1
+            }
+          },
+          "name": "jymbaquary:withered_rib",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jymbaquary:slime_pearl",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 2,
+              "min": 1
+            }
+          },
+          "name": "jymbaquary:molten_core",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jymbaquary:void_tear"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jymbaquary:salamander_eye"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jymbaquary:interdiction_torch"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 61
+        }
+      ],
+      "name": "main",
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jymbaquary:inject/chests/nether_bridge"
+}

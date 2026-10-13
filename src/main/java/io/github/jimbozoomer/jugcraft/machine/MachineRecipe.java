@@ -33,13 +33,20 @@ import net.minecraft.world.item.crafting.SingleItemRecipe;
 public class MachineRecipe extends SingleItemRecipe {
 	private final MachineKind machine;
 	private final int time;
+	private final int companionEffort;
 	private final List<Byproduct> byproducts;
 
 	public MachineRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, Ingredient ingredient, ItemStackTemplate result, int time,
 			List<Byproduct> byproducts) {
+		this(machine, commonInfo, ingredient, result, time, byproducts, 0);
+	}
+
+	public MachineRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, Ingredient ingredient, ItemStackTemplate result, int time,
+			List<Byproduct> byproducts, int companionEffort) {
 		super(commonInfo, ingredient, result);
 		this.machine = machine;
 		this.time = time;
+		this.companionEffort = Math.clamp(companionEffort, 0, MachineCompanionEffort.MAX_PER_QUARTER);
 		this.byproducts = List.copyOf(byproducts);
 	}
 
@@ -69,6 +76,8 @@ public class MachineRecipe extends SingleItemRecipe {
 	public int time() {
 		return time;
 	}
+
+	public int companionEffort() { return companionEffort; }
 
 	/** Extra results rolled once per operation. */
 	public List<Byproduct> byproducts() {
@@ -106,15 +115,17 @@ public class MachineRecipe extends SingleItemRecipe {
 				Ingredient.CODEC.fieldOf("ingredient").forGetter(SingleItemRecipe::input),
 				ItemStackTemplate.CODEC.fieldOf("result").forGetter(MachineRecipe::output),
 				ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(MachineRecipe::time),
-				Byproduct.CODEC.listOf().optionalFieldOf("byproducts", List.of()).forGetter(MachineRecipe::byproducts)
-		).apply(i, (info, ingredient, result, time, byproducts) -> new MachineRecipe(machine, info, ingredient, result, time, byproducts)));
+				Byproduct.CODEC.listOf().optionalFieldOf("byproducts", List.of()).forGetter(MachineRecipe::byproducts),
+				MachineCompanionEffort.CODEC.optionalFieldOf("companion_effort_per_quarter", 0).forGetter(MachineRecipe::companionEffort)
+		).apply(i, (info, ingredient, result, time, byproducts, effort) -> new MachineRecipe(machine, info, ingredient, result, time, byproducts, effort)));
 		StreamCodec<RegistryFriendlyByteBuf, MachineRecipe> stream = StreamCodec.composite(
 				Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
 				Ingredient.CONTENTS_STREAM_CODEC, SingleItemRecipe::input,
 				ItemStackTemplate.STREAM_CODEC, MachineRecipe::output,
 				ByteBufCodecs.VAR_INT, MachineRecipe::time,
 				Byproduct.STREAM_CODEC.apply(ByteBufCodecs.list()), MachineRecipe::byproducts,
-				(info, ingredient, result, time, byproducts) -> new MachineRecipe(machine, info, ingredient, result, time, byproducts));
+				ByteBufCodecs.VAR_INT, MachineRecipe::companionEffort,
+				(info, ingredient, result, time, byproducts, effort) -> new MachineRecipe(machine, info, ingredient, result, time, byproducts, effort));
 		return new RecipeSerializer<>(codec, stream);
 	}
 }

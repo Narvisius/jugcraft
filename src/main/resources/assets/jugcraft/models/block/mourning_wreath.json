@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/mourning_wreath",
+    "wreath": "jugcraft:block/mourning_wreath"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0.25,
+        1
+      ],
+      "to": [
+        15,
+        1.25,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#wreath",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#wreath",
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ]
+        },
+        "north": {
+          "texture": "#wreath",
+          "uv": [
+            0,
+            7,
+            16,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#wreath",
+          "uv": [
+            0,
+            8,
+            16,
+            9
+          ]
+        },
+        "east": {
+          "texture": "#wreath",
+          "uv": [
+            7,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#wreath",
+          "uv": [
+            8,
+            0,
+            9,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

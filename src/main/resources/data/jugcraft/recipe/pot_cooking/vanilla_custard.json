@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "minecraft:egg"
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    },
+    {
+      "ingredient": "jugcraft:vanilla_pods"
+    },
+    {
+      "ingredient": "jugcraft:milk_bottle"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:vanilla_custard"
+  },
+  "time": 200
+}

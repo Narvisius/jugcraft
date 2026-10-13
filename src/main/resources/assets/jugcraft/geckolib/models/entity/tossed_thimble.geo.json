@@ -1,0 +1,88 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.tossed_thimble",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 1.0,
+        "visible_bounds_height": 1.0,
+        "visible_bounds_offset": [
+          0,
+          0.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "tumble",
+          "pivot": [
+            0.0,
+            4.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -3.0,
+                1.0,
+                -3.0
+              ],
+              "size": [
+                6,
+                6,
+                6
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -2.0,
+                7.0,
+                -2.0
+              ],
+              "size": [
+                4,
+                1,
+                4
+              ],
+              "uv": [
+                0,
+                20
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                0.5,
+                -3.5
+              ],
+              "size": [
+                7,
+                1,
+                7
+              ],
+              "uv": [
+                0,
+                12
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/cheesecake_front",
+    "top": "jugcraft:block/cheesecake_top",
+    "front": "jugcraft:block/cheesecake_front",
+    "side": "jugcraft:block/cheesecake_side",
+    "inside": "jugcraft:block/cheesecake_inside",
+    "toppings": "jugcraft:block/cheesecake_toppings"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        8,
+        9,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#inside",
+          "uv": [
+            0,
+            15,
+            8,
+            16
+          ],
+          "cullface": "down"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#inside"
+        },
+        "north": {
+          "texture": "#inside"
+        },
+        "south": {
+          "texture": "#front",
+          "cullface": "south"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        9,
+        8
+      ],
+      "to": [
+        8,
+        10,
+        10
+      ],
+      "faces": {
+        "up": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            2,
+            2,
+            4
+          ]
+        },
+        "north": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            4,
+            2,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#toppings",
+          "uv": [
+            0,
+            4,
+            2,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#toppings",
+          "uv": [
+            2,
+            4,
+            4,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#toppings",
+          "uv": [
+            2,
+            4,
+            4,
+            5
+          ]
+        }
+      }
+    }
+  ]
+}

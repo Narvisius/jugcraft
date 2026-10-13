@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "GCG",
+    "SSS"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:compass",
+    "S": "minecraft:chiseled_stone_bricks"
+  },
+  "result": {
+    "id": "jugcraft:circle_anchor",
+    "count": 1
+  }
+}

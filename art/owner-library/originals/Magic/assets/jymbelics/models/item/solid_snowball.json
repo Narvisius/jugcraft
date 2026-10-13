@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+    "textures": {
+        "layer0": "jymbelics:item/solid_snowball_0"
+    },
+    "overrides": [
+        { "predicate": { "jymbelics:snow": 0 }, "model": "jymbelics:item/solid_snowball_0" },
+        { "predicate": { "jymbelics:snow": 1 }, "model": "jymbelics:item/solid_snowball_1" },
+        { "predicate": { "jymbelics:snow": 2 }, "model": "jymbelics:item/solid_snowball_2" }
+    ]
+}
+

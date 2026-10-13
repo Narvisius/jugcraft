@@ -8,6 +8,8 @@ worlds/
 # ...but not source packages named world (docs/ARCHITECTURE.md's world area).
 !/src/**/world/
 logs/
+# Owner library resource tags named logs are source data, not generated logs.
+!/art/owner-library/originals/**/logs/
 crash-reports/
 .idea/
 *.iml

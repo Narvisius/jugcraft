@@ -1339,6 +1339,8 @@ def machines():
     exosuit_art.draw_all(save, save_armor)
     import grapple
     grapple.draw_all(save)
+    import guns
+    guns.draw_all(save)
     import arms
     arms.draw_all(save)
     import arms_variants
@@ -1349,6 +1351,8 @@ def machines():
     construction.draw_all(save)
     import gas_storage
     gas_storage.draw_all(save)
+    import concordance_art
+    concordance_art.draw_all(save)
     import control_electronics
     control_electronics.draw_all(save)
     import rocketry
@@ -1542,6 +1546,18 @@ def main():
     pixel_hollows_textures.draw_all()
     import styx
     styx.textures()
+
+    # The feasts and food displays' plate, which the owner's library has no drawing for (tools/feasts_textures.py).
+    import feasts_textures
+    feasts_textures.draw_all(save)
+
+    import transport_crates
+    transport_crates.main()
+
+    # Last: the owner's own textures, copied from the shared library as drawn (tools/owner_art.py), so nothing above
+    # draws over them.
+    import owner_art
+    owner_art.write_all()
 
 
 if __name__ == "__main__":

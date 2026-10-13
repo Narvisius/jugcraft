@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI",
+    "SBS",
+    "S S"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "A": "minecraft:amethyst_shard",
+    "S": "minecraft:smooth_stone",
+    "B": "minecraft:smithing_table"
+  },
+  "result": {
+    "id": "jugcraft:artificer_bench",
+    "count": 1
+  }
+}

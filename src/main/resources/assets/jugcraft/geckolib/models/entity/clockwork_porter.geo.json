@@ -1,0 +1,196 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.clockwork_porter",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.5,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0,
+            4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                5,
+                -4
+              ],
+              "size": [
+                8,
+                6,
+                8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                4,
+                -3
+              ],
+              "size": [
+                6,
+                8,
+                6
+              ],
+              "uv": [
+                32,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            12,
+            -1
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                12,
+                -3
+              ],
+              "size": [
+                4,
+                4,
+                4
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                13,
+                -4
+              ],
+              "size": [
+                2,
+                2,
+                1
+              ],
+              "uv": [
+                56,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "basket",
+          "parent": "body",
+          "pivot": [
+            0,
+            9,
+            4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                7,
+                4
+              ],
+              "size": [
+                6,
+                5,
+                4
+              ],
+              "uv": [
+                16,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_left",
+          "parent": "root",
+          "pivot": [
+            2.5,
+            4.5,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                -2
+              ],
+              "size": [
+                3,
+                5,
+                4
+              ],
+              "uv": [
+                36,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_right",
+          "parent": "root",
+          "pivot": [
+            -2.5,
+            4.5,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                0,
+                -2
+              ],
+              "size": [
+                3,
+                5,
+                4
+              ],
+              "uv": [
+                50,
+                14
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

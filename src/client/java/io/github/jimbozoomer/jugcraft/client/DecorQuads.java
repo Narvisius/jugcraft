@@ -48,7 +48,7 @@ public final class DecorQuads {
 			Jugcraft.id("decor17_quads.json"), Jugcraft.id("trench_quads.json"),
 			Jugcraft.id("artillery_quads.json"), Jugcraft.id("decor18_quads.json"), Jugcraft.id("tower_gun_quads.json"),
 			Jugcraft.id("decor19_quads.json"), Jugcraft.id("decor20_quads.json"), Jugcraft.id("raider_quads.json"),
-			Jugcraft.id("armoured_walker_quads.json"));
+			Jugcraft.id("armoured_walker_quads.json"), Jugcraft.id("companion_wheel_quads.json"));
 	private static @Nullable Map<String, QuadModel> models;
 
 	private DecorQuads() {

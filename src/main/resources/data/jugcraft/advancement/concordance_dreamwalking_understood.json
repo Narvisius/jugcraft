@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_dreamwalking_observed",
+  "display": {
+    "icon": {
+      "id": "jugcraft:oneiric_censer"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_dreamwalking_understood.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_dreamwalking_understood.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

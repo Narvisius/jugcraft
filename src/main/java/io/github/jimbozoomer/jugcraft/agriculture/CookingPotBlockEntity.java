@@ -4,7 +4,6 @@ import io.github.jimbozoomer.jugcraft.Jugcraft;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -41,7 +40,7 @@ import org.jspecify.annotations.Nullable;
  * <p>
  * Hoppers and pipes put ingredients in from the top and sides and take meals out from the bottom.
  */
-public class CookingPotBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, ExtendedMenuProvider<BlockPos> {
+public class CookingPotBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 	/** What heats the pot from directly below. Keep in sync with HEAT_TAG in tools/agriculture.py. */
 	public static final TagKey<Block> HEAT_SOURCES = TagKey.create(Registries.BLOCK, Jugcraft.id("heat_sources"));
 	/**
@@ -59,7 +58,41 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 	public static final int DATA_PROGRESS = 0;
 	public static final int DATA_TIME = 1;
 	public static final int DATA_HEAT = 2;
-	public static final int DATA_COUNT = 3;
+	public static final int DATA_ASSISTED = 3;
+	public static final int DATA_STATUS = 4;
+	public static final int DATA_COUNT = 5;
+	public final local.peepo.CookingPotJob companionJob = new local.peepo.CookingPotJob(this);
+	private net.minecraft.resources.@Nullable Identifier selectedRecipe;
+	public final local.peepo.CompanionRecipeFilter companionFilter = new local.peepo.CompanionRecipeFilter();
+	public local.peepo.CompanionRecipeFilter filter(){companionFilter.initialize(supplyPlan().map(p->p.output().create()).orElse(ItemStack.EMPTY));return companionFilter;}
+	public void companionFilterChanged(){selectedRecipe=null;progress=0;assistHalf=0;recheck=true;loaded=false;setChanged();}
+	public void prepareCompanionRecipe(net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> source){
+		if(!(level instanceof ServerLevel server))return;
+		var filter=filter();var available=local.peepo.RecipeSupplies.available(source);
+		var catalog=CookingPotRecipe.catalog(server.getServer());
+		var options=new java.util.ArrayList<>(catalog.entrySet());
+		options.sort(java.util.Comparator.comparingInt(e->e.getKey().equals(selectedRecipe)?0:1));
+		int inspected=0;for(var entry:options){if(++inspected>256)break;var candidate=entry.getValue();
+			if(!filter.allows(candidate.output().create()))continue;
+			var parts=candidate.parts().stream().map(p->new local.peepo.RecipeSupplies.Part(p.ingredient(),p.count())).toList();
+			if(local.peepo.RecipeSupplies.completes(parts,items.subList(0,INPUTS),available)){selectRecipe(entry.getKey());return;}
+		}
+		if(items.subList(0,INPUTS).stream().allMatch(ItemStack::isEmpty))selectRecipe(null);
+	}
+	private java.util.Optional<CookingPotRecipe.Match> companionMatch(ServerLevel server){
+		var filter=filter();
+		var match=CookingPotRecipe.find(server.getServer(),items.subList(0,INPUTS),selectedRecipe);
+		if(match.isPresent() && filter.allows(match.get().recipe().output().create()))return match;
+		if(filter.empty())return CookingPotRecipe.find(server.getServer(),items.subList(0,INPUTS));
+		int inspected=0;for(var candidate:CookingPotRecipe.catalog(server.getServer()).values()){
+			if(++inspected>256)break;if(!filter.allows(candidate.output().create()))continue;
+			var take=candidate.take(new CookingPotRecipe.Input(items.subList(0,INPUTS)));
+			if(take!=null)return java.util.Optional.of(new CookingPotRecipe.Match(candidate,take));
+		}return java.util.Optional.empty();
+	}
+	private Object recipeRevision;
+	private int assistHalf;
+	private long lastAssisted = -1000;
 
 	private static final int[] INPUT_SLOTS = {0, 1, 2, 3, 4, 5};
 	private static final int[] RESULT_SLOTS = {6, 7, 8, 9};
@@ -87,6 +120,8 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 				case DATA_PROGRESS -> progress;
 				case DATA_TIME -> time;
 				case DATA_HEAT -> heated ? 1 : 0;
+				case DATA_ASSISTED -> level != null && level.getGameTime() - lastAssisted <= 2 ? 1 : 0;
+				case DATA_STATUS -> cookingStatus().ordinal();
 				default -> 0;
 			};
 		}
@@ -113,35 +148,82 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 
 	public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
 		heated = isHeated(level, pos);
+		refreshRecipe(level);
+		boolean cooking = heated && recipe != null && resultSlotFor(recipe.output().create()) >= 0;
+		if (cooking) {
+			advance(level, 1);
+		} else {
+			assistHalf = 0;
+			if (progress > 0) {
+				progress = Math.max(0, progress - COOLING);
+				setChanged();
+			}
+		}
+		if (level.getGameTime() - lastAssisted > 2) assistHalf = 0;
+		if (state.getValue(CookingPotBlock.COOKING) != cooking) {
+			level.setBlock(pos, state.setValue(CookingPotBlock.COOKING, cooking), Block.UPDATE_ALL);
+		}
+	}
+
+	private void refreshRecipe(ServerLevel level) {
+		if (recipeRevision != CookingPotRecipe.revision()) {
+			recheck = true; recipeRevision = CookingPotRecipe.revision();
+		}
 		if (inputsChanged()) {
 			recheck = true;
 		}
 		if (recheck) {
 			recheck = false;
-			CookingPotRecipe found = CookingPotRecipe.find(level.getServer(), items.subList(0, INPUTS))
+			CookingPotRecipe found = companionMatch(level)
 					.map(CookingPotRecipe.Match::recipe).orElse(null);
 			if (found != recipe) {
+				assistHalf = 0;
 				recipe = found;
 				progress = loaded && found != null ? progress : 0;
 			}
 			loaded = false;
 			time = recipe == null ? 0 : recipe.time();
 		}
-		boolean cooking = heated && recipe != null && resultSlotFor(recipe.output().create()) >= 0;
-		if (cooking) {
-			progress++;
-			if (progress >= time) {
-				progress = 0;
-				cook(level, pos, recipe);
-			}
-			setChanged();
-		} else if (progress > 0) {
-			progress = Math.max(0, progress - COOLING);
-			setChanged();
+	}
+
+	private void advance(ServerLevel level, int ticks) {
+		progress += ticks;
+		if (progress >= time) { progress = 0; cook(level, worldPosition, recipe); }
+		setChanged();
+	}
+
+	public net.minecraft.resources.@Nullable Identifier selectedRecipe() { return selectedRecipe; }
+	/** Stable recipe ID + counted Ingredient predicates for a future porter, without granting inventory access. */
+	public java.util.Optional<CookingPotPlan> supplyPlan() {
+		if (!(level instanceof ServerLevel server) || selectedRecipe == null) return java.util.Optional.empty();
+		var planned = CookingPotRecipe.catalog(server.getServer()).get(selectedRecipe);
+		return planned == null ? java.util.Optional.empty() : java.util.Optional.of(new CookingPotPlan(selectedRecipe, planned.output(), planned.parts(), planned.time()));
+	}
+	public void selectRecipe(net.minecraft.resources.@Nullable Identifier id) {
+		if (!(level instanceof ServerLevel server) || id != null && !CookingPotRecipe.catalog(server.getServer()).containsKey(id)) return;
+		if (java.util.Objects.equals(id, selectedRecipe)) return;
+		selectedRecipe = id; progress = 0; assistHalf = 0; recheck = true; loaded = false; setChanged();
+	}
+	public local.peepo.CompanionStatus cookingStatus() {
+		if (!(level instanceof ServerLevel server) || isRemoved()) return local.peepo.CompanionStatus.MISSING;
+		refreshRecipe(server);
+		if (selectedRecipe != null && !CookingPotRecipe.catalog(server.getServer()).containsKey(selectedRecipe)) return local.peepo.CompanionStatus.RECIPE_MISSING;
+		if (!isHeated(level, worldPosition)) return local.peepo.CompanionStatus.NO_HEAT;
+		if (recipe == null) return local.peepo.CompanionStatus.NO_INPUT;
+		return resultSlotFor(recipe.output().create()) < 0 ? local.peepo.CompanionStatus.FULL : local.peepo.CompanionStatus.READY;
+	}
+	/** One half-tick of useful effort per server tick: +50% speed, no additional recipe or heat tick. */
+	public boolean assist(local.peepo.PeepoEntity npc) {
+		if (!(level instanceof ServerLevel server) || isLocked() || lastAssisted == level.getGameTime()
+			|| !companionJob.isOccupant(npc) || !local.peepo.CompanionJobs.permitted(npc, worldPosition)
+			|| cookingStatus() != local.peepo.CompanionStatus.READY) return false;
+		try (var tx = net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()) {
+			if (npc.extractEnergy(16, tx) <= 0) return false;
+			tx.commit();
 		}
-		if (state.getValue(CookingPotBlock.COOKING) != cooking) {
-			level.setBlock(pos, state.setValue(CookingPotBlock.COOKING, cooking), Block.UPDATE_ALL);
-		}
+		lastAssisted = level.getGameTime();
+		if (++assistHalf >= 2) { assistHalf = 0; advance(server, 1); }
+		return true;
 	}
 
 	/** The meal a recipe serves at {@code now}: a jar of preserves is stamped with the time it was cooked (it spoils from then). */
@@ -215,7 +297,7 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 
 	/** Takes one batch of ingredients (leaving containers such as buckets behind) and adds the meal. */
 	private void cook(ServerLevel level, BlockPos pos, CookingPotRecipe cooked) {
-		Optional<CookingPotRecipe.Match> match = CookingPotRecipe.find(level.getServer(), items.subList(0, INPUTS));
+		Optional<CookingPotRecipe.Match> match = companionMatch(level);
 		if (match.isEmpty() || match.get().recipe() != cooked) {
 			recheck = true;
 			return;
@@ -312,7 +394,10 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 	/** Ingredient slots take only items some pot recipe uses; only the server knows the recipes. */
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
-		return slot < INPUTS && (!(level instanceof ServerLevel server) || CookingPotRecipe.isIngredient(server.getServer(), stack));
+		if (slot >= INPUTS) return false;
+		if (!(level instanceof ServerLevel server)) return true;
+		if (filter().empty()) return CookingPotRecipe.isIngredient(server.getServer(), stack);
+		return CookingPotRecipe.catalog(server.getServer()).values().stream().anyMatch(r->filter().allows(r.output().create()) && r.uses(stack));
 	}
 
 	@Override
@@ -337,19 +422,16 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 		return new CookingPotMenu(containerId, inventory, this, data);
 	}
 
-	@Override
-	public BlockPos getScreenOpeningData(ServerPlayer player) {
-		return worldPosition;
-	}
-
 	// ---------------------------------------------------------------- saving
 
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+		companionFilter.load(input);
 		items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, items);
 		progress = input.getInt("progress").orElse(0);
+		selectedRecipe = input.read("CompanionRecipe", net.minecraft.resources.Identifier.CODEC).orElse(null);
 		recheck = true;
 		loaded = true;
 	}
@@ -357,7 +439,10 @@ public class CookingPotBlockEntity extends BaseContainerBlockEntity implements W
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+		filter().save(output);
 		ContainerHelper.saveAllItems(output, items);
 		output.putInt("progress", progress);
+		if (selectedRecipe != null) output.store("CompanionRecipe", net.minecraft.resources.Identifier.CODEC, selectedRecipe);
 	}
+	@Override public void setRemoved() { companionJob.removed(); super.setRemoved(); }
 }

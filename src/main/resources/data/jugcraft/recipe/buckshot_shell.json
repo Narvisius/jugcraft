@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PLP",
+    "PGP",
+    " B "
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "L": "#c:nuggets/lead",
+    "G": "minecraft:gunpowder",
+    "B": "#c:nuggets/brass"
+  },
+  "result": {
+    "id": "jugcraft:buckshot_shell",
+    "count": 4
+  }
+}

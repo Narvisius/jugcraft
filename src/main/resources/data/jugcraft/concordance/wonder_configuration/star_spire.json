@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "wonder": "jugcraft:concord_spire",
+  "tradition": "starwatchers",
+  "requires": [
+    {
+      "research": "jugcraft:celestial_attunement",
+      "state": "mastered"
+    },
+    {
+      "research": "jugcraft:circle_lore",
+      "state": "understood"
+    }
+  ],
+  "practice": "jugcraft:observation",
+  "crown": "jugcraft:spire_crown_star",
+  "upkeep": {
+    "item": "minecraft:glow_ink_sac",
+    "count": 2,
+    "ley": 8
+  },
+  "field": {
+    "kind": "focus",
+    "radius": 24,
+    "count": 6
+  }
+}

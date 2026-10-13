@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:bowl"
+    },
+    {
+      "ingredient": "jugcraft:rice"
+    },
+    {
+      "ingredient": "minecraft:chicken"
+    },
+    {
+      "ingredient": "jugcraft:ginger"
+    },
+    {
+      "ingredient": "jugcraft:paprika"
+    },
+    {
+      "ingredient": "jugcraft:onion"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:chicken_curry"
+  },
+  "time": 300
+}

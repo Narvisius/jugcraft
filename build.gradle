@@ -120,6 +120,14 @@ fabricApi {
 	}
 }
 
+// Loom 1.17's shared cleanup task clears the last configured test run (the client
+// when both suites are enabled). Also clear the generated server test directory:
+// retaining its world leaks awarded seasonal contests and other saved data into
+// the next build. Development runClient/runServer worlds are outside this path.
+tasks.named("deleteGameTestRunDir", Delete) {
+	delete(layout.buildDirectory.dir("run/gameTest"))
+}
+
 // CI chooses and shares out the client game tests (tools/select_client_tests.py, docs/TESTING.md):
 // Loom deletes build/run/clientGameTest before each run, so CI must write these AFTER that dependency.
 // Restrict this to CI: never overwrite a local developer's client settings.

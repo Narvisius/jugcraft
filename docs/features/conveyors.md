@@ -3,7 +3,7 @@
 Status: implemented in source (PR #38); **not yet played**. Compiles in CI; game tests cover it, and the client test screenshots a running line.
 Proposal issue: none. The owner selected "Item conveyors" directly on 30 September 2026.
 Owner: @jimbozoomer-byte
-Target milestone and tier: bronze age, alongside kinetic power. A conveyor needs leather belts, iron plates and an iron shaft; the splitter adds bronze gears and a brass plate.
+Target milestone and tier: bronze age, alongside kinetic power. A conveyor needs drive belts, iron plates and an iron shaft; the splitter adds bronze gears and a brass plate.
 Primary specialty and supported player role: engineering, logistics
 
 ## Player experience

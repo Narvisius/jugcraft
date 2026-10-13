@@ -1,0 +1,31 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:vigil/surge",
+  "category": "jugcraft:vigil",
+  "x": 4,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.vigil.surge.name",
+  "description": "book.jugcraft.arcane_concordance.vigil.surge.description",
+  "icon": "minecraft:redstone",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/crimson_rites_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.crimson_rites.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.vigil.surge.p0.title",
+      "text": "book.jugcraft.arcane_concordance.vigil.surge.p0.text",
+      "show_title_separator": true
+    }
+  ]
+}

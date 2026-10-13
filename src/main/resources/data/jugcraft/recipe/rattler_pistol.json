@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "RLB"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "R": "minecraft:redstone",
+    "L": "minecraft:lever",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:rattler_pistol"
+  }
+}

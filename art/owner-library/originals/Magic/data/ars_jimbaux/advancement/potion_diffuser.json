@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:potion_jar",
+  "criteria": {
+    "has_potion_diffuser": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:potion_diffuser"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.potion_diffuser"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:potion_diffuser"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.potion_diffuser"
+    }
+  },
+  "requirements": [
+    [
+      "has_potion_diffuser"
+    ]
+  ]
+}

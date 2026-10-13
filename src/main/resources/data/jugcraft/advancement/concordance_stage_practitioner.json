@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_stage_initiate",
+  "display": {
+    "icon": {
+      "id": "minecraft:compass"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_stage_practitioner.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_stage_practitioner.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chelicerae": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jymbaquary:chelicerae"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "jymbaquary:uncrafting/spider_eye"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chelicerae"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jymbaquary:uncrafting/spider_eye"
+    ]
+  }
+}

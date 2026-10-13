@@ -1,6 +1,6 @@
 # Agriculture branch
 
-Status: **three slices implemented in source: the Fall Harvest (crops, wild plants, sickles), the Kitchen Garden (trellises, seven crops, the Cooking Pot) and the Festival Crops (gourds on stems, turnips and Turnip Lanterns, cranberry bogs, the chestnut tree), plus pumpkin carving (the Carving Knife), the Halloween harvest (giant pumpkins, the Harvest Scale, scarecrows, heirloom pumpkins, ornamental corn and fall decorations), the pumpkin regatta and trick-or-treating, the Halloween festivities (the carving contest, costumed mobs, the Halloween Peddler, spooky decorations and sweets), Halloween nights (will-o'-wisps, the Pumpkin Chunkin' Trebuchet, a bigger Candy Bag, the Harvest Moon and the Headless Horseman), and the thirty Halloween decorations (string lights, the Candy Bowl, the Coffin, the Haunted Portrait, the Fog Machine, luminarias, floating candles, the Skeleton Hand Sconce, soul-flame carvings, bat bunting, the graveyard: the cemetery fence and gate, the crypt set, the Grave Mound, the Mourning Angel and the Pop-Up Skeleton, the witch's cottage: the Bubbling Cauldron, the Apothecary Shelf, the Crystal Ball, the Grimoire Stand and the Witch's Broom, the harvest party: the Bobbing for Apples Tub, the Pumpkin Crate, the Hay Bale Seat, the Autumn Wreath and the Leaf Piles, and the haunted house and yard: the Rocking Chair, the Lurking Eyes, the Silhouette Window, the Spooky Music Box and the Giant Fake Spider), and the eight batches of more Halloween, the haunted house inside (the Haunted Chandelier, the Phantom Pipe Organ, the Suit of Armor, the Dust Sheet, the Spirit Mirror, Tattered Curtains and the Creepy Doll) the mad scientist and monsters (the Tesla Coil, the Lab Table, the Specimen Jar, the Mummy Sarcophagus, the Raven on a Perch and the Black Cat Figure) the yard and porch (the Yard Inflatables, the Animatronic Porch Witch, Grasping Hands, the Poseable Skeleton, Bone Wind Chimes, the Weathervanes, the Spooky Sign, the Haunted Archway and the Dead Hollow Tree) lighting and glow (the Black Light and Glow Paint, the Witch Fire Brazier, the Shadow Puppet Lamp, the Mini Pumpkin Stack and the Floating Witch Hat) party games (the Jump-Scare Trap, the Costume Contest, Pumpkin Bowling, the Candy Cache, the Monster Mash Dance Floor, Ghost Tag and the Fortune Teller's Table) night events (trick-or-treaters at your door, Toilet Paper Rolls, the Haunted Hayride and the Halloween Bonfire) treats (the Witch's Brew Punch Bowl, Soul Cakes and the Barmbrack, pumpkin spice lattes, pumpkin bread, spiderweb cupcakes, bat-wing cookies and Giant Candy) and costumes (the Vampire Cape, Mummy Wraps, the Skeleton Suit, the Werewolf Mask, Cat Ears and Tail, Bat Wings and the Costume Trunk).** They compile in CI and have automated in-game tests, but nobody has played them yet. Everything marked *planned* below is a design proposal, not a promise. See [../features/fall-harvest.md](../features/fall-harvest.md), [../features/kitchen-garden.md](../features/kitchen-garden.md), [../features/festival-crops.md](../features/festival-crops.md), [../features/pumpkin-carving.md](../features/pumpkin-carving.md), [../features/halloween-harvest.md](../features/halloween-harvest.md) , [../features/pumpkin-regatta-and-trick-or-treat.md](../features/pumpkin-regatta-and-trick-or-treat.md) [../features/halloween-festivities.md](../features/halloween-festivities.md) [../features/halloween-nights.md](../features/halloween-nights.md), [../features/halloween-decorations.md](../features/halloween-decorations.md) and [../features/more-halloween.md](../features/more-halloween.md) for the implemented slices and their test evidence.
+Status: **three slices implemented in source: the Fall Harvest (crops, wild plants, sickles), the Kitchen Garden (trellises, seven crops, the Cooking Pot) and the Festival Crops (gourds on stems, turnips and Turnip Lanterns, cranberry bogs, the chestnut tree), plus pumpkin carving (the Carving Knife), the Halloween harvest (giant pumpkins, the Harvest Scale, scarecrows, heirloom pumpkins, ornamental corn and fall decorations), the pumpkin regatta and trick-or-treating, the Halloween festivities (the carving contest, costumed mobs, the Halloween Peddler, spooky decorations and sweets), Halloween nights (will-o'-wisps, the Pumpkin Chunkin' Trebuchet, a bigger Candy Bag, the Harvest Moon and the Headless Horseman), and the thirty Halloween decorations (string lights, the Candy Bowl, the Coffin, the Haunted Portrait, the Fog Machine, luminarias, floating candles, the Skeleton Hand Sconce, soul-flame carvings, bat bunting, the graveyard: the cemetery fence and gate, the crypt set, the Grave Mound, the Mourning Angel and the Pop-Up Skeleton, the witch's cottage: the Bubbling Cauldron, the Apothecary Shelf, the Crystal Ball, the Grimoire Stand and the Witch's Broom, the harvest party: the Bobbing for Apples Tub, the Pumpkin Crate, the Hay Bale Seat, the Autumn Wreath and the Leaf Piles, and the haunted house and yard: the Rocking Chair, the Lurking Eyes, the Silhouette Window, the Spooky Music Box and the Giant Fake Spider), and the eight batches of more Halloween, the haunted house inside (the Haunted Chandelier, the Phantom Pipe Organ, the Suit of Armor, the Dust Sheet, the Spirit Mirror, Tattered Curtains and the Creepy Doll) the mad scientist and monsters (the Tesla Coil, the Lab Table, the Specimen Jar, the Mummy Sarcophagus, the Raven on a Perch and the Black Cat Figure) the yard and porch (the Yard Inflatables, the Animatronic Porch Witch, Grasping Hands, the Poseable Skeleton, Bone Wind Chimes, the Weathervanes, the Spooky Sign, the Haunted Archway and the Dead Hollow Tree) lighting and glow (the Black Light and Glow Paint, the Witch Fire Brazier, the Shadow Puppet Lamp, the Mini Pumpkin Stack and the Floating Witch Hat) party games (the Jump-Scare Trap, the Costume Contest, Pumpkin Bowling, the Candy Cache, the Monster Mash Dance Floor, Ghost Tag and the Fortune Teller's Table) night events (trick-or-treaters at your door, Toilet Paper Rolls, the Haunted Hayride and the Halloween Bonfire) treats (the Witch's Brew Punch Bowl, Soul Cakes and the Barmbrack, pumpkin spice lattes, pumpkin bread, spiderweb cupcakes, bat-wing cookies and Giant Candy) and costumes (the Vampire Cape, Mummy Wraps, the Skeleton Suit, the Werewolf Mask, Cat Ears and Tail, Bat Wings and the Costume Trunk), the Farmhouse Kitchen (the Kitchen Stove, the Skillet, the Cutting Board, knives and kitchen cabinets), feasts and food displays (five feasts served a bowl at a time, pies in the owner's art, the pumpkin pie set down, plates, platters and serving trays), the menu (55 dishes and ingredients from the owner's food art, every dish set down as a 3D model, the Cooking Pot in the owner's pot, nachos, and food for pets), rice and wet farming (rice paddies, wild rice, straw, rice and straw storage, tatami and the rice dishes), and soil, compost and storage (organic compost, rich soil and its farmland, produce crates and baskets).** They compile in CI and have automated in-game tests, but nobody has played them yet. Everything marked *planned* below is a design proposal, not a promise. See [../features/fall-harvest.md](../features/fall-harvest.md), [../features/kitchen-garden.md](../features/kitchen-garden.md), [../features/festival-crops.md](../features/festival-crops.md), [../features/pumpkin-carving.md](../features/pumpkin-carving.md), [../features/halloween-harvest.md](../features/halloween-harvest.md) , [../features/pumpkin-regatta-and-trick-or-treat.md](../features/pumpkin-regatta-and-trick-or-treat.md) [../features/halloween-festivities.md](../features/halloween-festivities.md) [../features/halloween-nights.md](../features/halloween-nights.md), [../features/halloween-decorations.md](../features/halloween-decorations.md), [../features/more-halloween.md](../features/more-halloween.md) [../features/farmhouse-kitchen.md](../features/farmhouse-kitchen.md), [../features/feasts-and-food-displays.md](../features/feasts-and-food-displays.md), [../features/the-menu.md](../features/the-menu.md), [../features/rice-and-wet-farming.md](../features/rice-and-wet-farming.md) and [../features/soil-compost-and-storage.md](../features/soil-compost-and-storage.md) for the implemented slices and their test evidence.
 
 Agriculture is Jugcraft's third starting branch, alongside technology and magic ([DESIGN.md](../DESIGN.md)). A farmer can begin on day one with a hoe and whatever grows nearby, and never needs a machine or a spell. Industrial farming (powered harvesters, planters, sprinklers, crop processors) comes later and belongs to the engineering branch; see [Boundaries](#boundaries).
 
@@ -1294,6 +1294,174 @@ Ten more fall and Halloween additions, numbered on from the twenty before, one p
 - **Blowing** herds leaf piles along the way you face, a layer at a time, until a wall, a fence or a full pile stops them: sweep a lawn into one heap. It blows dropped items along, nudges mobs, and puts out candles.
 - **Vacuuming** takes leaf piles and leaf litter up into your inventory, a layer at a time, for the composter, and draws dropped items in. Details: [even more fall additions](../features/even-more-fall-additions.md#the-leaf-blower).
 
+## What exists now: the Farmhouse Kitchen
+
+The first slice of the [kitchen and cooking expansion](#the-kitchen-and-cooking-expansion-planned): cooking devices and a preparation step, drawn in the owner's own farming and food textures. Details and test evidence: [features/farmhouse-kitchen.md](../features/farmhouse-kitchen.md).
+
+| **The Farmhouse Kitchen** | **Stoves:** a full hob, a skillet, a pot, and one out |
+| --- | --- |
+| ![The Farmhouse Kitchen](../images/ingame_farmhouse_kitchen.jpg) | ![The Kitchen Stoves](../images/ingame_kitchen_stoves.jpg) |
+
+- **Kitchen Stove.** A brick range (3 iron, 5 bricks and a campfire). Light it with flint and steel or a fire charge; a shovel puts it out. Lit, it glows and heats whatever stands on it, so a Cooking Pot, a kettle or a Skillet cooks on top. With nothing on top, its **hob** cooks up to six raw foods at twice a campfire's pace: use them on its top, and each pops off cooked. Its hot top burns what stands on it unless they sneak.
+- **Skillet.** An iron pan for any heat source: a lit stove, a campfire, fire, lava or magma. It takes up to 16 of one raw food and fries them one at a time at a furnace's pace; an empty hand takes everything out.
+- **Cutting Board** and **knives.** Set anything on the board; use a knife on it to cut what lies there. Porkchops become bacon, beef minced beef, chicken cuts, mutton chops, cod and salmon slices (with bone meal), cabbage leaves, pumpkin slices, and a cake seven slices. Knives come in flint, iron, bronze, gold, steel, diamond and netherite (a smithing upgrade). Any knife, the Carving Knife included, also cuts slices from pies and cakes and servings from the roast turkey.
+- **Kitchen cabinets** in eleven woods: a chest-sized cupboard whose doors swing open while someone looks inside.
+- **New foods:** raw and cooked bacon, beef patties, chicken cuts, mutton chops and fish slices; cabbage leaves, pumpkin slices, slices of cake and fried eggs. A whole's cuts are never worth more than the whole.
+
+## What exists now: feasts and food displays
+
+The second slice of the [kitchen and cooking expansion](#the-kitchen-and-cooking-expansion-planned): food to set on the table and show off, in the owner's own textures. Details and test evidence: [features/feasts-and-food-displays.md](../features/feasts-and-food-displays.md).
+
+| **Feasts:** whole, half eaten and leftovers | **The displays** laid with food |
+| --- | --- |
+| ![Feasts at every serving](../images/ingame_feasts.jpg) | ![Plate, platter and serving tray](../images/ingame_food_displays.jpg) |
+
+- **Feasts:** Roast Chicken, Honey-Glazed Ham, Shepherd's Pie, Stuffed Pumpkin and the glowing Gleaming Salad, each crafted from five or six foods and placed whole. A bowl takes a serving away; a hungry player eats one in place. The model is eaten down a serving at a time to the leftovers, which a use clears (for a bone or pumpkin seeds). Four servings give about what the ingredients do.
+- **Pies in the owner's art:** the apple pie (same ID and baking, the owner's look), and two new Hearth Oven pies, chocolate and the sweet berry cheesecake.
+- **The pumpkin pie set down:** sneak and use vanilla's pumpkin pie on a block to set it down as a pie, eaten or cut in four slices that add up to the pie.
+- **Plate, Platter and Serving Tray:** set food (or anything) on them to show it, one thing to the plate and four to the platter or tray, each where you use it.
+
+## What exists now: the menu
+
+The third slice of the [kitchen and cooking expansion](#the-kitchen-and-cooking-expansion-planned): dishes from the owner's own food art, each one set down as a 3D model. Details, the balance table and test evidence: [features/the-menu.md](../features/the-menu.md).
+
+| **The table:** every dish set down | **The Cooking Pot** in the owner's pot, and the nachos |
+| --- | --- |
+| ![Every dish set down](../images/ingame_menu_table.jpg) | ![The Cooking Pot and the nachos](../images/ingame_menu_pot.jpg) |
+
+- **55 new items:** drinks (hot cocoa, a creamy corn drink, melon juice, glow berry custard and a milk bottle that clears effects), soups and stews, plated meals and pastas, sandwiches, burgers, wraps and tacos, dumplings and ham, things on a stick (corn dogs, a barbecue stick, popsicles), cookies and caramel popcorn, boiled corn, cornbread, tortillas and chips, and the doughs and batters they start from. Corn on the cob gives its corncob back.
+- **Every dish sets down:** sneak and use it on a block to set it down facing you, as a model fitted to the owner's icon (a bowl, a plate, a stacked sandwich, a standing mug or bottle, or the icon lying flat); an empty hand takes it back.
+- **The owner's art on old favourites:** the onion, vegetable and pumpkin soups, cabbage rolls, roasted corn and mulled cider wear the owner's icons (same IDs, recipes and food), popcorn set down is the owner's striped popcorn box, and the **Cooking Pot** is the owner's iron pot (same block, recipes and screen).
+- **Nachos,** a sixth feast served four times. **Dog Food** and **Horse Feed** heal your own tamed wolf or horse and give it a boost.
+
+## What exists now: rice and wet farming
+
+The fourth slice of the [kitchen and cooking expansion](#the-kitchen-and-cooking-expansion-planned), and slice 7 of the [crop roster](#crop-roster-what-comes-next-planned): rice grown in flooded fields, in the owner's own textures. Details, the balance table and test evidence: [features/rice-and-wet-farming.md](../features/rice-and-wet-farming.md).
+
+| **The paddy** at every stage, and wild rice | **The table:** the rice dishes and the Rice Roll Medley |
+| --- | --- |
+| ![The paddy](../images/ingame_rice_paddy.jpg) | ![The rice dishes and the medley](../images/ingame_rice_medley_and_dishes.jpg) |
+
+- **Rice paddies.** Rice is its own seed: plant it into still water one block deep over bog soil (dirt, grass, mud, sand, clay or gravel) with air above. It grows two blocks tall, its panicles above the water; use a ripe plant or a sickle to pick 2-3 Rice Panicles, and the stalks stay to grow more. Flooded soil counts as moist farmland, under the plant and around it. The plant keeps its water when broken.
+- **Wild rice** grows in swamp and river shallows (shears take the plant; otherwise it gives rice), and rice drops from short grass.
+- **Straw and storage.** The Cutting Board cuts a panicle into two rice and a Straw. Nine rice make a Bag of Rice, nine panicles a Rice Bale and nine straw a Straw Bale, each crafting back into its nine.
+- **Tatami.** Four straw weave a Tatami; set against a lone one, it pairs into a two-block mat. Full Tatami Mats lie two blocks long as a bed does, and Half Tatami Mats one.
+- **Rice dishes,** each set down as the menu's are: Cooked Rice, Fried Rice and Mushroom Rice from the Cooking Pot; Salmon, Cod and Kelp Rolls, and Kelp Roll Slices cut from the kelp roll; and the **Rice Roll Medley**, a platter of rolls served one at a time, which gives the platter back.
+
+## What exists now: soil, compost and storage
+
+The fifth slice of the [kitchen and cooking expansion](#the-kitchen-and-cooking-expansion-planned): better soil and somewhere to keep the harvest, in the owner's own textures. Details and test evidence: [features/soil-compost-and-storage.md](../features/soil-compost-and-storage.md).
+
+| **The garden:** rich farmland with wheat and corn, and the compost heap | **The storehouse:** produce crates, the kernel bag and the baskets |
+| --- | --- |
+| ![The garden](../images/ingame_soil_garden.jpg) | ![The crates and baskets](../images/ingame_soil_storage.jpg) |
+
+- **Organic Compost** (dirt, four straw, two bone meal, two rotten flesh) rots through four stages into **Rich Soil**, every random tick while water touches it, otherwise half of them.
+- **Rich Soil** counts as dirt; a hoe tills it into **Rich Soil Farmland**, which takes crops as farmland does, keeps moist by water or rain, is never trampled, and dries back into Rich Soil. Whatever grows on either gets an extra random tick for each of the soil's own, about twice the pace.
+- **Produce crates** (beetroot, cabbage, carrot, corn, onion, potato, tomato) and the **Bag of Corn Kernels** hold nine each and craft back into them. The Pumpkin Crate is unchanged, as the owner chose.
+- **Wooden and Bamboo Baskets** are nine-slot storage blocks of their own, open at the top: items dropped in are taken in, hoppers reach them, and a comparator reads them. The Foraging Basket is unchanged, as the owner chose.
+
+## What exists now: orchards
+
+The sixth slice of the [kitchen and cooking expansion](#the-kitchen-and-cooking-expansion-planned): four fruit trees that fruit every year, in Jugcraft's own art (the owner's library has no fruit trees; the owner chose to build it this way). Details and test evidence: [features/orchards.md](../features/orchards.md).
+
+| **The orchard:** pear, peach, lemon and orange trees hung with fruit | **The table:** the new pies, juices, preserves and saplings |
+| --- | --- |
+| ![The orchard](../images/ingame_orchard_ripe.jpg) | ![The table](../images/ingame_orchard_table.jpg) |
+
+- **Pear, peach, lemon and orange trees** grow from their seeds (the peach's pit) into oak-trunked trees, each in its own shape. As the [apple tree's](#the-cider-mill), their leaves blossom and then hang with ripe fruit; a right-click picks one to three, and the leaves fruit again. A fruit crafts into its seed.
+- **Wild:** pears and peaches in the Orchard, lemons and oranges in the Mediterranean Forest and the Subtropics; pears in forests, peaches in plains and savannas, lemons in savannas and oranges in savannas and jungles elsewhere.
+- **Orange Juice** and **Lemonade,** drinks that set down as the menu's do; **Peach** and **Lemon Meringue Pies** from the Hearth Oven; **Orange Marmalade**, **Peach Preserves** and **Pear Butter** in Mason Jars.
+
+## What exists now: cakes
+
+Seven cakes the owner drew and shared on 8 October 2026 ("CAKES & BAKES - 3D CAKES"), rebuilt from their drawing and baked in the Hearth Oven as the pies are, as the owner chose. Details and test evidence: [features/cakes.md](../features/cakes.md).
+
+| **The display:** the seven cakes and the Burnt Cake, whole and cut | **As the owner drew it:** the carrot cake whole and cut |
+| --- | --- |
+| ![The cake display](../images/ingame_cakes.jpg) | ![The carrot cake whole and cut](../images/ingame_cakes_drawn.jpg) |
+
+- **Carrot, Birthday, Ice Cream, Red Velvet, Coffee and Apple Cakes and a Cheesecake.** Cake Batter (wheat, an egg, sugar and milk), a sugar and the cake's own two ingredients make a raw cake; the Hearth Oven bakes it, or burns it into a Burnt Cake.
+- **Set down whole,** a block wide and facing whoever set it down, with the drawing's toppings: carrots, candles, a square of berry jam, apple slices. Eaten, or cut with a knife into slices, a quarter at a time: the front right quarter first, showing the cake's inside as the owner's INTERIOR drawing does.
+
+## What exists now: fruit crops
+
+Five fruits the owner asked for on 8 October 2026 before the milkshakes and the pies and tarts that need them, as crops in Jugcraft's own art (their library has none of these fruits; the owner chose to build them this way). Details and test evidence: [features/fruit-crops.md](../features/fruit-crops.md).
+
+| **The bushes:** strawberries, blueberries and coffee, from planted to ripe | **The trees:** the plum and the banana hung with ripe fruit |
+| --- | --- |
+| ![The bushes](../images/ingame_fruit_bushes.jpg) | ![The trees ripe](../images/ingame_fruit_trees_ripe.jpg) |
+
+- **Strawberry Plant, Blueberry Bush and Coffee Plant:** bushes a block tall on farmland, planted from seeds (from short grass, a wild plant or a fruit); ripe, a right-click picks them and they fruit again, as the pepper does.
+- **Plum and banana trees,** grown from a Plum Pit and a Banana Pup as the [orchards'](#what-exists-now-orchards) are; the banana on a Banana Stem of its own under drooping fronds.
+- **Wild:** strawberries in forests and flower fields, blueberries in taigas and hills, coffee and bananas in jungles, plums in forests and taigas; plums in the Orchard, bananas in the Tropics and the Rainforest.
+- **Coffee Beans** roasted from coffee cherries (the Coffee Cake now takes them); **Strawberry, Blueberry and Plum Jam** in Mason Jars.
+
+## What exists now: pies and tarts
+
+Ten pies and tarts the owner drew and shared on 8 October 2026 ("CAKES & BAKES - 3D PIES & TARTS"), rebuilt from their drawing and baked in the Hearth Oven as the pies and cakes are. Details and test evidence: [features/pies-and-tarts.md](../features/pies-and-tarts.md).
+
+| **The pies,** whole in front and cut behind | **As drawn:** the strawberry pie and the blueberry tart, whole and cut |
+| --- | --- |
+| ![The pies](../images/ingame_square_pies.jpg) | ![As drawn](../images/ingame_pies_and_tarts_drawn.jpg) |
+
+- **Strawberry, Plum, Banoffee, Whipped Pumpkin and Pork Pies** and **Blueberry, Sweet Berry, Lemon, Strawberry and Coffee Tarts.** Pastry Dough, a sugar (none in the pork pie) and the bake's own ingredients make a raw pie or tart, from the [fruit crops](#what-exists-now-fruit-crops), the [orchards'](#what-exists-now-orchards) lemons and the farm; the Hearth Oven bakes it, or burns it into a Burnt Pie.
+- **Set down whole,** a block wide and facing whoever set it down: a pie seven texels tall under its crust, a tart four, its rim standing round the filling and the drawing's berries, lemon or cream on top. Eaten, or cut with a knife into slices, a quarter at a time: the front right quarter first, showing the filling inside as the owner's page does.
+
+## What exists now: milkshakes
+
+Seven milkshakes the owner drew and shared on 8 October 2026 ("CAKES & BAKES - 3D MILKSHAKE"), each read off their drawing as its own sundae glass. Details and test evidence: [features/milkshakes.md](../features/milkshakes.md).
+
+| **The seven** on a counter | **As drawn:** the strawberry and banana milkshakes |
+| --- | --- |
+| ![The milkshakes](../images/ingame_milkshakes.jpg) | ![As drawn](../images/ingame_milkshakes_drawn.jpg) |
+
+- **Strawberry, Banana, Plum, Apple, Blueberry, Pumpkin and Chocolate Milkshakes,** made by hand from a Milk Bottle, a snowball, a sugar and the flavour (the [fruit crops'](#what-exists-now-fruit-crops) strawberries, blueberries, plums and bananas among them). Drunk even when full, for five food and half a minute of Haste, leaving the bottle.
+- **Set down** by a sneaking player as the owner's glass: a foot of glass bars, the shake between the glass's posts, cream, the fruit on top and a leaning straw. An empty hand takes it back.
+
+## What exists now: garden crops
+
+Slice 7, part a: the owner's own art for Jugcraft's garden crops, chosen on 9 October 2026 ("go with the recommendations"), with what their drawings add. Details and test evidence: [features/garden-crops.md](../features/garden-crops.md).
+
+| **Corn:** the owner's corn at every age, and ripe ornamental corn | **Wild plants and colonies:** the seven wild plants, and mushroom colonies on Rich Soil |
+| --- | --- |
+| ![Corn at every age](../images/ingame_garden_corn.jpg) | ![Wild plants and mushroom colonies](../images/ingame_garden_wild.jpg) |
+
+- **The cabbage, onion, tomato and corn** grow through the owner's stages: eight for the cabbage, the budding and then fruiting tomato vine in its trellis, and their corn, still three blocks tall, its ears ripening gold (flint-coloured on ornamental corn). How they grow and what they give is unchanged; the Garden Salad is drawn as their mixed salad.
+- **Tomatoes go over:** a ripe vine left unpicked turns over-ripe in time and gives **Rotten Tomatoes** instead, to throw like snowballs (a splat, no harm) or compost.
+- **Wild Carrots, Potatoes and Beetroots** in plains, flower fields, taigas, hills and swamps give vanilla's crops; the wild cabbage, onion, tomato and corn wear the owner's art.
+- **Mushroom colonies:** a brown or red mushroom used on Rich Soil plants a colony that grows only in the shade; shears or a knife pick two or three mushrooms from a grown one, and it grows again.
+
+## What exists now: vegetables, herbs and spices
+
+Slice 7, part b: new vegetables, kitchen herbs and spices in Jugcraft's own art (the owner's library has none), chosen on 9 October 2026 with part a. Details and test evidence: [features/vegetables-herbs-and-spices.md](../features/vegetables-herbs-and-spices.md).
+
+| **Herbs:** drying bundles, Planter Boxes, stages and pots | **Spices:** the vines, ginger, mustard, saffron and a cinnamon tree |
+| --- | --- |
+| ![The herbs](../images/ingame_herbs.jpg) | ![The spice crops and the cinnamon tree](../images/ingame_spices.jpg) |
+
+- **Vegetables:** lettuce, spinach, radishes and peas (peas fix nitrogen), cucumbers on a trellis, eggplant and zucchini bushes; a Green Salad, Pea Soup, Roasted Eggplant and Grilled Zucchini; the menu's Ratatouille now cooked from eggplant and zucchini.
+- **Herbs:** basil, mint, rosemary, thyme, parsley, sage, dill and chives, planted from a sprig and cut back when grown; potted in flower pots; hung in bundles to dry into Dried Herbs; grown anywhere in a **Planter Box** that holds its own water. Herb dishes, Mint Tea and Dill Pickles.
+- **Spices:** black pepper and vanilla vines on trellises, ginger, mustard and the saffron crocus; the **Cinnamon Tree**, whose bark an axe peels off as Cinnamon; Paprika ground from a dried chili with the Mortar and Pestle; a **Spice Rack** to show eight spices; Gingerbread Cookies, Chicken Curry, Saffron Rice and Vanilla Custard.
+- Every crop grows wild; the vegetables' seeds also drop from short grass.
+
+## The kitchen and cooking expansion (planned)
+
+On 7 October 2026 the owner asked for "lots more crops, plants, food, cooking devices, preparation systems", with "lots and lots of the food to be very decorative and displayable", drawn from the farming and food textures in their own library ([art/owner-library](../../art/owner-library/README.md)). The plan is ten slices, each its own pull request; the owner chose the Farmhouse Kitchen first, then feasts and food displays. Where a slice meets something Jugcraft already has (its cabbage, onion, corn and tomato crops, the Cooking Pot, the apple pie), the owner decides one by one, seeing both looks side by side. Slices 1 to 6 are built; for slice 2 the owner gave the apple pie their art and let vanilla's pumpkin pie be set down in their art, for slice 3 they gave their art to the Cooking Pot, three soups, the cabbage rolls, roasted corn, mulled cider and set-down popcorn, for slice 5 they made their baskets storage blocks of their own and kept their produce crates separate from the Pumpkin Crate, and for slice 6, with no fruit trees in their library, they chose Jugcraft's own art and four trees: pear, peach, lemon and orange. On 8 October 2026 they shared pages of their own drawings: [seven cakes](#what-exists-now-cakes), built first from their drawing, then the new [fruit crops](#what-exists-now-fruit-crops) (strawberries, blueberries, bananas, plums and coffee) they asked for before their milkshakes and pies and tarts, then [ten pies and tarts](#what-exists-now-pies-and-tarts) and [seven milkshakes](#what-exists-now-milkshakes) from their drawings. For slice 7, shown where it meets Jugcraft's crops, they chose on 9 October 2026 to have their own [garden crops](#what-exists-now-garden-crops) art for Jugcraft's cabbage, onion, tomato and corn, their wild plants, rotten tomatoes and mushroom colonies first (part a), then new [vegetables, herbs and spices](#what-exists-now-vegetables-herbs-and-spices) in Jugcraft's own art (part b).
+
+| Slice | What it adds | Ties to the roster above |
+| --- | --- | --- |
+| **1. Farmhouse Kitchen** ✅ | The Kitchen Stove, the Skillet, the Cutting Board, knives, cabinets | — |
+| **2. Feasts and food displays** ✅ | Placeable feasts and pies served a portion at a time; platters, trays and plates to show food on | Pies and the Harvest Feast Table |
+| **3. The menu** ✅ | 55 dishes and ingredients from the owner's food art, each dish placeable as a 3D model; the owner's Cooking Pot (their rice dishes came with slice 4) | Uses the cuts from slice 1 |
+| **4. Rice and wet farming** ✅ | Rice paddies, wild rice, straw, rice and straw storage, tatami, and the owner's rice dishes and roll medley | Roster slice 7 |
+| **5. Soil, compost and storage** ✅ | Organic compost, rich soil and its farmland, produce crates, the kernel bag, and storage baskets | Uses the rice slice's straw |
+| **6. Orchards** ✅ | Pear, peach, lemon and orange trees, juices, pies and preserves (grapes and berries wait) | Roster slice 4 |
+| **7. Garden crops, herbs and spices** (parts a ✅ and b ✅) | Part a: the owner's art for the cabbage, onion, tomato and corn, their wild plants, rotten tomatoes and mushroom colonies. Part b: more vegetables, herbs and spices | Roster slice 2's crops |
+| **8. Mill, dairy and bakery** | Flour, butter, cheese, bread and pastry | Farm equipment below |
+| **9. Preserving and curing** | Jams, pickles, smoking and curing | The preserves pantry |
+| **10. Engineered dieselpunk kitchen** | Powered stoves, mixers and slicers that automate the earlier slices | The engineering branch |
+
 ## Crop roster: what comes next (planned)
 
 The branch grows in small slices that each stand on their own. Each crop needs a job: a food, a material another branch wants, or a farming mechanic. Proposals are welcome.
@@ -1303,10 +1471,10 @@ The branch grows in small slices that each stand on their own. Each crop needs a
 | **1. Fall Harvest** ✅ | Corn, sunflower, beans, sweet potato, flax | Tall crops, picking, legumes, wild plants, sickles | Starter farming; mazes and fields; string, feed and stew |
 | **2. Kitchen garden** ✅ | Tomato, onion, garlic, cabbage, pepper, oats, barley | Trellises for climbing crops; the **Cooking Pot** for multi-ingredient meals | A real kitchen: soups, salads, porridge. Cabbage + salt → sauerkraut uses Jugcraft's salt. Garlic can later double as a ward against the planned Vampirism school (not built yet) |
 | **3. Festival Crops** ✅ | Butternut and acorn squash, warty gourds, turnip, cranberry, chestnut tree | Gourds grow from stems like pumpkins; bog crops in shallow water; a fruit tree | Halloween: Turnip Lanterns (the original jack-o'-lantern), gourd displays, candy corn. December: cranberry sauce, roasted chestnuts. All permanent, so nothing is lost after a season |
-| **4. Orchards and vines** (apple ✅) | Apple (built: [the cider mill](#the-cider-mill)), pear, peach, lemon and orange trees; grapes and hops on trellises; blueberries and raspberries | Fruit trees that grow from saplings and fruit every year without being cut down | Juices, pies, preserves; the cider press; long-term homestead beauty |
+| **4. Orchards and vines** (apple, pear, peach, lemon, orange, plum, banana, blueberries ✅) | Apple (built: [the cider mill](#the-cider-mill)), pear, peach, lemon and orange trees (built: [orchards](#what-exists-now-orchards)); plum and banana trees and blueberries (built: [fruit crops](#what-exists-now-fruit-crops)); grapes and hops on trellises; raspberries | Fruit trees that grow from saplings and fruit every year without being cut down | Juices, pies, preserves; the cider press; long-term homestead beauty |
 | **5. Fibre, oil and industrial crops** | Cotton, canola, sugar beet, rubber tree, indigo and madder | Tapping (rubber) and retting (flax to linen) | What engineers need from farmers: rubber for insulated cables and belts, plant oil for lubricant and biodiesel, sugar and corn for ethanol, fibres for canvas, dyes |
 | **6. Magical botany** | One herb per magic school (proposal names: Emberroot, Frostcap, Stormreed, Stonebloom, Gravemoss, Bloodthorn, Nightshade, Moonpetal) | Attunement: an herb grows only near its school's influence or with a ritual catalyst | Reagents for the magic branch; see [CONTENT_BRANCHES.md](../CONTENT_BRANCHES.md#magical-workshops-and-schools) |
-| **7. Rice and wet farming** | Rice, taro, water chestnut | Paddy crops that grow in one block of still water | A distinct regional farm; rice dishes |
+| **7. Rice and wet farming** (rice ✅) | Rice (built: [rice and wet farming](#what-exists-now-rice-and-wet-farming)), taro, water chestnut | Paddy crops that grow in one block of still water | A distinct regional farm; rice dishes. Taro and water chestnut wait for art |
 | **8. Off-world farming** | Adapted crops for the Moon and beyond | Sealed greenhouse habitats | Expedition food; a shared engineering and agriculture milestone ([space](../CONTENT_BRANCHES.md#space-and-magical-realms)) |
 
 The owner's [industrial agriculture planning brief](../features/industrial-agriculture-plan.md) expands slice 5 into textiles/coated fabrics, paper/packaging, panels/linoleum, rubber goods and later agricultural chemistry. It records flexible common feedstocks, early optional natural rubber, reusable hand/shaft/motor equipment and construction uses without new routine upkeep. These are planning directions, not implemented equipment or final balance values.

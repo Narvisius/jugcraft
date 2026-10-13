@@ -1,0 +1,41 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:hexes/dreamwalking",
+  "category": "jugcraft:hexes",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.hexes.dreamwalking.name",
+  "description": "book.jugcraft.arcane_concordance.hexes.dreamwalking.description",
+  "icon": "jugcraft:oneiric_censer",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.hexes.dreamwalking.p0.title",
+      "text": "book.jugcraft.arcane_concordance.hexes.dreamwalking.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p1",
+      "title1": "book.jugcraft.arcane_concordance.hexes.dreamwalking.p1.title",
+      "recipe_id_1": "jugcraft:oneiric_censer",
+      "text": "book.jugcraft.arcane_concordance.hexes.dreamwalking.p1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.hexes.dreamwalking.p2.title",
+      "text": "book.jugcraft.arcane_concordance.hexes.dreamwalking.p2.text",
+      "show_title_separator": true
+    }
+  ]
+}

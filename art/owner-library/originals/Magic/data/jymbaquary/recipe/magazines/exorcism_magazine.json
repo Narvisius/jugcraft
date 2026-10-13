@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:potions_enabled"
+    }
+  ],
+  "type": "jymbaquary:potion_effects",
+  "duration_factor": 1.0,
+  "key": {
+    "B": "jymbaquary:bullets/exorcism_bullet",
+    "M": "jymbaquary:magazines/empty_magazine"
+  },
+  "pattern": [
+    "BBB",
+    "BMB",
+    "BBB"
+  ],
+  "result": {
+    "id": "jymbaquary:magazines/exorcism_magazine"
+  }
+}

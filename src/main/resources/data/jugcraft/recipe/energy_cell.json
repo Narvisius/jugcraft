@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " C ",
+    "GRG",
+    " B "
+  ],
+  "key": {
+    "C": "jugcraft:copper_cable",
+    "G": "minecraft:glass_pane",
+    "R": "minecraft:redstone",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:energy_cell",
+    "count": 1
+  }
+}

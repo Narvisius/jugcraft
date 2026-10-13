@@ -7,8 +7,10 @@ Called from agriculture_data.py (assets, loot, recipes, tags). Formats follow va
 """
 from agriculture import MAZE
 from decor_data import MOD, rid, box, block_model, turned, self_drop
+import garden
 
-SECTIONS = {0: "corn_stalk_ripe", 1: "corn_middle_ears", 2: "corn_tassel_ripe"}
+# Ripe corn's models, in the owner's art (tools/garden.py MAZE_SECTIONS).
+SECTIONS = garden.MAZE_SECTIONS
 TEXT = {
     "message.jugcraft.corn_maze.go": "Go! Find the way through",
     "message.jugcraft.corn_maze.void.flew": "Run void: no flying in the maze",

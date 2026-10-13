@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "jugcraft:lettuce",
+    "jugcraft:spinach",
+    "jugcraft:cucumber",
+    "jugcraft:radish"
+  ],
+  "result": {
+    "id": "jugcraft:green_salad",
+    "count": 1
+  }
+}

@@ -29,10 +29,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A baked pie in its tin, placed like a cake: {@value #SLICES} slices. A hungry player using it eats a slice; a Carving
- * Knife cuts a slice off to take away ({@link PieFilling#slice}). The last slice takes the tin with it. Only a whole pie
- * can be picked up again (its loot drops it only uncut). A burnt pie ({@code filling} null) is eaten the same way but
- * gives {@value #BURNT_NUTRITION} hunger a slice and, one time in {@value #BURNT_SICK_CHANCE}, Hunger.
+ * A baked pie in its tin, placed like a cake: {@value #SLICES} slices. A hungry player using it eats a slice; a knife (item
+ * tag {@code jugcraft:knives}) cuts a slice off to take away ({@link PieFilling#slice}). The last slice takes the tin with
+ * it. Only a whole pie can be picked up again (its loot drops it only uncut). A burnt pie (no slice) is eaten the same way
+ * but gives {@value #BURNT_NUTRITION} hunger a slice and, one time in {@value #BURNT_SICK_CHANCE}, Hunger. A pie not
+ * baked in the Hearth Oven (vanilla's pumpkin pie set down, {@link PlacedPieBlock}) names its own slice and food.
  */
 public class PieBlock extends Block {
 	public static final int SLICES = 4;
@@ -57,10 +58,27 @@ public class PieBlock extends Block {
 	}
 
 	private final @Nullable PieFilling filling;
+	/** The slice a knife cuts, and what a slice gives; null for a burnt pie. */
+	private final @Nullable String slice;
+	private final int nutrition;
+	private final float saturation;
 
 	public PieBlock(@Nullable PieFilling filling, Properties properties) {
+		this(filling, filling == null ? null : filling.slice(), filling == null ? BURNT_NUTRITION : filling.nutrition,
+				filling == null ? BURNT_SATURATION : filling.saturation, properties);
+	}
+
+	/** A pie not baked in the Hearth Oven: the slice a knife cuts and what a slice gives. */
+	public PieBlock(String slice, int nutrition, float saturation, Properties properties) {
+		this(null, slice, nutrition, saturation, properties);
+	}
+
+	private PieBlock(@Nullable PieFilling filling, @Nullable String slice, int nutrition, float saturation, Properties properties) {
 		super(properties);
 		this.filling = filling;
+		this.slice = slice;
+		this.nutrition = nutrition;
+		this.saturation = saturation;
 		registerDefaultState(stateDefinition.any().setValue(BITES, 0));
 	}
 
@@ -73,20 +91,20 @@ public class PieBlock extends Block {
 		return SHAPES[state.getValue(BITES)];
 	}
 
-	/** A Carving Knife cuts a slice to take away (not from a burnt pie). */
+	/** A knife (item tag jugcraft:knives: the Carving Knife and the kitchen knives) cuts a slice to take away (not from a burnt pie). */
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		if (!(stack.getItem() instanceof CarvingKnifeItem)) {
+		if (!stack.is(JugcraftAgriculture.KNIVES)) {
 			return InteractionResult.TRY_WITH_EMPTY_HAND;
 		}
-		if (filling == null) {
+		if (slice == null) {
 			return InteractionResult.PASS;
 		}
 		if (!level.isClientSide()) {
-			ItemStack slice = new ItemStack(JugcraftAgriculture.item(filling.slice()));
-			if (!player.getInventory().add(slice)) {
-				Block.popResource(level, pos, slice);
+			ItemStack cut = new ItemStack(JugcraftAgriculture.item(slice));
+			if (!player.getInventory().add(cut)) {
+				Block.popResource(level, pos, cut);
 			}
 			level.playSound(null, pos, SoundEvents.HONEY_BLOCK_SLIDE, SoundSource.BLOCKS, 0.6F, 1.4F);
 			takeSlice(level, pos, state, player);
@@ -103,14 +121,10 @@ public class PieBlock extends Block {
 		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		}
-		if (filling == null) {
-			player.getFoodData().eat(BURNT_NUTRITION, BURNT_SATURATION);
-			if (level.getRandom().nextInt(BURNT_SICK_CHANCE) == 0) {
-				player.addEffect(new MobEffectInstance(MobEffects.HUNGER, BURNT_SICK_TICKS));
-				player.sendOverlayMessage(Component.translatable("message.jugcraft.pie.burnt"));
-			}
-		} else {
-			player.getFoodData().eat(filling.nutrition, filling.saturation);
+		player.getFoodData().eat(nutrition, saturation);
+		if (slice == null && level.getRandom().nextInt(BURNT_SICK_CHANCE) == 0) {
+			player.addEffect(new MobEffectInstance(MobEffects.HUNGER, BURNT_SICK_TICKS));
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.pie.burnt"));
 		}
 		level.playSound(null, pos, SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		level.gameEvent(player, GameEvent.EAT, pos);

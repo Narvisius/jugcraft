@@ -4,6 +4,7 @@ import io.github.jimbozoomer.jugcraft.Jugcraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -46,6 +47,30 @@ public final class CropGrowth {
 			}
 		}
 		if (!isLegume && nextToLegume(level, pos)) {
+			speed *= LEGUME_BONUS;
+		}
+		if (HarvestMoon.active()) {
+			speed *= HarvestMoon.GROWTH_BONUS;
+		}
+		return speed;
+	}
+
+	/**
+	 * Growth speed of a paddy crop ({@link PaddyCropBlock}) at {@code pos}: as {@link #speed}, with flooded soil in place of
+	 * farmland. Bog soil under still water counts as moist farmland (3), under the plant and a quarter for each of the eight
+	 * around it, so a flooded paddy grows as fast as a watered field.
+	 */
+	public static float paddySpeed(BlockGetter level, BlockPos pos) {
+		float speed = 1.0F;
+		BlockPos soil = pos.below();
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dz = -1; dz <= 1; dz++) {
+				BlockPos at = soil.offset(dx, 0, dz);
+				float value = level.getBlockState(at).is(CranberryBushBlock.BOG_SOIL) && level.getFluidState(at.above()).is(FluidTags.WATER) ? 3.0F : 0.0F;
+				speed += dx == 0 && dz == 0 ? value : value / 4.0F;
+			}
+		}
+		if (nextToLegume(level, pos)) {
 			speed *= LEGUME_BONUS;
 		}
 		if (HarvestMoon.active()) {

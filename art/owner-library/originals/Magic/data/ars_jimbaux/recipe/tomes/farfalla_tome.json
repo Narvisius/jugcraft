@@ -1,0 +1,38 @@
+{
+  "type": "ars_jimbaux:caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "ars_jimbaux:constant",
+    "r": 255
+  },
+  "flavour_text": "Creates a fire that quickly freezes to ice.",
+  "name": "Farfalla's Frosty Flames",
+  "sound": {},
+  "spell": [
+    "ars_jimbaux:glyph_projectile",
+    "ars_jimbaux:glyph_ignite",
+    "ars_jimbaux:glyph_delay",
+    "ars_jimbaux:glyph_conjure_water",
+    "ars_jimbaux:glyph_freeze"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "ars_jimbaux:constant",
+      "r": 255
+    },
+    "name": "Farfalla's Frosty Flames",
+    "particleTimeline": {},
+    "recipe": [
+      "ars_jimbaux:glyph_projectile",
+      "ars_jimbaux:glyph_ignite",
+      "ars_jimbaux:glyph_delay",
+      "ars_jimbaux:glyph_conjure_water",
+      "ars_jimbaux:glyph_freeze"
+    ],
+    "sound": {}
+  },
+  "tome_type": "ars_jimbaux:caster_tome"
+}

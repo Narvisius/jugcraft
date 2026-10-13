@@ -4,19 +4,22 @@
 
 Run `python scripts/check_repository.py` with Python 3.11+. The Foundation / repository job checks required files, relative Markdown links, and the phase declaration. It is not a Java compiler, mod test, security audit, or gameplay approval. In the `bootstrap` phase, Java/Gradle sources are allowed. The Build workflow compiles the mod (`./gradlew build`), checks generated JSON is current and runs `tools/check_mod_data.py`, which validates material data and audits recipes offline. None of these is a game test.
 
-Game tests run in the Build workflow too. The `mod` job's `./gradlew build` runs every server game test on every change. The client game tests start a real game and photograph showrooms, which costs CI 15 to 25 minutes for the whole set, so:
+Game tests run in the Build workflow too. The `mod` job's `./gradlew build` runs every server game test on every change. The client game tests start a real game and photograph showrooms, which costs each of the five client jobs 20 to 30 minutes for the whole set, so:
 
 - **A pull request runs only the client test classes that show what it changed.** The `choose client tests` job runs `tools/select_client_tests.py`, which compares the pull request with its base:
-  - Docs, Markdown, `tools/` and `scripts/`, data, and the language file pick nothing. The generators' output is committed and judged as the files it writes.
+  - Docs, Markdown, `tools/` and `scripts/`, the art sources in `art/`, data, the language file, the optional resource packs, unit tests and `.claude/` pick nothing. The generators' output is committed and judged as the files it writes.
   - A model, blockstate or texture picks the classes that name its ID.
   - A Java class picks the classes that show it, and the classes that show the Jugcraft classes using it. A class only gaining code picks by the names and IDs it gained, such as a registry registering a new feature.
-  - Build files, the workflow, mixins and the test mod's helpers run every class. So does a change picking half the classes or more.
+  - A class that a quarter of the classes or more show, such as the registries `JugcraftAgriculture` and `Jugcraft`, picks by the names and IDs on the lines it lost or gained. Changing a registry's corn line selects the corn tests. If changed lines identify no feature, retain the known consumer tests instead of selecting zero.
+  - Build files, the workflow, mixins and the test mod's helpers run every class.
   - The job's log says why each file picked what it did.
 - **`main` (after each merge) and a manual run of the Build workflow run every class.** Run it on a branch from the Actions tab ("Run workflow") to test a pull request in full.
 
-Three client jobs share the chosen classes out by their rough running time (`./gradlew runClientGameTest -PclientTests=<Class,Class,...>`). A job with nothing to run passes at once. The `client` job passes only when the choice and all three jobs pass.
+Five client jobs share the chosen classes out by their rough running time (`./gradlew runClientGameTest -PclientTests=<Class,Class,...>`). Sources are resolved from each registered class's full package, including `local.peepo`; timed companion AI suites have explicit runtime estimates. A job with nothing to run passes at once. The `client` job passes only when the choice and all five jobs pass. Each job may run for 60 minutes. `python -m unittest discover -s scripts/tests -p test_client_test_selection.py -v` verifies source discovery, companion selection and complete, duplicate-free sharding.
 
 Locally:
+- Companion-only: `./gradlew runClientGameTest -PclientTests=PeepoCompanionClientTests`. See [coverage and results](features/companion-tests.md), including the one-client dedicated-server check and explicit limits.
+- Hearth-only (including companion spawn/render prerequisites): `./gradlew runClientGameTest -PclientTests=PeepoHearthClientTests`. This selects only the Hearth Oven regression class; it does not execute the full companion suite. See [Hearth Oven validation](features/companion-hearth.md#validation).
 - `./gradlew runClientGameTest` runs every class.
 - `python3 tools/select_client_tests.py --base origin/main` shows what a branch would run.
 - `-PclientTestShard=<n> -PclientTestShards=<count>` still keeps every count-th class.

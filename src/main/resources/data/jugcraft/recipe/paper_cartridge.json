@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P",
+    "L",
+    "G"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "L": "#c:nuggets/lead",
+    "G": "minecraft:gunpowder"
+  },
+  "result": {
+    "id": "jugcraft:paper_cartridge",
+    "count": 4
+  }
+}

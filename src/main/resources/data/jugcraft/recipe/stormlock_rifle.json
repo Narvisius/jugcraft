@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " SL",
+    "CAS",
+    "PB "
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "L": "minecraft:lightning_rod",
+    "C": "jugcraft:copper_cable",
+    "A": "jugcraft:advanced_circuit",
+    "P": "#minecraft:planks",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:stormlock_rifle"
+  }
+}

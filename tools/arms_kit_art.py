@@ -230,17 +230,21 @@ def tower_face(metal):
 def back(metal):
     """A shield's back: bare boards (dark for steel), a leather strap across their middle (STRAP_UV)."""
     style = px.STYLES[metal]
+    return _back(style.haft, px.LEATHER if metal == "bronze" else hd.RUBBER, style.fitting, f"back_{metal}")
+
+
+def _back(boards, strap, fitting, seed):
+    """Boards of `boards`, a `strap` across their middle (STRAP_UV) riveted in `fitting`."""
     img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
-    rng = random.Random(f"back_{metal}")
-    _boards(img, style.haft, rng, 8)
+    rng = random.Random(seed)
+    _boards(img, boards, rng, 8)
     u0, v0, u1, v1 = arms_kit.STRAP_UV
-    strap = px.LEATHER if metal == "bronze" else hd.RUBBER
     for y in range(int(v0 * 4) - 2, int(v1 * 4) + 2):
         for x in range(64):
             edge = y in (int(v0 * 4) - 2, int(v1 * 4) + 1)
             _put(img, x, y, _tone(strap, 0.2 if edge else 0.5 + 0.08 * math.sin(x * 0.7)))
     for x in (10, 32, 54):
-        _rivet(img, x, int(v0 * 4) + 3, style.fitting, big=True)
+        _rivet(img, x, int(v0 * 4) + 3, fitting, big=True)
     return img
 
 
@@ -248,23 +252,27 @@ def trim(metal):
     """A shield's metal: the rim band along the top (RIM_UV), the boss's face at the bottom left (BOSS_UV), plain metal
     at the bottom right (PLAIN_UV)."""
     style = px.STYLES[metal]
-    metal_material = _metal(style)
+    return _trim(_metal(style), style.fitting, f"trim_{metal}")
+
+
+def _trim(metal_material, fitting, seed):
+    """The trim in `metal_material`, its rivets and boss ring in `fitting`."""
     img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
-    rng = random.Random(f"trim_{metal}")
+    rng = random.Random(seed)
     for y in range(16):
         for x in range(32):
             lit = (0.85, 0.65, 0.5, 0.3)[min(3, y)] if y < 4 else 0.5
             _put(img, x, y, _tone(metal_material, lit))
     for x in range(3, 32, 8):
-        _rivet(img, x, 1, style.fitting)
+        _rivet(img, x, 1, fitting)
     for y in range(16):
         for x in range(16):
             dx, dy = x + 0.5 - 8.0, y + 0.5 - 8.0
             dist = math.hypot(dx, dy)
             if dist <= 2.2:
-                _put(img, x, 16 + y, style.fitting.highlight if dx + dy < 0 else style.fitting.light)
+                _put(img, x, 16 + y, fitting.highlight if dx + dy < 0 else fitting.light)
             elif 6.0 <= dist <= 7.9:
-                _put(img, x, 16 + y, _tone(style.fitting, 0.75 - (dx + dy) / 22.0))
+                _put(img, x, 16 + y, _tone(fitting, 0.75 - (dx + dy) / 22.0))
             elif dist < 6.0:
                 _put(img, x, 16 + y, _tone(metal_material, 0.62 - (dx + dy) / 18.0))
     for y in range(16, 32):
@@ -402,6 +410,51 @@ def crossbow_sprites(metal):
 
 
 RANGED_ART = {"bow": bow_sprites, "crossbow": crossbow_sprites}
+
+
+def star_face(gold, dark):
+    """An armor set's star shield's face (the Sentinel's, after the owner's design), in flat tones lit from the top
+    left: the star gold, paler on its lit half, with a light edge towards the light, a dark one away from it and the
+    raised frame's shadow below and to the right of it; the frame the palest gold, brightest along its upper left; the
+    recess inside it `dark`; the centre chequered in pixel squares, its stone the palest. Painted by model position
+    (tools/arms_kit.py star_part), so each raised part's front carries its own."""
+    kind = "star_shield"
+    width, height = _face_size(kind)
+    img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    step = 1.0 / arms_kit.face_scale(kind)
+    for y in range(height):
+        for x in range(width):
+            mx, my = _model(kind, x, y)
+            part = arms_kit.star_part(mx, my)
+            if part is None:
+                continue
+            dx, dy = mx - 8.0, my - 8.0
+            lit = dy - dx > 0.0   # model y runs up: the upper left is lit
+            if part == "stone":
+                colour = gold.highlight
+            elif part == "centre":
+                colour = gold.light if (round(dx) + round(dy)) % 2 == 0 else gold.dark
+            elif part == "recess":
+                colour = dark.outline_light if lit else dark.outline_dark
+            elif part == "frame":
+                colour = gold.highlight if lit else gold.light
+            else:
+                towards = [arms_kit.star_part(mx - step, my), arms_kit.star_part(mx, my + step)]
+                away = [arms_kit.star_part(mx + step, my), arms_kit.star_part(mx, my - step)]
+                if None in towards:
+                    colour = gold.light
+                elif None in away or "frame" in towards:
+                    colour = gold.outline_light
+                else:
+                    colour = gold.mid if lit else gold.dark
+            _put(img, x, y, colour)
+    return _on_face(kind, img)
+
+
+def set_shield_sprites(face_materials, back_materials, trim_materials, seed):
+    """An armor set's shield's three textures: (face, back, trim). `face_materials`: (gold, dark) for star_face;
+    `back_materials`: (boards, strap, fitting); `trim_materials`: (metal, fitting)."""
+    return (star_face(*face_materials), _back(*back_materials, f"back_{seed}"), _trim(*trim_materials, f"trim_{seed}"))
 
 
 SHIELD_FACES = {"heater_shield": heater_face, "tower_shield": tower_face}

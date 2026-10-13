@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:basic_spell_turret",
+  "criteria": {
+    "has_spell_prism": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:spell_prism"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.spell_prism"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:spell_prism"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.spell_prism"
+    }
+  },
+  "requirements": [
+    [
+      "has_spell_prism"
+    ]
+  ]
+}

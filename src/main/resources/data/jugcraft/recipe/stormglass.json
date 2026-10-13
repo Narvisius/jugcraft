@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "GCG",
+    "PGP"
+  ],
+  "key": {
+    "P": "minecraft:prismarine_shard",
+    "G": "minecraft:glass",
+    "C": "minecraft:lightning_rod"
+  },
+  "result": {
+    "id": "jugcraft:stormglass",
+    "count": 1
+  }
+}

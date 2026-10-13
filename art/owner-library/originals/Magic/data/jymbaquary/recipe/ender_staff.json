@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "jymbaquary:bat_wing",
+    "E": "minecraft:ender_eye",
+    "N": "jymbaquary:nebulous_heart",
+    "S": "minecraft:stick",
+    "V": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "!jymbaquary:enabled": {},
+        "!jymbaquary:oversized_item_container_contents": {}
+      },
+      "items": "jymbaquary:void_tear"
+    }
+  },
+  "pattern": [
+    " BE",
+    "NVB",
+    "SN "
+  ],
+  "result": {
+    "id": "jymbaquary:ender_staff"
+  }
+}

@@ -1,4 +1,4 @@
-# Guns: page 1 of 5
+# Guns: page 1 of 16
 
 [Category index](README.md) · [All categories](../README.md) · [Next](page-002.md)
 

@@ -63,12 +63,20 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.PORT_ENTITY, StorageTankRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.GATE_ENTITY, RailingGateRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.HATCH_ENTITY, StorageTankHatchRenderer::new);
+		MenuScreens.register(io.github.jimbozoomer.jugcraft.machine.form.JugcraftForms.MENU, FormMachineScreen::new);
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.machine.form.IndustrialForms.ENTITY, FormMachineRenderer::new);
 		MenuScreens.register(JugcraftAgriculture.COOKING_POT_MENU, CookingPotScreen::new);
 		MenuScreens.register(io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.ROCKET_PAD_MENU, RocketPadScreen::new);
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.ZIPLINE_RIDER,
 				net.minecraft.client.renderer.entity.NoopRenderer::new);
 		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.ZIPLINE_ANCHOR_ENTITY, ZiplineRenderer::new);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.COMBAT_ROCKET, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.lair.JugcraftLairs.MIST_GATE,
+				net.minecraft.client.renderer.entity.NoopRenderer::new);
+		VesperineClient.register();
+		TatterlaceClient.register();
+		YetiKingClient.register();
+		CinderTyrantClient.register();
 		BlockEntityRendererRegistry.register(JugcraftMachines.MACHINE_ENTITY, WindTurbineRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.BELT_PULLEY_ENTITY, BeltRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftKinetics.SHAFT_ENTITY, KineticRotorRenderer::new);
@@ -88,6 +96,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.GRUNT, RaiderRenderer::new);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.GRENADIER, RaiderRenderer::new);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.OFFICER, RaiderRenderer::new);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.GUNNER, RaiderRenderer::new);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.WALKER, RaiderWalkerRenderer::new);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.BLIMP, RaiderBlimpRenderer::new);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.BOMB, ThrownItemRenderer::new);
@@ -165,7 +174,10 @@ public final class JugcraftClient implements ClientModInitializer {
 		// Gear traits' descriptions show while Shift is held (gear/TraitTooltips.java, docs/features/trait-details.md).
 		io.github.jimbozoomer.jugcraft.gear.TraitTooltips.details = () -> Minecraft.getInstance().hasShiftDown();
 		SeasonColors.register();
+		WoodColors.register();
 		PartyClient.register();
+		ConcordanceClient.register();
+		GunsClient.register();
 		ClientPlayNetworking.registerGlobalReceiver(SurveyPayload.TYPE,
 				(payload, context) -> Minecraft.getInstance().gui.setScreen(new ProspectorScreen(payload.readings())));
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.CARVED_PUMPKIN_ENTITY, CarvedPumpkinRenderer::new);
@@ -249,6 +261,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.CIDER_PRESS_ENTITY, CiderPressRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.CANNING_KETTLE_ENTITY, CanningKettleRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.PANTRY_SHELF_ENTITY, PantryShelfRenderer::new);
+		BlockEntityRendererRegistry.register(JugcraftAgriculture.SPICE_RACK_ENTITY, SpiceRackRenderer::new);
 		ParticleProviderRegistry.getInstance().register(JugcraftAgriculture.FOG, FogParticle::provider);
 		ParticleProviderRegistry.getInstance().register(JugcraftAgriculture.SPOOKY_SPARK, SpookySparkParticle::provider);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.SHOW_LAUNCHER_ENTITY, ShowLauncherRenderer::new);
@@ -263,6 +276,12 @@ public final class JugcraftClient implements ClientModInitializer {
 				net.minecraft.client.renderer.entity.NoopRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.RESTLESS_SPIRIT, RestlessSpiritRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.FEAST_TABLE_ENTITY, FeastTableRenderer::new);
+		// The Farmhouse Kitchen: food on the stove's hob, in the skillet's pan and on the cutting board.
+		BlockEntityRendererRegistry.register(JugcraftAgriculture.KITCHEN_STOVE_ENTITY, KitchenStoveRenderer::new);
+		BlockEntityRendererRegistry.register(JugcraftAgriculture.SKILLET_ENTITY, SkilletRenderer::new);
+		BlockEntityRendererRegistry.register(JugcraftAgriculture.CUTTING_BOARD_ENTITY, CuttingBoardRenderer::new);
+		// Feasts and food displays: what is set on a plate, a platter or a serving tray.
+		BlockEntityRendererRegistry.register(JugcraftAgriculture.FOOD_DISPLAY_ENTITY, ShowcaseRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.CANDY_KETTLE_ENTITY, CandyKettleRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.SPINNING_WHEEL_ENTITY, SpinningWheelRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftAgriculture.HEARTH_OVEN_ENTITY, HearthOvenRenderer::new);
@@ -287,6 +306,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		EntityRendererRegistry.register(JugcraftAgriculture.BOWLING_PUMPKIN, BowlingPumpkinRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.TOILET_PAPER_ROLL, ThrownItemRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.TOSS_RING, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(JugcraftAgriculture.ROTTEN_TOMATO, ThrownItemRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.FERRIS_WHEEL, FerrisWheelRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.PINATA, PinataRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.HOT_AIR_BALLOON, HotAirBalloonRenderer::new);

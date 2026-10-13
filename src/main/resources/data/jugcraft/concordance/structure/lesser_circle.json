@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "anchor": "jugcraft:circle_anchor",
+  "parts": [
+    {
+      "role": "channel",
+      "block": "jugcraft:ley_pylon",
+      "at": [
+        [
+          2,
+          0,
+          0
+        ],
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          -2
+        ]
+      ]
+    },
+    {
+      "role": "boundary",
+      "block": "#jugcraft:concordance/ritual_boundary",
+      "at": [
+        [
+          3,
+          0,
+          0
+        ],
+        [
+          -3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          -3
+        ],
+        [
+          2,
+          0,
+          2
+        ],
+        [
+          2,
+          0,
+          -2
+        ],
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          0,
+          -2
+        ]
+      ]
+    },
+    {
+      "role": "clearance",
+      "at": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ]
+    }
+  ]
+}

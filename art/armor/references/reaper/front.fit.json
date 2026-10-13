@@ -1,0 +1,97 @@
+{
+ "cam": {
+  "dist": 60.0,
+  "tx": 0.0,
+  "ty": 16.0,
+  "tz": 0.0,
+  "az": 0.0,
+  "el": 12.0404,
+  "f": 773.2348,
+  "cx": 350.5302,
+  "cy": 376.0942
+ },
+ "pose": {
+  "head": [
+   0,
+   0,
+   0
+  ],
+  "right_arm": [
+   0,
+   0,
+   0
+  ],
+  "left_arm": [
+   0,
+   0,
+   0
+  ]
+ },
+ "exclude": [
+  [
+   [
+    325,
+    505
+   ],
+   [
+    400,
+    498
+   ],
+   [
+    405,
+    605
+   ],
+   [
+    255,
+    605
+   ],
+   [
+    255,
+    575
+   ],
+   [
+    325,
+    560
+   ]
+  ],
+  [
+   [
+    235,
+    240
+   ],
+   [
+    302,
+    236
+   ],
+   [
+    322,
+    335
+   ],
+   [
+    248,
+    350
+   ]
+  ],
+  [
+   [
+    404,
+    228
+   ],
+   [
+    475,
+    225
+   ],
+   [
+    475,
+    385
+   ],
+   [
+    408,
+    385
+   ]
+  ]
+ ],
+ "thresh": 10.0,
+ "lighting": "unlit",
+ "note": "fitted by tools/armor_reference.py (fit_region) to the outline of the hood, robe and legs, x 255 to 435, y 135 to 555; exclude: the scythes where they cross the legs and the arms"
+}

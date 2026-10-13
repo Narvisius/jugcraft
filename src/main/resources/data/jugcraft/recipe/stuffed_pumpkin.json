@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:pumpkin",
+    "minecraft:bread",
+    "minecraft:baked_potato",
+    "jugcraft:onion",
+    "minecraft:brown_mushroom",
+    "minecraft:sweet_berries"
+  ],
+  "result": {
+    "id": "jugcraft:stuffed_pumpkin",
+    "count": 1
+  }
+}

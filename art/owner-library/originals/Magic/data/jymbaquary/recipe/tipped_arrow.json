@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "jymbaquary:potions_enabled"
+    },
+    {
+      "type": "jymbaquary:potions_enabled"
+    }
+  ],
+  "type": "jymbaquary:potion_effects",
+  "duration_factor": 0.125,
+  "key": {
+    "A": "minecraft:arrow",
+    "P": "jymbaquary:lingering_potion"
+  },
+  "pattern": [
+    "AAA",
+    "APA",
+    "AAA"
+  ],
+  "result": {
+    "count": 8,
+    "id": "jymbaquary:tipped_arrow"
+  }
+}

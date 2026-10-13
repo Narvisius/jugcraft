@@ -1,0 +1,95 @@
+{
+  "type": "ars_jimbaux:caster_tome",
+  "color": {
+    "b": 239,
+    "g": 220,
+    "id": "ars_jimbaux:constant",
+    "r": 178
+  },
+  "flavour_text": "First you're airborne. Then you're dizzy. Then you're somewhere else. By the time you figure out what happened, it's already happening again.",
+  "name": "Pandoxyy's Spin Cycle",
+  "sound": {
+    "pitch": 1.2,
+    "sound": {
+      "id": "ars_jimbaux:puffer_fish_blow_up"
+    }
+  },
+  "spell": [
+    "ars_jimbaux:glyph_self",
+    "ars_jimbaux:glyph_orbit",
+    "ars_jimbaux:glyph_wind_burst",
+    "ars_jimbaux:glyph_orbit",
+    "ars_jimbaux:glyph_split",
+    "ars_jimbaux:glyph_split",
+    "ars_jimbaux:glyph_orbit",
+    "ars_jimbaux:glyph_rotate",
+    "ars_jimbaux:glyph_sensitive",
+    "ars_jimbaux:glyph_exchange"
+  ],
+  "spellData": {
+    "color": {
+      "b": 239,
+      "g": 220,
+      "id": "ars_jimbaux:constant",
+      "r": 178
+    },
+    "name": "Pandoxyy's Spin Cycle",
+    "particleTimeline": {
+      "ars_jimbaux:self": {
+        "type": "ars_jimbaux:self",
+        "onResolvingEffect": {
+          "motion": {
+            "type": "ars_jimbaux:burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "ars_jimbaux:new_glow",
+            "properties": {
+              "ars_jimbaux:density": {
+                "density": 5,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "ars_jimbaux:particle_type": {
+                "particleType": "ars_jimbaux:new_glow",
+                "subProperties": {
+                  "ars_jimbaux:color": {
+                    "particleColor": {
+                      "b": 239,
+                      "g": 220,
+                      "id": "ars_jimbaux:constant",
+                      "r": 178
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {}
+        }
+      }
+    },
+    "recipe": [
+      "ars_jimbaux:glyph_self",
+      "ars_jimbaux:glyph_orbit",
+      "ars_jimbaux:glyph_wind_burst",
+      "ars_jimbaux:glyph_orbit",
+      "ars_jimbaux:glyph_split",
+      "ars_jimbaux:glyph_split",
+      "ars_jimbaux:glyph_orbit",
+      "ars_jimbaux:glyph_rotate",
+      "ars_jimbaux:glyph_sensitive",
+      "ars_jimbaux:glyph_exchange"
+    ],
+    "sound": {
+      "pitch": 1.2,
+      "sound": {
+        "id": "ars_jimbaux:puffer_fish_blow_up"
+      }
+    }
+  },
+  "tome_type": "ars_jimbaux:caster_tome"
+}

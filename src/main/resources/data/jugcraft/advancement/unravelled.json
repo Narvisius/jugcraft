@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:needle_rapier"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.unravelled.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.unravelled.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

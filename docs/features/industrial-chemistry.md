@@ -13,7 +13,7 @@ Salt, sulfur, phosphate and bauxite have been in the world since the first ores,
 ### Brine and the electrolytic cell (commit 21)
 - **Brine:** the chemical mixer dissolves **2 salt + 1,000 mB of water → 1,000 mB of brine** (60 ticks at 64 JE/t). A fluid with a bucket.
 - **Electrolytic cell** (three wide, three tall, two deep): a rectifier cabinet (the master block) feeding three olive cells over copper bus bars, with gas headers on a rack at the back.
-- **1,000 mB of brine → 250 mB of chlorine + 250 mB of hydrogen + 500 mB of lye**, every 200 ticks at 256 JE/t (51,200 JE a bucket: electrolysis is power hungry).
+- **1,000 mB of brine → 250 mB of chlorine + 250 mB of hydrogen + 500 mB of lye**, every 400 ticks at 256 JE/t (102,400 JE a bucket: electrolysis is power hungry). It was 200 ticks (51,200 JE) until the industrial starter baseline matched it to the [Electrolytic Separator](industrial-electrolytic-separator.md).
 - Each product leaves at its own height: chlorine from the top row, hydrogen from the middle row, lye from the bottom row (`MachineKind.outputLayer`).
 - **Chlorine** and **hydrogen** are gases (tanks and pipes only). **Lye** (sodium hydroxide solution) is a fluid with a bucket.
 - The cell also has two item slots and an output slot, for alumina smelting (commit 23).
@@ -52,7 +52,7 @@ Salt, sulfur, phosphate and bauxite have been in the world since the first ores,
 ### The Kroll process (batch 6, commit 27)
 - **1 raw titanium + 1 coal coke + 250 mB of chlorine → 1 titanium sponge** in the chemical reactor, 160 ticks. Chlorine's first real use (it is used up).
 - The **arc furnace** melts a titanium sponge into a titanium ingot (160 ticks). Nothing else turns raw titanium into metal.
-- Each titanium costs a quarter bucket of chlorine: a bucket of brine in the electrolytic cell (51,200 JE) makes enough for one.
+- Each titanium costs a quarter bucket of chlorine: a bucket of brine in the electrolytic cell (102,400 JE) makes enough for one.
 - The metal audit counts a sponge as one ingot of titanium.
 
 ### Lithium and rare earths (batch 6, commit 28)
@@ -89,7 +89,7 @@ Split Decision (electrolytic cell), Oil of Vitriol (sulfuric acid), Green Revolu
 
 ## Balance and automation
 - Volume is conserved: a bucket of brine gives 1,000 mB of products in all.
-- Salt comes only from mining and fracking flowback; the cell costs 51,200 JE a bucket of brine. Its 250 mB of hydrogen give 32,000 JE in the fuel cell, so electrolysis is never a power loop.
+- Salt comes only from mining and fracking flowback; the cell costs 102,400 JE a bucket of brine. Its 250 mB of hydrogen give 32,000 JE in the fuel cell, so electrolysis is never a power loop.
 - Magnets: the magnet motor and dynamo are 95% each way, so a pair loses 9.75% a round (game test).
 - Storage: the lithium battery bank only stores power.
 - Metal: the fluid recipe audit (`check_mod_data`) holds every recipe to the metal its items carry.

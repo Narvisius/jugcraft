@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SS ",
+    "BLP"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "L": "minecraft:lever",
+    "B": "#c:ingots/brass",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:breacher"
+  }
+}

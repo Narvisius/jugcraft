@@ -35,6 +35,8 @@ All selected client files are installed by Jugcraft Complete. "Optional" means t
 
 Author models and clips in Blockbench and export the appropriate formats. GeckoLib plays authored animation; it does not create the models or poses. Use controllers for independent motions, meaningful preparation/release/recovery phases, and bounded effects. Retain simple existing renderers where they suffice.
 
+The first GeckoLib user is the [guns](features/guns.md): GeckoLib plays the owner's gun animations on each gun and, in the player's own first-person view, on the arms that hold it. The server times every shot and reload, and ArmsMotion does not touch guns.
+
 Jugcraft already has [ArmsMotion](features/arms-motion.md), including first-person and third-person weapon poses. Player Animation Library and Spell Engine do not automatically replace it. A feature using either must specify which system owns each action, transitions, off-hand behavior, handedness, riding, and remote-player playback. Keep hit timing and resource spending server-authoritative.
 
 Fusion requires authored texture/model definitions. High-resolution images and ordinary animated block/item sprites do not inherently require a library. Emissive surfaces, dynamic lighting, and shader bloom are different effects. Use LambDynamicLights only for visual illumination; gameplay lighting rules remain explicit. Test custom rendering with the pinned Sodium/Iris combination and without it.
@@ -44,6 +46,8 @@ Fusion requires authored texture/model definitions. High-resolution images and o
 Use Spell Engine's data and APIs for supported casting, targeting, delivery, and impact behaviors. Consult documentation/source for the **locked release**, since upstream default branches can document other Minecraft versions. Extend behavior through supported handlers when needed.
 
 Spell Engine includes its own content, HUD, casting controls, and defaults that may assign abilities to eligible equipment. Review those interactions when integrating Jugcraft items. Installing it does not implement Jugcraft research, rituals, alchemy, spirit agreements, or resource economics. Keep stable Jugcraft IDs and authoritative resource/progression state. Spell Power's school attributes should be reused where appropriate instead of creating duplicate statistics.
+
+The [Arcane Concordance](ARCANE_CONCORDANCE.md) is the reference integration: an instrument resolves a Jugcraft spell tag, a container source offers only learned spells, the casting gate refuses (never approves), a `CUSTOM` impact does the server-side work, and Jugcraft's own resource is paid once in `COST_CONSUME`. Jugcraft weapons opt out of Spell Engine's weapon fallback through `data/jugcraft/spell_assignments/`. Spell Engine runs event listeners without a try/finally, so every Jugcraft listener catches its own exceptions.
 
 Modonomicon presents the codex; it must not become the only owner of unlock state. SmartBrainLib organizes decisions; Jugcraft remains responsible for ownership, inventories, permissions, work limits, and unloaded chunks. Ordinary goals are still suitable for simple mobs.
 

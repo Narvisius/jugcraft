@@ -1,0 +1,45 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:vigil/thornheart",
+  "category": "jugcraft:vigil",
+  "x": 2,
+  "y": 2,
+  "name": "book.jugcraft.arcane_concordance.vigil.thornheart.name",
+  "description": "book.jugcraft.arcane_concordance.vigil.thornheart.description",
+  "icon": "jugcraft:thornheart_blade",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/crimson_rites_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.crimson_rites.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.vigil.thornheart.p0.title",
+      "recipe_id_1": "jugcraft:thornheart_blade",
+      "text": "book.jugcraft.arcane_concordance.vigil.thornheart.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.vigil.thornheart.p1.title",
+      "text": "book.jugcraft.arcane_concordance.vigil.thornheart.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.vigil.thornheart.p2.title",
+      "text": "book.jugcraft.arcane_concordance.vigil.thornheart.p2.text",
+      "show_title_separator": true
+    }
+  ]
+}

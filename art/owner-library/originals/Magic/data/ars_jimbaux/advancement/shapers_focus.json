@@ -1,0 +1,32 @@
+{
+  "parent": "ars_jimbaux:novice_spell_book",
+  "criteria": {
+    "has_shapers_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_jimbaux:shapers_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_jimbaux.adv.desc.shapers_focus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_jimbaux:shapers_focus"
+    },
+    "title": {
+      "translate": "ars_jimbaux.adv.title.shapers_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_shapers_focus"
+    ]
+  ]
+}

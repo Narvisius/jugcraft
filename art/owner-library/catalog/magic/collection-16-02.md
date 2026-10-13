@@ -1,0 +1,82 @@
+# Magic / data/ars_jymbaumental
+
+[Collection index](README.md) · [Use these assets](../../MAGIC_ASSETS.md)
+
+Files 251–324 of 324. Paths are relative to the supplied collection root.
+
+| File | Kind | Dimensions | Bytes |
+|---|---|---|---:|
+| [data/ars_jymbaumental/tags/block/logs/flashing_archwood.json](../../originals/Magic/data/ars_jymbaumental/tags/block/logs/flashing_archwood.json) | JSON data |  | 206 |
+| [data/ars_jymbaumental/tags/entity_type/aerial.json](../../originals/Magic/data/ars_jymbaumental/tags/entity_type/aerial.json) | JSON data |  | 338 |
+| [data/ars_jymbaumental/tags/entity_type/attraction_ritual_blacklist.json](../../originals/Magic/data/ars_jymbaumental/tags/entity_type/attraction_ritual_blacklist.json) | JSON data |  | 121 |
+| [data/ars_jymbaumental/tags/entity_type/charm_blacklist.json](../../originals/Magic/data/ars_jymbaumental/tags/entity_type/charm_blacklist.json) | JSON data |  | 18 |
+| [data/ars_jymbaumental/tags/entity_type/fiery.json](../../originals/Magic/data/ars_jymbaumental/tags/entity_type/fiery.json) | JSON data |  | 50 |
+| [data/ars_jymbaumental/tags/entity_type/insect.json](../../originals/Magic/data/ars_jymbaumental/tags/entity_type/insect.json) | JSON data |  | 48 |
+| [data/ars_jymbaumental/tags/item/blacklist_bag_item.json](../../originals/Magic/data/ars_jymbaumental/tags/item/blacklist_bag_item.json) | JSON data |  | 113 |
+| [data/ars_jymbaumental/tags/item/soulbound_extra.json](../../originals/Magic/data/ars_jymbaumental/tags/item/soulbound_extra.json) | JSON data |  | 1588 |
+| [data/ars_jymbaumental/tags/mob_effect/manabubble_blacklist.json](../../originals/Magic/data/ars_jymbaumental/tags/mob_effect/manabubble_blacklist.json) | JSON data |  | 124 |
+| [data/ars_jymbaumental/tags/worldgen/biome/flashing_biome.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/biome/flashing_biome.json) | JSON data |  | 105 |
+| [data/ars_jymbaumental/tags/worldgen/biome/flashing_tree_biome.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/biome/flashing_tree_biome.json) | JSON data |  | 100 |
+| [data/ars_jymbaumental/tags/worldgen/biome/flashjack_spawn.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/biome/flashjack_spawn.json) | JSON data |  | 102 |
+| [data/ars_jymbaumental/tags/worldgen/biome/has_structure/starbuncle_shrine.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/biome/has_structure/starbuncle_shrine.json) | JSON data |  | 236 |
+| [data/ars_jymbaumental/tags/worldgen/biome/siren_spawn.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/biome/siren_spawn.json) | JSON data |  | 148 |
+| [data/ars_jymbaumental/tags/worldgen/placed_feature/common_flashing_archwood.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/placed_feature/common_flashing_archwood.json) | JSON data |  | 114 |
+| [data/ars_jymbaumental/tags/worldgen/placed_feature/flashing_archwood.json](../../originals/Magic/data/ars_jymbaumental/tags/worldgen/placed_feature/flashing_archwood.json) | JSON data |  | 107 |
+| [data/ars_jymbaumental/trophies/flarecannon.json](../../originals/Magic/data/ars_jymbaumental/trophies/flarecannon.json) | JSON data |  | 114 |
+| [data/ars_jymbaumental/trophies/siren.json](../../originals/Magic/data/ars_jymbaumental/trophies/siren.json) | JSON data |  | 110 |
+| [data/ars_jymbaumental/worldgen/biome/blazing_forest.json](../../originals/Magic/data/ars_jymbaumental/worldgen/biome/blazing_forest.json) | JSON data |  | 5669 |
+| [data/ars_jymbaumental/worldgen/biome/cascading_forest.json](../../originals/Magic/data/ars_jymbaumental/worldgen/biome/cascading_forest.json) | JSON data |  | 6166 |
+| [data/ars_jymbaumental/worldgen/biome/flashing_forest.json](../../originals/Magic/data/ars_jymbaumental/worldgen/biome/flashing_forest.json) | JSON data |  | 5778 |
+| [data/ars_jymbaumental/worldgen/biome/flourishing_forest.json](../../originals/Magic/data/ars_jymbaumental/worldgen/biome/flourishing_forest.json) | JSON data |  | 5912 |
+| [data/ars_jymbaumental/worldgen/biome/vexing_caves.json](../../originals/Magic/data/ars_jymbaumental/worldgen/biome/vexing_caves.json) | JSON data |  | 5682 |
+| [data/ars_jymbaumental/worldgen/configured_carver/vexing_cave_carver.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_carver/vexing_cave_carver.json) | JSON data |  | 1417 |
+| [data/ars_jymbaumental/worldgen/configured_feature/blackstone_rock.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/blackstone_rock.json) | JSON data |  | 69 |
+| [data/ars_jymbaumental/worldgen/configured_feature/cave_source_vines.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/cave_source_vines.json) | JSON data |  | 2655 |
+| [data/ars_jymbaumental/worldgen/configured_feature/cave_vexing_tree.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/cave_vexing_tree.json) | JSON data |  | 1643 |
+| [data/ars_jymbaumental/worldgen/configured_feature/configured_cave_lights.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/configured_cave_lights.json) | JSON data |  | 210 |
+| [data/ars_jymbaumental/worldgen/configured_feature/flashing_tree_sapling.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/flashing_tree_sapling.json) | JSON data |  | 1203 |
+| [data/ars_jymbaumental/worldgen/configured_feature/natural_flashing_tree.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/natural_flashing_tree.json) | JSON data |  | 1203 |
+| [data/ars_jymbaumental/worldgen/configured_feature/ore_sourcestone.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/ore_sourcestone.json) | JSON data |  | 351 |
+| [data/ars_jymbaumental/worldgen/configured_feature/pools_with_drip.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/pools_with_drip.json) | JSON data |  | 1119 |
+| [data/ars_jymbaumental/worldgen/configured_feature/quartz_rock.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/quartz_rock.json) | JSON data |  | 61 |
+| [data/ars_jymbaumental/worldgen/configured_feature/random_common_flashing.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/random_common_flashing.json) | JSON data |  | 118 |
+| [data/ars_jymbaumental/worldgen/configured_feature/random_simple_flashing.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/random_simple_flashing.json) | JSON data |  | 118 |
+| [data/ars_jymbaumental/worldgen/configured_feature/short_vexing_tree.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/short_vexing_tree.json) | JSON data |  | 1185 |
+| [data/ars_jymbaumental/worldgen/configured_feature/single_blossom.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/single_blossom.json) | JSON data |  | 207 |
+| [data/ars_jymbaumental/worldgen/configured_feature/single_sparkflower.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/single_sparkflower.json) | JSON data |  | 202 |
+| [data/ars_jymbaumental/worldgen/configured_feature/single_torchflower.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/single_torchflower.json) | JSON data |  | 195 |
+| [data/ars_jymbaumental/worldgen/configured_feature/sourcestone_formation.json](../../originals/Magic/data/ars_jymbaumental/worldgen/configured_feature/sourcestone_formation.json) | JSON data |  | 66 |
+| [data/ars_jymbaumental/worldgen/placed_feature/blackstone_rock_placed.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/blackstone_rock_placed.json) | JSON data |  | 326 |
+| [data/ars_jymbaumental/worldgen/placed_feature/cave_vexing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/cave_vexing_archwood.json) | JSON data |  | 883 |
+| [data/ars_jymbaumental/worldgen/placed_feature/ceiling_berry_cave.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/ceiling_berry_cave.json) | JSON data |  | 922 |
+| [data/ars_jymbaumental/worldgen/placed_feature/cluster_blazing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/cluster_blazing_archwood.json) | JSON data |  | 687 |
+| [data/ars_jymbaumental/worldgen/placed_feature/cluster_cascading_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/cluster_cascading_archwood.json) | JSON data |  | 690 |
+| [data/ars_jymbaumental/worldgen/placed_feature/cluster_flashing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/cluster_flashing_archwood.json) | JSON data |  | 702 |
+| [data/ars_jymbaumental/worldgen/placed_feature/cluster_flourishing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/cluster_flourishing_archwood.json) | JSON data |  | 693 |
+| [data/ars_jymbaumental/worldgen/placed_feature/cluster_vexing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/cluster_vexing_archwood.json) | JSON data |  | 689 |
+| [data/ars_jymbaumental/worldgen/placed_feature/common_flashing.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/common_flashing.json) | JSON data |  | 744 |
+| [data/ars_jymbaumental/worldgen/placed_feature/common_flashing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/common_flashing_archwood.json) | JSON data |  | 702 |
+| [data/ars_jymbaumental/worldgen/placed_feature/flashing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/flashing_archwood.json) | JSON data |  | 424 |
+| [data/ars_jymbaumental/worldgen/placed_feature/lava_pools.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/lava_pools.json) | JSON data |  | 313 |
+| [data/ars_jymbaumental/worldgen/placed_feature/less_trees_mangrove.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/less_trees_mangrove.json) | JSON data |  | 1020 |
+| [data/ars_jymbaumental/worldgen/placed_feature/mojang_brown_mushroom.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/mojang_brown_mushroom.json) | JSON data |  | 325 |
+| [data/ars_jymbaumental/worldgen/placed_feature/mojang_forest_flowers.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/mojang_forest_flowers.json) | JSON data |  | 768 |
+| [data/ars_jymbaumental/worldgen/placed_feature/mojang_pumpkins.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/mojang_pumpkins.json) | JSON data |  | 318 |
+| [data/ars_jymbaumental/worldgen/placed_feature/mojang_red_mushroom.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/mojang_red_mushroom.json) | JSON data |  | 323 |
+| [data/ars_jymbaumental/worldgen/placed_feature/mojang_sugar_cane.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/mojang_sugar_cane.json) | JSON data |  | 319 |
+| [data/ars_jymbaumental/worldgen/placed_feature/mojang_windswept_hills_trees.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/mojang_windswept_hills_trees.json) | JSON data |  | 635 |
+| [data/ars_jymbaumental/worldgen/placed_feature/ore_sourcestone_placed.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/ore_sourcestone_placed.json) | JSON data |  | 473 |
+| [data/ars_jymbaumental/worldgen/placed_feature/placed_berry_bush_cave.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/placed_berry_bush_cave.json) | JSON data |  | 474 |
+| [data/ars_jymbaumental/worldgen/placed_feature/placed_lights_underground.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/placed_lights_underground.json) | JSON data |  | 481 |
+| [data/ars_jymbaumental/worldgen/placed_feature/pools_with_drip_placed.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/pools_with_drip_placed.json) | JSON data |  | 882 |
+| [data/ars_jymbaumental/worldgen/placed_feature/quartz_rock_placed.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/quartz_rock_placed.json) | JSON data |  | 321 |
+| [data/ars_jymbaumental/worldgen/placed_feature/scattered_blossoms.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/scattered_blossoms.json) | JSON data |  | 315 |
+| [data/ars_jymbaumental/worldgen/placed_feature/scattered_sparkflowers.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/scattered_sparkflowers.json) | JSON data |  | 319 |
+| [data/ars_jymbaumental/worldgen/placed_feature/scattered_torchflowers.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/scattered_torchflowers.json) | JSON data |  | 319 |
+| [data/ars_jymbaumental/worldgen/placed_feature/short_vexing_archwood.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/short_vexing_archwood.json) | JSON data |  | 978 |
+| [data/ars_jymbaumental/worldgen/placed_feature/simple_flashing.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/simple_flashing.json) | JSON data |  | 367 |
+| [data/ars_jymbaumental/worldgen/placed_feature/sourcestone_formation_placed.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/sourcestone_formation_placed.json) | JSON data |  | 489 |
+| [data/ars_jymbaumental/worldgen/placed_feature/sparse_jungle_trees.json](../../originals/Magic/data/ars_jymbaumental/worldgen/placed_feature/sparse_jungle_trees.json) | JSON data |  | 626 |
+| [data/ars_jymbaumental/worldgen/structure/starbuncle_shrine.json](../../originals/Magic/data/ars_jymbaumental/worldgen/structure/starbuncle_shrine.json) | JSON data |  | 1285 |
+| [data/ars_jymbaumental/worldgen/structure_set/starbuncle_shrine.json](../../originals/Magic/data/ars_jymbaumental/worldgen/structure_set/starbuncle_shrine.json) | JSON data |  | 806 |
+| [data/ars_jymbaumental/worldgen/template_pool/starbuncle_shrine/shrine.json](../../originals/Magic/data/ars_jymbaumental/worldgen/template_pool/starbuncle_shrine/shrine.json) | JSON data |  | 1644 |

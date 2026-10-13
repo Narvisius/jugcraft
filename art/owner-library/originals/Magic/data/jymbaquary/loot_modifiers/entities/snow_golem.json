@@ -1,0 +1,17 @@
+{
+  "type": "jymbaquary:inject_loot",
+  "condition": {
+    "type": "minecraft:all_of",
+    "terms": [
+      {
+        "type": "jymbaquary:entity_loot_enabled"
+      },
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:entities/snow_golem"
+      }
+    ]
+  },
+  "loot_table": "jymbaquary:inject/entities/snow_golem",
+  "loot_table_to_inject_into": "minecraft:entities/snow_golem"
+}

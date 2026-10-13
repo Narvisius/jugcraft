@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:mason_jar"
+    },
+    {
+      "ingredient": "jugcraft:cucumber",
+      "count": 4
+    },
+    {
+      "ingredient": "jugcraft:dill"
+    },
+    {
+      "ingredient": "jugcraft:mustard_seeds"
+    },
+    {
+      "ingredient": "jugcraft:cider_vinegar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:dill_pickles"
+  },
+  "time": 300
+}

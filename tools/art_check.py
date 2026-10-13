@@ -75,7 +75,7 @@ O1_ALLOW = {
     "aluminum_cable_arm": _ARM, "copper_cable_arm": _ARM, "silver_cable_arm": _ARM, "data_cable_arm": _ARM,
     "fluid_filter_arm": _ARM, "bronze_fluid_pipe_arm": _ARM, "brass_item_pipe_arm": _ARM,
     "bobbing_tub": _VESSEL, "bubbling_cauldron": _VESSEL, "candy_kettle": _VESSEL, "cider_press": _VESSEL,
-    "cooking_pot": _VESSEL, "luminaria": _VESSEL, "witchs_lantern": _VESSEL,
+    "luminaria": _VESSEL, "witchs_lantern": _VESSEL,
     "black_pillar_candle": _DECOR, "ivory_pillar_candle": _DECOR, "bowling_pumpkin": _DECOR, "corn_maze": _DECOR,
     "corn_plush": _DECOR, "hedgehog_plush": _DECOR, "owl_plush": _DECOR, "costume_trunk_open": _DECOR,
     "dead_hollow_tree": _DECOR, "flying_eyeball": _DECOR, "fog_machine": _DECOR,

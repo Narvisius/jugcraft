@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:corn",
+    "jugcraft:corn",
+    "minecraft:egg",
+    "minecraft:milk_bucket"
+  ],
+  "result": {
+    "id": "jugcraft:cornbread_batter",
+    "count": 1
+  }
+}

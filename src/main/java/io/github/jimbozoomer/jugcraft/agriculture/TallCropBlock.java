@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
@@ -164,9 +165,14 @@ public class TallCropBlock extends VegetationBlock implements BonemealableBlock 
 		if (age >= MAX_AGE || level.getRawBrightness(pos, 0) < CropGrowth.MIN_GROWTH_LIGHT) {
 			return;
 		}
-		if (random.nextInt(CropGrowth.chanceDivisor(CropGrowth.speed(level, pos, false), crop.growthTime)) == 0) {
+		if (random.nextInt(CropGrowth.chanceDivisor(growthSpeed(level, pos), crop.growthTime)) == 0) {
 			growTo(level, pos, age + 1);
 		}
+	}
+
+	/** How fast the plant whose bottom is at {@code pos} grows: from the farmland round it ({@link CropGrowth#speed}). */
+	protected float growthSpeed(ServerLevel level, BlockPos pos) {
+		return CropGrowth.speed(level, pos, false);
 	}
 
 	/**
@@ -238,10 +244,15 @@ public class TallCropBlock extends VegetationBlock implements BonemealableBlock 
 		}
 		RandomSource random = level.getRandom();
 		int count = crop.pickMin + random.nextInt(crop.pickMax - crop.pickMin + 1);
-		Block.popResource(level, dropPos, new ItemStack(JugcraftAgriculture.item(crop.produceId), count));
+		Block.popResource(level, dropPos, new ItemStack(produce(state), count));
 		setAge(level, bottom, crop.pickReset);
 		level.playSound(null, dropPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + random.nextFloat() * 0.4F);
 		return true;
+	}
+
+	/** What picking the ripe plant whose bottom is {@code bottom} gives: its produce ({@link TomatoVineBlock} may differ). */
+	protected Item produce(BlockState bottom) {
+		return JugcraftAgriculture.item(crop.produceId);
 	}
 
 	/** Bone meal on an unripe plant and sickles are item actions; anything else in hand may pick. */
@@ -281,7 +292,8 @@ public class TallCropBlock extends VegetationBlock implements BonemealableBlock 
 				if (!player.preventsBlockDrops()) {
 					Block.dropResources(bottomState, level, bottom, null, player, player.getMainHandItem());
 				}
-				level.setBlock(bottom, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+				// What the bottom held stays: air, or a paddy crop's water.
+				level.setBlock(bottom, bottomState.getFluidState().createLegacyBlock(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
 				level.levelEvent(player, LevelEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK, bottom, Block.getId(bottomState));
 			}
 		}

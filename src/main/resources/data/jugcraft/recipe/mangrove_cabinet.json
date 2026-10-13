@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "T T",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:mangrove_slab",
+    "T": "minecraft:mangrove_trapdoor"
+  },
+  "result": {
+    "id": "jugcraft:mangrove_cabinet",
+    "count": 1
+  }
+}

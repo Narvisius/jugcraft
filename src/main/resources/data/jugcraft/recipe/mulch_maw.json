@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "D D",
+    "DCD",
+    " B "
+  ],
+  "key": {
+    "D": "jugcraft:dewmoss",
+    "C": "minecraft:composter",
+    "B": "jugcraft:verdant_bed"
+  },
+  "result": {
+    "id": "jugcraft:mulch_maw",
+    "count": 1
+  }
+}

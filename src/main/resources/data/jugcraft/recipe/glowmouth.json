@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "CSS",
+    "PAB"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "S": "#c:ingots/steel",
+    "P": "#minecraft:planks",
+    "A": "jugcraft:advanced_circuit",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:glowmouth"
+  }
+}

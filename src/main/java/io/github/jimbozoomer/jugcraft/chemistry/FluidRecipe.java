@@ -5,7 +5,9 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.jimbozoomer.jugcraft.machine.MachineInput;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
+import io.github.jimbozoomer.jugcraft.machine.MachineCompanionEffort;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -32,6 +34,11 @@ import net.minecraft.world.level.material.Fluid;
  *
  * <p>Positions matter: the n-th item ingredient goes in the n-th item input slot, the n-th fluid in the n-th input
  * tank; results go to the output slots and tanks in order. Amounts are millibuckets.
+ *
+ * <p>Industrial machine forms (docs/features/industrial-machine-foundation.md) add two optional fields: a
+ * {@code "capability"} the form running it must declare, and a reusable {@code "tool"} (an ingredient) one of the
+ * form's tool sockets must hold, which the work never uses up. A recipe with either runs only in machine forms; the
+ * original one-model machines keep exactly the recipes they always had.
  */
 public class FluidRecipe implements Recipe<MachineInput> {
 	/** An item ingredient and how many are used per operation. */
@@ -70,9 +77,23 @@ public class FluidRecipe implements Recipe<MachineInput> {
 	private final List<FluidAmount> fluidResults;
 	private final List<ItemStackTemplate> results;
 	private final int time;
+	private final int companionEffort;
+	private final String capability;
+	private final Optional<Ingredient> tool;
 
 	public FluidRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, List<ItemPart> items, List<FluidAmount> fluids,
 			List<FluidAmount> fluidResults, List<ItemStackTemplate> results, int time) {
+		this(machine, commonInfo, items, fluids, fluidResults, results, time, 0);
+	}
+
+	public FluidRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, List<ItemPart> items, List<FluidAmount> fluids,
+			List<FluidAmount> fluidResults, List<ItemStackTemplate> results, int time, int companionEffort) {
+		this(machine, commonInfo, items, fluids, fluidResults, results, time, companionEffort, "", Optional.empty());
+	}
+
+	public FluidRecipe(MachineKind machine, Recipe.CommonInfo commonInfo, List<ItemPart> items, List<FluidAmount> fluids,
+			List<FluidAmount> fluidResults, List<ItemStackTemplate> results, int time, int companionEffort, String capability,
+			Optional<Ingredient> tool) {
 		this.machine = machine;
 		this.commonInfo = commonInfo;
 		this.items = List.copyOf(items);
@@ -80,6 +101,9 @@ public class FluidRecipe implements Recipe<MachineInput> {
 		this.fluidResults = List.copyOf(fluidResults);
 		this.results = List.copyOf(results);
 		this.time = time;
+		this.companionEffort = Math.clamp(companionEffort, 0, MachineCompanionEffort.MAX_PER_QUARTER);
+		this.capability = capability;
+		this.tool = tool;
 	}
 
 	public MachineKind machine() {
@@ -104,6 +128,23 @@ public class FluidRecipe implements Recipe<MachineInput> {
 
 	public int time() {
 		return time;
+	}
+
+	public int companionEffort() { return companionEffort; }
+
+	/** The process capability a machine form must declare to run this recipe; empty for the original machines. */
+	public String capability() {
+		return capability;
+	}
+
+	/** A reusable tool a form's socket must hold while this recipe runs (never used up), if any. */
+	public Optional<Ingredient> tool() {
+		return tool;
+	}
+
+	/** Whether the original one-model machine of its kind runs it: no capability and no tool. */
+	public boolean legacy() {
+		return capability.isEmpty() && tool.isEmpty();
 	}
 
 	/** Whether the item inputs hold this recipe's ingredients, each in its own slot, in order. */
@@ -192,6 +233,15 @@ public class FluidRecipe implements Recipe<MachineInput> {
 		return RecipeBookCategories.CRAFTING_MISC;
 	}
 
+	/** The fields added after the first fluid recipes, sent to clients together. */
+	private record Extras(int companionEffort, String capability, Optional<Ingredient> tool) {
+		static final StreamCodec<RegistryFriendlyByteBuf, Extras> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_INT, Extras::companionEffort,
+				ByteBufCodecs.STRING_UTF8, Extras::capability,
+				ByteBufCodecs.optional(Ingredient.CONTENTS_STREAM_CODEC), Extras::tool,
+				Extras::new);
+	}
+
 	static RecipeSerializer<FluidRecipe> serializer(MachineKind machine) {
 		MapCodec<FluidRecipe> codec = RecordCodecBuilder.mapCodec(i -> i.group(
 				Recipe.CommonInfo.MAP_CODEC.forGetter(recipe -> recipe.commonInfo),
@@ -199,9 +249,12 @@ public class FluidRecipe implements Recipe<MachineInput> {
 				FluidAmount.CODEC.listOf().optionalFieldOf("fluids", List.of()).forGetter(FluidRecipe::fluids),
 				FluidAmount.CODEC.listOf().optionalFieldOf("fluid_results", List.of()).forGetter(FluidRecipe::fluidResults),
 				ItemStackTemplate.CODEC.listOf().optionalFieldOf("results", List.of()).forGetter(FluidRecipe::results),
-				ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(FluidRecipe::time)
-		).apply(i, (info, items, fluids, fluidResults, results, time) ->
-				new FluidRecipe(machine, info, items, fluids, fluidResults, results, time)));
+				ExtraCodecs.POSITIVE_INT.optionalFieldOf("time", 200).forGetter(FluidRecipe::time),
+				MachineCompanionEffort.CODEC.optionalFieldOf("companion_effort_per_quarter", 0).forGetter(FluidRecipe::companionEffort),
+				Codec.STRING.optionalFieldOf("capability", "").forGetter(FluidRecipe::capability),
+				Ingredient.CODEC.optionalFieldOf("tool").forGetter(FluidRecipe::tool)
+		).apply(i, (info, items, fluids, fluidResults, results, time, effort, capability, tool) ->
+				new FluidRecipe(machine, info, items, fluids, fluidResults, results, time, effort, capability, tool)));
 		StreamCodec<RegistryFriendlyByteBuf, FluidRecipe> stream = StreamCodec.composite(
 				Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
 				ItemPart.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::items,
@@ -209,8 +262,9 @@ public class FluidRecipe implements Recipe<MachineInput> {
 				FluidAmount.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::fluidResults,
 				ItemStackTemplate.STREAM_CODEC.apply(ByteBufCodecs.list()), FluidRecipe::results,
 				ByteBufCodecs.VAR_INT, FluidRecipe::time,
-				(info, items, fluids, fluidResults, results, time) ->
-						new FluidRecipe(machine, info, items, fluids, fluidResults, results, time));
+				Extras.STREAM_CODEC, recipe -> new Extras(recipe.companionEffort, recipe.capability, recipe.tool),
+				(info, items, fluids, fluidResults, results, time, extras) -> new FluidRecipe(machine, info, items, fluids,
+						fluidResults, results, time, extras.companionEffort(), extras.capability(), extras.tool()));
 		return new RecipeSerializer<>(codec, stream);
 	}
 }

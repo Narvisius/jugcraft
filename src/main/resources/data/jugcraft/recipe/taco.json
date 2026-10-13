@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:tortilla",
+    "jugcraft:beef_patty",
+    "jugcraft:cabbage_leaf",
+    "jugcraft:tomato"
+  ],
+  "result": {
+    "id": "jugcraft:taco",
+    "count": 1
+  }
+}

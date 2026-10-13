@@ -1,0 +1,18 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "peepo_companion:item/iron_mob_transport_crate"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "peepo_companion:item/iron_mob_transport_crate",
+        "model": {
+          "type": "peepo_companion:crate_occupants"
+        }
+      }
+    ]
+  }
+}

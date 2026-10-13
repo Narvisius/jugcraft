@@ -1,0 +1,17 @@
+{
+  "type": "jymbaquary:inject_loot",
+  "condition": {
+    "type": "minecraft:all_of",
+    "terms": [
+      {
+        "type": "jymbaquary:chest_loot_enabled"
+      },
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:chests/jungle_temple"
+      }
+    ]
+  },
+  "loot_table": "jymbaquary:inject/chests/jungle_temple",
+  "loot_table_to_inject_into": "minecraft:chests/jungle_temple"
+}

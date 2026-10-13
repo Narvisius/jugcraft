@@ -1,0 +1,41 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:radiance/lampwright_bench",
+  "category": "jugcraft:radiance",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.name",
+  "description": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.description",
+  "icon": "jugcraft:lampwright_bench",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.p0.title",
+      "recipe_id_1": "jugcraft:lampwright_bench",
+      "text": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.p1.title",
+      "text": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.p2.title",
+      "text": "book.jugcraft.arcane_concordance.radiance.lampwright_bench.p2.text",
+      "show_title_separator": true
+    }
+  ]
+}

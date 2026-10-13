@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:vesper_scythe"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.the_last_harvest.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.the_last_harvest.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

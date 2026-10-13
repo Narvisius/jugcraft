@@ -43,7 +43,7 @@ Stand trellises on farmland (stack two for tomatoes), plant tomato seeds on them
 - New IDs only. The only existing behaviour that changes is the short-grass seed drop (see Balance). The `agriculture` switch stops recipes (crafting and Cooking Pot), wild plants in new chunks and grass drops. Registered blocks and items stay, so saved gardens and pots survive.
 
 ## Dependencies and assets
-No new dependencies. Uses Fabric API's menu, block entity, loot, biome modification and creative tab APIs, which are already required. Every texture is drawn by `tools/kitchen_textures.py` from fixed seeds; no Mojang texture is read, traced or recolored. The Cooking Pot screen reuses Jugcraft's own machine screen background.
+No new dependencies. Uses Fabric API's menu, block entity, loot, biome modification and creative tab APIs, which are already required. Every texture is drawn by `tools/kitchen_textures.py` from fixed seeds; no Mojang texture is read, traced or recolored. Since the [garden crops](garden-crops.md) (9 October 2026), the tomato, onion and cabbage, their items, the wild tomato, onion and cabbage and the Garden Salad wear the owner's own textures instead. The Cooking Pot screen reuses Jugcraft's own machine screen background.
 
 ## Verification
 Actual results (30 September 2026, Minecraft 26.3, Fabric Loader 0.19.3, Fabric API 0.161.0+26.3, Temurin JDK 25.0.4, GitHub Actions):

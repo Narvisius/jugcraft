@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 """Choose which client game test classes a change needs, and share them out between CI's client jobs.
 
-The client game tests start a real game and photograph showrooms, which takes CI about 15 to 25 minutes for every
-class. Most pull requests change a few blocks, so a pull request runs only the classes that show what it changed;
-main, a manual run and a pull request labelled "full-client-tests" run them all (docs/TESTING.md).
+The client game tests start a real game and photograph showrooms, which takes each of CI's five client jobs 20 to 30
+minutes when every class runs. Most pull requests change a few blocks, so a pull request runs only the classes that
+show what it changed; main and a manual run of the Build workflow run them all (docs/TESTING.md).
 
 How a changed file picks classes (src/gametest/resources/fabric.mod.json lists the classes):
 - a client test class itself, or one newly listed: that class;
 - docs, Markdown, the generators and checks in tools/ and scripts/ (their output is committed and judged below),
-  data under src/main/resources/data, the language file and server-only game tests: nothing;
+  the art sources in art/ (what the game loads is copied into the assets and judged there), data under
+  src/main/resources/data, the language file, the optional resource packs no client test turns on, unit tests,
+  server-only game tests and Claude's settings: nothing;
 - a Java class under src/main or src/client that only gained code (a feature registering itself in a registry, one
   more entry in a list): the classes matching the names and IDs it gained; comments do not count;
 - a Java class whose existing code changed: every class that shows it (names it, or whose IDs match it with "Block",
   "Renderer" and similar endings taken off: "GiantBeatingHeartRenderer" -> giant_beating_heart) or shows a Jugcraft
   class that uses it ("CrewedGun" -> the classes showing the Siege Mortar, Flak Gun and tower guns); a class no test
   shows picks nothing, as the mod job's server game tests still run;
+- a Java class that a quarter of the classes or more show (a registry such as JugcraftAgriculture or Jugcraft, which
+  most tests use to reach their blocks): the classes matching the names and IDs on the lines it lost or gained, as
+  for a class only gaining code, since what changed is what those lines name;
 - a model, blockstate, texture or other asset: every class naming its ID, or an ID it starts with
   ("ready_rack_0" -> ready_rack);
-- anything else (build files, the workflow, mixins, the test mod's helpers), or a change that picks half the classes
-  or more: every class.
+- anything else (build files, the workflow, mixins, the test mod's helpers): every class.
 
 A test "names" an ID when its source has it as a string ("pipe_organ", "jugcraft:pipe_organ") or a constant
 (PIPE_ORGAN), or when a Jugcraft class it uses that few tests use (a feature's own list, not a shared registry) has it.
@@ -35,22 +39,44 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 MOD_JSON = "src/gametest/resources/fabric.mod.json"
-TEST_DIR = ROOT / "src" / "gametest" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "test"
+TEST_DIR = ROOT / "src" / "gametest" / "java"
 CODE_DIRS = (ROOT / "src" / "main" / "java", ROOT / "src" / "client" / "java")
 
 # Rough seconds each class takes on a CI runner, to share them out evenly; others are estimated from their length.
 # Estimates from the client jobs' logs of October 2026, not measurements per class: with the biome tour at 600, its
-# job took 22 minutes and the others 15 and 14.
+# job took 22 minutes and the others 15 and 14. Biome, Guns, Styx, Arms and ArmorTiers are measured, from run
+# 37980438983's logs (565, 261, 221, 125 and 123 s; their length put the last four at 13 to 28), after three of them in
+# one job took it to 29 of its 30 minutes; ArmsMotion is its 87 screenshots at those classes' pace (about 2 s a shot),
+# where its length gave 14. Classes estimated from their length ran up to three times longer than that, so with three
+# jobs one still reached 29:32 (run 37989465048); the client tests then shared four jobs. With 131 classes the
+# estimates passed 25 minutes a job (the Cinder Kiln's), so they now share five.
 WEIGHTS = {
-    "BiomeClientGameTests": 900,
+    "BiomeClientGameTests": 570,
+    "GunsClientGameTests": 260,
+    "StyxClientGameTests": 220,
     "AlpineClientGameTests": 180,
     "JugcraftClientGameTests": 180,
+    "ArmsMotionClientGameTests": 170,
+    "ArmsClientGameTests": 125,
+    "ArmorTiersClientGameTests": 125,
     "TownClientGameTests": 120,
     "GuideScreenshotGameTests": 120,
     "SeasonClientGameTests": 90,
     "JugcraftServerClientGameTests": 90,
+    # Companion suites exercise timed AI, inventory trips and cooking, not just
+    # showrooms. Allow CI headroom over the focused local runtime measurements.
+    "PeepoCompanionClientTests": 600,
+    "PeepoHearthClientTests": 240,
+    "PeepoWorkSessionClientTests": 240,
+    "PeepoDeliveryClientTests": 240,
+    "PeepoKitchenAnimationClientTests": 120,
+    "PeepoSuppliesClientTests": 60,
+    "PeepoHarvestClientTests": 60,
+    "TransportCrateClientTests": 60,
+    "TikiTorchClientTests": 30,
 }
 HUB = 5  # a class this many test classes name is a shared registry, not one feature
+WIDE = 4  # a changed class shown by this share of the classes (a quarter) or more is picked by its changed lines
 ENDINGS = ("BlockEntityRenderer", "BlockEntity", "Renderer", "Block", "Item", "Entity", "Model", "Screen", "Menu",
            "Blocks", "Items")
 # Files that change nothing a client test shows.
@@ -59,8 +85,12 @@ NOTHING = (
     re.compile(r"\.md$"),
     re.compile(r"^tools/"),
     re.compile(r"^scripts/"),
+    re.compile(r"^art/"),
+    re.compile(r"^\.claude/"),
     re.compile(r"^src/main/resources/data/"),
     re.compile(r"^src/main/resources/assets/jugcraft/lang/"),
+    re.compile(r"^src/main/resources/resourcepacks/"),
+    re.compile(r"^src/test/"),
     re.compile(r"^project-status\.json$"),
     re.compile(r"^LICENSE"),
     re.compile(r"^\.github/(?!workflows/build\.yml$)"),
@@ -112,10 +142,10 @@ def test_classes(listed):
     tests = {}
     for entry in listed:
         name = entry.rsplit(".", 1)[-1]
-        path = TEST_DIR / f"{name}.java"
+        path = TEST_DIR.joinpath(*entry.split(".")).with_suffix(".java")
         text = path.read_text(encoding="utf-8") if path.is_file() else ""
         classes, ids = names_in(text)
-        tests[name] = {"classes": classes & sources.keys(), "ids": ids}
+        tests[name] = {"classes": classes & sources.keys(), "ids": ids, "source": path}
     users = {}
     for info in tests.values():
         for cls in info["classes"]:
@@ -171,6 +201,27 @@ def added_only(base, head, path):
     return None if removed else gained
 
 
+def changed_code(base, head, path):
+    """The code lines a file lost and gained; comments do not count."""
+    lines = []
+    for line in git("diff", "-U0", base, head, "--", path).splitlines():
+        if line.startswith(("---", "+++")) or not line.startswith(("-", "+")):
+            continue
+        text = line[1:].strip()
+        if text and not text.startswith(("*", "//", "/*")):
+            lines.append(text)
+    return lines
+
+
+def by_names(lines, tests):
+    """The classes naming the Jugcraft classes and IDs these code lines name (a registry many tests use aside)."""
+    classes, ids = names_in("\n".join(lines))
+    classes = {c for c in classes if sum(c in info["classes"] for info in tests.values()) < HUB}
+    ids |= {snake(c) for c in classes}
+    return {t for t, info in tests.items()
+            if classes & info["classes"] or any(match_id(i, info["ids"]) for i in ids)}
+
+
 def select(changed, tests, newly_listed, base=None, head=None):
     """(classes, reasons): the classes the changed files need, or None for every class."""
     chosen, reasons = set(), []
@@ -193,16 +244,23 @@ def select(changed, tests, newly_listed, base=None, head=None):
             existed = base and path in existing
             added = added_only(base, head, path) if existed else None
             if added is not None:
-                classes, ids = names_in("\n".join(added))
-                classes = {c for c in classes if sum(c in info["classes"] for info in tests.values()) < HUB}
-                ids |= {snake(c) for c in classes}
-                hits = {t for t, info in tests.items()
-                        if classes & info["classes"] or any(match_id(i, info["ids"]) for i in ids)}
+                hits = by_names(added, tests)
             else:
                 hits = showing(name, tests)
                 for user in users.get(name, ()):
                     if sum(user in info["classes"] for info in tests.values()) < HUB:  # not a registry many tests use
                         hits |= showing(user, tests)
+                if existed and len(hits) * WIDE >= len(tests):
+                    shown = len(hits)
+                    named_hits = by_names(changed_code(base, head, path), tests)
+                    # A shared helper can change behavior without naming an individual feature. In that case,
+                    # retain the known consumers rather than silently selecting no client regressions.
+                    if named_hits:
+                        hits = named_hits
+                    reasons.append(f"{path}: {shown} classes show {name}; "
+                                   f"the names on its changed lines pick {len(hits)}")
+                    chosen |= hits
+                    continue
             if not hits:
                 reasons.append(f"{path}: no client test shows {name}")
             chosen |= hits
@@ -220,8 +278,6 @@ def select(changed, tests, newly_listed, base=None, head=None):
         everything = everything or f"{path}: shared file"
     if everything:
         return None, [everything]
-    if len(chosen) * 2 >= len(tests):
-        return None, [f"{len(chosen)} of {len(tests)} classes changed"]
     return chosen, reasons
 
 
@@ -230,7 +286,7 @@ def share(classes, tests, shards):
     def weight(name):
         if name in WEIGHTS:
             return WEIGHTS[name]
-        path = TEST_DIR / f"{name}.java"
+        path = tests[name]["source"]
         return 8 + (len(path.read_text(encoding="utf-8").splitlines()) // 15 if path.is_file() else 0)
 
     jobs = [[0, []] for _ in range(shards)]
@@ -253,7 +309,7 @@ def main():
     parser.add_argument("--base", help="compare against this revision (a pull request's base)")
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--all", action="store_true", help="run every class")
-    parser.add_argument("--shards", type=int, default=3)
+    parser.add_argument("--shards", type=int, default=5)
     parser.add_argument("--github-output", help="append shard0..shardN-1 (comma-separated classes) to this file")
     args = parser.parse_args()
 

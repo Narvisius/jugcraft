@@ -1,0 +1,34 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:foundations/initiate_wand",
+  "category": "jugcraft:foundations",
+  "x": 2,
+  "y": 2,
+  "name": "book.jugcraft.arcane_concordance.foundations.initiate_wand.name",
+  "description": "book.jugcraft.arcane_concordance.foundations.initiate_wand.description",
+  "icon": "jugcraft:initiate_wand",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.foundations.initiate_wand.p0.title",
+      "recipe_id_1": "jugcraft:initiate_wand",
+      "text": "book.jugcraft.arcane_concordance.foundations.initiate_wand.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.foundations.initiate_wand.p1.title",
+      "text": "book.jugcraft.arcane_concordance.foundations.initiate_wand.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

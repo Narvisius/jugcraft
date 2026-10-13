@@ -34,9 +34,9 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * A roast turkey on its platter, placed on a table like a pie: {@value #SERVINGS} servings. A hungry player using it eats a
- * serving ({@value #NUTRITION} hunger); a Carving Knife carves a slice off to take away (Carving the Bird). First the
- * drumsticks go, then the breast; the last serving leaves the carcass's bones (a bone, for bone meal) and takes the
- * platter. Only a whole turkey can be picked up again.
+ * serving ({@value #NUTRITION} hunger); any knife (the Carving Knife or a kitchen knife) carves a slice off to take away
+ * (Carving the Bird). First the drumsticks go, then the breast; the last serving leaves the carcass's bones (a bone, for
+ * bone meal) and takes the platter. Only a whole turkey can be picked up again.
  */
 public class RoastTurkeyBlock extends Block {
 	public static final int SERVINGS = 6;
@@ -62,11 +62,11 @@ public class RoastTurkeyBlock extends Block {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
-	/** A Carving Knife carves a slice to take away. */
+	/** A knife (item tag jugcraft:knives: the Carving Knife and the kitchen knives) carves a slice to take away. */
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		if (!(stack.getItem() instanceof CarvingKnifeItem)) {
+		if (!stack.is(JugcraftAgriculture.KNIVES)) {
 			return InteractionResult.TRY_WITH_EMPTY_HAND;
 		}
 		if (!level.isClientSide()) {

@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "principle": "echo",
+  "tradition": "dreamwalkers",
+  "stage": "practitioner",
+  "icon": "jugcraft:oneiric_censer",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:dream_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:dream_specimens",
+          "distinct": 2
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:dream_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:dream",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

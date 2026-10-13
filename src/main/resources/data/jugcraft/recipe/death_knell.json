@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "G",
+    "N",
+    "B"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "N": "minecraft:iron_nugget",
+    "B": "minecraft:bone"
+  },
+  "result": {
+    "id": "jugcraft:death_knell",
+    "count": 1
+  }
+}

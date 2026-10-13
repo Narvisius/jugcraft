@@ -22,7 +22,7 @@ The stage names here reflect that planning conversation. They are not a rewrite 
 
 ## Existing source to extend
 
-The inspected source already contains cotton, flax, sunflowers, direct cotton/flax-to-string recipes, wool spinning/knitting, a Cider Press and Cider Barrel, wax melting/candle work, leather belts, synthetic rubber and gaskets, sawdust-to-paper, ethanol production/fuel consumers, cotton-based medical supplies and guncotton.
+The inspected source already contains cotton, flax, sunflowers, direct cotton/flax-to-string recipes, wool spinning/knitting, a Cider Press and Cider Barrel, wax melting/candle work, drive belts (leather), synthetic rubber and gaskets, sawdust-to-paper, ethanol production/fuel consumers, cotton-based medical supplies and guncotton.
 
 Useful source anchors: [agriculture data](../../tools/agriculture.py), [machine data](../../tools/machines.py), [petrochemistry data](../../tools/petro.py), [material generation](../../tools/generate_material_data.py), [rubber feature](rubber.md), [industrial chemistry feature](industrial-chemistry.md).
 
@@ -145,7 +145,7 @@ End products:
 - Reinforced belts, molded goods and tires for actual compatible vehicles.
 - Later specialty compounds for demanding temperatures, fluids or pressure conditions.
 
-Sidegrades: flexible, firm or reinforced products through different molds, reinforcement and compounds. Natural and synthetic rubber can both satisfy suitable basic recipes; advanced requirements should name the required compound/capability rather than declare all synthetic rubber universally superior. Keep current leather belts and existing synthetic-rubber consumers valid. Reusable molds are installed tooling rather than consumables in every finished part.
+Sidegrades: flexible, firm or reinforced products through different molds, reinforcement and compounds. Natural and synthetic rubber can both satisfy suitable basic recipes; advanced requirements should name the required compound/capability rather than declare all synthetic rubber universally superior. Keep current drive belts (leather) and existing synthetic-rubber consumers valid. Reusable molds are installed tooling rather than consumables in every finished part.
 
 ### Feed mill, farm supplies and food processing
 
@@ -205,6 +205,8 @@ Biodiesel is a processed fuel, not merely raw vegetable oil renamed. Alcohol/cat
 Plant residues should not ferment straight into refined alcohol at early tiers merely because they share a biomass tag. Sugar/starch preparation and later cellulosic processing are distinct capabilities. Where a route extends an existing simplified recipe, document coexistence and balance instead of silently invalidating it.
 
 Chemical feedstocks can keep farm goods in demand after petroleum processing arrives. Natural rubber, oils and fibre producers continue supplying suitable components and blends; later chemistry adds choices rather than making farming a temporary unlock chore.
+
+The owner's [sixth industrial-chemistry batch](industrial-chemistry-and-fuels-plan.md#materials-and-useful-factory-products-sixth-batch), selected 7 October 2026, adds **named nitrogen and phosphate fertilizers with distinct crop applications and optional blends**, including ammonium-nitrate/triple-superphosphate connections. The [seventh batch](industrial-chemistry-and-fuels-plan.md#starter-resources-operation-and-delivery-seventh-batch) selects **broad crop groups and optional blends convenient for mixed farms**. Define group/tag membership, effects, blend identities and application costs alongside this agriculture plan. Preserve ordinary compost/fertilizer and independently useful farms. The selection does not introduce mandatory soil-nutrient management; benefits and seed/crop/residue feedback must remain bounded. Industrial fertilizer/refining/polymer delivery precedes new optional chemical consumer goods, while earlier foods and agricultural workshops remain useful. These are planning additions, not implemented recipes or agronomy test results.
 
 ## Sidegrade dimensions
 

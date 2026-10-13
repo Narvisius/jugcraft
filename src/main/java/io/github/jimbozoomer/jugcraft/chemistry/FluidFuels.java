@@ -20,6 +20,12 @@ public final class FluidFuels {
 	/** Hydrogen in the fuel cell: 128,000 JE a bucket, less than the 204,800 JE the electrolytic cell spends making
 	 * a bucket of it (four buckets of brine), so electrolysis and the fuel cell are never a power loop. */
 	public static final int HYDROGEN = 128;
+	/**
+	 * The Gas Burning Generator (a machine form, docs/features/industrial-gas-burning-generator.md) burns hydrogen at
+	 * {@link #HYDROGEN}, the Fuel Cell's value, and makes this many JE a tick from it, the owner's selected starter
+	 * output: a millibucket a tick. Its fuels are listed on the form, so the gas turbine never burns hydrogen.
+	 */
+	public static final int GAS_BURNING_HYDROGEN = 128;
 	/** The gas turbine's lubricant upkeep: 1 mB for every this many ticks it runs (a bucket lasts 20,000 ticks). */
 	public static final int LUBRICANT_TICKS = 20;
 	/** The advanced combustion engine (KE per mB): turbocharged, it gets a quarter more from diesel than the diesel

@@ -1,0 +1,52 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:circles/lesser_circle",
+  "category": "jugcraft:circles",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.circles.lesser_circle.name",
+  "description": "book.jugcraft.arcane_concordance.circles.lesser_circle.description",
+  "icon": "jugcraft:circle_anchor",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/circle_lore_encountered",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.circle_lore.encountered"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.circles.lesser_circle.p0.title",
+      "recipe_id_1": "jugcraft:circle_anchor",
+      "text": "book.jugcraft.arcane_concordance.circles.lesser_circle.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.circles.lesser_circle.p1.title",
+      "text": "book.jugcraft.arcane_concordance.circles.lesser_circle.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.circles.lesser_circle.p2.title",
+      "text": "book.jugcraft.arcane_concordance.circles.lesser_circle.p2.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p3",
+      "title1": "book.jugcraft.arcane_concordance.circles.lesser_circle.p3.title",
+      "recipe_id_1": "jugcraft:warding_stone",
+      "text": "book.jugcraft.arcane_concordance.circles.lesser_circle.p3.text"
+    }
+  ]
+}

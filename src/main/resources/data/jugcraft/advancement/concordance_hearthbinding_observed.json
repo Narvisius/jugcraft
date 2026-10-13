@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_hearthbinding_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:torch"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_hearthbinding_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_hearthbinding_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

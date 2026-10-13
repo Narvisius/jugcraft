@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "wonder": "jugcraft:concord_spire",
+  "tradition": "lampwrights",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "mastered"
+    },
+    {
+      "research": "jugcraft:circle_lore",
+      "state": "understood"
+    }
+  ],
+  "practice": "jugcraft:ritual",
+  "crown": "jugcraft:spire_crown_lantern",
+  "upkeep": {
+    "item": "minecraft:glowstone_dust",
+    "count": 4,
+    "ley": 8
+  },
+  "field": {
+    "kind": "illumination",
+    "radius": 24,
+    "count": 4
+  }
+}

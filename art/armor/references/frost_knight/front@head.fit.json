@@ -1,0 +1,69 @@
+{
+ "cam": {
+  "dist": 60.106,
+  "tx": 0.0,
+  "ty": 16.0,
+  "tz": 0.0,
+  "az": -0.1,
+  "el": 15.15,
+  "f": 634.0,
+  "cx": 448.0,
+  "cy": 382.0
+ },
+ "pose": {
+  "right_arm": [
+   -40.0,
+   0.0,
+   15.0
+  ],
+  "left_arm": [
+   -19.619,
+   0.0,
+   -6.597
+  ],
+  "head": [
+   0.0,
+   -0.102,
+   0.0
+  ]
+ },
+ "exclude": [
+  [
+   [
+    15,
+    425
+   ],
+   [
+    130,
+    415
+   ],
+   [
+    300,
+    395
+   ],
+   [
+    415,
+    375
+   ],
+   [
+    425,
+    500
+   ],
+   [
+    300,
+    545
+   ],
+   [
+    80,
+    585
+   ],
+   [
+    15,
+    580
+   ]
+  ]
+ ],
+ "thresh": 40.0,
+ "lighting": "unlit",
+ "note": "the helm's camera: fitted by tools/armor_reference.py (fit) to the four corners of the helm's 9 x 9 face (x 391.3 to 504.7, y 198.7 to 312.1), elevation as the figure's outline gave it; used to lift the face, the crown's ice and the frost; exclude: the sword"
+}

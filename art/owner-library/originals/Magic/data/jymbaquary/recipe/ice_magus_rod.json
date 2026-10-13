@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "#c:gems/diamond",
+    "F": "jymbaquary:frozen_core",
+    "I": "#c:ingots/iron",
+    "V": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "!jymbaquary:enabled": {},
+        "!jymbaquary:oversized_item_container_contents": {}
+      },
+      "items": "jymbaquary:void_tear"
+    }
+  },
+  "pattern": [
+    " DF",
+    " VD",
+    "I  "
+  ],
+  "result": {
+    "id": "jymbaquary:ice_magus_rod"
+  }
+}
