@@ -199,13 +199,24 @@ public class BlueprintGameTests {
 		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
 		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);
 		stake.setup("small_church", Rotation.NONE, owner);
-		// A column of the church: a chest in its lowest cell, dirt in the next one up.
-		BlockPos low = stake.wanted().keySet().stream().filter(p -> stake.wanted().containsKey(p.above()))
-				.min(java.util.Comparator.comparingInt(BlockPos::getY)).orElseThrow();
-		helper.getLevel().setBlockAndUpdate(low, Blocks.CHEST.defaultBlockState());
-		((net.minecraft.world.level.block.entity.ChestBlockEntity) helper.getLevel().getBlockEntity(low)).setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND));
-		helper.getLevel().setBlockAndUpdate(low.above(), Blocks.DIRT.defaultBlockState());
 		helper.runAfterDelay(2, () -> {
+			// Neighbouring large fixtures can extend into this arena. Prepare only our footprint after their setup.
+			Map<BlockPos, BlockState> wanted = stake.wanted();
+			helper.assertFalse(wanted.containsKey(stakePos), "the fixture footprint leaves its survey stake intact");
+			for (BlockPos pos : wanted.keySet()) {
+				helper.getLevel().setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+			}
+			// A column of the church: a chest in its lowest cell, dirt in the next one up.
+			BlockPos low = wanted.keySet().stream().filter(p -> wanted.containsKey(p.above()))
+					.min(java.util.Comparator.comparingInt(BlockPos::getY)).orElseThrow();
+			helper.getLevel().setBlockAndUpdate(low, Blocks.CHEST.defaultBlockState());
+			((net.minecraft.world.level.block.entity.ChestBlockEntity) helper.getLevel().getBlockEntity(low)).setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND));
+			helper.getLevel().setBlockAndUpdate(low.above(), Blocks.DIRT.defaultBlockState());
+			long wrong = wanted.entrySet().stream().filter(e -> {
+				BlockState now = helper.getLevel().getBlockState(e.getKey());
+				return !now.canBeReplaced() && !SurveyStakeBlockEntity.matches(now, e.getValue());
+			}).count();
+			helper.assertTrue(wrong == 2, "only the chest and dirt obstruct this fixture, got " + wrong);
 			List<BuildJobs.Target> targets = BuildJobs.sources().stream()
 					.flatMap(s -> s.openTargets(helper.getLevel(), stakePos, 64, owner, UseMode.PERSONAL, 64).stream())
 					.filter(t -> t.owner().equals(owner)).toList();

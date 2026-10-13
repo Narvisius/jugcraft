@@ -35,7 +35,7 @@ import org.jspecify.annotations.Nullable;
  */
 public final class Blueprint {
 	/** The blueprints shipped with Jugcraft (tools/blueprints.py BUILT_IN). */
-	public static final List<String> BUILT_IN = List.of("drone_tower_foundation", "arc_furnace", "small_church");
+	public static final List<String> BUILT_IN = List.of("drone_tower_foundation", "drone_tower_industrial_foundation", "arc_furnace", "small_church");
 	/**
 	 * The built-in blueprints too big to send over the network (the nuclear plants and their parts, from
 	 * tools/nuclear_plants.py): each side reads them from its own copy of the jar when they are first wanted.

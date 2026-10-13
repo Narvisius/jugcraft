@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SDS",
+    "DCD",
+    "SPS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "D": "jugcraft:console_desk",
+    "C": "jugcraft:advanced_circuit",
+    "P": "jugcraft:processor"
+  },
+  "result": {
+    "id": "jugcraft:tower_master_console",
+    "count": 1
+  }
+}

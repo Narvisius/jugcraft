@@ -41,7 +41,7 @@ public class DroneTerminalBlock extends BaseEntityBlock implements EnergyConnect
 	static {
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			// Desk, and the display standing at its far edge.
-			SHAPES.put(facing, Shapes.or(Block.box(0, 0, 0, 16, 12, 16), turned(new double[] {0.5, 12, 2, 15.5, 16, 4.5}, facing)));
+			SHAPES.put(facing, Shapes.or(Block.box(0, 0, 0, 16, 12, 16), turned(new double[] {.6, 15.6, 2, 15.4, 25, 3.75}, facing)));
 		}
 	}
 

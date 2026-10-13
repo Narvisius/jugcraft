@@ -83,6 +83,9 @@ public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
 	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+		if (neighbor.getBlock() instanceof io.github.jimbozoomer.jugcraft.tower.ExchangeStationBlock station) {
+			return !station.energy && station.isPort(neighbor, direction.getOpposite());
+		}
 		if (neighbor.getBlock() instanceof ItemConnectable) {
 			return true;
 		}

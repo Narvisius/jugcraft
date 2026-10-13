@@ -1,0 +1,367 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "tower_detail_amber": "jugcraft:block/tower_detail_amber",
+    "tower_detail_light_steel": "jugcraft:block/tower_detail_light_steel",
+    "tower_detail_panel": "jugcraft:block/tower_detail_panel",
+    "tower_detail_rubber": "jugcraft:block/tower_detail_rubber",
+    "particle": "jugcraft:block/tower_detail_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2.4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            16,
+            2.4
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            16,
+            2.4
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            16,
+            2.4
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            16,
+            2.4
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.4,
+        1.2
+      ],
+      "to": [
+        16,
+        3.0,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_amber",
+          "uv": [
+            0,
+            0,
+            16,
+            0.6
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_amber",
+          "uv": [
+            0,
+            0,
+            16,
+            0.6
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_amber",
+          "uv": [
+            0,
+            0,
+            1.8,
+            0.6
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#tower_detail_amber",
+          "uv": [
+            0,
+            0,
+            1.8,
+            0.6
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#tower_detail_amber",
+          "uv": [
+            0,
+            0,
+            16,
+            1.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_amber",
+          "uv": [
+            0,
+            0,
+            16,
+            1.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.4,
+        5.2
+      ],
+      "to": [
+        16,
+        2.9,
+        6.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.5
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.5
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.4,
+        9.6
+      ],
+      "to": [
+        16,
+        2.9,
+        10.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.5
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.5
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_light_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.4,
+        13.8
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_rubber",
+          "uv": [
+            0,
+            0,
+            16,
+            0.6
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_rubber",
+          "uv": [
+            0,
+            0,
+            16,
+            0.6
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#tower_detail_rubber",
+          "uv": [
+            0,
+            0,
+            2.2,
+            0.6
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#tower_detail_rubber",
+          "uv": [
+            0,
+            0,
+            2.2,
+            0.6
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#tower_detail_rubber",
+          "uv": [
+            0,
+            0,
+            16,
+            2.2
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_rubber",
+          "uv": [
+            0,
+            0,
+            16,
+            2.2
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "reinforced_concrete": "jugcraft:block/reinforced_concrete",
+    "particle": "jugcraft:block/reinforced_concrete"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#reinforced_concrete",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#reinforced_concrete",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#reinforced_concrete",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#reinforced_concrete",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#reinforced_concrete",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#reinforced_concrete",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

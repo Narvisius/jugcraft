@@ -32,6 +32,13 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class TowerData {
 	public static final int TIERS = 9;
+	public static final int LEGACY_LAYOUT = 1;
+	public static final int FIRST_INDUSTRIAL_LAYOUT = 2;
+	public static final int PREVIOUS_INDUSTRIAL_LAYOUT = 3;
+	public static final int SERVICE_LAYOUT = 4;
+	public static final int LARGE_INPUT_LAYOUT = 5;
+	public static final int APRON_LAYOUT = 6;
+	public static final int INDUSTRIAL_LAYOUT = 7;
 	/** Edge of a build tile (blocks per side). */
 	public static final int TILE = 4;
 
@@ -90,7 +97,13 @@ public final class TowerData {
 		}
 	}
 
-	private static TowerData instance;
+	private static TowerData legacy;
+	private static TowerData industrial;
+	private static TowerData firstIndustrial;
+	private static TowerData previousIndustrial;
+	private static TowerData serviceIndustrial;
+	private static TowerData largeInputIndustrial;
+	private static TowerData apronIndustrial;
 
 	public final List<BlockState> palette;
 	public final List<Tier> tiers;
@@ -108,10 +121,58 @@ public final class TowerData {
 	}
 
 	public static synchronized TowerData get() {
-		if (instance == null) {
-			instance = load();
+		return get(INDUSTRIAL_LAYOUT);
+	}
+
+	/** Saved towers retain their own layout, including the exact ordering of unfinished build tiles. */
+	public static synchronized TowerData get(int version) {
+		if (version == APRON_LAYOUT) {
+			if (apronIndustrial == null) apronIndustrial = load("tower_industrial_v6");
+			return apronIndustrial;
 		}
-		return instance;
+		if (version == LARGE_INPUT_LAYOUT) {
+			if (largeInputIndustrial == null) largeInputIndustrial = load("tower_industrial_v5");
+			return largeInputIndustrial;
+		}
+		if (version == SERVICE_LAYOUT) {
+			if (serviceIndustrial == null) serviceIndustrial = load("tower_industrial_v4");
+			return serviceIndustrial;
+		}
+		if (version == FIRST_INDUSTRIAL_LAYOUT) {
+			if (firstIndustrial == null) firstIndustrial = load("tower_industrial_v2");
+			return firstIndustrial;
+		}
+		if (version == PREVIOUS_INDUSTRIAL_LAYOUT) {
+			if (previousIndustrial == null) previousIndustrial = load("tower_industrial_v3");
+			return previousIndustrial;
+		}
+		if (version == INDUSTRIAL_LAYOUT) {
+			if (industrial == null) {
+				industrial = load("tower_industrial");
+			}
+			return industrial;
+		}
+		if (legacy == null) {
+			legacy = load("tower");
+		}
+		return legacy;
+	}
+
+	/** Both persisted construction ordering and its status picture select the same frozen revision. */
+	public static String previewFolder(int version) {
+		return switch (version) {
+			case FIRST_INDUSTRIAL_LAYOUT -> "tower_industrial_v2";
+			case PREVIOUS_INDUSTRIAL_LAYOUT -> "tower_industrial_v3";
+			case SERVICE_LAYOUT -> "tower_industrial_v4";
+			case LARGE_INPUT_LAYOUT -> "tower_industrial_v5";
+			case APRON_LAYOUT -> "tower_industrial_v6";
+			case INDUSTRIAL_LAYOUT -> "tower_industrial";
+			default -> "drone_tower";
+		};
+	}
+
+	public static boolean supportedLayout(int version) {
+		return version >= LEGACY_LAYOUT && version <= INDUSTRIAL_LAYOUT;
 	}
 
 	/** Tier {@code number} (1 to 9). */
@@ -128,8 +189,8 @@ public final class TowerData {
 		return palette.get(paletteIndex);
 	}
 
-	private static TowerData load() {
-		String path = "/data/jugcraft/drone_tower/tower.json.gz";
+	private static TowerData load(String name) {
+		String path = "/data/jugcraft/drone_tower/" + name + ".json.gz";
 		try (InputStream raw = TowerData.class.getResourceAsStream(path)) {
 			if (raw == null) {
 				throw new IllegalStateException("missing " + path);

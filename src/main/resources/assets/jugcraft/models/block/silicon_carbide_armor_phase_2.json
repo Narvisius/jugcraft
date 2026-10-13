@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "silicon_carbide_armor": "jugcraft:block/silicon_carbide_armor",
+    "particle": "jugcraft:block/silicon_carbide_armor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#silicon_carbide_armor",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#silicon_carbide_armor",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#silicon_carbide_armor",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#silicon_carbide_armor",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#silicon_carbide_armor",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#silicon_carbide_armor",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

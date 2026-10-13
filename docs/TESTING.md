@@ -92,3 +92,5 @@ Use the cases relevant to the feature; do not claim a scenario was run just beca
 Maintainers test the combined candidate, not just individual PRs, on an isolated staging server. Publish a numbered release with checksums, exact requirements, changelog, known issues, and migration notes. Promote only explicitly approved artifacts. Never automatically deploy arbitrary main or PR builds to the viewer server.
 
 Back up world, player data, configs, and exact previous artifacts before upgrading. Test restoration. If migration is not reversible, restoring the matching backup and old artifacts is the rollback; merely reverting a source commit or replacing a JAR may not restore the world.
+
+For local server feature checks, `-PserverTests=TowerGameTests,IndustrialTowerGameTests,ExchangeStationGameTests,DroneGameTests,BlueprintGameTests` selects only those registered classes. Unknown class names fail. Omitting this property preserves the full CI suite. Combine it with the feature focus environment variable where applicable.

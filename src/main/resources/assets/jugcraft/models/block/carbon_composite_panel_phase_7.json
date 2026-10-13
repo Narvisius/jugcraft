@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "carbon_composite_panel": "jugcraft:block/carbon_composite_panel",
+    "particle": "jugcraft:block/carbon_composite_panel"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#carbon_composite_panel",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#carbon_composite_panel",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#carbon_composite_panel",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#carbon_composite_panel",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#carbon_composite_panel",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#carbon_composite_panel",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

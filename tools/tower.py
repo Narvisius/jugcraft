@@ -17,6 +17,10 @@ check_mod_data.py).
 import math
 import random
 
+import tower_realism_art
+import tower_exchanges
+import tower_master_console
+
 from PIL import Image
 
 FEATURE = "drones"
@@ -37,7 +41,7 @@ BUILDING = {
     "depleted_uranium_armor": {"display": "Depleted Uranium Armor", "kind": "cube", "variants": True},
     "graphene_lattice": {"display": "Graphene Lattice", "kind": "cube", "variants": True},
     "superconducting_conduit": {"display": "Superconducting Conduit", "kind": "light", "light": 5},
-    "red_light_strip": {"display": "Red Light Strip", "kind": "light", "light": 8},
+    "red_light_strip": {"display": "Recessed Floor Light", "kind": "light", "light": 8},
     "warning_light": {"display": "Warning Light", "kind": "light", "light": 13},
     # Room surfaces for the command room.
     "acoustic_wall_panel": {"display": "Acoustic Wall Panel", "kind": "cube"},
@@ -118,8 +122,13 @@ def variant_blocks():
     return [f"{b}_{v}" for b, info in BUILDING.items() if info.get("variants") for v in ("stairs", "slab")]
 
 
+SURFACE_LIGHTS = {"wall_task_light": "Sealed Wall Task Light", "linear_ceiling_light": "Sealed Linear Ceiling Light"}
+
+
 def tower_blocks():
-    return list(BUILDING) + variant_blocks() + list(FURNITURE) + list(CORE) + list(PORTS)
+    return (list(BUILDING) + variant_blocks() + list(FURNITURE) + list(CORE) + list(PORTS)
+            + list(tower_realism_art.DETAIL_BLOCKS) + list(tower_exchanges.STATIONS)
+            + list(SURFACE_LIGHTS) + [tower_master_console.BLOCK_ID])
 
 
 def tower_items():
@@ -181,6 +190,11 @@ CRAFTING = {
 }
 ITEM_FEATURES = {"plastic_sheet": ["crude_oil"], "coke": [], "silicon": ["silicon"], "processor": ["silicon"],
                  "superconducting_tape": ["rare_earths", "silicon"]}
+CRAFTING.update(tower_realism_art.CRAFTING)
+CRAFTING.update(tower_exchanges.CRAFTING)
+CRAFTING.update(tower_master_console.CRAFTING)
+CRAFTING.update({block: (["PPP", "GLG"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "L": "minecraft:glowstone_dust"}, 4)
+                 for block in SURFACE_LIGHTS})
 
 
 def variant_recipes():
@@ -438,6 +452,11 @@ def write_assets(write, rid, assets, lang):
         write(assets / "models" / "item" / f"{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
         write(assets / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
     lang.update(LANG)
+    tower_realism_art.write_assets(write, rid, assets, lang)
+    tower_exchanges.write_assets(root=assets.parents[4], lang=lang)
+    tower_master_console.write_all(root=assets.parents[4])
+    lang.update({f"block.{MOD}.{block}": display for block, display in SURFACE_LIGHTS.items()})
+    lang[f"block.{MOD}.{tower_master_console.BLOCK_ID}"] = tower_master_console.DISPLAY
 
 
 def stairs_blockstate(model):
@@ -494,6 +513,7 @@ TIER_NAMES = ["Command Post", "Hangar Deck", "Armoured Block", "Logistics Spire"
               "Ceramic Bastion", "Uranium Citadel", "Graphene Spire"]
 
 LANG = {
+    "message.jugcraft.master_console.unlinked": "Console incomplete or unlinked. Place near a Drone Depot Terminal.",
     "container.jugcraft.drone_tower": "Drone Tower",
     **{f"tower.jugcraft.tier.{i + 1}": name for i, name in enumerate(TIER_NAMES)},
     "tower.jugcraft.tier.0": "Foundation",
@@ -520,7 +540,7 @@ LANG = {
     "screen.jugcraft.tower.plinth_missing": "Plinth unfinished: 15x15 chiseled stone bricks",
     "screen.jugcraft.tower.hint": "Load modules into the core or the terminal",
     "screen.jugcraft.tower.legend": "Solid: built · outline: next",
-    "screen.jugcraft.terminal.tower": "TOWER",
+    "screen.jugcraft.terminal.tower": "TOWER CONTROL",
     "message.jugcraft.drone.link.needs_tower": "Drones need a Drone Tower: craft a Drone Tower Core, set it on a 15x15 chiseled stone brick plinth and build tier 1 (tier %s asked)",
     "message.jugcraft.drone.link.tower_tier": "Tier %s drones need the Drone Tower at that tier",
     "message.jugcraft.drone.status.no_tower": "No Drone Tower · build a Tower Core to fly drones",

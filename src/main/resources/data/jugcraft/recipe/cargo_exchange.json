@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SRS",
+    "RCR",
+    "SPS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "C": "jugcraft:advanced_circuit",
+    "P": "jugcraft:cargo_exchange_port",
+    "R": "jugcraft:intake_funnel"
+  },
+  "result": {
+    "id": "jugcraft:cargo_exchange",
+    "count": 1
+  }
+}

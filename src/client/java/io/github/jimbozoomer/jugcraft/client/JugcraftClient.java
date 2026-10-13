@@ -323,12 +323,15 @@ public final class JugcraftClient implements ClientModInitializer {
 			HarvestMoon.clientActive = false;
 			client.execute(CarvingTextures::clear);
 		});
-		BlockEntityRenderers.register(JugcraftDrones.TERMINAL_ENTITY, context -> new DroneDepotRenderer());
+		BlockEntityRenderers.register(JugcraftDrones.TERMINAL_ENTITY, DroneDepotRenderer::new);
 		DroneSounds.register();
 		DieselSounds.register();
 		SoundOcclusion.register();
 		BlockEntityRenderers.register(JugcraftDrones.SCREEN_ENTITY, ControlScreenRenderer::new);
 		BlockEntityRenderers.register(JugcraftDrones.HOLO_ENTITY, context -> new HoloMapRenderer());
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CONSOLE_ENTITY, ConsoleDeskRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.MASTER_CONSOLE_ENTITY, MasterConsoleRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.ExchangeStations.ENTITY, ExchangeStationRenderer::new);
 		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints.STAKE_ENTITY, context -> new SurveyStakeRenderer());
 		io.github.jimbozoomer.jugcraft.client.blueprint.ClientBlueprints.register();
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.SEAT, net.minecraft.client.renderer.entity.NoopRenderer::new);
@@ -343,6 +346,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.control.JugcraftControl.MONITOR_ENTITY, ControlMonitorRenderer::new);
 		io.github.jimbozoomer.jugcraft.drone.GuideBooks.openScreen = book -> Minecraft.getInstance().gui.setScreen(new GuideBookScreen(book));
 		DroneTerminalBlock.openScreen = pos -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(pos));
+		io.github.jimbozoomer.jugcraft.tower.ConsoleDeskBlock.openScreen = (terminal, access) -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(terminal, access));
+		io.github.jimbozoomer.jugcraft.tower.MasterConsoleBlock.openScreen = (terminal, access) -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(terminal, access));
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.openScreen = pos -> Minecraft.getInstance().gui.setScreen(new TowerScreen(pos));
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.EQUIPMENT_ENTITY, NuclearRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.COOLING_TOWER_ENTITY, CoolingTowerRenderer::new);

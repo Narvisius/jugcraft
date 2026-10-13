@@ -47,8 +47,9 @@ public class ControlScreenRenderer implements BlockEntityRenderer<DepotDisplayBl
 	}
 
 	public ControlScreenRenderer(BlockEntityRendererProvider.Context context) {
-		this.font = context.font();
+		this(context.font());
 	}
+	ControlScreenRenderer(Font font) { this.font = font; }
 
 	@Override
 	public State createRenderState() {
@@ -77,21 +78,21 @@ public class ControlScreenRenderer implements BlockEntityRenderer<DepotDisplayBl
 		add(state, "DRONE DEPOT  ▸ " + view.mode.toUpperCase(java.util.Locale.ROOT), ACCENT, 8, y);
 		y += 13;
 		int fleet = view.docks.size() + view.flights.size();
-		add(state, "FLEET " + fleet + "/" + view.maxDrones + "   AIRBORNE " + view.flying(), WHITE, 8, y);
+		add(state, "FLEET " + fleet + "/" + view.maxDrones + "  ACTIVE " + view.active() + "  UP " + view.airborne(screen.getLevel().getGameTime() + partialTick), WHITE, 8, y);
 		y += 10;
 		add(state, bar(fleet, view.maxDrones, 24), ACCENT, 8, y);
 		y += 12;
 		long percent = view.capacity <= 0 ? 0 : view.energy * 100 / view.capacity;
-		add(state, "POWER " + percent + "%   DRAW " + (view.flying() > 0 ? view.workingDraw : view.standbyDraw) + " JE/t",
+		add(state, "POWER " + percent + "%   DRAW " + view.draw() + " JE/t (" + view.loadPercent() + "% input)",
 				view.lowPower ? RED : WHITE, 8, y);
 		y += 10;
 		add(state, bar(view.energy, view.capacity, 24), view.lowPower ? RED : ACCENT, 8, y);
 		y += 12;
 		add(state, view.layoutStatus() == PlatformLayout.Status.OK
-				? "PADS " + view.pads.size() + "   SLOTS " + view.slotsUsed + "/" + view.slots
+				? "PADS " + view.padCount() + "   FREE SLOTS " + Math.max(0, view.maxDrones - fleet)
 				: "PLATFORM: " + view.layoutStatus().name().replace('_', ' '), view.layoutStatus() == PlatformLayout.Status.OK ? WHITE : AMBER, 8, y);
 		y += 10;
-		if (view.pickup == null) {
+		if (view.pickups.isEmpty()) {
 			add(state, "⚠ NO SUPPLY PICKUP", AMBER, 8, y);
 		} else if (!view.packager) {
 			add(state, "⚠ NO CARGO PACKAGER", AMBER, 8, y);

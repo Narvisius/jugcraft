@@ -1,0 +1,400 @@
+{
+  "author": "OpenAI Codex (GPT-6)",
+  "license": "MIT",
+  "date": "2026-10-08",
+  "source": "Original deterministic code-native geometry and instrument drawings; no screenshot or third-party pixels imported.",
+  "references": [
+    "tools/plant_panels.py: authored Jugcraft cabinet proportions, engraved labels, 240-degree percentage instruments and proud meter cases",
+    "src/client/java/io/github/jimbozoomer/jugcraft/client/LivePanelRenderer.java: static faces at rest with client-only truthful overlays",
+    "art/owner-library/README.md and catalog/files.csv reviewed; no owner-library pixels imported"
+  ],
+  "shared_materials": "Existing tower_detail steel/concrete/rubber textures referenced unchanged; original provenance remains art/tower-v3-sample/README.md.",
+  "layout": {
+    "version": 1,
+    "units": "anchor-relative model pixels",
+    "front": "north/-z",
+    "static_face_z": 0.15,
+    "overlay_z": 0.05,
+    "socket": {
+      "part": 26,
+      "center": [
+        40,
+        24,
+        0
+      ],
+      "contact": [
+        36.8,
+        20.8,
+        43.2,
+        27.2
+      ]
+    },
+    "dials": [
+      {
+        "channel": "storage_percent",
+        "pivot": [
+          21,
+          35,
+          0.05
+        ],
+        "radius": 2.35,
+        "start": 210,
+        "sweep": 240,
+        "min": 0,
+        "max": 100
+      },
+      {
+        "channel": "load_percent",
+        "pivot": [
+          27,
+          35,
+          0.05
+        ],
+        "radius": 2.35,
+        "start": 210,
+        "sweep": 240,
+        "min": 0,
+        "max": 100
+      },
+      {
+        "channel": "storage_percent",
+        "pivot": [
+          54.35,
+          26.6,
+          0.05
+        ],
+        "radius": 2.75,
+        "start": 90,
+        "sweep": 90,
+        "min": 0,
+        "max": 100
+      },
+      {
+        "channel": "load_percent",
+        "pivot": [
+          61.35,
+          26.6,
+          0.05
+        ],
+        "radius": 2.75,
+        "start": 90,
+        "sweep": 90,
+        "min": 0,
+        "max": 100
+      }
+    ],
+    "needle_axes": {
+      "x": "-cos(angle)",
+      "y": "sin(angle)"
+    },
+    "displays": [
+      {
+        "channel": "stored",
+        "rect": [
+          18.2,
+          24.6,
+          29.8,
+          29.4
+        ],
+        "center_x": 24,
+        "lines_y": [
+          28,
+          26.1
+        ],
+        "font_height": 0.62
+      },
+      {
+        "channel": "demand_load",
+        "rect": [
+          50.2,
+          35.6,
+          61.8,
+          40.4
+        ],
+        "center_x": 56,
+        "lines_y": [
+          39,
+          37.1
+        ],
+        "font_height": 0.62
+      }
+    ],
+    "lamps": [
+      {
+        "channel": "linked",
+        "center": [
+          35.6,
+          40,
+          0.05
+        ],
+        "radius": 0.48,
+        "color": "green"
+      },
+      {
+        "channel": "charged",
+        "center": [
+          35.6,
+          36.8,
+          0.05
+        ],
+        "radius": 0.48,
+        "color": "amber"
+      },
+      {
+        "channel": "low_power",
+        "center": [
+          35.6,
+          33.6,
+          0.05
+        ],
+        "radius": 0.48,
+        "color": "red"
+      }
+    ]
+  },
+  "textures": [
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_paint.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_paint.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "58823a627cd5ae9fa9bea8d07af523aefaa594cc17a79b1ad660ce46b05f12ff"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_dark_paint.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_dark_paint.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "94645744834cd0f95ef44bdcb50559bf44609972490937e32dfe3d126ad9e67e"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_black.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_black.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "0391933ad3c570d99744736bd36234980a86cac8d423e4e1a8c8f5c0ade349ba"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_display.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_display.png",
+      "size": [
+        512,
+        256
+      ],
+      "sha256": "90b2c62bca4e1a725cc79712c561c29da2b2da5724fd52491c913e3cb1d682df"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_dial.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_dial.png",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "56be6e55e0943b8eca96b3fe810356c1afa48de5772432e23f5c14310faafe3c"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_relay.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_relay.png",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "9100b22be8519975cee3ef9fa4f58edd0d33e5bd19ddb01ae26dcaa81c123141"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_incoming.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_incoming.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "d98f380361f29ed28e267fd3c5083a626432ec92c948515bf966b5c9339003eb"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_protection.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_protection.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "54eb6093cfef6e7f5dc5fadec103f8688c8ce31e34918f93bd8ba67b97a761d4"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_distribution.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_distribution.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "0a7b78fe64f9094e56b98f173cb5c45ec97ccd81ab07f6a0b90c851b9801b4bc"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_storage.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_storage.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "1de3114eab15bbd3c5dd20518dbcee2d0f6ba4f52877b6d25ab55ab632df6197"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_demand.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_demand.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "09b2d94b37818af647a86741574587b659b54073096e1c08369fe295471b0c18"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_storage_pct.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_storage_pct.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "45a2b47524f0fcf9b79c9a732eea918c5241a5d6c1d5aae8a5c019d24d500944"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_load_pct.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_load_pct.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "c4005fde464c27ba5b692c2f28619754897c6add83b568df6afcdcd13ea5b549"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_linked.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_linked.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "641372f69635f561f51dc6e313fba913edddd69ab06281065af171d03fc3209f"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_charged.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_charged.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "7a2bc26aa2a3bf9e3b3fdb0485ed5815183a0ef518f8e78baa168d97450d6722"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_low_power.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_low_power.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "d921833aa12206d0b56750d054a9d6aab9320862e85f808801d15e9b6ed0575d"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_selector.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_selector.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "23e7fc0b9a4efc31512188625bd1d742061df5482f6a17f5ea374b3eca13ae64"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_service.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_service.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "3bfd3d856e41f9d8b7d9e1b8432b2948a2d70d85aae8811a8e3e8b0276053e64"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_cable.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_cable.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "e92a42ef6424892045c85dd2fcacdf23324f0236cdc32f0aa11b8b40168888a1"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_cooling.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_cooling.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "b7ba864aa3673c898611a2d7ee7368a3f09064e18caa3eeaa0540cf4f75bc57c"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_main.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_main.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "d940ba48b3852fdb1434a08cd6501b00f841f8ad9bd8d1c510649843bed04c3a"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_access.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_access.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "9d848c835803d22a706e1ff520a4dc195dee51280cf8af16f833744db1009d86"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_relay_storage.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_relay_storage.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "ec7ae59bfa3797cfdb8e7afd72c143618f2262aaf6217f57998a22c280f10047"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_relay_load.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_relay_load.png",
+      "size": [
+        512,
+        128
+      ],
+      "sha256": "adae7e9ae1abd49b7dace412ee90bd217cb8f50754f1d712afd4c0c18399ca74"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_lamp_green.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_lamp_green.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "4f43fd43cfaa5d31ba3af779c8234a24527f324e7401e6d58f9407b959857ef1"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_lamp_amber.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_lamp_amber.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "6710da926bba58deedeca878027cdb852967f88df7ef24b74ce14698b45a877e"
+    },
+    {
+      "source": "art/tower-power-exchange/originals/tower_power_lamp_red.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/tower_power_lamp_red.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "b491fc6e639b13673c2cf046a0ce6e188d451c9a1ea99b53a108dd61d57bb77c"
+    }
+  ]
+}

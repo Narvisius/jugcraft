@@ -40,10 +40,11 @@ def weight(item):
 FAMILIES = {
     "structural_module": {"reinforced_concrete", "concrete_column", "steel_girder", "aluminum_cladding", "carbon_composite_panel",
                           "graphene_lattice", "tungsten_steel_frame", "chiseled_stone_bricks", "access_floor_tile",
-                          "acoustic_wall_panel", "carpet_tile", "blast_glass"},
+                          "acoustic_wall_panel", "carpet_tile", "blast_glass", "tower_service_grating",
+                          "tower_service_railing", "tower_vent", "tower_ladder"},
     "armor_module": {"steel_armor_plate", "hazard_plating", "depleted_uranium_armor", "silicon_carbide_armor"},
     "hangar_module": {"landing_platform", "landing_pad", "hangar_pad", "dock_plating", "hangar_bay_door", "supply_pickup",
-                      "intake_funnel"},
+                      "intake_funnel", "cargo_exchange", "tower_door_mechanism"},
 }
 
 
@@ -66,16 +67,25 @@ BLOCK_VALUE = {
     "landing_platform": 0.675, "operator_chair": 3.4, "red_light_strip": 0.108, "reinforced_concrete": 0.275,
     "silicon_carbide_armor": 1.55, "steel_armor_plate": 2.0, "steel_girder": 1.167, "superconducting_conduit": 3.375,
     "supply_pickup": 1.056, "transformer_casing": 2.8, "tungsten_steel_frame": 4.0, "warning_light": 0.5,
+    # A station's one-item recipe value spread over its dummy parts; never charge for 64 complete stations.
+    "energy_exchange": 25.3 / 64, "cargo_exchange": 21.8 / 60,
+    "tower_service_grating": 0.875, "tower_service_railing": 1.333, "tower_vent": 2.438, "tower_ladder": 1.167,
+    "tower_door_mechanism": 2.375,
+    "wall_task_light": 0.525, "linear_ceiling_light": 0.525, "tower_master_console": 30.7 / 6,
 }
+STATION_PARTS = {"energy_exchange": 64, "cargo_exchange": 60, "tower_master_console": 6}
 # SIE per module crafted.
 MODULE_VALUE = {"structural_module": 47.88, "armor_module": 46.5, "hangar_module": 21.9, "avionics_module": 24.43}
 
 
-def module_cost(tier, block_names):
+def module_cost(tier, block_names, station_parts=None):
     """{module: count} for a tier that places {@code block_names} (block ids without namespace, one per block)."""
     value = collections.Counter()
     for name in block_names:
-        value[family(name)] += BLOCK_VALUE.get(name, 0.5)
+        unit = BLOCK_VALUE.get(name, 0.5)
+        if station_parts and name in station_parts:
+            unit *= STATION_PARTS[name] / station_parts[name]
+        value[family(name)] += unit
     cost = {}
     for module in ("structural_module", "hangar_module", "armor_module", "avionics_module"):
         if value[module] > 0:
@@ -120,7 +130,7 @@ def check(err):
     recipes = _recipes()
     for name, fixed in BLOCK_VALUE.items():
         item = ("minecraft:" if name == "chiseled_stone_bricks" else "jugcraft:") + name
-        actual = _value(item, recipes)
+        actual = _value(item, recipes) / STATION_PARTS.get(name, 1)
         if abs(actual - fixed) > max(0.02, fixed * 0.02):
             err(f"tower_costs.BLOCK_VALUE[{name}] is {fixed} but its recipe now works out at {actual:.3f} SIE")
     for module, fixed in MODULE_VALUE.items():

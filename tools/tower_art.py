@@ -1004,3 +1004,6 @@ def write_all(root):
     for dz in range(3):
         for dx in range(3):
             pick.crop((dx * N, dz * N, dx * N + N, dz * N + N)).save(os.path.join(out, f"supply_pickup_formed_{1 + dz * 3 + dx}.png"))
+    # Approved industrial material pass, kept separate from shared drone sprites.
+    import tower_realism_art
+    tower_realism_art.write_textures(root)

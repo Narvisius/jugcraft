@@ -1,9 +1,41 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/block",
   "textures": {
-    "top": "jugcraft:block/hangar_pad_32",
-    "side": "jugcraft:block/hangar_pad_side",
-    "bottom": "jugcraft:block/landing_platform",
-    "particle": "jugcraft:block/hangar_pad"
-  }
+    "tower_detail_amber_lamp": "jugcraft:block/tower_detail_amber_lamp",
+    "tower_detail_copper": "jugcraft:block/tower_detail_copper",
+    "tower_detail_cyan": "jugcraft:block/tower_detail_cyan",
+    "tower_detail_dark": "jugcraft:block/tower_detail_dark",
+    "tower_detail_light_steel": "jugcraft:block/tower_detail_light_steel",
+    "tower_detail_panel": "jugcraft:block/tower_detail_panel",
+    "tower_detail_steel": "jugcraft:block/tower_detail_steel",
+    "tower_pad_surface": "jugcraft:block/hangar_pad_32"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        15.45,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#tower_pad_surface",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_steel"
+        }
+      }
+    }
+  ]
 }

@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "units": "anchor-relative model pixels",
+  "front": "north/-z",
+  "static_face_z": 0.15,
+  "overlay_z": 0.05,
+  "socket": {
+    "part": 26,
+    "center": [
+      40,
+      24,
+      0
+    ],
+    "contact": [
+      36.8,
+      20.8,
+      43.2,
+      27.2
+    ]
+  },
+  "dials": [
+    {
+      "channel": "storage_percent",
+      "pivot": [
+        21,
+        35,
+        0.05
+      ],
+      "radius": 2.35,
+      "start": 210,
+      "sweep": 240,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "channel": "load_percent",
+      "pivot": [
+        27,
+        35,
+        0.05
+      ],
+      "radius": 2.35,
+      "start": 210,
+      "sweep": 240,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "channel": "storage_percent",
+      "pivot": [
+        54.35,
+        26.6,
+        0.05
+      ],
+      "radius": 2.75,
+      "start": 90,
+      "sweep": 90,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "channel": "load_percent",
+      "pivot": [
+        61.35,
+        26.6,
+        0.05
+      ],
+      "radius": 2.75,
+      "start": 90,
+      "sweep": 90,
+      "min": 0,
+      "max": 100
+    }
+  ],
+  "needle_axes": {
+    "x": "-cos(angle)",
+    "y": "sin(angle)"
+  },
+  "displays": [
+    {
+      "channel": "stored",
+      "rect": [
+        18.2,
+        24.6,
+        29.8,
+        29.4
+      ],
+      "center_x": 24,
+      "lines_y": [
+        28,
+        26.1
+      ],
+      "font_height": 0.62
+    },
+    {
+      "channel": "demand_load",
+      "rect": [
+        50.2,
+        35.6,
+        61.8,
+        40.4
+      ],
+      "center_x": 56,
+      "lines_y": [
+        39,
+        37.1
+      ],
+      "font_height": 0.62
+    }
+  ],
+  "lamps": [
+    {
+      "channel": "linked",
+      "center": [
+        35.6,
+        40,
+        0.05
+      ],
+      "radius": 0.48,
+      "color": "green"
+    },
+    {
+      "channel": "charged",
+      "center": [
+        35.6,
+        36.8,
+        0.05
+      ],
+      "radius": 0.48,
+      "color": "amber"
+    },
+    {
+      "channel": "low_power",
+      "center": [
+        35.6,
+        33.6,
+        0.05
+      ],
+      "radius": 0.48,
+      "color": "red"
+    }
+  ]
+}

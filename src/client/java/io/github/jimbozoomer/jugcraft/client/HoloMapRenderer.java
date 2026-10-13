@@ -26,8 +26,8 @@ import net.minecraft.world.phys.Vec3;
  * The hologram map over a formed hologram table: a small, see-through, glowing model of the linked
  * depot. It shows the platform, pads (with their charger ports), the supply pickup, the terminal, every
  * docked drone, and every flying drone at its real position and height (with a line down to the map
- * and a marker on each stop it is heading to), under a slowly sweeping scan bar. It is a few hundred
- * quads at most, built from the depot view the client already has.
+ * and a marker on each stop it is heading to), under a slowly sweeping scan bar. It uses the existing
+ * depot view and caches the tower's coarse geometry and full projection bounds on the client.
  */
 public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEntity, HoloMapRenderer.State> {
 	private static final RenderType RENDER_TYPE = RenderTypes.entityTranslucentEmissive(DroneDepotRenderer.TEXTURE);
@@ -111,6 +111,16 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 				maxZ = Math.max(maxZ, link.getZ() + path.z(i));
 			}
 		}
+		double verticalScale = -1, heightLimit = MAX_HEIGHT;
+		if (view.towerPos != null && level.getBlockEntity(view.towerPos) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core) {
+			double[] bounds = TOWER_BOUNDS.computeIfAbsent(core.layoutVersion(), version -> towerBounds(core.layout()));
+			minX = Math.min(minX, view.towerPos.getX() + bounds[0]);
+			maxX = Math.max(maxX, view.towerPos.getX() + bounds[1]);
+			minZ = Math.min(minZ, view.towerPos.getZ() + bounds[2]);
+			maxZ = Math.max(maxZ, view.towerPos.getZ() + bounds[3]);
+			verticalScale = TOWER_MAX_HEIGHT / core.layout().tier(io.github.jimbozoomer.jugcraft.tower.TowerData.TIERS).top;
+			heightLimit = TOWER_MAX_HEIGHT;
+		}
 		minX = Math.min(minX, link.getX());
 		maxX = Math.max(maxX, link.getX() + 1);
 		minZ = Math.min(minZ, link.getZ());
@@ -118,7 +128,8 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 		double span = Math.max(maxX - minX, maxZ - minZ) + 4;
 		double scale = 2 * HALF / span;
 		double midX = (minX + maxX) / 2, midZ = (minZ + maxZ) / 2;
-		Mapper map = new Mapper(anchor, cx, floor, cz, midX, midZ, view.platformY + 1, scale);
+		Mapper map = new Mapper(anchor, cx, floor, cz, midX, midZ, view.platformY + 1, scale,
+				verticalScale < 0 ? scale * 1.6 : Math.min(scale, verticalScale), heightLimit);
 
 		// Platform, pads, pickup, terminal.
 		map.rect(state, view.minX, view.minZ, view.minX + view.width, view.minZ + view.depth, 0.004, PLATFORM);
@@ -161,22 +172,13 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 		if (!(level.getBlockEntity(core) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity entity)) {
 			return;
 		}
-		int tier = entity.tier();
-		int building = entity.building();
-		java.util.BitSet filled = entity.filledTiles();
-		int bucket = Math.round(entity.buildProgress() * 200);
-		String key = core.asLong() + "/" + tier + "/" + building + "/" + bucket + "/" + filled.hashCode();
-		if (!key.equals(towerKey)) {
-			towerKey = key;
-			towerCells = towerCells(tier, building, entity.buildProgress(), filled);
-		}
+		List<int[]> towerCells = cachedTowerCells(entity);
 		if (towerCells.isEmpty()) {
 			return;
 		}
-		// The tower is far taller than wide: squash it so the finished tower (spire tip and all) would fit between
-		// the table and the command room's ceiling. The scale stays the same as it grows.
-		int top = io.github.jimbozoomer.jugcraft.tower.TowerData.get().tier(io.github.jimbozoomer.jugcraft.tower.TowerData.TIERS).top;
-		double vertical = Math.min(map.scale(), TOWER_MAX_HEIGHT / top);
+		// Keep the full tower readable above an operations table without obscuring the room's consoles.
+		// The scale stays the same as it grows.
+		double vertical = map.verticalScale();
 		for (int[] c : towerCells) {
 			double wx0 = core.getX() + c[0] * TOWER_CELL, wz0 = core.getZ() + c[2] * TOWER_CELL;
 			double y0 = map.floor() + 0.02 + c[1] * TOWER_CELL * vertical;
@@ -186,19 +188,57 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 	}
 
 	private static final int TOWER_CELL = 3;
-	/** Table top to the command room's ceiling panels, less a hair: the spire's tip may just touch them. */
-	private static final double TOWER_MAX_HEIGHT = 7.2;
+	/** Full-height overview above the operations table, leaving the command room and displays visible. */
+	private static final double TOWER_MAX_HEIGHT = 2.8;
 	private static final int TOWER = 0x46E05A48;
 	private static final int TOWER_BUILDING = 0x66FFC04A;
-	private static String towerKey = "";
-	private static List<int[]> towerCells = List.of();
+	// Entity identity keeps identical coordinates in different worlds independent. Weak keys release
+	// unloaded towers; each table reuses only its own tower's last synchronized construction state.
+	private static final java.util.Map<io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity, Projection> PROJECTIONS = new java.util.WeakHashMap<>();
+	private record Projection(int layout, int tier, int building, int firstTierBlocks, java.util.BitSet filled, List<int[]> cells) { }
+	private static final java.util.Map<Integer, double[]> TOWER_BOUNDS = new java.util.HashMap<>();
+
+	static List<int[]> cachedTowerCells(io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core) {
+		java.util.BitSet filled = core.filledTiles();
+		int firstTierBlocks = core.building() == 1 ? firstTierPlaced(core.layout(), core.buildProgress()) : 0;
+		Projection cached = PROJECTIONS.get(core);
+		if (cached == null || cached.layout != core.layoutVersion() || cached.tier != core.tier()
+				|| cached.building != core.building() || cached.firstTierBlocks != firstTierBlocks || !cached.filled.equals(filled)) {
+			cached = new Projection(core.layoutVersion(), core.tier(), core.building(), firstTierBlocks,
+					(java.util.BitSet) filled.clone(), towerCells(core.layout(), core.tier(), core.building(), core.buildProgress(), filled));
+			PROJECTIONS.put(core, cached);
+		}
+		return cached.cells;
+	}
+
+	static int firstTierPlaced(io.github.jimbozoomer.jugcraft.tower.TowerData data, float progress) {
+		var tier = data.tier(1);
+		return Math.max(0, Math.min(tier.place.length,
+				Math.round(Math.clamp(progress, 0, 1) * (tier.place.length + tier.air.length)) - tier.air.length));
+	}
+
+	/** Includes the complete coarse hologram cells, so a larger apron cannot project outside the table. */
+	private static double[] towerBounds(io.github.jimbozoomer.jugcraft.tower.TowerData data) {
+		double[] bounds = {Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+		for (var tier : data.tiers) {
+			for (int[] b : tier.place) {
+				int x = Math.floorDiv(b[0], TOWER_CELL) * TOWER_CELL, z = Math.floorDiv(b[2], TOWER_CELL) * TOWER_CELL;
+				bounds[0] = Math.min(bounds[0], x); bounds[1] = Math.max(bounds[1], x + TOWER_CELL);
+				bounds[2] = Math.min(bounds[2], z); bounds[3] = Math.max(bounds[3], z + TOWER_CELL);
+			}
+		}
+		return bounds;
+	}
 
 	/**
 	 * Occupied 3x3x3 cells {cx, cy, cz, building?} of the tower as built: every tier up to {@code tier}, plus what is
 	 * in of {@code building} (tier 1 by the core's own progress, higher tiers by the tiles the drones have filled).
 	 */
 	static List<int[]> towerCells(int tier, int building, float progress, java.util.BitSet filled) {
-		var data = io.github.jimbozoomer.jugcraft.tower.TowerData.get();
+		return towerCells(io.github.jimbozoomer.jugcraft.tower.TowerData.get(), tier, building, progress, filled);
+	}
+
+	static List<int[]> towerCells(io.github.jimbozoomer.jugcraft.tower.TowerData data, int tier, int building, float progress, java.util.BitSet filled) {
 		java.util.Set<Long> solid = new java.util.HashSet<>();
 		java.util.Set<Long> fresh = new java.util.HashSet<>();
 		for (int t = 1; t <= io.github.jimbozoomer.jugcraft.tower.TowerData.TIERS; t++) {
@@ -215,7 +255,7 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 			if (t <= tier) {
 				java.util.Arrays.fill(built, true);
 			} else if (t == 1) {
-				int n = Math.round(td.place.length * Math.max(0, Math.min(1, progress)));
+				int n = firstTierPlaced(data, progress);
 				java.util.Arrays.fill(built, 0, Math.min(n, built.length), true);
 			} else {
 				for (int i = filled.nextSetBit(0); i >= 0 && i < td.tiles.size(); i = filled.nextSetBit(i + 1)) {
@@ -259,7 +299,8 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 	}
 
 	/** Converts world positions to map positions (relative to the table anchor). */
-	private record Mapper(BlockPos anchor, double cx, double floor, double cz, double midX, double midZ, double groundY, double scale) {
+	private record Mapper(BlockPos anchor, double cx, double floor, double cz, double midX, double midZ, double groundY, double scale,
+			double verticalScale, double heightLimit) {
 		double x(double wx) {
 			return cx + (wx - midX) * scale;
 		}
@@ -269,7 +310,7 @@ public class HoloMapRenderer implements BlockEntityRenderer<DepotDisplayBlockEnt
 		}
 
 		double y(double wy) {
-			return floor + Math.max(0, Math.min(MAX_HEIGHT, (wy - groundY) * scale * 1.6));
+			return floor + Math.max(0, Math.min(heightLimit, (wy - groundY) * verticalScale));
 		}
 
 		void rect(State s, double x0, double z0, double x1, double z1, double lift, int color) {

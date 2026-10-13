@@ -52,8 +52,19 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	 * the same player must stand outside it.
 	 */
 	public static final int BUILD_RADIUS_CHUNKS = 250;
-	/** The tower itself (its 39x39 field, exchanges and pads) lies within this many blocks of the core. */
+	/** Earlier saved towers retain their original loaded footprint. */
 	public static final int FOOTPRINT = 24;
+	public static final int LARGE_EXCHANGE_FOOTPRINT = 32;
+	/** The current design includes an independently removable 81x81 paved foundation. */
+	public static final int APRON_FOOTPRINT = 40;
+	public static int footprintRadius(ServerLevel level, BlockPos core) {
+		if (level.isLoaded(core) && level.getBlockEntity(core) instanceof TowerCoreBlockEntity tower) {
+			if (tower.layoutVersion() >= TowerData.APRON_LAYOUT) return APRON_FOOTPRINT;
+			return tower.layoutVersion() >= TowerData.LARGE_INPUT_LAYOUT ? LARGE_EXCHANGE_FOOTPRINT : FOOTPRINT;
+		}
+		// A removed/unloaded core may have held the largest layout's tickets. Never load it just to inspect its BE.
+		return APRON_FOOTPRINT;
+	}
 	public static final net.minecraft.server.level.TicketType CHUNK_TICKET = new net.minecraft.server.level.TicketType(0,
 			net.minecraft.server.level.TicketType.FLAG_PERSIST | net.minecraft.server.level.TicketType.FLAG_LOADING
 			| net.minecraft.server.level.TicketType.FLAG_SIMULATION | net.minecraft.server.level.TicketType.FLAG_KEEP_DIMENSION_ACTIVE);
@@ -69,14 +80,15 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	 * and nothing in between needs to be.
 	 */
 	public static void keepLoaded(ServerLevel level, BlockPos core, boolean loaded) {
-		net.minecraft.world.level.ChunkPos min = net.minecraft.world.level.ChunkPos.containing(core.offset(-FOOTPRINT, 0, -FOOTPRINT));
-		net.minecraft.world.level.ChunkPos max = net.minecraft.world.level.ChunkPos.containing(core.offset(FOOTPRINT, 0, FOOTPRINT));
+		int radius = footprintRadius(level, core);
+		net.minecraft.world.level.ChunkPos min = net.minecraft.world.level.ChunkPos.containing(core.offset(-radius, 0, -radius));
+		net.minecraft.world.level.ChunkPos max = net.minecraft.world.level.ChunkPos.containing(core.offset(radius, 0, radius));
 		for (int x = min.x(); x <= max.x(); x++) {
 			for (int z = min.z(); z <= max.z(); z++) {
 				var chunk = new net.minecraft.world.level.ChunkPos(x, z);
 				if (loaded) {
 					level.getChunkSource().addTicketWithRadius(CHUNK_TICKET, chunk, 2);
-				} else if (!TowerRegistry.get(level).needsChunk(chunk, core)) {
+				} else if (!TowerRegistry.get(level).needsChunk(level, chunk, core)) {
 					level.getChunkSource().removeTicketWithRadius(CHUNK_TICKET, chunk, 2);
 				}
 			}
@@ -87,6 +99,8 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	private boolean chunksForced;
 
 	private @Nullable UUID owner;
+	/** New cores use the industrial design; saves without this field retain the original design. */
+	private int layoutVersion = TowerData.INDUSTRIAL_LAYOUT;
 	private int tier;
 	/** The tier being built (0: none). */
 	private int building;
@@ -107,6 +121,14 @@ public class TowerCoreBlockEntity extends BlockEntity {
 
 	public int tier() {
 		return tier;
+	}
+
+	public int layoutVersion() {
+		return layoutVersion;
+	}
+
+	public TowerData layout() {
+		return TowerData.get(layoutVersion);
 	}
 
 	public int building() {
@@ -137,17 +159,17 @@ public class TowerCoreBlockEntity extends BlockEntity {
 			return clientProgress;
 		}
 		if (building == 1) {
-			return (float) progress / Math.max(1, TowerData.get().tier(1).place.length + TowerData.get().tier(1).air.length);
+			return (float) progress / Math.max(1, layout().tier(1).place.length + layout().tier(1).air.length);
 		}
 		if (building >= 2) {
-			return (float) filled.cardinality() / Math.max(1, TowerData.get().tier(building).tiles.size());
+			return (float) filled.cardinality() / Math.max(1, layout().tier(building).tiles.size());
 		}
 		return 0;
 	}
 
 	/** Where tier 1 puts the depot terminal. */
 	public BlockPos terminalPos() {
-		int[] t = TowerData.get().terminal;
+		int[] t = layout().terminal;
 		return getBlockPos().offset(t[0], t[1], t[2]);
 	}
 
@@ -190,7 +212,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 		if (level == null) {
 			return false;
 		}
-		int r = TowerData.get().plinth;
+		int r = layout().plinth;
 		for (int dx = -r; dx <= r; dx++) {
 			for (int dz = -r; dz <= r; dz++) {
 				if ((dx != 0 || dz != 0) && !level.getBlockState(getBlockPos().offset(dx, 0, dz)).is(Blocks.CHISELED_STONE_BRICKS)) {
@@ -239,7 +261,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.no_terminal"));
 			return;
 		}
-		TowerData.Tier next = TowerData.get().tier(tier + 1);
+		TowerData.Tier next = layout().tier(tier + 1);
 		for (Map.Entry<String, Integer> cost : next.modules.entrySet()) {
 			int index = java.util.Arrays.asList(JugcraftTower.MODULES).indexOf(cost.getKey());
 			if (index < 0 || modules[index] < cost.getValue()) {
@@ -260,7 +282,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 		building = target;
 		progress = 0;
 		filled = new BitSet();
-		TowerData.Tier data = TowerData.get().tier(target);
+		TowerData.Tier data = layout().tier(target);
 		// Clear first: the lower tier's antenna where the new floors go.
 		for (int[] c : data.clear) {
 			BlockPos at = getBlockPos().offset(c[0], c[1], c[2]);
@@ -294,7 +316,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 			keepLoaded(server, getBlockPos(), true);
 		}
 		if (building == 1) {
-			TowerData.Tier data = TowerData.get().tier(1);
+			TowerData.Tier data = layout().tier(1);
 			// Progress counts the cells to clear first, then the blocks to place.
 			int total = data.air.length + data.place.length;
 			int end = Math.min(total, progress + CORE_BLOCKS_PER_TICK);
@@ -305,7 +327,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 					continue;
 				}
 				int[] b = data.place[progress - data.air.length];
-				place(server, getBlockPos().offset(b[0], b[1], b[2]), TowerData.get().state(b[3]));
+				place(server, getBlockPos().offset(b[0], b[1], b[2]), layout().state(b[3]));
 			}
 			if (progress >= total) {
 				finish(server);
@@ -315,7 +337,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 			if (jobs == null) {
 				registerJobs();
 			}
-			if (filled.cardinality() >= TowerData.get().tier(building).tiles.size()) {
+			if (filled.cardinality() >= layout().tier(building).tiles.size()) {
 				finish(server);
 			}
 		}
@@ -339,6 +361,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 
 	/** Places one tower block: never over another block entity (a player's chest stays where it is). */
 	static void place(ServerLevel server, BlockPos at, BlockState state) {
+		state = TowerPanelBlock.at(state, at);
 		if (!server.isLoaded(at) || server.getBlockState(at) == state) {
 			return;
 		}
@@ -365,6 +388,9 @@ public class TowerCoreBlockEntity extends BlockEntity {
 				terminal.setOwner(owner);
 			}
 			terminal.linkTower(getBlockPos());
+			if (layoutVersion >= TowerData.FIRST_INDUSTRIAL_LAYOUT) {
+				ExchangeStations.bindBuilt(server, this);
+			}
 		}
 		changed();
 	}
@@ -374,7 +400,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	 * about each hologram shows its own tower.
 	 */
 	private void pinDisplays(ServerLevel server) {
-		TowerData data = TowerData.get();
+		TowerData data = layout();
 		BlockPos terminal = getBlockPos().offset(data.terminal[0], data.terminal[1], data.terminal[2]);
 		for (int[] b : data.tier(1).place) {
 			BlockPos at = getBlockPos().offset(b[0], b[1], b[2]);
@@ -387,7 +413,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	/** Builds every tier up to {@code target} at once (game tests and the dev command). */
 	public void buildInstantly(ServerLevel server, int target) {
 		for (int t = tier + 1; t <= Math.min(TowerData.TIERS, target); t++) {
-			TowerData.Tier data = TowerData.get().tier(t);
+			TowerData.Tier data = layout().tier(t);
 			for (int[] c : data.clear) {
 				server.setBlock(getBlockPos().offset(c[0], c[1], c[2]), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 			}
@@ -395,7 +421,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 				clear(server, getBlockPos().offset(c[0], c[1], c[2]));
 			}
 			for (int[] b : data.place) {
-				place(server, getBlockPos().offset(b[0], b[1], b[2]), TowerData.get().state(b[3]));
+				place(server, getBlockPos().offset(b[0], b[1], b[2]), layout().state(b[3]));
 			}
 			building = t;
 			finish(server);
@@ -448,6 +474,9 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+		int savedLayout = input.getIntOr("layout_version", TowerData.LEGACY_LAYOUT);
+		layoutVersion = TowerData.supportedLayout(savedLayout)
+				? savedLayout : TowerData.LEGACY_LAYOUT;
 		owner = input.read("owner", UUIDUtil.CODEC).orElse(null);
 		tier = Math.max(0, Math.min(TowerData.TIERS, input.getIntOr("tier", 0)));
 		building = Math.max(0, Math.min(TowerData.TIERS, input.getIntOr("building", 0)));
@@ -469,6 +498,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+		output.putInt("layout_version", layoutVersion);
 		if (owner != null) {
 			output.store("owner", UUIDUtil.CODEC, owner);
 		}

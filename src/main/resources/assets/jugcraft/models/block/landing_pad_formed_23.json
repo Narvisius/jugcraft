@@ -1,7 +1,70 @@
 {
-  "parent": "jugcraft:block/pad_plate",
+  "parent": "minecraft:block/block",
   "textures": {
-    "top": "jugcraft:block/landing_pad_formed_23",
-    "side": "jugcraft:block/landing_pad_side"
-  }
+    "tower_detail_amber_lamp": "jugcraft:block/tower_detail_amber_lamp",
+    "tower_detail_copper": "jugcraft:block/tower_detail_copper",
+    "tower_detail_cyan": "jugcraft:block/tower_detail_cyan",
+    "tower_detail_dark": "jugcraft:block/tower_detail_dark",
+    "tower_detail_light_steel": "jugcraft:block/tower_detail_light_steel",
+    "tower_detail_panel": "jugcraft:block/tower_detail_panel",
+    "tower_detail_steel": "jugcraft:block/tower_detail_steel",
+    "tower_pad_surface": "jugcraft:block/landing_pad_formed_23"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2.45,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#tower_detail_steel"
+        },
+        "up": {
+          "texture": "#tower_pad_surface",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.45,
+        14.2
+      ],
+      "to": [
+        16,
+        3,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_panel"
+        },
+        "south": {
+          "texture": "#tower_detail_panel"
+        },
+        "up": {
+          "texture": "#tower_detail_panel"
+        },
+        "down": {
+          "texture": "#tower_detail_panel"
+        }
+      }
+    }
+  ]
 }

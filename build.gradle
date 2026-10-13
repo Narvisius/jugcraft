@@ -144,6 +144,7 @@ tasks.named("runClientGameTest") {
 // -PclientTestShard=<n> -PclientTestShards=<count> keeps the classes at positions n, n + count, n + 2 * count ... of
 // it. Without them every class runs. Server game tests are never split.
 def clientTests = providers.gradleProperty("clientTests").getOrElse("")
+def serverTests = providers.gradleProperty("serverTests").getOrElse("")
 def clientTestShard = providers.gradleProperty("clientTestShard").getOrElse("")
 def clientTestShards = providers.gradleProperty("clientTestShards").getOrElse("")
 tasks.named("processGametestResources", ProcessResources) {
@@ -182,6 +183,24 @@ tasks.named("processGametestResources", ProcessResources) {
 		json.entrypoints["fabric-client-gametest"] = mine
 		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
 		task.logger.lifecycle("Client game tests: ${mine.size()} of ${all.size()} classes: ${mine}")
+	}
+}
+
+// Local feature work can select whole server test classes without constructing every unrelated arena.
+// Omission preserves the full CI suite, and unknown class names fail instead of silently skipping tests.
+tasks.named("processGametestResources", ProcessResources) {
+	inputs.property("serverTests", serverTests)
+	doLast { task ->
+		if (serverTests.isEmpty()) return
+		File manifest = new File(task.destinationDir, "fabric.mod.json")
+		def json = new groovy.json.JsonSlurper().parse(manifest)
+		Set<String> wanted = serverTests.split(",").collect { it.trim() }.findAll { !it.isEmpty() } as Set
+		List<String> mine = json.entrypoints["fabric-gametest"].findAll { wanted.contains(it.substring(it.lastIndexOf('.') + 1)) }
+		Set<String> unknown = wanted - (mine.collect { it.substring(it.lastIndexOf('.') + 1) } as Set)
+		if (!unknown.isEmpty()) throw new GradleException("serverTests names classes the test mod does not list: ${unknown}")
+		json.entrypoints["fabric-gametest"] = mine
+		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+		task.logger.lifecycle("Server game tests: ${mine}")
 	}
 }
 

@@ -84,12 +84,12 @@ public final class TowerRegistry extends SavedData {
 	}
 
 	/** Forgets {@code core} (it was broken), whoever owned it. */
-	public boolean needsChunk(ChunkPos chunk, BlockPos excluded) {
+	public boolean needsChunk(ServerLevel level, ChunkPos chunk, BlockPos excluded) {
 		for (List<Long> list : cores.values()) {
 			for (long packed : list) {
 				BlockPos core = BlockPos.of(packed);
 				if (core.equals(excluded)) continue;
-				int radius = TowerCoreBlockEntity.FOOTPRINT;
+				int radius = TowerCoreBlockEntity.footprintRadius(level, core);
 				ChunkPos min = ChunkPos.containing(core.offset(-radius, 0, -radius));
 				ChunkPos max = ChunkPos.containing(core.offset(radius, 0, radius));
 				if (chunk.x() >= min.x() && chunk.x() <= max.x() && chunk.z() >= min.z() && chunk.z() <= max.z()) return true;

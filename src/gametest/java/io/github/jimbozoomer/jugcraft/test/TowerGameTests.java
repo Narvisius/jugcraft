@@ -46,8 +46,8 @@ public class TowerGameTests {
 	}
 	private static final String ARENA = "jugcraft-test:drone_tower";
 	private static final String FULL = "jugcraft-test:drone_tower_full";
-	/** The core's position in the small arena (the tower's field is 39x39 round it). */
-	private static final BlockPos CORE = new BlockPos(21, 1, 21);
+	/** Centre the 81x81 field inside both 96-wide arenas, clear of neighbouring tests. */
+	private static final BlockPos CORE = new BlockPos(48, 1, 48);
 
 	@GameTest
 	public void towerDataIsConsistent(GameTestHelper helper) {
@@ -194,7 +194,7 @@ public class TowerGameTests {
 		helper.succeed();
 	}
 
-	@GameTest(structure = ARENA, maxTicks = 600, skyAccess = true)
+	@GameTest(structure = ARENA, maxTicks = 1800, skyAccess = true)
 	public void towerCoreBuildsTheCommandPost(GameTestHelper helper) {
 		if (TestFocus.skip("tower")) {
 			helper.succeed();
@@ -217,8 +217,11 @@ public class TowerGameTests {
 			BlockState table = helper.getLevel().getBlockState(core.getBlockPos().above());
 			helper.assertTrue(table.is(JugcraftDrones.HOLO_TABLE) && table.getValue(HoloTableBlock.PART) > 0,
 					"the plotting table over the core formed: " + table);
-			helper.assertTrue(helper.getLevel().getBlockState(core.getBlockPos().offset(-4, 1, 1)).is(JugcraftTower.BLOCKS.get("operator_chair")),
-					"real operator chairs in the command room");
+			for (int side : new int[] {-1, 1}) helper.assertTrue(
+					helper.getLevel().getBlockState(core.getBlockPos().offset(side * 5, 1, -2)).is(JugcraftTower.BLOCKS.get("operator_chair")),
+					"wall-station operator chairs in the command room");
+			helper.assertTrue(helper.getLevel().getBlockState(core.getBlockPos().offset(0, 1, 4)).is(JugcraftTower.MASTER_CONSOLE),
+					"the command post forms its central master console");
 		});
 	}
 
@@ -271,9 +274,9 @@ public class TowerGameTests {
 		core.buildInstantly(helper.getLevel(), 1);
 		BlockPos power = core.getBlockPos().offset(-3 - 19, 2, 0);
 		BlockPos cargo = core.getBlockPos().offset(39 - 19, 2, 0);
-		helper.assertTrue(helper.getLevel().getBlockState(power).is(io.github.jimbozoomer.jugcraft.tower.ExchangePortBlock.ENERGY),
+		helper.assertTrue(helper.getLevel().getBlockState(power).is(io.github.jimbozoomer.jugcraft.tower.ExchangeStations.ENERGY),
 				"the Energy Exchange Port is on the west edge: " + helper.getLevel().getBlockState(power));
-		helper.assertTrue(helper.getLevel().getBlockState(cargo).is(io.github.jimbozoomer.jugcraft.tower.ExchangePortBlock.CARGO),
+		helper.assertTrue(helper.getLevel().getBlockState(cargo).is(io.github.jimbozoomer.jugcraft.tower.ExchangeStations.CARGO),
 				"the Cargo Exchange Port is on the east edge: " + helper.getLevel().getBlockState(cargo));
 		DroneTerminalBlockEntity terminal = core.terminal();
 		terminal.rescanNow();
@@ -351,7 +354,7 @@ public class TowerGameTests {
 			return;
 		}
 		Player owner = helper.makeMockPlayer(GameType.CREATIVE);
-		BlockPos center = new BlockPos(36, 1, 36);
+		BlockPos center = CORE;
 		placePlinth(helper, center);
 		BlockPos at = helper.absolutePos(center);
 		helper.getLevel().setBlock(at, JugcraftTower.CORE.defaultBlockState(), 3);
@@ -362,10 +365,16 @@ public class TowerGameTests {
 		helper.assertTrue(terminal != null && terminal.maxTier() == 9 && terminal.maxDrones() == 133, "tier 9: every drone tier, 133 drones");
 		helper.assertTrue(terminal.activePickups().size() == 7 - 1, "six tower pickups (the ground one is under the deck)");
 		int linked = 0;
-		for (Map.Entry<DroneTier, Integer> batch : Map.of(DroneTier.SUPERCONDUCTING_LIFTER, 33, DroneTier.TANDEM_FREIGHTER, 32,
-				DroneTier.LIFTER_OCTOCOPTER, 68).entrySet()) {
-			for (int i = 0; i < batch.getValue(); i++) {
-				helper.assertTrue(terminal.linkDrone(owner, batch.getKey()), "drone " + (linked + 1) + " (" + batch.getKey() + ") finds a dock");
+		for (int t = 1; t <= TowerData.TIERS; t++) {
+			DroneTier drone = DroneTier.byNumber(t).orElseThrow();
+			int count = t == 1 ? 32 : core.layout().tier(t).docks.size();
+			for (int i = 0; i < count; i++) {
+				helper.assertTrue(terminal.linkDrone(owner, drone), "drone " + (linked + 1) + " (" + drone + ") finds its own tier's dock");
+				Vec3 dock = terminal.dockOf(linked);
+				boolean correctTier = t == 1 ? dock.y < at.getY() + 2 : core.layout().tier(t).docks.stream()
+						.anyMatch(d -> Math.abs(at.getX() + d.x() - dock.x) < .01 && Math.abs(at.getY() + d.y() - dock.y) < .01
+								&& Math.abs(at.getZ() + d.z() - dock.z) < .01);
+				helper.assertTrue(correctTier, "T" + t + " drone uses a T" + t + " pad");
 				linked++;
 			}
 		}

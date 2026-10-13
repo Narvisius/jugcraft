@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "aluminum_cladding": "jugcraft:block/aluminum_cladding",
+    "particle": "jugcraft:block/aluminum_cladding"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#aluminum_cladding",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#aluminum_cladding",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#aluminum_cladding",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#aluminum_cladding",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#aluminum_cladding",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#aluminum_cladding",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

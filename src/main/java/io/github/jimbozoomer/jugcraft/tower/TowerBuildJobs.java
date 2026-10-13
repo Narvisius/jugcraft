@@ -49,7 +49,7 @@ final class TowerBuildJobs implements BuildJobs.Source {
 
 	void reset(int tierNumber, BitSet filled) {
 		this.tierNumber = tierNumber;
-		this.tier = TowerData.get().tier(Math.max(1, tierNumber));
+		this.tier = core.layout().tier(Math.max(1, tierNumber));
 		this.filled = filled;
 		open.clear();
 		for (int i = 0; i < tier.tiles.size(); i++) {
@@ -141,7 +141,7 @@ final class TowerBuildJobs implements BuildJobs.Source {
 				continue;
 			}
 			int[] first = tier.place[tile.blocks()[0]];
-			out.add(new BuildJobs.Target(this, jobId, core.owner(), terminal.mode(), at(first), TowerData.get().state(first[3]), null, true));
+			out.add(new BuildJobs.Target(this, jobId, core.owner(), terminal.mode(), at(first), core.layout().state(first[3]), null, true));
 		}
 		return out;
 	}
@@ -218,7 +218,7 @@ final class TowerBuildJobs implements BuildJobs.Source {
 		}
 		for (int b : tile.blocks()) {
 			int[] block = tier.place[b];
-			TowerCoreBlockEntity.place(level, at(block), TowerData.get().state(block[3]));
+			TowerCoreBlockEntity.place(level, at(block), core.layout().state(block[3]));
 		}
 		open.remove(cellKey(tile));
 		// Another tile in the same cell and layer (rare) keeps the cell open.

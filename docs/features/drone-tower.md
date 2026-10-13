@@ -1,5 +1,8 @@
 # Drone Tower (tower core, nine tiers, hangars, pickups, building blocks)
 
+> **Industrial redesign (8 October 2026):** New towers use the [industrial layout and control room](drone-tower-industrial.md), formed Energy/Storage Exchange MBS, numbered-tier docking and client-side sliding hangar doors. The original design documented below remains supported for existing saved towers.
+
+
 Status: implemented on the drone branch (draft PR); not yet play-tested with two players
 Proposal: Drone Tower proposal (project doc), design approved as v9
 Owner: Narvisius
@@ -114,6 +117,7 @@ Primary specialty: logistics / building. Supports builders and anyone running a 
 - Small drones (tiers 1–3) are small and dark, so they are hard to spot in a hangar from a distance.
 - Flights may climb above the tower top on legs that cross it.
 - Operators (op level 2, or cheats on in single player) can build a tower instantly with `/dronetest build [tier]`: the nearest tower, or a new one where they stand, up to the tier given (9 if none). The tests use the same `buildInstantly`.
+- `/dronetest build industrial [tier]` explicitly builds the industrial redesign (tier 9 by default). A nearby legacy core is refused with directions to move at least 100 blocks away to an open site; its saved layout and blocks remain intact. The original command still uses the nearest tower's saved layout, and both commands identify the selected design in their feedback. New towers need a clear site and 215 blocks of vertical room; the instant-build testing command can replace ordinary blocks in its footprint.
 - **Testing aids (creative only, no recipes):**
   - Creative Energy Cell: endless power on all sides.
   - Creative Supply Crate: a depot within 48 blocks gets every building block its drones ask for.

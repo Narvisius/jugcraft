@@ -1,0 +1,86 @@
+{
+  "author": "OpenAI Codex (GPT-6)",
+  "license": "MIT",
+  "source": "tools/tower_master_console.py",
+  "geometry": "Original six-cell connected workstation; native closed solids, no imported model.",
+  "controls": "Original programmatic opaque instrument/keyboard/label textures; original PNGs retained here.",
+  "shared_materials": "Existing approved v3 tower_detail_* textures from tools/tower_realism_runtime.py; original imagegen source retained in art/tower-v3-sample.",
+  "owner_library_review": "art/owner-library/catalog/files.csv reviewed; no owner-library pixels copied. Existing approved tower steel matches the room.",
+  "footprint_north": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      -1,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      -1,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      1
+    ]
+  ],
+  "screen_planes": {
+    "main": {
+      "x": [
+        -1.6,
+        17.6
+      ],
+      "y": [
+        15.2,
+        24.5
+      ],
+      "z": 23.5,
+      "overlay_z": 23.39
+    },
+    "power": {
+      "x": [
+        20.2,
+        30.4
+      ],
+      "y": [
+        16.0,
+        24.2
+      ],
+      "z": 23.5,
+      "overlay_z": 23.39
+    },
+    "supply": {
+      "x": [
+        -14.5,
+        -4.2
+      ],
+      "y": [
+        16.0,
+        24.2
+      ],
+      "z": 23.5,
+      "overlay_z": 23.39
+    }
+  },
+  "original_sha256": {
+    "tower_console_keyboard.png": "8677b2f915ddc8508a4fe9f31648cc62b73fc357581e25cd1750cb5f37f9ddc4",
+    "tower_console_labels.png": "257daebdd4ac10b820a73f69035bbaa2e9f9523cf847a52ac6a9631e79feaaf2",
+    "tower_console_legend.png": "7935dfb30e1c1f92bccd91df6bc84d6c974481e3c8c78c22ba3ff310e9eff866",
+    "tower_console_screen.png": "5c86eef018d7cf802d18ccc4503a8ac9d99ee2432706f5385cbd4da931446efd",
+    "tower_console_touch.png": "6778433cc99f12289af6b50594f147c09187c81140d9a8cb0122c0df528f6c76"
+  }
+}

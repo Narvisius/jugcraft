@@ -186,7 +186,11 @@ public final class StructureReach {
 			side = Math.max(line.kind.height, 2 * line.kind.halfWidth() + 1);
 		} else if (stack.getItem() instanceof BlockItem item) {
 			Block block = item.getBlock();
-			if (block instanceof MultiFurnitureBlock furniture) {
+			if (block instanceof io.github.jimbozoomer.jugcraft.tower.ExchangeStationBlock station) {
+				side = station.longestSide();
+			} else if (block instanceof io.github.jimbozoomer.jugcraft.tower.MasterConsoleBlock) {
+				side = 3;
+			} else if (block instanceof MultiFurnitureBlock furniture) {
 				side = furniture.longestSide();
 			} else if (block instanceof ConferenceTableBlock) {
 				side = 3;

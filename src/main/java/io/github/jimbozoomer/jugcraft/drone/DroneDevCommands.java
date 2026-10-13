@@ -13,11 +13,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Development-only testing aid, registered only when running from the development environment
- * ({@code ./gradlew runClient} or {@code runServer}), never in a released jar's normal use:
+ * Operator-only testing aids, available in development and packaged builds:
  * {@code /dronetest fill <from> <to> <block> [personal|party]} asks drones to build a box of blocks, and
  * {@code /dronetest clear} cancels those jobs; {@code /dronetest supplies [off]} gives nearby depots endless power and
  * building blocks; {@code /dronetest modules} fills nearby Tower Cores with modules.
+ * {@code /dronetest build industrial [tier]} explicitly requests the current industrial design,
+ * refusing nearby legacy cores instead of changing their saved layout.
  */
 final class DroneDevCommands {
 	private static final List<SimpleBuildJobs> JOBS = new ArrayList<>();
@@ -47,10 +48,17 @@ final class DroneDevCommands {
 								.then(Commands.literal("off").executes(context -> supplies(context.getSource().getPlayerOrException(), false))))
 						.then(Commands.literal("modules").executes(context -> modules(context.getSource().getPlayerOrException())))
 						.then(Commands.literal("claim").executes(context -> claim(context.getSource().getPlayerOrException())))
+						.then(Commands.literal("slimes")
+								.then(Commands.literal("off").executes(context -> slimes(context.getSource().getPlayerOrException(), false)))
+								.then(Commands.literal("on").executes(context -> slimes(context.getSource().getPlayerOrException(), true))))
 						.then(Commands.literal("build").executes(context -> build(context.getSource().getPlayerOrException(), 9))
 								.then(Commands.argument("tier", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, 9))
 										.executes(context -> build(context.getSource().getPlayerOrException(),
-												com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "tier")))))
+												com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "tier"))))
+								.then(Commands.literal("industrial").executes(context -> build(context.getSource().getPlayerOrException(), 9, true))
+										.then(Commands.argument("tier", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, 9))
+												.executes(context -> build(context.getSource().getPlayerOrException(),
+														com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "tier"), true)))))
 						.then(Commands.literal("clear").executes(context -> {
 							JOBS.forEach(BuildJobs::unregister);
 							JOBS.clear();
@@ -63,6 +71,18 @@ final class DroneDevCommands {
 	 * Makes the caller the owner of every depot (and its Drone Tower) within 96 blocks. Testing only: a
 	 * development client gets a new random name, and so a new player ID, each launch.
 	 */
+	private static int slimes(ServerPlayer player, boolean allow) {
+		var level = (net.minecraft.server.level.ServerLevel) player.level();
+		if (!io.github.jimbozoomer.jugcraft.world.ReviewWorldSettings.isFlat(level)) {
+			player.sendSystemMessage(Component.literal("Use this command in a flat review world"));
+			return 0;
+		}
+		int removed = io.github.jimbozoomer.jugcraft.world.ReviewWorldSettings.setSlimesSuppressed(level, !allow);
+		player.sendSystemMessage(Component.literal(allow ? "Slimes enabled in this flat world"
+				: "Slimes disabled in this flat world; removed " + removed + " loaded slimes"));
+		return 1;
+	}
+
 	private static int claim(ServerPlayer player) {
 		net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
 		int count = 0;
@@ -86,6 +106,10 @@ final class DroneDevCommands {
 	 * player's feet first, owned by the player.
 	 */
 	private static int build(ServerPlayer player, int tier) {
+		return build(player, tier, false);
+	}
+
+	private static int build(ServerPlayer player, int tier, boolean industrialOnly) {
 		net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity found = null;
 		double best = Double.MAX_VALUE;
@@ -104,6 +128,13 @@ final class DroneDevCommands {
 				}
 			}
 		}
+		if (industrialOnly && found != null
+				&& found.layoutVersion() != io.github.jimbozoomer.jugcraft.tower.TowerData.INDUSTRIAL_LAYOUT) {
+			player.sendSystemMessage(Component.literal("The nearby tower at " + found.getBlockPos().toShortString()
+					+ " uses an earlier design (layout " + found.layoutVersion() + "). It has been left unchanged. Move at least 100 blocks away to an open site,"
+					+ " then run /dronetest build industrial " + tier + "."));
+			return 0;
+		}
 		if (found == null) {
 			BlockPos at = player.blockPosition();
 			level.setBlockAndUpdate(at, io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CORE.defaultBlockState());
@@ -119,14 +150,22 @@ final class DroneDevCommands {
 			return 0;
 		}
 		if (found.tier() >= tier) {
-			player.sendSystemMessage(Component.literal("That tower is already tier " + found.tier()));
+			player.sendSystemMessage(Component.literal("That " + towerDesign(found) + " tower is already tier " + found.tier()
+					+ (found.layoutVersion() == io.github.jimbozoomer.jugcraft.tower.TowerData.LEGACY_LAYOUT
+							? ". For the redesign, move at least 100 blocks away to an open site and run /dronetest build industrial."
+							: ".")));
 			return 0;
 		}
 		long start = System.currentTimeMillis();
 		found.buildInstantly(level, tier);
 		long ms = System.currentTimeMillis() - start;
-		player.sendSystemMessage(Component.literal("Built the Drone Tower to tier " + found.tier() + " (" + ms + " ms)"));
+		player.sendSystemMessage(Component.literal("Built the " + towerDesign(found) + " Drone Tower to tier " + found.tier() + " (" + ms + " ms)"));
 		return 1;
+	}
+
+	private static String towerDesign(io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core) {
+		return core.layoutVersion() >= io.github.jimbozoomer.jugcraft.tower.TowerData.FIRST_INDUSTRIAL_LAYOUT
+				? "industrial (layout " + core.layoutVersion() + ")" : "legacy (layout 1)";
 	}
 
 	/** Endless power and building blocks for every depot within 96 blocks (testing only). */
