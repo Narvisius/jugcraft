@@ -22,8 +22,8 @@ import net.minecraft.world.phys.BlockHitResult;
  * modelled: the bus is healthy). Holding right-click on its + BUS or - BUS test button puts a ground on that side
  * through the test resistor (the game uses the block again every 4 ticks while it is held, and each use holds the test
  * {@link #HOLD} ticks): that side's meter drops to nearly nothing and the other reads the whole bus, its GND lamp and
- * the ALARM lamp light, the screen says which side and the alarm beeps. Right-clicking anywhere else says how the bus
- * and the battery are. What it shows: client/EdgTelemetry.java groundDetector.
+ * the ALARM lamp light, the screen says which side and the alarm beeps. MENU steps the screen through the battery's
+ * strings (round 26, #9: two in parallel). Right-clicking anywhere else says how the bus and the battery are. What it shows: client/EdgTelemetry.java groundDetector.
  *
  * <p>The buttons match tools/plant_panels.py GD_TESTS (model pixels on the piece facing north: x across, y up from the
  * floor 0..32, its door's face at z 15).
@@ -49,6 +49,13 @@ public class GroundDetectorBlock extends LivePanelBlock {
 			}
 		}
 		return 0;
+	}
+
+	/** The battery monitor's MENU key (model pixels): tools/plant_panels.py GD_KEYS[0], GD_KEY_Y. */
+	static final double[] MENU = {2.5, 18.95, 0.6};
+
+	public static boolean menuAt(double x, double y) {
+		return Math.abs(x - MENU[0]) <= MENU[2] && Math.abs(y - MENU[1]) <= MENU[2];
 	}
 
 	/** The DC bus's volts on its battery (as a panel with no charger of its own reads it: client/EdgTelemetry.java battery). */
@@ -80,6 +87,15 @@ public class GroundDetectorBlock extends LivePanelBlock {
 		double[] at = local(facing, origin, hit.getLocation());
 		int side = at[2] > 14 ? testAt(at[0], at[1]) : 0;
 		String label = LivePanelBlockEntity.variant(state) == 1 ? "1B" : "1A";
+		if (at[2] > 14 && menuAt(at[0], at[1])) {
+			// MENU: the screen steps to the battery's next string (round 26, #9).
+			int strings = Math.max(1, LivePanelBlockEntity.strings(level, panel.racks).size());
+			panel.page = (panel.page + 1) % strings;
+			panel.changedMode((ServerLevel) level);
+			level.playSound(null, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS, 0.4F, 1.6F);
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.battery_string", panel.page + 1, strings, label));
+			return InteractionResult.SUCCESS_SERVER;
+		}
 		StationBatteryBlockEntity bank = panel.battery == null ? null : StationBatteryBlock.battery(level, panel.battery);
 		if (side == 0 || bank == null) {
 			player.sendOverlayMessage(bank == null ? Component.translatable("message.jugcraft.nuclear.ground_no_battery", label)

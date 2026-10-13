@@ -96,6 +96,9 @@ PANELS = {
     # Each inverter's 120 VAC vital instrument panel (round 26, 8e): vital_panel below. Hung on a wall, its door opens.
     "vital_panel": {"display": "120 VAC Vital Instrument Panel", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"],
                     "door": True},
+    # The battery rooms' hydrogen monitor and exhaust fan (round 26, #9): wall pieces two blocks high, below.
+    "h2_monitor": {"display": "Hydrogen Monitor", "width": 1, "item3d": True, "labels": ["1A", "1B"]},
+    "exhaust_fan": {"display": "Battery Room Exhaust Fan", "width": 1, "item3d": True, "labels": ["1A", "1B"]},
 }
 for _k, _v in PANELS.items():
     _v["multi"] = (_v["width"], 2, "panel")
@@ -110,8 +113,50 @@ _CZ = (0.5, 2.1)
 _TRAY = [(0, 12, 4, 16, 12.5, 12, "pi_chrome"), (0, 12.5, 11.5, 16, 14, 12, "pi_chrome"),
          (0, 12.5, 5, 16, 13.5, 7, "pi_sb_cable_red"), (0, 12.5, 7.5, 16, 13.5, 11, "pi_sb_cable"),
          (7.5, 14, 7.5, 8.5, 16, 8.5, "pi_chrome")]
+# The battery monitor's sense cable (round 26, #9; Justin: "Cell sense wiring"): from each rack's sense junction box up
+# the riser beside the power cables and along the tray, inside its front lip, on to the ground detector's battery
+# monitor (SB_SENSE_X: where it rises, x in the riser's block).
+SENSE = "pi_sense_cable"
+SB_SENSE_X, SB_SENSE_Z, SENSE_Z, SENSE_Y = (12.2, 12.8), (0.35, 0.85), (11.05, 11.45), (12.5, 12.9)
+_SENSE_RUN = [(0, SENSE_Y[0], SENSE_Z[0], 16, SENSE_Y[1], SENSE_Z[1], SENSE)]
+_SENSE_RISE = [(SB_SENSE_X[0], 0, SB_SENSE_Z[0], SB_SENSE_X[1], 16, SB_SENSE_Z[1], SENSE)]
+# The sense cable rising out of the wall's riser and over the tray's back wall into its lane.
+_SENSE_TURN = [(SB_SENSE_X[0], 0, SB_SENSE_Z[0], SB_SENSE_X[1], 14.65, SB_SENSE_Z[1], SENSE),
+               (SB_SENSE_X[0], 14.05, SB_SENSE_Z[1], SB_SENSE_X[1], 14.65, SENSE_Z[1], SENSE),
+               (SB_SENSE_X[0], SENSE_Y[0], SENSE_Z[0], SB_SENSE_X[1], 14.05, SENSE_Z[1], SENSE)]
+
+
+def _dc_tray_bend():
+    """The DC tray turning a corner (round 26, #9: the second string's run from its wall to the first's), facing north:
+    from the west edge (along the north wall) round to the south edge (along the east wall), the back wall outside the
+    turn, the front lip inside it, the cables and the sense cable turning with it."""
+    return [(0, 12, 4, 12, 12.5, 12, "pi_chrome"), (4, 12, 12, 12, 12.5, 16, "pi_chrome"),
+            (0, 12.5, 4, 12, 14, 4.5, "pi_chrome"), (11.5, 12.5, 4, 12, 14, 16, "pi_chrome"),
+            (0, 12.5, 11.5, 4.5, 14, 12, "pi_chrome"), (4, 12.5, 12, 4.5, 14, 16, "pi_chrome"),
+            (0, 12.5, 5, 11, 13.5, 7, "pi_sb_cable_red"), (9, 12.5, 7, 11, 13.5, 16, "pi_sb_cable_red"),
+            (0, 12.5, 7.5, 8.5, 13.5, 11, "pi_sb_cable"), (5, 12.5, 11, 8.5, 13.5, 16, "pi_sb_cable"),
+            (0, SENSE_Y[0], SENSE_Z[0], 16 - SENSE_Z[0], SENSE_Y[1], SENSE_Z[1], SENSE),
+            (16 - SENSE_Z[1], SENSE_Y[0], SENSE_Z[1], 16 - SENSE_Z[0], SENSE_Y[1], 16, SENSE),
+            (7.5, 14, 7.5, 8.5, 16, 8.5, "pi_chrome")]
+
+
+def _dc_tray_tee():
+    """The DC tray with a branch joining it from the south (round 26, #9: where the second string's run joins the
+    first's on its way to the switchboard), facing north: the run along x, the branch's cables lying into the bundle."""
+    return [(0, 12, 4, 16, 12.5, 12, "pi_chrome"), (4, 12, 12, 12, 12.5, 16, "pi_chrome"),
+            (0, 12.5, 4, 16, 14, 4.5, "pi_chrome"),
+            (0, 12.5, 11.5, 4.5, 14, 12, "pi_chrome"), (11.5, 12.5, 11.5, 16, 14, 12, "pi_chrome"),
+            (4, 12.5, 12, 4.5, 14, 16, "pi_chrome"), (11.5, 12.5, 12, 12, 14, 16, "pi_chrome"),
+            (0, 12.5, 5, 16, 13.5, 7, "pi_sb_cable_red"), (0, 12.5, 7.5, 16, 13.5, 11, "pi_sb_cable"),
+            # The branch's: the black into the bundle's black, the red up over it onto the red.
+            (5, 12.55, 10.5, 8.5, 13.45, 16, "pi_sb_cable"),
+            (9, 12.55, 11.6, 11, 13.45, 16, "pi_sb_cable_red"), (9, 13.45, 6.0, 11, 14.25, 12.4, "pi_sb_cable_red")] + _SENSE_RUN + [
+            (16 - SENSE_Z[1], SENSE_Y[0], SENSE_Z[1], 16 - SENSE_Z[0], SENSE_Y[1], 16, SENSE),
+            (7.5, 14, 7.5, 8.5, 16, 8.5, "pi_chrome")]
+
+
 RISERS = {
-    "dc_cable_tray": {"display": "DC Cable Tray", "boxes": [(0, 12.5, 4, 16, 14, 4.5, "pi_chrome")] + _TRAY},
+    "dc_cable_tray": {"display": "DC Cable Tray", "boxes": [(0, 12.5, 4, 16, 14, 4.5, "pi_chrome")] + _TRAY + _SENSE_RUN},
     "dc_cable_riser": {"display": "DC Cable Riser", "boxes": [
         (5.4, 0, 0, 11.0, 16, 0.4, "pi_chrome"),
         (_RED[0], 0, _CZ[0], _RED[1], 16, _CZ[1], "pi_sb_cable_red"), (_BLACK[0], 0, _CZ[0], _BLACK[1], 16, _CZ[1], "pi_sb_cable"),
@@ -123,8 +168,19 @@ RISERS = {
         (5.6, 3, 0.4, 10.8, 4, 2.4, "pi_sb_frame"),
         (_RED[0], 12.5, _CZ[1], _RED[1], 13.5, 5.0, "pi_sb_cable_red"),
         (_BLACK[0], 13.5, _CZ[1], _BLACK[1], 14.3, 9.0, "pi_sb_cable"),
-        (0, 12.5, 4, 5.6, 14, 4.5, "pi_chrome"), (10.8, 12.5, 4, 16, 14, 4.5, "pi_chrome")] + _TRAY},
+        (0, 12.5, 4, 5.6, 14, 4.5, "pi_chrome"), (10.8, 12.5, 4, 16, 14, 4.5, "pi_chrome")] + _TRAY + _SENSE_RUN},
 }
+# The battery rooms' (round 26, #9): the riser up from a rack's end and its top with the battery monitor's sense cable
+# beside the power cables; the tray's bend and tee where a second string's run joins.
+RISERS.update({
+    "dc_cable_riser_sense": {"display": "DC Cable Riser (With Sense Cable)", "boxes": RISERS["dc_cable_riser"]["boxes"] + _SENSE_RISE},
+    "dc_cable_riser_top_sense": {"display": "DC Cable Riser (Top, With Sense Cable)", "boxes":
+        [b for b in RISERS["dc_cable_riser_top"]["boxes"] if b != (10.8, 12.5, 4, 16, 14, 4.5, "pi_chrome")]
+        + [(10.8, 12.5, 4, SB_SENSE_X[0] - 0.05, 14, 4.5, "pi_chrome"), (SB_SENSE_X[1] + 0.05, 12.5, 4, 16, 14, 4.5, "pi_chrome"),
+           (SB_SENSE_X[0] - 0.05, 12.5, 4, SB_SENSE_X[1] + 0.05, 13.95, 4.5, "pi_chrome")] + _SENSE_TURN},
+    "dc_cable_tray_bend": {"display": "DC Cable Tray (Bend)", "boxes": _dc_tray_bend()},
+    "dc_cable_tray_tee": {"display": "DC Cable Tray (Tee)", "boxes": _dc_tray_tee()},
+})
 
 CRAFTING = {
     "edg_engine_panel": (["PGP", "PCP", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
@@ -148,6 +204,10 @@ CRAFTING = {
     "dc_cable_tray": (["P P", "CPC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser": (["PC", "P ", "PC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
     "dc_cable_riser_top": (["PCP", "PC "], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
+    "dc_cable_riser_sense": (["PC", "PS", "PC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot", "S": "minecraft:string"}, 4),
+    "dc_cable_riser_top_sense": (["PCP", "PCS"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot", "S": "minecraft:string"}, 2),
+    "dc_cable_tray_bend": (["PP ", "CPP", " CP"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
+    "dc_cable_tray_tee": (["PPP", "CPC", " P "], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
 }
 
 
@@ -617,7 +677,7 @@ def dc_switchboard(label="1A"):
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
             "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
             "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None, "vital_panel": None,
-            "dc_ground_detector": None}
+            "dc_ground_detector": None, "h2_monitor": None, "exhaust_fan": None}
 _FRONTS = {}
 
 
@@ -662,6 +722,10 @@ def cabinet(key):
         return vital_panel_boxes(False)
     if key == "dc_ground_detector":
         return ground_detector_boxes()
+    if key == "h2_monitor":
+        return h2_monitor_boxes()
+    if key == "exhaust_fan":
+        return exhaust_fan_boxes()
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -799,10 +863,35 @@ def station_battery():
               (62.0, ht + 2.6, rz0 + 0.4, 62.8, ht + 3.4, lzc - 0.4, black),
               (bx0 + 0.4, ht + 2.6, rz0 + 0.4, 62.0, ht + 3.4, rz1 - 0.4, black),
               (bx0, ht + 2.4, rz0, bx1, 32, rz1, black)]
+    # The battery monitor's cell sensing (round 26, #9; Justin: "Cell sense wiring"): a sensor clipped to each cell's
+    # positive post (sb_cell), daisy-chained along the front of the covers on each step; at the right end both chains
+    # go back to the sense junction box on the wall behind the upper step, its cable up out of the top into the riser
+    # beside the power cables (SB_SENSE_*), on through the tray to the ground detector's monitor.
+    for z0, z1, y0, y1 in (SB_LOW, SB_HIGH):
+        zc, top = (z0 + z1) / 2, y1 + SB_COVER
+        boxes.append((SB_X0 - 0.2, top + 0.02, zc + 1.75, 62.12, top + 0.22, zc + 1.95, SENSE))
+    lzs, hzs = (lz0 + lz1) / 2 + 1.75, (hz0 + hz1) / 2 + 1.75
+    jb = (59.6, 24.0, SB_SENSE_Z[0], 63.2, 29.0, 2.2)
+    boxes += [(61.92, lt + 0.02, lzs, 62.12, 25.5, lzs + 0.2, SENSE), (61.92, 25.3, jb[5], 62.12, 25.5, lzs, SENSE),
+              (61.92, ht + 0.02, jb[5], 62.12, ht + 0.22, hzs, SENSE),
+              (jb[0], jb[1], jb[2], jb[3], jb[4], jb[5], {"*": "pi_cabinet_dark", "south": "pi_sense_jb!"}),
+              (48 + SB_SENSE_X[0], jb[4], SB_SENSE_Z[0], 48 + SB_SENSE_X[1], 32, SB_SENSE_Z[1], SENSE)]
     # The battery's nameplate on the lower step's front rail, at the left: engraved, sized so its pixel letters stay
     # square (Justin, round 25b: the old one was too blurry to read).
     boxes.append((SB_TAG[0], SB_TAG[1], lz1 + 0.02, SB_TAG[2], SB_TAG[3], lz1 + 0.14, {"*": "pi_pnl_white", "south": ("pi_sb_tag", SB_TAG_UV)}))
     return boxes
+
+
+def _sense_jb():
+    """The cell sense junction box's front: grey, its cover screws, an engraved tag."""
+    img = Image.new("RGBA", (256, 256), (150, 154, 156, 255))
+    d = _Draw(img)
+    d.rectangle([6, 6, 249, 249], outline=(110, 112, 114, 255), width=4)
+    for x, y in ((22, 22), (233, 22), (22, 233), (233, 233)):
+        d.ellipse([x - 8, y - 8, x + 8, y + 8], fill=(190, 192, 194, 255), outline=(90, 92, 94, 255), width=2)
+    d.rectangle([40, 100, 215, 156], fill=(236, 236, 230, 255), outline=(60, 60, 62, 255), width=2)
+    d.text((128, 128), "CELL SENSE", font=rfont(30, True), fill=(24, 24, 26, 255), anchor="mm")
+    return img
 
 
 def sb_cell(x0, step, k, linked):
@@ -843,6 +932,11 @@ def sb_cell(x0, step, k, linked):
         out += [(px - 0.1, top, zc - 0.45, px + 0.8, top + 0.25, zc + 0.45, "pi_pnl_red" if plus else "pi_pnl_black"),
                 (px, top + 0.25, zc - 0.35, px + 0.7, top + SB_POST, zc + 0.35, "pi_sb_post"),
                 (px + 0.12, top + SB_POST, zc - 0.23, px + 0.58, top + SB_POST + 0.2, zc + 0.23, "pi_steel")]
+    # The cell's sensor (round 26, #9): clipped to its positive post, its lead to the post, its green OK light.
+    pp = next(px for px, plus in posts if plus)
+    out += [(pp - 0.1, top + 0.02, zc + 0.95, pp + 0.8, top + 0.55, zc + 1.7, "pi_sense_module"),
+            (pp + 0.5, top + 0.3, zc + 1.7, pp + 0.7, top + 0.45, zc + 1.78, "pi_pnl_green"),
+            (pp + 0.25, top + 0.25, zc + 0.3, pp + 0.45, top + 0.4, zc + 0.95, SENSE)]
     if linked:
         # The intercell connector to the next cell's left post, under the posts' tops; a rubber spacer between the jars.
         out += [(x1 - 0.95, top + 0.45, zc - 0.5, x1 + SB_PITCH - SB_W + 0.95, top + 0.75, zc + 0.5, "pi_link"),
@@ -977,16 +1071,26 @@ def makers():
         "pi_sb_vent_top": lambda: _solid((200, 200, 196), 427, 0.03),
         "pi_sb_cable": lambda: _solid((24, 24, 26), 428, 0.02), "pi_sb_cable_red": lambda: _solid((168, 30, 26), 429, 0.02),
         "pi_sb_copper": lambda: _solid((196, 120, 70), 430, 0.04), "pi_sb_tag": _sb_tag,
+        # The battery monitor's cell sensing (round 26, #9).
+        SENSE: lambda: _solid((70, 96, 140), 438, 0.03), "pi_sense_module": lambda: _solid((44, 46, 50), 439, 0.05),
+        "pi_sense_jb": _sense_jb,
+        # The battery rooms' fittings (round 26, #9).
+        "pi_eyewash_flag": _eyewash_flag, "pi_spill_front": _spill_front, "pi_h2_tag": _h2_tag,
+        "pi_spill_yellow": lambda: _solid((236, 190, 30), 440, 0.06),
     })
     out.update(relay_cabinet_textures())
     out.update(vital_panel_textures())
     out.update({"pi_lens_green": lambda: _solid((26, 84, 40), 530, 0.02), "pi_lens_white": lambda: _solid((150, 150, 144), 531, 0.02),
-                "pi_lens_amber": lambda: _solid((130, 84, 20), 532, 0.02), SC_GLASS: lambda: _see_through((220, 232, 236), 40, 533)})
+                "pi_lens_amber": lambda: _solid((130, 84, 20), 532, 0.02), SC_GLASS: lambda: _see_through((220, 232, 236), 40, 533),
+                "pi_lens_red": lambda: _solid((110, 22, 18), 534, 0.02)})
+    out.update({f"pi_{k}": (lambda k=k: _sign_image(k)) for k in SIGNS})
     return out
 
 
 # Kept at full size so the writing reads.
-SHARP = {f"pi_{texture_key(key, v)}_f_{p}" for key in DRAWINGS for v in range(variants(key)) for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front",
+SHARP = {f"pi_{texture_key(key, v)}_f_{p}" for key in DRAWINGS for v in range(variants(key)) for p in range(2 * PANELS[key]["width"])} | {"pi_battery_tag", "pi_battery_front", "pi_sense_jb", "pi_eyewash_flag",
+                                                                                           "pi_spill_front", "pi_h2_tag", "pi_sign_no_smoking", "pi_sign_battery_acid",
+                                                                                           "pi_sign_hydrogen", "pi_sign_eyewash",
                                                                                            "pi_sb_tag"}
 
 
@@ -1730,7 +1834,7 @@ def ground_detector(label="1A"):
     f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
     f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
     T(8.0, 29.4, f"DC GROUND DETECTOR {label}", 11, fill=WHITE, bold=True)
-    T(8.0, 28.75, "BATTERY MONITOR    125 VDC    60 CELLS", 7, fill=WHITE, bold=True)
+    T(8.0, 28.75, "BATTERY MONITOR    125 VDC    60 CELLS A STRING", 7, fill=WHITE, bold=True)
     # The battery monitor's screen: its printed legends and rules; the readings, the state and the cells' bars are live.
     GLASS, INKG, LIT = GD_LCD
     x0, y0, x1, y1 = GD_SCREEN
@@ -1739,6 +1843,8 @@ def ground_detector(label="1A"):
     f.R(gx0, gy0, gx1, gy1, fill=GLASS)
     zt = D + 0.2
     T(2.2, GD_HEAD_Y, f"BATTERY {label}", 8, fill=INKG, bold=True, anchor="lm")
+    # Which string the screen shows (round 26, #9: two strings in parallel; MENU steps through them), what it is doing.
+    f.text(5.55, GD_HEAD_Y, zt, 0.55, LIT, "bm_str", "left")
     f.text(GD_VALUE_X[1], GD_HEAD_Y, zt, 0.55, LIT, "bm_mode", "right")
     for y in (26.2, 23.65):
         f.R(2.1, y - 0.04, 13.9, y + 0.04, fill=INKG)
@@ -2288,9 +2394,385 @@ def vital_panel_textures():
 SHARP |= {f"pi_{texture_key(VP_KEY, v)}_{k}_{r}" for v in range(len(PANELS[VP_KEY]["labels"])) for k in "io" for r in range(2)}
 
 
+# ------------------------------------------------------------------------------------------------ the battery rooms
+
+# The battery rooms' fittings (round 26, #9; Justin: "Eyewash and spill kit", "Hydrogen monitor and fan", "Warning
+# signs"): wall pieces facing north (the wall behind them at z 0, their front +z). Their lettering is drawn at 512 px a
+# block so it reads (SHARP).
+
+def _oct_prism_z(cx, cy, a, z0, z1, tex):
+    """A regular octagon across x-y (a: its inradius), from z0 to z1: two crossing boxes and the same pair turned 45
+    degrees about z (a hair inside them front and back, so no faces share a plane)."""
+    s = a * math.tan(math.radians(22.5))
+    rot = {"rotation": {"angle": 45, "axis": "z", "origin": [cx, cy, z0]}}
+    return [(cx - a, cy - s, z0, cx + a, cy + s, z1, tex), (cx - s, cy - a, z0 + 0.03, cx + s, cy + a, z1 - 0.03, tex),
+            (cx - a, cy - s, z0 + 0.06, cx + a, cy + s, z1 - 0.06, tex, rot), (cx - s, cy - a, z0 + 0.09, cx + s, cy + a, z1 - 0.09, tex, rot)]
+
+
+def _oct_ring_z(cx, cy, a_in, a_out, z0, z1, tex):
+    """A ring of eight flat bars round an octagon (inradius a_in to a_out) across x-y, from z0 to z1."""
+    half = a_out * math.tan(math.radians(22.5)) + 0.04
+    out = [(cx + a_in, cy - half, z0, cx + a_out, cy + half, z1, tex), (cx - a_out, cy - half, z0, cx - a_in, cy + half, z1, tex),
+           (cx - half, cy + a_in, z0, cx + half, cy + a_out, z1, tex), (cx - half, cy - a_out, z0, cx + half, cy - a_in, z1, tex)]
+    for ang in (45, -45):
+        rot = {"rotation": {"angle": ang, "axis": "z", "origin": [cx, cy, z0]}}
+        out += [(cx + a_in, cy - half, z0 + 0.03, cx + a_out, cy + half, z1 - 0.03, tex, rot),
+                (cx - a_out, cy - half, z0 + 0.03, cx - a_in, cy + half, z1 - 0.03, tex, rot)]
+    return out
+
+
+# ---- the signs: a plate on four stand-off screws, its picture a region of a 512 px drawing (SIGN_UV: 11 by 13).
+SIGN_PLATE = (2.5, 1.5, 13.5, 14.5)
+SIGN_UV = [0, 0, round(16 * 11 / 13, 4), 16]
+SIGNS = {"sign_no_smoking": "No Smoking Sign", "sign_battery_acid": "Battery Acid Danger Sign", "sign_hydrogen": "Hydrogen Warning Sign",
+         "sign_eyewash": "Emergency Eyewash Sign"}
+
+
+def _sign_boxes(tex):
+    x0, y0, x1, y1 = SIGN_PLATE
+    out = [(x0, y0, 0.15, x1, y1, 0.35, {"*": "pi_pnl_white", "south": (tex, SIGN_UV)})]
+    for x, y in ((x0 + 0.6, y0 + 0.6), (x1 - 0.6, y0 + 0.6), (x0 + 0.6, y1 - 0.6), (x1 - 0.6, y1 - 0.6)):
+        out += [(x - 0.25, y - 0.25, 0.0, x + 0.25, y + 0.25, 0.15, "pi_steel"), (x - 0.2, y - 0.2, 0.35, x + 0.2, y + 0.2, 0.45, "pi_steel")]
+    return out
+
+
+def _fit_line(d, xy, text, size, max_w, fill):
+    """A line of bold condensed lettering centred at xy, its size brought down until it fits in max_w px."""
+    while size > 12 and d.textlength(text, font=rfont(size, True)) > max_w:
+        size -= 2
+    d.text(xy, text, font=rfont(size, True), fill=fill, anchor="mm")
+
+
+def _sign_image(kind):
+    """A sign's picture: 433 by 512 px in a 512 px square (the rest is never shown)."""
+    W, H = 433, 512
+    img = Image.new("RGBA", (512, 512), (255, 255, 255, 255))
+    d = ImageDraw.Draw(img)
+    F = lambda s: rfont(s, True)
+    M = W - 56
+    BLACK, WHITE = (20, 20, 22, 255), (250, 250, 246, 255)
+    if kind == "sign_no_smoking":
+        RED = (200, 30, 30, 255)
+        d.rectangle([0, 0, W - 1, H - 1], fill=WHITE, outline=RED, width=14)
+        cx, cy, r = W // 2, 168, 118
+        # The cigarette and its smoke, the red ring and bar over them.
+        d.rectangle([cx - 95, cy - 12, cx + 70, cy + 14], fill=BLACK)
+        d.rectangle([cx + 70, cy - 12, cx + 95, cy + 14], fill=(230, 120, 40, 255))
+        for k in range(3):
+            d.arc([cx - 120 + k * 22, cy - 82, cx - 70 + k * 22, cy - 20], 200, 340, fill=BLACK, width=7)
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=RED, width=26)
+        d.line([(cx - 82, cy - 82), (cx + 82, cy + 82)], fill=RED, width=26)
+        _fit_line(d, (cx, 352), "NO SMOKING", 66, M, BLACK)
+        _fit_line(d, (cx, 420), "NO OPEN FLAMES", 42, M, RED)
+        _fit_line(d, (cx, 466), "NO SPARKS", 42, M, RED)
+    elif kind == "sign_battery_acid":
+        d.rectangle([0, 0, W - 1, H - 1], fill=WHITE, outline=BLACK, width=10)
+        d.rectangle([10, 10, W - 11, 132], fill=BLACK)
+        d.ellipse([46, 26, W - 47, 116], fill=(200, 30, 30, 255), outline=WHITE, width=5)
+        _fit_line(d, (W // 2, 71), "DANGER", 70, W - 140, WHITE)
+        for y, line, size in ((196, "BATTERY ACID", 60), (270, "CORROSIVE", 52), (350, "WEAR FACE SHIELD,", 40), (408, "APRON AND GLOVES", 40)):
+            _fit_line(d, (W // 2, y), line, size, M, BLACK)
+    elif kind == "sign_hydrogen":
+        ORANGE = (244, 120, 26, 255)
+        d.rectangle([0, 0, W - 1, H - 1], fill=WHITE, outline=BLACK, width=10)
+        d.rectangle([10, 10, W - 11, 132], fill=ORANGE)
+        d.polygon([(34, 108), (74, 34), (114, 108)], fill=BLACK)
+        d.polygon([(50, 99), (74, 55), (98, 99)], fill=ORANGE)
+        d.text((74, 88), "!", font=F(44), fill=BLACK, anchor="mm")
+        _fit_line(d, (W // 2 + 50, 71), "WARNING", 64, W - 150, BLACK)
+        for y, line, size in ((196, "HYDROGEN GAS", 58), (270, "FLAMMABLE", 52), (350, "NO SPARKS OR", 44), (414, "OPEN FLAMES", 44)):
+            _fit_line(d, (W // 2, y), line, size, M, BLACK)
+    elif kind == "sign_eyewash":
+        GREEN = (0, 132, 72, 255)
+        d.rectangle([0, 0, W - 1, H - 1], fill=GREEN, outline=WHITE, width=12)
+        cx, cy = W // 2, 112
+        # An eye, and the two jets of water sprayed up into it from the nozzles below, arcing in.
+        d.ellipse([cx - 110, cy - 54, cx + 110, cy + 54], outline=WHITE, width=12)
+        d.ellipse([cx - 36, cy - 36, cx + 36, cy + 36], fill=WHITE)
+        for k in (-1, 1):
+            pts = [(cx + k * (96 - 80 * t * t), cy + 188 - 120 * t) for t in [i / 12 for i in range(13)]]
+            d.line(pts, fill=WHITE, width=10)
+            d.rectangle([cx + k * 96 - 18, cy + 188, cx + k * 96 + 18, cy + 212], fill=WHITE)
+        _fit_line(d, (cx, 382), "EMERGENCY", 66, M, WHITE)
+        _fit_line(d, (cx, 452), "EYE WASH", 66, M, WHITE)
+    return img
+
+
+# ---- the eyewash: a plumbed wall-mounted eyewash station (ANSI Z358.1), its stainless bowl at waist height with two
+# spray heads under yellow dust covers, fed from the wall through the stay-open valve its green push flag works, the
+# bowl's drain back into the wall. Use it and it runs (nuclear/EyewashBlock.java).
+EW_C, EW_A = (8.0, 7.4), 5.0                # the bowl's centre (x, z) and its inradius
+EW_BOWL_Y = (11.0, 13.4)
+EW_HEADS = (6.4, 9.6)                       # the spray heads (x)
+
+
+def _oct_prism_y(cx, cz, a, y0, y1, tex):
+    s = a * math.tan(math.radians(22.5))
+    rot = {"rotation": {"angle": 45, "axis": "y", "origin": [cx, y0, cz]}}
+    return [(cx - a, y0, cz - s, cx + a, y1, cz + s, tex), (cx - s, y0 + 0.03, cz - a, cx + s, y1 - 0.03, cz + a, tex),
+            (cx - a, y0 + 0.06, cz - s, cx + a, y1 - 0.06, cz + s, tex, rot), (cx - s, y0 + 0.09, cz - a, cx + s, y1 - 0.09, cz + a, tex, rot)]
+
+
+def _oct_ring_y(cx, cz, a_in, a_out, y0, y1, tex):
+    half = a_out * math.tan(math.radians(22.5)) + 0.15
+    out = [(cx + a_in, y0, cz - half, cx + a_out, y1, cz + half, tex), (cx - a_out, y0, cz - half, cx - a_in, y1, cz + half, tex),
+           (cx - half, y0, cz + a_in, cx + half, y1, cz + a_out, tex), (cx - half, y0, cz - a_out, cx + half, y1, cz - a_in, tex)]
+    for ang in (45, -45):
+        rot = {"rotation": {"angle": ang, "axis": "y", "origin": [cx, y0, cz]}}
+        out += [(cx + a_in, y0 + 0.03, cz - half, cx + a_out, y1 - 0.03, cz + half, tex, rot),
+                (cx - a_out, y0 + 0.03, cz - half, cx - a_in, y1 - 0.03, cz + half, tex, rot)]
+    return out
+
+
+def eyewash_boxes():
+    cx, cz = EW_C
+    y0, y1 = EW_BOWL_Y
+    SS = "pi_chrome"
+    out = [(5.5, 4.6, 0.12, 10.5, 12.6, 0.6, SS),                                  # the wall plate
+           (7.0, 9.6, 0.6, 9.0, 11.0, cz - EW_A + 0.4, SS)]                       # the bracket arm to the bowl
+    # The bowl: its floor, its wall round it, the rolled rim; the drain in the middle.
+    out += _oct_prism_y(cx, cz, EW_A - 0.3, y0, y0 + 0.5, SS)
+    out += _oct_ring_y(cx, cz, EW_A - 0.4, EW_A, y0 + 0.5, y1, SS)
+    out += _oct_ring_y(cx, cz, EW_A - 0.5, EW_A + 0.2, y1, y1 + 0.3, "pi_steel")
+    out += [(cx - 0.5, y0 + 0.5, cz - 0.5, cx + 0.5, y0 + 0.55, cz + 0.5, "pi_pnl_black")]
+    # The spray heads: a stem, the head, the yellow dust cover on it.
+    for hx in EW_HEADS:
+        out += [(hx - 0.3, y0 + 0.5, cz - 0.3, hx + 0.3, y0 + 1.6, cz + 0.3, SS),
+                (hx - 0.6, y0 + 1.6, cz - 0.6, hx + 0.6, y0 + 2.0, cz + 0.6, SS),
+                (hx - 0.7, y0 + 2.0, cz - 0.7, hx + 0.7, y0 + 2.35, cz + 0.7, "pi_pnl_yellow")]
+    # The feed: from the wall (z 0) out to the valve under the bowl, up into the bowl; the valve body.
+    out += [(9.0, 6.5, 0.6, 10.0, 7.5, 6.6, "pi_brass"), (6.9, 6.0, 6.4, 9.9, 8.2, 8.6, "pi_brass"),
+            (cx - 0.45, 8.2, cz - 0.45, cx + 0.45, y0, cz + 0.45, SS)]
+    # The push flag: its arm out of the valve, the green paddle (PUSH).
+    out += [(7.8, 6.9, 8.6, 8.2, 7.3, 12.6, "pi_steel"),
+            (6.2, 5.4, 12.6, 9.8, 9.0, 12.85, {"*": "pi_pnl_green", "south": "pi_eyewash_flag!"})]
+    # The drain: down out of the bowl's floor at the back, along to the wall.
+    out += [(5.2, 5.0, 3.8, 6.0, y0 + 0.05, 4.6, SS), (5.2, 5.0, 0.6, 6.0, 5.8, 3.8, SS)]
+    return out
+
+
+def _eyewash_flag():
+    img = Image.new("RGBA", (256, 256), (0, 140, 76, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([4, 4, 251, 251], outline=(0, 100, 54, 255), width=8)
+    d.text((128, 128), "PUSH", font=rfont(92, True), fill=(250, 250, 246, 255), anchor="mm")
+    return img
+
+
+# ---- the acid spill kit: a yellow steel cabinet on the wall (neutralizer, absorbent pillows, gloves, apron, goggles).
+def spill_kit_boxes():
+    out = [(2.0, 1.5, 0.2, 14.0, 14.5, 5.8, {"*": "pi_spill_yellow", "south": ("pi_spill_front", [0, 0, round(16 * 12 / 13, 4), 16])})]
+    # Hinges on the left, the latch handle on the right, the base rail.
+    for y in (3.0, 11.5):
+        out.append((1.7, y, 5.2, 2.1, y + 1.4, 6.0, "pi_steel"))
+    out += [(12.7, 6.4, 5.8, 13.3, 9.6, 6.15, "pi_pnl_black"), (12.8, 7.4, 6.15, 13.2, 9.2, 6.6, "pi_steel"),
+            (2.0, 1.0, 0.2, 14.0, 1.5, 5.2, "pi_cabinet_dark")]
+    return out
+
+
+def _spill_front():
+    W, H = 473, 512
+    img = Image.new("RGBA", (512, 512), (246, 200, 26, 255))
+    d = ImageDraw.Draw(img)
+    F = lambda s: rfont(s, True)
+    BLACK = (20, 20, 22, 255)
+    d.rectangle([12, 12, W - 13, H - 13], outline=(170, 136, 14, 255), width=6)
+    d.rectangle([40, 52, W - 41, 172], fill=BLACK)
+    _fit_line(d, (W // 2, 112), "SPILL KIT", 84, W - 110, (246, 200, 26, 255))
+    _fit_line(d, (W // 2, 226), "BATTERY ACID", 56, W - 130, BLACK)
+    for k, line in enumerate(("NEUTRALIZER", "ABSORBENT PILLOWS", "GLOVES  APRON  GOGGLES")):
+        _fit_line(d, (W // 2, 306 + k * 52), line, 40, W - 70, BLACK)
+    _fit_line(d, (W // 2, 466), "BREAK SEAL TO OPEN", 30, W - 70, BLACK)
+    return img
+
+
+# ---- the hydrogen sensor head: high on the wall by the ceiling (hydrogen rises), its conduit down to the monitor; a
+# conduit body with the sensor hanging under it, its sintered head.
+def h2_sensor_boxes():
+    z = 2.6
+    out = [(7.3, 0, z - 0.7, 8.7, 6.4, z + 0.7, "pi_chrome"),
+           (6.4, 6.4, 0.2, 12.4, 10.2, 3.6, {"*": "pi_cabinet", "south": "pi_h2_tag!"}),
+           (6.6, 10.2, 0.4, 12.2, 10.5, 3.4, "pi_cabinet_dark")]
+    for x in (6.9, 11.9):
+        out.append((x - 0.2, 9.7, 3.6, x + 0.2, 10.0, 3.75, "pi_steel"))
+    # The sensor under the box: its yellow housing, the sintered head at the bottom (round, as a square and the same
+    # square turned).
+    rot = lambda y: {"rotation": {"angle": 45, "axis": "y", "origin": [10.2, y, 2.0]}}
+    out += [(9.4, 3.4, 1.2, 11.0, 6.4, 2.8, "pi_spill_yellow"), (9.4, 3.45, 1.2, 11.0, 6.35, 2.8, "pi_spill_yellow", rot(3.4)),
+            (9.6, 2.4, 1.4, 10.8, 3.4, 2.6, "pi_steel_dark"), (9.6, 2.45, 1.4, 10.8, 3.35, 2.6, "pi_steel_dark", rot(2.4))]
+    return out
+
+
+def _h2_tag():
+    img = Image.new("RGBA", (256, 256), (170, 174, 176, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([40, 70, 215, 186], fill=(236, 236, 230, 255), outline=(40, 40, 42, 255), width=3)
+    d.text((128, 104), "H2", font=rfont(48, True), fill=(20, 20, 22, 255), anchor="mm")
+    d.text((128, 154), "SENSOR", font=rfont(30, True), fill=(20, 20, 22, 255), anchor="mm")
+    return img
+
+
+RISERS.update({k: {"display": v, "boxes": _sign_boxes(f"pi_{k}")} for k, v in SIGNS.items()})
+RISERS.update({
+    "eyewash_station": {"display": "Emergency Eyewash Station", "boxes": eyewash_boxes()},
+    "spill_kit": {"display": "Acid Spill Kit", "boxes": spill_kit_boxes()},
+    "h2_sensor": {"display": "Hydrogen Sensor Head", "boxes": h2_sensor_boxes()},
+})
+CRAFTING.update({
+    "sign_no_smoking": (["PRP", "PIP"], {"P": "minecraft:paper", "R": "minecraft:red_dye", "I": "minecraft:iron_nugget"}, 2),
+    "sign_battery_acid": (["PBP", "PIP"], {"P": "minecraft:paper", "B": "minecraft:black_dye", "I": "minecraft:iron_nugget"}, 2),
+    "sign_hydrogen": (["POP", "PIP"], {"P": "minecraft:paper", "O": "minecraft:orange_dye", "I": "minecraft:iron_nugget"}, 2),
+    "sign_eyewash": (["PGP", "PIP"], {"P": "minecraft:paper", "G": "minecraft:green_dye", "I": "minecraft:iron_nugget"}, 2),
+    "eyewash_station": (["IWI", " B ", " I "], {"I": "#c:plates/steel", "W": "minecraft:water_bucket", "B": "minecraft:copper_ingot"}, 1),
+    "spill_kit": (["YPY", "YSY", "YYY"], {"Y": "minecraft:yellow_dye", "P": "#c:plates/steel", "S": "minecraft:sand"}, 1),
+    "h2_sensor": (["P", "C", "R"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
+})
+
+
+# ---- the hydrogen monitor: its transmitter on the wall at eye level, the conduit up from its top to the sensor head.
+H2_KEY = "h2_monitor"
+H2_BOX = (3.0, 2.0, 13.0, 14.6)             # the transmitter's enclosure (x0, y0, x1, y1)
+H2_FRONT = 3.4
+H2_DISPLAY = (4.4, 8.6, 11.6, 11.6)         # the display's bezel
+H2_LAMPS = [(5.0, "NORMAL", (40, 180, 70), "h2_ok", "pi_lens_green"), (8.0, "WARN", (240, 170, 30), "h2_warn", "pi_lens_amber"),
+            (11.0, "ALARM", (230, 40, 30), "h2_alarm", "pi_lens_red")]
+H2_LAMP_Y = 6.4
+
+
+def h2_monitor(label="1A"):
+    f = Front(1, 590)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    x0, y0, x1, y1 = H2_BOX
+    D = H2_FRONT
+    f.R(x0, y1 - 1.9, x1, y1, fill=(30, 70, 140, 255))
+    T((x0 + x1) / 2, y1 - 0.65, "HYDROGEN MONITOR", 9, fill=WHITE, bold=True)
+    T((x0 + x1) / 2, y1 - 1.45, f"BATTERY ROOM {label}", 7, fill=WHITE, bold=True)
+    bx0, by0, bx1, by1 = H2_DISPLAY
+    f.R(bx0, by0, bx1, by1, fill=(30, 30, 32, 255))
+    f.R(bx0 + 0.3, by0 + 0.3, bx1 - 0.3, by1 - 0.3, fill=(28, 6, 6, 255))
+    T(bx1 - 0.55, (by0 + by1) / 2 - 0.45, "% LEL", 7, fill=(240, 90, 70, 255), bold=True, anchor="rm")
+    f.text(bx1 - 2.5, (by0 + by1) / 2 + 0.2, D + 0.2, 1.2, (255, 70, 50), "h2_lel", "right")
+    T((bx0 + bx1) / 2, by0 - 0.55, "H2 IN AIR", 7, bold=True)
+    for x, label_, colour, ch, _ in H2_LAMPS:
+        T(x, H2_LAMP_Y - 1.1, label_, 6, bold=True)
+        f.live.append({"t": "lamp", "x": x, "y": H2_LAMP_Y, "r": 0.45, "z": D + 0.56, "colour": list(colour), "ch": ch})
+    T((x0 + x1) / 2, 3.2, "WARN 10 %LEL   ALARM 25 %LEL", 6, bold=True)
+    T((x0 + x1) / 2, 2.55, "FAN TO HIGH AT WARN", 6, bold=True)
+    return f
+
+
+def h2_monitor_boxes():
+    F = f"pi_{H2_KEY}_f"
+    x0, y0, x1, y1 = H2_BOX
+    D = H2_FRONT
+    face = {"*": "pi_cabinet", "south": F}
+    b = [(x0, y0, 0.2, x1, y1, D, face), (x0 + 0.3, y1, 0.4, x1 - 0.3, y1 + 0.3, D - 0.2, "pi_cabinet_dark")]
+    # The display's bezel round its window.
+    bx0, by0, bx1, by1 = H2_DISPLAY
+    blk = "pi_pnl_black"
+    b += [(bx0, by0, D, bx0 + 0.3, by1, D + 0.3, blk), (bx1 - 0.3, by0, D, bx1, by1, D + 0.3, blk),
+          (bx0 + 0.3, by0, D, bx1 - 0.3, by0 + 0.3, D + 0.3, blk), (bx0 + 0.3, by1 - 0.3, D, bx1 - 0.3, by1, D + 0.3, blk)]
+    for x, _, _, _, lens in H2_LAMPS:
+        b += _sc_round(x, H2_LAMP_Y, D, D + 0.3, 0.65, "pi_chrome") + _sc_round(x, H2_LAMP_Y, D + 0.3, D + 0.5, 0.45, lens)
+    # Its mounting screws; the conduit up out of its top to the sensor head (as plant_office2's wall conduit).
+    for x, y in ((x0 + 0.5, y0 + 0.5), (x1 - 0.5, y0 + 0.5), (x0 + 0.5, y1 - 2.4), (x1 - 0.5, y1 - 2.4)):
+        b.append((x - 0.2, y - 0.2, D, x + 0.2, y + 0.2, D + 0.12, "pi_steel"))
+    b += [(7.3, y1 + 0.3, 1.9, 8.7, 32, 3.3, "pi_chrome"), (7.0, y1 + 0.3, 1.6, 9.0, y1 + 1.0, 3.6, "pi_steel_dark")]
+    return b
+
+
+# ---- the exhaust fan: a wall fan over the room's hydrogen exhaust louvre, high up (its upper block on the louvre), its
+# HAND-OFF-AUTO station under it. The blades turn (live): slowly on AUTO while the battery floats, fast while it
+# charges hard or the hydrogen is up, fast on HAND, stopped on OFF; RUN and HIGH SPEED lamps.
+EF_KEY = "exhaust_fan"
+EF_C, EF_SHROUD = (8.0, 24.0), (5.25, 5.7)   # the fan's centre (x, y), the shroud's inradius in and out
+EF_FRONT = 5.0
+EF_BOX = (4.0, 1.6, 12.0, 13.4)             # the control station's enclosure
+EF_SEL = (8.0, 8.2)                         # the selector
+EF_LAMPS = [(5.6, "RUN", (40, 180, 70), "ef_run", "pi_lens_green"), (10.4, "HIGH", (240, 170, 30), "ef_high", "pi_lens_amber")]
+EF_LAMP_Y = 4.6
+EF_STATION_FRONT = 3.0
+
+
+def exhaust_fan(label="1A"):
+    f = Front(1, 595)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    x0, y0, x1, y1 = EF_BOX
+    D = EF_STATION_FRONT
+    f.R(x0 + 0.4, y1 - 1.9, x1 - 0.4, y1 - 0.4, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T((x0 + x1) / 2, y1 - 0.85, f"EXHAUST FAN EF-{label}", 8, fill=WHITE, bold=True)
+    T((x0 + x1) / 2, y1 - 1.5, "BATTERY ROOM", 7, fill=WHITE, bold=True)
+    sx, sy = EF_SEL
+    f.E(sx, sy, 1.0, fill=(46, 46, 48, 255))
+    for name, (dx, dy) in (("HAND", (-1.2, 0.0)), ("OFF", (0.0, 1.5)), ("AUTO", (1.2, 0.0))):
+        T(sx + dx, sy + dy, name, 8, bold=True, anchor="rm" if dx < 0 else "lm" if dx > 0 else "mm")
+    T(sx, sy - 1.6, "SELECTOR", 7, bold=True)
+    for x, label_, colour, ch, _ in EF_LAMPS:
+        T(x, EF_LAMP_Y - 1.1, label_, 8, bold=True)
+        f.live.append({"t": "lamp", "x": x, "y": EF_LAMP_Y, "r": 0.42, "z": D + 0.56, "colour": list(colour), "ch": ch})
+    # The selector's pointer, live: one of three white bars on the knob (left HAND, up OFF, right AUTO).
+    for k, (bx0, by0, bx1, by1) in enumerate(((sx - 0.62, sy - 0.1, sx, sy + 0.1), (sx - 0.1, sy, sx + 0.1, sy + 0.62),
+                                              (sx, sy - 0.1, sx + 0.62, sy + 0.1))):
+        f.live.append({"t": "toggle", "on": [round(bx0, 3), round(by0, 3), D + 0.45, round(bx1, 3), round(by1, 3), D + 0.55], "off": [],
+                       "colour": [236, 236, 230], "ch": f"ef_mode_{k}"})
+    # The blades (live): four, turning in the shroud.
+    f.live.append({"t": "fan", "x": EF_C[0], "y": EF_C[1], "z": 2.0, "r": 5.0, "blades": 4, "width": 2.2, "colour": [176, 180, 184],
+                   "ch": "ef_spin"})
+    return f
+
+
+def exhaust_fan_boxes():
+    F = f"pi_{EF_KEY}_f"
+    cx, cy = EF_C
+    a_in, a_out = EF_SHROUD
+    D = EF_FRONT
+    H = "pi_cabinet_dark"
+    b = [(0.5, 30.9, 0.2, 15.5, 31.5, D, H), (0.5, 16.5, 0.2, 15.5, 17.1, D, H),
+         (0.5, 17.1, 0.2, 1.1, 30.9, D, H), (14.9, 17.1, 0.2, 15.5, 30.9, D, H)]
+    # The front plate round the shroud: four bands and the corners in to it.
+    b += [(1.1, cy + a_out, D - 0.4, 14.9, 30.9, D, H), (1.1, 17.1, D - 0.4, 14.9, cy - a_out, D, H),
+          (1.1, cy - a_out, D - 0.4, cx - a_out, cy + a_out, D, H), (cx + a_out, cy - a_out, D - 0.4, 14.9, cy + a_out, D, H)]
+    # (Each corner in to the octagon: a box turned 45 degrees, from the octagon's face out to the square's corner.)
+    reach, half = a_out * math.sqrt(2) + 0.05, a_out * math.tan(math.radians(22.5)) + 0.05
+    for ang in (45, -45):
+        rot = {"rotation": {"angle": ang, "axis": "z", "origin": [cx, cy, D - 0.45]}}
+        b += [(cx + a_out - 0.2, cy - half, D - 0.45, cx + reach, cy + half, D - 0.05, H, rot),
+              (cx - reach, cy - half, D - 0.45, cx - a_out + 0.2, cy + half, D - 0.05, H, rot)]
+    # The shroud, the dark behind it (the louvre), the motor and the cross bars it hangs on.
+    b += _oct_ring_z(cx, cy, a_in, a_out, 0.6, D + 0.25, "pi_steel")
+    b += _oct_prism_z(cx, cy, a_in, 0.25, 0.5, "pi_pnl_black")
+    b += _oct_prism_z(cx, cy, 1.7, 2.5, 4.2, "pi_cap_black")
+    b += [(cx - a_in, cy - 0.25, 3.0, cx - 1.7, cy + 0.25, 3.4, "pi_steel_dark"), (cx + 1.7, cy - 0.25, 3.0, cx + a_in, cy + 0.25, 3.4, "pi_steel_dark")]
+    # The wire guard over it: three rings and the spokes.
+    for r in (1.9, 3.5, 5.1):
+        b += _oct_ring_z(cx, cy, r, r + 0.18, D + 0.35, D + 0.55, "pi_chrome")
+    b += [(cx - 5.4, cy - 0.09, D + 0.3, cx + 5.4, cy + 0.09, D + 0.6, "pi_chrome"), (cx - 0.09, cy - 5.4, D + 0.3, cx + 0.09, cy + 5.4, D + 0.6, "pi_chrome")]
+    # The control station, its selector knob, lamps, the conduit up from it into the fan.
+    x0, y0, x1, y1 = EF_BOX
+    S = EF_STATION_FRONT
+    b.append((x0, y0, 0.2, x1, y1, S, {"*": "pi_cabinet", "south": F}))
+    sx, sy = EF_SEL
+    b += _oct_prism_z(sx, sy, 0.62, S, S + 0.45, "pi_cap_black")
+    for x, _, _, _, lens in EF_LAMPS:
+        b += _sc_round(x, EF_LAMP_Y, S, S + 0.3, 0.62, "pi_chrome") + _sc_round(x, EF_LAMP_Y, S + 0.3, S + 0.5, 0.42, lens)
+    b += [(9.6, y1, 1.1, 10.4, 16.6, 1.9, "pi_chrome"), (9.4, y1, 0.9, 10.6, y1 + 0.5, 2.1, "pi_steel_dark")]
+    return b
+
+
+CRAFTING.update({
+    "h2_monitor": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
+                                           "R": "minecraft:redstone"}, 1),
+    "exhaust_fan": (["PIP", "IRI", "PIP"], {"P": "#c:plates/steel", "I": "minecraft:iron_ingot", "R": "minecraft:redstone"}, 1),
+})
+
+
 # The drawings defined after the table (DRAWINGS holds their keys from the start, so SHARP has them).
 DRAWINGS["station_charger"] = station_charger
 DRAWINGS["vital_inverter"] = vital_inverter
 DRAWINGS["reg_transformer"] = reg_transformer
 DRAWINGS["vital_panel"] = vital_panel
 DRAWINGS["dc_ground_detector"] = ground_detector
+DRAWINGS["h2_monitor"] = h2_monitor
+DRAWINGS["exhaust_fan"] = exhaust_fan

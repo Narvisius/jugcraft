@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PC",
+    "PS",
+    "PC"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "C": "minecraft:copper_ingot",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "jugcraft:dc_cable_riser_sense",
+    "count": 4
+  }
+}

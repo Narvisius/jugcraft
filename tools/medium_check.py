@@ -22,7 +22,7 @@ B, O = P.BELOW, P.OVER
 # them), and what may stand on a piece's user side (its chair, a coffee table in front of a sofa).
 SEATED = {"sofa", "locker_bench", "stretcher"}
 WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
-             "fire_extinguisher"}
+             "fire_extinguisher", "exhaust_fan", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash"}
 USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
 
 
@@ -292,6 +292,8 @@ def check(site, quiet=False):
     # conduits up from its top and from the MCC's REG XF section reaching the same ladder tray; and (8e) each inverter's
     # vital panel, their conduits into the same tray.
     problems += regulating_transformers(site, g)
+    # 10. The battery rooms (round 26, #9): their second strings, sense cable risers and fittings.
+    problems += battery_rooms(site, g)
     if not quiet:
         for p in problems:
             print(p)
@@ -493,6 +495,56 @@ def regulating_transformers(site, g):
         mcc = nearest((x, y, z), list(components))
         if mcc is None or (x, k, z) not in components[mcc]:
             problems.append(f"{name} at {(x, y, z)}: its drop is not in its room's tray (the MCC at {mcc})")
+    return problems
+
+
+def battery_rooms(site, g):
+    """The battery rooms (round 26, #9): two strings of two racks in each, every rack's terminal end with its riser (and
+    the sense cable) up to a riser top under the ceiling; each room's exhaust fan over a louvre, its hydrogen monitor's
+    conduit up to the sensor head, its eyewash, spill kit and signs."""
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+
+    def at(x, y, z):
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+
+    problems = []
+    ends = []
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("jugcraft:station_battery[") and "part=3" in st:
+            ends += [(int(x), int(y) - B, int(z) - O) for x, y, z in np.argwhere(g == k)]
+    if len(ends) != 8:
+        problems.append(f"{len(ends)} station battery racks, not 8 (two strings of two in each battery room)")
+    for x, y, z in ends:
+        column = [at(x, y + k, z) for k in (2, 3, 4)]
+        if column != ["dc_cable_riser_sense", "dc_cable_riser_sense", "dc_cable_riser_top_sense"]:
+            problems.append(f"station battery rack ending at {(x, y, z)}: no riser with the sense cable over its terminal end ({column})")
+    fans = []
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("jugcraft:exhaust_fan[") and "part=1" in st:
+            fans += [(int(x), int(y) - B, int(z) - O, st) for x, y, z in np.argwhere(g == k)]
+    for x, y, z, st in fans:
+        facing = st.split("facing=")[1].split(",")[0].rstrip("]")
+        dx, dz = P.DIRS[facing]
+        if at(x + dx, y, z + dz) != "intake_louvre":
+            problems.append(f"exhaust fan at {(x, y, z)} is not over a louvre ({at(x + dx, y, z + dz)})")
+    for name in ("h2_monitor", "eyewash_station", "spill_kit", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash"):
+        n = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if kinds[k] == name and "part=1" not in st)
+        if n != 2:
+            problems.append(f"{n} {name} in the battery rooms, not one in each")
+    if len(fans) != 2:
+        problems.append(f"{len(fans)} battery room exhaust fans, not 2")
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("jugcraft:h2_monitor[") and "part=1" in st:
+            for x, y, z in np.argwhere(g == k):
+                x, y, z = int(x), int(y) - B, int(z) - O
+                k2 = y + 1
+                while at(x, k2, z) == "wall_conduit":
+                    k2 += 1
+                if at(x, k2, z) != "h2_sensor":
+                    problems.append(f"hydrogen monitor at {(x, y, z)}: its conduit does not reach a sensor head ({at(x, k2, z)} at y {k2})")
     return problems
 
 

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "IWI",
+    " B ",
+    " I "
+  ],
+  "key": {
+    "I": "#c:plates/steel",
+    "W": "minecraft:water_bucket",
+    "B": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:eyewash_station",
+    "count": 1
+  }
+}

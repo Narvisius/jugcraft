@@ -1,0 +1,326 @@
+{
+  "textures": {
+    "pi_cabinet": "jugcraft:block/pi_cabinet",
+    "pi_cabinet_dark": "jugcraft:block/pi_cabinet_dark",
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_h2_tag": "jugcraft:block/pi_h2_tag",
+    "pi_spill_yellow": "jugcraft:block/pi_spill_yellow",
+    "pi_steel": "jugcraft:block/pi_steel",
+    "pi_steel_dark": "jugcraft:block/pi_steel_dark",
+    "particle": "jugcraft:block/pi_cabinet"
+  },
+  "elements": [
+    {
+      "from": [
+        7.3,
+        0,
+        1.9000000000000001
+      ],
+      "to": [
+        8.7,
+        6.4,
+        3.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        6.4,
+        6.4,
+        0.2
+      ],
+      "to": [
+        12.4,
+        10.2,
+        3.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_h2_tag",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        6.6,
+        10.2,
+        0.4
+      ],
+      "to": [
+        12.2,
+        10.5,
+        3.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.7,
+        9.7,
+        3.6
+      ],
+      "to": [
+        7.1000000000000005,
+        10.0,
+        3.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel"
+        },
+        "south": {
+          "texture": "#pi_steel"
+        },
+        "east": {
+          "texture": "#pi_steel"
+        },
+        "west": {
+          "texture": "#pi_steel"
+        },
+        "up": {
+          "texture": "#pi_steel"
+        },
+        "down": {
+          "texture": "#pi_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        11.700000000000001,
+        9.7,
+        3.6
+      ],
+      "to": [
+        12.1,
+        10.0,
+        3.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel"
+        },
+        "south": {
+          "texture": "#pi_steel"
+        },
+        "east": {
+          "texture": "#pi_steel"
+        },
+        "west": {
+          "texture": "#pi_steel"
+        },
+        "up": {
+          "texture": "#pi_steel"
+        },
+        "down": {
+          "texture": "#pi_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        9.4,
+        3.3,
+        1.2
+      ],
+      "to": [
+        11.0,
+        6.5,
+        2.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_spill_yellow"
+        },
+        "south": {
+          "texture": "#pi_spill_yellow"
+        },
+        "east": {
+          "texture": "#pi_spill_yellow"
+        },
+        "west": {
+          "texture": "#pi_spill_yellow"
+        },
+        "up": {
+          "texture": "#pi_spill_yellow"
+        },
+        "down": {
+          "texture": "#pi_spill_yellow"
+        }
+      }
+    },
+    {
+      "from": [
+        9.4,
+        3.15,
+        1.2
+      ],
+      "to": [
+        11.0,
+        6.65,
+        2.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_spill_yellow"
+        },
+        "south": {
+          "texture": "#pi_spill_yellow"
+        },
+        "east": {
+          "texture": "#pi_spill_yellow"
+        },
+        "west": {
+          "texture": "#pi_spill_yellow"
+        },
+        "up": {
+          "texture": "#pi_spill_yellow"
+        },
+        "down": {
+          "texture": "#pi_spill_yellow"
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          10.2,
+          3.4,
+          2.0
+        ]
+      }
+    },
+    {
+      "from": [
+        9.6,
+        2.3,
+        1.4
+      ],
+      "to": [
+        10.8,
+        3.5,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        9.6,
+        2.15,
+        1.4
+      ],
+      "to": [
+        10.8,
+        3.65,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          10.2,
+          2.4,
+          2.0
+        ]
+      }
+    }
+  ]
+}

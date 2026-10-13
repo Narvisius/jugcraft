@@ -30,7 +30,8 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>The DC rooms' panels link what they read the same way (rounds 25 and 26): a charger, the DC switchboard and a
  * vital inverter their station battery; an inverter its regulating transformer; a regulating transformer its motor
- * control centre and its inverter (8d); the ground detector its station battery (8f).
+ * control centre and its inverter (8d); the ground detector its station battery (8f); the battery rooms' hydrogen
+ * monitor and exhaust fan their battery and each other, and the DC switchboard all its racks, which it keeps even (#9).
  */
 public class LivePanelBlockEntity extends BlockEntity {
 	public static final int REACH = 24;
@@ -87,6 +88,15 @@ public class LivePanelBlockEntity extends BlockEntity {
 	public long testUntil;
 	/** A ground detector: when its alarm may beep again (game time; not saved). */
 	long beepAt;
+	/**
+	 * The station battery's racks this panel's DC bus has in parallel (round 26, #9; Justin: "Second string in
+	 * parallel"): a DC switchboard's are every rack in reach nearer to it than to any other switchboard, and it keeps
+	 * their charge even (balance); a ground detector, hydrogen monitor or exhaust fan takes its nearest switchboard's.
+	 * Synced: the client reads their flows (the battery's current) and strings (strings) from them.
+	 */
+	public final List<BlockPos> racks = new ArrayList<>();
+	/** An exhaust fan's HAND-OFF-AUTO selector (ExhaustFanBlock.MODES); a battery monitor's string on its screen. Saved, synced. */
+	public int mode, page;
 	/** The linked generator's anchor, or null. */
 	public @Nullable BlockPos generator;
 	/**
@@ -94,11 +104,12 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * there, so it reads zero when it is linked (Justin, round 14). -1: not linked.
 	 */
 	public long hoursBase = -1;
-	private int timer;
+	private int timer, balanceTimer;
 
 	public LivePanelBlockEntity(BlockPos pos, BlockState state) {
 		super(PlantInterior.LIVE_PANEL_ENTITY, pos, state);
 		breakers = isVitalPanel(state) ? VitalPanelBlock.DEFAULT_BREAKERS : 0;
+		mode = isExhaustFan(state) ? ExhaustFanBlock.AUTO : 0;
 		input = isCharger(state) ? new io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage(CHARGER_BUFFER, 4_096, 0, this::setChanged) {
 			@Override
 			public long insert(long maxAmount, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext transaction) {
@@ -137,13 +148,123 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return state.getBlock() instanceof GroundDetectorBlock;
 	}
 
+	public static boolean isH2Monitor(BlockState state) {
+		return state.getBlock() == PlantInterior.BLOCKS.get("h2_monitor");
+	}
+
+	public static boolean isExhaustFan(BlockState state) {
+		return state.getBlock() instanceof ExhaustFanBlock;
+	}
+
+	/** The battery rooms' panels (round 26, #9): the hydrogen monitor and the exhaust fan. */
+	static boolean batteryRoom(BlockState state) {
+		return isH2Monitor(state) || isExhaustFan(state);
+	}
+
+	/**
+	 * A battery's racks by string (round 26, #9): the racks standing in one line (the same way, end to end) are one
+	 * string in series, each line another in parallel; ordered by where they stand, so every player's screen agrees.
+	 */
+	public static List<List<BlockPos>> strings(net.minecraft.world.level.Level level, List<BlockPos> racks) {
+		Map<String, List<BlockPos>> lines = new java.util.TreeMap<>();
+		for (BlockPos at : racks) {
+			BlockState state = level.getBlockState(at);
+			if (!(state.getBlock() instanceof StationBatteryBlock)) {
+				continue;
+			}
+			net.minecraft.core.Direction facing = state.getValue(MultiFurnitureBlock.FACING);
+			int row = facing.getAxis() == net.minecraft.core.Direction.Axis.Z ? at.getZ() : at.getX();
+			lines.computeIfAbsent(String.format(java.util.Locale.ROOT, "%s %+08d %+04d", facing.getAxis(), row, at.getY()),
+					k -> new ArrayList<>()).add(at);
+		}
+		List<List<BlockPos>> out = new ArrayList<>(lines.values());
+		for (List<BlockPos> line : out) {
+			line.sort(java.util.Comparator.<BlockPos>comparingInt(p -> p.getX()).thenComparingInt(p -> p.getZ()));
+		}
+		return out;
+	}
+
+	/**
+	 * A DC switchboard's racks (round 26, #9): every station battery in reach that is nearer to it than to any other
+	 * switchboard (so each train's switchboard has its own room's), nearest first.
+	 */
+	private void linkRacks(ServerLevel level) {
+		List<LivePanelBlockEntity> boards = around(level, getBlockState().getBlock());
+		BlockPos here = getBlockPos();
+		List<BlockPos> found = new ArrayList<>();
+		int r = (REACH >> 4) + 1;
+		for (int cx = (here.getX() >> 4) - r; cx <= (here.getX() >> 4) + r; cx++) {
+			for (int cz = (here.getZ() >> 4) - r; cz <= (here.getZ() >> 4) + r; cz++) {
+				LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+				if (chunk == null) {
+					continue;
+				}
+				for (BlockEntity be : chunk.getBlockEntities().values()) {
+					if (be instanceof StationBatteryBlockEntity bank) {
+						BlockPos at = bank.getBlockPos();
+						double d = at.distSqr(here);
+						if (d <= (double) REACH * REACH && boards.stream().noneMatch(o -> o.getBlockPos().distSqr(at) < d)) {
+							found.add(at.immutable());
+						}
+					}
+				}
+			}
+		}
+		found.sort(java.util.Comparator.<BlockPos>comparingDouble(p -> p.distSqr(here)).thenComparing(p -> p));
+		setRacks(level, found);
+	}
+
+	/** A ground detector's, hydrogen monitor's or exhaust fan's racks: its nearest switchboard's (else its own battery). */
+	private void copyRacks(ServerLevel level) {
+		List<LivePanelBlockEntity> boards = around(level, PlantInterior.BLOCKS.get("dc_switchboard"));
+		setRacks(level, !boards.isEmpty() ? boards.get(0).racks : battery == null ? List.of() : List.of(battery));
+	}
+
+	private void setRacks(ServerLevel level, List<BlockPos> found) {
+		if (!found.equals(racks)) {
+			racks.clear();
+			racks.addAll(found);
+			sync(level);
+		}
+	}
+
+	/**
+	 * A DC switchboard keeps its racks' charge even (round 26, #9): strings in parallel on one bus sit at the same
+	 * voltage, so a charger feeding one feeds them all. Each second the fullest gives the emptiest up to a second of
+	 * the racks' rate, and the next pair the same.
+	 */
+	private void balance(ServerLevel level) {
+		List<StationBatteryBlockEntity> banks = new ArrayList<>();
+		for (BlockPos at : racks) {
+			if (level.isLoaded(at) && level.getBlockEntity(at) instanceof StationBatteryBlockEntity bank) {
+				banks.add(bank);
+			}
+		}
+		banks.sort(java.util.Comparator.comparingLong(b -> b.energy.getAmount()));
+		for (int i = 0, j = banks.size() - 1; i < j; i++, j--) {
+			StationBatteryBlockEntity low = banks.get(i), high = banks.get(j);
+			long move = Math.min(StationBatteryBlockEntity.RATE * 20, (high.energy.getAmount() - low.energy.getAmount()) / 2);
+			if (move > 0) {
+				high.energy.setAmount(high.energy.getAmount() - move);
+				low.energy.setAmount(low.energy.getAmount() + move);
+				high.setChanged();
+				low.setChanged();
+			}
+		}
+	}
+
+	/** An exhaust fan's selector turned, a battery monitor's page stepped: saved, and sent to the players. */
+	void changedMode(ServerLevel level) {
+		sync(level);
+	}
+
 	/**
 	 * The DC equipment rooms' panels: the station charger, the DC switchboard, the vital inverter, its transformer, its
 	 * vital panel and the ground detector.
 	 */
 	static boolean dcRoom(BlockState state) {
 		return state.getBlock() == PlantInterior.BLOCKS.get("station_charger") || isSwitchboard(state) || isInverter(state) || isTransformer(state)
-				|| isVitalPanel(state) || isGroundDetector(state);
+				|| isVitalPanel(state) || isGroundDetector(state) || batteryRoom(state);
 	}
 
 	/** A ground detector's test (GroundDetectorBlock): on side 1 (+) or 2 (-) until game time until; saved, sent. */
@@ -344,12 +465,31 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (input != null) {
 			charge(level);
 		}
+		if (racks.size() > 1 && isSwitchboard(getBlockState()) && balanceTimer-- <= 0) {
+			balanceTimer = 19;
+			balance(level);
+		}
 		if (timer-- > 0) {
 			return;
 		}
 		timer = 40;
-		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState()) || isGroundDetector(getBlockState())) {
+		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState()) || isGroundDetector(getBlockState())
+				|| batteryRoom(getBlockState())) {
 			linkBattery(level);
+		}
+		if (isSwitchboard(getBlockState())) {
+			linkRacks(level);
+		} else if (isGroundDetector(getBlockState()) || batteryRoom(getBlockState())) {
+			copyRacks(level);
+		}
+		if (batteryRoom(getBlockState())) {
+			// The hydrogen monitor and the exhaust fan keep to each other (its panel): the nearest of the other in reach.
+			List<LivePanelBlockEntity> other = around(level, PlantInterior.BLOCKS.get(isH2Monitor(getBlockState()) ? "exhaust_fan" : "h2_monitor"));
+			BlockPos found = other.isEmpty() ? null : other.get(0).getBlockPos();
+			if (found == null ? panel != null : !found.equals(panel)) {
+				panel = found == null ? null : found.immutable();
+				sync(level);
+			}
 		}
 		if (isVitalPanel(getBlockState())) {
 			linkFeed(level);
@@ -586,6 +726,13 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.putInt("test_side", testSide);
 			out.putLong("test_until", testUntil);
 		}
+		if (!racks.isEmpty()) {
+			out.store("racks", BlockPos.CODEC.listOf(), List.copyOf(racks));
+		}
+		if (isExhaustFan(getBlockState()) || isGroundDetector(getBlockState())) {
+			out.putInt("mode", mode);
+			out.putInt("page", page);
+		}
 	}
 
 	@Override
@@ -604,6 +751,10 @@ public class LivePanelBlockEntity extends BlockEntity {
 		breakers = in.getIntOr("breakers", isVitalPanel(getBlockState()) ? VitalPanelBlock.DEFAULT_BREAKERS : 0);
 		testSide = in.getIntOr("test_side", 0);
 		testUntil = in.getLongOr("test_until", 0L);
+		racks.clear();
+		racks.addAll(in.read("racks", BlockPos.CODEC.listOf()).orElse(List.of()));
+		mode = in.getIntOr("mode", isExhaustFan(getBlockState()) ? ExhaustFanBlock.AUTO : 0);
+		page = in.getIntOr("page", 0);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}

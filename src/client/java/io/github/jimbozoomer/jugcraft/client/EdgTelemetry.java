@@ -46,6 +46,17 @@ public final class EdgTelemetry {
 	static final double XF_ROOM = 25, XF_NO_LOAD = 58, XF_LOADED = 96, XF_TAU = 1800;
 	/** Each regulating transformer's winding temperature as last drawn, and when (game ticks). */
 	private static final Map<BlockPos, double[]> WINDING = new HashMap<>();
+	/**
+	 * A battery room's hydrogen (round 26, #9): its monitor's WARN and ALARM (% LEL); hydrogen given off a cell's worth of
+	 * charging amps; what the fan carries away on high, low and off (the room's own leakage); how fast it follows (game
+	 * ticks); each monitor's reading as last drawn, and when.
+	 */
+	public static final double H2_WARN = 10, H2_ALARM = 25, H2_BASE = 0.3, H2_GAS = 0.12, H2_FLOAT_GAS = 0.04, H2_TAU = 600;
+	static final double[] H2_VENT = {2.5, 1.0, 0.05};
+	private static final Map<BlockPos, double[]> HYDROGEN = new HashMap<>();
+	/** An exhaust fan: its blades' turn (degrees), speed (turns a second) and when, as last drawn; its two speeds. */
+	private static final Map<BlockPos, double[]> FAN = new HashMap<>();
+	static final double FAN_LOW = 0.6, FAN_HIGH = 1.5, FAN_CHARGING = 20;
 
 	private EdgTelemetry() {
 	}
@@ -79,8 +90,15 @@ public final class EdgTelemetry {
 		public boolean gdOn, bmOn, bmAlarm;
 		public int gdGround;
 		public double gdPos, gdNeg, bmV, bmA, bmSoc, bmTemp;
-		public String bmMode = "";
+		public String bmMode = "", bmString = "";
 		public final double[] cells = new double[60];
+		/**
+		 * A battery room's hydrogen monitor (round 26, #9): hydrogen in the air (% of its lower explosive limit), and its
+		 * exhaust fan: its selector (ExhaustFanBlock.MODES), running, on high speed, its blades' turn (degrees).
+		 */
+		public double h2Lel, fanAngle;
+		public int fanMode = -1;
+		public boolean fanRun, fanHigh;
 		/** Sequencer steps done, and the one whose motor is starting now (-1 none). */
 		public int steps, starting = -1;
 		public String avr1 = "", avr2 = "", sequence = "";
@@ -120,6 +138,7 @@ public final class EdgTelemetry {
 				case "xf_temp" -> xfTemp;
 				case "gd_pos_v" -> gdPos;
 				case "gd_neg_v" -> gdNeg;
+				case "ef_spin" -> fanAngle;
 				default -> 0;
 			};
 		}
@@ -187,6 +206,15 @@ public final class EdgTelemetry {
 				case "gd_pos" -> gdGround == 1 ? 1 : 0;
 				case "gd_neg" -> gdGround == 2 ? 1 : 0;
 				case "bm_alarm" -> bmAlarm ? 1 : 0;
+				// A battery room's hydrogen monitor and exhaust fan (round 26, #9).
+				case "h2_ok" -> h2Lel < H2_WARN ? 1 : 0;
+				case "h2_warn" -> h2Lel >= H2_WARN && h2Lel < H2_ALARM ? 1 : 0;
+				case "h2_alarm" -> h2Lel >= H2_ALARM ? 1 : 0;
+				case "ef_run" -> fanRun ? 1 : 0;
+				case "ef_high" -> fanHigh ? 1 : 0;
+				case "ef_mode_0" -> fanMode == 0 ? 1 : 0;
+				case "ef_mode_1" -> fanMode == 1 ? 1 : 0;
+				case "ef_mode_2" -> fanMode == 2 ? 1 : 0;
 				default -> channel.startsWith("vb_") ? vbBreakers >> Integer.parseInt(channel.substring(3)) & 1 : 0;
 			};
 		}
@@ -213,8 +241,12 @@ public final class EdgTelemetry {
 					case "bm_soc" -> String.format(Locale.ROOT, "%.0f", bmSoc);
 					case "bm_t" -> String.format(Locale.ROOT, "%.1f", bmTemp);
 					case "bm_mode" -> bmMode;
+					case "bm_str" -> bmString;
 					default -> "";
 				};
+			}
+			if (channel.equals("h2_lel")) {
+				return String.format(Locale.ROOT, "%.1f", h2Lel);
 			}
 			if (channel.equals("inv_hz")) {
 				// The frequency display goes dark with the inverter's own control power (its DC) and no bypass.
@@ -304,7 +336,8 @@ public final class EdgTelemetry {
 		}
 		double soc = bank.charge();
 		boolean charger = panel.input != null;
-		double rate = charger ? panel.charging : bank.flow;
+		// A switchboard's battery current is all its racks' in parallel (round 26, #9).
+		double rate = charger ? panel.charging : panel.racks.isEmpty() ? bank.flow : flow(level, panel.racks);
 		o.chargerAc = charger ? panel.ac : bank.flow >= 0 && soc > 0.999 || bank.flow > 0;
 		if (rate > 0) {
 			o.dcA = rate / 8.0;
@@ -421,13 +454,19 @@ public final class EdgTelemetry {
 		o.gdPos = o.gdGround == 1 ? gnd : o.gdGround == 2 ? bus - gnd : half;
 		o.gdNeg = o.gdGround == 2 ? gnd : o.gdGround == 1 ? bus - gnd : bus - half;
 		o.bmV = bus + 0.05 * noise(t * 0.3, seed, 6);
-		double rate = bank.flow / 8.0;
+		// The string on the screen (round 26, #9; MENU steps through them): its racks' current and charge.
+		java.util.List<java.util.List<BlockPos>> strings = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.strings(level, panel.racks);
+		java.util.List<BlockPos> shown = strings.isEmpty() ? java.util.List.of(panel.battery) : strings.get(Math.floorMod(panel.page, strings.size()));
+		o.bmString = strings.size() > 1 ? String.format(Locale.ROOT, "STR %d/%d", Math.floorMod(panel.page, strings.size()) + 1, strings.size()) : "";
+		int f = flow(level, shown);
+		soc = charge(level, shown, soc);
+		double rate = f / 8.0;
 		boolean full = soc > 0.999;
-		o.bmA = (bank.flow > 0 ? rate : bank.flow < 0 ? rate : full ? 2 : 0) + 0.1 * noise(t * 0.4, seed, 7);
+		o.bmA = (f != 0 ? rate : full ? 2.0 / Math.max(1, strings.size()) : 0) + 0.1 * noise(t * 0.4, seed, 7);
 		o.bmSoc = soc * 100;
-		o.bmTemp = 25 + (bank.flow > 0 ? Math.min(3, rate / 50) : 0) + 0.15 * noise(t * 0.05, seed, 8);
+		o.bmTemp = 25 + (f > 0 ? Math.min(3, rate / 50) : 0) + 0.15 * noise(t * 0.05, seed, 8);
 		o.bmMode = o.gdGround == 1 ? "+ GND FAULT" : o.gdGround == 2 ? "- GND FAULT"
-				: bank.flow > 0 ? (rate > 35 ? "EQUALIZE" : "RECHARGE") : bank.flow < 0 ? "DISCHARGE" : full ? "FLOAT" : "OPEN CKT";
+				: f > 0 ? (rate > 35 ? "EQUALIZE" : "RECHARGE") : f < 0 ? "DISCHARGE" : full ? "FLOAT" : "OPEN CKT";
 		for (int i = 0; i < o.cells.length; i++) {
 			double h = Math.sin(i * 12.9898 + seed * 78.233) * 43758.5453;
 			o.cells[i] = o.bmV / o.cells.length + 0.03 * ((h - Math.floor(h)) * 2 - 1) + 0.002 * noise(t * 0.3, seed + i, 9);
@@ -435,6 +474,105 @@ public final class EdgTelemetry {
 		boolean blink = ((long) (now / 10)) % 2 == 0;
 		o.bmAlarm = (o.gdGround != 0 || bus < 124) && blink;
 		o.dcV = bus;
+	}
+
+	/** What a battery's racks take in (+) or give out (-) together (JE a tick, as their meters read it). */
+	static int flow(net.minecraft.world.level.Level level, java.util.List<BlockPos> racks) {
+		int f = 0;
+		for (BlockPos at : racks) {
+			if (at != null && level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity bank) {
+				f += bank.flow;
+			}
+		}
+		return f;
+	}
+
+	/** Racks' average charge (0..1), or fallback with none there. */
+	static double charge(net.minecraft.world.level.Level level, java.util.List<BlockPos> racks, double fallback) {
+		double sum = 0;
+		int n = 0;
+		for (BlockPos at : racks) {
+			if (at != null && level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity bank) {
+				sum += bank.charge();
+				n++;
+			}
+		}
+		return n == 0 ? fallback : sum / n;
+	}
+
+	/**
+	 * An exhaust fan's speed (round 26, #9; Justin: "Hydrogen monitor and fan"), as its selector sets it: HAND high, OFF
+	 * stopped, AUTO low while the battery floats and high while it charges hard (over FAN_CHARGING amps, when it gases).
+	 * 0 stopped, 1 low, 2 high.
+	 */
+	static int fanSpeed(int mode, double chargingAmps) {
+		return switch (mode) {
+			case io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.HAND -> 2;
+			case io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.OFF -> 0;
+			default -> chargingAmps > FAN_CHARGING ? 2 : 1;
+		};
+	}
+
+	/** What a battery room's racks take in charging (amps; 0 floating or discharging). */
+	static double chargingAmps(net.minecraft.world.level.Level level, java.util.List<BlockPos> racks) {
+		return Math.max(0, flow(level, racks)) / 8.0;
+	}
+
+	/**
+	 * A battery room's exhaust fan (round 26, #9): its RUN and HIGH lamps, the selector's pointer, and its blades
+	 * turning, spinning up and running down over a second or two when its speed changes.
+	 */
+	public static void exhaustFan(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
+			double now) {
+		o.fanMode = Math.floorMod(panel.mode, 3);
+		int speed = fanSpeed(o.fanMode, chargingAmps(level, panel.racks));
+		o.fanRun = speed > 0;
+		o.fanHigh = speed == 2;
+		double target = speed == 2 ? FAN_HIGH : speed == 1 ? FAN_LOW : 0;
+		double[] m = FAN.get(panel.getBlockPos());
+		if (m == null && FAN.size() > 256) {
+			FAN.clear();
+		}
+		if (m == null) {
+			m = new double[] {(panel.getBlockPos().hashCode() & 0xFF) * 1.4, target, now};
+			FAN.put(panel.getBlockPos().immutable(), m);
+		}
+		double dt = Math.max(0, Math.min(40, now - m[2]));
+		m[1] = target + (m[1] - target) * Math.exp(-dt / 25);
+		m[0] = (m[0] + 360 * m[1] * dt / 20) % 360;
+		m[2] = now;
+		o.fanAngle = m[0];
+	}
+
+	/**
+	 * A battery room's hydrogen monitor (round 26, #9): the hydrogen in the air (% LEL). A floating battery gives off a
+	 * little, one charging hard (its cells gassing) more with its current; the exhaust fan (its panel) carries it away,
+	 * fast on high, less on low, and with the fan off only the room's own leakage does, so the reading creeps up. The
+	 * reading follows slowly (two thirds of the way in about half a minute); NORMAL under WARN, then WARN, then ALARM.
+	 */
+	public static void hydrogen(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
+			double now) {
+		double amps = chargingAmps(level, panel.racks);
+		int speed = 0;
+		if (panel.panel != null && level.getBlockEntity(panel.panel) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity fan
+				&& io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isExhaustFan(fan.getBlockState())) {
+			speed = fanSpeed(Math.floorMod(fan.mode, 3), amps);
+		}
+		double gas = H2_FLOAT_GAS + H2_GAS * amps;
+		double target = Math.min(100, H2_BASE + gas / H2_VENT[2 - speed]);
+		double[] m = HYDROGEN.get(panel.getBlockPos());
+		if (m == null && HYDROGEN.size() > 256) {
+			HYDROGEN.clear();
+		}
+		if (m == null) {
+			m = new double[] {target, now};
+			HYDROGEN.put(panel.getBlockPos().immutable(), m);
+		}
+		double dt = Math.max(0, Math.min(H2_TAU, now - m[1]));
+		m[0] = target + (m[0] - target) * Math.exp(-dt / H2_TAU);
+		m[1] = now;
+		double seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		o.h2Lel = Math.max(0, m[0] + 0.05 * noise(now / 20.0 * 0.2, seed, 10));
 	}
 
 	/**

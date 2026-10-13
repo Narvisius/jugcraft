@@ -122,10 +122,17 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   lead bus bars and the posts rising from them. On top are the black cover, a flame-arrester vent, the posts with
   red and black collars and bolts, and bolted intercell links; rubber spacers sit between the jars. Restraint rails
   run along the front and back of both steps, and the engraved nameplate reads 125 VDC STATION BATTERY, 60 CELLS -
-  NO SMOKING.
+  NO SMOKING. Every cell has the battery monitor's sensor clipped to its positive post (a small black module with a
+  green light and its lead to the post), daisy-chained along the front of the covers on each step; at the rack's right
+  end both chains go back to the cell sense junction box on the wall behind it, and its blue-grey sense cable goes up
+  the riser beside the power cables and along the DC tray to the Ground Detector & Battery Monitor (round 26).
 - **Station batteries hold charge** (round 25): a Station Battery rack holds 1,500,000 JE. Any cable touching it can
   charge it or draw on it (4,096 JE/t). Right-click it to see its charge and whether it is charging, discharging or
   on float.
+  - **Strings in parallel** (round 26): a DC switchboard has every rack in reach that is nearer to it than to any
+    other switchboard on its bus, and keeps their charge even, each second moving charge from the fullest rack to the
+    emptiest (up to 81,920 JE), so a charger feeding one rack charges them all. Its BATT AMPS meter reads all of
+    them together. Racks standing in one line, end to end, are one string; each line is another in parallel.
   - A **Battery Charger** or **Station Battery Charger** takes AC from a cable into any block of it (it keeps a
     40,000 JE buffer). It charges the nearest station battery within 24 blocks that no other charger has, at up to
     1,024 JE/t (its 150 A limit).
@@ -193,8 +200,9 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   - The battery monitor's screen (green on black): the string's VOLTS and AMPS (in positive, out negative), CHARGE %,
     TEMP °C and what the battery is doing (FLOAT, RECHARGE, EQUALIZE, DISCHARGE, OPEN CKT), then a bar for each of
     its 60 cells (two rows of 30) on a 2.00 to 2.35 V scale with the 2.20 V float level dashed behind them. A healthy
-    battery's cells sit round the float level with a small spread; a cell below 2.10 V turns amber. MENU and ALARM ACK
-    keys, and the ALARM lamp (it flashes with a ground on the bus or the bus under 124 V).
+    battery's cells sit round the float level with a small spread; a cell below 2.10 V turns amber. With two strings
+    in parallel it shows one at a time (STR 1/2: its own amps and charge), and right-clicking MENU steps to the next.
+    MENU and ALARM ACK keys, and the ALARM lamp (it flashes with a ground on the bus or the bus under 124 V).
   - The ground detector: + BUS TO GROUND and - BUS TO GROUND voltmeters (0 to 150 V), each reading half the bus while
     neither side is grounded (no ground faults are modelled: the bus is healthy); + GND and - GND lamps (amber, that
     side grounded) and DC ON (white).
@@ -203,6 +211,26 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
     lamp lights, the screen reads + GND FAULT or - GND FAULT, ALARM flashes and the alarm beeps. Let go and it clears.
     Use it anywhere else for the bus and the battery in a line.
   - The louvred inlet, hinges and the T-handle; its conduit goes up from its top into the tray.
+- **The battery rooms' fittings** (round 26), each labelled by train where it has one:
+  - **Hydrogen Monitor**: a wall transmitter two blocks high, the display at eye level and its conduit up the wall
+    to the **Hydrogen Sensor Head** near the ceiling (hydrogen rises). It reads the hydrogen in the room's air in % of
+    its lower explosive limit (red digits) with NORMAL, WARN (10 %LEL) and ALARM (25 %LEL) lamps. A floating battery
+    gives off a little and a battery charging hard gives off more with its current; the room's exhaust fan carries it
+    away, more on high speed, and with the fan off the reading creeps up. The reading follows slowly (about half a
+    minute). It keeps to its battery and the nearest exhaust fan.
+  - **Battery Room Exhaust Fan**: a wall fan two blocks high, its upper block over the room's hydrogen exhaust louvre:
+    the housing and round shroud, the motor on its cross bars, four blades that turn (live) behind a wire guard, and
+    below it its HAND-OFF-AUTO station with RUN and HIGH lamps. Right-click the selector to turn it (HAND, OFF, AUTO).
+    AUTO runs it slowly while the battery floats and fast while it charges hard (over 20 A); HAND runs it fast; OFF
+    stops it. The blades spin up and run down over a second or two.
+  - **Emergency Eyewash Station**: a plumbed wall eyewash, its stainless bowl with two spray heads under yellow dust
+    covers, fed from the wall through a valve with a green PUSH flag, the drain back into the wall. Right-click it and it
+    runs for 5 seconds: water jets up out of both heads and splashes in the bowl.
+  - **Acid Spill Kit**: a yellow wall cabinet (neutralizer, absorbent pillows, gloves, apron, goggles).
+  - Signs: **No Smoking Sign** (no smoking, no open flames, no sparks), **Battery Acid Danger Sign**, **Hydrogen
+    Warning Sign** and **Emergency Eyewash Sign**, each a plate on four stand-off screws.
+  - **DC Cable Tray (Bend)** and **(Tee)**, and the riser and its top **(With Sense Cable)**: a second string's run
+    turning a corner and joining the first's on its way to the switchboard.
 - **Ladder Cable Tray** (round 26): 24-inch galvanized ladder tray (rails, rungs, black power cables on them) hung under
   the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend (with or without a
   drop in it), and drops where a conduit comes up under it and a cable goes down into it (one or two, each with or
@@ -321,8 +349,12 @@ blueprint (for players who lay out their own plant).
   bucket (or any full fluid container) right-clicked on the hatch; it holds one liquid, so another is refused.
 - **The medium plant's control building** (round 18, `tools/medium_plant.py` `control_building`), four floors laid
   out like a real plant's (NRC fire hazards analyses of TMI, Susquehanna and Peach Bottom; IEEE 484 battery rooms):
-  - Grade: Battery Rooms 1A and 1B, each a 60-cell 125 VDC station battery on two step racks (Station Battery, four
-    blocks long, 30 cells in clear jars, below), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
+  - Grade: Battery Rooms 1A and 1B, each a 125 VDC station battery of two 60-cell strings in parallel, each string on
+    two step racks along a wall, one string on each long wall (Station Battery, four blocks long, 30 cells in clear jars,
+    below; round 26: the second strings, and Battery Room 1B's door moved to its east end to make room), the second
+    string's cables up its wall into a tray that turns the corner and joins the first's; the hydrogen monitor, its
+    sensor head and the exhaust fan over a louvre on the outside wall, the eyewash with its sign, the acid spill kit, the
+    battery acid and hydrogen signs, NO SMOKING outside the door; its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers, Vital AC Inverters and Regulating Transformers (in groups by number: charger, inverter,
     transformer) and, at the row's end, the DC Ground Detector & Battery Monitor, with the room's 480 V motor control

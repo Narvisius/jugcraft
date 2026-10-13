@@ -59,13 +59,16 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 
 	record Element(String type, double x, double y, double z, double r, double x0, double y0, double x1, double y1, double lo, double hi,
 			double start, double sweep, int colour, int colour2, double alpha, double size, String channel, String align, String[] label,
-			double[] on, double[] off, boolean open, double warn) {
+			double[] on, double[] off, boolean open, double warn, int blades, double width) {
 	}
 
 	record Layout(int width, List<Element> elements) {
 	}
 
-	record Needle(double x, double y, double z, double angle, double length, double tail, double width, double hub) {
+	record Needle(double x, double y, double z, double angle, double length, double tail, double width, double hub, int colour) {
+		Needle(double x, double y, double z, double angle, double length, double tail, double width, double hub) {
+			this(x, y, z, angle, length, tail, width, hub, 0x1E1E20);
+		}
 	}
 
 	record Disc(double x, double y, double z, double r, int colour, boolean glow) {
@@ -141,6 +144,12 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isGroundDetector(panel.getBlockState())) {
 				// A ground detector and battery monitor (round 26, 8f): its battery, its test.
 				EdgTelemetry.groundDetector(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isH2Monitor(panel.getBlockState())) {
+				// A battery room's hydrogen monitor (round 26, #9): its battery's gassing, its fan.
+				EdgTelemetry.hydrogen(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isExhaustFan(panel.getBlockState())) {
+				// A battery room's exhaust fan (round 26, #9): its selector, its blades.
+				EdgTelemetry.exhaustFan(snap, panel, level, now);
 			}
 		}
 		// What shows only with a panel's door open (a vital panel's breaker handles).
@@ -152,7 +161,20 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 				continue;
 			}
 			switch (e.type()) {
-				case "toggle" -> state.boxes.add(new Box(snap.lit(e.channel()) > 0 ? e.on() : e.off(), e.colour()));
+				case "toggle" -> {
+					// A switch's handle (8e), a selector's pointer (#9: one of several, the rest with nothing to show off).
+					double[] b = snap.lit(e.channel()) > 0 ? e.on() : e.off();
+					if (b.length == 6) {
+						state.boxes.add(new Box(b, e.colour()));
+					}
+				}
+				case "fan" -> {
+					// A fan's blades (round 26, #9), turned to the channel's angle (degrees).
+					double a0 = Math.toRadians(snap.number(e.channel()));
+					for (int k = 0; k < e.blades(); k++) {
+						state.needles.add(new Needle(e.x(), e.y(), e.z(), a0 + 2 * Math.PI * k / e.blades(), e.r(), -0.4, e.width(), 0, e.colour()));
+					}
+				}
 				case "dial" -> {
 					double v = clamp(snap.number(e.channel()), e.lo(), e.hi());
 					double a = Math.toRadians(e.start() - e.sweep() * (v - e.lo()) / (e.hi() - e.lo()));
@@ -237,7 +259,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			Geometry g = new Geometry(p, consumer);
 			for (Needle n : state.needles) {
 				g.light = light;
-				g.color = 0xFF1E1E20;
+				g.color = 0xFF000000 | n.colour();
 				double dx = Math.cos(n.angle()), dy = Math.sin(n.angle());
 				double nx = -dy * n.width() / 2, ny = dx * n.width() / 2;
 				double tx = n.x() - dx * n.tail(), ty = n.y() - dy * n.tail();
@@ -245,7 +267,9 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 				float z = (float) (n.z() + 0.06);
 				g.quad((float) (tx - nx), (float) (ty - ny), z, (float) (hx - nx), (float) (hy - ny), z, (float) (hx + nx), (float) (hy + ny), z,
 						(float) (tx + nx), (float) (ty + ny), z, 0, 0, 1, WHITE);
-				square(g, n.x(), n.y(), n.z() + 0.09, n.hub(), HUB);
+				if (n.hub() > 0) {
+					square(g, n.x(), n.y(), n.z() + 0.09, n.hub(), HUB);
+				}
 			}
 			for (Disc d : state.discs) {
 				g.light = d.glow() ? LightCoordsUtil.FULL_BRIGHT : light;
@@ -365,7 +389,8 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		return new Element(o.get("t").getAsString(), num(o, "x"), num(o, "y"), num(o, "z"), num(o, "r"), num(o, "x0"), num(o, "y0"), num(o, "x1"),
 				num(o, "y1"), num(o, "lo"), num(o, "hi"), num(o, "start"), num(o, "sweep"), rgb(o, "colour"), rgb(o, "colour2"),
 				o.has("alpha") ? num(o, "alpha") : 0.6, num(o, "size"), o.get("ch").getAsString(), o.has("align") ? o.get("align").getAsString() : "left",
-				label(o), nums(o, "on"), nums(o, "off"), o.has("open") && o.get("open").getAsBoolean(), num(o, "warn"));
+				label(o), nums(o, "on"), nums(o, "off"), o.has("open") && o.get("open").getAsBoolean(), num(o, "warn"), (int) num(o, "blades"),
+				num(o, "width"));
 	}
 
 	private static double[] nums(JsonObject o, String key) {

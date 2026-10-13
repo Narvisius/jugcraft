@@ -125,9 +125,25 @@ public final class PlantInterior {
 			// Each DC room's ground detector and battery monitor (round 26, 8f): at the end of the equipment row, its test
 			// buttons held to put a ground on the bus (GroundDetectorBlock).
 			{"dc_ground_detector", 0, "ground", "metal", null},
+			// The battery rooms' (round 26, #9): the hydrogen monitor and the exhaust fan on the walls (live, labelled by
+			// train), the eyewash (EyewashBlock), the spill kit, the hydrogen sensor head, the signs; the second strings'
+			// cable runs with the battery monitor's sense cable.
+			{"h2_monitor", 0, "wall:2:3.8", "metal", null},
+			{"exhaust_fan", 0, "fan", "metal", null},
+			{"eyewash_station", 0, "eyewash", "metal", new double[] {2.5, 4.6, 0, 13.5, 13.8, 13}},
+			{"spill_kit", 0, "plain", "metal", new double[] {1.7, 1, 0, 14.3, 14.5, 6.6}},
+			{"h2_sensor", 0, "plain", "metal", new double[] {6.4, 0, 0.2, 12.4, 10.5, 3.6}},
+			{"sign_no_smoking", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
+			{"sign_battery_acid", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
+			{"sign_hydrogen", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
+			{"sign_eyewash", 0, "plain", "metal", new double[] {2.5, 1.5, 0, 13.5, 14.5, 0.5}},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
+			{"dc_cable_riser_sense", 0, "plain", "metal", new double[] {5, 0, 0, 13, 16, 3}},
+			{"dc_cable_riser_top_sense", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
+			{"dc_cable_tray_bend", 0, "plain", "metal", new double[] {0, 12, 4, 12, 16, 16}},
+			{"dc_cable_tray_tee", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 16}},
 			// A load centre's feeder conduit, up from its hub through the ceiling into the trays above (round 25b).
 			{"feeder_conduit", 0, "plain", "metal", new double[] {6.7, 0, 6.7, 9.3, 16, 9.3}},
 			{"feeder_conduit_base", 0, "plain", "metal", new double[] {6.7, 0, 6.7, 9.3, 16, 9.3}},
@@ -225,6 +241,12 @@ public final class PlantInterior {
 					return new VitalPanelBlock(p);
 				} else if (kind.equals("ground")) {
 					return new GroundDetectorBlock(p);
+				} else if (kind.equals("fan")) {
+					return new ExhaustFanBlock(p);
+				} else if (kind.equals("eyewash")) {
+					return new EyewashBlock(p, shape);
+				} else if (k[0].equals("wall")) {
+					return new WallLivePanelBlock(p, Integer.parseInt(k[1]), Double.parseDouble(k[2]));
 				} else if (k[0].equals("live")) {
 					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), k.length > 4 ? Integer.parseInt(k[4]) : 1);
 				} else if (k[0].equals("battery")) {

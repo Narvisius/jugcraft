@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PBP",
+    "PIP"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "B": "minecraft:black_dye",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:sign_battery_acid",
+    "count": 2
+  }
+}

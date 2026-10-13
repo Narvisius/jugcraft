@@ -850,21 +850,69 @@ def wall_screen(b, name, x, y, z, facing):
             b.p(x + rx * c, y + r, z + rz * c, multi_state(name, facing, r * 3 + c))
 
 
-def dc_run(b, battery_ends, board, y, z, facing):
+def dc_run(b, battery_ends, board, y, z, facing, tee=None):
     """The DC power cables from a station battery to its switchboard (plant_panels.RISERS): a riser up the wall from
     the end of each rack (where its cables come out of the top) to a cable tray under the ceiling at y, the tray along
     the wall at z to the switchboard, and a riser down into the switchboard's top. battery_ends: the x of each rack's
     terminal end; board: the x of the switchboard block the cables go down into; the racks and the board stand against
-    the same wall (facing it), two blocks high from the floor below y - 4."""
+    the same wall (facing it), two blocks high from the floor below y - 4. The racks' risers carry the battery
+    monitor's sense cable too (round 26, #9); tee: (x, facing), where a second string's run joins this one."""
     floor = y - 4
     ends = sorted(set(battery_ends) | {board})
     for x in ends:
+        sense = "_sense" if x in battery_ends else ""
         for k in range(floor + 2, y):
-            b.p(x, k, z, furniture("dc_cable_riser", facing))
-        b.p(x, y, z, furniture("dc_cable_riser_top", facing))
+            b.p(x, k, z, furniture("dc_cable_riser" + sense, facing))
+        b.p(x, y, z, furniture("dc_cable_riser_top" + sense, facing))
     for x in range(ends[0] + 1, ends[-1]):
-        if x not in ends:
+        if tee and x == tee[0]:
+            b.p(x, y, z, furniture("dc_cable_tray_tee", tee[1]))
+        elif x not in ends:
             b.p(x, y, z, furniture("dc_cable_tray", facing))
+
+
+def dc_branch(b, battery_ends, y, z, facing, bend, cross, cross_facing):
+    """A second string's DC cables (round 26, #9; Justin: "Second string in parallel", "Up the wall into the DC tray"):
+    risers up its wall from its racks' terminal ends (with the sense cable) into a tray along that wall at z, the
+    tray's bend at bend (x, facing), and on across (cross: the cells, cross_facing) to the tee in the first string's
+    run (dc_run tee)."""
+    floor = y - 4
+    for x in battery_ends:
+        for k in range(floor + 2, y):
+            b.p(x, k, z, furniture("dc_cable_riser_sense", facing))
+        b.p(x, y, z, furniture("dc_cable_riser_top_sense", facing))
+    lo, hi = min(battery_ends + [bend[0]]), max(battery_ends + [bend[0]])
+    for x in range(lo + 1, hi):
+        if x not in battery_ends:
+            b.p(x, y, z, furniture("dc_cable_tray", facing))
+    b.p(bend[0], y, z, furniture("dc_cable_tray_bend", bend[1]))
+    for cx, cz in cross:
+        b.p(cx, y, cz, furniture("dc_cable_tray", cross_facing))
+
+
+# The battery rooms' fittings (round 26, #9; Justin: "Eyewash and spill kit", "Hydrogen monitor and fan", "Warning
+# signs"): (piece, x, y, z, facing, label) — the exhaust fan over a hydrogen exhaust louvre, the hydrogen monitor at eye
+# level with its conduit up to the sensor head by the ceiling, the eyewash with its sign over it, the acid spill kit, the
+# signs (NO SMOKING outside the door).
+BATTERY_ROOM_1A = [("exhaust_fan", 1, 3, 3, "west", "1A"), ("h2_monitor", 1, 2, 5, "west", "1A"), ("wall_conduit", 1, 4, 5, "west", None),
+                   ("h2_sensor", 1, 5, 5, "west", None), ("sign_hydrogen", 1, 2, 4, "west", None),
+                   ("eyewash_station", 9, 1, 3, "east", None), ("sign_eyewash", 9, 2, 3, "east", None),
+                   ("spill_kit", 9, 1, 2, "east", None), ("sign_battery_acid", 9, 2, 2, "east", None),
+                   ("sign_no_smoking", 11, 2, 7, "west", None)]
+BATTERY_ROOM_1B = [("exhaust_fan", 38, 3, 23, "east", "1B"), ("h2_monitor", 38, 2, 25, "east", "1B"), ("wall_conduit", 38, 4, 25, "east", None),
+                   ("h2_sensor", 38, 5, 25, "east", None), ("sign_hydrogen", 38, 2, 24, "east", None),
+                   ("eyewash_station", 30, 1, 23, "west", None), ("sign_eyewash", 30, 2, 23, "west", None),
+                   ("spill_kit", 30, 1, 22, "west", None), ("sign_battery_acid", 30, 2, 22, "west", None),
+                   ("sign_no_smoking", 36, 2, 17, "south", None)]
+
+
+def battery_room_fittings(b, fittings):
+    for name, x, y, z, facing, label in fittings:
+        if label:
+            b.panel(name, x, y, z, facing, 1, label)
+        else:
+            assert b.get(x, y, z) == 0, (name, x, y, z)
+            b.furniture(name, x, y, z, facing)
 
 
 def feeder_conduits(b, ax, ay, az, facing, upper):
@@ -1085,9 +1133,15 @@ def ground_floor(b, W, D):
     # cables up and along the wall under the ceiling, through into the DC Equipment Room; the hydrogen exhaust louvres.
     b.panel("station_battery", 1, 1, 1, "north", 4)
     b.panel("station_battery", 5, 1, 1, "north", 4)
-    dc_run(b, [4, 8], 11, 5, 1, "north")
+    dc_run(b, [4, 8], 11, 5, 1, "north", tee=(9, "north"))
+    # Its second string (round 26, #9; Justin: "Second string in parallel"): two more racks along the south wall, their
+    # cables up into a tray along it, round the corner and along the east wall into the first string's run.
+    b.panel("station_battery", 8, 1, 8, "south", 4)
+    b.panel("station_battery", 4, 1, 8, "south", 4)
+    dc_branch(b, [5, 1], 5, 8, "south", (9, "east"), [(9, z) for z in range(2, 8)], "east")
     b.door(10, 1, 6, "west", label="battery_room_1a")
     b.furniture("fire_extinguisher", 1, 2, 7, "west")
+    battery_room_fittings(b, BATTERY_ROOM_1A)
     # ---- Remote Shutdown Room (x 1..9, z 10..13; round 24): the remote shutdown panel standing along its north wall
     # (Justin: no bookcase; the panel must work; "more realistic with detail"), a rubber mat in front of it, the
     # battery emergency lights over it (the room must stay lit if the plant loses power), against the east wall an
@@ -1216,9 +1270,14 @@ def ground_floor(b, W, D):
     b.furniture("fire_extinguisher", 19, 2, 26, "west")
     b.panel("station_battery", 37, 1, D - 2, "south", 4)
     b.panel("station_battery", 33, 1, D - 2, "south", 4)
-    dc_run(b, [34, 30], 28, 5, D - 2, "south")
-    b.door(34, 1, 18, "south", double=True, label="battery_room_1b")
+    dc_run(b, [34, 30], 28, 5, D - 2, "south", tee=(32, "south"))
+    # Its second string (round 26, #9) along the north wall; the door moved to the room's east end to make room for it.
+    b.panel("station_battery", 30, 1, 19, "north", 4)
+    b.panel("station_battery", 34, 1, 19, "north", 4)
+    dc_branch(b, [33, 37], 5, 19, "north", (32, "west"), [(32, z) for z in range(20, D - 2)], "west")
+    b.door(W - 2, 1, 18, "south", label="battery_room_1b")
     b.furniture("fire_extinguisher", W - 2, 2, 21, "east")
+    battery_room_fittings(b, BATTERY_ROOM_1B)
 
 
 def first_floor(b, W, D, y):

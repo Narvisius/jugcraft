@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341025"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341118"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -496,7 +496,8 @@ public class NuclearPlantGameTests {
 	 * Round 25 (Justin: "make sure they actually hold charge in game, I want it to actually work"): in a built medium
 	 * plant the main transformer feeds the control building's two load centres by its buried cable (and no other), each
 	 * load centre's DC MCC breaker feeds its train's motor control centre, whose CHGR 1 and CHGR 2 breakers each feed one
-	 * of the train's battery chargers (round 26), the chargers charge the four station batteries, and opening the
+	 * of the train's battery chargers (round 26), the chargers charge the eight station battery racks (kept even by their
+	 * switchboards: round 26, #9), and opening the
 	 * breakers stops it while everything keeps its charge; each vital inverter's regulating transformer reads its MCC's
 	 * REG XF breaker (round 26, 8d). The pieces are ticked by hand, in
 	 * the order the server ticks them.
@@ -529,6 +530,8 @@ public class NuclearPlantGameTests {
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> regXfs = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> vitals = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> detectors = new java.util.ArrayList<>(), boards = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> fans = new java.util.ArrayList<>(), monitors = new java.util.ArrayList<>();
+		java.util.List<BlockPos> eyewashes = new java.util.ArrayList<>();
 		EquipmentBlockEntity transformer = null;
 		for (int i = 0; i < print.size(); i++) {
 			BlockState state = print.state(i, Rotation.NONE);
@@ -563,13 +566,20 @@ public class NuclearPlantGameTests {
 			} else if (state.is(PlantInterior.BLOCKS.get("dc_switchboard"))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity board) {
 				boards.add(board);
+			} else if (state.is(PlantInterior.BLOCKS.get("exhaust_fan")) && level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity fan) {
+				fans.add(fan);
+			} else if (state.is(PlantInterior.BLOCKS.get("h2_monitor")) && level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity monitor) {
+				monitors.add(monitor);
+			} else if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.EyewashBlock) {
+				eyewashes.add(pos);
 			} else if ((state.is(PlantInterior.BLOCKS.get("edg_battery_charger")) || state.is(PlantInterior.BLOCKS.get("station_charger")))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
 				chargers.add(panel);
 			}
 		}
 		helper.assertTrue(transformer != null && transformer.output != null, "the main transformer");
-		helper.assertTrue(banks.size() == 4 && chargers.size() == 4, "four station batteries and four chargers: " + banks.size() + ", " + chargers.size());
+		// (Round 26, #9: two strings of two racks in each battery room.)
+		helper.assertTrue(banks.size() == 8 && chargers.size() == 4, "eight station battery racks and four chargers: " + banks.size() + ", " + chargers.size());
 		helper.assertTrue(mccs.size() == 2, "a motor control centre in each DC equipment room: " + mccs.size());
 		// Round 26 (8g, 8d): each vital inverter finds its battery and its bypass, the regulating transformer beside it with
 		// its own label (charger, inverter, transformer in a row for each number); each transformer finds its MCC and
@@ -586,6 +596,8 @@ public class NuclearPlantGameTests {
 			for (var vb : vitals) vb.serverTick(level);
 			for (var gd : detectors) gd.serverTick(level);
 			for (var board : boards) board.serverTick(level);
+			for (var fan : fans) fan.serverTick(level);
+			for (var monitor : monitors) monitor.serverTick(level);
 		}
 		// Round 26 (8f): each room's ground detector reads its train's battery, the one its switchboard is on, and is never
 		// on a diesel generator; holding a test button grounds that side for as long as it is held (each use holds it
@@ -605,6 +617,42 @@ public class NuclearPlantGameTests {
 				&& gd0.testSide == 2 && !io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.press(level, gd0, 2, now + 4)
 				&& gd0.testing(now + 4 + io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.HOLD - 1)
 				&& !gd0.testing(now + 4 + io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.HOLD), "a held test button grounds its side while held");
+		// Round 26 (#9): each switchboard has its own room's four racks, two strings in parallel, and the ground detector
+		// its switchboard's (its MENU steps through them); each room's exhaust fan starts on AUTO and its selector turns
+		// HAND, OFF, AUTO; each hydrogen monitor keeps to its room's fan; an eyewash pushed runs.
+		for (var board : boards) {
+			String at = board.getBlockPos().subtract(stake).toShortString();
+			helper.assertTrue(board.racks.size() == 4 && io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.strings(level, board.racks).size() == 2,
+					"a switchboard has its room's four racks, two strings: " + at + " " + board.racks.size());
+			for (var gd : detectors) {
+				if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(gd.getBlockState()) == io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(board.getBlockState())) {
+					helper.assertTrue(gd.racks.equals(board.racks), "a ground detector reads its switchboard's racks: " + at);
+				}
+			}
+		}
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.menuAt(2.5, 18.95) && !io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.menuAt(6.6, 18.95), "the battery monitor's MENU key");
+		helper.assertTrue(fans.size() == 2 && monitors.size() == 2 && eyewashes.size() == 2, "a fan, a hydrogen monitor and an eyewash in each battery room: "
+				+ fans.size() + ", " + monitors.size() + ", " + eyewashes.size());
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.selectorAt(8.0, 8.2) && !io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.selectorAt(8.0, 4.6), "the exhaust fan's selector");
+		for (var fan : fans) {
+			helper.assertTrue(fan.mode == io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.AUTO, "an exhaust fan starts on AUTO");
+			int[] seen = new int[3];
+			for (int k = 0; k < 3; k++) {
+				io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.turn(level, fan);
+				seen[k] = fan.mode;
+			}
+			helper.assertTrue(seen[0] == io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.HAND && seen[1] == io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.OFF && seen[2] == io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.AUTO,
+					"the fan's selector turns HAND, OFF, AUTO: " + java.util.Arrays.toString(seen));
+		}
+		for (var monitor : monitors) {
+			helper.assertTrue(monitor.panel != null && fans.stream().anyMatch(f -> f.getBlockPos().equals(monitor.panel)) && monitor.racks.size() == 4,
+					"a hydrogen monitor keeps to its room's fan and battery: " + monitor.getBlockPos().subtract(stake).toShortString());
+		}
+		for (BlockPos ew : eyewashes) {
+			var block = (io.github.jimbozoomer.jugcraft.nuclear.EyewashBlock) level.getBlockState(ew).getBlock();
+			block.start(level, ew);
+			helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.EyewashBlock.runningUntil(level, ew) == level.getGameTime() + io.github.jimbozoomer.jugcraft.nuclear.EyewashBlock.RUN, "an eyewash pushed runs");
+		}
 		// Round 26 (8e): each inverter feeds the vital panel of its label and each panel knows it; a panel starts with its
 		// main and circuits 1 to 10 closed (the spares open), which draw the inverter's 46 A; a circuit opened takes its
 		// share off, the main opened all of it.
@@ -700,6 +748,7 @@ public class NuclearPlantGameTests {
 			for (EquipmentBlockEntity m : mccs) m.serverTick(level);
 			for (var c : chargers) c.serverTick(level);
 			for (var bank : banks) bank.serverTick(level);
+			for (var board : boards) board.serverTick(level);
 		};
 		for (int t = 0; t < 200; t++) {
 			tick.run();
@@ -708,9 +757,19 @@ public class NuclearPlantGameTests {
 		for (var c : chargers) {
 			helper.assertTrue(c.battery != null && linked.add(c.battery), "each charger charges a battery of its own: " + c.battery);
 		}
+		// (Round 26, #9: each charger charges one rack; the switchboard keeps its four racks even, so all of them charge.)
 		for (var bank : banks) {
-			helper.assertTrue(bank.energy.getAmount() > 100_000, "the battery at " + bank.getBlockPos().subtract(stake).toShortString() + " charges: "
+			helper.assertTrue(bank.energy.getAmount() > 50_000, "the battery at " + bank.getBlockPos().subtract(stake).toShortString() + " charges: "
 					+ bank.energy.getAmount());
+		}
+		for (var board : boards) {
+			long lo = Long.MAX_VALUE, hi = 0;
+			for (BlockPos at : board.racks) {
+				long e = ((io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity) level.getBlockEntity(at)).energy.getAmount();
+				lo = Math.min(lo, e);
+				hi = Math.max(hi, e);
+			}
+			helper.assertTrue(hi - lo < 25_000, "a switchboard keeps its racks even: " + lo + " to " + hi);
 		}
 		for (EquipmentBlockEntity m : mccs) {
 			helper.assertTrue(m.flows[0] > 0 && m.flows[4] > 0 && m.flows[6] > 0, "each MCC takes power in and feeds both its chargers: "

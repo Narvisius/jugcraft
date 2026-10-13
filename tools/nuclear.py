@@ -184,6 +184,8 @@ LANG = {
     "message.jugcraft.nuclear.ground_status": "DC bus %s: no ground, each side %s V to ground; battery %s%% charged. Hold + TEST or - TEST to test",
     "message.jugcraft.nuclear.ground_test": "Ground test: %s side of DC bus %s grounded through the test resistor",
     "message.jugcraft.nuclear.ground_no_battery": "DC bus %s: no station battery in reach",
+    "message.jugcraft.nuclear.battery_string": "Battery monitor %3$s: string %1$s of %2$s",
+    "message.jugcraft.nuclear.exhaust_fan": "Exhaust fan EF-%s: %s (right-click the selector to turn it)",
     "message.jugcraft.nuclear.station_battery": "Station battery: %s%% charged (%s of %s JE), %s",
     "message.jugcraft.nuclear.battery_charging": "charging at %s JE/t",
     "message.jugcraft.nuclear.battery_discharging": "discharging at %s JE/t",

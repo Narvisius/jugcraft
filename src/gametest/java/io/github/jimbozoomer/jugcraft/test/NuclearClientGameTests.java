@@ -851,6 +851,12 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				context.waitTicks(10);
 				shotAt(context, singleplayer, wx.applyAsInt(155), y + 1, wz.applyAsInt(92), wx.applyAsInt(155), y + 2, wz.applyAsInt(89),
 						"jugcraft_plant_medium_r26_dc_1a_ground_test");
+				// Round 26 (#9): Battery Room 1A (building x 1..9, z 1..8): its second string along the south wall, then its
+				// west wall's exhaust fan over the louvre, hydrogen monitor and sensor head, hydrogen sign.
+				shotAt(context, singleplayer, wx.applyAsInt(141), y + 1, wz.applyAsInt(91), wx.applyAsInt(141), y + 1, wz.applyAsInt(96),
+						"jugcraft_plant_medium_r26_battery_room_1a_second_string");
+				shotAt(context, singleplayer, wx.applyAsInt(142), y + 1, wz.applyAsInt(92), wx.applyAsInt(137), y + 2, wz.applyAsInt(92),
+						"jugcraft_plant_medium_r26_battery_room_1a_fittings");
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "CPC",
+    " P "
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:dc_cable_tray_tee",
+    "count": 2
+  }
+}
