@@ -1,10 +1,12 @@
 # Nuclear power (stage 1)
 
-Status: implemented on the drone-tower branch (stage 1 of the approved plan). Stage 1 passed focused game tests on the
-owner's PC. The pre-made plants, cooling towers and new reactors (below) are built and compile, with game tests
-written, but have not been run in game yet. Not merged.
+Status: implemented, draft pull request. Stage 1 passed focused game tests on Narvisius's PC. The pre-made plants,
+their buildings and interiors, storage tanks and the rest below were played in single-player test builds up to the
+switchgear room (7a-7c); the later control-building rooms (switchgear 7d-7f, the DC rooms, battery rooms, relay room,
+control room HVAC, Technical Support Center) and `/nuclear plant` have not been played yet. Game tests are written for
+them; not all have been run. No dedicated-server test yet.
 Proposal: the "Nuclear Power Plant" proposal (draft 5) and "Nuclear, stage 1" design in the project notes.
-Owner: Justin (jimbozoomer)
+Owner: Narvisius
 Target milestone and tier: endgame power (after steel, aluminium, titanium, tungsten and electronics).
 Primary specialty and supported player role: engineers who build big plants; the radiation gear supports anyone near one.
 
