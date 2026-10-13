@@ -91,6 +91,8 @@ PANELS = {
     "station_charger": {"display": "Station Battery Charger", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
     # Each inverter's standby source (round 26, 8d): reg_transformer below.
     "reg_transformer": {"display": "Regulating Transformer", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"]},
+    # Each train's DC ground detector and battery monitor (round 26, 8f): dc_ground_detector below.
+    "dc_ground_detector": {"display": "DC Ground Detector & Battery Monitor", "width": 1, "item3d": True, "labels": ["1A", "1B"]},
     # Each inverter's 120 VAC vital instrument panel (round 26, 8e): vital_panel below. Hung on a wall, its door opens.
     "vital_panel": {"display": "120 VAC Vital Instrument Panel", "width": 1, "item3d": True, "labels": ["1A-1", "1A-2", "1B-1", "1B-2"],
                     "door": True},
@@ -139,6 +141,8 @@ CRAFTING = {
                                                "R": "minecraft:redstone"}, 1),
     "station_charger": (["PMP", "CRC", "PLP"], {"P": "#c:plates/steel", "M": "minecraft:clock", "C": "jugcraft:basic_circuit",
                                                 "R": "minecraft:redstone", "L": "minecraft:lever"}, 1),
+    "dc_ground_detector": (["PGP", "CXC", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
+                                                   "X": "minecraft:compass", "R": "minecraft:redstone"}, 1),
     "vital_panel": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:paper", "C": "minecraft:copper_ingot", "R": "minecraft:redstone"}, 1),
     "reg_transformer": (["PCP", "CIC", "PCP"], {"P": "#c:plates/steel", "C": "minecraft:copper_ingot", "I": "minecraft:iron_block"}, 1),
     "dc_cable_tray": (["P P", "CPC"], {"P": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 4),
@@ -612,7 +616,8 @@ def dc_switchboard(label="1A"):
 
 DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_panel, "edg_voltage_regulator": voltage_regulator,
             "edg_protection_panel": protection_panel, "edg_load_sequencer": load_sequencer, "edg_battery_charger": battery_charger,
-            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None, "vital_panel": None}
+            "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None, "vital_panel": None,
+            "dc_ground_detector": None}
 _FRONTS = {}
 
 
@@ -655,6 +660,8 @@ def cabinet(key):
         return reg_transformer_boxes()
     if key == "vital_panel":
         return vital_panel_boxes(False)
+    if key == "dc_ground_detector":
+        return ground_detector_boxes()
     W = PANELS[key]["width"] * 16
     F = f"pi_{key}_f"
     boxes = [(0.8, 0, 2.6, W - 0.8, 1.2, 14.6, "pi_toe_kick"),
@@ -662,7 +669,19 @@ def cabinet(key):
              (0.2, 30.6, 1.8, W - 0.2, 31.4, 15.3, "pi_cabinet_dark")]
     for x0, y0, x1, y1, depth, side in front(key).boxes:
         boxes.append((x0, y0, 15, x1, y1, 15 + depth, {"*": side, "south": F}))
+    if key == "dc_switchboard":
+        # Its chargers' and inverters' cables come and go through a conduit hub on its second section's top (round 26,
+        # 8f: up to the tray; the battery's cables come down into the first through their riser).
+        boxes += _top_hub(24.0, 31.4)
     return boxes
+
+
+def _top_hub(x, top, z=8.0):
+    """A conduit's hub and locknut on a cabinet's top at (x, z), the conduit's square stub up to the block's top (the
+    conduit above it is the plant's)."""
+    return [(x - 1.4, top, z - 1.4, x + 1.4, top + 0.3, z + 1.4, "pi_steel_dark"),
+            (x - 1.4, top, z - 1.4, x + 1.4, top + 0.25, z + 1.4, "pi_steel_dark", {"rotation": {"angle": 45, "axis": "y", "origin": [x, top, z]}}),
+            (x - 1.0, top + 0.2, z - 1.0, x + 1.0, 32.0, z + 1.0, "pi_chrome")]
 
 
 def battery_rack():
@@ -1425,20 +1444,9 @@ def station_charger_boxes():
     D = SC_DOOR
     face = {"*": "pi_pnl_black", "south": F}
     blk = "pi_pnl_black"
-    b = [(0.8, 0, 2.6, 15.2, 1.2, 14.0, "pi_toe_kick"),
-         (0.4, 1.2, 1.6, 15.6, 30.4, 14.6, "pi_cabinet"),
-         (0.6, 1.4, 14.6, 15.4, 30.2, D, {"*": "pi_cabinet", "south": F}),
-         (0.2, 30.4, 1.4, 15.8, 31.2, 15.2, "pi_cabinet_dark")]
-    # The exhaust hood on top: its roof, its sides, and the slats across its open front.
-    b += [(2.5, 31.9, 4.0, 13.5, 32.0, 12.4, "pi_cabinet_dark"), (2.5, 31.2, 4.0, 2.9, 31.9, 12.4, "pi_cabinet_dark"),
-          (13.1, 31.2, 4.0, 13.5, 31.9, 12.4, "pi_cabinet_dark"), (2.9, 31.2, 4.0, 13.1, 31.9, 4.4, "pi_pnl_black")]
-    for k in range(3):
-        b.append((2.9, 31.25 + k * 0.22, 12.0, 13.1, 31.37 + k * 0.22, 12.4, "pi_cabinet_dark"))
-    # Hinges; the locking T-handle in its escutcheon.
-    for y in (4.0, 26.0):
-        b.append((0.15, y, 14.5, 0.6, y + 2.0, 15.25, "pi_chrome"))
-    b += [(13.7, 12.4, D, 14.7, 17.4, D + 0.15, blk), (14.0, 13.0, D + 0.15, 14.4, 16.6, D + 0.5, "pi_chrome"),
-          (13.85, 15.8, D + 0.5, 14.55, 16.4, D + 0.75, "pi_chrome"), (14.05, 12.7, D + 0.15, 14.35, 12.95, D + 0.3, "pi_brass")]
+    # The cabinet: plinth, body, door, cap, the exhaust hood (in two halves either side of its DC output conduit's hub:
+    # round 26, 8f, up to the tray), hinges, the locking T-handle, the louvred inlet.
+    b = _cabinet_shell(F, hub="one")
     # The nameplate.
     b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
     # The meters: the black case standing out of the door, its face set back inside, the glass in front.
@@ -1486,13 +1494,6 @@ def station_charger_boxes():
               (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, "pi_pnl_black"),
               (cx - 0.35, 5.6, D + 0.45, cx + 0.35, 6.6, D + 0.75, "pi_pnl_black"),
               (cx - 0.45, 6.6, D + 0.45, cx + 0.45, 6.85, D + 0.95, "pi_cab_white")]
-    # The louvred inlet: its frame, the slats tilted down to the front.
-    b += [(1.8, 1.4, D, 14.2, 1.6, D + 0.3, "pi_cabinet_dark"), (1.8, 3.6, D, 14.2, 3.8, D + 0.3, "pi_cabinet_dark"),
-          (1.8, 1.6, D, 2.0, 3.6, D + 0.3, "pi_cabinet_dark"), (14.0, 1.6, D, 14.2, 3.6, D + 0.3, "pi_cabinet_dark")]
-    for k in range(4):
-        yc = 1.95 + k * 0.5
-        b.append((2.0, yc - 0.06, D - 0.1, 14.0, yc + 0.06, D + 0.4, "pi_cabinet_dark",
-                  {"rotation": {"angle": -22.5, "axis": "x", "origin": [8.0, yc, D + 0.15]}}))
     return b
 
 
@@ -1585,25 +1586,28 @@ def vital_inverter(label="1A-1"):
     return f
 
 
-def _cabinet_shell(F, hub=False):
+# Where a cabinet's conduits leave its top (x, z: model pixels, the piece facing north), by _cabinet_shell's hub.
+CABINET_HUBS = {None: (), "one": ((8.0, 8.0),), "pair": ((4.5, 8.0), (11.5, 8.0))}
+
+
+def _cabinet_shell(F, hub=None):
     """The station charger's and the inverter's cabinet: plinth, body, door, cap, exhaust hood, hinges, T-handle,
-    louvred inlet. hub: the inverter's output conduit comes out of the top's middle (round 26, 8e: up to the tray, on
-    to its vital panel), so its hood is in two halves either side of the hub."""
+    louvred inlet. hub: where conduits come out of its top (round 26, 8e/8f: up to the tray): "one" in the middle (a
+    charger's DC output, a ground detector's), the hood in two halves either side; "pair" (an inverter's DC feed and AC
+    output, side by side), the hood narrowed between them."""
     D = SC_DOOR
     b = [(0.8, 0, 2.6, 15.2, 1.2, 14.0, "pi_toe_kick"),
          (0.4, 1.2, 1.6, 15.6, 30.4, 14.6, "pi_cabinet"),
          (0.6, 1.4, 14.6, 15.4, 30.2, D, {"*": "pi_cabinet", "south": F}),
          (0.2, 30.4, 1.4, 15.8, 31.2, 15.2, "pi_cabinet_dark")]
-    for hx0, hx1 in (((2.5, 6.3), (9.7, 13.5)) if hub else ((2.5, 13.5),)):
+    hoods = {None: ((2.5, 13.5),), "one": ((2.5, 6.3), (9.7, 13.5)), "pair": ((6.3, 9.7),)}[hub]
+    for hx0, hx1 in hoods:
         b += [(hx0, 31.9, 4.0, hx1, 32.0, 12.4, "pi_cabinet_dark"), (hx0, 31.2, 4.0, hx0 + 0.4, 31.9, 12.4, "pi_cabinet_dark"),
               (hx1 - 0.4, 31.2, 4.0, hx1, 31.9, 12.4, "pi_cabinet_dark"), (hx0 + 0.4, 31.2, 4.0, hx1 - 0.4, 31.9, 4.4, "pi_pnl_black")]
         for k in range(3):
             b.append((hx0 + 0.4, 31.25 + k * 0.22, 12.0, hx1 - 0.4, 31.37 + k * 0.22, 12.4, "pi_cabinet_dark"))
-    if hub:
-        # The hub and its locknut, the conduit's square stub (the conduit above it is the plant's).
-        b += [(6.6, 31.2, 6.6, 9.4, 31.5, 9.4, "pi_steel_dark"),
-              (6.6, 31.2, 6.6, 9.4, 31.45, 9.4, "pi_steel_dark", {"rotation": {"angle": 45, "axis": "y", "origin": [8, 31.2, 8]}}),
-              (7.0, 31.4, 7.0, 9.0, 32.0, 9.0, "pi_chrome")]
+    for x, z in CABINET_HUBS[hub]:
+        b += _top_hub(x, 31.2, z)
     for y in (4.0, 26.0):
         b.append((0.15, y, 14.5, 0.6, y + 2.0, 15.25, "pi_chrome"))
     b += [(13.7, 12.4, D, 14.7, 17.4, D + 0.15, "pi_pnl_black"), (14.0, 13.0, D + 0.15, 14.4, 16.6, D + 0.5, "pi_chrome"),
@@ -1653,7 +1657,7 @@ def vital_inverter_boxes():
     D = SC_DOOR
     face = {"*": "pi_pnl_black", "south": F}
     blk = "pi_pnl_black"
-    b = _cabinet_shell(F, hub=True)
+    b = _cabinet_shell(F, hub="pair")
     b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
     w, y0, y1 = VI_METER
     for x0, *_ in VI_METERS:
@@ -1681,6 +1685,131 @@ def vital_inverter_boxes():
           (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, "pi_pnl_black"),
           (cx - 0.35, 5.6, D + 0.45, cx + 0.35, 6.6, D + 0.75, "pi_pnl_black"),
           (cx - 0.45, 6.6, D + 0.45, cx + 0.45, 6.85, D + 0.95, "pi_cab_white")]
+    return b
+
+
+# ------------------------------------------------------------------------------------------------ the ground detector
+
+# Each DC room's ground detector and battery monitor (round 26, 8f; Justin: "Healthy, with TEST", "Yes, with a screen",
+# "End of the equipment row"): a cabinet like the chargers' at the end of the row, on the train's 125 VDC bus. The
+# battery monitor's screen at the top: the string's volts and amps (in on charge, out on discharge), its state of
+# charge and temperature, what it is doing (FLOAT, RECHARGE, EQUALIZE, DISCHARGE), every one of its 60 cells' volts as
+# a bar (two rows of 30), its MENU and ALARM ACK keys and ALARM lamp. Below, the ground detector: + BUS TO GROUND and
+# - BUS TO GROUND voltmeters (each half the bus while neither side is grounded), the + GND and - GND lamps (that side
+# grounded) and DC ON, and the + BUS and - BUS test buttons, which put a ground on that side through the test resistor
+# while held: its meter drops to nearly nothing, the other reads the whole bus, its lamp lights and the alarm sounds
+# (nuclear/GroundDetectorBlock.java). All of it reads the train's station battery (client/EdgTelemetry.java
+# groundDetector). Its conduit goes up from its top into the tray over it.
+GD_KEY = "dc_ground_detector"
+GD_SCREEN = (1.5, 19.8, 14.5, 27.7)          # the screen's bezel
+GD_FRAME = 0.35                              # the bezel's width
+GD_LCD = ((10, 26, 16, 255), (110, 196, 132, 255), (140, 255, 170))   # the screen: its glass, the printed legends, the readings
+GD_HEAD_Y, GD_ROWS = 26.75, (25.4, 24.2)     # the screen's heading and its two rows of readings
+GD_VALUE_X = (7.3, 13.8)                     # where each column's readings end (right-aligned)
+GD_BARS = (3.25, 13.8, ((22.0, 23.3), (20.5, 21.8)))   # the cells' bars: from x, to x; each row's bottom and top
+GD_CELLS, GD_CELL_LO, GD_CELL_HI, GD_CELL_WARN = 60, 2.0, 2.35, 2.10   # the bars' scale (volts a cell), amber below WARN
+GD_KEY_Y = 18.95                              # the monitor's keys and ALARM lamp
+GD_KEYS = [(2.5, "MENU"), (6.6, "ALARM ACK")]
+GD_ALARM = 13.4
+GD_METER = (5.4, 12.0, 17.0)                 # a ground voltmeter's width, bottom, top
+GD_METERS = [(1.2, "+ BUS TO GROUND", "gd_pos_v"), (7.4, "- BUS TO GROUND", "gd_neg_v")]
+GD_LAMP_Y = 9.6
+GD_LAMPS = [(3.9, "+ GND", (240, 170, 30), "gd_pos", "pi_lens_amber"), (7.0, "DC ON", (240, 240, 230), "gd_dc", "pi_lens_white"),
+            (10.1, "- GND", (240, 170, 30), "gd_neg", "pi_lens_amber")]
+GD_TEST_Y = 5.7
+GD_TESTS = [(3.9, "+ BUS"), (10.1, "- BUS")]  # the test buttons (nuclear/GroundDetectorBlock.java TESTS)
+
+
+def ground_detector(label="1A"):
+    """The ground detector's door, drawn (the bezel, meter cases, glass, lamps, keys and buttons are real:
+    ground_detector_boxes)."""
+    f = Front(1, 580)
+    T = f.T
+    WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
+    D = SC_DOOR
+    f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
+    f.R(2.0, 28.3, 14.0, 29.9, fill=BLACK, outline=(170, 172, 174, 255), width=2)
+    T(8.0, 29.4, f"DC GROUND DETECTOR {label}", 11, fill=WHITE, bold=True)
+    T(8.0, 28.75, "BATTERY MONITOR    125 VDC    60 CELLS", 7, fill=WHITE, bold=True)
+    # The battery monitor's screen: its printed legends and rules; the readings, the state and the cells' bars are live.
+    GLASS, INKG, LIT = GD_LCD
+    x0, y0, x1, y1 = GD_SCREEN
+    gx0, gy0, gx1, gy1 = x0 + GD_FRAME, y0 + GD_FRAME, x1 - GD_FRAME, y1 - GD_FRAME
+    f.R(x0, y0, x1, y1, fill=(28, 28, 30, 255))
+    f.R(gx0, gy0, gx1, gy1, fill=GLASS)
+    zt = D + 0.2
+    T(2.2, GD_HEAD_Y, f"BATTERY {label}", 8, fill=INKG, bold=True, anchor="lm")
+    f.text(GD_VALUE_X[1], GD_HEAD_Y, zt, 0.55, LIT, "bm_mode", "right")
+    for y in (26.2, 23.65):
+        f.R(2.1, y - 0.04, 13.9, y + 0.04, fill=INKG)
+    for (la, ca), (lb, cb), y in ((("VOLTS", "bm_v"), ("AMPS", "bm_a"), GD_ROWS[0]), (("CHARGE %", "bm_soc"), ("TEMP \u00b0C", "bm_t"), GD_ROWS[1])):
+        T(2.2, y, la, 7, fill=INKG, bold=True, anchor="lm")
+        T(8.0, y, lb, 7, fill=INKG, bold=True, anchor="lm")
+        f.text(GD_VALUE_X[0], y, zt, 0.75, LIT, ca, "right")
+        f.text(GD_VALUE_X[1], y, zt, 0.75, LIT, cb, "right")
+    # The cells' bars: each cell's slot (dark), the float level (2.20 V a cell) dashed across behind them, the row's
+    # first cell number at its left.
+    bx0, bx1, rows = GD_BARS
+    pitch = (bx1 - bx0) / (GD_CELLS // 2)
+    for r, (ry0, ry1) in enumerate(rows):
+        T(2.65, (ry0 + ry1) / 2, str(1 + r * GD_CELLS // 2), 6, fill=INKG, bold=True)
+        level = ry0 + (ry1 - ry0) * (2.20 - GD_CELL_LO) / (GD_CELL_HI - GD_CELL_LO)
+        f.R(bx0 - 0.05, level - 0.025, bx1, level + 0.025, fill=INKG)
+        for k in range(GD_CELLS // 2):
+            cx0 = bx0 + k * pitch + 0.06
+            cx1 = cx0 + pitch - 0.12
+            f.R(cx0, ry0, cx1, ry1, fill=(22, 48, 32, 255))
+            f.live.append({"t": "bar", "x0": round(cx0, 4), "y0": ry0, "x1": round(cx1, 4), "y1": ry1, "z": D + 0.16, "lo": GD_CELL_LO,
+                           "hi": GD_CELL_HI, "warn": GD_CELL_WARN, "colour": [110, 235, 140], "colour2": [255, 190, 60],
+                           "ch": f"bm_c{r * GD_CELLS // 2 + k}"})
+    # Its keys' legends, the ALARM lamp (live: an alarm flashes it).
+    for x, label_ in GD_KEYS:
+        T(x + 0.75, GD_KEY_Y, label_, 7, bold=True, anchor="lm")
+    T(GD_ALARM - 0.95, GD_KEY_Y, "ALARM", 7, bold=True, anchor="rm")
+    f.live.append({"t": "lamp", "x": GD_ALARM, "y": GD_KEY_Y, "r": 0.5, "z": D + 0.56, "colour": [240, 170, 30], "ch": "bm_alarm"})
+    # The ground detector: its heading between two rules; the voltmeters (needles live); its lamps; the test buttons.
+    T(7.0, 17.55, "GROUND DETECTOR", 8, bold=True)
+    f.R(1.2, 17.51, 4.3, 17.59, fill=INK)
+    f.R(9.7, 17.51, 12.8, 17.59, fill=INK)
+    w, my0, my1 = GD_METER
+    for mx0, label_, ch in GD_METERS:
+        f.meter(mx0, my0, mx0 + w, my1, label_, (0, 150), 0, "V", live=ch)
+        f.live[-1]["z"] = D + 0.3
+    for x, label_, colour, ch, _ in GD_LAMPS:
+        T(x, GD_LAMP_Y - 1.2, label_, 7, bold=True)
+        f.live.append({"t": "lamp", "x": x, "y": GD_LAMP_Y, "r": 0.5, "z": D + 0.56, "colour": list(colour), "ch": ch})
+    for x, label_ in GD_TESTS:
+        T(x, GD_TEST_Y + 1.5, f"{label_} TEST", 7, bold=True)
+    T(7.0, GD_TEST_Y + 0.35, "GROUND TEST", 7, bold=True)
+    T(7.0, GD_TEST_Y - 0.35, "PUSH AND HOLD", 6, bold=True)
+    f.R(2.0, 1.6, 14.0, 3.6, fill=(22, 22, 24, 255))
+    return f
+
+
+def ground_detector_boxes():
+    """The whole ground detector (both blocks): the cabinet (its conduit's hub on its top), the nameplate, the screen's bezel and glass, the keys, the lamps, the voltmeters, the test buttons in their guard rings."""
+    F = f"pi_{GD_KEY}_f"
+    D = SC_DOOR
+    face = {"*": "pi_pnl_black", "south": F}
+    blk = "pi_pnl_black"
+    b = _cabinet_shell(F, hub="one")
+    b.append((2.0, 28.3, D, 14.0, 29.9, D + 0.12, face))
+    x0, y0, x1, y1 = GD_SCREEN
+    t = GD_FRAME
+    b += [(x0, y0, D, x0 + t, y1, D + 0.4, face), (x1 - t, y0, D, x1, y1, D + 0.4, face),
+          (x0 + t, y0, D, x1 - t, y0 + t, D + 0.4, face), (x0 + t, y1 - t, D, x1 - t, y1, D + 0.4, face),
+          (x0 + t, y0 + t, D, x1 - t, y1 - t, D + 0.1, face)]
+    for x, _ in GD_KEYS:
+        b += [(x - 0.45, GD_KEY_Y - 0.45, D, x + 0.45, GD_KEY_Y + 0.45, D + 0.12, blk),
+              (x - 0.32, GD_KEY_Y - 0.32, D + 0.12, x + 0.32, GD_KEY_Y + 0.32, D + 0.4, "pi_cap_black")]
+    b += _sc_round(GD_ALARM, GD_KEY_Y, D, D + 0.3, 0.7, "pi_chrome") + _sc_round(GD_ALARM, GD_KEY_Y, D + 0.3, D + 0.5, 0.5, "pi_lens_amber")
+    w, my0, my1 = GD_METER
+    for mx0, *_ in GD_METERS:
+        b += _meter_case(mx0, my0, mx0 + w, my1, face)
+    for x, _, _, _, lens in GD_LAMPS:
+        b += _sc_round(x, GD_LAMP_Y, D, D + 0.3, 0.7, "pi_chrome") + _sc_round(x, GD_LAMP_Y, D + 0.3, D + 0.5, 0.5, lens)
+    for x, _ in GD_TESTS:
+        b += _sc_round(x, GD_TEST_Y, D, D + 0.25, 0.95, "pi_chrome") + _sc_round(x, GD_TEST_Y, D + 0.25, D + 0.7, 0.62, "pi_pnl_yellow")
     return b
 
 
@@ -2164,3 +2293,4 @@ DRAWINGS["station_charger"] = station_charger
 DRAWINGS["vital_inverter"] = vital_inverter
 DRAWINGS["reg_transformer"] = reg_transformer
 DRAWINGS["vital_panel"] = vital_panel
+DRAWINGS["dc_ground_detector"] = ground_detector

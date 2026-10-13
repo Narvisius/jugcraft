@@ -186,11 +186,31 @@ Stage 1 adds one working reactor unit, built from real plant equipment and run f
   all ten): the inverter's AC AMPS, and its Regulating Transformer's OUTPUT AMPS while it is on bypass, read the closed
   breakers' sum; open the main and the load is gone. It links the nearest inverter of its label in reach (the inverter
   links it back); one put down by hand is 1A-1.
+- **DC Ground Detector & Battery Monitor** (round 26): one for each DC bus, labelled 1A or 1B, a cabinet like the
+  chargers' standing at the end of the equipment row. It links the nearest station battery in reach, the one its
+  switchboard is on (one put down by hand is 1A), and only reads it. Its door, top to bottom:
+  - The engraved nameplate.
+  - The battery monitor's screen (green on black): the string's VOLTS and AMPS (in positive, out negative), CHARGE %,
+    TEMP °C and what the battery is doing (FLOAT, RECHARGE, EQUALIZE, DISCHARGE, OPEN CKT), then a bar for each of
+    its 60 cells (two rows of 30) on a 2.00 to 2.35 V scale with the 2.20 V float level dashed behind them. A healthy
+    battery's cells sit round the float level with a small spread; a cell below 2.10 V turns amber. MENU and ALARM ACK
+    keys, and the ALARM lamp (it flashes with a ground on the bus or the bus under 124 V).
+  - The ground detector: + BUS TO GROUND and - BUS TO GROUND voltmeters (0 to 150 V), each reading half the bus while
+    neither side is grounded (no ground faults are modelled: the bus is healthy); + GND and - GND lamps (amber, that
+    side grounded) and DC ON (white).
+  - The + BUS and - BUS TEST buttons. Hold right-click on one to put a ground on that side through the test resistor
+    for as long as you hold it: that side's meter drops to about 2 V and the other reads the rest of the bus, its GND
+    lamp lights, the screen reads + GND FAULT or - GND FAULT, ALARM flashes and the alarm beeps. Let go and it clears.
+    Use it anywhere else for the bus and the battery in a line.
+  - The louvred inlet, hinges and the T-handle; its conduit goes up from its top into the tray.
 - **Ladder Cable Tray** (round 26): 24-inch galvanized ladder tray (rails, rungs, black power cables on them) hung under
-  the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend, and drops where a
-  conduit comes up under it and a cable goes down into it (one or two, or one up a wall beside it). **Feeder Conduits
-  (Pair)**: two conduits side by side, up from a motor control centre section's top. **Wall Conduit**: a conduit up a
-  wall on its straps.
+  the ceiling on trapeze hangers, as straight lengths (with or without a hanger), a 90-degree bend (with or without a
+  drop in it), and drops where a conduit comes up under it and a cable goes down into it (one or two, each with or
+  without a hanger, or one up a wall beside it). In the DC rooms every cabinet's cables run up into it in rigid
+  conduit from a hub on its top: the switchboard's (from its second section), each charger's DC output, each
+  inverter's two (its DC feed and its AC output), each regulating transformer's and the ground detector's.
+  **Feeder Conduits (Pair)**: two conduits side by side, up from a motor control centre section's top; **(Pair,
+  Run)**: the same in a full block, up from an inverter's top. **Wall Conduit**: a conduit up a wall on its straps.
 - The 125 VDC Distribution Switchboard's ground detector lamps are live: both lit while the bus is alive (no ground
   faults are modelled).
 - **Train labels** (round 26): the DC rooms' equipment says which train and which one it is. The chargers, the
@@ -305,9 +325,10 @@ blueprint (for players who lay out their own plant).
     blocks long, 30 cells in clear jars, below), its cables up a DC Cable Riser from each rack's end into a DC Cable Tray under
     the ceiling, through the wall and down into the 125 VDC Distribution Switchboard in the DC Equipment Room next door,
     beside the battery chargers, Vital AC Inverters and Regulating Transformers (in groups by number: charger, inverter,
-    transformer), with the room's 480 V motor control centre feeding the chargers by cables in the slab and the
-    transformers by the ladder tray under the ceiling (over the row, along the relay cabinets' wall and over the MCC,
-    a conduit down into each transformer's top and two up from the MCC's REG XF section); on the relay cabinets' wall
+    transformer) and, at the row's end, the DC Ground Detector & Battery Monitor, with the room's 480 V motor control
+    centre feeding the chargers by cables in the slab and the transformers by the ladder tray under the ceiling (over
+    the row, along the relay cabinets' wall and over the MCC, a conduit up into it from the top of every cabinet in the
+    row, two from each inverter, and two up from the MCC's REG XF section); on the relay cabinets' wall
     the two 120 VAC vital panels, each fed by its inverter (a conduit up from the inverter's top into the tray, along
     it and down the wall into the panel's top); the switchgear room
     (both trains' 480 V load centers face to face across an aisle of rubber mats, fed from the main transformer and

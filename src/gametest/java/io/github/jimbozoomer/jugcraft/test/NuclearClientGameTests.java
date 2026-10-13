@@ -836,6 +836,21 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				// conduits up into the tray, POWER ON lit.
 				shotAt(context, singleplayer, wx.applyAsInt(151), y + 1, wz.applyAsInt(98), wx.applyAsInt(155), y + 2, wz.applyAsInt(99),
 						"jugcraft_plant_medium_r26_dc_1a_vital_panels");
+				// Round 26 (8f): DC room 1A's ground detector and battery monitor at the end of the row (building x 19, z 1),
+				// healthy (each side half the bus to ground), its screen and cell bars lit; then with its + BUS test held
+				// (+ meter near zero, - meter the whole bus, + GND and ALARM lit, + GND FAULT on the screen).
+				shotAt(context, singleplayer, wx.applyAsInt(155), y + 1, wz.applyAsInt(92), wx.applyAsInt(155), y + 2, wz.applyAsInt(89),
+						"jugcraft_plant_medium_r26_dc_1a_ground_detector");
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					if (level.getBlockEntity(new BlockPos(wx.applyAsInt(155), baseY, wz.applyAsInt(89))) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity gd) {
+						// Held for the shot: a press that lasts a minute.
+						io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.press(level, gd, 1, level.getGameTime() + 1200);
+					}
+				});
+				context.waitTicks(10);
+				shotAt(context, singleplayer, wx.applyAsInt(155), y + 1, wz.applyAsInt(92), wx.applyAsInt(155), y + 2, wz.applyAsInt(89),
+						"jugcraft_plant_medium_r26_dc_1a_ground_test");
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					for (int gx = 155; gx <= 167; gx++) {

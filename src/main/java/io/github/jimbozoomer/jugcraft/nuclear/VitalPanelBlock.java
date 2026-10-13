@@ -131,22 +131,8 @@ public class VitalPanelBlock extends LivePanelBlock {
 			return InteractionResult.SUCCESS_SERVER;
 		}
 		// Where on the panel's face: the hit turned back into the piece's own frame (facing north), model pixels.
-		double wx = (hit.getLocation().x - origin.getX()) * 16, wz = (hit.getLocation().z - origin.getZ()) * 16;
-		double y = (hit.getLocation().y - origin.getY()) * 16;
-		int turns = switch (facing) {
-			case EAST -> 1;
-			case SOUTH -> 2;
-			case WEST -> 3;
-			default -> 0;
-		};
-		double x = wx, z = wz;
-		for (int i = 0; i < turns; i++) {
-			// The inverse of MultiFurnitureBlock.turned's clockwise turn (x' = 16 - z, z' = x).
-			double nx = z, nz = 16 - x;
-			x = nx;
-			z = nz;
-		}
-		int b = breakerAt(x, y);
+		double[] at = local(facing, origin, hit.getLocation());
+		int b = breakerAt(at[0], at[1]);
 		if (b < 0) {
 			setOpen(level, origin, facing, false);
 			level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.6F, 1.3F);

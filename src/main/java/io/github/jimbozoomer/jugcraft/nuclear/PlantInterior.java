@@ -122,6 +122,9 @@ public final class PlantInterior {
 			// Each inverter's 120 VAC vital instrument panel (round 26, 8e): hung on a wall, its door opens and its breakers
 			// switch (VitalPanelBlock).
 			{"vital_panel", 0, "vital", "metal", null},
+			// Each DC room's ground detector and battery monitor (round 26, 8f): at the end of the equipment row, its test
+			// buttons held to put a ground on the bus (GroundDetectorBlock).
+			{"dc_ground_detector", 0, "ground", "metal", null},
 			{"dc_cable_tray", 0, "plain", "metal", new double[] {0, 12, 4, 16, 16, 12}},
 			{"dc_cable_riser", 0, "plain", "metal", new double[] {5, 0, 0, 11, 16, 3}},
 			{"dc_cable_riser_top", 0, "plain", "metal", new double[] {0, 0, 0, 16, 16, 12}},
@@ -139,6 +142,12 @@ public final class PlantInterior {
 			{"ladder_tray_drop", 0, "plain", "metal", new double[] {0, 0, 3, 16, 14, 13}},
 			{"ladder_tray_drop_pair", 0, "plain", "metal", new double[] {0, 0, 3, 16, 14, 13}},
 			{"conduit_pair", 0, "plain", "metal", new double[] {3, 0, 6.5, 13, 16, 9.5}},
+			// Every cabinet in the DC rooms' rows with its conduits up into the tray (round 26, 8f): an inverter's two, the
+			// drops on their hangers, the bend with the ground detector's drop.
+			{"conduit_pair_run", 0, "plain", "metal", new double[] {3, 0, 6.5, 13, 16, 9.5}},
+			{"ladder_tray_drop_hanger", 0, "plain", "metal", new double[] {0, 0, 1.4, 16, 16, 14.6}},
+			{"ladder_tray_drop_pair_hanger", 0, "plain", "metal", new double[] {0, 0, 1.4, 16, 16, 14.6}},
+			{"ladder_tray_bend_drop", 0, "plain", "metal", new double[] {0, 0, 3, 13, 14, 16}},
 			// A vital panel's conduit up the wall to the tray, and the tray's drop over it (round 26, 8e): the wall at z 0.
 			{"wall_conduit", 0, "plain", "metal", new double[] {7.2, 0, 1.8, 8.8, 16, 3.4}},
 			{"ladder_tray_drop_wall", 0, "plain", "metal", new double[] {0, 0, 1.8, 16, 14.8, 13}},
@@ -214,6 +223,8 @@ public final class PlantInterior {
 					return new StatusScreenBlock(p);
 				} else if (kind.equals("vital")) {
 					return new VitalPanelBlock(p);
+				} else if (kind.equals("ground")) {
+					return new GroundDetectorBlock(p);
 				} else if (k[0].equals("live")) {
 					return new LivePanelBlock(p, Integer.parseInt(k[1]), Integer.parseInt(k[2]), k.length > 4 ? Integer.parseInt(k[4]) : 1);
 				} else if (k[0].equals("battery")) {

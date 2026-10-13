@@ -37,6 +37,27 @@ public class LivePanelBlock extends MultiFurnitureBlock implements EntityBlock {
 		return state == null || variantProperty() == null ? state : state.setValue(variantProperty(), 0);
 	}
 
+	/**
+	 * Where a hit on a placed piece is in the piece's own frame (round 26, 8f; the piece facing north): model pixels
+	 * x, y, z from its placing block, x across, y up, z out to its front (the inverse of MultiFurnitureBlock.turned's
+	 * clockwise turn, x' = 16 - z, z' = x).
+	 */
+	protected static double[] local(net.minecraft.core.Direction facing, BlockPos origin, net.minecraft.world.phys.Vec3 hit) {
+		double x = (hit.x - origin.getX()) * 16, y = (hit.y - origin.getY()) * 16, z = (hit.z - origin.getZ()) * 16;
+		int turns = switch (facing) {
+			case EAST -> 1;
+			case SOUTH -> 2;
+			case WEST -> 3;
+			default -> 0;
+		};
+		for (int i = 0; i < turns; i++) {
+			double nx = z, nz = 16 - x;
+			x = nx;
+			z = nz;
+		}
+		return new double[] {x, y, z};
+	}
+
 	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return state.getValue(partProperty()) == origin() ? new LivePanelBlockEntity(pos, state) : null;

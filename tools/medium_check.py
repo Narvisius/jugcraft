@@ -348,7 +348,8 @@ def feeder_conduits(site, g):
 def regulating_transformers(site, g):
     """Each regulating transformer stands beside the vital inverter of its own label (each the other's nearest), the
     nearest motor control centre feeds one transformer of each number of one train, and a conduit column runs up from
-    each transformer's top, and two from the MCC's REG XF section (its second section), to drops in one ladder tray."""
+    each transformer's top, and two from the MCC's REG XF section (its second section), to drops in one ladder tray;
+    so does one from every other cabinet in the row (round 26, 8f), each into its room's tray."""
     import plant_panels as PN
     labels = PN.PANELS["reg_transformer"]["labels"]
     kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
@@ -396,7 +397,7 @@ def regulating_transformers(site, g):
         k = y + 2
         while at(x, k, z) == "feeder_conduit":
             k += 1
-        if k == y + 2 or at(x, k, z) != "ladder_tray_drop":
+        if k == y + 2 or at(x, k, z) not in DROPS:
             problems.append(f"regulating transformer {labels[v]} at {xf}: its conduit does not reach a tray drop ({at(x, k, z)} at y {k})")
         else:
             tray_drops.setdefault(mcc, []).append((x, k, z))
@@ -406,7 +407,7 @@ def regulating_transformers(site, g):
     for anchor, (x, y, z) in mccs:
         if anchor not in fed:
             continue
-        if at(x, y, z) != "conduit_pair" or at(x, y + 1, z) != "ladder_tray_drop_pair":
+        if at(x, y, z) != "conduit_pair" or at(x, y + 1, z) not in PAIR_DROPS:
             problems.append(f"the MCC at {anchor}: no REG XF conduits from its second section's top to the tray ({at(x, y, z)}, {at(x, y + 1, z)})")
             continue
         # The tray from the MCC's drops reaches each of its transformers' drops.
@@ -439,10 +440,10 @@ def regulating_transformers(site, g):
             continue
         ix, iy, iz = inv
         j = iy + 2
-        while at(ix, j, iz) == "feeder_conduit":
+        while at(ix, j, iz) == "conduit_pair_run":
             j += 1
-        if j == iy + 2 or at(ix, j, iz) != "ladder_tray_drop":
-            problems.append(f"inverter {labels[v]} at {inv}: its output conduit does not reach a tray drop ({at(ix, j, iz)} at y {j})")
+        if j == iy + 2 or at(ix, j, iz) not in PAIR_DROPS:
+            problems.append(f"inverter {labels[v]} at {inv}: its conduits do not reach a pair of tray drops ({at(ix, j, iz)} at y {j})")
             continue
         seen, todo = {(x, k, z)}, deque([(x, k, z)])
         while todo:
@@ -456,7 +457,47 @@ def regulating_transformers(site, g):
             problems.append(f"vital panel {labels[v]} at {vp}: the tray from its conduit does not reach its inverter's at {(ix, j, iz)}")
     if len(vps) != len(invs):
         problems.append(f"{len(invs)} vital inverters but {len(vps)} vital panels")
+    # Every cabinet in the DC rooms' rows (round 26, 8f; Justin: "Chargers, switchboards, inverter DC"): a conduit up
+    # from its top (the switchboard's from its second section; an inverter's two) to a drop in the tray of its room's
+    # MCC; and each room has its ground detector, one of each train.
+    gds = panels("dc_ground_detector")
+    if sorted(gds.values()) != [0, 1]:
+        problems.append(f"the DC rooms' ground detectors: {sorted(gds.values())} (one 1A, one 1B)")
+    boards = {}
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("jugcraft:dc_switchboard[") and "part=1" in st:
+            for x, y, z in np.argwhere(g == k):
+                boards[(int(x), int(y) - B, int(z) - O)] = 0
+    cabinets = ([(p, "station charger", "feeder_conduit", DROPS) for p in panels("station_charger")]
+                + [(p, "ground detector", "feeder_conduit", DROPS) for p in gds]
+                + [(p, "DC switchboard", "feeder_conduit", DROPS) for p in boards]
+                + [(p, "vital inverter", "conduit_pair_run", PAIR_DROPS) for p in invs])
+    components = {}
+    for anchor, (x, y, z) in mccs:
+        seen, todo = {(x, y + 1, z)}, deque([(x, y + 1, z)])
+        while todo:
+            cx, cy, cz = todo.popleft()
+            for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n = (cx + dx, cy, cz + dz)
+                if n not in seen and at(*n).startswith("ladder_tray"):
+                    seen.add(n)
+                    todo.append(n)
+        components[anchor] = seen
+    for (x, y, z), name, conduit, drops in cabinets:
+        k = y + 2
+        while at(x, k, z) == conduit:
+            k += 1
+        if k == y + 2 or at(x, k, z) not in drops:
+            problems.append(f"{name} at {(x, y, z)}: its conduit does not reach a tray drop ({at(x, k, z)} at y {k})")
+            continue
+        mcc = nearest((x, y, z), list(components))
+        if mcc is None or (x, k, z) not in components[mcc]:
+            problems.append(f"{name} at {(x, y, z)}: its drop is not in its room's tray (the MCC at {mcc})")
     return problems
+
+
+DROPS = ("ladder_tray_drop", "ladder_tray_drop_hanger", "ladder_tray_bend_drop")
+PAIR_DROPS = ("ladder_tray_drop_pair", "ladder_tray_drop_pair_hanger")
 
 
 def lineup_role(lx, ly, lz):

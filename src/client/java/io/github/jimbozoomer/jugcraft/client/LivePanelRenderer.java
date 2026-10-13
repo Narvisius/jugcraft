@@ -43,7 +43,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * What moves on the diesel generator room's panels (round 14): gauge and meter needles, pilot lamps, alarm windows,
  * the hour meter, the regulator's and relays' displays, the load sequencer's screen and step lamps, the breaker's
- * mimic. Each panel follows the emergency diesel generator it is linked to (LivePanelBlockEntity); its readings come
+ * mimic; and on the DC rooms' (rounds 25 and 26), their breaker handles and the battery monitor's bars. Each panel follows the emergency diesel generator it is linked to (LivePanelBlockEntity); its readings come
  * from client/EdgTelemetry.java, laid out by tools/plant_panels.py (assets/jugcraft/live_panels.json, model pixels
  * on the piece facing north). The static drawing on the panel has every live part drawn at rest (no needle, lamps
  * dark, displays blank), so only one of each ever shows.
@@ -59,7 +59,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 
 	record Element(String type, double x, double y, double z, double r, double x0, double y0, double x1, double y1, double lo, double hi,
 			double start, double sweep, int colour, int colour2, double alpha, double size, String channel, String align, String[] label,
-			double[] on, double[] off, boolean open) {
+			double[] on, double[] off, boolean open, double warn) {
 	}
 
 	record Layout(int width, List<Element> elements) {
@@ -74,7 +74,8 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 	record Rect(double x0, double y0, double x1, double y1, double z, int colour, boolean opaque) {
 	}
 
-	record Text(double x, double y, double z, double size, int colour, FormattedCharSequence text, boolean centre, boolean glow) {
+	/** A line of text: align 0 from x, 1 centred on it, 2 ending at it (round 26, 8f). */
+	record Text(double x, double y, double z, double size, int colour, FormattedCharSequence text, int align, boolean glow) {
 	}
 
 	/** A small solid box in the panel's frame (a breaker's handle: round 26, 8e). */
@@ -137,6 +138,9 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isVitalPanel(panel.getBlockState())) {
 				// A vital panel (round 26, 8e): its inverter's output, its breakers.
 				EdgTelemetry.vitalPanel(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isGroundDetector(panel.getBlockState())) {
+				// A ground detector and battery monitor (round 26, 8f): its battery, its test.
+				EdgTelemetry.groundDetector(snap, panel, level, now);
 			}
 		}
 		// What shows only with a panel's door open (a vital panel's breaker handles).
@@ -175,7 +179,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 						for (int k = 0; k < label.length; k++) {
 							double cy = (e.y0() + e.y1()) / 2 + (label.length - 1) * 0.28 - k * 0.56;
 							state.texts.add(new Text((e.x0() + e.x1()) / 2, cy, e.z() + 0.05, 0.34, 0x18181A,
-									Component.literal(label[k]).getVisualOrderText(), true, true));
+									Component.literal(label[k]).getVisualOrderText(), 1, true));
 						}
 					}
 				}
@@ -185,7 +189,17 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 						// Digital displays light themselves; the hour meter's printed wheels do not.
 						boolean glow = !e.channel().startsWith("hours");
 						state.texts.add(new Text(e.x(), e.y(), e.z(), e.size(), e.colour(), Component.literal(s).getVisualOrderText(),
-								"center".equals(e.align()), glow));
+								"center".equals(e.align()) ? 1 : "right".equals(e.align()) ? 2 : 0, glow));
+					}
+				}
+				case "bar" -> {
+					// A screen's bar (round 26, 8f: a battery monitor's cell volts): filled up from its bottom to the
+					// reading on its scale, in its second colour below the warn level; lit.
+					double v = snap.number(e.channel());
+					double f = Math.max(0, Math.min(1, (v - e.lo()) / (e.hi() - e.lo())));
+					if (f > 0) {
+						int rgb = v < e.warn() && e.colour2() != 0 ? e.colour2() : e.colour();
+						state.rects.add(new Rect(e.x0(), e.y0(), e.x1(), e.y0() + (e.y1() - e.y0()) * f, e.z(), rgb, true));
 					}
 				}
 				default -> {
@@ -275,7 +289,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			pose.translate((float) t.x(), (float) t.y(), (float) (t.z() + 0.02));
 			pose.scale(k, -k, k);
 			float w = font.width(t.text());
-			float x = t.centre() ? -w / 2 : 0;
+			float x = t.align() == 1 ? -w / 2 : t.align() == 2 ? -w : 0;
 			collector.submitText(pose, x, -4.5F, t.text(), false, Font.DisplayMode.POLYGON_OFFSET, t.glow() ? LightCoordsUtil.FULL_BRIGHT : light,
 					0xFF000000 | t.colour(), 0, 0);
 			pose.popPose();
@@ -351,7 +365,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		return new Element(o.get("t").getAsString(), num(o, "x"), num(o, "y"), num(o, "z"), num(o, "r"), num(o, "x0"), num(o, "y0"), num(o, "x1"),
 				num(o, "y1"), num(o, "lo"), num(o, "hi"), num(o, "start"), num(o, "sweep"), rgb(o, "colour"), rgb(o, "colour2"),
 				o.has("alpha") ? num(o, "alpha") : 0.6, num(o, "size"), o.get("ch").getAsString(), o.has("align") ? o.get("align").getAsString() : "left",
-				label(o), nums(o, "on"), nums(o, "off"), o.has("open") && o.get("open").getAsBoolean());
+				label(o), nums(o, "on"), nums(o, "off"), o.has("open") && o.get("open").getAsBoolean(), num(o, "warn"));
 	}
 
 	private static double[] nums(JsonObject o, String key) {

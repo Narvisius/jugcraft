@@ -5,6 +5,7 @@
     "pi_chrome": "jugcraft:block/pi_chrome",
     "pi_dc_switchboard_f_3": "jugcraft:block/pi_dc_switchboard_f_3",
     "pi_pnl_black": "jugcraft:block/pi_pnl_black",
+    "pi_steel_dark": "jugcraft:block/pi_steel_dark",
     "particle": "jugcraft:block/pi_cabinet"
   },
   "elements": [
@@ -517,6 +518,135 @@
         },
         "down": {
           "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        6.600000000000001,
+        15.399999999999999,
+        6.6
+      ],
+      "to": [
+        9.399999999999999,
+        15.8,
+        9.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.600000000000001,
+        15.3,
+        6.6
+      ],
+      "to": [
+        9.399999999999999,
+        15.95,
+        9.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8.0,
+          15.399999999999999,
+          8.0
+        ]
+      }
+    },
+    {
+      "from": [
+        7.0,
+        15.599999999999998,
+        7.0
+      ],
+      "to": [
+        9.0,
+        16.1,
+        9.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome",
+          "uv": [
+            7.0,
+            0.0,
+            9.0,
+            0.5
+          ]
+        },
+        "south": {
+          "texture": "#pi_chrome",
+          "uv": [
+            7.0,
+            0.0,
+            9.0,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome",
+          "uv": [
+            7.0,
+            0.0,
+            9.0,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#pi_chrome",
+          "uv": [
+            7.0,
+            0.0,
+            9.0,
+            0.5
+          ]
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
         }
       }
     }

@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.Rotation;
  */
 public class NuclearPlantGameTests {
 	/** Block counts the blueprints must have (the same as tools/nuclear_plants.py writes; checked again there). */
-	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341003"}, {"nuclear_large_epr", "383209"}};
+	private static final String[][] PLANTS = {{"nuclear_small_modular", "118096"}, {"nuclear_medium_pwr", "341025"}, {"nuclear_large_epr", "383209"}};
 
 	@GameTest(maxTicks = 20)
 	public void plantBlueprintsLoadWhole(GameTestHelper helper) {
@@ -528,6 +528,7 @@ public class NuclearPlantGameTests {
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> inverters = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> regXfs = new java.util.ArrayList<>();
 		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> vitals = new java.util.ArrayList<>();
+		java.util.List<io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity> detectors = new java.util.ArrayList<>(), boards = new java.util.ArrayList<>();
 		EquipmentBlockEntity transformer = null;
 		for (int i = 0; i < print.size(); i++) {
 			BlockState state = print.state(i, Rotation.NONE);
@@ -556,6 +557,12 @@ public class NuclearPlantGameTests {
 			} else if (state.is(PlantInterior.BLOCKS.get("vital_panel"))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity vb) {
 				vitals.add(vb);
+			} else if (state.is(PlantInterior.BLOCKS.get("dc_ground_detector"))
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity gd) {
+				detectors.add(gd);
+			} else if (state.is(PlantInterior.BLOCKS.get("dc_switchboard"))
+					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity board) {
+				boards.add(board);
 			} else if ((state.is(PlantInterior.BLOCKS.get("edg_battery_charger")) || state.is(PlantInterior.BLOCKS.get("station_charger")))
 					&& level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel && panel.input != null) {
 				chargers.add(panel);
@@ -571,11 +578,33 @@ public class NuclearPlantGameTests {
 		helper.assertTrue(inverters.size() == 4 && regXfs.size() == 4, "four vital inverters and four regulating transformers: " + inverters.size()
 				+ ", " + regXfs.size());
 		helper.assertTrue(vitals.size() == 4, "four 120 VAC vital panels: " + vitals.size());
+		helper.assertTrue(detectors.size() == 2 && boards.size() == 2, "a ground detector and a switchboard in each DC room: " + detectors.size() + ", "
+				+ boards.size());
 		for (int t = 0; t < 90; t++) {
 			for (var inv : inverters) inv.serverTick(level);
 			for (var xf : regXfs) xf.serverTick(level);
 			for (var vb : vitals) vb.serverTick(level);
+			for (var gd : detectors) gd.serverTick(level);
+			for (var board : boards) board.serverTick(level);
 		}
+		// Round 26 (8f): each room's ground detector reads its train's battery, the one its switchboard is on, and is never
+		// on a diesel generator; holding a test button grounds that side for as long as it is held (each use holds it
+		// HOLD ticks), and the buttons are where the drawing has them.
+		for (var gd : detectors) {
+			int label = io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(gd.getBlockState());
+			var board = boards.stream().filter(b -> io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(b.getBlockState()) == label).findFirst();
+			helper.assertTrue(gd.battery != null && board.isPresent() && gd.battery.equals(board.get().battery) && gd.generator == null,
+					"a ground detector reads its train's battery, as its switchboard does: " + gd.getBlockPos().subtract(stake).toShortString());
+		}
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.testAt(3.9, 5.7) == 1
+				&& io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.testAt(10.1, 5.7) == 2
+				&& io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.testAt(7.0, 5.7) == 0, "the ground detector's test buttons");
+		var gd0 = detectors.get(0);
+		long now = level.getGameTime();
+		helper.assertTrue(!gd0.testing(now) && io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.press(level, gd0, 2, now) && gd0.testing(now)
+				&& gd0.testSide == 2 && !io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.press(level, gd0, 2, now + 4)
+				&& gd0.testing(now + 4 + io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.HOLD - 1)
+				&& !gd0.testing(now + 4 + io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.HOLD), "a held test button grounds its side while held");
 		// Round 26 (8e): each inverter feeds the vital panel of its label and each panel knows it; a panel starts with its
 		// main and circuits 1 to 10 closed (the spares open), which draw the inverter's 46 A; a circuit opened takes its
 		// share off, the main opened all of it.

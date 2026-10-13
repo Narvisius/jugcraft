@@ -30,7 +30,7 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>The DC rooms' panels link what they read the same way (rounds 25 and 26): a charger, the DC switchboard and a
  * vital inverter their station battery; an inverter its regulating transformer; a regulating transformer its motor
- * control centre and its inverter (8d).
+ * control centre and its inverter (8d); the ground detector its station battery (8f).
  */
 public class LivePanelBlockEntity extends BlockEntity {
 	public static final int REACH = 24;
@@ -39,7 +39,10 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * motor control centre's CHGR breaker), and what it charges its battery with at most (JE/t, its 150 A limit).
 	 */
 	public static final long CHARGER_BUFFER = 40_000, CHARGER_RATE = 1_024;
-	/** A battery charger's or the DC switchboard's station battery (the placing block of the rack), or null (synced). */
+	/**
+	 * A battery charger's, the DC switchboard's, a vital inverter's or a ground detector's station battery (the placing
+	 * block of the rack), or null (synced).
+	 */
 	public @Nullable BlockPos battery;
 	/** A battery charger: what came in from its supply in the last two seconds (whether its AC is on), and what it put
 	 * into its battery a tick, on average (both synced for its meters). */
@@ -75,6 +78,15 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * (VitalPanelBlock). Saved and synced.
 	 */
 	public int breakers;
+	/**
+	 * A ground detector (round 26, 8f): the test being made, the side (1 the + bus, 2 the - bus, 0 none) and the game
+	 * time it lasts to (held, each use renews it: GroundDetectorBlock). Saved and synced; the client reads the test from
+	 * them.
+	 */
+	public int testSide;
+	public long testUntil;
+	/** A ground detector: when its alarm may beep again (game time; not saved). */
+	long beepAt;
 	/** The linked generator's anchor, or null. */
 	public @Nullable BlockPos generator;
 	/**
@@ -121,13 +133,29 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return state.getBlock() instanceof VitalPanelBlock;
 	}
 
+	public static boolean isGroundDetector(BlockState state) {
+		return state.getBlock() instanceof GroundDetectorBlock;
+	}
+
 	/**
-	 * The DC equipment rooms' panels: the station charger, the DC switchboard, the vital inverter, its transformer and
-	 * its vital panel.
+	 * The DC equipment rooms' panels: the station charger, the DC switchboard, the vital inverter, its transformer, its
+	 * vital panel and the ground detector.
 	 */
 	static boolean dcRoom(BlockState state) {
 		return state.getBlock() == PlantInterior.BLOCKS.get("station_charger") || isSwitchboard(state) || isInverter(state) || isTransformer(state)
-				|| isVitalPanel(state);
+				|| isVitalPanel(state) || isGroundDetector(state);
+	}
+
+	/** A ground detector's test (GroundDetectorBlock): on side 1 (+) or 2 (-) until game time until; saved, sent. */
+	void test(ServerLevel level, int side, long until) {
+		testSide = side;
+		testUntil = until;
+		sync(level);
+	}
+
+	/** Whether a ground detector is testing at game time now (fractional on the client). */
+	public boolean testing(double now) {
+		return testSide != 0 && now < testUntil;
 	}
 
 	/** A vital panel's breakers switched (VitalPanelBlock): saved, and sent to the players. */
@@ -320,7 +348,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 			return;
 		}
 		timer = 40;
-		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState())) {
+		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState()) || isGroundDetector(getBlockState())) {
 			linkBattery(level);
 		}
 		if (isVitalPanel(getBlockState())) {
@@ -554,6 +582,10 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (isVitalPanel(getBlockState())) {
 			out.putInt("breakers", breakers);
 		}
+		if (testSide != 0) {
+			out.putInt("test_side", testSide);
+			out.putLong("test_until", testUntil);
+		}
 	}
 
 	@Override
@@ -570,6 +602,8 @@ public class LivePanelBlockEntity extends BlockEntity {
 		xf = in.read("xf", BlockPos.CODEC).orElse(null);
 		panel = in.read("panel", BlockPos.CODEC).orElse(null);
 		breakers = in.getIntOr("breakers", isVitalPanel(getBlockState()) ? VitalPanelBlock.DEFAULT_BREAKERS : 0);
+		testSide = in.getIntOr("test_side", 0);
+		testUntil = in.getLongOr("test_until", 0L);
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}

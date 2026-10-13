@@ -916,11 +916,16 @@ TRAY_Y = 5
 
 
 def _tray_line(cells, facing, drops=(), pairs=(), walls=()):
+    """A straight run of tray: a drop where a conduit comes up into it, a trapeze hanger every other block and at the
+    run's end (a drop's on its hanger kind there: round 26, 8f, the equipment rows being all drops)."""
     out = []
     for i, (x, z) in enumerate(cells):
         key = (x, z)
+        hung = i % 2 == 0 or i == len(cells) - 1
         kind = ("ladder_tray_drop" if key in drops else "ladder_tray_drop_pair" if key in pairs else "ladder_tray_drop_wall" if key in walls
-                else "ladder_tray_hanger" if i % 2 == 0 or i == len(cells) - 1 else "ladder_tray")
+                else "ladder_tray")
+        if hung and kind in ("ladder_tray", "ladder_tray_drop", "ladder_tray_drop_pair"):
+            kind = "ladder_tray_hanger" if kind == "ladder_tray" else kind + "_hanger"
         out.append((x, z, kind, (walls.get(key, facing) if isinstance(walls, dict) else facing)))
     return out
 
@@ -930,21 +935,29 @@ def _tray_line(cells, facing, drops=(), pairs=(), walls=()):
 # wall drops over them, and each inverter's output conduit up from its top into a drop over the row.
 VITAL_PANELS_1A = [(19, 10, "east", "1A-1"), (19, 11, "east", "1A-2")]
 VITAL_PANELS_1B = [(19, 24, "west", "1B-1"), (19, 25, "west", "1B-2")]
-DC_TRAY_1A = (_tray_line([(x, 1) for x in range(13, 19)], "north", drops={(14, 1), (15, 1), (17, 1), (18, 1)})
-              + [(19, 1, "ladder_tray_bend", "north")]
+DC_TRAY_1A = (_tray_line([(x, 1) for x in range(12, 19)], "north", drops={(12, 1), (13, 1), (15, 1), (16, 1), (18, 1)}, pairs={(14, 1), (17, 1)})
+              + [(19, 1, "ladder_tray_bend_drop", "north")]
               + _tray_line([(19, z) for z in range(2, 13)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1A})
               + [(19, 13, "ladder_tray_bend", "east")]
               + _tray_line([(x, 13) for x in range(18, 13, -1)], "north", pairs={(16, 13)}))
-DC_TRAY_1B = (_tray_line([(x, 28) for x in range(26, 19, -1)], "north", drops={(25, 28), (24, 28), (22, 28), (21, 28)})
+DC_TRAY_1B = (_tray_line([(x, 28) for x in range(27, 19, -1)], "north", drops={(27, 28), (26, 28), (24, 28), (23, 28), (21, 28), (20, 28)},
+                         pairs={(25, 28), (22, 28)})
               + [(19, 28, "ladder_tray_bend", "south")]
               + _tray_line([(19, z) for z in range(27, 19, -1)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1B})
               + [(19, 19, "ladder_tray_bend", "west")]
               + _tray_line([(x, 19) for x in range(20, 28)], "north", pairs={(25, 19)}))
-# The feeders' conduits under the drops: (x, z, from y, to y, piece, facing): the transformers' and the inverters'
-# from their tops, the MCC's pair from its top, the vital panels' up the wall.
-TRAY_CONDUITS = ([(x, 1, 3, 4, "feeder_conduit", "north") for x in (14, 15, 17, 18)] + [(16, 13, 4, 4, "conduit_pair", "north")]
-                 + [(x, 28, 3, 4, "feeder_conduit", "north") for x in (25, 24, 22, 21)] + [(25, 19, 4, 4, "conduit_pair", "north")]
+# The feeders' conduits under the drops: (x, z, from y, to y, piece, facing): from the top of every cabinet in the row
+# (round 26, 8f; Justin: "Chargers, switchboards, inverter DC"): the switchboard's (its second section, x 12 in 1A, x 27
+# in 1B), each charger's DC output, each inverter's two (its DC feed and its AC output), each transformer's, the ground
+# detector's (in 1A into the drop in the bend over it); the MCC's pair from its top; the vital panels' up the wall.
+TRAY_CONDUITS = ([(x, 1, 3, 4, "feeder_conduit", "north") for x in (12, 13, 15, 16, 18, 19)] + [(x, 1, 3, 4, "conduit_pair_run", "north") for x in (14, 17)]
+                 + [(16, 13, 4, 4, "conduit_pair", "north")]
+                 + [(x, 28, 3, 4, "feeder_conduit", "north") for x in (27, 26, 24, 23, 21, 20)] + [(x, 28, 3, 4, "conduit_pair_run", "north") for x in (25, 22)]
+                 + [(25, 19, 4, 4, "conduit_pair", "north")]
                  + [(x, z, 3, 4, "wall_conduit", f) for x, z, f, _ in VITAL_PANELS_1A + VITAL_PANELS_1B])
+# Each room's DC ground detector and battery monitor (round 26, 8f; Justin: "End of the equipment row"): beside the
+# row's last transformer (in 1A in the corner, under the tray's bend), (x, z, facing, label).
+GROUND_DETECTORS = [(19, 1, "north", "1A"), (20, 28, "south", "1B")]
 
 
 def dc_room_tray(b, tray):
@@ -1105,6 +1118,8 @@ def ground_floor(b, W, D):
     b.prop("mcc_lineup", 14, 1, 13, "south")
     for x, z, facing, label in VITAL_PANELS_1A:
         b.panel("vital_panel", x, 1, z, facing, 1, label)
+    x, z, facing, label = GROUND_DETECTORS[0]
+    b.panel("dc_ground_detector", x, 1, z, facing, 1, label)
     dc_room_tray(b, DC_TRAY_1A)
     b.door(11, 1, 14, "north", label="dc_equipment_1a")
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
@@ -1192,6 +1207,8 @@ def ground_floor(b, W, D):
     b.prop("mcc_lineup", 24, 1, 19, "north", variant=1)
     for x, z, facing, label in VITAL_PANELS_1B:
         b.panel("vital_panel", x, 1, z, facing, 1, label)
+    x, z, facing, label = GROUND_DETECTORS[1]
+    b.panel("dc_ground_detector", x, 1, z, facing, 1, label)
     dc_room_tray(b, DC_TRAY_1B)
     for z in (22, 23):
         b.stack("relay_cabinet", 19, 1, z, "west", n=2)

@@ -71,6 +71,16 @@ public final class EdgTelemetry {
 		/** A vital panel (round 26, 8e): POWER ON, and its breakers (bit 0 the main, 1 to 12 its circuits, set closed). */
 		public boolean vbOn;
 		public int vbBreakers;
+		/**
+		 * A ground detector and battery monitor (round 26, 8f): its DC (the bus alive), each side's volts to ground and
+		 * which side is grounded (its test: 0 none, 1 +, 2 -); the monitor's screen alive, the string's volts and amps
+		 * (in positive), its charge (%), temperature (degrees C) and state, each cell's volts, its ALARM lamp.
+		 */
+		public boolean gdOn, bmOn, bmAlarm;
+		public int gdGround;
+		public double gdPos, gdNeg, bmV, bmA, bmSoc, bmTemp;
+		public String bmMode = "";
+		public final double[] cells = new double[60];
 		/** Sequencer steps done, and the one whose motor is starting now (-1 none). */
 		public int steps, starting = -1;
 		public String avr1 = "", avr2 = "", sequence = "";
@@ -81,6 +91,10 @@ public final class EdgTelemetry {
 
 		/** A meter's or gauge's reading. */
 		public double number(String channel) {
+			if (channel.startsWith("bm_c")) {
+				int i = Integer.parseInt(channel.substring(4));
+				return bmOn && i >= 0 && i < cells.length ? cells[i] : 0;
+			}
 			return switch (channel) {
 				case "rpm" -> rpm;
 				case "air" -> air;
@@ -104,6 +118,8 @@ public final class EdgTelemetry {
 				case "xf_out_v" -> xfOutV;
 				case "xf_out_a" -> xfOutA;
 				case "xf_temp" -> xfTemp;
+				case "gd_pos_v" -> gdPos;
+				case "gd_neg_v" -> gdNeg;
 				default -> 0;
 			};
 		}
@@ -166,6 +182,11 @@ public final class EdgTelemetry {
 				case "xf_on" -> xfOn ? 1 : 0;
 				// A vital panel's POWER ON lamp; its breakers' handles (1 closed: ON).
 				case "vb_on" -> vbOn ? 1 : 0;
+				// A ground detector's lamps: DC ON, the grounded side's GND, the monitor's ALARM (flashing).
+				case "gd_dc" -> gdOn ? 1 : 0;
+				case "gd_pos" -> gdGround == 1 ? 1 : 0;
+				case "gd_neg" -> gdGround == 2 ? 1 : 0;
+				case "bm_alarm" -> bmAlarm ? 1 : 0;
 				default -> channel.startsWith("vb_") ? vbBreakers >> Integer.parseInt(channel.substring(3)) & 1 : 0;
 			};
 		}
@@ -180,6 +201,20 @@ public final class EdgTelemetry {
 			}
 			if (channel.startsWith("relay")) {
 				return relays[channel.charAt(5) - '0'];
+			}
+			if (channel.startsWith("bm_")) {
+				// The battery monitor's screen, dark with no DC.
+				if (!bmOn) {
+					return "";
+				}
+				return switch (channel) {
+					case "bm_v" -> String.format(Locale.ROOT, "%.1f", bmV);
+					case "bm_a" -> String.format(Locale.ROOT, "%+.1f", bmA);
+					case "bm_soc" -> String.format(Locale.ROOT, "%.0f", bmSoc);
+					case "bm_t" -> String.format(Locale.ROOT, "%.1f", bmTemp);
+					case "bm_mode" -> bmMode;
+					default -> "";
+				};
 			}
 			if (channel.equals("inv_hz")) {
 				// The frequency display goes dark with the inverter's own control power (its DC) and no bypass.
@@ -340,17 +375,6 @@ public final class EdgTelemetry {
 	}
 
 	/**
-	 * A regulating transformer (round 26, 8d; Justin: "Meters and a lamp", animated to work realistically): a 480 V to
-	 * 120 V constant-voltage (ferroresonant) transformer, its inverter's standby source. It reads its MCC's REG XF breaker
-	 * and draws nothing (Justin: "Read the MCC breaker"); alive (LivePanelBlockEntity.energized), POWER ON is lit, its
-	 * input reads about 480 V with a slow wander and its output a very steady 120 V. While its inverter runs on
-	 * its battery it carries no load (0 A); with the battery flat the inverter's static switch puts the load on it, and
-	 * its output amps read what the inverter's AC AMPS meter does (about 46 A, the same wander) while the output sags a
-	 * little, to about 119.3 V. Dead: every meter at zero, the lamp out. Its winding temperature follows its losses
-	 * slowly (a time constant of about 90 s of game time): room temperature dead, about 58 degrees on no load, 96
-	 * carrying the load.
-	 */
-	/**
 	 * A 120 VAC vital panel (round 26, 8e; Justin: "Switchable breakers"): POWER ON lit while its inverter's output is
 	 * alive (on its battery or on its bypass) and its main is closed; its breakers' handles as they are set.
 	 */
@@ -367,6 +391,63 @@ public final class EdgTelemetry {
 		o.vbOn = alive && (panel.breakers & 1) != 0;
 	}
 
+	/**
+	 * A ground detector and battery monitor (round 26, 8f; Justin: "Healthy, with TEST", "Yes, with a screen"): on its
+	 * station battery's DC (read as the switchboard reads it, battery()). Its voltmeters read each side of the bus to
+	 * ground: half the bus each, a hair apart, while neither side is grounded (no ground faults are modelled); while a
+	 * test button is held (nuclear/GroundDetectorBlock.java) that side's reads about 2 V and the other the rest of the
+	 * bus, its GND lamp lights, the screen says which side and the ALARM lamp flashes. The monitor: the string's volts,
+	 * its amps (in positive, out negative: a couple of amps in on float, the charge rate on recharge or equalize, the
+	 * load on discharge), its charge, its temperature (a little warmer charging hard), its state, and its 60 cells'
+	 * volts, each the string's share with its own small spread (a healthy battery: none below the alarm level until it
+	 * runs down). ALARM also flashes with the bus low (under 124 V). No battery: everything dark and at zero.
+	 */
+	public static void groundDetector(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
+			double now) {
+		if (panel.battery == null
+				|| !(level.getBlockEntity(panel.battery) instanceof io.github.jimbozoomer.jugcraft.nuclear.StationBatteryBlockEntity bank)) {
+			o.dcV = 0;
+			o.dcA = 0;
+			return;
+		}
+		double soc = bank.charge();
+		double t = now / 20.0, seed = (panel.getBlockPos().hashCode() & 0xFFFF) * 0.0137;
+		double bus = io.github.jimbozoomer.jugcraft.nuclear.GroundDetectorBlock.busVolts(bank);
+		o.gdOn = true;
+		o.bmOn = true;
+		o.gdGround = panel.testing(now) ? panel.testSide : 0;
+		double gnd = 1.8 + 0.3 * noise(t * 0.5, seed, 4);
+		double half = bus / 2 + 0.3 + 0.2 * noise(t * 0.2, seed, 5);
+		o.gdPos = o.gdGround == 1 ? gnd : o.gdGround == 2 ? bus - gnd : half;
+		o.gdNeg = o.gdGround == 2 ? gnd : o.gdGround == 1 ? bus - gnd : bus - half;
+		o.bmV = bus + 0.05 * noise(t * 0.3, seed, 6);
+		double rate = bank.flow / 8.0;
+		boolean full = soc > 0.999;
+		o.bmA = (bank.flow > 0 ? rate : bank.flow < 0 ? rate : full ? 2 : 0) + 0.1 * noise(t * 0.4, seed, 7);
+		o.bmSoc = soc * 100;
+		o.bmTemp = 25 + (bank.flow > 0 ? Math.min(3, rate / 50) : 0) + 0.15 * noise(t * 0.05, seed, 8);
+		o.bmMode = o.gdGround == 1 ? "+ GND FAULT" : o.gdGround == 2 ? "- GND FAULT"
+				: bank.flow > 0 ? (rate > 35 ? "EQUALIZE" : "RECHARGE") : bank.flow < 0 ? "DISCHARGE" : full ? "FLOAT" : "OPEN CKT";
+		for (int i = 0; i < o.cells.length; i++) {
+			double h = Math.sin(i * 12.9898 + seed * 78.233) * 43758.5453;
+			o.cells[i] = o.bmV / o.cells.length + 0.03 * ((h - Math.floor(h)) * 2 - 1) + 0.002 * noise(t * 0.3, seed + i, 9);
+		}
+		boolean blink = ((long) (now / 10)) % 2 == 0;
+		o.bmAlarm = (o.gdGround != 0 || bus < 124) && blink;
+		o.dcV = bus;
+	}
+
+	/**
+	 * A regulating transformer (round 26, 8d; Justin: "Meters and a lamp", animated to work realistically): a 480 V to
+	 * 120 V constant-voltage (ferroresonant) transformer, its inverter's standby source. It reads its MCC's REG XF breaker
+	 * and draws nothing (Justin: "Read the MCC breaker"); alive (LivePanelBlockEntity.energized), POWER ON is lit, its
+	 * input reads about 480 V with a slow wander and its output a very steady 120 V. While its inverter runs on
+	 * its battery it carries no load (0 A); with the battery flat the inverter's static switch puts the load on it, and
+	 * its output amps read what the inverter's AC AMPS meter does (about 46 A, the same wander) while the output sags a
+	 * little, to about 119.3 V. Dead: every meter at zero, the lamp out. Its winding temperature follows its losses
+	 * slowly (a time constant of about 90 s of game time): room temperature dead, about 58 degrees on no load, 96
+	 * carrying the load.
+	 */
 	public static void transformer(Snapshot o, io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity panel, net.minecraft.world.level.Level level,
 			double now) {
 		boolean on = panel.energized(level), loaded = false;

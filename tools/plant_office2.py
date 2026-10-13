@@ -418,10 +418,10 @@ def _trapeze(x=8.0):
     return out
 
 
-def _tray_drop(x):
-    """A feeder leaving the tray at x: its conduit up under the tray, the bushing, the cable dropping into it."""
-    return (_oct_y(x, 8, 0, 10.0, _CONDUIT, "pi_chrome") + _oct_y(x, 8, 3.5, 5.5, _COUPLING, "pi_steel") + _oct_y(x, 8, 10.0, 10.6, 1.45, _GALV_DARK)
-            + _oct_y(x, 8, 10.6, TRAY_CABLE_Y, 0.6, _JACKET))
+def _tray_drop(x, z=8):
+    """A feeder leaving the tray at (x, z): its conduit up under the tray, the bushing, the cable dropping into it."""
+    return (_oct_y(x, z, 0, 10.0, _CONDUIT, "pi_chrome") + _oct_y(x, z, 3.5, 5.5, _COUPLING, "pi_steel") + _oct_y(x, z, 10.0, 10.6, 1.45, _GALV_DARK)
+            + _oct_y(x, z, 10.6, TRAY_CABLE_Y, 0.6, _JACKET))
 
 
 def _seg(cx, cz, phi, length, width, y0, y1, tex):
@@ -456,7 +456,8 @@ def _arc(radius, y0, y1, width, tex, round_=None):
     return out
 
 
-def _tray_bend():
+def _tray_bend(rungs=(22.5, 45.0, 67.5)):
+    """The bend; rungs: the angles of its rungs across the corner (besides the two at its ends)."""
     y0, y1 = TRAY_Y
     out = []
     # The rails: the outer one round the corner at radius 12.8, the inner at 3.2, each web with its flanges inward.
@@ -464,7 +465,7 @@ def _tray_bend():
         out += _arc(r_web, y0, y1, 0.4, _GALV)
         out += _arc(r_flange, y0, y0 + 0.3, 0.7, _GALV) + _arc(r_flange, y1 - 0.3, y1, 0.7, _GALV)
     # The rungs, across the corner from the inner rail to the outer.
-    for theta in (22.5, 45.0, 67.5):
+    for theta in rungs:
         t = math.radians(theta)
         out += _seg(8 * math.sin(t), 16 - 8 * math.cos(t), theta - 90, 9.2, 0.9, y0 + 0.05, 11.85, _GALV)
     out += [(1.55, y0 + 0.05, 3.4, 2.45, 11.85, 12.6, _GALV), (3.4, y0 + 0.05, 13.55, 12.6, 11.85, 14.45, _GALV)]
@@ -508,10 +509,24 @@ PIECES.update({
     "ladder_tray_drop": {"display": "Ladder Cable Tray (Conduit Drop)", "boxes": _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(8.0)},
     "ladder_tray_drop_pair": {"display": "Ladder Cable Tray (Two Conduit Drops)", "boxes":
         _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(4.5) + _tray_drop(11.5)},
+    # The same on a trapeze hanger (round 26, 8f: the equipment rows are all drops now, every cabinet's conduit up into
+    # the tray, so their hangers are on drops): the single drop's hanger to one side of its conduit, the pair's between.
+    "ladder_tray_drop_hanger": {"display": "Ladder Cable Tray (Conduit Drop, Hanger)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(8.0) + _trapeze(2.0)},
+    "ladder_tray_drop_pair_hanger": {"display": "Ladder Cable Tray (Two Conduit Drops, Hanger)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(4.5) + _tray_drop(11.5) + _trapeze(8.0)},
+    # The bend with a drop in its middle (round 26, 8f: DC room 1A's ground detector stands under the bend at its row's
+    # end), its rungs at 30 and 60 degrees so the conduit comes up between them.
+    "ladder_tray_bend_drop": {"display": "Ladder Cable Tray (Bend, Conduit Drop)", "boxes": _tray_bend((30.0, 60.0)) + _tray_drop(8.0)},
     # Two feeder conduits side by side, up from their hubs on the top of an MCC section (in the block below, its top
     # 2.36 blocks up the lineup: tools/control_boards.py MCC_CONDUITS) to the tray's drops.
     "conduit_pair": {"display": "Feeder Conduits (Pair)", "boxes":
         _oct_y(4.5, 8, MCC_HUB_Y, 16, _CONDUIT, "pi_chrome") + _oct_y(11.5, 8, MCC_HUB_Y, 16, _CONDUIT, "pi_chrome")
+        + _oct_y(4.5, 8, 7, 9, _COUPLING, "pi_steel") + _oct_y(11.5, 8, 7, 9, _COUPLING, "pi_steel")},
+    # A vital inverter's two conduits up from its top (round 26, 8f: its DC feed from the switchboard and its AC
+    # output to its vital panel, plant_panels CABINET_HUBS "pair"), a length of each in a block with its coupling.
+    "conduit_pair_run": {"display": "Feeder Conduits (Pair, Run)", "boxes":
+        _oct_y(4.5, 8, 0, 16, _CONDUIT, "pi_chrome") + _oct_y(11.5, 8, 0, 16, _CONDUIT, "pi_chrome")
         + _oct_y(4.5, 8, 7, 9, _COUPLING, "pi_steel") + _oct_y(11.5, 8, 7, 9, _COUPLING, "pi_steel")},
 })
 
@@ -537,6 +552,10 @@ CRAFTING = {
     "ladder_tray_drop": (["P P", "PPP", " S "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "ladder_tray_drop_pair": (["P P", "PPP", "S S"], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "conduit_pair": (["P P", "P P"], {"P": "#c:plates/steel"}, 4),
+    "conduit_pair_run": (["P P", "P P", "P P"], {"P": "#c:plates/steel"}, 8),
+    "ladder_tray_drop_hanger": (["N N", "PPP", " S "], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "ladder_tray_drop_pair_hanger": (["N N", "PPP", "S S"], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "ladder_tray_bend_drop": (["P  ", "P P", "PSP"], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "wall_conduit": (["PN", "P ", "PN"], {"P": "#c:plates/steel", "N": "minecraft:iron_nugget"}, 8),
     "ladder_tray_drop_wall": (["P P", "PPP", "S  "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
     "emergency_light_conduit": (["P", "P", "P"], {"P": "#c:plates/iron"}, 8),
