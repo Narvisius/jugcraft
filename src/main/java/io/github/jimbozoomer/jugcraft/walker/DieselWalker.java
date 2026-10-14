@@ -182,11 +182,16 @@ public class DieselWalker extends Entity {
 			gait.tick(this);
 		}
 		if (level().isClientSide() && drilling() && tickCount % 2 == 0) {
-			double yaw = Math.toRadians(getYRot());
-			double x = getX() - 1.3 * Math.cos(yaw) - 2.0 * Math.sin(yaw);
-			double z = getZ() - 1.3 * Math.sin(yaw) + 2.0 * Math.cos(yaw);
-			level().addParticle(ParticleTypes.SMOKE, x, getY() + 1.9, z, 0, 0.02, 0);
+			workingEffects();
 		}
+	}
+
+	/** Client side, every other tick while its tool works: the Diesel Walker's drill smokes. */
+	protected void workingEffects() {
+		double yaw = Math.toRadians(getYRot());
+		double x = getX() - 1.3 * Math.cos(yaw) - 2.0 * Math.sin(yaw);
+		double z = getZ() - 1.3 * Math.sin(yaw) + 2.0 * Math.cos(yaw);
+		level().addParticle(ParticleTypes.SMOKE, x, getY() + 1.9, z, 0, 0.02, 0);
 	}
 
 	private void walk(ServerLevel level) {
@@ -205,8 +210,8 @@ public class DieselWalker extends Entity {
 		double vy = motion.y - 0.08;
 		if (onGround()) {
 			vy = Math.max(vy, -0.1);
-			if (fuelled && listening && jump > 0) {
-				vy = JUMP;
+			if (fuelled && leap(listening && jump > 0)) {
+				vy = leapSpeed();
 			} else if (speed != 0 && horizontalCollision) {
 				vy = 0.45; // Step up one block.
 			}
@@ -218,7 +223,8 @@ public class DieselWalker extends Entity {
 			passenger.resetFallDistance();
 		}
 
-		boolean drilled = listening && drill > 0 && fuelled && pilot instanceof ServerPlayer player && useHeld(level, player);
+		boolean drilled = listening && fuelled && pilot instanceof ServerPlayer player
+				&& operateTool(level, player, drill > 0, t != 0);
 		if (!drilled) {
 			stopDrilling(level);
 		}
@@ -250,8 +256,26 @@ public class DieselWalker extends Entity {
 	}
 
 	/**
-	 * One tick of the pilot holding use: the Diesel Walker drills. Returns whether it is drilling (which burns fuel and
-	 * spins the bit); a walker with another tool overrides this.
+	 * Whether it leaves the ground this tick, called each tick it stands fuelled on the ground, with whether the pilot
+	 * holds jump: the Diesel Walker leaps at once. A walker that crouches first overrides this.
+	 */
+	protected boolean leap(boolean jumpHeld) {
+		return jumpHeld;
+	}
+
+	/** How fast it leaves the ground when it leaps, in blocks a tick. */
+	protected double leapSpeed() {
+		return JUMP;
+	}
+
+	/** Tools normally work only while use is held; artillery can track a target before the trigger is pressed. */
+	protected boolean operateTool(ServerLevel level, ServerPlayer pilot, boolean use, boolean manualTurn) {
+		return use && useHeld(level, pilot);
+	}
+
+	/**
+	 * One tick of the pilot holding use: the Diesel Walker drills. Returns whether its tool is working (which burns fuel,
+	 * spins the bit and calls {@link #workingEffects()}); a walker with another tool overrides this.
 	 */
 	protected boolean useHeld(ServerLevel level, ServerPlayer pilot) {
 		return drill(level, pilot);

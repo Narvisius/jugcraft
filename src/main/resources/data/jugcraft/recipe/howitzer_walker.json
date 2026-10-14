@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SDS",
+    "PWP",
+    "R R"
+  ],
+  "key": {
+    "S": "jugcraft:steel_block",
+    "D": "minecraft:dispenser",
+    "P": "#c:plates/steel",
+    "W": "jugcraft:diesel_walker",
+    "R": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:howitzer_walker",
+    "count": 1
+  }
+}

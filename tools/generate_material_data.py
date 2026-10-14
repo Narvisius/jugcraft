@@ -229,6 +229,8 @@ def assets():
     import raiders
     import armoured_walker
     armoured_walker.write_all(write, ASSETS, DATA / MOD, lang, condition)
+    import howitzer_walker
+    howitzer_walker.write_all(write, ASSETS, DATA / MOD, lang, condition)
     raiders.write_all(write, ASSETS, DATA / MOD, lang, condition)
     import zeppelin
     zeppelin.write_all(write, ASSETS, DATA / MOD, lang, condition)

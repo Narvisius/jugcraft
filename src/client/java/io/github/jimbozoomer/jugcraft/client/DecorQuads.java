@@ -37,7 +37,8 @@ import org.jspecify.annotations.Nullable;
  * (tools/decor19_data.py: the laboratory's, larder's and dining room's moving parts, the witchlights' wisps and glows,
  * the yard silhouettes and the harvest moon's faces), decor20_quads.json (tools/decor20_data.py: the harvest
  * effigy's cloak), raider_quads.json (tools/raiders.py: the Raider Walker's and Raider Blimp's parts in raider paint)
- * and armoured_walker_quads.json (tools/armoured_walker.py: the Armoured Walker's hull, legs, arms and piston).
+ * and armoured_walker_quads.json (tools/armoured_walker.py: the Armoured Walker's hull, legs, arms and piston) and
+ * howitzer_walker_quads.json (tools/howitzer_walker.py: the Howitzer Walker's hull, gun, legs, star burst and smoke puffs).
  */
 public final class DecorQuads {
 	private static final List<Identifier> FILES = List.of(Jugcraft.id("decor_quads.json"), Jugcraft.id("decor7_quads.json"),
@@ -48,7 +49,8 @@ public final class DecorQuads {
 			Jugcraft.id("decor17_quads.json"), Jugcraft.id("trench_quads.json"),
 			Jugcraft.id("artillery_quads.json"), Jugcraft.id("decor18_quads.json"), Jugcraft.id("tower_gun_quads.json"),
 			Jugcraft.id("decor19_quads.json"), Jugcraft.id("decor20_quads.json"), Jugcraft.id("raider_quads.json"),
-			Jugcraft.id("armoured_walker_quads.json"), Jugcraft.id("companion_wheel_quads.json"));
+			Jugcraft.id("armoured_walker_quads.json"), Jugcraft.id("companion_wheel_quads.json"),
+			Jugcraft.id("howitzer_walker_quads.json"));
 	private static @Nullable Map<String, QuadModel> models;
 
 	private DecorQuads() {

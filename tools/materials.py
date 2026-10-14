@@ -337,6 +337,9 @@ def feature_of(entry_id):
     import armoured_walker
     if entry_id in armoured_walker.ITEMS:
         return "machines"
+    import howitzer_walker
+    if entry_id in howitzer_walker.ITEMS:
+        return "machines"
     import concordance
     if entry_id in concordance.items() or entry_id in concordance.blocks() or entry_id in concordance.itemless_blocks():
         return concordance.FEATURE

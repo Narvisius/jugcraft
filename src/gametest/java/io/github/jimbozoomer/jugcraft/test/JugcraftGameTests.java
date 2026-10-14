@@ -823,6 +823,205 @@ public class JugcraftGameTests {
 		helper.succeedWhen(() -> helper.assertTrue(!pig.isAlive() || pig.getHealth() < pig.getMaxHealth(), "The ram should hit the pig"));
 	}
 
+	private static io.github.jimbozoomer.jugcraft.walker.HowitzerWalker pilotedHowitzerWalker(GameTestHelper helper, Vec3 at, ServerPlayer pilot) {
+		io.github.jimbozoomer.jugcraft.walker.HowitzerWalker walker = helper.spawn(
+				io.github.jimbozoomer.jugcraft.walker.JugcraftWalkers.HOWITZER_WALKER, at);
+		walker.setFuel(1000);
+		pilot.setPos(walker.getX(), walker.getY(), walker.getZ());
+		helper.assertTrue(pilot.startRiding(walker, true, true), "The pilot could not climb in");
+		return walker;
+	}
+
+	/** The Howitzer Walker walks on fuel, as the Diesel Walker does. */
+	@GameTest(structure = "jugcraft-test:drone_depot", maxTicks = 200)
+	public void howitzerWalkerWalksOnFuel(GameTestHelper helper) {
+		walkerFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		var walker = pilotedHowitzerWalker(helper, new Vec3(7.5, 1, 2.5), pilot);
+		Vec3 start = walker.position();
+		helper.onEachTick(() -> walker.steer(pilot, 1, 0, 0, 0, 0));
+		helper.runAfterDelay(40, () -> {
+			double walked = walker.position().subtract(start).horizontalDistance();
+			helper.assertTrue(walked > 3, "Holding forward should walk it forward, but it moved " + walked);
+			helper.assertTrue(walker.fuel() < 1000, "Walking should burn fuel");
+			helper.succeed();
+		});
+	}
+
+	/** Mouse aim works before pressing the trigger and does not spend shells. */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 100, skyAccess = true)
+	public void howitzerWalkerAimsWithoutFiring(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		pilot.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		var walker = pilotedHowitzerWalker(helper, new Vec3(20.5, 1, 20.5), pilot);
+		pilot.getInventory().add(new ItemStack(io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.HEAVY_SHELL_ITEM, 2));
+		helper.onEachTick(() -> {
+			pilot.setYRot(-90);
+			pilot.setYHeadRot(-90);
+			pilot.setXRot(-45);
+			walker.steer(pilot, 0, 0, 0, 0, 0);
+		});
+		helper.runAfterDelay(35, () -> {
+			helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(walker.getYRot() + 90)) < 1,
+					"Mouse aim must turn the hull without holding fire");
+			helper.assertTrue(Math.abs(walker.elevation() - 45) < 1, "The barrel must follow the pilot's upward look");
+			helper.assertTrue(pilot.getInventory().countItem(io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.HEAVY_SHELL_ITEM) == 2,
+					"Aiming must not fire or spend shells");
+			helper.assertTrue(!pilot.isInvisible(), "Hiding the cockpit model must not grant gameplay invisibility");
+			helper.succeed();
+		});
+	}
+
+	/** Looking at ground too close for a ballistic arc must not freeze the gun; it can then aim back up. */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 100, skyAccess = true)
+	public void howitzerWalkerNearGroundDoesNotFreezeAim(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		var walker = pilotedHowitzerWalker(helper, new Vec3(20.5, 1, 20.5), pilot);
+		boolean[] lookUp = {false};
+		helper.onEachTick(() -> {
+			pilot.setYRot(90);
+			pilot.setYHeadRot(90);
+			pilot.setXRot(lookUp[0] ? -30 : 85);
+			walker.steer(pilot, 0, 0, 0, 0, 0);
+		});
+		helper.runAfterDelay(35, () -> {
+			helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(walker.getYRot() - 90)) < 1,
+					"A nearby target must not prevent turning; yaw was " + walker.getYRot());
+			helper.assertTrue(Math.abs(walker.elevation() + 15) < 1, "Close ground should lower the gun to its safe limit");
+			lookUp[0] = true;
+		});
+		helper.runAfterDelay(60, () -> {
+			// A loaded structure along the ray can require a ballistic arc rather than exactly the camera's pitch.
+			helper.assertTrue(walker.elevation() > 10, "Looking up must raise the gun away from its -15-degree limit; elevation was " + walker.elevation());
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Holding use lays the howitzer on the block the pilot looks at, off to its side: the walker turns to face it, and the
+	 * Heavy Shell it fires lands there and hurts the pig standing on it. One shell is used.
+	 */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 160, skyAccess = true)
+	public void howitzerWalkerShellsWhatThePilotLooksAt(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		pilot.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+		var walker = pilotedHowitzerWalker(helper, new Vec3(6.5, 1, 6.5), pilot);
+		pilot.getInventory().add(new ItemStack(io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.HEAVY_SHELL_ITEM, 2));
+		BlockPos target = new BlockPos(36, 1, 6);
+		net.minecraft.world.entity.Mob pig = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityTypes.PIG, target);
+		Vec3 aim = helper.absoluteVec(new Vec3(36.5, 1.0, 6.5));
+		helper.onEachTick(() -> {
+			pilot.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, aim);
+			walker.steer(pilot, 0, 0, 0, 1, 0);
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(!pig.isAlive() || pig.getHealth() < pig.getMaxHealth(), "The shell should land on the pig the pilot looks at");
+			float facing = net.minecraft.util.Mth.wrapDegrees(walker.getYRot() + 90.0F);
+			helper.assertTrue(Math.abs(facing) < 5.0F, "The walker should have turned to face the target (yaw -90), not " + walker.getYRot());
+			int left = pilot.getInventory().countItem(io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.HEAVY_SHELL_ITEM);
+			helper.assertTrue(left == 1, "One shot should use one Heavy Shell, but " + left + " are left");
+		});
+	}
+
+	/** The pilot's own Range Finder mark wins over where they look: the walker lays on the mark and shells it. */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 160, skyAccess = true)
+	public void howitzerWalkerFiresOnItsPilotsMark(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		var walker = pilotedHowitzerWalker(helper, new Vec3(20.5, 1, 4.5), pilot);
+		BlockPos target = new BlockPos(14, 1, 38);
+		net.minecraft.world.entity.Mob pig = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityTypes.PIG, target);
+		io.github.jimbozoomer.jugcraft.artillery.Spotting.mark(pilot, helper.absolutePos(target.below()));
+		// The pilot looks at the floor behind the walker, away from the mark. Once the shell is away the mark is cleared,
+		// so no other test's gun takes it for a spotter's.
+		Vec3 away = helper.absoluteVec(new Vec3(20.5, 1.0, 0.5));
+		net.minecraft.world.phys.AABB area = new net.minecraft.world.phys.AABB(helper.absolutePos(BlockPos.ZERO)).expandTowards(44, 40, 44);
+		helper.onEachTick(() -> {
+			pilot.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, away);
+			walker.steer(pilot, 0, 0, 0, 1, 0);
+			if (!helper.getLevel().getEntitiesOfClass(io.github.jimbozoomer.jugcraft.artillery.ArtilleryShell.class, area).isEmpty()) {
+				io.github.jimbozoomer.jugcraft.artillery.Spotting.clear(pilot);
+			}
+		});
+		helper.succeedWhen(() -> helper.assertTrue(!pig.isAlive() || pig.getHealth() < pig.getMaxHealth(),
+				"The shell should land on the marked pig"));
+	}
+
+	/**
+	 * Holding use fires no faster than once every {@value io.github.jimbozoomer.jugcraft.walker.HowitzerWalker#GUN_COOLDOWN}
+	 * ticks: a hundred ticks on a target ahead fire twice.
+	 */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 140, skyAccess = true)
+	public void howitzerWalkerReloadsBetweenShots(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		var walker = pilotedHowitzerWalker(helper, new Vec3(6.5, 1, 4.5), pilot);
+		Vec3 aim = helper.absoluteVec(new Vec3(6.5, 1.0, 38.5));
+		net.minecraft.world.phys.AABB area = new net.minecraft.world.phys.AABB(helper.absolutePos(BlockPos.ZERO)).expandTowards(44, 40, 44);
+		java.util.Set<java.util.UUID> shells = new java.util.HashSet<>();
+		helper.onEachTick(() -> {
+			pilot.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, aim);
+			walker.steer(pilot, 0, 0, 0, 1, 0);
+			for (var shell : helper.getLevel().getEntitiesOfClass(io.github.jimbozoomer.jugcraft.artillery.ArtilleryShell.class, area)) {
+				shells.add(shell.getUUID());
+			}
+		});
+		helper.runAfterDelay(100, () -> {
+			helper.assertTrue(shells.size() == 2, "A hundred ticks of holding use should fire twice (once every 80), not " + shells.size());
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Jump crouches first: the walker is still on the ground a few ticks after the press, then springs well up (in the
+	 * open, as it stands over five blocks tall).
+	 */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 80, skyAccess = true)
+	public void howitzerWalkerCrouchesThenLeaps(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		var walker = pilotedHowitzerWalker(helper, new Vec3(7.5, 1, 7.5), pilot);
+		// It settles for five ticks, then the pilot holds jump.
+		int[] tick = {0};
+		double[] start = {Double.NaN};
+		double[] highest = {0};
+		helper.onEachTick(() -> {
+			if (tick[0]++ == 5) {
+				start[0] = walker.getY();
+			}
+			walker.steer(pilot, 0, 0, Double.isNaN(start[0]) ? 0 : 1, 0, 0);
+			if (!Double.isNaN(start[0])) {
+				highest[0] = Math.max(highest[0], walker.getY() - start[0]);
+			}
+		});
+		helper.runAfterDelay(5 + io.github.jimbozoomer.jugcraft.walker.HowitzerWalker.CROUCH_TICKS - 2,
+				() -> helper.assertTrue(highest[0] < 0.01, "It should still be crouching on the ground, but it rose " + highest[0]));
+		helper.runAfterDelay(40, () -> {
+			helper.assertTrue(highest[0] > 2.0, "After its crouch it should spring over two blocks up, but it rose " + highest[0]);
+			helper.succeed();
+		});
+	}
+
+	/** Attack stomps: the walker hops and comes down hard, hurting the pig standing beside it. */
+	@GameTest(structure = "jugcraft-test:drone_tower", maxTicks = 100, skyAccess = true)
+	public void howitzerWalkerStomps(GameTestHelper helper) {
+		raiderFloor(helper);
+		ServerPlayer pilot = helper.makeMockServerPlayerInLevel();
+		var walker = pilotedHowitzerWalker(helper, new Vec3(7.5, 1, 7.5), pilot);
+		net.minecraft.world.entity.Mob pig = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityTypes.PIG, new BlockPos(9, 1, 9));
+		double startY = walker.getY();
+		boolean[] hopped = {false};
+		helper.runAfterDelay(5, () -> walker.steer(pilot, 0, 0, 0, 0, 1));
+		helper.onEachTick(() -> hopped[0] |= walker.getY() - startY > 0.5);
+		helper.succeedWhen(() -> {
+			helper.assertTrue(hopped[0], "The stomp should hop first");
+			helper.assertTrue(!pig.isAlive() || pig.getHealth() < pig.getMaxHealth(), "The stomp should hurt the pig beside it");
+		});
+	}
+
 	/** Batch 47: a Diesel Walker's fuel is saved with it. */
 	@GameTest
 	public void dieselWalkerKeepsFuel(GameTestHelper helper) {
