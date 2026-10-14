@@ -2860,7 +2860,8 @@ def write_cell_rack(write, assets, data, lang, condition):
     lang[f"block.{MOD}.{RACK}"] = RACK_DISPLAY
     lang[f"message.{MOD}.{RACK}"] = "Cell Rack: %s / %s JE"
     lang[f"message.{MOD}.{RACK}.cell"] = "%s: %s / %s JE"
-    elements = cell_rack_model()
+    from machine_connections import with_sockets, exterior_ports
+    elements = with_sockets(cell_rack_model(), exterior_ports())
     textures = {name: f"{MOD}:block/{name}" for name in model_writer.texture_names(elements)}
     textures["particle"] = f"{MOD}:block/el_frame"
     part = model_writer.split_model(RACK, elements, [(0, 0, 0)])[0]

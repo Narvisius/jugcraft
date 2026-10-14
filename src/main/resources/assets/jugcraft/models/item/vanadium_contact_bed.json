@@ -1,6 +1,351 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:block/block",
   "textures": {
-    "layer0": "jugcraft:item/vanadium_contact_bed"
-  }
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "el_white": "jugcraft:block/el_white",
+    "sp_copper": "jugcraft:block/sp_copper",
+    "particle": "jugcraft:block/dp_olive"
+  },
+  "elements": [
+    {
+      "from": [
+        1.1429,
+        5.6143,
+        2.2857
+      ],
+      "to": [
+        14.8571,
+        9.1429,
+        13.7143
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            13.714,
+            3.429
+          ]
+        },
+        "south": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            13.714,
+            3.429
+          ]
+        },
+        "east": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            11.429,
+            3.429
+          ]
+        },
+        "west": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            11.429,
+            3.429
+          ]
+        },
+        "up": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            13.714,
+            11.429
+          ]
+        },
+        "down": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            13.714,
+            11.429
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        5.7143,
+        1.1429
+      ],
+      "to": [
+        16.0,
+        6.8571,
+        14.8571
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0,
+            0,
+            16,
+            1.143
+          ]
+        },
+        "south": {
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0,
+            0,
+            16,
+            1.143
+          ]
+        },
+        "east": {
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0,
+            0,
+            13.714,
+            1.143
+          ]
+        },
+        "west": {
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0,
+            0,
+            13.714,
+            1.143
+          ]
+        },
+        "up": {
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0,
+            0,
+            16,
+            13.714
+          ]
+        },
+        "down": {
+          "texture": "#dp_gunmetal",
+          "uv": [
+            0,
+            0,
+            16,
+            13.714
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.4286,
+        9.1429,
+        3.4286
+      ],
+      "to": [
+        5.7143,
+        10.2857,
+        12.5714
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            1.143
+          ]
+        },
+        "south": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            1.143
+          ]
+        },
+        "east": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "west": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "up": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            9.143
+          ]
+        },
+        "down": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            9.143
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.8571,
+        9.1429,
+        3.4286
+      ],
+      "to": [
+        9.1429,
+        10.2857,
+        12.5714
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            1.143
+          ]
+        },
+        "south": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            1.143
+          ]
+        },
+        "east": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "west": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "up": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            9.143
+          ]
+        },
+        "down": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            9.143
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        10.2857,
+        9.1429,
+        3.4286
+      ],
+      "to": [
+        12.5714,
+        10.2857,
+        12.5714
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            1.143
+          ]
+        },
+        "south": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            1.143
+          ]
+        },
+        "east": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "west": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            9.143,
+            1.143
+          ]
+        },
+        "up": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            9.143
+          ]
+        },
+        "down": {
+          "texture": "#sp_copper",
+          "uv": [
+            0,
+            0,
+            2.286,
+            9.143
+          ]
+        }
+      }
+    }
+  ]
 }

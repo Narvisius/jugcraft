@@ -1,23 +1,26 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "fluid_tank_side": "jugcraft:block/fluid_tank_side",
     "fluid_tank_top": "jugcraft:block/fluid_tank_top",
     "heavy_plinth": "jugcraft:block/heavy_plinth",
     "machine_side": "jugcraft:block/machine_side",
     "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "sp_brass": "jugcraft:block/sp_brass",
     "front": "jugcraft:block/hydrotreater_front",
     "particle": "jugcraft:block/machine_side"
   },
   "elements": [
     {
       "from": [
-        2.5532,
+        2.5319,
         0.0,
         2.5532
       ],
       "to": [
-        13.4468,
+        13.4255,
         0.6809,
         13.4468
       ],
@@ -80,12 +83,12 @@
     },
     {
       "from": [
-        8.3404,
+        8.3191,
         0.6809,
         2.8936
       ],
       "to": [
-        13.1064,
+        13.0851,
         4.0851,
         5.617
       ],
@@ -148,12 +151,12 @@
     },
     {
       "from": [
-        3.234,
+        3.2128,
         0.6809,
         4.5957
       ],
       "to": [
-        7.3191,
+        7.2979,
         14.9787,
         12.0851
       ],
@@ -216,12 +219,12 @@
     },
     {
       "from": [
-        8.6809,
+        8.6596,
         4.0851,
         5.9574
       ],
       "to": [
-        12.766,
+        12.7447,
         7.4894,
         12.766
       ],
@@ -284,12 +287,12 @@
     },
     {
       "from": [
-        4.5957,
+        4.5745,
         14.9787,
         7.6596
       ],
       "to": [
-        5.9574,
+        5.9362,
         16.0,
         9.0213
       ],
@@ -346,6 +349,142 @@
             0,
             1.362,
             1.362
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.0426,
+        1.3617,
+        3.9149
+      ],
+      "to": [
+        13.4681,
+        4.1851,
+        6.6383
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        },
+        "east": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            2.723,
+            2.723
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        12.9426,
+        1.9574,
+        4.5106
+      ],
+      "to": [
+        13.1851,
+        3.4894,
+        6.0426
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.085,
+            1.532
+          ]
+        },
+        "south": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.085,
+            1.532
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.532,
+            1.532
+          ]
+        },
+        "west": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.532,
+            1.532
+          ]
+        },
+        "up": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.085,
+            1.532
+          ]
+        },
+        "down": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.085,
+            1.532
           ]
         }
       }

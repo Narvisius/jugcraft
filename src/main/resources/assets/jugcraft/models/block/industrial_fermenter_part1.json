@@ -433,13 +433,13 @@
     },
     {
       "from": [
-        5.0,
-        5.0,
+        4.9,
+        4.9,
         0.0
       ],
       "to": [
-        11.0,
-        11.0,
+        11.1,
+        11.1,
         0.75
       ],
       "faces": {
@@ -626,6 +626,106 @@
         },
         "down": {
           "texture": "#dr_red_paint"
+        }
+      }
+    },
+    {
+      "from": [
+        5.0,
+        5.0,
+        -0.125
+      ],
+      "to": [
+        11.0,
+        11.0,
+        1.125
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.0
+          ]
+        },
+        "south": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            1.25,
+            6.0
+          ]
+        },
+        "west": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            1.25,
+            6.0
+          ]
+        },
+        "up": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            6.0,
+            1.25
+          ]
+        },
+        "down": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            6.0,
+            1.25
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5.75,
+        5.75,
+        1.0
+      ],
+      "to": [
+        10.25,
+        10.25,
+        1.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber"
+        },
+        "south": {
+          "texture": "#dp_rubber"
+        },
+        "east": {
+          "texture": "#dp_rubber"
+        },
+        "west": {
+          "texture": "#dp_rubber"
+        },
+        "up": {
+          "texture": "#dp_rubber"
+        },
+        "down": {
+          "texture": "#dp_rubber"
         }
       }
     }

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SFL",
+    "TCT",
+    "MKM"
+  ],
+  "key": {
+    "S": "jugcraft:ptfe_seal",
+    "F": "jugcraft:ptfe_fitting",
+    "L": "jugcraft:ptfe_liner",
+    "T": "jugcraft:titanium_ingot",
+    "C": "jugcraft:basic_circuit",
+    "M": "jugcraft:electric_motor",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:lined_fluorochemical_reactor",
+    "count": 1
+  }
+}

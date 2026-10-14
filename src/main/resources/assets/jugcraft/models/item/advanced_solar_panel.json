@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "el_casing": "jugcraft:block/el_casing",
     "el_frame": "jugcraft:block/el_frame",
     "el_glow": "jugcraft:block/el_glow",
@@ -2040,6 +2041,142 @@
         ],
         "axis": "x",
         "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        10.3404,
+        5.0638,
+        6.6383
+      ],
+      "to": [
+        10.766,
+        7.7872,
+        9.3617
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_frame",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        },
+        "south": {
+          "texture": "#el_frame",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        },
+        "east": {
+          "texture": "#el_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#el_frame",
+          "uv": [
+            0,
+            0,
+            2.723,
+            2.723
+          ]
+        },
+        "up": {
+          "texture": "#el_frame",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        },
+        "down": {
+          "texture": "#el_frame",
+          "uv": [
+            0,
+            0,
+            0.426,
+            2.723
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.9362,
+        5.6596,
+        7.234
+      ],
+      "to": [
+        10.383,
+        7.1915,
+        8.766
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.447,
+            1.532
+          ]
+        },
+        "south": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.447,
+            1.532
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.532,
+            1.532
+          ]
+        },
+        "west": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.532,
+            1.532
+          ]
+        },
+        "up": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.447,
+            1.532
+          ]
+        },
+        "down": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.447,
+            1.532
+          ]
+        }
       }
     }
   ]

@@ -89,7 +89,7 @@ public class MachineMenu extends AbstractContainerMenu {
 	 */
 	public static int fluidArrowX(FluidMachineSpec spec) {
 		int firstOutput = spec.itemOutputs() > 0 ? fluidItemOutputX(spec, 0) : outputTankX(spec, 0);
-		return Math.min(FLUID_ARROW_X, firstOutput - ARROW_SPAN);
+		return Math.min(Math.max(FLUID_ARROW_X, fluidItemInputX(spec, spec.itemInputs())), firstOutput - ARROW_SPAN);
 	}
 
 	private final MachineKind kind;

@@ -283,6 +283,10 @@ PARTS = {"iron_shaft": iron_shaft(), "brass_gearbox": brass_gearbox_parts(), "ha
 # Conveyor slopes: one block (conveyor_slope, logistics/ConveyorSlopeBlock) with an ascending and a descending model.
 SLOPES = {"conveyor_slope": conveyor_slope(True), "conveyor_slope_down": conveyor_slope(False)}
 # Full models (rotor standing still) and the static parts shown while the rotor spins.
+from machine_connections import with_sockets, exterior_ports
+for _powered in ("dynamo", "magnet_dynamo", "electric_motor", "magnet_motor", "solar_tracker", "solar_receiver"):
+    _static, _rotor = PARTS[_powered]
+    PARTS[_powered] = (with_sockets(_static, exterior_ports()), _rotor)
 MODELS = {block: static + rotor for block, (static, rotor) in PARTS.items()}
 STATIC = {block: static for block, (static, rotor) in PARTS.items()}
 # Rotor axis (in the north-facing model), the point it turns about (pixels, on the other two axes), the block state

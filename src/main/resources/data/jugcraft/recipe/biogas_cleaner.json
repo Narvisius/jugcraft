@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "MCK",
+    "PWP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "jugcraft:fluid_tank",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "K": "jugcraft:machine_casing",
+    "W": "jugcraft:steel_fluid_pipe"
+  },
+  "result": {
+    "id": "jugcraft:biogas_cleaner",
+    "count": 1
+  }
+}

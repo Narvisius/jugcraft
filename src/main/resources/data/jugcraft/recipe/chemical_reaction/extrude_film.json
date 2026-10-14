@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_extrusion",
+  "items": [
+    {
+      "ingredient": "jugcraft:ldpe_pellets",
+      "count": 4
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:ldpe_film",
+      "count": 3
+    },
+    {
+      "id": "jugcraft:ldpe_offcut",
+      "count": 1
+    }
+  ],
+  "tool": "jugcraft:film_extrusion_die",
+  "energy_per_tick": 48,
+  "time": 160
+}

@@ -139,7 +139,7 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 			InteractionHand hand, BlockHitResult hit) {
 		MachineBlockEntity machine = machineAt(level, pos, state);
-		Storage<FluidVariant> tank = machine == null ? null : machine.fluidFor(null);
+		Storage<FluidVariant> tank = machine == null ? null : machine.fluidFor(hit.getDirection());
 		if (tank != null && FluidStorageUtil.interactWithFluidStorage(tank, player, hand)) {
 			return InteractionResult.SUCCESS;
 		}

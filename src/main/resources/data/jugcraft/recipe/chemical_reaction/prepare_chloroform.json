@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:fluorocarbon_synthesis",
+  "fluids": [
+    {
+      "fluid": "jugcraft:methane",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 1500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:chloroform",
+      "amount": 500,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:hydrogen_chloride",
+      "amount": 1500,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 240
+}

@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:crop_mashing",
+  "items": [
+    {
+      "ingredient": "#jugcraft:fermentable",
+      "count": 16
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:grain_mash",
+      "amount": 1250,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 24,
+  "time": 200
+}

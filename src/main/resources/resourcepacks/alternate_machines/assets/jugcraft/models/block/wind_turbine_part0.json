@@ -1,8 +1,11 @@
 {
   "ambientocclusion": false,
   "textures": {
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "machine_side": "jugcraft:block/machine_side",
     "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "sp_brass": "jugcraft:block/sp_brass",
     "wind_turbine_base": "jugcraft:block/wind_turbine_base",
     "wind_turbine_blade": "jugcraft:block/wind_turbine_blade",
     "wind_turbine_mast": "jugcraft:block/wind_turbine_mast",
@@ -104,6 +107,106 @@
         },
         "down": {
           "texture": "#wind_turbine_base"
+        }
+      }
+    },
+    {
+      "from": [
+        14.875,
+        4.0,
+        4.0
+      ],
+      "to": [
+        16.125,
+        12.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.75,
+        5.75,
+        5.75
+      ],
+      "to": [
+        15.0,
+        10.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber"
+        },
+        "south": {
+          "texture": "#dp_rubber"
+        },
+        "east": {
+          "texture": "#dp_rubber"
+        },
+        "west": {
+          "texture": "#dp_rubber"
+        },
+        "up": {
+          "texture": "#dp_rubber"
+        },
+        "down": {
+          "texture": "#dp_rubber"
         }
       }
     }

@@ -1,6 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "power_port": "jugcraft:block/power_port",
     "sp_brass": "jugcraft:block/sp_brass",
     "sp_brass_plate": "jugcraft:block/sp_brass_plate",
@@ -508,6 +509,106 @@
             0.5,
             3.0
           ]
+        }
+      }
+    },
+    {
+      "from": [
+        -0.125,
+        4.0,
+        4.0
+      ],
+      "to": [
+        1.125,
+        12.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        },
+        "west": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        5.75,
+        5.75
+      ],
+      "to": [
+        1.25,
+        10.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber"
+        },
+        "south": {
+          "texture": "#dp_rubber"
+        },
+        "east": {
+          "texture": "#dp_rubber"
+        },
+        "west": {
+          "texture": "#dp_rubber"
+        },
+        "up": {
+          "texture": "#dp_rubber"
+        },
+        "down": {
+          "texture": "#dp_rubber"
         }
       }
     }

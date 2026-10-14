@@ -302,6 +302,11 @@ def main_extra():
         save(rock(palette, seed + 2), "block", f"{mineral}_block")
         save(pile(seed + 3, palette), "item", mineral)
 
+    # Owner-supplied fluorite storage art, unchanged; ore overlays use the shared material maps.
+    from pathlib import Path
+    import shutil
+    fluorite_assets(Path(__file__).resolve().parents[1] / "src/main/resources/assets/jugcraft")
+
     save(speckled(BAUXITE, 300, [(214, 170, 130), (226, 190, 150)]), "block", "bauxite")
     save(speckled(OIL_SAND_BASE, 301, BITUMEN, count=40), "block", "oil_sand")
     save(lump(BITUMEN, (120, 116, 110)), "item", "bitumen")
@@ -1560,6 +1565,15 @@ def main():
     # draws over them.
     import owner_art
     owner_art.write_all()
+
+
+def fluorite_assets(assets):
+    from pathlib import Path
+    import shutil
+    import material_icons
+    source=Path(__file__).resolve().parents[1]/"art/owner-library/originals/Blocks/block_fluorite.png"
+    shutil.copyfile(source,assets/"textures/block/fluorite_block.png")
+    material_icons.draw("raw",material_icons.tones(material_icons.ORE_RAMPS["fluorite"])).save(assets/"textures/item/fluorite.png")
 
 
 if __name__ == "__main__":

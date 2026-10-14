@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "capability": "jugcraft:starter_gas_infusing",
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 250
+    },
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:hydrogen_chloride",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 96,
+  "priority": -10,
+  "time": 100
+}

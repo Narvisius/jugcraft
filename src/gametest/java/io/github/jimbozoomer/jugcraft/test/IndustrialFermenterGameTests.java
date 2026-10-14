@@ -235,8 +235,8 @@ public class IndustrialFermenterGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 2), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 1 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
-				&& own.get(0).recipe().time() == TICKS, "Its one recipe: " + own.stream().map(FluidRecipes.Entry::id).toList());
+		helper.assertTrue(own.size() == 2 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
+				&& own.get(0).recipe().time() == TICKS, "Original fermentation remains first beside the expanded mash route: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		long reactor = FluidRecipes.recipes(level.getServer(), MachineKind.CHEMICAL_REACTOR).stream()
 				.filter(recipe -> recipe.fluidResults().stream().anyMatch(result -> result.fluid() == PetroFluids.CARBON_DIOXIDE.fluid()))
 				.count();

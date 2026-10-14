@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:monomer_preparation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:ethylene",
+      "amount": 500,
+      "tank": 0
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 240
+}

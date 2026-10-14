@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:fluoride_dissolution",
+  "items": [
+    {
+      "ingredient": "jugcraft:fluorite_concentrate",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:concentrated_sulfuric_acid",
+      "amount": 750
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:hydrogen_fluoride",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:calcium_sulfate",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 80,
+  "time": 240
+}

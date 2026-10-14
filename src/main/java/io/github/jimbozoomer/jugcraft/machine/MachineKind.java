@@ -420,7 +420,8 @@ public enum MachineKind implements StringRepresentable {
 			case AIR_SEPARATION_UNIT -> new FluidMachineSpec(List.of(), List.of(ASU_TANK, ASU_TANK, ASU_TANK), 0, 0);
 			case SYNTHESIS_CONVERTER -> new FluidMachineSpec(List.of(CONVERTER_TANK, CONVERTER_TANK, CONVERTER_TANK),
 					List.of(CONVERTER_TANK), 0, 0);
-			case CHEMICAL_REACTOR -> new FluidMachineSpec(List.of(CHEM_REACTOR_TANK), List.of(CHEM_REACTOR_TANK), 2, 1);
+			case CHEMICAL_REACTOR -> new FluidMachineSpec(List.of(CHEM_REACTOR_TANK, CHEM_REACTOR_TANK, 1000),
+					List.of(CHEM_REACTOR_TANK), 2, 1).migratedFrom(0, 1, 0, 3);
 			case LITHOGRAPHY_STATION -> new FluidMachineSpec(List.of(LITHOGRAPHY_TANK), List.of(), 2, 1);
 			case AMMONIA_CHILLER -> new FluidMachineSpec(List.of(CHILLER_AMMONIA_TANK, CHILLER_WATER_TANK), List.of(), 1, 1);
 			case CRYOGENIC_LIQUEFIER -> new FluidMachineSpec(List.of(LIQUEFIER_TANK), List.of(LIQUEFIER_TANK), 0, 0);

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_molding",
+  "items": [
+    {
+      "ingredient": "jugcraft:ptfe_powder",
+      "count": 2
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:ptfe_fitting_blank",
+      "count": 1
+    }
+  ],
+  "tool": "jugcraft:fitting_mold",
+  "energy_per_tick": 48,
+  "time": 160
+}

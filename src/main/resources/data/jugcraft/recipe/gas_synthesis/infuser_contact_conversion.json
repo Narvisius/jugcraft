@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "capability": "jugcraft:starter_gas_infusing",
+  "fluids": [
+    {
+      "fluid": "jugcraft:oxygen",
+      "amount": 125
+    },
+    {
+      "fluid": "jugcraft:sulfur_dioxide",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:sulfur_trioxide",
+      "amount": 250,
+      "tank": 0
+    }
+  ],
+  "tool": "jugcraft:vanadium_contact_bed",
+  "energy_per_tick": 128,
+  "priority": -10,
+  "time": 100
+}

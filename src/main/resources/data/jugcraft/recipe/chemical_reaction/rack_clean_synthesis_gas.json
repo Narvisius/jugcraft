@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:starter_gas_cleaning",
+  "fluids": [
+    {
+      "fluid": "jugcraft:dirty_synthesis_gas",
+      "amount": 500
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 125
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:carbon_monoxide",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:mixed_gas_residue",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 100
+}

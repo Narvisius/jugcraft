@@ -171,8 +171,8 @@ public class AnaerobicDigesterGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 1), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 1 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/digester_biogas"))
-				&& own.get(0).recipe().time() == TICKS, "Its one recipe: " + own.stream().map(FluidRecipes.Entry::id).toList());
+		helper.assertTrue(own.size() == 3 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/digester_biogas"))
+				&& own.get(0).recipe().time() == TICKS, "Original digestion remains first beside expanded routes: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		long reactor = FluidRecipes.recipes(level.getServer(), MachineKind.CHEMICAL_REACTOR).stream()
 				.filter(recipe -> recipe.fluidResults().stream().anyMatch(result -> result.fluid() == PetroFluids.BIOGAS.fluid()))
 				.count();

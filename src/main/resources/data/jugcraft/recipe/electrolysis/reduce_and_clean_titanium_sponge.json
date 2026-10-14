@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:electrolysis",
+  "capability": "jugcraft:titanium_reduction",
+  "items": [
+    {
+      "ingredient": "jugcraft:magnesium_ingot",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:purified_titanium_chloride",
+      "amount": 750
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:titanium_sponge",
+      "count": 1
+    },
+    {
+      "id": "jugcraft:dry_magnesium_chloride",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 96,
+  "time": 400
+}

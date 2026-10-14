@@ -417,7 +417,8 @@ def write_assets(write, rid, assets, lang):
                 f"facing={face}": {"model": rid(f"block/{block}"), **({"y": y} if y else {})}
                 for face, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}})
         write(assets / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
-    write(assets / "models" / "block" / "drone_depot_terminal.json", furniture_model("drone_depot_terminal", TERMINAL_MODEL, rid))
+    from machine_connections import with_model_sockets
+    write(assets / "models" / "block" / "drone_depot_terminal.json", with_model_sockets(furniture_model("drone_depot_terminal", TERMINAL_MODEL, rid)))
     write(assets / "blockstates" / "drone_depot_terminal.json", {"variants": {
         f"facing={face}": {"model": rid("block/drone_depot_terminal"), **({"y": y} if y else {})}
         for face, y in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}})

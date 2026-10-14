@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "ingredients": [
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber",
+    "jugcraft:digestate_fiber"
+  ],
+  "result": {
+    "id": "jugcraft:fertilizer",
+    "count": 1
+  }
+}

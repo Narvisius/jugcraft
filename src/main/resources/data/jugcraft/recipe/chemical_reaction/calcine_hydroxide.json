@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:alumina_calcination",
+  "items": [
+    {
+      "ingredient": "jugcraft:aluminum_hydroxide",
+      "count": 2
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:alumina",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 200
+}

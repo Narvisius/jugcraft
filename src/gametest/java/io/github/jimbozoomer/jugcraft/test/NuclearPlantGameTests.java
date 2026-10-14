@@ -206,7 +206,7 @@ public class NuclearPlantGameTests {
 						io.github.jimbozoomer.jugcraft.nuclear.RadiationKind.NUCLEAR);
 			}
 		}
-		helper.assertTrue(!cores.isEmpty(), plant + ": reactors found");
+		helper.assertTrue(!cores.isEmpty(), plant + ": reactors found at " + built.vessels() + "; blocks=" + built.vessels().stream().map(p -> level.getBlockState(p).toString() + "/" + level.getBlockEntity(p)).toList());
 		double worst = 0;
 		BlockPos where = null;
 		int points = 0;

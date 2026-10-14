@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "capability": "jugcraft:starter_gas_infusing",
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 1600
+    },
+    {
+      "fluid": "jugcraft:clean_biogas",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:methane",
+      "amount": 1000,
+      "tank": 0
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 1600,
+      "tank": 1
+    }
+  ],
+  "tool": "jugcraft:nickel_catalyst_bed",
+  "energy_per_tick": 128,
+  "priority": -10,
+  "time": 600
+}

@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:starter_gasification",
+  "items": [
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:dirty_synthesis_gas",
+      "amount": 1500,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 64,
+  "emissions": 3,
+  "priority": -10,
+  "time": 200
+}

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WBW",
+    "BKB",
+    "PCP"
+  ],
+  "key": {
+    "B": "minecraft:bricks",
+    "C": "jugcraft:basic_circuit",
+    "K": "jugcraft:machine_casing",
+    "P": "#c:plates/steel",
+    "W": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:magnesium_electrolysis_cell",
+    "count": 1
+  }
+}

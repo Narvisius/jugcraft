@@ -3074,7 +3074,9 @@ def cheapest_electrolysis(fluid, _seen=None):
         # MachineUpgrades.Effect.use with four efficiency cards, the most that count.
         cheapest = max(1, round(use * 0.8 ** 4)) if info["upgrades"] else use
         for recipe in recipes:
-            offer(recipe, cheapest)
+            base_use = recipe.get("energy_per_tick", 0) or use
+            discounted = max(1, round(base_use * 0.8 ** 4)) if info["upgrades"] else base_use
+            offer(recipe, industrial_forms.form_energy(form, discounted))
     return min(costs) if costs else None
 
 
@@ -3120,6 +3122,17 @@ def check_industrial_forms():
             described = info.get(key, []) if key == "fuels" else info[key]
             if [tuple(item) for item in described] != [tuple(item) for item in built] if key == "fuels" else described != built:
                 err(f"{form}: {key} is {built} in IndustrialForms.java but {described} in tools/industrial_forms.py")
+        vents = re.findall(r'\.gasVentOutput\((\d+), Jugcraft\.id\("(\w+)"\)\)', body)
+        actual_vent = (int(vents[0][0]), f"{MOD}:{vents[0][1]}") if len(vents) == 1 else None
+        if len(vents) > 1 or actual_vent != info.get("gas_vent"):
+            err(f"{form}: Java gas overflow must match its declared output and exact gas")
+        if actual_vent is not None:
+            output, gas = actual_vent
+            if not 0 <= output < len(info["output_tanks"]) or gas not in {f"{MOD}:{g}" for g in petro.GASES}:
+                err(f"{form}: overflow must target a real output and registered gas, never a liquid")
+            for row in industrial_forms.FORM_RECIPES.get(form, []):
+                if any(petro.result_tank(i, r) == output and r[0] != gas for i, r in enumerate(row.get("fluid_results", []))):
+                    err(f"{form}: declared gas overflow disagrees with a recipe product")
         if profiles.get(info["profile"]) != info["tank_mb"]:
             err(f"{form}: the {info['profile']} profile's tanks hold {profiles.get(info['profile'])} mB, not {info['tank_mb']}")
         parts = len(industrial_forms.footprint(info["layers"]))
@@ -3128,7 +3141,7 @@ def check_industrial_forms():
                     for lit in ("false", "true") for part in range(parts)}
         if set(state.get("variants", {})) != expected:
             err(f"{form}: its blockstate must cover exactly 4 facings x 2 lights x {parts} parts")
-        if bool(industrial_forms.FORM_RECIPES.get(form)) != (f"{MOD}:{form}" in viewed):
+        if bool(industrial_forms.recipes_for_form(form)) != (f"{MOD}:{form}" in viewed):
             err(f"{form}: a JEI category in recipe_view.json exactly when it runs recipes")
         if info.get("fuels"):
             kinds = [port[1] for port in info["ports"]]
@@ -3146,7 +3159,7 @@ def check_industrial_forms():
                     err(f"{form}: {fluid} burns for {per_mb} JE/mB, at least the {cost:.1f} JE/mB its cheapest making costs: a power loop")
         tanks = info["input_tanks"] + info["output_tanks"]
         fluids = {f"{MOD}:{f}" for f in list(petro.FLUIDS) + list(petro.GASES)} | {"minecraft:water", "minecraft:lava"}
-        for recipe in industrial_forms.FORM_RECIPES.get(form, []):
+        for recipe in industrial_forms.recipes_for_form(form):
             label = f"{form} recipe {recipe['name']}"
             if recipe["capability"] not in info["capabilities"]:
                 err(f"{label}: needs {recipe['capability']}, which the form does not offer")
@@ -3162,12 +3175,36 @@ def check_industrial_forms():
             targets = [petro.result_tank(i, r) for i, r in enumerate(recipe.get("fluid_results", []))]
             if len(set(targets)) != len(targets) or any(t >= len(info["output_tanks"]) for t in targets):
                 err(f"{label}: its results need distinct output tanks the form has")
-            if sum(r[1] for r in recipe.get("fluid_results", [])) > sum(mb for _, mb in recipe.get("fluids", [])):
+            source = recipe.get("source", 0)
+            if source < 0 or (source and not recipe.get("items")):
+                err(f"{label}: fluid released from items needs a consumed solid feed")
+            if sum(r[1] for r in recipe.get("fluid_results", [])) > sum(mb for _, mb in recipe.get("fluids", [])) + source:
                 err(f"{label}: makes more fluid than it takes")
             if recipe["ticks"] <= 0:
                 err(f"{label}: takes no time")
         if len(tanks) != len(set(tanks)):
             err(f"{form}: two tanks share a role")
+    # Methanation pays for its hydrogen as well as its processing. Treat CO/CO2 as free here for a conservative
+    # bound; gasification instead pays a finite carbon item. Speed never reduces total energy per batch.
+    hydrogen_cost = cheapest_electrolysis("jugcraft:hydrogen")
+    methane_value = dict((f, v) for f, v, _ in industrial_forms.GAS_GENERATOR_FUELS).get("jugcraft:methane")
+    if methane_value is not None:
+        import math
+        for recipe in industrial_forms.FORM_RECIPES.get("chemical_infuser", []):
+            made = sum(r[1] for r in recipe.get("fluid_results", []) if r[0] == "jugcraft:methane")
+            if not made:
+                continue
+            hydrogen = sum(mb for fluid, mb in recipe["fluids"] if fluid == "jugcraft:hydrogen")
+            # Upgrading consumes already-burnable mixed gas, including its original methane.
+            # Count its actual Bio-Generator opportunity cost, not a free feed or a second fuel award.
+            bio_values = {f: v for f, v, _ in industrial_forms.FORMS.get("bio_generator", {}).get("fuels", [])}
+            feed_energy = sum(mb * bio_values.get(fluid, 0) for fluid, mb in recipe["fluids"])
+            for speed in range(5):
+                for efficiency in range(5):
+                    ticks = math.ceil(recipe["ticks"] / (1 + .5 * speed))
+                    draw = max(1, math.floor(industrial_forms.form_energy("chemical_infuser", recipe.get("energy_per_tick", 0)) * (1 + .5 * speed) * (1 + .25 * speed) * .8**efficiency + .5))
+                    if hydrogen_cost is None or hydrogen * hydrogen_cost + ticks * draw + feed_energy <= made * methane_value:
+                        err(f"{recipe['name']}: methanation can profit from electrolytic hydrogen")
     # The Separator's construction: the owner's selected 20 steel plates, counting the Steel Tanks' own.
     pattern, key = industrial_forms.FORMS["electrolytic_separator"]["recipe"]
     tank = load(DATA / MOD / "recipe" / "steel_tank.json") or {}
@@ -6227,7 +6264,7 @@ def check_ferris_wheel(java, number, lang):
 
 
 def check_pinata(java, number, lang):
-    """Fall addition 28: the piñatas match tools/pinata.py (slots, drop, a charged swing, the stick's hits, each kind's
+    """Fall addition 28: the piﾃｱatas match tools/pinata.py (slots, drop, a charged swing, the stick's hits, each kind's
     hits and item); the items, entity and Blindfold are registered and drawn from the quads; the Blindfold's view and
     worn band exist; their words, recipes and advancements exist."""
     pn = pinata.PINATA
@@ -6251,7 +6288,7 @@ def check_pinata(java, number, lang):
             err(f"JugcraftAgriculture.java must call {call}")
     client_dir = ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client"
     if "JugcraftAgriculture.PINATA, PinataRenderer::new" not in (client_dir / "JugcraftClient.java").read_text(encoding="utf-8"):
-        err("JugcraftClient.java must draw the piñatas")
+        err("JugcraftClient.java must draw the piﾃｱatas")
     if '"pinata_quads.json"' not in (client_dir / "DecorQuads.java").read_text(encoding="utf-8"):
         err("DecorQuads must read pinata_quads.json")
     quads = load(ASSETS / "pinata_quads.json") or {}
@@ -6264,16 +6301,16 @@ def check_pinata(java, number, lang):
                 break
     for item, display in pinata.displays().items():
         if lang.get(f"item.{MOD}.{item}") != display:
-            err(f"The piñata party has no words for item.{MOD}.{item}")
+            err(f"The piﾃｱata party has no words for item.{MOD}.{item}")
     for key in ("full", "no_room", "filled"):
         if f"message.{MOD}.pinata.{key}" not in lang:
-            err(f"The piñata party has no words for message.{MOD}.pinata.{key}")
+            err(f"The piﾃｱata party has no words for message.{MOD}.pinata.{key}")
     for path in [DATA / MOD / "advancement" / f"{a}.json" for a in pinata.ADVANCEMENTS] + [
             DATA / MOD / "recipe" / f"{r['id']}.json" for r in pinata.SHAPED + pinata.SHAPELESS] + [
             ASSETS / "textures" / "misc" / "blindfold.png", ASSETS / "textures" / "entity" / "equipment" / "humanoid" / "blindfold.png",
             ASSETS / "equipment" / "blindfold.json"] + [ASSETS / "items" / f"{i}.json" for i in pinata.items()]:
         if not path.exists():
-            err(f"The piñata party needs {path.relative_to(ROOT)}")
+            err(f"The piﾃｱata party needs {path.relative_to(ROOT)}")
 
 
 def check_hot_air_balloon(java, number, lang):
@@ -8141,7 +8178,7 @@ def check_pies(java, main):
 
 
 def check_spirit_board(java, main):
-    """The Spirit Board: the Java matches SPIRIT_BOARD in tools/agriculture.py (the séance's ranges, hands, letter times,
+    """The Spirit Board: the Java matches SPIRIT_BOARD in tools/agriculture.py (the sﾃｩance's ranges, hands, letter times,
     rest, watch range and a spirit's reward; the names; the wishes, in order); its words, YES, NO and GOODBYE sit on the
     face where tools/spirit_board_textures.py draws them; the block is registered; its model, textures (the face at its
     size), words, tags, recipe, loot and advancements exist."""

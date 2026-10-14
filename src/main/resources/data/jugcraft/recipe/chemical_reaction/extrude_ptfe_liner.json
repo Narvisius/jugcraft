@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_extrusion",
+  "items": [
+    {
+      "ingredient": "jugcraft:ptfe_paste_charge",
+      "count": 4
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:ptfe_liner_blank",
+      "count": 1
+    },
+    {
+      "id": "jugcraft:ptfe_offcut",
+      "count": 1
+    }
+  ],
+  "tool": "jugcraft:sheet_extrusion_die",
+  "energy_per_tick": 64,
+  "time": 200
+}

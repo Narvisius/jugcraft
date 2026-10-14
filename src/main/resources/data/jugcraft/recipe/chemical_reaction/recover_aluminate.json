@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:aluminate_recovery",
+  "fluids": [
+    {
+      "fluid": "jugcraft:aluminate_slurry",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 200,
+      "tank": 0
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 500,
+      "tank": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:aluminum_hydroxide",
+      "count": 2
+    },
+    {
+      "id": "jugcraft:bauxite_residue",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 160
+}

@@ -524,8 +524,9 @@ def write_all(write, assets, data, lang, condition, self_drop, packs):
                 "copper": rid("block/ley_pylon_copper"), "crystal": rid("block/ley_pylon_crystal")}
     for charged in (False, True):
         name = "ley_pylon_charged" if charged else "ley_pylon"
+        from machine_connections import with_model_sockets
         write(assets / "models" / "block" / f"{name}.json",
-              {"parent": "minecraft:block/block", "textures": textures, "elements": pylon_elements(charged)})
+              with_model_sockets({"parent": "minecraft:block/block", "textures": textures, "elements": pylon_elements(charged)}))
     write(assets / "blockstates" / "ley_pylon.json",
           {"variants": {"charged=false": {"model": rid("block/ley_pylon")},
                         "charged=true": {"model": rid("block/ley_pylon_charged")}}})

@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:chloride_drying",
+  "fluids": [
+    {
+      "fluid": "jugcraft:magnesium_chloride_solution",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:dry_magnesium_chloride",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 160
+}

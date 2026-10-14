@@ -214,10 +214,13 @@ def assets(root, write, lang):
     models, states = root / "models" / "block", root / "blockstates"
 
     coil = TESLA_COIL["block"]
+    from machine_connections import with_model_sockets, exterior_ports
+    coil_ports = [p for p in exterior_ports([(0, 0, 0), (0, 1, 0)]) if p[0] == (0, 0, 0)]
     for active in (False, True):
         suffix = "_active" if active else ""
         for half, cy in (("lower", 0), ("upper", 1)):
-            write(models / f"{coil}_{half}{suffix}.json", block_model(COIL_TEXTURES, split(coil_elements(active), (0, cy, 0)), COIL_TEXTURES["iron"]))
+            model = block_model(COIL_TEXTURES, split(coil_elements(active), (0, cy, 0)), COIL_TEXTURES["iron"])
+            write(models / f"{coil}_{half}{suffix}.json", with_model_sockets(model, coil_ports) if cy == 0 else model)
     write(states / f"{coil}.json", {"variants": {
         f"active={str(a).lower()},enabled={str(e).lower()},facing={f},half={h}": {"model": rid(f"block/{coil}_{h}{'_active' if a else ''}")}
         for a in (False, True) for e in (False, True) for f in HORIZONTAL for h in ("lower", "upper")}})

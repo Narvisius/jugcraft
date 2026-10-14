@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "TMT",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_tank",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:anaerobic_digester",
+    "count": 1
+  }
+}

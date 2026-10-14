@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P P",
+    " X ",
+    "P P"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "X": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:insulation_extrusion_die",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

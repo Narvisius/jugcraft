@@ -66,7 +66,7 @@ public final class FluidRecipes {
 		return TYPES.get(kind);
 	}
 
-	static RecipeSerializer<FluidRecipe> serializer(MachineKind kind) {
+	public static RecipeSerializer<FluidRecipe> serializer(MachineKind kind) {
 		return SERIALIZERS.get(kind);
 	}
 

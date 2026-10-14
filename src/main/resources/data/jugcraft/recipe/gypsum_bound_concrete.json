@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:gypsum_binder",
+    "minecraft:sand",
+    "minecraft:sand",
+    "minecraft:gravel"
+  ],
+  "result": {
+    "id": "minecraft:white_concrete_powder",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

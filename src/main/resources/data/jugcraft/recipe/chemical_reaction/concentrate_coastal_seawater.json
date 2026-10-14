@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:seawater_concentration",
+  "fluids": [
+    {
+      "fluid": "jugcraft:seawater",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:magnesium_brine",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 750,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 200
+}

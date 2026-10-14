@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:graded_polymerization",
+  "fluids": [
+    {
+      "fluid": "jugcraft:ethylene",
+      "amount": 1000
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:ldpe_pellets",
+      "count": 4
+    }
+  ],
+  "tool": "jugcraft:ldpe_process_insert",
+  "energy_per_tick": 80,
+  "time": 240
+}

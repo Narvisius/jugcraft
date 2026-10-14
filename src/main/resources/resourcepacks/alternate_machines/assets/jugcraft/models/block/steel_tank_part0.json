@@ -1,6 +1,8 @@
 {
   "ambientocclusion": false,
   "textures": {
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "fluid_tank_side": "jugcraft:block/fluid_tank_side",
     "fluid_tank_top": "jugcraft:block/fluid_tank_top",
     "heavy_plinth": "jugcraft:block/heavy_plinth",
@@ -125,6 +127,106 @@
             16,
             16
           ]
+        }
+      }
+    },
+    {
+      "from": [
+        14.875,
+        5.0,
+        5.0
+      ],
+      "to": [
+        16.125,
+        11.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            1.25,
+            6.0
+          ]
+        },
+        "south": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            1.25,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.0
+          ]
+        },
+        "west": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.0
+          ]
+        },
+        "up": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            1.25,
+            6.0
+          ]
+        },
+        "down": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            1.25,
+            6.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        14.75,
+        5.75,
+        5.75
+      ],
+      "to": [
+        15.1,
+        10.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber"
+        },
+        "south": {
+          "texture": "#dp_rubber"
+        },
+        "east": {
+          "texture": "#dp_rubber"
+        },
+        "west": {
+          "texture": "#dp_rubber"
+        },
+        "up": {
+          "texture": "#dp_rubber"
+        },
+        "down": {
+          "texture": "#dp_rubber"
         }
       }
     }

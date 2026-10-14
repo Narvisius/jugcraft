@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "BMB",
+    "WCW"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_tank",
+    "B": "minecraft:bricks",
+    "M": "jugcraft:electric_motor",
+    "W": "jugcraft:copper_cable",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:bauxite_digester",
+    "count": 1
+  }
+}

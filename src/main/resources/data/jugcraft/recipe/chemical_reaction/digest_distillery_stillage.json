@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:anaerobic_digestion",
+  "fluids": [
+    {
+      "fluid": "jugcraft:stillage",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:raw_biogas",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:digestate",
+      "amount": 500,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 24,
+  "priority": -10,
+  "time": 300
+}

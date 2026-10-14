@@ -173,10 +173,10 @@ public class CoalGasificationGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, IndustrialForms.COAL_GASIFIER, new BlockPos(6, 1, 2), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 3 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/gasifier_charcoal"))
+		helper.assertTrue(own.size() == 6 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/gasifier_charcoal"))
 				&& own.get(1).id().equals(Jugcraft.id("chemical_reaction/gasifier_coal"))
 				&& own.get(2).id().equals(Jugcraft.id("chemical_reaction/gasifier_coke")),
-				"Its three recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());
+				"Three original plus three expanded recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> crafting = RecipeManager.createCheck(RecipeType.CRAFTING);
 		ItemStack plate = stack("steel_plate");
 		ItemStack brick = new ItemStack(Items.BRICK);

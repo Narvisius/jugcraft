@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "ICI",
+    "PMP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_tank",
+    "I": "jugcraft:fluid_tank",
+    "C": "jugcraft:basic_circuit",
+    "M": "jugcraft:electric_motor"
+  },
+  "result": {
+    "id": "jugcraft:gas_cleaning_rack",
+    "count": 1
+  }
+}

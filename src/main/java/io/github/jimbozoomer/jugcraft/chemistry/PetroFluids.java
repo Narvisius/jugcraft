@@ -116,6 +116,10 @@ public final class PetroFluids {
 	public static Gas HYDROGEN;
 	/** Sulfur burnt and absorbed in water: the acid for fertilizer and leaching. */
 	public static Entry SULFURIC_ACID;
+	public static Entry HYDROCHLORIC_ACID;
+	public static Entry DIGESTATE;
+	public static Gas RAW_BIOGAS;
+	public static Gas CLEAN_BIOGAS;
 	/** Nitrogen chemistry (batch 12): air separated into nitrogen and oxygen; ammonia from them and hydrogen. */
 	public static Gas NITROGEN;
 	public static Gas OXYGEN;
@@ -128,7 +132,6 @@ public final class PetroFluids {
 	public static Gas VINYL_CHLORIDE;
 	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
 	public static Entry NITRIC_ACID;
-	public static Entry HYDROCHLORIC_ACID;
 	public static Entry ETHYLENE_DICHLORIDE;
 	/** Vanadium leached into sulfuric acid (batch 17): the flow battery's electrolyte. */
 	public static Entry VANADIUM_ELECTROLYTE;
@@ -155,6 +158,15 @@ public final class PetroFluids {
 	public static Gas RAW_SYNGAS;
 	public static Gas CARBON_MONOXIDE;
 	public static Gas SULFUR_TRIOXIDE;
+
+	public static Gas DIRTY_SYNTHESIS_GAS;
+
+	public static Entry GRAIN_MASH;
+	public static Entry ETHANOL_BROTH;
+	public static Entry STILLAGE;
+	public static Entry ALUMINATE_SLURRY;
+
+	public static Gas FERMENTATION_EXHAUST;
 
 	private PetroFluids() {
 	}
@@ -183,7 +195,14 @@ public final class PetroFluids {
 		return 0;
 	}
 
+	public static Entry CONCENTRATED_SULFURIC_ACID;
+	public static Entry CHLOROFORM;
+	public static Gas HYDROGEN_FLUORIDE;
+	public static Gas CHLORODIFLUOROMETHANE;
+	public static Gas TETRAFLUOROETHYLENE;
+
 	public static void register() {
+
 		CRUDE_OIL = fluid("crude_oil", 20, 2, 2, 0xFF1E1711, MapColor.COLOR_BLACK);
 		NAPHTHA = fluid("naphtha", 5, 4, 1, 0xFFBEAA64, MapColor.COLOR_YELLOW);
 		DIESEL = fluid("diesel", 8, 3, 1, 0xFFAA6E19, MapColor.COLOR_ORANGE);
@@ -224,12 +243,49 @@ public final class PetroFluids {
 		CARBON_MONOXIDE = gas("carbon_monoxide", 0xFFC2BED2);
 		SULFUR_TRIOXIDE = gas("sulfur_trioxide", 0xFFE2DCBC);
 
+
+		DIRTY_SYNTHESIS_GAS = gas("dirty_synthesis_gas", 0xFF625B4A);
+		DIGESTATE = fluid("digestate", 12, 2, 2, 0xFF5D4E2F, MapColor.COLOR_BROWN);
+		RAW_BIOGAS = gas("raw_biogas", 0xFF697446);
+		CLEAN_BIOGAS = gas("clean_biogas", 0xFF76965E);
+
+		GRAIN_MASH = fluid("grain_mash", 8, 3, 1, 0xFF77552B, MapColor.COLOR_BROWN);
+		ETHANOL_BROTH = fluid("ethanol_broth", 8, 3, 1, 0xFF8B7240, MapColor.COLOR_BROWN);
+		STILLAGE = fluid("stillage", 8, 3, 1, 0xFF5E452A, MapColor.COLOR_BROWN);
+		ALUMINATE_SLURRY = fluid("aluminate_slurry", 8, 3, 1, 0xFF7D452E, MapColor.COLOR_BROWN);
+
+		FERMENTATION_EXHAUST = gas("fermentation_exhaust", 0xFF928C76);
+
+		SEAWATER = fluid("seawater", 8, 3, 1, 0xFF30687C, MapColor.COLOR_LIGHT_GRAY);
+		MAGNESIUM_BRINE = fluid("magnesium_brine", 8, 3, 1, 0xFF5B7965, MapColor.COLOR_LIGHT_GRAY);
+		MAGNESIUM_CHLORIDE_SOLUTION = fluid("magnesium_chloride_solution", 8, 3, 1, 0xFF77818B, MapColor.COLOR_LIGHT_GRAY);
+		CRUDE_TITANIUM_CHLORIDE = fluid("crude_titanium_chloride", 8, 3, 1, 0xFF7D683B, MapColor.COLOR_LIGHT_GRAY);
+		PURIFIED_TITANIUM_CHLORIDE = fluid("purified_titanium_chloride", 8, 3, 1, 0xFF6E8088, MapColor.COLOR_LIGHT_GRAY);
+		SPENT_MINERAL_WASH = fluid("spent_mineral_wash", 8, 3, 1, 0xFF5A6948, MapColor.COLOR_LIGHT_GRAY);
+
+		ETHYLENE = gas("ethylene", 0xFF648787);
+
+		CONCENTRATED_SULFURIC_ACID = fluid("concentrated_sulfuric_acid", 8, 3, 1, 0xFF756E33, MapColor.COLOR_LIGHT_GRAY);
+		CHLOROFORM = fluid("chloroform", 8, 3, 1, 0xFF567769, MapColor.COLOR_LIGHT_GRAY);
+		HYDROGEN_FLUORIDE = gas("hydrogen_fluoride", 0xFF4E7B67);
+		CHLORODIFLUOROMETHANE = gas("chlorodifluoromethane", 0xFF59708D);
+		TETRAFLUOROETHYLENE = gas("tetrafluoroethylene", 0xFF69808A);
+
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {
 				output.accept(entry.bucket());
 			}
 		});
 	}
+
+	public static Entry SEAWATER;
+	public static Entry MAGNESIUM_BRINE;
+	public static Entry MAGNESIUM_CHLORIDE_SOLUTION;
+	public static Entry CRUDE_TITANIUM_CHLORIDE;
+	public static Entry PURIFIED_TITANIUM_CHLORIDE;
+	public static Entry SPENT_MINERAL_WASH;
+
+	public static Gas ETHYLENE;
 
 	private static Gas gas(String id, int color) {
 		Gas gas = new Gas(id, Registry.register(BuiltInRegistries.FLUID, Jugcraft.id(id), new GasFluid()), color);

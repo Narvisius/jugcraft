@@ -2,22 +2,25 @@
   "parent": "minecraft:block/block",
   "textures": {
     "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "fluid_tank_side": "jugcraft:block/fluid_tank_side",
     "heavy_plinth": "jugcraft:block/heavy_plinth",
     "machine_side": "jugcraft:block/machine_side",
     "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "sp_brass": "jugcraft:block/sp_brass",
     "front": "jugcraft:block/catalytic_cracker_front",
     "particle": "jugcraft:block/machine_side"
   },
   "elements": [
     {
       "from": [
-        3.7333,
+        3.7167,
         0.0,
         3.7333
       ],
       "to": [
-        12.2667,
+        12.25,
         0.5333,
         12.2667
       ],
@@ -80,12 +83,12 @@
     },
     {
       "from": [
-        8.2667,
+        8.25,
         0.5333,
         4.0
       ],
       "to": [
-        12.0,
+        11.9833,
         3.7333,
         6.1333
       ],
@@ -148,12 +151,12 @@
     },
     {
       "from": [
-        8.5333,
+        8.5167,
         3.7333,
         6.4
       ],
       "to": [
-        11.7333,
+        11.7167,
         16.0,
         10.6667
       ],
@@ -216,12 +219,12 @@
     },
     {
       "from": [
-        4.2667,
+        4.25,
         0.5333,
         5.3333
       ],
       "to": [
-        7.4667,
+        7.45,
         12.8,
         11.2
       ],
@@ -284,12 +287,12 @@
     },
     {
       "from": [
-        4.8,
+        4.7833,
         12.8,
         6.3
       ],
       "to": [
-        10.1333,
+        10.1167,
         13.8667,
         7.4667
       ],
@@ -352,12 +355,12 @@
     },
     {
       "from": [
-        4.5333,
+        4.5167,
         1.8667,
         3.7333
       ],
       "to": [
-        6.1333,
+        6.1167,
         2.9333,
         5.0667
       ],
@@ -420,12 +423,12 @@
     },
     {
       "from": [
-        4.5333,
+        4.5167,
         10.4,
         3.7333
       ],
       "to": [
-        6.1333,
+        6.1167,
         11.4667,
         5.0667
       ],
@@ -488,12 +491,12 @@
     },
     {
       "from": [
-        4.5333,
+        4.5167,
         14.6667,
         3.7333
       ],
       "to": [
-        6.1333,
+        6.1167,
         15.7333,
         5.0667
       ],
@@ -550,6 +553,142 @@
             0,
             1.6,
             1.333
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        11.95,
+        1.0667,
+        4.8
+      ],
+      "to": [
+        12.2833,
+        3.2,
+        6.9333
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.333,
+            2.133
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.333,
+            2.133
+          ]
+        },
+        "east": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            2.133,
+            2.133
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.333,
+            2.133
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.333,
+            2.133
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        11.85,
+        1.5333,
+        5.2667
+      ],
+      "to": [
+        12.0833,
+        2.7333,
+        6.4667
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.067,
+            1.2
+          ]
+        },
+        "south": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.067,
+            1.2
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.2,
+            1.2
+          ]
+        },
+        "west": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.2,
+            1.2
+          ]
+        },
+        "up": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.067,
+            1.2
+          ]
+        },
+        "down": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.067,
+            1.2
           ]
         }
       }

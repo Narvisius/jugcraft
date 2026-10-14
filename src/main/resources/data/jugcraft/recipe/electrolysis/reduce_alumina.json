@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:electrolysis",
+  "capability": "jugcraft:aluminum_reduction",
+  "items": [
+    {
+      "ingredient": "jugcraft:alumina",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 250,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:aluminum_ingot",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 96,
+  "time": 400
+}

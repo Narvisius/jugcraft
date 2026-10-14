@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "TMT",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "jugcraft:steel_gear",
+    "T": "jugcraft:steel_tank",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:mashing_station",
+    "count": 1
+  }
+}

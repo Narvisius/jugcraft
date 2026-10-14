@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:biogas_cleaning",
+  "fluids": [
+    {
+      "fluid": "jugcraft:raw_biogas",
+      "amount": 1000
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:clean_biogas",
+      "amount": 1000,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:digestate",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 24,
+  "time": 100
+}

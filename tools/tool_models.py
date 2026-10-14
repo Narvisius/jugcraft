@@ -104,7 +104,8 @@ def charging_station():
 
 
 ITEMS = {"mining_drill": mining_drill(), "chainsaw": chainsaw(), "rocket_pack": rocket_pack()}
-BLOCKS = {"charging_station": charging_station()}
+from machine_connections import with_sockets, exterior_ports
+BLOCKS = {"charging_station": with_sockets(charging_station(), exterior_ports([(0, 0, 0), (0, 1, 0)]))}
 # The screen lights while the station charges something.
 LIT = {"charging_station": ("el_screen", "el_screen_on")}
 

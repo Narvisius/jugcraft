@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:distillation",
+  "capability": "jugcraft:chemical_distillation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:crude_titanium_chloride",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:purified_titanium_chloride",
+      "amount": 750,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:spent_mineral_wash",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 240
+}

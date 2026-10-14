@@ -12,6 +12,7 @@
     "dp_olive": "jugcraft:block/dp_olive",
     "dp_olive_stencil": "jugcraft:block/dp_olive_stencil",
     "dp_rubber": "jugcraft:block/dp_rubber",
+    "power_port": "jugcraft:block/power_port",
     "sp_hopper_inside": "jugcraft:block/sp_hopper_inside",
     "particle": "jugcraft:block/sp_iron_plate"
   },
@@ -1247,7 +1248,7 @@
         1.5337
       ],
       "to": [
-        15.7513,
+        15.7855,
         5.4301,
         14.4663
       ],
@@ -5343,6 +5344,142 @@
             0,
             3.648,
             0.332
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        15.4855,
+        4.1036,
+        1.3679
+      ],
+      "to": [
+        16.0171,
+        6.7565,
+        4.0207
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            0.415,
+            2.653
+          ]
+        },
+        "south": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            0.415,
+            2.653
+          ]
+        },
+        "east": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            2.653,
+            2.653
+          ]
+        },
+        "up": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            0.415,
+            2.653
+          ]
+        },
+        "down": {
+          "texture": "#dp_chrome",
+          "uv": [
+            0,
+            0,
+            0.415,
+            2.653
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        15.3855,
+        4.6839,
+        1.9482
+      ],
+      "to": [
+        15.6855,
+        6.1762,
+        3.4404
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.083,
+            1.492
+          ]
+        },
+        "south": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.083,
+            1.492
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.492,
+            1.492
+          ]
+        },
+        "west": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.492,
+            1.492
+          ]
+        },
+        "up": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.083,
+            1.492
+          ]
+        },
+        "down": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.083,
+            1.492
           ]
         }
       }

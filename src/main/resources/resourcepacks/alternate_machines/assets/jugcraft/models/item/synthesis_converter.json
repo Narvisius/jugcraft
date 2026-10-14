@@ -1,22 +1,25 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "fluid_tank_side": "jugcraft:block/fluid_tank_side",
     "heavy_plinth": "jugcraft:block/heavy_plinth",
     "machine_side": "jugcraft:block/machine_side",
     "machine_top": "jugcraft:block/machine_top",
+    "power_port": "jugcraft:block/power_port",
+    "sp_brass": "jugcraft:block/sp_brass",
     "front": "jugcraft:block/synthesis_converter_front",
     "particle": "jugcraft:block/machine_side"
   },
   "elements": [
     {
       "from": [
-        1.8065,
+        1.7903,
         0.0,
         3.871
       ],
       "to": [
-        14.1935,
+        14.1774,
         0.5161,
         12.129
       ],
@@ -79,12 +82,12 @@
     },
     {
       "from": [
-        10.3226,
+        10.3065,
         0.5161,
         4.129
       ],
       "to": [
-        13.9355,
+        13.9194,
         3.6129,
         7.7419
       ],
@@ -147,12 +150,12 @@
     },
     {
       "from": [
-        3.871,
+        3.8548,
         0.5161,
         5.9355
       ],
       "to": [
-        8.0,
+        7.9839,
         16.0,
         10.0645
       ],
@@ -215,12 +218,12 @@
     },
     {
       "from": [
-        2.0645,
+        2.0484,
         0.5161,
         8.5161
       ],
       "to": [
-        3.3548,
+        3.3387,
         10.3226,
         11.6129
       ],
@@ -277,6 +280,142 @@
             0,
             1.29,
             3.097
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.8871,
+        1.0323,
+        4.9032
+      ],
+      "to": [
+        14.2097,
+        3.0968,
+        6.9677
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.323,
+            2.065
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.323,
+            2.065
+          ]
+        },
+        "east": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            2.065,
+            2.065
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.323,
+            2.065
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.323,
+            2.065
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.7871,
+        1.4839,
+        5.3548
+      ],
+      "to": [
+        14.0194,
+        2.6452,
+        6.5161
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.065,
+            1.161
+          ]
+        },
+        "south": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.065,
+            1.161
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.161,
+            1.161
+          ]
+        },
+        "west": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            1.161,
+            1.161
+          ]
+        },
+        "up": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.065,
+            1.161
+          ]
+        },
+        "down": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.065,
+            1.161
           ]
         }
       }

@@ -19,6 +19,8 @@ jobs:
           persist-credentials: false
       - name: Check contribution foundation
         run: python3 scripts/check_repository.py
+      - name: Install factory data test dependencies
+        run: python3 -m pip install --quiet pillow numpy
       - name: Check dependency pins and installer contracts
         run: |
           python3 scripts/package_modrinth.py check

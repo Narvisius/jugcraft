@@ -295,6 +295,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 */
 	public @Nullable Storage<FluidVariant> fluidFor(@Nullable Direction side) {
 		if (tanks != null) {
+			if (kind == MachineKind.CHEMICAL_REACTOR) {
+				if (side == Direction.UP) return new net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage<>(List.of(tanks.input(2), tanks.input(0), tanks.input(1), tanks.output(0)));
+				return new net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage<>(List.of(tanks.input(0), tanks.input(1), tanks.output(0)));
+			}
 			return tanks.exposed();
 		}
 		return reservoir != null ? reservoir : inlet;
@@ -357,7 +361,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	@Override
 	protected void collectImplicitComponents(DataComponentMap.Builder components) {
 		super.collectImplicitComponents(components);
-		StoredFluid stored = reservoir == null ? null : StoredFluid.of(reservoir);
+		StoredFluid stored = reservoir != null ? StoredFluid.of(reservoir)
+				: kind == MachineKind.CHEMICAL_REACTOR ? StoredFluid.of(tanks.input(2)) : null;
 		if (stored != null) {
 			components.set(JugcraftFluids.STORED_FLUID, stored);
 		}
@@ -369,6 +374,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		StoredFluid stored = components.get(JugcraftFluids.STORED_FLUID);
 		if (stored != null && reservoir != null) {
 			stored.restore(reservoir);
+		}
+		if (stored != null && kind == MachineKind.CHEMICAL_REACTOR
+				&& stored.variant().isOf(PetroFluids.SULFURIC_ACID.source()) && stored.amount() > 0) {
+			stored.restore(tanks.input(2));
 		}
 	}
 
@@ -997,7 +1006,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				items.get(slot).shrink(recipe.items().get(slot).count());
 			}
 			for (int i = 0; i < recipe.fluids().size(); i++) {
-				tanks.input(i).drain(recipe.fluids().get(i).amount());
+				if (!recipe.fluids().get(i).retained()) tanks.input(i).drain(recipe.fluids().get(i).amount());
 			}
 			for (int i = 0; i < recipe.fluidResults().size(); i++) {
 				tanks.output(recipe.resultTank(i)).fill(recipe.fluidResults().get(i).fluid(), recipe.fluidResults().get(i).amount());

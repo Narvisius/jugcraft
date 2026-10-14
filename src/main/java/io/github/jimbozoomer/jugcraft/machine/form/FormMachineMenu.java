@@ -38,27 +38,60 @@ public class FormMachineMenu extends AbstractContainerMenu {
 	private final MachineForm form;
 	private final Container container;
 	private final ContainerData data;
+    public static final int BUTTON_AUTO = 10;
+    public static final int BUTTON_RECIPE = 100;
+    private final java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog;
+    private long lastSelectionTick = Long.MIN_VALUE;
+
+    public java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog() { return catalog; }
+    /** 0 automatic, 1-based catalog entry, 65535 unavailable. */
+    public int selectedRecipe() { return data(FormMachineBlockEntity.DATA_COUNT); }
+    public boolean catalogStale() { return data(FormMachineBlockEntity.DATA_COUNT + 1) != 0; }
+    public MachineUpgrades.Effect upgrades() {
+        var cards = new java.util.ArrayList<ItemStack>();
+        for (int i = form.firstUpgradeSlot(); i < form.containerSize(); i++) cards.add(container.getItem(i));
+        return MachineUpgrades.effect(cards);
+    }
 	/** The machine itself, on the server only. */
 	private final @Nullable FormMachineBlockEntity machine;
 
 	/** Client side: contents arrive through slot and data syncing. */
 	public FormMachineMenu(int containerId, Inventory inventory, MachineForm form) {
-		this(containerId, inventory, form, new SimpleContainer(form.containerSize()),
-				new SimpleContainerData(FormMachineBlockEntity.DATA_COUNT), null);
+        this(containerId, inventory, form, java.util.List.of());
+    }
+
+    public FormMachineMenu(int containerId, Inventory inventory, MachineForm form,
+            java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog) {
+        this(containerId, inventory, form, new SimpleContainer(form.containerSize()),
+                new SimpleContainerData(FormMachineBlockEntity.DATA_COUNT + 2), null, catalog);
 	}
 
 	public FormMachineMenu(int containerId, Inventory inventory, FormMachineBlockEntity machine, ContainerData data) {
-		this(containerId, inventory, machine.form(), machine.container(), data, machine);
+		this(containerId, inventory, machine.form(), machine.container(), data, machine, machine.form().generator() ? java.util.List.of() : machine.recipes(inventory.player.level().getServer()));
 	}
 
 	private FormMachineMenu(int containerId, Inventory inventory, MachineForm form, Container container, ContainerData data,
-			@Nullable FormMachineBlockEntity machine) {
+			@Nullable FormMachineBlockEntity machine, java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog) {
 		super(JugcraftForms.MENU, containerId);
 		checkContainerSize(container, form.containerSize());
-		checkContainerDataCount(data, FormMachineBlockEntity.DATA_COUNT);
+		checkContainerDataCount(data, machine == null ? FormMachineBlockEntity.DATA_COUNT + 2 : FormMachineBlockEntity.DATA_COUNT);
 		this.form = form;
 		this.container = container;
-		this.data = data;
+		this.catalog = catalog;
+        this.data = machine == null ? data : new ContainerData() {
+            public int get(int index) {
+                if (index == FormMachineBlockEntity.DATA_COUNT) {
+                    if (machine.recipeLock() == null) return 0;
+                    for (int i = 0; i < catalog.size(); i++) if (catalog.get(i).id().equals(machine.recipeLock())) return i + 1;
+                    return 65535;
+                }
+                if (index == FormMachineBlockEntity.DATA_COUNT + 1)
+                    return !form.generator() && machine.recipes(inventory.player.level().getServer()) != catalog ? 1 : 0;
+                return data.get(index);
+            }
+            public void set(int index, int value) { }
+            public int getCount() { return FormMachineBlockEntity.DATA_COUNT + 2; }
+        };
 		this.machine = machine;
 		FluidMachineSpec spec = form.tanks();
 
@@ -108,7 +141,7 @@ public class FormMachineMenu extends AbstractContainerMenu {
 			});
 		}
 		addStandardInventorySlots(inventory, 8, 84);
-		addDataSlots(data);
+		addDataSlots(this.data);
 	}
 
 	public MachineForm form() {
@@ -176,7 +209,22 @@ public class FormMachineMenu extends AbstractContainerMenu {
 	/** Buttons: pause or resume, and cancel the running batches. Only the server applies them. */
 	@Override
 	public boolean clickMenuButton(Player player, int id) {
-		return machine != null && player instanceof ServerPlayer server && machine.clickButton(server, id);
+		if (machine == null || !(player instanceof ServerPlayer server) || server.containerMenu != this
+                || !stillValid(player) || player.isSpectator()
+                || !server.level().mayInteract(player, machine.getBlockPos())
+                || !player.mayUseItemAt(machine.getBlockPos(), net.minecraft.core.Direction.UP, ItemStack.EMPTY)
+                || io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player, server.level(), machine.getBlockPos())) return false;
+        if (id == BUTTON_AUTO || id >= BUTTON_RECIPE) {
+            if (catalogStale() || machine.form().generator()) return false;
+            long now = server.level().getGameTime();
+            if (lastSelectionTick == now) return false;
+            int index = id - BUTTON_RECIPE;
+            if (id != BUTTON_AUTO && (index < 0 || index >= catalog.size())) return false;
+            boolean accepted = machine.selectRecipe(id == BUTTON_AUTO ? null : catalog.get(index).id());
+            if (accepted) { lastSelectionTick = now; broadcastChanges(); }
+            return accepted;
+        }
+        return machine.clickButton(server, id);
 	}
 
 	@Override

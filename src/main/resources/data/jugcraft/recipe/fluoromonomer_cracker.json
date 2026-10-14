@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BPB",
+    "WGW",
+    "MCT"
+  ],
+  "key": {
+    "B": "minecraft:bricks",
+    "C": "jugcraft:basic_circuit",
+    "G": "jugcraft:steel_gear",
+    "M": "jugcraft:electric_motor",
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_tank",
+    "W": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:fluoromonomer_cracker",
+    "count": 1
+  }
+}

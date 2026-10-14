@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:digestate_separation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:digestate",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 750,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:digestate_fiber",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 16,
+  "time": 100
+}

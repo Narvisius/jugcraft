@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:distillation",
+  "capability": "jugcraft:chemical_distillation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:ethanol_broth",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 500,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:stillage",
+      "amount": 500,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 200
+}

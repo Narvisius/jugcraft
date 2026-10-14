@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:mineral_conditioning",
+  "items": [
+    {
+      "ingredient": "jugcraft:magnesium_hydroxide",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrochloric_acid",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:magnesium_chloride_solution",
+      "amount": 500,
+      "tank": 0
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 160
+}

@@ -148,6 +148,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 				if (mx >= tankX - 1 && mx <= tankX + MachineMenu.TANK_WIDTH) {
 					Component name = menu.tankFluid(tank) == 0 ? Component.translatable("container.jugcraft.tank.empty")
 							: FluidVariantAttributes.getName(FluidVariant.of(fluid(tank)));
+					if (kind == MachineKind.CHEMICAL_REACTOR) name = Component.translatable("container.jugcraft.reactor.tank." + tank).append(": ").append(name);
 					graphics.setTooltipForNextFrame(font, name.copy().append(String.format(": %,d / %,d mB",
 							menu.tankAmount(tank), spec.capacity(tank))), mouseX, mouseY);
 					return;

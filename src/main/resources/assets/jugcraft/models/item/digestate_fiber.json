@@ -1,0 +1,146 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bio_fiber_owner": "jugcraft:block/bio_fiber_owner",
+    "el_white": "jugcraft:block/el_white",
+    "particle": "jugcraft:block/dp_olive"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        4.8,
+        1.6
+      ],
+      "to": [
+        16.0,
+        11.2,
+        14.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bio_fiber_owner",
+          "uv": [
+            0,
+            0,
+            16,
+            6.4
+          ]
+        },
+        "south": {
+          "texture": "#bio_fiber_owner",
+          "uv": [
+            0,
+            0,
+            16,
+            6.4
+          ]
+        },
+        "east": {
+          "texture": "#bio_fiber_owner",
+          "uv": [
+            0,
+            0,
+            12.8,
+            6.4
+          ]
+        },
+        "west": {
+          "texture": "#bio_fiber_owner",
+          "uv": [
+            0,
+            0,
+            12.8,
+            6.4
+          ]
+        },
+        "up": {
+          "texture": "#bio_fiber_owner",
+          "uv": [
+            0,
+            0,
+            16,
+            12.8
+          ]
+        },
+        "down": {
+          "texture": "#bio_fiber_owner",
+          "uv": [
+            0,
+            0,
+            16,
+            12.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.4,
+        4.64,
+        1.44
+      ],
+      "to": [
+        9.6,
+        11.36,
+        14.56
+      ],
+      "faces": {
+        "north": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            3.2,
+            6.72
+          ]
+        },
+        "south": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            3.2,
+            6.72
+          ]
+        },
+        "east": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            13.12,
+            6.72
+          ]
+        },
+        "west": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            13.12,
+            6.72
+          ]
+        },
+        "up": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            3.2,
+            13.12
+          ]
+        },
+        "down": {
+          "texture": "#el_white",
+          "uv": [
+            0,
+            0,
+            3.2,
+            13.12
+          ]
+        }
+      }
+    }
+  ]
+}

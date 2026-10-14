@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_reclaiming",
+  "items": [
+    {
+      "ingredient": "jugcraft:pvc_profile",
+      "count": 3
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:pvc_resin",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 120
+}

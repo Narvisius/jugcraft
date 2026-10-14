@@ -598,7 +598,7 @@ public class IndustrialFoundationGameTests {
 			helper.assertTrue(reactor.tanks().input(0).millibuckets() == 1000 && reactor.tanks().output(0).millibuckets() == 0,
 					"The reactor never ran the form-only recipe");
 			CompoundTag saved = reactor.saveWithoutMetadata(level.registryAccess());
-			helper.assertFalse(saved.contains(FluidTanks.LAYOUT_KEY), "First-release layouts save exactly as before");
+			helper.assertTrue(saved.getIntOr(FluidTanks.LAYOUT_KEY, 0) == 1, "Reactor records its migrated absorption-tank layout");
 			MachineBlockEntity copy = new MachineBlockEntity(reactor.getBlockPos(), reactor.getBlockState());
 			copy.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
 			helper.assertTrue(amount(copy.tanks().input(0), Fluids.WATER) == 1000, "And load exactly as before");

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:ldpe_film",
+    "jugcraft:plastic_sheet",
+    "jugcraft:plastic_sheet",
+    "jugcraft:pvc_profile"
+  ],
+  "result": {
+    "id": "jugcraft:polymer_housing",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -206,8 +206,9 @@ def assets(root, write, lang):
     lang[f"block.{MOD}.{portrait}"] = HAUNTED_PORTRAIT["display"]
 
     fog = FOG_MACHINE["block"]
-    write(models / f"{fog}.json", fog_model(False))
-    write(models / f"{fog}_running.json", fog_model(True))
+    from machine_connections import with_model_sockets
+    write(models / f"{fog}.json", with_model_sockets(fog_model(False)))
+    write(models / f"{fog}_running.json", with_model_sockets(fog_model(True)))
     write(states / f"{fog}.json", {"variants": {f"facing={f},running={str(r).lower()}": turned(rid(f"block/{fog}{'_running' if r else ''}"), f)
                                                 for f in HORIZONTAL for r in (False, True)}})
     flat_item(root, write, fog)

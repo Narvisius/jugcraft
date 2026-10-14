@@ -799,7 +799,8 @@ def _ore_washer():
     from materials import WASHED_ORES, ore_ids
     return [{"input": ore, "output": f"jugcraft:washed_{metal}_ore", "count": ORE_WASHING_MULTIPLIER, "ticks": 200,
              "features": [FEATURE] + _metal_features(metal), "ore_bonus": ORE_WASHING_MULTIPLIER}
-            for metal in WASHED_ORES for ore in ore_ids(metal)]
+            for metal in WASHED_ORES for ore in ore_ids(metal)] + [
+                {"input": "jugcraft:vanadium_iron_concentrate", "output": "jugcraft:vanadium_oxide", "count": 1, "ticks": 200, "features": [FEATURE]}]
 
 
 # Sieve: gravel and soul sand, with small renewable finds.

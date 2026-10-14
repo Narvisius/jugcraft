@@ -1,5 +1,12 @@
 # Machine roadmap
 
+Local October 13 checkpoint: [ordinary polymer factory](features/polymer-factory-playtest.md) adds monomer preparation, HDPE/LDPE tooling, a shared Extruder and clean same-grade recycling; the existing Molding Press accepts appropriate HDPE stock. Local playtest only, not merged. PTFE chemistry remains separate.
+
+
+Local implementation, 12 October: [coastal magnesium, staged titanium and Polymer Molding Press playtest](features/coastal-metals-and-polymer-playtest.md). Eight new stations, six reusable molds and current product consumers; validation/package details are tracked in that record. Local-only, not merged to main. Broader alloys, polymer grades and bulk plants remain follow-ups.
+
+**12 October local implementation:** [Expanded fermentation and first aluminum refinery](features/biorefinery-and-aluminum-playtest.md) adds seven stations, connected ethanol/stillage processing and staged bauxite/lye recovery to existing aluminum products. Local playtest branch; not published to main. Larger variants, demanding fuel dehydration, alloys and new specialized aluminum products remain future work.
+
 Status: **proposals for discussion, not approved or implemented** unless marked ✅. How implemented things connect is documented in [TECH_TREE.md](TECH_TREE.md). Machines are grouped into branches: **Mechanical** (shape and mix of materials), **Fluids** (moving liquids) and the planned **Chemistry** branch ([branches/CHEMISTRY.md](branches/CHEMISTRY.md)).
 
 ## Progression and player guidance targets

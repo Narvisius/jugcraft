@@ -168,12 +168,12 @@ ABOUT = {
                          "and a bucket of water. It also splits plain water, slowly: a bucket gives 500 mB of hydrogen "
                          "(middle row) and 250 mB of oxygen (top row) every 40 seconds, an early fuel for the fuel cell.",
     "chemical_reactor": "Two by two by two, lined with lead against the acid: the general chemistry vessel, with two "
-                        "item slots, a tank in and a tank out. Two sulfur dust and a bucket of water make a bucket of "
+                        "item slots, liquid and gas feeds, a retained acid charge and a product tank. Two sulfur dust and a bucket of water make a bucket of "
                         "sulfuric acid. It also mixes: two salt and a bucket of water make brine; two sand, a dried "
                         "kelp and a bucket of water make fracking fluid. An ore in 250 mB of sulfuric acid gives four washed "
                         "ores, the best ore route. Eight crops (wheat, sugar cane, potatoes, carrots, beetroot, "
                         "berries, melon or apples) in a bucket of water ferment into 250 mB of bioethanol. Its other "
-                        "reactions are on its recipe pages.",
+                        "reactions are on its recipe pages. Absorption: 500 mB water + 500 mB hydrogen chloride gas makes 1000 mB hydrochloric acid; 250 mB water + 250 mB sulfur trioxide makes 500 mB sulfuric acid. Both take 5 seconds at 96 JE/t. For sulfuric absorption, first use a sulfuric-acid bucket on the TOP: the dedicated 1000 mB charge is retained, including in the dropped reactor. Normal liquid/gas feeds and products connect at the sides. Other process liquids are not preserved when broken: drain them first. HCl leaches one raw copper into two washed copper in 8 seconds. These are game recipes, not real chemical procedures.",
     "air_separation_unit": "Two by two and six tall: a cold box and its distillation column. It needs no input: it "
                            "liquefies air and splits it, 8 mB of nitrogen a tick out of the top row, 2 mB of oxygen "
                            "out of the bottom row and a little argon (1 mB every 2 ticks) out of the middle, at 64 "
@@ -1209,4 +1209,16 @@ def build():
                 "A comparator next to a generator or battery shows how full it is.",
                 "Next to a processing machine, it shows how full its slots are, like a chest."]}]},
     ]
+    # Keep every registered industrial form discoverable, including later chemistry/farm additions.
+    # Existing authored pages keep their positions; only missing station pages are appended.
+    import industrial_forms
+    covered = {page.get("icon") for chapter in chapters for page in chapter["pages"]}
+    chemistry = next(chapter for chapter in chapters if chapter["title"] == "Chemistry")
+    for form in industrial_forms.FORMS:
+        if f"{MOD}:{form}" not in covered:
+            chemistry["pages"].append(form_page(form))
+    chemistry["pages"].append({"title": "Four shared process machines", "icon": "jugcraft:brine_concentrator", "text": [
+        "Build a Concentrator for seawater or acid; a Gas Scrubber for synthesis gas, biogas or fermentation gas; a Filter Press for aluminate or digestate; and an Industrial Oven for drying, calcination or PTFE sintering. Each handles multiple resources without a separate named machine for every output.",
+        "The five older specialist designs stay craftable and continue working in existing factories. The four recommended machines also keep their original saved block IDs, inventories and ports. The Oven gains one connected solution inlet on its lower rear face.",
+        "Open Recipes to search and preview inputs, outputs and costs. Lock recipe chooses the only job new batches may start; Automatic restores input-driven selection. Saved locks also filter automated inputs. Drain incompatible input AND output fluids and clear other feed items when changing jobs; running batches finish unchanged."]})
     return {"chapters": chapters}

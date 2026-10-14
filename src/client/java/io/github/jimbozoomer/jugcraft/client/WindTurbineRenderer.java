@@ -48,11 +48,13 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 	public static final class State extends BlockEntityRenderState {
 		boolean turbine;
 		List<MachineRotors.Spin> spins = List.of();
+		List<MachineConnections.Fitting> fittings = List.of();
 		Direction facing = Direction.NORTH;
 		float angle;
 	}
 
 	public WindTurbineRenderer(BlockEntityRendererProvider.Context context) {
+		MachineConnections.reset();
 	}
 
 	@Override
@@ -65,6 +67,7 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 			ModelFeatureRenderer.@Nullable CrumblingOverlay crumbling) {
 		BlockEntityRenderState.extractBase(machine, state, crumbling);
 		state.spins = MachineRotors.extract(machine, partialTick);
+		state.fittings = MachineConnections.extract(machine);
 		state.turbine = machine.kind() == MachineKind.WIND_TURBINE;
 		if (!state.turbine) {
 			return;
@@ -78,6 +81,7 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
 		MachineRotors.submit(state.spins, pose, collector, state.lightCoords);
+		MachineConnections.submit(state.fittings, pose, collector);
 		if (!state.turbine) {
 			return;
 		}

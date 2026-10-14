@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:monomer_preparation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:ethylene",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:ethylene_dichloride",
+      "amount": 1000,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 160
+}

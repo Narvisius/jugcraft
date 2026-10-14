@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:titanium_ingot",
+    "jugcraft:magnesium_ingot",
+    "minecraft:brick"
+  ],
+  "result": {
+    "id": "jugcraft:hdpe_process_insert",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

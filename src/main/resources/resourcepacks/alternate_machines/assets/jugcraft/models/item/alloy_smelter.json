@@ -7,12 +7,14 @@
     "alloy_smelter_brick": "jugcraft:block/alloy_smelter_brick",
     "bronze_block": "jugcraft:block/bronze_block",
     "bronze_fluid_pipe": "jugcraft:block/bronze_fluid_pipe",
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "geothermal_stack": "jugcraft:block/geothermal_stack",
     "heavy_plinth": "jugcraft:block/heavy_plinth",
     "machine_side": "jugcraft:block/machine_side",
     "machine_top": "jugcraft:block/machine_top",
     "power_port": "jugcraft:block/power_port",
     "power_port_frame": "jugcraft:block/power_port_frame",
+    "sp_brass": "jugcraft:block/sp_brass",
     "front": "jugcraft:block/alloy_smelter_front",
     "particle": "jugcraft:block/machine_side"
   },
@@ -829,6 +831,142 @@
             0,
             2.0,
             0.667
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.0083,
+        0.6667,
+        6.0
+      ],
+      "to": [
+        4.2292,
+        2.0,
+        7.3333
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.208,
+            1.333
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.208,
+            1.333
+          ]
+        },
+        "east": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.333,
+            1.333
+          ]
+        },
+        "west": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.208,
+            1.333
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            0.208,
+            1.333
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.1083,
+        0.9583,
+        6.2917
+      ],
+      "to": [
+        4.3292,
+        1.7667,
+        7.0417
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.042,
+            0.75
+          ]
+        },
+        "south": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.042,
+            0.75
+          ]
+        },
+        "east": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.75,
+            0.75
+          ]
+        },
+        "west": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.75,
+            0.75
+          ]
+        },
+        "up": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.042,
+            0.75
+          ]
+        },
+        "down": {
+          "texture": "#dp_rubber",
+          "uv": [
+            0,
+            0,
+            0.042,
+            0.75
           ]
         }
       }

@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:anaerobic_digestion",
+  "items": [
+    {
+      "ingredient": "#jugcraft:digester_feedstock",
+      "count": 16
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:raw_biogas",
+      "amount": 1000,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:digestate",
+      "amount": 750,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 32,
+  "priority": -10,
+  "time": 400
+}

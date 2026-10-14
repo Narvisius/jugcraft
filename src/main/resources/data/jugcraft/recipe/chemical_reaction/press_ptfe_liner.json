@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_molding",
+  "items": [
+    {
+      "ingredient": "jugcraft:ptfe_powder",
+      "count": 3
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:ptfe_liner_blank",
+      "count": 1
+    }
+  ],
+  "tool": "jugcraft:panel_mold",
+  "energy_per_tick": 48,
+  "time": 160
+}

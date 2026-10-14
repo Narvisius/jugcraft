@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TGT",
+    "BCB",
+    "MKM"
+  ],
+  "key": {
+    "B": "minecraft:bricks",
+    "C": "jugcraft:basic_circuit",
+    "G": "jugcraft:steel_gear",
+    "K": "jugcraft:machine_casing",
+    "M": "jugcraft:electric_motor",
+    "T": "jugcraft:steel_tank"
+  },
+  "result": {
+    "id": "jugcraft:polymerization_kettle",
+    "count": 1
+  }
+}

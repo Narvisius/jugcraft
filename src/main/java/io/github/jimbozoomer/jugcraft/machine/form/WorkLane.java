@@ -43,9 +43,12 @@ public final class WorkLane {
 			Codec.INT.fieldOf("duration").forGetter(WorkLane::duration),
 			Codec.INT.optionalFieldOf("tool", -1).forGetter(WorkLane::tool),
 			Codec.BOOL.optionalFieldOf("cold", false).forGetter(WorkLane::cold),
-			Codec.INT.optionalFieldOf("progress", 0).forGetter(WorkLane::progress)
-	).apply(i, (recipe, inputs, fluids, itemResults, fluidResults, duration, tool, cold, progress) ->
-			new WorkLane(recipe.orElse(null), inputs, fluids, itemResults, fluidResults, duration, tool, cold, progress)));
+			Codec.INT.optionalFieldOf("progress", 0).forGetter(WorkLane::progress),
+			Codec.intRange(0, 65_535).optionalFieldOf("energy_per_tick", 0).forGetter(WorkLane::energyPerTick),
+			Codec.BOOL.optionalFieldOf("drain_water", false).forGetter(WorkLane::drainWater),
+			Codec.intRange(0, 65_535).optionalFieldOf("emissions", 0).forGetter(WorkLane::emissions)
+	).apply(i, (recipe, inputs, fluids, itemResults, fluidResults, duration, tool, cold, progress, energy, drain, emissions) ->
+			new WorkLane(recipe.orElse(null), inputs, fluids, itemResults, fluidResults, duration, tool, cold, progress, energy, drain, emissions)));
 
 	private final @Nullable Identifier recipe;
 	private final List<ItemPart> inputs;
@@ -56,9 +59,21 @@ public final class WorkLane {
 	private final int tool;
 	private final boolean cold;
 	private int progress;
+	private final int energyPerTick;
+	private final boolean drainWater;
+	private final int emissions;
 
 	public WorkLane(@Nullable Identifier recipe, List<ItemPart> inputs, List<FluidPart> fluids, List<ItemPart> itemResults,
 			List<FluidPart> fluidResults, int duration, int tool, boolean cold, int progress) {
+		this(recipe, inputs, fluids, itemResults, fluidResults, duration, tool, cold, progress, 0, false, 0);
+	}
+
+	public WorkLane(@Nullable Identifier recipe, List<ItemPart> inputs, List<FluidPart> fluids, List<ItemPart> itemResults,
+			List<FluidPart> fluidResults, int duration, int tool, boolean cold, int progress, int energyPerTick,
+			boolean drainWater, int emissions) {
+		this.energyPerTick = Math.max(0, energyPerTick);
+		this.drainWater = drainWater;
+		this.emissions = Math.max(0, emissions);
 		this.recipe = recipe;
 		this.inputs = List.copyOf(inputs);
 		this.fluids = List.copyOf(fluids);
@@ -114,6 +129,10 @@ public final class WorkLane {
 	public int progress() {
 		return progress;
 	}
+
+	public int energyPerTick() { return energyPerTick; }
+	public boolean drainWater() { return drainWater; }
+	public int emissions() { return emissions; }
 
 	void advance(int ticks) {
 		progress += ticks;

@@ -179,7 +179,7 @@ public class BioGeneratorGameTests {
 		MachineForm form = IndustrialForms.BIO_GENERATOR_FORM;
 		FormFuel ethanol = form.fuel(PetroFluids.BIOETHANOL.source());
 		FormFuel biogas = form.fuel(PetroFluids.BIOGAS.fluid());
-		helper.assertTrue(form.fuels().size() == 2 && biogas != null && biogas.jePerMb() == BIOGAS_PER_MB && biogas.jePerTick() == BIOGAS_PER_TICK,
+		helper.assertTrue(form.fuels().size() == 3 && biogas != null && biogas.jePerMb() == BIOGAS_PER_MB && biogas.jePerTick() == BIOGAS_PER_TICK,
 				"Biogas at 268 JE/mB and 64 JE/t");
 		helper.assertTrue(ethanol != null && ethanol.jePerMb() == PER_MB && ethanol.jePerTick() == PER_TICK
 				&& PER_MB == FluidFuels.jePerMb(MachineKind.GAS_TURBINE, PetroFluids.BIOETHANOL.source()), "Bioethanol at 192 JE/mB and 96 JE/t");

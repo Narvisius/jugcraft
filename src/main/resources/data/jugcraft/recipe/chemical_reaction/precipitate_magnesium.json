@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:mineral_conditioning",
+  "fluids": [
+    {
+      "fluid": "jugcraft:magnesium_brine",
+      "amount": 250
+    },
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:spent_mineral_wash",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:magnesium_hydroxide",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 24,
+  "time": 160
+}

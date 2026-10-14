@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * packages register their own form blocks and items, then hand the blocks to {@link #registerBlocks}.
  */
 public final class JugcraftForms {
-	public static ExtendedMenuType<FormMachineMenu, Identifier> MENU;
+	public static ExtendedMenuType<FormMachineMenu, FormRecipeCatalog> MENU;
 	private static final Map<Identifier, MachineForm> FORMS = new LinkedHashMap<>();
 
 	private JugcraftForms() {
@@ -30,8 +30,8 @@ public final class JugcraftForms {
 
 	public static void register() {
 		MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("machine_form"), new ExtendedMenuType<>(
-				(containerId, inventory, id) -> new FormMachineMenu(containerId, inventory, formOrThrow(id)),
-				Identifier.STREAM_CODEC.cast()));
+				(containerId, inventory, catalog) -> new FormMachineMenu(containerId, inventory, formOrThrow(catalog.form()), catalog.entries()),
+				FormRecipeCatalog.STREAM_CODEC));
 	}
 
 	/** The form with this id, or null. */

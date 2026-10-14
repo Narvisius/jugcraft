@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WBW",
+    "BCB",
+    "PKP"
+  ],
+  "key": {
+    "W": "jugcraft:copper_cable",
+    "B": "minecraft:bricks",
+    "C": "jugcraft:basic_circuit",
+    "P": "#c:plates/steel",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:aluminum_reduction_cell",
+    "count": 1
+  }
+}

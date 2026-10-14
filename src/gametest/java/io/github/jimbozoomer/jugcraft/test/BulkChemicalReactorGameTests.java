@@ -274,7 +274,8 @@ public class BulkChemicalReactorGameTests {
 				.filter(recipe -> recipe.fluidResults().stream().anyMatch(result -> result.fluid() == PetroFluids.HYDROCHLORIC_ACID.source())
 						|| recipe.fluids().stream().anyMatch(input -> input.fluid() == PetroFluids.HYDROCHLORIC_ACID.source()))
 				.count();
-		helper.assertTrue(reactor == 0, "The Chemical Reactor neither makes nor uses hydrochloric acid");
+		helper.assertTrue(reactor > 0 && FluidRecipes.recipes(level.getServer(), MachineKind.CHEMICAL_REACTOR).stream()
+				.noneMatch(recipe -> machine.form().runs(recipe)), "Expanded starter absorption exists without exposing bulk-only recipes on the small reactor");
 
 		RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> crafting = RecipeManager.createCheck(RecipeType.CRAFTING);
 		ItemStack plate = stack("steel_plate");

@@ -3834,7 +3834,7 @@
           "title": "Chemical Reactor",
           "icon": "jugcraft:chemical_reactor",
           "text": [
-            "Two by two by two, lined with lead against the acid: the general chemistry vessel, with two item slots, a tank in and a tank out. Two sulfur dust and a bucket of water make a bucket of sulfuric acid. It also mixes: two salt and a bucket of water make brine; two sand, a dried kelp and a bucket of water make fracking fluid. An ore in 250 mB of sulfuric acid gives four washed ores, the best ore route. Eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) in a bucket of water ferment into 250 mB of bioethanol. Its other reactions are on its recipe pages.",
+            "Two by two by two, lined with lead against the acid: the general chemistry vessel, with two item slots, liquid and gas feeds, a retained acid charge and a product tank. Two sulfur dust and a bucket of water make a bucket of sulfuric acid. It also mixes: two salt and a bucket of water make brine; two sand, a dried kelp and a bucket of water make fracking fluid. An ore in 250 mB of sulfuric acid gives four washed ores, the best ore route. Eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) in a bucket of water ferment into 250 mB of bioethanol. Its other reactions are on its recipe pages. Absorption: 500 mB water + 500 mB hydrogen chloride gas makes 1000 mB hydrochloric acid; 250 mB water + 250 mB sulfur trioxide makes 500 mB sulfuric acid. Both take 5 seconds at 96 JE/t. For sulfuric absorption, first use a sulfuric-acid bucket on the TOP: the dedicated 1000 mB charge is retained, including in the dropped reactor. Normal liquid/gas feeds and products connect at the sides. Other process liquids are not preserved when broken: drain them first. HCl leaches one raw copper into two washed copper in 8 seconds. These are game recipes, not real chemical procedures.",
             "Uses 96 JE/t while working. Holds 30,000 JE."
           ],
           "craft": {
@@ -3859,7 +3859,8 @@
           "text": [
             "Two wide, two deep and three tall: a lined reaction throat fed by a hopper and a feed screw at the back, with a gas column and collector hood on top, built from steel plates, a furnace, an electric motor, glass, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
             "Drop sulfur dust into the hopper on top at the back and pipe oxygen into the capped inlet low on the right. Each dust burns with 250 mB of oxygen into 250 mB of sulfur dioxide in five seconds, which leaves at the collar on top of the hood. It draws 96 JE/t through the socket low on the left side at the back.",
-            "Coal or charcoal burns the same way into 250 mB of carbon dioxide, the Chemical Infuser's feed for methane. Its screen says what it is waiting for, and upgrade cards fit its terminal."
+            "Coal or charcoal burns the same way into 250 mB of carbon dioxide, the Chemical Infuser's feed for methane. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
+            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported."
           ],
           "craft": {
             "grid": [
@@ -3883,7 +3884,8 @@
           "text": [
             "Three wide, three deep and four tall: a tall stirred vessel on four legs, built from steel plates, a Steel Tank, glass, an electric motor, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
             "Drop eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) into the hatch on its crown and pipe water into the inlet low at the back left. With a bucket of water they ferment into 250 mB of bioethanol at the broth outlet low at the front, and 250 mB of carbon dioxide at the flange high at the back, in five seconds at 96 JE/t.",
-            "The carbon dioxide feeds the Chemical Infuser's methane. Collecting it is optional: when its tank is full the rest is vented and fermentation goes on."
+            "The carbon dioxide feeds the Chemical Infuser's methane. Collecting it is optional: when its tank is full the rest is vented and fermentation goes on.",
+            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported."
           ],
           "craft": {
             "grid": [
@@ -3932,7 +3934,9 @@
           "text": [
             "Six wide, six deep and six tall: a huge sealed tank on four foundation shoes, with a feed auger on its left side, a digestate chute low on its right, a gas header over its dome and a mixer gearbox at the back, built from four Steel Tanks, two electric motors, a steel plate, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed. It runs four batches at once, from 16,000 mB tanks, at 80% of the reactor's draw.",
             "Feed it organic waste at the auger: crops, rotten flesh, poisonous potatoes, kelp, pumpkins or seeds. Pipe water into the inlet low on the left. Sixteen items and a bucket of water digest over twenty seconds into 1,000 mB of raw biogas (60% methane, 40% carbon dioxide) at the header flange high on the right, and two bone meal at the chute.",
-            "Biogas upgrades into pure methane in the Chemical Infuser with its Nickel Catalyst Bed: 250 mB of biogas and 400 mB of hydrogen give 250 mB of methane and 400 mB of water."
+            "Biogas upgrades into pure methane in the Chemical Infuser with its Nickel Catalyst Bed: 250 mB of biogas and 400 mB of hydrogen give 250 mB of methane and 400 mB of water.",
+            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported.",
+            "The expanded route collects liquid digestate at the lower rear-left outlet for the Filter Press. The original route still makes biogas and bone meal. This vessel retains four bulk lanes and 16,000 mB tanks."
           ],
           "craft": {
             "grid": [
@@ -3957,7 +3961,8 @@
             "Four wide, four deep and six tall: a tall lined reaction column over a broad ash chamber, with a charging chute on its left side and a gas header high on its right, built from steel plates, bricks, a furnace, a steel fluid pipe and a Machine Casing. Every block it fills must be free when it is placed. It runs two batches at once.",
             "Drop coal or coal coke into the charging chute and pipe water into the inlet low on its left side. Each piece and 500 mB of water (as steam) become 500 mB of raw syngas (half carbon monoxide, half hydrogen) in ten seconds, which leaves at the header flange high on its right. Charcoal gives 400 mB from 400 mB of water.",
             "Coal and coke each leave a Gasification Residue at the chute low on its right side. Bound with cement it makes concrete, and with asphalt binder road asphalt, in place of gravel.",
-            "Raw syngas is dirty: the Gas Cleanup and Separation Rack divides it into carbon monoxide and hydrogen."
+            "Raw syngas is dirty: the Gas Cleanup and Separation Rack divides it into carbon monoxide and hydrogen.",
+            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported."
           ],
           "craft": {
             "grid": [
@@ -4028,7 +4033,7 @@
           "text": [
             "Four wide, five deep and four tall: a gas engine turning a generator on a steel skid, built from steel plates, an electric motor, a steel gear, a Tinplate Tank and a basic circuit. Every block it fills must be free when it is placed; the corners above the skid at the front stay open.",
             "Pipe hydrogen into the capped inlet low on its right side. It burns a millibucket a tick, 128 JE each, and sends 128 JE/t out of the socket on the terminal cabinet at the back: a bucket lasts 50 seconds. Its coupling and intake fan spin up as it starts.",
-            "It makes only as much as its store has room for, so no fuel is wasted when nothing draws its power, and its screen says when the fuel tank is empty or the store is full. It also burns methane from the Chemical Infuser: 448 JE a millibucket at 256 JE/t, a bucket lasting 87.5 seconds."
+            "Methane from the Infuser now burns here too: 448 JE per mB, up to 256 JE/t. Fractional fuel credit is saved, so switching loads or restarting loses and duplicates no fuel. This generator has no upgrade slots."
           ],
           "craft": {
             "grid": [
@@ -4052,7 +4057,8 @@
           "text": [
             "Three wide, four deep and three tall: a compact engine-generator on a thick skid, built from a Steel Tank, an electric motor, a steel gear, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
             "Pipe bioethanol into the low liquid inlet on its right side. It burns 192 JE a millibucket at 96 JE/t, a bucket lasting 100 seconds, and sends the power out of the socket on the terminal box low on its left side. Its coupling and radiator fan turn while it runs.",
-            "It makes only as much as its store has room for. It also burns biogas from the Anaerobic Digester, piped into the same inlet: 268 JE a millibucket at 64 JE/t, a bucket lasting about 210 seconds."
+            "It makes only as much as its store has room for. It also burns biogas from the Anaerobic Digester, piped into the same inlet: 268 JE a millibucket at 64 JE/t, a bucket lasting about 210 seconds.",
+            "Also burns cleaned biogas from the expanded scrubber chain at 192 JE/mB, up to 64 JE/t."
           ],
           "craft": {
             "grid": [
@@ -4202,7 +4208,8 @@
           "text": [
             "Two wide, three deep and three tall: a stepped reaction chamber with an inlet on each shoulder, a catalyst-bed drawer at its foot and a cooling jacket behind, built from steel plates, two steel fluid pipes, a Tinplate Tank, copper cable and a basic circuit. Every block it fills must be free when it is placed.",
             "Pipe hydrogen into the left inlet and chlorine into the right. 250 mB of each burn together into 500 mB of hydrogen chloride in under four seconds, which leaves at the top collar at the back. It draws 128 JE/t through the socket low on the right side at the back.",
-            "With a Nickel Catalyst Bed in its bed socket it makes methane: 400 mB of hydrogen and 100 mB of carbon dioxide (the right inlet) give 100 mB of methane at the top collar and 400 mB of water at the drain below it in ten seconds. The bed is never used up. Its screen says what it is waiting for, and upgrade cards fit its terminal."
+            "With a Nickel Catalyst Bed in its bed socket it makes methane: 400 mB of hydrogen and 100 mB of carbon dioxide (the right inlet) give 100 mB of methane at the top collar and 400 mB of water at the drain below it in ten seconds. The bed is never used up. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
+            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported."
           ],
           "craft": {
             "grid": [
@@ -4364,6 +4371,667 @@
           "text": [
             "Two phosphate and 250 mB of sulfuric acid in the chemical reactor make four fertilizer.",
             "Use one on the ground or a crop: every crop in the 5x5 area around it (a block up or down too) gets two doses of bone meal. Grass and saplings are left alone."
+          ]
+        },
+        {
+          "title": "Gas Scrubber",
+          "icon": "jugcraft:gas_cleaning_rack",
+          "text": [
+            "One Gas Scrubber cleans synthesis gas, raw biogas and wet fermentation CO2. Feed gas and wash water into their labeled inputs. Outlet 1 collects CO/clean biogas/CO2; outlet 2 collects hydrogen/wash digestate/water respectively. Capture solid synthesis-gas residue in the drawer.",
+            "Open Recipes to search and preview jobs. Lock recipe limits new batches; Automatic restores input-based selection. Locks persist across saves; current batches finish unchanged. Drain incompatible input AND output fluids and remove other feed items before changing jobs. Empty outputs for sustained automation. You can use one machine for different jobs or dedicate identical copies to separate factory lines.",
+            "Three wide, five deep and four tall. A stepped wash tower, collection pot, separator, closed pipe loops and service bridge share one machine. Dirty gas enters high at the rear; wash water enters low on the left. The two front upper outlets give carbon monoxide on the left, hydrogen on the right. Residue leaves the low front drawer.",
+            "500 mB dirty synthesis gas + 125 mB wash water gives 250 mB carbon monoxide, 250 mB hydrogen and one wet mixed residue in 100 ticks at 48 JE/t. Both gases and the residue must fit before work starts. There are no disposable filters.",
+            "Stabilize one residue with clay and two gravel into two cobblestone road-fill blocks. That consumes the residue once; it gives no second fuel or recovered metals. Existing gas cylinders, tanks and pipes carry every new gas. Feed the cleaned hydrogen and carbon monoxide to an Infuser; methane drives the Gas Burning Generator at 256 JE/t, 448 JE/mB."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:basic_circuit",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:gas_cleaning_rack",
+            "count": 1
+          }
+        },
+        {
+          "title": "Biogas Cleaner",
+          "icon": "jugcraft:biogas_cleaner",
+          "text": [
+            "Optional specialist model: existing machines, recipes, inventories and production remain supported. For a new factory, build the Gas Scrubber, which also runs this machine's processes. This specialist stays craftable for existing layouts but is omitted from the main creative machinery list.",
+            "Two wide, three deep and three tall. The sealed wash tower and demister clean biogas without splitting its 60/40 composition. Raw gas enters upper rear right; wash water enters lower rear left. Cleaned gas leaves upper front right; dirty wash leaves lower front right. Power enters front left.",
+            "1000 mB raw biogas + 250 mB water -> 1000 mB cleaned biogas + 250 mB wash digestate, 100 ticks at 24 JE/t. Route that wash to the Digestate Separator with the digester residue. No disposable filter is needed. Full product tanks stop processing without wasting inputs.",
+            "Also cleans wet fermentation CO2: 250 mB gas + 250 mB wash water -> 250 mB usable CO2 + 250 mB recovered water, 100 ticks at 24 JE/t. Drain both previous products before switching between biogas and fermentation gas. No new disposable filter or separate gas-cleaning machine is needed."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:biogas_cleaner",
+            "count": 1
+          }
+        },
+        {
+          "title": "Digestate Separator",
+          "icon": "jugcraft:digestate_separator",
+          "text": [
+            "Optional specialist model: existing machines, recipes, inventories and production remain supported. For a new factory, build the Filter Press, which also runs this machine's processes. This specialist stays craftable for existing layouts but is omitted from the main creative machinery list.",
+            "Two wide, three deep and three tall. A closed screw press with guarded drive and collection drawer. Feed digestate at the rear left; recovered water leaves the rear right; fiber leaves the lower front right drawer. Power enters the front left.",
+            "1000 mB digestate -> 750 mB reusable water + one Digestate Fiber in 100 ticks at 16 JE/t. Eight fibers craft one existing Fertilizer, usable in the farming and hydroponics systems. Fertilizer and recovered water are never accepted as biomass feed, and water alone cannot produce fuel."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:digestate_separator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Heated Mashing Station",
+          "icon": "jugcraft:mashing_station",
+          "text": [
+            "Three wide, deep and tall. Mill and heat 16 fermentable crops with 1000 mB water into 1250 mB mash, 200 ticks at 24 JE/t. The grain hopper, guarded milling drive and insulated mash kettle share one machine. Existing crop and water producers supply it; water alone cannot make fuel.",
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: water low left, mash low middle. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:mashing_station",
+            "count": 1
+          }
+        },
+        {
+          "title": "Chemical Distillation Station",
+          "icon": "jugcraft:chemical_distillation_station",
+          "text": [
+            "Four wide/deep and six tall. Feed 1000 mB fermented broth; collect 500 mB existing Bioethanol and 500 mB Stillage, 200 ticks at 32 JE/t. A heated column, condenser, reboiler, pump and service ladder separate these products. Both outputs must fit.",
+            "Ethanol already fuels the Bio-Generator and existing compatible engines. The digester accepts 1000 mB stillage instead of solid farm feed, producing 250 mB raw biogas and 500 mB digestate in 300 ticks at 22 JE/t per expanded lane. Continue through the existing cleaner and separator. Pure water and digestate cannot make ethanol. Dehydration is reserved for a future real consumer; the original direct reactor ethanol recipe remains.",
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: broth midway up toward the right, ethanol midway up at the left, stillage low toward the right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable",
+              "minecraft:bricks",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:chemical_distillation_station",
+            "count": 1
+          }
+        },
+        {
+          "title": "Bauxite Digestion Vessel",
+          "icon": "jugcraft:bauxite_digester",
+          "text": [
+            "Three wide, four deep and three tall. One existing Bauxite + 250 mB lye + 750 mB water -> 1000 mB aluminate slurry, 200 ticks at 64 JE/t. The sealed horizontal vessel has a locking cover, heat jacket, feed hatch and service pipes. Mine or trade bauxite and make lye with the copper-built Electrolytic Separator.",
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: lye midway up at the left, water midway up in the middle, slurry low right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "minecraft:bricks",
+              "jugcraft:electric_motor",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "jugcraft:basic_circuit",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:bauxite_digester",
+            "count": 1
+          }
+        },
+        {
+          "title": "Filter Press",
+          "icon": "jugcraft:aluminate_filter_press",
+          "text": [
+            "One Filter Press handles aluminate slurry and digestate. Aluminate produces aluminum hydroxide, bauxite residue, lye at outlet 1 and water at outlet 2. Digestate produces fiber and water at outlet 1; its second liquid/solid outlets remain unused.",
+            "Open Recipes to search and preview jobs. Lock recipe limits new batches; Automatic restores input-based selection. Locks persist across saves; current batches finish unchanged. Drain incompatible input AND output fluids and remove other feed items before changing jobs. Empty outputs for sustained automation. You can use one machine for different jobs or dedicate identical copies to separate factory lines.",
+            "Three wide, four deep and three tall. 1000 mB slurry -> two Aluminum Hydroxide, one Bauxite Residue, 200 mB recovered lye and 500 mB water, 160 ticks at 32 JE/t. Return lye to digestion, adding 50 mB makeup per bauxite. Both liquid and both solid outputs must have room.",
+            "One residue + one clay ball + two gravel craft two cobblestone as stabilized game filler. Raw bauxite residue is not fertilizer or digester feed. The press uses visible filter plates, clamping rods, a collection trough and separate output drawers.",
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: slurry midway up in the middle, recovered lye low left and water low middle. Two solid output hatches sit on the right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_tank",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_tank"
+            ],
+            "result": "jugcraft:aluminate_filter_press",
+            "count": 1
+          }
+        },
+        {
+          "title": "Industrial Oven",
+          "icon": "jugcraft:alumina_calciner",
+          "text": [
+            "One Industrial Oven calcines aluminum hydroxide, dries magnesium chloride solution and sinters PTFE blanks. A new lower-rear solution inlet feeds drying; the old solid hatches and condensate outlet stay in place. Solid recipes require the solution tank to be empty. All recipes retain their original costs and products.",
+            "Open Recipes to search and preview jobs. Lock recipe limits new batches; Automatic restores input-based selection. Locks persist across saves; current batches finish unchanged. Drain incompatible input AND output fluids and remove other feed items before changing jobs. Empty outputs for sustained automation. You can use one machine for different jobs or dedicate identical copies to separate factory lines.",
+            "Three wide, four deep and three tall. Two hydroxide -> two existing Alumina + 250 mB recovered water, 200 ticks at 64 JE/t. Reuse this water with the press water. Enclosed ceramic kiln, guarded drive, insulated service hood and front charge door; all heating is paid electricity. Alumina keeps its existing catalyst and metal consumers.",
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: recovered water midway up at the left, alumina in the right hatch. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_plate",
+              "minecraft:bricks",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:alumina_calciner",
+            "count": 1
+          }
+        },
+        {
+          "title": "Aluminum Reduction Cell",
+          "icon": "jugcraft:aluminum_reduction_cell",
+          "text": [
+            "Three wide/deep and four tall. Two Alumina + one Coke -> two existing Aluminum Ingots + 250 mB CO2, 400 ticks at 96 JE/t. Copper busbars and clay bricks start the line without requiring its own aluminum. Carbon is consumed once per batch; there is no electrode repair meter.",
+            "Default collect-and-vent excess CO2, or select Keep gas before starting. Ingots must always fit. Existing aluminum wire, cable, plates and structural/vehicle recipes remain the useful destinations. The larger molten-salt hall, alloy expansion and new specialized products are later work.",
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: CO2 midway up at the left, ingots in the right hatch. Front right: lower hatch takes alumina, upper hatch takes coke. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:copper_cable",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "minecraft:bricks",
+              "jugcraft:basic_circuit",
+              "minecraft:bricks",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:aluminum_reduction_cell",
+            "count": 1
+          }
+        },
+        {
+          "title": "Coastal Seawater Intake",
+          "icon": "jugcraft:coastal_seawater_intake",
+          "text": [
+            "Renewable coastal resource collection: 200 mB seawater for 320 JE per one-second stroke (average 10 mB and 16 JE/t). Place the lower front-right intake against open water at sea level (water surface block Y = sea level - 1) in the Overworld. It samples a 3 by 3 water patch extending forward from its mouth, two source-water blocks deep. Every column must be beach/ocean-tagged and open to the sky; the loaded surrounding region must contain ocean biome. No shoreline blocks are removed.",
+            "An inland pond, elevated bucket pool, flowing water, sodium-chloride brine or pipe-fed ordinary water cannot provide this mineral feed. Coastal restoration of a qualifying shore is allowed; vanilla does not record historical ownership of water blocks. No remote intake or chunk loading. Power and output space are required; pause stops collection.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_tank",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:coastal_seawater_intake",
+            "count": 1
+          }
+        },
+        {
+          "title": "Concentrator",
+          "icon": "jugcraft:brine_concentrator",
+          "text": [
+            "One Concentrator handles coastal seawater and ordinary sulfuric acid. It replaces the need to build a separate Acid Concentrator. Product leaves outlet 1; recovered water leaves outlet 2. Each process keeps its original ingredients, yields, time and power.",
+            "Open Recipes to search and preview jobs. Lock recipe limits new batches; Automatic restores input-based selection. Locks persist across saves; current batches finish unchanged. Drain incompatible input AND output fluids and remove other feed items before changing jobs. Empty outputs for sustained automation. You can use one machine for different jobs or dedicate identical copies to separate factory lines.",
+            "1000 mB distinct coastal seawater -> 250 mB magnesium-bearing brine + 750 mB recovered water. 200 ticks at 32 JE/t. The short evaporator column, supported condenser and collection sump share one skid. Ordinary water and sodium-chloride brine are rejected.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_tank",
+              "jugcraft:copper_cable",
+              "jugcraft:electric_motor",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:brine_concentrator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Mineral Conditioning Station",
+          "icon": "jugcraft:mineral_conditioner",
+          "text": [
+            "250 mB magnesium brine + 250 mB lye -> one magnesium hydroxide + 500 mB spent mineral wash; 160 ticks at 24 JE/t. Then change feeds: one hydroxide + 500 mB existing hydrochloric acid -> 500 mB prepared chloride solution and 250 mB water; 160 ticks at 32 JE/t.",
+            "Drain old tanks before switching recipes. Settle 500 mB spent wash into one existing salt and 250 mB water for 120 ticks at 16 JE/t; the rest is evaporation/loss in game accounting. The same station treats titanium-distillation wash. Neither wash nor ordinary salt brine supplies magnesium.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:mineral_conditioner",
+            "count": 1
+          }
+        },
+        {
+          "title": "Chloride Drying Oven",
+          "icon": "jugcraft:chloride_dryer",
+          "text": [
+            "Optional specialist model: existing machines, recipes, inventories and production remain supported. For a new factory, build the Industrial Oven, which also runs this machine's processes. This specialist stays craftable for existing layouts but is omitted from the main creative machinery list.",
+            "500 mB prepared magnesium chloride solution -> one Dry Magnesium Chloride and 500 mB recovered condensate. 160 ticks at 48 JE/t includes paid conditioning/drying. Feed the dry item to the magnesium cell, never aqueous solution.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_gear",
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_tank",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:chloride_dryer",
+            "count": 1
+          }
+        },
+        {
+          "title": "Magnesium Electrolysis Cell",
+          "icon": "jugcraft:magnesium_electrolysis_cell",
+          "text": [
+            "One dry prepared MgCl2 -> one Magnesium Ingot + 250 mB chlorine; 400 ticks at 64 JE/t. Automatic internal heating is included in paid work. Capture all chlorine: a full outlet stops the batch. Steel, copper and clay build the first cell. Titanium recovery returns the same dry chloride, not extra metal; the same paid recipe handles both supplies.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:copper_cable",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "minecraft:bricks",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:magnesium_electrolysis_cell",
+            "count": 1
+          }
+        },
+        {
+          "title": "Titanium Chlorination Vessel",
+          "icon": "jugcraft:titanium_chlorinator",
+          "text": [
+            "One existing Raw Titanium + one Coke + 500 mB chlorine -> 1000 mB crude titanium chloride + 250 mB CO2. 240 ticks at 64 JE/t. Default captures CO2 that fits and vents excess; Keep gas stops for full storage. The crude product always needs room.",
+            "Existing Chemical Distillation Station: 1000 mB crude chloride -> 750 mB purified chloride + 250 mB spent mineral wash, 240 ticks at 48 JE/t. Empty ethanol/stillage before changing jobs. Process wash in the Mineral Conditioning Station.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:titanium_chlorinator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Titanium Reduction Retort",
+          "icon": "jugcraft:titanium_reduction_retort",
+          "text": [
+            "750 mB purified titanium chloride + two Magnesium Ingots -> one existing clean Titanium Sponge + two Dry Magnesium Chloride. 400 ticks at 96 JE/t includes internal separation and sponge cleanup. Both drawers must fit. Re-electrolyze both salt items to recover two Mg and 500 mB chlorine; it costs power, never generates it.",
+            "The existing Arc Furnace melts each sponge into one titanium ingot. Existing titanium tools, armor and components use it. Old titanium recipes remain available. First construction uses steel/copper/ceramics, never its own titanium or magnesium output.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:bricks",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_tank",
+              "jugcraft:electric_motor",
+              "jugcraft:machine_casing",
+              "jugcraft:electric_motor"
+            ],
+            "result": "jugcraft:titanium_reduction_retort",
+            "count": 1
+          }
+        },
+        {
+          "title": "Polymer Molding Press",
+          "icon": "jugcraft:polymer_molding_press",
+          "text": [
+            "Fit one reusable mold in the mold socket; it is locked during a batch and never consumed or worn. All six products take 120 ticks at 32 JE/t. Housings/panels accept existing plastic pellets, PVC resin or new HDPE pellets through an explicit rigid-polymer tag. Fittings require PVC. Insulation, gaskets and hoses require rubber.",
+            "Four rigid stock -> one housing or panel; two PVC -> two fittings; two rubber -> three insulation pieces or two existing gaskets; three rubber -> one hose. Housing assembles machine casings; fittings reinforce bronze pipes into steel pipes; insulation assembles copper cable; hoses assemble pipe valves; panels combine with coke into existing carbon-composite building/vehicle panels. These are additional routes, not new gates on old recipes.",
+            "Six distinct molds are made from earlier steel plates and simple pattern items. There is no free offcut award: all allocated feed becomes the listed parts. The Polymer Extruder and Clean Polymer Reclaimer add continuous shaping and same-grade offcut recovery. Named ethylene, HDPE, LDPE and staged PVC now connect through the Monomer Preparation Unit and Polymerization Kettle.",
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:polymer_molding_press",
+            "count": 1
+          }
+        },
+        {
+          "title": "Monomer Preparation Unit",
+          "icon": "jugcraft:monomer_preparation_unit",
+          "text": [
+            "Refinery gas (1000 mB) yields 500 mB named ethylene. Renewable route: 1000 mB bioethanol yields 500 mB ethylene and 250 mB water, with paid dehydration. All process heat is included in JE use; no manual pressure controls.",
+            "500 mB ethylene + 500 mB chlorine -> 1000 mB ethylene dichloride; then 1000 mB dichloride -> 500 mB vinyl chloride and 500 mB hydrogen chloride gas. Absorb recovered HCl in the existing Chemical Reactor. Empty incompatible tank contents before switching jobs. Both outlets must fit; nothing is silently vented. Earlier PVC routes remain available.",
+            "Power: lower front-left. Solid feed: front-right. Finished product: rear-right middle; extrusion offcuts: rear-right upper. Fluid feed: rear middle; fluid products: rear bottom. Pause, Cancel, progress, tank levels, energy, tool locks and upgrade slots use the shared factory screen. Recipes are fictional game quantities."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "jugcraft:basic_circuit",
+              "jugcraft:copper_cable",
+              "jugcraft:electric_motor",
+              "jugcraft:machine_casing",
+              "jugcraft:electric_motor"
+            ],
+            "result": "jugcraft:monomer_preparation_unit",
+            "count": 1
+          }
+        },
+        {
+          "title": "Polymerization Kettle",
+          "icon": "jugcraft:polymerization_kettle",
+          "text": [
+            "1000 mB ethylene makes four HDPE or LDPE pellets according to the reusable insert in the protected socket. HDPE uses a catalyst cartridge; LDPE uses its process insert. These select distinct paid processing recipes; they are not consumed. PVC and rubber use existing vinyl chloride and butadiene respectively and need no insert.",
+            "HDPE substitutes for ordinary rigid stock in the existing Molding Press, making housings and vehicle panels. LDPE belongs to flexible film, not the rigid-stock tag. The kettle needs only earlier steel, copper and ceramics; HDPE tooling adds existing titanium/magnesium stock.",
+            "Power: lower front-left. Solid feed: front-right. Finished product: rear-right middle; extrusion offcuts: rear-right upper. Fluid feed: rear middle; fluid products: rear bottom. Pause, Cancel, progress, tank levels, energy, tool locks and upgrade slots use the shared factory screen. Recipes are fictional game quantities."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_tank",
+              "minecraft:bricks",
+              "jugcraft:basic_circuit",
+              "minecraft:bricks",
+              "jugcraft:electric_motor",
+              "jugcraft:machine_casing",
+              "jugcraft:electric_motor"
+            ],
+            "result": "jugcraft:polymerization_kettle",
+            "count": 1
+          }
+        },
+        {
+          "title": "Polymer Extruder",
+          "icon": "jugcraft:polymer_extruder",
+          "text": [
+            "Continuous shaping on a supported heated barrel, cooling bed and draw rollers. Install a reusable sheet, film, profile, hose or insulation die. Feed HDPE or existing PVC for sheets, LDPE for film, PVC for profiles, or rubber for hoses/insulation. Tool sockets lock during a batch; automation handles feed and both products through their marked hatches.",
+            "Each 160-tick batch at 48 JE/t consumes four stock units. It produces three sheets, films, profiles or insulation pieces, or one hose, plus one matching clean offcut. Both output drawers must have room before work starts. The existing Molding Press keeps its six molds and all prior recipes.",
+            "Power: lower front-left. Solid feed: front-right. Finished product: rear-right middle; extrusion offcuts: rear-right upper. Fluid feed: rear middle; fluid products: rear bottom. Pause, Cancel, progress, tank levels, energy, tool locks and upgrade slots use the shared factory screen. Recipes are fictional game quantities."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:polymer_extruder",
+            "count": 1
+          }
+        },
+        {
+          "title": "Clean Polymer Reclaimer",
+          "icon": "jugcraft:polymer_reclaimer",
+          "text": [
+            "Four same-grade clean offcuts return one stock unit for 120 ticks at 32 JE/t. Three unused LDPE films or PVC profiles also return one matching stock. There is no recipe for mixed trash, other grades, placed blocks or assembled machinery. Recycling pays power and loses material every cycle.",
+            "Film wraps cable insulation and cushions machine housings. PVC profiles brace housings and assemble existing colored-plastic blocks. Sheets, insulation and hoses use all their existing recipes. Look up exact construction uses in JEI.",
+            "Power: lower front-left. Solid feed: front-right. Finished product: rear-right middle; extrusion offcuts: rear-right upper. Fluid feed: rear middle; fluid products: rear bottom. Pause, Cancel, progress, tank levels, energy, tool locks and upgrade slots use the shared factory screen. Recipes are fictional game quantities."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:polymer_reclaimer",
+            "count": 1
+          }
+        },
+        {
+          "title": "Acid Concentrator",
+          "icon": "jugcraft:acid_concentrator",
+          "text": [
+            "Optional specialist model: existing machines, recipes, inventories and production remain supported. For a new factory, build the Concentrator, which also runs this machine's processes. This specialist stays craftable for existing layouts but is omitted from the main creative machinery list.",
+            "Separate 1000 mB ordinary sulfuric acid into 750 mB concentrate and 250 mB recovered water. Both outlets must fit. Reuse the existing starter acid factory; this is paid concentration, not a second free acid source.",
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "jugcraft:copper_cable",
+              "jugcraft:basic_circuit",
+              "jugcraft:copper_cable",
+              "minecraft:bricks",
+              "jugcraft:electric_motor",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:acid_concentrator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Chemical Dissolution Chamber",
+          "icon": "jugcraft:chemical_dissolution_chamber",
+          "text": [
+            "Mine fluorite in snowy regions, including occasional exposed high mountain veins. The Mineral Conditioning Station washes one fluorite with 250 mB water into concentrate. Concentrate plus 750 mB concentrated sulfuric acid yields 500 mB hydrogen fluoride gas and one calcium sulfate. The washed-out water is consumed; these are game units, not chemical instructions.",
+            "Optional residue recovery: two calcium sulfate + 250 mB water in the Conditioner yields one Prepared Gypsum Binder, paying 160 ticks at 48 JE/t with a material loss. One binder + two sand + gravel crafts two white concrete powder as game construction filler. The chamber is ceramic-lined starter equipment and needs no PTFE. Retain the gas in tanks or cylinders; this machine has no gas vent.",
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_tank",
+              "minecraft:bricks",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:basic_circuit",
+              "jugcraft:machine_casing"
+            ],
+            "result": "jugcraft:chemical_dissolution_chamber",
+            "count": 1
+          }
+        },
+        {
+          "title": "Fluorocarbon Reactor",
+          "icon": "jugcraft:fluorocarbon_reactor",
+          "text": [
+            "500 mB methane + 1500 mB chlorine -> 500 mB chloroform + 1500 mB hydrogen chloride. Then 500 mB chloroform + 1000 mB hydrogen fluoride -> 500 mB chlorodifluoromethane + 1000 mB hydrogen chloride. Empty incompatible feeds/products before changing jobs; reserve room for every output.",
+            "Recovered hydrogen chloride goes to the existing Chemical Reactor absorption recipe. Methane can come from the biogas chain; chlorine comes from electrolysis or the magnesium line. No elemental fluorine is required for this route.",
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_tank"
+            ],
+            "result": "jugcraft:fluorocarbon_reactor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Fluoromonomer Cracker",
+          "icon": "jugcraft:fluoromonomer_cracker",
+          "text": [
+            "1000 mB chlorodifluoromethane -> 500 mB tetrafluoroethylene (TFE) + 500 mB hydrogen chloride. Work and heat are paid by JE. Feed 1000 mB TFE to the Polymerization Kettle with its reusable PTFE Process Insert to make four PTFE powder.",
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_plate",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "jugcraft:steel_gear",
+              "jugcraft:copper_cable",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_tank"
+            ],
+            "result": "jugcraft:fluoromonomer_cracker",
+            "count": 1
+          }
+        },
+        {
+          "title": "PTFE Sintering Oven",
+          "icon": "jugcraft:ptfe_sintering_oven",
+          "text": [
+            "Optional specialist model: existing machines, recipes, inventories and production remain supported. For a new factory, build the Industrial Oven, which also runs this machine's processes. This specialist stays craftable for existing layouts but is omitted from the main creative machinery list.",
+            "PTFE is shaped before sintering. Use the Molding Press gasket, fitting or panel mold with 1, 2 or 3 powder respectively to make one unsintered seal, fitting or liner. The oven finishes each blank for 240 ticks at 80 JE/t.",
+            "Alternative liner route: mix four powder with 250 mB lubricant in the Mineral Conditioner, yielding four paste charges. The Extruder sheet die consumes four charges for one liner blank plus one clean unsintered offcut. Four offcuts return one powder in the Reclaimer, paying energy and losing material. Finished PTFE parts are not melt-recycled or substituted for generic plastic.",
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+          ],
+          "craft": {
+            "grid": [
+              "minecraft:bricks",
+              "jugcraft:steel_gear",
+              "minecraft:bricks",
+              "jugcraft:copper_cable",
+              "jugcraft:basic_circuit",
+              "jugcraft:copper_cable",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:ptfe_sintering_oven",
+            "count": 1
+          }
+        },
+        {
+          "title": "Lined Fluorochemical Reactor",
+          "icon": "jugcraft:lined_fluorochemical_reactor",
+          "text": [
+            "Build with one finished PTFE seal, fitting and liner, two titanium ingots, two motors, a basic circuit and machine casing. This upgrade runs the same two fluorocarbon recipes in two independent lanes with 8000 mB tanks and 90% energy per lane, rounded up each tick. The starter reactor can produce every input to this upgrade.",
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:ptfe_seal",
+              "jugcraft:ptfe_fitting",
+              "jugcraft:ptfe_liner",
+              "jugcraft:titanium_ingot",
+              "jugcraft:basic_circuit",
+              "jugcraft:titanium_ingot",
+              "jugcraft:electric_motor",
+              "jugcraft:machine_casing",
+              "jugcraft:electric_motor"
+            ],
+            "result": "jugcraft:lined_fluorochemical_reactor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Four shared process machines",
+          "icon": "jugcraft:brine_concentrator",
+          "text": [
+            "Build a Concentrator for seawater or acid; a Gas Scrubber for synthesis gas, biogas or fermentation gas; a Filter Press for aluminate or digestate; and an Industrial Oven for drying, calcination or PTFE sintering. Each handles multiple resources without a separate named machine for every output.",
+            "The five older specialist designs stay craftable and continue working in existing factories. The four recommended machines also keep their original saved block IDs, inventories and ports. The Oven gains one connected solution inlet on its lower rear face.",
+            "Open Recipes to search and preview inputs, outputs and costs. Lock recipe chooses the only job new batches may start; Automatic restores input-driven selection. Saved locks also filter automated inputs. Drain incompatible input AND output fluids and clear other feed items when changing jobs; running batches finish unchanged."
           ]
         }
       ]

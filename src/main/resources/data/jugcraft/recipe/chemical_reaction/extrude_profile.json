@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_extrusion",
+  "items": [
+    {
+      "ingredient": "jugcraft:pvc_resin",
+      "count": 4
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:pvc_profile",
+      "count": 3
+    },
+    {
+      "id": "jugcraft:pvc_offcut",
+      "count": 1
+    }
+  ],
+  "tool": "jugcraft:profile_extrusion_die",
+  "energy_per_tick": 48,
+  "time": 160
+}

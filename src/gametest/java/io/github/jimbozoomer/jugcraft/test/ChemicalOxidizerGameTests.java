@@ -215,9 +215,9 @@ public class ChemicalOxidizerGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(2, 1, 2), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 2 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/oxidizer_carbon_dioxide"))
+		helper.assertTrue(own.size() == 4 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/oxidizer_carbon_dioxide"))
 				&& own.get(1).id().equals(Jugcraft.id("chemical_reaction/oxidizer_sulfur_dioxide"))
-				&& own.stream().allMatch(entry -> entry.recipe().time() == TICKS), "Its two recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());
+				&& own.stream().limit(2).allMatch(entry -> entry.recipe().time() == TICKS), "Two original plus two expanded recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		long reactor = FluidRecipes.recipes(level.getServer(), MachineKind.CHEMICAL_REACTOR).stream()
 				.filter(recipe -> recipe.fluidResults().stream().anyMatch(result -> result.fluid() == PetroFluids.SULFUR_DIOXIDE.fluid()))
 				.count();

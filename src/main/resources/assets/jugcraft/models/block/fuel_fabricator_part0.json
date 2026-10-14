@@ -1,6 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
+    "dp_rubber": "jugcraft:block/dp_rubber",
     "nu_cabinet": "jugcraft:block/nu_cabinet",
     "nu_cap": "jugcraft:block/nu_cap",
     "nu_centrifuge": "jugcraft:block/nu_centrifuge",
@@ -9,6 +10,8 @@
     "nu_hazard": "jugcraft:block/nu_hazard",
     "nu_pipe_blue": "jugcraft:block/nu_pipe_blue",
     "nu_steel": "jugcraft:block/nu_steel",
+    "power_port": "jugcraft:block/power_port",
+    "sp_brass": "jugcraft:block/sp_brass",
     "particle": "jugcraft:block/sp_iron_plate",
     "front": "jugcraft:block/fuel_fabricator_front"
   },
@@ -65,6 +68,106 @@
         },
         "down": {
           "texture": "#nu_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        14.875,
+        4.0,
+        4.0
+      ],
+      "to": [
+        16.125,
+        12.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#power_port",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            8.0,
+            8.0
+          ]
+        },
+        "up": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        },
+        "down": {
+          "texture": "#sp_brass",
+          "uv": [
+            0,
+            0,
+            1.25,
+            8.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        14.75,
+        5.75,
+        5.75
+      ],
+      "to": [
+        15.1,
+        10.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber"
+        },
+        "south": {
+          "texture": "#dp_rubber"
+        },
+        "east": {
+          "texture": "#dp_rubber"
+        },
+        "west": {
+          "texture": "#dp_rubber"
+        },
+        "up": {
+          "texture": "#dp_rubber"
+        },
+        "down": {
+          "texture": "#dp_rubber"
         }
       }
     }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nickel_ingot",
+    "jugcraft:alumina",
+    "minecraft:brick"
+  ],
+  "result": {
+    "id": "jugcraft:ptfe_process_insert",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

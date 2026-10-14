@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:mineral_conditioning",
+  "fluids": [
+    {
+      "fluid": "jugcraft:spent_mineral_wash",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:salt",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 16,
+  "time": 120
+}

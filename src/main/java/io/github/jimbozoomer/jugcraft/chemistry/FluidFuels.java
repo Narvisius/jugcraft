@@ -20,6 +20,8 @@ public final class FluidFuels {
 	/** Hydrogen in the fuel cell: 128,000 JE a bucket, less than the 204,800 JE the electrolytic cell spends making
 	 * a bucket of it (four buckets of brine), so electrolysis and the fuel cell are never a power loop. */
 	public static final int HYDROGEN = 128;
+	public static final int METHANE = 448;
+	public static final int GAS_BURNING_METHANE = 256;
 	/**
 	 * The Gas Burning Generator (a machine form, docs/features/industrial-gas-burning-generator.md) burns hydrogen at
 	 * {@link #HYDROGEN}, the Fuel Cell's value, and makes this many JE a tick from it, the owner's selected starter
@@ -31,8 +33,6 @@ public final class FluidFuels {
 	 * the owner's selected 256 JE a tick. Making a mB over the nickel bed takes four of hydrogen, so even with the
 	 * cheapest electrolysis it costs far more than it returns.
 	 */
-	public static final int METHANE = 448;
-	public static final int GAS_BURNING_METHANE = 256;
 
 	/**
 	 * The Bio Generator (docs/features/industrial-bio-generator.md), the lower-output generator for bioethanol and later

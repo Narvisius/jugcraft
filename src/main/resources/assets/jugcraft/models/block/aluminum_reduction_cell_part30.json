@@ -1,0 +1,126 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "copper_busbar": "jugcraft:block/copper_busbar",
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_gauge": "jugcraft:block/dp_gauge",
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "dp_olive": "jugcraft:block/dp_olive",
+    "dp_rubber": "jugcraft:block/dp_rubber",
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dw_ribbed_steel": "jugcraft:block/dw_ribbed_steel",
+    "dw_steel_plate": "jugcraft:block/dw_steel_plate",
+    "power_port": "jugcraft:block/power_port",
+    "sp_copper": "jugcraft:block/sp_copper",
+    "particle": "jugcraft:block/dp_olive"
+  },
+  "elements": [
+    {
+      "from": [
+        8.0,
+        0,
+        0
+      ],
+      "to": [
+        11.0,
+        5.0,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#dw_steel_plate"
+        },
+        "west": {
+          "texture": "#dw_steel_plate"
+        },
+        "up": {
+          "texture": "#dw_steel_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        5.0,
+        0
+      ],
+      "to": [
+        12.0,
+        8.0,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#sp_copper"
+        },
+        "west": {
+          "texture": "#sp_copper"
+        },
+        "up": {
+          "texture": "#sp_copper"
+        },
+        "down": {
+          "texture": "#sp_copper"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3.0,
+        3.0
+      ],
+      "to": [
+        10.0,
+        6.0,
+        6.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#copper_busbar"
+        },
+        "south": {
+          "texture": "#copper_busbar"
+        },
+        "east": {
+          "texture": "#copper_busbar"
+        },
+        "up": {
+          "texture": "#copper_busbar"
+        },
+        "down": {
+          "texture": "#copper_busbar"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3.0,
+        13.0
+      ],
+      "to": [
+        10.0,
+        6.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#copper_busbar"
+        },
+        "south": {
+          "texture": "#copper_busbar"
+        },
+        "east": {
+          "texture": "#copper_busbar"
+        },
+        "up": {
+          "texture": "#copper_busbar"
+        },
+        "down": {
+          "texture": "#copper_busbar"
+        }
+      }
+    }
+  ]
+}

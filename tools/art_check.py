@@ -659,12 +659,18 @@ def _see_through(faces, scale=H1_SCALE):
 
 
 def _quad_files():
-    files = sorted(ASSETS.glob("*_quads.json")) + [ASSETS / "kinetic_rotors.json", ASSETS / "worn_models.json"]
+    files = sorted(ASSETS.glob("*_quads.json")) + [ASSETS / "kinetic_rotors.json", ASSETS / "worn_models.json",
+                                                PACK / "machine_connection_quads.json"]
     for path in files:
         if not path.exists():
             continue
         data = json.loads(path.read_text(encoding="utf-8"))
         for name, raw in data.items():
+            if path.name == "machine_connection_quads.json":
+                for index, port in enumerate(raw):
+                    label = "classic/" + path.name if path.parent == PACK else path.name
+                    yield label, f"{name}/{index}", port["quads"]
+                continue
             raw = raw.get("quads") if isinstance(raw, dict) else raw
             if isinstance(raw, list) and raw:
                 yield path.name, name, raw

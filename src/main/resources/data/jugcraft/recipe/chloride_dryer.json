@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BGB",
+    "TCT",
+    "WKW"
+  ],
+  "key": {
+    "B": "minecraft:bricks",
+    "C": "jugcraft:basic_circuit",
+    "G": "jugcraft:steel_gear",
+    "K": "jugcraft:machine_casing",
+    "T": "jugcraft:steel_tank",
+    "W": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:chloride_dryer",
+    "count": 1
+  }
+}

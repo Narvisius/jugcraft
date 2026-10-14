@@ -78,6 +78,8 @@ public final class MachineForm {
 	private final boolean upgrades;
 	private final int warmupTicks;
 	private final boolean companionAssistance;
+	private final int waterDrainOutput;
+	private final @Nullable Identifier ventGas;
 	private final List<FormFuel> fuels;
 	/** Output tanks (by index) whose excess is vented: a full one never stops the work. */
 	private final boolean[] vented;
@@ -90,6 +92,11 @@ public final class MachineForm {
 		this.upgrades = builder.upgrades;
 		this.warmupTicks = builder.warmup;
 		this.companionAssistance = builder.companionAssistance;
+		this.waterDrainOutput = builder.waterDrainOutput;
+		this.ventGas = builder.ventGas;
+		if (waterDrainOutput < -1 || waterDrainOutput >= builder.outputTanks.size()) {
+			throw invalid("has no output tank for its water drain");
+		}
 		this.fuels = List.copyOf(builder.fuels);
 		if (builder.layers.isEmpty() || builder.layers.getFirst().length == 0) {
 			throw invalid("has no layers");
@@ -443,7 +450,8 @@ public final class MachineForm {
 
 	/** Whether this form may run {@code recipe}: it must declare the recipe's capability. */
 	public boolean runs(FluidRecipe recipe) {
-		return recipe.machine() == family && capabilities.contains(recipe.capability());
+		return recipe.machine() == family && capabilities.contains(recipe.capability())
+				&& recipe.fluids().stream().noneMatch(FluidRecipe.FluidAmount::retained);
 	}
 
 	/** Whether this is a generator form: it burns {@link #fuels()} and gives power out. */
@@ -540,6 +548,10 @@ public final class MachineForm {
 	 * Paid ticks at the start of a batch begun from cold that the machine reports as warming. The owner chose heating
 	 * included in the processing power: warming is part of a batch's paid work, never an extra charge.
 	 */
+	/** Overflow output: plain water, or the exact gas declared by ventGas; -1 retains every output. */
+	public int waterDrainOutput() { return waterDrainOutput; }
+	public @Nullable Identifier ventGas() { return ventGas; }
+
 	public int warmupTicks() {
 		return warmupTicks;
 	}
@@ -566,6 +578,8 @@ public final class MachineForm {
 		private boolean upgrades;
 		private int warmup;
 		private boolean companionAssistance;
+		private int waterDrainOutput = -1;
+		private @Nullable Identifier ventGas;
 		private final List<FormFuel> fuels = new ArrayList<>();
 		private final List<String> vents = new ArrayList<>();
 
@@ -624,6 +638,17 @@ public final class MachineForm {
 
 		public Builder upgrades() {
 			this.upgrades = true;
+			return this;
+		}
+
+		public Builder gasVentOutput(int output, Identifier gas) {
+			this.waterDrainOutput = output;
+			this.ventGas = java.util.Objects.requireNonNull(gas);
+			return this;
+		}
+
+		public Builder waterDrainOutput(int output) {
+			this.waterDrainOutput = output;
 			return this;
 		}
 

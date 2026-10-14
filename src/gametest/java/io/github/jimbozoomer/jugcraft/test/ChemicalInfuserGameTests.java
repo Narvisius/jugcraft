@@ -345,7 +345,7 @@ public class ChemicalInfuserGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(2, 1, 2), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 6 && own.get(0).id().equals(Jugcraft.id("gas_synthesis/infuser_biogas_upgrading"))
+		helper.assertTrue(own.size() == 11 && own.get(0).id().equals(Jugcraft.id("gas_synthesis/infuser_biogas_upgrading"))
 				&& own.get(0).recipe().time() == METHANATION_TICKS && own.get(0).recipe().tool().isPresent()
 				&& own.get(1).id().equals(Jugcraft.id("gas_synthesis/infuser_carbon_dioxide_methanation"))
 				&& own.get(1).recipe().time() == METHANATION_TICKS && own.get(1).recipe().tool().isPresent()
@@ -356,7 +356,7 @@ public class ChemicalInfuserGameTests {
 				&& own.get(4).id().equals(Jugcraft.id("gas_synthesis/infuser_hydrogen_chloride")) && own.get(4).recipe().time() == TICKS
 				&& own.get(4).recipe().tool().isEmpty()
 				&& own.get(5).id().equals(Jugcraft.id("gas_synthesis/infuser_sulfur_trioxide")) && own.get(5).recipe().time() == 100
-				&& own.get(5).recipe().tool().isPresent(), "Its six recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());
+				&& own.get(5).recipe().tool().isPresent(), "Six original plus five expanded recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		long converter = FluidRecipes.recipes(level.getServer(), MachineKind.SYNTHESIS_CONVERTER).stream()
 				.filter(recipe -> recipe.fluidResults().stream().anyMatch(result -> result.fluid() == PetroFluids.HYDROGEN_CHLORIDE.fluid()))
 				.count();
