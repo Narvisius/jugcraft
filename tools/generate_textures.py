@@ -1226,6 +1226,9 @@ def machines():
     save(battery_front(954), "block", "capacitor_bank_front")
     save(battery_front(978), "block", "lithium_battery_bank_front")
     save(battery_front(985), "block", "flow_battery_front")
+    for seed, name in ((990, "gas_centrifuge_cascade_front"), (991, "fuel_fabricator_front")):
+        save(window(seed, [(40, 46, 50), (52, 60, 64)]), "block", name)
+        save(window(seed, [(40, 46, 50)], glow=[(90, 230, 130), (170, 250, 190), (60, 190, 100)]), "block", name + "_on")
     save(window(980, [(40, 46, 50), (52, 60, 64)]), "block", "lithography_station_front")
     save(window(980, [(40, 46, 50)], glow=[(80, 210, 230), (150, 240, 250), (60, 170, 200)]), "block", "lithography_station_front_on")
     save(tank_side(955), "block", "steel_tank_front")
@@ -1502,6 +1505,39 @@ def main():
     # The tower's building blocks, pads and pickups at 64 px (tools/tower_art.py), over the 16 px versions above.
     import tower_art
     tower_art.write_all(str(ROOT / "src" / "main" / "resources" / "assets" / "jugcraft"))
+
+    import power_lines
+    entity_dir = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "entity"
+    entity_dir.mkdir(parents=True, exist_ok=True)
+    power_lines.draw_sheet().save(entity_dir / "power_lines.png", optimize=True)
+
+    import nuclear
+    for name, img in nuclear.draw_item_textures().items():
+        save(img, "item", name)
+    for name, img in nuclear.draw_block_textures().items():
+        save(img, "block", name)
+    nuclear.draw_sheet().save(entity_dir / "hazmat.png", optimize=True)
+    import plant_office6
+    plant_office6.draw_uniform_sheet().save(entity_dir / "uniform.png", optimize=True)
+    import plant_office7
+    plant_office7.draw_rack_sheet().save(entity_dir / "storage_rack.png", optimize=True)
+    import storage_tank
+    storage_tank.draw_sheet().save(entity_dir / "storage_tank.png", optimize=True)
+    import plant_panels
+    plant_panels.live_sheet().save(entity_dir / "live_panel.png", optimize=True)
+    # The blank equipment layer the 3D-drawn suits point at (equipment assets need one layer).
+    (entity_dir / "equipment" / "humanoid").mkdir(parents=True, exist_ok=True)
+    Image.new("RGBA", (64, 32), (0, 0, 0, 0)).save(entity_dir / "equipment" / "humanoid" / "blank.png", optimize=True)
+    (TEX / "gui").mkdir(parents=True, exist_ok=True)
+    nuclear.draw_hud_trefoil().save(TEX / "gui" / "radiation_trefoil.png", optimize=True)
+    nuclear.draw_scram_button().save(TEX / "gui" / "reactor_scram.png", optimize=True)
+    nuclear.draw_equipment_sheet().save(entity_dir / "nuclear_equipment.png", optimize=True)
+    # The equipment's and power lines' miniature items are drawn in flat-colour versions of their sheets.
+    import structure_items
+    structure_items.write_item_sheets(entity_dir)
+    (TEX / "particle").mkdir(parents=True, exist_ok=True)
+    for name, img in nuclear.draw_plume_frames().items():
+        img.save(TEX / "particle" / f"{name}.png", optimize=True)
 
     import tank_display
     tank_display.draw_all(save)

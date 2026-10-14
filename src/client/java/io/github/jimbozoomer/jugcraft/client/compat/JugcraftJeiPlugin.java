@@ -33,6 +33,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import org.jspecify.annotations.Nullable;
 
@@ -130,6 +131,7 @@ public class JugcraftJeiPlugin implements IModPlugin {
 		addAlchemyInfo(registration);
 		// Roadmap step 19: rings are forged at the Artificer's Bench, their properties rolled once on the server.
 		registration.addIngredientInfo(item("jugcraft:resonant_ring"), Component.translatable("jei.jugcraft.artifice.ring"));
+		addAcquisitionInfo(registration);
 	}
 
 	@Override
@@ -302,6 +304,34 @@ public class JugcraftJeiPlugin implements IModPlugin {
 			registration.addIngredientInfo(item("jugcraft:mortar"), Component.translatable("jei.jugcraft.alchemy.mortar"));
 		} catch (Exception e) {
 			Jugcraft.LOGGER.warn("Could not read the alchemy ingredients for JEI", e);
+		}
+	}
+
+	/**
+	 * Where the things only a ritual or a lair boss gives come from (recipe_view.json "acquisition_info",
+	 * tools/acquisition.py): an information page each, as no recipe shows them. The pages state the default data's
+	 * chances and offerings, and say so: a server's data pack that changes them is not seen here.
+	 */
+	private static void addAcquisitionInfo(IRecipeRegistration registration) {
+		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(DATA);
+		if (resource.isEmpty()) {
+			return;
+		}
+		try (Reader reader = resource.get().openAsReader()) {
+			JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
+			if (!root.has("acquisition_info")) {
+				return;
+			}
+			for (JsonElement element : root.getAsJsonArray("acquisition_info")) {
+				JsonObject row = element.getAsJsonObject();
+				Item item = item(row.get("item").getAsString());
+				if (item != Items.AIR) {
+					registration.addIngredientInfo(item,
+							Component.translatable("jei.jugcraft.acquire." + row.get("key").getAsString()));
+				}
+			}
+		} catch (Exception e) {
+			Jugcraft.LOGGER.warn("Could not read where ritual and lair rewards come from, for JEI", e);
 		}
 	}
 

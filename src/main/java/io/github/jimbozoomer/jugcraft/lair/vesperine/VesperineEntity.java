@@ -7,6 +7,7 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.LoopType;
 import com.geckolib.util.GeckoLibUtil;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
 import io.github.jimbozoomer.jugcraft.lair.LairBosses;
@@ -14,12 +15,11 @@ import io.github.jimbozoomer.jugcraft.lair.LairBrazierBlock;
 import io.github.jimbozoomer.jugcraft.lair.LairExitBlock;
 import io.github.jimbozoomer.jugcraft.lair.LairInstance;
 import io.github.jimbozoomer.jugcraft.lair.LairMoonBlock;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
@@ -72,7 +72,8 @@ import org.jspecify.annotations.Nullable;
  * her until they are struck down or the four ward braziers are lit again, and then she slams down.
  *
  * <p>Every attack has a wind-up you can read, a strike and a recovery ({@link Attack}); the numbers are here, in one
- * place, and in tools/vesperine.py. Each participant (whoever hurt her or her skulls) gets their own loot
+ * place, and in tools/vesperine.py. Each player who qualified in her fight ({@link Encounter}: a blow, healing, a ward
+ * or one of her objectives) gets their own loot
  * ({@link VesperineLoot}); left alone in her arena she goes back to her throne and heals. Bound to a lair instance she
  * vanishes with it; one with no instance (a test's) keeps to where she was put.
  */
@@ -231,7 +232,8 @@ public class VesperineEntity extends Monster implements GeoEntity {
 	private final List<UUID> souls = new ArrayList<>();
 	private @Nullable UUID scythe;
 	private int unarmedTicks;
-	private final Map<UUID, Float> damageBy = new HashMap<>();
+	/** This fight: who took part and how (Concordance Chunk A); her arena is round her anchor. */
+	private final Encounter encounter = new Encounter(this, () -> anchor);
 	private @Nullable UUID lastAttacker;
 	private Vec3 lungeDirection = Vec3.ZERO;
 	private double lunged;
@@ -364,6 +366,9 @@ public class VesperineEntity extends Monster implements GeoEntity {
 			discard();
 			return;
 		}
+		if (phase != Phase.SEATED && isAlive() && !encounter.underway()) {
+			encounter.begin();  // a fight back from a save keeps a fresh record of who takes part
+		}
 		resetFallDistance();
 		bossBar.setProgress(getHealth() / getMaxHealth());
 		entityData.set(GUARDS, skullsAlive(level));
@@ -448,6 +453,7 @@ public class VesperineEntity extends Monster implements GeoEntity {
 		phase = Phase.RISING;
 		phaseTicks = 0;
 		setAction(Action.RISING);
+		encounter.begin();
 		bossBar.setVisible(true);
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.BELL_RESONATE, SoundSource.HOSTILE, 2.0F, 0.5F);
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.SOUL_ESCAPE.value(), SoundSource.HOSTILE, 2.0F, 0.6F);
@@ -1029,17 +1035,36 @@ public class VesperineEntity extends Monster implements GeoEntity {
 		}
 	}
 
-	/** The four ward braziers of her lair (none with no lair). */
+	/**
+	 * The four ward braziers of her lair; with no lair (a test's arena), where they would stand round her arena, the
+	 * same places relative to it (nothing is there unless someone builds a brazier).
+	 */
 	public List<BlockPos> wards(ServerLevel level) {
 		LairInstance open = lairInstance(level);
-		if (open == null) {
-			return List.of();
-		}
 		List<BlockPos> out = new ArrayList<>();
+		BlockPos centre = BlockPos.containing(anchor);
 		for (BlockPos ward : HollowAcre.WARDS) {
-			out.add(open.origin().offset(ward));
+			out.add(open != null ? open.origin().offset(ward)
+					: centre.offset(ward.getX() - (int) HollowAcre.ARENA_X, ward.getY() - HollowAcre.FLOOR, ward.getZ() - (int) HollowAcre.ARENA_Z));
 		}
 		return out;
+	}
+
+	/**
+	 * Someone relit a ward brazier (its unlit-to-lit turn, once): in her Harvest that counts as a deed of the fight, once
+	 * for each ward (Concordance Chunk A). Every reaper near the brazier is asked.
+	 */
+	public static void wardLit(ServerLevel level, BlockPos pos, ServerPlayer player) {
+		for (VesperineEntity vesperine : level.getEntitiesOfClass(VesperineEntity.class, new AABB(pos).inflate(Encounter.REACH))) {
+			if (vesperine.phase == Phase.HARVEST && vesperine.encounter.contains(player) && vesperine.wards(level).contains(pos)) {
+				vesperine.encounter.deed(player, "ward " + pos.asLong());
+			}
+		}
+	}
+
+	/** This fight: who took part and how. */
+	public Encounter encounter() {
+		return encounter;
 	}
 
 	public static boolean lit(ServerLevel level, BlockPos ward) {
@@ -1165,17 +1190,21 @@ public class VesperineEntity extends Monster implements GeoEntity {
 		souls.removeIf(id -> !(level.getEntity(id) instanceof HarvestSoulEntity));
 	}
 
-	/** Whoever hurt her or her skulls has taken part. */
+	/** Whoever hurt her or her skulls, or whose tamed creature did, has taken part. */
 	public void took(ServerPlayer player, float amount) {
-		damageBy.merge(player.getUUID(), amount, Float::sum);
+		encounter.damage(player, amount);
 		lastAttacker = player.getUUID();
 	}
 
-	/** Her participants: everyone who hurt her or her skulls and is still in her arena. */
+	/**
+	 * Her participants still in her arena: everyone who hurt her or her skulls, or since Chunk A healed, warded or relit
+	 * a ward enough to qualify ({@link Encounter}), and is alive within {@value Encounter#REACH} blocks.
+	 */
 	public List<ServerPlayer> participants(ServerLevel level) {
 		List<ServerPlayer> out = new ArrayList<>();
-		for (ServerPlayer player : level.players()) {
-			if (player.isAlive() && damageBy.getOrDefault(player.getUUID(), 0.0F) > 0.0F && player.position().distanceTo(anchor) <= 64.0) {
+		for (UUID id : encounter.qualified()) {
+			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);
+			if (player != null && player.isAlive() && player.level() == level && player.position().distanceTo(anchor) <= Encounter.REACH) {
 				out.add(player);
 			}
 		}
@@ -1195,7 +1224,7 @@ public class VesperineEntity extends Monster implements GeoEntity {
 		attack = null;
 		abandoned = 0;
 		foe = null;
-		damageBy.clear();
+		encounter.abandon();
 		lastAttacker = null;
 		java.util.Arrays.fill(cooldowns, 0);
 		setHealth(getMaxHealth());
@@ -1242,6 +1271,11 @@ public class VesperineEntity extends Monster implements GeoEntity {
 	public void die(DamageSource source) {
 		super.die(source);
 		if (level() instanceof ServerLevel level) {
+			// A killing blow gets here inside super.hurtServer, before hurtServer's own took(): its striker (or the owner of
+			// the tamed creature that struck) has taken part before her fall is paid. Any amount qualifies.
+			if (Encounter.striker(source) instanceof ServerPlayer player) {
+				took(player, Float.MIN_VALUE);
+			}
 			defeated(level);
 		}
 	}
@@ -1251,11 +1285,15 @@ public class VesperineEntity extends Monster implements GeoEntity {
 	 * (it closes once everyone has left) and a gate of Grey Mist opens in the middle of the circle.
 	 */
 	private void defeated(ServerLevel level) {
+		// However often her fall is reported, it is answered once: one reward each (Concordance Chunk A).
+		if (!encounter.claim()) {
+			return;
+		}
 		dismiss(level);
 		for (ReaperSkullEntity skull : skulls(level)) {
 			skull.crumble(level);
 		}
-		VesperineLoot.reward(level, this, participants(level));
+		LairRewards.pay(level, VesperineLoot.BOSS, encounter, position(), anchor, EXPERIENCE);
 		moon(level, false);
 		LairInstance open = lairInstance(level);
 		if (open != null) {
@@ -1302,7 +1340,7 @@ public class VesperineEntity extends Monster implements GeoEntity {
 		}
 		float scaled = taken(amount);
 		boolean hurt = super.hurtServer(level, source, scaled);
-		if (hurt && source.getEntity() instanceof ServerPlayer player) {
+		if (hurt && Encounter.striker(source) instanceof ServerPlayer player) {
 			took(player, scaled);
 		}
 		return hurt;

@@ -18,6 +18,12 @@ The owner library and farming/food catalog were inspected, including its pot, bo
 
 ## Validation
 
+### Stirring fluidity revision — 12 October 2026
+
+Owner-requested, implemented using OpenAI Codex (GPT-6). The Cooking Pot spoon now sweeps a wider elliptical path with a gentle variation in pace, small vertical motion and changing shaft tilt. Both hands share its exact transform at staggered heights. The torso leans and shifts with the sweep and the head follows the spoon; feet remain planted on the existing handle-free rim. Peepo, Jughead and the pumpkin costume use the same clip and existing wooden spoon. No new geometry, textures, inventory props or dependencies are introduced.
+
+Pose evaluation happens in the client render state, shared by the spoon and arm solver. The 80-tick cycle, server position, work energy, recipe timing, access rules and network messages are unchanged. The direct model-pose test fixture now initializes the shared spoon pose just like the live renderer. Validation for this revision is compilation and assembly; no new in-game visual approval or gameplay test result is claimed. Earlier test evidence below predates this revision.
+
 Focused runtime command:
 
 ```powershell

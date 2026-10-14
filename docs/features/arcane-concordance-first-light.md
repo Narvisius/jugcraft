@@ -1,7 +1,10 @@
 # Arcane Concordance: First Light
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; compiled and server-tested in CI (831 server game tests
-pass, see Verification); not yet played in a client or on a dedicated server.
+Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
+`claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); compiled and server-tested in CI (831 server game tests pass, see Verification); not yet played by a
+person or on a dedicated server (the automated client test `ConcordanceJourneyClientGameTests`, step 31, plays the
+opening by key presses).
 Proposal issue: none; the owner's Arcane Concordance brief is the scope approval (this record describes the proposal).
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 1, Initiate stage (Jugcraft Discovery). Roadmap step 5.

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "YPY",
+    "YSY",
+    "YYY"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "P": "#c:plates/steel",
+    "S": "minecraft:sand"
+  },
+  "result": {
+    "id": "jugcraft:spill_kit",
+    "count": 1
+  }
+}

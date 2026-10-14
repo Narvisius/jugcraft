@@ -1,0 +1,87 @@
+{
+  "textures": {
+    "pi_doc_5": "jugcraft:block/pi_doc_5",
+    "pi_monitor": "jugcraft:block/pi_monitor",
+    "pi_pages": "jugcraft:block/pi_pages",
+    "pi_tablet": "jugcraft:block/pi_tablet",
+    "particle": "jugcraft:block/pi_doc_5"
+  },
+  "elements": [
+    {
+      "from": [
+        2.4,
+        12,
+        4
+      ],
+      "to": [
+        7.4,
+        12.4,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pages"
+        },
+        "south": {
+          "texture": "#pi_pages"
+        },
+        "east": {
+          "texture": "#pi_pages"
+        },
+        "west": {
+          "texture": "#pi_pages"
+        },
+        "up": {
+          "texture": "#pi_doc_5",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_pages"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        12,
+        5
+      ],
+      "to": [
+        14,
+        12.4,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_tablet",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    }
+  ]
+}

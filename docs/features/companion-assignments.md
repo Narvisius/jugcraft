@@ -12,7 +12,7 @@ Craft the **Companion Planner** from an iron nugget above three paper, with a st
 2. Right-click a companion bed/bunk or either half of a vanilla bed to assign home. A new home replaces the previous home.
 3. Right-click up to four Generator Wheels, Hand Cranks, Cider Presses, Jugcraft machines, cooking pots, or farmland plots to assign work. [Garden assignments](companion-gardens.md) each save up to eight connected soil blocks (four plots / 32 blocks maximum). Any part of a supported multi-block machine resolves to its controller. Assigning work switches the command to Work.
 4. Hold the selected planner to see green frames around that companion and its home/work/lunch assignments, blue for Supply, and yellow for Output. A missing/replaced target is orange. Only loaded targets in the current dimension are drawn.
-5. Left-click an assigned block with the planner to remove its assignment without breaking it. Shift-right-click air to clear the selection. Selecting another companion replaces the selection on that tool only.
+5. Left-click an assigned block with the planner to remove its assignment without breaking it. Shift-right-click opens the Planner menu, which includes **Clear selected companion** and the new [Animal Care corner selection](companion-livestock.md#combined-animal-care-zones-and-naming-11-october-2026). Selecting another companion replaces the selection on that tool only.
 6. Shift-right-click a companion normally to open its inventory/commands. Home, four work rows and separate Lunch, Supply and Output rows show names and coordinates. Hover for full name, dimension and server status. The x buttons also remove assignments, including targets that have been destroyed, unloaded, or left in another dimension.
 7. Use the up/down arrows beside work rows to set priority. Work 1 at the top is highest; home stays fixed. The order is saved with the companion. Removing a workstation closes the gap; new assignments go at the bottom. Existing saves with gaps are compacted while preserving their relative order.
 8. Right-click a lunch crate or lunch cover with the planner to bind the separate food source. Use the Routine tab for work shifts, recovery thresholds, food preferences, carried meals and optional alerts. See [jobs and routines](companion-jobs.md).
@@ -58,3 +58,16 @@ Manual cases: select Peepo and Jughead; assign one home and four wheels; reject 
 - Bulk assignment for several selected companions, with a preview and per-station worker limits.
 
 Supply/Output extension (7 October 2026), revised by the owner's role-cycling request: right-click containers to assign and switch Supply/Output. These are separate links, not work slots. Clicked-face automation rules and double-chest locks apply. Work mode uses Cooking Pot ghost recipes and the implemented machine/kitchen logistics; Porter mode performs direct container-to-container delivery. Cider Press loading, pressing, bottling and collection are automated. Hand Cranks accept one operator and pause for a full connected flywheel. See [jobs and limits](companion-jobs.md#hand-crank-cider-press-and-transport).
+
+
+## Direct naming and zone controls (11 October 2026)
+
+Owner-requested menu adjustment, implemented with OpenAI Codex (GPT-6). The combined Names / Zone tab is replaced by a pencil (Rename companion) immediately beside the companion title, a pencil (Rename job) button to the left of each job, and a gear (Zone options) button at the Filter position on Livestock Management rows. Naming and zone settings have separate panels with a return to Jobs; Population returns to its zone options. Existing server-validated edits, assignment identity checks, inventory, filters and priority controls are preserved. No new server scanning, networking or dependencies are introduced.
+
+The existing naming/population UI checks now target the relocated controls. Compilation and distribution packaging are performed for the owner's manual playtest; automated gameplay checks are not rerun for this layout change.
+
+Pencil-icon follow-up: both rename controls are compact 16-pixel buttons with a directly drawn pixel pencil, descriptive tooltips and narrated labels. The owner asset catalog search found no matching pencil/rename icon; this small code-drawn interface symbol adds no texture or font dependency. Existing checks locate the descriptive labels even though they are no longer visually rendered.
+
+Gear/label follow-up: Zone options uses a code-drawn gear through the shared icon-button renderer, retaining its tooltip and narrated label. Assigned work rows omit the Work-number prefix; empty rows keep numbered placeholders, and priority order/arrows are unchanged. Built and packaged for manual testing without running gameplay tests.
+
+Filter-icon follow-up: job-row Filter buttons use a code-drawn funnel through the same icon renderer, preserving the Filter tooltip, narrated label and existing server menu action. Compilation and packaging only; no gameplay tests run.

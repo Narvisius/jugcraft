@@ -42,6 +42,74 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	/** How many times faster than the treadle drives it the wheel spins while it is a gate. */
 	public static final float WILD_SPEED = 3.0F;
 
+    /** One saved batch: companions never scatter yarn or overwrite another colour. */
+    private ItemStack companionYarn = ItemStack.EMPTY;
+    public final local.peepo.SpinningWheelJob companionJob = new local.peepo.SpinningWheelJob(this);
+    private int companionTicks;
+    private boolean companionBatch;
+    private long lastCompanionTick = Long.MIN_VALUE;
+    private record TransferState(DyeColor wool, int turns, int ticks, boolean managed, ItemStack yarn) {}
+    private final net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant<TransferState> transfers =
+        new net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant<>() {
+            protected TransferState createSnapshot() { return new TransferState(wool, turns, companionTicks, companionBatch, companionYarn.copy()); }
+            protected void readSnapshot(TransferState s) { wool=s.wool(); turns=s.turns(); companionTicks=s.ticks(); companionBatch=s.managed(); companionYarn=s.yarn(); }
+            protected void onFinalCommit() { changed(); }
+        };
+    private final net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> companionInput =
+        new net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage<>() {
+            public long insert(net.fabricmc.fabric.api.transfer.v1.item.ItemVariant item, long amount,
+                    net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx) {
+                net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions.notBlankNotNegative(item, amount);
+                if(amount==0 || companionNeed(item.toStack(1))==0)return 0;
+                transfers.updateSnapshots(tx); wool=Knitting.woolColor(item.toStack(1)); turns=0; companionTicks=0; companionBatch=true; return 1;
+            }
+        };
+    private final net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> companionOutput =
+        new net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage<>() {
+            public long insert(net.fabricmc.fabric.api.transfer.v1.item.ItemVariant item,long amount,net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx){return 0;}
+            public boolean supportsInsertion(){return false;}
+            public long extract(net.fabricmc.fabric.api.transfer.v1.item.ItemVariant item,long amount,net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx){
+                net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions.notBlankNotNegative(item,amount);
+                if(isRemoved() || companionYarn.isEmpty() || !item.equals(getResource()))return 0;
+                int count=(int)Math.min(amount,companionYarn.getCount());
+                if(count>0){transfers.updateSnapshots(tx);companionYarn.shrink(count);}return count;
+            }
+            public boolean isResourceBlank(){return companionYarn.isEmpty();}
+            public net.fabricmc.fabric.api.transfer.v1.item.ItemVariant getResource(){return net.fabricmc.fabric.api.transfer.v1.item.ItemVariant.of(companionYarn);}
+            public long getAmount(){return companionYarn.getCount();}
+            public long getCapacity(){return Knitting.YARN_PER_WOOL;}
+        };
+    public int companionNeed(ItemStack item){
+        return !isRemoved() && level!=null && !isWild(level.getGameTime()) && wool==null && companionYarn.isEmpty() && Knitting.woolColor(item)!=null?1:0;
+    }
+    public net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> companionInputs(){return companionInput;}
+    public net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> companionOutputs(){return companionOutput;}
+    public local.peepo.CompanionStatus companionStatus(){
+        if(isRemoved() || level==null)return local.peepo.CompanionStatus.MISSING;
+        if(isWild(level.getGameTime()))return local.peepo.CompanionStatus.OCCUPIED;
+        if(!companionYarn.isEmpty())return local.peepo.CompanionStatus.FULL;
+        return wool==null?local.peepo.CompanionStatus.NO_INPUT:local.peepo.CompanionStatus.READY;
+    }
+    public local.peepo.CompanionStatus assist(local.peepo.PeepoEntity npc){
+        if(!(level instanceof ServerLevel server) || !companionJob.isOccupant(npc) || !local.peepo.CompanionJobs.permitted(npc,worldPosition))return local.peepo.CompanionStatus.FORBIDDEN;
+        var status=companionStatus();if(status!=local.peepo.CompanionStatus.READY)return status;
+        long now=level.getGameTime();if(now==lastCompanionTick)return local.peepo.CompanionStatus.WORKING;
+        try(var tx=net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()){
+            if(npc.extractEnergy(4,tx)!=4)return local.peepo.CompanionStatus.RECOVERING;
+            tx.commit();
+        }
+        lastCompanionTick=now;companionBatch=true;
+        if(++companionTicks>=SPIN_TICKS){companionTicks=0;turn(server,true);}
+        return local.peepo.CompanionStatus.WORKING;
+    }
+    public void resetCompanionStroke(){companionTicks=0;}
+    /** Shift-empty-hand recovery, without requiring a companion or losing components. */
+    public boolean collectCompanionOutput(Player player){
+        if(companionYarn.isEmpty())return false;
+        player.getInventory().add(companionYarn);changed();return true;
+    }
+    @Override public void setRemoved(){companionJob.removed();super.setRemoved();}
+
 	private @Nullable DyeColor wool;
 	private int turns;
 	/** Ticks the wheel had spun before its latest turn, and the game time of that turn (for drawing it). */
@@ -69,6 +137,7 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 			return false;
 		}
 		wool = color;
+        companionTicks=0;companionBatch=false;
 		turns = 0;
 		if (level != null) {
 			level.playSound(null, worldPosition, SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 0.8F, 1.0F);
@@ -117,10 +186,13 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	 * One turn of the treadle: spins the skein on, and on the last turn sets out its yarn in front of the wheel. Returns
 	 * false (and does nothing) with no wool on the distaff.
 	 */
-	public boolean turn(ServerLevel level) {
-		if (wool == null) {
+	public boolean turn(ServerLevel level) { return turn(level,companionBatch); }
+
+    private boolean turn(ServerLevel level, boolean collect) {
+		if (wool == null || collect && (!companionYarn.isEmpty() || isWild(level.getGameTime()))) {
 			return false;
 		}
+        companionTicks=0;
 		long now = level.getGameTime();
 		spun += Math.min(SPIN_TICKS, Math.max(0L, now - turnedAt));
 		turnedAt = now;
@@ -129,10 +201,12 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 		if (turns >= TURNS) {
 			Direction front = getBlockState().hasProperty(SpinningWheelBlock.FACING) ? getBlockState().getValue(SpinningWheelBlock.FACING)
 					: Direction.NORTH;
-			Block.popResourceFromFace(level, worldPosition, front, Knitting.yarn(wool.getTextureDiffuseColor(), Knitting.YARN_PER_WOOL));
+			ItemStack yarn=Knitting.yarn(wool.getTextureDiffuseColor(), Knitting.YARN_PER_WOOL);
+            if(collect)companionYarn=yarn;else Block.popResourceFromFace(level, worldPosition, front, yarn);
 			level.playSound(null, worldPosition, SoundEvents.BUNDLE_INSERT, SoundSource.BLOCKS, 0.8F, 1.0F);
 			level.gameEvent(null, GameEvent.BLOCK_CHANGE, worldPosition);
 			wool = null;
+            companionBatch=false;
 			turns = 0;
 		}
 		changed();
@@ -161,6 +235,7 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	/** Broken, it drops the skein (as the wool it was). */
 	@Override
 	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if(level instanceof ServerLevel server && !companionYarn.isEmpty()){Block.popResource(server,pos,companionYarn);companionYarn=ItemStack.EMPTY;}
 		if (level instanceof ServerLevel server && wool != null) {
 			ItemStack skein = woolItem(wool);
 			if (!skein.isEmpty()) {
@@ -175,6 +250,7 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	}
 
 	private void changed() {
+        local.peepo.CompanionReadiness.invalidate(this);
 		setChanged();
 		if (level != null) {
 			BlockState state = getBlockState();
@@ -186,6 +262,8 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+        companionYarn=input.read("CompanionYarn",ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        companionTicks=0;companionBatch=input.getBooleanOr("CompanionBatch",false);
 		int color = input.getIntOr("wool", -1);
 		wool = color >= 0 && color < DyeColor.values().length ? DyeColor.values()[color] : null;
 		turns = Math.clamp(input.getIntOr("turns", 0), 0, TURNS - 1);
@@ -199,6 +277,8 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+        output.store("CompanionYarn",ItemStack.OPTIONAL_CODEC,companionYarn);
+        output.putBoolean("CompanionBatch",companionBatch);
 		output.putInt("wool", wool == null ? -1 : wool.ordinal());
 		output.putInt("turns", turns);
 		output.putLong("spun", spun);

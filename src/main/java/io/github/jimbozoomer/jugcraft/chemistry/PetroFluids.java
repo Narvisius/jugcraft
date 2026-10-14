@@ -128,6 +128,8 @@ public final class PetroFluids {
 	public static Gas VINYL_CHLORIDE;
 	/** Ammonia burnt in oxygen and absorbed in water (the Ostwald process). */
 	public static Entry NITRIC_ACID;
+	public static Entry HYDROCHLORIC_ACID;
+	public static Entry ETHYLENE_DICHLORIDE;
 	/** Vanadium leached into sulfuric acid (batch 17): the flow battery's electrolyte. */
 	public static Entry VANADIUM_ELECTROLYTE;
 	/** Crops fermented in the chemical reactor (batch 26): fuel for the gas turbine and the advanced engine. */
@@ -141,6 +143,18 @@ public final class PetroFluids {
 	/** Batch 43: liquid fuels. */
 	public static Entry KEROSENE;
 	public static Entry LIQUID_OXYGEN;
+	/** The starter gas and acid factory: hydrogen burnt in chlorine in the Chemical Infuser. */
+	public static Gas HYDROGEN_CHLORIDE;
+	/** The starter gas and acid factory: sulfur burnt in oxygen in the Chemical Oxidizer. */
+	public static Gas SULFUR_DIOXIDE;
+	/** Coal burnt in oxygen in the Chemical Oxidizer: the carbon feed of methanation. */
+	public static Gas CARBON_DIOXIDE;
+	/** Carbon dioxide and hydrogen over the Chemical Infuser's nickel bed: the Gas Burning Generator's second fuel. */
+	public static Gas METHANE;
+	public static Gas BIOGAS;
+	public static Gas RAW_SYNGAS;
+	public static Gas CARBON_MONOXIDE;
+	public static Gas SULFUR_TRIOXIDE;
 
 	private PetroFluids() {
 	}
@@ -199,6 +213,16 @@ public final class PetroFluids {
 		NUTRIENT_SOLUTION = fluid("nutrient_solution", 5, 4, 1, 0xFF6EAA64, MapColor.COLOR_GREEN);
 		KEROSENE = fluid("kerosene", 5, 4, 1, 0xFFE0E0C4, MapColor.SAND);
 		LIQUID_OXYGEN = fluid("liquid_oxygen", 3, 4, 1, 0xFFA0C8EC, MapColor.COLOR_LIGHT_BLUE);
+		HYDROCHLORIC_ACID = fluid("hydrochloric_acid", 5, 4, 1, 0xFFD2DCB4, MapColor.COLOR_LIGHT_GREEN);
+		ETHYLENE_DICHLORIDE = fluid("ethylene_dichloride", 5, 4, 1, 0xFFCCD4A0, MapColor.COLOR_YELLOW);
+		HYDROGEN_CHLORIDE = gas("hydrogen_chloride", 0xFFD4DCDA);
+		SULFUR_DIOXIDE = gas("sulfur_dioxide", 0xFFDAD6B8);
+		CARBON_DIOXIDE = gas("carbon_dioxide", 0xFFC4CAD4);
+		METHANE = gas("methane", 0xFFAED4D0);
+		BIOGAS = gas("biogas", 0xFFB8C2AA);
+		RAW_SYNGAS = gas("raw_syngas", 0xFF9A9286);
+		CARBON_MONOXIDE = gas("carbon_monoxide", 0xFFC2BED2);
+		SULFUR_TRIOXIDE = gas("sulfur_trioxide", 0xFFE2DCBC);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {

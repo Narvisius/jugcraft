@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PBP",
+    "PBP",
+    "PBP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "B": "minecraft:book"
+  },
+  "result": {
+    "id": "jugcraft:tsc_procedure_shelf",
+    "count": 2
+  }
+}

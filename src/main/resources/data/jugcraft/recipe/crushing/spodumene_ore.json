@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    }
+  ],
+  "type": "jugcraft:crushing",
+  "ingredient": "jugcraft:spodumene_ore",
+  "result": {
+    "id": "jugcraft:spodumene",
+    "count": 2
+  },
+  "time": 160
+}

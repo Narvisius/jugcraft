@@ -1,0 +1,52 @@
+{
+  "textures": {
+    "slats": "jugcraft:block/pi_roller_slats",
+    "particle": "jugcraft:block/pi_roller_slats"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        6.5
+      ],
+      "to": [
+        16,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#slats",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#slats",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#slats"
+        },
+        "west": {
+          "texture": "#slats"
+        },
+        "up": {
+          "texture": "#slats"
+        },
+        "down": {
+          "texture": "#slats"
+        }
+      }
+    }
+  ]
+}

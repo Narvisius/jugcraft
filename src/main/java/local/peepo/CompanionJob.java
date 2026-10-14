@@ -2,6 +2,8 @@ package local.peepo;
 
 /** A productive station. The job owns its costs/atomic processing; the routine owns travel and cancellation. */
 public interface CompanionJob extends CompanionStation {
+    /** Ordinary hauling/priority changes must not abandon a short, perishable operation. Rest and player orders still win. */
+    default boolean timeCritical(){return false;}
     default WorkAnimation animation(){return WorkAnimation.INTERACT;}
     default net.minecraft.core.BlockPos animationTarget(){return stationPosition();}
     /** Cheap loaded-state query. Never search for workers or perform recipes here. */

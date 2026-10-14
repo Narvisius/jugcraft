@@ -2,6 +2,8 @@ package io.github.jimbozoomer.jugcraft.lair;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -50,6 +52,9 @@ public class LairBrazierBlock extends Block {
 		if (!level.isClientSide()) {
 			level.setBlock(pos, state.setValue(LIT, true), Block.UPDATE_ALL);
 			level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, 0.8F);
+			if (level instanceof ServerLevel server && player instanceof ServerPlayer lighter) {
+				Lairs.relit(server, pos, lighter);
+			}
 		}
 		return InteractionResult.SUCCESS;
 	}

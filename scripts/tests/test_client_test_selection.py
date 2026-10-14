@@ -34,8 +34,11 @@ class ClientTestSelectionTests(unittest.TestCase):
         assigned = [name for _, names in jobs for name in names]
         self.assertCountEqual(assigned, self.tests)
         self.assertEqual(len(assigned), len(set(assigned)))
-        # Keep estimated execution below 25 minutes; the 60-minute job limit also covers setup and slow runners.
-        self.assertLess(max(seconds for seconds, _ in jobs), 25 * 60)
+        # Added runtime suites put the full run above 25 minutes per shard even at perfect balance.
+        # Retain setup/slow-runner headroom under the 60-minute CI timeout without understating test weights.
+        durations = [seconds for seconds, _ in jobs]
+        self.assertLess(max(durations), 30 * 60)
+        self.assertLessEqual(max(durations), sum(durations) / len(durations) + 30)
         self.assertNotEqual(
             next(i for i, (_, names) in enumerate(jobs) if "PeepoCompanionClientTests" in names),
             next(i for i, (_, names) in enumerate(jobs) if "BiomeClientGameTests" in names),

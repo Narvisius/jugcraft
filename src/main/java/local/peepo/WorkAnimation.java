@@ -4,7 +4,8 @@ package local.peepo;
 public enum WorkAnimation {
     // Append actions: the ordinal is an entity-data wire ID.
     NONE(80), INTERACT(80), STIR(80), VALVE(100), LEVER(64), MALLET(48), WRENCH(64), CRANK(60),
-    PIE_LOAD(20), PIE_WAIT(80), PIE_TAKE(20), PIE_CARRY(80), CHOP(40), HARVEST(40), SHEAR(60), MILK(60);
+    PIE_LOAD(20), PIE_WAIT(80), PIE_TAKE(20), PIE_CARRY(80), CHOP(40), HARVEST(40), SHEAR(60), MILK(60), SLAUGHTER(40), SPINNING(20), HIVE_SHEAR(60), HIVE_BOTTLE(60),
+    PRESS(32), PLANT(40), PICK(40), WATER_FILL(40);
     private final int period;
     WorkAnimation(int period){this.period=period;}
     public boolean hasTool(){return this==VALVE || this==LEVER || this==MALLET || this==WRENCH;}

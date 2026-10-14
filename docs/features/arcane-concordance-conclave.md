@@ -1,6 +1,8 @@
 # Arcane Concordance: factions and the Starbound Conclave
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
+`claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 23) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 15, Practitioner to Master stages (Jugcraft Workshops to Expeditions).

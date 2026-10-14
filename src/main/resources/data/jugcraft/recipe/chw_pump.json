@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PMP",
+    " S "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "P": "jugcraft:steel_fluid_pipe",
+    "M": "jugcraft:electric_motor"
+  },
+  "result": {
+    "id": "jugcraft:chw_pump",
+    "count": 1
+  }
+}

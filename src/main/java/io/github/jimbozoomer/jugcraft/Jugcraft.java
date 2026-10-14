@@ -71,6 +71,7 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftSolar.register();
 		PetroBlocks.register();
 		JugcraftLogistics.register();
+		io.github.jimbozoomer.jugcraft.wallrun.WallRuns.register();
 		JugcraftStorage.register();
 		JugcraftElectronics.register();
 		io.github.jimbozoomer.jugcraft.control.JugcraftControl.register();
@@ -105,10 +106,17 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.lair.tatterlace.JugcraftTatterlace.register();
 		io.github.jimbozoomer.jugcraft.lair.yeti.JugcraftYeti.register();
 		io.github.jimbozoomer.jugcraft.lair.tyrant.JugcraftTyrant.register();
+		io.github.jimbozoomer.jugcraft.lair.hag.JugcraftHag.register();
+		io.github.jimbozoomer.jugcraft.lair.lich.JugcraftLich.register();
 		io.github.jimbozoomer.jugcraft.styx.JugcraftStyx.register();
 		JugcraftDrones.register();
 		io.github.jimbozoomer.jugcraft.tower.JugcraftTower.register();
 		io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints.register();
+		io.github.jimbozoomer.jugcraft.placement.StructureReach.register();
+		// A tank a kit placed comes down whole when any block of it is broken, giving the kit back.
+		io.github.jimbozoomer.jugcraft.nuclear.TankKitBreaking.register();
+		io.github.jimbozoomer.jugcraft.powerline.JugcraftPowerLines.register();
+		io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.register();
 		io.github.jimbozoomer.jugcraft.energy.CreativeEnergyCellBlock.register();
 		io.github.jimbozoomer.jugcraft.drone.CreativeSupplyCrateBlock.register();
 		PixelHollows.register();

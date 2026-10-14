@@ -40,7 +40,8 @@ public record Composition(List<Part> parts, @Nullable Composition then) {
 		return then == null ? 0 : 1 + then.depth();
 	}
 
-	static String shortName(String id) {
+	/** A component's written name: Jugcraft's own by its short name, any other by its full id. */
+	public static String shortName(String id) {
 		return id.startsWith("jugcraft:") ? id.substring("jugcraft:".length()) : id;
 	}
 }

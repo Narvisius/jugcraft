@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "QQQ",
+    "PPP",
+    "P P"
+  ],
+  "key": {
+    "Q": "minecraft:quartz_slab",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:reception_desk",
+    "count": 3
+  }
+}

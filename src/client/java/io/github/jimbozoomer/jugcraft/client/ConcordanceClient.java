@@ -44,7 +44,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * The Arcane Concordance on the client: the Lampwright's Bench screen, the Focus line shown while an instrument is in
- * the main hand, specimen and lantern tooltips, the settings key, the journal ({@link JournalClient}), the two fire
+ * the main hand, specimen and lantern tooltips, the settings key, the journal ({@link JournalClient}), the Spell
+ * Composer ({@link ComposerClient}), the two fire
  * sets as worn ({@link EmberClient}) and the render element Wayfaring's belt and boots are drawn through
  * ({@link WayfaringClient}). Everything here reads state the server sent
  * (the player's own Focus attachment, item components, menu data); nothing here decides an outcome.
@@ -64,8 +65,10 @@ final class ConcordanceClient {
 		ItemTooltipCallback.EVENT.register(ConcordanceClient::tooltip);
 		CircleClient.register();
 		VigilClient.register();
+		CastPoses.register();
 		WorkerClient.register();
 		JournalClient.register();
+		ComposerClient.register();
 		SignClient.register();
 		EmberClient.register();
 		WayfaringClient.register();

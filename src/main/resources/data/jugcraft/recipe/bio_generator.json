@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MGC",
+    " T ",
+    " K "
+  ],
+  "key": {
+    "M": "jugcraft:electric_motor",
+    "G": "jugcraft:steel_gear",
+    "C": "jugcraft:basic_circuit",
+    "T": "jugcraft:steel_tank",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:bio_generator",
+    "count": 1
+  }
+}

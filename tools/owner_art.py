@@ -4,7 +4,8 @@ imports files from the owner's magic collection (art/owner-library/originals/Mag
 textures, a GeckoLib model and sounds, each a byte-for-byte copy under a Jugcraft name (a model's JSON with its line ends
 made LF), listed in tools/concordance_ember.py OWNER_FILES. The trinkets slice (tools/concordance_trinkets.py) adds its
 icons, their animation sidecars, two slot icons and (part 1b) the Leather Belt's and Amphibian Boot's worn sheets the
-same way: OWNER_FILES from the magic collection and OWNER_BLOCKS_FILES from the Blocks folder's Trinket Type Mod.
+same way: OWNER_FILES from the magic collection and OWNER_BLOCKS_FILES from the Blocks folder's Trinket Type Mod. The
+encyclopedia (tools/encyclopedia.py, Chunk A) adds its inventory button's scroll sprite.
 
 On 7 October 2026 the owner asked for their farming and food textures to be used ("I have already made a ton of custom
 textures and food ... I made all of the textures in there myself its all mine"). Each imported texture is a byte-for-byte
@@ -19,7 +20,8 @@ import last, and tools/check_mod_data.py fails if a runtime copy differs from wh
     python3 tools/owner_art.py                write every import (generate_textures.py also does)
     python3 tools/owner_art.py --check        report differences only
     python3 tools/owner_art.py --provenance   the magic imports' sources and SHA-256, for the feature record
-    python3 tools/owner_art.py --provenance trinkets   the same for one slice's files (a tools/concordance_<slice>.py)
+    python3 tools/owner_art.py --provenance trinkets   the same for one slice's files (a tools/concordance_<slice>.py,
+                                                       or another module with OWNER_FILES, such as encyclopedia)
 """
 import hashlib
 import io
@@ -35,6 +37,7 @@ sys.path.insert(0, HERE)
 import arms_pixel  # noqa: E402
 import concordance_ember  # noqa: E402
 import concordance_trinkets  # noqa: E402
+import encyclopedia  # noqa: E402
 import feasts  # noqa: E402
 import garden  # noqa: E402
 import kitchen  # noqa: E402
@@ -53,6 +56,7 @@ def imports():
     """(runtime path under textures/ without .png, library path under Blocks/ without .png) for every copied texture."""
     out = []
     out.append(("block/transport_crate_wood", "biomes and tree blocks/origin_oak_planks"))
+    out.append(("block/fluorite_block", "block_fluorite"))
     for table in (kitchen.TEXTURES, feasts.TEXTURES, menu.TEXTURES, rice.TEXTURES, soil.TEXTURES, garden.TEXTURES):
         for target, source in table.items():
             out.append((target, f"{FOOD}/{source}"))
@@ -61,7 +65,7 @@ def imports():
 
 def magic_imports():
     """(runtime path under assets/jugcraft, library path under Magic/) for every copied magic-collection file."""
-    return sorted({**concordance_ember.OWNER_FILES, **concordance_trinkets.OWNER_FILES}.items())
+    return sorted({**concordance_ember.OWNER_FILES, **concordance_trinkets.OWNER_FILES, **encyclopedia.OWNER_FILES}.items())
 
 
 def block_asset_imports():
@@ -207,7 +211,11 @@ if __name__ == "__main__":
         rest = sys.argv[sys.argv.index("--provenance") + 1:]
         only = None
         if rest:
-            module = __import__(f"concordance_{rest[0]}")
+            try:
+                module = __import__(f"concordance_{rest[0]}")
+            except ModuleNotFoundError:
+                # A slice outside the Concordance's modules (the encyclopedia: tools/encyclopedia.py).
+                module = __import__(rest[0])
             only = set(getattr(module, "OWNER_FILES", {})) | set(getattr(module, "OWNER_BLOCKS_FILES", {}))
         for target, source, digest in provenance():
             if only is None or target in only:

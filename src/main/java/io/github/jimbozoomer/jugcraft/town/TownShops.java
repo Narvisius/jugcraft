@@ -93,6 +93,23 @@ public final class TownShops {
 		return id == null ? null : shops.get(id);
 	}
 
+	/** An offer on sale, and the shop selling it. */
+	public record Sale(Shop shop, Offer offer) {
+	}
+
+	/** Every offer of {@code item} on sale in {@code theme}, shop by shop in order (the encyclopedia's trade ways). */
+	public List<Sale> sales(Item item, String theme) {
+		List<Sale> out = new ArrayList<>();
+		for (Shop shop : shops.values()) {
+			for (Offer offer : shop.sellsIn(theme)) {
+				if (offer.itemType() == item) {
+					out.add(new Sale(shop, offer));
+				}
+			}
+		}
+		return out;
+	}
+
 	private static List<Offer> offers(JsonArray array) {
 		List<Offer> out = new ArrayList<>();
 		for (JsonElement e : array) {

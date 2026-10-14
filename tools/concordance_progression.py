@@ -428,6 +428,12 @@ class _Items:
         return key
 
 
+def item_node(nodes, at_hand, item, problems):
+    """Adds {item}'s node to a graph, with every node it needs, as a step that needs the item would (by any of its recipes,
+    its producer or a bench working); returns the node's key (the first loadout's check, tools/concordance_journey.py)."""
+    return _Items(nodes, at_hand, problems).item(item)
+
+
 def graph(research, invocations, rituals, at_hand=None, problems=None):
     """The progression graph over the data (Java: ProgressionGraph.build, which has no items). research: {path:
     definition}; invocations: {path: definition with research and stage}; rituals: {path: definition with research,
@@ -765,6 +771,7 @@ MESSAGES = {
     "stage.next": "To become %s, any one of:",
     "stage.route": "  %s: %s",
     "stage.route_met": "  %s: met",
+    "stage.routes_unmet": "  and %s more, through research you have not met yet",
     "stage.last": "There is no stage beyond this one",
     "stage.need.research": "%s %s",
     "stage.need.mastered": "%s entries mastered (you have %s)",

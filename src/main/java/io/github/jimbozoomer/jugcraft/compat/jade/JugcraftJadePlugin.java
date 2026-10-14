@@ -25,6 +25,8 @@ import snownee.jade.api.IWailaPlugin;
 public final class JugcraftJadePlugin implements IWailaPlugin {
 	@Override
 	public void register(IWailaCommonRegistration registration) {
+		// Jade 26.3 exposes picked-item naming through its common block operations, not the old client API.
+		registration.blockOperations().pick(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.FRAME.builtInRegistryHolder().key());
 		registration.registerBlockDataProvider(MachineDataProvider.INSTANCE, MachineBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.BENCH, LampwrightBenchBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.SCONCE, LumenSconceBlockEntity.class);

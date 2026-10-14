@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " N ",
+    "PBP",
+    "N N"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "minecraft:bucket",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:hv_chem_feeder",
+    "count": 1
+  }
+}

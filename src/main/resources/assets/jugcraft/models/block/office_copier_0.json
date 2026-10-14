@@ -1,0 +1,74 @@
+{
+  "textures": {
+    "pi_copier_dark": "jugcraft:block/pi_copier_dark",
+    "pi_copier_f_0": "jugcraft:block/pi_copier_f_0",
+    "pi_toe_kick": "jugcraft:block/pi_toe_kick",
+    "particle": "jugcraft:block/pi_copier_dark"
+  },
+  "elements": [
+    {
+      "from": [
+        1.6,
+        0,
+        2.6
+      ],
+      "to": [
+        16,
+        1,
+        14.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_toe_kick"
+        },
+        "south": {
+          "texture": "#pi_toe_kick"
+        },
+        "east": {
+          "texture": "#pi_toe_kick"
+        },
+        "west": {
+          "texture": "#pi_toe_kick"
+        },
+        "up": {
+          "texture": "#pi_toe_kick"
+        },
+        "down": {
+          "texture": "#pi_toe_kick"
+        }
+      }
+    },
+    {
+      "from": [
+        1.2,
+        1,
+        2
+      ],
+      "to": [
+        16,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_copier_dark"
+        },
+        "south": {
+          "texture": "#pi_copier_f_0"
+        },
+        "east": {
+          "texture": "#pi_copier_dark"
+        },
+        "west": {
+          "texture": "#pi_copier_dark"
+        },
+        "up": {
+          "texture": "#pi_copier_dark"
+        },
+        "down": {
+          "texture": "#pi_copier_dark"
+        }
+      }
+    }
+  ]
+}

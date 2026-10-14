@@ -78,6 +78,14 @@ FLUIDS = {
     "liquid_oxygen": {"display": "Liquid Oxygen", "feature": "machines",
                       "colors": [(70, 120, 180), (110, 160, 214), (160, 200, 236), (214, 234, 250)],
                       "tick_delay": 3, "slope": 4, "drop_off": 1},
+    # Factory package 2: hydrogen chloride absorbed in water (the Bulk Chemical Reactor), a faint greenish yellow.
+    "hydrochloric_acid": {"display": "Hydrochloric Acid", "feature": "machines",
+                          "colors": [(150, 164, 120), (184, 196, 150), (210, 220, 180), (236, 242, 218)],
+                          "tick_delay": 5, "slope": 4, "drop_off": 1},
+    # The named PVC intermediate: refinery ethylene chlorinated into ethylene dichloride, an oily pale yellow-green.
+    "ethylene_dichloride": {"display": "Ethylene Dichloride", "feature": "machines",
+                            "colors": [(140, 150, 96), (176, 186, 128), (204, 212, 160), (232, 238, 200)],
+                            "tick_delay": 5, "slope": 4, "drop_off": 1},
 }
 
 # Gases: fluids that only live in tanks and pipes (no block, no bucket). Gauge colour in Java (PetroFluids.gas).
@@ -110,6 +118,35 @@ GASES = {
     # chemical reactor recovers it as sulfur (the Claus process). A sickly yellow-green.
     "hydrogen_sulfide": {"display": "Hydrogen Sulfide", "feature": "crude_oil",
                          "colors": [(150, 150, 70), (178, 178, 96), (204, 204, 126), (230, 230, 170)]},
+    # The starter factory's hydrogen chloride (tools/industrial_forms.py): hydrogen burnt in chlorine in the Chemical
+    # Infuser. Colourless, fuming white in damp air: a cool grey-white.
+    "hydrogen_chloride": {"display": "Hydrogen Chloride", "feature": "salt",
+                          "colors": [(160, 172, 170), (188, 198, 196), (212, 220, 218), (238, 242, 241)]},
+    # The starter factory's sulfur dioxide (tools/industrial_forms.py): sulfur burnt in oxygen in the Chemical
+    # Oxidizer, the first step of the contact acid chain. Colourless and choking: a pale sulfur-tinted grey.
+    "sulfur_dioxide": {"display": "Sulfur Dioxide", "feature": "sulfur",
+                       "colors": [(166, 162, 126), (194, 190, 156), (216, 212, 182), (240, 238, 220)]},
+    # The starter factory's carbon dioxide: coal or charcoal burnt in oxygen in the Chemical Oxidizer, the carbon feed
+    # of the Infuser's methanation. A cool grey with a faint blue.
+    "carbon_dioxide": {"display": "Carbon Dioxide", "feature": "machines",
+                       "colors": [(150, 156, 166), (178, 184, 194), (204, 210, 218), (232, 236, 242)]},
+    # Methane from carbon dioxide and hydrogen over the Infuser's nickel bed: the Gas Burning Generator's second fuel.
+    # A pale blue-green.
+    "methane": {"display": "Methane", "feature": "machines",
+                "colors": [(130, 170, 170), (160, 196, 194), (190, 218, 214), (222, 240, 236)]},
+    # Raw biogas from the Anaerobic Digester: the selected 60/40 methane and carbon dioxide game mixture. A dull
+    # grey-green.
+    "biogas": {"display": "Biogas", "feature": "machines",
+               "colors": [(128, 140, 118), (156, 168, 144), (184, 194, 170), (214, 222, 202)]},
+    # The Coal Gasifier's dirty mixture of carbon monoxide and hydrogen, before the cleanup rack. A smoky brown-grey.
+    "raw_syngas": {"display": "Raw Syngas", "feature": "machines",
+                   "colors": [(96, 88, 80), (124, 116, 106), (154, 146, 134), (188, 182, 170)]},
+    # Carbon monoxide separated from it: methanation's second carbon feed. A faint grey-violet.
+    "carbon_monoxide": {"display": "Carbon Monoxide", "feature": "machines",
+                        "colors": [(138, 134, 156), (166, 162, 184), (194, 190, 210), (226, 224, 238)]},
+    # Sulfur dioxide oxidized over the vanadium contact bed, before its absorption into acid. A dense pale cream.
+    "sulfur_trioxide": {"display": "Sulfur Trioxide", "feature": "machines",
+                        "colors": [(176, 168, 132), (204, 196, 160), (226, 220, 188), (244, 240, 218)]},
 }
 
 
@@ -150,6 +187,18 @@ ITEMS = {
     "grenade_launcher": "Grenade Launcher",
     # Power (batch 19): fitted in the advanced engine's slot; needs coolant water.
     "turbocharger": "Turbocharger",
+    # The starter factory's reusable methanation catalyst (tools/industrial_forms.py): one nickel ingot on two fired
+    # bricks, held in the Chemical Infuser's bed socket and never used up.
+    "nickel_catalyst_bed": "Nickel Catalyst Bed",
+    # The sulfuric acid contact catalyst (tools/industrial_forms.py): vanadium oxide roasted out of washed iron ore with
+    # lye in the Bulk Chemical Reactor, then laid on two fired bricks. The Infuser's bed socket holds it, never used up.
+    "vanadium_pentoxide": "Vanadium Pentoxide",
+    "vanadium_contact_bed": "Vanadium Contact Bed",
+    # The Coal Gasifier's ash: one mixed residue (tools/industrial_forms.py), bound into concrete or asphalt.
+    "gasification_residue": "Gasification Residue",
+    # Nitric acid neutralized with ammonia in the Bulk Chemical Reactor (tools/industrial_forms.py): a nitrogen
+    # fertilizer (chemistry/FertilizerItem, three doses), and the explosive filling of grenades and HE rockets.
+    "ammonium_nitrate": "Ammonium Nitrate",
 }
 
 
@@ -289,6 +338,11 @@ FLUID_RECIPES = {
         {"name": "naphtha", "items": [("jugcraft:cracking_catalyst", 1)], "fluids": [("jugcraft:naphtha", 1000)],
          "fluid_results": [("jugcraft:gasoline", 900, 3), ("jugcraft:refinery_gas", 100, 2)], "source": 0,
          "ticks": 120, "features": ["crude_oil"]},
+        # Ethylene dichloride cracked by heat alone (no catalyst used up) into vinyl chloride, giving back its hydrogen
+        # chloride for oxychlorination: C2H4Cl2 -> C2H3Cl + HCl (the plan's detailed PVC route).
+        {"name": "ethylene_dichloride", "fluids": [("jugcraft:ethylene_dichloride", 500)],
+         "fluid_results": [("jugcraft:vinyl_chloride", 250, 0), ("jugcraft:hydrogen_chloride", 250, 1)], "source": 0,
+         "ticks": 80, "features": ["salt", "machines"]},
     ],
     # Refinery gas polymerizes into plastic: a bucket of gas gives four pellets.
     "polymerization_reactor": [
@@ -430,6 +484,12 @@ FLUID_RECIPES = {
         {"name": "ammonia", "fluids": [("jugcraft:hydrogen", 300), ("jugcraft:nitrogen", 100)],
          "fluid_results": [("jugcraft:ammonia", 200)], "ticks": 40, "features": ["salt", "machines"]},
         # Vinyl chloride (batch 15): chlorine added to refinery gas (its ethylene), at heat over a catalyst.
+        # Oxychlorination (the plan's detailed PVC route, HCl reused): refinery ethylene, the hydrogen chloride the
+        # cracker gives back and oxygen make ethylene dichloride, C2H4 + 2 HCl + 1/2 O2 -> C2H4Cl2 + H2O. The liquid at
+        # 2 mB a reaction amount; the water is not kept.
+        {"name": "ethylene_dichloride", "fluids": [("jugcraft:refinery_gas", 250), ("jugcraft:hydrogen_chloride", 500),
+                                                   ("jugcraft:oxygen", 125)],
+         "fluid_results": [("jugcraft:ethylene_dichloride", 500)], "ticks": 60, "features": ["salt", "machines"]},
         {"name": "vinyl_chloride", "fluids": [("jugcraft:refinery_gas", 250), ("jugcraft:chlorine", 250)],
          "fluid_results": [("jugcraft:vinyl_chloride", 250)], "ticks": 40, "features": ["crude_oil", "salt"]},
         # Ostwald: ammonia burnt over platinum gauze in oxygen, the gases absorbed in water.

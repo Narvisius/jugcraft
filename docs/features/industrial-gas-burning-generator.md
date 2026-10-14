@@ -1,6 +1,6 @@
 # Gas Burning Generator (factory package 2, second slice)
 
-Status: implemented (pending CI and review). Stacked on the [Electrolytic Separator](industrial-electrolytic-separator.md) (PR #316), itself on the [shared machine foundation](industrial-machine-foundation.md) (PR #312).
+Status: implemented and merged (PR #319, on main through the integration in PR #320). Built on the [Electrolytic Separator](industrial-electrolytic-separator.md) (PR #316) and the [shared machine foundation](industrial-machine-foundation.md) (PR #312).
 Proposal issue: none. The second slice of package 2, "Starter steel chemistry", of the owner's [factory implementation plan in PR #302](https://github.com/jimbozoomer-byte/jugcraft/pull/302): the plan's shared hydrogen and methane generator, the slice the owner chose on 11 October 2026. Its output per tick is the owner's selection in the [starter gas and acid factory](industrial-starter-gas-and-acid-factory.md) (eighth planning batch, question 8: 128 JE/t on hydrogen, 256 JE/t on methane). Its construction bill and its burn value of 128 JE per mB of hydrogen are that record's proposals; the burn value is also the Fuel Cell's existing one.
 Owner: jimbozoomer-byte
 Target milestone and tier: steel-era power, the generator of the starter gas and acid factory
@@ -36,7 +36,7 @@ Cables connect only at the socket; nothing can push power into it.
 
 **Working.** It burns a millibucket of hydrogen a tick, 128 JE each, and makes 128 JE/t into its 120,000 JE store, which it pushes out of the socket. A bucket of hydrogen lasts 50 seconds and gives 128,000 JE. It makes only as much as its store has room for: when nothing draws its power it idles, keeping its fuel, and when something draws less than 128 JE/t it makes just that. Fuel already burnt and not yet made into power stays in hand, is saved with the machine, and is made first.
 
-Its screen is the shared formed-machine screen in the diesel theme: the fuel tank on the left, an arrow lit while it makes power, and the store on the right. The terminal reads "Generating", "Idle" with "Fuel tank is empty" or "Power store is full", and gives the JE it made last tick and the store's level. Pause stops it; a generator runs no batches, so there is no Cancel. A comparator reads 0 when it makes nothing and up to 15 at its full rate.
+Its screen is the shared formed-machine screen in the diesel theme: the fuel tank on the left, an arrow lit while it makes power, and the store on the right. The terminal reads "Generating", "Idle" with "Fuel tank is empty" or "Power store is full", and gives the JE it made last tick and the store's level (the stored JE alone once it holds 10,000 JE or more, when both numbers would not fit). Pause stops it; a generator runs no batches, so there is no Cancel. A comparator reads 0 when it makes nothing and up to 15 at its full rate.
 
 ## Connections
 
@@ -122,7 +122,24 @@ For CI:
 
 ### Results
 
-Pending: CI has not run on this branch yet.
+**CI on f23a5813f.**
+
+[Build run 38108860106](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38108860106) was green:
+- `mod`: everything compiled and "All 1306 required tests passed": the base's 1,299 plus the 7 new `GasBurningGeneratorGameTests`. The foundation's descriptor test passed with its new generator cases.
+- `optional integrations absent`, every client job and `client` passed.
+- The client tests picked were the generator's, the Separator's, the foundation's, `MachineMotionClientGameTests` (whose sawmill and sieve rotors share the changed `MachineRotors`) and the two general Jugcraft classes.
+
+The client test's screenshots show:
+- the machine whole from the front left, straight on, from the back right and from its right side: the intake and fan, the ignition box at the front left, the arched heat shield, the ribbed olive housing, and the tall cabinet with its hazard band, stencil, socket and insulators;
+- the screen reading "Generating", "RATE 128 JE/t" and "POWER 3k/120k", with the arrow lit and no Cancel;
+- on a full store, "Idle" and "Power store is full" with "RATE 0 JE/t";
+- in the dark box, the machine lit only by its own glow.
+
+The full-store screen showed its power line as "120k/120k" without the "POWER" label: a store this size, once it holds 10,000 JE or more, is too wide for both on the terminal's line. The line now gives the stored JE alone in that case ("POWER 120k"); the bar and its tooltip still give the size.
+
+[Repository run 38108860191](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38108860191) was red. `scripts/tests/test_client_test_selection.py` requires a full run of every client test to stay under 25 estimated minutes in each client job. This machine's client test (estimated 18 s) took the busiest of the four jobs from 1,492 s to exactly 1,500 s. The owner's integration in PR #320 moved CI to five client jobs, and main's CI at b73f51c8a passed every check, the five client jobs included.
+
+The power-line fix came after the merge, in its own pull request.
 
 No survival playtest, two-client test or performance measurement has been done.
 

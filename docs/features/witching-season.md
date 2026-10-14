@@ -375,6 +375,7 @@ A player who logs in inside a closed instance is sent back to their return point
 - The boss's health is set when it wakes: base × (1 + 0.5 per extra player), at most 2.5 × for four. That stays under vanilla's 1,024 maximum health, so no attribute mod is needed. Its damage doesn't change.
 - **Every participant gets their own loot.** A participant dealt at least 5% of the boss's health, or was in the arena for at least 30 seconds of the fight. Each one's loot drops at their own feet, and only they can pick it up for the first minute.
 - Experience is shared out the same way.
+- *As built:* a participant is a player who struck the boss or a creature that counts for it (any blow; each boss's page names them), or who healed, warded or met one of the boss's objectives enough to qualify, within 64 blocks when it falls; one who died in the fight is paid wherever they are, and one who left the game in it and is still away when it falls is paid when they next join. Loot goes into the inventory, and what does not fit lands at their feet. See [lair encounter credit](lair-encounter-credit.md).
 
 **Recovery.** If every player leaves or dies, the boss goes back to its throne and heals after 30 seconds. A player leaving mid-fight doesn't make it easier: health set at waking stays.
 

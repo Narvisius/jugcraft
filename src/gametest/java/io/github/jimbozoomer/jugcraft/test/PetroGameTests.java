@@ -88,6 +88,10 @@ public class PetroGameTests {
 	/** Crude oil is a real fluid: its bucket holds it and a tinplate tank stores it like any other fluid. */
 	@GameTest
 	public void crudeOilFillsTanks(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		PetroFluids.Entry oil = PetroFluids.CRUDE_OIL;
 		helper.assertTrue(oil.bucket() instanceof BucketItem bucket && bucket.getContent() == oil.source(),
 				"The crude oil bucket does not hold crude oil");
@@ -106,6 +110,10 @@ public class PetroGameTests {
 	/** Crude oil never makes new source blocks: two sources with a gap between them leave the gap flowing. */
 	@GameTest(maxTicks = 200)
 	public void crudeOilMakesNoNewSources(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		for (int x = 0; x < 5; x++) {
 			for (int z = 0; z < 3; z++) {
 				helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
@@ -126,6 +134,10 @@ public class PetroGameTests {
 	 */
 	@GameTest
 	public void oilReservoirsAreSeededAndFinite(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		ServerLevel level = helper.getLevel();
 		int conventional = 0;
 		ChunkPos found = null;
@@ -155,6 +167,10 @@ public class PetroGameTests {
 	/** The prospector reports oil under the surveyed chunks. */
 	@GameTest
 	public void surveyFindsOil(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos center = helper.absolutePos(new BlockPos(2, 2, 2));
 		OilReservoirs.overrideForTest(ChunkPos.containing(center), OilReservoirs.Kind.CONVENTIONAL, 120_000);
 		List<OreSurvey.Reading> readings = OreSurvey.survey(helper.getLevel(), center, helper.getLevel().getRandom());
@@ -169,6 +185,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 200)
 	public void pumpjackPumpsOil(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(2, 1, 1);
 		ChunkPos chunk = ChunkPos.containing(helper.absolutePos(master));
 		OilReservoirs.overrideForTest(chunk, OilReservoirs.Kind.CONVENTIONAL, 200_000);
@@ -208,6 +228,10 @@ public class PetroGameTests {
 	 */
 	@GameTest
 	public void settlingPlantTanksOnlyTakeWhatTheyUse(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity plant = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
 		Storage<FluidVariant> tanks = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(4, 1, 2)), Direction.NORTH);
 		helper.assertTrue(tanks != null, "The settling plant has no fluid storage");
@@ -226,6 +250,10 @@ public class PetroGameTests {
 	/** With water, the settling plant turns a block of oil sand into 500 mB of crude oil and a block of sand. */
 	@GameTest(maxTicks = 300)
 	public void settlingPlantWashesOilFromOilSand(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity plant = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
 		plant.tanks().input(0).fill(Fluids.WATER, 1000);
 		plant.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("oil_sand"))));
@@ -241,6 +269,10 @@ public class PetroGameTests {
 	/** The settling plant's filter press squeezes a block of mud into four clay balls and 250 mB of water. */
 	@GameTest(maxTicks = 200)
 	public void settlingPlantPressesMudIntoClay(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity plant = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
 		plant.setItem(0, new ItemStack(Items.MUD));
 		helper.succeedWhen(() -> {
@@ -257,6 +289,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 12)
 	public void heavyPumpFillsFastThroughSteelPipes(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
 		BlockPos pump = new BlockPos(1, 2, 3);
 		helper.setBlock(pump, JugcraftFluids.HEAVY_PUMP);
@@ -275,6 +311,10 @@ public class PetroGameTests {
 	/** A pipe line carries as much as its slowest pipe: one bronze pipe in a steel line holds it to 250 mB a tick. */
 	@GameTest(maxTicks = 12)
 	public void bronzePipeLimitsASteelLine(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(1, 1, 3), Blocks.WATER);
 		BlockPos pump = new BlockPos(1, 2, 3);
 		helper.setBlock(pump, JugcraftFluids.HEAVY_PUMP);
@@ -298,6 +338,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void distillationTowerSplitsCrude(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 2);
 		MachineBlockEntity tower = place(helper, MachineKind.DISTILLATION_TOWER, master);
 		BlockPos tank = master.above(2).north();
@@ -317,6 +361,10 @@ public class PetroGameTests {
 	/** The catalytic cracker turns heavy fuel oil, water and one catalyst into diesel, naphtha and refinery gas. */
 	@GameTest(maxTicks = 300)
 	public void crackerCracksHeavyFuelOil(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity cracker = place(helper, MachineKind.CATALYTIC_CRACKER, new BlockPos(4, 1, 2));
 		cracker.tanks().input(0).fill(PetroFluids.HEAVY_FUEL_OIL.source(), 1000);
 		cracker.tanks().input(1).fill(Fluids.WATER, 1000);
@@ -336,6 +384,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void towerVacuumDistilsHeavyFuelOil(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity tower = place(helper, MachineKind.DISTILLATION_TOWER, new BlockPos(4, 1, 2));
 		tower.tanks().input(0).fill(PetroFluids.HEAVY_FUEL_OIL.source(), 1000);
 		helper.succeedWhen(() -> {
@@ -352,6 +404,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void crackerReformsNaphtha(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity cracker = place(helper, MachineKind.CATALYTIC_CRACKER, new BlockPos(4, 1, 2));
 		cracker.tanks().input(0).fill(PetroFluids.NAPHTHA.source(), 1000);
 		cracker.setItem(0, new ItemStack(PetroItems.CRACKING_CATALYST, 2));
@@ -365,6 +421,10 @@ public class PetroGameTests {
 	/** The chemical reactor mixes two sand and a dried kelp into a bucket of water: a bucket of fracking fluid. */
 	@GameTest(maxTicks = 200)
 	public void reactorMixesFrackingFluid(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
 		reactor.setItem(0, new ItemStack(Items.SAND, 2));
@@ -381,6 +441,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 200)
 	public void frackingRigFreesShaleOil(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 1);
 		ChunkPos chunk = ChunkPos.containing(helper.absolutePos(master));
 		OilReservoirs.overrideForTest(chunk, OilReservoirs.Kind.SHALE, 400_000);
@@ -404,6 +468,10 @@ public class PetroGameTests {
 	/** The settling plant turns a bucket of flowback water into 750 mB of clean water and a salt. */
 	@GameTest(maxTicks = 200)
 	public void treatmentCleansFlowback(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity unit = place(helper, MachineKind.FLOWBACK_TREATMENT_UNIT, new BlockPos(4, 1, 2));
 		unit.tanks().input(0).fill(PetroFluids.FLOWBACK_WATER.source(), 1000);
 		helper.succeedWhen(() -> {
@@ -415,6 +483,10 @@ public class PetroGameTests {
 	/** The diesel generator burns 1 mB of diesel a tick for 256 JE, and refuses crude oil. */
 	@GameTest(maxTicks = 200)
 	public void dieselGeneratorBurnsDiesel(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 2);
 		MachineBlockEntity generator = place(helper, MachineKind.DIESEL_GENERATOR, master);
 		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
@@ -439,6 +511,10 @@ public class PetroGameTests {
 	/** The gas turbine will not run without lubricant; with it, it burns gasoline at 384 JE/mB. */
 	@GameTest(maxTicks = 200)
 	public void gasTurbineNeedsLubricant(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 2);
 		MachineBlockEntity turbine = place(helper, MachineKind.GAS_TURBINE, master);
 		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
@@ -464,6 +540,10 @@ public class PetroGameTests {
 	/** Batch 29: the hydrotreater turns diesel and hydrogen into premium diesel (base tank) and hydrogen sulfide (top). */
 	@GameTest(maxTicks = 300)
 	public void hydrotreaterMakesPremiumDiesel(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity hydrotreater = place(helper, MachineKind.HYDROTREATER, new BlockPos(4, 1, 2));
 		hydrotreater.tanks().input(0).fill(PetroFluids.DIESEL.source(), 1000);
 		hydrotreater.tanks().input(1).fill(PetroFluids.HYDROGEN.fluid(), 100);
@@ -478,6 +558,10 @@ public class PetroGameTests {
 	/** Batch 29: 900 mB of gasoline blended with 100 mB of bioethanol make a bucket of premium gasoline. */
 	@GameTest(maxTicks = 200)
 	public void hydrotreaterBlendsPremiumGasoline(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity hydrotreater = place(helper, MachineKind.HYDROTREATER, new BlockPos(4, 1, 2));
 		hydrotreater.tanks().input(0).fill(PetroFluids.GASOLINE.source(), 900);
 		hydrotreater.tanks().input(1).fill(PetroFluids.BIOETHANOL.source(), 100);
@@ -488,6 +572,10 @@ public class PetroGameTests {
 	/** Batch 29: the chemical reactor recovers a sulfur dust from 200 mB of hydrogen sulfide (the Claus process). */
 	@GameTest(maxTicks = 200)
 	public void reactorRecoversSulfur(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.HYDROGEN_SULFIDE.fluid(), 200);
 		helper.succeedWhen(() -> {
@@ -500,6 +588,10 @@ public class PetroGameTests {
 	/** Batch 29: premium diesel is worth 320 JE a mB in the diesel generator, a quarter more than diesel. */
 	@GameTest(maxTicks = 200)
 	public void premiumDieselBurnsBetter(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 2);
 		MachineBlockEntity generator = place(helper, MachineKind.DIESEL_GENERATOR, master);
 		SimpleEnergyStorage energy = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
@@ -542,6 +634,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 200)
 	public void heatRecoveryUnitUsesTurbineExhaust(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 3);
 		runningTurbine(helper, master);
 		SimpleEnergyStorage turbine = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
@@ -566,6 +662,10 @@ public class PetroGameTests {
 	/** Batch 29: two heat recovery units on one turbine share its exhaust heat; together they never make more than one. */
 	@GameTest(maxTicks = 200)
 	public void heatRecoveryUnitsShareOneTurbine(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 3);
 		runningTurbine(helper, master);
 		SimpleEnergyStorage turbine = (SimpleEnergyStorage) EnergyStorage.SIDED.find(helper.getLevel(), helper.absolutePos(master), Direction.UP);
@@ -582,6 +682,10 @@ public class PetroGameTests {
 	/** The polymerization reactor turns a bucket of refinery gas into four plastic pellets. */
 	@GameTest(maxTicks = 300)
 	public void reactorMakesPlasticPellets(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.POLYMERIZATION_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.REFINERY_GAS.fluid(), 1000);
 		helper.succeedWhen(() -> {
@@ -597,6 +701,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void naphthaBecomesRubber(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity cracker = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(2, 1, 1));
 		cracker.tanks().input(0).fill(PetroFluids.NAPHTHA.source(), 1000);
 		MachineBlockEntity polymerizer = place(helper, MachineKind.POLYMERIZATION_REACTOR, new BlockPos(5, 1, 4));
@@ -615,6 +723,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void chlorineBecomesPvc(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity converter = place(helper, MachineKind.SYNTHESIS_CONVERTER, new BlockPos(5, 1, 1));
 		converter.tanks().input(0).fill(PetroFluids.REFINERY_GAS.fluid(), 250);
 		converter.tanks().input(1).fill(PetroFluids.CHLORINE.fluid(), 250);
@@ -631,6 +743,10 @@ public class PetroGameTests {
 	/** Soap (batch 15): two rotten flesh boiled in 250 mB of lye make four soap; a bar washes a player's effects off. */
 	@GameTest(maxTicks = 300)
 	public void lyeMakesSoapThatWashesEffectsOff(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.LYE.source(), 250);
 		reactor.setItem(0, new ItemStack(Items.ROTTEN_FLESH, 2));
@@ -653,6 +769,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void flowBatteryHoldsWhatItsElectrolyteAllows(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 1);
 		MachineBlockEntity battery = placeUnpowered(helper, MachineKind.FLOW_BATTERY, master);
 		EnergyStorage energy = battery.energyFor(null);
@@ -691,6 +811,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void grenadeBlastHurtsButBreaksNothing(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		helper.setBlock(new BlockPos(5, 1, 3), Blocks.GLASS);
 		helper.setBlock(new BlockPos(3, 1, 3), Blocks.GRASS_BLOCK);
 		for (int y = 1; y <= 3; y++) {
@@ -724,6 +848,10 @@ public class PetroGameTests {
 	/** All three asphalt blocks speed up walking, and need a pickaxe. */
 	@GameTest
 	public void asphaltIsFasterToWalkOn(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		for (Block block : List.of(PetroBlocks.ASPHALT, PetroBlocks.ASPHALT_SLAB, PetroBlocks.ASPHALT_ROAD_LINE)) {
 			helper.assertTrue(block.getSpeedFactor() == PetroBlocks.ASPHALT_SPEED, block + " speed " + block.getSpeedFactor());
 			helper.assertTrue(block.defaultBlockState().is(BlockTags.MINEABLE_WITH_PICKAXE), block + " is not mined with a pickaxe");
@@ -734,6 +862,10 @@ public class PetroGameTests {
 	/** The diesel engine turns a dynamo behind its upper right back block, burning diesel only for what it delivers. */
 	@GameTest(maxTicks = 200)
 	public void dieselEngineTurnsADynamo(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 1);
 		// Part 11 is one block right, one up and two back of the master; the shaft leaves its back face.
 		BlockPos dynamoPos = master.offset(-1, 1, 3);
@@ -758,6 +890,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 100)
 	public void advancedEngineTurnsAMagnetDynamo(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 1);
 		BlockPos dynamoPos = master.south();
 		helper.setBlock(dynamoPos, JugcraftKinetics.MAGNET_DYNAMO);
@@ -783,6 +919,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 100)
 	public void turbochargerAndFlywheel(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 1);
 		BlockPos wheelPos = master.south();
 		helper.setBlock(wheelPos, JugcraftKinetics.FLYWHEEL.defaultBlockState().setValue(FlywheelBlock.FACING, Direction.SOUTH));
@@ -825,6 +965,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 100)
 	public void joinedTanksAndGauge(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos low = new BlockPos(2, 1, 2);
 		BlockPos high = low.above();
 		BlockPos glass = low.east();
@@ -882,6 +1026,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 320)
 	public void heliostatsHeatASolarReceiver(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos receiverPos = new BlockPos(4, 5, 4);
 		helper.setBlock(receiverPos, JugcraftSolar.SOLAR_RECEIVER);
 		for (BlockPos mirror : List.of(new BlockPos(2, 1, 2), new BlockPos(6, 1, 6), new BlockPos(1, 2, 6), new BlockPos(6, 1, 1))) {
@@ -918,6 +1066,10 @@ public class PetroGameTests {
 	/** The advanced solar panel places its pedestal and the 3x3 layer of cells above it, and holds 400,000 JE. */
 	@GameTest
 	public void advancedSolarPanelFormsAndStores(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(3, 1, 3);
 		MachineBlockEntity panel = placeUnpowered(helper, MachineKind.ADVANCED_SOLAR_PANEL, master);
 		MachineBlock block = JugcraftMachines.MACHINES.get(MachineKind.ADVANCED_SOLAR_PANEL);
@@ -936,6 +1088,10 @@ public class PetroGameTests {
 	/** The chemical reactor dissolves two salt in a bucket of water to make a bucket of brine. */
 	@GameTest(maxTicks = 200)
 	public void reactorMixesBrine(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("salt")), 2));
@@ -948,6 +1104,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 600)
 	public void cellSplitsBrine(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 2);
 		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, master);
 		cell.tanks().input(0).fill(PetroFluids.BRINE.source(), 1000);
@@ -967,6 +1127,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 1000)
 	public void cellSplitsWater(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(4, 1, 2);
 		MachineBlockEntity cell = place(helper, MachineKind.ELECTROLYTIC_CELL, master);
 		cell.tanks().input(0).fill(Fluids.WATER, 1000);
@@ -988,6 +1152,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void reactorLeachesOreFourTimes(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 250);
 		reactor.setItem(0, new ItemStack(Items.IRON_ORE));
@@ -1005,6 +1173,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void reactorFermentsBioethanol(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
 		reactor.setItem(0, new ItemStack(Items.SUGAR_CANE, 8));
@@ -1024,6 +1196,10 @@ public class PetroGameTests {
 	/** The chemical reactor turns two sulfur dust and a bucket of water into a bucket of sulfuric acid. */
 	@GameTest(maxTicks = 300)
 	public void reactorMakesSulfuricAcid(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(Fluids.WATER, 1000);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("sulfur_dust")), 2));
@@ -1037,6 +1213,10 @@ public class PetroGameTests {
 	 * alumina with a coke anode into two aluminum ingots. */
 	@GameTest(maxTicks = 400)
 	public void bayerRouteMakesAluminum(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(2, 1, 1));
 		reactor.tanks().input(0).fill(PetroFluids.LYE.source(), 250);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("bauxite"))));
@@ -1055,6 +1235,10 @@ public class PetroGameTests {
 	/** The chemical reactor treats two phosphate with 250 mB of sulfuric acid to make four fertilizer. */
 	@GameTest(maxTicks = 300)
 	public void reactorMakesFertilizer(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 250);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("phosphate")), 2));
@@ -1067,6 +1251,10 @@ public class PetroGameTests {
 	/** The lithography station etches a wafer and two copper wire with 100 mB of sulfuric acid into four microchips. */
 	@GameTest(maxTicks = 400)
 	public void lithographyMakesMicrochips(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity station = place(helper, MachineKind.LITHOGRAPHY_STATION, new BlockPos(5, 1, 2));
 		station.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 1_000);
 		station.setItem(0, new ItemStack(PetroItems.SILICON_WAFER));
@@ -1086,6 +1274,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 200)
 	public void airSeparationMakesNitrogenAndOxygen(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity unit = place(helper, MachineKind.AIR_SEPARATION_UNIT, new BlockPos(4, 1, 2));
 		helper.succeedWhen(() -> {
 			int nitrogen = unit.tanks().output(0).millibuckets();
@@ -1116,6 +1308,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void oxygenSpeedsUpTheSteelFoundry(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(2, 1, 2);
 		MachineBlockEntity foundry = placeUnpowered(helper, MachineKind.STEEL_FOUNDRY, master);
 		foundry.setItem(0, new ItemStack(Items.IRON_INGOT));
@@ -1133,6 +1329,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void argonSpeedsUpTheArcFurnace(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		// A solid 3x3x3 of casing with the controller in the middle of its north face, facing out.
 		for (int x = 2; x <= 4; x++) {
 			for (int y = 1; y <= 3; y++) {
@@ -1162,6 +1362,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void converterMakesAmmoniaAndNitricAcid(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity haber = place(helper, MachineKind.SYNTHESIS_CONVERTER, new BlockPos(5, 1, 1));
 		haber.tanks().input(0).fill(PetroFluids.HYDROGEN.fluid(), 300);
 		haber.tanks().input(1).fill(PetroFluids.NITROGEN.fluid(), 100);
@@ -1182,6 +1386,10 @@ public class PetroGameTests {
 	/** Two phosphate in 250 mB of ammonia make six fertilizer in the chemical reactor (ammonium phosphate). */
 	@GameTest(maxTicks = 300)
 	public void reactorMakesAmmoniumPhosphate(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.AMMONIA.fluid(), 250);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("phosphate")), 2));
@@ -1194,6 +1402,10 @@ public class PetroGameTests {
 	/** Nitric acid etches microchips too, using 50 mB where sulfuric acid takes 100. */
 	@GameTest(maxTicks = 400)
 	public void lithographyEtchesWithNitricAcid(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity station = place(helper, MachineKind.LITHOGRAPHY_STATION, new BlockPos(5, 1, 2));
 		station.tanks().input(0).fill(PetroFluids.NITRIC_ACID.source(), 1_000);
 		station.setItem(0, new ItemStack(PetroItems.SILICON_WAFER));
@@ -1209,6 +1421,10 @@ public class PetroGameTests {
 	/** The 3x3x3 gas holder holds 1,024 buckets of one gas, through any of its blocks, and refuses liquids. */
 	@GameTest
 	public void gasHolderHoldsOnlyGas(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 1);
 		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
 		// The top back corner block, two blocks from the master each way.
@@ -1232,6 +1448,10 @@ public class PetroGameTests {
 	 */
 	@GameTest
 	public void scubaTankFillsFromAGasHolder(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 1);
 		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
 		BlockPos at = helper.absolutePos(master);
@@ -1257,6 +1477,10 @@ public class PetroGameTests {
 	 */
 	@GameTest
 	public void gasCylinderCarriesGas(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 1);
 		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
 		BlockPos at = helper.absolutePos(master);
@@ -1322,6 +1546,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 400)
 	public void ammoniaChillerMakesIce(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity freezer = placeSingle(helper, MachineKind.AMMONIA_CHILLER, new BlockPos(1, 1, 1));
 		MachineBlockEntity packer = placeSingle(helper, MachineKind.AMMONIA_CHILLER, new BlockPos(4, 1, 1));
 		Storage<FluidVariant> inlet = FluidStorage.SIDED.find(helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, 1)), Direction.UP);
@@ -1351,6 +1579,10 @@ public class PetroGameTests {
 	 */
 	@GameTest(maxTicks = 300)
 	public void cryogenicLiquefierMakesLiquidOxygen(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity liquefier = placeSingle(helper, MachineKind.CRYOGENIC_LIQUEFIER, new BlockPos(1, 1, 1));
 		liquefier.tanks().input(0).fill(PetroFluids.OXYGEN.fluid(), 1000);
 		helper.assertTrue(io.github.jimbozoomer.jugcraft.chemistry.FluidFuels.jePerMb(MachineKind.GAS_TURBINE,
@@ -1370,6 +1602,10 @@ public class PetroGameTests {
 	/** Batch 30: the pneumatic grapple fills with nitrogen from a gas holder, up to its 4,000 mB. */
 	@GameTest
 	public void grappleFillsFromAGasHolder(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos master = new BlockPos(5, 1, 1);
 		placeUnpowered(helper, MachineKind.GAS_HOLDER, master);
 		BlockPos at = helper.absolutePos(master);
@@ -1403,6 +1639,10 @@ public class PetroGameTests {
 	/** Batch 30: a shot costs 25 mB and puts a hook out; using it again lets go; an empty grapple does not fire. */
 	@GameTest
 	public void grappleFiresAndLetsGo(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		ServerPlayer player = grappler(helper, 100, new Vec3(2.5, 1, 2.5));
 		ItemStack grapple = player.getMainHandItem();
 		JugcraftGrapple.PNEUMATIC_GRAPPLE.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
@@ -1430,6 +1670,10 @@ public class PetroGameTests {
 	/** Batch 30: a hook that bites a wall reels its owner toward it and takes away their fall distance. */
 	@GameTest(maxTicks = 100)
 	public void grappleReelsItsOwnerToAWall(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		for (int y = 1; y <= 4; y++) {
 			for (int z = 0; z <= 4; z++) {
 				helper.setBlock(new BlockPos(7, y, z), Blocks.STONE);
@@ -1448,6 +1692,10 @@ public class PetroGameTests {
 	/** Batch 30: a hooked pig is dragged toward the owner; an iron golem is too heavy and the hook lets go. */
 	@GameTest(maxTicks = 100)
 	public void grappleDragsLightMobsOnly(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		ServerPlayer player = grappler(helper, 100, new Vec3(1.5, 1, 1.5));
 		Mob pig = helper.spawn(EntityTypes.PIG, new BlockPos(6, 1, 1));
 		Mob golem = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(6, 1, 5));
@@ -1465,6 +1713,10 @@ public class PetroGameTests {
 	/** A sprinkler with water and fertilizer uses its water a pulse at a time and spreads fertilizer on the crop beside it. */
 	@GameTest(maxTicks = 800)
 	public void sprinklerWatersAndFertilizes(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos crop = new BlockPos(2, 1, 2);
 		helper.setBlock(crop.below(), Blocks.FARMLAND);
 		helper.setBlock(crop, Blocks.WHEAT);
@@ -1486,6 +1738,10 @@ public class PetroGameTests {
 	/** Fertilizer grows every crop in the 5x5 area around where it is used. */
 	@GameTest
 	public void fertilizerGrowsTheCropsAround(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		List<BlockPos> crops = new java.util.ArrayList<>();
 		for (int x = 0; x < 3; x++) {
 			for (int z = 0; z < 3; z++) {
@@ -1507,6 +1763,10 @@ public class PetroGameTests {
 	/** The fuel cell turns each millibucket of hydrogen into 128 JE and refuses other fluids. */
 	@GameTest(maxTicks = 200)
 	public void fuelCellBurnsHydrogen(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		BlockPos pos = new BlockPos(2, 1, 2);
 		helper.setBlock(pos, JugcraftMachines.MACHINES.get(MachineKind.FUEL_CELL).defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));
 		MachineBlockEntity cell = helper.getBlockEntity(pos, MachineBlockEntity.class);
@@ -1530,6 +1790,10 @@ public class PetroGameTests {
 	/** The Kroll process: raw titanium, coke and 250 mB of chlorine in the chemical reactor make a titanium sponge. */
 	@GameTest(maxTicks = 300)
 	public void reactorMakesTitaniumSponge(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.CHLORINE.fluid(), 250);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("raw_titanium"))));
@@ -1544,6 +1808,10 @@ public class PetroGameTests {
 	/** Leaching: a lepidolite in 250 mB of sulfuric acid gives two lithium carbonate, twice the blast furnace. */
 	@GameTest(maxTicks = 300)
 	public void reactorLeachesLithium(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		MachineBlockEntity reactor = place(helper, MachineKind.CHEMICAL_REACTOR, new BlockPos(4, 1, 2));
 		reactor.tanks().input(0).fill(PetroFluids.SULFURIC_ACID.source(), 250);
 		reactor.setItem(0, new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("lepidolite"))));
@@ -1557,6 +1825,10 @@ public class PetroGameTests {
 	/** Batch 31: chlorine hurts a pig, not a pig in a gas mask (whose filter wears), a sealed scuba set or a zombie. */
 	@GameTest
 	public void chlorineHurtsWhatBreathesUnlessMasked(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		Mob bare = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 1, 3));
 		Mob masked = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(4, 1, 3));
 		Mob diver = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 1, 4));
@@ -1582,6 +1854,10 @@ public class PetroGameTests {
 	/** Batch 31: a mob hunting something inside smoke loses its target. */
 	@GameTest(maxTicks = 40)
 	public void smokeHidesFromMobs(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(2, 1, 2));
 		Mob zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(9, 1, 2));
 		zombie.setTarget(pig);
@@ -1592,6 +1868,10 @@ public class PetroGameTests {
 	/** Batch 31: thermite burns what stands in it and lights no block. */
 	@GameTest(maxTicks = 60)
 	public void thermiteBurnsButLightsNothing(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(3, 1, 3));
 		helper.setBlock(new BlockPos(4, 1, 3), Blocks.OAK_PLANKS);
 		Warhead.THERMITE.detonate(helper.getLevel(), helper.absoluteVec(new Vec3(3.5, 2.5, 3.5)), null, null);
@@ -1612,6 +1892,10 @@ public class PetroGameTests {
 	/** Batch 31: a flashbang staggers a mob that sees it, not one behind a wall, and hurts nothing. */
 	@GameTest
 	public void flashbangStaggersWhatSeesIt(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		for (int y = 1; y <= 3; y++) {
 			for (int z = 1; z <= 6; z++) {
 				helper.setBlock(new BlockPos(6, y, z), Blocks.STONE);
@@ -1629,6 +1913,10 @@ public class PetroGameTests {
 	/** Batch 31: the antidote clears poison and keeps speed; the stimulant hastes; the first aid kit heals. */
 	@GameTest(maxTicks = 40)
 	public void medicinesWork(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		Mob pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(2, 1, 2));
 		pig.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
 		pig.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 0));
@@ -1646,6 +1934,10 @@ public class PetroGameTests {
 	/** Batch 32: foam fills open space (air and water) but no solid block or space a mob stands in; canisters run down; cement sets foam. */
 	@GameTest
 	public void foamFillsOpenSpaceAndCementSetsIt(GameTestHelper helper) {
+		if (TestFocus.skip("petro")) {
+			helper.succeed();
+			return;
+		}
 		ServerLevel level = helper.getLevel();
 		helper.setBlock(new BlockPos(3, 1, 3), Blocks.STONE);
 		helper.setBlock(new BlockPos(2, 1, 2), Blocks.WATER);

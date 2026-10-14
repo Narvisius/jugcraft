@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:mud",
+    "minecraft:mud",
+    "minecraft:string",
+    "minecraft:flint",
+    "minecraft:gold_ingot",
+    "jugcraft:hagmoss",
+    "jugcraft:hagmoss"
+  ],
+  "result": {
+    "id": "jugcraft:hag_stone",
+    "count": 1
+  }
+}

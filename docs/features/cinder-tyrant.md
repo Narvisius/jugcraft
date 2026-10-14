@@ -1,6 +1,6 @@
 # The Cinder Tyrant
 
-Status: implemented in source. CI builds it, and its game tests and client game test pass (below). This is part 2 of boss 4 in the [bosses plan](../branches/BOSSES.md#the-cinder-tyrant-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the boss of the Cinder Kiln, his Cinderlings and his spat and fallen things, and his loot. It is built on part 1, the kiln and the Kiln Seal that opens it ([cinder-kiln.md](cinder-kiln.md)), and on the lair framework ([hollow-acre.md](hollow-acre.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do.
+Status: implemented in source. CI builds it, and its game tests and client game test pass (below). This is part 2 of boss 4 in the [bosses plan](../branches/BOSSES.md#the-cinder-tyrant-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the boss of the Cinder Kiln, his Cinderlings and his spat and fallen things, and his loot. It is built on part 1, the kiln and the Kiln Seal that opens it ([cinder-kiln.md](cinder-kiln.md)), and on the lair framework ([hollow-acre.md](hollow-acre.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do. On 13 October 2026 his seams were widened and brightened, at the owner's choice ([Changes after review](#changes-after-review)); CI passes on that too, and the pictures below are from it.
 Proposal issue: none. On 10 October 2026 the owner asked for "the next boss same way" as the Yeti King, and for the order he was made in to be saved as the plan for every boss (the playbook); the Cinder Tyrant is the next of the first eight in [branches/BOSSES.md](../branches/BOSSES.md).
 Owner: @jimbozoomer-byte
 
@@ -13,7 +13,7 @@ Primary specialty and supported player role: adventuring. His loot also serves t
 
 The Cinder Tyrant lies sunk in the crucible of every Cinder Kiln, placed with the kiln, only the crest down his spine showing over the slag. He is a salamander lord the size of a cart, seven and a half blocks from his jaws to the end of his tail (2.6 blocks wide, 2.2 high):
 - a long, low body of dark basalt scales on four sprawled legs;
-- plates of obsidian along his back and flanks, with magma glowing in the seams between them;
+- plates of obsidian along his back and flanks, with magma welling in the seams between them and rimming their feet, bright enough to read across the kiln;
 - a crest of obsidian spikes down his spine, the tallest behind his head;
 - a broad flat head with small burning eyes and a wide jaw, his throat glowing when he spits or breathes;
 - a tail ending in a club of basalt, ringed with spikes.
@@ -141,6 +141,16 @@ His settings are the ones every lair boss shares, in `config/jugcraft.properties
 - **He is a monster:** on Peaceful he is gone, as every monster is, and the Cinder Kiln stands empty.
 - **Animations by GeckoLib,** as the other lair bosses' are: GeckoLib 5.5.7 is already pinned.
 
+## Changes after review
+
+- **His seams read across the kiln (13 October 2026).** At his checkpoint his dark plates could blend into the basalt in play, and hot and quenched looked alike: his seams were a model pixel wide, flush between his plates. The owner chose the recommendation ("Go with recommendations"), with the kiln lit brighter beside it ([cinder-kiln.md](cinder-kiln.md#changes-after-review)). Now, all in the heat controller's bones, so all of it goes dark when he is quenched:
+  - the magma wells a pixel over the three joints between his back plates, two pixels wide, in two halves either side of the spine's seam (and over the joint between his tail's plates);
+  - a rim of magma runs along the foot of his plates where they meet his hide, on each side;
+  - a line of magma runs over and under each flank plate (one under it before), and along each side of his tail's base;
+  - the seams are painted brighter: only their outermost painted pixel is the deep orange, the rest the bright and pale tones.
+  - The Molten Heart's white-hot cores grew to wrap the wider seams, so no face of one lies on a face of the other.
+  - His fight, his numbers and his loot are unchanged; so are his other parts, his Cinderlings, gobs and cinders.
+
 ## Connections
 
 - **Inputs:** the way in is part 1's Kiln Seal, pressed into Nether or volcanic magma, so obsidian, a magma block, blaze powder and gold feed every fight.
@@ -201,14 +211,15 @@ No Mojang texture is read, traced or copied.
 ![The Molten Heart: seen from above his back, his cores glowing in his seams, fire burning on the floor all round](../images/ingame_cinder_tyrant_molten_heart.jpg)
 ![After his fall: Grey Mist standing in the bowl's middle, the crucible beyond it under the forge mouth](../images/ingame_cinder_tyrant_defeated.jpg)
 
-*The client game test's pictures (CI, commit `cc43a8e`): sunk and waking; the Kiln's Tail Sweep, Ember Spit, Body Slam, Kiln Breath and Mantle Shed; quenched in the south sluice's trough; the Eruption on the forge's lip, the surge and the west sluice choked; the Cinder Rain and the Lava Wave; the Molten Heart; and after his fall. Each attack is frozen mid-move. The test client renders at 480x270, and the kiln is dark: some of these are hard to read at that size.*
+*The client game test's pictures (CI, commit `cd8169f`, with his wider seams and the kiln's brighter light): sunk and waking; the Kiln's Tail Sweep, Ember Spit, Body Slam, Kiln Breath and Mantle Shed; quenched in the south sluice's trough; the Eruption on the forge's lip, the surge and the west sluice choked; the Cinder Rain and the Lava Wave; the Molten Heart; and after his fall. Each attack is frozen mid-move. The test client renders at 480x270. Hot, his seams now show as bright bars across his back and flanks; quenched, they are dark.*
 
-CI (10 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):
+CI (10 and 13 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):
 
 | Commit | What ran | Result |
 | --- | --- | --- |
 | `738fd70` | Build | **The game tests failed to compile:** his heat test set `Entity.invulnerableTime`, which is private in 26.3, to strike him twice in one tick. The main and client code built. Nothing else ran |
-| `cc43a8e` | Build, data audit, every server game test with and without the optional integrations, and every client test class (his arena is a new structure file, which the selection counts as shared) | The test now waits out his hurt cooldown between blows. **All pass:** all 1313 required game tests (his fourteen among them), `optional integrations absent`, and every client test class in five jobs of 15 to 28 minutes, `CinderTyrantClientGameTests` (his whole fight) among them. The pictures above are from this commit |
+| `cc43a8e` | Build, data audit, every server game test with and without the optional integrations, and every client test class (his arena is a new structure file, which the selection counts as shared) | The test now waits out his hurt cooldown between blows. **All pass:** all 1313 required game tests (his fourteen among them), `optional integrations absent`, and every client test class in five jobs of 15 to 28 minutes, `CinderTyrantClientGameTests` (his whole fight) among them |
+| `cd8169f` (his wider seams, the kiln's brighter light) | Build, data audit, every server game test with and without the optional integrations, and the client test classes the change picks: the kiln's, his and Arms VII's | **All pass:** all 1379 required game tests (main has grown since), his fourteen among them, `optional integrations absent`, and the three client test classes, his whole fight among them. The pictures above are from this commit |
 
 Run locally (10 October 2026):
 

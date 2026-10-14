@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PIP",
+    "WTC",
+    "PIP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "I": "jugcraft:steel_fluid_pipe",
+    "W": "jugcraft:copper_cable",
+    "T": "jugcraft:fluid_tank",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:chemical_infuser",
+    "count": 1
+  }
+}

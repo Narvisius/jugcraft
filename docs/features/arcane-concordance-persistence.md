@@ -1,6 +1,8 @@
 # Arcane Concordance: persistence, migration and performance
 
-Status: implemented on branch `claude/concordance-steps-26-32`; see Verification for what has run.
+Status: merged to main ([#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250), from branch
+`claude/concordance-steps-26-32`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 30) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 22, every stage. Roadmap step 30.

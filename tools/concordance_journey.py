@@ -23,6 +23,8 @@ Nothing here is generated into the game. tools/check_mod_data.py (check_journey)
 - the first success (understanding First Light and casting Kindle) is the data's: its specimens, the dark it asks
   for, the wand's recipe and Kindle's cost; and it needs nothing past the Practitioner stage and nothing from the
   Nether or the End;
+- the first loadout (tools/acquisition.py LOADOUT, Concordance Chunk A) is made by one player in the Overworld, each
+  piece by its recipe or its bench working, with no research but First Light up to understood;
 - every game test a step names exists;
 - the record's table is the one table() renders.
 
@@ -282,6 +284,21 @@ def problems():
     early = pg.reachable(nodes, research, cap="practitioner", dimensions={""})
     if f"invocation:{rid('kindle')}" not in early:
         found.append("journey: Kindle needs something past the Practitioner stage, or from the Nether or the End")
+    # The first loadout (Chunk A, A-07 and A-D10; tools/acquisition.py LOADOUT): one player makes every piece in the
+    # Overworld, by its recipe or its bench working, with no research but First Light up to understood (the
+    # Practitioner stage's own route; mastering two entries, or understanding five, would make them an Adept).
+    import acquisition
+    unmade = []
+    for item in acquisition.LOADOUT:
+        pg.item_node(nodes, at_hand, rid(item), unmade)
+    found.extend(f"journey: the first loadout: {problem}" for problem in unmade)
+    beyond = {pg.research_node(rid(key), state) for key in research for state in pg.RESEARCH_STATES
+              if key != "first_light" or state == "mastered"}
+    first = pg.reachable(nodes, research, cap="practitioner", dimensions={""}, without=beyond)
+    for item in acquisition.LOADOUT:
+        if f"item:{rid(item)}" not in first:
+            found.append(f"journey: the first loadout's {item} needs more than First Light understood (research past the "
+                         "Practitioner stage), another player, the Nether or the End")
     # Every game test named exists.
     tests = game_tests()
     named = list(FIRST_SUCCESS["tests"])

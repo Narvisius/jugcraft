@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -409,20 +410,29 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 
 	/** Tells the player how the anchor and its circle stand: the phase, then every fault (or that it is complete). */
 	public void status(ServerPlayer player, ServerLevel level) {
-		player.sendSystemMessage(Component.translatable("message.jugcraft.concordance.circle.status",
+		status(level, player::sendSystemMessage);
+	}
+
+	/**
+	 * The phase, then "complete" or every fault, line by line to {@code out}, from the cached report (no scan beyond
+	 * {@link #report}): what chat, the command and the encyclopedia's Inspect page show (Jade reads the same report, but
+	 * shows its phase and first three faults its own way).
+	 */
+	public void status(ServerLevel level, Consumer<Component> out) {
+		out.accept(Component.translatable("message.jugcraft.concordance.circle.status",
 				Component.translatable("block.jugcraft.circle_anchor"), phaseText()));
 		StructureValidator.Report current = report(level);
 		if (current == null) {
 			return;
 		}
 		if (current.complete()) {
-			player.sendSystemMessage(Component.translatable("message.jugcraft.concordance.circle.complete"));
+			out.accept(Component.translatable("message.jugcraft.concordance.circle.complete"));
 			return;
 		}
-		player.sendSystemMessage(Component.translatable("message.jugcraft.concordance.circle.faults",
+		out.accept(Component.translatable("message.jugcraft.concordance.circle.faults",
 				Component.translatable("structure.jugcraft." + Identifier.parse(current.pattern()).getPath()), current.faults().size()));
 		for (StructureValidator.Fault fault : current.faults()) {
-			player.sendSystemMessage(faultText(fault));
+			out.accept(faultText(fault));
 		}
 	}
 

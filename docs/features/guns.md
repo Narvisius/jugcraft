@@ -1,7 +1,7 @@
-# Guns: the scrap guns (slice 1), the iron set (slice 2), the lever set (slice 3), the black powder guns (slice 4), the attachments (slices 5 and 7), the guns in use (slice 6), the scopes (slice 7b), the hand guns (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C), the energy weapons (slice 8D), the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C), the pump shotguns (slice 9D), the tactical grip and laser sight (slice 9E), the aiming polish (slice 9F), the Trench Lobber's grenades (slice 9G), the launchers (slice 10A), coil and plasma (slice 10B), the double-barrels (slice 10C), the sculk guns (slice 10D), the Cell Rack (slice 10E), enemies with guns (slice 10F), two guns at once (slice 10G) and the Nether guns (slices 11A and 11B)
+# Guns: the scrap guns (slice 1), the iron set (slice 2), the lever set (slice 3), the black powder guns (slice 4), the attachments (slices 5 and 7), the guns in use (slice 6), the scopes (slice 7b), the hand guns (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C), the energy weapons (slice 8D), the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C), the pump shotguns (slice 9D), the tactical grip and laser sight (slice 9E), the aiming polish (slice 9F), the Trench Lobber's grenades (slice 9G), the launchers (slice 10A), coil and plasma (slice 10B), the double-barrels (slice 10C), the sculk guns (slice 10D), the Cell Rack (slice 10E), enemies with guns (slice 10F), two guns at once (slice 10G), the Nether guns (slices 11A and 11B), the End guns (slice 12A), the copper guns (slice 12B) and the lone guns (slice 12C)
 
 Status:
-- **Slices 1 to 9G are in `main`:** the last of them, 8C to 9G, with #277 on 10 October 2026. The lines below say where each was built.
+- **Slices 1 to 11B are in `main`:** the last of them, 10A to 11B, with #320 on 11 October 2026. The lines below say where each was built.
 - **Slice 1** (the Rust Midge, Patchwork Carbine and Thunderpipe): implemented on `claude/guns` (#248), awaiting review. It is stacked on `claude/owner-gun-models` (#247), which adds the owner's gun models to the owner asset library.
 - **Slice 2** (the iron set: the Warden Pistol, Riveter SMG and Haymaker; [below](#slice-2-the-iron-set)): implemented on `claude/guns-iron` (#252), stacked on slice 1, awaiting review.
 - **Slice 3** (the lever set: the Longhorn Rifle, Drover Rifle and Coach Gun; [below](#slice-3-the-lever-set)): implemented on `claude/guns-lever` (#253), stacked on slice 2, awaiting review.
@@ -30,6 +30,9 @@ Status:
 - **Slice 10G** (two guns at once: a one-handed gun in each hand, both fired; [below](#slice-10g-two-guns-at-once)): implemented on `claude/guns-dual-pistols`, stacked on slice 10F, awaiting review.
 - **Slice 11A** (the Nether guns: the Tusker, Cinder Repeater and Bastion Rifle; [below](#slice-11a-the-nether-guns)): implemented on `claude/guns-nether`, stacked on slice 10G, awaiting review.
 - **Slice 11B** (the rest of the Nether guns: the Ashfall Pistol, Goldbristle Carbine and Crackling; [below](#slice-11b-the-rest-of-the-nether-guns)): implemented on `claude/guns-nether-2`, stacked on slice 11A, awaiting review.
+- **Slice 12A** (the End guns: the Chitin SMG, Hermit Rifle and Borer; [below](#slice-12a-the-end-guns)): implemented on `claude/guns-12a`, off `main`, awaiting review.
+- **Slice 12B** (the copper guns: the Penny Pistol, Conductor Carbine and Magpie SMG; [below](#slice-12b-the-copper-guns)): implemented on `claude/guns-12b`, stacked on slice 12A, awaiting review.
+- **Slice 12C** (the lone guns: the Tuppence Pistol, Goshawk Revolver and Lament Rifle; [below](#slice-12c-the-lone-guns)): implemented on `claude/guns-12c`, stacked on slice 12B, awaiting review.
 - **Not yet played:** the Java compiles only in CI, and the game tests there are the only runs.
 Proposal issue: none. The owner asked on 7 October 2026: "I want to start working on the Guns plugin which I want to base off of the Mod Scorched Guns 2 I have models and animations that I have created already on the github in the "Blocks" folder for that part". The owner's answers:
 - on the files: "the files in the blocks folder are all mine I made all of them myself and have all the rights to them they are inspired by scorched guns 2 but I made all of them including the animations";
@@ -45,6 +48,9 @@ Proposal issue: none. The owner asked on 7 October 2026: "I want to start workin
 - the next part: on 10 October 2026, "Ok lets do the next part". Offered four more gun sets and three smaller follow-ups, each its own pull request, they chose all of them: "Marksman rifles (Recommended), Automatic weapons, Energy weapons II, Pump shotguns" and "Tactical grip + laser, Aiming polish, Lobber gas grenades". The marksman rifles are slice 9A, the automatic weapons slice 9B, the second energy weapons slice 9C, the pump shotguns slice 9D, the first follow-up, the tactical grip and the laser sight, slice 9E, the second, the aiming polish, slice 9F, and the third, the Lobber's grenades, slice 9G.
 - the round after: on 10 October 2026, asked "Look good what do we need next", and offered more of their gun sets and some systems to add alongside them, each its own pull request, they chose "Launchers (Recommended), Coil and plasma, Double-barrels, Sculk guns" and "Energy Cell rack (Recommended), Enemies with guns, Dual pistols, Javelin test fix". The launchers are slice 10A, coil and plasma slice 10B, the double-barrels slice 10C and the sculk guns slice 10D; the Energy Cell rack is slice 10E, the enemies with guns slice 10F and the dual pistols slice 10G.
 - the next round: on 10 October 2026, with those built, they asked "Ok lets continue and do the next thing we need to". No choice was offered this time: the next of their unbuilt guns were taken up, a set at a time, each its own pull request, starting with three of the six they made in the piglins' crimson, blackstone and gold. The Nether guns are slice 11A, and the other three slice 11B.
+- the round after: on 13 October 2026, with the Nether guns in `main`, they asked "Ok lets continue and do the next thing". The next of their unbuilt guns were taken up as before: the three they made in the shulkers' purpur, each fed from a shulker box, are slice 12A.
+- and again: on 13 October 2026, with slice 12A up for review, they asked again "Ok lets continue and do the next thing". Three of the five guns they made in copper are slice 12B.
+- and once more: on 13 October 2026, with slice 12B up for review, they asked again "Ok lets continue and do the next thing". Slice 12C takes up one of the two copper guns left and the two guns of their library that stand alone in their materials, the one of iron and the one of echo shards. The last copper gun, the Whizzbanger, waits for the model its animations were made for ([below](#the-whizzbanger-waits)).
 
 Owner: jimbozoomer-byte (models, textures, animations and sounds: the owner; implementation: Claude Opus 5.5).
 Target milestone and tier: early firearms, after the first copper and iron. These are the bottom rungs of a gun line the owner's library holds well over a hundred more of.
@@ -1732,6 +1738,245 @@ The reload times and the Crackling's rate are the owner's animations': its pump 
 - **In the Nether** most creatures are fireproof, as for slice 11A's.
 - **Not played:** none of it has been played yet. The numbers want play to set.
 
+## Slice 12A: the End guns
+The next of the owner's guns, taken up after the Nether guns reached `main` (on 13 October 2026 the owner asked "Ok lets continue and do the next thing"): the three they made in the shulkers' purpur, the Carapice, Shellurker and Weevil. Each is fed from a shulker box with the shulker peering out of it, cabled into the gun. Their bullets make what they hit float, as a shulker's do.
+
+| | Chitin SMG | Hermit Rifle | Borer |
+|---|---|---|---|
+| The owner's gun | Carapice | Shellurker | Weevil |
+| What it is | a short machine gun in purpur: a curved grip, a block on top of its receiver behind a ring sight, a short shroud with a post, and the shulker box under its receiver | the same body, longer: its muzzle wrapped in a curled purpur shell | a heavy machine gun carried at the hip: a D handle at its back, a long pale barrel with a post at its muzzle, an eight-sided drum and a crank on its left side, and the shulker box under its front |
+| Fires | for as long as the trigger is held | the same | the same |
+| Damage | 3 | 5 | 5.5 |
+| Rate | 6.7 a second (every 3 ticks) | 5 a second (every 4 ticks) | 4 a second (every 5 ticks) |
+| Holds | 24 | 20 | 40 |
+| Reload | 2.8 s: the magazine | 2.55 s: the magazine | 3.9 s: the magazine |
+| Spread, hip / aimed | 3.5° / 1.2° | 3° / 0.5° | 4° / 1.5° |
+| Range | 48 blocks | 80 | 72 |
+| The view aimed | narrowed to 0.88 | 0.85 | 0.95 |
+| Round | Light Round | Rifle Round | Rifle Round |
+| Takes | the scopes and the Laser Sight | the three stocks, the scopes and the Laser Sight | nothing |
+
+The reload times are the owner's animations'.
+
+**Crafting** (a crafting table; the guns switch, as every gun). Each takes steel and a lever, as the other steel guns, and a shulker shell and purpur, from the End's cities:
+- **Chitin SMG:** two steel ingots and a shulker shell over a lever and a purpur block.
+- **Hermit Rifle:** three steel ingots over a shulker shell, a lever and a purpur block.
+- **Borer:** three steel ingots over a lever between two shulker shells, over a purpur block.
+
+**How they fire:** as the other bullet guns: each bullet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. A magazine loads at the end of its reload.
+- **Float:** each creature their bullets hurt floats for 1 second (`GunShots.LIFT_TICKS`, 20 ticks): the game's own Levitation at its first level, as a shulker's bullet gives it (a shulker's lasts 10 seconds). It rises about three quarters of a block in that second. Each hit starts it again, so under steady fire it goes on rising, nearly a block a second. When it ends the creature falls, and a fall of more than 3 blocks hurts it, as any fall does. A longer spell of Levitation already on it is kept.
+- **Only where the shot may strike:** a creature the shooter may not hurt (`GunShots.allowed`) is neither hurt nor lifted.
+- The server works it out with the shot (`JugcraftGuns.LEVITATING`); nothing new is sent to clients, which show the effect as the game always does.
+
+**What you see:** the owner's animations.
+- **Chitin SMG:** each shot kicks it back and drives the block on top of its receiver back and home. To reload, the gun is lifted and tipped up toward the face, the block held back; the left hand draws the shulker box down and away, brings it back and pushes it home, and the block is let go.
+- **Hermit Rifle:** each shot kicks it back and drives the block back, as the Chitin SMG's. To reload, the gun is lifted and tipped toward the face; the left hand draws the box down and away and pushes it home; then the block is worked.
+- **Borer:** each shot drives the barrel 2.9 px back into the body and out again. To reload, the gun is pushed out and tipped; the left hand pulls the box down and away and brings it back; then the crank on its left is pushed forward and let back.
+- **Spent rounds:** the Chitin SMG and the Hermit Rifle throw a case with each shot; the Borer's animations cue none.
+- **Sounds:** the Riveter SMG's shot (the Chitin SMG); the library's shulker shot, the Reverb's (the Hermit Rifle); the Garrison Rifle's (the Borer). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source (slice 11A), so none was added. The boxes go out and in with the magazine's sounds, the Borer's crank with the lever's.
+
+**How the models were built:**
+- **Chitin SMG:**
+  - **Bolt:** the owner's receiver part, the block on top of the receiver.
+  - **Magazine:** the shulker box under the receiver: the main part's last six elements (the box's tray and lid plates and the shulker's head), with the two cables into its top and the loop of cable ahead of it (the 10th to 12th), so they go with it. Its `magazine_2` and `scriptures` bones hold nothing.
+  - **The whole gun** rides `gun_body2`, which the reload eases back and forth.
+  - **Sights:** the owner's ring ahead of the receiver block, over the post on its shroud. A scope stands on the owner's rail (its `no_sights` part).
+  - **Aiming:** at the hip's depth: through the aimed shot its back stays 1.69 px from the eye.
+- **Hermit Rifle:**
+  - **The same body** as the Chitin SMG's (the owner's two share their back half and their animations), its bolt the receiver part and its magazine the shulker box with its cables (the main part's 28th to 30th and last six elements). Its `magazine_2`, `default_mag` and `scriptures` bones hold nothing.
+  - **The curled shell** at its muzzle is part of its body.
+  - **Sights:** the owner's ring on its receiver, over the post at its muzzle.
+  - **Aiming:** held 2 px further out (`"eye_relief"`): the shot's kick brought the back of its receiver to the eye.
+- **Borer:**
+  - **At the hip,** as the Thresher (slice 8C), whose poses the owner's Weevil shares: the right hand holds the D handle at its back, the left the barrel's root, just ahead of the box. Seen from outside it is carried low, as the owner's third-person transform tilts it 66.75° (`GunLooks.TILT`).
+  - **Barrel:** its own part, slid back with each shot and through the reload.
+  - **Magazine:** the owner's group so named in the main part (its first nine elements: the box, the shulker's head and the cables).
+  - **Grip:** the owner's name for the crank on the left (the main part's 37th, 38th, 45th and 48th to 52nd elements), turned about its foot as the reload ends. The drum stays.
+  - **No sights:** its receiver stands above the line from its front post, and the owner made it no aimed shot. Aiming steadies it and narrows the view, as the Thresher's.
+- **The arms:**
+  - **The Chitin SMG and the Hermit Rifle** take the Solenoid Rifle's arms (slice 10B), whose poses theirs are. Their reloads, like the Solenoid's, lift the gun toward the face while the left hand changes the box beneath it, so the left arm covers part of the view for a moment. A search over the arm's direction found at best about an eighth less, as for the Solenoid, so the usual direction stayed.
+  - **The Borer's** were both chosen in first-person previews to cover as little of the screen as they can, still running back toward the shoulders: the left arm's share of the screen about seven tenths of what it was with the Thresher's directions, the right arm's about half.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the receiver blocks, the boxes, the Borer's barrel and crank through their animations; the scopes, the stocks and the Laser Sight; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Light Round and the Rifle Round; nothing new.
+- **Parts:** steel and a lever, as the steel guns; shulker shells and purpur from the End's cities (purpur is also made from chorus fruit).
+- **Their place:** past steel, a reward for reaching the End's cities.
+- **The float** is the game's own Levitation, as a shulker's bullet gives.
+
+**Balance:** starting numbers, at point blank with every shot landing.
+- **Chitin SMG:** 3 a shot, 20 a second while it fires, for 3.6 s; over a magazine and its 2.8 s reload about 11 a second, as the Riveter SMG's and the Rattler Pistol's (11), below the Cinder Repeater's (13).
+- **Hermit Rifle:** 5 a shot, 25 a second while it fires, for 4 s; over a magazine and its 2.55 s reload about 15 a second, as the Squall Rifle's (15), below the Garrison Rifle's (17). It reaches as far (80 blocks) and is a little steadier aimed (0.5° against 0.6°).
+- **Borer:** 5.5 a shot, 22 a second while it fires, for 10 s; over its forty rounds and their 3.9 s reload about 16 a second, below the Thresher's (17), which fires faster but must spin up first.
+- **The float** does no damage of its own. Held up under fire a creature climbs nearly a block a second: a whole magazine of the Borer's, every shot landing, lifts it about ten blocks, and the fall then costs it about 7. A magazine of the Chitin SMG's or the Hermit's lifts it about four, a fall that costs 1 or 2.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:chitin_smg`, `hermit_rifle` and `borer`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Chitin SMG's and the Hermit Rifle's reloads** bring the left arm across part of the view for a moment, as the Solenoid Rifle's does.
+- **The Borer has no sights:** it is fired from the hip, as the Thresher is.
+- **Attachments:** the owner made no barrel parts, magazines or grips for these three, and no stocks for the Chitin SMG or anything for the Borer, so those take none.
+- **The float lifts what the game lets float:** the game's own rules for Levitation apply.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 12B: the copper guns
+The next of the owner's guns, taken up after slice 12A in the same round (on 13 October 2026 the owner asked again "Ok lets continue and do the next thing"): three of the five they made in copper, the Scrapper, LLR Director and Birdfeeder. They are early guns of copper and iron, as the Rust Midge is.
+
+| | Penny Pistol | Conductor Carbine | Magpie SMG |
+|---|---|---|---|
+| The owner's gun | Scrapper | LLR Director | Birdfeeder |
+| What it is | a short copper pistol: a dark grip, a cocking knob on each side, a notch and post on top, and a long magazine standing out of its left side | a copper carbine with a black shroud over its barrel, a ring sight at the back, a slide under the barrel and a magazine in its left side | a copper submachine gun on the same lines, with a long magazine standing out of its left side |
+| Held | in one hand: it pairs with another (slice 10G) | in both hands | in both hands |
+| Fires | one shot each pull | one shot each pull, the slide worked after each | for as long as the trigger is held |
+| Damage | 4 | 8 | 2.5 |
+| Rate | 3.3 a second (every 6 ticks) | 1.3 a second (every 15 ticks) | 5 a second (every 4 ticks) |
+| Holds | 10 | 8 | 32 |
+| Reload | 2.8 s: the magazine | 2.45 s: the magazine | 2.65 s: the magazine |
+| Spread, hip / aimed | 3° / 1° | 2° / 0.3° | 3.5° / 1.5° |
+| Range | 48 blocks | 96 | 40 |
+| The view aimed | narrowed to 0.9 | 0.82 | 0.88 |
+| Round | Light Round | Rifle Round | Light Round |
+| Takes | the silencers, the Muzzle Brake and Extended Barrel and the three stocks | those, both magazines, the Light and Tactical Grips, the four bayonets, the scopes and the Laser Sight | those but the magazines |
+
+The reload times and the Conductor Carbine's rate are the owner's animations': its slide is worked in full between shots.
+
+**Crafting** (a crafting table; the guns switch, as every gun). Each takes copper ingots, an iron ingot and a lever, as the Rust Midge does:
+- **Penny Pistol:** two copper ingots over a lever and an iron ingot (a two-by-two recipe, so it can be made in the inventory).
+- **Conductor Carbine:** three copper ingots over a lever between two iron ingots.
+- **Magpie SMG:** three copper ingots over a lever and an iron ingot.
+
+**How they fire:** as the other bullet guns: each bullet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. A magazine loads at the end of its reload. Nothing else follows a hit.
+
+**What you see:** the owner's animations.
+- **Penny Pistol:** held out in the right hand; each shot kicks it back and up and drives the knobs back, throwing a case. To reload, the left hand comes in under the frame and the gun is rolled; the magazine is drawn out to the left and dropped away, a new one swung in and slapped home; then the knobs are racked.
+- **Conductor Carbine:** each shot kicks it back; then the left hand works the slide back and forward. To reload, the gun is rolled; the magazine swings out and away and a new one is brought in and slapped home; then the slide is worked.
+- **Magpie SMG:** each shot kicks it back. To reload, the gun is rolled; the magazine slides out along its length and swings away, a new one swings in and slides home; then the bolt is racked.
+- **Spent rounds:** the Penny Pistol throws a case with each shot; the Conductor Carbine's and the Magpie SMG's animations cue none.
+- **Sounds:** the library's Scrapper shot, the Sentry Pistol's (the Penny Pistol); the Drover Rifle's (the Conductor Carbine); the Rust Midge's (the Magpie SMG). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source (slice 11A), so none was added. The slide racks with each shot, the magazines go out and in with the magazine's sounds.
+
+**How the models were built:**
+- **Penny Pistol:**
+  - **One hand:** its idle hides the left arm, so it is among the one-handed guns (`JugcraftGuns.ONE_HANDED`, slice 10G); the left hand's place is given for the reload's first hold under the frame (0.25 s, `"hand_pose"`).
+  - **Bolt:** the owner's bolt part, the knob on each side of the receiver.
+  - **Magazine:** the owner's magazine part, on the `sliding_magazine` bone, which the reload draws out to the left. The `magazine` and `magazine_2` bones its shots scale hold nothing.
+  - **Sights:** the notch on its back over the post at its front (the main part's 12th and 13th elements, and its 16th).
+  - **Aiming:** at the hip's depth: its back stays more than 5 px from the eye.
+  - **Its other animations:** the owner also made "carbine" animations, for when a stock is fitted and it is held in both hands. They are not used: with a stock it is still held in one hand.
+- **Conductor Carbine:**
+  - **Slide:** the owner's bolt part is the slide under the barrel with the knob on the right of the receiver, which the left hand works.
+  - **Magazine:** its own part, in the left side of the receiver, and the Extended and Speed Magazines in its place; `magazine_2` holds nothing.
+  - **Sights:** the owner's ring at the back of the receiver, over the post at the front.
+  - **Aiming:** held 2.5 px further out (`"eye_relief"`): the shot's kick brought the back of its receiver 0.64 px past the eye.
+- **Magpie SMG:**
+  - **Magazine:** its own part (the owner's `sliding_magazine` group), on the `sliding_magazine` bone, which hangs from the `magazine` bone that swings it away.
+  - **Bolt:** its animations name a `bolt` bone in some places and a `Bolt` bone in others; it has no bolt part, so both hold nothing.
+  - **Sights:** the owner's ring at the back of the receiver, over the post at the front.
+  - **Aiming:** held 2 px further out: the shot's kick brought the back of its receiver to the eye.
+- **Particle cues:** the Penny Pistol's and the Magpie SMG's reloads cue `reset_mag_position` and `resume_mag_tracking`, for a magazine the owner's mod slid along as its rounds were spent. Here they show nothing (`QUIET_CUES`), as `loaded` does. One of the Scrapper's carbine animations names `end_reload` with a space after it, so the check reads the names trimmed.
+- **The arms:** chosen in first-person previews to cover as little of the screen as they can, still running back toward the shoulder: the Penny Pistol's both, and the two long guns' right arms, run straighter back. The long guns' left arms keep the usual direction, which a search could better only by a few per cent.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the knobs, the slide and the magazines through their animations; each with the attachments it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Light Round and the Rifle Round; nothing new.
+- **Parts:** copper ingots, an iron ingot and a lever, as the Rust Midge.
+- **Their place:** the first guns, beside the Rust Midge, once copper and iron are smelted.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Penny Pistol:** 4 a shot, 13 a second while it fires; about 7 a second, as the Rust Midge's (7.5), below the Warden and Sentry Pistols' (9). A pair (slice 10G) does about 9.
+- **Conductor Carbine:** 8 a shot; about 7.6 a second, above the lever rifles' (5 to 6) and below the Patchwork Carbine's (11), which fires faster but hits for less (6). It reaches as far as the Patchwork Carbine (96 blocks) and is nearly as steady aimed (0.3° against 0.25°).
+- **Magpie SMG:** 2.5 a shot, 12.5 a second for its 6.4 s magazine; about 9 a second, between the Rust Midge's (7.5) and the Riveter SMG's (11), its magazine half as long again as the Rust Midge's.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:penny_pistol`, `conductor_carbine` and `magpie_smg`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The side magazines do not move as rounds are spent:** the owner's mod slid the Birdfeeder's along as it emptied. At the start of the Magpie SMG's reload its magazine steps to where an empty one would be.
+- **The Penny Pistol stays one-handed with a stock:** the owner's carbine animations for it are not used.
+- **The Penny Pistol's hand** covers much of so small a pistol.
+- **The Conductor Carbine and the Magpie SMG throw no cases:** their animations cue none.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 12C: the lone guns
+The next of the owner's guns, taken up after slice 12B in the same round (on 13 October 2026 the owner asked again "Ok lets continue and do the next thing"): the UMAX Pistol, one of the two copper guns slice 12B left; the Ultra Knight Hawk, the one gun of their library made of iron; and the Forlorn Hope, the one made of echo shards. The other copper gun, the Whizzbanger, waits ([below](#the-whizzbanger-waits)).
+
+| | Tuppence Pistol | Goshawk Revolver | Lament Rifle |
+|---|---|---|---|
+| The owner's gun | UMAX Pistol | Ultra Knight Hawk | Forlorn Hope |
+| What it is | a copper pistol: a barrel over a fat tube, a receiver block at the back that slides with each shot, a lever loop under it, a ring sight over a front post | a long white revolver: a heavy barrel, a cylinder that swings out to the left, a hammer at the back | a sculk-grown rifle: a long barrel hung with sculk, a glowing echo-shard window in the receiver, a bolt handle on the right, a magazine under the barrel and a raked grip |
+| Held | in one hand: it pairs with another (slice 10G) | in one hand: it pairs with another | in both hands |
+| Fires | one shot each pull | one shot each pull | one shot each pull, the bolt worked after each |
+| Damage | 5 | 9 | 16 |
+| Rate | 3.3 a second (every 6 ticks) | 2 a second (every 10 ticks) | about 1 a second (every 19 ticks) |
+| Holds | 8 | 6 | 5 |
+| Reload | a round at a time: 0.4 s to start, 0.6 s a round, 0.25 s to finish (5.45 s from empty) | a round at a time: 0.5 s, 1 s a round, 0.7 s (7.2 s from empty) | 2.65 s: the magazine |
+| Spread, hip / aimed | 2.5° / 1° | 2° / 0.6° | 2° / 0.05° |
+| Range | 56 blocks | 64 | 160 |
+| The view aimed | narrowed to 0.9 | 0.9 | 0.7 |
+| Round | Light Round | Rifle Round | Rifle Round |
+| Takes | the three stocks, the scopes and the Laser Sight | nothing (the owner made it no parts) | the three stocks, the Light and Vertical Grips, the four bayonets, the scopes and the Laser Sight |
+
+The reload times and the Lament Rifle's rate are the owner's animations': its bolt is worked in full between shots.
+
+**Crafting** (a crafting table; the guns switch, as every gun):
+- **Tuppence Pistol:** three copper ingots over a copper ingot, a lever and an iron ingot, as the other copper guns take copper, iron and a lever.
+- **Goshawk Revolver:** iron and a lever only: three iron ingots over a lever and an iron ingot, and one more iron ingot under that.
+- **Lament Rifle:** as the sculk guns (slice 10D): three steel ingots over a lever between two echo shards, over a block of sculk.
+
+**How they fire:** as the other bullet guns: each bullet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. The Tuppence Pistol and the Goshawk Revolver load a round at a time, and a shot cuts the loading short, as the other round-at-a-time guns do; the Lament Rifle's magazine loads at the end of its reload. Nothing else follows a hit.
+
+**What you see:** the owner's animations.
+- **Tuppence Pistol:** held out in the right hand; each shot kicks it and drives the receiver block back, throwing a case. To reload, the gun is rolled and the left hand brings each round up from below into the gate under the back of the tube; as the reload ends the block is worked, throwing a case. In the inspection the lever under it swings down and back.
+- **Goshawk Revolver:** held out in the right hand; each shot kicks it up hard and flicks the hammer. To reload, the gun is rolled and the cylinder swung out to the left; the left hand comes in for each round, a case falling with each; then the cylinder is flicked shut.
+- **Lament Rifle:** each shot kicks it back; then the gun cants and the bolt is drawn back and pushed home. To reload, the gun is turned; the magazine under the barrel swings down about its front, a new one goes in and is slapped home; then the bolt is worked.
+- **Spent rounds:** the Tuppence Pistol's animations cue a case with each shot and one as its reload ends; the Goshawk Revolver's one each time its loading loop runs; the Lament Rifle's none. (How many the client shows depends on how far each animation plays: in CI, 1 and 3 over a shot and a one-round reload.)
+- **Sounds:** the Sapper Revolver's shot (the Tuppence Pistol), the Bulldog Pistol's (the Goshawk Revolver) and the Picket Rifle's (the Lament Rifle). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source (slice 11A), so none was added.
+
+**How the models were built:**
+- **Tuppence Pistol:**
+  - **One hand:** its idle hides the left arm, so it is among the one-handed guns (`JugcraftGuns.ONE_HANDED`, slice 10G); the left hand's place is given for the reload's push of a round into the gate (0.2917 s, `"hand_pose"`).
+  - **Bolt:** the receiver block at the back and the knob behind it (the main part's 1st, 2nd and 21st elements).
+  - **Lever:** the loop under the receiver, a flat plane (the main part's 4th element), turned about its front.
+  - **Round:** a Light Round the reload carries in (`PROPS`), resting behind the mouth of the tube, where the loop's last carry brings it; it shrinks to nothing there. The `magazine` bone its shots scale holds nothing.
+  - **Sights:** the owner's ring at the back (its sights part) over the post at the front.
+  - **Aiming:** held 1 px further out (`"eye_relief"`): the receiver block's travel brought it to 0.8 px from the eye.
+- **Goshawk Revolver:**
+  - **One hand:** its idle hides the left arm, so it pairs too; the left hand's place is given at the back of the swung-out cylinder, for the loop's push of a round (0.4583 s).
+  - **Cylinder:** the owner's drum part on the `magazine` bone, turned about the crane under its left side, so it swings out to the left; the `bolt`, `seal` and `shell` bones its animations move hold nothing.
+  - **Hammer:** the owner's hammer part, a flat plane at the back, turned about its foot.
+  - **Sights:** the notch at the back over the post at the front.
+  - **Aiming:** at the hip's depth: its hammer stays 1.7 px from the eye.
+- **Lament Rifle:**
+  - **Bolt:** the owner's bolt group, the handle on the right of the receiver.
+  - **Magazine:** the owner's mag group under the barrel, turned about its front; the `empty_mag` bone the reload throws out holds nothing, nor does the `seal`.
+  - **Texture:** the owner's is seven frames, one above another, its echo-shard window glowing from frame to frame; the gun draws on the first (`FRAMED`, as the sculk guns do).
+  - **Sights:** the owner's ring at the back of the receiver over the post on its front.
+  - **Aiming:** held 6 px further out: as the bolt is worked the gun cants, and the back of its grip came 4 px past the eye.
+- **The arms:** chosen in first-person previews to cover as little of the screen as they can, still running back toward the shoulder: both of the two hand guns', the Goshawk Revolver's right arm chosen over the flick that shuts its cylinder and its inspection as well. The Lament Rifle's keep the usual directions: its right arm stays behind the gun, and a search could better its left only by a few per cent.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the block, the lever, the round, the cylinder, the bolt and the magazine through their animations; each with the attachments it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Light Round and the Rifle Round; nothing new.
+- **Parts:** copper, iron and a lever (the Tuppence Pistol); iron and a lever (the Goshawk Revolver); steel, a lever, echo shards and sculk (the Lament Rifle).
+- **Their place:** the Tuppence Pistol among the first guns, with the copper guns; the Goshawk Revolver once iron is smelted, needing no brass, unlike the other revolvers; the Lament Rifle with the sculk guns, past steel and the deep dark.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Tuppence Pistol:** 5 a shot, 17 a second while it fires; about 5.3 a second, below the Penny Pistol's (7), above the Sapper Revolver's (4.4). It can be topped up a round at a time.
+- **Goshawk Revolver:** 9 a shot, 18 a second while it fires; about 5.6 a second, above the other revolvers' (the Sapper's 4.4, the Marshal's 2.8) and the Bulldog Pistol's (4.9).
+- **Lament Rifle:** 16 a shot, twice the Picket Rifle's; about 12.4 a second, as the Kestrel Rifle's (12.2), below the Picket's (13.9). It reaches further than any (160 blocks) and is the steadiest aimed (0.05°).
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:tuppence_pistol`, `goshawk_revolver` and `lament_rifle`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Lament Rifle throws no cases, nor an empty magazine:** its animations cue no cases, and the owner made no part for the magazine its reload throws out.
+- **The Lament Rifle's window does not glow from frame to frame:** the gun draws on the first of the seven.
+- **The Goshawk Revolver takes nothing:** the owner made no parts for it.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+### The Whizzbanger waits
+The owner's other copper gun is a hand cannon fired by striking a pin with a hammer held in the left hand; after each shot the left hand puts the hammer away, tips the spent shell out and loads the next. Its animations move the hammer and the cannon's body about pivots of the model the owner's mod animated, which is not in the library: built from the item model, the hammer comes nowhere near the pin it strikes. A fit of the hammer's pivot to land its face on the pin at the shot found none that also held the hammer sensibly at rest. With the owner's animated model (its `.geo.json` or Blockbench project), it can follow as its own slice.
+
 ## Connections
 - **Existing input producers:** copper, iron and gunpowder (vanilla); lead nuggets (the lead switch's lead); brass nuggets (brass, from zinc); paper and planks.
 - **Existing output consumer:** combat. The guns kill what drops loot for every branch.
@@ -1809,6 +2054,11 @@ The reload times and the Crackling's rate are the owner's animations': its pump 
   - GeckoLib owns everything a gun does: the gun's parts and, in first person, the arms that hold it.
   - In third person (slice 6), `GunPose` raises the arms through the same two hooks that pose ArmsMotion's: `ArmsRenderStateMixin` and `ArmsHumanoidModelMixin`.
   - The off hand plays no part: guns fire from the main hand only.
+- **Casting (Concordance Chunk A, ticket A-07, 11 October 2026):** a gun in the main hand owns the player's arms, so no cast's pose plays over the gun or its reload.
+  - A cast and a reload cannot begin together: a cast needs a wand in the main hand, and a reload stops when the gun leaves it.
+  - What could outlast a switch from the wand was Spell Engine's release clip (up to 14 ticks) or its fade of an ended cast. Player Animation Library lays those over the arms after `GunPose`, and in first person (Spell Engine's default) hides the gun as the game draws it while they play.
+  - `client/CastPoses` stops those clips, and the Vigil's offering gesture, on any player holding a gun. It runs at the end of each client tick, in first and third person, for every player the client sees. No mixin. `CircleClient` keeps the circle's gesture off such a player itself, by asking `CastPoses.gesturesYield`.
+  - [The Concordance presentation record](arcane-concordance-presentation.md#one-owner-for-the-arms-chunk-a-ticket-a-07) has the details and the test (`ConcordanceJourneyClientGameTests.aCastGivesWayToAGunOrAnArm`, not yet run).
 - **Particles:** the casings are registered as the Fog Machine's fog is (`FabricParticleTypes.simple()`, a provider on the client), and so is the Laser Sight's dot (slice 9E), which shows whatever the particle setting (`simple(true)`).
 
 ## How the owner's models became GeckoLib models
@@ -2861,6 +3111,155 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
 | crackling | `Guns/models/special/ribs_glory/tact_grip.json` | `e116a28a23644cef` |
 | crackling | `Guns/models/special/ribs_glory/bolt.json` | `650fcf80f52af042` |
 | crackling | `Guns/sounds/item/brass_shotgun/fire.ogg` | `95eee6d27b87d35a` |
+| chitin_smg | `Guns/models/item/carapice.json` | `9c7fd2500de2eec0` |
+| chitin_smg | `Guns/item/carapice.png` | `dbb4252f2a894972` |
+| chitin_smg | `Guns/item/carapice.animation.json` | `51cfe99c8591815e` |
+| chitin_smg | `Guns/models/special/carapice/main.json` | `4c8827ca7b72b9ce` |
+| chitin_smg | `Guns/models/special/carapice/sights.json` | `05ae7722c245bee9` |
+| chitin_smg | `Guns/models/special/carapice/no_sights.json` | `d00a8489b4a21b5b` |
+| chitin_smg | `Guns/models/special/carapice/receiver.json` | `2b23d62be150547f` |
+| chitin_smg | `Guns/sounds/item/greaser_smg/fire.ogg` | `201fd4258dea84a2` |
+| chitin_smg | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| chitin_smg | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| chitin_smg | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| chitin_smg | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| chitin_smg | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| hermit_rifle | `Guns/models/item/shellurker.json` | `2706d7f49c7aa19e` |
+| hermit_rifle | `Guns/item/shellurker.png` | `d3f7c77e46cdc7b0` |
+| hermit_rifle | `Guns/item/shellurker.animation.json` | `d6ede559f8613f4f` |
+| hermit_rifle | `Guns/models/special/shellurker/main.json` | `bc593446eb3b40de` |
+| hermit_rifle | `Guns/models/special/shellurker/light_stock.json` | `e0f565b913ead028` |
+| hermit_rifle | `Guns/models/special/shellurker/heavy_stock.json` | `b531eaab81b6035d` |
+| hermit_rifle | `Guns/models/special/shellurker/wooden_stock.json` | `e8c7d791f589adfc` |
+| hermit_rifle | `Guns/models/special/shellurker/sights.json` | `b0f71acd3eb9d1c3` |
+| hermit_rifle | `Guns/models/special/shellurker/no_sights.json` | `21a1d0e8ee891834` |
+| hermit_rifle | `Guns/models/special/shellurker/receiver.json` | `e0d4428d618163a8` |
+| hermit_rifle | `Guns/sounds/item/shulker/fire.ogg` | `6c116009b62adfb6` |
+| hermit_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| hermit_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| hermit_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| hermit_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| hermit_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| borer | `Guns/models/item/weevil.json` | `99dd246512007be7` |
+| borer | `Guns/item/weevil.png` | `cb35813e29e094d1` |
+| borer | `Guns/item/weevil.animation.json` | `34f343b3ee93ee6c` |
+| borer | `Guns/models/special/weevil/main.json` | `33630abf4a584e59` |
+| borer | `Guns/models/special/weevil/barrel.json` | `c10feb4040b6441a` |
+| borer | `Guns/sounds/item/scorched_rifle/fire.ogg` | `5a52d37065a09a8c` |
+| penny_pistol | `Guns/models/item/scrapper.json` | `21e152cbd79e9c8b` |
+| penny_pistol | `Guns/item/scrapper.png` | `4b201474a9f76fac` |
+| penny_pistol | `Guns/item/scrapper.animation.json` | `2a445942c866c32f` |
+| penny_pistol | `Guns/models/special/scrapper/main.json` | `a9e665b9a24327d5` |
+| penny_pistol | `Guns/models/special/scrapper/stan_barrel.json` | `a7ac5be3bd9db225` |
+| penny_pistol | `Guns/models/special/scrapper/silencer.json` | `2573c1ffaf457b35` |
+| penny_pistol | `Guns/models/special/scrapper/advanced_silencer.json` | `886cf44af0d75cd6` |
+| penny_pistol | `Guns/models/special/scrapper/muzzle_brake.json` | `0e54f551bcd37faf` |
+| penny_pistol | `Guns/models/special/scrapper/ext_barrel.json` | `95b4ffcb3c28a307` |
+| penny_pistol | `Guns/models/special/scrapper/stock_light.json` | `928176a958050cbb` |
+| penny_pistol | `Guns/models/special/scrapper/stock_weighted.json` | `8fd96de36e3892de` |
+| penny_pistol | `Guns/models/special/scrapper/stock_wooden.json` | `ef9cc93675dbc076` |
+| penny_pistol | `Guns/models/special/scrapper/bolt.json` | `af9d4beda116e8e3` |
+| penny_pistol | `Guns/models/special/scrapper/magazine.json` | `f55f5b3cfddd85e9` |
+| penny_pistol | `Guns/sounds/item/scrapper/fire.ogg` | `43c9d4ec929bf949` |
+| conductor_carbine | `Guns/models/item/llr_director.json` | `09798a72127536ec` |
+| conductor_carbine | `Guns/item/llr_director.png` | `8a2f74fa11c2f83c` |
+| conductor_carbine | `Guns/item/llr_director.animation.json` | `1dc09471a798d468` |
+| conductor_carbine | `Guns/models/special/llr_director/main.json` | `49c5ee4df4a29c1b` |
+| conductor_carbine | `Guns/models/special/llr_director/stan_barrel.json` | `eb8b5efc67bb36b7` |
+| conductor_carbine | `Guns/models/special/llr_director/silencer.json` | `09d76df8c82a5648` |
+| conductor_carbine | `Guns/models/special/llr_director/advanced_silencer.json` | `da08405f175ab121` |
+| conductor_carbine | `Guns/models/special/llr_director/muzzle_brake.json` | `f99b17974871a561` |
+| conductor_carbine | `Guns/models/special/llr_director/ext_barrel.json` | `46a16469071e9355` |
+| conductor_carbine | `Guns/models/special/llr_director/stan_grip.json` | `a750638fe7ebf39b` |
+| conductor_carbine | `Guns/models/special/llr_director/light_stock.json` | `cb3c92a98da87f0c` |
+| conductor_carbine | `Guns/models/special/llr_director/heavy_stock.json` | `0047edd3962254fb` |
+| conductor_carbine | `Guns/models/special/llr_director/wooden_stock.json` | `09857fee6970de53` |
+| conductor_carbine | `Guns/models/special/llr_director/light_grip.json` | `14e8b0239090a07f` |
+| conductor_carbine | `Guns/models/special/llr_director/iron_bayonet.json` | `0c9c50f6b4316fa1` |
+| conductor_carbine | `Guns/models/special/llr_director/anthralite_bayonet.json` | `7b1bd727128cd6f3` |
+| conductor_carbine | `Guns/models/special/llr_director/diamond_bayonet.json` | `934f55ecc996141d` |
+| conductor_carbine | `Guns/models/special/llr_director/netherite_bayonet.json` | `9320d8d34d81562d` |
+| conductor_carbine | `Guns/models/special/llr_director/tact_grip.json` | `5201427684b90f89` |
+| conductor_carbine | `Guns/models/special/llr_director/sights.json` | `607fccf24d378b43` |
+| conductor_carbine | `Guns/models/special/llr_director/bolt.json` | `9f0d9706556a4047` |
+| conductor_carbine | `Guns/models/special/llr_director/stan_mag.json` | `18f2d9d5e8877805` |
+| conductor_carbine | `Guns/models/special/llr_director/ext_mag.json` | `32f38e3c90a45996` |
+| conductor_carbine | `Guns/models/special/llr_director/speed_mag.json` | `a7013fb565b9e5c7` |
+| conductor_carbine | `Guns/sounds/item/cowboy/fire.ogg` | `27ab9051ec48ba94` |
+| conductor_carbine | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| conductor_carbine | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| conductor_carbine | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| conductor_carbine | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| conductor_carbine | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| magpie_smg | `Guns/models/item/birdfeeder.json` | `8429cd08e20c88a6` |
+| magpie_smg | `Guns/item/birdfeeder.png` | `3cc8b6b118573d76` |
+| magpie_smg | `Guns/item/birdfeeder.animation.json` | `8a92217edeb8d38f` |
+| magpie_smg | `Guns/models/special/birdfeeder/main.json` | `6b943e8f79267f7d` |
+| magpie_smg | `Guns/models/special/birdfeeder/stan_barrel.json` | `a88be4a66163bb69` |
+| magpie_smg | `Guns/models/special/birdfeeder/silencer.json` | `30087e7395b41398` |
+| magpie_smg | `Guns/models/special/birdfeeder/advanced_silencer.json` | `9de85a52c23c14bd` |
+| magpie_smg | `Guns/models/special/birdfeeder/muzzle_brake.json` | `3b53d4f60956b9ba` |
+| magpie_smg | `Guns/models/special/birdfeeder/ext_barrel.json` | `02b0663c089438de` |
+| magpie_smg | `Guns/models/special/birdfeeder/stan_grip.json` | `dabd49c2bf747140` |
+| magpie_smg | `Guns/models/special/birdfeeder/light_stock.json` | `86c316af237e6767` |
+| magpie_smg | `Guns/models/special/birdfeeder/heavy_stock.json` | `c2dfd8977c08195c` |
+| magpie_smg | `Guns/models/special/birdfeeder/wooden_stock.json` | `50a9fc933952076c` |
+| magpie_smg | `Guns/models/special/birdfeeder/light_grip.json` | `4523908e739390b2` |
+| magpie_smg | `Guns/models/special/birdfeeder/iron_bayonet.json` | `6a4885d3bd01c51a` |
+| magpie_smg | `Guns/models/special/birdfeeder/anthralite_bayonet.json` | `b71dae536862507e` |
+| magpie_smg | `Guns/models/special/birdfeeder/diamond_bayonet.json` | `f6c5e0a1647b8980` |
+| magpie_smg | `Guns/models/special/birdfeeder/netherite_bayonet.json` | `ae417f32ed193f9b` |
+| magpie_smg | `Guns/models/special/birdfeeder/tact_grip.json` | `a61801acb7b1c981` |
+| magpie_smg | `Guns/models/special/birdfeeder/sights.json` | `272376847534fb3b` |
+| magpie_smg | `Guns/models/special/birdfeeder/stan_mag.json` | `fd939e0dfe7633d4` |
+| magpie_smg | `Guns/sounds/item/rusty_gnat/fire.ogg` | `02c2854e36a0f377` |
+| magpie_smg | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| magpie_smg | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| magpie_smg | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| magpie_smg | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| magpie_smg | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| tuppence_pistol | `Guns/models/item/umax_pistol.json` | `9b9c754f3cf31fdd` |
+| tuppence_pistol | `Guns/item/umax_pistol.png` | `d8e0c22865b815e1` |
+| tuppence_pistol | `Guns/item/umax_pistol.animation.json` | `15f4b095663a3308` |
+| tuppence_pistol | `Guns/models/special/umax_pistol/main.json` | `122aca6c82019740` |
+| tuppence_pistol | `Guns/models/special/umax_pistol/stan_grip.json` | `5e0d57e2614fc281` |
+| tuppence_pistol | `Guns/models/special/umax_pistol/light_stock.json` | `baa4ed15ee654792` |
+| tuppence_pistol | `Guns/models/special/umax_pistol/heavy_stock.json` | `174aa819a0e63619` |
+| tuppence_pistol | `Guns/models/special/umax_pistol/wooden_stock.json` | `0bc4ab27612e8975` |
+| tuppence_pistol | `Guns/models/special/umax_pistol/sights.json` | `c96c4dce7d304682` |
+| tuppence_pistol | `Guns/sounds/item/brass_pistol/fire.ogg` | `4fca376e2ece67b2` |
+| tuppence_pistol | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| tuppence_pistol | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| tuppence_pistol | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| tuppence_pistol | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| tuppence_pistol | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| goshawk_revolver | `Guns/models/item/ultra_knight_hawk.json` | `93458ed13b5680ca` |
+| goshawk_revolver | `Guns/item/ultra_knight_hawk.png` | `b6cab422c02babfc` |
+| goshawk_revolver | `Guns/item/ultra_knight_hawk.animation.json` | `c371c22506a0c358` |
+| goshawk_revolver | `Guns/models/special/ultra_knight_hawk/main.json` | `9c9aad7e25c381a5` |
+| goshawk_revolver | `Guns/models/special/ultra_knight_hawk/drum.json` | `a81080ecf6dc7bc1` |
+| goshawk_revolver | `Guns/models/special/ultra_knight_hawk/hammer.json` | `58774cfb703f962c` |
+| goshawk_revolver | `Guns/sounds/item/heavier_rifle/fire.ogg` | `4e17f5a1b2891ee7` |
+| lament_rifle | `Guns/models/item/forlorn_hope.json` | `4920c31eb3990723` |
+| lament_rifle | `Guns/item/forlorn_hope.png` | `6a8de09c3a97ead9` |
+| lament_rifle | `Guns/item/forlorn_hope.animation.json` | `3d17e3c23fa8c9c0` |
+| lament_rifle | `Guns/models/special/forlorn_hope/main.json` | `d924d7d8f6cae1c4` |
+| lament_rifle | `Guns/models/special/forlorn_hope/light_stock.json` | `155015336966502e` |
+| lament_rifle | `Guns/models/special/forlorn_hope/heavy_stock.json` | `59ff86b904ed88a2` |
+| lament_rifle | `Guns/models/special/forlorn_hope/wooden_stock.json` | `600df85a131f0a4e` |
+| lament_rifle | `Guns/models/special/forlorn_hope/light_grip.json` | `2cbd3296de0c8d96` |
+| lament_rifle | `Guns/models/special/forlorn_hope/vert_grip.json` | `a69d15791a05afd5` |
+| lament_rifle | `Guns/models/special/forlorn_hope/iron_bayonet.json` | `74ad1a806ce9d247` |
+| lament_rifle | `Guns/models/special/forlorn_hope/anthralite_bayonet.json` | `1be3a36ebd5efa8e` |
+| lament_rifle | `Guns/models/special/forlorn_hope/diamond_bayonet.json` | `53b9c58bfc89cb0b` |
+| lament_rifle | `Guns/models/special/forlorn_hope/netherite_bayonet.json` | `f0178f1629a90903` |
+| lament_rifle | `Guns/models/special/forlorn_hope/sights.json` | `51ace3a81d2dd533` |
+| lament_rifle | `Guns/sounds/item/scorched_sniper/fire.ogg` | `624b2460a3e39921` |
+| lament_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| lament_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| lament_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| lament_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| lament_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
 
 - **The bolt sound's tag:** `bolt.ogg` carries Vorbis tags naming another source ("All Epic Infantry Assault Rifle Reload Sounds (Fortnite)"). The owner, asked about the eight tagged sounds in the library, answered "I have the rights", so it is used like the rest. None of the other sounds used here carries such a tag.
 - **The scopes' reticles and lens rims (slice 7b):** the owner uploaded them on 8 October 2026 ("heres reticles and vignette"). Two files in that upload carry embedded Photoshop metadata:
@@ -3602,13 +4001,92 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
     - **Aimed:** the Ashfall Pistol's notch and the Goldbristle Carbine's ring on the husk over the crimson backs of their receivers; the Crackling's posts on the husk over its narrow back and the right hand, as the Sledge's in the same run.
     - **Reloading:** the Ashfall Pistol and the Goldbristle Carbine tipped in their reloads, the husk burning behind both. The Crackling's left arm comes up across the middle of the view with its shell, as the Sledge's does in the same run.
     - **Inspection, attachments and third person:** each turned over in the hand; each with the stocks; the Goldbristle Carbine with its barrel devices, magazines, bayonet and grips, the Crackling with its grips and bayonet, the pistol and the carbine with the Laser Sight. Seen from outside, the Ashfall Pistol is raised in one hand and the others in both, each flashing as it fires.
+- **Slice 12A, run locally (13 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2192 material IDs), with `check_guns` (the numbers, attachments, looks, tilts and `JugcraftGuns.LEVITATING` and `GunShots.LIFT_TICKS` against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 12A game tests (all passed in CI, below):**
+  - `EndGunsGameTests`:
+    - `endGunsAreRegistered`: each is registered with its numbers, its recipe loads, and it fires bullets that make what they hit float, as no other gun's do, and sets nothing alight. Each is an automatic held in both hands, loaded a magazine at a time: the Chitin SMG of twenty-four light rounds, the Hermit Rifle of twenty rifle rounds, the Borer of forty. The Chitin SMG takes the scopes and the Laser Sight, the Hermit Rifle the stocks too, the Borer nothing.
+    - `endGunsFireAndLoad`: as `netherGunsFireAndLoad` (whose helpers it shares), for the three: each fires its last round at a pig and lands it, then loads from the inventory in its own time.
+    - `endGunsMakeWhatTheyHitFloat`: each End gun's shot gives its pig Levitation, and three quarters of a second on it has risen off the floor; an Undertone Rifle's shot beside them leaves its pig standing. Once the spell has ended, each pig is back on the floor, unhurt by the fall.
+  - `GunsGameTests` counts 57 guns.
+- **Slice 12A in CI** ([run 38433095782](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38433095782), on b1f946f3b): every check passed.
+  - **Server game tests:** 1382 in each job, the `mod` job's and the one without the optional integrations. All passed, `EndGunsGameTests` among them.
+  - **Client game tests:** the changed files chose `GunsClientGameTests` alone, and it passed. In it each new gun, in its turn:
+    - held and aimed, its arms drawn at full size and then half (the Borer's at full size both times, as a gun without sights), the view narrowed to 0.88 (Chitin SMG), 0.85 (Hermit Rifle) and 0.95 (Borer);
+    - fired at the husk, each spending one round, with 5 frames of flash: the Chitin SMG took it from 390.47 to 387.47 (3), the Hermit Rifle 5 and the Borer 5.5;
+    - reloaded from the inventory, 31 rounds left each time; the Chitin SMG and the Hermit Rifle threw 3 casings each, the Borer none, as its animations cue none;
+    - with each set of attachments it takes, held and aimed: the Hermit Rifle with each stock, the stock left out aimed (in 33 frames, none held); both with the Laser Sight.
+  - **After the shots:** the husk lost nothing more between the End guns' shots, so no fall hurt it. Between the Crackling's shot and the Chitin SMG's it lost 3, the Crackling's fire.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar. The Chitin SMG and the Hermit Rifle show the ring on top and the shulker box and its cables under the receiver, the Hermit Rifle its curled shell at the muzzle. The Borer is at the hip, its crank out to the left and its pale barrel toward the husk.
+    - **Aimed:** the Chitin SMG's and the Hermit Rifle's rings over the husk's head, the Hermit Rifle's shell either side. The Borer stays at the hip, the view narrowed a little.
+    - **Reloading:** the Chitin SMG's and the Hermit Rifle's left arms come up over the right of the view (see the known limits); the Borer is pushed out and tipped, its box out.
+    - **Inspection, attachments and third person:** each turned up toward the eye. The Laser Sight stands on the receiver of each, as it does on the Solenoid and Votive Rifles, the Ashfall Pistol and the Goldbristle Carbine in the same run. Seen from outside, the Chitin SMG and the Hermit Rifle are raised in both hands and the Borer carried low at the hip, each flashing as it fires.
+- **Slice 12B, run locally (13 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2195 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns, looks and eye relief against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 12B game tests (all passed in CI, below):**
+  - `CopperGunsGameTests`:
+    - `copperGunsAreRegistered`: each is registered with its numbers, its recipe loads, and it fires plain bullets, one a shot, loaded a magazine at a time. The Penny Pistol is a pistol held in one hand, of ten light rounds, and two of them are two guns at once; the Conductor Carbine a carbine of eight rifle rounds, one a pull; the Magpie SMG an automatic of thirty-two light rounds. The Penny Pistol takes the barrels' attachments and the stocks only; the other two those, the grips, the bayonets, the scopes and the Laser Sight, and the Conductor Carbine the magazines too.
+    - `copperGunsFireAndLoad`: as `netherGunsFireAndLoad` (whose helpers it shares), for the three.
+    - `pennyPistolsFireFromBothHands`: a Penny Pistol in each hand fires from each and lands both shots, each spending a round of its own.
+  - `GunsGameTests` counts 60 guns; `DualGunsGameTests` the fifteen held in one hand; `TacticalAttachmentsGameTests` the twenty-three that take the Tactical Grip.
+- **Slice 12B in CI** ([run 38457083489](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38457083489), on 3f4ac9b4e): every check passed.
+  - **Server game tests:** 1385 in each job, the `mod` job's and the one without the optional integrations. All passed, `CopperGunsGameTests` among them.
+  - **Client game tests:** the changed files chose `GunsClientGameTests` alone, and it passed. In it each new gun, in its turn:
+    - held and aimed, its arms drawn at full size and then half, the view narrowed to 0.9 (Penny Pistol), 0.82 (Conductor Carbine) and 0.88 (Magpie SMG);
+    - fired at the husk, each spending one round, with 7, 6 and 6 frames of flash: the Penny Pistol took it from 344.77 to 340.77 (4), the Conductor Carbine 8 and the Magpie SMG 2.5;
+    - reloaded from the inventory, 31 rounds left each time; the Penny Pistol threw 3 casings, the other two none, as their animations cue none;
+    - with each set of attachments it takes, held and aimed: each with each stock, the stock left out aimed (in 34 to 36 frames, none held); the Conductor Carbine's extended magazine holding 12; the long guns with the Tactical Grip and the Laser Sight.
+  - **Between the shots:** the husk lost nothing between the Borer's shot and the Penny Pistol's, or between the copper guns'.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar. The Penny Pistol's hand wraps most of it (see the known limits), its long magazine standing out to the left; the Conductor Carbine shows its slide and front post; the Magpie SMG its long magazine along the left of the view.
+    - **Aimed:** each raised to the middle of the view, the husk's head over it. The Penny Pistol's and the Magpie SMG's magazines stand out to the left.
+    - **Reloading:** the Penny Pistol's magazine drawn out of its side; the Conductor Carbine lowered, the left hand below it; the Magpie SMG tipped, its magazine out and the left hand over it at the left of the view.
+    - **Inspection:** each turned toward the eye to be looked over.
+    - **Attachments:** each barrel part at the muzzle and each stock behind the grip. The Laser Sight stands on the receiver aimed as it does on the Riveter SMG, the Garrison, Squall and Hermit Rifles and the Chitin SMG in the same run.
+    - **Third person:** each raised toward the camera, the Penny Pistol in one hand, each flashing as it fires.
+- **Slice 12C, run locally (13 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2198 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns, looks and eye relief against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 12C game tests (all passed in CI, below):**
+  - `MixedGunsGameTests`:
+    - `mixedGunsAreRegistered`: each is registered with its numbers, its recipe loads, and it fires plain bullets, one a pull. The Tuppence Pistol is a pistol of eight light rounds and the Goshawk Revolver a revolver of six rifle rounds, each held in one hand and loaded a round at a time, and the two in the two hands are two guns at once; the Lament Rifle a rifle of five rifle rounds, loaded a magazine at a time, hitting harder and reaching further than the Goshawk Revolver. The Tuppence Pistol takes the stocks, the scopes and the Laser Sight; the Lament Rifle those, the grips and the bayonets; the Goshawk Revolver nothing.
+    - `mixedGunsFireAndLoad`: as `netherGunsFireAndLoad` (whose helpers it shares), for the three: the two hand guns with one round in after their first round's time.
+    - `tuppenceAndGoshawkFireFromBothHands`: a Tuppence Pistol in the main hand and a Goshawk Revolver in the other each fire and land their shots, each spending a round of its own.
+  - `GunsGameTests` counts 63 guns; `DualGunsGameTests` the seventeen held in one hand.
+- **Slice 12C in CI** ([run 38468187979](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38468187979), on 53c96a3fd): every check passed.
+  - **Server game tests:** 1388 in each job, the `mod` job's and the one without the optional integrations. All passed, `MixedGunsGameTests` among them.
+  - **Client game tests:** the changed files chose `GunsClientGameTests` alone, and it passed. In it each new gun, in its turn:
+    - held and aimed, its arms drawn at full size and then half, the view narrowed to 0.9 (Tuppence Pistol), 0.9 (Goshawk Revolver) and 0.7 (Lament Rifle);
+    - fired at the husk, each spending one round, with 10 frames of flash: the Tuppence Pistol took it from 354.88 to 349.88 (5), the Goshawk Revolver 9 and the Lament Rifle 16;
+    - reloaded from the inventory, 31 rounds left each time; over its shot and reload the Tuppence Pistol threw 1 casing and the Goshawk Revolver 3, the Lament Rifle none, as its animations cue none;
+    - with each set of attachments it takes, held and aimed: each with each stock, the stock left out aimed (in 52 or 53 frames, none held); the Lament Rifle with the grips and a bayonet; both with the Laser Sight.
+  - **Between the shots:** the husk lost nothing between the Magpie SMG's shot and the Tuppence Pistol's, or between the three guns'.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar: the Tuppence Pistol's barrel over its tube; the Goshawk Revolver's long white barrel; the Lament Rifle's barrel hung with sculk, its echo-shard window glowing.
+    - **Aimed:** each raised to the middle of the view, the husk's head over it. As the Penny Pistol's did in slice 12B's run, the two hand guns' backs rise over the crosshair (the first-person previews draw them lower).
+    - **Fired:** the Tuppence Pistol's receiver block, driven back, fills the middle of the view for a moment; the Goshawk Revolver kicks up.
+    - **Reloading and inspection:** the Tuppence Pistol rolled; the Goshawk Revolver rolled, the left hand in; the Lament Rifle turned up; each turned toward the eye to be looked over.
+    - **Attachments:** each stock behind the grip; the Laser Sight stands on the receiver aimed as it does on the other guns in the same run.
+    - **Third person:** the two hand guns held out in one hand and the rifle across the body, each flashing as it fires.
 - **Not run:** the client by hand, a two-client dedicated server, and play.
 
 ## World and event applicability
 No worldgen, structures, bosses or seasonal content. Guns, rounds and the Cell Rack come from crafting (and the creative tab). The one loot is slice 10F's: raider gunners, in raids and raider camps, may drop their service arms (their equipment's drop chance) and rounds (the mob loot table `jugcraft:entities/raider_gunner`).
 
 ## Rollout and open questions
-- **Names:** proposed here (Rust Midge, Patchwork Carbine, Thunderpipe, Warden Pistol, Riveter SMG, Haymaker, Longhorn Rifle, Drover Rifle, Coach Gun, Duelling Pistol, Line Musket, Bellmouth, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Garrison Rifle, Breacher, Trench Lobber, Thresher, Stoker, Beam Pistol, Stormlock Rifle, Linesman, Picket Rifle, Ranger Rifle, Kestrel Rifle, Rattler Pistol, Bronco SMG, Squall Rifle, Spikedriver, Seam Cutter, Caisson Pistol, Sledge, Highwayman, Throttle, Earthmover, Skylark Rifle, Bullfrog, Solenoid Rifle, Votive Rifle, Glowmouth, Mule, Fowler, Culverin, Undertone Rifle, Murmur SMG, Reverb, Light Round, Rifle Round, Buckshot Shell, Paper Cartridge, Energy Cell, Cell Rack, Raider Gunner; the attachments keep plain names: Silencer, Baffled Silencer, Muzzle Brake, Extended Barrel, Extended Magazine, Speed Magazine, Light Stock, Weighted Stock, Wooden Stock, Light Grip, Vertical Grip, the four bayonets, Long Scope, Medium Scope, Reflex Sight, Tactical Grip, Laser Sight). The owner may rename them before release; IDs are stable only after release.
+- **Names:** proposed here (Rust Midge, Patchwork Carbine, Thunderpipe, Warden Pistol, Riveter SMG, Haymaker, Longhorn Rifle, Drover Rifle, Coach Gun, Duelling Pistol, Line Musket, Bellmouth, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Garrison Rifle, Breacher, Trench Lobber, Thresher, Stoker, Beam Pistol, Stormlock Rifle, Linesman, Picket Rifle, Ranger Rifle, Kestrel Rifle, Rattler Pistol, Bronco SMG, Squall Rifle, Spikedriver, Seam Cutter, Caisson Pistol, Sledge, Highwayman, Throttle, Earthmover, Skylark Rifle, Bullfrog, Solenoid Rifle, Votive Rifle, Glowmouth, Mule, Fowler, Culverin, Undertone Rifle, Murmur SMG, Reverb, Tusker, Cinder Repeater, Bastion Rifle, Ashfall Pistol, Goldbristle Carbine, Crackling, Chitin SMG, Hermit Rifle, Borer, Penny Pistol, Conductor Carbine, Magpie SMG, Tuppence Pistol, Goshawk Revolver, Lament Rifle, Light Round, Rifle Round, Buckshot Shell, Paper Cartridge, Energy Cell, Cell Rack, Raider Gunner; the attachments keep plain names: Silencer, Baffled Silencer, Muzzle Brake, Extended Barrel, Extended Magazine, Speed Magazine, Light Stock, Weighted Stock, Wooden Stock, Light Grip, Vertical Grip, the four bayonets, Long Scope, Medium Scope, Reflex Sight, Tactical Grip, Laser Sight). The owner may rename them before release; IDs are stable only after release.
 - **The arms:** placed from the animations' own evidence, without the models they were made for. The CI screenshots show where they sit; the rest points and arm directions above are the knobs.
 - **The gun sets the owner chose on 8 October 2026** are all built: the revolvers (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C) and the energy weapons (slice 8D).
 - **The gun sets the owner chose on 10 October 2026** are all built, each its own pull request: the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C) and the pump shotguns (slice 9D).
@@ -3617,5 +4095,6 @@ No worldgen, structures, bosses or seasonal content. Guns, rounds and the Cell R
 - **Not yet:**
   - the jam the Gnat's sound suggests;
   - other mobs with guns: the owner's Scorched Guns 2-style gun mobs, once their models are in the library (slice 10F gives the raider gunners the service arms);
+  - the Whizzbanger, which waits for the model its animations were made for ([above](#the-whizzbanger-waits));
   - the guns beyond these sets.
 - **Balance:** the numbers are starting points for the owner to set.

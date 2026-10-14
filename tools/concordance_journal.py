@@ -72,7 +72,8 @@ CLIENT = {
     "screen.jugcraft.concordance.config.exact.tooltip": "The journal shows the exact figures (counts, limits) beside its "
                                                         "descriptions.",
     "screen.jugcraft.concordance.config.simple_journal": "Simple journal",
-    "screen.jugcraft.concordance.config.simple_journal.tooltip": "Open the plain journal screen even when GuiLib is installed.",
+    "screen.jugcraft.concordance.config.simple_journal.tooltip": "Open the plain journal and Spell Composer screens even "
+                                                                 "when GuiLib is installed.",
 }
 
 
@@ -107,6 +108,7 @@ def codex():
             ("text", "Moving Around",
              "**Left**, **Right** or the section buttons change section; **Up**, **Down**, **Page Up** and "
              "**Page Down** scroll; **R** asks for the journal again; **X** shows or hides exact values; **Tab** "
-             "moves between buttons; **Esc** closes it. With GuiLib installed the journal opens as a full workspace; without it, or with "
+             "moves between buttons; **Compose** opens the Spell Composer for the instrument in your hand; **Esc** "
+             "closes it. With GuiLib installed the journal opens as a full workspace; without it, or with "
              "**Simple journal** chosen in the settings, it opens as a plain screen showing the same."),
         ]}}

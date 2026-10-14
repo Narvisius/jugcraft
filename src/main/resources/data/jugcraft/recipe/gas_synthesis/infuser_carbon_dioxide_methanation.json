@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "capability": "jugcraft:nickel_methanation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 400
+    },
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 100
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:methane",
+      "amount": 100,
+      "tank": 0
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 400,
+      "tank": 1
+    }
+  ],
+  "tool": "jugcraft:nickel_catalyst_bed",
+  "time": 200
+}

@@ -169,7 +169,7 @@ final class CompanionAutomationChecks {
             check(m.companionHelperCount()==(block.footprint(state).size()>1 || kind==MachineKind.ARC_FURNACE?2:1),"helper slots: "+kind);
             check(WorkAnimation.processor(kind,0)!=WorkAnimation.NONE,"clip mapping: "+kind);kinds++;
         }
-        check(kinds==36,"expected 36 enabled processor kinds, got "+kinds);
+        check(kinds==38,"expected 38 enabled processor kinds (including the Infuser and Oxidizer), got "+kinds);
         var m=machine(l,MachineKind.ALLOY_SMELTER,false);var p=npc(l,owner,false);p.assignments.assign(l,m.getBlockPos());
         var result=BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("jugcraft:bronze_ingot"));
         check(m.companionPort.select(new ItemStack(result)),"bronze ghost plan available");

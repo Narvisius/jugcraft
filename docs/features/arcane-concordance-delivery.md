@@ -1,6 +1,8 @@
 # Arcane Concordance: a reviewable delivery
 
-Status: implemented on branch `claude/concordance-steps-26-32`; see Verification for what has run.
+Status: merged to main ([#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250), from branch
+`claude/concordance-steps-26-32`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 32) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: the whole Arcane Concordance, every stage. Roadmap step 32.
@@ -14,7 +16,7 @@ identified accurately. This record is the index to that evidence, and it says wh
 
 | What | Where |
 |---|---|
-| The mod: Java (and the journal workspace's Kotlin), data and assets | `src/main`, `src/client`; the Concordance is under `concordance/` |
+| The mod: Java (and the Kotlin of the journal's and, since Concordance Chunk A, the Spell Composer's GuiLib workspaces), data and assets | `src/main`, `src/client`; the Concordance is under `concordance/` |
 | Content definitions | `data/jugcraft/concordance/`, written by `tools/concordance*.py` through `tools/generate_material_data.py` |
 | Design documentation | [ARCANE_CONCORDANCE.md](../ARCANE_CONCORDANCE.md): the contract, vocabulary, library map, definitions, traceability and the 32-step checklist; and one record per system in `docs/features/arcane-concordance-*.md` |
 | Player guide | [ARCANE_CONCORDANCE_GUIDE.md](../ARCANE_CONCORDANCE_GUIDE.md) and the in-game codex |
@@ -28,9 +30,9 @@ identified accurately. This record is the index to that evidence, and it says wh
 | | State |
 |---|---|
 | A local build | Not made: this environment has no Minecraft jars, so `./gradlew build` runs only in CI |
-| A branch | `claude/concordance-steps-26-32` (steps 26 to 32), stacked on `claude/awesome-davinci-iwv3b9` (steps 1 to 25) |
-| CI | Every push builds the mod and runs the server game tests twice (with and without the optional integrations), runs the client game tests in three shards and assembles Jugcraft Complete |
-| Merged main | No. Both pull requests are open for the owner's review: [244](https://github.com/jimbozoomer-byte/jugcraft/pull/244) and [250](https://github.com/jimbozoomer-byte/jugcraft/pull/250) |
+| A branch | `claude/concordance-steps-26-32` (steps 26 to 32, [#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250)), stacked on `claude/awesome-davinci-iwv3b9` (steps 1 to 25, [#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244)); both merged |
+| CI | Every push builds the mod and runs the server game tests twice (with and without the optional integrations), runs the client game tests in five shards (a pull request runs only the client test classes it needs) and assembles Jugcraft Complete |
+| Merged main | Yes. [#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244) and [#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250) were merged into `integration/oct8-finished-prs` on 8 October 2026, which reached `main` through [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) (`b533201f8`) the same day |
 | An import-tested pack | No: no `.mrpack` has been imported into a launcher |
 | A published release | No: publishing is the owner's step |
 
@@ -44,9 +46,9 @@ server game test with the optional libraries removed. The client game tests run 
 <!-- matrix:start -->
 | Library | Version (lock) | Side | Jugcraft | What the Concordance does with it | Without it | Game tests | Still limited |
 |---|---|---|---|---|---|---|---|
-| Fabric API | 0.161.0+26.3 | both | required | Attachments for every player record, and each wearer's worn trinkets choice, sent to everyone who sees them; item components; the rules' reload listener; menus; commands; networking (the journal and its request, signs, the Vigil's gesture, the worn trinkets choice); key mappings; the Focus HUD line; block-entity load and unload (the circle index); the block-break and attack questions asked for the person behind a change, with a FakePlayer standing in for an absent owner when a server allows it; the Transfer API for the crucible's water and every courier pickup and delivery | Jugcraft does not start (Fabric Loader names it as missing) | `theJournalSurvivesTheTrip`, `aSignReachesTheClientUnchanged`, `aRequestIsFetchedAndDelivered`, `lightGoesOnlyWhereItsCasterCouldBuild`, `theCircleIndexLooksOnlyInReach`, `eachWearerChoosesWhetherTheirTrinketsShow` | No pipe carries Concordance essences; a real protection mod has not been tried (a stand-in listener answers the two questions in the tests) |
+| Fabric API | 0.161.0+26.3 | both | required | Attachments for every player record, and each wearer's worn trinkets choice, sent to everyone who sees them; item components; the rules' reload listener; menus; commands; networking (the journal and its request, signs, the Vigil's gesture, the worn trinkets choice, the Spell Composer's request, state and result, the encyclopedia's request and pages); key mappings; the Focus HUD line; block-entity load and unload (the circle index); the block-break and attack questions asked for the person behind a change, with a FakePlayer standing in for an absent owner when a server allows it; the Transfer API for the crucible's water and every courier pickup and delivery | Jugcraft does not start (Fabric Loader names it as missing) | `theJournalSurvivesTheTrip`, `aSignReachesTheClientUnchanged`, `aRequestIsFetchedAndDelivered`, `lightGoesOnlyWhereItsCasterCouldBuild`, `theCircleIndexLooksOnlyInReach`, `eachWearerChoosesWhetherTheirTrinketsShow` | No pipe carries Concordance essences; a real protection mod has not been tried (a stand-in listener answers the two questions in the tests) |
 | Geckolib | 5.5.7 | both | required | Animated blocks and creatures driven by the status the server sends: Circle Anchor, Alembic Crucible (with its liquid at its volume), Verdant Heart, Mulch Maw, Gleaner, Orrery Observatory, Reliquary Shrine, Spire Heart, Oneiric Censer; Hearthling, Gathering Shade, Clockwork Porter and dream wisps; the two fire sets worn as the owner's armour model, each in its own texture (Jugcraft's first GeckoLib armour) | Jugcraft does not start (Fabric Loader names it as missing) | `ConcordancePresentationClientGameTests`, `aPorterShowsOnceWhatItLacks`, `ConcordanceEmberGearClientGameTests` | Seen only in CI's small screenshot previews; frame cost of a large installation not measured; the sets' glint is a Jugcraft layer, and vanilla trims are not drawn on them |
-| Player Animation Library | 1.2.7+mc.26.3 | both | required | Original cast and release gestures for the invocations; the circle participants' channelling gesture; the Vigil's offering gesture, sent by the server when an offering is made | Jugcraft does not start (Fabric Loader names it as missing) | none | No test looks at a gesture; skipped for players whose arms ArmsMotion poses |
+| Player Animation Library | 1.2.7+mc.26.3 | both | required | Original cast and release gestures for the invocations; the circle participants' channelling gesture; the Vigil's offering gesture, sent by the server when an offering is made; none of them plays over a gun or an arm in the main hand, on any player the client sees (CastPoses) | Jugcraft does not start (Fabric Loader names it as missing) | `aCastGivesWayToAGunOrAnArm` | No person has looked at the gestures; giving way has a test, added but not yet run, for Spell Engine's release clip and the Vigil's gesture on the client's own player; it does not cover the fade of an ended cast, another player's view (a second client, not run) or the circle's gesture |
 | Modonomicon | 2.16.0 | both | required | The Arcane Concordance codex: categories for every tradition, pages generated from the rules (components, the calendar, the Binding reasons, the spell bar's keys), entries unlocked by research advancements | Jugcraft does not start (Fabric Loader names it as missing) | `codexLoadsWithoutErrors`, `metResearchSaysWhatComesNext` | The codex has been read only as data; nobody has read it in a client |
 | SmartBrainLib | 2.0.3 | both | required | The workers' brains: a nearby-players sensor and look and walk behaviours driven by the walk target each worker's own decision sets; bonds, agreements, bodies and loads stay Jugcraft's records | Jugcraft does not start (Fabric Loader names it as missing) | `aPorterSaysWhyItStops`, `aSpiritKeepsToItsAgreement`, `aFamiliarMendsByItsBond` | Pathing over long distances and through many loaded workers not profiled |
 | Fusion (Connected Textures) | 1.3.16 | client | optional | Warding Stones and Verdant Beds join their neighbours, through a built-in resource pack registered only when Fusion is installed | plain cubes | none | Never seen in a client |
@@ -56,12 +58,12 @@ server game test with the optional libraries removed. The client game tests run 
 | Trinkets Updated | 4.2.1+26.3 | both | required | Resonant Rings in the ring slot and the Hearthstone in the necklace slot, both given by data; the owner's Spell Focus and Bracelet slots, ported from their Curios data, for the Ember foci and the Fire Bangle; a ring's and a focus's modifiers through Trinkets' callback; relics and the bangle read from the slots on the server; Wayfaring's Belt, Charm and Feet slots, with named callback modifiers, a slot-count attribute and Relic Lore's canEquip; the Leather Belt and Amphibian Boot drawn on the wearer by Trinkets' data-driven renderer (a render definition and block models from the owner's worn sheets), through Jugcraft's own render element, which hides them under armour and on a wearer who has chosen to hide them | Jugcraft does not start (Fabric Loader names it as missing) | `relicsAreFoundInTrinketSlots`, `gemsRunesAndBondsKeepTheirRules`, `theFociGiveFireSpellPowerThroughTrinkets`, `theBangleLeavesAHearthbindersBlowSmouldering`, `ConcordanceEmberGearClientGameTests`, `theTrinketsAreMadeAndWornAsDesigned`, `ConcordanceWayfaringClientGameTests` | Cosmetic slots count as worn for show only; of the worn things only the belt and boot are drawn on the body, in third person only, and seen so far only in CI's client screenshots |
 | Cloth Config API | 26.3.159 | both | required | The Concordance settings screen: the Focus line, reduced motion, exact values, the simple journal, visual intensity and whether your worn trinkets are shown | Jugcraft does not start (Fabric Loader names it as missing) | none | No test opens the screen; the settings it writes are read by client code only, but for the worn trinkets choice, which the client sends to the server |
 | Jade | 26.3.5+fabric | both | optional | Readouts from server snapshots: bench study, lantern Radiance, sconce charge, circle phase and faults, pylon charge, crucible state, beds and crops, living devices, observatory, workers, courier posts, shrines | nothing shown on looking; the same facts come from the journal, the commands and each device's own messages | `benchStudyUnderstandsFirstLight` | Server tests run without Jade in CI's optional-absent job; its overlay has not been seen in a client |
-| Just Enough Items (JEI) | 31.8.0.49 | both | optional | Recipe categories for the Lampwright's Bench, the Circle Anchor and the Resonant Ring; alchemy ingredients' properties as information (never outcomes) | no JEI pages; the codex's recipe pages remain | none | Its pages have not been seen in a client |
+| Just Enough Items (JEI) | 31.8.0.49 | both | optional | Recipe categories for the Lampwright's Bench, the Circle Anchor and the Resonant Ring; alchemy ingredients' properties as information (never outcomes); since Concordance Chunk A, an information page each on where the Adept's Wand and Vesperine's and Madame Tatterlace's loot come from (tools/acquisition.py), with the default data's chances and offerings | no JEI pages; the codex's recipe pages remain | none | Its pages have not been seen in a client; the information pages are written from the default data, so a server data pack that changes a recipe, a boss's loot table or the Adept's Attunement is not shown; Chunk A's information pages are not compiled yet |
 | Mod Menu | 21.0.0 | client | optional | Opens the Concordance settings screen from the mod list | the Concordance settings key (unbound by default, in Controls) opens the same screen | none | Not seen in a client |
 | Iris Shaders | 1.11.7+mc26.3 | client | optional | Not used: nothing in the Concordance needs a shader | nothing changes | none | No shader pack has been tried with the Concordance |
 | Sodium | 0.9.2+mc26.3 | client | optional | Not used | nothing changes | none | Not tried with the Concordance's renderers |
-| Fabric Language Kotlin | 1.14.1+kotlin.2.4.20 | client | optional | Runs the Kotlin of the journal's GuiLib workspace | the plain journal screen | `ConcordanceJournalClientGameTests` | Only the workspace is Kotlin |
-| GuiLib | 0.12.4 | client | optional | The Concordance Journal's workspace, a tab for each section of the journal the server sends | the plain journal screen, with the same journal | `ConcordanceJournalClientGameTests` | No composer, ritual-schematic, crucible or observatory screen is built; keyboard use not tried by a person |
+| Fabric Language Kotlin | 1.14.1+kotlin.2.4.20 | client | optional | Runs the Kotlin of the journal's and the Spell Composer's GuiLib workspaces | the plain journal and composer screens | `ConcordanceJournalClientGameTests`, `ConcordanceComposerClientGameTests` | Only the workspaces are Kotlin |
+| GuiLib | 0.12.4 | client | optional | The Concordance Journal's workspace (a tab for each section the server sends) and the Spell Composer's (the draft as a strip of words over the words the player has learned) | the plain journal and composer screens, with the same journal and the same draft | `ConcordanceJournalClientGameTests`, `ConcordanceComposerClientGameTests` | No ritual-schematic, crucible or observatory screen is built; the workspaces have no narration (the plain screens do); keyboard use not tried by a person |
 <!-- matrix:end -->
 
 ## What is complete, what is not, and what is assumed
@@ -87,8 +89,9 @@ server game test with the optional libraries removed. The client game tests run 
 **Partial:**
 - the player journey (step 31): the routes are checked and the opening is played by keys in a client, but no person has
   played them;
-- GuiLib screens: only the journal's workspace is built. The composer, ritual schematic, crucible and observatory
-  screens are not; their commands, the journal, Jade and the codex stand in.
+- GuiLib screens: the journal's workspace is built, and Concordance Chunk A adds the Spell Composer's
+  ([record](arcane-concordance-composer.md)). The ritual schematic, crucible and observatory screens are not; their
+  commands, the journal, Jade and the codex stand in.
 
 **Placeholder content:** none known. The owner approved the art and models of steps 14 to 25, but they have been seen
 only in CI's small screenshot previews.
@@ -112,12 +115,12 @@ only in CI's small screenshot previews.
 | No real protection mod tried | A claim mod that ignores Fabric's events would not be asked | Try a Fabric claim mod on a local server: a spell, a porter and a Gleaner at its border |
 | Devices wait while their owner is away | Farms and porters pause when their owner logs off | The owner decides the default of `concordance.absent_owner_authority` |
 | Not profiled under load | Unknown tick cost of many gardens, workers, rituals and spires; unknown frame cost of GeckoLib bodies and particles | Profile a large test world on a local server (tick time) and client (frame time) against the budget |
-| No real old save opened | A world from before step 30 is read as version 0 by design, but no such world has been opened | Keep a world saved by `main`, open it with this branch, save, reopen |
+| No real old save opened | A world from before step 30 is read as version 0 by design, but no such world has been opened | Open a world saved by a build from before step 30 with a current build, save, reopen |
 | A downgrade needs a backup | An older Jugcraft cannot read the versioned saves | Say so in the release notes |
 | The courier ledger is read whole | A damaged ledger is not partly kept, as the other records are | Read requests one by one, keeping what cannot be read |
 | Item components are not versioned | A changed component shape would need a new component id | Keep component shapes stable; version them if one must change |
 | The art has not been seen in a client | Models and textures may look wrong at full size | Look at each in a client: the client tests' full screenshots are in CI's artifacts |
-| Nothing published | Players cannot install it yet | After review, the owner merges and publishes as [DISTRIBUTION.md](../DISTRIBUTION.md) describes |
+| Nothing published | Players cannot install it yet | Merged to `main` through #263; the owner publishes a release as [DISTRIBUTION.md](../DISTRIBUTION.md) describes |
 
 ## Test results
 

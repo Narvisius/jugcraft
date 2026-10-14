@@ -33,6 +33,7 @@ import net.minecraft.world.level.storage.ValueOutput;
  * {@value #MAX_LENGTH} lengths joined end to end ({@link #table}).
  */
 public class FeastTableBlockEntity extends BlockEntity {
+	public final local.peepo.ServingCompanion companion = new local.peepo.ServingCompanion(this);
 	public static final int DISHES = 2;
 	public static final int SERVINGS = 8;
 	public static final int WINDOW = 2400;
@@ -55,7 +56,10 @@ public class FeastTableBlockEntity extends BlockEntity {
 	}
 
 	/** Serves up to {@value #SERVINGS} of {@code stack} on dish {@code index} (empty, or holding the same food); returns how many. */
-	public int serve(int index, ItemStack stack) {
+	public int serve(int index, ItemStack stack) { return serve(index,stack,true); }
+
+	/** Transfer simulations defer client notifications until their outer transaction commits. */
+	public int serve(int index, ItemStack stack, boolean notify) {
 		ItemStack dish = dishes.get(index);
 		if (!food(stack) || !dish.isEmpty() && !ItemStack.isSameItemSameComponents(dish, stack)) {
 			return 0;
@@ -69,7 +73,7 @@ public class FeastTableBlockEntity extends BlockEntity {
 		} else {
 			dish.grow(served);
 		}
-		changed();
+		if (notify) changed();
 		return served;
 	}
 
@@ -159,7 +163,14 @@ public class FeastTableBlockEntity extends BlockEntity {
 		}
 	}
 
+	public void restoreCompanionStock(List<ItemStack> stock) {
+		for (int i=0;i<DISHES;i++) dishes.set(i,stock.get(i).copy());
+	}
+
+	public void companionChanged() { changed(); }
+
 	private void changed() {
+		companion.observe();
 		setChanged();
 		if (level != null) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
@@ -173,11 +184,13 @@ public class FeastTableBlockEntity extends BlockEntity {
 		for (int i = 0; i < DISHES; i++) {
 			dishes.set(i, i < saved.size() ? saved.get(i) : ItemStack.EMPTY);
 		}
+		companion.load(input);
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+		companion.save(output);
 		output.store("dishes", ItemStack.OPTIONAL_CODEC.listOf(), new ArrayList<>(dishes));
 	}
 

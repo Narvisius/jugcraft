@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/insulated_steam_line",
+    "side": "jugcraft:block/insulated_steam_line",
+    "end": "jugcraft:block/insulated_steam_line_end"
+  },
+  "elements": [
+    {
+      "from": [
+        3.0,
+        3.0,
+        0
+      ],
+      "to": [
+        13.0,
+        13.0,
+        3.0
+      ],
+      "faces": {
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side",
+          "rotation": 90
+        },
+        "down": {
+          "texture": "#side",
+          "rotation": 90
+        },
+        "north": {
+          "texture": "#end"
+        },
+        "south": {
+          "texture": "#end"
+        }
+      }
+    }
+  ]
+}

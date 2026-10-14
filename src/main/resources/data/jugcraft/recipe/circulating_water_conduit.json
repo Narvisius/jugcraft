@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "CCC",
+    "S S",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:gray_concrete",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:circulating_water_conduit",
+    "count": 6
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "textures": {
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_rack_body": "jugcraft:block/pi_rack_body",
+    "pi_rack_top": "jugcraft:block/pi_rack_top",
+    "particle": "jugcraft:block/pi_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        0.8,
+        15.3,
+        0.8
+      ],
+      "to": [
+        15.2,
+        16.1,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rack_body",
+          "uv": [
+            0.8,
+            0,
+            15.2,
+            0.8
+          ]
+        },
+        "south": {
+          "texture": "#pi_rack_body",
+          "uv": [
+            0.8,
+            0,
+            15.2,
+            0.8
+          ]
+        },
+        "east": {
+          "texture": "#pi_rack_body",
+          "uv": [
+            0.4,
+            0,
+            15.2,
+            0.8
+          ]
+        },
+        "west": {
+          "texture": "#pi_rack_body",
+          "uv": [
+            0.8,
+            0,
+            15.6,
+            0.8
+          ]
+        },
+        "up": {
+          "texture": "#pi_rack_top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_rack_body",
+          "uv": [
+            0.8,
+            0.4,
+            15.2,
+            15.2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.2,
+        0.5,
+        15.4
+      ],
+      "to": [
+        13.8,
+        5.5,
+        15.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    }
+  ]
+}

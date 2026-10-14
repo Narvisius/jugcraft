@@ -730,7 +730,7 @@
           "title": "Ores",
           "icon": "jugcraft:tin_ore",
           "text": [
-            "Jugcraft ores appear in the stone and deepslate of every Overworld biome:",
+            "Jugcraft ores appear in Overworld stone and deepslate. Regional exceptions are listed below:",
             "Tin: Y -32 to 96, needs a stone pickaxe.",
             "Zinc: Y -16 to 80, needs a stone pickaxe.",
             "Lead: Y -48 to 64, needs a stone pickaxe.",
@@ -743,7 +743,9 @@
             "Rock Salt: Y 0 to 64.",
             "Phosphorite: Y -16 to 48.",
             "Lepidolite: Y -48 to 32.",
-            "Monazite: Y -64 to 16."
+            "Monazite: Y -64 to 16.",
+            "Fluorite: Y -32 to 48. Large pockets below permanently snowy inland biomes; needs an iron pickaxe. Mineral faces in small stone outcrops can point to a pocket below. Seasonal snow, beaches, rivers and oceans do not qualify. The prospector and ore drill work here; nine fluorite make a decorative storage block. Fluorite chemistry is planned separately.",
+            "Spodumene: Y -16 to 64. Large pockets below Shield, Highland, Basin, Windswept Hills, Windswept Gravelly Hills, Windswept Forest and Stony Peaks; most centers are near Y 24. Needs an iron pickaxe. Look for pale-green mineral faces in small stone outcrops, or use the prospector and ore drill. The crusher gives two spodumene per ore; nine compact into a storage block. Expanded lithium refining is planned separately; existing lepidolite processing remains available."
           ]
         },
         {
@@ -3107,17 +3109,19 @@
           "title": "Arms: Trophies",
           "icon": "jugcraft:glacier_maul",
           "text": [
-            "Great foes yet to be met in the world will each carry two arms of their own, with a boon:",
-            "The Yeti King: Glacier Maul and Rimeclaw.",
-            "The Cinder Tyrant: Cinderbrand and Magmaw.",
-            "The Mire Hag: Hagthorn and Bogfang.",
-            "The Crypt Lich: Soulreaver and Gravewarden.",
+            "Great foes carry arms of their own, with a boon.",
+            "These are met in their lairs. Anyone who takes part in one's fall may win its trophy, and always does the first time:",
+            "The Yeti King, in the Glacier Hall: Glacier Maul and Rimeclaw.",
+            "The Cinder Tyrant, in the Cinder Kiln: Cinderbrand and Magmaw.",
+            "The Mire Hag, in the Lantern Fen: Hagthorn and Bogfang.",
+            "The Crypt Lich, in the Archive of Last Names: Soulreaver and Gravewarden.",
+            "Vesperine, the Last Reaper, in the Hollow Acre: Vesper Scythe.",
+            "Madame Tatterlace, in the Spindle Loft: Needle Rapier.",
+            "These are yet to be met in the world, and will each carry two:",
             "The Iron Dreadnought: Dynamo Halberd and Piston Hammer.",
             "The Alpha Werewolf: Moonfang and Howler.",
             "The Storm Roc: Stormcaller and Galefeather.",
             "The Abyssal Leviathan: Tidebreaker and Leviathan's Hook.",
-            "Vesperine, the Last Reaper: Vesper Scythe.",
-            "Madame Tatterlace: Needle Rapier.",
             "Trophies last twice as long as steel, and fight as their kinds do."
           ]
         },
@@ -3850,6 +3854,152 @@
           }
         },
         {
+          "title": "Chemical Oxidizer",
+          "icon": "jugcraft:chemical_oxidizer",
+          "text": [
+            "Two wide, two deep and three tall: a lined reaction throat fed by a hopper and a feed screw at the back, with a gas column and collector hood on top, built from steel plates, a furnace, an electric motor, glass, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
+            "Drop sulfur dust into the hopper on top at the back and pipe oxygen into the capped inlet low on the right. Each dust burns with 250 mB of oxygen into 250 mB of sulfur dioxide in five seconds, which leaves at the collar on top of the hood. It draws 96 JE/t through the socket low on the left side at the back.",
+            "Coal or charcoal burns the same way into 250 mB of carbon dioxide, the Chemical Infuser's feed for methane. Its screen says what it is waiting for, and upgrade cards fit its terminal."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:furnace",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "minecraft:glass",
+              "jugcraft:steel_plate",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:chemical_oxidizer",
+            "count": 1
+          }
+        },
+        {
+          "title": "Industrial Fermenter",
+          "icon": "jugcraft:industrial_fermenter",
+          "text": [
+            "Three wide, three deep and four tall: a tall stirred vessel on four legs, built from steel plates, a Steel Tank, glass, an electric motor, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
+            "Drop eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) into the hatch on its crown and pipe water into the inlet low at the back left. With a bucket of water they ferment into 250 mB of bioethanol at the broth outlet low at the front, and 250 mB of carbon dioxide at the flange high at the back, in five seconds at 96 JE/t.",
+            "The carbon dioxide feeds the Chemical Infuser's methane. Collecting it is optional: when its tank is full the rest is vented and fermentation goes on."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:glass",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:machine_casing"
+            ],
+            "result": "jugcraft:industrial_fermenter",
+            "count": 1
+          }
+        },
+        {
+          "title": "Bulk Chemical Reactor",
+          "icon": "jugcraft:bulk_chemical_reactor",
+          "text": [
+            "Four wide, four deep and four tall: the Chemical Reactor enlarged into a jacketed vessel with a stirring drive on its lid, built from a Chemical Reactor, a Steel Tank, a steel fluid pipe, an electric motor, a basic circuit and steel plates. Every block it fills must be free when it is placed. It runs two batches at once, from 8,000 mB tanks, at 90% of the reactor's draw.",
+            "Pipe water into the inlet on its left side and hydrogen chloride from the Chemical Infuser into the short absorption inlet on its lid: 500 mB of the gas dissolves in a bucket of water into a bucket of hydrochloric acid in five seconds, which leaves at the outlet low at the front.",
+            "Hydrochloric acid leaches ore like sulfuric acid: drop an ore into the hatch on its lid, pipe 250 mB of the acid into the side inlet, and four washed ores come out of the chute at the front, ready for the furnace.",
+            "Nitric acid in the side inlet and ammonia in the lid inlet neutralize each other: 250 mB of the acid and 125 mB of ammonia give four ammonium nitrate at the chute. It is a strong nitrogen fertilizer, and it packs grenades and high-explosive rockets in place of guncotton."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:chemical_reactor",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:bulk_chemical_reactor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Anaerobic Digester",
+          "icon": "jugcraft:anaerobic_digester",
+          "text": [
+            "Six wide, six deep and six tall: a huge sealed tank on four foundation shoes, with a feed auger on its left side, a digestate chute low on its right, a gas header over its dome and a mixer gearbox at the back, built from four Steel Tanks, two electric motors, a steel plate, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed. It runs four batches at once, from 16,000 mB tanks, at 80% of the reactor's draw.",
+            "Feed it organic waste at the auger: crops, rotten flesh, poisonous potatoes, kelp, pumpkins or seeds. Pipe water into the inlet low on the left. Sixteen items and a bucket of water digest over twenty seconds into 1,000 mB of raw biogas (60% methane, 40% carbon dioxide) at the header flange high on the right, and two bone meal at the chute.",
+            "Biogas upgrades into pure methane in the Chemical Infuser with its Nickel Catalyst Bed: 250 mB of biogas and 400 mB of hydrogen give 250 mB of methane and 400 mB of water."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_tank",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_tank"
+            ],
+            "result": "jugcraft:anaerobic_digester",
+            "count": 1
+          }
+        },
+        {
+          "title": "Coal Gasifier",
+          "icon": "jugcraft:coal_gasifier",
+          "text": [
+            "Four wide, four deep and six tall: a tall lined reaction column over a broad ash chamber, with a charging chute on its left side and a gas header high on its right, built from steel plates, bricks, a furnace, a steel fluid pipe and a Machine Casing. Every block it fills must be free when it is placed. It runs two batches at once.",
+            "Drop coal or coal coke into the charging chute and pipe water into the inlet low on its left side. Each piece and 500 mB of water (as steam) become 500 mB of raw syngas (half carbon monoxide, half hydrogen) in ten seconds, which leaves at the header flange high on its right. Charcoal gives 400 mB from 400 mB of water.",
+            "Coal and coke each leave a Gasification Residue at the chute low on its right side. Bound with cement it makes concrete, and with asphalt binder road asphalt, in place of gravel.",
+            "Raw syngas is dirty: the Gas Cleanup and Separation Rack divides it into carbon monoxide and hydrogen."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "minecraft:brick",
+              "jugcraft:steel_plate",
+              "minecraft:furnace",
+              "jugcraft:machine_casing",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "minecraft:brick",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:coal_gasifier",
+            "count": 1
+          }
+        },
+        {
+          "title": "Gas Cleanup and Separation Rack",
+          "icon": "jugcraft:gas_cleanup_rack",
+          "text": [
+            "Three wide, five deep and four tall: a scrubber column and two separation towers on a steel skid, built from steel plates, a Steel Tank, two Tinplate Tanks, an electric motor and a basic circuit. Every block it fills must be free when it is placed.",
+            "Pipe raw syngas into the inlet low on its left side. 500 mB of it is cleaned and divided into 250 mB of carbon monoxide (the tower at the back on the right) and 250 mB of hydrogen (the tower at the back on the left) in five seconds at 128 JE/t.",
+            "Carbon monoxide becomes methane in the Chemical Infuser with its Nickel Catalyst Bed: 100 mB of it and 300 mB of hydrogen give 100 mB of methane and 200 mB of water."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:fluid_tank",
+              "jugcraft:electric_motor",
+              "jugcraft:fluid_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:gas_cleanup_rack",
+            "count": 1
+          }
+        },
+        {
           "title": "Fuel Cell",
           "icon": "jugcraft:fuel_cell",
           "text": [
@@ -3878,7 +4028,7 @@
           "text": [
             "Four wide, five deep and four tall: a gas engine turning a generator on a steel skid, built from steel plates, an electric motor, a steel gear, a Tinplate Tank and a basic circuit. Every block it fills must be free when it is placed; the corners above the skid at the front stay open.",
             "Pipe hydrogen into the capped inlet low on its right side. It burns a millibucket a tick, 128 JE each, and sends 128 JE/t out of the socket on the terminal cabinet at the back: a bucket lasts 50 seconds. Its coupling and intake fan spin up as it starts.",
-            "It makes only as much as its store has room for, so no fuel is wasted when nothing draws its power, and its screen says when the fuel tank is empty or the store is full. Methane, at 256 JE/t, comes with the methane Infuser."
+            "It makes only as much as its store has room for, so no fuel is wasted when nothing draws its power, and its screen says when the fuel tank is empty or the store is full. It also burns methane from the Chemical Infuser: 448 JE a millibucket at 256 JE/t, a bucket lasting 87.5 seconds."
           ],
           "craft": {
             "grid": [
@@ -3893,6 +4043,30 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:gas_burning_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Bio Generator",
+          "icon": "jugcraft:bio_generator",
+          "text": [
+            "Three wide, four deep and three tall: a compact engine-generator on a thick skid, built from a Steel Tank, an electric motor, a steel gear, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
+            "Pipe bioethanol into the low liquid inlet on its right side. It burns 192 JE a millibucket at 96 JE/t, a bucket lasting 100 seconds, and sends the power out of the socket on the terminal box low on its left side. Its coupling and radiator fan turn while it runs.",
+            "It makes only as much as its store has room for. It also burns biogas from the Anaerobic Digester, piped into the same inlet: 268 JE a millibucket at 64 JE/t, a bucket lasting about 210 seconds."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:electric_motor",
+              "jugcraft:steel_gear",
+              "jugcraft:basic_circuit",
+              null,
+              "jugcraft:steel_tank",
+              null,
+              null,
+              "jugcraft:machine_casing",
+              null
+            ],
+            "result": "jugcraft:bio_generator",
             "count": 1
           }
         },
@@ -4019,6 +4193,30 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:synthesis_converter",
+            "count": 1
+          }
+        },
+        {
+          "title": "Chemical Infuser",
+          "icon": "jugcraft:chemical_infuser",
+          "text": [
+            "Two wide, three deep and three tall: a stepped reaction chamber with an inlet on each shoulder, a catalyst-bed drawer at its foot and a cooling jacket behind, built from steel plates, two steel fluid pipes, a Tinplate Tank, copper cable and a basic circuit. Every block it fills must be free when it is placed.",
+            "Pipe hydrogen into the left inlet and chlorine into the right. 250 mB of each burn together into 500 mB of hydrogen chloride in under four seconds, which leaves at the top collar at the back. It draws 128 JE/t through the socket low on the right side at the back.",
+            "With a Nickel Catalyst Bed in its bed socket it makes methane: 400 mB of hydrogen and 100 mB of carbon dioxide (the right inlet) give 100 mB of methane at the top collar and 400 mB of water at the drain below it in ten seconds. The bed is never used up. Its screen says what it is waiting for, and upgrade cards fit its terminal."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:fluid_tank",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:chemical_infuser",
             "count": 1
           }
         },

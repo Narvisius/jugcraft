@@ -175,14 +175,28 @@ public class BindingThreadEntity extends Entity {
 		}
 	}
 
-	/** Struck: enough of a blow snaps it. */
+	/**
+	 * Struck: enough of a blow snaps it. A player cutting someone else free is a deed of her fight (Concordance Chunk A),
+	 * counted once for each thread.
+	 */
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		if (amount < HEALTH && !(source.getEntity() instanceof Player)) {
 			return false;
 		}
+		if (held != null && source.getEntity() instanceof ServerPlayer rescuer && !rescuer.getUUID().equals(held) && LairBosses.eligible(rescuer)
+				&& owner != null && level.getEntity(owner) instanceof TatterlaceEntity boss && boss.encounter().contains(rescuer)) {
+			boss.encounter().deed(rescuer, "thread " + getUUID());
+		}
 		snap(level);
 		return true;
+	}
+
+	/** Catches {@code player} at once, as reaching them would (tests use it to hold someone). */
+	public void tether(ServerPlayer player) {
+		held = player.getUUID();
+		anchor = player.position();
+		tethered = 0;
 	}
 
 	/** Players can strike it (their client picks it out), in flight or while it holds someone. */

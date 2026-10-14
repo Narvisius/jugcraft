@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -38,6 +39,8 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 	private static final int SCREEN_WIDTH = 74;
 	private static final int TEXT_BOTTOM = 80;
 	private static final int BUTTON_Y = 82;
+	/** The vent choice's row, above the other buttons; the terminal text stops above it. */
+	private static final int VENT_BUTTON_Y = BUTTON_Y - 13;
 	private static final int BAR_X = 10;
 	private static final int BAR_Y = 17;
 	private static final int BAR_WIDTH = 12;
@@ -50,6 +53,7 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 
 	private final MachineScreenThemes.Theme theme;
 	private Button pauseButton;
+	private Button ventButton;
 
 	public FormMachineScreen(FormMachineMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title, BAY_WIDTH + TERMINAL_WIDTH, 166);
@@ -66,6 +70,16 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 			addRenderableWidget(Button.builder(Component.translatable("container.jugcraft.form.cancel"),
 					button -> click(FormMachineBlockEntity.BUTTON_CANCEL)).bounds(leftPos + SCREEN_X + 38, topPos + BUTTON_Y, 36, 12).build());
 		}
+		if (menu.form().ventsAny()) {
+			ventButton = addRenderableWidget(Button.builder(Component.translatable("container.jugcraft.form.excess_vent"),
+					button -> click(FormMachineBlockEntity.BUTTON_HOLD_VENTED)).bounds(leftPos + SCREEN_X, topPos + VENT_BUTTON_Y, SCREEN_WIDTH, 12)
+					.tooltip(Tooltip.create(Component.translatable("container.jugcraft.form.excess_tooltip"))).build());
+		}
+	}
+
+	/** Where the terminal's text must end: above the vent choice when the form has one. */
+	private int textBottom() {
+		return menu.form().ventsAny() ? VENT_BUTTON_Y - 1 : TEXT_BOTTOM;
 	}
 
 	/** Where the energy bar stands: a processor's on the left, before its inputs; a generator's on the right. */
@@ -82,6 +96,9 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
 		pauseButton.setMessage(Component.translatable(menu.paused() ? "container.jugcraft.form.resume" : "container.jugcraft.form.pause"));
+		if (ventButton != null) {
+			ventButton.setMessage(Component.translatable(menu.holdsVented() ? "container.jugcraft.form.excess_hold" : "container.jugcraft.form.excess_vent"));
+		}
 		extractBackground(graphics, mouseX, mouseY, delta);
 		super.extractRenderState(graphics, mouseX, mouseY, delta);
 		extractTooltip(graphics, mouseX, mouseY);
@@ -147,6 +164,7 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 	private void terminal(GuiGraphicsExtractor graphics) {
 		MachineStatus status = menu.status();
 		int y = SCREEN_Y;
+		int bottom = textBottom();
 		// The state wraps like the reason: "Waiting for input" is wider than the terminal.
 		for (FormattedCharSequence line : font.split(Component.literal("> ").append(status.title(menu.form())), SCREEN_WIDTH)) {
 			graphics.text(font, line, SCREEN_X, y, status.state().warning() ? theme.warn() : theme.text(), false);
@@ -154,7 +172,7 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 		}
 		y += 2;
 		for (FormattedCharSequence line : font.split(status.detail(menu.form()), SCREEN_WIDTH)) {
-			if (y + 9 > TEXT_BOTTOM) {
+			if (y + 9 > bottom) {
 				return;
 			}
 			graphics.text(font, line, SCREEN_X, y, status.state().warning() ? theme.warn() : theme.dim(), false);
@@ -162,11 +180,11 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 		}
 		y += 2;
 		if (menu.form().generator()) {
-			if (y + 9 <= TEXT_BOTTOM) {
+			if (y + 9 <= bottom) {
 				row(graphics, y, Component.translatable("container.jugcraft.terminal.rate").getString(), menu.laneUse() + " JE/t");
 				y += 10;
 			}
-			if (y + 9 <= TEXT_BOTTOM) {
+			if (y + 9 <= bottom) {
 				powerRow(graphics, y);
 			}
 			return;
@@ -179,25 +197,32 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 				best = Math.max(best, (int) (fraction(lane) * 100));
 			}
 		}
-		if (y + 9 <= TEXT_BOTTOM) {
+		if (y + 9 <= bottom) {
 			meter(graphics, y, best, theme.progress(), best + "%");
 			y += 10;
 		}
-		if (y + 9 <= TEXT_BOTTOM) {
+		if (y + 9 <= bottom) {
 			powerRow(graphics, y);
 			y += 10;
 		}
-		if (y + 9 <= TEXT_BOTTOM) {
+		if (y + 9 <= bottom) {
 			row(graphics, y, Component.translatable("container.jugcraft.form.lanes").getString(), running + "/" + menu.form().profile().lanes());
 		}
 	}
 
-	/** The stored power against the store's size, in whole thousands when tenths would not fit beside the label. */
+	/**
+	 * The stored power against the store's size, in whole thousands when tenths would not fit beside the label, and the
+	 * stored power alone when even that would not (a store of 100,000 JE or more, holding 10,000 or more); the bar and
+	 * its tooltip still give the size.
+	 */
 	private void powerRow(GuiGraphicsExtractor graphics, int y) {
 		String label = Component.translatable("container.jugcraft.terminal.power").getString();
 		String energy = compact(menu.energy()) + "/" + compact(menu.capacity());
 		if (!fits(label, energy)) {
 			energy = thousands(menu.energy()) + "/" + thousands(menu.capacity());
+		}
+		if (!fits(label, energy)) {
+			energy = thousands(menu.energy());
 		}
 		row(graphics, y, label, energy);
 	}

@@ -15,12 +15,18 @@ public final class CompanionJobs {
     }
     static CompanionJob resolveFresh(PeepoEntity npc,BlockPos pos){
         if(!npc.level().hasChunkAt(pos))return null;
+        var water=npc.water.job(pos);if(water!=null)return water;
         var livestock=npc.livestock.job(pos);if(livestock!=null)return livestock;
         var garden=npc.garden.job(pos);if(garden!=null)return garden;
         var be=npc.level().getBlockEntity(pos);if(be==null || be.isRemoved())return null;
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.BatHouseBlockEntity house)return house.companionJob.prepare(npc);
+        if(be instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity)return VanillaCompanionPort.of(be).hiveJob().prepare(npc);
         if(be instanceof io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity crank)return crank.companionJob.prepare(npc);
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlockEntity wheel)return wheel.companionJob.prepare(npc);
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity kettle)return kettle.companionJob.prepare(npc);
         if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderPressBlockEntity press)return press.companionJob.prepare(npc);
         if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.CookingPotBlockEntity pot)return pot.companionJob.prepare(npc);
+        if(be instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity machine)return machine.companionJob(npc);
         if(be instanceof io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity machine){
             var job=machine.companionJob(npc);if(job!=null)return job;
         }

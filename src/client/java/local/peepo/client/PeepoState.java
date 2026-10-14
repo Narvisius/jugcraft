@@ -17,5 +17,11 @@ public final class PeepoState extends LivingEntityRenderState { public final Ite
     public float socialTime;
     final MachineWorkClip toolPose=new MachineWorkClip();
     float crankX,crankY,crankZ;
+    public local.peepo.CompanionGesture gesture=local.peepo.CompanionGesture.NONE;
+    public boolean actionPose,spatula;
+    public boolean pressSeated;
+    public net.minecraft.world.phys.Vec3 pressOffset=net.minecraft.world.phys.Vec3.ZERO;
+    public final ItemStackRenderState actionItem=new ItemStackRenderState();
+    float actionScale=.38F;
 }
 

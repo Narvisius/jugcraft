@@ -277,6 +277,8 @@ public final class JugcraftConcordance {
 		io.github.jimbozoomer.jugcraft.concordance.spire.ConcordSpire.register();
 		// Roadmap step 26: the Concordance Journal, every report in one place for the screens.
 		io.github.jimbozoomer.jugcraft.concordance.journal.Journal.register();
+		// Chunk A: the composer screen's server side, answered by the service the compose command uses (Composing).
+		io.github.jimbozoomer.jugcraft.concordance.composer.Composer.register();
 		io.github.jimbozoomer.jugcraft.concordance.sign.Signs.register();
 		BENCH_MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("lampwright_bench"),
 				new ExtendedMenuType<>((containerId, inventory, pos) -> new LampwrightBenchMenu(containerId, inventory), BlockPos.STREAM_CODEC.cast()));

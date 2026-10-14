@@ -31,7 +31,8 @@ MATRIX = {
     "fabric-api": (
         "Attachments for every player record, and each wearer's worn trinkets choice, sent to everyone who sees them; item "
         "components; the rules' reload listener; menus; commands; networking (the journal and its request, signs, the "
-        "Vigil's gesture, the worn trinkets choice); key mappings; the Focus HUD line; block-entity load and unload "
+        "Vigil's gesture, the worn trinkets choice, the Spell Composer's request, state and result, the encyclopedia's "
+        "request and pages); key mappings; the Focus HUD line; block-entity load and unload "
         "(the circle index); the block-break and attack questions asked for the person behind a change, with a "
         "FakePlayer standing in for an absent owner when a server allows it; the Transfer API for the crucible's water "
         "and every courier pickup and delivery",
@@ -51,10 +52,13 @@ MATRIX = {
         "is a Jugcraft layer, and vanilla trims are not drawn on them"),
     "player-animation-library": (
         "Original cast and release gestures for the invocations; the circle participants' channelling gesture; the "
-        "Vigil's offering gesture, sent by the server when an offering is made",
+        "Vigil's offering gesture, sent by the server when an offering is made; none of them plays over a gun or an "
+        "arm in the main hand, on any player the client sees (CastPoses)",
         "required",
-        [],
-        "No test looks at a gesture; skipped for players whose arms ArmsMotion poses"),
+        ["aCastGivesWayToAGunOrAnArm"],
+        "No person has looked at the gestures; giving way has a test, added but not yet run, for Spell Engine's "
+        "release clip and the Vigil's gesture on the client's own player; it does not cover the fade of an ended "
+        "cast, another player's view (a second client, not run) or the circle's gesture"),
     "modonomicon": (
         "The Arcane Concordance codex: categories for every tradition, pages generated from the rules (components, "
         "the calendar, the Binding reasons, the spell bar's keys), entries unlocked by research advancements",
@@ -125,10 +129,14 @@ MATRIX = {
         "Server tests run without Jade in CI's optional-absent job; its overlay has not been seen in a client"),
     "jei": (
         "Recipe categories for the Lampwright's Bench, the Circle Anchor and the Resonant Ring; alchemy ingredients' "
-        "properties as information (never outcomes)",
+        "properties as information (never outcomes); since Concordance Chunk A, an information page each on where the "
+        "Adept's Wand and Vesperine's and Madame Tatterlace's loot come from (tools/acquisition.py), with the default "
+        "data's chances and offerings",
         "no JEI pages; the codex's recipe pages remain",
         [],
-        "Its pages have not been seen in a client"),
+        "Its pages have not been seen in a client; the information pages are written from the default data, so a "
+        "server data pack that changes a recipe, a boss's loot table or the Adept's Attunement is not shown; Chunk A's "
+        "information pages are not compiled yet"),
     "modmenu": (
         "Opens the Concordance settings screen from the mod list",
         "the Concordance settings key (unbound by default, in Controls) opens the same screen",
@@ -145,15 +153,17 @@ MATRIX = {
         [],
         "Not tried with the Concordance's renderers"),
     "fabric-language-kotlin": (
-        "Runs the Kotlin of the journal's GuiLib workspace",
-        "the plain journal screen",
-        ["ConcordanceJournalClientGameTests"],
-        "Only the workspace is Kotlin"),
+        "Runs the Kotlin of the journal's and the Spell Composer's GuiLib workspaces",
+        "the plain journal and composer screens",
+        ["ConcordanceJournalClientGameTests", "ConcordanceComposerClientGameTests"],
+        "Only the workspaces are Kotlin"),
     "guilib": (
-        "The Concordance Journal's workspace, a tab for each section of the journal the server sends",
-        "the plain journal screen, with the same journal",
-        ["ConcordanceJournalClientGameTests"],
-        "No composer, ritual-schematic, crucible or observatory screen is built; keyboard use not tried by a person"),
+        "The Concordance Journal's workspace (a tab for each section the server sends) and the Spell Composer's (the "
+        "draft as a strip of words over the words the player has learned)",
+        "the plain journal and composer screens, with the same journal and the same draft",
+        ["ConcordanceJournalClientGameTests", "ConcordanceComposerClientGameTests"],
+        "No ritual-schematic, crucible or observatory screen is built; the workspaces have no narration (the plain "
+        "screens do); keyboard use not tried by a person"),
 }
 
 # Libraries the Concordance does not use: their mod ids must not appear in Jugcraft's code.

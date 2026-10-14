@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "QQQ",
+    "QIQ"
+  ],
+  "key": {
+    "Q": "minecraft:quartz_slab",
+    "I": "minecraft:ink_sac"
+  },
+  "result": {
+    "id": "jugcraft:tsc_status_board",
+    "count": 1
+  }
+}

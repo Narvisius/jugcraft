@@ -51,6 +51,12 @@ public class SpinningWheelBlock extends BaseEntityBlock {
 		return SHAPE;
 	}
 
+    @Override
+    protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) {
+        // The nearly full collision box is an obstacle, despite not being a full cube.
+        return false;
+    }
+
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
@@ -92,6 +98,7 @@ public class SpinningWheelBlock extends BaseEntityBlock {
 		if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof SpinningWheelBlockEntity wheel)) {
 			return InteractionResult.SUCCESS;
 		}
+		if(player.isShiftKeyDown() && wheel.collectCompanionOutput(player))return InteractionResult.SUCCESS;
 		if (!wheel.turn((ServerLevel) level)) {
 			player.sendOverlayMessage(Component.translatable(MESSAGES + "empty"));
 		}

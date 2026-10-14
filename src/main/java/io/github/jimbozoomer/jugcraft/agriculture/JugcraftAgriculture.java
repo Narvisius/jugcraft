@@ -377,6 +377,7 @@ public final class JugcraftAgriculture {
 	public static DataComponentType<Integer> BALLOON_FUEL;
 	public static DataComponentType<Integer> BROOM_CHARGE;
 	public static BlockEntityType<FeastTableBlockEntity> FEAST_TABLE_ENTITY;
+	public static BlockEntityType<PunchBowlBlockEntity> PUNCH_BOWL_ENTITY;
 	public static BlockEntityType<CornMazeGateBlockEntity> CORN_MAZE_GATE_ENTITY;
 	/** The mooncakes, baked in the Cooking Pot. */
 	public static final List<String> MOONCAKES = List.of("red_bean_mooncake", "chestnut_mooncake", "pumpkin_mooncake");
@@ -1809,6 +1810,8 @@ public final class JugcraftAgriculture {
 		// treats themselves are foods, registered with the others).
 		Block punch = registerBlock("witchs_brew_punch_bowl", PunchBowlBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GREEN)
 				.strength(0.5F).sound(SoundType.GLASS).noOcclusion().lightLevel(PunchBowlBlock::light).pushReaction(PushReaction.POPPED));
+		PUNCH_BOWL_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("witchs_brew_punch_bowl"),
+				FabricBlockEntityTypeBuilder.create(PunchBowlBlockEntity::new, punch).build());
 		Block brack = registerBlock("barmbrack", BarmbrackBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN)
 				.strength(0.5F).sound(SoundType.WOOL).noOcclusion().pushReaction(PushReaction.POPPED));
 		BARMBRACK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("barmbrack"),

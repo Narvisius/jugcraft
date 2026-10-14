@@ -1,7 +1,8 @@
 # Arcane Concordance: the player journey
 
-Status: the automated parts are implemented on branch `claude/concordance-steps-26-32`. **The human playtest has not
-been run**; see Verification for what has.
+Status: the automated parts are merged to main ([#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250), from
+branch `claude/concordance-steps-26-32`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026). **The human playtest has not been run**; see Verification for what has.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 31) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 23, every stage. Roadmap step 31.

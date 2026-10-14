@@ -101,7 +101,8 @@ public class TallCropBlock extends VegetationBlock implements BonemealableBlock 
 		return state.is(this) && state.getValue(SECTION) == section;
 	}
 
-	private BlockState stateFor(int age, int section) {
+	/** Canonical plant section at this age, including reset defaults for transient states such as overripeness. */
+	public BlockState stateFor(int age, int section) {
 		return this.defaultBlockState().setValue(AGE, age).setValue(SECTION, section);
 	}
 
@@ -251,7 +252,7 @@ public class TallCropBlock extends VegetationBlock implements BonemealableBlock 
 	}
 
 	/** What picking the ripe plant whose bottom is {@code bottom} gives: its produce ({@link TomatoVineBlock} may differ). */
-	protected Item produce(BlockState bottom) {
+	public Item produce(BlockState bottom) {
 		return JugcraftAgriculture.item(crop.produceId);
 	}
 

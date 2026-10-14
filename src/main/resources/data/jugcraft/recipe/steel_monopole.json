@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TAT",
+    "PWP",
+    "PCP"
+  ],
+  "key": {
+    "T": "minecraft:white_terracotta",
+    "A": "jugcraft:aluminum_cable",
+    "P": "#c:plates/steel",
+    "W": "jugcraft:spun_concrete_pole",
+    "C": "minecraft:gray_concrete"
+  },
+  "result": {
+    "id": "jugcraft:steel_monopole",
+    "count": 1
+  }
+}

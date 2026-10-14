@@ -48,6 +48,19 @@ public class BatHouseBlockEntity extends BlockEntity {
 	private int residents;
 	private int guano;
 	private int night = -1;
+	public final local.peepo.BatHouseCompanionJob companionJob = new local.peepo.BatHouseCompanionJob(this);
+	private final GuanoTransfer companionGuano = new GuanoTransfer();
+	private final class GuanoTransfer extends net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant<Integer> {
+		protected Integer createSnapshot() { return guano; }
+		protected void readSnapshot(Integer saved) { guano = saved; }
+		protected void onFinalCommit() { changed(); }
+		boolean collect(int expected, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx) {
+			if (expected <= 0 || guano != expected || isRemoved()) return false;
+			updateSnapshots(tx);
+			guano = 0;
+			return true;
+		}
+	}
 
 	public BatHouseBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftAgriculture.BAT_HOUSE_ENTITY, pos, state);
@@ -74,6 +87,11 @@ public class BatHouseBlockEntity extends BlockEntity {
 		guano = 0;
 		changed();
 		return taken;
+	}
+
+	/** Companion collection shares the real ledge; aborted cargo transfers leave it untouched. */
+	public boolean collectGuano(int expected, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx) {
+		return companionGuano.collect(expected, tx);
 	}
 
 	/** Night on the Overworld clock: from dusk to dawn. */
@@ -157,6 +175,7 @@ public class BatHouseBlockEntity extends BlockEntity {
 	/** Broken, the house lets its bats out (they aren't lost) and drops its guano. */
 	@Override
 	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		companionJob.removed();
 		if (level instanceof ServerLevel server) {
 			letOut(server);
 			if (guano > 0) {

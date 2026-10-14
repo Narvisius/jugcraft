@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "WNW"
+  ],
+  "key": {
+    "S": "minecraft:oak_slab",
+    "W": "minecraft:white_wool",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:coat_rack",
+    "count": 2
+  }
+}

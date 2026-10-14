@@ -8,17 +8,17 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.LoopType;
 import com.geckolib.util.GeckoLibUtil;
 import io.github.jimbozoomer.jugcraft.lair.DoilyLaceBlock;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
 import io.github.jimbozoomer.jugcraft.lair.LairBosses;
 import io.github.jimbozoomer.jugcraft.lair.LairExitBlock;
 import io.github.jimbozoomer.jugcraft.lair.LairInstance;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -70,7 +70,8 @@ import org.jspecify.annotations.Nullable;
  * to the lace for good, every cooldown is a third shorter and she unravels two segments at once.
  *
  * <p>Every attack has a wind-up you can read, a strike and a recovery ({@link Attack}); the numbers are here, in one place,
- * and in tools/tatterlace.py. Each participant (whoever hurt her or her brood) gets their own loot
+ * and in tools/tatterlace.py. Each player who qualified in her fight ({@link Encounter}: a blow, healing, a ward or
+ * one of her objectives) gets their own loot
  * ({@link TatterlaceLoot}); left alone she knits her doily whole, goes back up to her silk and heals. Bound to a lair
  * instance she vanishes with it; one with no instance (a test's) keeps to the loft laid out from the origin she was given.
  * She walks on her own lace and threads: no gravity holds her, and no web.
@@ -221,7 +222,8 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 	private final int[] cooldowns = new int[Attack.values().length];
 	private @Nullable UUID foe;
 	private int abandoned;
-	private final Map<UUID, Float> damageBy = new HashMap<>();
+	/** This fight: who took part and how (Concordance Chunk A); her arena is round her doily. */
+	private final Encounter encounter = new Encounter(this, this::centre);
 	private final List<UUID> sacs = new ArrayList<>();
 	private final List<UUID> brood = new ArrayList<>();
 	/** Her thrown and flung things (thimbles, threads, snares, spools), gone with her. */
@@ -378,6 +380,9 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 			knitOnLoad = false;
 			knitAll(level);
 		}
+		if (phase != Phase.WAITING && isAlive() && !encounter.underway()) {
+			encounter.begin();  // a fight back from a save keeps a fresh record of who takes part
+		}
 		resetFallDistance();
 		bossBar.setProgress(getHealth() / getMaxHealth());
 		prune(level);
@@ -448,6 +453,7 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 		phase = Phase.DESCENDING;
 		phaseTicks = 0;
 		setAction(Action.DESCEND);
+		encounter.begin();
 		bossBar.setVisible(true);
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.SPIDER_AMBIENT, SoundSource.HOSTILE, 2.0F, 0.5F);
 		tell(level, "message.jugcraft.tatterlace.wakes");
@@ -1130,21 +1136,30 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 		things.removeIf(id -> level.getEntity(id) == null);
 	}
 
-	/** Whoever hurt her or her brood has taken part. */
+	/** Whoever hurt her or her brood, or whose tamed creature did, has taken part. */
 	public void took(ServerPlayer player, float amount) {
-		damageBy.merge(player.getUUID(), amount, Float::sum);
+		encounter.damage(player, amount);
 	}
 
-	/** Her participants: everyone who hurt her or her brood and is still near her doily. */
+	/**
+	 * Her participants still near her doily: everyone who hurt her or her brood, or since Chunk A healed, warded or cut
+	 * someone free enough to qualify ({@link Encounter}), and is alive within {@value Encounter#REACH} blocks.
+	 */
 	public List<ServerPlayer> participants(ServerLevel level) {
 		List<ServerPlayer> out = new ArrayList<>();
 		Vec3 centre = centre();
-		for (ServerPlayer player : level.players()) {
-			if (player.isAlive() && damageBy.getOrDefault(player.getUUID(), 0.0F) > 0.0F && player.position().distanceTo(centre) <= 64.0) {
+		for (UUID id : encounter.qualified()) {
+			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);
+			if (player != null && player.isAlive() && player.level() == level && player.position().distanceTo(centre) <= Encounter.REACH) {
 				out.add(player);
 			}
 		}
 		return out;
+	}
+
+	/** This fight: who took part and how. */
+	public Encounter encounter() {
+		return encounter;
 	}
 
 	/** Who is fighting her, as her brood needs to know. */
@@ -1164,7 +1179,7 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 		attack = null;
 		abandoned = 0;
 		foe = null;
-		damageBy.clear();
+		encounter.abandon();
 		Arrays.fill(cooldowns, 0);
 		setHealth(getMaxHealth());
 		Vec3 perch = perch();
@@ -1202,6 +1217,11 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 	public void die(DamageSource source) {
 		super.die(source);
 		if (level() instanceof ServerLevel level) {
+			// A killing blow gets here inside super.hurtServer, before hurtServer's own took(): its striker (or the owner of
+			// the tamed creature that struck) has taken part before her fall is paid. Any amount qualifies.
+			if (Encounter.striker(source) instanceof ServerPlayer player) {
+				took(player, Float.MIN_VALUE);
+			}
 			defeated(level);
 		}
 	}
@@ -1211,9 +1231,13 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 	 * lair's instance ends (it closes once everyone has left) and a gate of Grey Mist opens in the middle of the doily.
 	 */
 	private void defeated(ServerLevel level) {
+		// However often her fall is reported, it is answered once: one reward each (Concordance Chunk A).
+		if (!encounter.claim()) {
+			return;
+		}
 		dismiss(level);
 		knitAll(level);
-		TatterlaceLoot.reward(level, this, participants(level));
+		LairRewards.pay(level, TatterlaceLoot.BOSS, encounter, position(), centre(), EXPERIENCE);
 		LairInstance open = lairInstance(level);
 		if (open != null) {
 			Lairs.end(open);
@@ -1259,7 +1283,7 @@ public class TatterlaceEntity extends Monster implements GeoEntity {
 			return false;
 		}
 		boolean hurt = super.hurtServer(level, source, amount);
-		if (hurt && source.getEntity() instanceof ServerPlayer player) {
+		if (hurt && Encounter.striker(source) instanceof ServerPlayer player) {
 			took(player, amount);
 		}
 		return hurt;

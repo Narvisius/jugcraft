@@ -11,6 +11,7 @@ import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.lair.MistGateEntity;
 import io.github.jimbozoomer.jugcraft.lair.SluiceGateBlock;
 import io.github.jimbozoomer.jugcraft.lair.TroughStoneBlock;
+import io.github.jimbozoomer.jugcraft.lair.tyrant.CinderKiln;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,7 +31,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -58,6 +61,8 @@ public class CinderKilnClientGameTests implements FabricClientGameTest {
 	private static final BlockPos EAST_TROUGH = new BlockPos(54, 5, 37);
 	private static final BlockPos SHELF = new BlockPos(24, 6, 26);
 	private static final int BOWL = 5;
+	/** tools/cinder_kiln.py's BOWL_LIGHT: the least block light on any cell of the bowl's floor. */
+	private static final int BOWL_LIGHT = 8;
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
@@ -121,6 +126,33 @@ public class CinderKilnClientGameTests implements FabricClientGameTest {
 				shoot(context, singleplayer, kiln, o.getX() + 30.5, o.getY() + BOWL + 2, o.getZ() + 32.5, 135, 14, "jugcraft_cinder_kiln_shelf");
 				shoot(context, singleplayer, kiln, o.getX() + 35.5, o.getY() + BOWL + 1, o.getZ() + 44.5, 180, -55, "jugcraft_cinder_kiln_dome");
 				shoot(context, singleplayer, kiln, o.getX() + 41.5, o.getY() + 13, o.getZ() + 64.5, 0, 6, "jugcraft_cinder_kiln_exit");
+				// The hidden lights reach the whole bowl: the game's own light engine has at least BOWL_LIGHT on every cell of its
+				// floor (the audit floods the template to the same rule).
+				server.runOnServer(minecraft -> {
+					ServerLevel level = minecraft.getLevel(KILN.dimension);
+					int cells = 0;
+					int least = 15;
+					BlockPos darkest = null;
+					for (int dx = 0; dx < KILN.width; dx++) {
+						for (int dz = 0; dz < KILN.length; dz++) {
+							BlockPos over = o.offset(dx, BOWL + 1, dz);
+							BlockState state = level.getBlockState(over);
+							if (!CinderKiln.inBowl(dx, dz) || !(state.isAir() || state.is(Blocks.LIGHT))) {
+								continue;
+							}
+							int light = level.getBrightness(LightLayer.BLOCK, over);
+							cells++;
+							if (light < least) {
+								least = light;
+								darkest = over.subtract(o);
+							}
+						}
+					}
+					Jugcraft.LOGGER.info("[lairs] the Cinder Kiln's bowl: {} cells of floor, the darkest at block light {} ({})", cells, least,
+							darkest);
+					check(cells > 1000 && least >= BOWL_LIGHT, "The kiln's bowl is lit at only " + least + " at " + darkest + " of " + cells
+							+ " cells (at least " + BOWL_LIGHT + ")");
+				});
 
 				// A seal pressed into the Nether's magma: a second kiln opens, and its vent rises there. The camera goes first, so
 				// the chunks there are loaded for the pad of netherrack and its magma block.

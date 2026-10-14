@@ -6,7 +6,7 @@ import net.minecraft.core.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.*;
 
-/** One helper works the existing paced grinder/screw, using the general two-arm clip. */
+/** One helper works the existing paced grinder/screw; the client seats its rider on the capstan. */
 public final class CiderPressJob implements CompanionJob {
     private final CiderPressBlockEntity press;
     private UUID worker;
@@ -34,6 +34,7 @@ public final class CiderPressJob implements CompanionJob {
     private void expire(){if(worker!=null && (press.isRemoved() || occupant()==null || !occupant().isAlive() || press.getLevel().getGameTime()>lease))removed();}
     public void removed(){var p=occupant();if(p!=null)p.setWorkAnimation(WorkAnimation.NONE,stationPosition());worker=null;nextSpace=0;}
     public Kind kind(){return Kind.WORK;}
+    public WorkAnimation animation(){return WorkAnimation.PRESS;}
     public void approachFailed(PeepoEntity npc){nextSpace=nextClearance=0;entrance=null;}
     public BlockPos stationPosition(){return press.getBlockPos();}
     public Vec3 approachPosition(){return entrance==null?Vec3.atBottomCenterOf(stationPosition()):entrance;}

@@ -44,18 +44,25 @@ def cinder_tyrant_model():
     for z, part, height in ((-15.0, "spike_tall", 20), (-6.0, "spike_tall", 20), (3.0, "spike", 16), (12.0, "spike_low", 12)):
         w = 4 if height > 12 else 3
         m.cube("crest", part, (-w / 2, 29, z), (w, height, w), rotation=(-14, 0, 0), pivot=(0, 29, z + w / 2))
-    # His seams (the heat controller's): magma between the plates and along the spine, and a line along each flank under
-    # its plate. They burn while he is hot.
+    # His seams (the heat controller's), so that a hot Tyrant reads at a distance in his dim kiln: magma welling a pixel
+    # over the joints between the plates (each in two halves either side of the spine's) and along the spine; a rim
+    # round the foot of his plates where they meet his hide; and a line over and under each flank plate. They burn while
+    # he is hot.
     m.bone("seams", "body", (0, 16, 2))
-    for z in (-9, 0, 9):
-        m.cube("seams", "seam", (-12, 27, z), (24, 2, 1))
-    m.cube("seams", "spine_seam", (-1, 29, -17), (2, 1, 35))
-    m.cube("seams", "flank_seam", (15, 12, -6), (1, 1, 12))
-    m.cube("seams", "flank_seam", (-16, 12, -6), (1, 1, 12), mirror=True)
-    # The Molten Heart (the heat controller's): white-hot cores swelling out of his seams, shown only then.
-    m.bone("heart", "body", (0, 16, 2))
     for z in (-9.5, -0.5, 8.5):
-        m.cube("heart", "core", (-10, 27, z), (20, 3, 2))
+        m.cube("seams", "seam", (1, 27, z), (11, 3, 2))
+        m.cube("seams", "seam", (-12, 27, z), (11, 3, 2), mirror=True)
+    m.cube("seams", "spine_seam", (-1, 29, -17), (2, 1, 35))
+    m.cube("seams", "rim_seam", (13, 26, -17), (1, 2, 35))
+    m.cube("seams", "rim_seam", (-14, 26, -17), (1, 2, 35), mirror=True)
+    for y in (12, 23):
+        m.cube("seams", "flank_seam", (15, y, -7), (3, 1, 14))
+        m.cube("seams", "flank_seam", (-18, y, -7), (3, 1, 14), mirror=True)
+    # The Molten Heart (the heat controller's): white-hot cores swelling out of his seams, shown only then. Each wraps
+    # its seam's middle, so no face of one lies on a face of the other.
+    m.bone("heart", "body", (0, 16, 2))
+    for z in (-10, -1, 8):
+        m.cube("heart", "core", (-10, 27, z), (20, 4, 3))
     m.cube("heart", "spine_core", (-1.5, 29, -17.5), (3, 2, 36))
     # His neck and head: broad and flat, small eyes standing on its top, two horns of the crest behind them; his jaw on
     # its own bone, and under it his throat, which glows as he gathers fire (shown only then).
@@ -110,11 +117,11 @@ def cinder_tyrant_model():
         size = (3, 8, 3) if height >= 7 else (2, 6, 2)
         top = 24 if bone == 1 else 22
         m.cube(f"tail_{bone}", part, (-size[0] / 2, top, z), size, rotation=(-20, 0, 0), pivot=(0, top, z + size[2] / 2))
-    # The tail's seams (the heat controller's), between its plates.
+    # The tail's seams (the heat controller's): welling a pixel over the joint between its plates, and along each side.
     m.bone("tail_seams", "tail_1", (0, 16, 22))
-    m.cube("tail_seams", "tail_seam", (-8, 22.5, 30), (16, 1, 1))
-    m.cube("tail_seams", "tail_seam_side", (10, 13, 24), (1, 1, 13))
-    m.cube("tail_seams", "tail_seam_side", (-11, 13, 24), (1, 1, 13), mirror=True)
+    m.cube("tail_seams", "tail_seam", (-8, 22, 29.5), (16, 3, 2))
+    m.cube("tail_seams", "tail_seam_side", (10, 13, 23.5), (1, 2, 14))
+    m.cube("tail_seams", "tail_seam_side", (-11, 13, 23.5), (1, 2, 14), mirror=True)
     return m
 
 

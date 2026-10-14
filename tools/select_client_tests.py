@@ -70,8 +70,11 @@ WEIGHTS = {
     "PeepoWorkSessionClientTests": 240,
     "PeepoDeliveryClientTests": 240,
     "PeepoKitchenAnimationClientTests": 120,
+    "PeepoGardenExpansionClientTests": 60,  # focused local runs: about 55 seconds
     "PeepoSuppliesClientTests": 60,
     "PeepoHarvestClientTests": 60,
+    "PeepoPopulationClientTests": 120,
+    "PeepoIntegrationClientTests": 300,
     "TransportCrateClientTests": 60,
     "TikiTorchClientTests": 30,
 }
@@ -282,7 +285,7 @@ def select(changed, tests, newly_listed, base=None, head=None):
 
 
 def share(classes, tests, shards):
-    """Longest first onto the least-loaded job."""
+    """Longest first, then swap small classes to reduce any remaining imbalance."""
     def weight(name):
         if name in WEIGHTS:
             return WEIGHTS[name]
@@ -294,6 +297,22 @@ def share(classes, tests, shards):
         job = min(jobs, key=lambda j: j[0])
         job[0] += weight(name)
         job[1].append(name)
+    # Greedy placement can leave a few seconds of avoidable skew at the time budget.
+    # Swap only when both jobs get closer to their mean; never drop or duplicate tests.
+    while jobs:
+        heavy, light = max(jobs, key=lambda j: j[0]), min(jobs, key=lambda j: j[0])
+        gap = heavy[0] - light[0]
+        if gap <= 1:
+            break
+        swaps = [(abs(gap - 2 * (weight(a) - weight(b))), a, b)
+                 for a in heavy[1] for b in light[1] if 0 < weight(a) - weight(b) < gap]
+        if not swaps:
+            break
+        _, a, b = min(swaps)
+        delta = weight(a) - weight(b)
+        heavy[1][heavy[1].index(a)], light[1][light[1].index(b)] = b, a
+        heavy[0] -= delta
+        light[0] += delta
     return jobs
 
 

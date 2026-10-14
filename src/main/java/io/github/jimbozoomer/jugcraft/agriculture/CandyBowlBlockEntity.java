@@ -29,6 +29,7 @@ import org.jspecify.annotations.Nullable;
  * looking every {@value TrickOrTreaters#CHECK_TICKS} ticks, and counts the groups that came tonight.
  */
 public class CandyBowlBlockEntity extends BlockEntity {
+	public final local.peepo.ServingCompanion companion = new local.peepo.ServingCompanion(this);
 	public static final int CAPACITY = 64;
 	public static final int VISITORS = 256;
 	/** The treat count at which the bowl looks a little, half and heaped full. */
@@ -68,7 +69,10 @@ public class CandyBowlBlockEntity extends BlockEntity {
 	}
 
 	/** Puts as much of {@code treat} in as fits (treats only); {@code treat} keeps the rest. Returns how many went in. */
-	public int add(ItemStack treat) {
+	public int add(ItemStack treat) { return add(treat,true); }
+
+	/** Transfer simulations defer fill-state changes until their outer transaction commits. */
+	public int add(ItemStack treat, boolean notify) {
 		if (treat.isEmpty() || !treat.is(CandyBagItem.TREATS)) {
 			return 0;
 		}
@@ -91,7 +95,7 @@ public class CandyBowlBlockEntity extends BlockEntity {
 			left -= add;
 		}
 		treat.shrink(moved);
-		if (moved > 0) {
+		if (moved > 0 && notify) {
 			changed();
 		}
 		return moved;
@@ -168,6 +172,13 @@ public class CandyBowlBlockEntity extends BlockEntity {
 		return fill;
 	}
 
+	public List<ItemStack> companionStock() { return treats.stream().map(ItemStack::copy).toList(); }
+	public void restoreCompanionStock(List<ItemStack> stock) {
+		treats.clear(); stock.forEach(s -> treats.add(s.copy()));
+	}
+
+	public void companionChanged() { changed(); }
+
 	private void changed() {
 		setChanged();
 		if (level != null && !level.isClientSide()) {
@@ -208,11 +219,13 @@ public class CandyBowlBlockEntity extends BlockEntity {
 		owner = input.read("owner", UUIDUtil.CODEC).orElse(null);
 		groupsNight = input.getLongOr("groups_night", Long.MIN_VALUE);
 		groups = input.getIntOr("groups", 0);
+		companion.load(input);
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+		companion.save(output);
 		output.store("treats", ItemStack.CODEC.listOf(), List.copyOf(treats));
 		output.store("visits", Visit.CODEC.listOf(), visits.entrySet().stream().map(e -> new Visit(e.getKey(), e.getValue())).toList());
 		if (owner != null) {

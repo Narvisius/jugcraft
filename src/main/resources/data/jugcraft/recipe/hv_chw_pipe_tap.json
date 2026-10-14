@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WNW",
+    "CCC",
+    "WWW"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "C": "minecraft:copper_ingot",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:hv_chw_pipe_tap",
+    "count": 4
+  }
+}

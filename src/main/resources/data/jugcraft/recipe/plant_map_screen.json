@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GGG",
+    "GCG",
+    " M "
+  ],
+  "key": {
+    "G": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "M": "minecraft:map"
+  },
+  "result": {
+    "id": "jugcraft:plant_map_screen",
+    "count": 1
+  }
+}

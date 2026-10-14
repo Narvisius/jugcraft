@@ -1,0 +1,339 @@
+{
+  "textures": {
+    "pi_hv_galv": "jugcraft:block/pi_hv_galv",
+    "pi_hv_galv_dark": "jugcraft:block/pi_hv_galv_dark",
+    "pi_hv_strips_1": "jugcraft:block/pi_hv_strips_1",
+    "pi_pnl_white": "jugcraft:block/pi_pnl_white",
+    "particle": "jugcraft:block/pi_hv_galv"
+  },
+  "elements": [
+    {
+      "from": [
+        1.5,
+        1.5,
+        0
+      ],
+      "to": [
+        14.5,
+        14.5,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#pi_hv_galv"
+        },
+        "west": {
+          "texture": "#pi_hv_galv"
+        },
+        "up": {
+          "texture": "#pi_hv_galv"
+        },
+        "down": {
+          "texture": "#pi_hv_galv"
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        14.5,
+        0
+      ],
+      "to": [
+        15.1,
+        15.1,
+        0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        0.9,
+        0
+      ],
+      "to": [
+        15.1,
+        1.5,
+        0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "down": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        1.5,
+        0
+      ],
+      "to": [
+        1.5,
+        14.5,
+        0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "down": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        1.5,
+        0
+      ],
+      "to": [
+        15.1,
+        14.5,
+        0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "down": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        14.5,
+        15.75
+      ],
+      "to": [
+        15.1,
+        15.1,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        0.9,
+        15.75
+      ],
+      "to": [
+        15.1,
+        1.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "down": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.9,
+        1.5,
+        15.75
+      ],
+      "to": [
+        1.5,
+        14.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "west": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "down": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        1.5,
+        15.75
+      ],
+      "to": [
+        15.1,
+        14.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "south": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "east": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "up": {
+          "texture": "#pi_hv_galv_dark"
+        },
+        "down": {
+          "texture": "#pi_hv_galv_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        1.38,
+        6.0,
+        2.0
+      ],
+      "to": [
+        1.5,
+        10.0,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_white"
+        },
+        "south": {
+          "texture": "#pi_pnl_white"
+        },
+        "west": {
+          "texture": "#pi_hv_strips_1",
+          "uv": [
+            0,
+            8,
+            16,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#pi_pnl_white"
+        },
+        "down": {
+          "texture": "#pi_pnl_white"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        6.0,
+        2.0
+      ],
+      "to": [
+        14.62,
+        10.0,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_white"
+        },
+        "south": {
+          "texture": "#pi_pnl_white"
+        },
+        "east": {
+          "texture": "#pi_hv_strips_1",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#pi_pnl_white"
+        },
+        "down": {
+          "texture": "#pi_pnl_white"
+        }
+      }
+    }
+  ]
+}

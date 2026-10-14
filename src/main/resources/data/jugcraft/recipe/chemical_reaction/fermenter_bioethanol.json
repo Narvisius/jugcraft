@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:controlled_fermentation",
+  "items": [
+    {
+      "ingredient": "#jugcraft:fermentable",
+      "count": 8
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "time": 100
+}

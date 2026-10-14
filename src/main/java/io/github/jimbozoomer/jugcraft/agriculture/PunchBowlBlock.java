@@ -31,7 +31,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * ladles out one Witch's Brew Punch. While there is punch in it, it glows (light {@value #LIGHT}) and dry-ice fog rolls
  * over its rim and down its sides.
  */
-public class PunchBowlBlock extends Block {
+public class PunchBowlBlock extends Block implements net.minecraft.world.level.block.EntityBlock {
+	@Override public net.minecraft.world.level.block.entity.BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new PunchBowlBlockEntity(pos,state); }
 	public static final int SERVINGS = 12;
 	public static final int PER_BERRY = 2;
 	public static final int LIGHT = 6;
@@ -86,6 +87,16 @@ public class PunchBowlBlock extends Block {
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.TRY_WITH_EMPTY_HAND;
+	}
+
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (!player.isShiftKeyDown() || !player.mayBuild() || !level.mayInteract(player,pos) || io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player,level,pos)) return InteractionResult.PASS;
+		if (level.isClientSide()) return InteractionResult.SUCCESS;
+		if (!(level.getBlockEntity(pos) instanceof PunchBowlBlockEntity bowl) || bowl.bottled.isEmpty()) return InteractionResult.PASS;
+		ItemStack bottles=bowl.bottled; bowl.bottled=ItemStack.EMPTY; bowl.setChanged();
+		if (!player.getInventory().add(bottles)) Block.popResource(level,pos.above(),bottles);
+		return InteractionResult.SUCCESS;
 	}
 
 	/** Now and then a puff of dry-ice fog spilling over the rim and down the sides, or a bubble. */

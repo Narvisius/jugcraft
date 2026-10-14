@@ -43,6 +43,19 @@ public class CandyKettleBlockEntity extends BlockEntity {
 	public static final int COOK_TICKS = 6;
 	public static final int COOL_TICKS = 8;
 
+    public final CandyKettleCompanion companion=new CandyKettleCompanion(this);
+    public final local.peepo.CandyKettleJob companionJob=new local.peepo.CandyKettleJob(this);
+    @Override public void setRemoved(){companionJob.removed();super.setRemoved();}
+    @Override public void preRemoveSideEffects(BlockPos pos,BlockState state){companion.drop(pos);}
+    /** Staged inputs become one real batch only when the cook arrives; no partial delivery can boil early. */
+    void loadCompanionBatch(CandyBase added,int sugarAdded,net.minecraft.world.item.ItemStack first,
+            net.minecraft.world.item.ItemStack second,net.minecraft.world.item.ItemStack dye){
+        base=added;sugar+=sugarAdded;cooked=temperature;step=0;
+        for(var item:List.of(first,second)){var flavour=CandyFlavour.of(item);if(flavour!=null && canFlavour(flavour))flavours.add(flavour);}
+        var color=ScarecrowBlock.dyeColor(dye);if(color!=null)addDye(color);
+        changed();
+    }
+
 	private @Nullable CandyBase base;
 	private int sugar;
 	private final List<CandyFlavour> flavours = new ArrayList<>();
@@ -166,6 +179,7 @@ public class CandyKettleBlockEntity extends BlockEntity {
 
 	/** Empties the kettle (poured or tipped out); it stays as hot as it is. */
 	void clear() {
+        companion.kettleCleared();
 		base = null;
 		sugar = 0;
 		flavours.clear();
@@ -227,6 +241,7 @@ public class CandyKettleBlockEntity extends BlockEntity {
 	}
 
 	private void changed() {
+        local.peepo.CompanionReadiness.invalidate(this);
 		setChanged();
 		if (level != null) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
@@ -237,6 +252,7 @@ public class CandyKettleBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+        companion.load(input);
 		base = input.read("base", CandyBase.CODEC).orElse(null);
 		sugar = Math.clamp(input.getIntOr("sugar", 0), 0, MAX_SUGAR);
 		flavours.clear();
@@ -253,6 +269,7 @@ public class CandyKettleBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+        companion.save(output);
 		if (base != null) {
 			output.store("base", CandyBase.CODEC, base);
 		}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P P",
+    "PPP",
+    " S "
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:ladder_tray_drop",
+    "count": 4
+  }
+}

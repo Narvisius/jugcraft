@@ -74,7 +74,7 @@ If no player she can fight is within 40 blocks of the circle's centre for 10 sec
 
 ### Her loot
 
-Each participant rolls their own loot. A participant is a player who hurt her or her skulls and is within 64 blocks of the circle's centre when she falls. The loot goes straight into their inventory, and what does not fit lands at their feet.
+Each participant rolls their own loot. A participant is a player who took part in the fight and is within 64 blocks of the circle's centre when she falls: who hurt her, her skulls or a harvest soul (or whose tamed creature did; her Grave Thralls do not count) or, since [Concordance Chunk A](lair-encounter-credit.md), who healed 4 of what she did to others, whose ward on another soaked 4 health of her side's blows, or who relit one of her wards in Death's Harvest. One who died in the fight is paid too, wherever they are once back on their feet; one who left the game during it is paid when they next join, if still away when she falls. A share kept for later is rolled when it is handed over, so it has the Halloween extras only if the event is still running then. The loot goes straight into their inventory, and what does not fit lands at their feet.
 
 | Loot | Chance |
 | --- | --- |
@@ -83,7 +83,7 @@ Each participant rolls their own loot. A participant is a player who hurt her or
 | **Dirge Skull** | 50% |
 | **Requiem Skull** | 50% |
 | **Reaper's Hood** | 20% |
-| 300 experience, shared out among the participants | always |
+| 300 experience, shared out among the participants paid | always |
 | The advancement **The Last Harvest** (a challenge in the Adventure tab) | always |
 
 During the Halloween event, unless `lairs.event_loot` is off, each participant also gets a roll of seasonal candy and another 10% chance at the hood.
@@ -117,7 +117,7 @@ Her damage numbers are Normal difficulty's: Easy and Hard scale them as they sca
 - **The Vesper Scythe fights as a scythe.** The plan gave it 9 damage, slow, and a 120° arc within 4.5 blocks. Jugcraft already has a scythe, and every Arms VII trophy fights as its kind does, so it has the steel scythe's 8.5 damage and 150° arc within 4 blocks, and up to five foes. New numbers would have made it a new kind of arm.
 - **The boon is Harvest, not Reap.** "Reap" is already the scythe kind's trait (harvesting crops), so the boon took the other word. What it does is the plan's.
 - **The Twin Beam's swept part burns until the beam ends.** The plan said the fire sweeps along the line. Here the fire stays where it has swept, so the line is safe only ahead of the sweep.
-- **Who counts as a participant:** the plan said loot goes only to those who took part. Here that means a player who hurt her or her skulls and is within 64 blocks of the circle's centre when she falls.
+- **Who counts as a participant:** the plan said loot goes only to those who took part. Here that means a player who took part as [Her loot](#her-loot) says and is within 64 blocks of the circle's centre when she falls, or who died or left the game in the fight. The plan's 5% of her health and 30 seconds in the arena were not used: any blow counts, as before, and support counts by what it did ([lair encounter credit](lair-encounter-credit.md)).
 - **A way out where she fell:** the plan did not say how players leave after the fight. Her death opens Grey Mist in the middle of the circle; the lych gate still works too.
 - **The skull trophies are costumes too.** They glow (light 6) and can be worn, so they count for trick-or-treating and the costume contest, as the plan's "lair trophies and costumes count" asks.
 - **Settings in `jugcraft.properties`,** as part 1 did, not a separate `jugcraft-lairs.json`.
@@ -140,7 +140,7 @@ Her damage numbers are Normal difficulty's: Easy and Hard scale them as they sca
 
 - **Every fight costs a ritual:** a fresh Mourning Wreath, as part 1 set it.
 - **No gain loop:** a shade makes one wreath, which still takes two flowers and a whole fight, and nothing she drops turns into more of itself. Nothing she drops sells to a Jugcraft shop for Jugs.
-- **No leeching:** only participants get loot. A bystander who never struck her or a skull gets nothing, and loot is rolled per participant, so nobody takes another's.
+- **No leeching:** only participants get loot. A bystander who never struck her or a skull, healed, warded or relit a ward gets nothing; healing and wards count only what her fight did to someone else, so two players cannot farm credit off each other; and loot is rolled per participant, so nobody takes another's.
 - **First kill once:** the scythe's first-kill guarantee is stored with the advancement, so it comes once per player.
 - **Abandoning resets her:** leaving her alone for 10 seconds heals her and forgets everyone's part. She cannot be worn down between visits.
 - **No automation:** she rises only for a player, the souls and wards need a player's hand, and her loot goes only to players.
@@ -206,7 +206,9 @@ The game tests (`VesperineGameTests`) show what a game-test server can, with a r
 5. her Grave Call brings up three thralls, and when she falls her thralls and skulls go with her;
 6. left alone, she returns to her seat, healed;
 7. her loot is each participant's own: two who struck her each get Reaper's Shade and, on a first kill, their own Vesper Scythe, and both earn The Last Harvest; a bystander who never struck her gets nothing;
-8. a kill with the Vesper Scythe heals two hearts.
+8. a kill with the Vesper Scythe heals two hearts;
+9. (added for [Concordance Chunk A](lair-encounter-credit.md), passed in CI run 38435014953) support shares her harvest: a healer who mended 4 of what she did to a fighter, and a striker who fell in her arena and stands elsewhere now, are paid when she falls; one who walked away alive, a bystander and the fighter she only hurt are not; and her fall reported again pays no one twice;
+10. (added for Chunk A, passed in CI run 38435014953) in her Harvest, relighting one of her wards is a deed of her fight, once a ward; before her Harvest, or at a brazier that is not a ward, it is nothing.
 
 The client game test (`VesperineClientGameTests`, CI job `client`) runs her fight in a real Hollow Acre, with its one player in survival under Resistance:
 1. an instance opens with her seated on the throne, her skulls beside her;

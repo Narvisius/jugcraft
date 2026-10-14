@@ -1,0 +1,145 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.hag_roots",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.5,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "clump",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                -2.0,
+                -1.5
+              ],
+              "size": [
+                3,
+                15,
+                3
+              ],
+              "rotation": [
+                12.0,
+                0.0,
+                8.0
+              ],
+              "pivot": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1.5,
+                -2.0,
+                0.0
+              ],
+              "size": [
+                2,
+                11,
+                2
+              ],
+              "rotation": [
+                -10.0,
+                0.0,
+                -22.0
+              ],
+              "pivot": [
+                2.5,
+                0.0,
+                1.0
+              ],
+              "uv": [
+                12,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4.0,
+                -2.0,
+                -1.0
+              ],
+              "size": [
+                2,
+                9,
+                2
+              ],
+              "rotation": [
+                12.0,
+                0.0,
+                24.0
+              ],
+              "pivot": [
+                -3.0,
+                0.0,
+                0.0
+              ],
+              "uv": [
+                20,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1.0,
+                -2.0,
+                -4.0
+              ],
+              "size": [
+                2,
+                9,
+                2
+              ],
+              "rotation": [
+                26.0,
+                0.0,
+                -6.0
+              ],
+              "pivot": [
+                0.0,
+                0.0,
+                -3.0
+              ],
+              "mirror": true,
+              "uv": [
+                20,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

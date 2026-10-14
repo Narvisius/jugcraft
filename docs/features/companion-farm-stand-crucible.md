@@ -1,0 +1,27 @@
+# Companion Farm Stand restocking and Alembic Crucible logistics
+
+Owner-requested implementation, 11 October 2026, using OpenAI Codex (GPT-6). Extends the existing Planner, four job slots, station Filters, linked Supply/Output containers, physical eight-slot cargo and load-based delivery effort. No dependencies or assets added. Reuses the existing delivery behavior; neither station needs a resident worker or processing speed bonus.
+
+## Farm Stand
+
+Both stand halves resolve to their master. Only companions whose persisted owner UUID equals the stand owner may assign/restock it; this works while the owner is offline and does not expand party permissions. Editing its filter additionally requires that the viewing player owns the stand. Ordinary town protection and loaded-block checks still apply. Existing sale rules, pricing and direct Jugs payments are unchanged.
+
+Six count-one exact-component templates remember each sale slot's most recent nonempty goods. Changes learn occupied slots; empty slots keep their prior template. Existing saves learn occupied crates when loaded or prepared for restocking. Players seed already-empty slots once. Replacing goods updates that slot; a nine-item allow-list limits active goods, with empty allowing every remembered template. To stop selling/restocking an item, exclude it using the filter or turn Supply Off before emptying its crate. The adapter inserts only matching remembered variants up to each real slot's stack capacity, through Fabric transactions. It exposes no extraction, and the GUI marks Output unsupported. There is no currency inventory or alternate purchasing path.
+
+Templates and the filter are saved on the stand, not the companion. Simulated inserts can only insert existing template variants, so they cannot teach new stock types; no template mutation occurs in the need calculation. The existing sale-slot container drives committed update notifications. Removing the block still drops only its real stock, never template ghosts.
+
+## Alembic Crucible
+
+The adapter supplies the existing native formula without choosing formulas or bypassing player research. Formula creation/installation, exact temperature bands, piped water, one native step per twenty ticks, mixture outcomes and container bottling remain unchanged. The native ingredient matcher is shared with logistics, preserving exact reagent item/preparation matching and the catalog's plain preparation. The feature switch gates companion input.
+
+Planning counts remaining Add operations (at most 32), subtracts actual buffer contents and requests the earliest missing preparation before later ones. Transactional simulations see prior simulated inserts; subsequent passes can batch multiple preparations without later ingredients blocking the earliest shortage. Matching stacks fill before empty buffer slots. Remaining water steps plus current mixture volume determine the bottle/bowl reserve, bounded to six. Every insertion rechecks the live formula and actual shortage. Cached plan IDs derive from canonical formula text so in-flight deliveries from a changed formula return through the existing unused-cargo path.
+
+The existing Filter opens Draught/Salve buttons and accepts their ghost items. Empty/both means Draught. The mode controls new restocking; existing native containers can finish a batch unchanged. The final output preserves all brew components. Obsolete buffer ingredients not used anywhere in the current formula, and empty containers incompatible with the selected form, are exposed to Output for recovery. A cleared formula does not automatically empty manually stocked inputs; finished output remains collectible. Retained manual mixtures still require native manual bottling before a newly installed formula starts.
+
+Inputs and outputs use the native seven slots and transactional ContainerStorage wrappers; no new real-item buffer, ticking entity, world search, fake player, chunk loading or remote item transfer is added. The existing scheduler budgets storage searches and routes. Each port probe is bounded to six sale slots or seven crucible slots and at most 32 formula operations. Filters and templates persist with their station. Existing hauling charges scale with delivery size; no new processing energy or speed change.
+
+## Validation
+
+Automated tests and gameplay were not run, following the owner's preference for this implementation sequence. Common and client compilation plus `assemble` passed (`build/farm-stand-crucible-build.log`). The complete Modrinth distribution was rebuilt with all 18 locked libraries and existing platform pins; its embedded JAR and SHA-512 sidecar were verified. `git diff --check` passed. No game launch, pack import or multiplayer playtest was performed.
+
+Manual checks remaining: stock/price six slots, sell a slot empty, replace its goods, filter and pause restocking, save/reload, owner offline and foreign/party companion rejection, both stand halves, two companions delivering to the same nearly-full slot; crucible plain/prepared reagent mismatch, ingredients split across Supply chests, formulas with more than five preparations, missing water/heat, Draught/Salve, full Output, formula changes during delivery, recovery of obsolete materials, manual mixture present, block removal/reload, native hopper overlap and feature disabled. Neither distribution creation nor compilation verifies gameplay or multiplayer behavior.

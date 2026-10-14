@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:coal_gasification",
+  "items": [
+    {
+      "ingredient": "minecraft:charcoal",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 400
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:raw_syngas",
+      "amount": 400,
+      "tank": 0
+    }
+  ],
+  "time": 200
+}

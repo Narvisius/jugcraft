@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.lair.vesperine;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.weapons.DescribedItem;
 import io.github.jimbozoomer.jugcraft.weapons.HarvestBoon;
@@ -53,6 +54,9 @@ public final class JugcraftVesperine {
 	}
 
 	public static void register() {
+		// Concordance Chunk A: her rewards may wait for a player, and a ward relit in her Harvest is a deed of her fight.
+		LairRewards.payer(VesperineLoot.BOSS, VesperineLoot::pay);
+		Lairs.onRelit(VesperineEntity::wardLit);
 		VESPERINE = entity("vesperine", EntityType.Builder.<VesperineEntity>of(VesperineEntity::new, MobCategory.MONSTER)
 				.sized(1.0F, 3.2F).eyeHeight(2.8F).fireImmune().noLootTable().clientTrackingRange(12));
 		FabricDefaultAttributeRegistry.register(VESPERINE, VesperineEntity.createAttributes());

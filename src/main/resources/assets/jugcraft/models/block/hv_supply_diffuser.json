@@ -1,0 +1,86 @@
+{
+  "textures": {
+    "ceiling_tile": "jugcraft:block/ceiling_tile",
+    "pi_hv_diffuser": "jugcraft:block/pi_hv_diffuser",
+    "pi_pnl_white": "jugcraft:block/pi_pnl_white",
+    "particle": "jugcraft:block/ceiling_tile"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ceiling_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        1.0,
+        -0.4,
+        1.0
+      ],
+      "to": [
+        15.0,
+        0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            1.0,
+            15.6,
+            15.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            1.0,
+            15.6,
+            15.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            1.0,
+            15.6,
+            15.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            1.0,
+            15.6,
+            15.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_hv_diffuser",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

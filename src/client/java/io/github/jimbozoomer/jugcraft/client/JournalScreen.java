@@ -17,7 +17,7 @@ import net.minecraft.util.FormattedCharSequence;
  * The simple Concordance Journal (roadmap step 26): the journal the server sent, one section at a time, in plain
  * vanilla widgets, so it works without GuiLib, with every control on the keyboard and read out by the narrator. The
  * section buttons (or Left and Right) change section; Tab moves between buttons; Up, Down, Page Up, Page Down and the
- * mouse wheel scroll; R asks the server again; X shows or hides the exact figures. Light text on a dark panel; nothing
+ * mouse wheel scroll; R asks the server again; X shows or hides the exact figures; Compose opens the Spell Composer. Light text on a dark panel; nothing
  * here relies on colour alone (the lines say what they mean). It only shows what the server sent.
  */
 public class JournalScreen extends Screen {
@@ -63,13 +63,16 @@ public class JournalScreen extends Screen {
 		next = addRenderableWidget(Button.builder(Component.literal(">"), button -> turn(1))
 				.bounds(left + panelWidth - PAD - 20, top + 14, 20, 16).build());
 		int buttonsY = top + panelHeight - 24;
-		int third = (panelWidth - 2 * PAD - 8) / 3;
+		int quarter = (panelWidth - 2 * PAD - 12) / 4;
 		addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.journal.refresh"), button -> JournalClient.request())
-				.bounds(left + PAD, buttonsY, third, 20).build());
+				.bounds(left + PAD, buttonsY, quarter, 20).build());
 		exact = addRenderableWidget(Button.builder(exactLabel(), button -> toggleExact())
-				.bounds(left + PAD + third + 4, buttonsY, third, 20).build());
+				.bounds(left + PAD + quarter + 4, buttonsY, quarter, 20).build());
+		// The Spell Composer, which comes back here.
+		addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.journal.compose"), button -> ComposerClient.open(minecraft, this))
+				.bounds(left + PAD + 2 * (quarter + 4), buttonsY, quarter, 20).build());
 		addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> onClose())
-				.bounds(left + PAD + 2 * (third + 4), buttonsY, third, 20).build());
+				.bounds(left + PAD + 3 * (quarter + 4), buttonsY, quarter, 20).build());
 	}
 
 	@Override

@@ -70,6 +70,9 @@ public class CandyKettleBlock extends BaseEntityBlock {
 		return SHAPE;
 	}
 
+    @Override
+    protected boolean isPathfindable(BlockState state,net.minecraft.world.level.pathfinder.PathComputationType type){return false;}
+
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
@@ -206,6 +209,7 @@ public class CandyKettleBlock extends BaseEntityBlock {
 		if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof CandyKettleBlockEntity kettle)) {
 			return InteractionResult.SUCCESS;
 		}
+        if(player.isSecondaryUseActive() && kettle.empty()){kettle.companion.collect(player);return InteractionResult.SUCCESS;}
 		if (player.isSecondaryUseActive() && !kettle.empty()) {
 			kettle.clear();
 			level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.2F);

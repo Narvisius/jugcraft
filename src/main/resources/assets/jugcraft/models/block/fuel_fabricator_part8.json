@@ -1,0 +1,162 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "nu_cabinet": "jugcraft:block/nu_cabinet",
+    "nu_cap": "jugcraft:block/nu_cap",
+    "nu_centrifuge": "jugcraft:block/nu_centrifuge",
+    "nu_floor": "jugcraft:block/nu_floor",
+    "nu_glass": "jugcraft:block/nu_glass",
+    "nu_hazard": "jugcraft:block/nu_hazard",
+    "nu_pipe_blue": "jugcraft:block/nu_pipe_blue",
+    "nu_steel": "jugcraft:block/nu_steel",
+    "particle": "jugcraft:block/sp_iron_plate",
+    "front": "jugcraft:block/fuel_fabricator_front"
+  },
+  "elements": [
+    {
+      "from": [
+        2.0,
+        0,
+        6.0
+      ],
+      "to": [
+        15.0,
+        2.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_cabinet"
+        },
+        "east": {
+          "texture": "#nu_cabinet"
+        },
+        "west": {
+          "texture": "#nu_cabinet"
+        },
+        "up": {
+          "texture": "#nu_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        2.0,
+        14.25
+      ],
+      "to": [
+        11.5,
+        10.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_steel"
+        },
+        "east": {
+          "texture": "#nu_steel"
+        },
+        "west": {
+          "texture": "#nu_steel"
+        },
+        "up": {
+          "texture": "#nu_steel"
+        },
+        "down": {
+          "texture": "#nu_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        2.0,
+        13.0
+      ],
+      "to": [
+        11.0,
+        10.0,
+        14.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_steel"
+        },
+        "south": {
+          "texture": "#nu_steel"
+        },
+        "east": {
+          "texture": "#nu_steel"
+        },
+        "west": {
+          "texture": "#nu_steel"
+        },
+        "up": {
+          "texture": "#nu_steel"
+        },
+        "down": {
+          "texture": "#nu_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        10.0,
+        10.0
+      ],
+      "to": [
+        14.0,
+        15.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_steel"
+        },
+        "east": {
+          "texture": "#nu_steel"
+        },
+        "west": {
+          "texture": "#nu_steel"
+        },
+        "up": {
+          "texture": "#nu_cap"
+        },
+        "down": {
+          "texture": "#nu_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        1.0,
+        2.0,
+        15.0
+      ],
+      "to": [
+        2.0,
+        6.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_pipe_blue"
+        },
+        "east": {
+          "texture": "#nu_pipe_blue"
+        },
+        "west": {
+          "texture": "#nu_pipe_blue"
+        },
+        "up": {
+          "texture": "#nu_pipe_blue"
+        },
+        "down": {
+          "texture": "#nu_pipe_blue"
+        }
+      }
+    }
+  ]
+}

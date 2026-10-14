@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "YYY",
+    "S S"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "S": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:guard_rail",
+    "count": 8
+  }
+}

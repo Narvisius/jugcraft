@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TCT",
+    " L ",
+    " L "
+  ],
+  "key": {
+    "T": "minecraft:white_terracotta",
+    "C": "jugcraft:copper_cable",
+    "L": "minecraft:spruce_log"
+  },
+  "result": {
+    "id": "jugcraft:wooden_pole",
+    "count": 1
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P P",
+    "PWP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "W": "#c:wires/copper"
+  },
+  "result": {
+    "id": "jugcraft:control_tray",
+    "count": 8
+  }
+}

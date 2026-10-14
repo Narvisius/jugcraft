@@ -1,0 +1,79 @@
+{
+  "textures": {
+    "pi_filing_front": "jugcraft:block/pi_filing_front",
+    "pi_filing_side": "jugcraft:block/pi_filing_side",
+    "particle": "jugcraft:block/pi_filing_front"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        15,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_filing_side"
+        },
+        "south": {
+          "texture": "#pi_filing_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_filing_side"
+        },
+        "west": {
+          "texture": "#pi_filing_side"
+        },
+        "up": {
+          "texture": "#pi_filing_side"
+        },
+        "down": {
+          "texture": "#pi_filing_side"
+        }
+      }
+    },
+    {
+      "from": [
+        1.8,
+        15,
+        1.8
+      ],
+      "to": [
+        14.2,
+        15.4,
+        15.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_filing_side"
+        },
+        "south": {
+          "texture": "#pi_filing_side"
+        },
+        "east": {
+          "texture": "#pi_filing_side"
+        },
+        "west": {
+          "texture": "#pi_filing_side"
+        },
+        "up": {
+          "texture": "#pi_filing_side"
+        },
+        "down": {
+          "texture": "#pi_filing_side"
+        }
+      }
+    }
+  ]
+}

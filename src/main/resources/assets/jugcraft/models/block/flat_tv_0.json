@@ -1,0 +1,48 @@
+{
+  "textures": {
+    "pi_blank_0": "jugcraft:block/pi_blank_0",
+    "pi_monitor": "jugcraft:block/pi_monitor",
+    "particle": "jugcraft:block/pi_blank_0"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        1.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_blank_0",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_monitor"
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      },
+      "light_emission": 12
+    }
+  ]
+}

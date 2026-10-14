@@ -21,6 +21,9 @@ import io.github.jimbozoomer.jugcraft.concordance.rules.FocusPool;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import io.netty.buffer.ByteBuf;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;
@@ -28,6 +31,8 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -41,6 +46,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -89,6 +95,8 @@ public final class Vigil {
 	public static DataComponentType<Growth> GROWTH;
 	/** A player's offering state (synced to them alone, kept through death). */
 	public static AttachmentType<OfferingState> OFFERING;
+	/** The players whose offering gesture goes out at the end of this server tick ({@link #gesture}). */
+	private static final Set<UUID> GESTURES = new LinkedHashSet<>();
 	public static final TagKey<Item> SPECIMENS = TagKey.create(Registries.ITEM, Jugcraft.id("crimson_specimens"));
 
 	private static final Codec<Exhaustion> EXHAUSTION_CODEC = RecordCodecBuilder.create(i -> i.group(
@@ -119,6 +127,8 @@ public final class Vigil {
 		THORNHEART_BLADE = item("thornheart_blade", ThornheartBladeItem::new,
 				new Item.Properties().sword(ToolMaterial.IRON, 3.0F, -2.4F).rarity(Rarity.UNCOMMON));
 		PayloadTypeRegistry.clientboundPlay().register(VigilGesturePayload.TYPE, VigilGesturePayload.CODEC);
+		ServerTickEvents.END_SERVER_TICK.register(Vigil::sendGestures);
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> GESTURES.clear());
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
 			if (enabled() && entity instanceof Enemy && source.getEntity() instanceof ServerPlayer killer && killer.getMainHandItem().is(THORNHEART_BLADE)) {
 				deed(killer, killer.getMainHandItem(), Growth.Deed.SLAY, BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString());
@@ -210,17 +220,36 @@ public final class Vigil {
 		return "surged";
 	}
 
-	/** Tells every client that sees {@code player}, and theirs, to play the offering gesture. */
+	/**
+	 * Tells every client that sees {@code player}, and theirs, to play the offering gesture, at the end of this server
+	 * tick. By then the player's own tick has sent other clients any change of what they hold: a player who takes the
+	 * chalice from a gun and offers in one tick is seen holding the chalice, not the gun, when the gesture arrives, so it
+	 * does not give way to the gun (the client's CastPoses.gesturesYield).
+	 */
 	private static void gesture(ServerPlayer player) {
-		VigilGesturePayload payload = new VigilGesturePayload(player.getId());
-		for (ServerPlayer watcher : PlayerLookup.tracking(player)) {
-			if (ServerPlayNetworking.canSend(watcher, VigilGesturePayload.TYPE)) {
-				ServerPlayNetworking.send(watcher, payload);
+		GESTURES.add(player.getUUID());
+	}
+
+	private static void sendGestures(MinecraftServer server) {
+		if (GESTURES.isEmpty()) {
+			return;
+		}
+		for (UUID id : GESTURES) {
+			ServerPlayer player = server.getPlayerList().getPlayer(id);
+			if (player == null) {
+				continue;
+			}
+			VigilGesturePayload payload = new VigilGesturePayload(player.getId());
+			for (ServerPlayer watcher : PlayerLookup.tracking(player)) {
+				if (ServerPlayNetworking.canSend(watcher, VigilGesturePayload.TYPE)) {
+					ServerPlayNetworking.send(watcher, payload);
+				}
+			}
+			if (ServerPlayNetworking.canSend(player, VigilGesturePayload.TYPE)) {
+				ServerPlayNetworking.send(player, payload);
 			}
 		}
-		if (ServerPlayNetworking.canSend(player, VigilGesturePayload.TYPE)) {
-			ServerPlayNetworking.send(player, payload);
-		}
+		GESTURES.clear();
 	}
 
 	// ---------------------------------------------------------------- living equipment

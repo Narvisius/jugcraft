@@ -51,7 +51,7 @@ public class TowerCoreBlockEntity extends BlockEntity {
 	 * How far a tower's drones build, in chunks each way from the core's chunk (from tier 1 on). Another tower of
 	 * the same player must stand outside it.
 	 */
-	public static final int BUILD_RADIUS_CHUNKS = 50;
+	public static final int BUILD_RADIUS_CHUNKS = 250;
 	/** The tower itself (its 39x39 field, exchanges and pads) lies within this many blocks of the core. */
 	public static final int FOOTPRINT = 24;
 	public static final net.minecraft.server.level.TicketType CHUNK_TICKET = new net.minecraft.server.level.TicketType(0,

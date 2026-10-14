@@ -25,6 +25,7 @@ import io.github.jimbozoomer.jugcraft.concordance.rules.FocusPool;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Knowledge;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchEngine;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
+import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.fabricmc.loader.api.FabricLoader;
@@ -32,8 +33,10 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -64,6 +67,11 @@ public class ConcordanceGameTests {
 	private static final String FIRST_LIGHT = "jugcraft:first_light";
 	private static final String KINDLE = "jugcraft:kindle";
 	private static final String AMETHYST = "minecraft:amethyst_shard";
+	/** The first loadout's crafting recipes (tools/acquisition.py LOADOUT and OPTIONAL; tools/check_mod_data.py keeps them so). */
+	private static final List<String> FIRST_LOADOUT_RECIPES = List.of("initiate_wand", "lampwright_bench", "pyromaniacs_hood",
+			"pyromaniacs_tunic", "pyromaniacs_pants", "pyromaniacs_shoes", "pyromancers_hat", "pyromancers_robes",
+			"pyromancers_leggings", "pyromancers_boots", "lesser_fire_focus", "fire_bangle", "fire_focus", "leather_belt",
+			"angelic_feather", "kraken_shell", "infernal_claws", "angelheart_vial", "phoenix_down", "amphibian_boot", "ice_breaker");
 
 	private static void floor(GameTestHelper helper) {
 		for (int x = 0; x <= 7; x++) {
@@ -383,6 +391,24 @@ public class ConcordanceGameTests {
 		SpellContainer sword = SpellContainerHelper.containerFromItemStack(
 				new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("steel_longsword"))));
 		helper.assertTrue(sword == null || !sword.isResolver(), "A Jugcraft weapon is no spell caster: " + sword);
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk A's first loadout (docs/features/concordance-first-loadout.md): every piece of it a crafting
+	 * recipe makes, the optional Wayfaring trinkets and the Focus of Fire included, has that recipe loaded on the server,
+	 * so survival makes the whole loadout with no new recipe. (The Kindled Lantern is the bench's, tested above.)
+	 */
+	@GameTest(maxTicks = 20)
+	public void theFirstLoadoutIsMadeInSurvival(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		List<String> missing = new ArrayList<>();
+		for (String name : FIRST_LOADOUT_RECIPES) {
+			if (level.recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Jugcraft.id(name))).isEmpty()) {
+				missing.add(name);
+			}
+		}
+		helper.assertTrue(missing.isEmpty(), "These first-loadout recipes did not load: " + missing);
 		helper.succeed();
 	}
 }

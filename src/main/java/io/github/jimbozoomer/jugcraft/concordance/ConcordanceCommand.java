@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Authored;
-import io.github.jimbozoomer.jugcraft.concordance.compose.Compiler;
 import io.github.jimbozoomer.jugcraft.concordance.compose.CompositionParser;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Instrument;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Plan;
@@ -43,7 +42,8 @@ import org.jspecify.annotations.Nullable;
 /**
  * {@code /jugcraft concordance}: anyone can see their own research ({@code status}), compose spells for the
  * instrument in their main hand ({@code compose check|inscribe <spell>}, {@code compose show}, {@code compose clear}):
- * the composer every player has, which explains what a spell does and costs or exactly why it cannot work, and tune
+ * the text form of the composer, answered by the same service as the composer screen ({@link Composing}), which
+ * explains what a spell does and costs or exactly why it cannot work, and tune
  * the invocations they know on that instrument ({@code tune}, {@code tune <invocation> <modifier>|clear}), and read
  * the circle round a Circle Anchor ({@code circle <pos>}). Operators
  * (permission level 2) can see anyone's research, list the problems found in the loaded rules ({@code diagnose}), and
@@ -51,8 +51,6 @@ import org.jspecify.annotations.Nullable;
  * Focus ({@code focus}).
  */
 public final class ConcordanceCommand {
-	/** The most often a player may check or inscribe a composition. Keep equal to COMPOSE_RATE_TICKS in tools/concordance.py. */
-	public static final int COMPOSE_RATE_TICKS = 20;
 	/** How near an anchor a player must be to read its circle with {@code circle}. */
 	public static final int CIRCLE_READ_RANGE = 16;
 
@@ -139,76 +137,52 @@ public final class ConcordanceCommand {
 	 */
 	private static int compose(CommandSourceStack source, String text, boolean inscribe) throws CommandSyntaxException {
 		ServerPlayer player = source.getPlayerOrException();
-		if (!JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE)) {
-			source.sendFailure(Component.translatable("message.jugcraft.concordance.disabled"));
-			return 0;
-		}
-		Instrument instrument = ComposedSpells.instrument(player);
-		if (instrument == null) {
-			source.sendFailure(Component.translatable("compose.jugcraft.problem.no_instrument"));
-			return 0;
-		}
-		if (!RateGate.allow(player, "compose", COMPOSE_RATE_TICKS)) {
-			source.sendFailure(Component.translatable("compose.jugcraft.problem.too_fast"));
-			return 0;
-		}
-		Compiler.Compilation compiled = ComposedSpells.compile(player, instrument, text);
-		Plan plan = compiled.plan();
-		if (plan == null) {
-			source.sendFailure(Component.translatable("compose.jugcraft.invalid", text.trim()));
-			for (Text problem : compiled.problems()) {
-				source.sendFailure(Component.literal("- ").append(ComposeText.show(problem)));
-			}
-			return 0;
-		}
-		explain(source, plan, instrument);
-		if (inscribe) {
-			ItemStack held = player.getMainHandItem();
-			held.set(JugcraftConcordance.INSCRIPTION, new Inscription(plan.text(), plan.focus(), plan.cooldown()));
-			source.sendSuccess(() -> Component.translatable("compose.jugcraft.inscribed", held.getHoverName(), plan.text()), false);
-		}
-		return plan.focus();
-	}
-
-	private static void explain(CommandSourceStack source, Plan plan, Instrument instrument) {
-		source.sendSuccess(() -> Component.translatable("compose.jugcraft.valid", plan.text()), false);
-		for (Text line : plan.explain(instrument)) {
-			source.sendSuccess(() -> Component.literal("- ").append(ComposeText.show(line)), false);
-		}
+		Composing.Result result = Composing.compose(player, text, inscribe, null);
+		report(source, player, result);
+		return result.plan() == null ? 0 : result.plan().focus();
 	}
 
 	/** Explains the spell inscribed on the held instrument, compiled as it would be cast now. */
 	private static int show(CommandSourceStack source) throws CommandSyntaxException {
 		ServerPlayer player = source.getPlayerOrException();
-		Instrument instrument = ComposedSpells.instrument(player);
-		Inscription inscription = ComposedSpells.inscription(player.getMainHandItem());
-		if (instrument == null || inscription == null) {
-			source.sendFailure(Component.translatable(instrument == null ? "compose.jugcraft.problem.no_instrument"
-					: "compose.jugcraft.nothing_inscribed"));
-			return 0;
-		}
-		Compiler.Compilation compiled = ComposedSpells.compile(player, instrument, inscription.text());
-		if (compiled.plan() == null) {
-			source.sendFailure(Component.translatable("compose.jugcraft.invalid", inscription.text()));
-			for (Text problem : compiled.problems()) {
-				source.sendFailure(Component.literal("- ").append(ComposeText.show(problem)));
-			}
-			return 0;
-		}
-		explain(source, compiled.plan(), instrument);
-		return compiled.plan().focus();
+		Composing.Result result = Composing.show(player);
+		report(source, player, result);
+		return result.plan() == null ? 0 : result.plan().focus();
 	}
 
 	private static int clear(CommandSourceStack source) throws CommandSyntaxException {
 		ServerPlayer player = source.getPlayerOrException();
-		ItemStack held = player.getMainHandItem();
-		if (ComposedSpells.inscription(held) == null) {
-			source.sendFailure(Component.translatable("compose.jugcraft.nothing_inscribed"));
-			return 0;
+		Composing.Result result = Composing.clear(player);
+		report(source, player, result);
+		return result.outcome() == Composing.Outcome.CLEARED ? 1 : 0;
+	}
+
+	/** Says what composing came to: the verdict, then each line of explanation or each problem under it. */
+	private static void report(CommandSourceStack source, ServerPlayer player, Composing.Result result) {
+		switch (result.outcome()) {
+			case DISABLED -> source.sendFailure(Component.translatable("message.jugcraft.concordance.disabled"));
+			case NO_INSTRUMENT -> source.sendFailure(Component.translatable("compose.jugcraft.problem.no_instrument"));
+			case CHANGED -> source.sendFailure(Component.translatable("compose.jugcraft.problem.changed"));
+			case TOO_FAST -> source.sendFailure(Component.translatable("compose.jugcraft.problem.too_fast"));
+			case NOTHING_INSCRIBED -> source.sendFailure(Component.translatable("compose.jugcraft.nothing_inscribed"));
+			case INVALID -> {
+				source.sendFailure(Component.translatable("compose.jugcraft.invalid", result.text()));
+				for (Text problem : result.problems()) {
+					source.sendFailure(Component.literal("- ").append(ComposeText.show(problem)));
+				}
+			}
+			case VALID, INSCRIBED -> {
+				source.sendSuccess(() -> Component.translatable("compose.jugcraft.valid", result.text()), false);
+				for (Text line : result.lines()) {
+					source.sendSuccess(() -> Component.literal("- ").append(ComposeText.show(line)), false);
+				}
+				if (result.outcome() == Composing.Outcome.INSCRIBED) {
+					ItemStack held = player.getMainHandItem();
+					source.sendSuccess(() -> Component.translatable("compose.jugcraft.inscribed", held.getHoverName(), result.text()), false);
+				}
+			}
+			case CLEARED -> source.sendSuccess(() -> Component.translatable("compose.jugcraft.cleared"), false);
 		}
-		held.remove(JugcraftConcordance.INSCRIPTION);
-		source.sendSuccess(() -> Component.translatable("compose.jugcraft.cleared"), false);
-		return 1;
 	}
 
 	/** Lists, for the instrument in hand, each invocation the player knows, its Focus and its tuning. */
@@ -264,7 +238,7 @@ public final class ConcordanceCommand {
 			source.sendFailure(Component.translatable("compose.jugcraft.problem.no_instrument"));
 			return 0;
 		}
-		if (!RateGate.allow(player, "compose", COMPOSE_RATE_TICKS)) {
+		if (!RateGate.allow(player, Composing.RATE_ACTION, Composing.COMPOSE_RATE_TICKS)) {
 			source.sendFailure(Component.translatable("compose.jugcraft.problem.too_fast"));
 			return 0;
 		}

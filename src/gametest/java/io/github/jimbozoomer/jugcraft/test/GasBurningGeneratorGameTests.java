@@ -146,6 +146,29 @@ public class GasBurningGeneratorGameTests {
 	}
 
 	/**
+	 * Methane, its second fuel, makes 256 JE a tick at 448 JE a millibucket: every millibucket burnt is accounted for as
+	 * JE made or JE still in hand.
+	 */
+	@GameTest(structure = ARENA, maxTicks = 100)
+	public void methaneBurnsAt256JEATick(GameTestHelper helper) {
+		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 2), Direction.NORTH);
+		insert(helper, port(helper, machine, "fuel_in"), PetroFluids.METHANE.fluid(), 1000);
+		long[] earlier = new long[1];
+		helper.runAfterDelay(20, () -> {
+			int burnt = 1000 - machine.tanks().input(0).millibuckets();
+			long made = machine.energy().getAmount();
+			helper.assertTrue(burnt > 0 && made + machine.burn() == (long) burnt * FluidFuels.METHANE,
+					"Burnt " + burnt + " mB of methane for " + made + " JE, with " + machine.burn() + " JE in hand");
+			earlier[0] = made;
+		});
+		helper.runAfterDelay(30, () -> {
+			helper.assertTrue(machine.energy().getAmount() - earlier[0] == 10L * FluidFuels.GAS_BURNING_METHANE,
+					"Not 256 JE a tick on methane: " + (machine.energy().getAmount() - earlier[0]) + " in ten ticks");
+			helper.succeed();
+		});
+	}
+
+	/**
 	 * It makes only what its store has room for. With room for 64 JE it burns one millibucket, makes 64 JE and keeps the
 	 * other 64 in hand, through saving and loading; when 1,000 JE are drawn it makes those, the 64 first, and burns no
 	 * more than they need.
@@ -256,8 +279,10 @@ public class GasBurningGeneratorGameTests {
 	public void itsFuelItsBalanceAndItsBill(GameTestHelper helper) {
 		MachineForm form = IndustrialForms.GAS_BURNING_GENERATOR_FORM;
 		FormFuel hydrogen = form.fuel(PetroFluids.HYDROGEN.fluid());
-		helper.assertTrue(form.fuels().size() == 1 && hydrogen != null && hydrogen.jePerMb() == PER_MB && hydrogen.jePerTick() == PER_TICK
+		helper.assertTrue(form.fuels().size() == 2 && hydrogen != null && hydrogen.jePerMb() == PER_MB && hydrogen.jePerTick() == PER_TICK
 				&& PER_MB == FluidFuels.jePerMb(MachineKind.FUEL_CELL, PetroFluids.HYDROGEN.fluid()), "Hydrogen at 128 JE/mB and 128 JE/t");
+		FormFuel methane = form.fuel(PetroFluids.METHANE.fluid());
+		helper.assertTrue(methane != null && methane.jePerMb() == 448 && methane.jePerTick() == 256, "Methane at 448 JE/mB and 256 JE/t");
 		helper.assertTrue(form.fuel(PetroFluids.REFINERY_GAS.fluid()) == null && FluidFuels.jePerMb(MachineKind.GAS_TURBINE, PetroFluids.HYDROGEN.fluid()) == 0,
 				"It never burns the turbine's fuels, nor the turbine hydrogen");
 		long cheapestDraw = new MachineUpgrades.Effect(0, MachineUpgrades.MAX_EFFECTIVE).use(MachineKind.ELECTROLYTIC_CELL.usePerTick);

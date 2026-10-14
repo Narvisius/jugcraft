@@ -1,0 +1,38 @@
+/* The Spell Composer's GuiLib workspace (src/client/kotlin/.../ComposerWorkspace.kt). Light text on a dark panel, the
+   journal's colours, a visible focus ring on every control, the chosen word in brackets and a problem word marked "!"
+   in its text (colour only repeats them), and no motion with the Concordance's reduced-motion setting. The spell box
+   never shrinks (GuiLib's inputs clip, so a column could squeeze one to its padding); the body takes what is left. */
+:root { --guilib-accent: #9b86d6; }
+body { display: flex; align-items: center; justify-content: center; }
+.composer {
+  width: min(460px, 94vw); height: 92vh; padding: 8px; display: flex; flex-direction: column;
+  background-color: #141419; border: 1px solid #6f5ba8; border-radius: 4px; color: #f2f0f8;
+}
+.composer h2 { color: #ffd98a; margin: 0 0 2px 0; }
+.status { color: #c9c3d8; margin: 0 0 2px 0; }
+.spell {
+  flex-shrink: 0; width: 100%; margin: 3px 0; padding: 3px 4px; background-color: #1b1a22; border: 1px solid #6f5ba8;
+  border-radius: 3px; color: #f2f0f8;
+}
+.body { flex: 1; min-height: 0; padding: 2px 4px; background-color: #1b1a22; border-radius: 3px; }
+.level, .slot, .edits { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; margin-bottom: 3px; }
+.label { color: #ffd98a; margin-right: 4px; }
+.part, .word, .edit {
+  padding: 2px 5px; background-color: #2a2833; border: 1px solid #4b4560; border-radius: 3px; color: #f2f0f8;
+}
+.part:hover, .word:hover, .edit:hover { background-color: #3a3547; }
+.part.chosen { border-color: #ffd98a; }
+.part.wrong { border-color: #e07a7a; }
+.word:disabled, .edit:disabled { color: #77727f; border-color: #2f2c38; }
+.hint, .busy { color: #c9c3d8; }
+.report { margin-top: 4px; }
+.heading { color: #ffd98a; margin: 0 0 2px 0; }
+.line { padding: 1px 0; line-height: 10px; }
+.help { color: #c9c3d8; margin-top: 4px; font-size: 7px; }
+.footer { display: flex; gap: 6px; justify-content: flex-end; margin-top: 4px; }
+.footer button { padding: 2px 8px; background-color: #2a2833; border: 1px solid #6f5ba8; border-radius: 3px; color: #f2f0f8; }
+.footer button:hover { background-color: #3a3547; }
+.footer .primary { border-color: #ffd98a; }
+.footer button:disabled { color: #77727f; border-color: #2f2c38; }
+button:focus-visible, .spell:focus-visible { outline: 1px solid #ffd98a; outline-offset: 1px; }
+.reduced-motion button { transition: none; }

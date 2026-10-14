@@ -1,0 +1,106 @@
+{
+  "textures": {
+    "pi_fridge_door": "jugcraft:block/pi_fridge_door",
+    "pi_fridge_side": "jugcraft:block/pi_fridge_side",
+    "pi_gasket": "jugcraft:block/pi_gasket",
+    "particle": "jugcraft:block/pi_fridge_door"
+  },
+  "elements": [
+    {
+      "from": [
+        1.5,
+        0,
+        2
+      ],
+      "to": [
+        14.5,
+        16,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_fridge_side"
+        },
+        "south": {
+          "texture": "#pi_gasket"
+        },
+        "east": {
+          "texture": "#pi_fridge_side"
+        },
+        "west": {
+          "texture": "#pi_fridge_side"
+        },
+        "up": {
+          "texture": "#pi_fridge_side"
+        },
+        "down": {
+          "texture": "#pi_fridge_side"
+        }
+      }
+    },
+    {
+      "from": [
+        1.6,
+        0,
+        14.5
+      ],
+      "to": [
+        14.4,
+        16,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_gasket"
+        },
+        "south": {
+          "texture": "#pi_gasket"
+        },
+        "east": {
+          "texture": "#pi_gasket"
+        },
+        "west": {
+          "texture": "#pi_gasket"
+        },
+        "up": {
+          "texture": "#pi_gasket"
+        },
+        "down": {
+          "texture": "#pi_gasket"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        0,
+        14.75
+      ],
+      "to": [
+        14.5,
+        16,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_fridge_door"
+        },
+        "south": {
+          "texture": "#pi_fridge_door"
+        },
+        "east": {
+          "texture": "#pi_fridge_door"
+        },
+        "west": {
+          "texture": "#pi_fridge_door"
+        },
+        "up": {
+          "texture": "#pi_fridge_door"
+        },
+        "down": {
+          "texture": "#pi_fridge_door"
+        }
+      }
+    }
+  ]
+}

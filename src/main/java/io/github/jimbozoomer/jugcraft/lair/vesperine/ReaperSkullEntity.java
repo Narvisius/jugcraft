@@ -6,6 +6,7 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import java.util.UUID;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -165,7 +166,7 @@ public class ReaperSkullEntity extends Monster implements GeoEntity {
 			return false;  // she sits, rises or tolls: they cannot be harmed then
 		}
 		boolean hurt = super.hurtServer(level, source, amount);
-		if (hurt && vesperine != null && source.getEntity() instanceof ServerPlayer player) {
+		if (hurt && vesperine != null && Encounter.striker(source) instanceof ServerPlayer player) {
 			vesperine.took(player, amount);
 		}
 		return hurt;

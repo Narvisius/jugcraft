@@ -1,0 +1,221 @@
+package io.github.jimbozoomer.jugcraft.nuclear;
+
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+
+/**
+ * The working equipment of a reactor unit (docs/features/nuclear.md), each one placed whole from its item and drawn by
+ * the client. Sizes are blocks across (to the placer's right), deep (away from the placer) and tall, from the
+ * approved equipment sheet. Same ids and order as EQUIPMENT in tools/nuclear.py (checked by tools/check_mod_data.py).
+ */
+public enum EquipmentKind {
+	//                         id                        wide deep tall
+	REACTOR_VESSEL("reactor_pressure_vessel", 7, 7, 20),
+	STEAM_GENERATOR("reactor_steam_generator", 7, 7, 21),
+	COOLANT_PUMP("reactor_coolant_pump", 5, 3, 10),
+	PRESSURIZER("pressurizer", 5, 3, 18),
+	TURBINE_GENERATOR("turbine_generator", 11, 50, 10),
+	CONDENSER("condenser", 12, 6, 6),
+	FEEDWATER_PUMP("feedwater_pump", 3, 2, 3),
+	MAIN_TRANSFORMER("main_transformer", 5, 5, 8),
+	CONTROL_CONSOLE("reactor_control_console", 3, 2, 3),
+	// The pre-made plants' own reactors (docs/features/nuclear.md, "Pre-made plants").
+	EPR_VESSEL("epr_reactor_vessel", 8, 8, 22),
+	SMALL_MODULAR_REACTOR("small_modular_reactor", 5, 5, 22),
+	SMALL_TURBINE("small_turbine_generator", 3, 5, 4),
+	// The pump house's circulating water pumps: a cooling tower only works with them on its conduit.
+	CIRCULATING_WATER_PUMP("circulating_water_pump", 3, 3, 6),
+	// Plant equipment that only has to look right (the plants' buildings): drawn by the client, placed whole.
+	POLAR_CRANE("polar_crane", 40, 5, 5),
+	REFUELING_MACHINE("refueling_machine", 15, 4, 8),
+	OVERHEAD_CRANE("overhead_crane", 40, 5, 4),
+	MOISTURE_SEPARATOR_REHEATER("moisture_separator_reheater", 5, 20, 5),
+	FEEDWATER_HEATER("feedwater_heater", 3, 12, 3),
+	EMERGENCY_DIESEL_GENERATOR("emergency_diesel_generator", 7, 14, 5),
+	STORAGE_TANK("storage_tank", 5, 5, 9),
+	HEAT_EXCHANGER("heat_exchanger", 3, 9, 3),
+	PUMP_SKID("pump_skid", 3, 5, 3),
+	FUEL_HANDLING_MACHINE("fuel_handling_machine", 14, 5, 7),
+	SPENT_FUEL_RACK("spent_fuel_rack", 4, 4, 4),
+	DRY_STORAGE_CASK("dry_storage_cask", 3, 3, 6),
+	TRAVELLING_WATER_SCREEN("travelling_water_screen", 6, 2, 9),
+	PLANT_DISPLAY_WALL("plant_display_wall", 9, 1, 4),
+	MAIN_CONTROL_BOARD("main_control_board", 6, 2, 3),
+	SWITCHGEAR_LINEUP("switchgear_lineup", 8, 2, 3),
+	AIR_HANDLING_UNIT("air_handling_unit", 4, 8, 3),
+	// The control room's system boards (round 23): each its own layout (client/ControlBoards.java).
+	ESF_BOARD("esf_control_board", 6, 2, 3),
+	RCS_BOARD("rcs_control_board", 6, 2, 3),
+	SECONDARY_BOARD("secondary_control_board", 6, 2, 3),
+	TURBINE_BOARD("turbine_control_board", 6, 2, 3),
+	ELECTRICAL_BOARD("electrical_control_board", 6, 2, 3),
+	RADIATION_BOARD("radiation_control_board", 6, 2, 3),
+	// The control building's remote shutdown panel (round 24): it works. It finds the nearest reactor itself, shows its
+	// state, trips it, and takes control from the control room's console with its transfer switches.
+	REMOTE_SHUTDOWN_PANEL("remote_shutdown_panel", 6, 1, 3),
+	// The DC equipment rooms' 480 V motor control centres (round 26, 8a): they work (nuclear/MotorControlCenter.java).
+	MCC_LINEUP("mcc_lineup", 4, 1, 3),
+	// The control room's ventilation plant (round 26, #11; tools/hvac_boards.py): they run as the room's HVAC control panel
+	// has them (HvacRoom), normal or emergency, labelled by train (their anchor's variant: 0 train A, 1 train B).
+	CR_FILTRATION_UNIT("cr_filtration_unit", 3, 7, 3),
+	CR_AIR_HANDLER("cr_air_handling_unit", 3, 7, 3),
+	CR_CHILLER("cr_chiller", 3, 5, 3),
+	CHW_PUMP("chw_pump", 1, 3, 2);
+
+	public final String id;
+	public final int wide, deep, tall;
+	private List<BlockPos> solid;
+
+	EquipmentKind(String id, int wide, int deep, int tall) {
+		this.id = id;
+		this.wide = wide;
+		this.deep = deep;
+		this.tall = tall;
+	}
+
+	/** The pipe kinds that join to this equipment. */
+	public boolean takes(PipeKind pipe) {
+		return switch (pipe) {
+			case COOLANT -> this == REACTOR_VESSEL || this == EPR_VESSEL || this == STEAM_GENERATOR || this == COOLANT_PUMP || this == PRESSURIZER;
+			case STEAM -> this == STEAM_GENERATOR || this == TURBINE_GENERATOR || this == FEEDWATER_PUMP || this == CONDENSER
+					|| this == SMALL_MODULAR_REACTOR || this == SMALL_TURBINE;
+			case WATER -> this == CONDENSER || this == SMALL_TURBINE || this == CIRCULATING_WATER_PUMP;
+			case BUS -> this == TURBINE_GENERATOR || this == MAIN_TRANSFORMER;
+		};
+	}
+
+	/** Plant equipment that only has to look right: it takes no pipes and does no work. */
+	public boolean decor() {
+		return ordinal() >= POLAR_CRANE.ordinal() && this != REMOTE_SHUTDOWN_PANEL && this != SWITCHGEAR_LINEUP && this != MCC_LINEUP && !hvac();
+	}
+
+	/** The control room's HVAC machines (round 26, #11): run and stopped by the room's HVAC control panel (HvacRoom). */
+	public boolean hvac() {
+		return this == CR_FILTRATION_UNIT || this == CR_AIR_HANDLER || this == CR_CHILLER || this == CHW_PUMP;
+	}
+
+	/** A working power board: a load centre or a motor control centre (a bus, breakers, feeders). */
+	public boolean board() {
+		return this == SWITCHGEAR_LINEUP || this == MCC_LINEUP;
+	}
+
+	/** Equipment that holds a reactor core (and is run from a console). */
+	public boolean reactor() {
+		return this == REACTOR_VESSEL || this == EPR_VESSEL || this == SMALL_MODULAR_REACTOR;
+	}
+
+	/** The core design of a reactor. */
+	public ReactorCore.Design design() {
+		return switch (this) {
+			case EPR_VESSEL -> ReactorCore.Design.EPR;
+			case SMALL_MODULAR_REACTOR -> ReactorCore.Design.SMALL_MODULAR;
+			default -> ReactorCore.Design.STANDARD;
+		};
+	}
+
+	/** Equipment that takes cooling water (and, with a cooling tower on its conduit, only make-up water). */
+	public boolean cooled() {
+		return this == CONDENSER || this == SMALL_TURBINE;
+	}
+
+	/** Equipment that sends a unit's power out into cables. */
+	public boolean powerOut() {
+		return this == MAIN_TRANSFORMER || this == SMALL_TURBINE;
+	}
+
+	/**
+	 * Whether a block cell (local coordinates: x to the right, y up, z away from the placer) is part of the
+	 * equipment's body: the cells that get a frame block. Round vessels leave their corners free.
+	 */
+	public boolean solid(int x, int y, int z) {
+		double cx = x + 0.5 - wide / 2.0, cz = z + 0.5 - deep / 2.0;
+		double r2 = cx * cx + cz * cz;
+		return switch (this) {
+			// The vessel on its support skirt; the drive housings on top are narrower.
+			case REACTOR_VESSEL -> y < 14 ? r2 <= 3.3 * 3.3 : r2 <= 2.4 * 2.4;
+			// The narrow tube bundle below, the wide steam drum above (a cone between).
+			case STEAM_GENERATOR -> y < 10 ? r2 <= 2.5 * 2.5 : r2 <= 3.3 * 3.3;
+			// The pump casing at the front, the tall motor stand behind it.
+			case COOLANT_PUMP -> y < 4 || (y < 9 && z >= 1);
+			case PRESSURIZER -> (cx * cx) <= 1.6 * 1.6;
+			// The turbine deck all the way along, the casings above along the middle.
+			case TURBINE_GENERATOR -> y < 3 || (x >= 2 && x <= 8 && y < 8);
+			case MAIN_TRANSFORMER -> y < 5 && x < 5 && z < 5;
+			// The EPR's larger vessel: wider shell, a taller drive forest on top.
+			case EPR_VESSEL -> y < 15 ? r2 <= 3.8 * 3.8 : r2 <= 2.8 * 2.8;
+			// A slim integral module (reactor, steam generator and pressurizer in one steel containment).
+			case SMALL_MODULAR_REACTOR -> r2 <= 2.4 * 2.4;
+			// The engine and generator along the middle; the walkways either side are walked on (their supports below
+			// them), with steps up to each one beside the generator; the local panel at the front left.
+			case EMERGENCY_DIESEL_GENERATOR -> x >= 1 && x <= 5 ? y < 5 && (z < 13 || x >= 2 && x <= 4 && y < 4)
+					: z >= 1 && z <= 8 && y <= 1 || (z == 9 && y <= 1 || (z == 10 || z == 11) && y == 0) || x == 0 && z == 0 && y <= 2;
+			default -> true;
+		};
+	}
+
+	/**
+	 * How a frame cell stands: a whole block, or half a block high where the piece's steps are drawn (so they can be
+	 * walked up: the diesel generator's steps to its walkways).
+	 */
+	public EquipmentFrameBlock.Shape frameShape(int x, int y, int z) {
+		if (this == EMERGENCY_DIESEL_GENERATOR && (x == 0 || x == 6) && (z == 9 && y == 1 || z == 11 && y == 0)) {
+			return EquipmentFrameBlock.Shape.HALF;
+		}
+		return EquipmentFrameBlock.Shape.FULL;
+	}
+
+	/** Every solid cell, local coordinates (the anchor's own cell included if solid). */
+	public List<BlockPos> solidCells() {
+		if (solid == null) {
+			List<BlockPos> cells = new ArrayList<>();
+			for (int y = 0; y < tall; y++) {
+				for (int z = 0; z < deep; z++) {
+					for (int x = 0; x < wide; x++) {
+						if (solid(x, y, z)) {
+							cells.add(new BlockPos(x, y, z));
+						}
+					}
+				}
+			}
+			solid = List.copyOf(cells);
+		}
+		return solid;
+	}
+
+	/** The cells that get frame blocks: every solid cell but the anchor's own. */
+	public List<BlockPos> frames(Direction facing) {
+		List<BlockPos> out = new ArrayList<>();
+		for (BlockPos local : solidCells()) {
+			if (!local.equals(BlockPos.ZERO)) {
+				out.add(toWorld(local, facing));
+			}
+		}
+		return out;
+	}
+
+	/** A local cell as an offset from the anchor in the world, for equipment placed facing {@code facing}. */
+	public static BlockPos toWorld(BlockPos local, Direction facing) {
+		Direction right = facing.getClockWise();
+		return new BlockPos(right.getStepX() * local.getX() + facing.getStepX() * local.getZ(), local.getY(),
+				right.getStepZ() * local.getX() + facing.getStepZ() * local.getZ());
+	}
+
+	/** An offset from the anchor back to local coordinates (the inverse of {@link #toWorld}). */
+	public static BlockPos toLocal(BlockPos offset, Direction facing) {
+		Direction right = facing.getClockWise();
+		int x = right.getStepX() * offset.getX() + right.getStepZ() * offset.getZ();
+		int z = facing.getStepX() * offset.getX() + facing.getStepZ() * offset.getZ();
+		return new BlockPos(x, offset.getY(), z);
+	}
+
+	public static EquipmentKind byId(String id) {
+		for (EquipmentKind kind : values()) {
+			if (kind.id.equals(id)) {
+				return kind;
+			}
+		}
+		return null;
+	}
+}

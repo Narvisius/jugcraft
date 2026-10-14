@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.lair.tatterlace;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.weapons.DescribedItem;
 import io.github.jimbozoomer.jugcraft.weapons.StitchBoon;
@@ -43,6 +44,8 @@ public final class JugcraftTatterlace {
 	}
 
 	public static void register() {
+		// Concordance Chunk A: her rewards may wait for a player.
+		LairRewards.payer(TatterlaceLoot.BOSS, TatterlaceLoot::pay);
 		TATTERLACE = entity("tatterlace", EntityType.Builder.<TatterlaceEntity>of(TatterlaceEntity::new, MobCategory.MONSTER)
 				.sized(2.4F, 1.5F).eyeHeight(1.2F).fireImmune().noLootTable().clientTrackingRange(12));
 		FabricDefaultAttributeRegistry.register(TATTERLACE, TatterlaceEntity.createAttributes());

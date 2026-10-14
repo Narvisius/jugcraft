@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P P",
+    "SSS",
+    "P P"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "S": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:hv_filter_rack",
+    "count": 2
+  }
+}

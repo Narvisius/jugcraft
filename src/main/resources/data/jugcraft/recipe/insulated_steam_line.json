@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WWW",
+    "SSS",
+    "WWW"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:insulated_steam_line",
+    "count": 6
+  }
+}

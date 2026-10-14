@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "AAA",
+    "PMP",
+    "PSP"
+  ],
+  "key": {
+    "A": "jugcraft:aluminum_cable",
+    "P": "#c:plates/steel",
+    "M": "jugcraft:steel_monopole",
+    "S": "#c:ingots/steel"
+  },
+  "result": {
+    "id": "jugcraft:double_circuit_monopole",
+    "count": 1
+  }
+}

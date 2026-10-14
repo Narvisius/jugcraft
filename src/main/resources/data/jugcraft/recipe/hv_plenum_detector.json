@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "PXP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "X": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:hv_plenum_detector",
+    "count": 4
+  }
+}

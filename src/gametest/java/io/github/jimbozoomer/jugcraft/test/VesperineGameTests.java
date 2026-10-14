@@ -1,6 +1,15 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.concordance.ConcordanceEffects;
+import io.github.jimbozoomer.jugcraft.concordance.effect.Cause;
+import io.github.jimbozoomer.jugcraft.concordance.effect.EffectKind;
+import io.github.jimbozoomer.jugcraft.concordance.effect.EffectSpec;
+import io.github.jimbozoomer.jugcraft.concordance.effect.Intent;
+import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
+import io.github.jimbozoomer.jugcraft.lair.LairDossiers;
+import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.lair.vesperine.GraveThrallEntity;
 import io.github.jimbozoomer.jugcraft.lair.vesperine.GriefBoltEntity;
 import io.github.jimbozoomer.jugcraft.lair.vesperine.JugcraftVesperine;
@@ -293,6 +302,10 @@ public class VesperineGameTests {
 			}
 			helper.assertTrue(bystander.getInventory().countItem(JugcraftVesperine.REAPER_SHADE) == 0, "The bystander got nothing");
 			helper.assertTrue(VesperineLoot.firstKill(bystander), "The bystander has not won The Last Harvest");
+			// The encyclopedia's dossier (Chunk A, A-D9) remembers the win for each participant, and not for the bystander.
+			helper.assertTrue(LairDossiers.discovery(first, LairDossiers.Boss.VESPERINE) == LairDossiers.Discovery.DEFEATED
+					&& LairDossiers.discovery(second, LairDossiers.Boss.VESPERINE) == LairDossiers.Discovery.DEFEATED, "The win shows in each participant's dossier");
+			helper.assertTrue(LairDossiers.discovery(bystander, LairDossiers.Boss.VESPERINE) == LairDossiers.Discovery.UNKNOWN, "The bystander's dossier knows nothing of her");
 		});
 		helper.succeed();
 	}
@@ -310,6 +323,88 @@ public class VesperineGameTests {
 		scythe.getItem().hurtEnemy(scythe, zombie, player);
 		helper.assertTrue(player.getHealth() == 10.0F + HarvestBoon.HEAL, "A kill heals " + HarvestBoon.HEAL + ", health is " + player.getHealth());
 		helper.assertFalse(HarvestBoon.charged(player), "One kill does not yet charge the crescent");
+		helper.succeed();
+	}
+
+	/** {@code healer} mends {@code patient} 4 through the Concordance's effect boundary, as the Mend word does. */
+	private static void mend(ServerLevel level, ServerPlayer healer, ServerPlayer patient) {
+		Cause cause = Cause.of(healer.getUUID(), Cause.Origin.SPELL, "test:mend", ConcordanceEffects.nextSerial());
+		ConcordanceEffects.apply(new ConcordanceEffects.Context(level, cause, healer, new Ledger(new Ledger.Limits(16, 256, 0)), "mend",
+				healer.position()), EffectSpec.of(EffectKind.RESTORATION, Intent.HELPFUL, 4, 0), patient);
+	}
+
+	/**
+	 * Concordance Chunk A: support earns her harvest. A healer who mended 4 of what she did to a fighter, and a striker
+	 * who fell in her arena (and stands elsewhere now), are paid when she falls; a striker who walked away alive, a
+	 * bystander and the fighter she only hurt are not; and her fall reported a second time pays no one twice.
+	 */
+	@GameTest
+	public void supportSharesHerHarvestOnce(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		VesperineEntity vesperine = seated(helper);
+		ServerPlayer fighter = player(helper, 4.5, 7.5);
+		ServerPlayer healer = player(helper, 6.5, 7.5);
+		ServerPlayer bystander = player(helper, 2.5, 7.5);
+		ServerPlayer wanderer = player(helper, 5.5, 6.5);
+		ServerPlayer fallen = player(helper, 3.5, 6.5);
+		Encounter fight = vesperine.encounter();
+		fight.begin();
+		ending(level, vesperine, () -> {
+			// She hurt the fighter 6 (as her blow would have been measured); the healer mends 4 of it.
+			fighter.setHealth(fighter.getMaxHealth() - 6.0F);
+			fight.hurt(fighter, 6.0F);
+			mend(level, healer, fighter);
+			vesperine.took(wanderer, 2.0F);
+			vesperine.took(fallen, 2.0F);
+			fight.excuse(fallen.getUUID());
+			wanderer.snapTo(wanderer.getX() + 100.0, wanderer.getY(), wanderer.getZ(), 0.0F, 0.0F);
+			fallen.snapTo(fallen.getX() - 100.0, fallen.getY(), fallen.getZ(), 0.0F, 0.0F);
+			List<UUID> qualified = fight.qualified();
+			helper.assertTrue(qualified.containsAll(List.of(healer.getUUID(), wanderer.getUUID(), fallen.getUUID()))
+					&& !qualified.contains(fighter.getUUID()) && !qualified.contains(bystander.getUUID()),
+					"The healer and both strikers qualify; the fighter she only hurt and the bystander do not");
+			vesperine.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+			int shades = healer.getInventory().countItem(JugcraftVesperine.REAPER_SHADE);
+			helper.assertTrue(shades >= 3 && healer.getInventory().countItem(item("vesper_scythe")) == 1,
+					"The healer is paid, first-kill scythe and all: " + shades + " Reaper's Shade");
+			helper.assertTrue(fallen.getInventory().countItem(JugcraftVesperine.REAPER_SHADE) >= 3,
+					"One who fell in her arena is paid wherever they stand now");
+			for (ServerPlayer unpaid : List.of(wanderer, bystander, fighter)) {
+				helper.assertTrue(unpaid.getInventory().countItem(JugcraftVesperine.REAPER_SHADE) == 0,
+						"Not paid: the one who walked away, the bystander, the one she only hurt");
+			}
+			vesperine.die(level.damageSources().genericKill());
+			helper.assertTrue(healer.getInventory().countItem(JugcraftVesperine.REAPER_SHADE) == shades
+					&& healer.getInventory().countItem(item("vesper_scythe")) == 1, "Her fall reported again pays no one twice");
+		});
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk A: in her Harvest, relighting one of her wards is a deed of her fight, counted once for each ward
+	 * (relighting it again adds nothing); before her Harvest, or a brazier that is not a ward, nothing.
+	 */
+	@GameTest
+	public void aWardRelitInHerHarvestCounts(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		VesperineEntity vesperine = seated(helper);
+		ServerPlayer lighter = player(helper, 4.5, 7.5);
+		Encounter fight = vesperine.encounter();
+		fight.begin();
+		ending(level, vesperine, () -> {
+			List<BlockPos> wards = vesperine.wards(level);
+			helper.assertTrue(wards.size() == 4, "She has four wards round her arena, lair or not: " + wards);
+			Lairs.relit(level, wards.get(0), lighter);
+			helper.assertTrue(fight.share(lighter) == null || fight.share(lighter).deeds() == 0, "Before her Harvest a relit ward is nothing");
+			vesperine.startHarvest(level);
+			Lairs.relit(level, wards.get(0), lighter);
+			Lairs.relit(level, wards.get(0), lighter);
+			Lairs.relit(level, wards.get(1), lighter);
+			Lairs.relit(level, helper.absolutePos(new BlockPos(1, 2, 1)), lighter);
+			Encounter.Share share = fight.share(lighter);
+			helper.assertTrue(share != null && share.deeds() == 2 && share.damage() == 0.0F && share.qualifies(),
+					"Two wards relit in her Harvest, each once, qualify without a blow: " + (share == null ? "nothing" : share.deeds()));
+		});
 		helper.succeed();
 	}
 }

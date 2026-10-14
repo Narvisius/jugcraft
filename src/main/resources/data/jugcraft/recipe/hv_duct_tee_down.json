@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    " P ",
+    "P P"
+  ],
+  "key": {
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:hv_duct_tee_down",
+    "count": 4
+  }
+}

@@ -12,7 +12,8 @@ import net.minecraft.world.flag.FeatureFlags;
 
 public final class CompanionMenu extends AbstractContainerMenu {
     public static final int DATA_COUNT=79, RECIPE_START=46, FILTER_START=50;
-    public static final int WIDTH=480, RECIPE_X=416;
+    public static final int WIDTH=480, RECIPE_X=416, SEED_X=396;
+    public static final int JOB_ROW_HEIGHT=28, STATUS_SPACE=40, HEIGHT=312+STATUS_SPACE;
     public static MenuType<CompanionMenu> TYPE;
     private final PeepoEntity npc;
     private final ContainerData data;
@@ -23,11 +24,59 @@ public final class CompanionMenu extends AbstractContainerMenu {
     private CompanionAssignments.Target filterTarget;
     private final int[] recipeEnabled=new int[4];
     private final int[] transportDisplay=new int[8];
-    private long nextRecipeRefresh,nextRecipeEdit;
+    private long nextRecipeRefresh,nextRecipeEdit,nextNameEdit,nextPopulationEdit,nextPopulationScan;
+    public java.util.List<net.minecraft.resources.Identifier> populationTypes=java.util.List.of();
+    public int populationRow=-1;
+    public net.minecraft.core.BlockPos populationAnchor=net.minecraft.core.BlockPos.ZERO;
     public boolean showRecipes=true;
-    public static int assignmentY(int row){return row==0?78:row>=5?168+(row-5)*18:94+(row-1)*18;}
+    private long nextDetailsRefresh;
+    private java.util.List<CompanionDetailsPayload.Row> jobDetails=java.util.List.of();
+    public void receiveDetails(java.util.List<CompanionDetailsPayload.Row> rows){if(npc==null && rows.size()==4)jobDetails=java.util.List.copyOf(rows);}
+    public String jobDetail(int row,CompanionAssignments.Target target){
+        if(row<1 || row>4 || jobDetails.size()!=4)return "Checking job...";
+        var detail=jobDetails.get(row-1);
+        return detail.target().equals(CompanionDetailsPayload.key(target))?detail.text():"Checking job...";
+    }
+    public static int assignmentY(int row){return row==0?78:row>=5?168+STATUS_SPACE+(row-5)*18:94+(row-1)*JOB_ROW_HEIGHT;}
     public static int assignmentData(int row){return row<6?12+row:29+row-6;}
-    public static void initialize(){TYPE=Registry.register(BuiltInRegistries.MENU,PeepoMod.id("companion_commands"),new MenuType<>(CompanionMenu::new,FeatureFlags.VANILLA_SET));}
+    public static void initialize(){TYPE=Registry.register(BuiltInRegistries.MENU,PeepoMod.id("companion_commands"),new MenuType<>(CompanionMenu::new,FeatureFlags.VANILLA_SET));
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(CompanionEditPayload.TYPE,CompanionEditPayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(PopulationEditPayload.TYPE,PopulationEditPayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.clientboundPlay().register(PopulationTypesPayload.TYPE,PopulationTypesPayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.clientboundPlay().register(CompanionDetailsPayload.TYPE,CompanionDetailsPayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(PopulationEditPayload.TYPE,(payload,context)->{if(context.player().containerMenu instanceof CompanionMenu menu)menu.editPopulation(context.player(),payload);});
+        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(CompanionEditPayload.TYPE,(payload,context)->{if(context.player().containerMenu instanceof CompanionMenu menu && menu.containerId==payload.menu())menu.editDetails(context.player(),payload);});
+    }
+    public boolean editPopulation(Player player,PopulationEditPayload edit){
+        if(npc==null || player.containerMenu!=this || edit.menu()!=containerId || !stillValid(player) || filterRow>=0 || edit.row()<1 || edit.row()>4 || edit.action()<0 || edit.action()>6 || npc.level().getGameTime()<nextPopulationEdit)return false;
+        var target=recipeTarget(edit.row()-1);if(target==null || !target.care() || target.zone()==null || !target.at().pos().equals(edit.anchor()))return false;
+        long now=npc.level().getGameTime();nextPopulationEdit=now+4;
+        if(edit.action()==0 || edit.action()==1){
+            if(edit.action()==0){if(now<nextPopulationScan)return false;nextPopulationScan=now+20;}
+            var types=CompanionHusbandry.discover(npc,target);if(types==null){player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Keep the whole zone loaded, then refresh in a moment."));return false;}
+            populationTypes=types;populationRow=edit.row();populationAnchor=edit.anchor();
+            net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send((net.minecraft.server.level.ServerPlayer)player,new PopulationTypesPayload(containerId,populationRow,populationAnchor,types));
+            if(edit.action()==0)return true;
+            if(!types.contains(edit.animal()))return false;
+        }
+        var rule=target.zone().population(edit.animal());
+        if(edit.action()==1)return rule==null && npc.assignments.population(edit.row(),edit.animal(),10,6,false);
+        if(rule==null)return false;
+        int targetCount=rule.target()+(edit.action()==3?-1:edit.action()==4?1:0),keep=rule.keep()+(edit.action()==5?-1:edit.action()==6?1:0);
+        return npc.assignments.population(edit.row(),edit.animal(),targetCount,keep,edit.action()==2);
+    }
+    public boolean editDetails(Player player,CompanionEditPayload edit){
+        if(npc==null || player.containerMenu!=this || edit.menu()!=containerId || !stillValid(player) || filterRow>=0 || npc.level().getGameTime()<nextNameEdit || edit.row()<0 || edit.row()>4)return false;
+        var target=edit.row()==0?null:npc.assignments.get(edit.row());
+        if(edit.row()>0 && (target==null || !target.at().pos().equals(edit.anchor()) || recipeTarget(edit.row()-1)==null))return false;
+        if((edit.action()==CompanionAssignments.REPAIR || edit.action()==CompanionAssignments.FERTILIZE) && edit.row()>0){nextNameEdit=npc.level().getGameTime()+4;return npc.assignments.toggleGardenMaintenance(edit.row(),edit.action());}
+        if(edit.action()!=0 && (edit.row()==0 || !target.care() || edit.action()!=1 && edit.action()!=2 && edit.action()!=4 && edit.action()!=8 && edit.action()!=16))return false;
+        nextNameEdit=npc.level().getGameTime()+4;
+        if(edit.action()!=0)return npc.assignments.toggleAnimalTask(edit.row(),edit.action());
+        String name=CompanionNames.clean(edit.text());
+        if(edit.row()==0)npc.setCustomName(name.isEmpty()?null:net.minecraft.network.chat.Component.literal(name));else npc.assignments.renameJob(edit.row(),name);
+        broadcastChanges();return true;
+    }
     public CompanionMenu(int id,Inventory inventory){this(id,inventory,null);}
     public CompanionMenu(int id,Inventory inventory,PeepoEntity npc){
         super(TYPE,id);this.npc=npc;playerInventory=inventory;
@@ -60,11 +109,11 @@ public final class CompanionMenu extends AbstractContainerMenu {
             public int getMaxStackSize(){return 1;}
         });
         addSlot(new Slot(contents,9,70,54){public int getMaxStackSize(){return 1;}});
-        for(int row=0;row<3;row++)for(int col=0;col<9;col++)addSlot(new Slot(inventory,col+row*9+9,80+col*18,230+row*18));
-        for(int col=0;col<9;col++)addSlot(new Slot(inventory,col,80+col*18,288));
+        for(int row=0;row<3;row++)for(int col=0;col<9;col++)addSlot(new Slot(inventory,col+row*9+9,80+col*18,230+STATUS_SPACE+row*18));
+        for(int col=0;col<9;col++)addSlot(new Slot(inventory,col,80+col*18,288+STATUS_SPACE));
         for(int row=0;row<4;row++){
             final int at=row;
-            addSlot(new Slot(recipeIcons,row,RECIPE_X,assignmentY(row+1)){
+            addSlot(new Slot(recipeIcons,row,SEED_X,assignmentY(row+1)){
                 public boolean mayPlace(ItemStack stack){return false;}
                 public boolean mayPickup(Player player){return false;}
                 public boolean isActive(){return showRecipes && value(25+at)==4 && filterRow()<0;}
@@ -95,9 +144,13 @@ public final class CompanionMenu extends AbstractContainerMenu {
         return target;
     }
     private net.minecraft.world.level.block.entity.BlockEntity recipeStation(int row){
-        var target=recipeTarget(row);if(target==null || target.livestock())return null;
+        var target=recipeTarget(row);if(target==null || target.livestock() || target.garden())return null;
         var be=npc.level().getBlockEntity(target.at().pos());
-        return KitchenCompanionPort.of(be)!=null || be instanceof HearthOvenBlockEntity || be instanceof CookingPotBlockEntity pot && !pot.isLocked()
+        var serving=ServingCompanion.of(be);if(serving!=null)return !serving.hasOutput() && serving.allowed(npc)?be:null;
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity stand)return stand.isOwner(playerInventory.player) && npc.orders.foodAccess(stand.owner(),false)?be:null;
+        if(be instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity maw)return playerInventory.player instanceof net.minecraft.server.level.ServerPlayer player && maw.mayChange(player) && MagicGardenCompanion.keeperAccess(npc,maw.keeper())?be:null;
+        return be instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity || KitchenCompanionPort.of(be)!=null || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity || be instanceof HearthOvenBlockEntity || be instanceof CookingPotBlockEntity pot && !pot.isLocked()
+            || VanillaCompanionPort.supports(be) && (!(be instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity container) || !container.isLocked())
             || be instanceof io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity machine && !machine.isLocked() && (machine.companionPort.selectable() || machine.companionPort.locked())?be:null;
     }
     private void refreshRecipes(){
@@ -109,8 +162,8 @@ public final class CompanionMenu extends AbstractContainerMenu {
             var pot=station instanceof CookingPotBlockEntity p?p:null;
             var oven=station instanceof HearthOvenBlockEntity o?o:null;
             var machine=station instanceof io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity m?m:null;
-            var target=recipeTarget(row);boolean garden=target!=null && target.garden();
-            recipeEnabled[row]=garden?4:KitchenCompanionPort.of(station)!=null?5:machine!=null?3:oven!=null?2:pot!=null?1:0;
+            var target=recipeTarget(row);boolean garden=target!=null && target.garden() && !target.orchard();
+            recipeEnabled[row]=ServingCompanion.of(station)!=null?13:station instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity?12:station instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity?11:station instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity?10:station instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity?9:VanillaCompanionPort.supports(station)?8:station instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity?7:station instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity?6:garden?4:KitchenCompanionPort.of(station)!=null?5:machine!=null?3:oven!=null?2:pot!=null?1:0;
             var icon=ItemStack.EMPTY;
             if(garden){var seed=npc.assignments.gardenSeed(target);if(seed!=null)icon=new ItemStack(seed);}
             if(!ItemStack.matches(recipeIcons.getItem(row),icon))recipeIcons.setItem(row,icon);
@@ -125,8 +178,22 @@ public final class CompanionMenu extends AbstractContainerMenu {
         nextRecipeRefresh=npc.level().getGameTime()+10;
     }
     @Override public void broadcastChanges(){
+        if(npc!=null && stillValid(playerInventory.player))npc.assignments.refreshLabels();
         if(npc!=null && npc.level().getGameTime()>=nextRecipeRefresh)refreshRecipes();
         super.broadcastChanges();
+        if(npc!=null && playerInventory.player.containerMenu==this && stillValid(playerInventory.player) && npc.level().getGameTime()>=nextDetailsRefresh){
+            nextDetailsRefresh=npc.level().getGameTime()+20;
+            var details=new java.util.ArrayList<CompanionDetailsPayload.Row>(4);
+            for(int row=1;row<=4;row++){
+                String text=CompanionJobDetails.describe(npc,row,CompanionStatus.from(npc.report.row(row))).replaceAll("[\\p{Cntrl}\\u00a7]"," ");
+                if(text.length()>512)text=text.substring(0,509)+"...";
+                details.add(new CompanionDetailsPayload.Row(CompanionDetailsPayload.key(npc.assignments.get(row)),text));
+            }
+            if(!details.equals(jobDetails)){
+                jobDetails=java.util.List.copyOf(details);
+                net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send((net.minecraft.server.level.ServerPlayer)playerInventory.player,new CompanionDetailsPayload(containerId,jobDetails));
+            }
+        }
     }
     public int filterRow(){return npc==null?value(40):filterRow;}
     @Override public void clicked(int slot,int button,ContainerInput type,Player player){
@@ -149,7 +216,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
             if(target==null || now<nextRecipeEdit)return;nextRecipeEdit=now+2;
             var held=getCarried();
             if(target.garden()){
-                if(!npc.assignments.selectGardenSeed(row+1,button==1?ItemStack.EMPTY:held))player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Choose a supported seed or raw crop for this garden."));
+                if(!npc.assignments.selectGardenSeed(row+1,button==1?ItemStack.EMPTY:held))player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Choose seeds, mushrooms, or a ready-made herb bundle appropriate for this plot."));
                 refreshRecipes();broadcastChanges();return;
             }
             return;
@@ -167,6 +234,24 @@ public final class CompanionMenu extends AbstractContainerMenu {
         if(id>=60 && id<=64){
             if(id==64){filterRow=-1;filterTarget=null;}
             else {int row=id-60;var station=recipeStation(row);if(station==null || CompanionFilters.get(station)==null)return false;filterRow=row;filterTarget=recipeTarget(row);}
+            refreshRecipes();broadcastChanges();return true;
+        }
+        if((id==65 || id==66) && filterRow>=0 && filterRow<4){
+            var target=recipeTarget(filterRow);var station=recipeStation(filterRow);long now=npc.level().getGameTime();
+            if(target==null || !target.equals(filterTarget) || !(station instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity barrel) || now<nextRecipeEdit)return false;
+            nextRecipeEdit=now+2;barrel.selectCompanionStage(id==66);npc.readiness.clear();
+            refreshRecipes();broadcastChanges();return true;
+        }
+        if((id==67 || id==68) && filterRow>=0 && filterRow<4){
+            var target=recipeTarget(filterRow);var station=recipeStation(filterRow);long now=npc.level().getGameTime();
+            if(target==null || !target.equals(filterTarget) || !(station instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity) || now<nextRecipeEdit)return false;
+            nextRecipeEdit=now+2;VanillaCompanionPort.of(station).selectHoneycomb(id==68);npc.readiness.clear();
+            refreshRecipes();broadcastChanges();return true;
+        }
+        if((id==69 || id==70) && filterRow>=0 && filterRow<4){
+            var target=recipeTarget(filterRow);var station=recipeStation(filterRow);long now=npc.level().getGameTime();
+            if(target==null || !target.equals(filterTarget) || !(station instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity crucible) || now<nextRecipeEdit)return false;
+            nextRecipeEdit=now+2;crucible.companion.selectSalve(id==70);npc.readiness.clear();
             refreshRecipes();broadcastChanges();return true;
         }
         if(id>=320 && id<328 && filterRow==4+(id-320)/2){

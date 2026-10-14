@@ -1,0 +1,124 @@
+{
+  "textures": {
+    "pi_brass": "jugcraft:block/pi_brass",
+    "pi_walnut": "jugcraft:block/pi_walnut",
+    "pi_walnut_edge": "jugcraft:block/pi_walnut_edge",
+    "particle": "jugcraft:block/pi_brass"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        12,
+        0.5
+      ],
+      "to": [
+        16,
+        13,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_walnut_edge"
+        },
+        "south": {
+          "texture": "#pi_walnut_edge"
+        },
+        "east": {
+          "texture": "#pi_walnut_edge"
+        },
+        "west": {
+          "texture": "#pi_walnut_edge"
+        },
+        "up": {
+          "texture": "#pi_walnut",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_walnut_edge"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1,
+        0.5
+      ],
+      "to": [
+        16,
+        12,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_walnut",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pi_walnut",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_walnut"
+        },
+        "west": {
+          "texture": "#pi_walnut"
+        },
+        "up": {
+          "texture": "#pi_walnut"
+        },
+        "down": {
+          "texture": "#pi_walnut"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0.5
+      ],
+      "to": [
+        16,
+        1,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_brass"
+        },
+        "south": {
+          "texture": "#pi_brass"
+        },
+        "east": {
+          "texture": "#pi_brass"
+        },
+        "west": {
+          "texture": "#pi_brass"
+        },
+        "up": {
+          "texture": "#pi_brass"
+        },
+        "down": {
+          "texture": "#pi_brass"
+        }
+      }
+    }
+  ]
+}

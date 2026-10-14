@@ -6,6 +6,8 @@ import local.peepo.WorkAnimation;
 
 /** Uses the same clip evaluation and rig as rendering, without making production internals public. */
 public final class CompanionClipChecks {
+    /** Match the render-state extraction used by the live spoon/hand models. */
+    public static void prepareStir(PeepoState state){state.toolPose.stir(state.workPhase);}
     public static void harvesting(BiConsumer<Boolean,String> check){
         for(boolean jughead:new boolean[]{false,true})for(boolean pumpkin:new boolean[]{false,true}){
             var root=PeepoGeometry.create().bakeRoot();var model=new PeepoModel(root);var state=new PeepoState();

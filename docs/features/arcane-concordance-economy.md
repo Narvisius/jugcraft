@@ -1,6 +1,8 @@
 # Arcane Concordance: the economy (interactions and economic loops)
 
-Status: implemented on branch `claude/concordance-steps-26-32`; see Verification for what has run.
+Status: merged to main ([#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250), from branch
+`claude/concordance-steps-26-32`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 29) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 21, every stage (Initiate to Architect). Roadmap step 29.
@@ -118,7 +120,7 @@ The brief's library interactions:
 | Research with codex and recipe visibility | Partly: the journal names only met research (`ConcordanceJournalGameTests`); JEI's and the codex's visibility are not tested in a client. |
 | Packet replay | Partly: a repeated request within its window does nothing (the sconce's pour, the journal, the bench and courier commands, `RateGate`); no test replays raw packets. |
 | Cancellation at each charge stage | Not tested: Spell Engine's charge stages run from the client's input. Focus is taken once, at the cast (`ConcordanceGameTests.kindleCastsThroughSpellEngine`). |
-| Player animation with ArmsMotion and casting; dynamic lights with gameplay light | Not tested: client-side. Gameplay light is the server's Lumen motes alone; LambDynamicLights only draws. |
+| Player animation with ArmsMotion and casting; dynamic lights with gameplay light | Player animation, since Chunk A: a client game test, passed in CI (run 38435014953; `ConcordanceJourneyClientGameTests.aCastGivesWayToAGunOrAnArm`), checks that a cast's release clip and the Vigil's gesture give way to a gun or an arm on the client's own player ([one owner for the arms](arcane-concordance-presentation.md#one-owner-for-the-arms-chunk-a-ticket-a-07)); another player's view is not tested. Dynamic lights: not tested (client-side). Gameplay light is the server's Lumen motes alone; LambDynamicLights only draws. |
 
 ## Connections
 

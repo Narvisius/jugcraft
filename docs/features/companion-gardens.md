@@ -1,10 +1,16 @@
 # Companion garden work
 
+The subsequent [additional garden crops update](companion-garden-crops.md) adds cane, bamboo, cactus, berries, cocoa and flooded plots; its rules supersede the earlier exclusions below.
+
 For current player controls and setup, use the [Peepo and Jughead player guide](../PEEPO_COMPANION_GUIDE.md). This feature record retains implementation history; earlier single-container, Porter-command and single-recipe-slot descriptions have been superseded.
 
 Owner-requested on 7 October 2026, implemented locally with **OpenAI Codex (GPT-6)** on `peepo-companion`, from `2d03b7c7`. This extends the existing assignment, job, cargo and porter systems; no new dependency, inventory, item ID or art asset is introduced.
 
-## Setting up a garden
+## Current zone workflow (11 October 2026)
+
+Farmland assignments now use two Planner corners, with a separate Orchard zone option. See [garden and orchard zones](companion-garden-zones.md) for the current limits, server budget, persistence and validation. Existing fixed plots below remain supported without widening or losing route identity; their original creation UI has been replaced for farmland and planters. Mushroom and hanging-herb creation stays unchanged.
+
+## Original fixed-plot setup (legacy saves)
 
 1. Tame Peepo/Jughead and select it with the Companion Planner.
 2. Right-click farmland (or a crop standing on it). That soil is the anchor of one garden assignment. It saves up to **eight edge-connected farmland blocks at the same height**, including the anchor. Diagonals, gaps, inaccessible/unloaded cells and soil already assigned to this companion are excluded. A larger field takes the nearest connected eight in a stable breadth-first order.
@@ -27,6 +33,14 @@ Supported plants are vanilla `CropBlock` crops, Jugcraft's ordinary crops, and J
 | Same action with a hoe in Hand | 40 ticks / 2 seconds | 4 JE/t, 160 JE per uninterrupted action | 1 durability per completed action, using normal enchantment handling |
 
 Pathfinding/search delays and deliveries are additional. An interrupted action restarts; effort already spent is not refunded. Tool material does not add another speed multiplier. Food regeneration can offset the net reserve drain. Existing recovery thresholds, rest, shifts, eating, priorities and the settings-menu pause continue to apply. Transport retains its existing up-to-2-JE/t walking cost. This is early farming utility: seeds/soil/tools and companion food are inputs, and harvests feed cooking, lunch or later processing. It creates no electricity and bypasses no crop growth/food cost.
+
+## Tomato overripeness compatibility (10 October 2026)
+
+Implemented with OpenAI Codex (GPT-6), from `66dd5f28`. Companion picking now uses the tall crop's own state-dependent produce and canonical regrowth states, matching manual picking. Ripe tomato vines give tomatoes; overripe vines give rotten tomatoes. Both sections reset to the normal regrowth age with overripeness cleared. A plot changing to another crop still restores the trellis, and full cargo leaves the entire vine and inventory unchanged. Existing yield, effort, energy, ownership and transactional inventory rules remain intact; no new scans or saved fields were added.
+
+Crop replacement also suppresses intermediate shape updates while removing the tall plant, so replacing its top section cannot break the remaining sections, destroy the trellis or spill duplicate crop loot. Rollback restores sections with the same protection.
+
+The focused `PeepoHarvestClientTests` covers fresh and overripe tomatoes, both companion types, full cargo, crop replacement, two-section resets and absence of dropped duplicate produce. On 10 October 2026, `./gradlew runClientGameTest -PclientTests=PeepoHarvestClientTests --console=plain` passed **185 assertions**, including the existing hoe animation and wheat harvesting checks, on Windows with Java 25.0.4.1, Minecraft 26.3 and Fabric Loader 0.19.5. This compiled the main, client and test sources and ran only this client test class in a disposable world. No full suite or multiplayer playtest was run.
 
 ## Supply, output and conservation
 
@@ -63,3 +77,22 @@ Each assignment saves an optional `GardenSeed` item ID. It follows row reorderin
 Crop-selection follow-up: common/client compilation and assembly passed (`build/garden-selection-assemble.log`), and the complete pack was rebuilt. No automated or in-game tests ran. Manual crop-choice checks remain: ghost item conservation and invalid clicks, clearing to Auto, four different seeds from one Supply, wrong seeds in cargo, mature replacement versus young crops, tall plants/trellises, full cargo, changing selection during delivery, multiple viewers, reordering/removal, and save/restart.
 
 Pending manual checks: irregular/oversized fields and four-plot limits; vanilla/Jugcraft crops and tall plants; hoe timing/wear; mixed seed supplies; output full/off and completely full cargo; player cargo edits; two workers on overlapping plots; lower-priority jobs; rest/menu interruption; save/restart while carrying seeds or harvests; unloaded chunks, removed anchors, protected cells and `mobGriefing` disabled.
+
+
+## Planter boxes, mushroom colonies and herb drying (11 October 2026)
+
+Owner-requested extension implemented with OpenAI Codex (GPT-6), on the local `peepo-companion` branch after the tomato compatibility fix. The owner chose ready-made Supply bundles; loose-herb/string crafting is outside this change.
+
+Crop plots now accept Planter Boxes alongside farmland. Mushroom plots accept Rich Soil and the colony's mushroom substrate tag, plant real brown/red mushrooms, and pick mature colonies with shears or knives. Tool retrieval reuses Supplies marked Tools and respects the Hand lock. Picking preserves the colony at `PICK_RESET`, returns its normal 2-3 mushrooms, charges 4 JE/t for 40 ticks and wears the tool once. Planting costs 4 JE/t for 80 ticks. No growth, light or shade rule changes.
+
+Drying plots discover up to eight adjacent existing hanging bundles. Saved cells point to permanent supports; the existing target `Face=DOWN` distinguishes them from soil plots. Harvesting the bundle therefore does not destroy the assignment. Empty saved spots accept compatible ready-made bundles from cargo/Supply, fresh bundles remain untouched until naturally dried, and dried bundles use their real loot table. Hanging and collection each cost 4 JE/t for 80 ticks, with no hoe bonus or tool requirement. No new recipe/currency or duplicate inventory is introduced.
+
+All types use the existing assignment priority, crop filter, Supply/Output settings, eight-slot cargo, harvest provenance, leases, cooldowns and global search/path budgets. Discovery never crosses plot types and remains capped at eight positions. Saved data retains the same plot/face schema and transport snapshots; no entity/world scan or chunk loading is added. Hanging approach candidates check at most ten nearby floor positions per saved cell, constrained by normal collision, hazards, protection and 2.5-block interaction reach. Full output capacity aborts the transaction without changing the crop or bundle. Unsupported filter items are rejected for each plot type. Frames and tooltips distinguish drying positions and mushroom tools.
+
+Focused verification passed on Windows with Minecraft 26.3, Fabric Loader 0.19.5 and Java 25.0.4.1: `PeepoGardenExpansionClientTests` passed 37 assertions covering plot caps, bundle canonicalization and save/reload, filters, real Supply/Tools/Output travel for all three additions, natural-drying waits, mushroom regrowth/tool wear, missing supports and full-inventory conservation. `PeepoHarvestClientTests` passed 185 assertions for existing crops/animations and tomato regressions (222 assertions total). The expansion suite passed again after the final hanging-approach and GUI-label adjustments; common/client compilation also passed. Logs: `build/garden-expansion-tests.log` and `build/garden-expansion-final-tests.log`. No full suite or multiplayer test is claimed.
+
+The new client suite has a 60-second scheduling estimate based on focused runs of about 55 seconds. The CI scheduler now balances residual skew by swapping classes between the longest and shortest groups, without changing coverage or relaxing the existing time-budget check. All five client-test-selection unit tests passed, including registration discovery, complete nonduplicated coverage and the four-group budget.
+
+## Magic garden integration (11 October 2026)
+
+Awakened Verdant Beds now participate in existing garden zones, with native organism yields and retained regrowth stages. Planting, harvest cargo and linked Supply/Output reuse the bounded garden scheduler. See [companion magic gardens](companion-magic-gardens.md) for permissions, costs, device logistics and validation limits. Maintenance remains deferred.

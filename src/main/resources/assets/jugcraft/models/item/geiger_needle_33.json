@@ -1,0 +1,133 @@
+{
+  "parent": "jugcraft:item/geiger_counter",
+  "textures": {
+    "needle": "jugcraft:item/geiger_needle",
+    "hub": "jugcraft:item/geiger_rubber"
+  },
+  "elements": [
+    {
+      "from": [
+        7.91,
+        4.64,
+        10.46
+      ],
+      "to": [
+        8.09,
+        8.28,
+        10.5
+      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          4.64,
+          10.48
+        ],
+        "axis": "z",
+        "angle": -18.75
+      },
+      "faces": {
+        "south": {
+          "texture": "#needle",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#needle",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#needle",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#needle",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#needle",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.72,
+        4.36,
+        10.36
+      ],
+      "to": [
+        8.28,
+        4.92,
+        10.6
+      ],
+      "faces": {
+        "south": {
+          "texture": "#hub"
+        },
+        "east": {
+          "texture": "#hub",
+          "uv": [
+            5.44,
+            11.08,
+            5.58,
+            11.64
+          ]
+        },
+        "west": {
+          "texture": "#hub",
+          "uv": [
+            10.42,
+            11.08,
+            10.56,
+            11.64
+          ]
+        },
+        "up": {
+          "texture": "#hub",
+          "uv": [
+            7.72,
+            10.42,
+            8.28,
+            10.56
+          ]
+        },
+        "down": {
+          "texture": "#hub",
+          "uv": [
+            7.72,
+            5.44,
+            8.28,
+            5.58
+          ]
+        },
+        "north": {
+          "texture": "#hub"
+        }
+      }
+    }
+  ]
+}

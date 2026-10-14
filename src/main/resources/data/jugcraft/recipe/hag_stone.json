@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MSM",
+    "GFG",
+    " E "
+  ],
+  "key": {
+    "M": "minecraft:mud",
+    "S": "minecraft:string",
+    "G": "minecraft:gold_ingot",
+    "F": "minecraft:flint",
+    "E": "minecraft:fermented_spider_eye"
+  },
+  "result": {
+    "id": "jugcraft:hag_stone",
+    "count": 1
+  }
+}

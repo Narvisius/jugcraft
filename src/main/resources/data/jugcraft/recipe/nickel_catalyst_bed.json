@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BNB"
+  ],
+  "key": {
+    "B": "minecraft:brick",
+    "N": "#c:ingots/nickel"
+  },
+  "result": {
+    "id": "jugcraft:nickel_catalyst_bed",
+    "count": 1
+  }
+}

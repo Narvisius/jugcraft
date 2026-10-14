@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "fluids": [
+    {
+      "fluid": "jugcraft:refinery_gas",
+      "amount": 250
+    },
+    {
+      "fluid": "jugcraft:hydrogen_chloride",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:oxygen",
+      "amount": 125
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:ethylene_dichloride",
+      "amount": 500
+    }
+  ],
+  "time": 60
+}

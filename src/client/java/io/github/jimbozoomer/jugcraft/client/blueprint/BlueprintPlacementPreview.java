@@ -36,6 +36,9 @@ public final class BlueprintPlacementPreview {
 	/** The finished build's space (a later stage): tops a little brighter than sides. */
 	private static final int STAGE_TOP = 0x50FFB84A;
 	private static final int STAGE_SIDE = 0x30FFB84A;
+	/** A large build's outer skin. */
+	private static final int HULL_TOP = 0x585AB4FF;
+	private static final int HULL_SIDE = 0x385AB4FF;
 
 	private BlueprintPlacementPreview() {
 	}
@@ -53,7 +56,7 @@ public final class BlueprintPlacementPreview {
 				return;
 			}
 			Blueprint blueprint = Blueprint.get(BlueprintItem.idOf(held), true);
-			BlueprintItem.Target target = BlueprintItem.target(player, minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));
+			BlueprintItem.Target target = BlueprintItem.target(player, held, minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));
 			if (blueprint == null || target == null) {
 				return;
 			}
@@ -61,17 +64,21 @@ public final class BlueprintPlacementPreview {
 			List<float[]> boxes = new ArrayList<>();
 			boxes.add(new float[] {0, 0, 0, Float.intBitsToFloat(STAKE)});
 			BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
-			for (Blueprint.Cell cell : blueprint.cells(target.rotation())) {
-				at.setWithOffset(stake, cell.offset());
-				boolean clear = level.getBlockState(at).canBeReplaced() || level.getBlockState(at).is(cell.state().getBlock());
-				boxes.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(clear ? CLEAR : BLOCKED)});
+			// A large build (a power plant) shows its rough outer skin instead of every block.
+			float[] hull = blueprint.large() ? blueprint.hull(target.rotation()) : null;
+			if (hull == null) {
+				for (Blueprint.Cell cell : blueprint.cells(target.rotation())) {
+					at.setWithOffset(stake, cell.offset());
+					boolean clear = level.getBlockState(at).canBeReplaced() || level.getBlockState(at).is(cell.state().getBlock());
+					boxes.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(clear ? CLEAR : BLOCKED)});
+				}
 			}
 			// A later growth stage (shift+scroll): the space the finished build takes, measured from its anchor block.
 			String id = BlueprintItem.idOf(held);
 			BlueprintStages.Set set = BlueprintStages.stages(id);
 			int stageIndex = set == null ? 0 : Math.min(BlueprintStages.stage(id), set.stages().size());
 			BlockPos anchor = null;
-			if (stageIndex > 0) {
+			if (stageIndex > 0 && hull == null) {
 				for (Blueprint.Cell cell : blueprint.cells(target.rotation())) {
 					if (net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(cell.state().getBlock()).toString().equals(set.anchor())) {
 						anchor = cell.offset();
@@ -88,6 +95,11 @@ public final class BlueprintPlacementPreview {
 				for (float[] box : boxes) {
 					cube(p, consumer, box[0] + 0.1f, box[1] + 0.1f, box[2] + 0.1f, box[0] + 0.9f, box[1] + 0.9f, box[2] + 0.9f,
 							Float.floatToRawIntBits(box[3]));
+				}
+				if (hull != null) {
+					for (int i = 0; i + 6 < hull.length; i += 7) {
+						face(p, consumer, hull[i], hull[i + 1], hull[i + 2], hull[i + 3], hull[i + 4], hull[i + 5], hull[i + 6] == 1 ? HULL_TOP : HULL_SIDE);
+					}
 				}
 				if (anchorAt != null) {
 					float ax = anchorAt.getX(), ay = anchorAt.getY(), az = anchorAt.getZ();

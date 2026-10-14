@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GSG",
+    "PRP"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "S": "#c:plates/steel",
+    "P": "#c:plates/steel",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:speed_gate",
+    "count": 1
+  }
+}

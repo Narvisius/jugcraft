@@ -15,6 +15,9 @@ final class CompanionGroundNavigation extends GroundPathNavigation {
                 var original=super.getPathType(context,x,y,z);
                 if(mob instanceof PeepoEntity npc){
                     var pos=new BlockPos(x,y,z);
+                    // Route around the wheel: neither its mechanism nor its top is a walking surface.
+                    if(context.getBlockState(pos).getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlock
+                        || context.getBlockState(pos.below()).getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlock)return PathType.FENCE;
                     if(CompanionHazards.harmful(npc,context.getBlockState(pos))
                         || CompanionHazards.harmful(npc,context.getBlockState(pos.below())))return PathType.BLOCKED;
                 }

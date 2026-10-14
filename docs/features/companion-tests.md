@@ -2,6 +2,18 @@
 
 Owner requested companion-only automated testing on 7 October 2026, superseding the earlier instruction to skip tests. Implemented and run with OpenAI Codex (GPT-6).
 
+## PR #323 stirring fixture correction, 12 October 2026
+
+Implemented with OpenAI Codex (GPT-6). [Build run 38327903835](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38327903835) failed in client shard 0 at `arms move to stir spoon`; the aggregate `client` failure reported that same error. The other four client shards, normal mod build, optional-integrations-absent build/server tests and Foundation checks passed.
+
+The direct model fixture advanced `workPhase` for its second sample but did not reevaluate the shared spoon/hand pose. The runtime renderer already does this every frame. Refreshing the second fixture sample with `CompanionClipChecks.prepareStir` restores the same data flow. The movement assertion, threshold and planted-feet checks remain unchanged. This correction changes no production code, dependencies or CI gates.
+
+Focused command: `./gradlew runClientGameTest -PclientTests=PeepoCompanionClientTests` (through the local Java-25 build wrapper on Windows). The run passed **42 groups, 719 assertions, zero failed groups** at 20:22 UTC-5 on 12 October 2026, including save/reopen and dedicated-server reconnect. Evidence is recorded in `build/peepo-pr323-fix.log`; repository/documentation-link checks also passed. Only this companion suite ran locally. Separate task-animation additions present in the local working tree are excluded from this PR repair; the stirring renderer/clip exercised by the corrected fixture is unchanged by those additions.
+
+## Integration revision, 12 October 2026
+
+See the [new integration regression record](companion-integration-tests.md) for the owner-requested run covering the newer workstation, livestock, garden, maintenance, water and sprinkler implementations. It records the exact suites, fixes, local evidence and coverage limits.
+
 ## Performance revision, 8 October 2026
 
 The [planning, synchronization, rest and navigation changes](companion-performance.md) passed the expanded companion suite: **42 groups, 715 assertions, zero failed groups**, completed at 11:46 local time. The additional four groups check shared readiness reuse, per-companion isolation, live claim validation, same-tick block replacement, exact energy rollback, reduced snapshot frequency, stable meal timestamps, obstructed bunk release, retained progressing paths and alternate entrance selection. World save/reopen and the one-client dedicated reconnect check passed again.

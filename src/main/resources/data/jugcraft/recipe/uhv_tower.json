@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TTT",
+    "BLB",
+    "BXB"
+  ],
+  "key": {
+    "T": "#c:plates/tungsten",
+    "B": "#c:storage_blocks/steel",
+    "L": "jugcraft:monitored_lattice_tower",
+    "X": "jugcraft:processor"
+  },
+  "result": {
+    "id": "jugcraft:uhv_tower",
+    "count": 1
+  }
+}

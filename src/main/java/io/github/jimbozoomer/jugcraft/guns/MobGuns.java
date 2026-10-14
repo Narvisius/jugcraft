@@ -111,6 +111,7 @@ public final class MobGuns {
 		Vec3 eye = shooter.getEyePosition();
 		Vec3 look = target.getBoundingBox().getCenter().subtract(eye).normalize();
 		GunShots.bullets(level, shooter, eye, look, spec, spec.hipSpread(), spec.damage() * DAMAGE, JugcraftGuns.ignites(gun),
+				JugcraftGuns.levitates(gun),
 				foe -> foe != shooter && foe.isAlive() && !foe.isSpectator() && !(foe instanceof ArmorStand stand && stand.isMarker())
 						&& foe.getRootVehicle() != shooter.getRootVehicle() && !(shooter instanceof Gunner gunner && gunner.spares(foe)),
 				foe -> true);

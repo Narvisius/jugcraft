@@ -42,7 +42,11 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 	private UseMode mode = UseMode.PERSONAL;
 	private final UUID jobId = UUID.randomUUID();
 	private @Nullable Jobs jobs;
-	private @Nullable Map<BlockPos, BlockState> wanted;
+	private @Nullable BuildSite site;
+	/** Large builds: the lowest layer that may still have work (every layer under it is done). */
+	private int cursor;
+	/** Large builds: ticks between full checks of which blocks are in place. */
+	private static final int VERIFY_INTERVAL = 600;
 
 	public SurveyStakeBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftBlueprints.STAKE_ENTITY, pos, state);
@@ -52,7 +56,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		this.blueprintId = blueprintId;
 		this.rotation = rotation;
 		this.owner = owner;
-		this.wanted = null;
+		this.site = null;
 		setChanged();
 		sync();
 	}
@@ -69,7 +73,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 	/** Turns the blueprint a quarter turn clockwise about the stake. */
 	public void rotate() {
 		rotation = rotation.getRotated(Rotation.CLOCKWISE_90);
-		wanted = null;
+		site = null;
 		setChanged();
 		sync();
 	}
@@ -91,15 +95,16 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		int wrong = 0;
 		Map<Item, Integer> missing = new LinkedHashMap<>();
 		Map<Item, Integer> hand = new LinkedHashMap<>();
-		if (level != null) {
-			for (Map.Entry<BlockPos, BlockState> entry : wanted().entrySet()) {
-				BlockState now = level.getBlockState(entry.getKey());
-				if (matches(now, entry.getValue())) {
+		BuildSite site = site();
+		if (level != null && site != null) {
+			for (int i = 0; i < site.size(); i++) {
+				BlockState now = level.getBlockState(site.blockPos(i));
+				if (site.matches(now, i)) {
 					done++;
 				} else if (!now.canBeReplaced()) {
 					wrong++;
 				} else {
-					(handOnly(entry.getValue()) ? hand : missing).merge(entry.getValue().getBlock().asItem(), 1, Integer::sum);
+					(handOnly(site.state(i)) ? hand : missing).merge(site.state(i).getBlock().asItem(), 1, Integer::sum);
 				}
 			}
 		}
@@ -112,7 +117,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		List<String> handOnly = new ArrayList<>();
 		hand.keySet().forEach(item -> handOnly.add(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).toString()));
 		return new io.github.jimbozoomer.jugcraft.blueprint.BlueprintNetwork.StakeInfoPayload(getBlockPos(),
-				blueprint == null ? "?" : blueprint.name, done, wanted().size(), mode.id(), items, counts, wrong, handOnly, mayChange(player), open);
+				blueprint == null ? "?" : blueprint.name, done, site == null ? 0 : site.size(), mode.id(), items, counts, wrong, handOnly, mayChange(player), open);
 	}
 
 	public String blueprintId() {
@@ -136,18 +141,28 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		return world.is(wanted.getBlock());
 	}
 
-	/** Every block of the blueprint, absolute, in order (bottom layer first). */
-	public Map<BlockPos, BlockState> wanted() {
-		if (wanted == null) {
-			wanted = new LinkedHashMap<>();
+	/** The placed blueprint's cells in the world (null while its blueprint is unknown). */
+	public @Nullable BuildSite site() {
+		if (site == null) {
 			Blueprint blueprint = blueprint();
 			if (blueprint != null) {
-				for (Blueprint.Cell cell : blueprint.cells(rotation)) {
-					wanted.put(getBlockPos().offset(cell.offset()), cell.state());
-				}
+				site = new BuildSite(blueprint, rotation, getBlockPos());
+				cursor = 0;
 			}
 		}
-		return wanted;
+		return site;
+	}
+
+	/** Every block of the blueprint, absolute, in order (bottom layer first). A copy: for tests and small builds. */
+	public Map<BlockPos, BlockState> wanted() {
+		Map<BlockPos, BlockState> out = new LinkedHashMap<>();
+		BuildSite site = site();
+		if (site != null) {
+			for (int i = 0; i < site.size(); i++) {
+				out.put(site.blockPos(i), site.state(i));
+			}
+		}
+		return out;
 	}
 
 	public boolean mayChange(Player player) {
@@ -173,17 +188,19 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		int wrong = 0;
 		Map<Item, Integer> missing = new LinkedHashMap<>();
 		Map<Item, Integer> handOnly = new LinkedHashMap<>();
-		for (Map.Entry<BlockPos, BlockState> entry : wanted().entrySet()) {
-			BlockState now = level.getBlockState(entry.getKey());
-			if (matches(now, entry.getValue())) {
+		BuildSite site = site();
+		int total = site == null ? 0 : site.size();
+		for (int i = 0; i < total; i++) {
+			BlockState now = level.getBlockState(site.blockPos(i));
+			if (site.matches(now, i)) {
 				done++;
 			} else if (!now.canBeReplaced()) {
 				wrong++;
 			} else {
-				(handOnly(entry.getValue()) ? handOnly : missing).merge(entry.getValue().getBlock().asItem(), 1, Integer::sum);
+				(handOnly(site.state(i)) ? handOnly : missing).merge(site.state(i).getBlock().asItem(), 1, Integer::sum);
 			}
 		}
-		player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.progress", blueprint.name, done, wanted().size(),
+		player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.progress", blueprint.name, done, total,
 				mode.id().toUpperCase(java.util.Locale.ROOT)));
 		if (!missing.isEmpty()) {
 			player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.missing", list(missing)));
@@ -211,11 +228,36 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			jobs = new Jobs();
 			BuildJobs.register(jobs);
 		}
-		if ((server.getGameTime() + getBlockPos().hashCode()) % CHECK_INTERVAL != 0 || wanted().isEmpty()) {
+		BuildSite site = site();
+		if (site == null || site.size() == 0) {
 			return;
 		}
-		for (Map.Entry<BlockPos, BlockState> entry : wanted().entrySet()) {
-			if (!server.isLoaded(entry.getKey()) || !matches(server.getBlockState(entry.getKey()), entry.getValue())) {
+		long phase = server.getGameTime() + getBlockPos().hashCode();
+		if (site.blueprint.large()) {
+			// A big build is checked in full only now and then; in between drones mark the blocks they place.
+			if (Math.floorMod(phase, VERIFY_INTERVAL) != 0) {
+				return;
+			}
+			boolean all = true;
+			BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+			for (int i = 0; i < site.size(); i++) {
+				at.set(site.pos(i));
+				boolean in = server.isLoaded(at) && site.matches(server.getBlockState(at), i);
+				site.done.set(i, in);
+				all &= in;
+			}
+			cursor = 0;
+			if (all) {
+				complete(server);
+			}
+			return;
+		}
+		if (Math.floorMod(phase, CHECK_INTERVAL) != 0) {
+			return;
+		}
+		for (int i = 0; i < site.size(); i++) {
+			BlockPos p = site.blockPos(i);
+			if (!server.isLoaded(p) || !site.matches(server.getBlockState(p), i)) {
 				return;
 			}
 		}
@@ -224,6 +266,11 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 
 	private void complete(ServerLevel server) {
 		Blueprint blueprint = blueprint();
+		BuildSite done = site();
+		if (done != null) {
+			// The pools and basins fill once everything else is in.
+			done.fillFluids(server);
+		}
 		BlockPos pos = getBlockPos();
 		if (owner != null && server.getServer().getPlayerList().getPlayer(owner) instanceof Player player && blueprint != null) {
 			player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.complete", blueprint.name));
@@ -267,7 +314,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		rotation = Rotation.values()[Math.floorMod(input.getIntOr("rotation", 0), 4)];
 		owner = input.read("owner", UUIDUtil.CODEC).orElse(null);
 		mode = "party".equals(input.getStringOr("mode", "personal")) ? UseMode.PARTY : UseMode.PERSONAL;
-		wanted = null;
+		site = null;
 	}
 
 	@Override
@@ -318,64 +365,101 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		}
 
 		/** Is the block under {@code pos} ready to build on: done, solid ground, or a cell drones never fill? */
-		private boolean supported(ServerLevel level, BlockPos pos, Map<BlockPos, BlockState> all) {
+		private boolean supported(ServerLevel level, BlockPos pos, BuildSite site) {
 			BlockPos under = pos.below();
-			BlockState wantedBelow = all.get(under);
-			if (wantedBelow == null || handOnly(wantedBelow)) {
+			int below = site.find(under);
+			if (below < 0 || handOnly(site.state(below))) {
 				return true;
 			}
 			BlockState now = level.getBlockState(under);
-			return matches(now, wantedBelow) || level.getBlockEntity(under) != null;
+			return site.matches(now, below) || level.getBlockEntity(under) != null;
 		}
 
 		@Override
 		public List<BuildJobs.Target> openTargets(ServerLevel level, BlockPos center, int radius, UUID depotOwner, UseMode depotMode, int max) {
-			if (owner == null || isRemoved() || level != SurveyStakeBlockEntity.this.level
+			BuildSite site = site();
+			if (owner == null || isRemoved() || level != SurveyStakeBlockEntity.this.level || site == null
 					|| !JugcraftParties.mayServe(depotOwner, depotMode, owner, mode)) {
 				return List.of();
 			}
 			long now = level.getGameTime();
-			Map<BlockPos, BlockState> all = wanted();
+			boolean large = site.blueprint.large();
 			// The blocks this depot could place: in its range, not hand-only, still missing.
-			List<Map.Entry<BlockPos, BlockState>> missing = new ArrayList<>();
+			List<Integer> missing = new ArrayList<>();
 			// The lowest missing block of each column: drones come down from above, so a block only goes in once
 			// everything under it in its column is done (a roof placed early would cover the pews under it).
 			Map<Long, Integer> columnBottom = new HashMap<>();
-			for (Map.Entry<BlockPos, BlockState> e : all.entrySet()) {
-				BlockPos pos = e.getKey();
-				if (handOnly(e.getValue()) || !open(level, pos, e.getValue())) {
+			// A large build is looked at a few layers at a time, from the lowest layer with work in it: the rest waits.
+			if (large) {
+				while (cursor < site.layers() && site.done.nextClearBit(site.layerFrom(cursor)) >= site.layerFrom(cursor + 1)) {
+					cursor++;
+				}
+			}
+			int lowestHere = Integer.MAX_VALUE;
+			BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+			for (int i = large ? site.layerFrom(cursor) : 0; i < site.size(); i++) {
+				if (large) {
+					i = site.done.nextClearBit(i);
+					if (i >= site.size()) {
+						break;
+					}
+					if (lowestHere != Integer.MAX_VALUE && site.layerOf(i) > lowestHere + LAYER_WINDOW + 1) {
+						break;
+					}
+				}
+				BlockState state = site.state(i);
+				if (handOnly(state)) {
 					continue;
 				}
-				columnBottom.merge(column(pos), pos.getY(), Math::min);
-				if (Math.abs(pos.getX() - center.getX()) <= radius && Math.abs(pos.getZ() - center.getZ()) <= radius) {
-					missing.add(e);
+				at.set(site.pos(i));
+				boolean inRange = Math.abs(at.getX() - center.getX()) <= radius && Math.abs(at.getZ() - center.getZ()) <= radius;
+				if (large && !inRange) {
+					// Out of this depot's reach: assume it is still to do (the full check marks it done when it is).
+					columnBottom.merge(column(at), at.getY(), Math::min);
+					continue;
+				}
+				if (!level.isLoaded(at)) {
+					continue;
+				}
+				BlockState world = level.getBlockState(at);
+				if (site.matches(world, i)) {
+					site.done.set(i);
+					continue;
+				}
+				if (!(world.canBeReplaced() || obstacle(level, at, world))) {
+					continue;
+				}
+				columnBottom.merge(column(at), at.getY(), Math::min);
+				if (inRange) {
+					missing.add(i);
+					if (!blocked(level, at)) {
+						lowestHere = Math.min(lowestHere, site.layerOf(i));
+					}
 				}
 			}
 			List<BuildJobs.Target> out = new ArrayList<>();
 			// Red cells first, from the top down: a wrong block is swapped for the right one straight away (it was
 			// solid already, so this covers nothing), and clearing the top ones opens the way to those under them.
 			missing.stream()
-					.filter(e -> blocked(level, e.getKey()))
-					.filter(e -> reservedUntil.getOrDefault(e.getKey(), Long.MIN_VALUE) < now)
-					.sorted(Comparator.comparingInt((Map.Entry<BlockPos, BlockState> e) -> -e.getKey().getY())
-							.thenComparingDouble(e -> e.getKey().distSqr(center)))
+					.filter(i -> blocked(level, site.blockPos(i)))
+					.filter(i -> reservedUntil.getOrDefault(site.blockPos(i), Long.MIN_VALUE) < now)
+					.sorted(Comparator.comparingInt((Integer i) -> -site.layerOf(i)).thenComparingDouble(i -> site.blockPos(i).distSqr(center)))
 					.limit(max)
-					.forEach(e -> out.add(new BuildJobs.Target(this, jobId, owner, mode, e.getKey(), e.getValue(), null)));
+					.forEach(i -> out.add(new BuildJobs.Target(this, jobId, owner, mode, site.blockPos(i), site.state(i), null)));
 			// Then the empty cells, roughly layer by layer, a few layers at a time: while the last blocks of a layer
 			// are still in the air the next layers go ahead, so a big fleet keeps working instead of waiting.
-			int lowest = missing.stream().filter(e -> !blocked(level, e.getKey())).mapToInt(e -> e.getKey().getY()).min().orElse(Integer.MAX_VALUE);
+			int lowest = lowestHere;
 			missing.stream()
-					.filter(e -> !blocked(level, e.getKey()))
-					.filter(e -> e.getKey().getY() <= lowest + LAYER_WINDOW)
-					.filter(e -> reservedUntil.getOrDefault(e.getKey(), Long.MIN_VALUE) < now)
-					.filter(e -> columnBottom.get(column(e.getKey())) == e.getKey().getY())
+					.filter(i -> !blocked(level, site.blockPos(i)))
+					.filter(i -> site.layerOf(i) <= lowest + LAYER_WINDOW)
+					.filter(i -> reservedUntil.getOrDefault(site.blockPos(i), Long.MIN_VALUE) < now)
+					.filter(i -> columnBottom.get(column(site.blockPos(i))) == BlockPos.getY(site.pos(i)))
 					// Bottom-up: never a block straight above one that is still missing (also outside the blueprint's
 					// own column bookkeeping, e.g. a cell another depot is placing right now).
-					.filter(e -> supported(level, e.getKey(), all))
-					.sorted(Comparator.comparingInt((Map.Entry<BlockPos, BlockState> e) -> e.getKey().getY())
-							.thenComparingDouble(e -> e.getKey().distSqr(center)))
+					.filter(i -> supported(level, site.blockPos(i), site))
+					.sorted(Comparator.comparingInt((Integer i) -> site.layerOf(i)).thenComparingDouble(i -> site.blockPos(i).distSqr(center)))
 					.limit(Math.max(0, max - out.size()))
-					.forEach(e -> out.add(new BuildJobs.Target(this, jobId, owner, mode, e.getKey(), e.getValue(), null)));
+					.forEach(i -> out.add(new BuildJobs.Target(this, jobId, owner, mode, site.blockPos(i), site.state(i), null)));
 			return out;
 		}
 
@@ -400,7 +484,9 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 
 		@Override
 		public boolean stillWanted(ServerLevel level, BuildJobs.Target target, UUID depotOwner, UseMode depotMode) {
-			BlockState state = wanted().get(target.pos());
+			BuildSite site = site();
+			int i = site == null ? -1 : site.find(target.pos());
+			BlockState state = i < 0 ? null : site.state(i);
 			return state != null && !isRemoved() && owner != null && JugcraftParties.mayServe(depotOwner, depotMode, owner, mode)
 					&& open(level, target.pos(), state);
 		}
@@ -416,7 +502,34 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			if (level.getBlockEntity(target.pos()) != null) {
 				level.destroyBlock(target.pos(), true);
 			}
-			level.setBlockAndUpdate(target.pos(), state);
+			if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock anchor) {
+				// Nuclear equipment is placed whole: its body is cleared of terrain first, then it goes in like from its item.
+				net.minecraft.core.Direction facing = state.getValue(io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.FACING);
+				for (BlockPos offset : anchor.kind.frames(facing)) {
+					BlockPos cell = target.pos().offset(offset);
+					BlockState there = level.getBlockState(cell);
+					if (!there.canBeReplaced() && obstacle(level, cell, there)) {
+						level.destroyBlock(cell, level.getBlockEntity(cell) != null);
+					}
+				}
+				if (!level.getBlockState(target.pos()).canBeReplaced()) {
+					level.removeBlock(target.pos(), false);
+				}
+				if (!io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement.place(level, target.pos(), anchor.kind, facing, null)) {
+					return false;
+				}
+				if (level.getBlockEntity(target.pos()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity equipment) {
+					equipment.setOwner(owner);
+				}
+			} else {
+				// Panes, bars, fences and pipes join their neighbours as if placed by hand.
+				level.setBlockAndUpdate(target.pos(), Block.updateFromNeighbourShapes(state, level, target.pos()));
+			}
+			BuildSite site = site();
+			int i = site == null ? -1 : site.find(target.pos());
+			if (i >= 0) {
+				site.done.set(i);
+			}
 			return true;
 		}
 	}

@@ -36,6 +36,7 @@ public final class MachineRecipes {
 	private static synchronized void clearCache() {
 		MULTI_CACHE.clear();
 		MachineCompanionPort.clearCatalog();
+        local.peepo.VanillaCompanionPort.clearCatalog();
 	}
 
 	public static Optional<MachineRecipe> find(ServerLevel level, MachineKind kind, ItemStack input) {

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SBS",
+    "BVB",
+    "SBS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:iron_bars",
+    "V": "jugcraft:fluid_valve"
+  },
+  "result": {
+    "id": "jugcraft:flame_arrester",
+    "count": 1
+  }
+}

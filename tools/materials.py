@@ -12,7 +12,7 @@ MOD = "jugcraft"
 
 # Feature switches (config/jugcraft.properties). Order is the config file order.
 FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "titanium", "thallite", "aluminum",
-            "salt", "phosphate", "lithium", "rare_earths", "sulfur", "silicon", "crude_oil", "machines", "deposits",
+            "salt", "phosphate", "lithium", "rare_earths", "fluorite", "sulfur", "silicon", "crude_oil", "machines", "deposits",
             "explosives", "agriculture", "parties", "drones",
             "pixel_hollows", "retro_trader", "alpine_spawn", "biomes", "town", "diagonal_connections", "raiders",
             "concordance", "guns"]
@@ -69,6 +69,18 @@ MINERALS = {
                    "tool": "iron", "gen": {"size": 7, "count": 3, "min_y": -48, "max_y": 32}},
     "monazite": {"display": "Monazite", "ore_display": "Monazite", "feature": "rare_earths", "drops": [1, 1],
                  "tool": "iron", "gen": {"size": 5, "count": 2, "min_y": -64, "max_y": 16}},
+    "fluorite": {"display": "Fluorite", "ore_display": "Fluorite", "feature": "fluorite", "drops": [1, 1],
+                 "tool": "iron", "gen": {"size": 48, "rarity": 8, "min_y": -32, "max_y": 48,
+                 "outcrop_chance": 4, "surface_biomes": [
+                     "minecraft:snowy_plains", "minecraft:snowy_taiga", "minecraft:ice_spikes", "minecraft:grove",
+                     "minecraft:snowy_slopes", "minecraft:frozen_peaks", "minecraft:jagged_peaks",
+                     "jugcraft:snowy_coniferous_forest", "jugcraft:snowy_forest", "jugcraft:muskeg",
+                     "jugcraft:frostlight_garden", "jugcraft:snowpetal_grove"]}},
+    "spodumene": {"display": "Spodumene", "ore_display": "Spodumene", "feature": "lithium", "drops": [1, 1],
+                  "tool": "iron", "gen": {"size": 40, "rarity": 12, "min_y": -16, "max_y": 64,
+                  "outcrop_chance": 4, "surface_biomes": [
+                      "jugcraft:shield", "jugcraft:highland", "jugcraft:basin", "minecraft:windswept_hills",
+                      "minecraft:windswept_gravelly_hills", "minecraft:windswept_forest", "minecraft:stony_peaks"]}},
 }
 
 # Surface rocks with their own blocks. copy: vanilla block whose properties are copied.

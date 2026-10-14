@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "W  ",
+    "WWW",
+    "P P"
+  ],
+  "key": {
+    "W": "minecraft:gray_wool",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:sofa",
+    "count": 2
+  }
+}

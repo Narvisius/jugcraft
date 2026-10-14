@@ -38,6 +38,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -93,6 +95,9 @@ import org.jspecify.annotations.Nullable;
  * fires, and a shot of either cuts a shell-at-a-time reload short.</li>
  * <li>Slice 11A, the Nether guns ({@link JugcraftGuns#INCENDIARY}): each creature their bullets hurt is set alight for
  * {@link #BURN_SECONDS}, as a burst of flame sets it alight. No block is set alight.</li>
+ * <li>Slice 12A, the End guns ({@link JugcraftGuns#LEVITATING}): each creature their bullets hurt floats up for
+ * {@link #LIFT_TICKS}, as a shulker's bullet lifts it (the game's own Levitation, at its first level; a longer spell
+ * already on it is kept). It falls when the spell ends.</li>
  * </ul>
  */
 public final class GunShots {
@@ -114,6 +119,8 @@ public final class GunShots {
 	 * gun's bullet (slice 11A).
 	 */
 	public static final int BURN_SECONDS = 4;
+	/** Ticks an End gun's bullet makes what it hurts float (slice 12A, tools/guns.py LIFT_TICKS). */
+	public static final int LIFT_TICKS = 20;
 	/** How hard a stab pushes its foe back (a sword's knockback is 0.4, and more for a sprinting strike). */
 	private static final float STAB_KNOCKBACK = 0.4F;
 
@@ -513,7 +520,7 @@ public final class GunShots {
 	/** Fires every pellet of one shot and deals what hit. */
 	private static void shoot(ServerLevel level, ServerPlayer player, GunItem gun, GunSpec spec, float spread) {
 		bullets(level, player, player.getEyePosition(), player.getLookAngle(), spec, spread, spec.damage(), JugcraftGuns.ignites(gun),
-				candidate -> target(player, candidate), candidate -> allowed(player, level, candidate));
+				JugcraftGuns.levitates(gun), candidate -> target(player, candidate), candidate -> allowed(player, level, candidate));
 	}
 
 	/**
@@ -521,10 +528,11 @@ public final class GunShots {
 	 * block or creature in the gun's range that {@code hittable} lets it strike (others are passed through), and deals
 	 * {@code damage} a pellet to each creature it hits that {@code allowed} lets the shooter strike; a shotgun's pellets
 	 * on one creature land as one hit. A player's shots and, slice 10F, a raider gunner's ({@link MobGuns}) fire this way.
-	 * When {@code ignites} (slice 11A, a Nether gun), each creature the hit hurts is set alight for {@link #BURN_SECONDS}.
+	 * When {@code ignites} (slice 11A, a Nether gun), each creature the hit hurts is set alight for {@link #BURN_SECONDS};
+	 * when {@code lifts} (slice 12A, an End gun), it floats for {@link #LIFT_TICKS}.
 	 */
 	static void bullets(ServerLevel level, LivingEntity shooter, Vec3 eye, Vec3 look, GunSpec spec, float spread, float damage,
-			boolean ignites, Predicate<LivingEntity> hittable, Predicate<LivingEntity> allowed) {
+			boolean ignites, boolean lifts, Predicate<LivingEntity> hittable, Predicate<LivingEntity> allowed) {
 		RandomSource random = shooter.getRandom();
 		Map<LivingEntity, Float> hits = new LinkedHashMap<>();
 		for (int i = 0; i < spec.pellets(); i++) {
@@ -559,8 +567,13 @@ public final class GunShots {
 		// Guns fire faster than the half second a creature is shielded after a hit; the bullet damage type is tagged
 		// minecraft:bypasses_cooldown, so each shot counts.
 		hits.forEach((target, dealt) -> {
-			if (target.hurtServer(level, source, dealt) && ignites) {
-				target.igniteForSeconds(BURN_SECONDS);
+			if (target.hurtServer(level, source, dealt)) {
+				if (ignites) {
+					target.igniteForSeconds(BURN_SECONDS);
+				}
+				if (lifts) {
+					target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, LIFT_TICKS, 0), shooter);
+				}
 			}
 		});
 		smoke(level, eye, look);

@@ -1,6 +1,8 @@
 # Arcane Concordance: the Concordance Journal
 
-Status: implemented on branch `claude/concordance-steps-26-32`; see Verification for what has run.
+Status: merged to main ([#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250), from branch
+`claude/concordance-steps-26-32`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 26) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 18, every stage (Initiate to Architect). Roadmap step 26.
@@ -51,7 +53,9 @@ Concordance settings change it.
 
 **Two screens, the same journal.** With GuiLib installed the journal opens as a workspace (a tab per section, a
 scrolling page, the exact-values switch, a refresh button). Without GuiLib, or with **Simple journal** chosen in the
-settings, it opens as a plain screen of vanilla buttons.
+settings, it opens as a plain screen of vanilla buttons. Since Concordance Chunk A both have a **Compose** button, which
+opens the [Spell Composer](arcane-concordance-composer.md) for the instrument in hand, and the codex's journal page
+names it.
 
 **Keyboard and accessibility.**
 
@@ -159,7 +163,8 @@ New identifiers: the payloads `jugcraft:concordance_journal` and `jugcraft:conco
 
 Open items:
 
-- The GuiLib composer, ritual schematic, crucible and observatory screens are still not built. The `compose` command,
-  the circle report, the crucible's own report and the forecast are their interfaces.
+- The ritual schematic, crucible and observatory screens are still not built; the circle report, the crucible's own
+  report and the forecast are their interfaces. (The Spell Composer came with Concordance Chunk A:
+  [record](arcane-concordance-composer.md).)
 - The journal shows the stage's routes but not the Conclave project progress of a party (the `conclave project`
   command does).

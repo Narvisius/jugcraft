@@ -1,6 +1,8 @@
 # Arcane Concordance: bounded material equivalence
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
+`claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 21) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 13, Practitioner stage (Jugcraft Workshops). Roadmap step 21.
@@ -133,6 +135,9 @@ yet.
   value and no profitable cycle; forming always costs more than dissolving pays; nothing excluded or scarce is
   catalogued; every reason and message has its text; the ledger moves through the shared `Reservoir`; the model,
   texture and icon agree. The pure-package rule covers `concordance/equivalence`.
+- Concordance Chunk A ([first loadout](concordance-first-loadout.md)): the Adept's Wand had been left out of `EXCLUDED`,
+  although the refusals above name wands (the scale refused a plain one as uncatalogued and an inscribed one as
+  magical). It is excluded now, and `check_equivalence` requires every Concordance instrument to be.
 - The pure core compiles with JDK 21 and the rules load the generated catalogue (45 materials, 42 transmutations) with
   no problems. The step 21 harness passes **31 checks** against it: exact fractions add and round as asked; nuggets
   dissolve at 256/9 rounded down once on the whole batch, and splitting never earns more; forming costs five quarters

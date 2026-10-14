@@ -23,7 +23,6 @@ import io.github.jimbozoomer.jugcraft.concordance.garden.VerdantHeartBlockEntity
 import io.github.jimbozoomer.jugcraft.concordance.sky.ObservatoryBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.sky.Sky;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.StructurePattern;
-import io.github.jimbozoomer.jugcraft.weapons.ArmItem;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +49,8 @@ import net.minecraft.world.phys.Vec3;
  * <ul>
  * <li>GeckoLib draws the Circle Anchor and plays its idle or channel animation from the synced phase;</li>
  * <li>the players a gathering or channelling anchor names as participants hold the {@code circle_channel} gesture,
- * on a Player Animation Library layer of Jugcraft's own;</li>
+ * on a Player Animation Library layer of Jugcraft's own, except those whose arms a gun or ArmsMotion poses
+ * ({@link CastPoses#gesturesYield});</li>
  * <li>motes run along the channels the server last validated (the anchor's linked mask), never along a channel the
  * server did not check;</li>
  * <li>with Fusion installed, the built-in pack {@code fusion_textures} joins neighbouring Warding Stones and Verdant
@@ -147,9 +147,9 @@ public final class CircleClient {
 			if (!(PlayerAnimationAccess.getPlayerAnimationLayer(player, LAYER) instanceof PlayerAnimationController controller)) {
 				continue;
 			}
-			// A participant holding arms keeps ArmsMotion's pose: one owner for the arms at a time, as with the Vigil's gesture.
-			boolean armed = player.getMainHandItem().getItem() instanceof ArmItem || player.getOffhandItem().getItem() instanceof ArmItem;
-			boolean taking = participants.contains(player.getUUID()) && !armed;
+			// A participant whose arms a gun or ArmsMotion poses keeps that pose: one owner for the arms at a time, as with the
+			// Vigil's gesture (CastPoses).
+			boolean taking = participants.contains(player.getUUID()) && !CastPoses.gesturesYield(player);
 			if (taking && !controller.isPlayingTriggeredAnimation()) {
 				controller.triggerAnimation(GESTURE);
 			} else if (!taking && controller.isPlayingTriggeredAnimation()) {

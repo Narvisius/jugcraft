@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "jugcraft:item/drone_t7"
+    "type": "minecraft:special",
+    "base": "jugcraft:item/drone_t7",
+    "model": {
+      "type": "jugcraft:drone",
+      "tier": 7
+    }
   }
 }

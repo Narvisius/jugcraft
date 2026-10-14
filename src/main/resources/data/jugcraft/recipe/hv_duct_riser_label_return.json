@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P P",
+    "PDP",
+    "P P"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "D": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:hv_duct_riser_label_return",
+    "count": 8
+  }
+}

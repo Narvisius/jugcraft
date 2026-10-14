@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "PTP",
+    "MCK"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:glass",
+    "T": "jugcraft:steel_tank",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:industrial_fermenter",
+    "count": 1
+  }
+}

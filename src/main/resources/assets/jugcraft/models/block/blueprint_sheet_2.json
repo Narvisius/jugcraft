@@ -1,0 +1,111 @@
+{
+  "textures": {
+    "pi_blueprint_2": "jugcraft:block/pi_blueprint_2",
+    "pi_marker_red": "jugcraft:block/pi_marker_red",
+    "particle": "jugcraft:block/pi_blueprint_2"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        2,
+        0
+      ],
+      "to": [
+        15,
+        15,
+        0.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_blueprint_2"
+        },
+        "south": {
+          "texture": "#pi_blueprint_2",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_blueprint_2"
+        },
+        "west": {
+          "texture": "#pi_blueprint_2"
+        },
+        "up": {
+          "texture": "#pi_blueprint_2"
+        },
+        "down": {
+          "texture": "#pi_blueprint_2"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14.2,
+        0.6
+      ],
+      "to": [
+        3,
+        15,
+        1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_marker_red"
+        },
+        "south": {
+          "texture": "#pi_marker_red"
+        },
+        "east": {
+          "texture": "#pi_marker_red"
+        },
+        "west": {
+          "texture": "#pi_marker_red"
+        },
+        "up": {
+          "texture": "#pi_marker_red"
+        },
+        "down": {
+          "texture": "#pi_marker_red"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        14.2,
+        0.6
+      ],
+      "to": [
+        14,
+        15,
+        1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_marker_red"
+        },
+        "south": {
+          "texture": "#pi_marker_red"
+        },
+        "east": {
+          "texture": "#pi_marker_red"
+        },
+        "west": {
+          "texture": "#pi_marker_red"
+        },
+        "up": {
+          "texture": "#pi_marker_red"
+        },
+        "down": {
+          "texture": "#pi_marker_red"
+        }
+      }
+    }
+  ]
+}

@@ -156,6 +156,10 @@ def workshop_recipes():
          "output": rid("line_rocket"), "count": 1, "ticks": 200, "features": feature + ["aluminum"]},
         {"inputs": [[rid("solid_propellant"), 2], [rid("guncotton"), 2], [rid("rocket_casing"), 1]],
          "output": rid("he_rocket"), "count": 4, "ticks": 200, "features": feature},
+        # Ammonium nitrate (the Bulk Chemical Reactor's) fills the HE rocket's warhead in place of guncotton.
+        {"name": "he_rocket_ammonium_nitrate",
+         "inputs": [[rid("solid_propellant"), 2], [rid("ammonium_nitrate"), 2], [rid("rocket_casing"), 1]],
+         "output": rid("he_rocket"), "count": 4, "ticks": 200, "features": feature},
         {"inputs": [[rid("solid_propellant"), 2], [rid("guncotton"), 2], [rid("guidance_unit"), 1]],
          "output": rid("homing_rocket"), "count": 4, "ticks": 300, "features": feature},
         {"inputs": [[rid("solid_propellant"), 1], ["minecraft:paper", 2], ["minecraft:red_dye", 1]],

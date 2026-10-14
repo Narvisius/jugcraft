@@ -1,6 +1,8 @@
 # Arcane Concordance: the progression graph
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
+`claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 24) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 16, every stage (Initiate to Architect: Jugcraft Discovery to Shared

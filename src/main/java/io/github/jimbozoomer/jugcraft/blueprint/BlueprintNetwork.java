@@ -250,7 +250,7 @@ public final class BlueprintNetwork {
 	}
 
 	static void sendAll(ServerPlayer player) {
-		List<Blueprint> all = new ArrayList<>(BlueprintLibrary.all());
+		List<Blueprint> all = Blueprint.synced();
 		ServerPlayNetworking.send(player, new SyncPayload(true, "", "", "", ""));
 		for (Blueprint blueprint : all) {
 			send(player, blueprint, false);

@@ -802,6 +802,10 @@ def crop_textures():
     out.update(yeti_king_textures())
     from cinder_tyrant_art import cinder_tyrant_textures  # and the Cinder Tyrant, his Cinderlings, gobs and cinders, and his loot
     out.update(cinder_tyrant_textures())
+    from mire_hag_art import mire_hag_textures  # and the Mire Hag, her Likenesses, Root Knot, roots, hands and brew, and her loot
+    out.update(mire_hag_textures())
+    from crypt_lich_art import crypt_lich_textures  # and the Crypt Lich, his dead, bolts and bones, and his loot
+    out.update(crypt_lich_textures())
     from orchard_textures import orchard_textures  # and the orchards' fruit trees
     out.update(orchard_textures())
     from cake_art import cake_textures  # and the cakes, rebuilt from the owner's drawing of them

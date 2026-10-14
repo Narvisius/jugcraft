@@ -51,6 +51,7 @@ public final class PeepoSuppliesClientTests implements FabricClientGameTest {
             server.runCommand("time set noon");server.runCommand("weather clear");
             server.runCommand(String.format(Locale.ROOT,"tp @a %.1f %d %.1f",base.getX()+.5,base.getY(),base.getZ()-5.5));
             server.runOnServer(s->configuration(s.overworld()));
+            server.runOnServer(s->jobDetails(s.overworld()));
             for(boolean jughead:new boolean[]{false,true})porter(server,jughead);
             tools(server);
             menu(context,server);
@@ -126,8 +127,14 @@ public final class PeepoSuppliesClientTests implements FabricClientGameTest {
         server.runOnServer(s->{check(npc.belongings.getItem(9).is(JugcraftAgriculture.KNIVES) && count(npc.belongings,Items.TORCH)==1 && supply[1].getItem(0).isEmpty(),"walks to tool chest, preserves torch and uses equipped knife");});
     }
     private void menu(ClientGameTestContext context,TestServerContext server){
+        server.runOnServer(s->{for(int i=0;i<3;i++){var p=base.offset(-2+i*2,0,4);s.overworld().setBlockAndUpdate(p,JugcraftAgriculture.block("cooking_pot").defaultBlockState());npc.assignments.assign(s.overworld(),p);}});
         server.runOnServer(s->{npc.setNoAi(true);npc.resetCompanionRoutine();npc.snapTo(base.getX()+.5,base.getY(),base.getZ()-3.5,0,0);var owner=s.getPlayerList().getPlayers().getFirst();owner.openMenu(new SimpleMenuProvider((id,inv,p)->new CompanionMenu(id,inv,npc),npc.getDisplayName()));});
         context.waitForScreen(local.peepo.client.CompanionScreen.class);
+        context.waitFor(c->c.player.containerMenu instanceof CompanionMenu m && !m.jobDetail(1,m.companion(c.player).assignments.view().get(1)).equals("Checking job..."),100);
+        check(context.computeOnClient(c->((CompanionMenu)c.player.containerMenu).jobDetail(1,((CompanionMenu)c.player.containerMenu).companion(c.player).assignments.view().get(1)).length()>15),"job detail reaches the authorized client menu");
+        context.waitFor(c->c.player.containerMenu instanceof CompanionMenu m && m.companion(c.player)!=null && m.jobDetail(2,m.companion(c.player).assignments.view().get(2)).contains("lacks heat"),100);
+        check(context.computeOnClient(c->((CompanionMenu)c.player.containerMenu).jobDetail(2,((CompanionMenu)c.player.containerMenu).companion(c.player).assignments.view().get(2)).contains("source below")),"new assignment refreshes to an actionable live station reason");
+        context.takeScreenshot("peepo_job_status_details");
         context.runOnClient(c->{for(var child:c.gui.screen().children())if(child instanceof net.minecraft.client.gui.components.Button b && b.getMessage().getString().equals("Supplies"))b.onPress(null);});
         context.waitTicks(5);context.takeScreenshot("peepo_shared_supplies");
         context.runOnClient(c->{for(var child:c.gui.screen().children())if(child instanceof net.minecraft.client.gui.components.Button b && b.getMessage().getString().equals("Job links"))b.onPress(null);});
@@ -147,5 +154,31 @@ public final class PeepoSuppliesClientTests implements FabricClientGameTest {
         check(context.computeOnClient(c->c.player.containerMenu.getCarried().getCount()==5),"route ghost leaves cursor untouched");
         context.waitTicks(5);context.takeScreenshot("peepo_porter_filter_stock_limits");
         context.runOnClient(c->c.player.closeContainer());context.waitForScreen(null);
+    }
+    private void jobDetails(ServerLevel level){
+        reset(level,false);
+        for(int i=0;i<4;i++){var p=base.offset(i*2-3,0,3);level.setBlockAndUpdate(p,JugcraftAgriculture.block("cooking_pot").defaultBlockState());npc.assignments.assign(level,p);}
+        npc.assignments.supplies.link(1,false,2);
+        check(CompanionJobDetails.describe(npc,1,CompanionStatus.NO_INPUT).contains("Supply 2"),"missing-input explanation names only linked supplies");
+        npc.assignments.cycleTransport(1,true);npc.assignments.cycleTransport(1,true);
+        check(CompanionJobDetails.describe(npc,1,CompanionStatus.NO_INPUT).contains("Supply is Off"),"disabled supply explains why items will not arrive");
+        npc.assignments.supplies.toggleHandLock();
+        check(CompanionJobDetails.describe(npc,2,CompanionStatus.NEEDS_HOE).contains("Unlock Hand"),"tool shortage explains hand lock");
+        npc.assignments.supplies.link(2,true,1);npc.assignments.supplies.link(2,true,1);
+        check(CompanionJobDetails.describe(npc,2,CompanionStatus.FULL).contains("link an assigned Output"),"explicitly unlinked output gives setup advice");
+        check(CompanionJobDetails.describe(npc,3,CompanionStatus.BLOCKED).contains("safe path"),"blocked work gives safe approach advice");
+        var wheat=new ItemStack(Items.WHEAT,3);
+        var ingredient=net.minecraft.world.item.crafting.Ingredient.of(Items.WHEAT);
+        String missing=CompanionJobDetails.missingIngredients(List.of(new RecipeSupplies.Part(ingredient,2),new RecipeSupplies.Part(ingredient,3)),List.of(wheat));
+        check(missing.equals("2 Wheat") && wheat.getCount()==3,"deficit consumes installed quantities once without mutating the station");
+        check(CompanionJobDetails.missingIngredients(List.of(new RecipeSupplies.Part(ingredient,2)),List.of(wheat)).isEmpty(),"satisfied ingredients are not reported missing");
+        var client=new CompanionMenu(123,level.getServer().getPlayerList().getPlayers().getFirst().getInventory());
+        var old=npc.assignments.get(1);var rows=new ArrayList<CompanionDetailsPayload.Row>();
+        for(int i=1;i<=4;i++)rows.add(new CompanionDetailsPayload.Row(CompanionDetailsPayload.key(npc.assignments.get(i)),"Detail "+i));
+        client.receiveDetails(rows);
+        check(client.jobDetail(1,old).equals("Detail 1"),"detail matches assignment identity");
+        npc.assignments.moveWork(1,1);
+        check(client.jobDetail(1,npc.assignments.get(1)).equals("Checking job..."),"reordered jobs cannot display another station's stale detail");
+        check(CompanionMenu.assignmentY(4)+27<CompanionMenu.assignmentY(5) && CompanionMenu.assignmentY(5)+16<client.getSlot(10).y,"four expanded job rows clear lunch and player inventory");
     }
 }

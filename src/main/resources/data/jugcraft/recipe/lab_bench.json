@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "BBB",
+    "PPP",
+    "PPP"
+  ],
+  "key": {
+    "B": "minecraft:blackstone_slab",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:lab_bench",
+    "count": 3
+  }
+}

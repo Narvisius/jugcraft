@@ -1,0 +1,110 @@
+{
+  "textures": {
+    "pi_leaf_ball": "jugcraft:block/pi_leaf_ball",
+    "pi_pot_white": "jugcraft:block/pi_pot_white",
+    "pi_soil": "jugcraft:block/pi_soil",
+    "particle": "jugcraft:block/pi_leaf_ball"
+  },
+  "elements": [
+    {
+      "from": [
+        10,
+        11.5,
+        5
+      ],
+      "to": [
+        14,
+        15,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pot_white"
+        },
+        "south": {
+          "texture": "#pi_pot_white"
+        },
+        "east": {
+          "texture": "#pi_pot_white"
+        },
+        "west": {
+          "texture": "#pi_pot_white"
+        },
+        "up": {
+          "texture": "#pi_soil"
+        },
+        "down": {
+          "texture": "#pi_pot_white"
+        }
+      }
+    },
+    {
+      "from": [
+        10.5,
+        15,
+        5.5
+      ],
+      "to": [
+        13.5,
+        18,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_leaf_ball",
+          "uv": [
+            2.5,
+            0,
+            5.5,
+            3
+          ]
+        },
+        "south": {
+          "texture": "#pi_leaf_ball",
+          "uv": [
+            10.5,
+            0,
+            13.5,
+            3
+          ]
+        },
+        "east": {
+          "texture": "#pi_leaf_ball",
+          "uv": [
+            7.5,
+            0,
+            10.5,
+            3
+          ]
+        },
+        "west": {
+          "texture": "#pi_leaf_ball",
+          "uv": [
+            5.5,
+            0,
+            8.5,
+            3
+          ]
+        },
+        "up": {
+          "texture": "#pi_leaf_ball",
+          "uv": [
+            10.5,
+            5.5,
+            13.5,
+            8.5
+          ]
+        },
+        "down": {
+          "texture": "#pi_leaf_ball",
+          "uv": [
+            10.5,
+            7.5,
+            13.5,
+            10.5
+          ]
+        }
+      }
+    }
+  ]
+}

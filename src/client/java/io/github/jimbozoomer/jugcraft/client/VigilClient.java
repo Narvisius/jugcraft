@@ -11,7 +11,6 @@ import io.github.jimbozoomer.jugcraft.concordance.crimson.Offerings;
 import io.github.jimbozoomer.jugcraft.concordance.vigil.CrimsonChaliceItem;
 import io.github.jimbozoomer.jugcraft.concordance.vigil.Vigil;
 import io.github.jimbozoomer.jugcraft.concordance.vigil.VigilGesturePayload;
-import io.github.jimbozoomer.jugcraft.weapons.ArmItem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -29,9 +28,11 @@ import net.minecraft.world.item.ItemStack;
  * The Crimson Vigil on the client (roadmap step 16). Nothing here decides anything:
  * <ul>
  * <li>the offering gesture plays, on a Player Animation Library layer of its own, when the server says a player has
- * made an offering. <b>ArmsMotion coordination:</b> ArmsMotion poses the arms of a player holding a Jugcraft arm
- * ({@link ArmItem}); the gesture is skipped for such a player, so the two never pose the same arms at once (the
- * offering itself still happened on the server);</li>
+ * made an offering. <b>One owner for the arms:</b> GunPose poses the arms of a player with a gun in the main hand, and
+ * ArmsMotion those of a player holding a Jugcraft arm. The gesture is skipped for such a player, and for one with an
+ * arm in the off hand ({@link CastPoses#gesturesYield}), and {@link CastPoses} stops it if a gun or an arm is taken in
+ * hand while it plays, so the two never pose the same arms at once (the offering itself still happened on the
+ * server);</li>
  * <li>while a Crimson Chalice or Thornheart Blade is held, a line at the bottom right says the player's health, the
  * chalice's Vitae and their offering exhaustion with its efficiency and recovery time, each apart, never as one bar.</li>
  * </ul>
@@ -58,8 +59,7 @@ public final class VigilClient {
 	private static void gesture(int entity) {
 		Minecraft client = Minecraft.getInstance();
 		Entity found = client.level == null ? null : client.level.getEntity(entity);
-		if (!(found instanceof Player player) || player.getMainHandItem().getItem() instanceof ArmItem
-				|| player.getOffhandItem().getItem() instanceof ArmItem) {
+		if (!(found instanceof Player player) || CastPoses.gesturesYield(player)) {
 			return;
 		}
 		if (PlayerAnimationAccess.getPlayerAnimationLayer(player, LAYER) instanceof PlayerAnimationController controller) {

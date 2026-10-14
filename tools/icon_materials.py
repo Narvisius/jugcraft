@@ -68,6 +68,19 @@ YETI_FUR = Material((40, 50, 76), (70, 84, 114), (112, 136, 184), (174, 198, 234
 # an accent.
 OBSIDIAN = Material((14, 8, 24), (30, 20, 46), (50, 36, 76), (72, 54, 106), (104, 84, 148), (156, 134, 206))
 MAGMA = Material((60, 14, 6), (96, 28, 10), (124, 40, 12), (178, 66, 16), (230, 116, 30), (250, 176, 70), shine=False)
+# The Lantern Fen's: the Hag Stone's flint, a dark green-grey worn smooth by the fen.
+FEN_FLINT = Material((24, 32, 30), (36, 46, 44), (60, 78, 70), (88, 118, 100), (130, 156, 140), (196, 216, 202))
+# The Mire Hag's loot (tools/item_icons/hagmoss.txt, hags_eye.txt and hags_shawl.txt): her grey moss, a dull green-grey
+# that does not shine (tools/mire_hag_art.py MOSS); and marsh-light, the sickly green of her eyes and her lantern's flame,
+# only ever a stone or an accent.
+HAGMOSS = Material((22, 26, 20), (38, 44, 34), (58, 66, 52), (84, 94, 76), (116, 126, 104), (156, 166, 140), shine=False)
+MARSH_LIGHT = Material((18, 44, 12), (30, 70, 20), (52, 116, 32), (96, 184, 56), (150, 230, 100), (214, 255, 176),
+                       shine=False)
+# The Crypt Lich's loot (tools/item_icons/grave_dust.txt, emptied_phylactery.txt and lichs_crown.txt): old bone, a pale
+# yellowed grey that does not shine (tools/crypt_lich_art.py BONE); and soul-fire, the cold blue of his eyes and his
+# crown's fire, only ever a stone or an accent.
+OLD_BONE = Material((40, 37, 31), (60, 56, 48), (98, 92, 78), (140, 132, 114), (180, 172, 150), (214, 207, 186), shine=False)
+SOUL_FIRE = Material((8, 30, 44), (12, 48, 68), (18, 92, 132), (38, 152, 204), (112, 216, 246), (204, 246, 255), shine=False)
 PAPER = Material((80, 64, 40), (124, 104, 74), (170, 152, 116), (214, 200, 166), (236, 226, 198), (250, 246, 230),
                  shine=False)
 # The Greenwardens' garden (roadmap step 14; tools/item_icons/: the four crops, Verdant Chaff and the living devices).
@@ -112,6 +125,10 @@ MATERIALS = {
     "horn": HORN, "yeti_fur": YETI_FUR,
     # the Cinder Kiln's
     "obsidian": OBSIDIAN, "magma": MAGMA,
+    # the Lantern Fen's, and the Mire Hag's loot
+    "fen_flint": FEN_FLINT, "hagmoss": HAGMOSS, "marsh_light": MARSH_LIGHT,
+    # the Crypt Lich's loot
+    "old_bone": OLD_BONE, "soul_fire": SOUL_FIRE,
 }
 
 # Materials meant to be vanilla's own metal: the distance test against copper, iron and gold is skipped for them.

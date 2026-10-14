@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PCP",
+    "CIC",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "minecraft:copper_ingot",
+    "I": "minecraft:iron_block"
+  },
+  "result": {
+    "id": "jugcraft:reg_transformer",
+    "count": 1
+  }
+}

@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -48,6 +49,11 @@ public class LeyPylonBlockEntity extends BlockEntity {
 
 	public LeyPylonBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftConcordance.PYLON_ENTITY, pos, state);
+	}
+
+	/** What the pylon holds, as its empty-hand use and the encyclopedia's Inspect page say it. */
+	public Component status() {
+		return Component.translatable("message.jugcraft.concordance.pylon.status", ley(), CAPACITY);
 	}
 
 	public long ley() {

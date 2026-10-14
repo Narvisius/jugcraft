@@ -11,6 +11,9 @@ Input refs may be tags ("#c:ingots/tin"); the plugin shows every item in the tag
 Fluid machines (tools/petro.py) are listed under "fluid_machines": {"block", "type", "recipes": [
   {"items": [[ref, count]], "fluids": [[fluid, mB]], "fluid_results": [[fluid, mB]], "results": [[id, count]],
    "ticks": n}]}.
+
+Things only a ritual or a lair boss gives (tools/acquisition.py) are listed under "acquisition_info": [{"item": id,
+"key": key}], each shown as an information page with the words of jei.jugcraft.acquire.<key>.
 """
 from machines import MACHINES, machine_recipes
 
@@ -53,6 +56,7 @@ def build():
     import industrial_forms
     fluid_machines += industrial_forms.recipe_view()
     import concordance
+    import acquisition
     return {"machines": machines, "fluid_machines": fluid_machines, "concordance": concordance.recipe_view(),
             "concordance_stations": concordance.recipe_stations(),
-            "alchemy_ingredients": concordance.alchemy.recipe_ingredients()}
+            "alchemy_ingredients": concordance.alchemy.recipe_ingredients(), "acquisition_info": acquisition.rows()}

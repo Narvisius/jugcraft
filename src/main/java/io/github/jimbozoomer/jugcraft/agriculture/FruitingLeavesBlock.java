@@ -37,6 +37,9 @@ public abstract class FruitingLeavesBlock extends TintedParticleLeavesBlock {
 	/** What a ripe cluster gives when picked. */
 	protected abstract ItemStack fruit(RandomSource random);
 
+	/** Shared native yield for a validated companion harvest; does not change blocks or spawn items. */
+	public final ItemStack harvestFruit(RandomSource random) { return fruit(random); }
+
 	/** Whether leaves in {@code state} at {@code pos} can bear fruit: grown by the tree, near a log, over air. */
 	public static boolean canFruit(BlockState state, Level level, BlockPos pos) {
 		return !state.getValue(PERSISTENT) && state.getValue(DISTANCE) < DECAY_DISTANCE && level.isEmptyBlock(pos.below());

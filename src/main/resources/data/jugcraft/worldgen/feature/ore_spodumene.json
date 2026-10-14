@@ -1,0 +1,26 @@
+{
+  "type": "jugcraft:surface_linked_ore",
+  "ore": {
+    "size": 40,
+    "discard_chance_on_air_exposure": 0.0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "minecraft:stone_ore_replaceables"
+        },
+        "state": "jugcraft:spodumene_ore"
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "minecraft:deepslate_ore_replaceables"
+        },
+        "state": "jugcraft:deepslate_spodumene_ore"
+      }
+    ]
+  },
+  "surface_biomes": "jugcraft:has_surface_ore/spodumene",
+  "outcrop": "jugcraft:spodumene_ore",
+  "outcrop_chance": 4
+}

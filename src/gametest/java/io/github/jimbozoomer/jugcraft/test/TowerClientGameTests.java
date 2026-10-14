@@ -24,6 +24,9 @@ import net.minecraft.world.level.block.Blocks;
 public class TowerClientGameTests implements FabricClientGameTest {
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		if (TestFocus.skip("tower")) {
+			return;
+		}
 		if (GuideScreenshotGameTests.active()) {
 			return;
 		}

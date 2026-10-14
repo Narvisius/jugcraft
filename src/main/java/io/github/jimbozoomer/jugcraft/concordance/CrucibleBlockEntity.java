@@ -108,6 +108,7 @@ public class CrucibleBlockEntity extends BlockEntity implements GeoBlockEntity, 
 	private int temperature = Heat.AMBIENT;
 	private @Nullable Formula program;
 	private int step;
+	public final local.peepo.CrucibleCompanion companion = new local.peepo.CrucibleCompanion(this);
 	private long lastStir = Long.MIN_VALUE / 2;
 	/** Whether its formula is waiting for something it lacks (so the shortage shows once, not every try). Not saved. */
 	private boolean waiting;
@@ -281,19 +282,25 @@ public class CrucibleBlockEntity extends BlockEntity implements GeoBlockEntity, 
 
 	/** The buffer slot holding what an Add step needs: the item itself as it comes, or a reagent of that preparation. */
 	private int bufferSlotFor(Operation.Add add) {
-		Preparation plain = Alchemy.catalog().asItComes();
 		for (int i = 0; i < BUFFER_SLOTS; i++) {
 			ItemStack stack = items.get(i);
 			if (stack.isEmpty()) {
 				continue;
 			}
-			Reagent reagent = stack.get(JugcraftConcordance.REAGENT);
-			if (reagent != null ? reagent.item().equals(add.item()) && reagent.preparation().equals(add.preparation())
-					: plain != null && plain.id().equals(add.preparation()) && ConcordanceProgress.itemId(stack).equals(add.item())) {
+			if (matchesIngredient(add, stack)) {
 				return i;
 			}
 		}
 		return -1;
+	}
+
+	/** Shared exact ingredient/preparation matching for native automation and companion deliveries. */
+	public static boolean matchesIngredient(Operation.Add add, ItemStack stack) {
+		if (stack.isEmpty()) return false;
+		Preparation plain = Alchemy.catalog().asItComes();
+		Reagent reagent = stack.get(JugcraftConcordance.REAGENT);
+		return reagent != null ? reagent.item().equals(add.item()) && reagent.preparation().equals(add.preparation())
+			: plain != null && plain.id().equals(add.preparation()) && ConcordanceProgress.itemId(stack).equals(add.item());
 	}
 
 	private void bottleIntoOutput(ServerLevel level) {
@@ -589,6 +596,7 @@ public class CrucibleBlockEntity extends BlockEntity implements GeoBlockEntity, 
 		items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, items);
 		water.readValue(input);
+		companion.filter.load(input);
 		temperature = input.getIntOr("temperature", Heat.AMBIENT);
 		int parts = Math.clamp(input.getIntOr("parts", 0), 0, Mixture.MAX_PARTS);
 		List<Operation> history = new ArrayList<>();
@@ -619,6 +627,7 @@ public class CrucibleBlockEntity extends BlockEntity implements GeoBlockEntity, 
 		Saved.stamp(output, 1);
 		ContainerHelper.saveAllItems(output, items);
 		water.writeValue(output);
+		companion.filter.save(output);
 		output.putInt("temperature", temperature);
 		output.putInt("parts", mixture.parts());
 		if (!mixture.isEmpty()) {

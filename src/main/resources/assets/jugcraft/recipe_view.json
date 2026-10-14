@@ -427,6 +427,62 @@
         {
           "in": [
             [
+              "jugcraft:fluorite_ore",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:fluorite",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
+              "jugcraft:deepslate_fluorite_ore",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:fluorite",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
+              "jugcraft:spodumene_ore",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:spodumene",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
+              "jugcraft:deepslate_spodumene_ore",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:spodumene",
+            2
+          ],
+          "extra": [],
+          "ticks": 160
+        },
+        {
+          "in": [
+            [
               "minecraft:sulfur",
               1
             ]
@@ -5401,6 +5457,28 @@
               2
             ],
             [
+              "jugcraft:ammonium_nitrate",
+              2
+            ],
+            [
+              "jugcraft:rocket_casing",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:he_rocket",
+            4
+          ],
+          "extra": [],
+          "ticks": 200
+        },
+        {
+          "in": [
+            [
+              "jugcraft:solid_propellant",
+              2
+            ],
+            [
               "jugcraft:guncotton",
               2
             ],
@@ -5584,6 +5662,27 @@
           ],
           "results": [],
           "ticks": 120
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:ethylene_dichloride",
+              500
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:vinyl_chloride",
+              250
+            ],
+            [
+              "jugcraft:hydrogen_chloride",
+              250
+            ]
+          ],
+          "results": [],
+          "ticks": 80
         },
         {
           "items": [
@@ -6974,6 +7073,31 @@
               250
             ],
             [
+              "jugcraft:hydrogen_chloride",
+              500
+            ],
+            [
+              "jugcraft:oxygen",
+              125
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:ethylene_dichloride",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 60
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:refinery_gas",
+              250
+            ],
+            [
               "jugcraft:chlorine",
               250
             ]
@@ -7258,6 +7382,949 @@
           "ticks": 800
         }
       ]
+    },
+    {
+      "block": "jugcraft:chemical_infuser",
+      "type": "chemical_infuser",
+      "recipes": [
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:refinery_gas",
+              250
+            ],
+            [
+              "jugcraft:chlorine",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:ethylene_dichloride",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 60
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:hydrogen",
+              250
+            ],
+            [
+              "jugcraft:chlorine",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:hydrogen_chloride",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 75
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:hydrogen",
+              400
+            ],
+            [
+              "jugcraft:carbon_dioxide",
+              100
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:methane",
+              100
+            ],
+            [
+              "minecraft:water",
+              400
+            ]
+          ],
+          "results": [],
+          "ticks": 200
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:oxygen",
+              125
+            ],
+            [
+              "jugcraft:sulfur_dioxide",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:sulfur_trioxide",
+              250
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:hydrogen",
+              300
+            ],
+            [
+              "jugcraft:carbon_monoxide",
+              100
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:methane",
+              100
+            ],
+            [
+              "minecraft:water",
+              200
+            ]
+          ],
+          "results": [],
+          "ticks": 150
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:hydrogen",
+              400
+            ],
+            [
+              "jugcraft:biogas",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:methane",
+              250
+            ],
+            [
+              "minecraft:water",
+              400
+            ]
+          ],
+          "results": [],
+          "ticks": 200
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:chemical_oxidizer",
+      "type": "chemical_oxidizer",
+      "recipes": [
+        {
+          "items": [
+            [
+              "jugcraft:sulfur_dust",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:oxygen",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:sulfur_dioxide",
+              250
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        },
+        {
+          "items": [
+            [
+              "#minecraft:coals",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:oxygen",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:carbon_dioxide",
+              250
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:industrial_fermenter",
+      "type": "industrial_fermenter",
+      "recipes": [
+        {
+          "items": [
+            [
+              "#jugcraft:fermentable",
+              8
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:bioethanol",
+              250
+            ],
+            [
+              "jugcraft:carbon_dioxide",
+              250
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:bulk_chemical_reactor",
+      "type": "bulk_chemical_reactor",
+      "recipes": [
+        {
+          "items": [],
+          "fluids": [
+            [
+              "minecraft:water",
+              1000
+            ],
+            [
+              "jugcraft:hydrogen_chloride",
+              500
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:hydrochloric_acid",
+              1000
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "minecraft:water",
+              500
+            ],
+            [
+              "jugcraft:sulfur_trioxide",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:sulfuric_acid",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        },
+        {
+          "items": [
+            [
+              "jugcraft:washed_iron_ore",
+              4
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:lye",
+              500
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:vanadium_pentoxide",
+              1
+            ]
+          ],
+          "ticks": 200
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:nitric_acid",
+              250
+            ],
+            [
+              "jugcraft:ammonia",
+              125
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:ammonium_nitrate",
+              4
+            ]
+          ],
+          "ticks": 100
+        },
+        {
+          "items": [
+            [
+              "minecraft:copper_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_copper_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "minecraft:deepslate_copper_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_copper_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "minecraft:iron_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_iron_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "minecraft:deepslate_iron_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_iron_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "minecraft:gold_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_gold_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "minecraft:deepslate_gold_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_gold_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:tin_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_tin_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_tin_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_tin_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:zinc_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_zinc_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_zinc_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_zinc_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:lead_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_lead_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_lead_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_lead_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:silver_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_silver_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_silver_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_silver_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:nickel_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_nickel_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_nickel_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_nickel_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:tungsten_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_tungsten_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_tungsten_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_tungsten_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:uranium_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_uranium_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_uranium_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_uranium_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:thallite_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_thallite_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        },
+        {
+          "items": [
+            [
+              "jugcraft:deepslate_thallite_ore",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:washed_thallite_ore",
+              4
+            ]
+          ],
+          "ticks": 160
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:anaerobic_digester",
+      "type": "anaerobic_digester",
+      "recipes": [
+        {
+          "items": [
+            [
+              "#jugcraft:digestible",
+              16
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              1000
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:biogas",
+              1000
+            ]
+          ],
+          "results": [
+            [
+              "minecraft:bone_meal",
+              2
+            ]
+          ],
+          "ticks": 400
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:coal_gasifier",
+      "type": "coal_gasifier",
+      "recipes": [
+        {
+          "items": [
+            [
+              "minecraft:coal",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              500
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:raw_syngas",
+              500
+            ]
+          ],
+          "results": [
+            [
+              "jugcraft:gasification_residue",
+              1
+            ]
+          ],
+          "ticks": 200
+        },
+        {
+          "items": [
+            [
+              "jugcraft:coke",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              500
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:raw_syngas",
+              500
+            ]
+          ],
+          "results": [
+            [
+              "jugcraft:gasification_residue",
+              1
+            ]
+          ],
+          "ticks": 200
+        },
+        {
+          "items": [
+            [
+              "minecraft:charcoal",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              400
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:raw_syngas",
+              400
+            ]
+          ],
+          "results": [],
+          "ticks": 200
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:gas_cleanup_rack",
+      "type": "gas_cleanup_rack",
+      "recipes": [
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:raw_syngas",
+              500
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:carbon_monoxide",
+              250
+            ],
+            [
+              "jugcraft:hydrogen",
+              250
+            ]
+          ],
+          "results": [],
+          "ticks": 100
+        }
+      ]
     }
   ],
   "concordance": {
@@ -7521,6 +8588,48 @@
     {
       "item": "jugcraft:mendvetch",
       "key": "mendvetch"
+    }
+  ],
+  "acquisition_info": [
+    {
+      "item": "jugcraft:adept_wand",
+      "key": "adept_wand"
+    },
+    {
+      "item": "jugcraft:dirge_skull",
+      "key": "dirge_skull"
+    },
+    {
+      "item": "jugcraft:golden_thimble",
+      "key": "golden_thimble"
+    },
+    {
+      "item": "jugcraft:gossamer_silk",
+      "key": "gossamer_silk"
+    },
+    {
+      "item": "jugcraft:needle_rapier",
+      "key": "needle_rapier"
+    },
+    {
+      "item": "jugcraft:reaper_hood",
+      "key": "reaper_hood"
+    },
+    {
+      "item": "jugcraft:reaper_shade",
+      "key": "reaper_shade"
+    },
+    {
+      "item": "jugcraft:requiem_skull",
+      "key": "requiem_skull"
+    },
+    {
+      "item": "jugcraft:tatterlace_headdress",
+      "key": "tatterlace_headdress"
+    },
+    {
+      "item": "jugcraft:vesper_scythe",
+      "key": "vesper_scythe"
     }
   ]
 }

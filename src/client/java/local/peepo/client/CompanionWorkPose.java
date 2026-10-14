@@ -5,9 +5,6 @@ import net.minecraft.util.Mth;
 
 /** Shared procedural clips on the existing rig. Work targets/timing stay server-authoritative. */
 final class CompanionWorkPose {
-    static final float GRIP_Y=20F, GRIP_Z=-3.4F;
-    static float gripX(PeepoState s){return Mth.cos(s.workPhase)*.65F;}
-    static float gripZ(PeepoState s){return GRIP_Z+Mth.sin(s.workPhase)*.65F;}
     static void interact(PeepoState s,ModelPart left,ModelPart right,ModelPart head){
         float lift=Mth.sin(s.workPhase*3)*.24F;
         left.xRot=right.xRot=-1.45F+lift;
@@ -30,17 +27,25 @@ final class CompanionWorkPose {
         reach(left,s.pieX+2.5F,s.pieY+.7F,gripZ);reach(right,s.pieX-2.5F,s.pieY+.7F,gripZ);
         if(s.work!=local.peepo.WorkAnimation.PIE_CARRY)leftLeg.xRot=rightLeg.xRot=0;
     }
-    static void stir(PeepoState s,ModelPart left,ModelPart right,ModelPart head,ModelPart leftLeg,ModelPart rightLeg){
-        grip(s,left,1);grip(s,right,-1);
-        head.yRot=0;head.xRot=.18F;
-        // Keep both feet planted on the rim while the hands circle the spoon.
-        leftLeg.xRot=rightLeg.xRot=0;
-        leftLeg.yRot=rightLeg.yRot=leftLeg.zRot=rightLeg.zRot=0;
+    static void stir(PeepoState s,ModelPart left,ModelPart right,ModelPart head,ModelPart leftLeg,ModelPart rightLeg,ModelPart[] torso){
+        tool(s,left,right,head,leftLeg,rightLeg,torso);
+        // Watch the spoon while shifting weight above planted feet on the handle-free rim.
+        head.yRot=-s.toolPose.x*.10F;
+        head.xRot+=.04F+Mth.sin(s.workPhase)*.025F;
     }
-    private static void grip(PeepoState s,ModelPart arm,int side){
-        // Move the shoulders towards the front of the broad torso; both hands share the spoon grip.
-        arm.x=side*2.3F;arm.y=19.2F;arm.z=-1.4F;
-        reach(arm,gripX(s)+side*.35F,GRIP_Y,gripZ(s));
+    static void spinning(PeepoState s,ModelPart left,ModelPart right,ModelPart head,ModelPart leftLeg,ModelPart rightLeg,ModelPart[] torso){
+        float pedal=(1-Mth.cos(s.workPhase))*.5F,feed=Mth.sin(s.workPhase)*.28F;
+        float pitch=.10F+pedal*.10F,bob=-pedal*.22F;
+        head.yRot=0;head.xRot=.16F;
+        for(var part:torso)lean(part,pitch,0,0,bob);
+        left.x=s.pumpkin?2.9F:2.3F;right.x=-left.x;
+        left.y=right.y=19.2F;left.z=right.z=s.pumpkin?-2.6F:-1.4F;
+        lean(left,pitch,0,0,bob);lean(right,pitch,0,0,bob);
+        reach(left,s.crankX+.6F,s.crankY+feed,s.crankZ+.3F);
+        reach(right,s.crankX-.6F,s.crankY-feed,s.crankZ-.3F);
+        leftLeg.xRot=-.10F;rightLeg.xRot=-.25F-pedal*.65F;
+        rightLeg.y-=pedal*.7F;rightLeg.z-=pedal*.5F;
+        leftLeg.yRot=rightLeg.yRot=leftLeg.zRot=rightLeg.zRot=0;
     }
     static void crank(PeepoState s,ModelPart left,ModelPart right,ModelPart head,ModelPart leftLeg,ModelPart rightLeg,ModelPart[] torso){
         float lift=Math.max(0,17.0F-s.crankY),hang=Mth.clamp(lift/2,0,1);
@@ -66,6 +71,20 @@ final class CompanionWorkPose {
         left.x=s.pumpkin?2.9F:2.3F;right.x=-left.x;
         left.y=right.y=19.2F;left.z=right.z=s.pumpkin?-2.6F:-1.4F;
         head.yRot=0;head.xRot=.14F;
+        if(s.work==local.peepo.WorkAnimation.MALLET){
+            // Let the shoulders reach with the lift, while keeping each hand attached to its grip.
+            float lift=Mth.clamp((20-p.y)/4.1F,0,1),roll=Mth.sin(s.workPhase)*.10F;
+            left.z-=.35F+lift*.45F;right.z-=.35F+lift*.45F;
+            left.y-=lift*.20F+roll;right.y-=lift*.20F-roll;
+            head.xRot+=Mth.sin(s.workPhase-.18F)*.05F;
+        }
+        if(s.work==local.peepo.WorkAnimation.HARVEST){
+            float lift=Mth.clamp((19.4F-p.y)/4,0,1),brace=Math.max(0,p.bodyPitch);
+            // Reach from the shoulders, with one hand guiding above the other on the shaft.
+            left.y-=lift*.30F;right.y-=lift*.16F;
+            left.z-=lift*.25F+brace*.45F;right.z-=lift*.40F+brace*.35F;
+            head.xRot=.14F-lift*.10F+brace*.06F;
+        }
         if(p.bodyPitch!=0 || p.bodyRoll!=0 || p.bodyX!=0 || p.bodyY!=0){
             for(var part:torso)lean(part,p);
             lean(left,p);lean(right,p);
@@ -75,14 +94,18 @@ final class CompanionWorkPose {
         leftLeg.xRot=rightLeg.xRot=0;
         leftLeg.yRot=rightLeg.yRot=leftLeg.zRot=rightLeg.zRot=0;
         if(s.work==local.peepo.WorkAnimation.HARVEST){
+            float brace=Math.max(0,p.bodyPitch),back=Math.max(0,-p.bodyPitch);
+            leftLeg.xRot=brace*.40F-back*.35F;rightLeg.xRot=-brace*.25F+back*.55F;
+        }
+        if(s.work==local.peepo.WorkAnimation.MALLET){
             float brace=Math.max(0,p.bodyPitch);
-            leftLeg.xRot=brace*.35F;rightLeg.xRot=-brace*.20F;
+            leftLeg.xRot=brace*.4F;rightLeg.xRot=-brace*.25F;
         }
     }
     private static void lean(ModelPart part,MachineWorkClip pose){
         lean(part,pose.bodyPitch,pose.bodyRoll,pose.bodyX,pose.bodyY);
     }
-    private static void lean(ModelPart part,float pitch,float roll,float bodyX,float bodyY){
+    static void lean(ModelPart part,float pitch,float roll,float bodyX,float bodyY){
         // The rig's parts have different pivots (some at y=9.6). Rotate all around the hips,
         // so head, shirt, bare torso, shorts and costume move together with the feet braced.
         float dy=part.y-22.5F,cosX=Mth.cos(pitch),sinX=Mth.sin(pitch);

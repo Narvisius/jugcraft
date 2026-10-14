@@ -8,16 +8,17 @@ import net.minecraft.util.Mth;
 
 /** Small closed-cube tools, with separate existing wood/iron textures and no item entities. */
 final class WorkPropsModel extends EntityModel<PeepoState> {
-    private final ModelPart valve,lever,mallet,wrench,valveMount,leverMount;
+    private final ModelPart valve,lever,mallet,wrench,valveMount,leverMount,spatula;
     WorkPropsModel(ModelPart root){
         super(root);
         valve=root.getChild("valve");lever=root.getChild("lever");
         mallet=root.getChild("mallet");wrench=root.getChild("wrench");
         valveMount=root.getChild("valve_mount");leverMount=root.getChild("lever_mount");
+        spatula=root.getChild("spatula");
     }
     @Override public void setupAnim(PeepoState state){
         super.setupAnim(state);
-        valve.visible=lever.visible=mallet.visible=wrench.visible=valveMount.visible=leverMount.visible=false;
+        valve.visible=lever.visible=mallet.visible=wrench.visible=valveMount.visible=leverMount.visible=spatula.visible=false;
         ModelPart active=switch(state.work){
             case VALVE -> valve;
             case LEVER -> lever;
@@ -25,6 +26,7 @@ final class WorkPropsModel extends EntityModel<PeepoState> {
             case WRENCH -> wrench;
             default -> null;
         };
+        if(state.spatula)active=spatula;
         if(active==null)return;
         var p=state.toolPose;
         active.visible=true;active.x=p.x;active.y=p.y;active.z=p.z;active.xRot=p.xRot;active.zRot=p.zRot;
@@ -40,7 +42,9 @@ final class WorkPropsModel extends EntityModel<PeepoState> {
         var wrench=root.addOrReplaceChild("wrench",CubeListBuilder.create(),PartPose.ZERO);
         var valveMount=root.addOrReplaceChild("valve_mount",CubeListBuilder.create(),PartPose.ZERO);
         var leverMount=root.addOrReplaceChild("lever_mount",CubeListBuilder.create(),PartPose.ZERO);
+        var spatula=root.addOrReplaceChild("spatula",CubeListBuilder.create(),PartPose.ZERO);
         if(metal){
+            spatula.addOrReplaceChild("blade",box(-.75F,-4.3F,-.12F,1.5F,1.5F,.24F),PartPose.ZERO);
             // Large octagonal rim; the fixed hub and downpipe belong to the stationary mount.
             for(int i=0;i<8;i++){
                 float angle=i*Mth.PI/4;
@@ -67,6 +71,7 @@ final class WorkPropsModel extends EntityModel<PeepoState> {
             wrench.addOrReplaceChild("jaw_left",box(-1.05F,-1.5F,-.32F,.52F,1,.64F),PartPose.ZERO);
             wrench.addOrReplaceChild("jaw_right",box(.53F,-1.5F,-.32F,.52F,1,.64F),PartPose.ZERO);
         }else{
+            spatula.addOrReplaceChild("handle",box(-.18F,-3.0F,-.18F,.36F,4,.36F),PartPose.ZERO);
             lever.addOrReplaceChild("grip",box(-1.05F,MachineWorkClip.LEVER_GRIP-.32F,-.35F,2.1F,.64F,.7F),PartPose.ZERO);
             mallet.addOrReplaceChild("handle",box(-.30F,-3.1F,-.30F,.6F,3.5F,.6F),PartPose.ZERO);
             mallet.addOrReplaceChild("head",box(-1.65F,-.65F,-.65F,3.3F,1.3F,1.3F),

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SBS",
+    " P "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:charcoal",
+    "P": "jugcraft:steel_fluid_pipe"
+  },
+  "result": {
+    "id": "jugcraft:storage_tank_scrubber_vent",
+    "count": 1
+  }
+}

@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -24,6 +26,7 @@ public final class JugcraftWorldgen {
 	}
 
 	public static void register() {
+		Registry.register(BuiltInRegistries.FEATURE_TYPE, Jugcraft.id("surface_linked_ore"), SurfaceLinkedOreFeature.CODEC);
 		Predicate<BiomeSelectionContext> overworld = BiomeSelectors.foundInOverworld();
 
 		// Metal and mineral ores: placed feature name, feature switch.
@@ -32,6 +35,9 @@ public final class JugcraftWorldgen {
 				{"nickel", "nickel"}, {"tungsten", "tungsten"}, {"uranium", "uranium"}, {"titanium", "titanium"},
 				{"thallite", "thallite"},
 				{"salt", "salt"}, {"phosphate", "phosphate"}, {"lepidolite", "lithium"}, {"monazite", "rare_earths"},
+				// The feature itself checks the surface biome. An underground biome filter would reject cave biomes.
+				{"fluorite", "fluorite"},
+				{"spodumene", "lithium"},
 		};
 		for (String[] ore : ores) {
 			add(ore[0], ore[1], overworld);

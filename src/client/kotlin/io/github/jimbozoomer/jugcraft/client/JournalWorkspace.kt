@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.client
 
 import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.sbo.guilib.core.dom.component
 import net.sbo.guilib.core.dsl.button
@@ -16,7 +17,8 @@ import net.sbo.guilib.fabric.text
 
 /**
  * The Concordance Journal as a GuiLib workspace (roadmap step 26): the same journal [JournalScreen] shows, with a tab
- * per section, a scrolling page of its lines, the exact-values switch and a refresh button. Keyboard: Tab moves between
+ * per section, a scrolling page of its lines, the exact-values switch, a refresh button and Compose (the Spell Composer).
+ * Keyboard: Tab moves between
  * the controls, Left and Right change tab, Page Up, Page Down, Home and End scroll, R asks the server again, X shows or
  * hides the exact figures, Escape closes. Reduced motion (the Concordance setting) stops the tab indicator sliding.
  * Loaded only when GuiLib is installed ([JournalClient] checks); it shows only what the server sent.
@@ -56,6 +58,9 @@ object JournalWorkspace {
                     }, label = Component.translatable("screen.jugcraft.concordance.config.exact").string)
                     button(className = "refresh", onClick = { JournalClient.request() }) {
                         text(Component.translatable("screen.jugcraft.journal.refresh"))
+                    }
+                    button(className = "refresh", onClick = { ComposerClient.open(Minecraft.getInstance(), GuiLib.currentScreen()) }) {
+                        text(Component.translatable("screen.jugcraft.journal.compose"))
                     }
                 }
             }

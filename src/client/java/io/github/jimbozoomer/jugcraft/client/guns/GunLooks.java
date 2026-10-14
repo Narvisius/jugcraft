@@ -46,17 +46,21 @@ public final class GunLooks {
 	 * Repeater's rib within two pixels, and the Bastion Rifle's kick the back of its grip two and a half pixels past
 	 * the eye. Of the rest (slice 11B), the Goldbristle Carbine's top plate, driven back with each shot, comes within
 	 * three pixels, as the Cinder Repeater's rib does, and the Crackling's kick the top of its grip two pixels past the
-	 * eye, as the Sledge's, whose receiver and grip it shares; the Ashfall Pistol stays nearly four pixels off.
+	 * eye, as the Sledge's, whose receiver and grip it shares; the Ashfall Pistol stays nearly four pixels off. Of the End
+	 * guns (slice 12A), the Hermit Rifle's kick brings the back of its receiver to the eye; the Chitin SMG's, the same
+	 * receiver lower, stays a pixel and a half off. Of the copper guns (slice 12B), the Conductor Carbine's kick brings
+	 * the back of its receiver two thirds of a pixel past the eye and the Magpie SMG's to it; the Penny Pistol stays
+	 * five pixels off.
 	 */
-	static final Map<String, Float> EYE_RELIEF = Map.ofEntries(Map.entry("garrison_rifle", 4.0F), Map.entry("beam_pistol", 4.0F), Map.entry("picket_rifle", 2.0F), Map.entry("ranger_rifle", 2.0F), Map.entry("kestrel_rifle", 2.0F), Map.entry("rattler_pistol", 4.0F), Map.entry("bronco_smg", 4.0F), Map.entry("squall_rifle", 3.0F), Map.entry("spikedriver", 2.0F), Map.entry("sledge", 6.0F), Map.entry("highwayman", 6.0F), Map.entry("throttle", 2.0F), Map.entry("skylark_rifle", 3.0F), Map.entry("solenoid_rifle", 1.0F), Map.entry("votive_rifle", 2.0F), Map.entry("glowmouth", 3.0F), Map.entry("mule", 2.5F), Map.entry("fowler", 3.0F), Map.entry("undertone_rifle", 2.0F), Map.entry("murmur_smg", 1.0F), Map.entry("reverb", 1.0F), Map.entry("tusker", 1.0F), Map.entry("cinder_repeater", 1.0F), Map.entry("bastion_rifle", 6.0F), Map.entry("goldbristle_carbine", 1.0F), Map.entry("crackling", 6.0F));
+	static final Map<String, Float> EYE_RELIEF = Map.ofEntries(Map.entry("garrison_rifle", 4.0F), Map.entry("beam_pistol", 4.0F), Map.entry("picket_rifle", 2.0F), Map.entry("ranger_rifle", 2.0F), Map.entry("kestrel_rifle", 2.0F), Map.entry("rattler_pistol", 4.0F), Map.entry("bronco_smg", 4.0F), Map.entry("squall_rifle", 3.0F), Map.entry("spikedriver", 2.0F), Map.entry("sledge", 6.0F), Map.entry("highwayman", 6.0F), Map.entry("throttle", 2.0F), Map.entry("skylark_rifle", 3.0F), Map.entry("solenoid_rifle", 1.0F), Map.entry("votive_rifle", 2.0F), Map.entry("glowmouth", 3.0F), Map.entry("mule", 2.5F), Map.entry("fowler", 3.0F), Map.entry("undertone_rifle", 2.0F), Map.entry("murmur_smg", 1.0F), Map.entry("reverb", 1.0F), Map.entry("tusker", 1.0F), Map.entry("cinder_repeater", 1.0F), Map.entry("bastion_rifle", 6.0F), Map.entry("goldbristle_carbine", 1.0F), Map.entry("crackling", 6.0F), Map.entry("hermit_rifle", 2.0F), Map.entry("conductor_carbine", 2.5F), Map.entry("magpie_smg", 2.0F), Map.entry("tuppence_pistol", 1.0F), Map.entry("lament_rifle", 6.0F));
 	/**
 	 * How far the owner's third-person transform tilts a gun up off the arm that holds it, in degrees (tools/guns.py
 	 * tilt(): the x rotation of its "thirdperson_righthand"); a gun not listed has none. The Gattaler's is made for an
 	 * arm hanging at the hip, so seen from outside its holder's arms hang that much lower ({@link GunPose}) and the gun
 	 * still points along the look: raised like a rifle, its barrels pointed at the sky. The CR4K Mining Laser's (the Seam
-	 * Cutter, slice 9C) is made the same way.
+	 * Cutter, slice 9C) is made the same way, and the Weevil's (the Borer, slice 12A).
 	 */
-	static final Map<String, Float> TILT = Map.of("thresher", 68.25F, "seam_cutter", 72.75F);
+	static final Map<String, Float> TILT = Map.of("thresher", 68.25F, "seam_cutter", 72.75F, "borer", 66.75F);
 	private static final Look DEFAULT = new Look(true, 1.0F);
 
 	static {
@@ -114,6 +118,15 @@ public final class GunLooks {
 		LOOKS.put("ashfall_pistol", new Look(false, 0.9F));
 		LOOKS.put("goldbristle_carbine", new Look(true, 0.85F));
 		LOOKS.put("crackling", new Look(true, 0.9F));
+		LOOKS.put("chitin_smg", new Look(true, 0.88F));
+		LOOKS.put("hermit_rifle", new Look(true, 0.85F));
+		LOOKS.put("borer", new Look(true, 0.95F));
+		LOOKS.put("penny_pistol", new Look(false, 0.9F));
+		LOOKS.put("conductor_carbine", new Look(true, 0.82F));
+		LOOKS.put("magpie_smg", new Look(true, 0.88F));
+		LOOKS.put("tuppence_pistol", new Look(false, 0.9F));
+		LOOKS.put("goshawk_revolver", new Look(false, 0.9F));
+		LOOKS.put("lament_rifle", new Look(true, 0.7F));
 		OPTICS.put("long_scope", new Optic(0.3F, "long_scope_reticle2", "scope_vignette", null));
 		OPTICS.put("medium_scope", new Optic(0.5F, "long_scope_reticle2", "scope_vignette", null));
 		OPTICS.put("reflex_sight", new Optic(0.85F, null, null, "red_dot_reticle"));

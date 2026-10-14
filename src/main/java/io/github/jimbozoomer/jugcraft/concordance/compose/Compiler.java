@@ -363,8 +363,8 @@ public final class Compiler {
 		}
 	}
 
-	/** Whether a modifier of this aspect would change this component at all. */
-	private static boolean changes(Component.Aspect aspect, Component part) {
+	/** Whether a modifier of this aspect would change this component at all (the composer screen offers only these). */
+	public static boolean changes(Component.Aspect aspect, Component part) {
 		return switch (part.part()) {
 			case Component.Operation operation -> switch (aspect) {
 				case MAGNITUDE -> switch (operation.effect().kind()) {

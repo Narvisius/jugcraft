@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "PRP",
+    "N N"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "R": "minecraft:rabbit_hide",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:hv_expansion_tank",
+    "count": 1
+  }
+}

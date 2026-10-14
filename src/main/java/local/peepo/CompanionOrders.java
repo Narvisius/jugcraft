@@ -20,6 +20,7 @@ public final class CompanionOrders {
     private long nextCommand;
     CompanionOrders(PeepoEntity npc){this.npc=npc;}
     public boolean tamed(){return owner!=null;}
+    java.util.UUID ownerId(){return owner;}
     Player ownerPlayer(){return owner!=null && npc.level() instanceof net.minecraft.server.level.ServerLevel level?level.getServer().getPlayerList().getPlayer(owner):null;}
     public boolean owner(Player p){return p.getUUID().equals(owner);}
     public boolean allowed(Player p){return owner(p) || owner!=null && party && JugcraftParties.sameParty(owner,p.getUUID());}

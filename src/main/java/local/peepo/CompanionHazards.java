@@ -14,7 +14,7 @@ final class CompanionHazards {
     private static final TagKey<Block> WHEN_LIT=TagKey.create(Registries.BLOCK,PeepoMod.id("harmful_when_lit"));
     private CompanionHazards(){}
     static boolean harmful(PeepoEntity npc,BlockState state){
-        return npc.getType().isBlockDangerous(state) || state.getFluidState().is(FluidTags.LAVA) || state.is(ALWAYS)
+        return state.is(net.minecraft.world.level.block.Blocks.CACTUS) || state.is(net.minecraft.world.level.block.Blocks.SWEET_BERRY_BUSH) || npc.getType().isBlockDangerous(state) || state.getFluidState().is(FluidTags.LAVA) || state.is(ALWAYS)
             || state.is(WHEN_LIT) && state.hasProperty(BlockStateProperties.LIT) && state.getValue(BlockStateProperties.LIT);
     }
     static boolean safeAt(PeepoEntity npc,Vec3 point){

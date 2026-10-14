@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SBS",
+    "TCT",
+    "SBS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "#c:storage_blocks/steel",
+    "T": "#c:plates/nickel",
+    "C": "minecraft:copper_block"
+  },
+  "result": {
+    "id": "jugcraft:reactor_steam_generator",
+    "count": 1
+  }
+}

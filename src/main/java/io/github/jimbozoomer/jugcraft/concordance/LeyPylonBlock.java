@@ -112,8 +112,7 @@ public class LeyPylonBlock extends BaseEntityBlock implements EnergyConnectable 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof LeyPylonBlockEntity pylon) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.pylon.status", pylon.ley(),
-					LeyPylonBlockEntity.CAPACITY));
+			player.sendOverlayMessage(pylon.status());
 		}
 		return InteractionResult.SUCCESS;
 	}

@@ -33,6 +33,7 @@ public class SprinklerBlockEntity extends BlockEntity {
 	public static final int FERTILIZE_PULSES = 6;
 	public static final int TANK_MB = 4_000;
 	public static final int MAX_FERTILIZER = 16;
+	public final local.peepo.SprinklerCompanion companion = new local.peepo.SprinklerCompanion(this);
 
 	final SingleFluidStorage water = new SingleFluidStorage() {
 		@Override
@@ -94,6 +95,11 @@ public class SprinklerBlockEntity extends BlockEntity {
 		return water;
 	}
 
+	public net.fabricmc.fabric.api.transfer.v1.storage.Storage<ItemVariant> fertilizerInput() { return hopper; }
+
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) { companion.drop(); }
+
 	public int fertilizer() {
 		return fertilizerStack.getCount();
 	}
@@ -137,6 +143,7 @@ public class SprinklerBlockEntity extends BlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		water.readValue(input);
+		companion.load(input);
 		int count = input.getInt("fertilizer").orElse(0);
 		fertilizerStack = count > 0 ? new ItemStack(PetroItems.FERTILIZER, count) : ItemStack.EMPTY;
 		pulses = input.getInt("pulses").orElse(0);
@@ -146,6 +153,7 @@ public class SprinklerBlockEntity extends BlockEntity {
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		water.writeValue(output);
+		companion.save(output);
 		output.putInt("fertilizer", fertilizer());
 		output.putInt("pulses", pulses);
 	}

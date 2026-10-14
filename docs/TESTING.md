@@ -64,6 +64,7 @@ Checks:
 
 ## Content-specific scenarios
 
+- **Jugcraft Encyclopedia:** `EncyclopediaClientGameTests` presses the Encyclopedia key and opens both routes. It follows a technology milestone into the handbook and back, opens the codex from a magic milestone, and opens and closes from the survival inventory's button (screenshots `jugcraft_encyclopedia_*`). Not covered: GUI scales, the creative inventory, the narrator, two clients and a dedicated server's codex sync. See the [feature record](features/jugcraft-encyclopedia.md#first-slice-entry-points-and-route-home).
 - **World Designer:** run `node --test tools/world-designer/model.test.cjs`, the three `WorldDesignerGameTests`, and `WorldDesignerClientGameTests`. Also load an actual exported ZIP into a new world's datapacks, select `jugcraft:designed`, generate the pinned chunks, and inspect structure starts. The [feature record](features/world-designer.md) distinguishes compiler, browser, real-world and persistence evidence.
 
 Use the cases relevant to the feature; do not claim a scenario was run just because it appears here.

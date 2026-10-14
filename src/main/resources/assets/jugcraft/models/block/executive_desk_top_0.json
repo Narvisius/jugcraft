@@ -1,0 +1,315 @@
+{
+  "textures": {
+    "pi_keyboard": "jugcraft:block/pi_keyboard",
+    "pi_monitor": "jugcraft:block/pi_monitor",
+    "pi_office_screen": "jugcraft:block/pi_office_screen",
+    "pi_tv": "jugcraft:block/pi_tv",
+    "particle": "jugcraft:block/pi_keyboard"
+  },
+  "elements": [
+    {
+      "from": [
+        2.5,
+        13.0,
+        3
+      ],
+      "to": [
+        5.5,
+        13.3,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_monitor"
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        10.5,
+        13,
+        3
+      ],
+      "to": [
+        13.5,
+        13.3,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_monitor"
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        0.4,
+        15,
+        3.2
+      ],
+      "to": [
+        7.7,
+        21,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            8.3,
+            0,
+            15.6,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#pi_office_screen",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            12,
+            0,
+            12.8,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.2,
+            0,
+            4,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            0.4,
+            3.2,
+            7.7,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            0.4,
+            12,
+            7.7,
+            12.8
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        8.3,
+        15,
+        3.2
+      ],
+      "to": [
+        15.6,
+        21,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor",
+          "uv": [
+            0.4,
+            0,
+            7.7,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#pi_tv",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_monitor",
+          "uv": [
+            12,
+            0,
+            12.8,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#pi_monitor",
+          "uv": [
+            3.2,
+            0,
+            4,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#pi_monitor",
+          "uv": [
+            8.3,
+            3.2,
+            15.6,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor",
+          "uv": [
+            8.3,
+            12,
+            15.6,
+            12.8
+          ]
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        3.7,
+        12.87,
+        3.5
+      ],
+      "to": [
+        4.3,
+        15,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_monitor"
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        11.7,
+        12.87,
+        3.5
+      ],
+      "to": [
+        12.3,
+        15,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_monitor"
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        13,
+        8
+      ],
+      "to": [
+        12,
+        13.4,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_monitor"
+        },
+        "south": {
+          "texture": "#pi_monitor"
+        },
+        "east": {
+          "texture": "#pi_monitor"
+        },
+        "west": {
+          "texture": "#pi_monitor"
+        },
+        "up": {
+          "texture": "#pi_keyboard",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_monitor"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "K",
+    "R"
+  ],
+  "key": {
+    "K": "jugcraft:tank_kit_general_medium",
+    "R": "jugcraft:tank_rubber_lining"
+  },
+  "result": {
+    "id": "jugcraft:tank_kit_corrosive_medium",
+    "count": 1
+  }
+}

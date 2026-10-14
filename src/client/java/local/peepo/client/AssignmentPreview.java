@@ -23,18 +23,28 @@ public final class AssignmentPreview {
             var camera=context.levelState().cameraRenderState.pos;
             var frames=new ArrayList<Frame>(9);
             frames.add(new Frame(npc.getBoundingBox().inflate(.06).move(-camera.x,-camera.y,-camera.z),0xFF66FF88));
+            var first=AssignmentTool.firstCorner(stack);
+            if(AssignmentTool.zoneMode(stack) && first!=null){
+                frames.add(new Frame(new AABB(first).inflate(.03).move(-camera.x,-camera.y,-camera.z),0xFFFFFF55));
+                if(mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult hit){var end=hit.getBlockPos();boolean valid=AnimalCareZone.valid(first,end);var box=AssignmentTool.zoneKind(stack)==1?new AnimalCareZone(first,end,7).box():new GardenZone(first,end,AssignmentTool.zoneKind(stack)==3).box();frames.add(new Frame(box.move(-camera.x,-camera.y,-camera.z),valid?0xFF55FF88:0xFFFF5555));}
+            }
             var assignments=npc.assignments.view();
             for(int row=0;row<assignments.size();row++){
                 var target=assignments.get(row);
                 if(target==null || !target.local(mc.level) || !mc.level.hasChunkAt(target.at().pos()) || target.at().pos().distToCenterSqr(mc.player.position())>128*128)continue;
+                if(target.care() && target.zone()!=null){frames.add(new Frame(target.zone().box().inflate(.015).move(-camera.x,-camera.y,-camera.z),0xFF55CC88));frames.add(new Frame(new AABB(target.at().pos()).inflate(.025).move(-camera.x,-camera.y,-camera.z),0xFF55FF66));continue;}
                 if(target.livestock()){
                     var anchor=target.at().pos();
                     frames.add(new Frame(new AABB(anchor).inflate(.025).move(-camera.x,-camera.y,-camera.z),0xFF55FF66));
                     frames.add(new Frame(new AABB(anchor.getX()+.5-8,anchor.getY()+1.02,anchor.getZ()+.5-8,anchor.getX()+.5+8,anchor.getY()+1.06,anchor.getZ()+.5+8).move(-camera.x,-camera.y,-camera.z),0xFF55CC88));
                     continue;
                 }
+                if(target.gardenZone()!=null){frames.add(new Frame(target.gardenZone().box().inflate(.015).move(-camera.x,-camera.y,-camera.z),target.orchard()?0xFF99DD55:0xFF55FF66));frames.add(new Frame(new AABB(target.at().pos()).inflate(.025).move(-camera.x,-camera.y,-camera.z),0xFF55FF66));continue;}
                 if(target.garden()){
-                    for(var cell:target.plot())if(mc.level.hasChunkAt(cell))frames.add(new Frame(new AABB(cell.getX(),cell.getY()+.89,cell.getZ(),cell.getX()+1,cell.getY()+.98,cell.getZ()+1).inflate(.015).move(-camera.x,-camera.y,-camera.z),CompanionGarden.farmland(mc.level,cell)?0xFF55FF66:0xFFFF8844));
+                    for(var cell:target.plot())if(mc.level.hasChunkAt(cell)){
+                        AABB box=CompanionGarden.hanging(target)?new AABB(cell.below()):new AABB(cell.getX(),cell.getY()+.89,cell.getZ(),cell.getX()+1,cell.getY()+1.02,cell.getZ()+1);
+                        frames.add(new Frame(box.inflate(.015).move(-camera.x,-camera.y,-camera.z),npc.garden.validCell(mc.level,target,cell)?0xFF55FF66:0xFFFF8844));
+                    }
                     continue;
                 }
                 BlockPos pos=target.at().pos();AABB box=new AABB(pos);boolean present=target.present(mc.level);

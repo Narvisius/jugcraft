@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:hagthorn"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.seen_through.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.seen_through.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

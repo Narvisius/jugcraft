@@ -451,6 +451,8 @@ import concordance_progression as progression  # noqa: E402
 import concordance_spire as spire  # noqa: E402
 # Roadmap step 26 (tools/concordance_journal.py): the Concordance Journal's words and codex page.
 import concordance_journal as journal  # noqa: E402
+# Chunk A (tools/concordance_composer.py): the Spell Composer's words.
+import concordance_composer as composer  # noqa: E402
 # Roadmap step 27 (tools/concordance_signs.py): signs of what really happened, the warnings' sounds and the codex page.
 import concordance_signs as signs  # noqa: E402
 ITEMS.update(spire.ITEMS)
@@ -577,11 +579,13 @@ for _component in COMPONENTS.values():
 # gestures; the composition decides everything else.
 COMPOSED_CAST_SECONDS = 0.5
 COMPOSED_BASE_COOLDOWN_SECONDS = 0.5
-COMPOSE_RATE_TICKS = 20  # the most often a player may check or inscribe a composition
+COMPOSE_RATE_TICKS = 20  # the most often a player may check, inscribe or tune a composition, by command or screen
+                         # (Java: Composing.COMPOSE_RATE_TICKS)
 # Example compositions for the codex; the game tests compile the same texts.
 COMPOSE_EXAMPLES = {
     "touch struck light": "Light where you touch",
     "here struck ward": "Ward yourself",
+    "touch struck ward": "Ward the friend you touch: soaking 4 health in a lair fight earns your share",
     "ray struck sear then here creatures dazzle": "Sear what you aim at, then dazzle what stands round it",
 }
 
@@ -1072,9 +1076,14 @@ def composition_codex():
                  f"Join a **modifier** to the word it changes with **+**, and write **then** before a second spell "
                  f"that starts where the first landed."),
                 ("text", "Writing and Inscribing",
-                 "Hold an instrument and type `/jugcraft concordance compose check` and the spell to see what it "
-                 "does and costs, or exactly why it cannot work. `compose inscribe` writes it on the instrument and "
-                 "it appears on your spell bar; `compose show` reads it back and `compose clear` wipes it."),
+                 "Hold an instrument and open the **Spell Composer**: press **J** for your journal and choose "
+                 "**Compose** (or bind its own key in Controls). Choose words from those you know, or type the "
+                 "spell; the composer checks it as you go and says what it does and costs, or exactly why it cannot "
+                 "work. **Inscribe** writes it on the instrument and it appears on your spell bar."),
+                ("text", "By Command",
+                 "The same can be done in chat: `/jugcraft concordance compose check` and the spell explains it, "
+                 "`compose inscribe` writes it on the instrument, `compose show` reads it back and `compose clear` "
+                 "wipes it. The composer and the commands give the same answer."),
                 ("text", "Examples", examples),
                 ("text", "Limits",
                  f"The Initiate's Wand holds {wand['capacity']} capacity of words. A spell on it reaches at most "
@@ -1624,6 +1633,8 @@ COMPOSE_TEXT = {
     "problem.branch_delivery": "A branch starts where the spell before it landed: begin it with here, not %s",
     "problem.no_instrument": "Hold a composing instrument in your main hand",
     "problem.too_fast": "Wait a moment before composing again",
+    "problem.changed": "Your instrument or the Concordance's rules changed since this was checked: nothing was written",
+    "more_problems": "And %s more problems",
     "explain.delivery.here": "%s: lands where you stand",
     "explain.delivery.here_then": "%s: lands where the spell before it landed",
     "explain.delivery.touch": "%s: lands on the first creature or surface within %s blocks",
@@ -1777,6 +1788,7 @@ def write_all(write, assets, data, lang, condition, self_drop):
     ember.write_all(write, assets, data, lang, condition, self_drop)
     trinkets.write_all(write, assets, data, lang, condition, self_drop)
     journal.lang_entries(lang)
+    composer.lang_entries(lang)
     signs.lang_entries(lang)
     # Items.
     write(assets / "models" / "item" / "initiate_wand.json",

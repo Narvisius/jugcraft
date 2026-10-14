@@ -9,6 +9,13 @@ import net.minecraft.server.level.ServerLevel;
 /** Shared server validation for the inventory's output filter editor. */
 public final class CompanionFilters {
     public static CompanionRecipeFilter get(BlockEntity block){
+        var serving=ServingCompanion.of(block);if(serving!=null && !serving.hasOutput())return serving.filter;
+        if(block instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity maw)return maw.companionFilter;
+        if(block instanceof FarmStandBlockEntity stand)return stand.companion.filter;
+        if(block instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity crucible)return crucible.companion.filter;
+        var vanilla=VanillaCompanionPort.of(block);if(vanilla!=null)return vanilla.filter;
+        if(block instanceof CandyKettleBlockEntity kettle)return kettle.companion.filter;
+        if(block instanceof CiderBarrelBlockEntity barrel)return barrel.filter();
         if(block instanceof HearthOvenBlockEntity oven)return oven.filter();
         if(block instanceof CookingPotBlockEntity pot)return pot.filter();
         if(block instanceof MachineBlockEntity machine)return machine.companionPort.filter();
@@ -17,7 +24,20 @@ public final class CompanionFilters {
     public static boolean set(BlockEntity block,int slot,ItemStack icon){
         if(slot<0 || slot>=9 || !(block.getLevel() instanceof ServerLevel level))return false;
         ItemStack value=icon;
-        if(block instanceof HearthOvenBlockEntity){
+        if(block instanceof VanillaCompanionAccess access){if(!access.peepo$port().acceptsFilter(icon))return false;
+        }else if(block instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity){
+            if(!icon.isEmpty() && io.github.jimbozoomer.jugcraft.concordance.garden.Garden.mulch(icon)<=0)return false;
+        }else if(ServingCompanion.of(block) instanceof ServingCompanion serving){
+            if(serving.hasOutput() || !serving.acceptsFilter(icon))return false;
+        }else if(block instanceof FarmStandBlockEntity){
+            // Stock templates determine exact variants; this filter only limits which goods to restock.
+        }else if(block instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity){
+            if(!CrucibleCompanion.acceptsFilter(icon))return false;
+        }else if(block instanceof CandyKettleBlockEntity){
+            if(!CandyKettleCompanion.acceptsFilter(icon))return false;
+        }else if(block instanceof CiderBarrelBlockEntity){
+            if(!icon.isEmpty() && !icon.is(JugcraftAgriculture.item("sparkling_cider")) && !icon.is(JugcraftAgriculture.item("aged_cider")))return false;
+        }else if(block instanceof HearthOvenBlockEntity){
             var filling=HearthOvenBlockEntity.selectedFilling(icon);if(!icon.isEmpty() && filling==null)return false;
             value=filling==null?ItemStack.EMPTY:new ItemStack(JugcraftAgriculture.item(filling.pie()));
         }else if(block instanceof CookingPotBlockEntity){
@@ -27,6 +47,8 @@ public final class CompanionFilters {
         var filter=get(block);if(filter==null)return false;filter.set(slot,value);
         if(block instanceof CookingPotBlockEntity pot)pot.companionFilterChanged();
         if(block instanceof MachineBlockEntity machine)machine.companionPort.filterChanged();
-        block.setChanged();return true;
+        if(block instanceof CandyKettleBlockEntity kettle)kettle.companion.filterChanged();
+        if(block instanceof VanillaCompanionAccess access)access.peepo$port().filterChanged();
+        CompanionReadiness.invalidate(block);block.setChanged();return true;
     }
 }

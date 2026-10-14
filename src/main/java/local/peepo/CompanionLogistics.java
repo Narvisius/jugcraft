@@ -18,9 +18,15 @@ public final class CompanionLogistics {
         Identifier plan();
         default void prepare(Storage<ItemVariant> source){}
         int needed(ItemStack stack);
+        /** Cheap discovery demand; a pickup may expand this into a larger balanced batch. */
+        default int pickupNeeded(ItemStack stack){return needed(stack);}
         default int needed(ItemStack stack,net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx){return needed(stack);}
         Storage<ItemVariant> inputs();
         Storage<ItemVariant> outputs();
+        /** Pickup-only planning; the real transfer still commits in CompanionTransport. */
+        default List<ItemStack> supplyBatch(Storage<ItemVariant> source,int slots){
+            return CompanionDeliveryPlan.create(source,inputs(),slots,this::needed,null);
+        }
         /** Status for logistics-only stations that process without a resident helper. */
         default CompanionStatus status(){return CompanionStatus.READY;}
     }
@@ -29,11 +35,25 @@ public final class CompanionLogistics {
     public static void register(Adapter adapter){ADAPTERS.add(Objects.requireNonNull(adapter));}
     public static Port resolve(PeepoEntity npc,CompanionAssignments.Target target){
         if(target==null || !target.present(npc.level()) || !npc.assignments.assignedWork(target.at().pos()) || !CompanionJobs.permitted(npc,target.at().pos()))return null;
+        if(target.water())return npc.water.port(target);
         if(target.garden())return npc.garden.port(target);
         if(target.livestock())return npc.livestock.port(target);
+        if(npc.level() instanceof net.minecraft.server.level.ServerLevel server && npc.level().getBlockState(target.at().pos()).getBlock() instanceof net.minecraft.world.level.block.ComposterBlock)return new ComposterCompanionPort(server,target.at().pos());
         var be=npc.level().getBlockEntity(target.at().pos());
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.BatHouseBlockEntity)return new Port(){
+            public Identifier plan(){return null;}
+            public int needed(ItemStack stack){return 0;}
+            public Storage<ItemVariant> inputs(){return Storage.empty();}
+            public Storage<ItemVariant> outputs(){return Storage.empty();} // Collected guano is already marked cargo.
+        };
+        if(be instanceof io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity sprinkler)return sprinkler.companion.forCompanion(npc);
+        var serving=ServingCompanion.of(be);if(serving!=null)return serving.forCompanion(npc);
+        var magic=MagicGardenCompanion.of(npc,be);if(magic!=null)return magic;
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity stand)return stand.companion.forCompanion(npc);
+        if(be instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity crucible)return crucible.companion;
+        var vanilla=VanillaCompanionPort.of(be);if(vanilla!=null)return vanilla;
         if(be instanceof io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity machine
-            && machine.kind().supportsCompanionAssistance() && !machine.isLocked())return machine.companionPort;
+            && machine.kind().supportsCompanionLogistics() && !machine.isLocked())return machine.companionPort;
         var kitchen=KitchenCompanionPort.of(be);if(kitchen!=null)return kitchen.forCompanion(npc);
         if(be instanceof HearthOvenBlockEntity oven)return new Port(){
             public Identifier plan(){return Identifier.fromNamespaceAndPath("jugcraft","hearth_oven");}
@@ -55,12 +75,27 @@ public final class CompanionLogistics {
             public Storage<ItemVariant> outputs(){return oven.companionOutputs();}
             public CompanionStatus status(){return oven.companionStatus();}
         };
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity kettle)return kettle.companion;
         if(be instanceof CanningKettleBlockEntity kettle)return new Port(){
             public Identifier plan(){return Identifier.fromNamespaceAndPath("jugcraft","canning_kettle");}
             public int needed(ItemStack candidate){return kettle.companionNeed(candidate);}
             public Storage<ItemVariant> inputs(){return kettle.companionInputs();}
             public Storage<ItemVariant> outputs(){return kettle.companionOutputs();}
             public CompanionStatus status(){return kettle.companionStatus();}
+        };
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlockEntity wheel)return new Port(){
+            public Identifier plan(){return Identifier.fromNamespaceAndPath("jugcraft","spinning_wheel");}
+            public int needed(ItemStack candidate){return wheel.companionNeed(candidate);}
+            public Storage<ItemVariant> inputs(){return wheel.companionInputs();}
+            public Storage<ItemVariant> outputs(){return wheel.companionOutputs();}
+            public CompanionStatus status(){return wheel.companionStatus();}
+        };
+        if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity barrel)return new Port(){
+            public Identifier plan(){return Identifier.fromNamespaceAndPath("jugcraft","cider_barrel");}
+            public int needed(ItemStack candidate){return barrel.companionNeed(candidate);}
+            public Storage<ItemVariant> inputs(){return barrel.companionInputs();}
+            public Storage<ItemVariant> outputs(){return barrel.companionOutputs();}
+            public CompanionStatus status(){return barrel.companionStatus();}
         };
         if(be instanceof CiderPressBlockEntity press)return new Port(){
             public Identifier plan(){return Identifier.fromNamespaceAndPath("jugcraft","sweet_cider");}
@@ -71,17 +106,13 @@ public final class CompanionLogistics {
         if(be instanceof CookingPotBlockEntity pot && !pot.isLocked())return new Port(){
             public void prepare(Storage<ItemVariant> source){pot.prepareCompanionRecipe(source);}
             public Identifier plan(){return pot.supplyPlan().map(p->p.id()).orElse(null);}
+            public int pickupNeeded(ItemStack candidate){return CookingPotSupplies.missing(pot,candidate);}
             public int needed(ItemStack candidate){
-                var plan=pot.supplyPlan().orElse(null);if(plan==null)return 0;
-                int[] available=new int[CookingPotBlockEntity.INPUTS];
-                for(int i=0;i<available.length;i++)available[i]=pot.getItem(i).getCount();
-                int missing=0;
-                for(var part:plan.ingredients()){
-                    int left=part.count();
-                    for(int i=0;i<available.length && left>0;i++)if(part.ingredient().test(pot.getItem(i))){int take=Math.min(left,available[i]);left-=take;available[i]-=take;}
-                    if(part.ingredient().test(candidate))missing=Math.min(32,missing+Math.min(32,left));
-                }
-                return Math.min(32,missing);
+                var plan=pot.supplyPlan().orElse(null);
+                return plan!=null && !candidate.isEmpty() && plan.ingredients().stream().anyMatch(p->p.ingredient().test(candidate))?candidate.getMaxStackSize():0;
+            }
+            public List<ItemStack> supplyBatch(Storage<ItemVariant> source,int slots){
+                return CookingPotSupplies.create(pot,source,npc.assignments.supplies.combined(target,false),slots);
             }
             public Storage<ItemVariant> inputs(){return ContainerStorage.of(pot,Direction.UP);}
             public Storage<ItemVariant> outputs(){return ContainerStorage.of(pot,Direction.DOWN);}

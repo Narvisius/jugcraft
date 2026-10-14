@@ -968,9 +968,17 @@ def write_steampunk(root, machines, parts, fluid_blocks):
     from steampunk_models import COMPACT, MODELS, GLOW, CUBES, PARTICLE
     out = StyleWriter(root)
 
-    def textures_for(elements):
+    from large_machines import FRONTS
+
+    def textures_for(elements, machine=None):
         textures = {name: rid(f"block/{name}") for name in texture_names(elements)}
         textures["particle"] = rid(f"block/{PARTICLE}")
+        # Models drawn with the machine's own front ("#front": the nuclear fuel machines) take it from FRONTS.
+        uses_front = any(v is not None and v.rstrip("!") == "#front"
+                         for item in elements
+                         for v in (unpack(item)[2].values() if isinstance(unpack(item)[2], dict) else [unpack(item)[2]]))
+        if uses_front and machine in FRONTS:
+            textures["front"] = rid(f"block/{FRONTS[machine]}")
         return textures
 
     def glow_override(elements):
@@ -978,7 +986,7 @@ def write_steampunk(root, machines, parts, fluid_blocks):
 
     for machine, info in machines.items():
         elements = MODELS[machine]
-        textures = textures_for(elements)
+        textures = textures_for(elements, machine)
         lit = info["lit"] and bool(glow_override(elements))
         if machine in FOOTPRINTS:
             sliced = split_model(machine, elements, FOOTPRINTS[machine])
@@ -1003,7 +1011,7 @@ def write_steampunk(root, machines, parts, fluid_blocks):
             # Parts a renderer draws (giant_models.ITEM_EXTRAS: the sawmill's blade) stand in the item icon too.
             from steampunk_models import ITEM_EXTRAS
             item_elements = elements + ITEM_EXTRAS.get(machine, [])
-            out.item_model(machine, {"parent": "minecraft:block/block", "textures": textures_for(item_elements),
+            out.item_model(machine, {"parent": "minecraft:block/block", "textures": textures_for(item_elements, machine),
                                      "elements": scaled_elements(item_elements)})
             out.item(machine, rid(f"item/{machine}"))
             continue

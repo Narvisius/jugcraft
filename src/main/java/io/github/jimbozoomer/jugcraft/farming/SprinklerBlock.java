@@ -78,6 +78,11 @@ public class SprinklerBlock extends Block implements EntityBlock, FluidConnectab
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof SprinklerBlockEntity sprinkler) {
+			if (player.isShiftKeyDown() && player.mayBuild() && level.mayInteract(player,pos)
+					&& !io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player,level,pos)) {
+				var buckets = sprinkler.companion.takeBuckets();
+				if (!buckets.isEmpty() && !player.getInventory().add(buckets)) Block.popResource(level,pos.above(),buckets);
+			}
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.sprinkler",
 					sprinkler.water.amount / FluidNetworks.DROPLETS_PER_MB, sprinkler.fertilizer()));
 		}

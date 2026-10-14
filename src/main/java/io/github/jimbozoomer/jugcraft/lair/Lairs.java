@@ -1,6 +1,8 @@
 package io.github.jimbozoomer.jugcraft.lair;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.concordance.ConcordanceEffects;
+import io.github.jimbozoomer.jugcraft.concordance.effect.EffectKind;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +68,7 @@ public final class Lairs {
 	private static final Map<Lair, List<BiConsumer<ServerLevel, LairInstance>>> PLACED = new EnumMap<>(Lair.class);
 	/** What each lair puts right as an instance closes (the Cursed Spindle's wheel stops spinning wild). */
 	private static final Map<Lair, List<BiConsumer<MinecraftServer, LairInstance>>> CLOSED = new EnumMap<>(Lair.class);
+	private static final List<Relit> RELIT = new ArrayList<>();
 	public static AttachmentType<LairVisit> VISIT;
 	public static AttachmentType<GraveGoods> GRAVE_GOODS;
 
@@ -73,6 +76,11 @@ public final class Lairs {
 	}
 
 	static void register() {
+		// Concordance Chunk A: each boss fight's record, and its rewards, paid once each and kept for the fallen and away
+		// (LairRewards is registered below, after the join check: see there).
+		Encounter.register();
+		ConcordanceEffects.observe((person, effect, target, amount) -> Encounter.helped(person, target,
+				effect.kind() == EffectKind.RESTORATION, amount, effect.duration()));
 		VISIT = AttachmentRegistry.<LairVisit>builder().persistent(LairVisit.CODEC).buildAndRegister(Jugcraft.id("lair_visit"));
 		GRAVE_GOODS = AttachmentRegistry.<GraveGoods>builder().persistent(GraveGoods.CODEC).copyOnDeath()
 				.buildAndRegister(Jugcraft.id("grave_goods"));
@@ -80,6 +88,8 @@ public final class Lairs {
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> INSTANCES.clear());
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> INSTANCES.clear());
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> joined(handler.getPlayer()));
+		// After joined(): a player who logs in inside a closed lair is sent home before a reward kept for them is paid.
+		LairRewards.register();
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
 			if (entity instanceof ServerPlayer player) {
 				died(player);
@@ -140,6 +150,24 @@ public final class Lairs {
 	/** Calls {@code hook} for each instance of {@code lair} as it closes (its ritual's gate shuts). */
 	public static void onClosed(Lair lair, BiConsumer<MinecraftServer, LairInstance> hook) {
 		CLOSED.computeIfAbsent(lair, l -> new ArrayList<>()).add(hook);
+	}
+
+	/** A player relit a lair brazier (its unlit-to-lit turn, once). */
+	@FunctionalInterface
+	public interface Relit {
+		void relit(ServerLevel level, BlockPos pos, ServerPlayer player);
+	}
+
+	/** Calls {@code hook} whenever a player relights a lair brazier (a boss may count it as a deed of its fight). */
+	public static void onRelit(Relit hook) {
+		RELIT.add(hook);
+	}
+
+	/** A player relit the brazier at {@code pos} (LairBrazierBlock calls this). */
+	public static void relit(ServerLevel level, BlockPos pos, ServerPlayer player) {
+		for (Relit hook : RELIT) {
+			hook.relit(level, pos, player);
+		}
 	}
 
 	// ---------------------------------------------------------------- instances

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PIP",
+    "MRC",
+    "PTP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "I": "jugcraft:steel_fluid_pipe",
+    "M": "jugcraft:electric_motor",
+    "R": "jugcraft:chemical_reactor",
+    "C": "jugcraft:basic_circuit",
+    "T": "jugcraft:steel_tank"
+  },
+  "result": {
+    "id": "jugcraft:bulk_chemical_reactor",
+    "count": 1
+  }
+}

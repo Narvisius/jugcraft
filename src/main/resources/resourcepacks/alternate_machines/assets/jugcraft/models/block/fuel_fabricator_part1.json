@@ -1,0 +1,263 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "nu_cabinet": "jugcraft:block/nu_cabinet",
+    "nu_cap": "jugcraft:block/nu_cap",
+    "nu_centrifuge": "jugcraft:block/nu_centrifuge",
+    "nu_floor": "jugcraft:block/nu_floor",
+    "nu_glass": "jugcraft:block/nu_glass",
+    "nu_hazard": "jugcraft:block/nu_hazard",
+    "nu_pipe_blue": "jugcraft:block/nu_pipe_blue",
+    "nu_steel": "jugcraft:block/nu_steel",
+    "front": "jugcraft:block/fuel_fabricator_front",
+    "particle": "jugcraft:block/machine_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16,
+        1.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_hazard"
+        },
+        "up": {
+          "texture": "#nu_floor"
+        },
+        "down": {
+          "texture": "#nu_floor"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        1.5,
+        4.0
+      ],
+      "to": [
+        14.0,
+        10.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_cabinet"
+        },
+        "east": {
+          "texture": "#nu_cabinet"
+        },
+        "west": {
+          "texture": "#nu_cabinet"
+        },
+        "up": {
+          "texture": "#nu_cabinet"
+        },
+        "down": {
+          "texture": "#nu_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        10.0,
+        4.0
+      ],
+      "to": [
+        2.5,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_glass"
+        },
+        "east": {
+          "texture": "#nu_glass"
+        },
+        "west": {
+          "texture": "#nu_glass"
+        },
+        "down": {
+          "texture": "#nu_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        13.5,
+        10.0,
+        4.0
+      ],
+      "to": [
+        14.0,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_glass"
+        },
+        "east": {
+          "texture": "#nu_glass"
+        },
+        "west": {
+          "texture": "#nu_glass"
+        },
+        "down": {
+          "texture": "#nu_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        10.0,
+        4.0
+      ],
+      "to": [
+        14.0,
+        16,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_glass"
+        },
+        "south": {
+          "texture": "#nu_glass"
+        },
+        "east": {
+          "texture": "#nu_glass"
+        },
+        "west": {
+          "texture": "#nu_glass"
+        },
+        "down": {
+          "texture": "#nu_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        9.9,
+        14.0
+      ],
+      "to": [
+        9.5,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_centrifuge"
+        },
+        "east": {
+          "texture": "#nu_centrifuge"
+        },
+        "west": {
+          "texture": "#nu_centrifuge"
+        },
+        "down": {
+          "texture": "#nu_centrifuge"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        10.0,
+        13.5
+      ],
+      "to": [
+        10.0,
+        11.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_steel"
+        },
+        "east": {
+          "texture": "#nu_steel"
+        },
+        "west": {
+          "texture": "#nu_steel"
+        },
+        "up": {
+          "texture": "#nu_steel"
+        },
+        "down": {
+          "texture": "#nu_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        15.5,
+        3.5
+      ],
+      "to": [
+        5.5,
+        16,
+        4.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_cap"
+        },
+        "south": {
+          "texture": "#nu_cap"
+        },
+        "east": {
+          "texture": "#nu_cap"
+        },
+        "west": {
+          "texture": "#nu_cap"
+        },
+        "down": {
+          "texture": "#nu_cap"
+        }
+      }
+    },
+    {
+      "from": [
+        9.5,
+        15.5,
+        3.5
+      ],
+      "to": [
+        12.5,
+        16,
+        4.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#nu_cap"
+        },
+        "south": {
+          "texture": "#nu_cap"
+        },
+        "east": {
+          "texture": "#nu_cap"
+        },
+        "west": {
+          "texture": "#nu_cap"
+        },
+        "down": {
+          "texture": "#nu_cap"
+        }
+      }
+    }
+  ]
+}

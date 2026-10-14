@@ -1,6 +1,8 @@
 # Arcane Concordance: Crimson resources and living equipment
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
+`claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 16) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 8, Practitioner stage (Jugcraft Workshops). Roadmap step 16.
@@ -107,7 +109,12 @@ No new dependency. Framework use:
   by every client that sees the player when the server says an offering was made (`VigilGesturePayload`).
   **ArmsMotion coordination**: ArmsMotion poses the arms of a player holding a Jugcraft arm; the gesture is skipped for
   such a player, so the two never pose the same arms at once (the offering itself still happens). The Thornheart Blade
-  is not one of ArmsMotion's arms, so it keeps vanilla's sword animation.
+  is not one of ArmsMotion's arms, so it keeps vanilla's sword animation. Since Concordance Chunk A (ticket A-07) a gun
+  in the main hand owns the arms too (`GunPose`): the gesture is skipped for a player holding one, and `CastPoses` stops
+  a gesture already playing when a gun or an arm is taken in hand
+  ([presentation](arcane-concordance-presentation.md#one-owner-for-the-arms-chunk-a-ticket-a-07)). The server sends the
+  gesture at the end of the tick of the offering, after the player's own tick has told other clients what they now
+  hold, so a player who takes the chalice from a gun and offers in one tick is not seen still holding the gun.
 - **Modonomicon**: a new **Vigil** codex category (Crimson Rites, offerings and efficiency, Crimson Surge, the
   Thornheart Blade).
 - **Spell Power, Trinkets**: not used. The blade's bonus is a plain attack-damage modifier (it is a sword, not a

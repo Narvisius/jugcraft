@@ -89,8 +89,13 @@ EXIT = {"x": (41, 42), "z": 68}
 CENTRE = (35.5, 38.5)
 BOUNDS = 40
 FLOOR = BOWL - 4
-# The hidden lights: a lattice through the kiln at two heights (y, level, spacing), and these: (x, y, z, level).
-LIGHT_LAYERS = ((BOWL + 5, 11, 8), (BOWL + 16, 12, 10))
+# The hidden lights: a lattice through the kiln at each of these heights (y, level, spacing, staggered), and these:
+# (x, y, z, level). A staggered lattice shifts every other row half a spacing along, its rows half a spacing apart, so no
+# cell under it is more than half a spacing (in blocks walked) from a light. The lower one hangs two blocks over the
+# floor at full strength, so that the Tyrant and whoever fights him can be seen anywhere in the bowl: its floor lies at
+# light 8 to 13 (it was 0 to 11 under a lattice three blocks higher, at 11), the slag brighter still.
+LIGHT_LAYERS = ((BOWL + 3, 15, 8, True), (BOWL + 16, 12, 10, False))
+BOWL_LIGHT = 8                     # the least block light on any cell of the bowl's floor (the audit and the client test)
 LIGHTS = [
     (35, BOWL + 3, 37, 13), (35, BOWL + 20, 37, 14),
     (41, ARRIVAL[1] + 2, 63, 13), (41, ARRIVAL[1] + 3, 66, 12),
@@ -338,9 +343,9 @@ def build():
     shelves(put, cells)
     stair(put, cells, blocks)
     exit_arch(put)
-    for y, level, spacing in LIGHT_LAYERS:
-        for x in range(4, SIZE[0], spacing):
-            for z in range(4, SIZE[2], spacing):
+    for y, level, spacing, staggered in LIGHT_LAYERS:
+        for row, z in enumerate(range(4, SIZE[2], spacing // 2 if staggered else spacing)):
+            for x in range(4 + (spacing // 2 if staggered and row % 2 else 0), SIZE[0], spacing):
                 if (x, y, z) in cells and (x, y, z) not in blocks:
                     put(x, y, z, light(level))
     for x, y, z, level in LIGHTS:

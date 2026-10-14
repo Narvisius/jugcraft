@@ -1,6 +1,19 @@
 package io.github.jimbozoomer.jugcraft.agriculture;
 
 import java.util.List;
+import local.peepo.CompanionRecipeFilter;
+import local.peepo.CompanionStatus;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
@@ -28,6 +41,96 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 
 	private int servings;
 	private long started;
+
+    private int companionBottles;
+    /** Brief unloading window for an eight-slot delivery; topping up never resets this batch's clock. */
+    private long companionFillUntil;
+    private final CompanionRecipeFilter filter = new CompanionRecipeFilter();
+    public CompanionRecipeFilter filter() { return filter; }
+    public int companionStage() {
+        return filter.allows(new ItemStack(JugcraftAgriculture.item("sparkling_cider"))) ? 1 : 2;
+    }
+    public void selectCompanionStage(boolean aged) {
+        for(int i=0;i<9;i++)filter.set(i,ItemStack.EMPTY);
+        filter.set(0,new ItemStack(JugcraftAgriculture.item(aged?"aged_cider":"sparkling_cider")));
+        changed();
+    }
+    private record TransferState(int servings, long started, int bottles, long fillUntil) {}
+    private final SnapshotParticipant<TransferState> transfers = new SnapshotParticipant<>() {
+        protected TransferState createSnapshot() { return new TransferState(servings,started,companionBottles,companionFillUntil); }
+        protected void readSnapshot(TransferState s) { servings=s.servings();started=s.started();companionBottles=s.bottles();companionFillUntil=s.fillUntil(); }
+        protected void onFinalCommit() { changed(); }
+    };
+    private final Storage<ItemVariant> companionInput = new InsertionOnlyStorage<>() {
+        public long insert(ItemVariant item,long amount,TransactionContext tx) {
+            StoragePreconditions.notBlankNotNegative(item,amount);
+            int count=(int)Math.min(amount,companionNeed(item.toStack(1)));
+            if(count<=0)return 0;
+            transfers.updateSnapshots(tx);
+            if(item.isOf(JugcraftAgriculture.item("sweet_cider"))) {
+                if(servings==0){started=level.getGameTime();companionFillUntil=started+100;}
+                servings+=count;
+            }
+            // Sweet cider is emptied into the cask; retain its actual bottles for this batch.
+            companionBottles+=count;
+            return count;
+        }
+    };
+    private final Storage<ItemVariant> companionOutput = new CombinedStorage<>(List.of(new BarrelOutput(false),new BarrelOutput(true)));
+    private class BarrelOutput implements SingleSlotStorage<ItemVariant> {
+        private final boolean spareBottles;
+        BarrelOutput(boolean spareBottles){this.spareBottles=spareBottles;}
+        public long insert(ItemVariant item,long amount,TransactionContext tx){return 0;}
+        public boolean supportsInsertion(){return false;}
+        public long extract(ItemVariant item,long amount,TransactionContext tx){
+            StoragePreconditions.notBlankNotNegative(item,amount);
+            if(!item.equals(getResource()))return 0;
+            int count=(int)Math.min(amount,getAmount());
+            if(count<=0)return 0;
+            transfers.updateSnapshots(tx);companionBottles-=count;
+            if(!spareBottles){servings-=count;if(servings==0){started=0;companionFillUntil=0;}}
+            return count;
+        }
+        public boolean isResourceBlank(){return getAmount()==0;}
+        public ItemVariant getResource(){
+            if(getAmount()==0)return ItemVariant.blank();
+            return ItemVariant.of(spareBottles?Items.GLASS_BOTTLE:JugcraftAgriculture.item(STAGES.get(stage(level.getGameTime()))));
+        }
+        public long getAmount(){
+            if(isRemoved() || level==null || level.isClientSide())return 0;
+            if(spareBottles)return Math.max(0,companionBottles-servings);
+            return stage(level.getGameTime())>=companionStage()?Math.min(servings,companionBottles):0;
+        }
+        public long getCapacity(){return CAPACITY;}
+    }
+    public int companionNeed(ItemStack item){
+        if(isRemoved() || level==null || level.isClientSide())return 0;
+        long now=level.getGameTime();
+        if(item.is(JugcraftAgriculture.item("sweet_cider")) && (servings==0 || now<companionFillUntil && stage(now)==0))
+            return Math.min(CAPACITY-servings,CAPACITY-companionBottles);
+        return item.is(Items.GLASS_BOTTLE)?Math.max(0,servings-companionBottles):0;
+    }
+    public Storage<ItemVariant> companionInputs(){return companionInput;}
+    public Storage<ItemVariant> companionOutputs(){return companionOutput;}
+    public CompanionStatus companionStatus(){
+        if(isRemoved() || level==null)return CompanionStatus.MISSING;
+        if(companionBottles>servings)return CompanionStatus.FULL;
+        if(servings==0)return CompanionStatus.NO_INPUT;
+        if(stage(level.getGameTime())<companionStage())return CompanionStatus.AGING;
+        return companionBottles==0?CompanionStatus.NEEDS_BOTTLES:CompanionStatus.FULL;
+    }
+    /** Recover reserved bottles by hand, including after manually drawing the batch. */
+    public boolean collectCompanionBottles(Player player){
+        if(companionBottles==0)return false;
+        var bottles=new ItemStack(Items.GLASS_BOTTLE,companionBottles);
+        player.getInventory().add(bottles);companionBottles=bottles.getCount();changed();return true;
+    }
+    @Override public void preRemoveSideEffects(BlockPos pos,BlockState state){
+        if(level instanceof ServerLevel server && companionBottles>0){
+            Block.popResource(server,pos,new ItemStack(Items.GLASS_BOTTLE,companionBottles));companionBottles=0;
+        }
+    }
+
 
 	public CiderBarrelBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftAgriculture.CIDER_BARREL_ENTITY, pos, state);
@@ -70,6 +173,7 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 	/** Pours in a serving of fresh juice; the batch's clock starts again. */
 	public void fill(long now) {
 		servings++;
+        companionFillUntil=0;
 		started = now;
 		changed();
 	}
@@ -95,6 +199,7 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 	}
 
 	private void changed() {
+        local.peepo.CompanionReadiness.invalidate(this);
 		setChanged();
 		if (level != null && !level.isClientSide()) {
 			BlockState state = getBlockState();
@@ -129,6 +234,9 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 		super.loadAdditional(input);
 		servings = Math.clamp(input.getIntOr("servings", 0), 0, CAPACITY);
 		started = input.getLongOr("started", 0L);
+        companionBottles=Math.clamp(input.getIntOr("CompanionBottles",0),0,CAPACITY);
+        companionFillUntil=input.getLongOr("CompanionFillUntil",0L);
+        filter.load(input);
 	}
 
 	@Override
@@ -136,5 +244,8 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 		super.saveAdditional(output);
 		output.putInt("servings", servings);
 		output.putLong("started", started);
+        output.putInt("CompanionBottles",companionBottles);
+        output.putLong("CompanionFillUntil",companionFillUntil);
+        filter.save(output);
 	}
 }

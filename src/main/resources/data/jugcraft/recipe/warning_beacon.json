@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "G",
+    "R",
+    "P"
+  ],
+  "key": {
+    "G": "minecraft:orange_stained_glass",
+    "R": "minecraft:redstone_lamp",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:warning_beacon",
+    "count": 2
+  }
+}

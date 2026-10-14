@@ -100,7 +100,7 @@ public class FluidPipeBlock extends PipeBlock implements FluidConnectable {
 	 * a fluid storage on the touching face (Jugcraft machines or other mods' blocks).
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
-	private static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
 		if (neighbor.getBlock() instanceof FluidConnectable) {
 			return true;
 		}

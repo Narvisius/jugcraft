@@ -405,6 +405,9 @@ def write_all(write, assets, data, lang, condition):
     by_tag["head_armor"].append(f"{MOD}:gas_mask")  # batch 31, tools/field_chemistry.py
     by_tag["chest_armor"].append(f"{MOD}:scuba_tank")
     by_tag["foot_armor"].append(f"{MOD}:free_runners")
+    import nuclear  # the hazmat suit (tools/nuclear.py)
+    for tag, item in nuclear.HAZMAT_TAGS.items():
+        by_tag[tag].append(f"{MOD}:{item}")
     # The two fire sets (tools/concordance_ember.py ARMOR): armor of their slots, so they enchant and equip as any armor.
     import concordance_ember
     for item, piece in concordance_ember.ARMOR.items():

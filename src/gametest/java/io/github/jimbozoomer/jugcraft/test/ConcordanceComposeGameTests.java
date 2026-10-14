@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.concordance.ComposedSpells;
+import io.github.jimbozoomer.jugcraft.concordance.Composing;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceData;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceEffects;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress;
@@ -10,19 +11,33 @@ import io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance;
 import io.github.jimbozoomer.jugcraft.concordance.RateGate;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Catalog;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Compiler;
+import io.github.jimbozoomer.jugcraft.concordance.compose.Component;
+import io.github.jimbozoomer.jugcraft.concordance.compose.Draft;
+import io.github.jimbozoomer.jugcraft.concordance.compose.Grammar;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Instrument;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Plan;
+import io.github.jimbozoomer.jugcraft.concordance.compose.Slot;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Text;
+import io.github.jimbozoomer.jugcraft.concordance.composer.Composer;
+import io.github.jimbozoomer.jugcraft.concordance.composer.ComposerRequestPayload;
+import io.github.jimbozoomer.jugcraft.concordance.composer.ComposerResultPayload;
+import io.github.jimbozoomer.jugcraft.concordance.composer.ComposerStatePayload;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Cause;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
 import io.github.jimbozoomer.jugcraft.concordance.rules.FocusPool;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
+import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
+import io.netty.buffer.Unpooled;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.function.Function;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +60,8 @@ import net.spell_engine.internals.target.SpellTarget;
  * Roadmap step 8, the spell compiler: the grammar loads from data; compositions compile to the numbers the codex
  * states, or name their exact problem; a spell is composed and inscribed by command, cast through Spell Engine's
  * carrier spell and settled once; the server compiles the inscription again (a forged cost is ignored); and a running
- * spell stays inside its compiled limits however many creatures it meets.
+ * spell stays inside its compiled limits however many creatures it meets. Since Chunk A (A-01), the command and the
+ * composer screen are answered by one service, {@link Composing}.
  */
 public class ConcordanceComposeGameTests {
 	private static final String FIRST_LIGHT = "jugcraft:first_light";
@@ -122,6 +138,7 @@ public class ConcordanceComposeGameTests {
 		Object[][] examples = {
 			{"touch struck light", ResearchState.UNDERSTOOD, 2, 2, 20},
 			{"here struck ward", ResearchState.UNDERSTOOD, 3, 3, 25},
+			{"touch struck ward", ResearchState.UNDERSTOOD, 3, 3, 25},
 			{"ray struck sear then here creatures dazzle", ResearchState.MASTERED, 8, 8, 50},
 		};
 		for (Object[] example : examples) {
@@ -214,6 +231,343 @@ public class ConcordanceComposeGameTests {
 			helper.assertTrue(ComposedSpells.inscription(player.getMainHandItem()) == null, "compose clear wipes it");
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * Chunk A (A-D13): the route's support spell. {@code touch struck ward} is inscribed through the composing service
+	 * and cast: the friend touched (a villager here) is warded (Absorption, 4 points), it costs its 3 Focus and starts its
+	 * cooldown; turned away, with no one to touch, it costs nothing and starts no cooldown.
+	 */
+	@GameTest(maxTicks = 40)
+	public void aWardForAFriendIsComposedAndCast(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		floor(helper);
+		ServerPlayer player = player(helper, new BlockPos(1, 2, 1));
+		ConcordanceProgress.grant(player, FIRST_LIGHT, ResearchState.UNDERSTOOD);
+		Composing.Result inscribed = Composing.compose(player, "touch struck ward", true, Composing.Held.of(player));
+		Inscription ward = ComposedSpells.inscription(player.getMainHandItem());
+		helper.assertTrue(inscribed.outcome() == Composing.Outcome.INSCRIBED && ward != null && ward.focus() == 3 && ward.cooldown() == 25,
+				"The ward for a friend is inscribed with its cost: " + inscribed.outcome() + " " + ward);
+		Mob villager = helper.spawnWithNoFreeWill(EntityTypes.VILLAGER, new BlockPos(1, 2, 3));
+		helper.runAfterDelay(SETTLE_TICKS, () -> {
+			ConcordanceProgress.setFocus(player, FocusPool.MAX);
+			refreshSpells(player);
+			cast(level, player);
+			SpellCaster.Player caster = (SpellCaster.Player) player;
+			helper.assertTrue(villager.hasEffect(MobEffects.ABSORPTION) && villager.getEffect(MobEffects.ABSORPTION).getAmplifier() == 0,
+					"The friend touched is warded: " + villager.getEffect(MobEffects.ABSORPTION));
+			helper.assertTrue(ConcordanceProgress.currentFocus(player) == FocusPool.MAX - 3 && caster.getCooldownManager().isCoolingDown(composed(level)),
+					"It costs its 3 Focus and starts its cooldown: " + ConcordanceProgress.currentFocus(player));
+
+			// Turned away: nothing to touch, so nothing is spent.
+			caster.getCooldownManager().reset(null);
+			ConcordanceProgress.setFocus(player, FocusPool.MAX);
+			BlockPos at = helper.absolutePos(new BlockPos(1, 2, 1));
+			player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 180.0F, 0.0F);
+			player.setYHeadRot(180.0F);
+			player.setYBodyRot(180.0F);
+			refreshSpells(player);
+			cast(level, player);
+			helper.assertTrue(ConcordanceProgress.currentFocus(player) == FocusPool.MAX && !caster.getCooldownManager().isCoolingDown(composed(level)),
+					"Warding no one costs nothing and starts no cooldown");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Chunk A, A-01: the command and the composer screen are one service. Each refusal comes in its order (the
+	 * Concordance off, then no instrument, then the rate gate the command shares) and writes nothing; an unknown word,
+	 * over-long text and an illegal branch are invalid with their problem named; a valid spell is checked without being
+	 * written, then inscribed in its canonical form; a screen's inscription is refused, writing nothing, once the
+	 * instrument in hand or the rules have changed since the screen showed them; a screen's clear wipes it; and what the
+	 * command writes is what the service shows.
+	 */
+	@GameTest(maxTicks = 20)
+	public void oneServiceAnswersCommandAndScreen(GameTestHelper helper) {
+		ServerPlayer player = player(helper, new BlockPos(1, 2, 1));
+		ConcordanceProgress.grant(player, FIRST_LIGHT, ResearchState.UNDERSTOOD);
+		String light = "touch struck light";
+
+		// The Concordance off: refused first, whatever is held (switched back at once; the server runs other tests).
+		boolean on = JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE);
+		JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE, false);
+		Composing.Result off;
+		try {
+			off = Composing.compose(player, light, true, Composing.Held.of(player));
+		} finally {
+			JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE, on);
+		}
+		helper.assertTrue(off.outcome() == Composing.Outcome.DISABLED && ComposedSpells.inscription(player.getMainHandItem()) == null,
+				"With the Concordance off nothing is composed: " + off.outcome());
+
+		// No instrument in hand.
+		ItemStack wand = player.getMainHandItem();
+		player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+		Composing.Result bare = Composing.compose(player, light, true, null);
+		player.setItemInHand(InteractionHand.MAIN_HAND, wand);
+		helper.assertTrue(bare.outcome() == Composing.Outcome.NO_INSTRUMENT && bare.instrument() == null,
+				"Bare hands hold no instrument: " + bare.outcome());
+
+		// Checked, not written; then the command, straight after, meets the same gate and writes nothing.
+		Composing.Result checked = Composing.compose(player, light, false, null);
+		helper.assertTrue(checked.outcome() == Composing.Outcome.VALID && checked.plan() != null && checked.plan().focus() == 2
+				&& checked.text().equals(light) && !checked.lines().isEmpty() && ComposedSpells.inscription(wand) == null,
+				"A valid spell is checked and explained, and nothing is written: " + checked.outcome() + " " + checked.problems());
+		command(player, "jugcraft concordance compose inscribe " + light);
+		Composing.Result fast = Composing.compose(player, light, false, null);
+		helper.assertTrue(ComposedSpells.inscription(wand) == null && fast.outcome() == Composing.Outcome.TOO_FAST,
+				"Command and screen share one rate: the command just after writes nothing, and the next check waits: " + fast.outcome());
+
+		// Invalid texts name their problem and write nothing.
+		String[][] invalid = {
+			{"touch struck glitter", "problem.unknown"},
+			{"touch ".repeat(43) + "struck light", "problem.too_long"},
+			{"touch struck light then touch struck light", "problem.branch_delivery"},
+		};
+		for (String[] example : invalid) {
+			RateGate.forget(player.getUUID());
+			Composing.Result result = Composing.compose(player, example[0], true, Composing.Held.of(player));
+			helper.assertTrue(result.outcome() == Composing.Outcome.INVALID && result.plan() == null
+					&& result.problems().stream().map(Text::key).anyMatch(example[1]::equals) && result.lines().equals(result.problems())
+					&& ComposedSpells.inscription(wand) == null, example[1] + " is named and nothing is written: " + result.problems());
+		}
+
+		// A screen inscribes the wand it showed, in canonical form.
+		RateGate.forget(player.getUUID());
+		Composing.Held shown = Composing.Held.of(player);
+		Composing.Result inscribed = Composing.compose(player, "  Touch  struck   LIGHT ", true, shown);
+		Inscription written = ComposedSpells.inscription(player.getMainHandItem());
+		helper.assertTrue(inscribed.outcome() == Composing.Outcome.INSCRIBED && written != null && written.text().equals(light)
+				&& written.focus() == 2 && written.cooldown() == 20, "Inscribed in canonical form with its Focus and cooldown: " + written);
+
+		// What that screen showed no longer holds: the wand has changed.
+		RateGate.forget(player.getUUID());
+		Composing.Result stale = Composing.compose(player, "touch struck reveal", true, shown);
+		helper.assertTrue(stale.outcome() == Composing.Outcome.CHANGED && light.equals(ComposedSpells.inscription(player.getMainHandItem()).text()),
+				"A screen that showed the wand before it changed writes nothing: " + stale.outcome());
+
+		// Another wand swapped in before the commit is left as it is.
+		Composing.Held showing = Composing.Held.of(player);
+		ItemStack inscribedWand = player.getMainHandItem();
+		ItemStack other = new ItemStack(JugcraftConcordance.INITIATE_WAND);
+		player.setItemInHand(InteractionHand.MAIN_HAND, other);
+		Composing.Result swapped = Composing.compose(player, "touch struck reveal", true, showing);
+		helper.assertTrue(swapped.outcome() == Composing.Outcome.CHANGED && ComposedSpells.inscription(other) == null,
+				"A wand swapped in after the screen showed another is not written on: " + swapped.outcome());
+
+		// The same wand back holds again, until the rules are reloaded.
+		player.setItemInHand(InteractionHand.MAIN_HAND, inscribedWand);
+		helper.assertTrue(showing.holds(player), "The wand the screen showed, back in hand, is what it showed");
+		ConcordanceData.replace(ConcordanceData.rules());
+		Composing.Result reloaded = Composing.compose(player, "touch struck reveal", true, showing);
+		helper.assertTrue(reloaded.outcome() == Composing.Outcome.CHANGED && light.equals(ComposedSpells.inscription(player.getMainHandItem()).text()),
+				"After a reload, a screen showing the old rules writes nothing: " + reloaded.outcome());
+
+		// A screen's clear, then the command's finds nothing to wipe.
+		RateGate.forget(player.getUUID());
+		Composing.Result cleared = Composing.clear(player, Composing.Held.of(player));
+		Composing.Result again = Composing.clear(player);
+		helper.assertTrue(cleared.outcome() == Composing.Outcome.CLEARED && again.outcome() == Composing.Outcome.NOTHING_INSCRIBED
+				&& ComposedSpells.inscription(player.getMainHandItem()) == null, "Cleared once; then nothing is inscribed: " + again.outcome());
+
+		// What the command writes is what the service shows.
+		RateGate.forget(player.getUUID());
+		command(player, "jugcraft concordance compose inscribe touch struck reveal");
+		Composing.Result shownNow = Composing.show(player);
+		Inscription byCommand = ComposedSpells.inscription(player.getMainHandItem());
+		helper.assertTrue(byCommand != null && shownNow.outcome() == Composing.Outcome.VALID && shownNow.text().equals(byCommand.text())
+				&& shownNow.plan() != null && shownNow.plan().focus() == byCommand.focus(), "The command inscribes through the service: "
+						+ byCommand + " / " + shownNow.outcome());
+		helper.succeed();
+	}
+
+	private static ComposerRequestPayload request(int sequence, int action, int revision, String text) {
+		return new ComposerRequestPayload(sequence, action, revision, text);
+	}
+
+	private static ComposerStatePayload.Word learned(ComposerStatePayload state, String id) {
+		return state.words().stream().filter(word -> word.id().equals(id)).findFirst().orElse(null);
+	}
+
+	/**
+	 * Chunk A, A-03: the composer's draft writes what the grammar wants. Words chosen from buttons go where their slot
+	 * belongs (a new delivery or selection replaces the old one); a modifier joins the chosen word, once; words move and
+	 * are removed; a branch is its own level and shows as "then" while empty; typed text that reads as a spell becomes
+	 * its words, and any other text is kept as typed for the check to explain; every edit can be undone, at most
+	 * Draft.UNDO_LIMIT deep.
+	 */
+	@GameTest(maxTicks = 20)
+	public void theDraftWritesWhatTheGrammarWants(GameTestHelper helper) {
+		Catalog catalog = ConcordanceData.rules().catalog();
+		Function<String, Slot> slots = id -> {
+			Component component = catalog.component(id);
+			return component == null ? null : component.slot();
+		};
+		Draft draft = new Draft();
+		draft.add("jugcraft:light", Slot.OPERATION, slots);
+		draft.add("jugcraft:touch", Slot.DELIVERY, slots);
+		draft.add("jugcraft:struck", Slot.SELECTION, slots);
+		helper.assertValueEqual(draft.text(), "touch struck light", "words from buttons, in the grammar's order");
+		draft.add("jugcraft:here", Slot.DELIVERY, slots);
+		helper.assertValueEqual(draft.text(), "here struck light", "a new delivery replaces the old");
+		helper.assertTrue(draft.undo() && draft.text().equals("touch struck light"), "an undo brings it back: " + draft.text());
+		draft.choose(0, 2);
+		helper.assertTrue(draft.join("jugcraft:prolong") && draft.text().equals("touch struck light+prolong") && !draft.join("jugcraft:prolong"),
+				"a modifier joins the chosen word, once: " + draft.text());
+		helper.assertTrue(draft.unjoin() && draft.move(-1) && draft.text().equals("touch light struck"), "unjoined, then moved earlier: " + draft.text());
+		helper.assertTrue(draft.undo() && draft.text().equals("touch struck light") && draft.index() == 2, "the move undone: " + draft.text());
+		helper.assertTrue(draft.branch() && draft.text().equals("touch struck light then") && !draft.canBranch(),
+				"an empty branch shows as then, and no second begins until it has words: " + draft.text());
+		draft.add("jugcraft:here", Slot.DELIVERY, slots);
+		draft.add("jugcraft:dazzle", Slot.OPERATION, slots);
+		draft.add("jugcraft:creatures", Slot.SELECTION, slots);
+		helper.assertTrue(draft.levels().size() == 2 && draft.text().equals("touch struck light then here creatures dazzle"),
+				"the branch's words go in its own level: " + draft.text());
+		draft.read("Ray  STRUCK   sear", true);
+		helper.assertTrue(draft.text().equals("ray struck sear") && !draft.typed() && draft.levels().getFirst().size() == 3,
+				"typed text that reads as a spell becomes its words: " + draft.text());
+		draft.read("ray struck # sear", true);
+		helper.assertTrue(draft.typed() && draft.text().equals("ray struck # sear"), "other text is kept as typed: " + draft.text());
+		helper.assertTrue(draft.undo() && draft.text().equals("ray struck sear") && draft.undo() && draft.text().contains(" then "),
+				"and both are undone in turn: " + draft.text());
+		draft.read("touch struck light", true);
+		draft.choose(0, 1);
+		helper.assertTrue(draft.remove() && draft.text().equals("touch light") && draft.index() == 1, "removed, the next word chosen: "
+				+ draft.text());
+		draft.read("touch struck light then here creatures dazzle", true);
+		draft.choose(0, 0);
+		helper.assertTrue(draft.remove() && draft.remove() && draft.remove() && draft.index() == -1 && draft.level() == 0
+				&& !draft.canBranch(), "the spell's words all removed, its emptied level is where words go next: " + draft.text());
+		draft.add("jugcraft:ray", Slot.DELIVERY, slots);
+		helper.assertValueEqual(draft.text(), "ray then here creatures dazzle", "a word written into the emptied level");
+		Draft full = new Draft();
+		int written = 0;
+		while (full.add("jugcraft:light", Slot.OPERATION, slots)) {
+			written++;
+		}
+		helper.assertTrue(written > 0 && full.text().length() <= Grammar.MAX_TEXT && full.text().length() > Grammar.MAX_TEXT - "light ".length(),
+				"words from buttons stop at the grammar's length: " + full.text().length());
+		Draft deep = new Draft();
+		for (int i = 0; i < Draft.UNDO_LIMIT + 6; i++) {
+			deep.read(i % 2 == 0 ? "touch struck light" : "here struck ward", true);
+		}
+		int undone = 0;
+		while (deep.undo()) {
+			undone++;
+		}
+		helper.assertValueEqual(undone, Draft.UNDO_LIMIT, "edits that can be undone");
+		helper.succeed();
+	}
+
+	/**
+	 * Chunk A, A-02: the composer screen's server side answers as the command does. Opening sends the wand's limits and
+	 * only the words the player has learned (the rest are counted, not named), each with what can change it; an answer
+	 * names and blames an unknown word, shows each distinct problem once, and carries a valid spell's numbers; a check
+	 * within the shared rate waits and the newest is answered at the allowed tick; an inscribe or clear naming an old
+	 * revision writes nothing and the screen is sent its state again; and an unknown action is ignored.
+	 */
+	@GameTest(maxTicks = 60)
+	public void theComposerAnswersAsTheCommandDoes(GameTestHelper helper) {
+		ServerPlayer player = player(helper, new BlockPos(1, 2, 1));
+		ConcordanceProgress.grant(player, FIRST_LIGHT, ResearchState.UNDERSTOOD);
+		Composer.receive(player, request(1, ComposerRequestPayload.OPEN, 0, ""));
+		int opened = Composer.revision(player);
+		ComposerStatePayload state = Composer.state(player, opened);
+		helper.assertTrue(opened >= 1 && !Composer.waiting(player) && state.status() == ComposerStatePayload.READY
+				&& state.instrument().map(ComposerStatePayload.InstrumentView::capacity).orElse(0) == 8 && state.inscribed().isEmpty(),
+				"It opens on the wand: " + state);
+		List<String> words = state.words().stream().map(ComposerStatePayload.Word::id).toList();
+		helper.assertTrue(words.size() == 7 && state.locked() == 10 && words.contains("jugcraft:touch") && !words.contains("jugcraft:ray")
+				&& !words.contains("jugcraft:mend"), "Only the seven words First Light understood teaches are sent; ten more are counted, "
+						+ "not named, and no invocation's own word: " + words + " and " + state.locked());
+		ComposerStatePayload.Word touch = learned(state, "jugcraft:touch");
+		ComposerStatePayload.Word light = learned(state, "jugcraft:light");
+		ComposerStatePayload.Word prolong = learned(state, "jugcraft:prolong");
+		ComposerStatePayload.Word struck = learned(state, "jugcraft:struck");
+		helper.assertTrue(touch.aspects() == 1 << Component.Aspect.RANGE.ordinal() && prolong.aspects() == 1 << Component.Aspect.DURATION.ordinal()
+				&& (light.aspects() & prolong.aspects()) != 0 && struck.aspects() == 0 && touch.slot() == Slot.DELIVERY.ordinal(),
+				"Each word says what can change it: touch its range, light its time (so prolong may join it), struck nothing");
+
+		RateGate.forget(player.getUUID());
+		ComposerResultPayload unknown = Composer.result(2, opened, Composing.compose(player, "touch struck glitter", false, null), player);
+		helper.assertTrue(unknown.what() == Composing.Outcome.INVALID && unknown.report().blamed().contains("glitter")
+				&& unknown.report().summary().isEmpty() && !unknown.report().lines().isEmpty() && unknown.text().equals("touch struck glitter")
+				&& unknown.heading().getContents() instanceof TranslatableContents heading && heading.getKey().equals("compose.jugcraft.invalid"),
+				"An unknown word is named and blamed: " + unknown.report());
+		RateGate.forget(player.getUUID());
+		ComposerResultPayload crowded = Composer.result(3, opened, Composing.compose(player, "here allies" + " dazzle".repeat(22), false, null), player);
+		helper.assertTrue(crowded.what() == Composing.Outcome.INVALID && !crowded.report().lines().isEmpty()
+				&& new HashSet<>(crowded.report().lines()).size() == crowded.report().lines().size()
+				&& crowded.report().lines().size() <= ComposerResultPayload.MAX_LINES, "Each distinct problem is shown once: "
+						+ crowded.report().lines().size());
+		RateGate.forget(player.getUUID());
+		ComposerResultPayload valid = Composer.result(4, opened, Composing.compose(player, "touch struck light", false, null), player);
+		helper.assertTrue(valid.what() == Composing.Outcome.VALID && valid.text().equals("touch struck light") && valid.report().blamed().isEmpty()
+				&& valid.report().summary().map(ComposerResultPayload.Summary::focus).orElse(0) == 2, "A valid spell carries its numbers: "
+						+ valid.report().summary());
+
+		// The rate the command shares: the first check is answered, the next waits, and a newer one replaces it.
+		RateGate.forget(player.getUUID());
+		Composer.receive(player, request(5, ComposerRequestPayload.CHECK, 0, "touch struck light"));
+		boolean first = !Composer.waiting(player);
+		Composer.receive(player, request(6, ComposerRequestPayload.CHECK, 0, "touch struck glitter"));
+		Composer.receive(player, request(7, ComposerRequestPayload.CHECK, 0, "touch struck reveal"));
+		helper.assertTrue(first && Composer.waiting(player), "The first check is answered at once; one within the second waits");
+		helper.runAfterDelay(Composing.COMPOSE_RATE_TICKS + 2, () -> {
+			helper.assertTrue(!Composer.waiting(player), "and is answered at the allowed tick");
+			RateGate.forget(player.getUUID());
+			int before = Composer.revision(player);
+			Composer.receive(player, request(8, ComposerRequestPayload.INSCRIBE, before - 1, "touch struck light"));
+			helper.assertTrue(ComposedSpells.inscription(player.getMainHandItem()) == null && Composer.revision(player) == before + 1,
+					"An inscribe naming an old revision writes nothing, and the screen is sent the state again");
+			RateGate.forget(player.getUUID());
+			Composer.receive(player, request(9, ComposerRequestPayload.INSCRIBE, Composer.revision(player), "touch struck light"));
+			Inscription written = ComposedSpells.inscription(player.getMainHandItem());
+			helper.assertTrue(written != null && written.text().equals("touch struck light") && Composer.revision(player) == before + 2
+					&& Composer.state(player, Composer.revision(player)).inscribed().equals("touch struck light"),
+					"The latest revision inscribes, and the new state says so: " + written);
+			RateGate.forget(player.getUUID());
+			Composer.receive(player, request(10, ComposerRequestPayload.CLEAR, before + 1, ""));
+			helper.assertTrue(ComposedSpells.inscription(player.getMainHandItem()) != null, "A clear naming an old revision wipes nothing");
+			RateGate.forget(player.getUUID());
+			Composer.receive(player, request(11, ComposerRequestPayload.CLEAR, Composer.revision(player), ""));
+			helper.assertTrue(ComposedSpells.inscription(player.getMainHandItem()) == null, "The latest revision wipes it");
+			Composer.receive(player, request(12, 7, Composer.revision(player), "touch struck light"));
+			helper.assertTrue(!Composer.waiting(player) && ComposedSpells.inscription(player.getMainHandItem()) == null,
+					"An action the server does not know is ignored");
+			helper.succeed();
+		});
+	}
+
+	/** Chunk A, A-02: the composer's three messages come through encoding whole, and an over-long text cannot be sent. */
+	@GameTest(maxTicks = 20)
+	public void composerMessagesSurviveTheTrip(GameTestHelper helper) {
+		ServerPlayer player = player(helper, new BlockPos(1, 2, 1));
+		ConcordanceProgress.grant(player, FIRST_LIGHT, ResearchState.UNDERSTOOD);
+		RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
+		ComposerRequestPayload request = request(3, ComposerRequestPayload.INSCRIBE, 2, "touch struck light");
+		ComposerRequestPayload.CODEC.encode(buffer, request);
+		helper.assertTrue(ComposerRequestPayload.CODEC.decode(buffer).equals(request), "the request");
+		ComposerStatePayload state = Composer.state(player, 4);
+		ComposerStatePayload.CODEC.encode(buffer, state);
+		ComposerStatePayload stateBack = ComposerStatePayload.CODEC.decode(buffer);
+		helper.assertTrue(stateBack.equals(state) && stateBack.words().size() == 7, "the state: " + stateBack);
+		RateGate.forget(player.getUUID());
+		ComposerResultPayload result = Composer.result(5, 4, Composing.compose(player, "touch struck light", false, null), player);
+		ComposerResultPayload.CODEC.encode(buffer, result);
+		ComposerResultPayload back = ComposerResultPayload.CODEC.decode(buffer);
+		helper.assertTrue(back.sequence() == 5 && back.what() == Composing.Outcome.VALID && back.text().equals(result.text())
+				&& back.report().summary().equals(result.report().summary()) && back.report().lines().size() == result.report().lines().size()
+				&& back.heading().getString().equals(result.heading().getString()), "the answer");
+		boolean refused = false;
+		try {
+			ComposerRequestPayload.CODEC.encode(new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess()),
+					request(6, ComposerRequestPayload.CHECK, 0, "a".repeat(ComposerRequestPayload.MAX_TEXT + 1)));
+		} catch (RuntimeException expected) {
+			refused = true;
+		}
+		helper.assertTrue(refused, "A text past the bound cannot be encoded, so it is never sent or received");
+		helper.succeed();
 	}
 
 	/**

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P  ",
+    "PPP",
+    "N N"
+  ],
+  "key": {
+    "P": "jugcraft:plastic_sheet",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:cafe_chair",
+    "count": 2
+  }
+}

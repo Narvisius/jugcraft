@@ -42,6 +42,7 @@ public class CiderPressRenderer implements BlockEntityRenderer<CiderPressBlockEn
 		int pulp;
 		int turns;
 		int juice;
+		float handleAngle;
 		Direction facing = Direction.NORTH;
 	}
 
@@ -61,6 +62,7 @@ public class CiderPressRenderer implements BlockEntityRenderer<CiderPressBlockEn
 		state.pulp = press.pulp();
 		state.turns = press.turns();
 		state.juice = press.juice();
+		state.handleAngle=press.visualHandleAngle(partialTick);
 		state.facing = press.getBlockState().hasProperty(CiderPressBlock.FACING) ? press.getBlockState().getValue(CiderPressBlock.FACING)
 				: Direction.NORTH;
 	}
@@ -101,7 +103,7 @@ public class CiderPressRenderer implements BlockEntityRenderer<CiderPressBlockEn
 		// The capstan bar on the nut, a quarter turn a turn of the screw.
 		pose.pushPose();
 		pose.translate(0.5F, 0.0F, 0.5F);
-		pose.rotateDegrees(Axis.YP, 90.0F * state.turns);
+		pose.rotateDegrees(Axis.YP, state.handleAngle);
 		pose.translate(-0.5F, 0.0F, -0.5F);
 		collector.submitCustomGeometry(pose, IRON, (matrix, buffer) ->
 				TintedBoxes.box(buffer, matrix, 2.5F, 16, 7.5F, 13.5F, 17, 8.5F, WHITE, light));

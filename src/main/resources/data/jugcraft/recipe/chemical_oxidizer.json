@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PFP",
+    "MCG",
+    "PKP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "F": "minecraft:furnace",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "G": "minecraft:glass",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:chemical_oxidizer",
+    "count": 1
+  }
+}

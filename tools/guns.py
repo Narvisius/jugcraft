@@ -537,6 +537,85 @@ GUNS = {
         "damage": 4.0, "pellets": 6, "interval": 20, "auto": False, "capacity": 5,
         "reload": (6, 10, 11), "spread": (5.0, 3.0), "range": 36, "ammo": "buckshot_shell",
     },
+    # Slice 12A: the End guns, in the shulkers' purpur, each fed from a shulker box with the shulker peering out of it:
+    # a machine gun, a rifle and a heavy machine gun carried at the hip. Their shots make what they hit float, as a
+    # shulker's do (LEVITATING).
+    "chitin_smg": {
+        "display": "Chitin SMG",
+        "source": "carapice",
+        "tooltip": "An End-forged machine gun fed from a shulker box, firing for as long as the trigger is held; its "
+                   "shots make what they hit float. Fires light rounds.",
+        "damage": 3.0, "pellets": 1, "interval": 3, "auto": True, "capacity": 24,
+        "reload": 56, "spread": (3.5, 1.2), "range": 48, "ammo": "light_round",
+    },
+    "hermit_rifle": {
+        "display": "Hermit Rifle",
+        "source": "shellurker",
+        "tooltip": "An End-forged rifle in a shulker's shell, fed from a shulker box and firing for as long as the "
+                   "trigger is held; its shots make what they hit float. Fires rifle rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 4, "auto": True, "capacity": 20,
+        "reload": 51, "spread": (3.0, 0.5), "range": 80, "ammo": "rifle_round",
+    },
+    "borer": {
+        "display": "Borer",
+        "source": "weevil",
+        "tooltip": "An End-forged machine gun carried at the hip, fed from a shulker box under its long barrel and "
+                   "charged with a crank; its shots make what they hit float. Fires rifle rounds.",
+        "damage": 5.5, "pellets": 1, "interval": 5, "auto": True, "capacity": 40,
+        "reload": 78, "spread": (4.0, 1.5), "range": 72, "ammo": "rifle_round",
+    },
+    # Slice 12B: the copper guns, early guns of copper and iron as the Rust Midge is: a pistol held in one hand, a
+    # slide-action carbine and a submachine gun, the pistol and the submachine gun fed from magazines at their left side.
+    "penny_pistol": {
+        "display": "Penny Pistol",
+        "source": "scrapper",
+        "tooltip": "A copper pistol held in one hand, fed from a magazine at its left side. Fires light rounds.",
+        "damage": 4.0, "pellets": 1, "interval": 6, "auto": False, "capacity": 10,
+        "reload": 56, "spread": (3.0, 1.0), "range": 48, "ammo": "light_round",
+    },
+    "conductor_carbine": {
+        "display": "Conductor Carbine",
+        "source": "llr_director",
+        "tooltip": "A copper slide-action carbine, its fore-end worked after every shot: one hard round each pull. Fires "
+                   "rifle rounds.",
+        "damage": 8.0, "pellets": 1, "interval": 15, "auto": False, "capacity": 8,
+        "reload": 49, "spread": (2.0, 0.3), "range": 96, "ammo": "rifle_round",
+    },
+    "magpie_smg": {
+        "display": "Magpie SMG",
+        "source": "birdfeeder",
+        "tooltip": "A copper submachine gun fed from a long magazine at its left side, firing for as long as the trigger "
+                   "is held. Fires light rounds.",
+        "damage": 2.5, "pellets": 1, "interval": 4, "auto": True, "capacity": 32,
+        "reload": 53, "spread": (3.5, 1.5), "range": 40, "ammo": "light_round",
+    },
+    # Slice 12C: one of the owner's last two copper guns, their one iron gun and their one echo-shard gun. A pistol held
+    # in one hand, the tube under its barrel loaded a round at a time; a heavy revolver held in one hand, its cylinder
+    # swung out to load a round at a time; and a bolt-action rifle of the deep dark.
+    "tuppence_pistol": {
+        "display": "Tuppence Pistol",
+        "source": "umax_pistol",
+        "tooltip": "A copper pistol held in one hand, the tube under its barrel loaded a round at a time. Fires light "
+                   "rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 6, "auto": False, "capacity": 8,
+        "reload": (8, 12, 5), "spread": (2.5, 1.0), "range": 56, "ammo": "light_round",
+    },
+    "goshawk_revolver": {
+        "display": "Goshawk Revolver",
+        "source": "ultra_knight_hawk",
+        "tooltip": "A heavy iron revolver held in one hand, its cylinder swung out to load a round at a time. Fires "
+                   "rifle rounds.",
+        "damage": 9.0, "pellets": 1, "interval": 10, "auto": False, "capacity": 6,
+        "reload": (10, 20, 14), "spread": (2.0, 0.6), "range": 64, "ammo": "rifle_round",
+    },
+    "lament_rifle": {
+        "display": "Lament Rifle",
+        "source": "forlorn_hope",
+        "tooltip": "A sculk-grown bolt-action rifle, its bolt worked after every shot: one heavy, true shot at long range "
+                   "from a magazine of five. Fires rifle rounds.",
+        "damage": 16.0, "pellets": 1, "interval": 19, "auto": False, "capacity": 5,
+        "reload": 53, "spread": (2.0, 0.05), "range": 160, "ammo": "rifle_round",
+    },
 }
 
 # What a gun fires: bullets, or a slice 8C or 8D gun's "shot".
@@ -706,6 +785,27 @@ RECIPES = {
                                              "B": "minecraft:gilded_blackstone"}),
     "crackling": (["GGS", "SLB"], {"S": "#c:ingots/steel", "G": "minecraft:gold_ingot", "L": "minecraft:lever",
                                    "B": "minecraft:gilded_blackstone"}),
+    # Slice 12A: steel and a lever, as the other steel guns; a shulker shell and purpur from the End's cities. The
+    # Borer, the heaviest, takes two shells.
+    "chitin_smg": (["SSH", " LP"], {"S": "#c:ingots/steel", "H": "minecraft:shulker_shell", "L": "minecraft:lever",
+                                    "P": "minecraft:purpur_block"}),
+    "hermit_rifle": (["SSS", "HLP"], {"S": "#c:ingots/steel", "H": "minecraft:shulker_shell", "L": "minecraft:lever",
+                                      "P": "minecraft:purpur_block"}),
+    "borer": (["SSS", "HLH", " P "], {"S": "#c:ingots/steel", "H": "minecraft:shulker_shell", "L": "minecraft:lever",
+                                      "P": "minecraft:purpur_block"}),
+    # Slice 12B: copper, iron and a lever, as the Rust Midge.
+    "penny_pistol": (["CC", "LI"], {"C": "minecraft:copper_ingot", "L": "minecraft:lever", "I": "minecraft:iron_ingot"}),
+    "conductor_carbine": (["CCC", "ILI"], {"C": "minecraft:copper_ingot", "L": "minecraft:lever",
+                                           "I": "minecraft:iron_ingot"}),
+    "magpie_smg": (["CCC", " LI"], {"C": "minecraft:copper_ingot", "L": "minecraft:lever", "I": "minecraft:iron_ingot"}),
+    # Slice 12C: the Tuppence Pistol as the other copper guns; the Goshawk Revolver all iron and a lever, the library's
+    # one iron gun.
+    "tuppence_pistol": (["CCC", "CLI"], {"C": "minecraft:copper_ingot", "L": "minecraft:lever",
+                                         "I": "minecraft:iron_ingot"}),
+    "goshawk_revolver": (["III", " LI", "  I"], {"I": "minecraft:iron_ingot", "L": "minecraft:lever"}),
+    # The Lament Rifle as the sculk guns (slice 10D): steel and a lever, echo shards and sculk from the deep dark.
+    "lament_rifle": (["SSS", "ELE", " K "], {"S": "#c:ingots/steel", "E": "minecraft:echo_shard", "L": "minecraft:lever",
+                                             "K": "minecraft:sculk"}),
 }
 # The switches beyond "guns" a gun's recipe needs (separate load conditions, all of which must hold): the energy weapons
 # and their cells are useless without the Charging Station, so they need the machines too (as the leaf blower does).
@@ -1712,6 +1812,169 @@ BUILDS = {
         "sight": (8.0, 6.45, 9.1),
         "eye_relief": 6.0,
     },
+    # Slice 12A, the End guns. The Carapice and the Shellurker share their animations and the back of their body. The
+    # magazine is the shulker box under the receiver (the main part's last six elements: the shell, its lid plates and
+    # the shulker's head), with the two cables plugged into its top and the loop of cable ahead of it; magazine_2 and
+    # scriptures hold nothing. The bolt is the owner's receiver part, the block on top of the receiver, driven back
+    # with each shot and held back through the reload. The sight is the owner's ring ahead of it, the front post on
+    # the shroud.
+    "chitin_smg": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 2.4, 14.7)),
+            ("gun_body", "gun_body2", ["main-#9,10,11,22,23,24,25,26,27", "sights"], (8.0, 2.4, 14.7)),
+            ("bolt", "gun_body", ["receiver"], (8.0, 5.6, 12.4)),
+            ("magazine", "gun_body", ["main#9,10,11,22,23,24,25,26,27"], (8.0, 3.24, 9.43)),
+            ("magazine_2", "gun_body", [], (8.0, 3.24, 9.43)),
+            ("scriptures", "gun_body", [], (8.0, 6.0, 12.0)),
+        ],
+        "hands": {"right": (8.0, 2.4, 14.7), "left": (8.0, 2.0, 6.3)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 3.28, 3.1),
+        "sight": (8.0, 7.0, 10.94),
+    },
+    "hermit_rifle": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 2.4, 14.7)),
+            ("gun_body", "gun_body2", ["main-#27,28,29,41,42,43,44,45,46", "sights"], (8.0, 2.4, 14.7)),
+            ("bolt", "gun_body", ["receiver"], (8.0, 6.1, 9.9)),
+            ("magazine", "gun_body", ["main#27,28,29,41,42,43,44,45,46"], (8.0, 3.24, 9.43)),
+            ("magazine_2", "gun_body", [], (8.0, 3.24, 9.43)),
+            ("default_mag", "gun_body", [], (8.0, 3.24, 9.43)),
+            ("scriptures", "gun_body", [], (8.0, 6.0, 12.0)),
+        ],
+        "hands": {"right": (8.0, 2.4, 14.7), "left": (8.0, 2.0, 5.5)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 5.25, -0.55),
+        "sight": (8.0, 7.25, 7.94),
+        "eye_relief": 2.0,
+    },
+    # The Weevil is carried at the hip, as the Gattaler is: the right hand holds the D handle at the back. Its barrel
+    # part slides back with each shot and through the reload; its magazine is the owner's group of the shulker box under
+    # the front (the main part's first nine elements); its "grip" is the crank on the left (the 37th, 38th, 45th and
+    # 48th to 52nd), turned as the reload ends. The drum on the left side stays. It has no sights to aim down: its
+    # receiver stands above the line from its front post.
+    "borer": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 6.75, 18.25)),
+            ("gun_body", "gun_body2", ["main-#0,1,2,3,4,5,6,7,8,36,37,44,47,48,49,50,51"], (8.0, 6.75, 18.25)),
+            ("barrel", "gun_body", ["barrel"], (8.0, 4.18, -3.4)),
+            ("magazine", "gun_body", ["main#0,1,2,3,4,5,6,7,8"], (8.0, 2.09, 4.51)),
+            ("grip", "gun_body", ["main#36,37,44,47,48,49,50,51"], (5.0, 4.25, 8.53)),
+        ],
+        "hands": {"right": (8.0, 6.75, 18.25), "left": (8.0, 2.4, 1.5)},
+        "arms": {"right": (0.1576, -0.588, 0.7934), "left": (-0.5272, -0.3044, 0.7934)},
+        "muzzle": (8.0, 4.18, -8.3),
+        "sight": None,
+    },
+    # Slice 12B, the copper guns. The Scrapper is held in one hand: its idle hides the left arm, which comes in through
+    # the reload, first under the frame (0.25 s), then to change the magazine. Its magazine goes in at the left side and
+    # rides the sliding_magazine bone, which the reload draws out to the left and drops away, a new one swung in; the
+    # magazine and magazine_2 bones its shots scale hold nothing. Its bolt is the pair of knobs on its sides, driven
+    # back with each shot and racked as the reload ends. Its sight is the notch on its back over the post on its front.
+    "penny_pistol": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel"], (8.0, 2.9, 14.6)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 4.65, 12.43)),
+            ("magazine", "gun_body", [], (4.91, 4.63, 10.93)),
+            ("magazine_2", "gun_body", [], (4.91, 4.63, 10.93)),
+            ("sliding_magazine", "gun_body", ["magazine"], (4.91, 4.63, 10.93)),
+        ],
+        "hands": {"right": (8.0, 2.9, 14.6), "left": (8.0, 2.2, 10.5)},
+        "hand_pose": {"left": ("reload", "0.25")},
+        "arms": {"right": (-0.5272, -0.3044, 0.7934), "left": (0.2706, -0.2706, 0.9239)},
+        "muzzle": (8.0, 4.4, 7.8),
+        "sight": (8.0, 6.1, 14.0),
+    },
+    # The LLR Director is a slide-action carbine: its bolt part is the fore-end under the barrel with the knob on the
+    # right of the receiver, which the left hand works back and forward after each shot and as the reload ends. Its
+    # magazine goes in at the left side and swings out down and away to reload; magazine_2 holds nothing. Its sight is
+    # the owner's ring at the back of the receiver, over the post at the front.
+    "conductor_carbine": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.0, 3.0, 16.6)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 3.0, 9.0)),
+            ("magazine", "gun_body", ["stan_mag"], (6.6, 4.68, 12.1)),
+            ("magazine_2", "gun_body", [], (6.6, 4.68, 12.1)),
+        ],
+        "hands": {"right": (8.0, 3.0, 16.6), "left": (8.0, 1.9, 7.3)},
+        "arms": {"right": (0.05, -0.3794, 0.9239), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 4.9, 0.0),
+        "sight": (8.0, 6.25, 15.18),
+        "eye_relief": 2.5,
+    },
+    # The Birdfeeder's long magazine goes in at its left side (the owner's sliding_magazine group, its standard
+    # magazine part). The reload slides it out along its length on the sliding_magazine bone, which hangs from the
+    # magazine bone that swings it down and away, and slides the new one home. Its bolt bones, named "bolt" in some of
+    # its animations and "Bolt" in others, hold nothing. Its sight is the owner's ring at the back of the receiver, over
+    # the post at the front.
+    "magpie_smg": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.0, 3.3, 17.0)),
+            ("bolt", "gun_body", [], (8.0, 4.8, 10.7)),
+            ("Bolt", "gun_body", [], (8.0, 4.8, 10.7)),
+            ("magazine", "gun_body", [], (7.37, 5.2, 14.77)),
+            ("sliding_magazine", "magazine", ["stan_mag"], (4.6, 5.2, 14.77)),
+        ],
+        "hands": {"right": (8.0, 3.3, 17.0), "left": (8.0, 2.4, 8.5)},
+        "arms": {"right": (-0.05, -0.3794, 0.9239), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 5.1, -0.35),
+        "sight": (8.0, 6.9, 15.18),
+        "eye_relief": 2.0,
+    },
+    # Slice 12C. The UMAX Pistol is held in one hand: its idle hides the left arm, which comes in through the reload to
+    # put each round in. Its bolt is the receiver block at the back, driven back with each shot; its lever the loop under
+    # it (a flat plane, main#3), swung down in the inspection. Its sight is the owner's ring at the back over the post at
+    # the front.
+    "tuppence_pistol": {
+        "bones": [
+            ("gun_body", None, ["main-#0,1,3,20", "stan_grip", "sights"], (8.0, 2.5, 15.3)),
+            ("bolt", "gun_body", ["main#0,1,20"], (8.0, 4.75, 13.7)),
+            ("lever", "gun_body", ["main#3"], (8.0, 3.3, 10.6)),
+            ("magazine", "gun_body", [], (8.0, 2.75, 9.0)),
+            ("shell", "gun_body", ["@shell"], (8.0, 2.4, 11.0)),
+        ],
+        "hands": {"right": (8.0, 2.5, 15.3), "left": (7.3, 1.8, 12.0)},
+        "hand_pose": {"left": ("reload_loop", "0.2917")},
+        "arms": {"right": (0.1913, -0.4619, 0.866), "left": (0.6294, -0.483, 0.6088)},
+        "muzzle": (8.0, 5.03, 4.7),
+        "sight": (8.0, 6.3, 13.64),
+        "eye_relief": 1.0,
+    },
+    # The Ultra Knight Hawk is held in one hand, as the Sapper Revolver: its idle hides the left arm, which comes in to
+    # load each round. Its drum swings out to the left about the crane under it; its hammer is the flat plane at the back.
+    # Its sight is the notch at the back over the post at the front.
+    "goshawk_revolver": {
+        "bones": [
+            ("gun_body", None, ["main"], (8.0, 1.6, 14.6)),
+            ("magazine", "gun_body", ["drum"], (6.9, 2.4, 10.4)),
+            ("hammer", "gun_body", ["hammer"], (8.0, 3.6, 14.0)),
+            ("bolt", "gun_body", [], (8.0, 4.3, 12.0)),
+            ("seal", "gun_body", [], (8.0, 3.73, 10.4)),
+            ("shell", "gun_body", [], (8.0, 3.73, 10.4)),
+        ],
+        "hands": {"right": (8.0, 1.6, 14.6), "left": (5.6, 3.2, 13.2)},
+        "hand_pose": {"left": ("reload_loop", "0.4583")},
+        "arms": {"right": (-0.6871, -0.3967, 0.6088), "left": (0.733, -0.3036, 0.6088)},
+        "muzzle": (8.0, 4.3, -1.77),
+        "sight": (8.0, 6.0, 13.1),
+    },
+    # The Forlorn Hope is a bolt-action rifle: its bolt is the handle on the right of the receiver, drawn back after each
+    # shot. Its magazine under the barrel swings down about its front to reload; the empty one its reload throws out
+    # (empty_mag) and its seal hold nothing. Its sight is the owner's ring at the back over the post on the receiver.
+    "lament_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-#23,24,25,57,58", "sights"], (8.0, 2.4, 17.8)),
+            ("bolt", "gun_body", ["main#23,24,25"], (9.2, 5.5, 15.4)),
+            ("mag", "gun_body", ["main#57,58"], (8.0, 3.02, 6.275)),
+            ("empty_mag", "gun_body", [], (8.0, 3.02, 6.275)),
+            ("seal", "gun_body", [], (8.0, 4.5, 11.0)),
+        ],
+        "hands": {"right": (8.0, 2.4, 17.8), "left": (8.0, 1.6, 8.5)},
+        "arms": {"right": (-0.2762, -0.2762, 0.9206), "left": (0.717, -0.4911, 0.4947)},
+        "muzzle": (8.0, 4.92, -7.87),
+        "sight": (8.0, 6.5, 16.5),
+        "eye_relief": 6.0,
+    },
 }
 
 # Props the animations move on bones that had no part ("@<name>" in a bone's parts): the rounds a reload carries in,
@@ -1784,6 +2047,10 @@ PROPS = {
     # the open trapdoor, and shrinks to nothing there.
     "bastion_rifle": {"shell": {"kind": "cartridge", "from": (8.207, 5.542, 13.778), "size": (1.0, 1.0, 3.0),
                                 "texture_at": (120, 120)}},
+    # Slice 12C: the UMAX Pistol's round rests behind the mouth of the tube under its barrel, where the loop's last carry
+    # (0.3333 s) brings it, and shrinks to nothing there.
+    "tuppence_pistol": {"shell": {"kind": "cartridge", "from": (7.5, 1.9, 11.0), "size": (1.0, 1.0, 3.0),
+                                  "texture_at": (120, 120)}},
 }
 # The owner's pilot flame (Guns/item/spitfire_flame.png): three 8 x 8 frames, one above the other; the first frame's
 # flame is 4 px wide (columns 2 to 5) and 8 tall, its tip at the top.
@@ -2206,6 +2473,12 @@ ZOOM = {
     # The Nether guns (slice 11A): a shotgun, a repeater and a rifle; (slice 11B) a pistol, a carbine and a shotgun.
     "tusker": 0.9, "cinder_repeater": 0.88, "bastion_rifle": 0.8,
     "ashfall_pistol": 0.9, "goldbristle_carbine": 0.85, "crackling": 0.9,
+    # The End guns (slice 12A): a machine gun, a rifle, and a heavy machine gun fired from the hip.
+    "chitin_smg": 0.88, "hermit_rifle": 0.85, "borer": 0.95,
+    # The copper guns (slice 12B): a pistol, a carbine and a submachine gun.
+    "penny_pistol": 0.9, "conductor_carbine": 0.82, "magpie_smg": 0.88,
+    # Slice 12C: a pistol, a revolver and a bolt-action rifle.
+    "tuppence_pistol": 0.9, "goshawk_revolver": 0.9, "lament_rifle": 0.7,
 }
 
 
@@ -2233,9 +2506,11 @@ CASINGS = {"light_round": "small_copper_casing", "rifle_round": "large_brass_cas
 # owner's red dot (Guns/effect/red_dot_reticle.png, the Reflex Sight's), copied to textures/particle/laser_dot.png.
 LASER_DOT = "red_dot_reticle"
 # The animations' particle cues: GunAnimations ejects a casing at EJECT_CUE; the others mark points in a reload that
-# the server's timing already covers, and show nothing.
+# the server's timing already covers, and show nothing. Slice 12B: a side magazine's tracking cues (the owner's mod
+# slid such a magazine along as its rounds were spent; here it stays where the animations put it).
 EJECT_CUE = "eject_casing"
-QUIET_CUES = ("loaded", "end_reload", "loop_end", "reload_end", "stop_mag_tracking")
+QUIET_CUES = ("loaded", "end_reload", "loop_end", "reload_end", "stop_mag_tracking", "reset_mag_position",
+              "resume_mag_tracking")
 # The muzzle flash: the owner's four flash frames, copied to textures/item/guns/flash/flash_<n>.png; each shot shows
 # one, turned at random about the barrel. A silencer hides it ("hides_flash").
 FLASH_FRAMES = ["muzzleflash", "muzzleflash2", "muzzleflash3", "muzzleflash4"]
@@ -2388,6 +2663,18 @@ SHOT_SOUNDS = {
     "ashfall_pistol": "item/scrapper/fire.ogg",
     "goldbristle_carbine": "item/makeshift_rifle/fire.ogg",
     "crackling": "item/brass_shotgun/fire.ogg",
+    # Slice 12A: the Riveter's shot; the library's shulker shot, the Reverb's; the Garrison Rifle's.
+    "chitin_smg": "item/greaser_smg/fire.ogg",
+    "hermit_rifle": "item/shulker/fire.ogg",
+    "borer": "item/scorched_rifle/fire.ogg",
+    # Slice 12B: the library's Scrapper shot (the Sentry Pistol's), the Drover Rifle's and the Rust Midge's.
+    "penny_pistol": "item/scrapper/fire.ogg",
+    "conductor_carbine": "item/cowboy/fire.ogg",
+    "magpie_smg": "item/rusty_gnat/fire.ogg",
+    # Slice 12C: the Sapper Revolver's, the Bulldog Pistol's and the Picket Rifle's.
+    "tuppence_pistol": "item/brass_pistol/fire.ogg",
+    "goshawk_revolver": "item/heavier_rifle/fire.ogg",
+    "lament_rifle": "item/scorched_sniper/fire.ogg",
 }
 SUBTITLES = {
     "fire": "Gun fires",
@@ -2529,6 +2816,15 @@ def one_handed():
 # water puts out. No block is set alight (JugcraftGuns.INCENDIARY).
 INCENDIARY = ("tusker", "cinder_repeater", "bastion_rifle", "ashfall_pistol", "goldbristle_carbine", "crackling")
 BURN_SECONDS = 4
+
+
+# ------------------------------------------------------------------ the End guns' float (slice 12A)
+
+# Each creature an End gun's bullet hurts floats up for LIFT_TICKS, as a shulker's bullet lifts it: the game's own
+# Levitation, at its first level (about three quarters of a block a second hit). A longer spell already on it is kept.
+# It falls when it ends, and takes the fall's damage (JugcraftGuns.LEVITATING).
+LEVITATING = ("chitin_smg", "hermit_rifle", "borer")
+LIFT_TICKS = 20
 
 
 def cell_rack_model():
@@ -2907,7 +3203,9 @@ FRAMED = {"scguns:item/rocket_rifle",
           "scguns:item/sculk_resonator_animated", "scguns:item/sculk_resonator_tendril", "scguns:item/echoes_2_animated",
           # Slice 11A: the Cinder Repeater's glowing stone, three frames (the Pyroclastic Flow's); slice 11B's Goldbristle
           # Carbine's too.
-          "scguns:item/pyroclastic_flow_animated"}
+          "scguns:item/pyroclastic_flow_animated",
+          # Slice 12C: the Forlorn Hope's whole texture, seven frames.
+          "scguns:item/forlorn_hope"}
 
 
 def texture_size(texture):
@@ -3472,7 +3770,8 @@ def check():
                 if event["effect"] not in EVENT_SOUNDS:
                     problems.append(f"{gun}: animation {name} plays {event['effect']}, which has no sound")
             for event in (data.get("particle_effects") or {}).values():
-                if event["effect"] != EJECT_CUE and event["effect"] not in QUIET_CUES:
+                # (the Scrapper's carbine reload names "end_reload " with a space after it)
+                if event["effect"].strip() != EJECT_CUE and event["effect"].strip() not in QUIET_CUES:
                     problems.append(f"{gun}: animation {name} cues particle {event['effect']}, which nothing shows")
         for kind in fits(gun):
             if ATTACHMENTS[kind]["slot"] == "barrel" and f"muzzle_{kind}" not in bones.get(f"att_{kind}", {}).get("locators", {}):

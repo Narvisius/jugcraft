@@ -133,6 +133,11 @@ public class FormMachineMenu extends AbstractContainerMenu {
 		return data(FormMachineBlockEntity.DATA_PAUSED) != 0;
 	}
 
+	/** Whether the vented tanks hold their excess (stop instead) rather than release it. */
+	public boolean holdsVented() {
+		return data(FormMachineBlockEntity.DATA_HOLD_VENTED) != 0;
+	}
+
 	/** JE a tick one running lane pays; for a generator, the JE it made last tick. */
 	public int laneUse() {
 		return data(FormMachineBlockEntity.DATA_LANE_USE);

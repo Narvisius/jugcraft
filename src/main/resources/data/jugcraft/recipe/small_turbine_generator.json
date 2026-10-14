@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SGS",
+    "PMP",
+    "SCS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "P": "jugcraft:steel_fluid_pipe",
+    "M": "jugcraft:electric_motor",
+    "C": "minecraft:copper_block"
+  },
+  "result": {
+    "id": "jugcraft:small_turbine_generator",
+    "count": 1
+  }
+}

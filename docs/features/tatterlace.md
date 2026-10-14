@@ -78,7 +78,7 @@ If no player she can fight is within 38 blocks of the doily's centre for 10 seco
 
 ### Her loot
 
-Each participant rolls their own loot. A participant is a player who hurt her, her egg sacs or her spiderlings and is within 64 blocks of the doily's centre when she falls. The loot goes straight into their inventory, and what does not fit lands at their feet. "Her sewing basket is yours".
+Each participant rolls their own loot. A participant is a player who took part in the fight and is within 64 blocks of the doily's centre when she falls: who hurt her, her egg sacs or her spiderlings (or whose tamed creature did) or, since [Concordance Chunk A](lair-encounter-credit.md), who healed 4 of what she did to others, whose ward on another soaked 4 health of her side's blows, or who cut another player free of her Binding Thread. One who died in the fight is paid too, wherever they are once back on their feet; one who left the game during it is paid when they next join, if still away when she falls. A share kept for later is rolled when it is handed over, so it has the Halloween extras only if the event is still running then. The loot goes straight into their inventory, and what does not fit lands at their feet. "Her sewing basket is yours".
 
 | Loot | Chance |
 | --- | --- |
@@ -86,7 +86,7 @@ Each participant rolls their own loot. A participant is a player who hurt her, h
 | **Needle Rapier**, a boss trophy of Arms VII | 15%; certain on a player's first kill (whoever has not yet earned Unravelled) |
 | **Golden Thimble** | 25% |
 | **Tatterlace's Headdress** | 20% |
-| 300 experience, shared out among the participants | always |
+| 300 experience, shared out among the participants paid | always |
 | The advancement **Unravelled** (a challenge in the Adventure tab) | always |
 
 During the Halloween event, unless `lairs.event_loot` is off, each participant also gets a roll of seasonal candy and another 10% chance at the headdress, as for every lair boss.
@@ -122,7 +122,7 @@ Her damage numbers are Normal difficulty's: Easy and Hard scale them as they sca
 - **The spool she kicks is one of her own,** a spool of her red thread, not one of the four giant spools: those hold the doily up.
 - **The egg sacs can be broken** (12 health), which stops their brood; whoever hurts a sac or a spiderling has taken part in her fight.
 - **The tape's foot is kept too.** As well as the ring round each spool, she never unravels the lace where the tape meets the doily, so the way down stays open. The arrival (the pincushion) is not on the doily, so it is out of her reach anyway. At most two segments are down at once.
-- **Who counts as a participant:** the plan said loot goes only to those who took part. Here that means a player who hurt her, her sacs or her spiderlings and is within 64 blocks of the doily's centre when she falls.
+- **Who counts as a participant:** the plan said loot goes only to those who took part. Here that means a player who took part as [Her loot](#her-loot) says and is within 64 blocks of the doily's centre when she falls, or who died or left the game in the fight. The plan's 5% of her health and 30 seconds in the arena were not used: any blow counts, as before, and support counts by what it did ([lair encounter credit](lair-encounter-credit.md)).
 - **A way out where she fell:** her death opens Grey Mist in the middle of the doily, as Vesperine's does; the needle's eye still works too.
 - **What every lair boss shares** (who may fight one, its health for a party, and its damage settings) is now one class, `lair/LairBosses.java`, used by both bosses. Vesperine's numbers are unchanged.
 - **Her spiderlings are `jugcraft:tatter_spiderling`** ("Spiderling"): batch 19's egg sac decoration already draws a `spiderling` texture, which an entity of that id would have replaced.
@@ -146,7 +146,7 @@ Her damage numbers are Normal difficulty's: Easy and Hard scale them as they sca
 
 - **Every fight costs a ritual:** a fresh Cursed Spindle, as part 1 set it.
 - **No gain loop:** silk makes a spindle that still needs gold, an amethyst shard, spider eyes, string, a stick and a whole fight, and silk unpicks into three string, while string makes no silk. Nothing she drops turns into more of itself. Nothing she drops sells to a Jugcraft shop for Jugs.
-- **No leeching:** only participants get loot. A bystander who never struck her, a sac or a spiderling gets nothing, and loot is rolled per participant, so nobody takes another's.
+- **No leeching:** only participants get loot. A bystander who never struck her, a sac or a spiderling, healed, warded or cut a friend free gets nothing; healing and wards count only what her fight did to someone else, so two players cannot farm credit off each other; and loot is rolled per participant, so nobody takes another's.
 - **First kill once:** the rapier's first-kill guarantee is stored with the advancement, so it comes once per player.
 - **Abandoning resets her:** leaving her alone for 10 seconds heals her and forgets everyone's part. She cannot be worn down between visits.
 - **No automation:** she comes down only for a player, her doily is unravelled and knitted only in a fight, and her loot goes only to players. Her spiderlings and sacs drop nothing and give no experience.
@@ -215,7 +215,8 @@ The game tests (`TatterlaceGameTests`) show what a game-test server can, with a 
 7. the Needle Rapier's third hit on a foe stitches it;
 8. the Golden Thimble turns aside one projectile, then cools down;
 9. a snare lets go of a player half a second after it stops holding them;
-10. a struck Binding Thread snaps.
+10. a struck Binding Thread snaps;
+11. (added for [Concordance Chunk A](lair-encounter-credit.md), passed in CI run 38435014953) cutting another player free of her Binding Thread is a deed of her fight, once a thread; cutting your own is not.
 
 The client game test (`TatterlaceClientGameTests`, CI job `client`) runs her fight in a real Spindle Loft, with its one player in survival under Resistance:
 1. an instance opens with her waiting on her silk;

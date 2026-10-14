@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "TCT",
+    "BVB",
+    "TBT"
+  ],
+  "key": {
+    "T": "#c:plates/tungsten",
+    "C": "jugcraft:processor",
+    "B": "#c:storage_blocks/steel",
+    "V": "jugcraft:reactor_pressure_vessel"
+  },
+  "result": {
+    "id": "jugcraft:epr_reactor_vessel",
+    "count": 1
+  }
+}

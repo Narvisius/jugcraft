@@ -1,6 +1,8 @@
 # Arcane Concordance: Reading the Signs (presentation of actual state)
 
-Status: implemented on branch `claude/concordance-steps-26-32`; see Verification for what has run.
+Status: merged to main ([#250](https://github.com/jimbozoomer-byte/jugcraft/pull/250), from branch
+`claude/concordance-steps-26-32`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 27) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 19, every stage (Initiate to Architect). Roadmap step 27.
@@ -113,7 +115,8 @@ The events are wired as follows:
   bone again on its own, scaled to the volume and tinted. The liquid's texture is drawn pale for that
   (`tools/concordance_alchemy_art.py`).
 - `CircleClient` shows a held result and spends the budget on its channel motes. It now leaves the gesture off players
-  holding Jugcraft arms, as the Vigil's gesture does, so ArmsMotion keeps one owner of the arms.
+  holding Jugcraft arms, as the Vigil's gesture does, so ArmsMotion keeps one owner of the arms. Since Chunk A it leaves
+  it off players holding a gun as well ([one owner for the arms](#one-owner-for-the-arms-chunk-a-ticket-a-07)).
 - `WorkerEntity.shown` keeps a stalled traveller's body still.
 - The Spire Heart's and the crucible's `animateTick` read the synced state.
 
@@ -139,7 +142,69 @@ Real light, emissive surfaces and bloom stay apart:
   CI's client runs.
 
 Spell Engine's own cast and release presentation (gestures, sounds, the spells' particle bursts) is unchanged. Its
-impacts come back through the shared effect boundary, whose marks are now signs.
+impacts come back through the shared effect boundary, whose marks are now signs. Since Chunk A its gestures give way to
+a gun or an arm in the main hand (below).
+
+### One owner for the arms (Chunk A, ticket A-07)
+
+Added in Concordance Chunk A, unit 4, on 11 October 2026; its client test passes in CI (run [38435014953](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38435014953); see
+Verification). The
+ticket's rule: a cast's pose cannot override an active gun reload or an action ArmsMotion owns. A gun or a Jugcraft arm
+in the main hand now owns the player's arms, and no cast's pose plays over it.
+
+**What could overlap** (read in Jugcraft's code and in the sources of Spell Engine 1.10.9 and Player Animation Library
+1.2.7, the pinned releases):
+
+- A cast and a gun or an arm cannot begin together. A Concordance cast needs an instrument in the main hand
+  (`ConcordanceSpells`). When the main hand's item changes, Spell Engine ends the cast on the client and on the server,
+  the server ends a reload (`GunShots`), and ArmsMotion ends a weapon art.
+- What outlasted the change was the cast's presentation:
+  - Spell Engine's release clip (12 to 14 ticks), which the server sends to the caster and to everyone watching once
+    the cast took effect, so it can arrive after a quick switch;
+  - the five ticks over which Spell Engine fades out a cast that ended.
+- Player Animation Library lays its clips over the player model after `GunPose` and ArmsMotion have posed it, so a
+  playing clip took the arms of a player holding a gun or an arm. In first person, by Spell Engine's default, the
+  library stops the game drawing the first-person hands and held item. It draws the player's own model instead, with
+  everything but the held items hidden (the library's default first-person configuration, which Spell Engine keeps). So
+  the gun or arm was drawn where the cast's pose held the unseen hand, while the first-person arms that hold the gun and
+  work its reload, its aim, or the arm's stroke went out of view. A reload can begin during a gun's draw, inside that
+  window.
+- The circle's and the Vigil's gestures gave way to Jugcraft arms, but not to guns.
+
+**The rule.** `client/CastPoses` runs at the end of each client tick, for every player the client sees: its own, in
+either view, and every other player.
+
+- While a gun or an arm is in the main hand, it stops Spell Engine's casting and release clips if they are playing.
+  The main hand is the player's own, left or right; riding, crouching and the camera's view change nothing.
+- The circle's and the Vigil's gestures are left off a player whose arms are owned, or who holds an arm in the off
+  hand. The circle's is held off by `CircleClient`'s own tick. The Vigil's is skipped when it would start, and
+  `CastPoses` stops one already playing when a gun or an arm is taken in hand. The server sends the Vigil's gesture at
+  the end of the tick of the offering (`Vigil.gesture`), after the player's own tick has sent other clients any change
+  of what they hold. Otherwise a player who took the chalice from a gun and offered in one tick (keeping the use button
+  held after aiming does this) would reach every other client still holding the gun, and the gesture would be skipped
+  there.
+- A stopped clip ends at once rather than fading, so the gun's or the arm's pose shows from the next frame.
+- Jugcraft's arms are no spell casters and Jugcraft gives no gun a spell, so only leftovers are stopped. A spell another
+  mod lets a player cast with a gun or an arm in hand would still be cast, without its gesture.
+- No mixin. It uses Player Animation Library's public controller methods and Spell Engine's two layer names
+  (`SpellAnimationStack.CASTING_ID` and `RELEASE_ID`). A Spell Engine update that renames them fails to compile rather
+  than failing silently.
+- Nothing reaches the server. The cast, its Focus and its effect are decided there, as before.
+
+**Failure behaviour and limits.**
+
+- A release that reaches a client while a gun or an arm is already in hand plays until the end of the next client tick
+  (at most 50 ms), on the body in third person. In first person it depends on the tick before. If a Spell Engine clip
+  was playing then (as after a quick switch from the wand, while the cast was fading out), the library's first-person
+  hand-off is still complete, so until that tick ends the view may show the held gun or arm where the cast's pose holds
+  the unseen hand, with no hands or arms, in place of the first-person view of it. Otherwise the hands are only lowered
+  for a moment. This is read from Player Animation Library's source, not seen in a game: its first-person item and pass
+  checks and the transition it advances in the entity tick; its model mixin hides the head, body and legs in that pass
+  and shows the arms only as the configuration says; the default configuration shows the items, not the arms; Spell
+  Engine sets a mode but no configuration.
+- An arm in the off hand does not stop a cast's clips: a wand in the main hand still casts with its gesture, and
+  ArmsMotion poses only the main hand.
+- Spell Engine's third layer, its evasion clip, is left alone.
 
 ## Connections
 
@@ -169,6 +234,9 @@ every intensity with reduced motion off and on, and gets the same light, shell a
   never saved. The intensity is this computer's setting (`concordance.visual_intensity` in
   `config/jugcraft-client.properties`).
 - Disable behaviour: with `concordance.enabled=false` features refuse their actions as before, so no sign follows.
+- Other players' gestures (Chunk A): each client gives the arms of every player it sees to the gun or the arm that
+  player holds, from the held items vanilla already sends. No packet was added, and two clients may stop a leftover clip
+  a tick apart.
 
 ## Dependencies and assets
 
@@ -236,6 +304,38 @@ The owner library ([catalog](../../art/owner-library/catalog/README.md)) was sea
 Not yet run: a person looking at the screenshots and at the signs in play; the sounds heard in game; Iris with a shader
 pack; a large installation profiled for frame time; a two-client server (whether another player sees the same signs).
 
+**One owner for the arms (Chunk A, ticket A-07).** Checked in the unit's worktree on 11 October 2026. It has no
+Minecraft jar, so nothing was compiled or run in a game.
+
+- `python3 tools/check_mod_data.py`: PASS (2149 material IDs, data files and recipe audit). Its new `check_cast_poses`
+  checks that:
+  - `CastPoses.armsOwned` covers a gun and an arm in the main hand, and `gesturesYield` adds an arm in the off hand;
+  - the end-of-tick pass covers every player the client sees and stops Spell Engine's casting and release layers and
+    the Vigil's (clearing the clip, then stopping the layer);
+  - `ConcordanceClient` registers it, and `CircleClient` asks it. `check_crimson` checks that `VigilClient` asks it.
+- Eleven faults injected into copies of the client sources were each reported by `check_cast_poses`: a gun, or an arm,
+  no longer owning the arms; the off hand dropped; each of the three layers left playing; the layer not stopped at once;
+  the pass moved to the start of the tick; the pass not registered; the circle ignoring guns; the class missing. A
+  twelfth, `VigilClient` ignoring guns, was reported by `check_crimson`.
+- `python3 scripts/check_repository.py`: PASS. `python3 tools/concordance_delivery.py`: the matrix holds; its Player
+  Animation Library row now names the client test below.
+- Client game test, passed in CI (run [38435014953](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38435014953)): `ConcordanceJourneyClientGameTests.aCastGivesWayToAGunOrAnArm`, in a second
+  world after the journey. It starts Kindle's release clip on the player the way Spell Engine's handler does for the
+  server's packet, and checks:
+  - with the wand in hand the clip plays, laid over the player by Player Animation Library (so the test can see one);
+  - 2 taking the rifle part way through stops it by the next tick, and nothing is laid over the player or starts it
+    again (screenshot `jugcraft_concordance_cast_pose_gun`, first person);
+  - a release that arrives with the rifle in hand is stopped within two ticks
+    (`jugcraft_concordance_cast_pose_gun_third_person`, from the front);
+  - 3 taking the longsword stops one part way through (`jugcraft_concordance_cast_pose_arm_third_person`);
+  - the Vigil's gesture, sent by the server, does not start on the rifle's holder, and one playing with the wand in hand
+    stops when 2 takes the rifle.
+
+Not yet done for this rule: compiling it (CI is its first compile); running the client test; a real cast followed by
+a switch (the test starts the release clip as Spell Engine's packet handler does, rather than racing a cast's own
+timing); another player watched from a second client; the circle's gesture with a gun in hand (it needs a working
+circle); a person looking at the screenshots; a spell from another mod cast with a gun in hand.
+
 ## World and event applicability
 
 Works everywhere; no seasonal content.
@@ -258,3 +358,6 @@ Open items:
 - The relics, the garden's living devices, the observatory and the logistics posts keep their own presentation, which
   already follows their synced status. They send no signs of their own yet; the effects they apply show their marks.
 - Spell Engine's cast effects are its own and are not scaled by the visual intensity.
+- One owner for the arms (Chunk A) adds no identifier and saves nothing. If a mod is ever added whose spells may be cast
+  with a gun or a Jugcraft arm in hand, those casts lose their gesture to the gun's or the arm's pose; whether that
+  should change is the owner's choice.

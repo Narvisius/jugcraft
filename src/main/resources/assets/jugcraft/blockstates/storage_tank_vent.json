@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,riser=false": {
+      "model": "jugcraft:block/storage_tank_vent"
+    },
+    "facing=north,riser=true": {
+      "model": "jugcraft:block/storage_tank_vent_riser"
+    },
+    "facing=east,riser=false": {
+      "model": "jugcraft:block/storage_tank_vent",
+      "y": 90
+    },
+    "facing=east,riser=true": {
+      "model": "jugcraft:block/storage_tank_vent_riser",
+      "y": 90
+    },
+    "facing=south,riser=false": {
+      "model": "jugcraft:block/storage_tank_vent",
+      "y": 180
+    },
+    "facing=south,riser=true": {
+      "model": "jugcraft:block/storage_tank_vent_riser",
+      "y": 180
+    },
+    "facing=west,riser=false": {
+      "model": "jugcraft:block/storage_tank_vent",
+      "y": 270
+    },
+    "facing=west,riser=true": {
+      "model": "jugcraft:block/storage_tank_vent_riser",
+      "y": 270
+    }
+  }
+}

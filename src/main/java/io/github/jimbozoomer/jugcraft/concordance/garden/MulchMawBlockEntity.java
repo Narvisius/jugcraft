@@ -38,9 +38,12 @@ public class MulchMawBlockEntity extends LivingDeviceBlockEntity implements GeoB
 	private ItemStack food = ItemStack.EMPTY;
 	/** Quarters of a nutrient digested and not yet given to a bed. */
 	private int held;
+	/** Companion-only stocking allow-list; native hand/hopper feeding is unchanged. */
+	public final local.peepo.CompanionRecipeFilter companionFilter = new local.peepo.CompanionRecipeFilter();
 
 	public MulchMawBlockEntity(BlockPos pos, BlockState state) {
 		super(Garden.MAW_ENTITY, pos, state);
+		companionFilter.initialize(new ItemStack(Garden.VERDANT_CHAFF));
 	}
 
 	public int held() {
@@ -193,6 +196,8 @@ public class MulchMawBlockEntity extends LivingDeviceBlockEntity implements GeoB
 		super.loadAdditional(input);
 		food = input.read("food", ItemStack.CODEC).orElse(ItemStack.EMPTY);
 		held = Math.clamp(input.getIntOr("held", 0), 0, Mulch.MAX_HELD);
+		companionFilter.load(input);
+		companionFilter.initialize(new ItemStack(Garden.VERDANT_CHAFF));
 	}
 
 	@Override
@@ -202,6 +207,7 @@ public class MulchMawBlockEntity extends LivingDeviceBlockEntity implements GeoB
 			output.store("food", ItemStack.CODEC, food);
 		}
 		output.putInt("held", held);
+		companionFilter.save(output);
 	}
 
 	@Override

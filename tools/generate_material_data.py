@@ -15,6 +15,7 @@ import model_writer
 import agriculture_data
 from party import party_lang
 import drones
+import structure_items
 import town_assets
 import material_icons
 
@@ -26,6 +27,7 @@ PACKS = RES / "resourcepacks"
 
 GENERATED_DIRS = [
     DATA / MOD / "advancement", ASSETS / "blockstates", ASSETS / "items", ASSETS / "models", ASSETS / "lang", ASSETS / "handbook",
+    ASSETS / "encyclopedia",
     DATA / MOD / "loot_table", DATA / MOD / "recipe", DATA / MOD / "worldgen",
     # The lairs' dimensions and templates (tools/lair_data.py).
     DATA / MOD / "dimension", DATA / MOD / "dimension_type", DATA / MOD / "structure" / "lair",
@@ -85,9 +87,20 @@ def core_glow(lo, hi):
     return out
 
 
+# Nuclear components must keep their exposed backs and end caps when viewed on their own, as items or disconnected
+# from neighbouring equipment. Use the established closed-geometry pass; do not exempt them from the art audit.
+NUCLEAR_CLOSED_MODELS = (
+    "circulating_water_conduit_arm", "reactor_coolant_pipe_arm", "insulated_steam_line_arm", "isolated_phase_bus_arm",
+    "geiger_counter", "geiger_needle", "hv_chw", "hv_expansion_tank", "hv_plenum", "lead_pig", "waste_drum", "warning_beacon",
+)
+
+
 def write(path, obj):
     if isinstance(obj, dict) and obj.get("elements"):
-        model_writer.finish_elements(obj["elements"])
+        if any(path.stem == name or path.stem.startswith(name + "_") for name in NUCLEAR_CLOSED_MODELS):
+            model_writer.finish_closed(obj["elements"])
+        else:
+            model_writer.finish_elements(obj["elements"])
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
 
@@ -194,6 +207,9 @@ def assets():
     concordance.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     concordance.advancements(DATA, write, lang)
     lang.update(concordance.write_data(write, RES))
+    # JEI's pages on where the things only a ritual or a lair boss gives come from (rows in recipe_view.json).
+    import acquisition
+    acquisition.lang_entries(lang)
     import control_electronics
     control_electronics.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import rocketry
@@ -233,14 +249,31 @@ def assets():
     import advancements
     lang.update(advancements.generate(MOD)[1])
     party_lang(lang)
+    # The Jugcraft Encyclopedia's words (tools/encyclopedia.py, Concordance Chunk A, A-04).
+    import encyclopedia
+    encyclopedia.lang_entries(lang)
+    import encyclopedia_routes
+    encyclopedia_routes.lang(lang)
     drone_assets(lang)
     import tower
     tower.write_assets(write, rid, ASSETS, lang)
+    import power_lines
+    power_lines.write_assets(write, rid, ASSETS, lang)
+    import nuclear
+    nuclear.write_assets(write, rid, ASSETS, lang)
+    import wall_runs
+    wall_runs.write_assets(write, rid, ASSETS, lang)
     import blueprints
     blueprints.write_assets(write, rid, ASSETS, lang)
     blueprints.write_all()
+    import nuclear_plants
+    nuclear_plants.write_blueprints()
+    import tank_kits
+    tank_kits.write()
     import drone_sounds
     lang.update(drone_sounds.LANG)
+    import diesel_sounds
+    lang.update(diesel_sounds.LANG)
     import guide_books
     guide_books.write_assets(write, rid, ASSETS, DATA, lang)
     seasons_assets(lang)
@@ -308,13 +341,15 @@ def drone_assets(lang):
         write(ASSETS / "models" / "block" / f"{block}.json", model)
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
-    items = dict(drones.DRONE_PARTS)
-    items.update({tier["id"]: tier["display"] for tier in drones.DRONE_TIERS.values()})
-    for item, display in items.items():
+    for item, display in drones.DRONE_PARTS.items():
         lang[f"item.{MOD}.{item}"] = display
         write(ASSETS / "models" / "item" / f"{item}.json",
               {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
         write(ASSETS / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
+    # A drone's item shows the drone itself, in miniature (tools/structure_items.py).
+    for tier, info in drones.DRONE_TIERS.items():
+        lang[f"item.{MOD}.{info['id']}"] = info["display"]
+        structure_items.drone_item(write, rid, ASSETS, info["id"], tier)
     lang.update(drones.DRONE_LANG)
 
 
@@ -451,6 +486,18 @@ def drone_recipes(out):
                     found |= features_of(name)
         features = [MACHINE_FEATURE, drones.FEATURE] + sorted(found - {MACHINE_FEATURE, drones.FEATURE})
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    import power_lines
+    for result, (pattern, key, count) in power_lines.CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted(power_lines.recipe_features(result, feature_of))
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    import nuclear
+    for result, (pattern, key, count) in nuclear.CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted(nuclear.recipe_features(result, feature_of))
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "equipment" if result != "shielding_concrete" else "building")
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
     for result, (pattern, key, count) in drones.DRONE_CRAFTING.items():
@@ -771,6 +818,10 @@ def machine_assets(lang):
     lang[f"container.{MOD}.form.pause"] = "Pause"
     lang[f"container.{MOD}.form.resume"] = "Resume"
     lang[f"container.{MOD}.form.cancel"] = "Cancel"
+    lang[f"container.{MOD}.form.excess_vent"] = "Excess: vent"
+    lang[f"container.{MOD}.form.excess_hold"] = "Excess: hold"
+    lang[f"container.{MOD}.form.excess_tooltip"] = ("Vent releases what a full byproduct tank cannot hold, so the work "
+                                                    "goes on. Hold keeps it, and a full tank stops the work instead.")
     lang[f"container.{MOD}.form.lanes"] = "Batches"
     lang[f"container.{MOD}.form.reserved"] = "(%s mB reserved)"
     lang[f"container.{MOD}.form.locked"] = "(in use)"
@@ -802,7 +853,8 @@ RECIPE_TYPES = {"crusher": "crushing", "arc_furnace": "arc_smelting", "alloy_sme
                 "coke_oven": "coking", "steel_foundry": "steelmaking",
                 "tree_farm": "tree_growing",
                 "hydroponic_bay": "hydroponics",
-                "rocket_workshop": "rocket_assembly"}
+                "rocket_workshop": "rocket_assembly",
+                "gas_centrifuge_cascade": "enrichment", "fuel_fabricator": "fuel_fabrication"}
 
 
 def machine_recipe_files(out):
@@ -1006,10 +1058,14 @@ def pixel_hollows_assets(lang):
     for event, subtitle in ph.SUBTITLES.items():
         lang[f"subtitles.{MOD}.{event}"] = subtitle
     import choir_sounds
+    import diesel_sounds
     import drone_sounds
+    import nuclear
     import concordance
     import guns
-    write(ASSETS / "sounds.json", {**drone_sounds.SOUNDS, **ph.SOUNDS, **choir_sounds.SOUNDS, **concordance.sounds(), **guns.SOUNDS})
+    # The diesel generators' start, run and stop, and the Geiger counter's clicks (made in game, GeigerSound.java).
+    write(ASSETS / "sounds.json", {**drone_sounds.SOUNDS, **ph.SOUNDS, **choir_sounds.SOUNDS, **diesel_sounds.SOUNDS,
+                                   **nuclear.sound_events(), **concordance.sounds(), **guns.SOUNDS})
 
 
 def petro_assets(lang):
@@ -1112,6 +1168,14 @@ def loot_tables():
         write(out / f"{block}.json", table)
     import tower
     tower.write_loot(write, rid, out, self_drop)
+    import power_lines
+    power_lines.write_loot(write, rid, out, self_drop)
+    power_lines.write_data(write, DATA)
+    import nuclear
+    nuclear.write_loot(write, rid, out, self_drop)
+    import wall_runs
+    wall_runs.write_loot(write, rid, out, self_drop)
+    nuclear.write_data(write, DATA)
     import blueprints
     blueprints.write_loot(write, rid, out, self_drop)
     # The 2-tall charging station drops once, from its lower half.
@@ -1240,6 +1304,10 @@ def recipes():
             ("grenade", shaped(MACHINE_FEATURE, [" N ", "PGP", " P "],
                                {"N": "minecraft:iron_nugget", "P": "#c:plates/steel", "G": rid("guncotton")},
                                "grenade", 4, "equipment")),
+            # Ammonium nitrate (the Bulk Chemical Reactor's) packs a grenade in place of guncotton.
+            ("grenade_from_ammonium_nitrate", shaped(MACHINE_FEATURE, [" N ", "PGP", " P "],
+                                                     {"N": "minecraft:iron_nugget", "P": "#c:plates/steel",
+                                                      "G": rid("ammonium_nitrate")}, "grenade", 4, "equipment")),
             ("grenade_launcher", shaped(MACHINE_FEATURE, ["PPG", "RCS"],
                                         {"P": "#c:plates/steel", "G": "#c:gears/steel", "R": rid("rubber"),
                                          "C": rid("basic_circuit"), "S": "#c:ingots/steel"},
@@ -1342,6 +1410,8 @@ def storage_tags(tags, path, block_id, tool):
 
 def tags():
     tags = Tags()
+    import wall_runs
+    wall_runs.write_tags(tags, rid)
     import petro
     for crop in petro.FERMENTABLE:
         tags.add("item", f"{MOD}:fermentable", crop)
@@ -1414,6 +1484,8 @@ def tags():
         for placed, gen in ore_gens(name, info):
             for biome in gen.get("biomes", []):
                 tags.add("worldgen/biome", f"{MOD}:has_ore/{placed}", biome)
+            for biome in gen.get("surface_biomes", []):
+                tags.add("worldgen/biome", f"{MOD}:has_surface_ore/{placed}", biome)
 
     for block in machine_blocks():
         if block not in CROPS:
@@ -1477,6 +1549,10 @@ def tags():
     import tank_display
     for block in tank_display.BLOCKS:
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    import nuclear
+    nuclear.write_tags(tags, rid)
+    import wall_runs
+    wall_runs.write_tags(tags, rid)
     # Biomes whose grass and leaves change colour with the seasons (client/SeasonColors).
     import seasons
     for biome in seasons.BIOMES:
@@ -1518,15 +1594,15 @@ def placed_feature(name, gen):
     write(DATA / MOD / "worldgen" / "placed_feature" / f"ore_{name}.json", {
         "feature": rid(f"ore_{name}"),
         "placement": [
-            {"type": "minecraft:count", "count": gen["count"]},
+            ({"type": "minecraft:rarity_filter", "chance": gen["rarity"]} if "rarity" in gen
+             else {"type": "minecraft:count", "count": gen["count"]}),
             {"type": "minecraft:in_square"},
             {"type": "minecraft:height_range", "height": {
                 "type": "minecraft:trapezoid",
                 "min_inclusive": {"absolute": gen["min_y"]},
                 "max_inclusive": {"absolute": gen["max_y"]},
             }},
-            {"type": "minecraft:biome"},
-        ],
+        ] + ([] if gen.get("surface_biomes") else [{"type": "minecraft:biome"}]),
     })
 
 
@@ -1542,7 +1618,16 @@ def layered_targets(ore, deep):
 def worldgen():
     for name, info in list(METALS.items()) + list(MINERALS.items()):
         for placed, gen in ore_gens(name, info):
-            ore_feature(placed, gen["size"], layered_targets(f"{name}_ore", f"deepslate_{name}_ore"))
+            targets = layered_targets(f"{name}_ore", f"deepslate_{name}_ore")
+            if gen.get("surface_biomes"):
+                write(DATA / MOD / "worldgen" / "feature" / f"ore_{placed}.json", {
+                    "type": rid("surface_linked_ore"),
+                    "ore": {"size": gen["size"], "discard_chance_on_air_exposure": 0.0, "targets": targets},
+                    "surface_biomes": rid(f"has_surface_ore/{placed}"),
+                    "outcrop": rid(f"{name}_ore"), "outcrop_chance": gen["outcrop_chance"],
+                })
+            else:
+                ore_feature(placed, gen["size"], targets)
             placed_feature(placed, gen)
     for rock, info in ROCKS.items():
         gen = info["gen"]
@@ -1637,7 +1722,10 @@ def main():
             shutil.rmtree(directory)
     assets()
     import handbook
-    write(ASSETS / "handbook" / "en_us.json", handbook.build())
+    book = handbook.build()
+    write(ASSETS / "handbook" / "en_us.json", book)
+    import encyclopedia_routes
+    write(ASSETS / "encyclopedia" / "en_us.json", encyclopedia_routes.build(book))
     import recipe_view
     write(ASSETS / "recipe_view.json", recipe_view.build())
     loot_tables()

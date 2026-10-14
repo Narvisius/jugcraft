@@ -2,7 +2,9 @@ package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.lair.DoilyLaceBlock;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
+import io.github.jimbozoomer.jugcraft.lair.LairDossiers;
 import io.github.jimbozoomer.jugcraft.lair.tatterlace.BindingThreadEntity;
 import io.github.jimbozoomer.jugcraft.lair.tatterlace.GoldenThimble;
 import io.github.jimbozoomer.jugcraft.lair.tatterlace.JugcraftTatterlace;
@@ -340,6 +342,10 @@ public class TatterlaceGameTests {
 			}
 			helper.assertTrue(bystander.getInventory().countItem(JugcraftTatterlace.GOSSAMER_SILK) == 0, "The bystander got nothing");
 			helper.assertTrue(TatterlaceLoot.firstKill(bystander), "The bystander has not won Unravelled");
+			// The encyclopedia's dossier (Chunk A, A-D9) remembers the win for each participant, and not for the bystander.
+			helper.assertTrue(LairDossiers.discovery(first, LairDossiers.Boss.TATTERLACE) == LairDossiers.Discovery.DEFEATED
+					&& LairDossiers.discovery(second, LairDossiers.Boss.TATTERLACE) == LairDossiers.Discovery.DEFEATED, "The win shows in each participant's dossier");
+			helper.assertTrue(LairDossiers.discovery(bystander, LairDossiers.Boss.TATTERLACE) == LairDossiers.Discovery.UNKNOWN, "The bystander's dossier knows nothing of her");
 		});
 		helper.succeed();
 	}
@@ -409,6 +415,39 @@ public class TatterlaceGameTests {
 		ending(level, tatterlace, () -> {
 			helper.assertTrue(thread.hurtServer(level, level.damageSources().playerAttack(player), 1.0F), "A blow did not snap it");
 			helper.assertTrue(thread.isRemoved(), "The thread is still there");
+		});
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk A: cutting a fellow player free of her Binding Thread is a deed of her fight, once a thread
+	 * (striking a snapped thread again adds nothing); cutting your own is not.
+	 */
+	@GameTest
+	public void cuttingAFriendFreeCounts(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		TatterlaceEntity tatterlace = waiting(helper);
+		BlockPos centre = helper.absolutePos(CENTRE);
+		ServerPlayer held = player(helper, centre, 1.5, 0.5);
+		ServerPlayer rescuer = player(helper, centre, -1.5, 0.5);
+		Encounter fight = tatterlace.encounter();
+		fight.begin();
+		ending(level, tatterlace, () -> {
+			BindingThreadEntity own = BindingThreadEntity.shoot(level, tatterlace, held);
+			own.tether(held);
+			own.hurtServer(level, level.damageSources().playerAttack(held), 1.0F);
+			helper.assertTrue(fight.share(held) == null || fight.share(held).deeds() == 0, "Cutting your own thread is no deed");
+			BindingThreadEntity first = BindingThreadEntity.shoot(level, tatterlace, held);
+			first.tether(held);
+			first.hurtServer(level, level.damageSources().playerAttack(rescuer), 1.0F);
+			first.hurtServer(level, level.damageSources().playerAttack(rescuer), 1.0F);
+			BindingThreadEntity second = BindingThreadEntity.shoot(level, tatterlace, held);
+			second.tether(held);
+			second.hurtServer(level, level.damageSources().playerAttack(rescuer), 1.0F);
+			Encounter.Share share = fight.share(rescuer);
+			helper.assertTrue(share != null && share.deeds() == 2 && share.damage() == 0.0F && share.qualifies(),
+					"Two friends' threads cut, each once, qualify without a blow: " + (share == null ? "nothing" : share.deeds()));
+			helper.assertTrue(own.isRemoved() && first.isRemoved() && second.isRemoved(), "Every struck thread snapped");
 		});
 		helper.succeed();
 	}

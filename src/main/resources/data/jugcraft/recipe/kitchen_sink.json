@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SBS",
+    "PPP"
+  ],
+  "key": {
+    "S": "minecraft:smooth_stone_slab",
+    "B": "minecraft:cauldron",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:kitchen_sink",
+    "count": 1
+  }
+}

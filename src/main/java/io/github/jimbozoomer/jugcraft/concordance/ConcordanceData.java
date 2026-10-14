@@ -26,6 +26,7 @@ public final class ConcordanceData extends SimpleJsonResourceReloadListener<Json
 	public static final Identifier ID = Jugcraft.id("concordance_rules");
 	static final ConcordanceData INSTANCE = new ConcordanceData();
 	private static volatile ConcordanceRules rules = ConcordanceRules.EMPTY;
+	private static volatile int revision;
 
 	private ConcordanceData() {
 		super(ExtraCodecs.JSON, FileToIdConverter.json(FOLDER));
@@ -36,9 +37,18 @@ public final class ConcordanceData extends SimpleJsonResourceReloadListener<Json
 		return rules;
 	}
 
-	/** Replaces the rules (game tests use this to check how bad data is handled). */
+	/**
+	 * Counts the times the rules have been replaced: each load or reload (and each {@link #replace}) makes a new
+	 * revision. A composer screen's change made against an older revision is refused (concordance/Composing).
+	 */
+	public static int revision() {
+		return revision;
+	}
+
+	/** Replaces the rules (game tests use this to check how bad data is handled, and to stand for a reload). */
 	public static void replace(ConcordanceRules replacement) {
 		rules = replacement;
+		revision++;
 	}
 
 	/** Splits {@code <ns>:<kind>/<name>} into a rules source of that kind with id {@code <ns>:<name>}. */
@@ -64,5 +74,6 @@ public final class ConcordanceData extends SimpleJsonResourceReloadListener<Json
 				loaded.research().size(), loaded.invocations().size(), loaded.workings().size(), loaded.catalog().components().size(),
 				loaded.problems().size());
 		rules = loaded;
+		revision++;
 	}
 }

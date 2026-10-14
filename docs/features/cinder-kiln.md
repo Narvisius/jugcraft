@@ -1,6 +1,6 @@
 # The Cinder Kiln, and the Kiln Seal
 
-Status: implemented in source; CI passes (below), and its client test's pictures are in the record. Part 1 of boss 4, the Cinder Tyrant, in the [bosses plan](../branches/BOSSES.md#the-cinder-tyrant-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the Cinder Kiln, a fourth lair on the shared framework ([hollow-acre.md](hollow-acre.md)), and the summoning that opens it. The Cinder Tyrant and his loot are part 2, in their own pull request ([cinder-tyrant.md](cinder-tyrant.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do.
+Status: implemented in source; CI passes (below), and its client test's pictures are in the record. Part 1 of boss 4, the Cinder Tyrant, in the [bosses plan](../branches/BOSSES.md#the-cinder-tyrant-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the Cinder Kiln, a fourth lair on the shared framework ([hollow-acre.md](hollow-acre.md)), and the summoning that opens it. The Cinder Tyrant and his loot are part 2, in their own pull request ([cinder-tyrant.md](cinder-tyrant.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do. On 13 October 2026 its bowl was lit brighter, at the owner's choice ([Changes after review](#changes-after-review)); CI passes on that too, and the pictures below are from it.
 Proposal issue: none. On 10 October 2026 the owner asked to "do the next boss same way" as the Yeti King; the Cinder Tyrant is the next of the first eight in the bosses brainstorm, and the planning pack's "Kiln Beneath the Mountain" ([chapter 05](../plans/concordance-expansion-2026-10-10/05-new-boss-compendium.md)).
 
 Target milestone and tier: Specialization tier (dungeon expeditions), as the other lairs are. The seal takes what a player has once they reach the Nether: obsidian, blaze powder, gold and a magma block.
@@ -43,7 +43,7 @@ A kiln hollowed out of a volcano's roots, 72 blocks across, 46 high and 80 long.
   - The flooded troughs are where the Tyrant's Body Slam quenches him ([cinder-tyrant.md](cinder-tyrant.md)).
   - In his Eruption one gate at a time is **choked** with slag: a glowing crust over its panels, embers at its foot, and turned, it says "Slag chokes the sluice: it will not turn". The choke moves from gate to gate, and every gate is clear again when the fight ends. Part 2 added this fourth state of the gate.
 - **The shelves:** four raised shelves of smooth basalt, rimmed with polished basalt, round the bowl (north-west, north-east, south-west and south-east), a step up. The slag never reaches them.
-- **The light:** hidden light blocks, and the slag's own glow.
+- **The light:** hidden light blocks, and the slag's own glow. A staggered lattice of lights at full strength hangs two blocks over the floor, so the Tyrant and whoever fights him are seen anywhere in the bowl: every cell of its floor has light 8 or more, 13 under a light. Another lattice lights the dome, and single lights hang over the bowl's middle, under the crown, on the ledge, before each sluice and in the forge.
 
 Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the sluice gates are the kiln's one fixture besides the Grey Mist); the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
 
@@ -58,6 +58,14 @@ Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-t
 - **The vent is the Mist Gate.** The Last Rites' gate entity serves, as it did for the Frost Horn: on the magma it draws smoke, lava sparks and flames, and those who follow sink in.
 - **The Kiln Seal stacks to 16.**
 - **Tyrant Scale** in a cheaper seal comes with the Tyrant's loot in part 2.
+
+## Changes after review
+
+- **The bowl is lit brighter (13 October 2026).** At the Cinder Tyrant's checkpoint the kiln was atmospheric but dark: several of the test's pictures were hard to read, and his dark plates could blend into the basalt in play. The owner chose the recommendation ("Go with recommendations"): a few more hidden lights round the bowl, and his seams brighter ([cinder-tyrant.md](cinder-tyrant.md#changes-after-review)).
+  - The old lattice hung three blocks over the floor, eight apart, at level 11. Flooded as the game floods light, it left the bowl's floor at 0 to 11, two thirds of it at 4 or under.
+  - The new one hangs two blocks over the floor at level 15, eight apart, every other row shifted half a spacing along and the rows four apart, so no cell of the floor is more than four blocks walked from a light. Every cell of the bowl's floor now has 8 to 13, three in four of them 10 or more, and most of the ring round the bowl is as bright. It is 95 light blocks where there were 63.
+  - The dome's lattice and the single lights are as they were. Nothing else in the kiln changed, and nobody can see, touch or stand on a light block.
+  - In the test's pictures the kiln looks only a little lighter: the slag and the glowing basalt already lit much of what the camera sees. The gain is in the dark corners: in the game, CI read every cell of the bowl's floor at block light 8 or more, where the darkest was 0.
 
 ## Connections
 
@@ -91,7 +99,7 @@ Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-t
 ## Dependencies and assets
 
 No new dependency. Everything is drawn by code:
-- the kiln is laid out by `tools/cinder_kiln.py`, on `tools/lair_layout.py`. Its template has 12,573 blocks: only the stone touching the open air is kept, but the crucible keeps its depth. Nothing in it burns;
+- the kiln is laid out by `tools/cinder_kiln.py`, on `tools/lair_layout.py`. Its template has 12,605 blocks (12,573 before the brighter light), 95 of them hidden lights: only the stone touching the open air is kept, but the crucible keeps its depth. Nothing in it burns;
 - its five lair-only blocks' textures (and the troughs' water and the sluices' frame, panels, gushing water and wheel) are painted by `tools/cinder_kiln_textures.py`, in the manner of the vanilla blocks (`tools/block_style.py`);
 - the Kiln Seal's icon is a 16×16 map, `tools/item_icons/kiln_seal.txt`, drawn by [ITEM_ICONS.md](../ITEM_ICONS.md), with two new materials, `obsidian` and `magma`, in `tools/icon_materials.py`, and checked by `tools/check_icon_maps.py`;
 - the dimension files are written by `tools/lair_data.py` from the kiln's line in `tools/lairs.py`. Its music is vanilla's basalt deltas.
@@ -120,14 +128,15 @@ Nothing is renamed.
 ![The arch beside the arrival ledge, filled with Grey Mist](../images/ingame_cinder_kiln_exit.jpg)
 ![A second Kiln Seal pressed into a magma block in the Nether: its vent among the netherrack](../images/ingame_kiln_seal_vent_nether.jpg)
 
-*The client game test's pictures (CI, commit `042b98d`): the vent where the seal was pressed, then in the kiln the view from the ledge, the bowl from the stair's foot, the crucible, the slag over the lip, the west sluice's flooded trough, a shelf, the dome and the Grey Mist's arch; last, the vent a second seal opened in the Nether. The test client renders at 480x270.*
+*The client game test's pictures (CI, commit `cd8169f`, with the brighter light): the vent where the seal was pressed, then in the kiln the view from the ledge, the bowl from the stair's foot, the crucible, the slag over the lip, the west sluice's flooded trough, a shelf, the dome and the Grey Mist's arch; last, the vent a second seal opened in the Nether. The test client renders at 480x270.*
 
-CI (10 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):
+CI (10 and 13 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):
 
 | Commit | What ran | Result |
 | --- | --- | --- |
 | `8a7a4d4` | Build, data audit, game tests, client game tests | **Two failures.** `mod` passed all 1299 required server game tests, the kiln's six among them, and `optional integrations absent` passed. `repository` failed its check on how the client tests are shared out: with the kiln's client test class, the estimate for the busiest of the four client jobs came to 25 minutes 10 seconds, over the 25 it allows. The client test stopped at the seal's press: it judged the press by comparing the item's result with the game's one plain success value, and the result was something else |
-| `042b98d` | The same, the client tests now shared between five jobs ([TESTING.md](../TESTING.md)), and the press judged by whether it took effect (the checks after it still look for the open kiln, the used seal and the vent) | **All pass:** all 1299 required game tests, and every client test class (a workflow change runs them all) in five jobs of 12 to 28 minutes, `CinderKilnClientGameTests` among them. The pictures above are from this commit |
+| `042b98d` | The same, the client tests now shared between five jobs ([TESTING.md](../TESTING.md)), and the press judged by whether it took effect (the checks after it still look for the open kiln, the used seal and the vent) | **All pass:** all 1299 required game tests, and every client test class (a workflow change runs them all) in five jobs of 12 to 28 minutes, `CinderKilnClientGameTests` among them. |
+| `cd8169f` (the brighter light) | Build, data audit, every server game test with and without the optional integrations, and the client test classes the change picks: the kiln's, the Tyrant's and Arms VII's | **All pass:** all 1379 required game tests (main has grown since), `optional integrations absent`, and the three client test classes. In the game the client test read the block light on all 1,312 cells of the bowl's floor: the darkest is 8, as the audit has it. The pictures above are from this commit |
 
 Run locally:
 
@@ -149,7 +158,8 @@ Run locally:
 - the lip has room over it;
 - each sluice's gate is whole and faces into the kiln; the walk `SluiceGateBlock` makes from any of its blocks finds all of it and nothing else, and the walk from under it finds its whole trough and no other; its wheel can be reached;
 - each shelf is a raised step inside the bowl with room over it, more than three blocks from the slag;
-- no magma lies where anyone could stand, and nothing burns.
+- no magma lies where anyone could stand, and nothing burns;
+- (since the brighter light) the light, flooded from its hidden lights, the slag and magma as the game floods it, is at least `BOWL_LIGHT` (8) on every cell of the bowl's floor, and the client test reads against the same. Five deliberate changes to the lattice (the old one, two levels dimmer, none over the floor, square rather than staggered, a block higher) and one to the client test's threshold each failed it.
 
 What the breaking found:
 - The audit's first run caught the audit itself, counting the void outside the kiln's shell as open air; it now walks only the kiln's own open space.
@@ -170,7 +180,7 @@ The client game test (`CinderKilnClientGameTests`, CI job `client`) runs the sea
 4. leaving takes the player back to where they stood. A second seal at the open vent is refused and kept, and using the vent takes the player back into the same kiln;
 5. when the instance closes, the player goes home and the vent is gone.
 
-Then it takes ten pictures: the vent on the magma, and in the kiln the view from the ledge, the bowl from near the stair's foot, the crucible and channel under the forge mouth, the slag falling over the lip, the west sluice open over its flooded trough, a shelf, the dome and its vent, and the Grey Mist's arch. Last, a seal pressed into a magma block in the Nether opens a second kiln, and the tenth picture is that vent.
+Then it takes ten pictures: the vent on the magma, and in the kiln the view from the ledge, the bowl from near the stair's foot, the crucible and channel under the forge mouth, the slag falling over the lip, the west sluice open over its flooded trough, a shelf, the dome and its vent, and the Grey Mist's arch. Since the brighter light it then reads the game's own block light on every cell of the bowl's floor, and fails under 8. Last, a seal pressed into a magma block in the Nether opens a second kiln, and the tenth picture is that vent.
 
 Not run: the two-client dedicated-server playtest, and play by hand.
 

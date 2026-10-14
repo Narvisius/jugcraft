@@ -110,14 +110,17 @@ def obsidian(sheet, part, tip=False, sheen=True):
         sheet.fill((x, y + h - 2, w, 2), OBSIDIAN[1])
 
 
-def magma(sheet, part, pal=MAGMA, glow=True):
-    """Magma burning in a seam: bright along its middle, deepening to its edges; drawn on the glowmask too."""
+def magma(sheet, part, pal=MAGMA, glow=True, seam=False):
+    """Magma burning in a seam: bright along its middle, deepening to its edges; drawn on the glowmask too. A `seam` (his
+    seams, a model pixel or two across) is the deep orange only along its outermost painted pixel, so it burns bright
+    when seen from across his dim kiln."""
     for name, rect in sheet.faces(part).items():
         x, y, w, h = rect
         for py in range(y, y + h):
             for px_ in range(x, x + w):
                 edge = min(px_ - x, x + w - 1 - px_, py - y, y + h - 1 - py)
-                colour = pal[min(len(pal) - 1, 2 + edge // 2)] if pal is MAGMA else pal[min(len(pal) - 1, 1 + edge // 2)]
+                step = min(edge, 2) if seam else edge // 2
+                colour = pal[min(len(pal) - 1, 2 + step)] if pal is MAGMA else pal[min(len(pal) - 1, 1 + edge // 2)]
                 sheet.put(px_, py, colour)
                 if glow:
                     sheet.put(px_, py, colour, glow=True)
@@ -170,8 +173,8 @@ def paint_body(sheet):
             sheet.fill((x + w // 2 - 2 * S, y + S, 4 * S, 2), OBSIDIAN[5])
     for part in ("spike_tall", "spike", "spike_low"):
         obsidian(sheet, part, tip=True)
-    for part in ("seam", "spine_seam", "flank_seam"):
-        magma(sheet, part)
+    for part in ("seam", "spine_seam", "rim_seam", "flank_seam"):
+        magma(sheet, part, seam=True)
     for part in ("core", "spine_core"):
         magma(sheet, part, pal=HOT)
 
@@ -269,7 +272,7 @@ def paint_tail(sheet):
     for part in ("club", "club_knob", "club_knob_top"):
         columns(sheet, part)
     for part in ("tail_seam", "tail_seam_side"):
-        magma(sheet, part)
+        magma(sheet, part, seam=True)
 
 
 def cinder_tyrant():

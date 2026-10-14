@@ -1,0 +1,1571 @@
+"""More of the plant kit (round 5): desks that come with different things on them, security lockers, first aid,
+engineering, documentation, IT, cubicles, and furniture bigger than a block (wall screens, the oval table).
+
+Same conventions as tools/plant_office.py. Extra keys:
+  tops   (row pieces) a list of box lists, one per variant: what is on the desk; picked at random when placed
+  multi  (width, rows, vertical): placed and broken as one; "screen" names the picture drawn across it, or
+         "table" makes it an oval meeting table
+A box may carry an 8th item, extra element JSON (a rotation).
+"""
+import math
+import random
+
+import numpy as np
+from PIL import Image, ImageDraw
+
+import nuclear_materials as M
+import plant_office3 as O3
+import plant_office4 as O4
+import plant_panels as PN
+
+S = M.CELL
+
+# ---------------------------------------------------------------------------------------------- desk tops
+MONITOR = [(6.5, 12.5, 3, 9.5, 12.8, 5.5, "pi_monitor"), (7.6, 12.8, 3.6, 8.4, 15.5, 4.2, "pi_monitor"),
+           (2.5, 15, 3.2, 13.5, 22, 4, "pi_monitor"),
+           (2.8, 15.3, 4, 13.2, 21.7, 4.1, {"*": "pi_monitor", "south": "pi_office_screen!"}),
+           (4, 12.5, 8, 12, 12.9, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"}),
+           (12.8, 12.5, 8.5, 13.8, 12.9, 10, "pi_monitor")]
+# Paperwork you can read (an operating procedure, a radiation work permit...), a pen cup with pens in it.
+PAPERS = [(1.4, 12.5, 3.4, 6.2, 13.3, 10.2, {"*": "pi_pages", "up": "pi_doc_0!"}),
+          (7.2, 12.5, 4.2, 11.6, 12.7, 10.4, {"*": "pi_paper", "up": "pi_doc_1!"})] + O4.pen_cup(12.4, 4.0, 12.5)
+# Binders standing between two bookends, spines (with their labels) toward whoever sits there, and a coffee.
+BINDERS = [b for k, (code, _) in enumerate(O3.DESK_BINDERS)
+           for b in O3.binder(1.6 + k * O3.DESK_BINDER_W, 12.8, 9, 5.5, "desk:" + code, O3.DESK_BINDER_W, O3.DESK_BINDER_H)] + [
+           (1, 12.5, 3.5, 1.6, 17.4, 9, "pi_steel_dark"), (8.2, 12.5, 3.5, 8.8, 17.4, 9, "pi_steel_dark"),
+           (1, 12.5, 3.5, 8.8, 12.8, 9, "pi_steel_dark")] + O4.mug(10.6, 6.6, 12.5)
+MUG_AT = (10.6 + O3.MUG_CENTRE, 15.6, 6.6 + O3.MUG_CENTRE)   # where the steam rises from (model pixels)
+LAMP = [(2, 12.5, 3, 5, 12.9, 6, "pi_steel_dark"), (3.2, 12.9, 4.2, 3.8, 19, 4.8, "pi_steel_dark"),
+        (2, 18.5, 4, 7, 20, 7, "pi_steel_dark")] + O4.phone(9, 3.6, 12.5) + [
+        (8, 12.5, 8, 13, 12.7, 12, {"*": "pi_paper", "up": "pi_doc_2!"})]
+LAPTOP = [(4, 12.5, 6, 12, 12.9, 11, {"*": "pi_laptop", "up": "pi_keyboard!"}),
+          (4, 12.9, 5.4, 12, 18, 6, {"*": "pi_laptop", "south": "pi_office_screen!"}),
+          (13, 12.5, 7, 15, 12.8, 11, {"*": "pi_paper", "up": "pi_notepad!"})]
+ROLLS = [(1, 12.5, 4, 15, 14, 5.5, "pi_blueprint_roll"), (2, 12.5, 6, 14, 14, 7.5, "pi_blueprint_roll"),
+         (3, 12.5, 9, 13, 12.7, 13, {"*": "pi_blueprint_0", "up": "pi_blueprint_0!"})]
+# Two screens side by side, both inside the desk's own block (they used to overhang its sides, and desks in a row
+# pushed their screens into each other: Justin's round 23).
+DUAL = [(2.5, 12.5 + 0.5, 3, 5.5, 13.3, 5, "pi_monitor"), (10.5, 13, 3, 13.5, 13.3, 5, "pi_monitor"),
+        (0.4, 15, 3.2, 7.7, 21, 4, {"*": "pi_monitor", "south": "pi_office_screen!"}),
+        (8.3, 15, 3.2, 15.6, 21, 4, {"*": "pi_monitor", "south": "pi_tv!"}),
+        (3.7, 13, 3.5, 4.3, 15, 4), (11.7, 13, 3.5, 12.3, 15, 4),
+        (4, 13, 8, 12, 13.4, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"})]
+DUAL[4] = DUAL[4] + ("pi_monitor",)
+DUAL[5] = DUAL[5] + ("pi_monitor",)
+BLOTTER = [(3, 13, 5, 13, 13.2, 11, {"*": "pi_leather", "up": "pi_leather!"}),
+           (5.6, 13.2, 5.6, 10.4, 13.4, 10.4, {"*": "pi_paper", "up": "pi_doc_4!"}),
+           (2, 13, 12, 8, 14.5, 13.5, {"*": "pi_walnut_edge", "south": "pi_nameplate!"})] + O4.pen_cup(13.2, 3.4, 13)
+EXEC_LAMP = [(1.5, 13, 3, 4.5, 13.4, 6, "pi_brass"), (2.7, 13.4, 4.2, 3.3, 20, 4.8, "pi_brass"),
+             (0.5, 19, 2.5, 5.5, 22, 7.5, "pi_lamp_shade")] + O4.phone(7.6, 3.4, 13) + [
+             (6, 13, 8.5, 11, 13.3, 12.5, {"*": "pi_paper", "up": "pi_doc_3!"})]
+PC_OPEN = [(1.5, 12, 3, 7.5, 19, 12, {"*": "pi_pc_case", "east": "pi_pc_inside!"}),
+           (8.5, 12, 4, 14, 12.3, 8, {"*": "pi_circuit", "up": "pi_circuit!"}),
+           (9, 12, 9, 13.5, 12.4, 10, "pi_ram"), (9, 12, 11, 13.5, 12.4, 12, "pi_ram"),
+           (13.5, 12, 9.5, 15, 13.5, 13, "pi_steel_dark")]
+TOOLS = [(1.5, 12, 4, 7, 12.3, 9, {"*": "pi_circuit", "up": "pi_circuit!"}),
+         (8, 12, 4, 10, 13, 7, "pi_steel_dark"), (9.5, 12, 4.5, 14.5, 12.4, 5.5, "pi_solder_iron"),
+         (8.5, 12, 8, 14.5, 12.6, 12, {"*": "pi_tool_case", "up": "pi_tool_case!"}),
+         (2, 12, 10, 6, 12.3, 13, "pi_ram")]
+DOCS = [(2.4, 12, 4, 7.4, 12.4, 11, {"*": "pi_pages", "up": "pi_doc_5!"}),
+        (9, 12, 5, 14, 12.4, 11, {"*": "pi_monitor", "up": "pi_tablet!"})]
+
+# The control room operators' consoles (Justin's round 23: "keep the black ones ... at least three blocks each ...
+# have like little setups"): a black desk with a raised shelf along the back for the screens, joining up side by
+# side; each block carries its own setup, everything inside its own block so joined pieces never overlap.
+CONSOLE_BODY = [(0, 11, 0.5, 16, 12, 15.5, {"*": "pi_console_edge", "up": "pi_console_top!"}),
+                (0, 0, 1, 16, 11, 2.5, "pi_console_body"),
+                (0, 12, 0.5, 16, 13.2, 5, {"*": "pi_console_edge", "up": "pi_console_top!"})]
+
+
+def _screen(x0, x1, y0, y1, tex, z=2.2):
+    """A monitor standing on the console's shelf: its case, the picture toward the operator, its foot."""
+    mid = (x0 + x1) / 2
+    return [(x0, y0, z, x1, y1, z + 0.8, {"*": "pi_monitor", "south": f"{tex}!"}),
+            (mid - 0.4, 13.2, z + 0.1, mid + 0.4, y0, z + 0.7, "pi_monitor"),
+            (mid - 1.6, 13.2, z - 0.4, mid + 1.6, 13.5, z + 1.6, "pi_monitor")]
+
+
+CONSOLE_KEYS = [(3.5, 12, 8, 12.5, 12.5, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"}),
+                (13.2, 12, 8.5, 14.4, 12.5, 10.5, "pi_monitor")]
+CONSOLE_TWIN = _screen(0.6, 7.6, 14, 20.4, "pi_plant_screen_a") + _screen(8.4, 15.4, 14, 20.4, "pi_plant_screen_b") + CONSOLE_KEYS
+CONSOLE_WIDE = (_screen(1.0, 15.0, 14, 21.0, "pi_plant_screen_c") + O4.phone(11, 10, 12) +
+                [(2, 12, 8, 10, 12.5, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"})])
+CONSOLE_STACK = (_screen(2.0, 14.0, 14, 19.0, "pi_plant_screen_b") +
+                 [(2.0, 19.2, 2.3, 14.0, 24.2, 3.1, {"*": "pi_monitor", "south": "pi_plant_screen_a!"}),
+                  (7.6, 19.0, 2.5, 8.4, 19.2, 2.9, "pi_monitor"),
+                  (1.5, 12, 7.5, 8.5, 12.4, 12.5, {"*": "pi_pages", "up": "pi_doc_5!"}),
+                  (10, 12, 9, 14.5, 12.5, 11, {"*": "pi_monitor", "up": "pi_keyboard!"})])
+CONSOLE_PHONE = (_screen(0.6, 7.6, 14, 20.4, "pi_plant_screen_c") + O4.phone(9.4, 6.5, 12) +
+                 [(2.5, 12, 8, 7.5, 12.4, 10.5, {"*": "pi_monitor", "up": "pi_keyboard!"}),
+                  (9.5, 12, 11.5, 14.5, 12.3, 14.5, {"*": "pi_paper", "up": "pi_doc_3!"})])
+
+DESK_BODY = [(0, 11.5, 1, 16, 12.5, 15, {"*": "pi_laminate", "up": "pi_laminate!"}),
+             (0, 3, 1.2, 16, 11.5, 2, "pi_desk_panel")]
+GLASS_BODY = [(0, 11.5, 1, 16, 12, 15, {"*": "pi_glass_edge", "up": "pi_glass_top", "down": "pi_glass_top"}),
+              (0, 10.8, 1.5, 16, 11.5, 2.5, "pi_steel_dark"), (0, 10.8, 13.5, 16, 11.5, 14.5, "pi_steel_dark")]
+EXEC_BODY = [(0, 12, 0.5, 16, 13, 15.5, {"*": "pi_walnut_edge", "up": "pi_walnut!"}),
+             (0, 1, 0.5, 16, 12, 1.5, {"*": "pi_walnut", "north": "pi_walnut!", "south": "pi_walnut!"}),
+             (0, 0, 0.5, 16, 1, 2, "pi_brass")]
+
+
+def _shift(boxes, dy):
+    return [(b[0], b[1] + dy, b[2], b[3], b[4] + dy, b[5]) + tuple(b[6:]) for b in boxes]
+
+
+PIECES = {
+    "office_desk_long": {"display": "Office Desk (joins up)", "row": "desk", "boxes": DESK_BODY,
+                         "left": [(0.5, 0, 1, 1.5, 11.5, 15, "pi_desk_panel")], "right": [(14.5, 0, 1, 15.5, 11.5, 15, "pi_desk_panel")],
+                         "tops": [MONITOR, PAPERS, BINDERS, LAMP, LAPTOP, ROLLS], "glow": ["pi_office_screen"]},
+    "executive_desk": {"display": "Executive Desk", "row": "exec", "boxes": EXEC_BODY,
+                       "left": [(0, 0, 0.5, 1.2, 12, 15.5, {"*": "pi_walnut", "west": "pi_walnut!"})],
+                       "right": [(14.8, 0, 0.5, 16, 12, 15.5, {"*": "pi_walnut", "east": "pi_walnut!"})],
+                       "tops": [DUAL, BLOTTER, EXEC_LAMP], "glow": ["pi_office_screen", "pi_tv"]},
+    "operator_console": {"display": "Operator Console", "row": "opcon", "boxes": CONSOLE_BODY,
+                         "left": [(0, 0, 2.5, 1.2, 11, 15.5, "pi_console_body")],
+                         "right": [(14.8, 0, 2.5, 16, 11, 15.5, "pi_console_body")],
+                         "tops": [CONSOLE_TWIN, CONSOLE_WIDE, CONSOLE_STACK, CONSOLE_PHONE],
+                         "glow": ["pi_plant_screen_a", "pi_plant_screen_b", "pi_plant_screen_c"]},
+    "glass_desk": {"display": "Glass Desk", "row": "glass", "boxes": GLASS_BODY,
+                   "left": [(0.4, 0, 1.5, 1.4, 11.5, 2.5, "pi_steel_dark"), (0.4, 0, 13.5, 1.4, 11.5, 14.5, "pi_steel_dark")],
+                   "right": [(14.6, 0, 1.5, 15.6, 11.5, 2.5, "pi_steel_dark"), (14.6, 0, 13.5, 15.6, 11.5, 14.5, "pi_steel_dark")],
+                   "tops": [_shift(MONITOR, -0.5), PC_OPEN, DOCS, TOOLS], "glow": ["pi_office_screen"]},
+    "stretcher": {"display": "Stretcher Bed", "row": "stretcher", "boxes": [
+        (0, 5.5, 2, 16, 6.5, 14, "pi_chrome"),
+        (0, 6.5, 2.5, 16, 9.5, 13.5, {"*": "pi_mattress", "up": "pi_sheet!"}),
+        (0, 6, 1.5, 16, 7, 2, "pi_chrome"), (0, 6, 14, 16, 7, 14.5, "pi_chrome")],
+        "left": [(0.5, 0, 2.5, 2, 5.5, 4, "pi_chrome"), (0.5, 0, 12, 2, 5.5, 13.5, "pi_chrome"),
+                 (0, 5.5, 2, 1, 13, 14, "pi_chrome"), (1.5, 9.5, 3.5, 6, 11, 12.5, {"*": "pi_sheet", "up": "pi_sheet!"})],
+        "right": [(14, 0, 2.5, 15.5, 5.5, 4, "pi_chrome"), (14, 0, 12, 15.5, 5.5, 13.5, "pi_chrome"),
+                  (15, 5.5, 2, 16, 11, 14, "pi_chrome")]},
+    "cubicle_panel": {"display": "Cubicle Partition", "row": "cubicle", "boxes": [
+        (0, 0.5, 7, 16, 20, 9, "pi_partition"), (0, 20, 6.8, 16, 20.6, 9.2, "pi_chrome"),
+        (0, 0, 7.2, 16, 0.5, 8.8, "pi_steel_dark")],
+        "left": [(0, 0, 6.5, 1, 20.8, 9.5, "pi_chrome")], "right": [(15, 0, 6.5, 16, 20.8, 9.5, "pi_chrome")]},
+    "locker_security": {"display": "Security Locker", "stacks": True, "boxes": [
+        (1, 0, 2, 15, 16, 3, "pi_locker_side"), (1, 0, 3, 2, 16, 15, "pi_locker_side"), (14, 0, 3, 15, 16, 15, "pi_locker_side"),
+        (2, 0, 3, 14, 16, 3.2, "pi_locker_inside"),
+        (0.4, 0.4, 15, 1.2, 15.6, 21.5, {"*": "pi_locker_side", "west": "pi_locker_door!", "east": "pi_locker_door_in!"})],
+        "cap": [(0.8, 15.4, 1.8, 15.2, 16.1, 15.2, "pi_cabinet_dark"),
+                (2, 12.4, 3, 14, 13, 14.5, "pi_locker_side"),
+                (4.5, 13, 5, 9.5, 14.6, 10, {"*": "pi_security_cap", "up": "pi_security_cap"}),
+                (10, 13, 6, 12, 16, 8, {"*": "pi_radio", "south": "pi_radio!"}),
+                (2.5, 11, 8.6, 13.5, 11.6, 9.4, "pi_chrome"),
+               ],
+        "plinth": [(0.8, 0, 1.8, 15.2, 1, 15.2, "pi_cabinet_dark"),
+                   (3.5, 1, 6, 7.5, 4, 12, "pi_boot_black"), (8.5, 1, 6, 12.5, 4, 12, "pi_boot_black")]},
+    # ---- first aid
+    "aed_cabinet": {"display": "Defibrillator (AED) Cabinet", "boxes": [
+        (3, 3, 0, 13, 14, 3.5, {"*": "pi_cab_white", "south": "pi_aed!"}),
+        (4, 15, 0, 12, 19, 0.4, {"*": "pi_cab_white", "south": "pi_aed_sign!"})], "glow": ["pi_aed_sign"]},
+    "fire_extinguisher": {"display": "Fire Extinguisher Cabinet", "boxes": O4.EXTINGUISHER_CABINET},
+    # ---- an 8-hour battery emergency light (round 24; rebuilt in round 25b: Justin, "they look horrible ... I don't want
+    # anything to just be like an image pasted over"): every part is modelled (emergency_light_boxes below).
+    "emergency_light": {"display": "Emergency Light", "glow": ["pi_pnl_green"], "boxes": None},
+    # The 3/4-inch conduit that feeds it from the lighting panel, run down the wall from the ceiling into the top of its
+    # cabinet (Justin: cables must go to something), with a one-hole strap and a set-screw coupling.
+    "emergency_light_conduit": {"display": "Emergency Light Conduit", "boxes": None},
+    "medicine_cabinet": {"display": "First Aid Cabinet", "boxes": [
+        (1, 5, 0, 15, 16, 4.5, {"*": "pi_cab_white", "south": "pi_medicine_front!"})]},
+    "vitals_monitor": {"display": "Patient Monitor", "boxes": [
+        # A five-castor stand, the pole, a basket for the leads, the monitor on its bracket with a handle on top,
+        # the leads coiled down the pole.
+        (3, 0.8, 7.5, 13, 1.5, 8.5, "pi_steel_dark"), (7.5, 0.8, 3, 8.5, 1.5, 13, "pi_steel_dark"),
+        (3, 0, 7.4, 4.2, 0.8, 8.6, "pi_boot_black"), (11.8, 0, 7.4, 13, 0.8, 8.6, "pi_boot_black"),
+        (7.4, 0, 3, 8.6, 0.8, 4.2, "pi_boot_black"), (7.4, 0, 11.8, 8.6, 0.8, 13, "pi_boot_black"),
+        (7.5, 1.5, 7.5, 8.5, 14, 8.5, "pi_chrome"),
+        (5.5, 7, 8.5, 10.5, 9.5, 11.5, {"*": "pi_steel_dark", "up": "pi_basket!"}),
+        (6.5, 13, 7, 9.5, 14.5, 9, "pi_steel_dark"),
+        (2.5, 14, 6, 13.5, 22, 9.5, {"*": "pi_monitor_case", "south": "pi_vitals!"}),
+        (3.5, 13.5, 6.5, 12.5, 14, 9, "pi_monitor_case"),
+        (5, 22, 7.2, 11, 23, 8.2, "pi_steel_dark"), (5, 21, 7.2, 5.8, 22, 8.2, "pi_steel_dark"),
+        (10.2, 21, 7.2, 11, 22, 8.2, "pi_steel_dark"),
+        (8.5, 4, 8, 9, 14, 8.5, "pi_cable"), (9, 10, 8, 10.5, 10.5, 8.5, "pi_cable")], "glow": ["pi_vitals"]},
+    "glass_coffee_table": {"display": "Glass Coffee Table", "boxes": [
+        (1, 6.5, 2, 15, 7.3, 14, {"*": "pi_glass_edge", "up": "pi_glass_top", "down": "pi_glass_top"}),
+        (1.5, 0, 2.5, 2.5, 6.5, 3.5, "pi_chrome"), (13.5, 0, 2.5, 14.5, 6.5, 3.5, "pi_chrome"),
+        (1.5, 0, 12.5, 2.5, 6.5, 13.5, "pi_chrome"), (13.5, 0, 12.5, 14.5, 6.5, 13.5, "pi_chrome"),
+        (2.5, 2, 3, 13.5, 2.5, 13, "pi_walnut"),
+] + O4.mug(3.6, 5.6, 7.3) + O4.magazines(8.4, 4.4, 7.3) + O4.magazines(4, 7.5, 2.5)[:1]},
+    # ---- documents and engineering
+    "filing_cabinet_open": {"display": "Filing Cabinet (open)", "boxes": O3.LOW_CABINET_OPEN},
+    "filing_cabinet_tall": O3.TALL_CABINET,
+    "filing_cabinet_tall_open": O3.TALL_CABINET_OPEN,
+    "office_copier": {"display": "Office Copier", "multi": (2, 2, "box"), "copier": True},
+    "drafting_table": {"display": "Drafting Table", "boxes": [
+        (1, 0, 3, 2, 11, 4, "pi_steel_dark"), (14, 0, 3, 15, 11, 4, "pi_steel_dark"),
+        (1, 0, 12, 2, 11, 13, "pi_steel_dark"), (14, 0, 12, 15, 11, 13, "pi_steel_dark"),
+        (1, 4, 3, 15, 5, 13, "pi_steel_dark"),
+        (0, 12, 2, 16, 13, 15, {"*": "pi_cab_white", "up": "pi_blueprint_1!"}, {"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 12, 8]}}),
+        (1, 15.5, 1, 2, 22, 2, "pi_steel_dark"), (1, 21, 1, 7, 22, 2, "pi_steel_dark"),
+        (5, 19, 0.5, 9, 21, 3.5, "pi_lamp_shade")]},
+    "blueprint_sheet": {"display": "Blueprint", "variants": 6, "vtex": "pi_blueprint", "boxes": [
+        (1, 2, 0, 15, 15, 0.6, {"*": "pi_blueprint", "south": "pi_blueprint!"}),
+        (2, 14.2, 0.6, 3, 15, 1, "pi_marker_red"), (13, 14.2, 0.6, 14, 15, 1, "pi_marker_red")]},
+    # ---- bigger than a block
+    "training_screen": {"display": "Training Screen", "multi": (3, 2, True), "screen": "training"},
+    "plant_map_screen": {"display": "Plant Overview Screen", "multi": (3, 2, True), "screen": "plant_map"},
+    "status_screen": {"display": "Plant Status Screen", "multi": (3, 2, True), "screen": "status"},
+    "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank"},
+    "oval_table": {"display": "Oval Meeting Table", "multi": (5, 3, False), "table": True, "versions": 3},
+    "lounge_table": {"display": "Oval Glass Coffee Table", "multi": (3, 2, False), "lounge": True},
+    # ---- the warehouse
+    "storage_rack": {"display": "Storage Rack", "multi": (3, 3, "rack"), "rack": True},
+    "high_bay_light": {"display": "High-Bay Light", "boxes": O4.O7.HIGH_BAY, "glow": ["pi_highbay_lens"]},
+    "light_hanger": {"display": "Light Hanger Chain", "boxes": O4.O7.LIGHT_HANGER},
+    "large_print": {"display": "Large Framed Picture", "multi": (2, 1, True), "prints": 12},
+}
+# The diesel generator rooms' control and protection panels (tools/plant_panels.py).
+PIECES.update(PN.PANELS)
+PIECES.update(PN.RISERS)
+
+
+# ---------------------------------------------------------------------------------------------- emergency light
+def _round_y(cx, cz, y0, y1, r, tex, extra=None):
+    """A round part along y (a lamp head pointing down: its cup, bezel ring, lens) as five boxes side by side across x,
+    a middle column and two steps each side, together a stepped circle of radius r about (cx, cz). They touch but
+    never overlap, so no two of their faces lie in one plane facing the same way (tools/zfight.py would otherwise pull
+    them apart)."""
+    out = []
+    for a0, a1, half in ((-1.0, -0.75, 0.45), (-0.75, -0.35, 0.8), (-0.35, 0.35, 1.0), (0.35, 0.75, 0.8), (0.75, 1.0, 0.45)):
+        box = (cx + a0 * r, y0, cz - half * r, cx + a1 * r, y1, cz + half * r, tex)
+        out.append(box + ((extra,) if extra else ()))
+    return out
+
+
+# The cabinet is against the wall (z 0), its door at z 5..5.25. Each lamp head hangs in a yoke out in front of the
+# cabinet's top on a stalk, pointing down at the floor (Justin, round 25b: "the lights need to face down toward the
+# floor"), swung out into the room 45 degrees ("angled out a bit more"); its pivot here.
+EM_HEADS = (4.6, 11.4)
+EM_PIVOT_Y, EM_PIVOT_Z = 11.4, 8.0
+EM_CONDUIT_X, EM_CONDUIT_Z = (7.7, 8.3), (0.9, 1.5)
+
+
+def _em_head(cx):
+    """A sealed-beam lamp head on its stalk and yoke: the swivel base on the cabinet top, the stalk up and forward, the
+    U yoke hanging from it, the knurled pivot knobs, and the head (a dark cup, a chrome bezel ring, a domed glass lens
+    with the lamp's boss in the middle) pointing down, swung out about its pivot."""
+    y, z = EM_PIVOT_Y, EM_PIVOT_Z
+    tilt = {"rotation": {"angle": -45, "axis": "x", "origin": [cx, y, z]}}
+    out = [(cx - 0.9, 8.6, 2.4, cx + 0.9, 9.0, 4.2, "pi_chrome"),
+           (cx - 0.35, 9.0, 2.95, cx + 0.35, 14.8, 3.65, "pi_chrome"),
+           (cx - 0.35, 14.3, 3.65, cx + 0.35, 14.8, z - 0.4, "pi_chrome"),
+           (cx - 2.7, 14.3, z - 0.4, cx + 2.7, 14.8, z + 0.4, "pi_emlight_head"),
+           (cx - 2.7, 10.9, z - 0.4, cx - 2.3, 14.3, z + 0.4, "pi_emlight_head"),
+           (cx + 2.3, 10.9, z - 0.4, cx + 2.7, 14.3, z + 0.4, "pi_emlight_head"),
+           (cx - 3.2, y - 0.5, z - 0.5, cx - 2.7, y + 0.5, z + 0.5, "pi_cap_black"),
+           (cx + 2.7, y - 0.5, z - 0.5, cx + 3.2, y + 0.5, z + 0.5, "pi_cap_black")]
+    out += _round_y(cx, z, 9.76, 13.3, 1.9, "pi_emlight_head", extra=tilt)
+    out += _round_y(cx, z, 9.2, 9.75, 2.05, "pi_chrome", extra=tilt)
+    out += _round_y(cx, z, 9.0, 9.3, 1.4, "pi_emlight_glass", extra=tilt)
+    out += [(cx - 0.35, 8.75, z - 0.35, cx + 0.35, 8.95, z + 0.35, "pi_emlight_glass", tilt)]
+    return out
+
+
+def emergency_light_boxes():
+    """A Big Beam style 8-hour emergency light (the units Appendix R puts in every room a plant must be run from): a
+    cream steel cabinet on a wall flange, louvred both sides, its hinged front with the TEST push button in its chrome
+    bezel, the AC ON (lit) and HIGH CHARGE pilot lamps, the riveted nameplate and the door latch; two sealed-beam
+    heads on stalks over its top, aimed down at the floor; the feed conduit into the top through its connector."""
+    b = [(3, 0.8, 0, 13, 1.6, 0.6, "pi_emlight_case"),
+         (3.4, 1.0, 0.6, 3.9, 1.4, 0.8, "pi_chrome"), (12.1, 1.0, 0.6, 12.6, 1.4, 0.8, "pi_chrome"),
+         (2, 1.6, 0, 14, 8.6, 5, "pi_emlight_case"),
+         (2.4, 2.0, 5, 13.6, 8.2, 5.25, "pi_emlight_case")]
+    # The louvres down each side: a slat standing out over a dark slot.
+    for y in (3.0, 3.9, 4.8, 5.7, 6.6):
+        b += [(14, y, 1.0, 14.3, y + 0.4, 4.0, "pi_emlight_case"), (14, y - 0.4, 1.1, 14.12, y, 3.9, "pi_emlight_head"),
+              (1.7, y, 1.0, 2, y + 0.4, 4.0, "pi_emlight_case"), (1.88, y - 0.4, 1.1, 2, y, 3.9, "pi_emlight_head")]
+    # The TEST button, the two pilot lamps.
+    b += [(10.1, 5.4, 5.25, 11.7, 7.0, 5.45, "pi_chrome"), (10.45, 5.75, 5.45, 11.35, 6.65, 5.9, "pi_cap_black"),
+          (12.15, 6.8, 5.25, 13.25, 7.9, 5.4, "pi_chrome"), (12.35, 7.0, 5.4, 13.05, 7.7, 5.7, "pi_pnl_green"),
+          (12.15, 5.4, 5.25, 13.25, 6.5, 5.4, "pi_chrome"), (12.35, 5.6, 5.4, 13.05, 6.3, 5.7, "pi_pnl_red")]
+    # The maker's nameplate with its four rivets, the door latch.
+    b += [(3.3, 4.6, 5.25, 9.3, 7.2, 5.35, "pi_chrome"),
+          (3.5, 6.75, 5.35, 3.8, 7.05, 5.47, "pi_cap_black"), (8.8, 6.75, 5.35, 9.1, 7.05, 5.47, "pi_cap_black"),
+          (3.5, 4.75, 5.35, 3.8, 5.05, 5.47, "pi_cap_black"), (8.8, 4.75, 5.35, 9.1, 5.05, 5.47, "pi_cap_black"),
+          (12.5, 2.6, 5.25, 13.0, 4.4, 5.6, "pi_chrome")]
+    # The feed: its connector in the top knockout, the conduit up out of the block.
+    x0, x1 = EM_CONDUIT_X
+    z0, z1 = EM_CONDUIT_Z
+    b += [(x0 - 0.3, 8.6, z0 - 0.3, x1 + 0.3, 9.3, z1 + 0.3, "pi_chrome"), (x0, 9.3, z0, x1, 16, z1, "pi_chrome")]
+    for cx in EM_HEADS:
+        b += _em_head(cx)
+    return b
+
+
+def emergency_light_conduit_boxes():
+    """The emergency light's conduit down the wall: the conduit, a set-screw coupling, a one-hole strap screwed to
+    the wall."""
+    x0, x1 = EM_CONDUIT_X
+    z0, z1 = EM_CONDUIT_Z
+    return [(x0, 0, z0, x1, 16, z1, "pi_chrome"),
+            (x0 - 0.15, 2.6, z0 - 0.15, x1 + 0.15, 3.6, z1 + 0.15, "pi_steel"),
+            (x0 + 0.2, 3.0, z1 + 0.15, x1 - 0.2, 3.2, z1 + 0.3, "pi_steel_dark"),
+            (x0 - 0.25, 9.6, 0, x1 + 0.25, 10.4, z1 + 0.2, "pi_steel_dark"),
+            (x1 + 0.25, 9.72, 0, x1 + 1.3, 10.28, 0.2, "pi_steel_dark"),
+            (x1 + 0.6, 9.82, 0.2, x1 + 0.95, 10.18, 0.4, "pi_chrome")]
+
+
+PIECES["emergency_light"]["boxes"] = emergency_light_boxes()
+PIECES["emergency_light_conduit"]["boxes"] = emergency_light_conduit_boxes()
+
+
+# ---------------------------------------------------------------------------------------------- feeder conduits
+# A 480 V load centre's feeder conduit (round 25b; Justin: the conduits on top of the switchgear "are going nowhere ...
+# it should be connected to what it's actually supposed to be connected to"): 4-inch rigid steel conduit from the hub on
+# top of its section (tools/control_boards.py LC_CONDUIT_*) straight up through the ceiling into the cable spreading
+# room, where it comes up through the floor and turns into the lowest tray. Pieces stacked in one column (block
+# middle), each facing north: the tray is on its south side, the strut on its north side.
+def _oct_y(x, z, y0, y1, half, tex):
+    """A round-ish run up the block: a square and the same square turned 45 degrees (its ends a hair short, so no two
+    faces share a plane)."""
+    return [(x - half, y0, z - half, x + half, y1, z + half, tex),
+            (x - half, y0 + 0.05, z - half, x + half, y1 - 0.05, z + half, tex, {"rotation": {"angle": 45, "axis": "y", "origin": [x, y0, z]}})]
+
+
+def _oct_z(x, y, z0, z1, half, tex):
+    """The same, running along z."""
+    return [(x - half, y - half, z0, x + half, y + half, z1, tex),
+            (x - half, y - half, z0 + 0.05, x + half, y + half, z1 - 0.05, tex, {"rotation": {"angle": 45, "axis": "z", "origin": [x, y, z0]}})]
+
+
+_CONDUIT, _COUPLING = 1.0, 1.3
+
+
+def _coupling(y):
+    return _oct_y(8, 8, y - 1, y + 1, _COUPLING, "pi_steel")
+
+
+def _firestop(y0, y1, sleeve):
+    """Where it goes through the slab: the red fire-stop seal round it, and the steel sleeve's flange."""
+    return _oct_y(8, 8, y0, y1, 1.6, "pi_extinguisher_red") + _oct_y(8, 8, *sleeve, 2.4, "pi_steel_dark")
+
+
+def _strut(y):
+    """A length of yellow strut channel on the north side at y, with the conduit's clamp and its arm to it."""
+    return [(0, y - 0.9, 0, 16, y + 0.9, 1.6, "pi_rail_yellow"), (7.4, y - 0.6, 1.6, 8.6, y + 0.6, 6.9, "pi_steel_dark"),
+            (6.6, y - 0.7, 6.9, 9.4, y + 0.7, 9.4, "pi_steel_dark")]
+
+
+PIECES.update({
+    # Over the load centre: from its hub (half a block down, on the cubicle's top) up, a coupling half way.
+    "feeder_conduit_base": {"display": "Feeder Conduit (Hub)", "boxes": _oct_y(8, 8, -8.48, 16, _CONDUIT, "pi_chrome") + _coupling(8)},
+    # Under the ceiling: a coupling, and the fire-stop where it goes up through.
+    "feeder_conduit_ceiling": {"display": "Feeder Conduit (Ceiling)", "boxes":
+        _oct_y(8, 8, 0, 16, _CONDUIT, "pi_chrome") + _coupling(6) + _firestop(14.4, 15.4, (15.4, 16))},
+    # Up through the floor of the room above: the sleeve and fire-stop, the strut that holds the run, a coupling.
+    "feeder_conduit_floor": {"display": "Feeder Conduit (Floor)", "boxes":
+        _oct_y(8, 8, 0, 16, _CONDUIT, "pi_chrome") + _firestop(0.6, 1.6, (0, 0.6)) + _strut(11.2) + _coupling(14.4)},
+    "feeder_conduit": {"display": "Feeder Conduit", "boxes": _oct_y(8, 8, 0, 16, _CONDUIT, "pi_chrome") + _coupling(8)},
+    # Into the tray: up to a cast LB fitting, along under the tray (in the next block south), up through a second into
+    # the tray's floor at its bushing, where the cables go on in the tray.
+    "feeder_conduit_tray": {"display": "Feeder Conduit (Into Tray)", "boxes":
+        _oct_y(8, 8, 0, 5.6, _CONDUIT, "pi_chrome") + [(6.5, 5.6, 6.5, 9.5, 8.8, 10.4, "pi_steel_dark"), (6.9, 6.6, 10.4, 9.1, 8.6, 10.6, "pi_steel")]
+        + _oct_z(8, 7.2, 10.6, 22.2, _CONDUIT, "pi_chrome")
+        + [(6.5, 5.6, 22.2, 9.5, 8.8, 25.6, "pi_steel_dark"), (6.9, 8.8, 22.6, 9.1, 9.0, 25.2, "pi_steel")]
+        + _oct_y(8, 24, 9.0, 11.3, _CONDUIT, "pi_chrome") + _oct_y(8, 24, 11.3, 12, 1.7, "pi_steel_dark")},
+})
+
+
+# ---------------------------------------------------------------------------------------------- ladder tray
+# The DC equipment rooms' overhead cable tray (round 26, 8d; Justin: "Overhead tray now"): 24-inch galvanized ladder
+# tray hung under the ceiling on trapeze hangers (a length of strut under it on two threaded rods), over the equipment
+# row and the motor control centre and along the side wall between them, a bundle of black power cables laid on its
+# rungs. Where a feeder leaves it, a rigid conduit comes up under it and ends in a bushing, the cable dropping out of
+# the bundle into it (the regulating transformers' feeders: up from each transformer's top, and two side by side from
+# the top of the MCC's REG XF section). Pieces facing north run along x (the tray across z 3..13, its rails 11.2..14 up
+# the block); the bend facing north joins the west side to the south side.
+TRAY_Y = (11.2, 14.0)                   # the rails' bottom and top
+TRAY_RAIL = (3.0, 3.4)                  # the near rail's web (the far one mirrored about z 8)
+TRAY_RUNGS = (2.0, 6.0, 10.0, 14.0)     # rung centres along the run (9 inches apart)
+TRAY_CABLES = (4.6, 6.2, 8.0, 9.8, 11.4)
+TRAY_CABLE_R, TRAY_CABLE_Y = 0.7, 12.55
+MCC_HUB_Y = -10.3                       # an MCC's REG XF hubs' tops, from the block over the lineup (2.36 - 3 blocks, a hair into the hub)
+_GALV, _GALV_DARK, _JACKET = "pi_steel", "pi_steel_dark", "pi_sb_cable"
+
+
+def _oct_x(z, y, x0, x1, half, tex):
+    """A round-ish run along x (as _oct_y)."""
+    return [(x0, y - half, z - half, x1, y + half, z + half, tex),
+            (x0 + 0.05, y - half, z - half, x1 - 0.05, y + half, z + half, tex, {"rotation": {"angle": 45, "axis": "x", "origin": [x0, y, z]}})]
+
+
+def _tray_rails(x0=0.0, x1=16.0):
+    y0, y1 = TRAY_Y
+    out = []
+    for w0, w1, f0, f1 in ((3.0, 3.4, 3.4, 4.1), (12.6, 13.0, 11.9, 12.6)):
+        out += [(x0, y0, w0, x1, y1, w1, _GALV), (x0, y0, f0, x1, y0 + 0.3, f1, _GALV), (x0, y1 - 0.3, f0, x1, y1, f1, _GALV)]
+    return out
+
+
+def _tray_rungs(skip=()):
+    return [(c - 0.45, TRAY_Y[0] + 0.05, 3.4, c + 0.45, 11.85, 12.6, _GALV) for c in TRAY_RUNGS if c not in skip]
+
+
+def _tray_cables(x0=0.0, x1=16.0, lanes=TRAY_CABLES):
+    out = []
+    for z in lanes:
+        out += _oct_x(z, TRAY_CABLE_Y, x0, x1, TRAY_CABLE_R, _JACKET)
+    return out
+
+
+def _trapeze(x=8.0):
+    """A trapeze hanger at x: the strut under the rails, two threaded rods up to the ceiling outside them, the nuts
+    under the strut, the rods' anchor plates on the ceiling."""
+    out = [(x - 0.8, 10.2, 1.4, x + 0.8, TRAY_Y[0], 14.6, _GALV)]
+    for z in (2.0, 14.0):
+        out += [(x - 0.2, 9.6, z - 0.2, x + 0.2, 16.0, z + 0.2, _GALV_DARK), (x - 0.4, 9.75, z - 0.4, x + 0.4, 10.2, z + 0.4, _GALV_DARK),
+                (x - 0.7, 15.7, z - 0.7, x + 0.7, 16.0, z + 0.7, _GALV_DARK)]
+    return out
+
+
+def _tray_drop(x, z=8):
+    """A feeder leaving the tray at (x, z): its conduit up under the tray, the bushing, the cable dropping into it."""
+    return (_oct_y(x, z, 0, 10.0, _CONDUIT, "pi_chrome") + _oct_y(x, z, 3.5, 5.5, _COUPLING, "pi_steel") + _oct_y(x, z, 10.0, 10.6, 1.45, _GALV_DARK)
+            + _oct_y(x, z, 10.6, TRAY_CABLE_Y, 0.6, _JACKET))
+
+
+def _seg(cx, cz, phi, length, width, y0, y1, tex):
+    """A box along a direction in the plan (phi degrees from +x toward +z: 0, +-22.5, +-45, +-67.5 or 90), centred at
+    (cx, cz): built along x or z and turned about y."""
+    if abs(phi) > 45:
+        base = 90 if phi > 0 else -90
+        box = (cx - width / 2, y0, cz - length / 2, cx + width / 2, y1, cz + length / 2, tex)
+        turn = phi - base
+    else:
+        box = (cx - length / 2, y0, cz - width / 2, cx + length / 2, y1, cz + width / 2, tex)
+        turn = phi
+    if turn == 0:
+        return [box]
+    # The game turns +x toward -z for a positive angle about y (seen from above, anticlockwise): phi's opposite.
+    return [box + ({"rotation": {"angle": -turn, "axis": "y", "origin": [cx, (y0 + y1) / 2, cz]}},)]
+
+
+def _arc(radius, y0, y1, width, tex, round_=None):
+    """A run bent round the corner at radius from (0, 16): along x from the west edge, a 45-degree chamfer, along z
+    to the south edge (the octagon round the quarter circle)."""
+    a = radius * math.tan(math.radians(22.5))
+    zr = 16 - radius
+    out = []
+    if round_:
+        out += _oct_x(zr, (y0 + y1) / 2, 0, a, round_, tex) + _oct_z(radius, (y0 + y1) / 2, 16 - a, 16, round_, tex)
+    else:
+        out += [(0, y0, zr - width / 2, a, y1, zr + width / 2, tex), (radius - width / 2, y0, 16 - a, radius + width / 2, y1, 16, tex)]
+    diag = math.sqrt(2) * (radius - a)
+    out += _seg((a + radius) / 2, (zr + 16 - a) / 2, 45, diag + (0.2 if not round_ else 0), width if not round_ else 2 * round_,
+                y0 if not round_ else (y0 + y1) / 2 - round_, y1 if not round_ else (y0 + y1) / 2 + round_, tex)
+    return out
+
+
+def _tray_bend(rungs=(22.5, 45.0, 67.5)):
+    """The bend; rungs: the angles of its rungs across the corner (besides the two at its ends)."""
+    y0, y1 = TRAY_Y
+    out = []
+    # The rails: the outer one round the corner at radius 12.8, the inner at 3.2, each web with its flanges inward.
+    for r_web, r_flange in ((12.8, 12.25), (3.2, 3.75)):
+        out += _arc(r_web, y0, y1, 0.4, _GALV)
+        out += _arc(r_flange, y0, y0 + 0.3, 0.7, _GALV) + _arc(r_flange, y1 - 0.3, y1, 0.7, _GALV)
+    # The rungs, across the corner from the inner rail to the outer.
+    for theta in rungs:
+        t = math.radians(theta)
+        # Pin sub-pixel coordinates so Windows and Linux libm serialize the same generated model.
+        out += _seg(round(8 * math.sin(t), 10), round(16 - 8 * math.cos(t), 10), theta - 90, 9.2, 0.9, y0 + 0.05, 11.85, _GALV)
+    out += [(1.55, y0 + 0.05, 3.4, 2.45, 11.85, 12.6, _GALV), (3.4, y0 + 0.05, 13.55, 12.6, 11.85, 14.45, _GALV)]
+    # The cables round the bend.
+    for z in TRAY_CABLES:
+        out += _arc(16 - z, TRAY_CABLE_Y - TRAY_CABLE_R, TRAY_CABLE_Y + TRAY_CABLE_R, 2 * TRAY_CABLE_R, _JACKET, round_=TRAY_CABLE_R)
+    return out
+
+
+# A feeder conduit up a wall (round 26, 8e: from a vital panel's top to the tray over it): 1-1/4-inch rigid conduit
+# a little off the wall (z 0 for a piece facing north), held by a one-hole strap; and the tray's drop on the wall side,
+# where it ends under the near rail in a bushing and its cable goes up over the rail into the tray.
+WALL_CONDUIT_Z, WALL_CONDUIT_R = 2.6, 0.7
+
+
+def _wall_conduit(y0, y1):
+    return _oct_y(8, WALL_CONDUIT_Z, y0, y1, WALL_CONDUIT_R, "pi_chrome")
+
+
+def _strap(y):
+    """A one-hole conduit strap: round the conduit's front, its foot screwed to the wall."""
+    z = WALL_CONDUIT_Z
+    r = WALL_CONDUIT_R + 0.12
+    return [(8 - r, y - 0.35, z - 0.05, 8 + r, y + 0.35, z + r, "pi_steel"), (8 + r, y - 0.35, 0, 9.9, y + 0.35, 0.2, "pi_steel"),
+            (8 + r, y - 0.35, 0.2, 8 + r + 0.15, y + 0.35, z, "pi_steel"), (9.2, y - 0.2, 0.2, 9.6, y + 0.2, 0.35, "pi_steel_dark")]
+
+
+def _tray_drop_wall():
+    z = WALL_CONDUIT_Z
+    return (_wall_conduit(0, 10.0) + _oct_y(8, z, 10.0, 10.5, 1.05, _GALV_DARK)
+            + _oct_y(8, z, 10.5, 14.3, 0.5, _JACKET) + _oct_z(8, 14.3, z, 4.6, 0.5, _JACKET))
+
+
+PIECES.update({
+    "wall_conduit": {"display": "Wall Conduit", "boxes": _wall_conduit(0, 16) + _strap(8)},
+    "ladder_tray_drop_wall": {"display": "Ladder Cable Tray (Wall Conduit Drop)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop_wall()},
+    "ladder_tray": {"display": "Ladder Cable Tray", "boxes": _tray_rails() + _tray_rungs() + _tray_cables()},
+    "ladder_tray_hanger": {"display": "Ladder Cable Tray (Hanger)", "boxes": _tray_rails() + _tray_rungs() + _tray_cables() + _trapeze()},
+    "ladder_tray_bend": {"display": "Ladder Cable Tray (Bend)", "boxes": _tray_bend()},
+    "ladder_tray_drop": {"display": "Ladder Cable Tray (Conduit Drop)", "boxes": _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(8.0)},
+    "ladder_tray_drop_pair": {"display": "Ladder Cable Tray (Two Conduit Drops)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(4.5) + _tray_drop(11.5)},
+    # The same on a trapeze hanger (round 26, 8f: the equipment rows are all drops now, every cabinet's conduit up into
+    # the tray, so their hangers are on drops): the single drop's hanger to one side of its conduit, the pair's between.
+    "ladder_tray_drop_hanger": {"display": "Ladder Cable Tray (Conduit Drop, Hanger)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(8.0) + _trapeze(2.0)},
+    "ladder_tray_drop_pair_hanger": {"display": "Ladder Cable Tray (Two Conduit Drops, Hanger)", "boxes":
+        _tray_rails() + _tray_rungs() + _tray_cables() + _tray_drop(4.5) + _tray_drop(11.5) + _trapeze(8.0)},
+    # The bend with a drop in its middle (round 26, 8f: DC room 1A's ground detector stands under the bend at its row's
+    # end), its rungs at 30 and 60 degrees so the conduit comes up between them.
+    "ladder_tray_bend_drop": {"display": "Ladder Cable Tray (Bend, Conduit Drop)", "boxes": _tray_bend((30.0, 60.0)) + _tray_drop(8.0)},
+    # Two feeder conduits side by side, up from their hubs on the top of an MCC section (in the block below, its top
+    # 2.36 blocks up the lineup: tools/control_boards.py MCC_CONDUITS) to the tray's drops.
+    "conduit_pair": {"display": "Feeder Conduits (Pair)", "boxes":
+        _oct_y(4.5, 8, MCC_HUB_Y, 16, _CONDUIT, "pi_chrome") + _oct_y(11.5, 8, MCC_HUB_Y, 16, _CONDUIT, "pi_chrome")
+        + _oct_y(4.5, 8, 7, 9, _COUPLING, "pi_steel") + _oct_y(11.5, 8, 7, 9, _COUPLING, "pi_steel")},
+    # A vital inverter's two conduits up from its top (round 26, 8f: its DC feed from the switchboard and its AC
+    # output to its vital panel, plant_panels CABINET_HUBS "pair"), a length of each in a block with its coupling.
+    "conduit_pair_run": {"display": "Feeder Conduits (Pair, Run)", "boxes":
+        _oct_y(4.5, 8, 0, 16, _CONDUIT, "pi_chrome") + _oct_y(11.5, 8, 0, 16, _CONDUIT, "pi_chrome")
+        + _oct_y(4.5, 8, 7, 9, _COUPLING, "pi_steel") + _oct_y(11.5, 8, 7, 9, _COUPLING, "pi_steel")},
+})
+
+# ---------------------------------------------------------------------------------------- control cable tray
+# The relay room's overhead tray (round 26, #10; Justin: "Overhead trays and cable entry"): the same ladder tray, full of
+# control cables, a flat layer of them on its rungs with a few laid over it; over every cabinet a drop-out fitting under
+# the tray and the cabinet's bundle of control cables coming down out of it, tied, into a gland on the cabinet's top;
+# a cross where a row's run meets the run along the aisle, a tee where that run leaves the cable spreading room's tray,
+# and fire-stopped where it goes through a wall. Pieces facing north run along x (as the ladder tray); the tee's branch
+# leaves to the south; the fire stop's wall is across x (a piece facing east goes through a wall along x).
+CTRL_LAYER_Y = (11.9, 12.75)
+CTRL_Z = (3.45, 12.55)
+CTRL_OVER = (5.6, 8.2, 10.9)          # the cables laid over the layer (z)
+CTRL_OVER_R = 0.36
+CTRL_CABLE_R = 0.32
+# The bundle: seven cables, far enough apart that no two of their (star-shaped) sections overlap.
+_HEX = 0.84
+CTRL_BUNDLE = [(0, 0, "pi_ctrl_black"), (_HEX, 0, "pi_ctrl_grey"), (-_HEX, 0, "pi_ctrl_light"),
+               (_HEX / 2, _HEX * 0.866, "pi_ctrl_black"), (-_HEX / 2, _HEX * 0.866, "pi_ctrl_grey"),
+               (_HEX / 2, -_HEX * 0.866, "pi_ctrl_light"), (-_HEX / 2, -_HEX * 0.866, "pi_ctrl_black")]
+CTRL_TIE = (1.36, 1.52)
+_LAYER_X = {"*": "pi_ctrl_ends", "up": "pi_ctrl_layer", "down": "pi_ctrl_layer", "north": "pi_ctrl_layer", "south": "pi_ctrl_layer"}
+_LAYER_Z = {"*": "pi_ctrl_ends", "up": "pi_ctrl_layer_z", "down": "pi_ctrl_layer_z", "east": "pi_ctrl_layer", "west": "pi_ctrl_layer"}
+
+
+def _ctrl_layer(x0=0.0, x1=16.0):
+    """The control cables along the run: the layer on the rungs and the few cables laid on it."""
+    out = [(x0, CTRL_LAYER_Y[0], CTRL_Z[0], x1, CTRL_LAYER_Y[1], CTRL_Z[1], _LAYER_X)]
+    r = CTRL_OVER_R
+    for z in CTRL_OVER:
+        out.append((x0, CTRL_LAYER_Y[1], z - r, x1, CTRL_LAYER_Y[1] + 2 * r, z + r, "pi_ctrl_black" if z != 8.2 else "pi_ctrl_grey"))
+    return out
+
+
+def _ctrl_branch(z0, z1):
+    """The control cables of a run along z (a cross's or a tee's branch), laid over the run along x where they cross it."""
+    return [(CTRL_Z[0], CTRL_LAYER_Y[0] + 0.15, z0, CTRL_Z[1], CTRL_LAYER_Y[1] + 0.3, z1, _LAYER_Z)]
+
+
+def _ctrl_bundle(y0, y1, ties=()):
+    """A cabinet's bundle of seven control cables down the middle of the block, tied at the heights given."""
+    out = []
+    for dx, dz, tex in CTRL_BUNDLE:
+        out += PN.star_y(8 + dx, 8 + dz, CTRL_CABLE_R, y0, y1, tex)
+    for y in ties:
+        out += PN.ring_y(8, 8, CTRL_TIE[0], CTRL_TIE[1], y, y + 0.4, "pi_cable_tie")
+    return out
+
+
+def _dropout():
+    """The drop-out fitting under the rung gap where a bundle leaves the tray: a collar hung from the rungs either
+    side of the gap by a strap."""
+    return PN.ring_y(8, 8, 1.62, 1.92, 10.4, 11.0, _GALV) + [(5.75, 10.5, 7.65, 6.2, 11.25, 8.35, _GALV), (9.8, 10.5, 7.65, 10.25, 11.25, 8.35, _GALV)]
+
+
+def _ctrl_waterfall():
+    """A run with a cabinet's bundle leaving it: its cables down out of the layer through the drop-out, out of the
+    block's bottom."""
+    return _tray_rails() + _tray_rungs() + _ctrl_layer() + _dropout() + _ctrl_bundle(0, CTRL_LAYER_Y[0] + 0.3, ties=(3.0, 8.0))
+
+
+def _ctrl_cross():
+    """Four ways: the run along x and one along z across it, the rails turning in at the corners."""
+    y0, y1 = TRAY_Y
+    out = []
+    for a0, a1 in ((0.0, 3.4), (12.6, 16.0)):
+        for w0, w1, f0, f1 in ((3.0, 3.4, 3.4, 4.1), (12.6, 13.0, 11.9, 12.6)):
+            # Along x at the corners (z w0..w1), and along z (x w0..w1).
+            out += [(a0, y0, w0, a1, y1, w1, _GALV), (a0, y0, f0, a1, y0 + 0.3, f1, _GALV), (a0, y1 - 0.3, f0, a1, y1, f1, _GALV)]
+            zb0, zb1 = (a0, min(a1, w0)) if a0 == 0 else (max(a0, w1), a1)
+            out += [(w0, y0, zb0, w1, y1, zb1, _GALV), (f0, y0, zb0, f1, y0 + 0.3, zb1, _GALV), (f0, y1 - 0.3, zb0, f1, y1, zb1, _GALV)]
+    # (The rungs' undersides 0.15 over the rails' bottom flanges: tools/zfight.py never has to move them.)
+    out += [(c - 0.45, y0 + 0.15, 3.4, c + 0.45, 11.85, 12.6, _GALV) for c in (2.0, 14.0)]
+    out += [(3.4, y0 + 0.15, c - 0.45, 12.6, 11.85, c + 0.45, _GALV) for c in (2.0, 6.0, 10.0, 14.0)]
+    return out + _ctrl_layer() + _ctrl_branch(0.0, 16.0)
+
+
+def _ctrl_tee():
+    """Three ways: the run along x, a branch leaving it to the south (+z), the south rail turning into the branch."""
+    y0, y1 = TRAY_Y
+    out = [(0, y0, 3.0, 16, y1, 3.4, _GALV), (0, y0, 3.4, 16, y0 + 0.3, 4.1, _GALV), (0, y1 - 0.3, 3.4, 16, y1, 4.1, _GALV)]
+    for a0, a1 in ((0.0, 3.4), (12.6, 16.0)):
+        out += [(a0, y0, 12.6, a1, y1, 13.0, _GALV), (a0, y0, 11.9, a1, y0 + 0.3, 12.6, _GALV), (a0, y1 - 0.3, 11.9, a1, y1, 12.6, _GALV)]
+    for w0, w1, f0, f1 in ((3.0, 3.4, 3.4, 4.1), (12.6, 13.0, 11.9, 12.6)):
+        out += [(w0, y0, 13.0, w1, y1, 16, _GALV), (f0, y0, 13.0, f1, y0 + 0.3, 16, _GALV), (f0, y1 - 0.3, 13.0, f1, y1, 16, _GALV)]
+    out += _tray_rungs()
+    out += [(3.4, y0 + 0.15, 13.55, 12.6, 11.85, 14.45, _GALV)]
+    return out + _ctrl_layer() + _ctrl_branch(8.0, 16.0)
+
+
+def _firestop():
+    """The run through a wall (across x: the wall's faces at x 0 and 16), in its opening sealed with fire-stop mortar
+    either side of a steel sleeve's lining; the wall's own blocks round it."""
+    W = "painted_wall"
+    y0, y1, z0, z1 = 10.4, 14.6, 2.2, 13.8
+    out = [(0, 0, 0, 16, y0, 16, W), (0, y1, 0, 16, 16, 16, W), (0, y0, 0, 16, y1, z0, W), (0, y0, z1, 16, y1, 16, W)]
+    for a0, a1 in ((0, 1.0), (15.0, 16)):
+        out += [(a0, y0, z0, a1, y0 + 0.2, z1, _GALV), (a0, y1 - 0.2, z0, a1, y1, z1, _GALV),
+                (a0, y0 + 0.2, z0, a1, y1 - 0.2, z0 + 0.2, _GALV), (a0, y0 + 0.2, z1 - 0.2, a1, y1 - 0.2, z1, _GALV)]
+    out.append((1.0, y0 + 0.2, z0 + 0.2, 15.0, y1 - 0.2, z1 - 0.2, "pi_firestop"))
+    return out + _tray_rails() + _tray_rungs() + _ctrl_layer()
+
+
+PIECES.update({
+    "control_tray": {"display": "Control Cable Tray", "boxes": _tray_rails() + _tray_rungs() + _ctrl_layer()},
+    "control_tray_hanger": {"display": "Control Cable Tray (Hanger)", "boxes": _tray_rails() + _tray_rungs() + _ctrl_layer() + _trapeze()},
+    "control_tray_waterfall": {"display": "Control Cable Tray (Cable Drop)", "boxes": _ctrl_waterfall()},
+    "control_tray_waterfall_hanger": {"display": "Control Cable Tray (Cable Drop, Hanger)", "boxes": _ctrl_waterfall() + _trapeze(2.0)},
+    "control_tray_cross": {"display": "Control Cable Tray (Cross)", "boxes": _ctrl_cross()},
+    "control_tray_tee": {"display": "Control Cable Tray (Tee)", "boxes": _ctrl_tee()},
+    "control_tray_firestop": {"display": "Control Cable Tray (Fire-Stopped Wall Penetration)", "boxes": _firestop()},
+    # A cabinet's bundle on its way down (a block of it), and its last block: into the gland on the cabinet's top (the
+    # block under it), the gland's plate on the cap.
+    "control_cable_drop": {"display": "Control Cable Bundle", "boxes": _ctrl_bundle(0, 16, ties=(2.0, 10.0))},
+    "control_cable_entry": {"display": "Control Cable Bundle (Cabinet Entry)", "boxes":
+        [(5.2, 0, 5.2, 10.8, 0.3, 10.8, _GALV_DARK)] + PN.round_y(8, 8, 1.95, 0.3, 1.4, _GALV)
+        + PN.star_y(8, 8, 1.7, 1.4, 2.1, _GALV_DARK) + _ctrl_bundle(1.75, 16, ties=(6.0, 12.0))
+        + [(x, 0.3, z, x + 0.5, 0.6, z + 0.5, _GALV) for x in (5.45, 10.05) for z in (5.45, 10.05)]},
+})
+
+
+CRAFTING = {
+    "office_desk_long": (["SSS", "P P"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 2),
+    "executive_desk": (["SSS", "PPP", "P P"], {"S": "minecraft:dark_oak_slab", "P": "minecraft:dark_oak_planks"}, 2),
+    "glass_desk": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "#c:plates/iron"}, 2),
+    "operator_console": (["GCG", "SSS", "S S"], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit",
+                                                 "S": "minecraft:smooth_stone_slab"}, 2),
+    "stretcher": (["WWW", "N N"], {"W": "minecraft:white_wool", "N": "minecraft:iron_nugget"}, 2),
+    "cubicle_panel": (["WWW", "WWW"], {"W": "minecraft:light_gray_wool"}, 4),
+    "locker_security": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:blue_wool"}, 2),
+    "aed_cabinet": (["PGP", "PRP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "R": "minecraft:redstone"}, 1),
+    "fire_extinguisher": (["N", "R", "R"], {"N": "minecraft:iron_nugget", "R": "minecraft:red_dye"}, 2),
+    "feeder_conduit": (["P", "P", "P"], {"P": "#c:plates/steel"}, 8),
+    "feeder_conduit_base": (["N", "P", "P"], {"N": "minecraft:iron_nugget", "P": "#c:plates/steel"}, 4),
+    "feeder_conduit_ceiling": (["R", "P", "P"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
+    "feeder_conduit_floor": (["P", "P", "R"], {"R": "minecraft:red_dye", "P": "#c:plates/steel"}, 4),
+    "feeder_conduit_tray": (["PP", "P "], {"P": "#c:plates/steel"}, 4),
+    "ladder_tray": (["P P", "PPP"], {"P": "#c:plates/iron"}, 8),
+    "ladder_tray_hanger": (["N N", "P P", "PPP"], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron"}, 4),
+    "ladder_tray_bend": (["P  ", "P P", "PPP"], {"P": "#c:plates/iron"}, 4),
+    "ladder_tray_drop": (["P P", "PPP", " S "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "ladder_tray_drop_pair": (["P P", "PPP", "S S"], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "conduit_pair": (["P P", "P P"], {"P": "#c:plates/steel"}, 4),
+    "conduit_pair_run": (["P P", "P P", "P P"], {"P": "#c:plates/steel"}, 8),
+    "ladder_tray_drop_hanger": (["N N", "PPP", " S "], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "ladder_tray_drop_pair_hanger": (["N N", "PPP", "S S"], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "ladder_tray_bend_drop": (["P  ", "P P", "PSP"], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "wall_conduit": (["PN", "P ", "PN"], {"P": "#c:plates/steel", "N": "minecraft:iron_nugget"}, 8),
+    "ladder_tray_drop_wall": (["P P", "PPP", "S  "], {"P": "#c:plates/iron", "S": "#c:plates/steel"}, 4),
+    "emergency_light_conduit": (["P", "P", "P"], {"P": "#c:plates/iron"}, 8),
+    "emergency_light": (["G G", "PRP"], {"G": "minecraft:glowstone_dust", "P": "#c:plates/iron", "R": "minecraft:redstone"}, 2),
+    "medicine_cabinet": (["PGP", "PWP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "W": "minecraft:white_wool"}, 1),
+    "vitals_monitor": (["GRG", " N ", " N "], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone", "N": "minecraft:iron_nugget"}, 1),
+    "filing_cabinet_open": (["PP", "PB"], {"P": "#c:plates/iron", "B": "minecraft:paper"}, 1),
+    "filing_cabinet_tall": (["PP", "PP", "PP"], {"P": "#c:plates/iron"}, 2),
+    "filing_cabinet_tall_open": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:paper"}, 2),
+    "office_copier": (["GCG", "PRP", "PPP"], {"G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone",
+                                              "P": "#c:plates/iron"}, 1),
+    "drafting_table": (["PPP", "S S"], {"P": "minecraft:paper", "S": "minecraft:stick"}, 1),
+    "blueprint_sheet": (["BBB", "BPB", "BBB"], {"B": "minecraft:blue_dye", "P": "minecraft:paper"}, 2),
+    "training_screen": (["GGG", "GCG"], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit"}, 1),
+    "plant_map_screen": (["GGG", "GCG", " M "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "M": "minecraft:map"}, 1),
+    "status_screen": (["GGG", "GCG", " R "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:comparator"}, 1),
+    "oval_table": (["SSS", "SSS", "N N"], {"S": "minecraft:dark_oak_slab", "N": "#c:plates/iron"}, 1),
+    "lounge_table": (["GGG", "W W"], {"G": "minecraft:glass_pane", "W": "minecraft:dark_oak_log"}, 1),
+    "storage_rack": (["SBS", "SBS", "SBS"], {"S": "#c:plates/iron", "B": "minecraft:barrel"}, 1),
+    "high_bay_light": ([" N ", "PGP", " L "], {"N": "minecraft:iron_chain", "P": "#c:plates/iron", "G": "minecraft:glowstone", "L": "minecraft:glass_pane"}, 2),
+    "light_hanger": (["N", "N", "S"], {"N": "minecraft:iron_chain", "S": "minecraft:string"}, 4),
+    "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 1),
+    "large_print": (["SSS", "SPS", "SSS"], {"S": "minecraft:dark_oak_planks", "P": "minecraft:painting"}, 1),
+    "glass_coffee_table": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "minecraft:iron_nugget"}, 1),
+    "control_tray": (["P P", "PWP"], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 8),
+    "control_tray_hanger": (["N N", "P P", "PWP"], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "W": "#c:wires/copper"}, 4),
+    "control_tray_waterfall": (["P P", "PWP", " W "], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 4),
+    "control_tray_waterfall_hanger": (["N N", "PWP", " W "], {"N": "minecraft:iron_nugget", "P": "#c:plates/iron", "W": "#c:wires/copper"}, 4),
+    "control_tray_cross": ([" P ", "PWP", " P "], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 2),
+    "control_tray_tee": (["PPP", "PWP", " P "], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 2),
+    "control_tray_firestop": (["CCC", "PWP", "CCC"], {"C": "minecraft:clay_ball", "P": "#c:plates/iron", "W": "#c:wires/copper"}, 2),
+    "control_cable_drop": (["W", "W", "W"], {"W": "#c:wires/copper"}, 4),
+    "control_cable_entry": (["W", "W", "P"], {"W": "#c:wires/copper", "P": "#c:plates/steel"}, 2),
+}
+
+
+# ---------------------------------------------------------------------------------------------- models
+
+def oval_boxes(c, r, w, rows):
+    """Block (c, r)'s slice of an oval tabletop over w x rows blocks (radius just inside the edges), and the
+    pedestals under every other block of the middle row."""
+    a, b = w * 8 - 1, rows * 8 - 1
+    cx, cz = w * 8, rows * 8
+    out = []
+    for z in range(16):
+        gz = r * 16 + z + 0.5 - cz
+        half = 0 if gz * gz >= b * b else a * math.sqrt(1 - gz * gz / (b * b))
+        x0, x1 = max(0, cx - half - c * 16), min(16, cx + half - c * 16)
+        if x1 - x0 > 0.5:
+            out.append((round(x0 * 4) / 4, 12, z, round(x1 * 4) / 4, 13, z + 1,
+                        {"*": "pi_walnut_edge", "up": "pi_walnut_top", "down": "pi_walnut_edge"}))
+    if r == rows // 2 and 0 < c < w - 1 and c % 2 == 1:
+        out += [(6, 1, 6, 10, 12, 10, "pi_steel_dark"), (2, 0, 3, 14, 1, 13, "pi_steel_dark"), (3, 11, 3, 13, 12, 13, "pi_steel_dark")]
+    return out
+
+
+def screen_boxes(name, c, r, w, rows):
+    """Block (c, r)'s piece of a wall screen: a thin panel on the wall showing its slice of the picture, with the
+    bezel round the outside edges."""
+    return [(0, 0, 0, 16, 16, 1.6, {"*": "pi_monitor", "south": f"pi_{name}_{r * w + c}!"})]
+
+
+LPRINT_KINDS = [0, 1, 3, 4, 6, 7, 9, 11, 13, 14, 2, 10]
+
+
+def lprint_boxes(c, v):
+    """Block c's share of a big framed picture two blocks across: a frame standing off the wall round a recessed
+    canvas (whose texture is the picture cut in two, mapped by position so the halves meet)."""
+    whole = [(2.2, 2.7, 0, 29.8, 13.3, 0.8, {"*": "pi_frame", "south": f"pi_lprint_{v}_{c}"}),
+             (1, 1.5, 0, 31, 2.7, 1.8, "pi_frame"), (1, 13.3, 0, 31, 14.5, 1.8, "pi_frame"),
+             (1, 2.7, 0, 2.2, 13.3, 1.8, "pi_frame"), (29.8, 2.7, 0, 31, 13.3, 1.8, "pi_frame")]
+    out = []
+    for b in whole:
+        x0, x1 = max(b[0], c * 16), min(b[3], c * 16 + 16)
+        if x1 - x0 > 0.01:
+            t = b[6]
+            if isinstance(t, dict) and c * 16 > b[0] or isinstance(t, dict) and c * 16 + 16 < b[3]:
+                t = dict(t)
+            out.append((x0 - c * 16, b[1], b[2], x1 - c * 16, b[4], b[5], t))
+    return out
+
+
+def lprint_texture(v):
+    """The picture for big print v, 256 x 128 over its two blocks: a mat, the panorama inside it."""
+    import paintings
+    img = Image.new("RGBA", (2 * S, S), (240, 238, 230, 255))
+    pic = paintings.painted(LPRINT_KINDS[v], 408, 136, 950 + v).resize((204, 68), Image.LANCZOS).convert("RGBA")
+    img.paste(pic, (26, 30))
+    d = ImageDraw.Draw(img)
+    d.rectangle([25, 29, 230, 98], outline=(200, 196, 186, 255))
+    return {f"pi_lprint_{v}_{c}": img.crop((c * S, 0, c * S + S, S)) for c in range(2)}
+
+
+def multi_parts(info, version=0, open_=False):
+    """Each block of a multi-block piece: (part, boxes). open_: a panel with a door, open (PANELS "door")."""
+    w, rows, vertical = info["multi"]
+    items = O4.O5.meeting_items(version) if info.get("versions") else []
+    for p in range(w * rows):
+        c, r = p % w, p // w
+        if info.get("rack"):
+            yield p, O4.O7.rack_part(c, r)
+        elif info.get("lounge"):
+            yield p, O4.O5.lounge_part(c, r)
+        elif info.get("versions"):
+            yield p, oval_boxes(c, r, w, rows) + O4.O5.slice_into(items, c, r)
+        elif info.get("copier"):
+            yield p, O3.copier_part(c, r)
+        elif info.get("panel"):
+            yield p, PN.part(info["panel"], c, r, open_)
+        elif vertical:
+            yield p, screen_boxes(info["screen"], c, r, w, rows)
+        else:
+            yield p, oval_boxes(c, r, w, rows)
+
+
+# ---------------------------------------------------------------------------------------------- textures
+
+def _img(colour, size=S):
+    return M.to_img(M.base(colour, size))
+
+
+def _flat(colour):
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., :3] = colour
+    a[..., 3] = 255
+    return Image.fromarray(a, "RGBA")
+
+
+def _noise(img, seed, colours, count):
+    d = ImageDraw.Draw(img)
+    r = random.Random(seed)
+    w, h = img.size
+    for _ in range(count):
+        d.point((r.randrange(w), r.randrange(h)), fill=r.choice(colours))
+    return img
+
+
+def _glow(img):
+    a = np.asarray(img).copy()
+    a[..., 3] = np.where(a[..., 3] > 0, 254, 0)
+    return Image.fromarray(a, "RGBA")
+
+
+def _phone():
+    img = _img((30, 32, 36))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([10, 10, 50, 118], radius=10, fill=(20, 20, 22, 255))
+    for k in range(12):
+        d.rectangle([62 + (k % 3) * 20, 20 + (k // 3) * 24, 76 + (k % 3) * 20, 36 + (k // 3) * 24], fill=(70, 72, 78, 255))
+    d.rectangle([62, 116, 116, 122], fill=(90, 200, 240, 255))
+    return img
+
+
+def _visitor_book():
+    img = _img((240, 240, 232))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, S, S], outline=(40, 60, 110, 255), width=8)
+    d.line([(64, 8), (64, S - 8)], fill=(170, 170, 160, 255), width=3)
+    for y in range(20, S - 10, 10):
+        d.line([(14, y), (58, y)], fill=(150, 160, 190, 255))
+        d.line([(70, y), (114, y)], fill=(150, 160, 190, 255))
+    return img
+
+
+def _leaf_ball():
+    img = _img((50, 120, 60))
+    return _noise(img, 801, [(30, 90, 40, 255), (80, 160, 70, 255)], 1500)
+
+
+def _pen_cup():
+    return _img((40, 42, 46))
+
+
+def _pens():
+    img = _img((30, 30, 34))
+    d = ImageDraw.Draw(img)
+    for k, c in enumerate([(30, 60, 200), (200, 40, 40), (20, 20, 20), (240, 200, 40)]):
+        d.ellipse([20 + k * 22, 40 + (k % 2) * 30, 34 + k * 22, 54 + (k % 2) * 30], fill=c + (255,))
+    return img
+
+
+def _mug():
+    img = _img((236, 236, 230))
+    d = ImageDraw.Draw(img)
+    d.rectangle([30, 40, 90, 80], fill=(40, 90, 160, 255))
+    return img
+
+
+def _notepad():
+    img = _img((250, 240, 140))
+    d = ImageDraw.Draw(img)
+    for y in range(20, S, 12):
+        d.line([(8, y), (8 + random.Random(y).randint(40, 110), y)], fill=(90, 90, 100, 255), width=2)
+    return img
+
+
+def _laptop():
+    return M.brushed((150, 154, 160), 802, "h", dirt=0.05)
+
+
+def _blueprint(i):
+    """A blueprint sheet: white lines on blue: a P&ID, a floor plan, a pump section, a cable route, a tower, a
+    valve detail."""
+    img = _img((26, 66, 140))
+    d = ImageDraw.Draw(img)
+    r = random.Random(820 + i)
+    line = (220, 232, 250, 255)
+    for x in range(0, S, 16):
+        d.line([(x, 0), (x, S)], fill=(40, 82, 156, 255))
+        d.line([(0, x), (S, x)], fill=(40, 82, 156, 255))
+    kind = i % 6
+    if kind == 0:     # P&ID: pipes, valves, a pump, a tank
+        d.rectangle([10, 30, 40, 90], outline=line, width=2)
+        d.line([(40, 50), (90, 50), (90, 100), (118, 100)], fill=line, width=2)
+        d.polygon([(60, 44), (60, 56), (70, 50)], outline=line)
+        d.polygon([(80, 44), (80, 56), (70, 50)], outline=line)
+        d.ellipse([84, 86, 104, 106], outline=line, width=2)
+    elif kind == 1:   # floor plan
+        d.rectangle([10, 14, 118, 114], outline=line, width=3)
+        for x in (44, 80):
+            d.line([(x, 14), (x, 70)], fill=line, width=2)
+        d.line([(10, 70), (118, 70)], fill=line, width=2)
+        for x in (24, 60, 96):
+            d.arc([x, 62, x + 14, 76], 180, 270, fill=line)
+    elif kind == 2:   # pump section
+        d.ellipse([30, 30, 98, 98], outline=line, width=2)
+        d.ellipse([52, 52, 76, 76], outline=line, width=2)
+        d.rectangle([60, 6, 68, 30], outline=line)
+        d.line([(10, 64), (30, 64)], fill=line, width=2)
+    elif kind == 3:   # cable route with dimensions
+        pts = [(10, 100)] + [(r.randint(20, 110), r.randint(20, 110)) for _ in range(4)] + [(118, 20)]
+        d.line(pts, fill=line, width=2)
+        for x in range(14, 118, 26):
+            d.line([(x, 120), (x + 20, 120)], fill=line)
+    elif kind == 4:   # cooling tower elevation
+        d.polygon([(30, 118), (44, 50), (84, 50), (98, 118)], outline=line)
+        d.line([(44, 50), (40, 20), (88, 20), (84, 50)], fill=line)
+    else:             # valve detail
+        d.rectangle([40, 60, 88, 80], outline=line, width=2)
+        d.line([(64, 60), (64, 20)], fill=line, width=2)
+        d.ellipse([48, 12, 80, 24], outline=line, width=2)
+        d.line([(10, 70), (40, 70)], fill=line, width=3)
+        d.line([(88, 70), (118, 70)], fill=line, width=3)
+    # Title block, bottom right.
+    d.rectangle([84, 104, 124, 124], outline=line)
+    d.line([(88, 112), (118, 112)], fill=line)
+    return img
+
+
+def _blueprint_roll():
+    img = _img((200, 214, 236))
+    d = ImageDraw.Draw(img)
+    d.line([(0, 30), (S, 30)], fill=(40, 80, 150, 255), width=6)
+    return img
+
+
+def _leather():
+    a = M.base((50, 30, 22), S)
+    M.shade(a, M.grain(S, 803, 8))
+    return M.to_img(a)
+
+
+def _nameplate():
+    img = M.brushed((196, 168, 100), 804, "h", dirt=0.02)
+    d = ImageDraw.Draw(img)
+    d.rectangle([10, 40, 118, 88], fill=(30, 26, 22, 255))
+    for x in range(18, 110, 9):
+        d.rectangle([x, 56, x + 5, 72], fill=(220, 196, 130, 255))
+    return img
+
+
+def _lamp_shade():
+    return _img((30, 70, 50))
+
+
+def _pc_case():
+    return _img((40, 42, 46))
+
+
+def _pc_inside():
+    img = _img((26, 28, 30))
+    d = ImageDraw.Draw(img)
+    d.rectangle([10, 10, 118, 118], fill=(30, 110, 60, 255))
+    d.rectangle([30, 30, 60, 60], fill=(160, 164, 168, 255))   # cooler
+    for y in (70, 80, 90):
+        d.rectangle([20, y, 110, y + 4], fill=(60, 60, 64, 255))
+    d.rectangle([70, 20, 76, 60], fill=(40, 40, 44, 255))
+    d.line([(20, 100), (100, 30)], fill=(200, 40, 40, 255), width=2)
+    return img
+
+
+def _circuit():
+    img = _img((30, 110, 60))
+    d = ImageDraw.Draw(img)
+    r = random.Random(805)
+    for _ in range(16):
+        x, y = r.randint(4, 110), r.randint(4, 110)
+        d.rectangle([x, y, x + r.randint(6, 18), y + r.randint(6, 14)], fill=r.choice([(20, 20, 24, 255), (200, 180, 90, 255), (180, 180, 184, 255)]))
+    for _ in range(12):
+        d.line([(r.randint(0, S), r.randint(0, S)), (r.randint(0, S), r.randint(0, S))], fill=(190, 160, 70, 255))
+    return img
+
+
+def _ram():
+    img = _img((30, 110, 60))
+    d = ImageDraw.Draw(img)
+    for x in range(8, S, 24):
+        d.rectangle([x, 20, x + 16, 100], fill=(20, 20, 24, 255))
+    return img
+
+
+def _solder_iron():
+    img = _img((60, 120, 200))
+    d = ImageDraw.Draw(img)
+    d.rectangle([90, 0, S, S], fill=(180, 180, 184, 255))
+    return img
+
+
+def _tool_case():
+    img = _img((200, 60, 40))
+    d = ImageDraw.Draw(img)
+    for k in range(5):
+        d.rectangle([12 + k * 22, 20, 24 + k * 22, 100], fill=(30, 30, 34, 255))
+        d.rectangle([14 + k * 22, 22, 22 + k * 22, 60], fill=(190, 190, 194, 255))
+    return img
+
+
+def _console(part):
+    """The operator console's black laminate top, its edge and its dark grey body panels."""
+    if part == "top":
+        a = M.base((34, 36, 40))
+        M.shade(a, M.fbm(S, 711, 3, 32) * 5)
+        M.shade(a, M.grain(S, 712, 3))
+        return M.to_img(a)
+    if part == "edge":
+        return _img((22, 22, 24))
+    img = _img((52, 54, 58))
+    d = ImageDraw.Draw(img)
+    d.rectangle([3, 3, S - 4, S - 4], outline=(40, 42, 46, 255), width=3)
+    for y in range(20, S - 10, 10):
+        d.line([(18, y), (S - 19, y)], fill=(44, 46, 50, 255), width=2)
+    return img
+
+
+def _plant_screen(kind):
+    """A plant computer display: a (dark) system mimic with values (a), trends and the alarm list (b), the overview of
+    the unit's main parameters as bar graphs (c)."""
+    img = _img((14, 20, 30))
+    d = ImageDraw.Draw(img)
+    r = random.Random({"a": 731, "b": 732, "c": 733}[kind])
+    d.rectangle([0, 0, S, 10], fill=(30, 50, 90, 254))
+    d.rectangle([4, 3, 40, 7], fill=(220, 226, 236, 254))
+    if kind == "a":
+        boxes = [(10, 24, 36, 60), (52, 20, 80, 44), (92, 30, 118, 70), (22, 82, 58, 110), (72, 78, 112, 108)]
+        for x0, y0, x1, y1 in boxes:
+            d.rectangle([x0, y0, x1, y1], outline=(90, 200, 230, 254), width=2)
+            d.rectangle([x0 + 3, y1 - 8, x0 + 3 + r.randint(8, x1 - x0 - 6), y1 - 4], fill=(240, 190, 60, 254))
+        for a, b in (((36, 42), (52, 32)), ((80, 32), (92, 50)), ((40, 82), (40, 60)), ((92, 78), (104, 70))):
+            d.line([a, b], fill=(90, 200, 230, 254), width=2)
+        d.ellipse([60, 54, 74, 68], outline=(70, 220, 110, 254), width=2)
+    elif kind == "b":
+        for k, colour in enumerate(((230, 80, 60), (70, 200, 230), (240, 200, 70))):
+            pts, y = [], 30 + k * 12
+            for x in range(6, 122, 6):
+                y = max(16, min(66, y + r.randint(-4, 4)))
+                pts.append((x, y))
+            d.line(pts, fill=colour + (254,), width=2)
+        d.rectangle([4, 72, S - 5, 74], fill=(60, 70, 90, 254))
+        for k in range(6):
+            y = 80 + k * 8
+            d.rectangle([6, y, 10, y + 4], fill=((230, 60, 50) if k < 2 else (240, 190, 50)) + (254,))
+            d.rectangle([14, y, 14 + r.randint(40, 100), y + 4], fill=(200, 206, 216, 254))
+    else:
+        for k in range(8):
+            x = 10 + k * 14
+            h = r.randint(30, 84)
+            d.rectangle([x, 112 - h, x + 9, 112], fill=((70, 200, 110) if h < 76 else (240, 190, 50)) + (254,))
+            d.rectangle([x, 116, x + 9, 120], fill=(200, 206, 216, 254))
+    return img
+
+
+def _tablet():
+    img = _img((20, 20, 24))
+    d = ImageDraw.Draw(img)
+    d.rectangle([12, 10, 116, 118], fill=(230, 236, 244, 254))
+    d.rectangle([12, 10, 116, 24], fill=(40, 90, 160, 254))
+    return img
+
+
+def _glass_top():
+    """Clear glass with a faint green tint: see-through (kept translucent, not cut out), the same all over so a row
+    of glass desks reads as one sheet."""
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., :3] = (196, 224, 222)
+    a[..., 3] = 96
+    return Image.fromarray(a, "RGBA")
+
+
+def _glass_edge():
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., :3] = (120, 176, 170)
+    a[..., 3] = 170
+    return Image.fromarray(a, "RGBA")
+
+
+def _binder_side():
+    return _img((40, 80, 160))
+
+
+def _binder_spines():
+    img = _img((30, 30, 34))
+    d = ImageDraw.Draw(img)
+    r = random.Random(830)
+    x = 0
+    while x < S:
+        w = r.choice((14, 18, 22))
+        col = r.choice([(40, 80, 160), (170, 40, 40), (30, 30, 34), (200, 200, 196), (40, 120, 70)])
+        d.rectangle([x, 0, x + w - 1, S - 1], fill=col + (255,), outline=tuple(c // 2 for c in col) + (255,))
+        d.rectangle([x + 3, 18, x + w - 4, 40], fill=(246, 246, 240, 255))
+        d.ellipse([x + w // 2 - 3, S - 30, x + w // 2 + 3, S - 24], fill=(20, 20, 20, 255))
+        x += w
+    return img
+
+
+def _binder_top():
+    img = _img((230, 228, 220))
+    d = ImageDraw.Draw(img)
+    r = random.Random(830)
+    x = 0
+    while x < S:
+        w = r.choice((14, 18, 22))
+        col = r.choice([(40, 80, 160), (170, 40, 40), (30, 30, 34), (200, 200, 196), (40, 120, 70)])
+        d.rectangle([x, 0, x + 2, S - 1], fill=col + (255,))
+        d.rectangle([x + w - 3, 0, x + w - 1, S - 1], fill=col + (255,))
+        x += w
+    return img
+
+
+def _basket():
+    img = _img((50, 52, 56))
+    d = ImageDraw.Draw(img)
+    for k in range(0, S, 16):
+        d.line([(k, 0), (k, S)], fill=(120, 124, 128, 255), width=3)
+        d.line([(0, k), (S, k)], fill=(120, 124, 128, 255), width=3)
+    return img
+
+
+def _monitor_case():
+    return M.painted((214, 218, 220), 831, chip_count=0, drip_count=0, dirt=0.04)
+
+
+def _cable():
+    return _img((60, 140, 220))
+
+
+def _ctrl_cables(along_z):
+    """A layer of control cables seen from above (round 26, #10): a row of texels a cable (a column, along z), their
+    jackets black and greys with a highlight down each."""
+    rng = random.Random(911)
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., 3] = 255
+    k = 0
+    while k < S:
+        w = rng.choice((2, 2, 3))
+        c = rng.choice(((34, 34, 36), (40, 40, 44), (92, 94, 98), (150, 152, 150), (28, 28, 30), (70, 72, 76)))
+        a[k:k + w, :, :3] = c
+        a[k, :, :3] = [min(255, v + 40) for v in c]
+        a[min(S - 1, k + w - 1), :, :3] = [v // 2 for v in c]
+        k += w
+    img = Image.fromarray(a, "RGBA")
+    return img.transpose(Image.Transpose.TRANSPOSE) if along_z else img
+
+
+def _ctrl_ends():
+    """Control cables' cut ends: round jackets packed close, their cores showing."""
+    rng = random.Random(912)
+    img = Image.new("RGBA", (S, S), (20, 20, 22, 255))
+    d = ImageDraw.Draw(img)
+    r = max(2, S // 22)
+    for y in range(r, S, 2 * r):
+        for x in range(r + (y // (2 * r)) % 2 * r, S, 2 * r):
+            c = rng.choice(((34, 34, 36), (92, 94, 98), (150, 152, 150)))
+            d.ellipse([x - r, y - r, x + r - 1, y + r - 1], fill=c + (255,))
+            d.ellipse([x - r // 2, y - r // 2, x + r // 2 - 1, y + r // 2 - 1], fill=(184, 112, 60, 255))
+    return img
+
+
+def _firestop_mortar():
+    """Fire-stop mortar: grey, troweled, flecked."""
+    return M.painted((176, 174, 168), 914, seams=(), chip_count=0, drip_count=0, dirt=0.25)
+
+
+def _tinted(colour, alpha):
+    a = np.zeros((S, S, 4), np.uint8)
+    a[..., :3] = colour
+    a[..., 3] = alpha
+    return Image.fromarray(a, "RGBA")
+
+
+def _lab_glass():
+    img = _tinted((214, 232, 236), 70)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, S - 1, S - 1], outline=(240, 250, 252, 150), width=6)
+    d.line([(26, 10), (26, S - 10)], fill=(250, 252, 255, 140), width=8)
+    for y in range(40, S - 8, 22):
+        d.line([(S - 30, y), (S - 12, y)], fill=(250, 252, 255, 150), width=3)   # graduations
+    return img
+
+
+def _label():
+    img = _img((246, 246, 240))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, S, 24], fill=(30, 90, 160, 255))
+    for y in (44, 64, 84):
+        d.line([(12, y), (100, y)], fill=(80, 80, 84, 255), width=6)
+    d.polygon([(96, 92), (116, 92), (106, 112)], fill=(240, 180, 30, 255))
+    return img
+
+
+def _cooler_lower():
+    img = _img((230, 228, 220))
+    d = ImageDraw.Draw(img)
+    for y in range(70, 118, 10):
+        d.rectangle([20, y, 108, y + 4], fill=(150, 150, 146, 255))   # the vent
+    return img
+
+
+def _cooler_badge():
+    img = _img((230, 228, 220))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([34, 40, 94, 80], radius=8, fill=(40, 110, 190, 255))
+    d.rectangle([44, 56, 84, 62], fill=(240, 244, 250, 255))
+    return img
+
+
+def _drip_grate():
+    img = _img((70, 72, 76))
+    d = ImageDraw.Draw(img)
+    for x in range(8, S, 14):
+        d.rectangle([x, 8, x + 6, S - 8], fill=(30, 30, 32, 255))
+    return img
+
+
+def _cup_stack():
+    img = _img((236, 236, 232))
+    d = ImageDraw.Draw(img)
+    for y in range(10, S, 12):
+        d.line([(30, y), (98, y)], fill=(200, 200, 196, 255), width=3)
+    return img
+
+
+def _mattress():
+    return _img((60, 110, 170))
+
+
+def _sheet():
+    img = _img((236, 240, 240))
+    return _noise(img, 807, [(220, 226, 228, 255), (246, 248, 248, 255)], 800)
+
+
+def _partition():
+    a = M.base((104, 118, 132), S)
+    M.shade(a, M.grain(S, 808, 7))
+    return M.to_img(a)
+
+
+def _security_jacket():
+    img = _img((30, 38, 60))
+    d = ImageDraw.Draw(img)
+    d.line([(64, 0), (64, S)], fill=(20, 26, 44, 255), width=3)
+    d.rectangle([20, 34, 46, 46], fill=(220, 220, 214, 255))     # SECURITY flash
+    d.rectangle([84, 30, 104, 46], fill=(200, 170, 60, 255))      # badge
+    d.rectangle([0, 96, S, 104], fill=(190, 196, 200, 255))       # reflective band
+    return img
+
+
+def _security_cap():
+    img = _img((26, 32, 52))
+    d = ImageDraw.Draw(img)
+    d.rectangle([50, 50, 78, 70], fill=(200, 170, 60, 255))
+    return img
+
+
+def _radio():
+    img = _img((24, 24, 26))
+    d = ImageDraw.Draw(img)
+    d.rectangle([20, 20, 108, 60], fill=(60, 120, 80, 255))
+    for y in range(76, 120, 10):
+        d.line([(20, y), (108, y)], fill=(50, 50, 54, 255), width=3)
+    return img
+
+
+def _boot_black():
+    return _img((20, 20, 22))
+
+
+def _aed():
+    img = _img((238, 240, 236))
+    d = ImageDraw.Draw(img)
+    d.rectangle([10, 10, 118, 118], outline=(30, 150, 80, 255), width=6)
+    d.rectangle([30, 30, 98, 98], fill=(40, 170, 90, 255))
+    d.polygon([(64, 84), (40, 58), (48, 44), (64, 54), (80, 44), (88, 58)], fill=(250, 250, 250, 255))
+    d.polygon([(66, 48), (56, 66), (66, 66), (60, 82), (76, 60), (66, 60), (72, 48)], fill=(240, 200, 30, 255))
+    return img
+
+
+def _aed_sign():
+    img = _img((40, 170, 90))
+    d = ImageDraw.Draw(img)
+    d.text((22, 50), "AED", fill=(255, 255, 255, 255))
+    d.rectangle([20, 48, 108, 80], outline=(255, 255, 255, 255), width=3)
+    return _glow(img)
+
+
+def _extinguisher():
+    img = M.painted((200, 30, 30), 809, chip_count=2, drip_count=0, dirt=0.1)
+    d = ImageDraw.Draw(img)
+    d.rectangle([30, 40, 98, 90], fill=(240, 240, 236, 255))
+    for y in (50, 60, 70, 80):
+        d.line([(36, y), (92, y)], fill=(60, 60, 60, 255))
+    return img
+
+
+def _fire_sign():
+    img = _img((200, 30, 30))
+    d = ImageDraw.Draw(img)
+    d.polygon([(64, 20), (84, 70), (64, 100), (44, 70)], fill=(250, 250, 250, 255))
+    return img
+
+
+def _medicine_front():
+    """A white wall cabinet with a glass door: shelves of bandages, plasters, gauze rolls and bottles, a red cross."""
+    img = _img((240, 240, 236))
+    d = ImageDraw.Draw(img)
+    d.rectangle([4, 4, 123, 123], outline=(190, 190, 186, 255), width=4)
+    d.rectangle([52, 8, 76, 20], fill=(210, 40, 40, 255))
+    d.rectangle([58, 2, 70, 26], fill=(210, 40, 40, 255))
+    d.rectangle([10, 30, 117, 117], fill=(214, 226, 228, 255))
+    r = random.Random(810)
+    for shelf, y in enumerate((58, 86, 114)):
+        d.line([(10, y), (117, y)], fill=(170, 176, 178, 255), width=3)
+        x = 12
+        while x < 110:
+            w = r.choice((10, 14, 18))
+            h = r.randint(14, 24)
+            col = r.choice([(250, 250, 250), (230, 200, 160), (60, 120, 200), (200, 40, 40), (240, 240, 220)])
+            if r.random() < 0.3:
+                d.ellipse([x, y - h, x + w, y], fill=col + (255,))
+            else:
+                d.rectangle([x, y - h, x + w, y - 1], fill=col + (255,))
+            x += w + 3
+    d.line([(14, 34), (60, 110)], fill=(240, 248, 250, 255), width=2)
+    return img
+
+
+def _vitals():
+    img = _img((10, 14, 16))
+    d = ImageDraw.Draw(img)
+    pts = []
+    for x in range(0, 90, 3):
+        k = x % 30
+        y = 30 - (18 if k == 12 else -8 if k == 15 else 0)
+        pts.append((x + 4, y))
+    d.line(pts, fill=(70, 240, 110, 254), width=2)
+    d.line([(4, 62), (30, 62), (40, 52), (50, 70), (90, 62)], fill=(240, 220, 60, 254), width=2)
+    d.line([(4, 94), (90, 90)], fill=(80, 180, 250, 254), width=2)
+    for k, c in enumerate([(70, 240, 110), (240, 220, 60), (80, 180, 250)]):
+        d.rectangle([98, 20 + k * 34, 122, 40 + k * 34], fill=c + (254,))
+    return _glow(img)
+
+
+def _drawer_front():
+    img = _img((178, 180, 176))
+    d = ImageDraw.Draw(img)
+    d.rectangle([4, 4, 123, 123], outline=(110, 112, 110, 255), width=3)
+    d.rectangle([44, 30, 84, 44], fill=(90, 92, 94, 255))
+    return img
+
+
+def _folders():
+    img = _img((60, 60, 60))
+    d = ImageDraw.Draw(img)
+    r = random.Random(811)
+    for y in range(0, S, 9):
+        d.rectangle([0, y, S, y + 6], fill=r.choice([(220, 190, 110), (210, 180, 100), (90, 140, 200), (200, 80, 70)]) + (255,))
+        if r.random() < 0.5:
+            x = r.randint(10, 90)
+            d.rectangle([x, y - 2, x + 18, y + 2], fill=(240, 220, 150, 255))
+    return img
+
+
+def _brass():
+    return M.brushed((190, 160, 90), 812, "h", dirt=0.03)
+
+
+def _walnut_top():
+    a = M.base((96, 64, 42), S)
+    M.shade(a, M.streaks(S, 813, "h", count=140, amount=14))
+    M.shade(a, M.fbm(S, 814, 3, 64) * 5)
+    return M.to_img(a)
+
+
+# ---- screens: one picture drawn across the whole screen, cut into its blocks
+
+def _screen_picture(kind, w, rows):
+    W, H = w * S, rows * S
+    img = Image.new("RGBA", (W, H), (16, 20, 26, 255))
+    d = ImageDraw.Draw(img)
+    bez = 10
+    d.rectangle([0, 0, W - 1, H - 1], outline=(30, 32, 36, 255), width=bez)
+    inner = [bez, bez, W - bez - 1, H - bez - 1]
+    if kind == "status":
+        # The live page is drawn over this by the renderer: a dark panel, a header bar, faint grid lines.
+        d.rectangle(inner, fill=(14, 22, 34, 254))
+        d.rectangle([bez, bez, W - bez - 1, bez + 26], fill=(24, 48, 84, 254))
+        for y in range(bez + 40, H - bez, 24):
+            d.line([(bez + 6, y), (W - bez - 6, y)], fill=(20, 32, 48, 254))
+    elif kind == "blank":
+        # Switched off: black glass with a soft reflection across it.
+        d.rectangle(inner, fill=(12, 13, 15, 255))
+        for k in range(40):
+            d.line([(bez + 40 + k * 3, bez), (bez + k * 3 - 40, H - bez - 1)], fill=(22, 24, 28, 255))
+    elif kind == "training":
+        d.rectangle(inner, fill=(240, 242, 246, 254))
+        d.rectangle([bez, bez, W - bez - 1, bez + 40], fill=(20, 70, 130, 254))
+        d.rectangle([bez + 20, bez + 12, bez + 220, bez + 28], fill=(240, 244, 250, 254))
+        # Bullets on the left, a reactor diagram on the right.
+        for k in range(6):
+            y = bez + 66 + k * 26
+            d.ellipse([bez + 24, y, bez + 34, y + 10], fill=(20, 70, 130, 254))
+            d.rectangle([bez + 44, y + 2, bez + 44 + random.Random(k).randint(100, 150), y + 8], fill=(80, 88, 100, 254))
+        cx = W * 0.72
+        d.rectangle([cx - 40, 90, cx + 40, 210], outline=(40, 50, 60, 254), width=4)
+        d.arc([cx - 40, 50, cx + 40, 130], 180, 360, fill=(40, 50, 60, 254), width=4)
+        d.rectangle([cx - 18, 130, cx + 18, 200], fill=(70, 150, 230, 254))
+        d.line([(cx + 40, 150), (cx + 100, 150)], fill=(220, 60, 50, 254), width=6)
+        d.line([(cx + 40, 180), (cx + 100, 180)], fill=(60, 120, 220, 254), width=6)
+        d.rectangle([bez + 20, H - bez - 26, bez + 120, H - bez - 16], fill=(220, 160, 40, 254))
+    else:  # plant_map: the site from above, buildings labelled, lights showing what runs
+        d.rectangle(inner, fill=(30, 46, 40, 254))
+        d.rectangle([bez, bez, W - bez - 1, bez + 50], fill=(30, 60, 100, 254))   # the lake
+        def bldg(x0, y0, x1, y1, col):
+            d.rectangle([x0, y0, x1, y1], fill=col + (254,), outline=(220, 226, 230, 254), width=2)
+        bldg(70, 80, 130, 140, (150, 150, 160))      # containment (dome)
+        d.ellipse([78, 88, 122, 132], fill=(190, 190, 200, 254), outline=(230, 230, 236, 254), width=2)
+        bldg(150, 76, 250, 120, (120, 130, 150))     # turbine hall
+        bldg(40, 160, 100, 200, (110, 120, 130))     # aux
+        bldg(120, 160, 160, 200, (110, 120, 130))    # fuel
+        bldg(170, 150, 220, 200, (140, 120, 90))     # control
+        bldg(240, 150, 280, 190, (120, 110, 100))    # diesels
+        bldg(270, 70, 330, 110, (90, 100, 110))      # transformers
+        for cx in (130, 290):
+            d.ellipse([cx - 26, 214, cx + 26, H - bez - 4], fill=(200, 204, 210, 254), outline=(240, 240, 244, 254), width=2)
+        d.line([(100, 110), (150, 98)], fill=(230, 80, 60, 254), width=4)   # main steam
+        d.line([(250, 98), (270, 90)], fill=(240, 200, 60, 254), width=4)   # power out
+        for x, y, col in ((100, 110, (80, 240, 110)), (200, 98, (80, 240, 110)), (300, 90, (80, 240, 110)), (260, 170, (240, 200, 60))):
+            d.ellipse([x - 6, y - 6, x + 6, y + 6], fill=col + (254,))
+        d.rectangle([W - bez - 120, H - bez - 50, W - bez - 10, H - bez - 10], fill=(16, 24, 30, 254), outline=(80, 90, 100, 254))
+        for k, col in enumerate([(80, 240, 110), (240, 200, 60), (230, 80, 60)]):
+            d.ellipse([W - bez - 112, H - bez - 46 + k * 12, W - bez - 104, H - bez - 38 + k * 12], fill=col + (254,))
+            d.rectangle([W - bez - 98, H - bez - 44 + k * 12, W - bez - 30, H - bez - 40 + k * 12], fill=(140, 150, 160, 254))
+    return img
+
+
+def screen_slices(kind, w, rows):
+    """The picture cut into blocks: part (c, r) counts rows from the bottom."""
+    big = _screen_picture(kind, w, rows)
+    out = {}
+    for r in range(rows):
+        for c in range(w):
+            top = (rows - 1 - r) * S
+            tile = big.crop((c * S, top, (c + 1) * S, top + S))
+            out[f"pi_{kind}_{r * w + c}"] = tile
+    return out
+
+
+def _plant_top(i):
+    """The plant seen from above: clusters of leaves on a transparent sheet."""
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    r = random.Random(900 + i)
+    green = [(40, 110, 50), (60, 140, 60), (30, 90, 40), (80, 160, 70)]
+    radius = 30 if i % 8 in (1, 4, 7) else 54
+    for _ in range(160):
+        a, rr = r.random() * math.tau, radius * math.sqrt(r.random())
+        cx, cy = 64 + math.cos(a) * rr, 64 + math.sin(a) * rr
+        w = 5 if i % 8 in (0, 2) else 9
+        d.ellipse([cx - w, cy - w / 2, cx + w, cy + w / 2], fill=r.choice(green) + (255,))
+    return img
+
+
+def makers():
+    out = {
+        "pi_phone": _phone, "pi_visitor_book": _visitor_book, "pi_leaf_ball": _leaf_ball, "pi_pen_cup": _pen_cup, "pi_pens": _pens,
+        "pi_mug": _mug, "pi_notepad": _notepad, "pi_laptop": _laptop, "pi_blueprint_roll": _blueprint_roll,
+        "pi_leather": _leather, "pi_nameplate": _nameplate, "pi_lamp_shade": _lamp_shade, "pi_pc_case": _pc_case,
+        "pi_pc_inside": _pc_inside, "pi_circuit": _circuit, "pi_ram": _ram, "pi_solder_iron": _solder_iron,
+        "pi_tool_case": _tool_case, "pi_tablet": _tablet, "pi_glass_top": _glass_top, "pi_glass_edge": _glass_edge,
+        "pi_mattress": _mattress, "pi_sheet": _sheet, "pi_partition": _partition, "pi_security_jacket": _security_jacket,
+        "pi_security_cap": _security_cap, "pi_radio": _radio, "pi_boot_black": _boot_black, "pi_aed": _aed,
+        "pi_aed_sign": _aed_sign, "pi_extinguisher": _extinguisher, "pi_fire_sign": _fire_sign,
+        "pi_emlight_case": lambda: M.painted((222, 220, 210), 810, chip_count=1, drip_count=0, dirt=0.2),
+        "pi_emlight_glass": lambda: M.painted((238, 234, 218), 813, chip_count=0, drip_count=0, dirt=0.05),
+        "pi_emlight_head": lambda: M.painted((52, 54, 58), 812, chip_count=0, drip_count=0, dirt=0.1),
+        "pi_medicine_front": _medicine_front, "pi_vitals": _vitals, "pi_drawer_front": _drawer_front,
+        "pi_folders": _folders, "pi_brass": _brass, "pi_walnut_top": _walnut_top,
+        "pi_binder_side": _binder_side, "pi_binder_spines": _binder_spines, "pi_binder_top": _binder_top,
+        "pi_basket": _basket, "pi_monitor_case": _monitor_case, "pi_cable": _cable,
+        "pi_lab_glass": _lab_glass, "pi_label": _label,
+        "pi_liquid_blue": lambda: _tinted((60, 130, 230), 150), "pi_liquid_amber": lambda: _tinted((220, 140, 40), 160),
+        "pi_liquid_green": lambda: _tinted((70, 190, 90), 150), "pi_liquid_clear": lambda: _tinted((200, 230, 240), 110),
+        "pi_amber_glass": lambda: _tinted((120, 66, 22), 215), "pi_white_bottle": lambda: _img((236, 236, 230)),
+        "pi_cap_black": lambda: _img((30, 30, 32)), "pi_cap_blue": lambda: _img((40, 80, 180)), "pi_cap_red": lambda: _img((190, 40, 40)),
+        "pi_cooler_lower": _cooler_lower, "pi_cooler_badge": _cooler_badge, "pi_drip_grate": _drip_grate,
+        "pi_bottle_plastic": lambda: _tinted((120, 180, 230), 90), "pi_bottle_water": lambda: _tinted((70, 140, 220), 120),
+        "pi_cup_stack": _cup_stack,
+        "pi_ctrl_layer": lambda: _ctrl_cables(False), "pi_ctrl_layer_z": lambda: _ctrl_cables(True), "pi_ctrl_ends": _ctrl_ends,
+        "pi_ctrl_black": lambda: _img((34, 34, 36)), "pi_ctrl_grey": lambda: _img((92, 94, 98)), "pi_ctrl_light": lambda: _img((150, 152, 150)),
+        "pi_cable_tie": lambda: _img((22, 22, 24)), "pi_firestop": _firestop_mortar,
+        "pi_console_top": lambda: _console("top"), "pi_console_edge": lambda: _console("edge"),
+        "pi_console_body": lambda: _console("body"), "pi_plant_screen_a": lambda: _plant_screen("a"),
+        "pi_plant_screen_b": lambda: _plant_screen("b"), "pi_plant_screen_c": lambda: _plant_screen("c"),
+    }
+    for i in range(6):
+        out[f"pi_blueprint_{i}"] = (lambda i=i: _blueprint(i))
+    for i in range(8):
+        out[f"pi_plant_top_{i}"] = (lambda i=i: _plant_top(i))
+    out.update(O3.makers())
+    out.update(O4.makers())
+    out.update(PN.makers())
+    for v in range(12):
+        for tex, img in lprint_texture(v).items():
+            out[tex] = (lambda img=img: img)
+    for name, info in PIECES.items():
+        if "screen" in info:
+            w, rows, _ = info["multi"]
+            for tex, img in screen_slices(info["screen"], w, rows).items():
+                out[tex] = (lambda img=img: img)
+    return out
+
+
+# Kept see-through (translucent) instead of cut out.
+TRANSLUCENT = O4.TRANSLUCENT | {"pi_glass_top", "pi_glass_edge", "pi_lab_glass", "pi_liquid_blue", "pi_liquid_amber", "pi_liquid_green",
+               "pi_liquid_clear", "pi_amber_glass", "pi_bottle_plastic", "pi_bottle_water"} | PN.SEE_THROUGH
+RICH = {"pi_medicine_front", "pi_binder_spines", "pi_vitals", "pi_circuit", "pi_pc_inside", "pi_folders", "pi_aed",
+        "pi_plant_screen_a", "pi_plant_screen_b", "pi_plant_screen_c"} | \
+    {f"pi_blueprint_{i}" for i in range(6)} | {f"pi_plant_top_{i}" for i in range(8)} | \
+    {f"pi_{k}_{p}" for k in ("training", "plant_map", "status", "blank") for p in range(6)}
+
+
+PAINTINGS = {f"pi_lprint_{v}_{c}" for v in range(12) for c in range(2)} | {f"pi_print_{i}" for i in range(16)}
+
+
+def icon(name):
+    """Inventory icons for the pieces bigger than a block."""
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    if name == "large_print":
+        import paintings
+        d.rectangle([2, 30, 126, 98], fill=(80, 52, 34, 255))
+        img.paste(paintings.painted(0, 112, 56, 950).convert("RGBA"), (8, 36))
+        return M.stylize(img, 24)
+    if name in PN.PANELS:
+        return PN.icon(name)
+    if name == "office_copier":
+        fr = O3._COPIER_TEX
+        big = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+        for p_ in range(4):
+            big.paste(fr[f"pi_copier_f_{p_}"], ((p_ % 2) * 256, (1 - p_ // 2) * 256))
+        crop = big.crop((16, 150, 512, 512)).resize((124, 90))
+        img.paste(crop, (2, 30))
+        return M.stylize(img, 24)
+    if name == "storage_rack":
+        d.rectangle([10, 14, 118, 114], outline=(30, 60, 120, 255), width=6)
+        for y in (46, 80):
+            d.rectangle([10, y, 118, y + 6], fill=(214, 110, 30, 255))
+        for x in (44, 78):
+            d.rectangle([x, 14, x + 5, 114], fill=(30, 60, 120, 255))
+        for bx, by in ((16, 90), (50, 90), (84, 56), (16, 22)):
+            d.rectangle([bx, by, bx + 24, by + 22], fill=(196, 154, 100, 255), outline=(150, 110, 60, 255))
+    elif name == "lounge_table":
+        d.ellipse([6, 40, 122, 84], fill=(200, 226, 230, 255), outline=(150, 190, 196, 255), width=3)
+        d.rectangle([30, 84, 50, 112], fill=(92, 58, 36, 255))
+        d.rectangle([78, 84, 98, 112], fill=(92, 58, 36, 255))
+    elif name == "oval_table":
+        d.ellipse([6, 36, 122, 80], fill=(96, 64, 42, 255), outline=(60, 40, 26, 255), width=4)
+        d.rectangle([40, 78, 50, 110], fill=(60, 62, 66, 255))
+        d.rectangle([78, 78, 88, 110], fill=(60, 62, 66, 255))
+    else:
+        kind = PIECES[name]["screen"]
+        pic = _screen_picture(kind, 3, 2).resize((120, 80))
+        img.paste(pic, (4, 24))
+        d.rectangle([60, 104, 68, 120], fill=(40, 42, 46, 255))
+    return M.stylize(img, 16)

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PLP",
+    "P P",
+    "PLP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "L": "#c:plates/lead"
+  },
+  "result": {
+    "id": "jugcraft:lead_locker",
+    "count": 1
+  }
+}

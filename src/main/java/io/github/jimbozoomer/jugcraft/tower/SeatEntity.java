@@ -30,11 +30,16 @@ public class SeatEntity extends Entity {
 
 	/** Seats {@code player} on the chair at {@code pos}, facing the way the chair faces. False if it is taken. */
 	public static boolean sit(Level level, BlockPos pos, Player player, Direction facing) {
+		return sit(level, pos, player, facing, SEAT_HEIGHT);
+	}
+
+	/** As {@link #sit(Level, BlockPos, Player, Direction)}, for a seat whose top is {@code height} up the block. */
+	public static boolean sit(Level level, BlockPos pos, Player player, Direction facing, double height) {
 		if (local.peepo.CompanionSeats.isReserved(level,pos)) return false;
 		if (player.isPassenger() || player.isShiftKeyDown()) {
 			return false;
 		}
-		Vec3 at = new Vec3(pos.getX() + 0.5, pos.getY() + SEAT_HEIGHT, pos.getZ() + 0.5);
+		Vec3 at = new Vec3(pos.getX() + 0.5, pos.getY() + height, pos.getZ() + 0.5);
 		if (!level.getEntitiesOfClass(SeatEntity.class, new net.minecraft.world.phys.AABB(pos)).isEmpty()) {
 			return false;
 		}
@@ -57,7 +62,7 @@ public class SeatEntity extends Entity {
 	}
 
 	private static boolean isChair(BlockState state) {
-		return state.is(JugcraftTower.BLOCKS.get("operator_chair"));
+		return state.is(JugcraftTower.BLOCKS.get("operator_chair")) || state.getBlock() instanceof Sittable;
 	}
 
 	@Override

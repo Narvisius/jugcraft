@@ -141,8 +141,11 @@ public class NetherGunsGameTests {
 		setAlight(helper, SECOND);
 	}
 
-	/** Each gun fires its last round at its own pig, then loads from the inventory in its own time. */
-	private static void fireAndLoad(GameTestHelper helper, List<String> guns) {
+	/**
+	 * Each gun fires its last round at its own pig, then loads from the inventory in its own time (the End guns' tests
+	 * too, slice 12A).
+	 */
+	static void fireAndLoad(GameTestHelper helper, List<String> guns) {
 		GunsGameTests.floor(helper);
 		int longest = 0;
 		for (int i = 0; i < guns.size(); i++) {
@@ -222,7 +225,7 @@ public class NetherGunsGameTests {
 	}
 
 	/** A pig that stays put, with 200 health so that every shot and every second of fire shows. */
-	private static Mob sturdyPig(GameTestHelper helper, BlockPos at) {
+	static Mob sturdyPig(GameTestHelper helper, BlockPos at) {
 		Mob pig = GunsGameTests.pig(helper, at);
 		pig.getAttribute(Attributes.MAX_HEALTH).setBaseValue(200.0);
 		pig.setHealth(200.0F);
@@ -230,7 +233,7 @@ public class NetherGunsGameTests {
 	}
 
 	/** A shooter standing at {@code at}, facing south with its look on the target's middle, its last round loaded. */
-	private static ServerPlayer shooter(GameTestHelper helper, String gun, BlockPos at, Mob target) {
+	static ServerPlayer shooter(GameTestHelper helper, String gun, BlockPos at, Mob target) {
 		ServerPlayer player = GunsGameTests.shooter(helper, gun, 1, target, GameType.SURVIVAL);
 		BlockPos pos = helper.absolutePos(at);
 		player.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);

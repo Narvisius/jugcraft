@@ -39,7 +39,7 @@ public final class PeepoWorkSessionClientTests implements FabricClientGameTest {
         var owner=l.getServer().getPlayerList().getPlayers().getFirst();npc.orders.tame(owner);npc.orders.command(owner,3);
         npc.preferences.social=false;npc.preferences.carryMeals=0;
         npc.belongings.setItem(0,new ItemStack(Items.WHEAT_SEEDS,32));npc.belongings.setItem(9,new ItemStack(Items.DIAMOND_HOE));
-        npc.assignments.assign(l,anchor);npc.assignments.assignContainer(l,base.east(6),Direction.UP,true);
+        npc.assignments.assignGardenZone(anchor,anchor.east(2),false);npc.assignments.assignContainer(l,base.east(6),Direction.UP,true);
     }
     @Override public void runTest(ClientGameTestContext context){
         try(var world=context.worldBuilder().adjustSettings(c->{

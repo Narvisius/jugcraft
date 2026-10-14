@@ -10,6 +10,8 @@ public interface CompanionStation {
     default net.minecraft.core.BlockPos stationPosition(){return this instanceof net.minecraft.world.level.block.entity.BlockEntity be?be.getBlockPos():net.minecraft.core.BlockPos.containing(approachPosition());}
     /** Safe reachable standing/mounting point, outside the block's collision shape. */
     Vec3 approachPosition();
+    /** How close ground navigation must get before stopping to occupy the station. */
+    default double arrivalDistanceSquared(){return .64;}
     /** Let a job choose another entrance after a budgeted path attempt failed. */
     default void approachFailed(PeepoEntity npc){}
     boolean availableTo(PeepoEntity companion);

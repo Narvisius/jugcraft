@@ -23,6 +23,8 @@ import lairs
 import tatterlace
 import yeti_king
 import cinder_tyrant
+import mire_hag
+import crypt_lich
 import vesperine
 import kitchen
 import feasts
@@ -2644,7 +2646,7 @@ def all_items():
             + chandlery_items() + cider_items() + pantry_items() + firework_items()
             + lantern_items() + feast_blocks() + [MAZE["gate"]] + ghost_items() + face_paint_items() + candy_items() + foraging_items() + bat_items() + knitting_items() + pie_items() + [SPIRIT_BOARD["block"], TURKEYS["roast"], THEREMIN["block"], OFRENDA["block"]] + list(OFRENDA["decor"]) + graveyard.items() + [h["item"] for h in HEX["brews"].values()] + [BROOMSTICK["item"]] + [WOLFSBANE["block"], WEREWOLF["dagger"], WEREWOLF["arrow"]] + WEREWOLF_PELTS + WEREWOLF_RUGS + [SQUIRRELS["acorn"]] + midway.items() + ferris_wheel.items() + pinata.items() + hot_air_balloon.items() + leaf_blower.items() + plants.items() + decor15.items() + decor16.items() + decor17.items() + decor18.items() + decor19.items() + decor20.items() + kitchen.items() + feasts.items() + rice.items() + soil.items() + orchard.items() + [i for i in cakes.items() if i not in cakes.ITEMS] + pies_and_tarts.items() + garden.items()
             + herbs.items() + spices.items() + lairs.items() + vesperine.items() + tatterlace.items()
-            + yeti_king.items() + cinder_tyrant.items())
+            + yeti_king.items() + cinder_tyrant.items() + mire_hag.items() + crypt_lich.items())
 
 
 def owns(entry_id):

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PP",
+    "PB"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "B": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:filing_cabinet_open",
+    "count": 1
+  }
+}

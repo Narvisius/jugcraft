@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CRC",
+    "RWR",
+    "CRC"
+  ],
+  "key": {
+    "C": "jugcraft:cement",
+    "R": "jugcraft:gasification_residue",
+    "W": "minecraft:water_bucket"
+  },
+  "result": {
+    "id": "jugcraft:concrete",
+    "count": 8
+  }
+}

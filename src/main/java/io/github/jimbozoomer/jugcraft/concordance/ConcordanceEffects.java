@@ -83,6 +83,7 @@ public final class ConcordanceEffects {
 	public static final TagKey<Block> HARVESTABLE = TagKey.create(Registries.BLOCK, Jugcraft.id("concordance/harvestable"));
 	private static final AtomicLong SERIALS = new AtomicLong();
 	private static final List<Guard> GUARDS = new CopyOnWriteArrayList<>();
+	private static final List<Observer> OBSERVERS = new CopyOnWriteArrayList<>();
 
 	/**
 	 * A protection a feature adds to the boundary (roadmap step 22's moving ward): asked of every creature operation after
@@ -96,6 +97,21 @@ public final class ConcordanceEffects {
 	/** Adds a guard (at registration). */
 	public static void guard(Guard guard) {
 		GUARDS.add(guard);
+	}
+
+	/**
+	 * Told of every restoration or protection that took (Concordance Chunk A, A-05): the person behind it, the effect,
+	 * its target and how much it did (the health a restoration gave back, or the most a protection may soak). Lair
+	 * fights credit their healers and warders through this; the boundary itself knows nothing of them.
+	 */
+	@FunctionalInterface
+	public interface Observer {
+		void helped(@Nullable ServerPlayer person, EffectSpec effect, LivingEntity target, float amount);
+	}
+
+	/** Adds an observer (at registration). */
+	public static void observe(Observer observer) {
+		OBSERVERS.add(observer);
 	}
 
 	private ConcordanceEffects() {
@@ -183,13 +199,15 @@ public final class ConcordanceEffects {
 			return Result.LIMIT;
 		}
 		ServerLevel level = context.level();
+		float gained = 0.0F;
 		Result result = switch (effect.kind()) {
 			case DAMAGE -> target.hurtServer(level, damageSource(level, effect, context.actor()), effect.magnitude()) ? Result.APPLIED
 					: Result.NOTHING;
 			case RESTORATION -> {
 				float before = target.getHealth();
 				target.heal(effect.magnitude());
-				yield target.getHealth() > before ? Result.APPLIED : Result.NOTHING;
+				gained = target.getHealth() - before;
+				yield gained > 0.0F ? Result.APPLIED : Result.NOTHING;
 			}
 			case MOVEMENT -> push(target, context.origin(), effect);
 			case STATUS -> {
@@ -202,6 +220,12 @@ public final class ConcordanceEffects {
 		};
 		if (result.applied()) {
 			show(level, effect.kind(), target.getX(), target.getY() + target.getBbHeight() * 0.6, target.getZ());
+			if (effect.kind() == EffectKind.RESTORATION || effect.kind() == EffectKind.PROTECTION) {
+				float amount = effect.kind() == EffectKind.RESTORATION ? gained : 4.0F * (effect.protectionAmplifier() + 1);
+				for (Observer observer : OBSERVERS) {
+					observer.helped(person, effect, target, amount);
+				}
+			}
 		}
 		return result;
 	}

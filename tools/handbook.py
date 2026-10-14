@@ -540,11 +540,31 @@ def arms_pages():
 
 
 def variant_pages():
-    """Arms VII (batch 56): the styles' patterns, the bosses' trophies and the armor sets' arms."""
+    """Arms VII (batch 56): the styles' patterns, the bosses' trophies and the armor sets' arms. A boss that is built
+    names its lair (tools/arms_variants.py BOSSES), so the trophy page lists it among the foes met, the rest among those
+    yet to be met."""
     import arms_variants as av
+    import lairs
     rows, key = av.STYLES["gilded"]["pattern_recipe"]
     grid = [item_for(key[ch]) if ch in key else None for row in rows for ch in row.ljust(3)]
     styles = ", ".join(info["display"].lower() for info in av.STYLES.values())
+
+    def trophies(boss, info):
+        # "Vesperine, the Last Reaper, in the Hollow Acre: Vesper Scythe."
+        name = info["display"][0].upper() + info["display"][1:]
+        if "lair" in info:
+            lair = lairs.LAIRS[info["lair"]]["display"]
+            name += ", in " + ("the " + lair[4:] if lair.startswith("The ") else lair)
+        return f"{name}: " + " and ".join(av.BY_ID[trophy][3] for trophy in av.trophies(boss)) + "."
+    met = [trophies(boss, info) for boss, info in av.BOSSES.items() if "lair" in info]
+    unmet = [trophies(boss, info) for boss, info in av.BOSSES.items() if "lair" not in info]
+    trophy_text = ["Great foes carry arms of their own, with a boon."]
+    if met:
+        trophy_text += ["These are met in their lairs. Anyone who takes part in one's fall may win its trophy, and "
+                        "always does the first time:"] + met
+    if unmet:
+        trophy_text += ["These are yet to be met in the world, and will each carry two:"] + unmet
+    trophy_text += ["Trophies last twice as long as steel, and fight as their kinds do."]
     return [
         {"title": "Arms: Styles", "icon": f"{MOD}:gilded_longsword", "text": [
             f"Four styles restyle a steel arm at a smithing table: {styles}. Put the style's pattern, the steel arm and "
@@ -556,12 +576,7 @@ def variant_pages():
             f"for {av.MARK_TICKS // 20} seconds, seen through walls.",
             "Each fights as its kind does: the same swing, reach, trait and art."],
          "craft": {"grid": grid, "result": f"{MOD}:gilders_pattern", "count": 1}},
-        {"title": "Arms: Trophies", "icon": f"{MOD}:glacier_maul", "text": [
-            "Great foes yet to be met in the world will each carry two arms of their own, with a boon:",
-            ] + [f"{info['display'][0].upper()}{info['display'][1:]}: "
-                 + " and ".join(av.BY_ID[name][3] for name in av.trophies(boss)) + "."
-                 for boss, info in av.BOSSES.items()] + [
-            "Trophies last twice as long as steel, and fight as their kinds do."]},
+        {"title": "Arms: Trophies", "icon": f"{MOD}:glacier_maul", "text": trophy_text},
     ] + set_pages()
 
 
@@ -768,9 +783,21 @@ def ores_page():
             lines.append(line)
     for mineral, info in MINERALS.items():
         gen = info["gen"]
-        lines.append(f"{info['ore_display']}: Y {gen['min_y']} to {gen['max_y']}.")
+        line = f"{info['ore_display']}: Y {gen['min_y']} to {gen['max_y']}."
+        if mineral == "fluorite":
+            line += (f" Large pockets below permanently snowy inland biomes; needs an {info['tool']} pickaxe. "
+                     "Mineral faces in small stone outcrops can point to a pocket below. Seasonal snow, beaches, rivers and oceans do not qualify. "
+                     "The prospector and ore drill work here; nine fluorite make a decorative storage block. "
+                     "Fluorite chemistry is planned separately.")
+        elif mineral == "spodumene":
+            line += (" Large pockets below Shield, Highland, Basin, Windswept Hills, Windswept Gravelly Hills, "
+                     "Windswept Forest and Stony Peaks; most centers are near Y 24. Needs an iron pickaxe. "
+                     "Look for pale-green mineral faces in small stone outcrops, or use the prospector and ore drill. "
+                     "The crusher gives two spodumene per ore; nine compact into a storage block. "
+                     "Expanded lithium refining is planned separately; existing lepidolite processing remains available.")
+        lines.append(line)
     return {"title": "Ores", "icon": f"{MOD}:tin_ore",
-            "text": ["Jugcraft ores appear in the stone and deepslate of every Overworld biome:"] + lines}
+            "text": ["Jugcraft ores appear in Overworld stone and deepslate. Regional exceptions are listed below:"] + lines}
 
 
 # The path through the mod, stage by stage (the "Progression" chapter). Each stage: title, icon, what it is for, a
@@ -979,8 +1006,15 @@ def build():
             machine_page("electrolytic_cell"),
             form_page("electrolytic_separator"),
             machine_page("chemical_reactor"),
+            form_page("chemical_oxidizer"),
+            form_page("industrial_fermenter"),
+            form_page("bulk_chemical_reactor"),
+            form_page("anaerobic_digester"),
+            form_page("coal_gasifier"),
+            form_page("gas_cleanup_rack"),
             machine_page("fuel_cell"),
             form_page("gas_burning_generator"),
+            form_page("bio_generator"),
             machine_page("electroplating_bath"),
             {"title": "Rubber", "icon": f"{MOD}:rubber", "text": [
                 "Crack a bucket of naphtha in the chemical reactor: 500 mB of butadiene. The polymerization reactor "
@@ -1013,6 +1047,7 @@ def build():
                 "Nitric acid etches microchips with half as much acid as sulfuric."]},
             machine_page("air_separation_unit"),
             machine_page("synthesis_converter"),
+            form_page("chemical_infuser"),
             machine_page("ammonia_chiller"),
             machine_page("cryogenic_liquefier"),
             {"title": "Gas Cylinders", "icon": f"{MOD}:gas_cylinder", "text": [

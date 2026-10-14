@@ -95,8 +95,8 @@ public final class MachineItemAutomation extends SnapshotParticipant<Integer> {
                     if(neighbor.getBlock()==block && block.masterPos(adjacent,neighbor).equals(machine.getBlockPos()))continue;
                     boolean takes=false,gives=false;
                     for(int slot:machine.getSlotsForFace(side)){
-                        if(slot<machine.kind().outputSlot())takes=true;
-                        if(slot>=machine.kind().outputSlot() && slot<machine.kind().slots)gives=true;
+                        if(slot<machine.kind().outputSlot() || machine.kind()==MachineKind.COAL_GENERATOR)takes=true;
+                        if(machine.kind()!=MachineKind.COAL_GENERATOR && slot>=machine.kind().outputSlot() && slot<machine.kind().slots)gives=true;
                     }
                     if(neighbor.getBlock() instanceof HopperBlock && neighbor.getValue(HopperBlock.ENABLED)){
                         if(takes && neighbor.getValue(HopperBlock.FACING)==side.getOpposite())connected|=1;

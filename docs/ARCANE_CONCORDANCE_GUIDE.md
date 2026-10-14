@@ -14,11 +14,22 @@ and this guide is a bug.
 1. **Find something that glows**: amethyst shards (in geodes), glow lichen or glow berries (in lush caves), a glow ink
    sac (from glow squid), glowstone dust, or Jugcraft's glowcap, glimmerbloom and jack-o'-lantern mushroom.
 2. **Sneak and use it** to examine it. You are now an **Initiate** of First Light.
-3. **In the dark** (a cave, or outside at night), examine three *different* ones. Or build a **Lampwright's Bench** and
-   study one there. You now **understand** First Light and know three invocations: Aegis, Kindle and Revelation.
-4. **Craft an Initiate's Wand**: something luminous, a stick and a copper ingot. Hold it in your main hand.
+3. **In the dark** (a cave, or outside at night), examine three *different* ones. Or examine one in the dark and study
+   one at a **Lampwright's Bench**: the bench saves you the other two, not the dark. You now **understand** First Light
+   and know three invocations: Aegis, Kindle and Revelation.
+4. **Craft an Initiate's Wand**: a copper ingot, a stick and an amethyst shard or glowstone dust, in a line from the
+   bottom left corner to the top right. Hold it in your main hand.
 5. **Cast.** The use key casts the first invocation on the spell bar, and 2, 3 and on cast the ones after it. While the
    wand is in your hand those number keys cast instead of changing your hotbar slot; scroll to change slot.
+6. **Write your own spell.** Holding the wand, press **J** and choose **Compose** (or bind *Open the Spell Composer* in
+   Controls). Pick from the words you have learned, or type them: `touch struck ward` wards the friend you are looking
+   at, within 4 blocks, against 4 damage for 10 seconds, for 3 Focus; `here struck ward` wards only you. The composer
+   says what a spell does and costs, or exactly why it cannot work. **Inscribe** writes it on the wand, and it joins the
+   spell bar.
+
+Lost on the way? Press **B**, or the scroll button beside the recipe book in your inventory, for the **Jugcraft
+Encyclopedia**: its Discover page shows each of these steps, which are done, and which comes next, with the recipes
+your server actually has.
 
 ## Controls
 
@@ -26,10 +37,12 @@ and this guide is a bug.
 |---|---|
 | Examine a specimen | Sneak and use it |
 | Cast an invocation | Hold an instrument (a wand) in your main hand: the use key casts the first, 2, 3 and on the next |
+| Compose a spell | Hold an instrument, press J and choose **Compose**; or bind *Open the Spell Composer* in Controls (unbound at first) |
 | See your Focus | The Focus line at the bottom right while an instrument is in hand |
 | Open your journal | J (remappable in Controls) |
+| Open the Jugcraft Encyclopedia | B (remappable in Controls), or the scroll button in your inventory |
 | Concordance settings | Its key in Controls (unbound at first), or Mod Menu if installed |
-| Look at a device's state | Jade, if installed; otherwise the device's own messages and the journal |
+| Look at a device's state | Jade, if installed; the encyclopedia opened while looking at a Circle Anchor or Ley Pylon; otherwise the device's own messages and the journal |
 
 ## Focus, research and stages
 
@@ -89,6 +102,11 @@ Each route, step by step: [the journey record](features/arcane-concordance-journ
 - Your spells, devices and workers change only what you could change by hand: claims, towns, spawn protection and the
   PvP rules apply to them. While you are away (offline or in another dimension) they wait, unless the server lets them
   carry on in your name.
+- At a lair boss (Vesperine and Madame Tatterlace), helping counts as much as hitting. Once the boss is awake, any of
+  these earns your share of the loot: a ward you put on a friend (`touch struck ward`) soaking two hearts of the fight's
+  blows; mending two hearts of the hurt the fight did a friend (Lanternward); relighting one of Vesperine's wards in her
+  Harvest; cutting a friend free of Madame Tatterlace's thread. A ward on yourself does not count. Die or lose your
+  connection mid-fight, and your share waits until you are back.
 
 ## When something goes wrong
 

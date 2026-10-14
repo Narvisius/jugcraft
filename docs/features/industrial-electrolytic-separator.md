@@ -1,6 +1,6 @@
 # Electrolytic Separator (factory package 2, first slice)
 
-Status: implemented (CI green; pending review). Stacked on the [shared machine foundation](industrial-machine-foundation.md) (PR #312).
+Status: implemented and merged (PR #316, on main through the integration in PR #320). Built on the [shared machine foundation](industrial-machine-foundation.md) (PR #312).
 Proposal issue: none. The first slice of package 2, "Starter steel chemistry", of the owner's [factory implementation plan in PR #302](https://github.com/jimbozoomer-byte/jugcraft/pull/302); the owner asked on 10 October 2026 to begin the next part once package 1 was done. Its construction, quantities, times and output policies are the owner's selections in the [starter gas and acid factory](industrial-starter-gas-and-acid-factory.md) (eighth planning batch, questions 1, 2, 3, 9 and 10).
 Owner: jimbozoomer-byte
 Target milestone and tier: steel-era chemistry, the first machine of the starter gas and acid factory

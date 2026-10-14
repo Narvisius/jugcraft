@@ -74,6 +74,9 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 public class JugcraftClientGameTests implements FabricClientGameTest {
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		if (TestFocus.skip("machines")) {
+			return;
+		}
 		if (GuideScreenshotGameTests.active()) {
 			return;
 		}

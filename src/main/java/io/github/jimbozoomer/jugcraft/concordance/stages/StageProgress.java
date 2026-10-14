@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -143,6 +144,14 @@ public final class StageProgress {
 
 	/** {@code player}'s stage and, for the next one, every route and what it still needs (the command and the Journal). */
 	public static void describe(ServerPlayer player, Consumer<Component> out) {
+		describe(player, out, research -> true);
+	}
+
+	/**
+	 * As {@link #describe(ServerPlayer, Consumer)}, but a route that needs research {@code met} refuses (by id) is only
+	 * counted, never named, nor is that research (the encyclopedia, which names nothing a player has not met).
+	 */
+	public static void describe(ServerPlayer player, Consumer<Component> out, Predicate<String> met) {
 		StageDefinition held = stage(player);
 		if (held == null) {
 			out.accept(Component.translatable("message.jugcraft.concordance.stage.none"));
@@ -162,7 +171,12 @@ public final class StageProgress {
 		}
 		Stages.Situation situation = situation(player);
 		out.accept(Component.translatable("message.jugcraft.concordance.stage.next", name(next.id())));
+		int unmet = 0;
 		for (Route route : next.routes()) {
+			if (!route.research().stream().allMatch(need -> met.test(need.contains("@") ? need.substring(0, need.indexOf('@')) : need))) {
+				unmet++;
+				continue;
+			}
 			List<String> missing = Stages.missing(route, situation);
 			Component text = Component.translatable("compose.jugcraft.stage." + next.id() + "." + route.id());
 			MutableComponent needs = Component.empty();
@@ -171,6 +185,9 @@ public final class StageProgress {
 			}
 			out.accept(missing.isEmpty() ? Component.translatable("message.jugcraft.concordance.stage.route_met", text)
 					: Component.translatable("message.jugcraft.concordance.stage.route", text, needs));
+		}
+		if (unmet > 0) {
+			out.accept(Component.translatable("message.jugcraft.concordance.stage.routes_unmet", unmet));
 		}
 	}
 

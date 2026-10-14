@@ -40,6 +40,7 @@ public class FarmStandBlockEntity extends BlockEntity {
 		}
 	};
 	private final long[] prices = {1, 1, 1, 1, 1, 1};
+	public final local.peepo.FarmStandCompanion companion = new local.peepo.FarmStandCompanion(this);
 
 	public FarmStandBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftAgriculture.FARM_STAND_ENTITY, pos, state);
@@ -88,6 +89,7 @@ public class FarmStandBlockEntity extends BlockEntity {
 	}
 
 	private void changed() {
+		if (companion != null && level != null && !level.isClientSide()) companion.observe();
 		setChanged();
 		if (level != null && !level.isClientSide()) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
@@ -110,6 +112,7 @@ public class FarmStandBlockEntity extends BlockEntity {
 		ownerName = input.getStringOr("owner_name", "");
 		crates.clearContent();
 		ContainerHelper.loadAllItems(input, crates.getItems());
+		companion.load(input);
 		List<Long> saved = input.read("prices", Codec.LONG.listOf()).orElse(List.of());
 		for (int i = 0; i < CRATES; i++) {
 			prices[i] = i < saved.size() ? Math.max(1, saved.get(i)) : 1;
@@ -124,6 +127,7 @@ public class FarmStandBlockEntity extends BlockEntity {
 		}
 		output.putString("owner_name", ownerName);
 		ContainerHelper.saveAllItems(output, crates.getItems());
+		companion.save(output);
 		output.store("prices", Codec.LONG.listOf(), java.util.Arrays.stream(prices).boxed().toList());
 	}
 

@@ -21,19 +21,25 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
 /**
- * Vesperine's loot, per participant (everyone who hurt her or her skulls and is still in her arena when she falls):
- * each rolls {@code jugcraft:entities/vesperine} for themselves (Reaper's Shade, and a chance of the Vesper Scythe, her
+ * Vesperine's loot, for each player paid for her fall (lair/LairRewards, which calls {@link #pay}): everyone who
+ * qualified in her fight (lair/Encounter: hurt her or her skulls, or whose tamed creature did, or healed, warded or
+ * relit one of her wards enough) and is alive within 64 blocks of her arena when she falls, and anyone who died in the
+ * fight or left the game during it and is still away, paid once they are back. Each rolls
+ * {@code jugcraft:entities/vesperine} for themselves when paid (Reaper's Shade, and a chance of the Vesper Scythe, her
  * two skull trophies and the Reaper's Hood), a player's first kill always brings the Vesper Scythe (whoever has not yet
- * earned The Last Harvest), the {@value VesperineEntity#EXPERIENCE} experience is shared out, and everyone earns The
- * Last Harvest. During the Halloween event (unless {@code lairs.event_loot} is off) each also gets a roll of seasonal
- * candy and a {@value #EVENT_HOOD_CHANCE} chance more of the hood. It goes straight into their inventory, the rest at
- * their feet, so nobody else can pick it up.
+ * earned The Last Harvest), the {@value VesperineEntity#EXPERIENCE} experience is shared out among everyone paid, now
+ * or later, and everyone earns The Last Harvest. During the Halloween event (unless {@code lairs.event_loot} is off)
+ * each also gets a roll of seasonal candy and a {@value #EVENT_HOOD_CHANCE} chance more of the hood (judged when the
+ * share is paid). It goes straight into their inventory, the rest at their feet, so nobody else can pick it up.
  */
 public final class VesperineLoot {
 	public static final ResourceKey<LootTable> TABLE = ResourceKey.create(Registries.LOOT_TABLE,
 			Jugcraft.id("entities/vesperine"));
+	/** The name her rewards are kept under when they wait for a player (lair/LairRewards). */
+	public static final String BOSS = "vesperine";
 	public static final String ADVANCEMENT = "the_last_harvest";
 	public static final float EVENT_HOOD_CHANCE = 0.1F;
 
@@ -48,26 +54,39 @@ public final class VesperineLoot {
 		}
 		int share = Math.max(1, VesperineEntity.EXPERIENCE / participants.size());
 		for (ServerPlayer player : participants) {
-			List<ItemStack> loot = roll(level, boss, player);
-			for (ItemStack stack : loot) {
-				player.getInventory().placeItemBackInInventory(stack.copy(), Prediction.SERVER_ONLY);
-			}
-			player.giveExperiencePoints(share);
-			TrickOrTreat.award(player, ADVANCEMENT);
-			player.sendSystemMessage(Component.translatable("message.jugcraft.vesperine.loot"));
-			given.put(player, loot);
+			given.put(player, pay(level, boss.position(), player, share));
 		}
 		return given;
 	}
 
+	/**
+	 * Pays one player their loot from a fall at {@code origin}: rolled now, into their inventory (the rest at their feet),
+	 * their {@code experience} share and the advancement. Rewards paid later (lair/LairRewards) come this way too.
+	 */
+	public static List<ItemStack> pay(ServerLevel level, Vec3 origin, ServerPlayer player, int experience) {
+		List<ItemStack> loot = roll(level, origin, player);
+		for (ItemStack stack : loot) {
+			player.getInventory().placeItemBackInInventory(stack.copy(), Prediction.SERVER_ONLY);
+		}
+		player.giveExperiencePoints(experience);
+		TrickOrTreat.award(player, ADVANCEMENT);
+		player.sendSystemMessage(Component.translatable("message.jugcraft.vesperine.loot"));
+		return loot;
+	}
+
 	/** One participant's roll. */
 	public static List<ItemStack> roll(ServerLevel level, VesperineEntity boss, ServerPlayer player) {
-		List<ItemStack> loot = new ArrayList<>(table(level, TABLE, boss, player));
+		return roll(level, boss.position(), player);
+	}
+
+	/** One participant's roll, for a fall at {@code origin}. */
+	public static List<ItemStack> roll(ServerLevel level, Vec3 origin, ServerPlayer player) {
+		List<ItemStack> loot = new ArrayList<>(table(level, TABLE, origin, player));
 		if (firstKill(player) && loot.stream().noneMatch(stack -> stack.is(JugcraftVesperine.vesperScythe()))) {
 			loot.add(new ItemStack(JugcraftVesperine.vesperScythe()));
 		}
 		if (eventBonus()) {
-			loot.addAll(table(level, CostumedMobs.CANDY, boss, player));
+			loot.addAll(table(level, CostumedMobs.CANDY, origin, player));
 			if (level.getRandom().nextFloat() < EVENT_HOOD_CHANCE && loot.stream().noneMatch(stack -> stack.is(JugcraftVesperine.REAPER_HOOD))) {
 				loot.add(new ItemStack(JugcraftVesperine.REAPER_HOOD));
 			}
@@ -75,9 +94,9 @@ public final class VesperineLoot {
 		return loot;
 	}
 
-	private static List<ItemStack> table(ServerLevel level, ResourceKey<LootTable> key, VesperineEntity boss, ServerPlayer player) {
+	private static List<ItemStack> table(ServerLevel level, ResourceKey<LootTable> key, Vec3 origin, ServerPlayer player) {
 		LootTable table = level.getServer().reloadableRegistries().getLootTable(key);
-		LootParams params = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, boss.position())
+		LootParams params = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, origin)
 				.withParameter(LootContextParams.THIS_ENTITY, player).create(LootContextParamSets.GIFT);
 		return List.copyOf(table.getRandomItems(params));
 	}

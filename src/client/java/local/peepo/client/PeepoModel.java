@@ -79,17 +79,28 @@ public final class PeepoModel extends EntityModel<PeepoState> {
             head.xRot=.04F;
         }
         if(s.work!=local.peepo.WorkAnimation.NONE && !s.eating && !s.sleeping && !s.sitting && !s.wheelRunning){
-            if(s.work==local.peepo.WorkAnimation.STIR)CompanionWorkPose.stir(s,leftArm,rightArm,head,leftLeg,rightLeg);
+            if(s.work==local.peepo.WorkAnimation.STIR)CompanionWorkPose.stir(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+            else if(s.work==local.peepo.WorkAnimation.SPINNING)CompanionWorkPose.spinning(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
             else if(s.work==local.peepo.WorkAnimation.CRANK)CompanionWorkPose.crank(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
             else if(s.work.isPie())CompanionWorkPose.pie(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
-            else if(s.work.hasTool() || s.work==local.peepo.WorkAnimation.CHOP || s.work==local.peepo.WorkAnimation.HARVEST || s.work==local.peepo.WorkAnimation.SHEAR)CompanionWorkPose.tool(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+            else if(s.work.hasTool() || s.work==local.peepo.WorkAnimation.CHOP || s.work==local.peepo.WorkAnimation.HARVEST || s.work==local.peepo.WorkAnimation.SHEAR || s.work==local.peepo.WorkAnimation.HIVE_SHEAR || s.work==local.peepo.WorkAnimation.HIVE_BOTTLE)CompanionWorkPose.tool(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
             else CompanionWorkPose.interact(s,leftArm,rightArm,head);
         }
-        if(!s.held.isEmpty() && !s.eating && !s.wheelRunning && !s.sleeping && s.work==local.peepo.WorkAnimation.NONE)rightArm.xRot=-.65F;
-        if(s.holdingLight && !s.held.isEmpty() && !s.eating && !s.sleeping && s.work==local.peepo.WorkAnimation.NONE){
+        if(s.pressSeated){
+            CiderPressPose.apply(s,leftArm,rightArm,head,leftLeg,rightLeg);
+        }else if(s.actionPose && s.work==local.peepo.WorkAnimation.WATER_FILL){
+            WaterScoopPose.apply(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+        }else if(s.actionPose){
+            float leftWalk=leftLeg.xRot,rightWalk=rightLeg.xRot;
+            CompanionWorkPose.tool(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+            if(s.gesture!=local.peepo.CompanionGesture.NONE){leftLeg.xRot=leftWalk;rightLeg.xRot=rightWalk;}
+            else {leftLeg.xRot=.15F*s.toolPose.bodyPitch;rightLeg.xRot=-.3F*s.toolPose.bodyPitch;}
+        }
+        if(!s.held.isEmpty() && !s.actionPose && !s.eating && !s.wheelRunning && !s.sleeping && s.work==local.peepo.WorkAnimation.NONE)rightArm.xRot=-.65F;
+        if(s.holdingLight && !s.actionPose && !s.held.isEmpty() && !s.eating && !s.sleeping && s.work==local.peepo.WorkAnimation.NONE){
             rightArm.xRot=-2.55F;rightArm.yRot=0;rightArm.zRot=.15F;
         }
-        if(s.social!=local.peepo.CompanionSocial.NONE && !s.eating && !s.sleeping && !s.sitting && !s.wheelRunning && s.work==local.peepo.WorkAnimation.NONE){
+        if(s.social!=local.peepo.CompanionSocial.NONE && !s.actionPose && !s.eating && !s.sleeping && !s.sitting && !s.wheelRunning && s.work==local.peepo.WorkAnimation.NONE){
             // The free left hand waves; held tools/lights stay in the existing right-hand pose.
             float t=s.socialTime;
             if(s.social==local.peepo.CompanionSocial.WAVE){

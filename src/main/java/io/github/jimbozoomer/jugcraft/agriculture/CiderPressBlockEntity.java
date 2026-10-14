@@ -69,6 +69,14 @@ public class CiderPressBlockEntity extends BlockEntity {
 	private final Storage<ItemVariant> companionOutputs = new CombinedStorage<>(List.of(output(true), output(false)));
 	/** When the crank or screw last moved (game time); never, at first. */
 	private long lastWork = -WORK_TICKS;
+	private int visualTurns;
+	private long visualTurnStarted=-WORK_TICKS;
+	/** Shared by the block and companion renderers; no worker search or per-frame synchronization. */
+	public float visualHandleAngle(float partialTick){
+		float t=level==null?1:net.minecraft.util.Mth.clamp((level.getGameTime()-visualTurnStarted+partialTick)/WORK_TICKS,0,1);
+		return (visualTurns-1+t*t*(3-2*t))*90;
+	}
+	public float visualHandleStart(){return (visualTurns-1)*90;}
 	public final local.peepo.CiderPressJob companionJob=new local.peepo.CiderPressJob(this);
 	public local.peepo.CompanionStatus companionStatus(){
 		if(apples<=0 && pulp<=0)return local.peepo.CompanionStatus.NO_INPUT;
@@ -192,6 +200,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 		apples--;
 		pulp++;
 		lastWork = gameTime;
+		visualTurns=(visualTurns+1)%4;visualTurnStarted=gameTime;
 		changed();
 	}
 
@@ -212,6 +221,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 		juice += nextRelease();
 		turns++;
 		lastWork = gameTime;
+		visualTurns=(visualTurns+1)%4;visualTurnStarted=gameTime;
 		int pomace = 0;
 		if (turns == TURNS) {
 			pomace = (pressing + APPLES_PER_POMACE - 1) / APPLES_PER_POMACE;
@@ -248,6 +258,8 @@ public class CiderPressBlockEntity extends BlockEntity {
 		bottled = Math.clamp(input.getIntOr("companionBottled", 0), 0, OUTPUT_CAPACITY);
 		pomaceStored = Math.clamp(input.getIntOr("companionPomace", 0), 0, OUTPUT_CAPACITY);
 		lastWork = -WORK_TICKS;
+		visualTurns=Math.floorMod(input.getIntOr("VisualTurns",turns),4);
+		visualTurnStarted=input.getLongOr("VisualTurnStarted",-WORK_TICKS);
 	}
 
 	@Override
@@ -260,6 +272,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 		output.putInt("juice", juice);
 		output.putInt("companionBottled", bottled);
 		output.putInt("companionPomace", pomaceStored);
+		output.putInt("VisualTurns",visualTurns);output.putLong("VisualTurnStarted",visualTurnStarted);
 	}
 
 	@Override

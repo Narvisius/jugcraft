@@ -1,0 +1,27 @@
+# Companion hive harvesting and brewing chains
+
+Owner-requested implementation, 11 October 2026, with OpenAI Codex (GPT-6). Extends existing Planner jobs, station Filters, four linked Supply/Output containers, Tools supplies, transactional physical cargo, job leases and server budgets. No new dependencies, items, currencies, fake players, chunk loaders or farm/orchard zones.
+
+## Progression and player behavior
+
+Workshop agriculture: ordinary beehives/bee nests provide honey bottles or native honeycomb loot for food and crafting consumers. Players still obtain bees, grow honey normally, craft bottles/shears and provide campfire smoke. Select Honey or Honeycomb in the existing job Filter; empty/mixed defaults to Honey. Harvest only at level 5 with effective vanilla smoke and mob griefing enabled. Three seconds of work costs 4 JE/tick (240 JE), with existing load-based hauling charges. Honey consumes one actual bottle from a four-bottle input reserve; honeycomb uses the actual equipped shears and one durability. Existing Tools routes fetch shears only for ripe, smoked honeycomb hives. Harvesting resets honey without angering or releasing bees. Safe approaches include the adjacent block and one block below.
+
+Output preflight protects twelve saved collection slots. The native hive-interaction loot table provides honeycomb; actual rolled drops are checked before resetting honey. Mode changes expose surplus empty bottles to Output. Empty-hand sneak-use recovers stored products/bottles, leaving anything that will not fit; block removal drops buffered contents. One expiring worker lease prevents simultaneous harvests. Interrupted work loses progress/effort but does not consume a bottle or damage shears before completion.
+
+Brewing remains native-speed vanilla processing. Filters select final potion contents and bottle type, including strong/extended/splash/lingering results when registered recipes permit them. A breadth-first search prefers shorter available chains, including starting from supplied intermediates. Empty filters deliberately choose any available single step. All reagents, starting bottles and initial fuel must be available when selecting a plan; snapshots reserve quantities, including blaze powder used both as fuel and reagent. Later materials are not remotely reserved: competing supply use can pause a batch until restocked. Water filling is not included; Supply must contain water bottles or prepared base potions.
+
+The batch fills its planned one to three bottle slots before companion insertion of the first reagent. Intermediate bottles stay in the stand; only final batch potions and unused/remainder reagent/fuel containers are extracted. Later steps never receive mixed top-up potions. The eight-slot physical delivery system still governs transport. Filter changes retain loaded batches; changing an empty stand's filter cancels its pending plan. Manual incompatible bottles or removed datapack recipes pause automation without discarding items. Hopper/player operations remain vanilla and can interrupt a plan.
+
+## Server cost and persistence
+
+Hive state allocates lazily on the existing vanilla block-entity mixin; it has no new ticking block entity. Existing readiness cache and job scheduler drive work. Entrance searches consider eight positions at most once per second unless invalidated; a 100-tick claim expires if abandoned. Smoke/permissions/resources and output space are rechecked during real work. Input/output buffers use transaction snapshots; simulated deliveries cannot consume bottles, mutate batch stage or write managed state.
+
+Brewing recipes and per-input graph edges are shared across the server, cleared by the existing recipe reload/start/stop lifecycle. Edge cache holds at most 4,096 variants. Each plan search is bounded to 256 expanded nodes, 2,048 examined edges and eight steps, with a 40-tick retry delay. Supply snapshots keep the existing bounded storage view limits. No world/entity scan is added. Recipe IDs, batch size, initial potion, loaded marker and current step are saved on the stand; old saved one-step recipes migrate as a one-step plan. Hive bottles, collection contents, filter and managed state are saved with existing lazy vanilla state.
+
+## Assets and integration
+
+Reviewed the owner library and catalog. Reuses Jugcraft's existing companion two-hand shear/reach pose with native glass bottle/shears item models and vanilla harvesting sounds. Two appended animation wire IDs distinguish hive work from animal work; no new textures, models, audio or external animation infrastructure. Dedicated server code does not reference client classes.
+
+## Validation
+
+No automated tests or gameplay session were run, following the owner's preference for this implementation sequence. Common/client compilation and `assemble` passed. The complete Modrinth distribution was rebuilt with the existing 18 locked libraries and platform pins. Its embedded mod JAR matches the final built JAR, and SHA-512 matches the sidecar. `git diff --check` passed. Manual checks: both hive modes, smoke removed during work, missing/broken shears, Output full, two workers on one hive, block break/reload with stored bottles/products, one- and three-bottle multi-stage brewing, blaze powder shared between fuel and Strength reagent, filters edited mid-batch, intermediate retention, reload during brewing, removed recipes and incompatible manual bottles. Multiplayer behavior and rendered poses remain to be checked in game.

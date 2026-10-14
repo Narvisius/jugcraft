@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "G",
+    "B",
+    "P"
+  ],
+  "key": {
+    "G": "minecraft:glass_bottle",
+    "B": "minecraft:water_bucket",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:water_cooler",
+    "count": 1
+  }
+}

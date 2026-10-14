@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PRP",
+    "PIP"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "R": "minecraft:red_dye",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:sign_no_smoking",
+    "count": 2
+  }
+}

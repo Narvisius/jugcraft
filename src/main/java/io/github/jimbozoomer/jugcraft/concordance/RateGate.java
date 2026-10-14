@@ -3,8 +3,8 @@ package io.github.jimbozoomer.jugcraft.concordance;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
@@ -19,7 +19,9 @@ public final class RateGate {
 	}
 
 	static void register() {
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> LAST.remove(handler.getPlayer().getUUID()));
+		// On the server thread, as the player leaves the list (Fabric's disconnect event may come on a network thread, and a
+		// request answered later in the same tick would put the entry back).
+		ServerPlayerEvents.LEAVE.register(player -> LAST.remove(player.getUUID()));
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> LAST.clear());
 	}
 

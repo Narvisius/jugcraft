@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:anaerobic_digestion",
+  "items": [
+    {
+      "ingredient": "#jugcraft:digestible",
+      "count": 16
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:biogas",
+      "amount": 1000,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:bone_meal",
+      "count": 2
+    }
+  ],
+  "time": 400
+}

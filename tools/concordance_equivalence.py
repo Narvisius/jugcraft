@@ -178,7 +178,7 @@ TRANSMUTATIONS = {
 # Never weighed, whatever they carry: the Concordance's own magical things and vanilla's. (Uncatalogued items are refused
 # anyway; the tag makes the refusal say why, and keeps them out of the catalogue for good.)
 EXCLUDED = [
-    rid("research_notes"), rid("initiate_wand"), rid("kindled_lantern"), rid("astrolabe"), rid("resonant_ring"),
+    rid("research_notes"), rid("initiate_wand"), rid("adept_wand"), rid("kindled_lantern"), rid("astrolabe"), rid("resonant_ring"),
     rid("wardlight"), rid("hearthstone"), rid("stormglass"), rid("owlsight_circlet"), rid("bonding_charm"), rid("porter_key"),
     rid("thornheart_blade"), rid("crimson_chalice"),
     rid("lesser_fire_focus"), rid("fire_focus"), rid("fire_bangle"), rid("pyromaniacs_hood"), rid("pyromaniacs_tunic"),

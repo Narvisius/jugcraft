@@ -38,7 +38,7 @@ Minecraft remains **26.3 + Fabric**, with **Loader 0.19.5** required by the sele
 - [Explore specialties, magic schools, creatures and seasonal briefs](docs/CONTENT_BRANCHES.md).
 - [See architecture and integration rules](docs/ARCHITECTURE.md).
 - [Check the roadmap](docs/ROADMAP.md), [owner-requested TODO list](docs/TODO.md) and [platform decision](docs/PLATFORM.md).
-- [Plan the Jugcraft Encyclopedia](docs/features/jugcraft-encyclopedia.md): inventory/keybind access, technology and magic pathways, integrated quests and ten UI references.
+- [The Jugcraft Encyclopedia](docs/features/jugcraft-encyclopedia.md): open it with K or the inventory's book button for the technology and magic routes; pathway graphs, integrated quests and the final look are planned, with ten UI references.
 - [Maintainer setup and review guide](docs/MAINTAINERS.md).
 
 ## How additions become part of Jugcraft

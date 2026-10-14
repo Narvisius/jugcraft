@@ -60,6 +60,9 @@ public class CiderBarrelBlock extends BaseEntityBlock {
 		return state.getValue(FACING).getAxis() == Direction.Axis.Z ? ALONG_Z : ALONG_X;
 	}
 
+    @Override
+    protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) { return false; }
+
 	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CiderBarrelBlockEntity(pos, state);
@@ -117,6 +120,7 @@ public class CiderBarrelBlock extends BaseEntityBlock {
 		if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof CiderBarrelBlockEntity barrel)) {
 			return InteractionResult.SUCCESS;
 		}
+        if(player.isShiftKeyDown() && barrel.collectCompanionBottles(player))return InteractionResult.SUCCESS;
 		long now = level.getGameTime();
 		if (barrel.servings() == 0) {
 			player.sendOverlayMessage(Component.translatable(MESSAGES + "empty"));

@@ -56,6 +56,29 @@ public final class CompanionTransport extends Goal {
         return 2+Math.max(0,stacks-1)+Math.max(0,(items+31)/32-1);
     }
     public CompanionStatus activity(){return active?status:CompanionStatus.IDLE;}
+    private record Detail(CompanionAssignments.Target target,String text,long until){}
+    private final Map<BlockPos,Detail> jobDetails=new HashMap<>();
+    /** Only facts already discovered by real transport work; the menu never probes storage. */
+    private void rememberDetail(String text){
+        if(porter || workstation==null)return;
+        if(jobDetails.size()>=4 && !jobDetails.containsKey(workstation.at().pos()))jobDetails.clear();
+        jobDetails.put(workstation.at().pos(),new Detail(workstation,text,npc.level().getGameTime()+200));
+    }
+    public String jobDetail(CompanionAssignments.Target target){
+        if(target.equals(workstation) && !porter && !manifest.isEmpty()){
+            String item=manifest.getCount()+" "+manifest.getHoverName().getString();
+            String endpoint=storeName();
+            if(status==CompanionStatus.FULL)return endpoint+" cannot accept "+item+"; cargo retained.";
+            if(status==CompanionStatus.BLOCKED)return "Cannot reach "+(destination()==store?endpoint:"the workstation")+"; cargo retained.";
+            return (returning?"Returning ":supply?"Supplying ":"Delivering ")+item+(pending.isEmpty()?"":" + "+pending.size()+" more stack(s)")+(supply && !returning?" from ":" to ")+endpoint+".";
+        }
+        var detail=jobDetails.get(target.at().pos());
+        return detail!=null && detail.target.equals(target) && npc.level().getGameTime()<detail.until?detail.text:"";
+    }
+    private String storeName(){
+        for(int i=0;i<4;i++)for(boolean output:new boolean[]{false,true})if(store!=null && store.equals(npc.assignments.get(CompanionAssignments.containerSlot(output,i))))return (output?"Output ":"Supply ")+(i+1);
+        return "the linked container";
+    }
     public CompanionStatus porterStatus(){return !npc.assignments.supplies.anyRoutes()?CompanionStatus.PORTER_SETUP:porterState;}
     public CompanionStatus containerStatus(int row){
         if(npc.orders.porter() && row>=CompanionAssignments.SUPPLY)return porterStatus();
@@ -131,6 +154,7 @@ public final class CompanionTransport extends Goal {
     private void beginHandoff(){
         // Stay here while choosing the next bounded step: return to work, restock,
         // collect another output, or continue a porter route. Never wander between legs.
+        if(workstation!=null)jobDetails.remove(workstation.at().pos());
         forget();handoffUntil=npc.level().getGameTime()+40;active=true;
         status=CompanionStatus.WAITING;npc.getNavigation().stop();
     }
@@ -216,7 +240,7 @@ public final class CompanionTransport extends Goal {
                 if(sourceCounts!=null)max=Math.min(max,Math.max(0,sourceCounts.getOrDefault(stack.getItem(),0)-limits.leave));
                 if(destinationCounts!=null)max=Math.min(max,Math.max(0,limits.keep-destinationCounts.getOrDefault(stack.getItem(),0)));
             }
-            if(supply)max=Math.min(max,port.needed(stack));
+            if(supply)max=Math.min(max,port.pickupNeeded(stack));
             if(max<=0)continue;
             try(var scope=io.github.jimbozoomer.jugcraft.machine.MachineItemAutomation.companionTransfer();var tx=Transaction.openOuter()){
                 int take=(int)view.extract(variant,max,tx);
@@ -229,6 +253,7 @@ public final class CompanionTransport extends Goal {
         return ItemStack.EMPTY;
     }
     @Override public boolean canUse(){
+        if(npc.tendingCriticalJob())return false;
         long now=npc.level().getGameTime();if(!allowed() || now<nextSearch)return false;
         if(!CompanionBudget.search(npc))return false;
         nextSearch=now+80+Math.floorMod(npc.getId(),20);
@@ -261,6 +286,14 @@ public final class CompanionTransport extends Goal {
         for(int i=1;i<5;i++){
             var work=npc.assignments.get(i);if(work==null || blocked.containsKey(work.at().pos()))continue;
             if(npc.deferJobTransport(work.at().pos()))continue;
+            // Let a stocked pot finish everything it can hold before taking its meals away.
+            // This also applies after reload, before the routine has reclaimed its rim position.
+            if(work.present(npc.level()) && npc.level().getBlockEntity(work.at().pos()) instanceof io.github.jimbozoomer.jugcraft.agriculture.CookingPotBlockEntity pot
+                    && pot.cookingStatus()==CompanionStatus.READY){
+                var job=CompanionJobs.resolve(npc,work.at().pos());
+                if(job!=null && npc.orders.station(job) && job.worthStarting(npc))return false;
+                continue;
+            }
             // A supplied processor/plot should start working before we plan another haul.
             // This also lets a higher-priority productive job interrupt a delivery chain.
             if(continuing && work.present(npc.level())){
@@ -282,9 +315,11 @@ public final class CompanionTransport extends Goal {
         handoffUntil=0;active=true;npc.resetCompanionRoutine();npc.leaveCompanionBed();npc.setRestMode(CompanionEnergy.Rest.NONE);
         deadline=npc.level().getGameTime()+600;nextPath=nextValidity=0;approach=null;travel.reset();lastPosition=npc.position();
     }
-    @Override public void stop(){handoffUntil=0;active=false;clearPiePose();npc.getNavigation().stop();approach=null;if(npc.level().getGameTime()>=deadline)nextSearch=npc.level().getGameTime()+200;if(manifest.isEmpty())forget();}
+    @Override public void stop(){handoffUntil=0;active=false;clearPiePose();npc.clearCarryGesture();npc.getNavigation().stop();approach=null;if(npc.level().getGameTime()>=deadline)nextSearch=npc.level().getGameTime()+200;if(manifest.isEmpty())forget();}
     private CompanionAssignments.Target destination(){return manifest.isEmpty()?(supply?store:workstation):supply && !returning?workstation:store;}
     private void fail(CompanionStatus why){
+        if(why==CompanionStatus.BLOCKED)rememberDetail("Last attempt: cannot reach "+(destination()==store?storeName():"the workstation")+". Clear a safe path and standing space.");
+        if(why==CompanionStatus.FULL)rememberDetail("Last attempt: "+storeName()+" could not accept the delivery; clear room or link another Output.");
         clearPiePose();
         if(porter)porterState=why;
         status=why;active=false;nextSearch=npc.level().getGameTime()+200;
@@ -297,19 +332,20 @@ public final class CompanionTransport extends Goal {
         boolean oven=targetState.getBlock() instanceof HearthOvenBlock;
         if(target.carriesProduce()){
             var floors=new LinkedHashSet<BlockPos>();
-            for(var soil:target.livestock()?List.of(target.at().pos()):target.plot())if((target.livestock() || CompanionGarden.farmland(npc.level(),soil)) && CompanionJobs.permitted(npc,soil)){
-                floors.add(soil);for(var side:Direction.Plane.HORIZONTAL)floors.add(soil.relative(side));
+            for(var soil:target.livestock()?List.of(target.at().pos()):npc.garden.cells(target))if((target.livestock()?CompanionJobs.permitted(npc,soil):npc.garden.accessible(target,soil))){
+                if(target.garden())floors.addAll(CompanionGarden.standingFloors(target,soil));
+                else {floors.add(soil);for(var side:Direction.Plane.HORIZONTAL)floors.add(soil.relative(side));}
             }
             for(var floor:floors){
                 if(!npc.level().hasChunkAt(floor))continue;
                 var state=npc.level().getBlockState(floor);
-                double top=state.getBlock() instanceof net.minecraft.world.level.block.FarmlandBlock?.9375:state.isFaceSturdy(npc.level(),floor,Direction.UP)?1:0;
+                double top=(state.getBlock() instanceof net.minecraft.world.level.block.FarmlandBlock || state.getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.PlanterBoxBlock)?.9375:state.isFaceSturdy(npc.level(),floor,Direction.UP)?1:0;
                 if(top==0)continue;
                 var p=new Vec3(floor.getX()+.5,floor.getY()+top,floor.getZ()+.5);double r=npc.getBbWidth()/2+.01;
-                if(CompanionHazards.safeAt(npc,p) && npc.level().noCollision(new AABB(p.x-r,p.y+.001,p.z-r,p.x+r,p.y+npc.getBbHeight(),p.z+r)))points.add(floor.above());
+                if(npc.level().getFluidState(floor.above()).isEmpty() && CompanionHazards.safeAt(npc,p) && npc.level().noCollision(new AABB(p.x-r,p.y+.001,p.z-r,p.x+r,p.y+npc.getBbHeight(),p.z+r)))points.add(floor.above());
             }
         }
-        for(var side:Direction.Plane.HORIZONTAL)for(int dy=0;dy>=-1;dy--){
+        if(!CompanionGarden.hanging(target))for(var side:Direction.Plane.HORIZONTAL)for(int dy=0;dy>=-1;dy--){
             // The pie must enter the mouth, with a standing surface at the oven's level.
             if(oven && (side!=targetState.getValue(HearthOvenBlock.FACING) || dy!=0))continue;
             var pos=target.at().pos().relative(side).offset(0,dy,0);var p=Vec3.atBottomCenterOf(pos);var floor=pos.below();
@@ -361,11 +397,18 @@ public final class CompanionTransport extends Goal {
             if(supply && !returning){clearPiePose();returning=true;approach=null;nextPath=0;}
             // Already collected outputs finish their delivery; unused supplies return to their source.
         }
+        // Animal-zone and water-source inputs are used from cargo; these anchors are not containers to stock.
+        // Finish the handoff where supplies were collected, then navigate to the actual animal.
+        if(supply && !returning && !manifest.isEmpty() && (workstation.livestock() || workstation.water())){
+            if(!loaded()){fail(CompanionStatus.FORBIDDEN);return;}
+            deliver();return;
+        }
         if(pieAction==WorkAnimation.PIE_TAKE){
             if(!animatePie(WorkAnimation.PIE_TAKE,carried()))return;
             clearPiePose();approach=null;nextPath=0;
         }
         var visibleCargo=carried();
+        if(!hearthRoute() && !visibleCargo.isEmpty())npc.showGesture(CompanionGesture.CARRY,visibleCargo,destination().at().pos());
         if(pieAction!=WorkAnimation.PIE_LOAD && hearthRoute() && !visibleCargo.isEmpty()
             && (HearthOvenBlockEntity.selectedFilling(visibleCargo)!=null || (visibleCargo.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.item("burnt_pie")) || visibleCargo.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.item("burnt_cake")))))
             piePose(WorkAnimation.PIE_CARRY,visibleCargo);
@@ -397,7 +440,7 @@ public final class CompanionTransport extends Goal {
             if(!Objects.equals(recipe,port.plan())){clearPiePose();returning=true;approach=null;nextPath=0;return;}
             if(port.needed(carried())<=0){deferUnused();return;}
         }
-        boolean near=target.garden()?target.plot().stream().anyMatch(p->CompanionGarden.farmland(npc.level(),p) && CompanionJobs.permitted(npc,p) && p.distToCenterSqr(npc.position())<=6.25):target.at().pos().distToCenterSqr(npc.position())<=6.25;
+        boolean near=target.garden()?npc.garden.cells(target).stream().anyMatch(p->npc.garden.accessible(target,p) && CompanionGarden.inReach(target,p,npc.position())):target.at().pos().distToCenterSqr(npc.position())<=6.25;
         if(!near){fail(CompanionStatus.BLOCKED);return;}
         if(hearthRoute() && supply && !returning && HearthOvenBlockEntity.rawFilling(carried())!=null){
             if(!animatePie(WorkAnimation.PIE_LOAD,carried()))return;
@@ -443,6 +486,7 @@ public final class CompanionTransport extends Goal {
         }
         approach=null;nextPath=0;deadline=npc.level().getGameTime()+600;
         if(hearthRoute() && !supply)animatePie(WorkAnimation.PIE_TAKE,carried());
+        else transferGesture(true,carried());
     }
     private void pickupBatch(){
         var port=porter?null:CompanionLogistics.resolve(npc,workstation);
@@ -451,7 +495,7 @@ public final class CompanionTransport extends Goal {
         var source=porter?CompanionStorage.find(npc,workstation):supply?CompanionStorage.find(npc,store):port.outputs();
         var destination=supply?port.inputs():CompanionStorage.find(npc,store);
         var slots=new ArrayList<Integer>();for(int i=0;i<8;i++)if(npc.belongings.getItem(i).isEmpty())slots.add(i);
-        var batch=CompanionDeliveryPlan.create(source,destination,slots.size(),supply?port::needed:null,porter?npc.assignments.supplies.route(route):null);
+        var batch=supply?port.supplyBatch(source,slots.size()):CompanionDeliveryPlan.create(source,destination,slots.size(),null,porter?npc.assignments.supplies.route(route):null);
         if(batch.isEmpty()){fail(slots.isEmpty()?CompanionStatus.FULL:porter?CompanionStatus.FULL:CompanionStatus.NO_INPUT);return;}
         try(var scope=io.github.jimbozoomer.jugcraft.machine.MachineItemAutomation.companionTransfer();var tx=Transaction.openOuter()){
             for(int i=0;i<batch.size();i++){
@@ -465,6 +509,7 @@ public final class CompanionTransport extends Goal {
         for(int i=0;i<batch.size();i++)pending.add(new Cargo(slots.get(i),batch.get(i).copy()));
         advanceCargo();approach=null;nextPath=0;deadline=npc.level().getGameTime()+600;
         if(hearthRoute() && !supply)animatePie(WorkAnimation.PIE_TAKE,carried());
+        else transferGesture(true,carried());
     }
     private void deliver(){
         if(tooling && !returning){deliverTool();return;}
@@ -490,11 +535,24 @@ public final class CompanionTransport extends Goal {
             if(npc.food.takeCargo(cargoSlot,stack,inserted,tx)!=inserted)return;
             tx.commit();
         }
+        transferGesture(false,stack);
         manifest.shrink(inserted);
         clearPiePose();
         if(manifest.isEmpty())finishCargo();
         else if(supply && !returning)deferUnused();
         else fail(CompanionStatus.FULL);
+    }
+    private void transferGesture(boolean pickup,ItemStack stack){
+        if(hearthRoute() || stack.isEmpty())return;
+        var target=pickup?(porter?workstation:supply?store:workstation):destination();
+        if(target==null)return;
+        var kind=pickup?CompanionGesture.TAKE:CompanionGesture.PUT;
+        if(!pickup && supply && !returning){
+            var block=npc.level().getBlockEntity(target.at().pos());
+            if(block instanceof io.github.jimbozoomer.jugcraft.agriculture.SkilletBlockEntity || block instanceof io.github.jimbozoomer.jugcraft.agriculture.KitchenStoveBlockEntity)kind=CompanionGesture.TURN_FOOD;
+            else if(block instanceof io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity && stack.is(net.minecraft.world.item.Items.WATER_BUCKET))kind=CompanionGesture.POUR;
+        }
+        npc.showGesture(kind,stack,target.at().pos());
     }
     /** Bounded counts by item type, matching the user-facing ghost filter. */
     private Map<net.minecraft.world.item.Item,Integer> counts(Storage<ItemVariant> storage){
@@ -511,18 +569,22 @@ public final class CompanionTransport extends Goal {
     }
     private boolean toolFits(CompanionAssignments.Target work,ItemStack stack){
         if(stack.isEmpty() || stack.isDamageableItem() && stack.getDamageValue()>=stack.getMaxDamage())return false;
-        return work.shearing()?stack.is(net.minecraft.world.item.Items.SHEARS):work.garden()?stack.is(net.minecraft.tags.ItemTags.HOES):work.block().equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("cutting_board")) && stack.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.KNIVES);
+        if(HiveCompanionJob.needsShears(npc,work))return stack.is(net.minecraft.world.item.Items.SHEARS);
+        if(work.care()){int task=npc.livestock.requiredTool(work);return task==AnimalCareZone.SHEAR?stack.is(net.minecraft.world.item.Items.SHEARS):task==AnimalCareZone.SLAUGHTER && CompanionHusbandry.weapon(stack);}
+        return work.task(AnimalCareZone.SHEAR)?stack.is(net.minecraft.world.item.Items.SHEARS):work.garden()?CompanionGarden.toolFits(work,stack):work.block().equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("cutting_board")) && stack.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.KNIVES);
     }
     private boolean needsTool(CompanionAssignments.Target work){
         return !npc.assignments.supplies.handLocked() && work.present(npc.level()) && CompanionJobs.permitted(npc,work.at().pos())
-            && (work.garden() || work.shearing() || work.block().equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("cutting_board"))) && !toolFits(work,npc.belongings.getItem(9));
+            && (HiveCompanionJob.needsShears(npc,work) || work.garden() && !work.orchard() && !CompanionGarden.hanging(work) || work.task(AnimalCareZone.SHEAR) || work.task(AnimalCareZone.SLAUGHTER) || work.block().equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("cutting_board"))) && !toolFits(work,npc.belongings.getItem(9));
     }
     private boolean readyTool(CompanionAssignments.Target work){
         if(!npc.assignments.supplies.anyTools() || !needsTool(work))return false;
-        if(work.shearing() && !npc.livestock.hasReadyAnimal(work))return false;
+        if(work.care() && npc.livestock.requiredTool(work)==0)return false;
+        if(!work.care() && work.task(AnimalCareZone.SHEAR) && !npc.livestock.hasReadySheep(work))return false;
         // Do not swap back and forth between tools for idle/lower-priority jobs.
         if(work.garden()){
-            var job=CompanionJobs.resolve(npc,work.at().pos());if(job==null || job.planningStatus(npc)!=CompanionStatus.READY)return false;
+            var job=CompanionJobs.resolve(npc,work.at().pos());if(job==null)return false;var status=job.planningStatus(npc);if(status!=CompanionStatus.READY && status!=CompanionStatus.NEEDS_CUTTER)return false;
+            if(job instanceof CompanionGarden.Job garden && !garden.benefitsFromTool())return false;
         }else if(npc.level().getBlockEntity(work.at().pos()) instanceof io.github.jimbozoomer.jugcraft.agriculture.CuttingBoardBlockEntity board && board.item().isEmpty()){
             var port=CompanionLogistics.resolve(npc,work);if(port==null)return false;
             port.prepare(npc.assignments.supplies.combined(work,false));if(port.plan()==null)return false;
@@ -555,7 +617,7 @@ public final class CompanionTransport extends Goal {
         return ItemStack.EMPTY;
     }
     private java.util.function.Predicate<ItemStack> toolUsefulness(CompanionAssignments.Target work){
-        if(work.garden() || work.shearing())return tool->true;
+        if(HiveCompanionJob.needsShears(npc,work) || work.garden() || work.care() || work.task(AnimalCareZone.SHEAR))return tool->true;
         if(!(npc.level().getBlockEntity(work.at().pos()) instanceof io.github.jimbozoomer.jugcraft.agriculture.CuttingBoardBlockEntity board)
             || !(npc.level() instanceof net.minecraft.server.level.ServerLevel level))return tool->false;
         // One rolled-back input snapshot per search, not one full scan for every knife in storage.
@@ -582,11 +644,11 @@ public final class CompanionTransport extends Goal {
     }
     private static void saveTarget(ValueOutput out,String name,CompanionAssignments.Target t){
         var child=out.child(name);child.store("At",GlobalPos.CODEC,t.at());child.store("Block",Identifier.CODEC,t.block());child.putInt("Face",t.face().ordinal());
-        if(t.garden())child.store("Plot",BlockPos.CODEC.listOf(),t.plot());
+        if(t.garden())child.store("Plot",BlockPos.CODEC.listOf(),t.plot());if(t.zone()!=null)t.zone().save(child);if(t.gardenZone()!=null)t.gardenZone().save(child);
     }
     private static CompanionAssignments.Target loadTarget(ValueInput in,String name){
         var c=in.child(name);if(c.isEmpty())return null;var at=c.get().read("At",GlobalPos.CODEC).orElse(null);var id=c.get().read("Block",Identifier.CODEC).orElse(null);
-        return at==null || id==null?null:new CompanionAssignments.Target(at,id,Direction.values()[Math.clamp(c.get().getIntOr("Face",1),0,5)],c.get().read("Plot",BlockPos.CODEC.listOf()).orElse(List.of()));
+        return at==null || id==null?null:new CompanionAssignments.Target(at,id,Direction.values()[Math.clamp(c.get().getIntOr("Face",1),0,5)],c.get().read("Plot",BlockPos.CODEC.listOf()).orElse(List.of()),AnimalCareZone.load(c.get()),GardenZone.load(c.get()));
     }
     public void save(ValueOutput out){
         if(manifest.isEmpty() || workstation==null || store==null)return;

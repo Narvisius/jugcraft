@@ -62,7 +62,7 @@ public class TomatoVineBlock extends TallCropBlock {
 	}
 
 	@Override
-	protected Item produce(BlockState bottom) {
+	public Item produce(BlockState bottom) {
 		return isOverripe(bottom) ? JugcraftAgriculture.item(ROTTEN) : super.produce(bottom);
 	}
 

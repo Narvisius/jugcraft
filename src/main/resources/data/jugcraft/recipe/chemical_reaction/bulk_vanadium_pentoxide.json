@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:vanadium_recovery",
+  "items": [
+    {
+      "ingredient": "jugcraft:washed_iron_ore",
+      "count": 4
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 500
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:vanadium_pentoxide",
+      "count": 1
+    }
+  ],
+  "time": 200
+}

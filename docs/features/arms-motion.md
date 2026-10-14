@@ -92,6 +92,24 @@ Four client mixins, in `jugcraft.client.mixins.json`. Fabric API's rendering mod
 
 The flail's swinging head ([arms-restyle.md](arms-restyle.md#the-flails-head-swings-5-october-2026), `client/arms/FlailHeads.java`) rides on the same four targets, with no new one: `ArmsRenderStateMixin` also resolves its chain and ball parts for the frame; `ArmsHumanoidModelMixin`, after the arms pose, keeps the body as finally posed (head, torso, arms and legs), which the ball keeps clear of; `ArmsItemInHandLayerMixin` keeps the model's root at the start of `submitArmWithItem` (a new inject at its head) and draws the head where the item is drawn, after the wrist; `ArmsFirstPersonMixin` keeps the view's frame at the start, the item's after `applyItemArmTransform` and after `swingArm`, and draws the head on screen at the end. The flail's first-person guard is held higher (`FL_FP`), so its ball hangs in sight.
 
+## Other animation on the same arms
+Player Animation Library and Spell Engine have been required frameworks since 5 October 2026; ArmsMotion still does not
+use them. Since Concordance Chunk A (ticket A-07, 11 October 2026) an arm in the main hand owns the player's arms, so no
+cast's pose plays over a guard, a stroke or a weapon art:
+- A weapon art and a cast cannot begin together: a cast needs a wand in the main hand, and an art ends when its arm
+  leaves the hand.
+- What could outlast a switch from the wand was Spell Engine's release clip (up to 14 ticks) or its fade of an ended
+  cast. Player Animation Library lays those over the arms after ArmsMotion, and in first person (Spell Engine's
+  default) hides the held arm as the game draws it while they play.
+- `client/CastPoses` stops those clips, and the Vigil's offering gesture, on any player holding an arm. It runs at the
+  end of each client tick, in first and third person, for every player the client sees, with no mixin. `CircleClient`
+  keeps the circle's gesture off such a player itself, by asking `CastPoses.gesturesYield`.
+- An arm in the off hand keeps the two gestures off as well, but not a cast's clips: ArmsMotion poses only the main
+  hand, and a wand in the main hand still casts with its gesture.
+
+[The Concordance presentation record](arcane-concordance-presentation.md#one-owner-for-the-arms-chunk-a-ticket-a-07) has
+the details and the test (`ConcordanceJourneyClientGameTests.aCastGivesWayToAGunOrAnArm`, passed in CI run 38435014953).
+
 ## Connections
 - Input producer: the arms of batch 42 (`weapons/ArmItem.kind()`).
 - Output consumer: the player's view. No item, recipe, unlock or progression changes.

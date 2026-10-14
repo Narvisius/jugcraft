@@ -424,9 +424,10 @@ public final class PeepoCompanionClientTests implements FabricClientGameTest {
         s.pumpkin=true;model.setupAnim(s);check(root.getChild("pumpkin").visible && !root.getChild("body").visible && !root.getChild("jughead_shorts").visible,"pumpkin costume visibility");
         s.pumpkin=false;s.work=WorkAnimation.INTERACT;s.workPhase=0;model.setupAnim(s);float arm=root.getChild("left_arm").xRot;
         s.workPhase=.4F;model.setupAnim(s);check(Math.abs(arm-root.getChild("left_arm").xRot)>.1 && root.getChild("left_arm").xRot==root.getChild("right_arm").xRot,"general two-arm animation");
-        s.work=WorkAnimation.STIR;model.setupAnim(s);check(root.getChild("left_arm").xRot> -1.5 && root.getChild("left_arm").xRot<-.5 && root.getChild("right_arm").yRot<0,"forward spoon grip");
+        s.work=WorkAnimation.STIR;local.peepo.client.CompanionClipChecks.prepareStir(s);model.setupAnim(s);check(root.getChild("left_arm").xRot> -1.5 && root.getChild("left_arm").xRot<-.5 && root.getChild("right_arm").yRot<0,"forward spoon grip");
         float stirringArm=root.getChild("left_arm").yRot;
-        s.workPhase+=1.5F;model.setupAnim(s);
+        // Render-state extraction reevaluates the shared spoon/hand pose each frame.
+        s.workPhase+=1.5F;local.peepo.client.CompanionClipChecks.prepareStir(s);model.setupAnim(s);
         check(Math.abs(stirringArm-root.getChild("left_arm").yRot)>.1,"arms move to stir spoon");
         check(root.getChild("left_leg").xRot==0 && root.getChild("right_leg").xRot==0,"stirring feet stay planted");
         s.work=WorkAnimation.NONE;s.sitting=true;s.ageInTicks=4;model.setupAnim(s);check(root.getChild("left_leg").xRot!=root.getChild("right_leg").xRot,"sitting leg kicks");

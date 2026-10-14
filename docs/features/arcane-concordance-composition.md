@@ -1,6 +1,8 @@
 # Arcane Concordance: composed spells and the shared effect system
 
-Status: implemented on branch `claude/awesome-davinci-iwv3b9`; see Verification for what has run.
+Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
+`claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
+8 October 2026); see Verification for what has run.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap steps 8 and 9) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 3, Initiate stage (Jugcraft Discovery). Roadmap steps 8 and 9.
@@ -26,7 +28,9 @@ starts a branch where the spell landed (`ray struck sear then here creatures daz
 Light understood; `ray`, `creatures`, `spread`, `sear`, `dazzle`, `pulse` and most modifiers with First Light
 mastered.
 
-The composer every player has is the command, used while holding the wand:
+Players compose in the **Spell Composer**: hold the wand, press **J** and choose **Compose** (or press its own key, once
+bound). It came with Concordance Chunk A ([record](arcane-concordance-composer.md)). The commands, used while holding
+the wand, answer through the same service (`Composing`) in the same words, and stay as a diagnostic path:
 
 - `/jugcraft concordance compose check <spell>` explains what the spell does and costs, line by line, or lists every
   problem by name ("Light acts on blocks, which Creatures does not choose"; "This spell needs 10 capacity; the
@@ -219,7 +223,9 @@ gestures and sounds. Everything is original.
   now stands as close as in the inscription test, and the mock player's head faces the way it was placed).
 
 Not yet run: any client (the composer's chat output, the wand tooltip, the spell bar entry and the icon in game), a
-two-client dedicated server, a GuiLib composer screen (not built: the command is the composer every player has).
+two-client dedicated server, a GuiLib composer screen (none existed then: the command was the composer every player had.
+Concordance Chunk A added the Spell Composer and its client game test; see
+[its record](arcane-concordance-composer.md)).
 
 ## World and event applicability
 
@@ -233,5 +239,6 @@ No worldgen, creatures, loot or seasons. Effects obey spawn protection, protecte
   `/resistant`, `/interactable`, `/harvestable`.
 - Removing a component later would make inscriptions that use it fail to compile (the cast is refused with the
   reason); the wand and its inscription text are kept, so restoring the component restores the spell.
-- A GuiLib composer, Spell Power scaling, and more operations (restoration, movement, interaction, harvesting and
-  alteration have no component yet) are open; they need the research of the Principles they belong to.
+- Spell Power scaling and more operations (restoration, movement, interaction, harvesting and alteration have no
+  component yet) are open; they need the research of the Principles they belong to. A composer screen came with
+  Concordance Chunk A ([record](arcane-concordance-composer.md)).

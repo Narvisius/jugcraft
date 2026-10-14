@@ -1,6 +1,6 @@
 # Bosses branch (brainstorm)
 
-Status: **a brainstorm; two bosses are being built.** On 10 October 2026 the owner chose to build a new boss "the same way" as Madame Tatterlace ([features/tatterlace.md](../features/tatterlace.md)); the Yeti King is first, to the plan below. The same day the owner asked for "the next boss same way" as him: the Cinder Tyrant, to his plan below. On 4 October 2026 the owner asked for variant weapons, many of them "drops from bosses ill make later", themed around those bosses ("example: Yeti King"), and to "brainstorm bosses we could make". This page is that brainstorm. The bosses' weapons already exist: Arms VII ([features/arms-vii.md](../features/arms-vii.md)) adds two trophies for each of the first eight bosses below, and their loot tables are ready (`data/jugcraft/loot_table/bosses/<boss>.json`, one of the two per roll). Building a boss is a separate, reviewed feature each time, in the order the Yeti King was built in: [BOSS_PLAYBOOK.md](BOSS_PLAYBOOK.md). Everything here is a proposal for the owner to pick from, change or drop.
+Status: **a brainstorm; six bosses are built.** On 10 October 2026 the owner chose to build a new boss "the same way" as Madame Tatterlace ([features/tatterlace.md](../features/tatterlace.md)); the Yeti King is first, to the plan below. The same day the owner asked for "the next boss same way" as him: the Cinder Tyrant, to his plan below. Both are built. On 13 October 2026 the owner chose the next: the Mire Hag, to her plan below, who is built too; and after her, the same day, the Crypt Lich, to his plan below, who is built too. On 4 October 2026 the owner asked for variant weapons, many of them "drops from bosses ill make later", themed around those bosses ("example: Yeti King"), and to "brainstorm bosses we could make". This page is that brainstorm. The bosses' weapons already exist: Arms VII ([features/arms-vii.md](../features/arms-vii.md)) adds two trophies for each of the first eight bosses below, and their loot tables are ready (`data/jugcraft/loot_table/bosses/<boss>.json`, one of the two per roll). Building a boss is a separate, reviewed feature each time, in the order the Yeti King was built in: [BOSS_PLAYBOOK.md](BOSS_PLAYBOOK.md). Everything here is a proposal for the owner to pick from, change or drop.
 
 ## Rules every boss follows
 
@@ -8,10 +8,21 @@ From [CONTENT_BRANCHES.md](../CONTENT_BRANCHES.md) ("Caves, dungeons and bosses"
 - **An arena with edges:** a lair, or a summoning that builds one. The boss does not wander out of it, and it resets when everyone leaves.
 - **Readable attacks:** every big attack is telegraphed (a wind-up, a sound, a shadow on the ground) and can be dodged or blocked.
 - **Recovery:** dying in the fight is not the end; gear can be fetched back, and the boss heals and resets rather than keeping its gains.
-- **Multiplayer:** its health scales with the players in the arena; every player who fought gets a roll of its loot table, not just the last hit.
+- **Multiplayer:** its health scales with the players in the arena; every player who took part gets a roll of its loot table, not just the last hit. A blow to it, or to a creature that counts for it, is taking part; at Vesperine and Madame Tatterlace, since Concordance Chunk A, so is support: healing or warding another player against the fight, or one of its objectives ([lair encounter credit](../features/lair-encounter-credit.md)).
 - **No griefing:** a summoned boss cannot be called inside a town's protection or another player's claim, and its attacks do not break player builds.
 - **No farming loop:** a long respawn timer per lair (or a costly summoning item), so a trophy stays a trophy.
 - **Optional:** no core progression needs a boss. Its trophies are side-grades with a boon, and each boss also drops something useful to non-fighters (a crafting material, a decoration, a trophy head).
+
+## Built so far
+
+| Boss | Lair, and how it is opened | Records | In `main` |
+|---|---|---|---|
+| **Vesperine, the Last Reaper** | The Hollow Acre: the Last Rites at a Jugcraft headstone at night (four lit candles, a Mourning Wreath and the Death Knell) | [hollow-acre.md](../features/hollow-acre.md), [vesperine.md](../features/vesperine.md) | #284 and #288, through #277 |
+| **Madame Tatterlace** | The Spindle Loft: a Cursed Spindle used on a Spinning Wheel at night | [spindle-loft.md](../features/spindle-loft.md), [tatterlace.md](../features/tatterlace.md) | #292 and #294, through #277 |
+| **The Yeti King** | The Glacier Hall: the Frost Horn | [glacier-hall.md](../features/glacier-hall.md), [yeti-king.md](../features/yeti-king.md) | #300 and #304, through #320 |
+| **The Cinder Tyrant** | The Cinder Kiln: the Kiln Seal | [cinder-kiln.md](../features/cinder-kiln.md), [cinder-tyrant.md](../features/cinder-tyrant.md) | #313 and #317, through #320 |
+
+The first two are the Witching Season's ([features/witching-season.md](../features/witching-season.md)); all four are on the shared lair framework (`lair/`). Vesperine and Madame Tatterlace roll their own loot table, `loot_table/entities/<boss>.json`, for each player who took part: their trophies, the Vesper Scythe and the Needle Rapier (Arms VII's), come at 15% a share and always on a player's first win. The Arms VII trophy tables `bosses/vesperine` and `bosses/tatterlace` are written by `tools/arms_variants.py` as the others' are, but nothing rolls them. The Yeti King and the Cinder Tyrant roll theirs the same way, a trophy always on a player's first win; they still credit damage alone, without Concordance Chunk A's support credit ([lair-encounter-credit.md](../features/lair-encounter-credit.md)).
 
 ## The first eight (trophies built)
 
@@ -240,6 +251,239 @@ He follows the rules every boss follows (above):
 - every opening costs a Kiln Seal.
 
 Nothing a tier needs comes only from him: Fire Resistance and magma cream come from brewing and the Nether as ever.
+
+## The Mire Hag: the plan (being built)
+
+The third of the first eight, built by [the boss playbook](BOSS_PLAYBOOK.md) as the Yeti King and the Cinder Tyrant were: first her lair and the summoning that opens it, then the Hag herself and her loot, each its own pull request with tests and pictures. On 13 October 2026 the owner chose her as the next boss ("Go with recommendations" on the Cinder Tyrant's checkpoint). Part 1, the fen and the stone: [features/lantern-fen.md](../features/lantern-fen.md). Part 2, the Hag and her loot: [features/mire-hag.md](../features/mire-hag.md).
+
+The design joins two sources:
+- this page's own idea for her: a witch who hides in the fog among illusions of herself, throws poison brews and binds players with roots, and must be struck where she truly is, the one who casts a shadow;
+- the planning pack's "Lantern Fen" ([chapter 05](../plans/concordance-expansion-2026-10-10/05-new-boss-compendium.md)): a shallow marsh with firm boardwalks and four lamps; the real Hag leaves a different ripple and answers to light, and relighting a lamp reveals her; her decoys share a tell that anything thrown can test, and never drop anything; root lanes, a lobbed pool, a decoy exchange and a close swipe; and at 55% two lamps go out while a knot of roots crawls toward a third.
+
+The numbers here are the plan's. Each part's feature record says what changed in building it.
+
+*A crone of the deep fen, bent nearly double and a head taller than a man even so, wrapped in a shawl of grey moss over rotted sackcloth, sedge and fen-roots grown through her hair. Her fingers are long and knotted as roots, her eyes the sickly green of marsh-light, and she leans on a crooked staff of bog oak with a little lantern swinging from its crook.* She leads travellers into the fen by its light, and by her likenesses.
+
+### The Lantern Fen
+
+A drowned fen floating in a night of mist:
+- **The arrival:** the end of a jetty on the fen's south edge, a sunken punt at its mooring. Behind it, Grey Mist hangs between two dead willows whose crowns have grown together: the way home.
+- **The marsh, the arena:** 44 blocks across, black water knee-deep over mud, with tussocks of sedge, reeds and cattails, lily pads, and here and there a drowned stump. Wading is slow.
+- **The boardwalks:** walkways of willow planks two blocks wide, laid a block over the mud, so the water lies just under them. One runs from the jetty north to the hut, and a ring joins four lamp platforms round the marsh. They are firm and quick.
+- **The lamps:** four great lanterns on posts, one on each platform (north-west, north-east, south-west and south-east), burning. Any player can light one that has gone out, by using it.
+- **The hut:** the Hag's hut on stilts at the north edge, its porch over the water facing the marsh, her cauldron on it. She waits there.
+- **Round it:** banks of reeds and cattails, dead willows hung with moss and vine, toadstools; beyond them, mist over open water to the fen's edge.
+
+The lair-only blocks are fixtures like the other lairs': unbreakable, no items, no drops. Only the lamps can be worked, by any player in the fen.
+
+### The summoning: the Hag Stone
+
+1. Craft a **Hag Stone**: a flint with a hole worn through it, threaded on string, bound with two gold ingots and two blocks of mud, and set with a fermented spider eye.
+2. At night, standing in the shallow water or on the mud of a wetland (the Bog, the Quagmire, the Sludge Mire, the Hallowed Bog, the Marsh, the Fen, the Dead Swamp, the Lush Swamp, the Swamp Woods, or vanilla's swamps), look through it.
+3. Through its hole you see a lantern burning far off in mist. The water stills, mist rises from it with a marsh-light bobbing in it, and the fen takes you: you wake on the jetty. The stone is used up.
+4. For 60 seconds the mist stays, and anyone who uses it follows. Nobody is taken in by standing near it.
+5. By day, out of the water and off the mud, out of the wetlands, or outside the Overworld, the stone only says why, and nothing is used up.
+
+Like the Yeti King, she is not a Witching Season boss: the stone works all year, at night.
+
+### The fight
+
+The Mire Hag has 360 health, scaled for the party: half as much again for each player after the first, at most two and a half times. She has armour 6: the hunt is in finding her, not in wearing her down. Poison, drowning, knockback and falls never harm her, and she wades the fen as if it were dry land.
+
+She waits on her porch, bent over her cauldron. She wakes when a player who can fight her steps off the jetty into the marsh, or strikes her: she looks up, the lamps gutter, and she steps down into the water as the mist rises (2 s, unhurt meanwhile). She keeps to her fen: more than 30 blocks from the marsh's middle, she glides back.
+
+**Her rule: the light finds her.** She is never alone. Her **Likenesses** walk the fen with her, two at first: each looks just as she does and mirrors her gestures, but casts no shadow and leaves no ripple where it wades. She casts a shadow, and the water rings round her feet.
+- Anything striking a Likeness (a blow, an arrow, a thrown snowball or egg) bursts it into a puff of marsh gas, harmlessly, and another forms from the mist a while later.
+- Within 8 blocks of a burning lamp her Likenesses gutter and fade, and she cannot hide: her outline shows.
+- Lighting a lamp that has gone out shows her for 5 seconds wherever she is, and bursts every Likeness in its light.
+
+**Phase 1, "The Lure"** (full to 55% health):
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Clawing Swipe | She draws back her hand of roots (0.6 s) | Claws across her front, 3 blocks: 8 damage. Close in, her most frequent attack |
+| Root Lanes | She plunges her staff into the water, and lines of bubbles race out toward her foe (1.2 s) | Roots burst up along three lanes 12 blocks long: 6 damage, and held fast for 1.5 s. Never twice running on one player |
+| Poison Brew | She draws a green flask from her shawl (0.8 s) | Lobbed at her foe, it shatters into a pool of venom 3 blocks across for 6 s: Poison while in it, which never kills |
+| Likeness Exchange | She and her Likenesses shimmer as the mist thickens (2 s) | They trade places in a burst of mist, and any Likeness burst comes back |
+
+**At 55% health, "Lights Out":**
+- she cackles for 3 seconds, unhurt, and two lamps gutter out;
+- a **Root Knot** bursts from the water beside a third lamp's boardwalk and crawls along it toward the lamp: if it reaches the lamp, that lamp goes out too. It has 30 health; cut it down and the lamp keeps burning;
+- then the fight changes.
+
+**Phase 2, "The Drowned Dark"** (55% to a fifth): her Likenesses are up to four, and she keeps every attack and adds:
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Mire Grasp | The water churns round her foe (1.2 s) | Hands of mud reach up in a ring 3 blocks across: 6 damage, and slowed for 2 s |
+| Snuff | She pinches the wick of her lantern, and the nearest lamp flickers (1.5 s) | That lamp goes out; at most one every 20 seconds |
+
+**Below a fifth, "The Last Light":** her lantern flares and she can hide no longer: her Likenesses burst and do not come back, and her outline shows. Every cooldown, and her pause between attacks, is a third shorter.
+
+**Left alone** for 10 seconds, she climbs back onto her porch, healed. Her Likenesses burst, the lamps relight, the pools and roots are gone, and who hurt her is forgotten.
+
+### Her loot (per participant)
+
+A participant is a player who hurt her, her Likenesses or the Root Knot, and is within 64 blocks of the marsh's middle when she falls.
+
+| Loot | Chance |
+| --- | --- |
+| **Hagmoss**, grey moss from her shawl | 3 to 6, always |
+| **A trophy:** the Hagthorn or the Bogfang (her `bosses/mire_hag` table, one of the two) | 15%; certain on a player's first kill |
+| **The Hag's Eye** | 25% |
+| **The Hag's Shawl** | 20% |
+| 300 experience, shared out | always |
+| The advancement **Seen Through** | always |
+
+- **Hagmoss:** a cheaper Hag Stone, her part of what summons her; and for those who never fight her, light grey dye or compost (settled in part 2).
+- **The Hag's Eye:** a hag stone that has seen through her. Held in the offhand, it makes invisible creatures near you glow.
+- **The Hag's Shawl:** a costume worn on the head, her hood of grey moss and sedge.
+- **The trophies** are Arms VII's ([features/arms-vii.md](../features/arms-vii.md)), with their Venom boon; until now they were in the creative tab only.
+- When she falls, her lantern goes out, the mist lifts, and Grey Mist opens in the marsh's middle, the way home.
+
+### The shared lair contract
+
+The planning pack's chapter 04 asks each lair to answer these:
+- **Arrival, staging, waking and return:** the jetty is safe. She wakes when a player steps off it into the marsh or strikes her. Grey Mist hangs at the jetty's end, and in the marsh's middle when she falls.
+- **Fixtures:** the four lamps, which any player in the fen may light, and the Grey Mist. Nothing else can be used, built or broken.
+- **The floor:** the fen owns it. Only the lamps change, going out and being lit, and every lamp burns again when she resets; each instance is placed fresh. Her roots, pools and grasping hands are hers, not blocks.
+- **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
+- **Reset:** when no eligible player is left, or she is left alone for 10 seconds.
+- **Clean-up:** her Likenesses, the Root Knot, her brews' pools, roots and hands are hers, capped, and gone with her.
+- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when she falls.
+- **An ordinary player** can do everything: a lamp is lit by hand, a Likeness bursts at any blow or anything thrown, her shadow shows with particles off, and her roots, pools and grasps are read before they land. Her poison never kills, and milk or the chemical reactor's Antidote cures it.
+
+Of the planning pack's magic links, Radiance's is already in the game: its Revelation makes a creature glow, so cast on her it shows her as a lamp does. The others (Verdance clearing a path through her roots, Tether cutting the knot, Tide thinning a pool) wait for spells of those schools. None of them will be needed.
+
+### Rules kept
+
+She follows the rules every boss follows (above):
+- her fen is her arena, and resets when everyone leaves;
+- every big attack is read before it lands;
+- dying there keeps everything as Grave Goods;
+- her health scales with the party, and every participant rolls her loot;
+- nothing in her fen can be built or broken, and the only blocks that change are her own lamps, which burn again;
+- every opening costs a Hag Stone.
+
+Nothing a tier needs comes only from her.
+
+## The Crypt Lich: the plan (being built)
+
+The fourth of the first eight, built by [the boss playbook](BOSS_PLAYBOOK.md) as the bosses before him were: first his lair and the summoning that opens it, then the Lich himself and his loot, each its own pull request with tests and pictures. On 13 October 2026 the owner chose him as the next boss ("go with recommendations" on the Mire Hag's checkpoint). Part 1, the archive and the writ: [features/crypt-archive.md](../features/crypt-archive.md). Part 2, the Lich and his loot: [features/crypt-lich.md](../features/crypt-lich.md).
+
+The design joins two sources:
+- this page's own idea for him: a crowned skeleton sorcerer below a crypt, who raises the restless dead in waves, drains life with a soul beam, and hides his heart in a phylactery that must be broken first;
+- the planning pack's "Archive of Last Names" ([chapter 05](../plans/concordance-expansion-2026-10-10/05-new-boss-compendium.md)): three sarcophagus alcoves, a central lectern and four clear lanes; three links protect the Lich, and the vulnerable one is shown by a lit inscription with a rune on it, so symbols and text, not colour alone, tell them apart; a wrong link answers with a short, recoverable add, at most four; named bone lanes, a slow soul projectile that can be struck back, a grave pull that leaves a marked way out, and a modest sweep; and at half health he erases an inscription, which the lectern restores.
+
+The numbers here are the plan's. Each part's feature record says what changed in building it.
+
+*A crowned skeleton, gaunt and a head taller than a man, in the mouldering robe of a scholar hung with chains of tarnished gold. His crown is black iron set with soul-fire, his eyes are cold blue flames, and his staff is a thighbone bound to a sceptre.* He was the sexton who dug the graves, then the scribe who kept their names, and at last he wrote his own name out of death's ledger and crowned himself. He keeps the Archive of Last Names below the graves, and his heart in a phylactery bound by the three names he bore: **the Sexton**, **the Scribe** and **the Crowned**.
+
+### The Archive of Last Names
+
+A vaulted crypt deep under the graves, lit by soul-fire:
+- **The arrival:** a landing at the top of a stair, at the hall's south end, where the stair from the opened sarcophagus comes down. Behind it, Grey Mist fills the stair back up: the way home. The landing and the stair are safe.
+- **The hall, the arena:** about 40 blocks square under a ribbed vault, floored with old flagstones and ledger stones (the floor graves, where his dead rise). Four pairs of thick pillars stand in its quarters, cover from his soul beam.
+- **The four lanes:** paved walks three blocks wide, inlaid with bone, from the central dais to the three alcoves (west, north and east) and south to the lectern. They are kept clear.
+- **The three alcoves:** one for each of his names, the Sexton's to the west, the Crowned's to the north behind his throne, the Scribe's to the east. In each a stone sarcophagus lies with its head to the back wall, and on that wall a carved **name-stone**: the name, and its rune (a spade, a crown, a quill). Under it a **grave seal** bears the same rune.
+- **The dais:** at the hall's heart, a round step with his **phylactery** on a plinth: an urn of bone and gold with soul-fire in it.
+- **The throne:** in the north apse, raised on steps, before the Crowned's alcove. He waits there.
+- **The Lectern of Last Names:** at the foot of the stair, the archive's great book open on it. Any player can read it.
+- **Round it:** the walls are the archive: shelves of ledgers and ribcage bookcases, ossuary niches of skulls and bones, candles in skulls, soul lanterns hung on chains.
+
+The lair-only blocks are fixtures like the other lairs': unbreakable, no items, no drops. Only the grave seals and the lectern can be used, by any player in the archive.
+
+### The summoning: the Writ of Exhumation
+
+1. Craft a **Writ of Exhumation**: three paper over two bones and a bottle of ectoplasm (from a restless spirit, by the spirit lantern), signed with an ink sac.
+2. Serve it on a stone sarcophagus (stone brick, deepslate or blackstone) that lies in a crypt: under a roof, where no sky can be seen from its lid. Any hour, all year: underground, night and day are alike.
+3. The lid grinds aside, cold blue fire and grey mist well up from the dark inside, and a stair goes down: you wake on the archive's landing. The writ is used up.
+4. For 60 seconds the mist stays over the open sarcophagus, and anyone who uses it follows. Nobody is taken in by standing near it. Then the lid grinds shut.
+5. Under the open sky, outside the Overworld, or on a sarcophagus whose mist is already rising, the writ only says why, and nothing is used up.
+
+Like the Yeti King and the Mire Hag, he is not a Witching Season boss. There is no generated crypt yet: the crypt is any a player builds, or any cellar under a graveyard.
+
+### The fight
+
+The Crypt Lich has 400 health, scaled for the party: half as much again for each player after the first, at most two and a half times. He has armour 8. Wither, poison, drowning, falls and knockback never harm him.
+
+He waits on his throne, seated, his crown dark. He wakes when a player who can fight him steps off the stair onto the hall's floor, or strikes him: the soul-fire flares down the lanes, and he rises (2 s, unhurt meanwhile). He keeps to his hall: more than 30 blocks from the dais, he glides back.
+
+**His rule: the phylactery.** Three **soul chains** of blue fire run from the grave seals to his phylactery, and a fourth from it to him. While any chain holds, he is **warded**: every blow, arrow and spell is turned aside with a flare of the chains, and does nothing.
+- One name at a time is **lit**: its stone glows and its rune burns, its seal flickers with soul-fire, and the bar over the screen names it ("He answers to the Scribe").
+- **Use the lit name's seal** and it breaks: that chain snaps, and the next name lights.
+- **Use a seal whose name is dark,** and it holds: a Restless Dead claws its way out of that sarcophagus instead.
+- **Break all three,** and the phylactery cracks and the fourth chain snaps: he is **exposed** for 12 seconds, staggered for the first 2. Then the chains reforge (1.5 s, the seals relighting one by one) and the names light again in a new order.
+
+**Phase 1, "The Warded King"** (full to half health):
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Grave Sweep | He draws his staff back over his shoulder (0.7 s) | Sweeps 3.5 blocks across his front: 7 damage, and thrown back. Close in |
+| Bone Lanes | He calls one of his names, and the lane to its alcove cracks with blue fire (1.2 s) | Bones burst up the whole lane: 6 damage, and tossed up. He calls the lane nearest his foe; off the lane is safe |
+| Soul Bolt | A skull of soul-fire forms in his hand (0.8 s) | It drifts at his foe, slow and turning a little: 6 damage, and Wither for 3 s. Struck back (any blow or arrow) it flies at him: warded, it staggers him and spoils his next attack; exposed, 10 damage |
+| Raise the Dead | He spreads his arms and the floor graves glow (1.5 s) | Two Restless Dead climb out of the graves nearest his foe; at most four at a time |
+
+**At half health, "The Erasure":**
+- he shrieks for 2 seconds, unhurt, and the chains reforge at once;
+- from now on, whenever they reforge, he **scrapes one name from its stone**. That name comes last, and when it lights its stone is blank: its seal will not break until somebody **reads the name back at the Lectern of Last Names** (using it), or 30 seconds pass;
+- then the fight changes.
+
+**Phase 2, "The Unwritten"** (half to a fifth): he keeps every attack, calls two lanes at once, and adds:
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Soul Drain | A thin beam of blue light joins him to his foe (1.0 s) | For 3 s it drains 1 health every half second, 6 in all, and heals him as much. A pillar between them, or 16 blocks, breaks it |
+| Grave Pull | A ring of soul-fire 10 blocks wide flares round him, one sixth of it dark (1.5 s) | Everyone in the ring but those in its dark part is dragged to him, and bones burst round his feet half a second later: 8 damage within 3.5 blocks. The dark part is the way out |
+
+**Below a fifth, "The Last Name":** his phylactery shatters, the chains are gone for good, and he is exposed to the end. Every cooldown, and his pause between attacks, is a third shorter, and his dead rise every 12 seconds.
+
+**Left alone** for 10 seconds, he climbs back to his throne, healed. His dead crumble, the chains reforge, every name is restored, and who hurt him is forgotten.
+
+### His loot (per participant)
+
+A participant is a player who hurt him or his dead, broke one of his seals, or read a name back at the lectern, and is within 64 blocks of the dais when he falls.
+
+| Loot | Chance |
+| --- | --- |
+| **Grave Dust**, the dust of his bones | 3 to 6, always |
+| **A trophy:** the Soulreaver or the Gravewarden (his `bosses/crypt_lich` table, one of the two) | 15%; certain on a player's first kill |
+| **The Emptied Phylactery** | 25% |
+| **The Lich's Crown** | 20% |
+| 300 experience, shared out | always |
+| The advancement **Nameless** | always |
+
+- **Grave Dust:** a cheaper Writ of Exhumation, his part of what summons him; and for those who never fight him, bone meal for the garden (settled in part 2).
+- **The Emptied Phylactery:** his urn, cracked and empty. Held in the offhand, Wither never takes hold of you.
+- **The Lich's Crown:** a costume worn on the head, his crown of black iron with the soul-fire guttering in it.
+- **The trophies** are Arms VII's ([features/arms-vii.md](../features/arms-vii.md)), with their Drain and Wither boons; until now they were in the creative tab only.
+- When he falls, his crown rolls from his skull, the soul-fire goes out down the lanes, and Grey Mist opens on the dais, the way home.
+
+### The shared lair contract
+
+The planning pack's chapter 04 asks each lair to answer these:
+- **Arrival, staging, waking and return:** the landing and the stair are safe. He wakes when a player steps off the stair onto the hall's floor or strikes him. Grey Mist fills the stair back up, and opens on the dais when he falls.
+- **Fixtures:** the three grave seals and the Lectern of Last Names, which any player in the archive may use, and the Grey Mist. Nothing else can be used, built or broken.
+- **The floor:** the archive owns it. Only the fixtures change (a seal broken, a name lit, scraped or restored, the phylactery cracked), and all of them are put back when he resets; each instance is placed fresh. His bones, bolts and dead are his, not blocks.
+- **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
+- **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
+- **Clean-up:** his dead, bolts, bone lanes and chains are his, capped, and gone with him.
+- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **An ordinary player** can do everything: a seal is broken and a name read by using them, the lit name is shown by its rune, its glow and the words over the screen, his bolts are struck back with any weapon or arrow, and every attack is read before it lands. Alone, a player breaks two seals, reads the scraped name back, and breaks the third.
+
+Of the planning pack's magic links, Radiance's is already in the game: its Revelation makes him glow, though it does not break his ward. The others (Echo reading a scraped name back from afar, Hollow turning one of his bolts, the Circlewrights holding an alcove's chain) wait for spells of those schools. None of them will be needed.
+
+### Rules kept
+
+He follows the rules every boss follows (above):
+- his archive is his arena, and resets when everyone leaves;
+- every big attack is read before it lands, and he is never warded for good: every round of seals opens him;
+- dying there keeps everything as Grave Goods;
+- his health scales with the party, and every participant rolls his loot;
+- nothing in his archive can be built or broken, and the only blocks that change are his own seals, stones and phylactery, which are put back;
+- every opening costs a Writ of Exhumation.
+
+Nothing a tier needs comes only from him.
 
 ## More bosses to consider (no trophies yet)
 
