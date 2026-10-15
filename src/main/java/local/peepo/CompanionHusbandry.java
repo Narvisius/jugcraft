@@ -21,6 +21,9 @@ import net.minecraft.world.phys.Vec3;
 /** Explicit species rules; planning is cached, population-changing actions re-count under the shared budget. */
 final class CompanionHusbandry {
     static final int CENSUS_LIMIT=256;
+    /** Vanilla's breed goal looks for a partner within 8 blocks. Both animals are held still until both are fed, so they look
+     *  from where they were fed: a pair farther apart would waste its food. */
+    static final double PARTNER_RANGE=8;
     final PeepoEntity npc;
     final CompanionAssignments.Target target;
     final Job breed=new Job(false),slaughter=new Job(true);
@@ -31,6 +34,7 @@ final class CompanionHusbandry {
     private CompanionStatus censusStatus=CompanionStatus.IDLE;
     CompanionHusbandry(PeepoEntity npc,CompanionAssignments.Target target){this.npc=npc;this.target=target;}
     static Identifier type(Animal animal){return BuiltInRegistries.ENTITY_TYPE.getKey(animal.getType());}
+    static boolean partners(Animal a,Animal b){return a.distanceToSqr(b)<=PARTNER_RANGE*PARTNER_RANGE;}
     static boolean weapon(ItemStack item){return !item.isEmpty() && (item.is(ItemTags.SWORDS) || item.is(ItemTags.AXES)) && (!item.isDamageableItem() || item.getDamageValue()<item.getMaxDamage());}
     static boolean loaded(ServerLevel level,AnimalCareZone zone){
         var box=zone.box();for(int x=((int)box.minX)>>4;x<=(((int)box.maxX-1)>>4);x++)for(int z=((int)box.minZ)>>4;z<=(((int)box.maxZ-1)>>4);z++)if(!level.getChunkSource().hasChunk(x,z))return false;return true;
@@ -122,7 +126,7 @@ final class CompanionHusbandry {
         Animal current(){return phase==0?first():second();}
         Set<UUID> own(){return firstId==null?Set.of():secondId==null?Set.of(firstId):Set.of(firstId,secondId);}
         boolean assigned(){int row=npc.assignments.workPriority(stationPosition());return row<5 && target.equals(npc.assignments.get(row)) && target.task(task()) && target.present(npc.level());}
-        boolean usable(){var a=first();var b=second();return eligible(a,kill) && CompanionLivestock.free(a,npc) && (kill || eligible(b,false) && CompanionLivestock.free(b,npc));}
+        boolean usable(){var a=first();var b=second();return eligible(a,kill) && CompanionLivestock.free(a,npc) && (kill || eligible(b,false) && CompanionLivestock.free(b,npc) && partners(a,b));}
         boolean find(){
             if(!assigned())return false;
             if(firstId!=null && usable()){
@@ -136,7 +140,7 @@ final class CompanionHusbandry {
             var candidates=animals.stream().filter(a->eligible(a,kill) && CompanionLivestock.free(a,npc)).sorted(Comparator.comparingDouble(npc::distanceToSqr)).limit(24).toList();
             status=CompanionStatus.POPULATION_LIMIT;
             for(var a:candidates){var rule=target.zone().population(type(a));if(!allowed(animals,rule,kill,Set.of()))continue;
-                Animal b=null;if(!kill){b=candidates.stream().filter(other->other!=a && other.getType()==a.getType()).findFirst().orElse(null);if(b==null)continue;}
+                Animal b=null;if(!kill){b=candidates.stream().filter(other->other!=a && other.getType()==a.getType() && partners(a,other)).findFirst().orElse(null);if(b==null)continue;}
                 var point=CompanionLivestock.standing(npc,target,a);if(point==null){status=CompanionStatus.BLOCKED;continue;}
                 firstId=a.getUUID();secondId=b==null?null:b.getUUID();approach=point;nextApproach=npc.level().getGameTime()+10;return true;
             }

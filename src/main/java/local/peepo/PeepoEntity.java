@@ -545,6 +545,10 @@ public final class PeepoEntity extends PathfinderMob {
                 beginEating(food.copyWithCount(1));
                 var rest=food.copy();rest.shrink(1);
                 if(rest.isEmpty())target.discard();else target.setItem(rest);
+            } else if (getNavigation().isDone() && distanceToSqr(target)<4) {
+                // A path to the food ends anywhere within a waypoint's reach of the middle of its block, which can be
+                // out of eating reach of food lying in a corner: the last steps go straight to it.
+                getMoveControl().setWantedPosition(target.getX(),target.getY(),target.getZ(),1.15);
             }
         }
     }

@@ -154,8 +154,11 @@ public final class PeepoDeliveryClientTests implements FabricClientGameTest {
             npc.setHealth(npc.getMaxHealth()/2);npc.assignments.supplies.route(0).enabled=true;npc.setNoAi(false);
         });
         picked(s,8);
-        s.runOnServer(v->v.overworld().addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(v.overworld(),base.getX()+4.5,base.getY()+.1,base.getZ()+.5,new ItemStack(Items.COOKED_BEEF))));
-        try{s.waitFor(v->npc.isEating(),500);}catch(AssertionError e){throw new AssertionError(s.computeOnServer(v->"meal: position="+npc.position()+", status="+npc.transport.activity()+", hungry="+npc.needsAutomaticFood()+", output="+count(output,Items.DIAMOND)+", source="+count(source,Items.DIAMOND)),e);}
+        // The meal is set down still, in the far corner of its block from the barrel the companion comes from: a path to
+        // it ends anywhere within a waypoint's reach of the block's middle, out of eating reach of this corner.
+        var meal=new net.minecraft.world.entity.item.ItemEntity[1];
+        s.runOnServer(v->{meal[0]=new net.minecraft.world.entity.item.ItemEntity(v.overworld(),base.getX()+4.02,base.getY()+.1,base.getZ()+.98,new ItemStack(Items.COOKED_BEEF));meal[0].setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);v.overworld().addFreshEntity(meal[0]);});
+        try{s.waitFor(v->npc.isEating(),500);}catch(AssertionError e){throw new AssertionError(s.computeOnServer(v->"meal: position="+npc.position()+", meal="+(meal[0].isAlive()?meal[0].position():"gone")+", status="+npc.transport.activity()+", hungry="+npc.needsAutomaticFood()+", output="+count(output,Items.DIAMOND)+", source="+count(source,Items.DIAMOND)),e);}
         s.runOnServer(v->{check(count(output,Items.DIAMOND)==512,"needed meal waits for the current cargo to unload");
             check(count(source,Items.DIAMOND)==64,"needed meal interrupts the chain before the next porter pickup");
         });

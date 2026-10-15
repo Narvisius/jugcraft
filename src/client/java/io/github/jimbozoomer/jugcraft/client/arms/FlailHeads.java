@@ -246,6 +246,14 @@ public final class FlailHeads {
 		float[] body;
 		float ballClear;
 		float linkClear;
+		/** The body as the chain was last stepped against it, and as posed at a sub-step: over a step the body sweeps
+		 * from the one to this frame's, as the eye does, so a limb that moved far in a frame (a walking leg, when frames
+		 * are slow) sweeps the ball aside rather than landing on it. {@link #at} is the pose the constraint passes keep
+		 * clear of. */
+		final float[] lastPose = new float[PARTS * 6];
+		final float[] sweep = new float[PARTS * 6];
+		boolean lastPosed;
+		private float[] at;
 		/** For the client game tests: the nearest the ball has come to the holder's body since the last reset, beyond
 		 * ballClear (blocks; infinite until a body was measured). */
 		float nearest = Float.POSITIVE_INFINITY;
@@ -279,6 +287,7 @@ public final class FlailHeads {
 			System.arraycopy(x, 0, old, 0, points * 3);
 			lastAnchor.set(anchor);
 			step = SUBSTEP;
+			lastPosed = false;
 			ready = true;
 		}
 
@@ -290,10 +299,12 @@ public final class FlailHeads {
 		void step(float dt, float g, Vector3f anchor, Vector3f grip, float clear) {
 			if (dt <= 0.0F) {
 				// No time passes (a still chain): only settle it where it hangs.
+				at = body;
 				settle(anchor.x, anchor.y, anchor.z, grip, clear);
 				lastAnchor.set(anchor);
 				return;
 			}
+			boolean sweeping = body != null && lastPosed;
 			int steps = Math.max(1, (int) Math.ceil(dt / SUBSTEP));
 			float h = dt / steps;
 			float keep = (float) Math.pow(KEEP, h);
@@ -314,9 +325,21 @@ public final class FlailHeads {
 					x[o + 1] -= g * h * h;
 				}
 				carry = 1.0F;
+				if (sweeping) {
+					for (int j = 0; j < PARTS * 6; j++) {
+						sweep[j] = lastPose[j] + (body[j] - lastPose[j]) * f;
+					}
+					at = sweep;
+				} else {
+					at = body;
+				}
 				settle(ax0 + (anchor.x - ax0) * f, ay0 + (anchor.y - ay0) * f, az0 + (anchor.z - az0) * f, grip, clear);
 			}
 			lastAnchor.set(anchor);
+			lastPosed = body != null;
+			if (lastPosed) {
+				System.arraycopy(body, 0, lastPose, 0, PARTS * 6);
+			}
 		}
 
 		/** The constraint passes: the eye pinned at (ax, ay, az), each link pulled back to its length, the ball off the haft. */
@@ -348,7 +371,7 @@ public final class FlailHeads {
 					x[b + 2] = x[a + 2] + dz * k;
 				}
 			}
-			if (body != null) {
+			if (at != null) {
 				nearest = Math.min(nearest, bodyGap(points - 1, ballClear, true));
 			}
 		}
@@ -421,7 +444,7 @@ public final class FlailHeads {
 		/** Keeps the ball and the links clear of the holder's body (third person): the ball of every part, a link of the
 		 * torso, the legs and the head (not the arms: the chain hangs from the hand). */
 		private void clearBody() {
-			if (body == null) {
+			if (at == null) {
 				return;
 			}
 			for (int i = 1; i < points; i++) {
@@ -448,24 +471,25 @@ public final class FlailHeads {
 		/**
 		 * Point i against one body part: its box about the part's pivot, turned as the part is (z, then y, then x, as a
 		 * model part turns) and grown by the outer layer. If `move` and the point is nearer than `clear` but still outside
-		 * the part, it is pushed straight out to `clear` from it. A point already inside the part (a fast strike's arm or
-		 * head swept over it within a frame) is left to pass through, rather than thrown out through its nearest face,
-		 * which may be the far one. Returns how far beyond `clear` the point was (blocks; negative: too near or inside).
+		 * the part, it is pushed straight out to `clear` from it, in the part's pose at this sub-step ({@link #at}). A point
+		 * already inside the part (a fast strike's arm or head swept over it within a sub-step) is left to pass through,
+		 * rather than thrown out through its nearest face, which may be the far one. Returns how far beyond `clear` the
+		 * point was (blocks; negative: too near or inside).
 		 */
 		private float push(int i, int part, float clear, boolean move) {
 			int o = i * 3;
 			int b = part * 6;
 			float[] box = BOXES[part];
 			// The sim frame is the model's root turned upright: x and y the other way, blocks rather than pixels.
-			float px = -x[o] * 16.0F - body[b];
-			float py = -x[o + 1] * 16.0F - body[b + 1];
-			float pz = x[o + 2] * 16.0F - body[b + 2];
-			float cx = (float) Math.cos(body[b + 3]);
-			float sx = (float) Math.sin(body[b + 3]);
-			float cy = (float) Math.cos(body[b + 4]);
-			float sy = (float) Math.sin(body[b + 4]);
-			float cz = (float) Math.cos(body[b + 5]);
-			float sz = (float) Math.sin(body[b + 5]);
+			float px = -x[o] * 16.0F - at[b];
+			float py = -x[o + 1] * 16.0F - at[b + 1];
+			float pz = x[o + 2] * 16.0F - at[b + 2];
+			float cx = (float) Math.cos(at[b + 3]);
+			float sx = (float) Math.sin(at[b + 3]);
+			float cy = (float) Math.cos(at[b + 4]);
+			float sy = (float) Math.sin(at[b + 4]);
+			float cz = (float) Math.cos(at[b + 5]);
+			float sz = (float) Math.sin(at[b + 5]);
 			// Into the part's own frame: its turns undone (z, then y, then x).
 			float ax = px * cz + py * sz;
 			float ay = -px * sz + py * cz;
@@ -506,9 +530,9 @@ public final class FlailHeads {
 			float rz = ly * sx + lz * cx;
 			float qx = lx * cy + rz * sy;
 			float qz = -lx * sy + rz * cy;
-			float mx = qx * cz - ry * sz + body[b];
-			float my = qx * sz + ry * cz + body[b + 1];
-			float mz = qz + body[b + 2];
+			float mx = qx * cz - ry * sz + at[b];
+			float my = qx * sz + ry * cz + at[b + 1];
+			float mz = qz + at[b + 2];
 			x[o] = -mx / 16.0F;
 			x[o + 1] = -my / 16.0F;
 			x[o + 2] = mz / 16.0F;
