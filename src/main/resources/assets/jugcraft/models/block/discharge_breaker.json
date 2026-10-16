@@ -1,0 +1,199 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/breaker_cabinet",
+    "cabinet": "jugcraft:block/breaker_cabinet",
+    "panel": "jugcraft:block/breaker_panel",
+    "lamp": "jugcraft:block/breaker_lamp",
+    "lamp_lit": "jugcraft:block/breaker_lamp_lit",
+    "blade": "jugcraft:block/breaker_blade",
+    "handle": "jugcraft:block/breaker_handle",
+    "plate": "jugcraft:block/breaker_plate"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        7
+      ],
+      "to": [
+        14,
+        13,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#panel",
+          "uv": [
+            2,
+            3,
+            14,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#cabinet"
+        },
+        "east": {
+          "texture": "#cabinet"
+        },
+        "west": {
+          "texture": "#cabinet"
+        },
+        "up": {
+          "texture": "#cabinet"
+        },
+        "down": {
+          "texture": "#cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13,
+        9
+      ],
+      "to": [
+        10,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lamp"
+        },
+        "south": {
+          "texture": "#lamp"
+        },
+        "east": {
+          "texture": "#lamp"
+        },
+        "west": {
+          "texture": "#lamp"
+        },
+        "up": {
+          "texture": "#lamp"
+        },
+        "down": {
+          "texture": "#lamp"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        2,
+        5
+      ],
+      "to": [
+        10,
+        4,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#handle"
+        },
+        "south": {
+          "texture": "#handle"
+        },
+        "east": {
+          "texture": "#handle"
+        },
+        "west": {
+          "texture": "#handle"
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "down": {
+          "texture": "#handle"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        3,
+        5.5
+      ],
+      "to": [
+        9,
+        12,
+        6.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#blade"
+        },
+        "south": {
+          "texture": "#blade"
+        },
+        "east": {
+          "texture": "#blade"
+        },
+        "west": {
+          "texture": "#blade"
+        },
+        "up": {
+          "texture": "#blade"
+        },
+        "down": {
+          "texture": "#blade"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          3,
+          6
+        ],
+        "axis": "x",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        6.5,
+        12,
+        5
+      ],
+      "to": [
+        9.5,
+        14,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#handle"
+        },
+        "south": {
+          "texture": "#handle"
+        },
+        "east": {
+          "texture": "#handle"
+        },
+        "west": {
+          "texture": "#handle"
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "down": {
+          "texture": "#handle"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          3,
+          6
+        ],
+        "axis": "x",
+        "angle": -45
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
-# Guns: the scrap guns (slice 1), the iron set (slice 2), the lever set (slice 3), the black powder guns (slice 4), the attachments (slices 5 and 7), the guns in use (slice 6), the scopes (slice 7b), the hand guns (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C), the energy weapons (slice 8D), the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C), the pump shotguns (slice 9D), the tactical grip and laser sight (slice 9E), the aiming polish (slice 9F), the Trench Lobber's grenades (slice 9G), the launchers (slice 10A), coil and plasma (slice 10B), the double-barrels (slice 10C), the sculk guns (slice 10D), the Cell Rack (slice 10E), enemies with guns (slice 10F), two guns at once (slice 10G), the Nether guns (slices 11A and 11B), the End guns (slice 12A), the copper guns (slice 12B) and the lone guns (slice 12C)
+# Guns: the scrap guns (slice 1), the iron set (slice 2), the lever set (slice 3), the black powder guns (slice 4), the attachments (slices 5 and 7), the guns in use (slice 6), the scopes (slice 7b), the hand guns (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C), the energy weapons (slice 8D), the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C), the pump shotguns (slice 9D), the tactical grip and laser sight (slice 9E), the aiming polish (slice 9F), the Trench Lobber's grenades (slice 9G), the launchers (slice 10A), coil and plasma (slice 10B), the double-barrels (slice 10C), the sculk guns (slice 10D), the Cell Rack (slice 10E), enemies with guns (slice 10F), two guns at once (slice 10G), the Nether guns (slices 11A and 11B), the End guns (slice 12A), the copper guns (slice 12B), the lone guns (slice 12C), the frontier guns (slices 13A to 13D), the brass sidearms (slice 14A), the brass carbines (slice 14B) and the brass quick-firers (slice 14C)
 
 Status:
-- **Slices 1 to 11B are in `main`:** the last of them, 10A to 11B, with #320 on 11 October 2026. The lines below say where each was built.
+- **Slices 1 to 12C are in `main`:** 10A to 11B with #320 on 11 October 2026; 12A to 12C with #352 on 13 October 2026, which closed their own pull requests (#332, #338 and #344). The lines below say where each was built.
 - **Slice 1** (the Rust Midge, Patchwork Carbine and Thunderpipe): implemented on `claude/guns` (#248), awaiting review. It is stacked on `claude/owner-gun-models` (#247), which adds the owner's gun models to the owner asset library.
 - **Slice 2** (the iron set: the Warden Pistol, Riveter SMG and Haymaker; [below](#slice-2-the-iron-set)): implemented on `claude/guns-iron` (#252), stacked on slice 1, awaiting review.
 - **Slice 3** (the lever set: the Longhorn Rifle, Drover Rifle and Coach Gun; [below](#slice-3-the-lever-set)): implemented on `claude/guns-lever` (#253), stacked on slice 2, awaiting review.
@@ -33,6 +33,13 @@ Status:
 - **Slice 12A** (the End guns: the Chitin SMG, Hermit Rifle and Borer; [below](#slice-12a-the-end-guns)): implemented on `claude/guns-12a`, off `main`, awaiting review.
 - **Slice 12B** (the copper guns: the Penny Pistol, Conductor Carbine and Magpie SMG; [below](#slice-12b-the-copper-guns)): implemented on `claude/guns-12b`, stacked on slice 12A, awaiting review.
 - **Slice 12C** (the lone guns: the Tuppence Pistol, Goshawk Revolver and Lament Rifle; [below](#slice-12c-the-lone-guns)): implemented on `claude/guns-12c`, stacked on slice 12B, awaiting review.
+- **Slice 13A** (the frontier guns: the Tabby Revolver, Lookout Rifle and Ammonite Carbine; [below](#slice-13a-the-frontier-guns)): implemented on `claude/guns-13a`, built on slice 12C and brought onto `main` once 12C was in it, awaiting review.
+- **Slice 13B** (more frontier guns: the Fencepost Carbine, Waystation Shotgun and Highball Rifle; [below](#slice-13b-more-frontier-guns)): implemented on `claude/guns-13b`, stacked on slice 13A, awaiting review.
+- **Slice 13C** (a punt gun, a repeater and a heavier rifle: the Flatboat Gun, Windlass Musket and Millstone Rifle; [below](#slice-13c-a-punt-gun-a-repeater-and-a-heavier-rifle)): implemented on `claude/guns-13c`, stacked on slice 13B, awaiting review.
+- **Slice 13D** (a revolving launcher, a carbine revolver and a musket of light: the Fencepost Thumper, Parley Revolver and Lantern Musket; [below](#slice-13d-a-revolving-launcher-a-carbine-revolver-and-a-musket-of-light)): implemented on `claude/guns-13d`, stacked on slice 13C, awaiting review.
+- **Slice 14A** (the brass sidearms: the Holler Pistol, Minuet Pistol and Half-Crown Revolver; [below](#slice-14a-the-brass-sidearms)): implemented on `claude/guns-14a`, stacked on slice 13D, awaiting review.
+- **Slice 14B** (the brass carbines: the Holler Carbine, Minuet Carbine and Grange Carbine; [below](#slice-14b-the-brass-carbines)): implemented on `claude/guns-14b`, stacked on slice 14A, awaiting review.
+- **Slice 14C** (the brass quick-firers: the Sprocket Gun, Navvy Shotgun and Freeholder Rifle; [below](#slice-14c-the-brass-quick-firers)): implemented on `claude/guns-14c`, stacked on slice 14B, awaiting review.
 - **Not yet played:** the Java compiles only in CI, and the game tests there are the only runs.
 Proposal issue: none. The owner asked on 7 October 2026: "I want to start working on the Guns plugin which I want to base off of the Mod Scorched Guns 2 I have models and animations that I have created already on the github in the "Blocks" folder for that part". The owner's answers:
 - on the files: "the files in the blocks folder are all mine I made all of them myself and have all the rights to them they are inspired by scorched guns 2 but I made all of them including the animations";
@@ -51,6 +58,13 @@ Proposal issue: none. The owner asked on 7 October 2026: "I want to start workin
 - the round after: on 13 October 2026, with the Nether guns in `main`, they asked "Ok lets continue and do the next thing". The next of their unbuilt guns were taken up as before: the three they made in the shulkers' purpur, each fed from a shulker box, are slice 12A.
 - and again: on 13 October 2026, with slice 12A up for review, they asked again "Ok lets continue and do the next thing". Three of the five guns they made in copper are slice 12B.
 - and once more: on 13 October 2026, with slice 12B up for review, they asked again "Ok lets continue and do the next thing". Slice 12C takes up one of the two copper guns left and the two guns of their library that stand alone in their materials, the one of iron and the one of echo shards. The last copper gun, the Whizzbanger, waits for the model its animations were made for ([below](#the-whizzbanger-waits)).
+- and after that: on 13 October 2026, with slice 12C up for review, they asked again "Ok lets continue and do the next thing". Slice 13A takes up three of the fourteen guns of their library whose item models name plain stone as their base texture: a revolver, a lever-action rifle and a carbine.
+- and next: on 14 October 2026, with slice 13A up for review, they asked "Ok lets continue and do the next thing or what should we do?". The recommendation was to keep on with their guns; slice 13B takes up three more of the same fourteen: a lever-action carbine, a lever-action shotgun and a single-shot rifle.
+- and then: on 14 October 2026, with slice 13B up for review, they asked "What could we work on next?". Offered more of their guns and some follow-ups, they answered "continue" to the recommendation: slice 13C takes up three more of the same fourteen, a punt gun, a flintlock repeater and a heavier lever-action rifle.
+- and after that: on 14 October 2026, with slice 13C up for review, they asked "Ok what sohuld we work on next". Offered three more of their guns first among other work, they answered "Yeah lets do slice 13D then when thats done suggest 2 and 3 again": slice 13D takes up three more of the same fourteen, a revolving grenade launcher, a revolver that takes a stock and an energy musket.
+- and then: on 14 October 2026, with slice 13D up for review, they were offered again their treated-brass guns (option 2) or two small fixes (option 3), and answered "Lets do option 2 and then option 3". Slice 14A takes up the first three of the fourteen guns of their library whose item models name treated brass as their base texture: a heavy pistol, a target pistol and a break-top revolver.
+- and next: on 14 October 2026, with slice 14A up for review, they asked "Begin the next part always be offering to start the next part at the end begin 14B". Slice 14B takes up three more of the same fourteen: the two conversions of slice 14A's pistols into carbines, and a carbine fed from a box magazine.
+- and after that: on 15 October 2026, with slice 14B up for review and offered the next part, they answered "yes start 14C". Slice 14C takes up three more of the same fourteen, whose animations are one family: an automatic rifle fed from a pan magazine, an automatic shotgun and a quick-firing rifle.
 
 Owner: jimbozoomer-byte (models, textures, animations and sounds: the owner; implementation: Claude Opus 5.5).
 Target milestone and tier: early firearms, after the first copper and iron. These are the bottom rungs of a gun line the owner's library holds well over a hundred more of.
@@ -959,7 +973,7 @@ Each fires Buckshot Shells (slice 1). The reload times are the owner's animation
 
 **Crafting** (a crafting table; the guns switch):
 - **Sledge:** three steel ingots over a steel ingot, a lever and planks: four steel for its heavy barrel and frame, the lever for its action and the planks for its fore-end.
-- **Highwayman:** three steel ingots over planks, a lever and a brass ingot (its long barrel's fittings).
+- **Highwayman:** three steel ingots over planks, a lever and a brass ingot, with a second brass ingot under the first (its long barrel's fittings). Until 14 October 2026 it had no second brass ingot, and its grid was the Garrison Rifle's mirrored: a crafting table matches a shaped recipe mirrored too, so the two could not both be made from it.
 - **Throttle:** two steel ingots and a copper ingot (its bulb) over planks, a lever and a brass ingot.
 
 **How they fire:** as the other shotguns: each pellet strays within the spread to the first creature or block in its path, and a creature takes the damage of every pellet that lands on it at once (`jugcraft:bullet`, which counts every shot). A shot cuts a reload short and fires what is loaded.
@@ -1976,6 +1990,578 @@ The reload times and the Lament Rifle's rate are the owner's animations': its bo
 
 ### The Whizzbanger waits
 The owner's other copper gun is a hand cannon fired by striking a pin with a hammer held in the left hand; after each shot the left hand puts the hammer away, tips the spent shell out and loads the next. Its animations move the hammer and the cannon's body about pivots of the model the owner's mod animated, which is not in the library: built from the item model, the hammer comes nowhere near the pin it strikes. A fit of the hammer's pivot to land its face on the pin at the shot found none that also held the hammer sensibly at rest. With the owner's animated model (its `.geo.json` or Blockbench project), it can follow as its own slice.
+
+## Slice 13A: the frontier guns
+The next of the owner's guns, taken up after slice 12C in the same round (on 13 October 2026, with slice 12C up for review, the owner asked again "Ok lets continue and do the next thing"): three of the fourteen guns in their library whose item models name plain stone as their base texture, the Micina, the Red Raydar and the Spirulida. A revolver, a lever-action rifle and a lever-cycled carbine, they are named for the frontier.
+
+| | Tabby Revolver | Lookout Rifle | Ammonite Carbine |
+|---|---|---|---|
+| The owner's gun | Micina | Red Raydar | Spirulida |
+| What it is | a gunmetal revolver: a slotted top strap over the barrel, a cylinder that swings out to the left, a hammer at the back and a wooden grip | a lever-action rifle: a long barrel over a fore-end, a lever loop under the receiver and a raked stock | a carbine: a bundle of barrels caged in copper bands, a long curved magazine hooked under it, a lever loop under the grip and a cocking piece on top at the back |
+| Held | in one hand: it pairs with another (slice 10G) | in both hands | in both hands |
+| Fires | one shot each pull | one shot each pull, the lever worked after each | one shot each pull |
+| Damage | 6 | 7 | 5 |
+| Rate | 2.5 a second (every 8 ticks) | about 1.5 a second (every 13 ticks) | 2.5 a second (every 8 ticks) |
+| Holds | 6 | 8 | 16 |
+| Reload | a round at a time: 0.45 s to start, 0.6 s a round, 0.65 s to finish (4.7 s from empty) | a round at a time: 0.65 s, 0.45 s a round, 0.85 s (5.1 s from empty) | 3 s: the magazine |
+| Spread, hip / aimed | 2.5° / 0.8° | 2° / 0.2° | 2.5° / 0.4° |
+| Range | 56 blocks | 112 | 88 |
+| The view aimed | narrowed to 0.9 | 0.8 | 0.85 |
+| Round | Light Round | Rifle Round | Rifle Round |
+| Takes | the Silencer, the Baffled Silencer, the Muzzle Brake and the Extended Barrel | the three stocks, the Light and Tactical Grips, the four bayonets, the scopes and the Laser Sight | the three stocks |
+
+The reload times and the rates are the owner's animations': the Lookout Rifle's lever is worked in full between shots.
+
+**Crafting** (a crafting table; the guns switch, as every gun):
+- **Tabby Revolver:** iron and brass, as the other revolvers: an iron ingot, a brass ingot and an iron ingot over a lever and a plank.
+- **Lookout Rifle:** as the lever rifles: two iron ingots and a brass ingot over a lever between two planks, for its longer stock.
+- **Ammonite Carbine:** three copper ingots, for its copper bands, over an iron ingot, a lever and a plank.
+
+**How they fire:** as the other bullet guns: each bullet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. The Tabby Revolver and the Lookout Rifle load a round at a time, and a shot cuts the loading short, as the other round-at-a-time guns do; the Ammonite Carbine's magazine loads at the end of its reload. Nothing else follows a hit.
+
+**What you see:** the owner's animations.
+- **Tabby Revolver:** held out in the right hand. Drawn, it is tossed end over end and caught. Each shot kicks it and drops the hammer. To reload, the gun is rolled and the cylinder swung out to the left; the left hand comes in for each round, a case falling with each; then the cylinder is flicked shut.
+- **Lookout Rifle:** each shot kicks it; then the gun cants and the lever is swung down and back, throwing a case. To reload, the gun is rolled and the left hand pushes each round into the gate; as the reload ends the lever is worked again.
+- **Ammonite Carbine:** each shot kicks it and drives the cocking piece back, throwing a case. To reload, the gun is tipped; the curved magazine is pulled down and away, a new one swung up into place and slapped home; then the lever is swung down, drawing the cocking piece back, and pushed home.
+- **Spent rounds:** the Tabby Revolver's animations cue a case each time its loading loop runs; the Lookout Rifle's one with each shot and one as its reload ends; the Ammonite Carbine's one with each shot.
+- **Sounds:** the Marshal Revolver's shot (the Tabby Revolver), the Longhorn Rifle's (the Lookout Rifle) and the Ranger Rifle's (the Ammonite Carbine). The Lookout Rifle's animation cues the magazine going in as each round goes in; it plays the shell-in sound there, as the Longhorn and Drover Rifles do (`GUN_SOUND_ALIASES`). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source or tool (slices 11A and 12C), so none was added.
+
+**How the models were built:**
+- **Tabby Revolver:**
+  - **One hand:** its idle hides the left arm, so it is among the one-handed guns (`JugcraftGuns.ONE_HANDED`, slice 10G); the left hand's place is given at the back of the swung-out cylinder, for the loop's push of a round (0.3016 s, `"hand_pose"`).
+  - **The toss:** the owner put every part of it on a second body bone (`gun_body_2`), which its draw alone turns, end over end, about the frame under the cylinder; the other animations move the outer `gun_body`, about the grip.
+  - **Cylinder:** the owner's drum part on the `magazine` bone, turned about the crane under its left side, so it swings out to the left, as the Goshawk Revolver's; the `bolt`, `seal` and `shell` bones its animations move hold nothing.
+  - **Hammer:** the owner's hammer part, a flat plane at the back, turned about its foot: it stands cocked and falls forward at each shot.
+  - **Barrel:** its standard barrel is the owner's part, so the barrel attachments fit it; the Baffled Silencer, the owner's part for it, stands 0.3 px clear of the barrel's end.
+  - **Sights:** the notch at the back of the frame over the post at the front.
+  - **Aiming:** at the hip's depth: its hammer stays 3.9 px from the eye.
+- **Lookout Rifle:**
+  - **Lever:** the loop under the receiver (the main part's element the owner named "lever"), turned about its front where it meets the receiver; the `bolt` and `shell` bones hold nothing (its reload keeps the round at scale 0).
+  - **Sights:** the owner's notch at the back of the receiver over the post at the muzzle; the scopes stand on the receiver in its place.
+  - **Aiming:** held 3.5 px further out (`"eye_relief"`): as the lever is worked the gun cants, and the back of its stock came 1.8 px past the eye.
+- **Ammonite Carbine:**
+  - **Magazine:** the curved magazine under it (the main part's elements the owner named "default_mag") on the `Magazine` bone, turned about where it meets the receiver.
+  - **Lever:** the loop under the grip (named "lever"), turned about its front.
+  - **Bolt:** the cocking piece on top at the back (the main part's 41st to 43rd elements), drawn back with each shot and by the lever.
+  - **Empty bone:** the `gun_body2` bone its reload slides forward as the lever is worked holds nothing.
+  - **Sights:** the owner's notch at the back of the receiver.
+  - **Aiming:** held 3 px further out: the back of its stock came 1.4 px past the eye.
+- **The arms:** chosen in first-person previews to cover as little of the screen as they can, still running back toward the shoulder: the Tabby Revolver's right arm for its hold, its shots, its loading and its inspection, its left for its loading; the two long guns' for their hold, their shots, their reloads and their inspections.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the hammer, the cylinder, the lever, the magazine and the cocking piece through their animations; each with the attachments it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Light Round and the Rifle Round; nothing new.
+- **Parts:** iron, brass, a lever and a plank (the Tabby Revolver); iron, brass, a lever and planks (the Lookout Rifle); copper, iron, a lever and a plank (the Ammonite Carbine).
+- **Their place:** the Tabby Revolver and the Lookout Rifle with the other revolvers and the lever rifles, which take brass too; the Ammonite Carbine among the first guns, with the copper guns.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Tabby Revolver:** 6 a shot, 15 a second while it fires; about 5.4 a second, as the Tuppence Pistol's (5.3), below the Goshawk Revolver's (5.6), above the Sapper Revolver's (4.4), which it matches in its reload and its attachments but outhits (6 to 4.5).
+- **Lookout Rifle:** 7 a shot, about 11 a second while it fires; about 5.8 a second, between the Drover Rifle's (5) and the Longhorn Rifle's (6.3). It holds two fewer than the Drover Rifle and hits a little harder, and reaches 112 blocks to the Drover's 100 and the Longhorn's 120.
+- **Ammonite Carbine:** 5 a shot, 12.5 a second while it fires; about 8.9 a second, as the Magpie SMG's (9), below the Patchwork Carbine's (11.8), which reaches further (96 blocks to 88) but holds ten to its sixteen.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:tabby_revolver`, `lookout_rifle` and `ammonite_carbine`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Ammonite Carbine's `gun_body2` moves nothing:** its reload slides that bone forward as the lever is worked, but no part of the owner's model is named for it.
+- **The Baffled Silencer on the Tabby Revolver** stands 0.3 px clear of the barrel, as the owner's part has it.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 13B: more frontier guns
+The next of the owner's guns, taken up after slice 13A (on 14 October 2026, with slice 13A up for review, the owner asked "Ok lets continue and do the next thing or what should we do?"): three more of the guns whose item models name plain stone as their base texture, the Fencer Carabine, the Callwell Terminal and the Saketini. A lever-action carbine loaded through its stock, a lever-action shotgun and a single-shot rifle, they follow slice 13A's frontier guns. Their fourth, the Fencer Thumper, waits ([below](#the-fencer-thumper-waits)).
+
+| | Fencepost Carbine | Waystation Shotgun | Highball Rifle |
+|---|---|---|---|
+| The owner's gun | Fencer Carabine | Callwell Terminal | Saketini |
+| What it is | a lever-action carbine: a long barrel over a fore-end, a hammer on the right of the lock, a lever loop under it and a stock with a lid on top that opens to load the tube inside | a lever-action shotgun without a shoulder stock: a barrel over a long fore-end, a drum under the action and a lever loop behind it | a single-shot rifle: a long barrel that swings aside to be loaded, a hammer on the right of the lock, a lever loop under it and a raked stock |
+| Held | in both hands | in both hands | in both hands |
+| Fires | one shot each pull, the lever worked and the hammer cocked after each | eight pellets each pull, the lever worked after each | one shot, then a reload |
+| Damage | 10 | 3 a pellet | 15 |
+| Rate | about 1.1 a second (every 18 ticks) | about 1.2 a second (every 17 ticks) | one a load |
+| Holds | 7 | 8 | 1 |
+| Reload | a round at a time: 0.75 s to start, 1 s a round, 1.35 s to finish (9.1 s from empty) | a shell at a time: 0.45 s, 0.65 s a shell, 0.9 s (6.55 s from empty) | 1.65 s |
+| Spread, hip / aimed | 2° / 0.3° | 6.5° / 4.5° | 2° / 0.1° |
+| Range | 104 blocks | 28 | 128 |
+| The view aimed | narrowed to 0.82 | 0.9 | 0.75 |
+| Round | Rifle Round | Buckshot Shell | Rifle Round |
+| Takes | the Light and Tactical Grips and the four bayonets | those and the barrel attachments | those, the barrel attachments, the scopes and the Laser Sight |
+
+The reload times and the rates are the owner's animations'.
+
+**Crafting** (a crafting table; the guns switch, as every gun):
+- **Fencepost Carbine:** two iron ingots and a brass ingot over a lever and two planks, as the lever guns.
+- **Waystation Shotgun:** a brass ingot and two iron ingots over an iron ingot (its drum), a lever and a plank. (First set as two iron ingots and a brass ingot over the same, which was the Mule's recipe; changed so the two do not clash.)
+- **Highball Rifle:** three steel ingots over a lever and a plank, a marksman's rifle of the steel tier.
+
+**How they fire:** as the other bullet guns, and the Waystation Shotgun as the other shotguns: each bullet or pellet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. The Fencepost Carbine and the Waystation Shotgun load a round at a time, and a shot cuts the loading short; the Highball Rifle's round goes in at the end of its reload. Nothing else follows a hit.
+
+**What you see:** the owner's animations.
+- **Fencepost Carbine:** each shot kicks it, throwing a case, and drops the hammer; then the lever is swung down and back and the hammer cocked. To reload, the gun is rolled and the lid on the stock flipped open; the right hand brings each round back to it; then the lid is shut and the lever worked.
+- **Waystation Shotgun:** each shot kicks it, throwing a case; then the gun cants and the lever is swung down and back. To reload, the gun is rolled and the left hand carries each shell up to the back of the drum; as the reload ends a case is thrown and the lever worked.
+- **Highball Rifle:** each shot kicks it and drops the hammer, and the right hand cocks it again. To reload, the gun is turned and the barrel swung aside, throwing a case; a round goes in and the barrel is swung home.
+- **Spent rounds:** the Fencepost Carbine's and the Waystation Shotgun's animations cue a case with each shot, and the shotgun's one more as its reload ends; the Highball Rifle's one each reload.
+- **Sounds:** the Kestrel Rifle's shot (the Fencepost Carbine), the Coach Gun's (the Waystation Shotgun; the owner's Callwell, of which the Terminal is a kind) and the Thresher's (the Highball Rifle). The Fencepost Carbine's and the Waystation Shotgun's animations cue the magazine going in as each round or shell goes in; each plays the shell-in sound there, as the other lever guns do (`GUN_SOUND_ALIASES`). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source or tool (slices 11A and 12C), so none was added.
+
+**How the models were built:**
+- **Fencepost Carbine:**
+  - **Lid:** the plate on top of the stock (the main part's elements the owner put in their lid group, the 20th and 21st), turned up and over about its front.
+  - **Hammer:** the owner's hammer part on the right of the lock, turned about its foot: it falls forward at the shot and is cocked again as the lever closes.
+  - **Lever:** the loop under the lock (the main part's 24th element), turned about its front.
+  - **Empty bones:** the `bolt` and `flash` bones its animations move hold nothing.
+  - **Sights:** the notch on the receiver over the post at the muzzle.
+  - **Aiming:** held 6 px further out (`"eye_relief"`), as the Lament Rifle: as the lever is worked the gun cants back toward the eye. Its long stock still reaches 1 px past the eye then, but 2 px or more below the line of sight, out of view.
+- **Waystation Shotgun:**
+  - **Lever:** the loop behind the drum (the main part's element the owner named "lever"), turned about its front.
+  - **Shell:** the shell the loading loop carries in is the owner's (the main part's element they named "shell"), resting inside the fore-end; the renderer shows it only while the loop moves it.
+  - **Barrel:** its standard barrel is the owner's part, so the barrel attachments fit it.
+  - **Sights:** the notch on the receiver over the post at the muzzle.
+  - **Aiming:** held 1 px further out: as it kicks, the back of its grip came 0.9 px from the eye.
+- **Highball Rifle:**
+  - **Barrel:** the owner's standard barrel part, swung aside about a hinge under the left of the breech.
+  - **Hammer:** the owner's hammer part on the right of the lock, turned about its foot.
+  - **Lever:** the loop under the lock (the main part's 13th element), turned about its front in the inspection.
+  - **Empty bone:** the `bolt` bone its draw names holds nothing.
+  - **Sights:** the owner's notch over the post at the muzzle; the scopes stand on the receiver in its place.
+  - **Aiming:** held 3 px further out: the back of its stock came 1.2 px past the eye.
+- **The arms:** chosen in first-person previews to cover as little of the screen as they can, still running back toward the shoulder, through each gun's hold, shot, reload and inspection.
+  - **The Fencepost Carbine's right arm** mattered most: its hand carries each round back to the lid on the stock, within a few pixels of the eye. There the game leaves an arm out while any of it is within a tenth of a block of the eye, and draws it again as it leaves.
+  - **First choice:** in CI ([run 38500777704](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38500777704)), the reload screenshot showed it across the right half of the view, just outside that reach. Checked against the game's own rule at every hundredth of a second, it covered a fifth to two fifths of the view for about a tenth of a second twice in every round's loading.
+  - **Now:** it runs down and in from the hand. It is left out for most of each round's loading, and covers at most a sixth of the view when drawn. Its hold, shot and inspection look as before. In CI ([run 38506772653](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38506772653)), the reload screenshot shows the gun rolled with its lid open and the arm out of the view.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the lid, the hammers, the levers, the shell and the swinging barrel through their animations; each with the attachments it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Rifle Round and the Buckshot Shell; nothing new.
+- **Parts:** iron, brass, a lever and planks (the Fencepost Carbine and the Waystation Shotgun); steel, a lever and a plank (the Highball Rifle).
+- **Their place:** the Fencepost Carbine and the Waystation Shotgun with the other lever guns, which take brass too; the Highball Rifle with the marksman rifles, past steel.
+
+**Balance:** starting numbers, at point blank with every shot (and pellet) landing, over a load and its reload.
+- **Fencepost Carbine:** 10 a shot, the hardest of the lever rifles (the Longhorn Rifle's 8); about 4.8 a second, as the Drover Rifle's (5). It is the slowest of them to load, a round a second.
+- **Waystation Shotgun:** 24 a shot; about 15.4 a second, as the Throttle's (15.2), between the Highwayman's (13.7) and the Haymaker's (17). It holds eight, more than any shotgun loaded a shell at a time.
+- **Highball Rifle:** 15 a shot; about 9.1 a second, below the Skylark Rifle's (10), a single-shot rocket rifle, and the marksman rifles' (12 to 15), which hold eight or ten. It reaches as far as the furthest of them (128 blocks) and aims as steadily as the Picket Rifle (0.1°).
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:fencepost_carbine`, `waystation_shotgun` and `highball_rifle`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Fencepost Carbine's `flash` bone shows nothing:** its shot scales that bone up and away, a flash at the lock the owner's mod drew; here the muzzle flash every gun shows stands for it.
+- **The Highball Rifle's barrel swings aside about a hinge chosen here:** the owner's model gave no pivot for it.
+- **The Fencepost Carbine's right arm at the end of a reload:** as the lever is worked, it passes close to the eye. For about three hundredths of a second it covers much of the view, as it did with the first choice of arm.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+### The Fencer Thumper waits
+The owner's other Fencer gun is a revolving gun whose cylinder turns with each shot. Its animations cue the turn ("rotate_cylinder") for the owner's mod to make in code, and nothing here turns a cylinder from a cue yet; built now, its cylinder would stand still. It can follow as its own slice, with that turn added.
+
+## Slice 13C: a punt gun, a repeater and a heavier rifle
+The next of the owner's guns, taken up after slice 13B (on 14 October 2026, with slice 13B up for review, the owner asked "What could we work on next?" and, offered this set among others, answered "continue"): three more of the guns whose item models name plain stone as their base texture, the Big Bore, the Repeating Musket and the Winnie Millend. A punt gun, a flintlock repeater and a heavier lever-action rifle, they follow slices 13A's and 13B's frontier guns.
+
+| | Flatboat Gun | Windlass Musket | Millstone Rifle |
+|---|---|---|---|
+| The owner's gun | Big Bore | Repeating Musket | Winnie Millend |
+| What it is | a punt gun: a long, wide barrel ahead of a block-shaped chamber with a handle on its right, a hammer over it and a short stock | a flintlock repeater: a short barrel, a drum across the breech with the magazine tube through it standing out to the left, a hammer and pan on the right and a stock | a heavy lever-action rifle: a long barrel over a fore-end, a lever loop under the lock and a stock |
+| Held | in both hands | in both hands | in both hands |
+| Fires | sixteen pellets, then a reload | one shot each pull, the drum turned after each | one shot each pull, the lever worked after each |
+| Damage | 3 a pellet | 6 | 8.5 |
+| Rate | one a load | 2.5 a second (every 8 ticks) | about 1.3 a second (every 15 ticks) |
+| Holds | 1 | 7 | 8 |
+| Reload | 3.6 s | 3.45 s, the magazine | a round at a time: 0.4 s to start, 0.65 s a round, 0.85 s to finish (6.45 s from empty) |
+| Spread, hip / aimed | 8° / 6° | 3° / 1° | 2° / 0.25° |
+| Range | 36 blocks | 56 | 108 |
+| The view aimed | narrowed to 0.9 | 0.85 | 0.78 |
+| Round | Buckshot Shell | Paper Cartridge | Rifle Round |
+| Takes | the scopes and the Laser Sight | the Light and Vertical Grips and the four bayonets | the barrel attachments, the Light and Tactical Grips, the four bayonets, the scopes and the Laser Sight |
+
+The reload times and the rates are the owner's animations'.
+
+**Crafting** (a crafting table; the guns switch, as every gun):
+- **Flatboat Gun:** a block of iron and two iron ingots over a brass ingot, a lever and a plank, the only gun's recipe to take a block of iron.
+- **Windlass Musket:** two iron ingots and a brass ingot over a flint, a lever and a plank; the flint for its lock, as the other flintlocks.
+- **Millstone Rifle:** a steel ingot, an iron ingot and a brass ingot over a lever and a plank: the lever rifle of the steel tier.
+
+**How they fire:** as the other bullet guns, and the Flatboat Gun as the other shotguns: each bullet or pellet goes from the eye along the look, strayed by the spread, to the first creature or block in its way. The Flatboat Gun's shell and the Windlass Musket's magazine go in at the end of their reloads; the Millstone Rifle loads a round at a time, and a shot cuts the loading short. Nothing else follows a hit.
+
+**What you see:** the owner's animations.
+- **Flatboat Gun:** each shot kicks it and works the hammer. To reload, the chamber is swung out to the left, throwing the spent shell; the left hand carries a new shell up into it, and the chamber is swung home.
+- **Windlass Musket:** each shot kicks it with a flash at the pan, throwing a case, and the drum across the breech is turned for the next. To reload, the left hand draws the magazine out to the left and away, brings it back and slaps it home, and the drum is turned.
+- **Millstone Rifle:** each shot kicks it, throwing a case, and the lever is swung down and back. To reload, the gun is tipped and each round pushed in; as the reload ends a case is thrown and the lever worked.
+- **Spent rounds:** the Flatboat Gun's animation cues one as its chamber opens; the Windlass Musket's one with each shot; the Millstone Rifle's one with each shot and one more as its reload ends.
+- **Sounds:** the Culverin's shot (the Flatboat Gun), the Line Musket's (the Windlass Musket) and the Bastion Rifle's (the Millstone Rifle). The Flatboat Gun's and the Millstone Rifle's animations cue the magazine going in as the shell or round goes in; each plays the shell-in sound there (`GUN_SOUND_ALIASES`). The library's shots not used yet are silenced takes, rocket, flamethrower and jetpack sounds and wind-ups, or carry tags naming another source or tool (slices 11A and 12C), so none was added.
+
+**How the models were built:**
+- **Flatboat Gun:**
+  - **Texture:** its item model names the owner's `punt_gun.png`, not a texture of its own name; `tools/guns.py` now takes a gun's texture by another name where the owner's model names one (`OWN_TEXTURES`).
+  - **Chamber:** the block behind the barrel (the main part's 3rd to 9th elements, the handle on its right among them), swung out to the left about a hinge along its lower left edge.
+  - **Shell:** no part of the owner's model is named for it. A buckshot shell is drawn into a free corner of its texture and carried into the chamber from the left; the renderer shows it only while the reload moves it.
+  - **Hammer:** the owner's hammer part.
+  - **Empty bone:** the `no_sights` bone only its inspection moves holds nothing.
+  - **Sights:** the owner's peep ring on the chamber's top; a scope stands on the owner's rail in its place.
+  - **Aiming:** held 6 px further out (`"eye_relief"`): the back of its stock came 2.4 px past the eye. Held there, the nearest of it is 3.6 px away.
+- **Windlass Musket:**
+  - **Drum:** the main part's 25th and 27th to 35th elements, turned about the axis of the magazine that runs through it.
+  - **Magazine:** the owner's magazine part, the tube through the drum.
+  - **Bolt:** the block behind the drum with the plate and knob on top (the main part's 6th, 8th and 9th elements).
+  - **Hammer:** the owner's hammer part.
+  - **Flash:** no part of the owner's model is named for it; a burst of priming fire is drawn at the pan, as for the other flintlocks.
+  - **Grips:** the owner named its Vertical Grip part `grip_vert`, which the Vertical Grip now finds too. Its grips and bayonets use the owner's musket grip and bayonet textures.
+  - **Sights:** the notch between the two posts on the drum. The owner made no rail for a scope.
+  - **Aiming:** held 3 px further out: the back of its stock came to the eye. Held there, it is 3 px away.
+- **Millstone Rifle:**
+  - **Lever:** the loop under the lock (the main part's element the owner named "lever"), turned about its front.
+  - **Barrel:** its standard barrel is the owner's part, so the barrel attachments fit it.
+  - **Empty bone:** the `bolt` bone its draw moves holds nothing.
+  - **Sights:** the owner's peep ring at the back; the scopes stand on the receiver in its place.
+  - **Aiming:** held 5 px further out: as it kicks, the back of its stock came 1.7 px past the eye. Held there, it is 3.3 px away.
+- **The arms:** chosen in first-person previews, with the game's rule that leaves an arm out while any of it is within a tenth of a block of the eye, to cover as little of the screen as they can through each gun's hold, shot, reload and inspection.
+  - **The Flatboat Gun's right hand** rests where the Drover Rifle's does: the owner's idle pose for it holds the gun as the Winnie's (the Drover Rifle's) holds it.
+  - **The Flatboat Gun's left arm,** as it carries the shell up to the chamber, covers about a quarter of the view at the height of the reach and about an eighth for the half second after. Every direction tried for it did the same: the owner's animation brings the hand up beside the eye there.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the chamber and shell, the drum, magazine and flash, and the lever through their animations; each with every attachment it takes; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Buckshot Shell, the Paper Cartridge and the Rifle Round; nothing new.
+- **Parts:** iron (a block of it for the Flatboat Gun), brass, a lever and a plank; a flint (the Windlass Musket); steel (the Millstone Rifle).
+- **Their place:** the Flatboat Gun with the shotguns, past brass; the Windlass Musket with the black powder guns, the first of them to hold more than two; the Millstone Rifle with the lever rifles, past steel.
+
+**Balance:** starting numbers, at point blank with every shot (and pellet) landing, over a load and its reload.
+- **Flatboat Gun:** 48 a shot, the most of any shotgun in one pull (the Reverb's 35); about 13.3 a second, as the Highwayman's (13.7). It fires once a load and reaches 36 blocks, as the Crackling.
+- **Windlass Musket:** 6 a shot; about 7.2 a second, above the Line Musket's (3.6), the Bellmouth's (6.4) and the Culverin's (6.8), below the Fowler's (9).
+- **Millstone Rifle:** 8.5 a shot, harder than the Drover Rifle (6.5) and the Longhorn Rifle (8); about 5.8 a second, as the Lookout Rifle's, between the Drover's (5) and the Longhorn's (6.3).
+- **A round:** each spends one a shot, the Flatboat Gun one shell of sixteen pellets; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:flatboat_gun`, `windlass_musket` and `millstone_rifle`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Flatboat Gun's chamber swings about a hinge chosen here:** the owner's model gave no pivot for it.
+- **The Flatboat Gun's left arm as the shell goes in:** about a quarter of the view for a moment (above).
+- **The Windlass Musket's `glow` bone shows nothing:** its shot moves it, a glow at the pan the owner's mod drew; the priming flash stands for it.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 13D: a revolving launcher, a carbine revolver and a musket of light
+The next of the owner's guns, taken up after slice 13C (on 14 October 2026, with slice 13C up for review, the owner asked "Ok what sohuld we work on next" and, offered this set first among others, answered "Yeah lets do slice 13D then when thats done suggest 2 and 3 again"): three more of the guns whose item models name plain stone as their base texture, the Fencer Thumper, the Pax and the Laser Musket. A revolving grenade launcher, a revolver that takes a stock and an energy musket, they follow slices 13A to 13C's frontier guns.
+
+| | Fencepost Thumper | Parley Revolver | Lantern Musket |
+|---|---|---|---|
+| The owner's gun | Fencer Thumper | Pax | Laser Musket |
+| What it is | a revolving grenade launcher: a short, wide barrel over a pump with a handle out to its left, an eight-sided cylinder behind the barrel, a hammer and a sloping stock | a single-action revolver: a barrel, a cylinder, a hammer and a grip; the owner made three stocks for it | an energy musket: a long barrel caged in rings, a glass core glowing at the breech and a stock |
+| Held | in both hands | in one hand; in both, as a carbine, with a stock fitted | in both hands |
+| What it fires | grenades, any kind (as the Trench Lobber, [slice 9G](#slice-9g-the-trench-lobbers-grenades)) | Rifle Rounds | a beam on Energy Cells, through every creature in its line (as the Beam Pistol's, [slice 8D](#slice-8d-the-energy-weapons)) |
+| Damage | the grenade's own burst: a frag Grenade's 16 at its centre | 10 | 12 to each creature in the line |
+| Rate | about 1.1 a second (every 18 ticks), the pump worked after each | 1.25 a second (every 16 ticks) | about 2.2 a second (every 9 ticks) |
+| Holds | 4 grenades | 6 | 3 charges, 900 JE each |
+| Reload | a grenade at a time: 0.6 s to start, 1.1 s a grenade, 0.95 s to finish (5.95 s from empty) | a round at a time: 0.5 s to start, 0.65 s a round, 0.7 s to finish (5.1 s from empty) | 2.2 s, the core |
+| Spread, hip / aimed | 3° / 1.25° | 2.5° / 0.6° | 2° / 0.3° |
+| Range | 20 (how far a level shot carries, as the Bullfrog's) | 72 blocks | 96 |
+| The view aimed | narrowed to 0.9 | 0.9 | 0.8 |
+| Takes | the Light and Vertical Grips (on its pump) and the four bayonets | the barrel attachments and the three stocks | nothing (the owner made it none) |
+
+The reload times and the rates are the owner's animations'. The Thumper's four chambers are chosen here: the owner's cylinder is eight-sided and shows no chambers on its faces.
+
+**Crafting** (a crafting table; the guns switch, as every gun):
+- **Fencepost Thumper:** two iron ingots and a brass ingot over a brass ingot, a lever and a plank, with a brass ingot under them for its cylinder (without it, the grid is the Marshal Revolver's).
+- **Parley Revolver:** a steel ingot and two iron ingots over a lever and a brass ingot: the revolver of the steel tier.
+- **Lantern Musket:** two steel ingots and a lantern over a plank, an advanced circuit and a brass ingot; the machines switch too, as the other energy weapons.
+
+**How they fire:**
+- **Fencepost Thumper:** as the Trench Lobber and the Bullfrog: each shot lobs a grenade of the kind the cylinder holds, which goes off where it lands as that kind does and breaks no block. It loads any grenade, the one in the other hand first, a grenade at a time; loading another kind first empties the cylinder into the inventory, as the Lobber's magazine is. A shot cuts the loading short.
+- **Parley Revolver:** as the other bullet guns, loaded a round at a time.
+- **Lantern Musket:** as the Beam Pistol and the Solenoid Rifle: a beam from the eye along the look to the first block in range, through every creature in its line, each taking its damage. Its reload draws three charges from the Energy Cells in the inventory and leaves the cells.
+
+**The Parley Revolver as a carbine:** with a stock fitted (the Light, Weighted or Wooden Stock, each the owner's own for it) it is held in both hands:
+- **Its animations:** the owner's carbine_ set in place of its own: the draw, the idle with the left hand under the barrel, the shots, the inspection and the reload ([`GunAnimations`](../../src/client/java/io/github/jimbozoomer/jugcraft/client/guns/GunAnimations.java)). The change shows from its next animation; a stock goes on in a crafting grid, so taking the gun up again draws it as a carbine.
+- **Seen from outside:** both arms come up to it, as to a rifle (`GunPose`).
+- **Two guns at once:** a carbine is not one of two guns at once ([slice 10G](#slice-10g-two-guns-at-once)): with one, the other hand's gun does not fire, and its tooltip no longer says it pairs (`GunItem.carbine`, `JugcraftGuns.CARBINES`).
+- **Its numbers:** the stock's, as on any gun; aimed, the stock is left out of the view past halfway, as every stock is ([slice 9F](#slice-9f-the-aiming-polish)).
+
+**What you see:** the owner's animations.
+- **Fencepost Thumper:** each shot kicks it and the hammer falls; the pump is worked back and forward, the left hand riding it, and the cylinder turns a chamber as the pump comes back (the owner's "rotate_cylinder" cue; the turn is drawn here from code, eased over three ticks). To reload, the barrel is tipped down about the hinge under the cylinder's front, raising the cylinder's back out of the frame; the left hand pushes each grenade in; the barrel is snapped shut and the pump racked.
+- **Parley Revolver:** each shot kicks it up and the hammer is cocked. To reload, the cylinder swings out to the left and the left hand comes in to push each round in, throwing a case for each; the cylinder is swung home. As a carbine, the aimed shot cants the gun.
+- **Lantern Musket:** each shot kicks it. To reload, the core is drawn out down and away and a new one put in and turned home.
+- **Spent rounds:** the Parley Revolver's reload throws a case for each round it loads. The Thumper and the Lantern Musket throw none.
+- **Sounds:** the Trench Lobber's shot (the Fencepost Thumper), the Goshawk Revolver's (the Parley Revolver) and the Linesman's (the Lantern Musket). The Thumper's animation cues the magazine going in as each grenade goes in; it plays the shell-in sound there, as the Bullfrog does. The Lantern Musket's core clanks home with the Squall Rifle's clank, not the ramrod's sound its cue names (`GUN_SOUND_ALIASES`). The Parley Revolver's shot cues the magazine-in sound as its hammer is cocked, and each round goes in with it, as the Tabby Revolver's and the Goshawk Revolver's do.
+
+**How the models were built:**
+- **Fencepost Thumper:**
+  - **Barrel:** the main part's 5th to 14th elements, with the cylinder and the pump on it, tipped about the knuckle under the cylinder's front (the 12th). The owner's groups name a barrel, a cylinder and a pump, but their origins do not place them on the model (its groups also carry a musket's names: ram, ball, sights), so the hinge and the cylinder's middle are chosen from the elements.
+  - **Cylinder:** the 15th to 18th elements, turned a quarter at each shot's cue about its middle (`GunEffects.cylinderTurn`); each client keeps the turn for the guns it draws.
+  - **Pump:** the 19th to 22nd elements, the slide and the handle out to its left; the left hand rides it on a `left_arm2` bone, as the Bellmouth's does.
+  - **Hammer:** the owner's hammer part; the main part's 30th element is the same plane and is left out.
+  - **Attachments:** its grips ride the pump and its bayonets the barrel. `tools/guns.py`'s `"mounts"` can now name an attachment as well as a slot.
+  - **Empty bones:** the `bolt`, `flash` and `lid` bones its animations move hold nothing.
+  - **Sights:** the notch between the two posts on the back of the barrel.
+  - **Aiming:** held 5.5 px further out (`"eye_relief"`): the hammer, fallen forward at the shot, came 1.6 px past the eye. Held there, it is 3.9 px away.
+- **Parley Revolver:**
+  - **Cylinder:** the owner's drum part, swung out to the left about the crane under it, as the Tabby Revolver's.
+  - **Hammer:** the owner's hammer part, the flat plane at the back.
+  - **Stocks:** the owner's three, behind the grip.
+  - **Empty bones:** the `bolt`, `seal` and `shell` bones hold nothing; `gun_body2`, which the carbine's aimed shot cants, holds the whole gun.
+  - **Left hand:** placed where it pushes a round into the swung-out cylinder; the carbine's hold then puts it under the barrel ahead of the frame.
+  - **Sights:** the notch at the back over the post at the front.
+  - **Aiming:** its nearest point stays 4.9 px from the eye; it is held where the hip view holds it.
+- **Lantern Musket:**
+  - **Textures:** one part on three of the owner's textures: its own, the glass and the core's three-frame glow (its first frame, as the Solenoid Rifle's glow).
+  - **Core:** the 22nd and 23rd elements, the glass tube at the breech and the glow inside it.
+  - **Glass:** most of its pixels are about four-fifths opaque. The guns are drawn as cutouts, so those show fully opaque; its clear windows show the glow.
+  - **Empty bone:** the `bolt` bone only its draw names holds nothing.
+  - **Sights:** the notch between the posts at the breech over the post at the muzzle.
+  - **Aiming:** held 3.5 px further out: the back of its stock came within half a pixel of the eye. Held there, it is 4 px away.
+- **The arms:** chosen in first-person previews, with the game's rule that leaves an arm out while any of it is within a tenth of a block of the eye, to cover as little of the screen as they can through each gun's hold, shot, reload and inspection; the Parley Revolver's left arm through its loading and its carbine hold.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the barrel, cylinder, pump and hammer, the drum, the core; the Parley Revolver with a stock and its carbine hold; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** grenades (any kind), the Rifle Round and the Energy Cell; nothing new.
+- **Parts:** iron, brass, a lever and a plank (the Thumper); steel, iron and brass (the Parley Revolver); steel, an advanced circuit, a lantern, brass and a plank (the Lantern Musket).
+- **Their place:** the Thumper with the grenade launchers, of iron and brass (the Bullfrog's are iron and copper, the Trench Lobber's steel); the Parley Revolver with the revolvers, past steel; the Lantern Musket with the energy weapons, past advanced circuits, its cells filled at the Charging Station or the Cell Rack.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Fencepost Thumper:** a frag Grenade's 16 a shot; about 7.4 a second, as the Bullfrog's (7.1), half the Trench Lobber's (15.6). Four in the cylinder, topped up a grenade at a time.
+- **Parley Revolver:** 10 a shot, the hardest of the revolvers (the Goshawk Revolver's 9); about 6.6 a second, above the Goshawk's (5.6) and the Tabby Revolver's (5.4).
+- **Lantern Musket:** 12 a shot to each creature in its line; about 11.6 a second, below the Solenoid Rifle's (12.1) and the Votive Rifle's (13.1), above the Beam Pistol's (9.2). It reaches 96 blocks, further than any energy weapon but the Solenoid Rifle (128).
+- **Charge:** 900 JE a shot, 2,700 a magazine: a full Energy Cell (10,000 JE) loads eleven shots.
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:fencepost_thumper`, `parley_revolver` and `lantern_musket`; nothing saved changes. A Parley Revolver's stock is a fitted attachment, as on any gun. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Thumper's hinge and cylinder middle are chosen here:** the owner's groups did not place them.
+- **The Thumper's four chambers are chosen here,** and each client turns its cylinder for the guns it draws: two players may see it at different chambers, which look the same.
+- **A Parley Revolver becomes a carbine from its next animation:** fitting a stock takes it out of the hand, so in play that is its draw.
+- **The Lantern Musket's glass draws opaque** where the owner's texture is four-fifths so.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 14A: the brass sidearms
+The next of the owner's guns, taken up after slice 13D (on 14 October 2026, with slice 13D up for review, the owner was offered again their treated-brass guns or two small fixes, and answered "Lets do option 2 and then option 3"): the first three of the fourteen guns in their library whose item models name treated brass as their base texture, the Howler, the M22 Waltz and the Osgood 50. A heavy pistol, a target pistol and a break-top revolver, they are the brass sidearms. (The library's Grandle OG also names treated brass, but holds only a barrel's parts, with no body of its own, so it is not counted.)
+
+| | Holler Pistol | Minuet Pistol | Half-Crown Revolver |
+|---|---|---|---|
+| The owner's gun | Howler | M22 Waltz | Osgood 50 |
+| What it is | a heavy pistol: a long barrel, a box magazine ahead of the trigger guard, a bolt with a knob out to either side and a ring sight at the back; the owner made stocks, grips, bayonets and magazines for it | a light target pistol: a slim barrel in a shroud, a slide at the back of its top, a ring sight on a rail and the magazine in the grip | a break-top revolver: a barrel over a lug, a cylinder, a top strap, a hammer and a grip; the owner made three stocks for it |
+| Held | in both hands, the left under the magazine | in one hand | in one hand; in both, as a carbine, with a stock fitted |
+| What it fires | Rifle Rounds | Light Rounds | Rifle Rounds |
+| Damage | 12 | 3.5 | 9 |
+| Rate | about 0.9 a second (every 22 ticks), the bolt worked after each | 4 a second (every 5 ticks) | about 2.2 a second (every 9 ticks) |
+| Holds | 10 | 10 | 6 |
+| Reload | 2.9 s, the magazine | 2.4 s, the magazine | a round at a time: 0.45 s to start, 0.65 s a round, 0.7 s to finish (5.05 s from empty) |
+| Spread, hip / aimed | 3° / 0.6° | 2° / 0.25° | 2.5° / 0.6° |
+| Range | 80 blocks | 64 | 64 |
+| The view aimed | narrowed to 0.88 | 0.9 | 0.9 |
+| Takes | the barrel attachments, the Extended and Speed Magazines, the three stocks, the Light and Tactical Grips, the four bayonets, and the Medium Scope, Reflex Sight and Laser Sight | the barrel attachments, the Extended Magazine and the four sights | the barrel attachments and the three stocks |
+
+The reload times and the rates are the owner's animations'. The Holler Pistol takes every sight but the Long Scope: there is no room for that one's pieces in its atlas (its model, below).
+
+**Crafting** (a crafting table; the guns switch, as every gun): steel and brass, as the library's other treated-brass guns, and a lever.
+- **Holler Pistol:** two steel ingots and a brass ingot over a lever and a brass ingot: its barrel is two steel ingots long.
+- **Minuet Pistol:** a steel ingot and a brass ingot over a lever and a brass ingot. It is small: it fits the inventory's own crafting grid too.
+- **Half-Crown Revolver:** a steel ingot, a brass ingot and a silver ingot over a lever and a brass ingot; the silver is for the coin it is named for.
+
+**How they fire:** as the other bullet guns; the Half-Crown Revolver loaded a round at a time.
+
+**The Half-Crown Revolver as a carbine:** as the Parley Revolver ([slice 13D](#slice-13d-a-revolving-launcher-a-carbine-revolver-and-a-musket-of-light)): with a stock fitted (the Light, Weighted or Wooden Stock, each the owner's own for it) it is held in both hands, plays the owner's carbine_ animations, both arms come up to it seen from outside, and it is not one of two guns at once (`JugcraftGuns.CARBINES`). Nothing new was needed for it.
+
+**What you see:** the owner's animations.
+- **Holler Pistol:** each shot kicks it; it is canted and its bolt drawn back and let go. To reload, it is turned up, the left hand draws the magazine out from below and puts it back in, and the right hand works the bolt.
+- **Minuet Pistol:** each shot kicks it and its slide comes back. To reload, the slide is locked back, the magazine drops from the grip and the left hand drives it home, and the slide is let go.
+- **Half-Crown Revolver:** each shot kicks it and the hammer falls. To reload, the barrel is tipped down about the hinge at the front of the frame, raising the cylinder, which turns as the left hand pushes each round in; the barrel is snapped shut.
+- **Spent rounds:** the Holler Pistol and the Minuet Pistol throw a case at each shot; the Half-Crown Revolver's reload throws one for each round it loads.
+- **Sounds:** the owner's brass pistol shot (the Sapper Revolver's and the Tuppence Pistol's) for the Holler Pistol, their iron pistol shot (the Warden Pistol's) for the Minuet Pistol, and their brass revolver shot (the Marshal Revolver's and the Tabby Revolver's) for the Half-Crown Revolver. Each animation's own cues play as they name: the magazine out and in, the slide racked, the bolt pulled and let go.
+
+**How the models were built:**
+- **Where the guns turn:** each gun's body turns about the model's origin (owner point (8, 0, 8), under the middle of the gun), not about the grip in the right hand as the earlier guns' do. About the grip, the Holler Pistol's long barrel swung the back of the gun into the view as it reloaded, and the Minuet Pistol's reload brought the back of its slide up into the view; about the origin each stays in the lower part of the view. This was chosen in first-person previews: the library does not hold the owner's own pivots.
+- **Holler Pistol:**
+  - **Magazine:** the owner's magazine part, ahead of the trigger guard; the left hand holds it from below. The reload's second magazine bone, which the owner's reload only hides, holds nothing, so the magazine drawn out is the one put back.
+  - **Bolt:** the owner's bolt part, a knob out to either side.
+  - **Empty bones:** the `magazine_2` and `no_sights` bones (the inspection tips the second) hold nothing.
+  - **Atlas:** its own texture is 128 x 128, as big as an atlas may be (`tools/check_mod_data.py`'s texture rule). Beside it there is room for the pieces of only three of the four sights, so it goes without the marksman's Long Scope (`ATTACHMENTS` `"not_on"`).
+  - **Sights:** the ring at the back over the post at the muzzle.
+  - **Aiming:** held 5 px further out (`"eye_relief"`): the back of its receiver came 1.2 px past the eye. Held there, it is 3.8 px away.
+- **Minuet Pistol:**
+  - **Slide:** the owner's "receiver" part (the animations call it the bolt).
+  - **Magazine:** only the base plate under the grip, which the reload drops; its `magazine_2` bone, which every other animation hides, holds nothing.
+  - **Left hand:** placed where it drives the magazine home.
+  - **Sights:** the ring on the rail over the post at the muzzle.
+  - **Aiming:** held 3 px further out: the back of its slide came within 0.85 px of the eye. Held there, it is 3.85 px away.
+- **Half-Crown Revolver:**
+  - **Barrel:** the owner's barrel part with the main part's 3rd to 5th and 10th to 14th elements (the lug under the barrel, the core of the cylinder, the top strap over it and both sights), tipped about the hinge at the bottom front of the frame.
+  - **Cylinder:** the owner's drum part, on the barrel, turned about its own middle as the rounds go in.
+  - **Hammer:** the owner's hammer part.
+  - **Empty bones:** the `bolt`, `seal` and `shell` bones hold nothing.
+  - **Left hand:** placed where it pushes a round into the raised cylinder; the carbine's hold then puts it under the barrel.
+  - **Sights:** the notch at the back of the top strap over the post at the front.
+  - **Aiming:** its nearest point stays 4 px from the eye; it is held where the hip view holds it.
+- **The arms:** chosen in first-person previews, with the game's rule that leaves an arm out while any of it is within a tenth of a block of the eye, to cover as little of the screen as they can through each gun's hold, shot, reload and inspection; the Minuet Pistol's left arm through its reload, and the Half-Crown Revolver's through its loading and its carbine hold.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload, draw and inspection; the Holler's bolt and magazine, the Minuet's slide and magazine, the Half-Crown's barrel opened about its hinge, its cylinder and hammer; the Half-Crown with a stock and its carbine hold; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Light Round and the Rifle Round; nothing new.
+- **Parts:** steel, brass and a lever; the Half-Crown Revolver a silver ingot too.
+- **Their place:** past steel, with the hand guns: the Holler Pistol the heaviest of the pistols, the Minuet Pistol the truest held in one hand, the Half-Crown Revolver the quickest of the revolvers that fire rifle rounds.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Holler Pistol:** 12 a shot, the hardest of the pistols (the Bulldog Pistol's 11); about 9.4 a second, as the Warden Pistol's (9.4) and the Ashfall Pistol's (9.3), in fewer and heavier shots.
+- **Minuet Pistol:** 3.5 a shot; about 7.5 a second, between the Penny Pistol's (7.3) and the Caisson Pistol's (7.8). Aimed, it strays 0.25°, less than any other gun held in one hand (the Spikedriver's 0.3°).
+- **Half-Crown Revolver:** 9 a shot, as the Goshawk Revolver's; about 7.4 a second, the most of the revolvers (the Parley Revolver's 6.6).
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:holler_pistol`, `minuet_pistol` and `half_crown_revolver`; nothing saved changes. A Half-Crown Revolver's stock is a fitted attachment, as on any gun. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **Where each gun turns is chosen here:** the model's origin, from previews, not the owner's own pivots.
+- **The Holler Pistol takes no Long Scope:** its atlas has room for only three sights' pieces.
+- **The Holler Pistol's reload puts the same magazine back:** the owner's reload moves one magazine and hides the second.
+- **A Half-Crown Revolver becomes a carbine from its next animation,** as the Parley Revolver does.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 14B: the brass carbines
+The next three of the owner's treated-brass guns, taken up after slice 14A (on 14 October 2026 the owner asked "Begin the next part always be offering to start the next part at the end begin 14B"): the Howler Conversion, the Waltz Conversion and the Grandle. The two conversions are slice 14A's Howler and M22 Waltz made over into carbines held in both hands; the Grandle is a carbine fed from a box magazine. They are the brass carbines.
+
+| | Holler Carbine | Minuet Carbine | Grange Carbine |
+|---|---|---|---|
+| The owner's gun | Howler Conversion | Waltz Conversion | Grandle |
+| What it is | the Howler with a long shroud over its barrel, its bolt worked by the shot itself | the M22 Waltz with a long barrel, a slide at the back of its top, a magazine ahead of its trigger and a lever under its barrel | a carbine with a wooden handguard, a stock's wrist and no pistol grip, a box magazine under its receiver and a bolt handle on its right; the owner made every attachment for it |
+| Held | in both hands, the left under the magazine | in both hands, the left under the magazine | in both hands, the right at the stock's wrist and the left on the handguard |
+| What it fires | Rifle Rounds | Light Rounds | Rifle Rounds |
+| Damage | 9 | 5 | 7 |
+| Rate | 2 a second (every 10 ticks) | 4 a second (every 5 ticks) | about 2.9 a second (every 7 ticks) |
+| Holds | 10 | 10 | 12 |
+| Reload | 2.9 s, the magazine | 2.3 s, the magazine | 2.25 s, the magazine |
+| Spread, hip / aimed | 2.5° / 0.4° | 2° / 0.2° | 2.5° / 0.35° |
+| Range | 96 blocks | 80 | 96 |
+| The view aimed | narrowed to 0.85 | 0.88 | 0.85 |
+| Takes | nothing: the owner made no attachment for it | the three stocks and the four sights | the barrel attachments, the Extended and Speed Magazines, the three stocks, the Light and Tactical Grips, the four bayonets and the four sights |
+
+The reload times are the owner's animations'.
+
+**Crafting** (a crafting table; the guns switch, as every gun): steel, brass and a lever, as slice 14A's.
+- **Holler Carbine:** three steel ingots over a brass ingot, a lever and a brass ingot: its barrel is three steel ingots long.
+- **Minuet Carbine:** two steel ingots and a brass ingot over a brass ingot and a lever: its barrel is two, as the pistol it is made from is small.
+- **Grange Carbine:** three steel ingots over a lever and a brass ingot, and a brass ingot under that.
+
+**The conversions and their pistols:** each fires its pistol's rounds, as many to a magazine, reaches further and strays less aimed. The Holler Carbine fires more than twice as fast as the Holler Pistol, as its shot works its bolt, and hits less hard; the Minuet Carbine hits harder than the Minuet Pistol. They are crafted as guns of their own, not made from their pistols, so a pistol's fitted attachments and rounds are never lost to a conversion.
+
+**What you see:** the owner's animations.
+- **Holler Carbine:** the Holler Pistol's, but for its shot: each kicks it and its bolt runs back and home, with no hand on it. To reload, it is turned up, the left hand draws the magazine out from below and puts it back in, and the right hand works the bolt.
+- **Minuet Carbine:** each shot kicks it and its slide comes back. To reload, it is tipped and rolled over, the lever under its barrel swings down, the magazine drops out and comes back up, the left hand slaps it home, and the lever swings back up.
+- **Grange Carbine:** each shot kicks it and its bolt comes back. To reload, it is rolled over and its bolt locked back, the magazine drops out and the left hand slaps it home, and the bolt is let go.
+- **Spent rounds:** each throws a case at each shot.
+- **Sounds:** the conversions keep their pistols' shots, the owner's brass pistol shot for the Holler Carbine and their iron pistol shot for the Minuet Carbine; the Grange Carbine fires their old rifle shot (the Ranger Rifle's and the Ammonite Carbine's). The library's carabine, pistol and revolver shots carry tags naming other sources, so none of them is used. Each animation's own cues play as they name: the magazine out and in, the slap, the bolt, the lever.
+
+**How the models were built:**
+- **Where the guns turn:** about the model's origin (owner point (8, 0, 8)), as slice 14A's guns, checked in first-person previews of each reload and inspection. The Holler Carbine's animations are the Holler Pistol's.
+- **Holler Carbine:**
+  - **Magazine:** the owner's Howler Conversion has no magazine part, though its reload draws one out from below and puts it back. Its magazine bone holds the Howler's own magazine part (`tools/guns.py` `part_source()`: a part entry `howler/stan_mag` names another of the owner's guns' parts). The two guns share the receiver it stands under, and it stands where it stands on the Howler, ahead of the trigger guard. Its pieces come from the Howler's texture, packed beside the Howler Conversion's own in its atlas.
+  - **Bolt:** the owner's bolt part, a knob out to either side.
+  - **Empty bones:** the `magazine_2` and `no_sights` bones (its reload hides the one and its inspection tips the other) hold nothing.
+  - **Sights:** the ring at the back over the post at the muzzle.
+  - **Aiming:** held 5.5 px further out (`"eye_relief"`): the back of its top rail came 1.7 px past the eye. Held there, it is 3.8 px away.
+- **Minuet Carbine:** its main part holds it all.
+  - **Slide:** the 19th, 20th, 23rd, 26th and 27th elements, the slide and the knob on its left side (the animations call it the bolt).
+  - **Lever:** the 34th to 39th elements, turned about the hinge at their back, where the owner's model turns them.
+  - **Magazine:** the 40th to 42nd elements (the animations' core).
+  - **Empty bones:** the `magazine`, `magazine_2`, `seal` and `scriptures` bones hold nothing: the model has no part for them. Its shot only sways the last two.
+  - **Sights:** the ring on the rail over the post at the front of the rail.
+  - **Aiming:** held 2 px further out: the back of its frame came within 1.6 px of the eye. Held there, it is 3.6 px away.
+- **Grange Carbine:**
+  - **Hold:** it has no pistol grip; the right hand holds the stock's wrist behind the trigger guard, and the left the handguard, where its reload draws it back to the magazine.
+  - **Bolt:** the owner's bolt part, the handle on its right.
+  - **Magazine:** the owner's; its `magazine_2` bone holds nothing.
+  - **Sights:** the ring at the back over the post at the front.
+  - **Aiming:** held 4 px further out: the back end of its stock came 0.3 px past the eye. Held there, it is 3.7 px away.
+- **The arms:** chosen in first-person previews, with the game's rule that leaves an arm out while any of it is within a tenth of a block of the eye, to cover as little of the screen as they can through each gun's hold, shot, reload and inspection. The Holler Carbine keeps the Holler Pistol's.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload and inspection; the Holler Carbine's bolt and borrowed magazine, the Minuet Carbine's slide, lever and magazine, the Grange Carbine's bolt and magazine; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Light Round and the Rifle Round; nothing new.
+- **Parts:** steel, brass and a lever.
+- **Their place:** past steel, with the carbines: the conversions are the long guns of slice 14A's pistols, the Grange Carbine the brass carbine that takes every attachment.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Holler Carbine:** 9 a shot; about 12.2 a second, as the Kestrel Rifle's (12.2), above the Holler Pistol's 9.4.
+- **Minuet Carbine:** 5 a shot; about 11.0 a second, the most of the guns that fire light rounds a pull at a time (the Sentry Pistol's 9.8). Aimed, it strays 0.2°, the least of the guns that fire light rounds.
+- **Grange Carbine:** 7 a shot; about 13.8 a second, as the Picket Rifle's (13.9), below the Goldbristle Carbine's (14.2).
+- **A round:** each spends one a shot; nothing converts back.
+
+**Save compatibility:** new items `jugcraft:holler_carbine`, `minuet_carbine` and `grange_carbine`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Holler Carbine's magazine is the Howler's:** its own model has none. If the owner makes one for it, it can take its place.
+- **The Holler Carbine takes no attachment:** the owner made none for it, not even a stand-in for the sights, so it takes no scope either.
+- **The Minuet Carbine's seal and scriptures:** its shot sways two bones the model has no part for; they hold nothing.
+- **Where each gun turns is chosen here:** the model's origin, from previews, not the owner's own pivots.
+- **Not played:** none of it has been played yet. The numbers want play to set.
+
+## Slice 14C: the brass quick-firers
+Three more of the owner's treated-brass guns, taken up after slice 14B (on 15 October 2026, offered the next part, the owner answered "yes start 14C"): the Cogloader, the Jackhammer and the Libertas. Their animations are one family, the same shot and inspection made for three guns: an automatic rifle fed from a pan magazine, an automatic shotgun and a quick-firing rifle. They are the brass quick-firers.
+
+| | Sprocket Gun | Navvy Shotgun | Freeholder Rifle |
+|---|---|---|---|
+| The owner's gun | Cogloader | Jackhammer | Libertas |
+| What it is | a rifle with a flat pan magazine on its top, a long cooled barrel, a frame of rear sight posts and a stock's wrist instead of a pistol grip | a short gun with a perforated barrel shroud, a box magazine, a pistol grip and a bolt handle across its top | a rifle with glowing green coils along its barrel, a ring sight and a D-shaped trigger loop |
+| Held | in both hands: the right at the stock's wrist, the left under the fore-end | in both hands: the right on the grip, the left under the fore-end | in both hands: the right through the trigger loop, the left under the fore-end |
+| What it fires | Rifle Rounds, as long as the trigger is held | Buckshot Shells, six pellets each, as long as the trigger is held | Rifle Rounds, a pull a shot |
+| Damage | 4.5 | 2.5 a pellet | 6 |
+| Rate | 5 a second (every 4 ticks) | 2.5 a second (every 8 ticks) | 4 a second (every 5 ticks) |
+| Holds | 40 | 8 | 20 |
+| Reload | 3.15 s, the pan | 2.6 s, the magazine | 2.65 s, the magazine |
+| Spread, hip / aimed | 4° / 1.5° | 6° / 4° | 2.5° / 0.3° |
+| Range | 80 blocks | 24 | 104 |
+| The view aimed | narrowed to 0.85 | 0.9 | 0.8 |
+| Takes | the barrel attachments, the three stocks, the Light and Tactical Grips, the four bayonets and the four sights | the barrel attachments, the Extended and Speed Magazines, the three stocks, the Light and Tactical Grips and the four bayonets | the Extended and Speed Magazines and the Medium Scope, Reflex Sight and Laser Sight |
+
+The reload times are the owner's animations'. The Navvy Shotgun takes no scope: its sights are part of its body, and the owner made no stand-in for them. The Freeholder Rifle goes without the Long Scope, as the Holler Pistol does (its model, below).
+
+**Crafting** (a crafting table; the guns switch, as every gun): steel, brass and a lever, as slices 14A's and 14B's.
+- **Sprocket Gun:** three steel ingots over a hopper, a lever and a brass ingot, and a brass ingot under the lever: the hopper is for the pan that feeds it.
+- **Navvy Shotgun:** a steel ingot, a brass ingot and a steel ingot over a lever and a brass ingot: it is short.
+- **Freeholder Rifle:** two steel ingots and an emerald over a brass ingot, a lever and a brass ingot: the emerald is for its green coils.
+
+**How they fire:** as the other bullet guns; the Sprocket Gun and the Navvy Shotgun as long as the trigger is held, as the automatic guns. The Navvy Shotgun is the first automatic gun to fire shells: each shot is six pellets, as a shotgun's.
+
+**What you see:** the owner's animations.
+- **Sprocket Gun:** each shot kicks it and its bolt comes back. To reload, it is rolled over, the left hand lifts the pan off to the left and sets it back on, slaps it and works the bolt on the gun's left, and the pan is wound a full turn about its middle.
+- **Navvy Shotgun and Freeholder Rifle:** each shot kicks it and its bolt comes back. To reload, it is rolled over and its bolt locked back, the magazine drops out and the left hand slaps it home, and the bolt is let go.
+- **Spent rounds:** each throws a case at each shot.
+- **Sounds:** the owner's scorched rifle shot (the Garrison Rifle's and the Borer's) for the Sprocket Gun, their combat shotgun shot (the Breacher's) for the Navvy Shotgun, and their scorched sniper shot (the Picket Rifle's and the Lament Rifle's) for the Freeholder Rifle. None carries a tag naming another source. Each animation's own cues play as they name: the magazine out and in, the slap, the bolt.
+
+**How the models were built:**
+- **Where the guns turn:** about the model's origin (owner point (8, 0, 8)), as slices 14A's and 14B's guns, checked in first-person previews of each reload and inspection.
+- **Sprocket Gun:**
+  - **Pan:** the owner's magazine part, flat on the gun's top. Its reload moves two bones the owner's animations name: the magazine bone lifts the pan off and puts it back, and the cogloader_magazine bone under it, which holds the pan, winds it a turn. Both turn about the pan's middle.
+  - **Bolt:** the owner's bolt part, the handle on its left.
+  - **Empty bones:** the `magazine_2` and `seal` bones hold nothing (its shot and inspection sway the seal, which the model has no part for).
+  - **Sights:** the frame of posts at the back of the pan over the post at the muzzle; the line of sight passes just over the pan.
+  - **Aiming:** held 3.5 px further out (`"eye_relief"`): the back end of its stock came within 0.4 px of the eye. Held there, it is 3.9 px away.
+- **Navvy Shotgun:**
+  - **Bolt:** the owner's bolt part, the handle across its top.
+  - **Grip and magazine:** the owner's; a fitted stock takes the grip's place, as on the owner's other guns with a grip part.
+  - **Empty bones:** the `magazine_2` and `seal` bones hold nothing.
+  - **Sights:** the ring at the back over the post at the front, both part of its body.
+  - **Aiming:** held 2 px further out: the top of its grip came within 2 px of the eye. Held there, it is 4 px away.
+- **Freeholder Rifle:**
+  - **Bolt:** it has no bolt part, and none of its body's pieces slides as one (its top carries the sights; the pieces on its sides are flat), so its bolt bone holds nothing, as its `magazine_2` and `seal` bones do.
+  - **Magazine:** the owner's, ahead of the trigger loop.
+  - **Atlas:** its own texture is 128 x 128, as big as an atlas may be; beside it there is room for the pieces of only three of the four sights, so it goes without the Long Scope, as the Holler Pistol does.
+  - **Sights:** the ring at the back over the post at the front of its top.
+  - **Aiming:** held 2 px further out: the back of its receiver came within 1.8 px of the eye. Held there, it is 3.8 px away.
+- **The arms:** chosen in first-person previews, with the game's rule that leaves an arm out while any of it is within a tenth of a block of the eye, to cover as little of the screen as they can through each gun's hold, shot, reload and inspection.
+- **Checked** in first-person, side and orthographic previews: idle, aimed, fired, through each reload and inspection; the Sprocket Gun's pan lifted off, set back and wound, its bolt; the Navvy Shotgun's bolt and magazine; the Freeholder Rifle's magazine; and the nearest point of each gun to the eye through its aimed shot.
+
+**Connections:**
+- **Rounds:** the Rifle Round and the Buckshot Shell; nothing new.
+- **Parts:** steel, brass and a lever; the Sprocket Gun a hopper, the Freeholder Rifle an emerald.
+- **Their place:** past steel. The Sprocket Gun with the automatic rifles, the Navvy Shotgun with the shotguns, the Freeholder Rifle with the rifles fired a pull at a time.
+
+**Balance:** starting numbers, at point blank with every shot landing, over a load and its reload.
+- **Sprocket Gun:** 4.5 a shot; about 16.4 a second, between the Garrison Rifle's (17.1) and the Borer's (16.1).
+- **Navvy Shotgun:** 15 a shell with every pellet landing; about 22.2 a second, between the Mule's (23.3) and the Breacher's (21.8).
+- **Freeholder Rifle:** 6 a shot; about 16.2 a second, second of the guns that fire rifle rounds a pull at a time to the Undertone Rifle's 17.3. It fires them quicker than any other such gun, every 5 ticks to the Patchwork Carbine's 6.
+- **A round:** each spends one a shot (a shell for the Navvy Shotgun's six pellets); nothing converts back.
+
+**Save compatibility:** new items `jugcraft:sprocket_gun`, `navvy_shotgun` and `freeholder_rifle`; nothing saved changes. `guns.enabled=false` turns their recipes off; the items stay registered.
+
+**Known limits:**
+- **The Navvy Shotgun takes no scope:** its sights are part of its body.
+- **The Freeholder Rifle takes no Long Scope:** its atlas has room for only three sights' pieces.
+- **The Freeholder Rifle's bolt does not show:** its model has no part for it.
+- **The Sprocket Gun's seal:** its shot and inspection sway a bone the model has no part for; it holds nothing.
+- **Where each gun turns is chosen here:** the model's origin, from previews, not the owner's own pivots.
+- **Not played:** none of it has been played yet. The numbers want play to set.
 
 ## Connections
 - **Existing input producers:** copper, iron and gunpowder (vanilla); lead nuggets (the lead switch's lead); brass nuggets (brass, from zinc); paper and planks.
@@ -3260,6 +3846,364 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
 | lament_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
 | lament_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
 | lament_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| tabby_revolver | `Guns/models/item/micina.json` | `15a8d9614307f216` |
+| tabby_revolver | `Guns/item/micina.png` | `c6d71af39617c4f7` |
+| tabby_revolver | `Guns/item/micina.animation.json` | `932aa4c715d612d6` |
+| tabby_revolver | `Guns/models/special/micina/main.json` | `9b424faeaa1cd635` |
+| tabby_revolver | `Guns/models/special/micina/stan_barrel.json` | `a418c0135eff4acd` |
+| tabby_revolver | `Guns/models/special/micina/silencer.json` | `fbcad38b4e75586b` |
+| tabby_revolver | `Guns/models/special/micina/advanced_silencer.json` | `80689a482a56cc1f` |
+| tabby_revolver | `Guns/models/special/micina/muzzle_brake.json` | `2995268809fafc70` |
+| tabby_revolver | `Guns/models/special/micina/ext_barrel.json` | `dc67c7c3cc250be1` |
+| tabby_revolver | `Guns/models/special/micina/drum.json` | `0f0ff66dcb3434f5` |
+| tabby_revolver | `Guns/models/special/micina/hammer.json` | `828238e794952f3a` |
+| tabby_revolver | `Guns/sounds/item/brass_revolver/fire.ogg` | `9ede81f3520dfd5c` |
+| lookout_rifle | `Guns/models/item/red_raydar.json` | `d5043024891f5def` |
+| lookout_rifle | `Guns/item/red_raydar.png` | `f717867517542253` |
+| lookout_rifle | `Guns/item/red_raydar.animation.json` | `acea19226e70fa7c` |
+| lookout_rifle | `Guns/models/special/red_raydar/main.json` | `ec18a73c2cde2610` |
+| lookout_rifle | `Guns/models/special/red_raydar/light_stock.json` | `ffc72c01b2a0488b` |
+| lookout_rifle | `Guns/models/special/red_raydar/heavy_stock.json` | `acd98b0582c14627` |
+| lookout_rifle | `Guns/models/special/red_raydar/wooden_stock.json` | `66e3aa715589f318` |
+| lookout_rifle | `Guns/models/special/red_raydar/light_grip.json` | `61211a5101ac7f2f` |
+| lookout_rifle | `Guns/models/special/red_raydar/iron_bayonet.json` | `0983c6383dfd1bcb` |
+| lookout_rifle | `Guns/models/special/red_raydar/anthralite_bayonet.json` | `42c256791d7fc830` |
+| lookout_rifle | `Guns/models/special/red_raydar/diamond_bayonet.json` | `ad0cb4a036864c71` |
+| lookout_rifle | `Guns/models/special/red_raydar/netherite_bayonet.json` | `24cc60e07759e79e` |
+| lookout_rifle | `Guns/models/special/red_raydar/tact_grip.json` | `8a15ac84ca898daf` |
+| lookout_rifle | `Guns/models/special/red_raydar/sights.json` | `aa6035a4b8541d73` |
+| lookout_rifle | `Guns/sounds/item/heavy_rifle/fire.ogg` | `389a087108dc1565` |
+| lookout_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| lookout_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| lookout_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| lookout_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| lookout_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| ammonite_carbine | `Guns/models/item/spirulida.json` | `24dd5fda329a4c8f` |
+| ammonite_carbine | `Guns/item/spirulida.png` | `534455aeb4f99102` |
+| ammonite_carbine | `Guns/item/spirulida.animation.json` | `8807bbe25f371839` |
+| ammonite_carbine | `Guns/models/special/spirulida/main.json` | `02e70c50c0b3b8e2` |
+| ammonite_carbine | `Guns/models/special/spirulida/sights.json` | `2152ddc0b46a1aad` |
+| ammonite_carbine | `Guns/models/special/spirulida/light_stock.json` | `a8b80ed540c65d9b` |
+| ammonite_carbine | `Guns/models/special/spirulida/heavy_stock.json` | `2926ebb2256f5eb4` |
+| ammonite_carbine | `Guns/models/special/spirulida/wooden_stock.json` | `28ded3465978fe73` |
+| ammonite_carbine | `Guns/sounds/item/old_rifle/fire.ogg` | `d684ae9a09c9c12c` |
+| fencepost_carbine | `Guns/models/item/fencer_carabine.json` | `ffa260b1360b4b32` |
+| fencepost_carbine | `Guns/item/fencer_carabine.png` | `5c35a35f1e4ea61c` |
+| fencepost_carbine | `Guns/item/fencer_carabine.animation.json` | `042163727e5f741e` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/main.json` | `9ca1ed42452b5a47` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/light_grip.json` | `d9dc1a3bc6263bf6` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/iron_bayonet.json` | `9c6808e8d21117d9` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/anthralite_bayonet.json` | `119ecb9ebc26fea4` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/diamond_bayonet.json` | `4554b531058af7d8` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/netherite_bayonet.json` | `e0f1a82b403ac930` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/tact_grip.json` | `6081c7c952e7f207` |
+| fencepost_carbine | `Guns/models/special/fencer_carabine/hammer.json` | `b810d36b3242b1b0` |
+| fencepost_carbine | `Guns/sounds/item/iron_rifle/fire.ogg` | `e4a92914502ffd1c` |
+| waystation_shotgun | `Guns/models/item/callwell_terminal.json` | `fe8ac73f362dc54f` |
+| waystation_shotgun | `Guns/item/callwell_terminal.png` | `4183d551f83dffd0` |
+| waystation_shotgun | `Guns/item/callwell_terminal.animation.json` | `8ffa05490858e199` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/main.json` | `899a29c536b3fa71` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/stan_barrel.json` | `3de7ee67547b18f6` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/silencer.json` | `fb00d6e9a758c4ff` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/advanced_silencer.json` | `c11554dde63ea113` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/muzzle_brake.json` | `ad334c219da7ca55` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/ext_barrel.json` | `fef56cd59efd427d` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/light_grip.json` | `134e942f35933f9a` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/iron_bayonet.json` | `51ec0e6c2de55208` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/anthralite_bayonet.json` | `dca846b29a362d4f` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/diamond_bayonet.json` | `6b09f5894c24ca36` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/netherite_bayonet.json` | `a3b2f6855e7a8deb` |
+| waystation_shotgun | `Guns/models/special/callwell_terminal/tact_grip.json` | `990034371ab282e4` |
+| waystation_shotgun | `Guns/sounds/item/brass_shotgun/fire.ogg` | `95eee6d27b87d35a` |
+| highball_rifle | `Guns/models/item/saketini.json` | `d83b819c2c9a4036` |
+| highball_rifle | `Guns/item/saketini.png` | `048f70e9a97fe923` |
+| highball_rifle | `Guns/item/saketini.animation.json` | `47948b84854488de` |
+| highball_rifle | `Guns/models/special/saketini/main.json` | `2cccc9a95567c8e0` |
+| highball_rifle | `Guns/models/special/saketini/light_grip.json` | `33f72bf1821cfc71` |
+| highball_rifle | `Guns/models/special/saketini/iron_bayonet.json` | `2f99ea34b6301f65` |
+| highball_rifle | `Guns/models/special/saketini/anthralite_bayonet.json` | `450aa9780315e0d2` |
+| highball_rifle | `Guns/models/special/saketini/diamond_bayonet.json` | `b0f8eac636b6a649` |
+| highball_rifle | `Guns/models/special/saketini/netherite_bayonet.json` | `29b7f03f0b298cae` |
+| highball_rifle | `Guns/models/special/saketini/tact_grip.json` | `9672af6808382d42` |
+| highball_rifle | `Guns/models/special/saketini/sights.json` | `1dcb5b05a4e28785` |
+| highball_rifle | `Guns/models/special/saketini/stan_barrel.json` | `d06cd42bc3ddcec6` |
+| highball_rifle | `Guns/models/special/saketini/silencer.json` | `18824fdb27c492f4` |
+| highball_rifle | `Guns/models/special/saketini/advanced_silencer.json` | `952e8a8a20666ec3` |
+| highball_rifle | `Guns/models/special/saketini/muzzle_brake.json` | `a1fcf19059083d2c` |
+| highball_rifle | `Guns/models/special/saketini/ext_barrel.json` | `6612cf1ca4061713` |
+| highball_rifle | `Guns/models/special/saketini/hammer.json` | `8a0491f25aa8f35d` |
+| highball_rifle | `Guns/sounds/item/new_rifle/fire.ogg` | `267e176ad9bae07a` |
+| highball_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| highball_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| highball_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| highball_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| highball_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| flatboat_gun | `Guns/models/item/big_bore.json` | `7546eba8f6df2b04` |
+| flatboat_gun | `Guns/item/punt_gun.png` | `abb919cf7c153739` |
+| flatboat_gun | `Guns/item/big_bore.animation.json` | `9456c0bbdc1a0e99` |
+| flatboat_gun | `Guns/models/special/big_bore/main.json` | `48466951bbba8066` |
+| flatboat_gun | `Guns/models/special/big_bore/sights.json` | `865b4d1913707ffa` |
+| flatboat_gun | `Guns/models/special/big_bore/no_sights.json` | `4fafa6ef1b60d03f` |
+| flatboat_gun | `Guns/models/special/big_bore/hammer.json` | `6bbca2cbdad3718b` |
+| flatboat_gun | `Guns/sounds/item/cannon/fire.ogg` | `c114b809e9f48ac7` |
+| flatboat_gun | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| flatboat_gun | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| flatboat_gun | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| flatboat_gun | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| flatboat_gun | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| windlass_musket | `Guns/models/item/repeating_musket.json` | `cb2907bc7653c358` |
+| windlass_musket | `Guns/item/repeating_musket.png` | `896f9d6945847057` |
+| windlass_musket | `Guns/item/repeating_musket.animation.json` | `f00cfaeee6da6a9e` |
+| windlass_musket | `Guns/models/special/repeating_musket/main.json` | `4a63a97a8931aaf3` |
+| windlass_musket | `Guns/models/special/repeating_musket/grip_light.json` | `cbcec1846bfe5165` |
+| windlass_musket | `Guns/models/special/repeating_musket/grip_vert.json` | `41d59e39dda99b4d` |
+| windlass_musket | `Guns/models/special/repeating_musket/iron_bayonet.json` | `9ccd44ae2a94e81b` |
+| windlass_musket | `Guns/models/special/repeating_musket/anthralite_bayonet.json` | `7d12beb71578b1dd` |
+| windlass_musket | `Guns/models/special/repeating_musket/diamond_bayonet.json` | `eae89e0edffc52fb` |
+| windlass_musket | `Guns/models/special/repeating_musket/netherite_bayonet.json` | `930e0a15e547243f` |
+| windlass_musket | `Guns/models/special/repeating_musket/magazine.json` | `732ae9835ff6ed52` |
+| windlass_musket | `Guns/models/special/repeating_musket/hammer.json` | `bf5507bbcc5bd23e` |
+| windlass_musket | `Guns/sounds/item/blackpowder/fire.ogg` | `a3d3d49a332d034f` |
+| windlass_musket | `Guns/item/musket_bayonets.png` | `0830d15655ef543b` |
+| windlass_musket | `Guns/item/musket_grips.png` | `7f451a500ba89baa` |
+| millstone_rifle | `Guns/models/item/winnie_millend.json` | `3a5daaa5d34cca2e` |
+| millstone_rifle | `Guns/item/winnie_millend.png` | `eb44fba86f42e85b` |
+| millstone_rifle | `Guns/item/winnie_millend.animation.json` | `55dc415d784a9ba2` |
+| millstone_rifle | `Guns/models/special/winnie_millend/main.json` | `3bbefbaba9d806c2` |
+| millstone_rifle | `Guns/models/special/winnie_millend/hammer.json` | `be66a48f42b58c44` |
+| millstone_rifle | `Guns/models/special/winnie_millend/stan_barrel.json` | `bc49dd3a75c2dbd7` |
+| millstone_rifle | `Guns/models/special/winnie_millend/silencer.json` | `bf1ce71d5659cbe6` |
+| millstone_rifle | `Guns/models/special/winnie_millend/advanced_silencer.json` | `667af6f7937a5033` |
+| millstone_rifle | `Guns/models/special/winnie_millend/muzzle_brake.json` | `28f96ea00d937707` |
+| millstone_rifle | `Guns/models/special/winnie_millend/ext_barrel.json` | `c1fcdcaae7b9a5b1` |
+| millstone_rifle | `Guns/models/special/winnie_millend/light_grip.json` | `eb96a3b5facbadc2` |
+| millstone_rifle | `Guns/models/special/winnie_millend/iron_bayonet.json` | `8221f395a25333e5` |
+| millstone_rifle | `Guns/models/special/winnie_millend/anthralite_bayonet.json` | `cc1e92c5a79a902d` |
+| millstone_rifle | `Guns/models/special/winnie_millend/diamond_bayonet.json` | `06430dbc1ebba073` |
+| millstone_rifle | `Guns/models/special/winnie_millend/netherite_bayonet.json` | `80e8597a73a5b675` |
+| millstone_rifle | `Guns/models/special/winnie_millend/tact_grip.json` | `23fa52e4ca420b52` |
+| millstone_rifle | `Guns/models/special/winnie_millend/sights.json` | `ab7d105d36a760f8` |
+| millstone_rifle | `Guns/sounds/item/heavier_rifle/fire.ogg` | `4e17f5a1b2891ee7` |
+| millstone_rifle | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| millstone_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| millstone_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| millstone_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| millstone_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| fencepost_thumper | `Guns/models/item/fencer_thumper.json` | `3d3cc900694fff66` |
+| fencepost_thumper | `Guns/item/fencer_thumper.png` | `265f3046d417ceb6` |
+| fencepost_thumper | `Guns/item/fencer_thumper.animation.json` | `ad9d07accadf78b0` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/main.json` | `b416dc445c874e80` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/iron_bayonet.json` | `fca12e8827f3bc63` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/anthralite_bayonet.json` | `f684d8e47c0607cb` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/diamond_bayonet.json` | `495f46a6c177e36f` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/netherite_bayonet.json` | `722f93fb9323837a` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/light_grip.json` | `4908065855d8a91a` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/vert_grip.json` | `861529ab91616b44` |
+| fencepost_thumper | `Guns/models/special/fencer_thumper/hammer.json` | `e5cfc09ca9296e2a` |
+| fencepost_thumper | `Guns/sounds/item/grenade_launcher/fire.ogg` | `447fa85801d894e8` |
+| parley_revolver | `Guns/models/item/pax.json` | `3d9b0a55bc933e24` |
+| parley_revolver | `Guns/item/pax.png` | `85e845d1eb80467f` |
+| parley_revolver | `Guns/item/pax.animation.json` | `a72b9433509ecd9d` |
+| parley_revolver | `Guns/models/special/pax/main.json` | `bc2f2f636d5c55ed` |
+| parley_revolver | `Guns/models/special/pax/stan_barrel.json` | `f03bf4557b032c5f` |
+| parley_revolver | `Guns/models/special/pax/silencer.json` | `23a5d17a056bf5e1` |
+| parley_revolver | `Guns/models/special/pax/advanced_silencer.json` | `b60375010e5e81d7` |
+| parley_revolver | `Guns/models/special/pax/muzzle_brake.json` | `d68e9f273822c417` |
+| parley_revolver | `Guns/models/special/pax/ext_barrel.json` | `1cdfe0ee362623cd` |
+| parley_revolver | `Guns/models/special/pax/light_stock.json` | `205612b23b3e7e24` |
+| parley_revolver | `Guns/models/special/pax/heavy_stock.json` | `5c6638e436e65f89` |
+| parley_revolver | `Guns/models/special/pax/wooden_stock.json` | `5548e0536662d35a` |
+| parley_revolver | `Guns/models/special/pax/drum.json` | `4c824dce6091cd7d` |
+| parley_revolver | `Guns/models/special/pax/hammer.json` | `b9a73debc945764b` |
+| parley_revolver | `Guns/sounds/item/heavier_rifle/fire.ogg` | `4e17f5a1b2891ee7` |
+| lantern_musket | `Guns/models/item/laser_musket.json` | `615461c8162afd48` |
+| lantern_musket | `Guns/item/laser_musket.png` | `7324b5d528d5d2d5` |
+| lantern_musket | `Guns/item/laser_musket.animation.json` | `e6e4a68072b64240` |
+| lantern_musket | `Guns/models/special/laser_musket/main.json` | `56e4997b9a41c315` |
+| lantern_musket | `Guns/sounds/item/laser/fire.ogg` | `9ce6c4df8b513390` |
+| lantern_musket | `Guns/item/animated_laser_musket.png` | `a1ec8740abdb7c6b` |
+| lantern_musket | `Guns/item/laser_musket_glass.png` | `a2f2f66e1dd97ef5` |
+| holler_pistol | `Guns/models/item/howler.json` | `b70321061cb27fcf` |
+| holler_pistol | `Guns/item/howler.png` | `768f46a178640ddd` |
+| holler_pistol | `Guns/item/howler.animation.json` | `260af6cffc3df5f9` |
+| holler_pistol | `Guns/models/special/howler/main.json` | `6af62ded19d3ac96` |
+| holler_pistol | `Guns/models/special/howler/stan_barrel.json` | `f97e0e16ad3a6612` |
+| holler_pistol | `Guns/models/special/howler/silencer.json` | `8950cf2c1968e464` |
+| holler_pistol | `Guns/models/special/howler/advanced_silencer.json` | `b3ad85d938549251` |
+| holler_pistol | `Guns/models/special/howler/muzzle_brake.json` | `5abd4ce47a9541bb` |
+| holler_pistol | `Guns/models/special/howler/ext_barrel.json` | `4ee21e193423017d` |
+| holler_pistol | `Guns/models/special/howler/light_stock.json` | `4ddd371a4b9b6f4e` |
+| holler_pistol | `Guns/models/special/howler/heavy_stock.json` | `56679384f8db7b6c` |
+| holler_pistol | `Guns/models/special/howler/wooden_stock.json` | `9f404bfb31bef4fb` |
+| holler_pistol | `Guns/models/special/howler/light_grip.json` | `5e613540dc7cdfaf` |
+| holler_pistol | `Guns/models/special/howler/iron_bayonet.json` | `6c48435db3e5ae3a` |
+| holler_pistol | `Guns/models/special/howler/anthralite_bayonet.json` | `92a78ccb9e996013` |
+| holler_pistol | `Guns/models/special/howler/diamond_bayonet.json` | `a92c373ff358bba1` |
+| holler_pistol | `Guns/models/special/howler/netherite_bayonet.json` | `08ba9b8cf483cbaf` |
+| holler_pistol | `Guns/models/special/howler/tact_grip.json` | `8051ddea719b68e5` |
+| holler_pistol | `Guns/models/special/howler/sights.json` | `444b57a8d4360454` |
+| holler_pistol | `Guns/models/special/howler/bolt.json` | `6df05adb7ccae09a` |
+| holler_pistol | `Guns/models/special/howler/stan_mag.json` | `1f0c7cb0c4096001` |
+| holler_pistol | `Guns/models/special/howler/ext_mag.json` | `b41c2924f80dd887` |
+| holler_pistol | `Guns/models/special/howler/speed_mag.json` | `29105cbb000654c9` |
+| holler_pistol | `Guns/sounds/item/brass_pistol/fire.ogg` | `4fca376e2ece67b2` |
+| holler_pistol | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| holler_pistol | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| holler_pistol | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| holler_pistol | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| minuet_pistol | `Guns/models/item/m22_waltz.json` | `f17ed40cab2cf903` |
+| minuet_pistol | `Guns/item/m22_waltz.png` | `6d1bd268dfac4115` |
+| minuet_pistol | `Guns/item/m22_waltz.animation.json` | `21cf81319ce79baa` |
+| minuet_pistol | `Guns/models/special/m22_waltz/main.json` | `f2a74ecf1d161879` |
+| minuet_pistol | `Guns/models/special/m22_waltz/stan_barrel.json` | `7296e4ba7d8bdfb9` |
+| minuet_pistol | `Guns/models/special/m22_waltz/silencer.json` | `3018eb984b96244b` |
+| minuet_pistol | `Guns/models/special/m22_waltz/advanced_silencer.json` | `87099918de6d15c2` |
+| minuet_pistol | `Guns/models/special/m22_waltz/muzzle_brake.json` | `487d6206a2d97a64` |
+| minuet_pistol | `Guns/models/special/m22_waltz/ext_barrel.json` | `be23cd9e96e04097` |
+| minuet_pistol | `Guns/models/special/m22_waltz/sights.json` | `b73431bf4d41baf6` |
+| minuet_pistol | `Guns/models/special/m22_waltz/receiver.json` | `8f180bcab1c5b84f` |
+| minuet_pistol | `Guns/models/special/m22_waltz/stan_mag.json` | `f1c9e2fb7bcff096` |
+| minuet_pistol | `Guns/models/special/m22_waltz/ext_mag.json` | `082462f181871de3` |
+| minuet_pistol | `Guns/sounds/item/iron_pistol/fire.ogg` | `6a0fe18dfc3165d5` |
+| minuet_pistol | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| minuet_pistol | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| minuet_pistol | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| minuet_pistol | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| minuet_pistol | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| half_crown_revolver | `Guns/models/item/osgood_50.json` | `e4f93511bcf87454` |
+| half_crown_revolver | `Guns/item/osgood_50.png` | `9c26dd19d436f65d` |
+| half_crown_revolver | `Guns/item/osgood_50.animation.json` | `7cb635d1930d4e45` |
+| half_crown_revolver | `Guns/models/special/osgood_50/main.json` | `3275319e1934b7cd` |
+| half_crown_revolver | `Guns/models/special/osgood_50/light_stock.json` | `c7cbac829ca84704` |
+| half_crown_revolver | `Guns/models/special/osgood_50/heavy_stock.json` | `a23c8ac4710d949d` |
+| half_crown_revolver | `Guns/models/special/osgood_50/wooden_stock.json` | `9cdc3263a68ec3fe` |
+| half_crown_revolver | `Guns/models/special/osgood_50/stan_barrel.json` | `93f858143c7f84e4` |
+| half_crown_revolver | `Guns/models/special/osgood_50/silencer.json` | `cea1db4438f3ccfa` |
+| half_crown_revolver | `Guns/models/special/osgood_50/advanced_silencer.json` | `80f5784da196be8f` |
+| half_crown_revolver | `Guns/models/special/osgood_50/muzzle_brake.json` | `2f8d931f6a1e1c99` |
+| half_crown_revolver | `Guns/models/special/osgood_50/ext_barrel.json` | `06f633d71ca8e4ee` |
+| half_crown_revolver | `Guns/models/special/osgood_50/drum.json` | `7fa91cc59e74ce06` |
+| half_crown_revolver | `Guns/models/special/osgood_50/hammer.json` | `23c0224325ee8d98` |
+| half_crown_revolver | `Guns/sounds/item/brass_revolver/fire.ogg` | `9ede81f3520dfd5c` |
+| holler_carbine | `Guns/models/item/howler_conversion.json` | `cd9d9d76eee49fcb` |
+| holler_carbine | `Guns/item/howler_conversion.png` | `cf22317ac487ac39` |
+| holler_carbine | `Guns/item/howler_conversion.animation.json` | `a55726b4a2658208` |
+| holler_carbine | `Guns/models/special/howler_conversion/main.json` | `979db3903a20975b` |
+| holler_carbine | `Guns/models/special/howler_conversion/stan_barrel.json` | `682f66f9ca01841a` |
+| holler_carbine | `Guns/models/special/howler_conversion/sights.json` | `c14ca49cd2cd9da4` |
+| holler_carbine | `Guns/models/special/howler_conversion/bolt.json` | `cb86d0e7f4cf5aa0` |
+| holler_carbine | `Guns/models/special/howler/stan_mag.json` | `1f0c7cb0c4096001` |
+| holler_carbine | `Guns/sounds/item/brass_pistol/fire.ogg` | `4fca376e2ece67b2` |
+| holler_carbine | `Guns/item/howler.png` | `768f46a178640ddd` |
+| minuet_carbine | `Guns/models/item/waltz_conversion.json` | `b3b6d43c130a5481` |
+| minuet_carbine | `Guns/item/waltz_conversion.png` | `047cf85ab365e901` |
+| minuet_carbine | `Guns/item/waltz_conversion.animation.json` | `9370427b5d4420b5` |
+| minuet_carbine | `Guns/models/special/waltz_conversion/main.json` | `747d3230aa208b7e` |
+| minuet_carbine | `Guns/models/special/waltz_conversion/light_stock.json` | `7d954a24b072ab0e` |
+| minuet_carbine | `Guns/models/special/waltz_conversion/heavy_stock.json` | `23b3acadd76359e5` |
+| minuet_carbine | `Guns/models/special/waltz_conversion/wooden_stock.json` | `a1c8bc09f2a871ed` |
+| minuet_carbine | `Guns/models/special/waltz_conversion/sights.json` | `e1597adeeebb2ed5` |
+| minuet_carbine | `Guns/sounds/item/iron_pistol/fire.ogg` | `6a0fe18dfc3165d5` |
+| minuet_carbine | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| minuet_carbine | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| minuet_carbine | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| minuet_carbine | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| minuet_carbine | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| grange_carbine | `Guns/models/item/grandle.json` | `c66593ffde7a056b` |
+| grange_carbine | `Guns/item/grandle.png` | `b9aeedd07a230010` |
+| grange_carbine | `Guns/item/grandle.animation.json` | `00528c620dda2d26` |
+| grange_carbine | `Guns/models/special/grandle/main.json` | `cf2136ce6990a328` |
+| grange_carbine | `Guns/models/special/grandle/stan_barrel.json` | `0197a341bb4e61aa` |
+| grange_carbine | `Guns/models/special/grandle/silencer.json` | `4a95cd84a0158d4c` |
+| grange_carbine | `Guns/models/special/grandle/advanced_silencer.json` | `7695ef649b257e63` |
+| grange_carbine | `Guns/models/special/grandle/muzzle_brake.json` | `e03fa8ab8f457601` |
+| grange_carbine | `Guns/models/special/grandle/ext_barrel.json` | `b3ad11cd1d641fb3` |
+| grange_carbine | `Guns/models/special/grandle/light_stock.json` | `8939deb3d0665084` |
+| grange_carbine | `Guns/models/special/grandle/heavy_stock.json` | `5c7fb8025fe4efb8` |
+| grange_carbine | `Guns/models/special/grandle/wooden_stock.json` | `7e78c522585f8077` |
+| grange_carbine | `Guns/models/special/grandle/light_grip.json` | `880cbee82daa7f7c` |
+| grange_carbine | `Guns/models/special/grandle/iron_bayonet.json` | `8d0006f4abb52a25` |
+| grange_carbine | `Guns/models/special/grandle/anthralite_bayonet.json` | `2a72b79d513fc2e9` |
+| grange_carbine | `Guns/models/special/grandle/diamond_bayonet.json` | `b7f05a773b22c5c6` |
+| grange_carbine | `Guns/models/special/grandle/netherite_bayonet.json` | `922a28f199ccd827` |
+| grange_carbine | `Guns/models/special/grandle/tact_grip.json` | `79f3d8cde481ee9e` |
+| grange_carbine | `Guns/models/special/grandle/sights.json` | `b480903472926df1` |
+| grange_carbine | `Guns/models/special/grandle/no_sights.json` | `719909411988aac2` |
+| grange_carbine | `Guns/models/special/grandle/bolt.json` | `2c6065f5233cf70c` |
+| grange_carbine | `Guns/models/special/grandle/stan_mag.json` | `91e3b7b0836db229` |
+| grange_carbine | `Guns/models/special/grandle/ext_mag.json` | `de362dabe31e767a` |
+| grange_carbine | `Guns/models/special/grandle/speed_mag.json` | `039a498c5efb4704` |
+| grange_carbine | `Guns/sounds/item/old_rifle/fire.ogg` | `d684ae9a09c9c12c` |
+| grange_carbine | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| grange_carbine | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| grange_carbine | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| grange_carbine | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| grange_carbine | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| sprocket_gun | `Guns/models/item/cogloader.json` | `afdff981c85abed1` |
+| sprocket_gun | `Guns/item/cogloader.png` | `71810fd3fc7c0cb2` |
+| sprocket_gun | `Guns/item/cogloader.animation.json` | `34747fadbeff9c11` |
+| sprocket_gun | `Guns/models/special/cogloader/main.json` | `bfaa92b9b3195d05` |
+| sprocket_gun | `Guns/models/special/cogloader/stan_barrel.json` | `225148dd2623f619` |
+| sprocket_gun | `Guns/models/special/cogloader/silencer.json` | `f472b4dfa762ad6d` |
+| sprocket_gun | `Guns/models/special/cogloader/advanced_silencer.json` | `b793d0d629534450` |
+| sprocket_gun | `Guns/models/special/cogloader/muzzle_brake.json` | `3cd54cb3ef1de269` |
+| sprocket_gun | `Guns/models/special/cogloader/ext_barrel.json` | `984a1433468fb410` |
+| sprocket_gun | `Guns/models/special/cogloader/light_stock.json` | `e79fb89da3c88066` |
+| sprocket_gun | `Guns/models/special/cogloader/heavy_stock.json` | `24dabda8530aa5d6` |
+| sprocket_gun | `Guns/models/special/cogloader/wooden_stock.json` | `9f3924171f1875e3` |
+| sprocket_gun | `Guns/models/special/cogloader/light_grip.json` | `ad5862a01a437055` |
+| sprocket_gun | `Guns/models/special/cogloader/iron_bayonet.json` | `215932fd2aaa5802` |
+| sprocket_gun | `Guns/models/special/cogloader/anthralite_bayonet.json` | `a6b591f0ca0436c6` |
+| sprocket_gun | `Guns/models/special/cogloader/diamond_bayonet.json` | `e034e7edb1ecf421` |
+| sprocket_gun | `Guns/models/special/cogloader/netherite_bayonet.json` | `4978562caff71bc8` |
+| sprocket_gun | `Guns/models/special/cogloader/tact_grip.json` | `3debca5d359b9fd8` |
+| sprocket_gun | `Guns/models/special/cogloader/sights.json` | `2c5362ec880c91d3` |
+| sprocket_gun | `Guns/models/special/cogloader/bolt.json` | `44d8e4e405d2e4fc` |
+| sprocket_gun | `Guns/models/special/cogloader/magazine.json` | `705858dd2839b1e6` |
+| sprocket_gun | `Guns/sounds/item/scorched_rifle/fire.ogg` | `5a52d37065a09a8c` |
+| sprocket_gun | `Guns/item/makeshift_rifle_bayonets.png` | `dfc93f5032504095` |
+| sprocket_gun | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| sprocket_gun | `Guns/item/long_scope_texture.png` | `e69191017eb081ad` |
+| sprocket_gun | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| sprocket_gun | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| sprocket_gun | `Guns/item/laser.png` | `aac5f06e892e350a` |
+| navvy_shotgun | `Guns/models/item/jackhammer.json` | `bfd5eb7ffc2a950d` |
+| navvy_shotgun | `Guns/item/jackhammer.png` | `2198cf8cfda3a00b` |
+| navvy_shotgun | `Guns/item/jackhammer.animation.json` | `38c0ab9e9239f119` |
+| navvy_shotgun | `Guns/models/special/jackhammer/main.json` | `1e31cf33db2a1bf7` |
+| navvy_shotgun | `Guns/models/special/jackhammer/stan_barrel.json` | `c5f2a8cdc823ee83` |
+| navvy_shotgun | `Guns/models/special/jackhammer/silencer.json` | `81a90dc19de3256b` |
+| navvy_shotgun | `Guns/models/special/jackhammer/advanced_silencer.json` | `51e88b550abfd321` |
+| navvy_shotgun | `Guns/models/special/jackhammer/muzzle_brake.json` | `10e9453b32c0b870` |
+| navvy_shotgun | `Guns/models/special/jackhammer/ext_barrel.json` | `81c9d548e22ce884` |
+| navvy_shotgun | `Guns/models/special/jackhammer/stan_grip.json` | `276f7c936bf66c9c` |
+| navvy_shotgun | `Guns/models/special/jackhammer/light_stock.json` | `b4e8bf9ae4ae35de` |
+| navvy_shotgun | `Guns/models/special/jackhammer/heavy_stock.json` | `1f0af1c2d818acab` |
+| navvy_shotgun | `Guns/models/special/jackhammer/wooden_stock.json` | `f847aedcac2727ca` |
+| navvy_shotgun | `Guns/models/special/jackhammer/light_grip.json` | `4bfe4ee31c4f0220` |
+| navvy_shotgun | `Guns/models/special/jackhammer/iron_bayonet.json` | `9406c32986faa8e2` |
+| navvy_shotgun | `Guns/models/special/jackhammer/anthralite_bayonet.json` | `c87e249920212c08` |
+| navvy_shotgun | `Guns/models/special/jackhammer/diamond_bayonet.json` | `427135423505b6c1` |
+| navvy_shotgun | `Guns/models/special/jackhammer/netherite_bayonet.json` | `d80748990b9ee2a2` |
+| navvy_shotgun | `Guns/models/special/jackhammer/tact_grip.json` | `6e40954a1cea505b` |
+| navvy_shotgun | `Guns/models/special/jackhammer/bolt.json` | `fbcddf88c1f409d3` |
+| navvy_shotgun | `Guns/models/special/jackhammer/stan_mag.json` | `4f9ea74efcb8c508` |
+| navvy_shotgun | `Guns/models/special/jackhammer/ext_mag.json` | `ed42e46480e7913e` |
+| navvy_shotgun | `Guns/models/special/jackhammer/speed_mag.json` | `bc4061e4c23b4e9c` |
+| navvy_shotgun | `Guns/sounds/item/combat_shotgun/fire.ogg` | `155925e837a3d40b` |
+| freeholder_rifle | `Guns/models/item/libertas.json` | `e9a8eee00e777540` |
+| freeholder_rifle | `Guns/item/libertas.png` | `0929828ebf746e69` |
+| freeholder_rifle | `Guns/item/libertas.animation.json` | `15a6545ab6bf408f` |
+| freeholder_rifle | `Guns/models/special/libertas/main.json` | `116179cd8f0500ca` |
+| freeholder_rifle | `Guns/models/special/libertas/sights.json` | `50ae78c6f0e80ce3` |
+| freeholder_rifle | `Guns/models/special/libertas/stan_mag.json` | `e2e553a8d803d28c` |
+| freeholder_rifle | `Guns/models/special/libertas/ext_mag.json` | `445ba427cd5e9562` |
+| freeholder_rifle | `Guns/models/special/libertas/speed_mag.json` | `7e857ec330699da5` |
+| freeholder_rifle | `Guns/sounds/item/scorched_sniper/fire.ogg` | `624b2460a3e39921` |
+| freeholder_rifle | `Guns/item/medium_scope.png` | `543abecf859783be` |
+| freeholder_rifle | `Guns/item/relex_sight.png` | `c8a38dbce7c266b0` |
+| freeholder_rifle | `Guns/item/laser_sight.png` | `1e0a3342068bc5df` |
+| freeholder_rifle | `Guns/item/laser.png` | `aac5f06e892e350a` |
 
 - **The bolt sound's tag:** `bolt.ogg` carries Vorbis tags naming another source ("All Epic Infantry Assault Rifle Reload Sounds (Fortnite)"). The owner, asked about the eight tagged sounds in the library, answered "I have the rights", so it is used like the rest. None of the other sounds used here carries such a tag.
 - **The scopes' reticles and lens rims (slice 7b):** the owner uploaded them on 8 October 2026 ("heres reticles and vignette"). Two files in that upload carry embedded Photoshop metadata:
@@ -3282,6 +4226,7 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
   - `GunsGameTests` (server): every gun and round registered; a carbine shot hurts its target by 6 and spends a round; an empty gun and an empty hand do not fire; the trigger rate holds and two quick shots both land; creative spends nothing; a magazine reload loads from the inventory after its time and not before; no reload without rounds or room; a shell reload loads one at a time; a shot cuts a shell reload short; switching away stops a reload; pellets land together; bullets are projectiles.
   - `GunsClientGameTests` (client): end to end through the real keys, for each gun:
     - draw, aim, fire at a husk (the server lands it and spends a round), reload part way and done (one round from the inventory), inspect;
+    - the husk stands seven blocks off; a gun whose aimed cone is wider than the husk there fires from where it is not (`0.45 / tan(aimed spread)` blocks, the husk's half width and the hit test's reach past it), so one shot cannot miss by chance. Added after the Culverin's five pellets all went past it once ([#355's comment](https://github.com/jimbozoomer-byte/jugcraft/pull/355#issuecomment-6159532662)): it fires from 3.7 blocks; 14 other wide-spread guns from 2.5 to 6.4.
     - the Thunderpipe's shell reload part way; each gun in third person; the inventory.
     - Screenshots `jugcraft_guns_*`.
 - **CI on `33823d0c0` (Build run 37651397033):** every job passed: the mod build with the server game tests, the build without the optional integrations, and the client test.
@@ -3650,6 +4595,7 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
     - `pumpShotgunsAreRegistered`: the three are registered with their numbers, fire eight pellets a shot from Buckshot Shells a pull at a time and load a shell at a time; each recipe loads; the Sledge hits hardest, the Highwayman holds the most, reaches furthest and aims steadiest, the Throttle fires quickest; the Highwayman and the Throttle take the scopes, the Sledge none; the Throttle takes only the stocks and scopes, the others the barrel attachments, the light grip and the bayonets too.
     - `pumpShotgunsLandAndLoad`: side by side, each fires its one shell at a pig three blocks off, the pellets landing together and the shell spent; then each loads its full tube from the inventory, the first shell after its opening and one shell's time, every shell after its whole reload, and no more than the tube holds.
     - `highwaymanKeepsItsPelletsTogether`: aimed at pigs thirteen blocks off, standing a block up so that no pellet strays into the floor first, all eight of the Highwayman's pellets land (its 2.5° cone is narrower than the pig there), and fewer of the Sledge's (6°).
+    - `highwaymanAndGarrisonRifleCraftApart` (added 14 October 2026, with the Highwayman's second brass ingot): the Highwayman's grid gives the Highwayman and the Garrison Rifle's the Garrison Rifle; the Highwayman's old grid, the Garrison Rifle's mirrored, gives the Garrison Rifle.
   - "Every gun registered" now counts thirty-six guns.
   - `GunsClientGameTests` takes the three through every gun's steps; screenshots `jugcraft_guns_sledge_*`, `jugcraft_guns_highwayman_*` and `jugcraft_guns_throttle_*`.
 - **Slice 9D in CI** ([run 38036998697](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38036998697), on 631cc3a84): every check passed.
@@ -4080,13 +5026,193 @@ Slice 9E's files: the guns' tactical grip parts and the Laser Sight's textures m
     - **Reloading and inspection:** the Tuppence Pistol rolled; the Goshawk Revolver rolled, the left hand in; the Lament Rifle turned up; each turned toward the eye to be looked over.
     - **Attachments:** each stock behind the grip; the Laser Sight stands on the receiver aimed as it does on the other guns in the same run.
     - **Third person:** the two hand guns held out in one hand and the rifle across the body, each flashing as it fires.
+- **Slice 13A, run locally (14 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2201 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns, looks and eye relief against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 13A game tests (all passed in CI, below):**
+  - `FrontierGunsGameTests`:
+    - `frontierGunsAreRegistered`: each is registered with its numbers, its recipe loads, and it fires plain bullets, one a pull. The Tabby Revolver is a revolver of six light rounds, held in one hand and loaded a round at a time, and two of them are two guns at once; the Lookout Rifle a rifle of eight rifle rounds loaded a round at a time; the Ammonite Carbine a carbine of sixteen rifle rounds, loaded a magazine at a time; the Lookout Rifle reaches furthest and the Tabby Revolver least. The Tabby Revolver takes the barrel attachments only; the Lookout Rifle the stocks, the Light and Tactical Grips, the bayonets, the scopes and the Laser Sight; the Ammonite Carbine the stocks only.
+    - `frontierGunsFireAndLoad`: as `netherGunsFireAndLoad` (whose helpers it shares), for the three: the revolver and the lever rifle with one round in after their first round's time.
+    - `tabbyRevolversFireFromBothHands`: a Tabby Revolver in each hand fires from each and lands both shots, each spending a round of its own.
+  - `GunsGameTests` counts 66 guns; `DualGunsGameTests` the eighteen held in one hand; `TacticalAttachmentsGameTests` the twenty-four that take the Tactical Grip.
+- **Slice 13A in CI** ([run 38489671371](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38489671371), on bbe529f28): every check passed.
+  - **Server game tests:** 1391 in each job, the `mod` job's and the one without the optional integrations. All passed, `FrontierGunsGameTests` among them.
+  - **Client game tests:** the changed files chose eight classes over five shards, and all passed. `GunsClientGameTests` ran alone in its shard; in it each new gun, in its turn:
+    - held and aimed, its arms drawn at full size and then half, the view narrowed to 0.9 (Tabby Revolver), 0.8 (Lookout Rifle) and 0.85 (Ammonite Carbine);
+    - fired at the husk, each spending one round, with 6 frames of flash: the Tabby Revolver took it from 321.94 to 315.94 (6), the Lookout Rifle 7 and the Ammonite Carbine 5;
+    - reloaded from the inventory, 31 rounds left each time; over its shot and reload the Tabby Revolver threw 4 casings, the Lookout Rifle 3 and the Ammonite Carbine 1;
+    - with each set of attachments it takes, held and aimed: the Tabby Revolver with the Silencer, the Extended Barrel and the Muzzle Brake; the two long guns with each stock, the stock left out aimed (in 34 or 35 frames, none held); the Lookout Rifle with the Light Grip, a bayonet, and the Tactical Grip and the Laser Sight.
+  - **Between the shots:** the husk lost nothing between the Lament Rifle's shot and the Tabby Revolver's, or between the three guns'.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar: the Tabby Revolver's slotted barrel; the Lookout Rifle's barrel over its fore-end, the left hand at the front; the Ammonite Carbine's copper-banded barrels.
+    - **Aimed:** each raised to the middle of the view. The Lookout Rifle's and the Ammonite Carbine's sights meet the crosshair under the husk's head. As the other hand guns' did, the Tabby Revolver's cylinder rises over the crosshair and covers the husk's body.
+    - **Fired:** the Ammonite Carbine's cocking piece, driven back, covers the husk's body for a moment.
+    - **Reloading and inspection:** the Tabby Revolver rolled, the left hand in; the Lookout Rifle rolled, the left hand over it; the Ammonite Carbine tipped; each turned toward the eye to be looked over, the Ammonite Carbine filling the right of the view.
+    - **Attachments:** each barrel part at the Tabby Revolver's muzzle; each stock behind the grip; the Laser Sight stands on the receiver aimed as it does on the Longhorn and Drover Rifles in the same run. The bayonet is hidden behind the left hand.
+    - **Third person:** the Tabby Revolver held out in one hand and the long guns raised, each flashing as it fires.
+- **The Lookout Rifle's loading sound, run locally (14 October 2026):** it had played the magazine-in sound for each round, where the other lever rifles play the shell-in sound; it now plays theirs. `python3 tools/guns.py` PASS, `python3 tools/check_mod_data.py` PASS, `python3 scripts/check_repository.py` PASS; Java syntax parse only.
+- **Slice 13B, run locally (14 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2564 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns, looks and eye relief against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+- **Slice 13B game tests (all passed in CI, below):**
+  - `FrontierGunsIIGameTests`:
+    - `frontierGunsIIAreRegistered`: each is registered with its numbers, its recipe loads, it fires plain bullets one pull a shot, held in both hands, and it takes the grips and the bayonets. The Fencepost Carbine is a carbine of seven rifle rounds and the Waystation Shotgun a shotgun of eight shells, eight pellets a shot, each loaded a round at a time; the Highball Rifle a single-shot rifle, hitting hardest and reaching furthest of the three, the shotgun least. The barrel attachments fit the shotgun and the rifle, not the carbine; the scopes and the Laser Sight the rifle alone.
+    - `frontierGunsIIFireAndLoad`: as `netherGunsFireAndLoad` (whose helpers it shares), for the three: the carbine and the shotgun with one round in after their first round's time, the rifle with none halfway through its reload.
+  - `GunsGameTests` counts 69 guns; `TacticalAttachmentsGameTests` the twenty-seven that take the Tactical Grip.
+- **Slice 13B in CI** ([run 38500777704](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38500777704), on d1f20f7fe): every check passed.
+  - **Server game tests:** 1588 in each job, the `mod` job's and the one without the optional integrations. All passed, `FrontierGunsIIGameTests` among them.
+  - **Client game tests:** all five shards passed. `GunsClientGameTests` ran alone in its shard, taking each new gun through holding, aiming, firing at the husk, reloading from the inventory, inspection and its attachments. Its checks passed for each: the arms' sizes, the narrowed view, the hit and the round spent, the reload, and the casings its animations cue. The job's text log was too large to read here, so its numbers are not quoted.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar.
+    - **Aimed and fired:** each raised to the middle of the view. The Fencepost Carbine's and the Highball Rifle's sights meet the crosshair on the husk's chest. The Waystation Shotgun's sights meet it at the husk's head, with the right hand over its legs.
+    - **Reloading:** the Waystation Shotgun and the Highball Rifle rolled, each hand at its work. The Fencepost Carbine's right arm covered the right half of the view, with the gun out of sight behind it. It was chosen again after this run ([above](#slice-13b-more-frontier-guns)).
+    - **Inspection:** each turned toward the eye to be looked over.
+    - **Attachments:** each barrel part at the muzzle of the Waystation Shotgun and the Highball Rifle; the grips under the fore-end; the Laser Sight on the Highball Rifle as on the Longhorn, Kestrel, Lookout and Lament Rifles in the same run.
+    - **Third person:** each raised, flashing as it fires.
+- **The Fencepost Carbine's right arm chosen again, run locally (14 October 2026):** `python3 tools/guns.py` PASS, `python3 tools/check_mod_data.py` PASS, `python3 scripts/check_repository.py` PASS. Its first-person previews were drawn with the game's near-eye rule at every hundredth of a second of the reload.
+- **Slice 13B on 643c6fe3b in CI** ([run 38506772653](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38506772653); the new arm and the Waystation Shotgun's own recipe): every check passed.
+  - **Server game tests:** 1588 in the `mod` job, all passed; the job without the optional integrations passed too.
+  - **Client game tests:** all five shards passed, `GunsClientGameTests` among them.
+  - **The Fencepost Carbine's reload screenshot:** the gun rolled with its lid open, the right arm out of the view.
+- **The Fencepost Carbine's and the Waystation Shotgun's loading sound, run locally (14 October 2026):** each had played the magazine-in sound for each round or shell, where the other lever guns play the shell-in sound; each now plays theirs. `python3 tools/guns.py` PASS, `python3 tools/check_mod_data.py` PASS, `python3 scripts/check_repository.py` PASS; Java syntax parse only.
+- **Slice 13C, run locally (14 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2567 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns, looks and eye relief against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Recipes:** every shaped recipe in the mod's data compared, mirrors included: none of the three guns' matches another.
+- **Slice 13C game tests (all passed in CI, below):**
+  - `FrontierGunsIIIGameTests`:
+    - `frontierGunsIIIAreRegistered`: each is registered with its numbers, its recipe loads, and it fires plain bullets one pull a shot, held in both hands. The Flatboat Gun is a single shot of sixteen pellets of buckshot and takes the scopes and the Laser Sight only; the Windlass Musket a repeater of seven paper cartridges loaded a magazine at a time, taking the Light and Vertical Grips and the bayonets but no scope; the Millstone Rifle a rifle of eight rifle rounds loaded a round at a time, hitting harder and working slower than the Drover Rifle and taking what it takes. The rifle reaches furthest and the punt gun least.
+    - `frontierGunsIIIFireAndLoad`: as `netherGunsFireAndLoad` (whose helpers it shares), for the three: the punt gun and the musket with nothing in halfway through their reloads, the rifle with one round in after its first round's time.
+  - `GunsGameTests` counts 72 guns; `TacticalAttachmentsGameTests` the twenty-eight that take the Tactical Grip.
+- **Slice 13C in CI** ([run 38511296312](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38511296312), on 43088608d): every check passed.
+  - **Server game tests:** 1598 in the `mod` job, all passed, `FrontierGunsIIIGameTests` among them; the job without the optional integrations passed too.
+  - **Client game tests:** all five shards passed. `GunsClientGameTests` took each new gun through holding, aiming, firing at the husk, reloading from the inventory, inspection and its attachments, and its checks passed for each. The job's text log was too large to read here, so its numbers are not quoted.
+  - **Screenshots:**
+    - **Held:** each at the lower right pointing at the husk, its name over the hotbar; the Windlass Musket's magazine tube standing out to the left across the view's lower middle.
+    - **Aimed:** each raised to the middle of the view, its sight on the crosshair at the husk's chest.
+    - **Fired:** the Windlass Musket flashes at its pan, to the right of its drum, and smokes.
+    - **Reloading:** the Flatboat Gun tipped with its chamber out to the left; the Windlass Musket lowered, the left hand drawing the magazine away; the Millstone Rifle tipped, the left hand below it.
+    - **Inspection:** each turned toward the eye to be looked over, the Flatboat Gun and the Windlass Musket filling a side of the view.
+    - **Attachments:** the Laser Sight on top of the Flatboat Gun and the Millstone Rifle, as on the Highball Rifle; the Windlass Musket's grips and bayonet hidden behind the left hand, as the Lookout Rifle's bayonet is.
+    - **Third person:** the Flatboat Gun's long barrel held out and flashing as it fires; the Windlass Musket and the Millstone Rifle raised, smoking as they fire.
+- **Slice 13D, run locally (14 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged (an attachment's own `"mounts"` bone changes none of theirs).
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2660 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns and now the carbines, looks, eye relief and the sound aliases against tools/guns.py). Its first run caught the two new sound aliases missing from `GunAnimations`; they were added.
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files. The GeckoLib calls the carbine idle and the cylinder cue use (`AnimationTest.getDataOrDefault`, `DataTickets.ANIMATABLE_INSTANCE_ID`) were read in GeckoLib 5.5.7's source.
+  - **Recipes:** every shaped recipe in the mod's data compared, mirrors included. The Thumper's first grid was the Marshal Revolver's; with a brass ingot more under it, none of the three guns' matches another.
+- **Slice 13D game tests (all passed in CI, below):**
+  - `FrontierGunsIVGameTests`:
+    - `frontierGunsIVAreRegistered`: each is registered with its numbers, its recipe loads, and it is one pull a shot. The Fencepost Thumper lobs grenades, four loaded one at a time, held in both hands, and takes the grips and the bayonets; the Parley Revolver fires rifle rounds, six loaded one at a time, held in one hand and a carbine with a stock, and takes the barrel attachments and the stocks; the Lantern Musket fires a beam on Energy Cells, three charges a magazine, held in both hands, reaching further than every energy weapon but the Solenoid Rifle, and takes nothing.
+    - `parleyRevolverIsACarbineWithAStock`: two bare Parley Revolvers are two guns at once and the other hand's fires; with a Wooden Stock on one, it is a carbine, the two are not two guns at once, the other hand's does not fire, and the stock steadies it; without it again, it is one-handed.
+    - `fencepostThumperLoadsAGrenadeAtATime`: an empty Thumper with three Grenades holds one halfway through the second's time and all three when its reload ends, none left over; a shot then spends one and lobs a Grenade of the shooter's, which bursts on the pig seven blocks off and leaves the floor whole.
+    - `lanternMusketDrivesThroughItsLine`: a shot takes its damage from both pigs in its line and stops at the wall, spending a charge; an empty one loads nothing before its reload's time and its three charges after, the cell keeping the rest.
+  - `GunsGameTests` counts 75 guns; `DualGunsGameTests` the nineteen held in one hand; `LobberGrenadesGameTests` the three grenade guns, the Thumper among them.
+- **Slice 13D in CI** ([run 38634736533](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38634736533), on d00700826): every check passed after one re-run.
+  - **Server game tests:** 1653 in the `mod` job, all passed, `FrontierGunsIVGameTests` among them.
+  - **The job without the optional integrations failed once** on `SpodumeneGameTests.prospectAndDrill`, a test this slice does not touch, and passed on its one re-run. It reads only the drill's chunk, as the fluorite test does (slice 13C's record): in about one random placement in 64 both its ores fall across a chunk border from the drill ([the comment](https://github.com/jimbozoomer-byte/jugcraft/pull/373#issuecomment-6178187056)).
+  - **Client game tests:** all five shards passed. `GunsClientGameTests` took each new gun through holding, aiming, firing at the husk, reloading from the inventory, inspection and its attachments, and its checks passed for each.
+  - **Screenshots** (from the last 2,500 lines of the guns shard's log; the whole log was too large to read here):
+    - **Held:** each at the lower right pointing at the husk, the Parley Revolver small in the right hand alone.
+    - **Aimed:** each raised to the middle of the view, its sight on the crosshair at the husk.
+    - **Reloading:** the Thumper's and the Lantern Musket's left arm comes across the middle of the view as it loads, the owner's animations' reach; the Parley Revolver is rolled over, the right arm across the lower middle.
+    - **Inspection:** each turned to be looked over, the Parley Revolver raised to the upper right over the arm.
+    - **The carbine:** with each stock fitted (with a silencer, an extended barrel or a muzzle brake), the Parley Revolver's left hand comes up under its barrel; without a stock it does not.
+    - **Attachments:** the Thumper's grips and bayonet are hidden behind the left hand, as the Windlass Musket's are.
+    - **Third person:** each raised and flashing as it fires.
+- **Slice 14A, run locally (14 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged (the Long Scope's `"not_on"` names only the Holler Pistol). Its first run stopped on the Holler Pistol: its own texture is a whole 128 px atlas, and the four sights' pieces did not fit beside it; without the Long Scope's they do.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2663 material IDs), with `check_guns` (the numbers, attachments, the one-handed guns and the carbines, looks, eye relief and the sound aliases against tools/guns.py).
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Recipes:** every shaped recipe in the mod's data compared, mirrors included: none of the three guns' grids matches another.
+- **Slice 14A game tests (all passed in CI, below):**
+  - `BrassSidearmsGameTests`:
+    - `brassSidearmsAreRegistered`: each is registered with its numbers, its recipe loads, and it is one pull a shot, firing bullets. The Holler Pistol fires rifle rounds, ten a magazine, held in both hands, harder than any other pistol, and takes every attachment the owner made for it and every sight but the Long Scope; the Minuet Pistol fires light rounds, ten a magazine, held in one hand, and aimed strays less than any other gun held in one hand, and takes the barrel attachments, the Extended Magazine and the four sights; the Half-Crown Revolver fires rifle rounds, six loaded one at a time, held in one hand and a carbine with a stock, and takes what the Parley Revolver takes.
+    - `oneHandedSidearmsPairUntilStocked`: two Minuet Pistols are two guns at once and the other hand's fires; a bare Half-Crown Revolver pairs with a Minuet Pistol; with a Weighted Stock on it, it is a carbine, the two are not two guns at once, the other hand's does not fire, and the stock steadies its aim; without it again, it is one-handed.
+    - `halfCrownRevolverLoadsARoundAtATime`: an empty Half-Crown Revolver with three Rifle Rounds holds one halfway through the second's time and all three when its reload ends, none left over; a shot then spends one and takes its damage from the pig.
+    - `hollerPistolChangesItsMagazine`: an empty Holler Pistol with fifteen Rifle Rounds loads nothing before its reload's time and ten after it, leaving five; a shot then takes its damage from the pig.
+  - `GunsGameTests` counts 78 guns; `DualGunsGameTests` the twenty-one held in one hand; `TacticalAttachmentsGameTests` the twenty-nine guns the Tactical Grip fits, the Holler Pistol among them.
+- **Slice 14A's first CI run** ([run 38651258803](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38651258803), on 5e60bf941), in the job without the optional integrations, failed two server tests:
+  - `TacticalAttachmentsGameTests.tacticalAttachmentsFitTheirGuns`: "The holler_pistol takes the Tactical Grip". Its list of the guns the grip fits did not name the Holler Pistol, which the owner made a tactical grip for; it does now.
+  - `FluoriteGameTests.prospectAndDrill`: "Prospector missed fluorite", the chance failure https://github.com/jimbozoomer-byte/jugcraft/pull/376 fixes (its survey read only the drill's chunk). That fix is carried here too, line for line, for the fluorite and spodumene tests.
+- **Slice 14A in CI** ([run 38652346741](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38652346741), on f4cd9232e, with both fixes): every check passed, on its first run.
+  - **Server game tests:** 1657 in the `mod` job, all passed, `BrassSidearmsGameTests` and `TacticalAttachmentsGameTests` among them.
+  - **The job without the optional integrations** and **the repository check:** passed.
+  - **Client game tests:** all five shards passed. `GunsClientGameTests` took each new gun through holding, aiming, firing at the husk, reloading from the inventory, inspection and its attachments, and its checks passed for each.
+  - **Screenshots** (from the last 2,500 lines of the guns shard's log; the whole log was too large to read here):
+    - **Held:** each at the lower right pointing at the husk, the Minuet Pistol and the Half-Crown Revolver in the right hand alone.
+    - **Aimed:** each raised to the middle of the view, its sight on the crosshair at the husk.
+    - **Reloading:** the Holler Pistol is turned up and its left arm comes across the lower left as it draws the magazine, the owner's animation's reach; the Minuet Pistol is rolled over at the lower right; the Half-Crown Revolver's barrel is tipped down, raising the cylinder.
+    - **Inspection:** each turned to be looked over at the right.
+    - **Attachments:** the stocks, scopes and Laser Sight sit on each gun where they should; with a stock fitted, the Half-Crown Revolver's left hand comes up under its barrel.
+    - **Third person:** each raised and flashing as it fires.
+- **Slice 14B, run locally (14 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged. Its new `part_source()` reads a part entry `howler/stan_mag` from the Howler's folder; the Holler Carbine's atlas holds its own texture and the Howler magazine's pieces.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2666 material IDs), with `check_guns`.
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Recipes:** every shaped recipe in the mod's data compared, mirrors included: none of the three guns' grids matches another. (This branch still carries the Highwayman's old grid, which matches the Garrison Rifle's mirrored; https://github.com/jimbozoomer-byte/jugcraft/pull/377 fixes that on `main`.)
+- **Slice 14B game tests (all passed in CI, below):**
+  - `BrassCarbinesGameTests`:
+    - `brassCarbinesAreRegistered`: each is registered with its numbers, its recipe loads, and it is one pull a shot, firing bullets from a magazine, held in both hands. Each conversion fires its pistol's rounds, as many a magazine, reaches further and strays less aimed; the Holler Carbine fires quicker than the Holler Pistol and hits less hard, and the Minuet Carbine hits harder than the Minuet Pistol. The Holler Carbine takes nothing; the Minuet Carbine takes the stocks and the four sights; the Grange Carbine fires rifle rounds, twelve a magazine, and takes all nineteen attachments the owner made for it.
+    - `grangeCarbineChangesItsMagazine`: an empty Grange Carbine with twenty Rifle Rounds loads nothing before its reload's time and twelve after it, leaving eight; a shot then takes its damage from the pig.
+    - `minuetCarbineLoadsLightRounds`: an empty Minuet Carbine with ten Light Rounds and ten Rifle Rounds loads the Light Rounds and leaves the Rifle Rounds; a shot then takes its damage from the pig.
+  - `GunsGameTests` counts 81 guns; `TacticalAttachmentsGameTests` the thirty guns the Tactical Grip fits, the Grange Carbine among them.
+- **Slice 14B in CI** ([run 38657383418](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38657383418), on d0001d964): every check passed, on its first run.
+  - **Server game tests:** 1660 in the `mod` job, all passed, `BrassCarbinesGameTests` and `TacticalAttachmentsGameTests` among them.
+  - **The job without the optional integrations** and **the repository check:** passed.
+  - **Client game tests:** all five shards passed. `GunsClientGameTests` took each new gun through holding, aiming, firing at the husk, reloading from the inventory, inspection and its attachments, and its checks passed for each.
+  - **Screenshots** (from the last 2,500 lines of the guns shard's log; the whole log was too large to read here):
+    - **Held:** each at the lower right pointing at the husk, in both hands.
+    - **Aimed:** each raised to the middle of the view, its sight on the crosshair at the husk.
+    - **Reloading:** the Holler Carbine is turned up and its left arm comes across the lower left as it draws the magazine, the owner's animation's reach, as the Holler Pistol's; the Minuet and Grange Carbines are rolled over at the lower right.
+    - **Inspection:** each turned to be looked over at the right.
+    - **Attachments:** the Minuet Carbine's stocks and Laser Sight and the Grange Carbine's stocks and sights sit where they should. (The Holler Carbine takes none.)
+    - **Third person:** each raised and flashing as it fires.
+- **Slice 14C, run locally (15 October 2026):**
+  - `python3 tools/guns.py`: PASS. It wrote the three guns' models, animations and textures (their shots are sounds already copied); every other gun's files came out unchanged (the Long Scope's `"not_on"` now names the Freeholder Rifle too). Its first run stopped on the Freeholder Rifle: its own texture is a whole 128 px atlas, and the four sights' pieces did not fit beside it; without the Long Scope's they do. `--check` passed after the last run.
+  - `python3 tools/generate_material_data.py`: wrote the guns' item models, definitions, recipes, names and sounds.
+  - `python3 tools/check_mod_data.py`: PASS (2669 material IDs), with `check_guns`.
+  - `python3 scripts/check_repository.py`: PASS.
+  - **Java:** a syntax parse only: 0 errors in the changed files.
+  - **Recipes:** every shaped recipe in the mod's data compared, mirrors included: none of the three guns' grids matches another.
+- **Slice 14C game tests (all passed in CI, below):**
+  - `BrassQuickFirersGameTests`:
+    - `brassQuickFirersAreRegistered`: each is registered with its numbers, its recipe loads, and it fires bullets from a magazine, held in both hands. The Sprocket Gun fires rifle rounds as long as the trigger is held, forty a pan, and takes all seventeen attachments the owner made for it, the four sights among them; the Navvy Shotgun fires six pellets a shell as long as the trigger is held, eight shells a magazine, the only automatic gun that fires shells, and takes its fifteen and no scope; the Freeholder Rifle fires rifle rounds a pull at a time, twenty a magazine, quicker than any other gun that fires rifle rounds a pull at a time, and takes both magazines and every sight but the Long Scope.
+    - `sprocketGunChangesItsPan`: an empty Sprocket Gun with fifty Rifle Rounds loads nothing before its reload's time and forty after it, leaving ten; a shot then takes its damage from the pig.
+    - `navvyShotgunChangesItsMagazine`: an empty Navvy Shotgun with twelve Buckshot Shells loads eight, leaving four; a shot then spends one, and at close range its pellets land together on the pig.
+  - `GunsGameTests` counts 84 guns; `TacticalAttachmentsGameTests` the thirty-two guns the Tactical Grip fits, the Sprocket Gun and the Navvy Shotgun among them.
+- **Slice 14C in CI** ([run 38659879209](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38659879209), on e786153dd): every check passed, on its first run.
+  - **Server game tests:** 1663 in the `mod` job, all passed, `BrassQuickFirersGameTests` and `TacticalAttachmentsGameTests` among them.
+  - **The job without the optional integrations** and **the repository check:** passed.
+  - **Client game tests:** all five shards passed. `GunsClientGameTests` took each new gun through holding, aiming, firing at the husk, reloading from the inventory, inspection and its attachments, and its checks passed for each.
+  - **Screenshots** (from the last 2,500 lines of the guns shard's log; the whole log was too large to read here):
+    - **Held:** each at the lower right pointing at the husk, in both hands.
+    - **Aimed:** each raised to the middle of the view. The Sprocket Gun's pan lies level across the crosshair at the husk; the Navvy Shotgun's butt fills the lower middle, the husk's head between its two rear posts at the crosshair; the Freeholder Rifle's sight is on the crosshair at the husk.
+    - **Reloading:** the Sprocket Gun is tipped up at the lower middle, its top to the view; the Navvy Shotgun and the Freeholder Rifle are rolled over at the lower right.
+    - **Inspection:** each turned to be looked over at the right.
+    - **Attachments:** the Laser Sight sits on the Sprocket Gun's pan and on the Freeholder Rifle, and stands to the right of the crosshair aimed, as on the earlier guns; the Navvy Shotgun's bayonet sits under its muzzle; the Extended Magazine shows thirty rounds on the Freeholder Rifle and twelve shells on the Navvy Shotgun. At the hip the muzzle attachments point away from the view and the stocks are behind it, so they show little.
+    - **Third person:** each raised and flashing as it fires.
 - **Not run:** the client by hand, a two-client dedicated server, and play.
 
 ## World and event applicability
 No worldgen, structures, bosses or seasonal content. Guns, rounds and the Cell Rack come from crafting (and the creative tab). The one loot is slice 10F's: raider gunners, in raids and raider camps, may drop their service arms (their equipment's drop chance) and rounds (the mob loot table `jugcraft:entities/raider_gunner`).
 
 ## Rollout and open questions
-- **Names:** proposed here (Rust Midge, Patchwork Carbine, Thunderpipe, Warden Pistol, Riveter SMG, Haymaker, Longhorn Rifle, Drover Rifle, Coach Gun, Duelling Pistol, Line Musket, Bellmouth, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Garrison Rifle, Breacher, Trench Lobber, Thresher, Stoker, Beam Pistol, Stormlock Rifle, Linesman, Picket Rifle, Ranger Rifle, Kestrel Rifle, Rattler Pistol, Bronco SMG, Squall Rifle, Spikedriver, Seam Cutter, Caisson Pistol, Sledge, Highwayman, Throttle, Earthmover, Skylark Rifle, Bullfrog, Solenoid Rifle, Votive Rifle, Glowmouth, Mule, Fowler, Culverin, Undertone Rifle, Murmur SMG, Reverb, Tusker, Cinder Repeater, Bastion Rifle, Ashfall Pistol, Goldbristle Carbine, Crackling, Chitin SMG, Hermit Rifle, Borer, Penny Pistol, Conductor Carbine, Magpie SMG, Tuppence Pistol, Goshawk Revolver, Lament Rifle, Light Round, Rifle Round, Buckshot Shell, Paper Cartridge, Energy Cell, Cell Rack, Raider Gunner; the attachments keep plain names: Silencer, Baffled Silencer, Muzzle Brake, Extended Barrel, Extended Magazine, Speed Magazine, Light Stock, Weighted Stock, Wooden Stock, Light Grip, Vertical Grip, the four bayonets, Long Scope, Medium Scope, Reflex Sight, Tactical Grip, Laser Sight). The owner may rename them before release; IDs are stable only after release.
+- **Names:** proposed here (Rust Midge, Patchwork Carbine, Thunderpipe, Warden Pistol, Riveter SMG, Haymaker, Longhorn Rifle, Drover Rifle, Coach Gun, Duelling Pistol, Line Musket, Bellmouth, Bulldog Pistol, Marshal Revolver, Sapper Revolver, Sentry Pistol, Garrison Rifle, Breacher, Trench Lobber, Thresher, Stoker, Beam Pistol, Stormlock Rifle, Linesman, Picket Rifle, Ranger Rifle, Kestrel Rifle, Rattler Pistol, Bronco SMG, Squall Rifle, Spikedriver, Seam Cutter, Caisson Pistol, Sledge, Highwayman, Throttle, Earthmover, Skylark Rifle, Bullfrog, Solenoid Rifle, Votive Rifle, Glowmouth, Mule, Fowler, Culverin, Undertone Rifle, Murmur SMG, Reverb, Tusker, Cinder Repeater, Bastion Rifle, Ashfall Pistol, Goldbristle Carbine, Crackling, Chitin SMG, Hermit Rifle, Borer, Penny Pistol, Conductor Carbine, Magpie SMG, Tuppence Pistol, Goshawk Revolver, Lament Rifle, Tabby Revolver, Lookout Rifle, Ammonite Carbine, Fencepost Carbine, Waystation Shotgun, Highball Rifle, Flatboat Gun, Windlass Musket, Millstone Rifle, Fencepost Thumper, Parley Revolver, Lantern Musket, Holler Pistol, Minuet Pistol, Half-Crown Revolver, Holler Carbine, Minuet Carbine, Grange Carbine, Sprocket Gun, Navvy Shotgun, Freeholder Rifle, Light Round, Rifle Round, Buckshot Shell, Paper Cartridge, Energy Cell, Cell Rack, Raider Gunner; the attachments keep plain names: Silencer, Baffled Silencer, Muzzle Brake, Extended Barrel, Extended Magazine, Speed Magazine, Light Stock, Weighted Stock, Wooden Stock, Light Grip, Vertical Grip, the four bayonets, Long Scope, Medium Scope, Reflex Sight, Tactical Grip, Laser Sight). The owner may rename them before release; IDs are stable only after release.
 - **The arms:** placed from the animations' own evidence, without the models they were made for. The CI screenshots show where they sit; the rest points and arm directions above are the knobs.
 - **The gun sets the owner chose on 8 October 2026** are all built: the revolvers (slice 8), the service arms (slice 8B), the heavy weapons (slice 8C) and the energy weapons (slice 8D).
 - **The gun sets the owner chose on 10 October 2026** are all built, each its own pull request: the marksman rifles (slice 9A), the automatic weapons (slice 9B), the second energy weapons (slice 9C) and the pump shotguns (slice 9D).
@@ -4096,5 +5222,6 @@ No worldgen, structures, bosses or seasonal content. Guns, rounds and the Cell R
   - the jam the Gnat's sound suggests;
   - other mobs with guns: the owner's Scorched Guns 2-style gun mobs, once their models are in the library (slice 10F gives the raider gunners the service arms);
   - the Whizzbanger, which waits for the model its animations were made for ([above](#the-whizzbanger-waits));
+  - the Fencer Thumper, which waits for its cylinder to turn with each shot ([above](#the-fencer-thumper-waits));
   - the guns beyond these sets.
 - **Balance:** the numbers are starting points for the owner to set.

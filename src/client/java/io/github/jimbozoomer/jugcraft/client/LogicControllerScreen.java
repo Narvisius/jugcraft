@@ -4,55 +4,54 @@ import io.github.jimbozoomer.jugcraft.control.Channels;
 import io.github.jimbozoomer.jugcraft.control.LogicControllerBlockEntity;
 import io.github.jimbozoomer.jugcraft.control.LogicControllerMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.DyeColor;
 
 /**
- * The logic controller (batch 36): eight rules, one a row ("[n] IF <sensor channel> <below/above> N% THEN <target
- * channel> ON/OFF"), and along the bottom every channel's reading and whether this controller has it on. Each part of a
- * rule is a button; the server keeps the rules ({@link LogicControllerMenu}).
+ * The logic controller (batch 36), in the advanced look (docs/features/machine-screens.md): eight rules, one a row
+ * ("[n] IF <sensor channel> <below/above> N% THEN <target channel> ON/OFF") under a heading row, the rules that are on
+ * lit; along the bottom every channel's swatch, its reading and whether this controller has it on (hover a swatch for
+ * its name); and a help strip. Each part of a rule is a key with a tooltip; the server keeps the rules
+ * ({@link LogicControllerMenu}). The status lamp is lit while the controller has any channel on.
  */
 public class LogicControllerScreen extends AbstractContainerScreen<LogicControllerMenu> {
 	/** The channel colours, as drawn on the sensor and relay lamps (tools/control_electronics.py CHANNEL_COLORS). */
 	public static final int[] COLORS = {0xF0F0F0, 0xF9801D, 0xC74EBD, 0x3AB3DA, 0xFED83D, 0x80C71F, 0xF38BAA, 0x474F52,
 			0x9D9D97, 0x169C9C, 0x8932B8, 0x3C44AA, 0x835432, 0x5E7C16, 0xB02E26, 0x1D1D21};
-	private static final int BEZEL = 0xFF2A3036;
-	private static final int SCREEN = 0xFF0E2A2E;
-	private static final int TEXT = 0xFF7FE6F0;
-	private static final int DIM = 0xFF3C9AA8;
-	private static final int ROW = 20;
-	private static final int TOP = 24;
-	private final Button[][] buttons = new Button[LogicControllerBlockEntity.RULES][];
+	private static final int ROW = 18;
+	private static final int TOP = 29;
+	private static final int STRIP = 176;
+	/** Each key of a rule: its left edge and width (the rule number, sensor, compare, -, +, target, on/off). */
+	private static final int[][] KEYS = {{8, 20}, {48, 60}, {110, 20}, {134, 14}, {182, 14}, {222, 48}, {272, 22}};
+	private static final String[] TIPS = {"enable", "sensor", "compare", "down", "up", "target", "action"};
+	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("logic_controller");
+	private final ScreenKit.TextButton[][] buttons = new ScreenKit.TextButton[LogicControllerBlockEntity.RULES][];
 
 	public LogicControllerScreen(LogicControllerMenu menu, Inventory inventory, Component title) {
-		super(menu, inventory, title, 300, 226);
+		super(menu, inventory, title, 300, 236);
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		titleLabelX = 8;
-		titleLabelY = 8;
+		titleLabelX = 12;
+		titleLabelY = 2;
 		inventoryLabelY = 10_000;
 		for (int rule = 0; rule < LogicControllerBlockEntity.RULES; rule++) {
 			int y = topPos + TOP + rule * ROW;
 			int base = rule * 8;
-			buttons[rule] = new Button[] {
-					button(base, leftPos + 8, y, 20),
-					button(base + 1, leftPos + 48, y, 60),
-					button(base + 2, leftPos + 110, y, 20),
-					button(base + 3, leftPos + 134, y, 14),
-					button(base + 4, leftPos + 182, y, 14),
-					button(base + 5, leftPos + 222, y, 48),
-					button(base + 6, leftPos + 272, y, 22)};
+			buttons[rule] = new ScreenKit.TextButton[KEYS.length];
+			for (int key = 0; key < KEYS.length; key++) {
+				int id = base + key;
+				ScreenKit.TextButton button = addRenderableWidget(new ScreenKit.TextButton(leftPos + KEYS[key][0], y, KEYS[key][1], 16, theme,
+						Component.empty(), b -> click(id)));
+				button.setTooltip(Tooltip.create(Component.translatable("screen.jugcraft.logic_controller.tip." + TIPS[key])));
+				buttons[rule][key] = button;
+			}
 		}
-	}
-
-	private Button button(int id, int x, int y, int width) {
-		return addRenderableWidget(Button.builder(Component.empty(), b -> click(id)).bounds(x, y, width, 16).build());
 	}
 
 	private void click(int id) {
@@ -69,47 +68,93 @@ public class LogicControllerScreen extends AbstractContainerScreen<LogicControll
 	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
 		for (int rule = 0; rule < LogicControllerBlockEntity.RULES; rule++) {
 			boolean enabled = menu.rule(rule, LogicControllerBlockEntity.ENABLED) == 1;
-			buttons[rule][0].setMessage(Component.literal(String.valueOf(rule + 1)).withColor(enabled ? 0x80FF90 : 0x707070));
+			buttons[rule][0].setMessage(Component.literal(String.valueOf(rule + 1)));
+			buttons[rule][0].setSelected(enabled);
 			buttons[rule][1].setMessage(channel(menu.rule(rule, LogicControllerBlockEntity.SENSOR)));
 			buttons[rule][2].setMessage(Component.literal(menu.rule(rule, LogicControllerBlockEntity.ABOVE) == 1 ? ">" : "<"));
 			buttons[rule][3].setMessage(Component.literal("-"));
 			buttons[rule][4].setMessage(Component.literal("+"));
 			buttons[rule][5].setMessage(channel(menu.rule(rule, LogicControllerBlockEntity.TARGET)));
-			buttons[rule][6].setMessage(Component.translatable(menu.rule(rule, LogicControllerBlockEntity.ACTION) == 1
-					? "screen.jugcraft.logic_controller.on" : "screen.jugcraft.logic_controller.off"));
+			boolean on = menu.rule(rule, LogicControllerBlockEntity.ACTION) == 1;
+			buttons[rule][6].setMessage(Component.translatable(on ? "screen.jugcraft.logic_controller.on" : "screen.jugcraft.logic_controller.off"));
+			buttons[rule][6].setSelected(on);
 		}
 		extractBackground(graphics, mouseX, mouseY, delta);
 		super.extractRenderState(graphics, mouseX, mouseY, delta);
-	}
-
-	@Override
-	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
-		graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, BEZEL);
-		graphics.fill(leftPos + 3, topPos + 20, leftPos + imageWidth - 3, topPos + imageHeight - 3, SCREEN);
-		// The channel strip: a swatch per channel, lit while this controller has it on.
-		int y = topPos + TOP + LogicControllerBlockEntity.RULES * ROW + 6;
-		for (int channel = 0; channel < Channels.COUNT; channel++) {
-			int x = leftPos + 8 + channel * 18;
-			graphics.fill(x, y, x + 14, y + 8, 0xFF000000 | COLORS[channel]);
-			if (menu.isOn(channel)) {
-				graphics.fill(x + 5, y + 10, x + 9, y + 13, 0xFF80FF90);
+		// A channel swatch hovered: its name, its reading and whether this controller has it on.
+		int mx = mouseX - leftPos;
+		int my = mouseY - topPos;
+		if (my >= STRIP + 4 && my < STRIP + 28) {
+			int channel = (mx - 8) / 18;
+			if (mx >= 8 && channel >= 0 && channel < Channels.COUNT && (mx - 8) % 18 < 14) {
+				int reading = menu.reading(channel);
+				graphics.setTooltipForNextFrame(font, channel(channel).copy().append(": " + (reading < 0 ? "-" : reading + "%")
+						+ (menu.isOn(channel) ? " · " + Component.translatable("screen.jugcraft.logic_controller.on").getString() : "")),
+						mouseX, mouseY);
 			}
 		}
 	}
 
 	@Override
+	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+		int x = leftPos;
+		int y = topPos;
+		ScreenKit.body(graphics, theme, x, y, imageWidth, imageHeight);
+		boolean anyOn = false;
+		for (int channel = 0; channel < Channels.COUNT; channel++) {
+			anyOn |= menu.isOn(channel);
+		}
+		MachineSkin.lamp(graphics, x + 4, y + 3, anyOn ? theme.ok() : theme.dim());
+		ScreenKit.pane(graphics, theme, x + 4, y + 13, imageWidth - 8, STRIP - 16);
+		graphics.fill(x + 8, y + 26, x + imageWidth - 8, y + 27, (theme.dim() & 0x00FFFFFF) | 0x90000000);
+		// The rules that are on stand out behind their keys.
+		for (int rule = 0; rule < LogicControllerBlockEntity.RULES; rule++) {
+			if (menu.rule(rule, LogicControllerBlockEntity.ENABLED) == 1) {
+				int ry = y + TOP + rule * ROW;
+				graphics.fill(x + 6, ry - 1, x + imageWidth - 6, ry + 17, (theme.text() & 0x00FFFFFF) | 0x14000000);
+			}
+		}
+		// The channel strip: a swatch per channel, lit under while this controller has it on.
+		ScreenKit.pane(graphics, theme, x + 4, y + STRIP, imageWidth - 8, 30);
+		for (int channel = 0; channel < Channels.COUNT; channel++) {
+			int sx = x + 8 + channel * 18;
+			graphics.fill(sx - 1, y + STRIP + 4, sx + 15, y + STRIP + 13, theme.slotDark());
+			graphics.fill(sx, y + STRIP + 5, sx + 14, y + STRIP + 12, 0xFF000000 | COLORS[channel]);
+			if (menu.isOn(channel)) {
+				graphics.fill(sx + 4, y + STRIP + 14, sx + 10, y + STRIP + 16, theme.ok());
+			}
+		}
+		ScreenKit.help(graphics, font, theme, x + 4, y + STRIP + 33, imageWidth - 8, imageHeight - STRIP - 37,
+				Component.translatable("screen.jugcraft.logic_controller.help"));
+	}
+
+	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-		graphics.text(font, title.getString(), titleLabelX, titleLabelY, 0xFFDDE6EA, false);
+		graphics.text(font, title.getString(), titleLabelX, titleLabelY, theme.label(), false);
+		// The heading row, each over its column.
+		heading(graphics, "rule", KEYS[0][0], KEYS[0][1]);
+		heading(graphics, "sensor", KEYS[1][0], KEYS[1][1]);
+		heading(graphics, "level", KEYS[3][0], KEYS[4][0] + KEYS[4][1] - KEYS[3][0]);
+		heading(graphics, "target", KEYS[5][0], KEYS[5][1]);
+		heading(graphics, "set", KEYS[6][0], KEYS[6][1]);
 		for (int rule = 0; rule < LogicControllerBlockEntity.RULES; rule++) {
 			int y = TOP + rule * ROW + 4;
-			graphics.text(font, Component.translatable("screen.jugcraft.logic_controller.if").getString(), 32, y, DIM, false);
-			graphics.text(font, menu.rule(rule, LogicControllerBlockEntity.THRESHOLD) + "%", 152, y, TEXT, false);
-			graphics.text(font, Component.translatable("screen.jugcraft.logic_controller.then").getString(), 200, y, DIM, false);
+			int color = menu.rule(rule, LogicControllerBlockEntity.ENABLED) == 1 ? theme.text() : theme.dim();
+			graphics.text(font, Component.translatable("screen.jugcraft.logic_controller.if").getString(), 32, y, theme.dim(), false);
+			String level = menu.rule(rule, LogicControllerBlockEntity.THRESHOLD) + "%";
+			graphics.text(font, level, 165 - font.width(level) / 2, y, color, false);
+			graphics.text(font, Component.translatable("screen.jugcraft.logic_controller.then").getString(), 199, y, theme.dim(), false);
 		}
-		int y = TOP + LogicControllerBlockEntity.RULES * ROW + 20;
+		int y = STRIP + 18;
 		for (int channel = 0; channel < Channels.COUNT; channel++) {
 			int reading = menu.reading(channel);
-			graphics.text(font, reading < 0 ? "-" : String.valueOf(reading), 8 + channel * 18, y, reading < 0 ? DIM : TEXT, false);
+			String text = reading < 0 ? "-" : String.valueOf(reading);
+			graphics.text(font, text, 8 + channel * 18 + 7 - font.width(text) / 2, y, reading < 0 ? theme.dim() : theme.text(), false);
 		}
+	}
+
+	private void heading(GuiGraphicsExtractor graphics, String key, int x, int width) {
+		String text = Component.translatable("screen.jugcraft.logic_controller." + key).getString();
+		graphics.text(font, text, x + (width - font.width(text)) / 2, 16, theme.dim(), false);
 	}
 }

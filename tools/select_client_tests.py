@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Choose which client game test classes a change needs, and share them out between CI's client jobs.
 
-The client game tests start a real game and photograph showrooms, which takes each of CI's five client jobs 20 to 30
-minutes when every class runs. Most pull requests change a few blocks, so a pull request runs only the classes that
+The client game tests start a real game and photograph showrooms, distributed across eight CI jobs.
+Most pull requests change a few blocks, so a pull request runs only the classes that
 show what it changed; main and a manual run of the Build workflow run them all (docs/TESTING.md).
 
 How a changed file picks classes (src/gametest/resources/fabric.mod.json lists the classes):
@@ -52,7 +52,9 @@ CODE_DIRS = (ROOT / "src" / "main" / "java", ROOT / "src" / "client" / "java")
 # estimates passed 25 minutes a job (the Cinder Kiln's), so they now share five.
 WEIGHTS = {
     "BiomeClientGameTests": 570,
-    "GunsClientGameTests": 260,
+    # Run 38936177915: gun assertions alone span 17:22:33–17:52:09 (~30 minutes),
+    # before setup/teardown. The growing all-gun gallery no longer fits its old 260 s estimate.
+    "GunsClientGameTests": 2000,
     "StyxClientGameTests": 220,
     "AlpineClientGameTests": 180,
     "JugcraftClientGameTests": 180,
@@ -328,7 +330,7 @@ def main():
     parser.add_argument("--base", help="compare against this revision (a pull request's base)")
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--all", action="store_true", help="run every class")
-    parser.add_argument("--shards", type=int, default=5)
+    parser.add_argument("--shards", type=int, default=8)
     parser.add_argument("--github-output", help="append shard0..shardN-1 (comma-separated classes) to this file")
     args = parser.parse_args()
 

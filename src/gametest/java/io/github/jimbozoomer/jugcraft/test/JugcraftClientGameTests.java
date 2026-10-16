@@ -664,12 +664,17 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.getInput().pressKey(options -> options.keyUse);
 			context.waitForScreen(MachineScreen.class);
 			context.takeScreenshot("jugcraft_machine_screen");
+			// Its sides view: the faces in the status pane, the key in the help box.
+			context.runOnClient(client -> ((MachineScreen) client.gui.screen()).showSides(true));
+			context.waitTicks(2);
+			context.takeScreenshot("jugcraft_machine_screen_sides");
 			context.setScreen(() -> null);
 
-			// One screen in each of the other two themes (batch 22): the electric battery box and the lab's circuit
-			// assembler; and the distillation tower, whose screen holds the most outputs (five tanks and a slot, batch
-			// 24).
-			for (MachineKind kind : List.of(MachineKind.BATTERY_BOX, MachineKind.CIRCUIT_ASSEMBLER, MachineKind.DISTILLATION_TOWER)) {
+			// One screen in each of the other looks (docs/features/machine-screens.md): the electric battery box, the
+			// advanced circuit assembler, the lab's chemical reactor and the industrial distillation tower, whose screen
+			// holds the most outputs (five tanks and a slot, batch 24). The crusher above is the workshop look.
+			for (MachineKind kind : List.of(MachineKind.BATTERY_BOX, MachineKind.CIRCUIT_ASSEMBLER, MachineKind.CHEMICAL_REACTOR,
+					MachineKind.DISTILLATION_TOWER)) {
 				BlockPos machine = kind.isLarge() ? new BlockPos(x + largeOffset(kind), y, z - 5)
 						: new BlockPos(x - 7 + singleIndex(kind), y, z - 5);
 				server.runCommand("tp @p %d %d %d 180 30".formatted(machine.getX(), y, z - 3));
@@ -700,6 +705,48 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.waitTicks(20);
 			context.takeScreenshot("jugcraft_auto_crafter_screen");
 			context.setScreen(() -> null);
+
+			// Two of the other machine screens in their looks, on the floor in front of the auto-crafter: the rocket pad
+			// (industrial), with a rocket and some cargo but no flight plan yet, then the logic controller (advanced),
+			// with two rules set.
+			BlockPos front = crafter.south();
+			server.runOnServer(minecraft -> {
+				minecraft.overworld().setBlockAndUpdate(front, io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.ROCKET_PAD.defaultBlockState());
+				if (minecraft.overworld().getBlockEntity(front) instanceof io.github.jimbozoomer.jugcraft.rocketry.RocketPadBlockEntity rocketPad) {
+					rocketPad.setItem(io.github.jimbozoomer.jugcraft.rocketry.RocketPadBlockEntity.ROCKET,
+							new ItemStack(io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.DELIVERY_ROCKET));
+					rocketPad.setItem(0, new ItemStack(Items.IRON_INGOT, 32));
+					rocketPad.setItem(1, new ItemStack(Items.REDSTONE, 16));
+				}
+			});
+			context.waitTicks(5);
+			context.getInput().lookAt(front);
+			context.waitTick();
+			context.getInput().pressKey(options -> options.keyUse);
+			context.waitForScreen(io.github.jimbozoomer.jugcraft.client.RocketPadScreen.class);
+			context.waitTicks(5);
+			context.takeScreenshot("jugcraft_rocket_pad_screen");
+			context.setScreen(() -> null);
+			server.runOnServer(minecraft -> {
+				// Emptied first, so its cargo is not dropped in front of the later shots.
+				if (minecraft.overworld().getBlockEntity(front) instanceof net.minecraft.world.Container pad) {
+					pad.clearContent();
+				}
+				minecraft.overworld().setBlockAndUpdate(front, io.github.jimbozoomer.jugcraft.control.JugcraftControl.LOGIC_CONTROLLER.defaultBlockState());
+				if (minecraft.overworld().getBlockEntity(front) instanceof io.github.jimbozoomer.jugcraft.control.LogicControllerBlockEntity controller) {
+					controller.setRule(0, true, net.minecraft.world.item.DyeColor.BLUE, false, 20, net.minecraft.world.item.DyeColor.RED, true);
+					controller.setRule(1, true, net.minecraft.world.item.DyeColor.YELLOW, true, 80, net.minecraft.world.item.DyeColor.LIME, false);
+				}
+			});
+			context.waitTicks(5);
+			context.getInput().lookAt(front);
+			context.waitTick();
+			context.getInput().pressKey(options -> options.keyUse);
+			context.waitForScreen(io.github.jimbozoomer.jugcraft.client.LogicControllerScreen.class);
+			context.waitTicks(5);
+			context.takeScreenshot("jugcraft_logic_controller_screen");
+			context.setScreen(() -> null);
+			server.runOnServer(minecraft -> minecraft.overworld().setBlockAndUpdate(front, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()));
 
 			// The Engineer's Handbook: the first page and the crusher's page.
 			context.setScreen(HandbookScreen::new);

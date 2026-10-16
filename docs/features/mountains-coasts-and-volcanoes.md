@@ -6,6 +6,8 @@ Owner: @jimbozoomer-byte
 Target milestone and tier: world generation (Discovery).
 Primary specialty and supported player role: exploration; mining (surface coal, volcanic stone).
 
+Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
+
 ## Player experience
 Thirteen biomes of mountains, shores and seas. A biome in Minecraft 26.3 does not shape the land: its height and steepness come from the climate. So each of these takes a vanilla biome whose land already has the right shape (peaks, shattered hills, badlands plateaus, beaches, deep seas) and gives it new ground, plants and air. The **wild** layout of Jugcraft regions takes the mountains and hills; the **wetland** layout takes the coasts and islands; both take the frozen and deep seas.
 
@@ -13,17 +15,17 @@ Thirteen biomes of mountains, shores and seas. A biome in Minecraft 26.3 does no
 | --- | --- | --- |
 | **Volcano** | wild: stony peaks, windswept savannas | blackstone and basalt slopes cracked with magma, lava pools banked with blackstone, basalt spires, drifting ash under a grey sky; no animals |
 | **Canyon** | wild: wooded badlands | cliffs banded in terracotta with grassy ledges, pines and spruce scrub, pools of lava |
-| **Highland** | wild: windswept hills | high, treeless grassland: tall grass, coarse dirt, gravel and stone, mossy boulders; sheep, cattle and rabbits |
+| **Highland** | wild: windswept hills | high, open grassland with rare lone rowans: tall grass, coarse dirt, gravel and stone, mossy boulders; sheep, cattle and rabbits |
 | **Basin** | wild: windswept gravelly hills | a barren basin of gravel, stone and andesite with dead bushes; no animals |
-| **Shield** | wild: windswept forests | humps of bare stone and andesite with seams of coal at the surface, firs, pines, spruces, larches and aspens, and lakes |
-| **Karst Pinnacles** | wild: jagged peaks | steep peaks clothed in grass, pines and spruce scrub, pale limestone (calcite) showing through, a grey-green sky; pandas |
-| **Hot Springs** | wild: groves | pines over warm, turquoise pools banked with calcite, blackstone showing through; trail ruins |
+| **Shield** | wild: windswept forests | humps of bare stone and andesite with seams of coal at the surface, firs, windswept Jugcraft pines, spruces, larches and aspens, and lakes |
+| **Karst Pinnacles** | wild: jagged peaks | steep peaks clothed in grass, windswept Jugcraft pines and spruce scrub, pale limestone (calcite) showing through, a grey-green sky; pandas |
+| **Hot Springs** | wild: groves | windswept Jugcraft pines and low Japanese maples, with some vanilla pines, over warm, turquoise pools banked with calcite, blackstone showing through; trail ruins |
 | **Ice Sheet** | wetland and wild: frozen seas | a frozen sea under ice and floes of packed ice; polar bears |
 | **Ocean Trench** | wetland and wild: deep and deep cold seas | a dark floor of deepslate, gravel and obsidian under dim, inky water |
 | **Gravel Beach** | wetland: cool beaches | a shore of gravel; no animals |
 | **Dune Beach** | wetland: temperate beaches | sand with dune grass and **sea oats** |
-| **Overgrown Beach** | wetland: warm beaches | grass, oak scrub, tall grass and sea oats, sand between |
-| **Flower Isle** | wetland: mushroom islands | a peaceful island of grass, sunflowers, poppies, meadow flowers and hydrangeas; no monsters spawn |
+| **Overgrown Beach** | wetland: warm beaches | grass, palms, small palms, oak scrub and tall grass and sea oats, sand between |
+| **Flower Isle** | wetland: mushroom islands | a peaceful island of magnolias, apple trees and oak scrub among grass, sunflowers, poppies, meadow flowers and hydrangeas; no monsters spawn |
 
 - Biomes O' Plenty's Arctic and Icy Hills merge into the Ice Sheet, the Canyon Ravine into the Canyon, the Knoll, Mountain and Mountain Foothills into the Highland, the Volcano Edge into the Volcano, the Jade Cliffs become the Karst Pinnacles, the Oceanic Abyss the Ocean Trench, and the Flower Island the Flower Isle.
 - The beaches keep vanilla's beach structures (buried treasure, beached shipwrecks), and the Ocean Trench vanilla's deep-sea ones (ocean monuments, ruins).
@@ -82,3 +84,7 @@ Results are recorded under "Results" below after CI runs.
 ## World and event applicability
 - Biome fit: each biome takes the climate and the land shape of the vanilla biome it replaces.
 - Seasons: see above.
+
+Tree roster batch 4c makes Flower Isle 55% magnolia, 30% oak bush and 15% apple tree attempts, retaining its sparse 1/2 attempts per chunk and flower decoration. See [the implementation record](trees-batch-4bc.md).
+
+Tree roster batch 5 adds a lone rowan attempt per eight Highland chunks on average, subject to dry ground and sapling survival. It remains open grassland without a forest tree-count layer. See [the implementation and verification record](trees-batch-5.md).

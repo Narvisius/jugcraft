@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "condition": "minecraft:tool/can_silk_touch",
+              "name": "jugcraft:vanadium_iron_ore"
+            },
+            {
+              "type": "minecraft:item",
+              "modifier": [
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "jugcraft:vanadium_iron"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/vanadium_iron_ore"
+}

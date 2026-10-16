@@ -33,6 +33,7 @@ public record FeatureEnabledCondition(String feature, List<String> or) implement
 
 	public static void register() {
 		ResourceConditions.register(TYPE);
+		ResourceConditions.register(VanadiumLegacyCondition.TYPE);
 	}
 
 	@Override

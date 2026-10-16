@@ -74,12 +74,12 @@ BROOM_RACK = {"block": "broom_rack", "display": "Broom Rack", "pegs": 3}
 BROOMS = ["jugcraft:witchs_broom", "jugcraft:enchanted_broom", "jugcraft:flying_broomstick"]
 # What floats in the Horned Skull Cauldron (item tag jugcraft:cauldron_floaters): a witch's ingredients, nothing that
 # would be lost by mistake (no tools, weapons or containers).
-FLOATERS = ["minecraft:apple", "minecraft:bone", "minecraft:spider_eye", "minecraft:fermented_spider_eye", "minecraft:rotten_flesh",
+FLOATERS = ["jugcraft:elderberries", "minecraft:apple", "minecraft:bone", "minecraft:spider_eye", "minecraft:fermented_spider_eye", "minecraft:rotten_flesh",
             "minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:carrot", "minecraft:potato", "minecraft:poisonous_potato",
             "minecraft:beetroot", "minecraft:sweet_berries", "minecraft:glow_berries", "minecraft:egg", "minecraft:feather",
             "minecraft:slime_ball", "minecraft:magma_cream", "minecraft:ghast_tear", "minecraft:nether_wart", "minecraft:pufferfish",
             "minecraft:rabbit_foot", "minecraft:phantom_membrane", "minecraft:amethyst_shard", "minecraft:wither_rose",
-            "jugcraft:mandrake_root", "jugcraft:garlic", "jugcraft:acorn", "jugcraft:chestnut", "jugcraft:cranberries"]
+            "jugcraft:yew_arils", "jugcraft:mandrake_root", "jugcraft:garlic", "jugcraft:acorn", "jugcraft:chestnut", "jugcraft:cranberries"]
 MESSAGES = {"message.jugcraft.enchanted_broom.anointed": "The broom stirs and twitches its bristles: it will sweep for three days.",
             "message.jugcraft.enchanted_broom.full": "The broom is still wide awake.",
             "message.jugcraft.beating_heart_jar.tempo": "%s beats a minute",

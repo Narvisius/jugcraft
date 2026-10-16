@@ -238,7 +238,7 @@ public class BiomeClientGameTests implements FabricClientGameTest {
 	 * has {@code biome}. Preferred, in order: one inside the biome (the biome {@link #SURFACE_MARGIN} blocks to each side
 	 * and where the camera looks) on dry ground; one inside the biome; any. Null if none.
 	 */
-	private static BlockPos surfaceSpot(ServerLevel level, BlockPos place, ResourceKey<Biome> biome) {
+	static BlockPos surfaceSpot(ServerLevel level, BlockPos place, ResourceKey<Biome> biome) {
 		List<int[]> offsets = new ArrayList<>();
 		for (int dx = -SURFACE_REACH; dx <= SURFACE_REACH; dx += SURFACE_STEP) {
 			for (int dz = -SURFACE_REACH; dz <= SURFACE_REACH; dz += SURFACE_STEP) {

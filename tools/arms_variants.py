@@ -67,7 +67,8 @@ BOSSES = {
     "cinder_tyrant": {"display": "the Cinder Tyrant", "lair": "cinder_kiln"},
     "mire_hag": {"display": "the Mire Hag", "lair": "lantern_fen"},
     "crypt_lich": {"display": "the Crypt Lich", "lair": "crypt_archive"},
-    "iron_dreadnought": {"display": "the Iron Dreadnought"},
+    # Fought in the Foundry Trench (docs/features/iron-dreadnought.md); his loot drops one of his two.
+    "iron_dreadnought": {"display": "the Iron Dreadnought", "lair": "foundry_trench"},
     "werewolf_alpha": {"display": "the Alpha Werewolf"},
     "storm_roc": {"display": "the Storm Roc"},
     "abyssal_leviathan": {"display": "the Abyssal Leviathan"},

@@ -8,6 +8,7 @@ import io.github.jimbozoomer.jugcraft.guns.JugcraftGuns;
 import java.util.List;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
@@ -17,6 +18,9 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -142,6 +146,34 @@ public class PumpGunsGameTests {
 		helper.assertTrue(wideTaken < wide.damage() * wide.pellets() - 1.0E-3F,
 				"Aimed at thirteen blocks all eight of the Sledge's pellets landed too (" + wideTaken + ")");
 		helper.succeed();
+	}
+
+	/**
+	 * The Highwayman's grid and the Garrison Rifle's craft apart: each gives its own gun. Its grid without the second
+	 * brass ingot, as it was until 14 October 2026, is the Garrison Rifle's mirrored, and a crafting table matches a shaped
+	 * grid mirrored too, so that grid gives the Garrison Rifle.
+	 */
+	@GameTest
+	public void highwaymanAndGarrisonRifleCraftApart(GameTestHelper helper) {
+		ItemStack s = new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("steel_ingot")));
+		ItemStack b = new ItemStack(BuiltInRegistries.ITEM.getValue(Jugcraft.id("brass_ingot")));
+		ItemStack l = new ItemStack(Items.LEVER);
+		ItemStack p = new ItemStack(Items.OAK_PLANKS);
+		ItemStack e = ItemStack.EMPTY;
+		helper.assertTrue(crafts(helper, CraftingInput.of(3, 3, List.of(s, s, s, p, l, b, e, e, b))).is(JugcraftGuns.GUNS.get("highwayman")),
+				"The Highwayman's grid does not give the Highwayman");
+		helper.assertTrue(crafts(helper, CraftingInput.of(3, 2, List.of(s, s, s, b, l, p))).is(JugcraftGuns.GUNS.get("garrison_rifle")),
+				"The Garrison Rifle's grid does not give the Garrison Rifle");
+		helper.assertTrue(crafts(helper, CraftingInput.of(3, 2, List.of(s, s, s, p, l, b))).is(JugcraftGuns.GUNS.get("garrison_rifle")),
+				"The Highwayman's old grid, the Garrison Rifle's mirrored, does not give the Garrison Rifle");
+		helper.succeed();
+	}
+
+	/** What a crafting grid of these items gives, or nothing. */
+	private static ItemStack crafts(GameTestHelper helper, CraftingInput input) {
+		var level = helper.getLevel();
+		return level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level)
+				.map(recipe -> recipe.value().assemble(input)).orElse(ItemStack.EMPTY);
 	}
 
 	/** A shooter standing at {@code at}, facing south with its look on the target's middle, holding the gun with a shell in. */

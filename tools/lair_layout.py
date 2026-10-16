@@ -2,6 +2,7 @@
 against the blocks' own blockstate files, a deterministic hash for scattering things, and the structure template file in
 26.3's format (tools/retro_game_shop.py's: palette entries {"id", "properties"}, DataVersion 26.3's).
 """
+import ast
 import json
 from pathlib import Path
 
@@ -29,6 +30,27 @@ def _jugcraft_properties(block):
             for name, value in when.items():
                 if name not in ("OR", "AND"):
                     found.setdefault(name, set()).update(str(value).split("|"))
+    for name, values in _drawn_properties(block).items():
+        found.setdefault(name, set()).update(values)
+    return found
+
+
+def _drawn_properties(block):
+    """A block drawn by its block entity's renderer has one model for every state, so its blockstate file names none of
+    its properties: they are its Java's, from the tables that keep the Java's numbers."""
+    if block == "searchlight":
+        steps = _constants(ROOT / "tools" / "trenchworks.py", "SEARCHLIGHT_YAWS", "SEARCHLIGHT_TILTS")
+        return {"yaw": {str(i) for i in range(steps["SEARCHLIGHT_YAWS"])},
+                "tilt": {str(i) for i in range(steps["SEARCHLIGHT_TILTS"] + 1)}, "lit": {"true", "false"}}
+    return {}
+
+
+def _constants(path, *names):
+    """Plain constants from a table's source, read without importing it (some tables draw their art when imported)."""
+    found = {}
+    for node in ast.parse(path.read_text(encoding="utf-8")).body:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and getattr(node.targets[0], "id", None) in names:
+            found[node.targets[0].id] = ast.literal_eval(node.value)
     return found
 
 

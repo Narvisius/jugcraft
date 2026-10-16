@@ -26,6 +26,8 @@ art and fit, and every colour figure was recomputed by script. Their points and 
 own-wood revision" in Decisions, which ends with the choices still left to the owner. The owner has since approved the
 cedar as batch 1 built it ("Cedar looks sooo good!!"), so every check here is made against that cedar, #725543.
 
+**Batch 2 is implemented and tested (15 October 2026)** in [PR #386](https://github.com/jimbozoomer-byte/jugcraft/pull/386); [feature record and actual measurements](../features/trees-batch-2.md). The owner approved the original pine textures, then authorized the trees/biomes and the remaining roster. The original pine wood supersedes the older proposed pine palette below. The owner approved the batch-2 inspection world on 15 October (“Batch 2 looks good”). Batch 3 yew is implemented on a separate public branch; the owner instructed us to finish it and not start batch 4. This is not a merge or server-world deployment.
+
 **The new woods' colours are approved.** On 6 October 2026 the owner saw the sixteen new woods as previewed (each wood's
 bark, log end, stripped side and planks, with this roster's defaults: the yew as painted and one fruitwood) and said:
 "The new wood looks so so so good". Those colours are the ones to build. The other calls at the end of Decisions (wood
@@ -38,6 +40,8 @@ with vanilla, and one for biome coverage. Their findings were applied, and the l
 changed and why. Leaf and bark colours were worked out by script from the ramps in `tools/wood_style.py`. Each wood was
 checked against every other wood, vanilla's and Jugcraft's, by CIE76 ΔE and by CIEDE2000, and each leaf and bark against
 the trees it grows beside.
+
+**Batches 4b and 4c are implemented and owner-approved (16 October 2026)** on `codex/tree-generation-batch-4bc` in [PR #395](https://github.com/jimbozoomer-byte/jugcraft/pull/395), following the owner-approved batch 4. The owner requested both together; [the feature record](../features/trees-batch-4bc.md) records the shared scope and actual verification. PR #395 is ready for review. Batch 5 (rowan, elder and seasonal fruit) is implemented and owner-approved on its own public branch in [PR #396](https://github.com/jimbozoomer-byte/jugcraft/pull/396); [implementation record](../features/trees-batch-5.md). PR #396 is ready for review. Batches 5b and 5c are implemented together in [draft PR #397](https://github.com/jimbozoomer-byte/jugcraft/pull/397), awaiting owner inspection; [record](../features/trees-batch-5bc.md). Batch 6 and later remain unstarted.
 
 ## How to read this
 

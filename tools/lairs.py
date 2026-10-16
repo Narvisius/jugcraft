@@ -23,7 +23,8 @@ EDGE_DAMAGE = 4.0     # the mist's toll for flying or falling off, never below h
 # The lair-only blocks: unbreakable fixtures, in the wither_immune and dragon_immune tags, with no item and no drops.
 # The Hollow Acre's, the exit (every lair's), the Spindle Loft's (docs/features/spindle-loft.md), the Glacier Hall's
 # (docs/features/glacier-hall.md), the Cinder Kiln's (docs/features/cinder-kiln.md), the Lantern Fen's
-# (docs/features/lantern-fen.md), then the Archive of Last Names' (docs/features/crypt-archive.md).
+# (docs/features/lantern-fen.md), the Archive of Last Names' (docs/features/crypt-archive.md), the Foundry Trench's
+# (docs/features/foundry-trench.md), then the Moonlit Ring's (docs/features/moonlit-ring.md).
 LAIR_BLOCKS = {
     "blighted_soil": "Blighted Soil",
     "black_wheat": "Black Wheat",
@@ -59,6 +60,13 @@ LAIR_BLOCKS = {
     "grave_seal": "Grave Seal",
     "archive_lectern": "Lectern of Last Names",
     "phylactery": "Phylactery",
+    "pylon_lattice": "Pylon Lattice",
+    "pylon_crown": "Pylon Crown",
+    "discharge_breaker": "Breaker",
+    "ground_terminal": "Ground Terminal",
+    "moonwood_leaves": "Moonwood Leaves",
+    "warden_bell": "Warden Bell",
+    "raked_turf": "Raked Turf",
 }
 # The colours of the Spindle Loft's thread: its four spools', and the white of the threads between them.
 THREAD_COLOURS = ("green", "blue", "beige", "red", "white")
@@ -82,8 +90,10 @@ SLUICE = {"flood_ticks": 200, "refill_ticks": 400, "gate_blocks": 40, "trough_bl
 SLUICE_PARTS = ("frame", "panel", "wheel")
 SLUICE_FLOWS = ("ready", "open", "filling", "choked")   # choked: by the Cinder Tyrant's slag
 # Fixtures a player in a lair may use (everything else is refused): the exits, the braziers Vesperine's fight lights, the
-# Cinder Kiln's sluice gates, the Lantern Fen's lamps, and the Archive of Last Names' grave seals and lectern.
-FIXTURES = ("lair_exit", "lair_brazier", "sluice_gate", "fen_lamp", "grave_seal", "archive_lectern")
+# Cinder Kiln's sluice gates, the Lantern Fen's lamps, the Archive of Last Names' grave seals and lectern, the Foundry
+# Trench's breakers, and the Moonlit Ring's Warden Bells.
+FIXTURES = ("lair_exit", "lair_brazier", "sluice_gate", "fen_lamp", "grave_seal", "archive_lectern", "discharge_breaker",
+            "warden_bell")
 
 # The Last Rites (the Hollow Acre's ritual): a grave in the Overworld at night, lit candles round it, a Mourning Wreath
 # laid on it and the Death Knell rung beside it.
@@ -162,6 +172,41 @@ NAME_STONE = {"light": 9}
 PHYLACTERY = {"light": 10}
 LECTERN = {"cooldown": 20}     # ticks between readings of the lectern by one player
 
+# Sealed Orders (the Foundry Trench's ritual): used on a Field Telephone in the Overworld that stands in a trench: under
+# the open sky, with at least `trench_blocks` trench-works blocks (#jugcraft:trench_works) within `trench_range` blocks of
+# it (a cube). Any hour, all year. The bell rings and a whistle shrills down the line, the gate for lairs.gate_seconds;
+# whoever goes in wakes in the trench's dugout. Then the line goes dead.
+ORDERS = {
+    "cooldown": 40,            # ticks between uses of one set of orders, answered or not
+    "line_range": 3,           # how near another open line into the trench must not be (blocks)
+    "trench_range": 3,         # how far round the telephone the trench is looked for (blocks, a cube)
+    "trench_blocks": 4,        # trench-works blocks needed round it
+    "bell_ticks": 40,          # ticks between rings of an open line's bell
+}
+TRENCH_WORKS = ["jugcraft:sandbags", "jugcraft:sandbags_slab", "jugcraft:sandbags_stairs", "jugcraft:timber_revetment",
+                "jugcraft:timber_revetment_slab", "jugcraft:timber_revetment_stairs", "jugcraft:duckboard"]
+# The trench's fixtures. Three pylons, each with its breaker; a pylon is dark or live (its crown burning, its breaker's
+# lamp lit, the one the Dreadnought's charge will strike), and its terminal live while it earths a discharge. A breaker
+# is open or thrown, and fouled while a plate jams it. Light: a live crown, a live breaker's lamp, a live terminal.
+PYLON_NAMES = ("west", "east", "south")
+PYLON_CROWN = {"light": 12}
+BREAKER = {"light": 10, "rest": 10}   # its lamp's light when live; the least ticks between one player's uses
+TERMINAL = {"light": 8}
+
+# The Howling Totem (the Moonlit Ring's ritual): used at night in the Overworld, in werewolf country (the werewolves'
+# haunts, #jugcraft:werewolf_haunts), under the open sky, standing on woodland floor (earth a tree could grow on: grass,
+# dirt, podzol, moss and the like), and no nearer growing or potted wolfsbane than the werewolves' ward reach. Any night,
+# not only a full moon's, all year. The totem howls and something answers; it is used up, and Grey Mist rises where it
+# stood, the gate for lairs.gate_seconds; whoever goes in comes to in the ring's camp.
+TOTEM = {
+    "cooldown": 40,            # ticks between uses of one totem, answered or not
+    "mist_range": 3,           # how near another open mist into the ring must not be (blocks)
+}
+# The ring's Warden Bells (west, north and east): a bell rung swings for swing_ticks, and cannot be rung again until it
+# has stopped.
+WARDEN_BELL = {"swing_ticks": 40}
+BELL_NAMES = ("west", "north", "east")
+
 ITEMS = {
     "mourning_wreath": "Mourning Wreath",
     "death_knell": "Death Knell",
@@ -170,6 +215,8 @@ ITEMS = {
     "kiln_seal": "Kiln Seal",
     "hag_stone": "Hag Stone",
     "exhumation_writ": "Writ of Exhumation",
+    "sealed_orders": "Sealed Orders",
+    "howling_totem": "Howling Totem",
 }
 GATE = {"entity": "mist_gate", "display": "Mist Gate", "width": 1.6, "height": 2.6}
 
@@ -200,7 +247,19 @@ RECIPES = {
     # sac. Used up by its serving.
     "exhumation_writ": {"pattern": ["PPP", "BEB", " I "], "key": {
         "P": "minecraft:paper", "B": "minecraft:bone", "E": "jugcraft:ectoplasm", "I": "minecraft:ink_sac"}},
+    # Orders: three sheets of paper over a steel plate and a coil of copper wire, sealed with a honeycomb's wax. Used up by
+    # the call.
+    "sealed_orders": {"pattern": ["PPP", "SHW"], "key": {
+        "P": "minecraft:paper", "S": "jugcraft:steel_plate", "H": "minecraft:honeycomb", "W": "jugcraft:copper_wire"}},
+    # A totem: a werewolf's pelt (any kind) wrapped round three bones and bound with two silver ingots. Used up by its
+    # howl.
+    "howling_totem": {"pattern": ["SPS", " B ", "BB "], "key": {
+        "S": "#c:ingots/silver", "P": "#jugcraft:werewolf_pelts", "B": "minecraft:bone"}},
 }
+# What counts as a werewolf's pelt for the totem: every kind's (tools/agriculture.py WEREWOLF kinds), and the Alpha's
+# own (tools/alpha_werewolf.py), one for one.
+WEREWOLF_PELTS = ["jugcraft:werewolf_pelt", "jugcraft:snow_werewolf_pelt", "jugcraft:shadow_werewolf_pelt",
+                  "jugcraft:alpha_pelt"]
 
 # Each lair's dimension: a void with its own biome; fixed time, no weather, no beds or respawn anchors. Its sky, fog and
 # light colours, its music, and the motes drifting in its air; and what a player is told on coming in.
@@ -259,12 +318,30 @@ LAIRS = {
         "ambient_light": 0.18,
         "motes": ("minecraft:white_ash", 0.004),
     },
+    "foundry_trench": {
+        "display": "The Foundry Trench",
+        "enter": "A whistle shrills down the line, and you come to in %s",
+        "sky": "#3a2a20", "fog": "#6a5442", "water_fog": "#2a2a24", "water": "#4a4a3c",
+        "ambient_light_color": "#6a5038", "sky_light_color": "#8a6644",
+        "music": "minecraft:music.nether.basalt_deltas",
+        "ambient_light": 0.25,
+        "motes": ("minecraft:ash", 0.008),
+    },
+    "moonlit_ring": {
+        "display": "The Moonlit Ring",
+        "enter": "The totem howls, something far off answers, and you come to in %s",
+        "sky": "#0b1222", "fog": "#1c2638", "water_fog": "#141c2a", "water": "#2a3a52",
+        "ambient_light_color": "#2c3a58", "sky_light_color": "#6a7aa0",
+        "music": "minecraft:music.overworld.forest",
+        "ambient_light": 0.2,
+        "motes": ("minecraft:white_ash", 0.003),
+    },
 }
 
 
 def blocks():
     """Every block the lairs register: the lair-only blocks and the Mourning Wreath (the Cursed Spindle, the Frost Horn, the
-    Kiln Seal, the Hag Stone and the Writ of Exhumation are items)."""
+    Kiln Seal, the Hag Stone, the Writ of Exhumation, Sealed Orders and the Howling Totem are items)."""
     return list(LAIR_BLOCKS) + ["mourning_wreath"]
 
 

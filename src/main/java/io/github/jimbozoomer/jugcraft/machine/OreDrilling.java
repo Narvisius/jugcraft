@@ -12,11 +12,13 @@ import org.jspecify.annotations.Nullable;
 /**
  * Where the ore drill digs and what it leaves behind. It works through a (2R+1)x(2R+1) column
  * below itself (R = {@link MachineKind#DRILL_RADIUS}), one layer at a time from the top, down to the
- * bottom of the world. Only blocks in {@code c:ores} are taken, as whole ore blocks (like silk touch),
- * so ore processing still decides the yield; the hole is refilled with the ore's host rock.
+ * bottom of the world. Blocks in {@code c:ores} or {@code jugcraft:mineral_sands} are taken whole.
+ * The hole is refilled with host rock or ordinary sand. A mineral-sand block is one finite feed unit;
+ * it deliberately has no ore-yield tag and cannot be extracted again after replacement.
  */
 public final class OreDrilling {
 	public static final TagKey<Block> ORES = tag("ores");
+	public static final TagKey<Block> MINERAL_SANDS = TagKey.create(Registries.BLOCK, Identifier.parse("jugcraft:mineral_sands"));
 	private static final TagKey<Block> IN_DEEPSLATE = tag("ores_in_ground/deepslate");
 	private static final TagKey<Block> IN_NETHERRACK = tag("ores_in_ground/netherrack");
 
@@ -47,11 +49,12 @@ public final class OreDrilling {
 	}
 
 	public static boolean isOre(BlockState state) {
-		return state.is(ORES);
+		return state.is(ORES) || state.is(MINERAL_SANDS);
 	}
 
-	/** The rock that replaces a mined ore: deepslate, netherrack or stone. */
+	/** Depleted sediment, or the rock that replaces a mined ore. */
 	public static BlockState filler(BlockState ore) {
+		if (ore.is(MINERAL_SANDS)) return Blocks.SAND.defaultBlockState();
 		if (ore.is(IN_DEEPSLATE)) {
 			return Blocks.DEEPSLATE.defaultBlockState();
 		}

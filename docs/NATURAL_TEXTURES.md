@@ -11,6 +11,8 @@ they said: "All the wood looks so so good now ... take note of how you did that 
 for how we want any additional wood or natural textures to look ingame". This page is that note. The code that does it
 is `tools/wood_style.py`; read it beside this page.
 
+**15 October pine exception:** the owner requested and approved the original pine wood textures from the shared library. Pine logs, ends and planks therefore use their local originals without recolouring. Its grayscale needle layer takes a fixed evergreen tint at render time; the original brown twig overlay remains untinted. See [tree batch 2](features/trees-batch-2.md).
+
 ## The owner's own textures are used as drawn
 
 These rules are for textures Jugcraft draws. Textures the owner drew themselves, in the shared library

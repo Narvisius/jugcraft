@@ -19,20 +19,24 @@ import net.minecraft.world.level.material.Fluids;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A storage tank's screen (right-click its shell): a picture of the tank cut away to show the liquid inside at its
- * level (the fluid's own moving texture, the level marked in tenths), what it holds and how much (mB, of how much), how
- * much came in and went out over the last second, how long until it is full or empty at that rate, and the outlet
- * valve. Everything is read live from the outlet's synced block entity.
+ * A storage tank's screen (right-click its shell), in the industrial look (docs/features/machine-screens.md): the
+ * status lamp and the tank's name, with what it is rated for in a chip; a picture of the tank cut away to show the
+ * liquid inside at its level (the fluid's own moving texture, the level marked in tenths); then three panes: its
+ * contents (what, how much of how much, a fill bar), its flow over the last second (in, out, net and how long until it is
+ * full or empty at that rate) and the outlet valve; and a help strip. Everything is read live from the outlet's synced
+ * block entity.
  */
 public class StorageTankScreen extends Screen {
 	static final int W = 352, H = 196;
-	static final int BG = 0xF00E1820, PANEL = 0xF0132029, EDGE = 0xFF2B5566, ACCENT = 0xFF4FC8E8, TEXT = 0xFFBCD4DC, DIM = 0xFF6F8A94,
-			GREEN = 0xFF5ADC78, AMBER = 0xFFF0B030, RED = 0xFFF04034, WHITE = 0xFFFFFFFF;
+	static final int AMBER = 0xFFF0B030, WHITE = 0xFFFFFFFF;
 	// The tank's paint, as on the real thing: white shell, the yellow and black checker band, dark rim and roof edge.
 	static final int SHELL = 0xFFE8EAE6, SHELL_SHADE = 0xFFB8BCB8, SHELL_LIGHT = 0xFFFAFAF8, BAND_Y = 0xFFE2B822, BAND_K = 0xFF1A1A1C,
 			RIM = 0xFF363A3E, LINING = 0xFF3C2E28, LINING_DARK = 0xFF2A201C, FOUNDATION = 0xFF9E9E9C;
+	/** The readout panes' left edge and width. */
+	private static final int READ_X = 136, READ_W = 210;
 
 	private final BlockPos outlet;
+	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("storage_tank");
 	private int left, top;
 
 	public StorageTankScreen(BlockPos outlet) {
@@ -68,9 +72,7 @@ public class StorageTankScreen extends Screen {
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractRenderState(g, mouseX, mouseY, delta);
 		int x0 = left, y0 = top;
-		g.fill(x0, y0, x0 + W, y0 + H, BG);
-		g.outline(x0, y0, W, H, EDGE);
-		g.fill(x0, y0 + 20, x0 + W, y0 + 21, ACCENT);
+		ScreenKit.body(g, theme, x0, y0, W, H);
 		StorageTankPortBlockEntity tank = tank();
 		BlockState state = tank == null ? null : tank.getBlockState();
 		String name = t("title");
@@ -82,10 +84,9 @@ public class StorageTankScreen extends Screen {
 		if (tank != null && !tank.title().isEmpty()) {
 			name = tank.title();
 		}
-		int nameRoom = W - 16;
+		int nameRoom = W - 8;
 		if (tank != null) {
-			// What the tank is rated for, in its rating's colour, at the right of the title bar (a long title is cut
-			// short to leave it room).
+			// What the tank is rated for, in its rating's colour, in a chip at the right of the title strip.
 			io.github.jimbozoomer.jugcraft.nuclear.TankRating rating = tank.rating();
 			int colour = switch (rating) {
 				case FLAMMABLE -> 0xFFE0605A;
@@ -93,25 +94,27 @@ public class StorageTankScreen extends Screen {
 				case CRYOGENIC -> 0xFF78B8F0;
 				default -> 0xFFB8C0C8;
 			};
-			String rated = Component.translatable("screen.jugcraft.tank.rating", io.github.jimbozoomer.jugcraft.nuclear.TankUpgrades.name(rating)).getString();
-			int ratedWidth = font.width(rated);
-			g.text(font, rated, x0 + W - 8 - ratedWidth, y0 + 6, colour, false);
-			nameRoom = W - 28 - ratedWidth;
+			String rated = t("rating", io.github.jimbozoomer.jugcraft.nuclear.TankUpgrades.name(rating));
+			ScreenKit.chip(g, font, theme, x0 + W - 4, y0 + 1, rated, colour);
+			nameRoom = W - 24 - font.width(rated);
 		}
-		if (font.width(name) > nameRoom) {
-			name = font.plainSubstrByWidth(name, nameRoom - font.width("...")) + "...";
-		}
-		g.text(font, name, x0 + 8, y0 + 6, ACCENT, false);
-		if (tank == null || !tank.formed()) {
-			g.text(font, t("not_formed"), x0 + 8, y0 + 40, AMBER, false);
+		boolean formed = tank != null && tank.formed();
+		int in = formed ? tank.inRate() : 0, out = formed ? tank.outRate() : 0;
+		ScreenKit.title(g, font, theme, x0, y0, Component.literal(name), !formed ? theme.warn() : in > 0 || out > 0 ? theme.ok() : theme.dim(),
+				nameRoom);
+		if (!formed) {
+			ScreenKit.pane(g, theme, x0 + 6, y0 + 15, W - 12, 60);
+			MachineSkin.wrap(g, font, Component.translatable("screen.jugcraft.tank.not_formed"), x0 + 12, y0 + 22, W - 24, y0 + 72, theme.warn());
 			return;
 		}
 		long capacity = tank.fluid.capacity() / FluidConstants.BUCKET * 1000;
 		FluidVariant variant = tank.fluid.variant;
 		long amount = variant.isBlank() ? 0 : tank.fluid.amount * 1000 / FluidConstants.BUCKET;
 		float fill = capacity <= 0 ? 0 : Math.min(1, amount / (float) capacity);
-		picture(g, tank, variant, fill, x0 + 10, y0 + 28);
-		readouts(g, tank, state, variant, amount, capacity, fill, x0 + 136, y0 + 30);
+		ScreenKit.pane(g, theme, x0 + 6, y0 + 15, 124, 155);
+		picture(g, tank, variant, fill, x0 + 10, y0 + 17);
+		readouts(g, tank, state, variant, amount, capacity, fill, in, out, x0 + READ_X, y0 + 15);
+		ScreenKit.help(g, font, theme, x0 + 6, y0 + 174, W - 12, 16, Component.translatable("screen.jugcraft.tank.hint"));
 	}
 
 	/**
@@ -121,7 +124,6 @@ public class StorageTankScreen extends Screen {
 	 */
 	private void picture(GuiGraphicsExtractor g, StorageTankPortBlockEntity tank, FluidVariant variant, float fill, int x, int y) {
 		int w = 104, h = 150;
-		g.fill(x - 2, y, x + w + 16, y + h + 6, PANEL);
 		int sx0 = x + 6, sx1 = x + w - 6, roofTop = y + 10, wallTop = y + 18, base = y + h - 6;
 		// The roof, low and wide, its rim dark; the handrail on it.
 		g.fill(sx0 + 6, roofTop, sx1 - 6, roofTop + 3, SHELL_SHADE);
@@ -170,60 +172,60 @@ public class StorageTankScreen extends Screen {
 		int scale = sx1 + 4;
 		for (int k = 0; k <= 10; k++) {
 			int yy = cy1 - Math.round(k / 10F * (cy1 - cy0));
-			g.fill(scale, yy, scale + (k % 5 == 0 ? 6 : 3), yy + 1, DIM);
+			g.fill(scale, yy, scale + (k % 5 == 0 ? 6 : 3), yy + 1, theme.dim());
 		}
-		g.fill(scale - 2, level - 1, scale + 8, level + 1, RED);
+		g.fill(scale - 2, level - 1, scale + 8, level + 1, theme.warn());
 		String pct = String.format("%.0f%%", fill * 100);
 		g.text(font, pct, (cx0 + cx1) / 2 - font.width(pct) / 2, Math.max(cy0 + 2, level - 10), WHITE, true);
 	}
 
-	/** What it holds, how much, how fast it is filling and emptying, how long that leaves, and the outlet valve. */
+	/** Three panes: what it holds and how much, how fast it is filling and emptying and how long that leaves, the outlet. */
 	private void readouts(GuiGraphicsExtractor g, StorageTankPortBlockEntity tank, BlockState state, FluidVariant variant, long amount, long capacity,
-			float fill, int x, int y) {
-		g.fill(x - 4, y - 2, x + 208, y + 156, PANEL);
-		int line = y + 4;
-		g.text(font, t("fluid"), x + 2, line, DIM, false);
+			float fill, int in, int out, int x, int y) {
+		int w = READ_W - 12;
+		// Contents.
+		int line = ScreenKit.pane(g, font, theme, x, y, READ_W, 56, t("heading.contents"));
 		String fluid = variant.isBlank() || amount <= 0 ? t("empty") : FluidVariantAttributes.getName(variant).getString();
+		int fx = x + 6;
 		if (!variant.isBlank() && amount > 0) {
 			int colour = variant.getFluid().isSame(Fluids.WATER) ? 0xFF3F76E4
 					: 0xFF000000 | (Minecraft.getInstance().level != null
 					? FluidVariantRendering.getColor(variant, Minecraft.getInstance().level, tank.getBlockPos()) : FluidVariantRendering.getColor(variant));
-			g.fill(x + 54, line, x + 62, line + 8, colour == 0xFFFFFFFF ? 0xFF9A7A40 : colour);
+			g.fill(fx, line, fx + 8, line + 8, colour == 0xFFFFFFFF ? 0xFF9A7A40 : colour);
+			fx += 12;
 		}
-		g.text(font, fluid, x + (variant.isBlank() || amount <= 0 ? 54 : 66), line, WHITE, false);
-		line += 18;
-		g.text(font, t("contents"), x + 2, line, DIM, false);
-		g.text(font, mb(amount) + " mB", x + 54, line, WHITE, false);
+		g.text(font, ScreenKit.fit(font, fluid, x + 6 + w - fx), fx, line, theme.text(), false);
 		line += 11;
-		g.text(font, t("of", mb(capacity), mb(capacity / 1000)), x + 54, line, DIM, false);
+		String percent = t("fill", String.format("%.1f", fill * 100));
+		g.text(font, ScreenKit.fit(font, mb(amount) + " / " + mb(capacity) + " mB", w - font.width(percent) - 4), x + 6, line, theme.text(), false);
+		g.text(font, percent, x + 6 + w - font.width(percent), line, theme.dim(), false);
 		line += 11;
-		g.text(font, t("fill", String.format("%.1f", fill * 100)), x + 54, line, TEXT, false);
-		line += 18;
-		int in = tank.inRate(), out = tank.outRate();
-		g.text(font, t("in"), x + 2, line, DIM, false);
-		g.text(font, "+" + mb(in) + " mB/s", x + 54, line, in > 0 ? GREEN : DIM, false);
-		line += 11;
-		g.text(font, t("out"), x + 2, line, DIM, false);
-		g.text(font, "-" + mb(out) + " mB/s", x + 54, line, out > 0 ? RED : DIM, false);
-		line += 11;
+		ScreenKit.bar(g, theme, x + 6, line, w, 6, fill, theme.energy());
+		// Flow.
+		int fy = y + 59;
+		line = ScreenKit.pane(g, font, theme, x, fy, READ_W, 62, t("heading.flow"));
+		ScreenKit.row(g, font, theme, x + 6, line, w, t("in"), "+" + mb(in) + " mB/s", in > 0 ? theme.ok() : theme.dim());
+		line += 10;
+		ScreenKit.row(g, font, theme, x + 6, line, w, t("out"), "-" + mb(out) + " mB/s", out > 0 ? AMBER : theme.dim());
+		line += 10;
 		int net = in - out;
 		String eta;
-		int etaColour = TEXT;
+		int etaColour = theme.text();
 		if (net > 0 && amount < capacity) {
 			eta = t("full_in", time((capacity - amount) / net));
-			etaColour = GREEN;
+			etaColour = theme.ok();
 		} else if (net < 0 && amount > 0) {
 			eta = t("empty_in", time(amount / -net));
 			etaColour = AMBER;
 		} else {
 			eta = t("steady");
 		}
-		g.text(font, t("net"), x + 2, line, DIM, false);
-		g.text(font, (net >= 0 ? "+" : "") + mb(net) + " mB/s", x + 54, line, TEXT, false);
-		line += 11;
-		g.text(font, eta, x + 54, line, etaColour, false);
-		line += 18;
-		g.text(font, t("outlet"), x + 2, line, DIM, false);
+		ScreenKit.row(g, font, theme, x + 6, line, w, t("net"), (net >= 0 ? "+" : "") + mb(net) + " mB/s", theme.text());
+		line += 10;
+		g.text(font, ScreenKit.fit(font, eta, w), x + 6 + w - font.width(ScreenKit.fit(font, eta, w)), line, etaColour, false);
+		// The outlet valve, with a lamp.
+		int oy = y + 124;
+		line = ScreenKit.pane(g, font, theme, x, oy, READ_W, 31, t("heading.outlet"));
 		String valve;
 		int valveColour;
 		if (state.getValue(StorageTankPortBlock.POWERED)) {
@@ -231,14 +233,13 @@ public class StorageTankScreen extends Screen {
 			valveColour = AMBER;
 		} else if (state.getValue(StorageTankPortBlock.OPEN)) {
 			valve = t("open");
-			valveColour = GREEN;
+			valveColour = theme.ok();
 		} else {
 			valve = t("shut");
 			valveColour = AMBER;
 		}
-		g.text(font, valve, x + 54, line, valveColour, false);
-		line += 14;
-		g.text(font, t("hint"), x + 2, line, DIM, false);
+		MachineSkin.lamp(g, x + 6, line + 1, valveColour);
+		g.text(font, ScreenKit.fit(font, valve, w - 10), x + 16, line, valveColour, false);
 	}
 
 	/** Seconds as "1h 4m", "3m 20s" or "45s". */

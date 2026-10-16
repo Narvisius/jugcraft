@@ -53,7 +53,8 @@ public final class GunPose {
 				&& !entity.isFallFlying() && !entity.isSleeping()) {
 			// The other hand busy with something of its own (eating, a shield) keeps to it.
 			boolean otherBusy = entity.isUsingItem() && entity.getUsedItemHand() == InteractionHand.OFF_HAND;
-			boolean both = GunLooks.of(gun.name()).twoHanded() && !otherBusy;
+			// Slice 13D: a carbine (a one-handed gun with a stock fitted) is held in both.
+			boolean both = (GunLooks.of(gun.name()).twoHanded() || GunItem.carbine(entity.getMainHandItem())) && !otherBusy;
 			// Slice 10G: a one-handed gun in each hand raises both arms, each with its gun.
 			boolean dual = GunItem.dual(entity) && !otherBusy;
 			hold = Hold.of(both, entity.getMainArm() == HumanoidArm.LEFT, dual);

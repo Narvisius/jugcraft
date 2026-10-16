@@ -32,7 +32,9 @@ public class GiantSaplingBlock extends SaplingBlock {
 			for (int dx = 0; dx >= -1; dx--) {
 				for (int dz = 0; dz >= -1; dz--) {
 					BlockPos corner = pos.offset(dx, 0, dz);
-					if (isSquare(level, corner) && growGiant(level, corner, state, random)) {
+					if (isSquare(level, corner)) {
+						growGiant(level, corner, state, random);
+						// A planted square reserves a giant; failed clearance must not consume one as a small tree.
 						return;
 					}
 				}
@@ -52,14 +54,15 @@ public class GiantSaplingBlock extends SaplingBlock {
 
 	private boolean growGiant(ServerLevel level, BlockPos corner, BlockState state, RandomSource random) {
 		List<BlockPos> square = square(corner);
+		List<BlockState> original = square.stream().map(level::getBlockState).toList();
 		for (BlockPos at : square) {
 			level.setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_NONE);
 		}
 		if (giant.growTree(level, level.getChunkSource().getGenerator(), corner, state, random)) {
 			return true;
 		}
-		for (BlockPos at : square) {
-			level.setBlock(at, state, Block.UPDATE_NONE);
+		for (int i = 0; i < square.size(); i++) {
+			level.setBlock(square.get(i), original.get(i), Block.UPDATE_NONE);
 		}
 		return false;
 	}

@@ -6,19 +6,21 @@ Owner: @jimbozoomer-byte
 Target milestone and tier: world generation and building (Discovery).
 Primary specialty and supported player role: exploration; building (redwood, eucalyptus and mahogany wood).
 
+Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
+
 ## Player experience
 Eight forests, mostly in the **woodland** layout of Jugcraft regions. The two giant forests of the old-growth taigas also grow in the wild layout:
 
 | Biome | Layout: replaces | What grows |
 | --- | --- | --- |
 | **Rainforest** | woodland: the wettest jungles | tall mahoganies and giant ones, jungle trees and bushes over ferns, orange cosmos and puddles; only parrots |
-| **Eucalyptus Forest** | woodland: other jungles, savanna plateaus | tall eucalyptus with rainbow-streaked bark, oak scrub, melons and wildflowers; parrots among the farm animals |
+| **Eucalyptus Forest** | woodland: other jungles, savanna plateaus | ordinary, branching and rare giant eucalyptus with rainbow-streaked bark, oak scrub, melons and wildflowers; parrots among the farm animals |
 | **Tropics** | woodland: sparse jungles | bright green land of palms, small palms, flowering azaleas and jungle bushes; hibiscus, hydrangeas and bamboo; turquoise water; parrots; jungle temples |
-| **Subtropics** | woodland: savannas, warm plains | green, plains-like country with flowering azaleas, oaks, birches, small palms and vine-hung oaks; hydrangeas, sugar cane; villages |
+| **Subtropics** | woodland: savannas, warm plains | green, plains-like country with flowering azaleas, broad live oaks with shroud moss, birches, small palms and vine-hung oaks; hydrangeas, sugar cane; villages |
 | **Dense Forest** | woodland: dark forests | big spreading oaks packed close, dark oaks and a rare great oak among them, leaf litter and ferns; woodland mansions |
 | **Redwood Forest** | woodland and wild: old-growth pine taigas | giant redwoods two blocks wide and tall single ones, a few firs and mossy maples, on podzol broken by moss; ferns and tall ferns |
 | **Temperate Rainforest** | woodland and wild: old-growth spruce taigas | firs and redwoods, moss-hung bigleaf maples and willows, thick with ferns and berry bushes |
-| **Woodland** | woodland: flower forests, sunflower plains | plain oak woodland: oaks big and small, fallen logs, leaf litter, poppies, daisies, berry bushes; villages and woodland mansions |
+| **Woodland** | woodland: flower forests, sunflower plains | oak woodland with occasional elder shrubs: oaks big and small, fallen logs, leaf litter, poppies, daisies, berry bushes; villages and woodland mansions |
 
 - Biomes O' Plenty's Redwood Forest Edge merges into the Redwood Forest, the Temperate Rainforest Hills into the Temperate Rainforest, the old Rainforest into the Rainforest, the Tropic Beach into the Tropics, and the Deciduous Forest and Timber into the Woodland.
 - Seasons: the Dense Forest, Redwood Forest, Temperate Rainforest and Woodland change colour with the seasons. Only the Dense Forest and Woodland take winter snow when `seasons.snow` is on; the redwood and temperate rainforests have mild, wet winters. The four tropical forests do not change.
@@ -88,3 +90,5 @@ Results are recorded under "Results" below after CI runs.
 ## World and event applicability
 - Biome fit: each biome takes the climate of the vanilla biome it replaces.
 - Seasons: see above.
+
+Tree roster batch 5 draws 4% of Woodland's existing tree attempts from ordinary oak into elder shrubs. The 9/10 attempts per chunk, fancy oaks, oak bushes, fallen logs and other decoration remain unchanged. See [the implementation and verification record](trees-batch-5.md).

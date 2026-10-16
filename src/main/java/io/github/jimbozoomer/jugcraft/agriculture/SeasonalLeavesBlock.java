@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * turns together. With seasons off they stay green. Only the look changes: otherwise these are vanilla leaves (natural ones decay away from logs; they drop
  * saplings and sticks).
  */
-public class SeasonalLeavesBlock extends TintedParticleLeavesBlock {
+public class SeasonalLeavesBlock extends TintedParticleLeavesBlock implements SeasonalFoliage {
 	public static final EnumProperty<Foliage> SEASON = EnumProperty.create("season", Foliage.class);
 	/** Keep in sync with JITTER and SPREAD in tools/agriculture.py. */
 	public static final int JITTER = 7;
@@ -94,9 +94,7 @@ public class SeasonalLeavesBlock extends TintedParticleLeavesBlock {
 		super.randomTick(state, level, pos, random);
 		BlockState now = level.getBlockState(pos);
 		int day = JugcraftSeasons.today();
-		if (now.is(this) && follow(now, level, pos, day)) {
-			catchUp(level, pos, day);
-		}
+		updateSeason(this, now, level, pos, day, schedule);
 	}
 
 	/** Leaves placed or grown from a sapling start in today's state rather than waiting for a random tick. */
@@ -104,12 +102,18 @@ public class SeasonalLeavesBlock extends TintedParticleLeavesBlock {
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
 		super.onPlace(state, level, pos, oldState, movedByPiston);
 		if (!level.isClientSide() && !oldState.is(this)) {
-			follow(state, level, pos, JugcraftSeasons.today());
+			follow(state, level, pos, JugcraftSeasons.today(), schedule);
 		}
 	}
 
 	/** Brings the loaded leaves connected to {@code start} up to date for {@code day}, at most {@link #SPREAD} of them. */
-	private void catchUp(ServerLevel level, BlockPos start, int day) {
+	static void updateSeason(Block block, BlockState state, ServerLevel level, BlockPos pos, int day, Schedule schedule) {
+		if (state.is(block) && follow(state, level, pos, day, schedule)) {
+			catchUp(block, level, pos, day, schedule);
+		}
+	}
+
+	private static void catchUp(Block block, ServerLevel level, BlockPos start, int day, Schedule schedule) {
 		Set<BlockPos> seen = new HashSet<>();
 		ArrayDeque<BlockPos> queue = new ArrayDeque<>();
 		seen.add(start);
@@ -123,9 +127,9 @@ public class SeasonalLeavesBlock extends TintedParticleLeavesBlock {
 				BlockPos next = pos.relative(direction);
 				if (!seen.contains(next) && level.isLoaded(next)) {
 					BlockState state = level.getBlockState(next);
-					if (state.is(this)) {
+					if (state.is(block)) {
 						seen.add(next);
-						follow(state, level, next, day);
+						follow(state, level, next, day, schedule);
 						queue.add(next);
 					}
 				}
@@ -134,7 +138,7 @@ public class SeasonalLeavesBlock extends TintedParticleLeavesBlock {
 	}
 
 	/** Sets the leaves at {@code pos} to their look on {@code day}; true if that changed them. */
-	private boolean follow(BlockState state, Level level, BlockPos pos, int day) {
+	static boolean follow(BlockState state, Level level, BlockPos pos, int day, Schedule schedule) {
 		Foliage foliage = schedule.on(day, pos);
 		if (state.getValue(SEASON) == foliage) {
 			return false;

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "SHW"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "jugcraft:steel_plate",
+    "H": "minecraft:honeycomb",
+    "W": "jugcraft:copper_wire"
+  },
+  "result": {
+    "id": "jugcraft:sealed_orders",
+    "count": 1
+  }
+}

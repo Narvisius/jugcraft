@@ -21,7 +21,14 @@ LOGS = {
     "mahogany": ("jungle", 0xB58378, 0xB56855),
     "cedar": ("spruce", 0xC5B6A5, 0xBCAA92),
     "cinnamon": ("jungle", 0xE9B98D, 0xF7B881),
+    "yew": ("oak", 0xC3B5A7, 0x815647),
+    "bald_cypress": ("spruce", 0xDBC0BB, 0xC8BEBF),
+    "magnolia": ("oak", 0xC0C0A3, 0xA4A16F),
+    "fruitwood": ("birch", 0xA39996, 0xD7A69F),
+    "persimmon": ("oak", 0x484A50, 0x504A46),
 }
+# Pine uses the owner's original local textures without tints (15 October correction).
+# Its ordinary wood models from festival_data.wood_assets must not be overridden here.
 
 
 def column(side, end, horizontal=False, bark_ends=False):

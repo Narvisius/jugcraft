@@ -1,0 +1,51 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/ground_terminal_side",
+    "side": "jugcraft:block/ground_terminal_side",
+    "bottom": "jugcraft:block/ground_terminal_side",
+    "top": "jugcraft:block/ground_terminal_top",
+    "live": "jugcraft:block/ground_terminal_live"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#live"
+        },
+        "down": {
+          "texture": "#bottom",
+          "cullface": "down"
+        }
+      },
+      "shade": false,
+      "light_emission": 15
+    }
+  ]
+}

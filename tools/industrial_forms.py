@@ -51,7 +51,7 @@ NICKEL_METHANATION = f"{MOD}:nickel_methanation"
 # What the Infuser's bed socket holds: the nickel bed and the vanadium contact bed.
 CATALYST_BEDS = "catalyst_beds"
 # Oxidizing sulfur dioxide over the vanadium contact bed (the Infuser), and roasting the bed's vanadium oxide out of
-# washed iron ore with lye (the Bulk Chemical Reactor).
+# vanadium-bearing concentrate with lye (the Bulk Chemical Reactor; washed iron is a legacy fallback).
 CONTACT_CONVERSION = f"{MOD}:contact_conversion"
 VANADIUM_RECOVERY = f"{MOD}:vanadium_recovery"
 # Neutralizing nitric acid with ammonia into solid ammonium nitrate (the Bulk Chemical Reactor).
@@ -596,9 +596,13 @@ FORM_RECIPES = {
         {"name": "bulk_sulfuric_acid", "capability": ACID_ABSORPTION,
          "fluids": [("minecraft:water", 500), (f"{MOD}:sulfur_trioxide", 250)],
          "fluid_results": [(f"{MOD}:sulfuric_acid", 500, 0)], "ticks": 100, "features": ["sulfur", "machines"]},
-        # The contact bed's vanadium, from the owner's selected vanadium-bearing iron concentrate: four washed iron ores
-        # roasted with 500 mB of lye (a salt roast, no sulfuric acid) give a vanadium pentoxide. 200 ticks at 96 JE/t.
-        {"name": "bulk_vanadium_pentoxide", "capability": VANADIUM_RECOVERY, "items": [(f"{MOD}:washed_iron_ore", 4)],
+        # Four vanadium-bearing concentrates roasted with lye give pentoxide without an acid gate.
+        # Preserve the ordinary washed-iron recipe only behind the explicit legacy fallback.
+        {"name": "bulk_vanadium_pentoxide_from_concentrate", "capability": VANADIUM_RECOVERY,
+         "items": [(f"{MOD}:vanadium_iron_concentrate", 4)],
+         "fluids": [(f"{MOD}:lye", 500)], "results": [(f"{MOD}:vanadium_pentoxide", 1)], "ticks": 200,
+         "features": ["salt", "machines"]},
+        {"name": "bulk_vanadium_pentoxide", "legacy_vanadium": True, "capability": VANADIUM_RECOVERY, "items": [(f"{MOD}:washed_iron_ore", 4)],
          "fluids": [(f"{MOD}:lye", 500)], "results": [(f"{MOD}:vanadium_pentoxide", 1)], "ticks": 200,
          "features": ["salt", "machines"]},
         # Ammonium nitrate (this change's proposal): HNO3 + NH3 -> NH4NO3, 250 mB of nitric acid (125 reaction amounts at
@@ -1875,6 +1879,8 @@ def form_recipe_files(condition):
         for recipe in recipes:
             data = {"fabric:load_conditions": [c for f in recipe["features"] for c in condition(f)],
                     "type": f"{MOD}:{kind}", "capability": recipe["capability"]}
+            if recipe.get("legacy_vanadium"):
+                data["fabric:load_conditions"].append({"condition": "jugcraft:vanadium_legacy_iron"})
             if recipe.get("items"):
                 data["items"] = [{"ingredient": item, "count": count} for item, count in recipe["items"]]
             if recipe.get("fluids"):

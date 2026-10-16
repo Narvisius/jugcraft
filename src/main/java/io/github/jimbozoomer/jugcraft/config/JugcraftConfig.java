@@ -21,7 +21,7 @@ public final class JugcraftConfig {
 	/** Every feature switch. Keep in sync with FEATURES in tools/materials.py. */
 	public static final List<String> FEATURES = List.of(
 			"tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "titanium", "thallite", "aluminum",
-			"salt", "phosphate", "lithium", "rare_earths", "fluorite", "sulfur", "silicon", "crude_oil", "machines",
+			"salt", "phosphate", "lithium", "rare_earths", "fluorite", "mineral_sands", "vanadium", "sulfur", "silicon", "crude_oil", "machines",
 			"deposits", "explosives", "agriculture", "parties", "drones",
 			"pixel_hollows", "retro_trader", "alpine_spawn", "biomes", "town", "diagonal_connections", "raiders",
 			"concordance", "guns");
@@ -34,7 +34,7 @@ public final class JugcraftConfig {
 	 * protection and protection mods judge as that owner; false (the default) makes it wait for its owner
 	 * (concordance/Authority).
 	 */
-	public static final Map<String, Boolean> OPTIONS = Map.of("carving.free_draw", true, "concordance.absent_owner_authority", false);
+	public static final Map<String, Boolean> OPTIONS = Map.of("carving.free_draw", true, "concordance.absent_owner_authority", false, "vanadium.legacy_iron_recipes", false);
 
 	/**
 	 * Text options, with their defaults.

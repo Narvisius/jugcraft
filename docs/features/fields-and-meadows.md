@@ -6,6 +6,8 @@ Owner: @jimbozoomer-byte
 Target milestone and tier: world generation and building (Discovery).
 Primary specialty and supported player role: exploration, farming and building; open land for settling.
 
+Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
+
 ## Player experience
 Nine open biomes grow in the **meadow** layout of Jugcraft regions (a quarter of them), each in place of the vanilla biome with the same climate:
 
@@ -15,9 +17,9 @@ Nine open biomes grow in the **meadow** layout of Jugcraft regions (a quarter of
 | **Flower Meadow** | flower forest | no trees; vanilla flowers and wildflowers on almost every block |
 | **Grassland** | cool plains (moister) | no trees; blue-green grass carpeted with clover |
 | **Heathland** | savanna (moister) | brown-tinged grass, heather and wildflowers, pines and oak bushes; wild horses |
-| **Lavender Field** | sunflower plains | lavender and tall lavender everywhere, jacarandas in bloom and oaks with bees |
-| **Lush Grassland** | sparse jungle, warm plains | small jungle trees and oak bushes among orange cosmos and oxeye daisies; parrots; villages |
-| **Prairie** | temperate plains (one weirdness half) | tall grass and goldenrod, oak bushes and the odd big oak; villages |
+| **Lavender Field** | sunflower plains | lavender and tall lavender everywhere, jacarandas in bloom, oaks with bees and a few cypresses |
+| **Lush Grassland** | sparse jungle, warm plains | small palms, small jungle trees and oak bushes among orange cosmos and oxeye daisies; parrots; villages |
+| **Prairie** | temperate plains (one weirdness half) | tall grass and goldenrod, oak bushes, scattered cottonwoods and the odd big oak; villages |
 | **Shrubland** | temperate plains (the other half) | dense oak bushes and bushes, alliums, no trees; wild horses |
 | **Steppe** | dry cool plains | tan, dry grass and dead bushes, nothing taller; horses, donkeys and llamas |
 

@@ -1,0 +1,120 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mortar_shell",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.0,
+        "visible_bounds_height": 1.0,
+        "visible_bounds_offset": [
+          0,
+          0.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "shell",
+          "pivot": [
+            0.0,
+            3.0,
+            0.0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -2.5,
+                0.5,
+                -4.0
+              ],
+              "size": [
+                5,
+                5,
+                8
+              ],
+              "uv": [
+                10,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1.5,
+                1.5,
+                -7.0
+              ],
+              "size": [
+                3,
+                3,
+                3
+              ],
+              "uv": [
+                36,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -0.5,
+                2.5,
+                -8.0
+              ],
+              "size": [
+                1,
+                1,
+                1
+              ],
+              "uv": [
+                28,
+                14
+              ]
+            },
+            {
+              "origin": [
+                0.0,
+                -1.0,
+                3.0
+              ],
+              "size": [
+                0,
+                9,
+                5
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4.5,
+                3.0,
+                3.0
+              ],
+              "size": [
+                9,
+                0,
+                5
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

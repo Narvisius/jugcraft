@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    " B ",
+    "BB "
+  ],
+  "key": {
+    "S": "#c:ingots/silver",
+    "P": "#jugcraft:werewolf_pelts",
+    "B": "minecraft:bone"
+  },
+  "result": {
+    "id": "jugcraft:howling_totem",
+    "count": 1
+  }
+}

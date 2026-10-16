@@ -6,6 +6,10 @@ Owner: @jimbozoomer-byte
 Target milestone and tier: world generation (Discovery).
 Primary specialty and supported player role: exploration; decoration (glowing plants).
 
+Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
+
+Tree-generation batch 3, implemented and tested: [yew and Gloomweald](trees-batch-3.md) replaces the retained vanilla dark-forest canopy with one deliberate 16-17-attempt list: dark oak 45%, yew 20%, dead tree 10%, dead snag 10%, red mushroom 8%, brown mushroom 7%.
+
 ## Player experience
 Fifteen rare, strange lands and two cave biomes, spread over all four layouts of Jugcraft regions on climates the earlier batches left free, so each layout has a few wonders:
 
@@ -15,18 +19,18 @@ Fifteen rare, strange lands and two cave biomes, spread over all four layouts of
 | **Elder Vale** | meadow: mushroom islands | a vale of the old world: bright, simple grass, plain oaks, poppies and dandelions under a clear sky; no monsters spawn |
 | **Frostlight Garden** | woodland: dry snowy plains | firs and birches in the snow, frost irises and glimmerblooms, a cold, shimmering sky; no monsters spawn |
 | **Gilded Shrubland** | wetland: savanna plateaus | golden grass and golden-leaved oak scrub, goldenrod, dry grass, little lakes |
-| **Glimmer Grove** | wild: flower forests | jacarandas and giant red mushrooms, glimmerblooms, alliums, lilacs and hydrangeas under pink air, pink water; only witches spawn |
-| **Gloomweald** | wild: dark forests | dark oaks, dead trees and giant mushrooms over leaf litter and toadstools, dark purple pools, a dim sky |
+| **Glimmer Grove** | wild: flower forests | jacarandas, mature branching jacarandas and giant red mushrooms, glimmerblooms, alliums, lilacs and hydrangeas under pink air, pink water; only witches spawn |
+| **Gloomweald** | wild: dark forests | dark oaks, dense evergreen yews, dead trees/snags and giant mushrooms over leaf litter and toadstools, dark purple pools, a dim sky |
 | **Glowcap Grotto** | wetland: dripstone caves | a cave of mud floors grown with **glowcaps** that light the dark, moss and glow lichen |
 | **Hallowed Bog** | meadow: swamps | a pale, bright bog of willows and young white aspens standing in its water, lilies of the valley and daisies, clear blue water; no monsters spawn |
 | **Highsun Meadow** | wetland: savannas, warm plains | sunny, golden-green grass, sunflowers, goldenrod and wildflowers, a few small oaks |
-| **Mycelial Jungle** | wild: jungles | huge red and brown mushrooms, jungle bushes and oaks over grass and mycelium, toadstools, spore-green air; mooshrooms |
+| **Mycelial Jungle** | wild: jungles | huge red and brown mushrooms, jungle bushes and mahogany over grass and mycelium, toadstools, spore-green air; mooshrooms |
 | **Shrine Springs** | wild: bamboo jungles | great oaks two blocks wide, warm pools banked with calcite, ferns, dark green grass |
 | **Snowpetal Grove** | wild: dry snowy plains | blossoming cherries and white-trunked aspens in the snow, snowpetals and clover, mossy boulders, snowflakes on the air |
 | **Spider Nest** | wild: dripstone caves | a cave strung with cobwebs from ceiling to floor; spiders and cave spiders |
 | **Starlit Wood** | meadow: dark forests | soaring birches and tall firs, glimmerblooms and lilies of the valley, motes of light under a twilight-blue sky |
 | **Toadstool Field** | woodland: mushroom islands | mycelium patched with grass, giant mushrooms, toadstools and glowcaps; mooshrooms, and no monsters, as on vanilla's mushroom islands |
-| **Webwood** | meadow: mangrove swamps | willows, dead trees and vine-hung oaks strung with cobwebs, toadstools and cattails, grey air; spiders everywhere |
+| **Webwood** | meadow: mangrove swamps | willows, bald cypresses, dead trees and vine-hung oaks strung with cobwebs, toadstools and cattails, grey air; spiders everywhere |
 | **Wild Greens** | wetland: warm forests | a riot of tall grass, clover, ferns and wildflowers over swathes of coarse dirt; no trees; cattle, sheep and chickens |
 
 - Biomes O' Plenty's names become ours: the Deadlands become the Cinder Barrens, the Origin Valley the Elder Vale, the Auroral Garden the Frostlight Garden, the Sublime Shrubland the Gilded Shrubland, the Mystic Grove the Glimmer Grove, the Ominous Woods the Gloomweald, the Glowing Grotto the Glowcap Grotto, the Blessed Bog the Hallowed Bog, the Majestic Meadow the Highsun Meadow, the Fungal Jungle the Mycelial Jungle, the Sacred Springs the Shrine Springs, the Snowblossom Grove the Snowpetal Grove, the Wondrous Woods the Starlit Wood, the Fungal Field and Fungi Forest the Toadstool Field, the Silkglade the Webwood and the Overgrown Greens the Wild Greens.
@@ -99,3 +103,5 @@ Results are recorded under "Results" below after CI runs.
 ## World and event applicability
 - Biome fit: each biome takes the climate and land shape of the vanilla biome it replaces.
 - Seasons: see above.
+
+Tree roster batch 4b replaces Webwood birches and part of its vine-oak share with 15% bald cypress attempts on dry ground: willow 57%, dead tree 20%, vine oak 8%. Existing density and cobweb decoration remain unchanged. See [the implementation record](trees-batch-4bc.md).

@@ -13,7 +13,7 @@ import org.jspecify.annotations.Nullable;
  * A lair: a pocket dimension of its own, into whose instance slots its structure template is placed fresh by
  * {@link Lairs}. Every position here is relative to the template's corner; the numbers are its layout tool's
  * (tools/hollow_acre.py, tools/spindle_loft.py, tools/glacier_hall.py, tools/cinder_kiln.py, tools/lantern_fen.py,
- * tools/crypt_archive.py; checked by tools/check_mod_data.py).
+ * tools/crypt_archive.py, tools/foundry_trench.py, tools/moonlit_ring.py; checked by tools/check_mod_data.py).
  */
 public enum Lair {
 	/** Vesperine's lair (docs/features/hollow-acre.md). */
@@ -27,7 +27,11 @@ public enum Lair {
 	/** The Mire Hag's lair (docs/features/lantern-fen.md): a drowned fen floating in a night of mist, no moon over it. */
 	LANTERN_FEN("lantern_fen", 80, 40, 88, new Vec3(40.0, 10.0, 80.5), 180.0F, 40.0, 43.0, 44, -4, null, 0),
 	/** The Crypt Lich's lair (docs/features/crypt-archive.md): a vaulted crypt under the graves, closed all round, so no moon. */
-	CRYPT_ARCHIVE("crypt_archive", 64, 26, 70, new Vec3(32.5, 11.0, 63.5), 180.0F, 32.5, 34.5, 40, 1, null, 0);
+	CRYPT_ARCHIVE("crypt_archive", 64, 26, 70, new Vec3(32.5, 11.0, 63.5), 180.0F, 32.5, 34.5, 40, 1, null, 0),
+	/** The Iron Dreadnought's lair (docs/features/foundry-trench.md): a test pit open to a sky of smoke, no moon over it. */
+	FOUNDRY_TRENCH("foundry_trench", 72, 24, 76, new Vec3(22.5, 9.15625, 65.5), 180.0F, 35.5, 36.5, 40, 1, null, 0),
+	/** The Alpha Werewolf's lair (docs/features/moonlit-ring.md): a clearing in an old wood, a full moon over its northern trees. */
+	MOONLIT_RING("moonlit_ring", 75, 40, 78, new Vec3(37.5, 5.0, 67.5), 180.0F, 37.5, 36.5, 40, 1, new BlockPos(37, 49, -24), 13);
 
 	/** Blocks between one instance slot and the next, along X (tools/lairs.py SPACING). */
 	public static final int SPACING = 1024;

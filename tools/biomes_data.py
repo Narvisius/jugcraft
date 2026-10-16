@@ -198,11 +198,11 @@ def material(block):
     return {"type": "minecraft:block", "result_state": block}
 
 
-def floor_rule(surface):
+def floor_rule(surface, layer="floor", patches="patches"):
     rules = [{"type": "minecraft:condition", "if_true": {"type": "minecraft:noise_threshold", "noise": "minecraft:surface",
                                                          "min_threshold": low, "max_threshold": high}, "then_run": material(block)}
-             for low, high, block in surface.get("patches", [])]
-    rules.append(material(surface["floor"]))
+             for low, high, block in surface.get(patches, [])]
+    rules.append(material(surface[layer]))
     return rules[0] if len(rules) == 1 else {"type": "minecraft:sequence", "sequence": rules}
 
 
@@ -215,7 +215,7 @@ def surface_rule():
             continue
         parts = [{"type": "minecraft:condition", "if_true": "minecraft:on_floor", "then_run": floor_rule(surface)}]
         if "under" in surface:
-            parts.append({"type": "minecraft:condition", "if_true": "minecraft:under_floor", "then_run": material(surface["under"])})
+            parts.append({"type": "minecraft:condition", "if_true": "minecraft:under_floor", "then_run": floor_rule(surface, "under", "under_patches")})
         rules.append({"type": "minecraft:condition", "if_true": {"type": "minecraft:biome", "biome_is": rid(name)},
                       "then_run": {"type": "minecraft:sequence", "sequence": parts}})
     return {"type": "minecraft:sequence", "sequence": rules}

@@ -1,6 +1,6 @@
 # Rocky-upland spodumene deposits
 
-Status: implemented for owner inspection, 13 October 2026, public branch `speedygroyper:codex/spodumene-deposits` and draft [PR #351](https://github.com/jimbozoomer-byte/jugcraft/pull/351). Depends on the fluorite stone-outcrop update in [PR #343](https://github.com/jimbozoomer-byte/jugcraft/pull/343), commit `6256dd86`, which was tested and pushed first. The branch and draft PR announced the scope before implementation. OpenAI Codex (GPT-6) is the actual implementation tool, explicitly authorized by the owner.
+Status: implemented and visually accepted by the owner, 13 October 2026, public branch `speedygroyper:codex/spodumene-deposits` and [PR #351](https://github.com/jimbozoomer-byte/jugcraft/pull/351). Depends on the fluorite stone-outcrop update in [PR #343](https://github.com/jimbozoomer-byte/jugcraft/pull/343), commit `6256dd86`, which was tested and pushed first. The branch and draft PR announced the scope before implementation. OpenAI Codex (GPT-6) is the actual implementation tool, explicitly authorized by the owner.
 
 ## Approved scope
 
@@ -30,7 +30,7 @@ Only newly decorated chunks gain these deposits. Existing generated chunks and o
 
 Platform: Minecraft 26.3, Fabric Loader 0.19.5, Fabric API 0.161.0+26.3, Java 25.0.4.1, Gradle 9.6 and Loom 1.17.21. All 18 dependency versions and hashes remain those in `distribution/frameworks.lock.json`.
 
-- `gradlew build --no-daemon`: **PASS**, all **1,385 required server GameTests**. `SpodumeneGameTests` checks both ore forms, iron/stone tool boundaries, ordinary/Silk Touch/Fortune drops, loaded crusher outputs, storage round-trip, exact biome policy, prospecting and an actual powered ore drill recovering both finite ore blocks.
+- `gradlew build --no-daemon`: **PASS**, all **1,385 required server GameTests**. `SpodumeneGameTests` checks both ore forms, iron/stone tool boundaries, ordinary/Silk Touch/Fortune drops, loaded crusher outputs, storage round-trip, exact biome policy, prospecting and an actual powered ore drill recovering both finite ore blocks. Test maintenance (14 October 2026): `prospectAndDrill` surveys the drill's chunk and the eight around it, not its chunk alone. Game tests stand at random places, and its two ore blocks, three blocks or less from the drill, crossed a chunk border from it in about one placement in 64, so the survey missed them and the test failed by chance; the spodumene twin failed so once in CI ([#373's comment](https://github.com/jimbozoomer-byte/jugcraft/pull/373#issuecomment-6178187056)).
 - `gradlew runClientGameTest -PclientTests=SpodumeneClientGameTests --no-daemon`: **PASS**. Two normal seeds and a Designed world; natural ore sampled and preserved after save/reopen. The exported first seed also contains naturally generated fluorite, whose sampled ores survive reopening. Rendered outcrop and cutaway screenshots were inspected.
 - The preceding fluorite-only stone revision passed `runClientGameTest -PclientTests=FluoriteClientGameTests` on two normal seeds, Designed terrain and the expanded surface-safety fixtures before spodumene implementation began.
 - Both mineral client suites with `-PjugcraftOptionalIntegrations=false`, `fluorite.enabled=false`, `lithium.enabled=false`, `biomes.enabled=false`, `alpine_spawn.start=off` and `town.enabled=false`: **PASS**. Neither mineral remained in biome decoration, compaction recipes were absent, and both ore forms plus seven inventory items of each mineral survived reopening. The lithium test also checks removal of lepidolite decoration. The local ignored init script writes configuration under `build/run/clientGameTest/config/` after test-directory cleanup.
@@ -62,7 +62,7 @@ Fabric's content-presence snapshot also retained five names belonging to test-on
 - Fluorite surface view: `/tp @s 180 97 32`; mineral near `173 92 23`.
 - Untouched fluorite pocket: `/gamemode spectator`, then `/tp @s 154 -2 123`.
 
-Owner visual acceptance, launcher UI import, a two-independent-client dedicated-server session and representative server load remain untested. No merge or server deployment is included.
+The owner accepted the combined inspection world's spodumene deposits and revised stone outcrops for both minerals on 13 October 2026. Launcher UI import, a two-independent-client dedicated-server session and representative server load remain untested. No merge or server deployment is included.
 
 ## Art and provenance
 

@@ -25,6 +25,8 @@ import yeti_king
 import cinder_tyrant
 import mire_hag
 import crypt_lich
+import iron_dreadnought
+import alpha_werewolf
 import vesperine
 import kitchen
 import feasts
@@ -190,6 +192,13 @@ GRASS_SEED_CHANCE = 0.125
 # compost: composter chance tier, as vanilla's (low 30 %, medium 65 %, medium_high 85 %).
 # tags: extra item tags.
 ITEMS = {
+    "haws": {"display": "Haws", "food": [1, 0.1], "compost": "medium", "tags": ["c:foods/berry", "minecraft:fox_food"]},
+    "persimmon": {"display": "Persimmon", "food": [3, 0.3], "compost": "medium", "tags": ["c:foods/fruit", "jugcraft:fermentable"]},
+    "rowan_berries": {"display": "Rowan Berries", "food": [1, 0.1], "compost": "medium",
+                       "tags": ["c:foods/berry", "minecraft:fox_food"]},
+    "elderberries": {"display": "Elderberries", "food": [2, 0.2], "compost": "medium",
+                     "tags": ["c:foods/berry", "minecraft:fox_food"]},
+    "yew_arils": {"display": "Yew Arils", "food": [1, 0.1], "sweet": ["POISON", 10], "tags": []},
     "corn": {"display": "Corn", "food": [3, 0.6], "compost": "medium", "tags": ["c:crops/corn", "c:foods/vegetable", "minecraft:pig_food"]},
     "corn_kernels": {"display": "Corn Kernels", "plants": "corn_crop", "compost": "low",
                      "tags": ["c:seeds/corn", "minecraft:chicken_food", "minecraft:parrot_food"]},
@@ -414,7 +423,8 @@ CHESTNUT = {"sapling": "chestnut_sapling", "leaves": "chestnut_leaves", "seed": 
 # (docs/branches/TREES.md), the swamp cedar of its wetlands.
 WOOD_SETS = {"chestnut": "Chestnut", "larch": "Larch", "maple": "Maple", "aspen": "Aspen", "fir": "Fir", "dead": "Dead",
              "jacaranda": "Jacaranda", "willow": "Willow", "palm": "Palm", "cypress": "Cypress", "redwood": "Redwood",
-             "eucalyptus": "Eucalyptus", "mahogany": "Mahogany", "cedar": "Cedar"}
+             "eucalyptus": "Eucalyptus", "mahogany": "Mahogany", "cedar": "Cedar", "pine": "Pine", "yew": "Yew",
+             "bald_cypress": "Bald Cypress", "magnolia": "Magnolia", "fruitwood": "Fruitwood", "persimmon": "Persimmon"}
 # The feature switches each wood's hand and sawmill recipes, and its tree's leaves and sapling, follow: every switch
 # that grows its logs, any one of which turns them on (TREES.md rule 4). The chestnut grows wild (agriculture) and in
 # the Orchard (biomes); the larch in Alpine Spawn and, as the larch and the tamarack, in Jugcraft's biomes.
@@ -422,7 +432,8 @@ WOOD_SETS = {"chestnut": "Chestnut", "larch": "Larch", "maple": "Maple", "aspen"
 WOOD_SWITCHES = {"chestnut": [FEATURE, "biomes"], "larch": ["alpine_spawn", "biomes"], "maple": ["biomes"],
                  "aspen": ["biomes"], "fir": ["biomes"], "dead": ["biomes"], "jacaranda": ["biomes"], "willow": ["biomes"],
                  "palm": ["biomes"], "cypress": ["biomes"], "redwood": ["biomes"], "eucalyptus": ["biomes"],
-                 "mahogany": ["biomes"], "cedar": ["biomes"]}
+                 "mahogany": ["biomes"], "cedar": ["biomes"], "pine": ["biomes"], "yew": ["biomes"],
+                 "bald_cypress": ["biomes"], "magnolia": ["biomes"], "fruitwood": ["biomes"], "persimmon": ["biomes"]}
 
 
 def wood_blocks(wood, display):
@@ -438,8 +449,9 @@ WOOD_TAGS = {wood: f"jugcraft:{wood}_logs" for wood in WOOD_SETS}
 WOOD_TAG = WOOD_TAGS["chestnut"]
 STRIPPED = {f"{wood}_{part}": f"stripped_{wood}_{part}" for wood in WOOD_SETS for part in ("log", "wood")}
 # Trees with their own leaves and sapling (besides the chestnut, whose sapling is planted from a chestnut). Their
-# wood is in WOOD_SETS under the same name; their shapes are in tools/trees.py. Leaves drop saplings and sticks like
-# spruce leaves (SAPLING_CHANCES with Fortune); leaves and saplings follow the wood's switch.
+# wood defaults to WOOD_SETS under the same name; optional "wood" reuses established timber. Their shapes are in
+# tools/trees.py. Leaves drop saplings and sticks like spruce leaves (SAPLING_CHANCES with Fortune). Leaves and
+# saplings follow the timber's switch, or explicit "switches" when using vanilla timber.
 # "season": deciduous leaves (agriculture/SeasonalLeavesBlock, state "season": green, gold, bare) follow the server's
 # season day (season/JugcraftSeasons): green from the first day, their autumn colour ("gold") from the second, bare
 # from the third until the first comes round again (northern calendar days; seasons.hemisphere shifts the south).
@@ -447,7 +459,33 @@ STRIPPED = {f"{wood}_{part}": f"stripped_{wood}_{part}" for wood in WOOD_SETS fo
 # differ; blocks catch up on random ticks (a changed block brings up to SPREAD touching leaves along), and leaves
 # placed or grown from a sapling start in today's state. With seasons off they stay green. "autumn": the gold
 # state's looks, weighted (random by position, as vanilla picks grass models). None: evergreen.
+# "seasonal_drop": fruit item and green/gold/bare loot chances; natural leaves only, without Silk Touch/shears.
 TREES = {
+    "hawthorn": {"wood": "fruitwood", "display": "Hawthorn", "leaves": "hawthorn_leaves", "leaves_display": "Hawthorn Leaves",
+                 "season": [85, 280, 325], "autumn": {"gold": 1}, "base": "oak",
+                 "sapling_shapes": {"hawthorn": 1, "hawthorn_bush": 3},
+                 "fruit": {"item": "haws", "min": 1, "max": 2, "chance": 10, "exposed_sides": True}},
+    "persimmon": {"display": "Persimmon", "leaves": "persimmon_leaves", "leaves_display": "Persimmon Leaves",
+                  "season": [98, 280, 315], "autumn": {"gold": 1}, "base": "oak",
+                  "fruit": {"item": "persimmon", "min": 1, "max": 2, "chance": 10}},
+    "rowan": {"wood": "fruitwood", "display": "Rowan", "leaves": "rowan_leaves", "leaves_display": "Rowan Leaves",
+              "season": [98, 255, 305], "autumn": {"gold": 1}, "base": "birch",
+              "fruit": {"item": "rowan_berries", "min": 1, "max": 2, "chance": 10}},
+    "elder": {"wood": "minecraft:oak", "display": "Elder", "switches": ["biomes"],
+              "leaves": "elder_leaves", "leaves_display": "Elder Leaves",
+              "season": [88, 283, 328], "autumn": {"gold": 1}, "base": "oak",
+              "fruit": {"item": "elderberries", "min": 1, "max": 2, "chance": 10}},
+    "bald_cypress": {"leaves": "bald_cypress_needles", "leaves_display": "Bald Cypress Needles",
+                     "season": [98, 286, 330], "autumn": {"gold": 1}, "base": "spruce"},
+    "magnolia": {"leaves": "magnolia_leaves", "leaves_display": "Magnolia Leaves", "season": None, "base": "oak"},
+    "snowpetal_cherry": {"wood": "minecraft:cherry", "display": "Snowpetal Cherry", "switches": ["biomes"],
+                         "leaves": "snowpetal_cherry_leaves", "leaves_display": "Snowpetal Cherry Leaves",
+                         "season": None, "base": "cherry"},
+    "shimmer_birch": {"wood": "minecraft:birch", "display": "Shimmer Birch", "switches": ["biomes"],
+                      "leaves": "shimmer_birch_leaves", "leaves_display": "Shimmer Birch Leaves",
+                      "season": None, "base": "birch", "sapling_shapes": {"shimmer_birch": 4, "tall_shimmer_birch": 1}},
+    "yew": {"leaves": "yew_needles", "leaves_display": "Yew Needles", "season": None, "base": "spruce",
+            "giant": "ancient_yew", "fruit": {"item": "yew_arils", "min": 1, "max": 2, "chance": 16}},
     "larch": {"leaves": "larch_needles", "leaves_display": "Larch Needles", "season": [91, 268, 318], "autumn": {"gold": 1},
               "base": "spruce"},
     "maple": {"leaves": "maple_leaves", "leaves_display": "Maple Leaves", "season": [95, 265, 310],
@@ -467,11 +505,14 @@ TREES = {
     # tools/trees.py) that four saplings planted in a square grow (agriculture/GiantSaplingBlock).
     "redwood": {"leaves": "redwood_needles", "leaves_display": "Redwood Needles", "season": None, "base": "spruce",
                 "giant": "giant_redwood"},
-    "eucalyptus": {"leaves": "eucalyptus_leaves", "leaves_display": "Eucalyptus Leaves", "season": None, "base": "jungle"},
+    "eucalyptus": {"leaves": "eucalyptus_leaves", "leaves_display": "Eucalyptus Leaves", "season": None, "base": "jungle",
+                   "giant": "giant_eucalyptus"},
     "mahogany": {"leaves": "mahogany_leaves", "leaves_display": "Mahogany Leaves", "season": None, "base": "jungle",
                  "giant": "giant_mahogany"},
     # The tree roster's batch 1: the swamp cedar, an evergreen conifer of flat sprays of scale-leaves.
     "cedar": {"leaves": "cedar_leaves", "leaves_display": "Cedar Leaves", "season": None, "base": "spruce"},
+    "pine": {"leaves": "pine_needles", "leaves_display": "Pine Needles", "season": None, "base": "spruce",
+             "leaf_tint": 0x78A88A, "leaf_overlay": "pine_needles_overlay"},
 }
 SEASON_STATES = ["green", "gold", "bare"]
 JITTER = 7
@@ -481,6 +522,16 @@ SAPLING_CHANCES = [0.05, 0.0625, 0.083333336, 0.1]
 
 def sapling(tree):
     return f"{tree}_sapling"
+
+
+def timber(tree):
+    """Timber identity, independent of the tree's leaves and sapling."""
+    return TREES[tree].get("wood", tree)
+
+
+def tree_switches(tree):
+    wood = timber(tree)
+    return TREES[tree]["switches"] if wood.startswith("minecraft:") else WOOD_SWITCHES[wood]
 
 
 def leaf_looks(tree):
@@ -494,13 +545,15 @@ def leaf_looks(tree):
 
 TREE_BLOCKS = {"chestnut_sapling": "Chestnut Sapling", "chestnut_leaves": "Chestnut Leaves",
                **{block: name for tree in TREES for block, name in
-                  ((sapling(tree), f"{WOOD_SETS[tree]} Sapling"), (TREES[tree]["leaves"], TREES[tree]["leaves_display"]))}}
+                  ((sapling(tree), f"{TREES[tree].get('display', WOOD_SETS.get(tree))} Sapling"), (TREES[tree]["leaves"], TREES[tree]["leaves_display"]))}}
 TREE_TEXTURES = (["chestnut_log", "chestnut_log_top", "stripped_chestnut_log", "stripped_chestnut_log_top", "chestnut_planks",
                   "chestnut_leaves", "chestnut_leaves_burs", "chestnut_leaves_ripe", "chestnut_sapling"]
                  + [name for wood in WOOD_SETS if wood != "chestnut" for name in (
                      f"{wood}_log", f"{wood}_log_top", f"stripped_{wood}_log", f"stripped_{wood}_log_top", f"{wood}_planks")]
                  + [texture for tree in TREES for looks in leaf_looks(tree).values() for texture in looks]
-                 + [sapling(tree) for tree in TREES])
+                 + [sapling(tree) for tree in TREES]
+                 + [f"{texture}_{stage}" for tree, info in TREES.items() if "fruit" in info
+                    for looks in leaf_looks(tree).values() for texture in looks for stage in ("unripe", "ripe")])
 
 # Decorations. The Turnip Lantern is the original jack-o'-lantern: a carved turnip with a candle inside.
 DECOR = {"turnip_lantern": {"display": "Turnip Lantern", "light": 13}}
@@ -1464,7 +1517,7 @@ CHANDLERY = {"pot": "wax_melting_pot", "pot_display": "Wax Melting Pot", "candle
                         "ember": {"display": "Ember", "items": ["minecraft:magma_cream"], "effect": "FIRE_RESISTANCE", "color": 0xFF6A1A},
                         "diligence": {"display": "Diligence", "items": ["minecraft:amethyst_shard"], "effect": "HASTE", "color": 0xE8C84A},
                         "mending": {"display": "Mending", "items": ["minecraft:ghast_tear"], "effect": "REGENERATION", "color": 0xF27ACB},
-                        "warding": {"display": "Warding", "items": ["minecraft:fermented_spider_eye"], "effect": None, "color": 0x7A3FCF},
+                        "warding": {"display": "Warding", "items": ["minecraft:fermented_spider_eye", "jugcraft:rowan_berries"], "effect": None, "color": 0x7A3FCF},
                         "harvest": {"display": "Harvest", "items": ["minecraft:bone_meal"], "effect": None, "color": 0x5FBF3A},
                         "revealing": {"display": "Revealing", "items": ["minecraft:glow_ink_sac"], "effect": None, "color": 0x9FFFE8},
                         # Ectoplasm, caught from restless spirits (fall additions 9): everyone near turns invisible.
@@ -1523,6 +1576,9 @@ PANTRY = {"jar": "mason_jar", "jar_display": "Mason Jar", "vinegar": "cider_vine
           "kettle": "canning_kettle", "kettle_display": "Canning Kettle", "shelf": "pantry_shelf", "shelf_display": "Pantry Shelf",
           "servings": 4, "spoil_ticks": 72000, "kettle_jars": 4, "boil_ticks": 200, "process_ticks": 400, "shelf_slots": 6,
           "preserves": {
+              "haw_jelly": {"display": "Haw Jelly", "food": [3, 0.4], "effect": None, "color": 0xB8302A, "kind": "sweet"},
+              "persimmon_preserve": {"display": "Persimmon Preserve", "food": [3, 0.4], "effect": None, "color": 0xDE7A2A, "kind": "sweet"},
+              "rowan_jelly": {"display": "Rowan Jelly", "food": [3, 0.4], "effect": None, "color": 0xC4300F, "kind": "sweet"},
               "sweet_berry_jam": {"display": "Sweet Berry Jam", "food": [3, 0.4], "effect": None, "color": 0x9A1E3A, "kind": "sweet"},
               "apple_butter": {"display": "Apple Butter", "food": [4, 0.5], "effect": None, "color": 0x7A3A14, "kind": "sweet"},
               "pumpkin_butter": {"display": "Pumpkin Butter", "food": [4, 0.5], "effect": None, "color": 0xC8701E, "kind": "sweet"},
@@ -1691,7 +1747,7 @@ CANDY = {"kettle": "candy_kettle", "kettle_display": "Candy Kettle", "tray": "ca
          "corn_bands": [0xF8F4EA, 0xF08A24, 0xF6C836],
          "flavours": {"chocolate": {"display": "Chocolate", "items": ["minecraft:cocoa_beans"], "effect": "SPEED", "seconds": 10,
                                     "color": 0x5A3218},
-                      "berry": {"display": "Berry", "items": ["minecraft:sweet_berries"], "effect": "REGENERATION", "seconds": 4,
+                      "berry": {"display": "Berry", "items": ["minecraft:sweet_berries", "jugcraft:rowan_berries", "jugcraft:elderberries"], "effect": "REGENERATION", "seconds": 4,
                                 "color": 0xC8283C},
                       "glow_berry": {"display": "Glow Berry", "items": ["minecraft:glow_berries"], "effect": "NIGHT_VISION", "seconds": 30,
                                      "color": 0xF0B030},
@@ -1828,6 +1884,9 @@ PIES = {"oven": "hearth_oven", "oven_display": "Hearth Oven", "dough": "pastry_d
 PIES["fillings"]["apple"]["owner"] = True
 # Orchards (tools/orchard.py): the peach and lemon meringue pies, in Jugcraft's art (after the others: PieFilling's order).
 PIES["fillings"].update(orchard.PIES)
+# Appended among round pies; the runtime enum appends after all existing cakes/tarts to preserve saved ordinals.
+PIES["fillings"]["persimmon"] = {"display": "Persimmon", "food": [4, 0.6], "color": 0xDE7A2A,
+                                  "with": ["jugcraft:persimmon", "jugcraft:persimmon"]}
 
 
 def pie_name(filling):
@@ -2103,6 +2162,9 @@ POT_RECIPES = {
     # fruit butters with sugar (apple butter cooked in sweet cider, pumpkin butter with mulling spices), and pickles and
     # relish in cider vinegar.
     "cider_vinegar": {"inputs": {"jugcraft:aged_cider": 1, "jugcraft:apple_pomace": 1}, "time": 200},
+    "haw_jelly": {"inputs": {"jugcraft:mason_jar": 1, "jugcraft:haws": 6, "minecraft:sugar": 2}, "time": 300},
+    "persimmon_preserve": {"inputs": {"jugcraft:mason_jar": 1, "jugcraft:persimmon": 6, "minecraft:sugar": 2}, "time": 300},
+    "rowan_jelly": {"inputs": {"jugcraft:mason_jar": 1, "jugcraft:rowan_berries": 6, "minecraft:sugar": 2}, "time": 300},
     "sweet_berry_jam": {"inputs": {"jugcraft:mason_jar": 1, "minecraft:sweet_berries": 6, "minecraft:sugar": 2}, "time": 300},
     "apple_butter": {"inputs": {"jugcraft:mason_jar": 1, "minecraft:apple": 3, "minecraft:sugar": 1, "jugcraft:sweet_cider": 1}, "time": 300},
     "pumpkin_butter": {"inputs": {"jugcraft:mason_jar": 1, "minecraft:pumpkin": 1, "minecraft:sugar": 2, "jugcraft:mulling_spices": 1},
@@ -2126,6 +2188,10 @@ for _cake, _info in LANTERNS["mooncakes"].items():
 
 # Crafting. result: an ID (jugcraft unless namespaced) and count. features: switches besides agriculture.
 SHAPELESS = [
+    {"id": "purple_dye_from_elderberries", "inputs": ["jugcraft:elderberries"], "result": "minecraft:purple_dye",
+     "count": 1, "category": "misc", "switch": ["biomes"]},
+    {"id": "red_dye_from_yew_arils", "inputs": ["jugcraft:yew_arils"], "result": "minecraft:red_dye", "count": 1,
+     "category": "misc", "switch": ["biomes"]},
     # Fall additions 13: bat guano is rich in phosphate.
     {"id": "phosphate_from_bat_guano", "inputs": ["jugcraft:bat_guano"] * 4, "result": "phosphate", "count": 1, "category": "misc",
      "features": ["phosphate"]},
@@ -2646,7 +2712,8 @@ def all_items():
             + chandlery_items() + cider_items() + pantry_items() + firework_items()
             + lantern_items() + feast_blocks() + [MAZE["gate"]] + ghost_items() + face_paint_items() + candy_items() + foraging_items() + bat_items() + knitting_items() + pie_items() + [SPIRIT_BOARD["block"], TURKEYS["roast"], THEREMIN["block"], OFRENDA["block"]] + list(OFRENDA["decor"]) + graveyard.items() + [h["item"] for h in HEX["brews"].values()] + [BROOMSTICK["item"]] + [WOLFSBANE["block"], WEREWOLF["dagger"], WEREWOLF["arrow"]] + WEREWOLF_PELTS + WEREWOLF_RUGS + [SQUIRRELS["acorn"]] + midway.items() + ferris_wheel.items() + pinata.items() + hot_air_balloon.items() + leaf_blower.items() + plants.items() + decor15.items() + decor16.items() + decor17.items() + decor18.items() + decor19.items() + decor20.items() + kitchen.items() + feasts.items() + rice.items() + soil.items() + orchard.items() + [i for i in cakes.items() if i not in cakes.ITEMS] + pies_and_tarts.items() + garden.items()
             + herbs.items() + spices.items() + lairs.items() + vesperine.items() + tatterlace.items()
-            + yeti_king.items() + cinder_tyrant.items() + mire_hag.items() + crypt_lich.items())
+            + yeti_king.items() + cinder_tyrant.items() + mire_hag.items() + crypt_lich.items()
+            + iron_dreadnought.items() + alpha_werewolf.items())
 
 
 def owns(entry_id):
@@ -2660,8 +2727,8 @@ def switch_of(entry_id):
         if entry_id in wood_blocks(wood, WOOD_SETS[wood]):
             return switch
     for tree in TREES:
-        if entry_id in (sapling(tree), TREES[tree]["leaves"]):
-            return WOOD_SWITCHES[tree]
+        if entry_id in (sapling(tree), TREES[tree]["leaves"], TREES[tree].get("fruit", {}).get("item")):
+            return tree_switches(tree)
     if entry_id in plants.blocks():
         return plants.FEATURE
     return FEATURE

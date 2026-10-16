@@ -188,15 +188,15 @@ public class BulkChemicalReactorGameTests {
 	}
 
 	/**
-	 * The contact bed's vanadium: four washed iron ores roasted with 500 mB of lye give a vanadium pentoxide at the chute,
+	 * The contact bed's vanadium: four vanadium-bearing concentrates roasted with 500 mB of lye give a vanadium pentoxide at the chute,
 	 * and that oxide on two bricks crafts the vanadium contact bed.
 	 */
 	@GameTest(structure = ARENA, maxTicks = 400)
-	public void washedIronOreGivesTheContactBedsVanadium(GameTestHelper helper) {
+	public void vanadiumConcentrateGivesTheContactBedsVanadium(GameTestHelper helper) {
 		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 2), Direction.NORTH);
 		supply(helper, machine);
 		try (Transaction transaction = Transaction.openOuter()) {
-			itemPort(helper, machine, "feed_in").insert(ItemVariant.of(item("washed_iron_ore")), 4, transaction);
+			itemPort(helper, machine, "feed_in").insert(ItemVariant.of(item("vanadium_iron_concentrate")), 4, transaction);
 			transaction.commit();
 		}
 		machine.tanks().input(0).fill(PetroFluids.LYE.source(), 500);

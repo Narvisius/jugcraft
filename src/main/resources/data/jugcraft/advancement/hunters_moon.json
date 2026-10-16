@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:moonfang"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.hunters_moon.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.hunters_moon.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

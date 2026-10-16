@@ -771,6 +771,12 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 				context.waitTicks(20);
 				shotAt(context, singleplayer, wx.applyAsInt(140), y + 1, wz.applyAsInt(100), wx.applyAsInt(140), y + 1, wz.applyAsInt(98),
 						"jugcraft_plant_medium_r24_rsp_transferred");
+				// Its screen, in the advanced look (docs/features/machine-screens.md), saying control is at the panel.
+				BlockPos rsp = new BlockPos(wx.applyAsInt(138), baseY, wz.applyAsInt(98));
+				context.setScreen(() -> new io.github.jimbozoomer.jugcraft.client.RemoteShutdownScreen(rsp));
+				context.waitTicks(5);
+				context.takeScreenshot("jugcraft_plant_medium_r24_rsp_screen");
+				context.setScreen(() -> null);
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
 					BlockPos at = new BlockPos(wx.applyAsInt(138), baseY, wz.applyAsInt(98));

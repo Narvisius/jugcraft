@@ -1,6 +1,17 @@
 package io.github.jimbozoomer.jugcraft.client;
 
-import io.github.jimbozoomer.jugcraft.Jugcraft;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.BUTTON_STEP;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.BUTTON_X;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.BUTTON_Y;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.HELP_BOTTOM;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.HELP_WIDTH;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.HELP_X;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.HELP_Y;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.STATUS_BOTTOM;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.STATUS_WIDTH;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.STATUS_X;
+import static io.github.jimbozoomer.jugcraft.client.MachineSkin.STATUS_Y;
+
 import io.github.jimbozoomer.jugcraft.chemistry.FluidMachineSpec;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
@@ -9,84 +20,112 @@ import io.github.jimbozoomer.jugcraft.machine.MachineMenu;
 import io.github.jimbozoomer.jugcraft.machine.SideConfig;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Screen for every machine (redesigned in batch 22): the machine bay (energy bar on the left, slots, gauges and
- * progress in the middle) over the player inventory, and a control terminal on the right whose screen says what the
- * machine is for and how it is doing (status, progress, power and its rate), with the side and redstone controls
- * below it. The look follows the machine's model: dieselpunk amber, electric green or lab teal
- * ({@link MachineScreenThemes}).
+ * Screen for every machine (docs/features/machine-screens.md), in one of five looks by tech level
+ * ({@link MachineScreenThemes}). The body holds the title with a status lamp, the machine pane (energy bar, slots,
+ * gauges and progress, where the menu puts them) and the status pane: one word for what the machine is doing, what to
+ * do about it when it is stuck, progress with the time left, and power. Under it sit the inventory tray, the icon
+ * buttons (redstone, eject, sides) and the help box with what the machine is for. The Sides button turns the status
+ * pane into the machine's six faces, each clicked to change what it does, with the key in the help box. Hovering an
+ * empty slot says what goes in it.
  */
 public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
-	/** The machine bay and inventory; the terminal is joined to their right. */
-	private static final int BAY_WIDTH = 176;
-	private static final int TERMINAL_WIDTH = 92;
-	/** The terminal's screen: text starts here and wraps at this width. */
-	private static final int SCREEN_X = 185;
-	private static final int SCREEN_Y = 9;
-	private static final int SCREEN_WIDTH = 74;
-	private static final int SCREEN_BOTTOM = 94;
-	/** Below the screen: the side controls (processors) or more readouts. */
-	private static final int CONTROLS_Y = 106;
-	private static final int CONTROLS_BOTTOM = 137;
 	private static final int BAR_X = 10;
 	private static final int BAR_Y = 17;
 	private static final int BAR_WIDTH = 12;
 	private static final int BAR_HEIGHT = 52;
+	/** The big charge gauge on a machine with nothing else in its pane, centred with its percentage under it. */
+	private static final int CHARGE_X = 25;
+	private static final int CHARGE_Y = 25;
+	/** The player's inventory and hotbar: the menu's last slots. */
+	private static final int PLAYER_SLOTS = 36;
 
 	private static final int FLAME = 0xFFE06020;
 	private static final int WATER = 0xFF3060D0;
 	private static final int LAVA = 0xFFE87010;
 
-	// Side configuration in the terminal: a cross of face buttons (front in the middle), redstone, and eject.
-	private static final int[][] FACE_BUTTON_XY = {{228, 117}, {240, 128}, {216, 117}, {240, 117}, {228, 106}, {228, 128}};
+	// The sides view: a cross of faces (front in the middle, the back apart on the right) in the status pane.
+	private static final int[][] FACE_XY = {{203, 37}, {241, 37}, {191, 37}, {215, 37}, {203, 25}, {203, 49}};
 	private static final String[] FACE_LETTERS = {"F", "B", "L", "R", "T", "D"};
-	private static final int[] MODE_COLORS = {0x5AA0FF, 0xFFA040, 0x70E070, 0x9A9A9A};
-	private static final int[] REDSTONE_COLORS = {0x9A9A9A, 0xFF4030, 0x802018};
-	private final Button[] faceButtons = new Button[6];
-	private Button ejectButton;
-	private Button redstoneButton;
+	/** Mode colours, input, output, both and closed; the key in the help box uses the same. */
+	private static final int[] MODE_COLORS = {0xFF5AA0FF, 0xFFFFA040, 0xFF70E070, 0xFF9A9A9A};
+	private static final String[] MODE_KEYS = {"input", "output", "both", "none"};
+	/** The redstone icon's colour by mode: the look's own while ignored, red with a signal, dark red without. */
+	private static final int[] REDSTONE_COLORS = {0, 0xFFFF4030, 0xFF902018};
+	/** The lab look's tab colours for the three controls. */
+	private static final int TAB_REDSTONE = 0xFFC83228;
+	private static final int TAB_EJECT = 0xFF32AA46;
+	private static final int TAB_SIDES = 0xFF285AC8;
+
+	private final MachineSkin.FaceButton[] faceButtons = new MachineSkin.FaceButton[6];
+	private MachineSkin.@Nullable IconButton ejectButton;
+	private MachineSkin.@Nullable IconButton redstoneButton;
+	private MachineSkin.@Nullable IconButton sidesButton;
+	private boolean sidesView;
 	private int shownSides = -1;
 	private final MachineScreenThemes.Theme theme;
-	/** Energy a second ago (20 ticks of samples), for the rate and the charging/discharging status. */
+	/** Energy and progress a second ago (20 ticks of samples), for the rate, the time left and the status. */
 	private final long[] energyHistory = new long[20];
+	private final int[] progressHistory = new int[20];
 	private int samples;
 
 	public MachineScreen(MachineMenu menu, Inventory inventory, Component title) {
-		super(menu, inventory, title, BAY_WIDTH + TERMINAL_WIDTH, 166);
+		super(menu, inventory, title, 268, 166);
 		this.theme = MachineScreenThemes.of(menu.kind());
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		titleLabelX = (BAY_WIDTH - font.width(title)) / 2;
+		titleLabelX = MachineSkin.TITLE_X;
+		titleLabelY = MachineSkin.TITLE_Y;
 		shownSides = -1;
 		if (!menu.kind().isProcessor()) {
 			return;
 		}
 		for (int face = 0; face < faceButtons.length; face++) {
 			int id = face;
-			faceButtons[face] = addRenderableWidget(Button.builder(Component.literal(FACE_LETTERS[face]), button -> click(id))
-					.bounds(leftPos + FACE_BUTTON_XY[face][0], topPos + FACE_BUTTON_XY[face][1], 11, 11).build());
+			faceButtons[face] = addRenderableWidget(new MachineSkin.FaceButton(leftPos + FACE_XY[face][0], topPos + FACE_XY[face][1],
+					FACE_LETTERS[face], Component.translatable("container.jugcraft.side." + SideConfig.Face.values()[face].name().toLowerCase()),
+					button -> click(id)));
 		}
-		ejectButton = addRenderableWidget(Button.builder(Component.empty(), button -> click(SideConfig.EJECT_BUTTON))
-				.bounds(leftPos + 182, topPos + 125, 32, 12).build());
-		redstoneButton = addRenderableWidget(Button.builder(Component.literal("R"), button -> click(SideConfig.REDSTONE_BUTTON))
-				.bounds(leftPos + 250, topPos + 106, 11, 11).build());
+		redstoneButton = addRenderableWidget(new MachineSkin.IconButton(leftPos + BUTTON_X, topPos + BUTTON_Y, theme,
+				MachineSkin.Icon.REDSTONE, TAB_REDSTONE, Component.translatable("container.jugcraft.redstone", ""),
+				button -> click(SideConfig.REDSTONE_BUTTON)));
+		ejectButton = addRenderableWidget(new MachineSkin.IconButton(leftPos + BUTTON_X + BUTTON_STEP, topPos + BUTTON_Y, theme,
+				MachineSkin.Icon.EJECT, TAB_EJECT, Component.translatable("container.jugcraft.eject"),
+				button -> click(SideConfig.EJECT_BUTTON)));
+		sidesButton = addRenderableWidget(new MachineSkin.IconButton(leftPos + BUTTON_X + 2 * BUTTON_STEP, topPos + BUTTON_Y, theme,
+				MachineSkin.Icon.SIDES, TAB_SIDES, Component.translatable("container.jugcraft.button.sides"), button -> showSides(!sidesView)));
+		showSides(sidesView);
+	}
+
+	/** Shows the machine's faces in the status pane, or its status again. Public for the client game test. */
+	public void showSides(boolean show) {
+		sidesView = show;
+		for (MachineSkin.FaceButton button : faceButtons) {
+			if (button != null) {
+				button.visible = show;
+			}
+		}
+		if (sidesButton != null) {
+			sidesButton.setIcon(show ? MachineSkin.Icon.BACK : MachineSkin.Icon.SIDES);
+			sidesButton.setLit(show);
+			sidesButton.setTooltip(Tooltip.create(Component.translatable(show ? "container.jugcraft.button.status" : "container.jugcraft.button.sides")));
+		}
 	}
 
 	private void click(int id) {
@@ -95,47 +134,51 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		}
 	}
 
-	/** Recolours the side buttons when the synced configuration changes. */
+	/** Recolours the faces and controls when the synced configuration changes. */
 	private void refreshSideButtons() {
 		int packed = menu.data(MachineBlockEntity.DATA_SIDES);
-		if (ejectButton == null || packed == shownSides) {
+		if (ejectButton == null || redstoneButton == null || packed == shownSides) {
 			return;
 		}
 		shownSides = packed;
 		SideConfig config = SideConfig.of(packed);
 		for (SideConfig.Face face : SideConfig.Face.values()) {
 			SideConfig.Mode mode = config.mode(face);
-			Button button = faceButtons[face.ordinal()];
-			button.setMessage(Component.literal(FACE_LETTERS[face.ordinal()]).withColor(MODE_COLORS[mode.ordinal()]));
+			MachineSkin.FaceButton button = faceButtons[face.ordinal()];
+			button.setColor(MODE_COLORS[mode.ordinal()]);
 			button.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.side",
 					Component.translatable("container.jugcraft.side." + face.name().toLowerCase()),
 					Component.translatable("container.jugcraft.mode." + mode.name().toLowerCase()))));
 		}
-		// "Eject" fits the button; green when on, gray when off, and the tooltip says which.
-		ejectButton.setMessage(Component.translatable("container.jugcraft.eject").withColor(config.eject() ? 0x70E070 : 0x9A9A9A));
-		SideConfig.Redstone redstone = config.redstone();
-		redstoneButton.setMessage(Component.literal("R").withColor(REDSTONE_COLORS[redstone.ordinal()]));
-		redstoneButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.redstone",
-				Component.translatable("container.jugcraft.redstone." + redstone.name().toLowerCase()))));
+		ejectButton.setLit(config.eject());
 		ejectButton.setTooltip(Tooltip.create(Component.translatable(config.eject() ? "container.jugcraft.eject.on" : "container.jugcraft.eject.off")
 				.append(". ").append(Component.translatable("container.jugcraft.eject.tooltip"))));
+		SideConfig.Redstone redstone = config.redstone();
+		redstoneButton.setIconColor(REDSTONE_COLORS[redstone.ordinal()]);
+		redstoneButton.setLit(redstone != SideConfig.Redstone.IGNORED);
+		redstoneButton.setTooltip(Tooltip.create(Component.translatable("container.jugcraft.redstone",
+				Component.translatable("container.jugcraft.redstone." + redstone.name().toLowerCase()))));
 	}
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+		refreshSideButtons();
 		extractBackground(graphics, mouseX, mouseY, delta);
 		super.extractRenderState(graphics, mouseX, mouseY, delta);
 		extractTooltip(graphics, mouseX, mouseY);
 		extractGaugeTooltip(graphics, mouseX, mouseY);
 	}
 
-	/** Exact numbers when hovering the energy bar or a tank gauge. */
+	/** Exact numbers over the energy bar (or charge gauge) and the tanks, and what goes in an empty machine slot. */
 	private void extractGaugeTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		int mx = mouseX - leftPos;
 		int my = mouseY - topPos;
 		MachineKind kind = menu.kind();
 		String line = null;
-		if (kind.usesPower() && mx >= BAR_X - 1 && mx <= BAR_X + BAR_WIDTH && my >= BAR_Y - 1 && my <= BAR_Y + BAR_HEIGHT) {
+		boolean overEnergy = bare(kind)
+				? mx >= CHARGE_X - 1 && mx <= CHARGE_X + 127 && my >= CHARGE_Y - 1 && my <= CHARGE_Y + 26
+				: mx >= BAR_X - 1 && mx <= BAR_X + BAR_WIDTH && my >= BAR_Y - 1 && my <= BAR_Y + BAR_HEIGHT;
+		if (kind.usesPower() && overEnergy) {
 			line = String.format("%,d / %,d JE", menu.energy(), menu.capacity());
 		} else if (kind.tankCapacity() > 0 && my >= BAR_Y - 1 && my <= BAR_Y + BAR_HEIGHT
 				&& (kind.isProcessor() ? mx >= 29 && mx < 37 : mx >= 149 && mx < 163)) {
@@ -155,17 +198,71 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 				}
 			}
 		}
-		if (line == null) {
+		if (line != null) {
+			graphics.setTooltipForNextFrame(font, Component.literal(line), mouseX, mouseY);
 			return;
 		}
-		graphics.setTooltipForNextFrame(font, Component.literal(line), mouseX, mouseY);
+		Slot slot = hoveredSlot;
+		if (slot != null && slot.index < menu.slots.size() - PLAYER_SLOTS && !slot.hasItem()) {
+			String role = slotRole(slot.getContainerSlot());
+			if (role != null) {
+				graphics.setTooltipForNextFrame(font, Component.translatable("container.jugcraft.slot." + role), mouseX, mouseY);
+			}
+		}
 	}
 
-	/** Samples the stored energy once a tick, for the terminal's rate. */
+	/** The menu's slot for a machine container slot, or null. */
+	private @Nullable Slot machineSlot(int containerSlot) {
+		for (int index = 0; index < menu.slots.size() - PLAYER_SLOTS; index++) {
+			Slot slot = menu.getSlot(index);
+			if (slot.getContainerSlot() == containerSlot) {
+				return slot;
+			}
+		}
+		return null;
+	}
+
+	private boolean empty(int containerSlot) {
+		Slot slot = machineSlot(containerSlot);
+		return slot == null || !slot.hasItem();
+	}
+
+	/** What a machine container slot is for (a lang key's last part), or null where the machine does not say. */
+	private @Nullable String slotRole(int index) {
+		MachineKind kind = menu.kind();
+		if (kind == MachineKind.COAL_GENERATOR) {
+			return index == 0 ? "fuel" : null;
+		}
+		if (kind.isBoiler()) {
+			return index == MachineBlockEntity.SLOT_FUEL ? "fuel" : index == MachineBlockEntity.SLOT_WATER_IN ? "water"
+					: index == MachineBlockEntity.SLOT_BUCKET_OUT ? "bucket" : null;
+		}
+		if (kind.isFluidProcessor()) {
+			FluidMachineSpec spec = kind.fluidSpec();
+			return index < spec.itemInputs() ? "in" : index < spec.itemInputs() + spec.itemOutputs() ? "out" : null;
+		}
+		if (!kind.isProcessor()) {
+			return null;
+		}
+		int output = kind.outputSlot();
+		if (index < output) {
+			return "in";
+		}
+		if (index == output) {
+			return "out";
+		}
+		if (index <= output + kind.byproductSlots()) {
+			return "extra";
+		}
+		return index >= kind.slots && index < kind.slots + kind.upgradeSlots() ? "upgrade" : null;
+	}
+
+	/** Samples the stored energy and the progress once a tick, for the rate and the time left. */
 	@Override
 	protected void containerTick() {
 		super.containerTick();
 		energyHistory[samples % energyHistory.length] = menu.energy();
+		progressHistory[samples % progressHistory.length] = menu.data(MachineBlockEntity.DATA_PROGRESS);
 		samples++;
 	}
 
@@ -174,33 +271,49 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		if (samples <= energyHistory.length) {
 			return 0;
 		}
-		long then = energyHistory[samples % energyHistory.length];
-		return (menu.energy() - then) / energyHistory.length;
+		return (menu.energy() - energyHistory[samples % energyHistory.length]) / energyHistory.length;
+	}
+
+	/** Seconds the work in hand has left at the pace of the last second, or -1 when that pace is not known. */
+	private int secondsLeft() {
+		int progress = menu.data(MachineBlockEntity.DATA_PROGRESS);
+		int max = menu.data(MachineBlockEntity.DATA_MAX_PROGRESS);
+		if (samples <= progressHistory.length || max <= 0 || progress <= 0) {
+			return -1;
+		}
+		int advanced = progress - progressHistory[samples % progressHistory.length];
+		if (advanced <= 0) {
+			return -1; // A batch finished within the second, or the work stalled.
+		}
+		return (int) Math.ceil((max - progress) / (double) advanced);
 	}
 
 	@Override
 	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
-		refreshSideButtons();
 		int x = leftPos;
 		int y = topPos;
 		graphics.blit(RenderPipelines.GUI_TEXTURED, theme.texture(), x, y, 0.0F, 0.0F, imageWidth, imageHeight, 512, 256);
+		Status status = status();
+		MachineSkin.lamp(graphics, x + MachineSkin.LAMP_X, y + MachineSkin.LAMP_Y,
+				status.warning ? theme.warn() : status.active ? theme.ok() : theme.dim());
 
 		MachineKind kind = menu.kind();
-		if (kind.usesPower()) {
-			energyBar(graphics, x + BAR_X, y + BAR_Y);
+		if (kind.usesPower() && bare(kind)) {
+			MachineSkin.charge(graphics, theme, x + CHARGE_X, y + CHARGE_Y, menu.energy(), menu.capacity());
+		} else if (kind.usesPower()) {
+			MachineSkin.energyBar(graphics, theme, x + BAR_X, y + BAR_Y, BAR_WIDTH, BAR_HEIGHT, menu.energy(), menu.capacity());
 		}
 		if (kind == MachineKind.COAL_GENERATOR) {
-			slotFrame(graphics, x + MachineMenu.INPUT_X, y + MachineMenu.SLOT_Y);
+			slot(graphics, MachineMenu.INPUT_X, MachineMenu.SLOT_Y, 0, MachineSkin.Icon.FLAME);
 			flame(graphics, x + 57, y + 20);
 		} else if (kind.isBoiler()) {
-			slotFrame(graphics, x + MachineMenu.INPUT_X, y + 17);
-			slotFrame(graphics, x + MachineMenu.INPUT_X, y + 53);
-			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
+			slot(graphics, MachineMenu.INPUT_X, 17, MachineBlockEntity.SLOT_WATER_IN, null);
+			slot(graphics, MachineMenu.INPUT_X, 53, MachineBlockEntity.SLOT_FUEL, MachineSkin.Icon.FLAME);
+			slot(graphics, MachineMenu.OUTPUT_X, MachineMenu.SLOT_Y, MachineBlockEntity.SLOT_BUCKET_OUT, null);
 			flame(graphics, x + 57, y + 37);
 			tube(graphics, x + 150, y + BAR_Y, 12, BAR_HEIGHT, menu.data(MachineBlockEntity.DATA_TANK), kind.tankCapacity(), WATER);
 		} else if (kind == MachineKind.GEOTHERMAL_GENERATOR) {
-			tube(graphics, x + 150, y + BAR_Y, 12, BAR_HEIGHT, menu.data(MachineBlockEntity.DATA_TANK),
-					MachineKind.GEOTHERMAL_TANK, LAVA);
+			tube(graphics, x + 150, y + BAR_Y, 12, BAR_HEIGHT, menu.data(MachineBlockEntity.DATA_TANK), MachineKind.GEOTHERMAL_TANK, LAVA);
 		} else if (kind.isFluidProcessor()) {
 			FluidMachineSpec spec = kind.fluidSpec();
 			for (int tank = 0; tank < spec.tanks(); tank++) {
@@ -209,44 +322,49 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 						menu.tankAmount(tank), spec.capacity(tank), color);
 			}
 			for (int slot = 0; slot < spec.itemInputs(); slot++) {
-				slotFrame(graphics, x + MachineMenu.fluidItemInputX(spec, slot), y + MachineMenu.SLOT_Y);
+				slot(graphics, MachineMenu.fluidItemInputX(spec, slot), MachineMenu.SLOT_Y, slot, null);
 			}
 			for (int slot = 0; slot < spec.itemOutputs(); slot++) {
-				slotFrame(graphics, x + MachineMenu.fluidItemOutputX(spec, slot), y + MachineMenu.SLOT_Y);
+				slot(graphics, MachineMenu.fluidItemOutputX(spec, slot), MachineMenu.SLOT_Y, spec.itemInputs() + slot, null);
 			}
-			arrow(graphics, x + MachineMenu.fluidArrowX(spec), y + 43);
+			MachineSkin.arrow(graphics, theme, x + MachineMenu.fluidArrowX(spec), y + 43, progressFraction());
 		} else if (kind.isProcessor()) {
 			int inputs = kind.outputSlot();
 			for (int slot = 0; slot < inputs; slot++) {
-				slotFrame(graphics, x + MachineMenu.inputX(kind, slot), y + MachineMenu.inputY(kind, slot));
+				slot(graphics, MachineMenu.inputX(kind, slot), MachineMenu.inputY(kind, slot), slot, null);
 			}
-			slotFrame(graphics, x + MachineMenu.OUTPUT_X, y + MachineMenu.SLOT_Y);
+			slot(graphics, MachineMenu.OUTPUT_X, MachineMenu.SLOT_Y, inputs, null);
 			for (int index = 0; index < kind.byproductSlots(); index++) {
-				slotFrame(graphics, x + MachineMenu.byproductX(index), y + MachineMenu.BYPRODUCT_Y);
+				slot(graphics, MachineMenu.byproductX(index), MachineMenu.BYPRODUCT_Y, inputs + 1 + index, null);
 			}
 			for (int index = 0; index < kind.upgradeSlots(); index++) {
-				slotFrame(graphics, x + MachineMenu.upgradeX(index), y + MachineMenu.UPGRADE_Y);
+				slot(graphics, MachineMenu.upgradeX(index), MachineMenu.UPGRADE_Y, kind.slots + index, MachineSkin.Icon.UPGRADE);
 			}
 			if (kind.tankCapacity() > 0) {
 				// Water gauge between the energy bar and the input slot.
 				tube(graphics, x + 30, y + BAR_Y, 6, 52 - BAR_Y, menu.data(MachineBlockEntity.DATA_TANK), kind.tankCapacity(), WATER);
 			}
-			arrow(graphics, x + MachineMenu.arrowX(kind), y + 43);
+			MachineSkin.arrow(graphics, theme, x + MachineMenu.arrowX(kind), y + 43, progressFraction());
 		}
 	}
 
-	/** The energy bar: a column of lit segments, filled from the bottom. */
-	private void energyBar(GuiGraphicsExtractor graphics, int left, int top) {
-		graphics.fill(left - 1, top - 1, left + BAR_WIDTH + 1, top + BAR_HEIGHT + 1, theme.slotDark());
-		graphics.fill(left, top, left + BAR_WIDTH, top + BAR_HEIGHT, theme.slotFace());
-		long capacity = Math.max(1, menu.capacity());
-		int filled = (int) (menu.energy() * BAR_HEIGHT / capacity);
-		int unlit = (theme.energy() & 0x00FFFFFF) | 0x30000000;
-		for (int segment = 0; segment * 4 < BAR_HEIGHT; segment++) {
-			int bottom = top + BAR_HEIGHT - segment * 4;
-			boolean lit = segment * 4 < filled;
-			graphics.fill(left + 1, bottom - 3, left + BAR_WIDTH - 1, bottom, lit ? theme.energy() : unlit);
+	/** Whether a machine has nothing in its pane but its energy (batteries, solar panels): no slots, tanks or fuel. */
+	private static boolean bare(MachineKind kind) {
+		return kind != MachineKind.COAL_GENERATOR && !kind.isBoiler() && kind != MachineKind.GEOTHERMAL_GENERATOR
+				&& !kind.isFluidProcessor() && !kind.isProcessor();
+	}
+
+	/** A machine slot's frame at (slotX, slotY), with a faint hint of what goes there while it is empty. */
+	private void slot(GuiGraphicsExtractor graphics, int slotX, int slotY, int containerSlot, MachineSkin.@Nullable Icon hint) {
+		MachineSkin.slot(graphics, theme, leftPos + slotX, topPos + slotY);
+		if (hint != null && empty(containerSlot)) {
+			MachineSkin.hint(graphics, theme, leftPos + slotX, topPos + slotY, hint);
 		}
+	}
+
+	private float progressFraction() {
+		int max = menu.data(MachineBlockEntity.DATA_MAX_PROGRESS);
+		return max <= 0 ? 0 : menu.data(MachineBlockEntity.DATA_PROGRESS) / (float) max;
 	}
 
 	/** A glass gauge tube: a dark frame, the fluid filled from the bottom, a highlight down the glass and tick marks. */
@@ -277,115 +395,143 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		}
 	}
 
-	/** The progress arrow: a shaft and a head pointing right, filled from the left as the work goes on. */
-	private void arrow(GuiGraphicsExtractor graphics, int left, int middle) {
-		int maxProgress = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_PROGRESS));
-		int done = menu.data(MachineBlockEntity.DATA_PROGRESS) * 24 / maxProgress;
-		for (int column = 0; column < 24; column++) {
-			// A shaft 4 pixels high, then a head narrowing from 11 pixels to 1.
-			int half = column < 18 ? 2 : 6 - (column - 18);
-			int color = column < done ? theme.progress() : theme.slotDark();
-			graphics.fill(left + column, middle - half, left + column + 1, middle + half, color);
-		}
-	}
-
 	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		graphics.text(font, title, titleLabelX, titleLabelY, theme.label(), false);
-		graphics.text(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, theme.label(), false);
-		terminal(graphics);
+		slotLabels(graphics);
+		if (menu.kind().usesPower() && bare(menu.kind())) {
+			String percent = menu.energy() * 100 / Math.max(1, menu.capacity()) + "%";
+			graphics.text(font, percent, CHARGE_X + 61 - font.width(percent) / 2, CHARGE_Y + 31, theme.text(), false);
+		}
+		if (sidesView) {
+			sides(graphics);
+		} else {
+			statusPane(graphics);
+			MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.tagline." + menu.kind().id), HELP_X,
+					sidesButton != null ? HELP_Y : MachineSkin.HELP_TOP, HELP_WIDTH, HELP_BOTTOM, theme.help());
+		}
 	}
 
-	/** The terminal's screen: what the machine is for, then its status and readouts. */
-	private void terminal(GuiGraphicsExtractor graphics) {
+	/** IN and OUT over a processor's slots, where they fit without touching another slot. */
+	private void slotLabels(GuiGraphicsExtractor graphics) {
 		MachineKind kind = menu.kind();
-		int y = SCREEN_Y;
-		for (FormattedCharSequence line : font.split(Component.translatable("container.jugcraft.tagline." + kind.id), SCREEN_WIDTH)) {
-			graphics.text(font, line, SCREEN_X, y, theme.dim(), false);
-			y += 9;
+		if (!kind.isProcessor() || kind == MachineKind.AUTO_CRAFTER || kind.isFluidProcessor()) {
+			return;
 		}
-		y += 2;
-		graphics.fill(SCREEN_X, y, SCREEN_X + SCREEN_WIDTH, y + 1, (theme.dim() & 0x00FFFFFF) | 0x80000000);
-		y += 4;
+		int labelY = MachineMenu.SLOT_Y - 10;
+		graphics.text(font, Component.translatable("container.jugcraft.label.in"), MachineMenu.inputX(kind, 0), labelY, theme.dim(), false);
+		if (kind.byproductSlots() <= 1) {
+			graphics.text(font, Component.translatable("container.jugcraft.label.out"), MachineMenu.OUTPUT_X, labelY, theme.dim(), false);
+		}
+	}
+
+	/** The status pane: what the machine is doing, what to do about it, progress, the time left and power. */
+	private void statusPane(GuiGraphicsExtractor graphics) {
+		MachineKind kind = menu.kind();
 		Status status = status();
-		graphics.text(font, "> " + Component.translatable("container.jugcraft.terminal." + status.key).getString(),
-				SCREEN_X, y, status.warning ? theme.warn() : theme.text(), false);
-		y += 11;
-		boolean controls = kind.isProcessor();
-		int bottom = controls ? SCREEN_BOTTOM : CONTROLS_BOTTOM;
-		if (hasProgress(kind) && y + 9 <= bottom) {
-			int maxProgress = Math.max(1, menu.data(MachineBlockEntity.DATA_MAX_PROGRESS));
-			int percent = Math.min(100, menu.data(MachineBlockEntity.DATA_PROGRESS) * 100 / maxProgress);
-			meter(graphics, y, percent, theme.progress(), percent + "%");
-			y += 10;
+		int y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.terminal." + status.key), STATUS_X, STATUS_Y,
+				STATUS_WIDTH, STATUS_BOTTOM, status.warning ? theme.warn() : theme.text());
+		y += 2;
+		if (status.hint != null) {
+			y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.hint." + status.hint), STATUS_X, y,
+					STATUS_WIDTH, STATUS_BOTTOM, status.warning ? theme.warn() : theme.dim());
+			y += 2;
 		}
-		if (kind.usesPower() && kind != MachineKind.AUTO_CRAFTER && y + 9 <= bottom) {
-			String energy = compact(menu.energy()) + "/" + compact(menu.capacity());
-			graphics.text(font, Component.translatable("container.jugcraft.terminal.power").getString(), SCREEN_X, y, theme.dim(), false);
-			graphics.text(font, energy, SCREEN_X + SCREEN_WIDTH - font.width(energy), y, theme.text(), false);
+		if (hasProgress(kind) && status.active && y + 9 <= STATUS_BOTTOM) {
+			int percent = (int) Math.min(100, progressFraction() * 100);
+			MachineSkin.meter(graphics, font, theme, y, percent, percent + "%");
+			y += 10;
+			int seconds = secondsLeft();
+			if (seconds >= 0 && y + 9 <= STATUS_BOTTOM) {
+				graphics.text(font, Component.translatable("container.jugcraft.terminal.time_left", MachineSkin.duration(seconds)),
+						STATUS_X, y, theme.dim(), false);
+				y += 10;
+			}
+		}
+		if (kind.usesPower() && kind != MachineKind.AUTO_CRAFTER && y + 9 <= STATUS_BOTTOM) {
+			row(graphics, y, Component.translatable("container.jugcraft.terminal.power").getString(),
+					MachineSkin.compact(menu.energy()) + "/" + MachineSkin.compact(menu.capacity()));
 			y += 10;
 		}
 		long rate = energyRate();
-		if (kind.usesPower() && rate != 0 && y + 9 <= bottom) {
-			String text = (rate > 0 ? "+" : "") + compact(Math.abs(rate)) + " JE/t";
-			if (rate < 0) {
-				text = "-" + text;
-			}
-			graphics.text(font, Component.translatable("container.jugcraft.terminal.rate").getString(), SCREEN_X, y, theme.dim(), false);
-			graphics.text(font, text, SCREEN_X + SCREEN_WIDTH - font.width(text), y, theme.text(), false);
+		if (kind.usesPower() && rate != 0 && y + 9 <= STATUS_BOTTOM) {
+			String text = (rate > 0 ? "+" : "-") + MachineSkin.compact(Math.abs(rate)) + " JE/t";
+			row(graphics, y, Component.translatable("container.jugcraft.terminal.rate").getString(), text);
 			y += 10;
 		}
 		String condition = conditionKey(kind);
 		if (condition != null) {
-			for (FormattedCharSequence line : font.split(Component.translatable(condition), SCREEN_WIDTH)) {
-				if (y + 9 > bottom) {
-					break;
-				}
-				graphics.text(font, line, SCREEN_X, y, menu.data(MachineBlockEntity.DATA_FORMED) == 1 ? theme.text() : theme.warn(), false);
-				y += 9;
-			}
-		}
-		if (controls) {
-			graphics.text(font, Component.translatable("container.jugcraft.terminal.sides").getString(), 183, CONTROLS_Y + 2,
-					theme.dim(), false);
+			MachineSkin.wrap(graphics, font, Component.translatable(condition), STATUS_X, y, STATUS_WIDTH, STATUS_BOTTOM,
+					menu.data(MachineBlockEntity.DATA_FORMED) == 1 ? theme.text() : theme.warn());
 		}
 	}
 
-	/** A one-line meter: a bar of ten cells and a label on the right. */
-	private void meter(GuiGraphicsExtractor graphics, int y, int percent, int color, String label) {
-		int cells = 10;
-		int width = SCREEN_WIDTH - font.width(label) - 4;
-		int cell = Math.max(2, width / cells);
-		int lit = percent * cells / 100;
-		for (int i = 0; i < cells; i++) {
-			int left = SCREEN_X + i * cell;
-			graphics.fill(left, y + 1, left + cell - 1, y + 7, i < lit ? color : (color & 0x00FFFFFF) | 0x30000000);
+	/** The sides view: its heading over the faces (which draw themselves), and the faces' key in the help box. */
+	private void sides(GuiGraphicsExtractor graphics) {
+		graphics.text(font, Component.translatable("container.jugcraft.terminal.sides"), STATUS_X, STATUS_Y - 1, theme.text(), false);
+		int y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.sides.help"), HELP_X, HELP_Y, HELP_WIDTH,
+				HELP_BOTTOM, theme.help());
+		y += 2;
+		for (int mode = 0; mode < MODE_KEYS.length && y + 9 <= HELP_BOTTOM; mode++) {
+			graphics.fill(HELP_X, y + 1, HELP_X + 6, y + 7, MODE_COLORS[mode]);
+			graphics.text(font, Component.translatable("container.jugcraft.sides.key." + MODE_KEYS[mode]), HELP_X + 9, y, theme.help(), false);
+			y += 9;
 		}
-		graphics.text(font, label, SCREEN_X + SCREEN_WIDTH - font.width(label), y, theme.text(), false);
 	}
 
-	private record Status(String key, boolean warning) {
+	/** A label on the left of the status pane and its value on the right; a value too wide for both is shown alone. */
+	private void row(GuiGraphicsExtractor graphics, int y, String label, String value) {
+		if (font.width(label) + 2 + font.width(value) <= STATUS_WIDTH) {
+			graphics.text(font, label, STATUS_X, y, theme.dim(), false);
+		}
+		graphics.text(font, value, STATUS_X + STATUS_WIDTH - font.width(value), y, theme.text(), false);
 	}
 
-	/** What the terminal says the machine is doing, from what the menu syncs. */
+	/**
+	 * What the machine is doing: a lang key under container.jugcraft.terminal, whether it is a problem, whether the
+	 * machine is busy, and what to do about it (a lang key under container.jugcraft.hint), if anything.
+	 */
+	private record Status(String key, boolean warning, boolean active, @Nullable String hint) {
+	}
+
+	/** What the status pane says, from what the menu syncs: the machine's data and its slots. */
 	private Status status() {
 		MachineKind kind = menu.kind();
 		long rate = energyRate();
 		boolean burning = menu.data(MachineBlockEntity.DATA_BURN) > 0;
 		boolean working = menu.data(MachineBlockEntity.DATA_PROGRESS) > 0;
 		if (kind.isBattery()) {
-			return new Status(rate > 0 ? "charging" : rate < 0 ? "discharging" : "storing", false);
+			return new Status(rate > 0 ? "charging" : rate < 0 ? "discharging" : "storing", false, rate != 0, null);
 		}
 		if (kind.isGenerator()) {
-			return new Status(burning || working || rate > 0 ? "generating" : "idle", false);
+			if (burning || working || rate > 0) {
+				return new Status("generating", false, true, null);
+			}
+			boolean needsFuel = kind == MachineKind.COAL_GENERATOR ? empty(0) : kind.isBoiler() && empty(MachineBlockEntity.SLOT_FUEL);
+			return new Status("idle", false, false, needsFuel ? "add_fuel" : null);
 		}
 		if (working) {
-			return new Status("running", false);
+			return new Status("running", false, true, null);
 		}
 		if (kind.usesPower() && kind.usePerTick > 0 && menu.energy() < kind.usePerTick) {
-			return new Status("no_power", true);
+			return new Status("no_power", true, false, "no_power");
 		}
-		return new Status("idle", false);
+		if (kind.isProcessor() && !kind.isFluidProcessor()) {
+			int output = kind.outputSlot();
+			Slot result = machineSlot(output);
+			ItemStack stack = result == null ? ItemStack.EMPTY : result.getItem();
+			if (!stack.isEmpty() && stack.getCount() >= stack.getMaxStackSize()) {
+				return new Status("output_full", true, false, "output_full");
+			}
+			boolean anyInput = false;
+			for (int slot = 0; slot < output; slot++) {
+				anyInput |= !empty(slot);
+			}
+			if (!anyInput) {
+				return new Status("idle", false, false, "add_input");
+			}
+		}
+		return new Status("idle", false, false, null);
 	}
 
 	/** Machines whose progress means a batch of work (not engines, which use it for their fuel). */
@@ -407,21 +553,6 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		};
 	}
 
-	/** 950, 12.5k, 400k, 64M: short enough for the terminal. */
-	private static String compact(long value) {
-		if (value < 1_000) {
-			return Long.toString(value);
-		}
-		if (value < 100_000) {
-			long tenths = value / 100;
-			return tenths % 10 == 0 ? tenths / 10 + "k" : tenths / 10 + "." + tenths % 10 + "k";
-		}
-		if (value < 10_000_000) {
-			return value / 1_000 + "k";
-		}
-		return value / 1_000_000 + "M";
-	}
-
 	/** Left edge of a fluid processor's tank gauge (input tanks first). */
 	private static int tankX(FluidMachineSpec spec, int tank) {
 		return spec.isInput(tank) ? MachineMenu.inputTankX(tank) : MachineMenu.outputTankX(spec, tank - spec.inputTanks().size());
@@ -441,12 +572,5 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		}
 		int color = PetroFluids.gaugeColor(fluid);
 		return color != 0 ? color : 0xFF8090A8;
-	}
-
-	/** A sunken slot in the theme's colours. */
-	private void slotFrame(GuiGraphicsExtractor graphics, int slotX, int slotY) {
-		graphics.fill(slotX - 1, slotY - 1, slotX + 17, slotY + 17, theme.slotDark());
-		graphics.fill(slotX, slotY, slotX + 17, slotY + 17, theme.slotLight());
-		graphics.fill(slotX, slotY, slotX + 16, slotY + 16, theme.slotFace());
 	}
 }

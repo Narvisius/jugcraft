@@ -36,7 +36,7 @@ public final class SeasonalLeavesDecorator extends TreeDecorator {
 				found[0] = state;
 				return true;
 			});
-			if (found[0] != null && found[0].getBlock() instanceof SeasonalLeavesBlock leaves) {
+			if (found[0] != null && found[0].getBlock() instanceof SeasonalFoliage leaves) {
 				SeasonalLeavesBlock.Foliage look = leaves.schedule().on(day, pos);
 				if (found[0].getValue(SeasonalLeavesBlock.SEASON) != look) {
 					context.setBlock(pos, found[0].setValue(SeasonalLeavesBlock.SEASON, look));

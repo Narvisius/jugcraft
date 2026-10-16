@@ -1,6 +1,6 @@
 # Snow-country fluorite deposits
 
-Status: implemented on `codex/fluorite-deposits`, 13 October 2026. Public [PR #343](https://github.com/jimbozoomer-byte/jugcraft/pull/343). The owner accepted the first inspection world, then requested stone around and beneath the surface ore. The revised outcrops passed the rendered generation/persistence suite before starting spodumene. Original implementation commit: `5bc2af7af84824456ed61864c7f3a62597ce3b65`.
+Status: implemented on `codex/fluorite-deposits`, 13 October 2026. Public [PR #343](https://github.com/jimbozoomer-byte/jugcraft/pull/343). The owner accepted the first inspection world, then requested stone around and beneath the surface ore. The revised outcrops passed the rendered generation/persistence suite before starting spodumene. The owner accepted the revised stone outcrops in the combined mineral inspection world on 13 October 2026. Original implementation commit: `5bc2af7af84824456ed61864c7f3a62597ce3b65`.
 
 ## Approved player result
 
@@ -54,7 +54,7 @@ The switch `fluorite.enabled=false` takes effect after restart, stopping new dec
 
 ## Validation commands
 
-`./gradlew build` runs the server suite, including `FluoriteGameTests` for iron-tier harvesting, Silk Touch, Fortune, storage, biome policy, prospecting and the actual powered ore drill. `./gradlew runClientGameTest -PclientTests=FluoriteClientGameTests` generates two ordinary seeds and a Designed world, checks cave-biome behavior and excluded land, exercises failed underground placement/snow/water/roof/obstruction fixtures, saves/reopens natural ores, renders screenshots and exports a disposable inspection save under the test run directory. With fluorite disabled in the test process's startup configuration, the same client suite instead verifies absent decoration/recipes and persistent registered ores/items.
+`./gradlew build` runs the server suite, including `FluoriteGameTests` for iron-tier harvesting, Silk Touch, Fortune, storage, biome policy, prospecting and the actual powered ore drill. Test maintenance (14 October 2026): `prospectAndDrill` surveys the drill's chunk and the eight around it, not its chunk alone. Game tests stand at random places, and its two ore blocks, three blocks or less from the drill, crossed a chunk border from it in about one placement in 64, so the survey missed them and the test failed by chance; the spodumene twin failed so once in CI ([#373's comment](https://github.com/jimbozoomer-byte/jugcraft/pull/373#issuecomment-6178187056)). `./gradlew runClientGameTest -PclientTests=FluoriteClientGameTests` generates two ordinary seeds and a Designed world, checks cave-biome behavior and excluded land, exercises failed underground placement/snow/water/roof/obstruction fixtures, saves/reopens natural ores, renders screenshots and exports a disposable inspection save under the test run directory. With fluorite disabled in the test process's startup configuration, the same client suite instead verifies absent decoration/recipes and persistent registered ores/items.
 
 ## Recorded results — 13 October 2026
 

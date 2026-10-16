@@ -8,11 +8,13 @@ needs machines that do not exist yet. Until they do, the hard steps use the vani
 blast furnace as a clearly marked stand-in, and liquid crude oil is not added.
 """
 
+from mineral_sands import SANDS
+
 MOD = "jugcraft"
 
 # Feature switches (config/jugcraft.properties). Order is the config file order.
 FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "titanium", "thallite", "aluminum",
-            "salt", "phosphate", "lithium", "rare_earths", "fluorite", "sulfur", "silicon", "crude_oil", "machines", "deposits",
+            "salt", "phosphate", "lithium", "rare_earths", "fluorite", "mineral_sands", "vanadium", "sulfur", "silicon", "crude_oil", "machines", "deposits",
             "explosives", "agriculture", "parties", "drones",
             "pixel_hollows", "retro_trader", "alpine_spawn", "biomes", "town", "diagonal_connections", "raiders",
             "concordance", "guns"]
@@ -81,6 +83,15 @@ MINERALS = {
                   "outcrop_chance": 4, "surface_biomes": [
                       "jugcraft:shield", "jugcraft:highland", "jugcraft:basin", "minecraft:windswept_hills",
                       "minecraft:windswept_gravelly_hills", "minecraft:windswept_forest", "minecraft:stony_peaks"]}},
+    "vanadium_iron": {"display": "Raw Vanadium-bearing Iron", "ore_display": "Vanadium-bearing Iron",
+                     "feature": "vanadium", "drops": [1, 1], "fortune": False, "tool": "iron",
+                     "gen": {"size": 40, "rarity": 24, "min_y": -48, "max_y": 32,
+                             "outcrop_chance": 3, "surface_biomes": [
+                                 "jugcraft:highland", "jugcraft:basin", "minecraft:windswept_hills",
+                                 "minecraft:windswept_gravelly_hills", "minecraft:windswept_forest", "minecraft:stony_peaks"]},
+                     "rich_gen": {"size": 48, "rarity": 12, "min_y": -48, "max_y": 32,
+                                  "outcrop_chance": 3, "surface_biomes": ["jugcraft:shield", "jugcraft:volcano"],
+                                  "outcrop_surface_biomes": ["jugcraft:shield"]}},
 }
 
 # Surface rocks with their own blocks. copy: vanilla block whose properties are copied.
@@ -98,6 +109,9 @@ ROCKS = {
                "gen": {"size": 14, "count": 2, "min_y": 55, "max_y": 100, "target": "minecraft:sand",
                        "biomes": ["IS_DESERT", "IS_BADLANDS"]}},
 }
+
+ROCKS.update({name: {"display": info["display"], "feature": "mineral_sands", "copy": "SAND",
+                          "tool": "shovel", "drop": None} for name, info in SANDS.items()})
 
 # Plain items: display name, feature, optional c: tag path.
 ITEMS = {

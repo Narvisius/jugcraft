@@ -36,6 +36,8 @@ import org.jspecify.annotations.Nullable;
  * muzzle to its end, or an arc of sparks jagging from the muzzle to each creature it leapt to. Its casing cue vents
  * sparks.</li>
  * <li>slice 10G, two guns at once: each hand's gun has its own flash, and its shots and casings come from its side.</li>
+ * <li>slice 13D: a revolving gun's cylinder, turned on a chamber at each of its shot's "rotate_cylinder" cues
+ * ({@link #cylinderTurn}).</li>
  * </ul>
  */
 public final class GunEffects {
@@ -63,6 +65,16 @@ public final class GunEffects {
 	static final double RUN_DOWN_TICKS = 30.0;
 	/** Ticks a shot (another player's, seen from here) keeps the barrels driven. */
 	private static final long SHOT_DRIVES = 4;
+	/**
+	 * Each revolving gun's cylinder (slice 13D), by its stack's animation id: the chambers turned and when the last turn
+	 * began. Pruned once it holds more than a few; a cylinder forgotten comes back to rest a whole number of chambers
+	 * round, which looks the same.
+	 */
+	private static final Map<Long, Cylinder> CYLINDERS = new HashMap<>();
+	/** Ticks a cylinder takes to turn on a chamber. */
+	static final float CYLINDER_TICKS = 3.0F;
+	/** A cylinder not turned for this long may be forgotten. */
+	private static final long CYLINDER_FORGET_TICKS = 1200;
 	/** Flashes drawn and casings (or puffs) thrown, counted for the client game tests. */
 	private static long flashes;
 	private static long ejected;
@@ -249,6 +261,28 @@ public final class GunEffects {
 		return (float) barrels.turn;
 	}
 
+	/** The gun with this animation id turned its cylinder on a chamber, now (its shot's "rotate_cylinder" cue, slice 13D). */
+	static void turnCylinder(long id, int chambers, long gameTime) {
+		if (CYLINDERS.size() > 32) {
+			CYLINDERS.values().removeIf(cylinder -> gameTime - cylinder.since() > CYLINDER_FORGET_TICKS || cylinder.since() > gameTime);
+		}
+		Cylinder was = CYLINDERS.get(id);
+		CYLINDERS.put(id, new Cylinder(was == null ? 1 : was.turns() % chambers + 1, gameTime));
+	}
+
+	/**
+	 * How far the cylinder of the gun with this animation id has turned (radians), at this frame; null if it never has. Each
+	 * cue turns it on a chamber (a whole turn over its chambers), eased over {@link #CYLINDER_TICKS}.
+	 */
+	static @Nullable Float cylinderTurn(long id, int chambers, long gameTime, float partialTick) {
+		Cylinder cylinder = CYLINDERS.get(id);
+		if (cylinder == null) {
+			return null;
+		}
+		float t = Math.clamp((gameTime - cylinder.since() + partialTick) / CYLINDER_TICKS, 0.0F, 1.0F);
+		return (float) (Math.PI * 2.0 / chambers * (cylinder.turns() - 1 + t * t * (3.0F - 2.0F * t)));
+	}
+
 	/** This entity stabbed with its gun's bayonet, now (slice 7). */
 	public static void stabbed(LivingEntity stabber) {
 		long now = stabber.level().getGameTime();
@@ -341,6 +375,15 @@ public final class GunEffects {
 				.add(moving.x, Math.max(0.0, moving.y), moving.z);
 		level.addParticle(casing, port.x, port.y, port.z, throwTo.x + random.nextGaussian() * 0.01,
 				0.14 + random.nextFloat() * 0.04, throwTo.z + random.nextGaussian() * 0.01);
+	}
+
+	/**
+	 * A revolving gun's cylinder (slice 13D).
+	 *
+	 * @param turns the chambers it has turned on, 1 to its chambers (a whole turn wraps round)
+	 * @param since the game time its last turn began
+	 */
+	private record Cylinder(int turns, long since) {
 	}
 
 	/** A holder's rotary barrels: driven until this game time; their speed (radians a tick), turn and the frame time. */

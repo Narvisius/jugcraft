@@ -166,8 +166,11 @@ public class NuclearPlantGameTests {
 		PlantBuilder.Result medium = PlantBuilder.build(level, mediumPrint, origin.offset(-5_000, 0, 4_000), Rotation.NONE, null, true);
 		surveyAtFullPower(helper, medium, "medium plant", mediumPrint, origin.offset(-5_000, 0, 4_000));
 		Blueprint largePrint = Blueprint.get("nuclear_large_epr", false);
-		PlantBuilder.Result large = PlantBuilder.build(level, largePrint, origin.offset(5_000, 0, -5_000), Rotation.NONE, null, true);
-		surveyAtFullPower(helper, large, "large plant", largePrint, origin.offset(5_000, 0, -5_000));
+		// Reserve a separate site: the relay-room test also builds a full plant at its origin + (5000, 0, -5000).
+		// Relative test origins are close enough for those hundreds-of-blocks-wide buildings to overlap.
+		BlockPos largeStake = new BlockPos(8_000, origin.getY(), -8_000);
+		PlantBuilder.Result large = PlantBuilder.build(level, largePrint, largeStake, Rotation.NONE, null, true);
+		surveyAtFullPower(helper, large, "large plant", largePrint, largeStake);
 		helper.succeed();
 	}
 

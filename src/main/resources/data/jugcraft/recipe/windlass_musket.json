@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "IIB",
+    "FLP"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "B": "#c:ingots/brass",
+    "F": "minecraft:flint",
+    "L": "minecraft:lever",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:windlass_musket"
+  }
+}

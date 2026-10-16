@@ -57,6 +57,14 @@ def imports():
     out = []
     out.append(("block/transport_crate_wood", "biomes and tree blocks/origin_oak_planks"))
     out.append(("block/fluorite_block", "block_fluorite"))
+    from mineral_sands import SANDS
+    out.extend(("block/" + name, info["texture"]) for name, info in SANDS.items())
+    # Owner's 15 October pine correction: use the supplied wood textures unchanged.
+    for name in ("pine_log", "pine_log_top", "stripped_pine_log", "stripped_pine_log_top", "pine_planks"):
+        out.append((f"block/{name}", f"biomes and tree blocks/{name}"))
+    out += [("block/pine_needles", "biomes and tree blocks/pine_leaves"),
+            ("block/pine_needles_overlay", "biomes and tree blocks/pine_leaves_overlay"),
+            ("block/pine_sapling", "biomes and tree blocks/pine_sapling")]
     for table in (kitchen.TEXTURES, feasts.TEXTURES, menu.TEXTURES, rice.TEXTURES, soil.TEXTURES, garden.TEXTURES):
         for target, source in table.items():
             out.append((target, f"{FOOD}/{source}"))

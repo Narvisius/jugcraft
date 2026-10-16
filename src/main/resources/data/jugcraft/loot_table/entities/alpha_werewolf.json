@@ -1,0 +1,58 @@
+{
+  "type": "minecraft:gift",
+  "random_sequence": "jugcraft:entities/alpha_werewolf",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:alpha_pelt"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.15
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:moonfang"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:howler"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:packfinder_charm"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:alphas_hood"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

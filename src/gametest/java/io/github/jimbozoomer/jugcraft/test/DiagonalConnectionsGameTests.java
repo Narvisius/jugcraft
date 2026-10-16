@@ -496,16 +496,20 @@ public class DiagonalConnectionsGameTests {
 	/**
 	 * Every fence and bars block has the four properties and starts with them false. Walls keep their own states, without
 	 * the properties, and each (vanilla's and Jugcraft's) has a diagonal wall that starts with none and is a wall by tag.
-	 * Every block in the tag is a fence, bars block or wall (vanilla's 14 fences, 17 panes, 9 bars and 32 walls,
-	 * Jugcraft's 15 fences, the cedar's since the tree roster's batch 1, and 1 wall: 88).
+	 * Every fence, bars block and wall belongs to the tag, including wood sets added after this test was written.
 	 */
 	@GameTest
 	public void everyFenceBarsBlockAndWallHasDiagonals(GameTestHelper helper) {
 		List<String> problems = new ArrayList<>();
-		int tagged = 0;
+		int tagged = 0, eligible = 0, walls = 0;
 		for (Block block : BuiltInRegistries.BLOCK) {
 			BlockState state = block.defaultBlockState();
 			boolean crossing = block instanceof FenceBlock || block instanceof IronBarsBlock;
+			if (crossing || block instanceof WallBlock) {
+				eligible++;
+				if (!state.is(DiagonalConnections.TAG)) problems.add(BuiltInRegistries.BLOCK.getKey(block) + " lacks the diagonal tag");
+			}
+			if (block instanceof WallBlock) walls++;
 			if (crossing && (!DiagonalConnections.hasDiagonals(state) || DiagonalConnections.mask(state) != 0)) {
 				problems.add(BuiltInRegistries.BLOCK.getKey(block) + " lacks diagonals or starts joined");
 			}
@@ -525,8 +529,8 @@ public class DiagonalConnectionsGameTests {
 		}
 		LOGGER.info("{} blocks join diagonally, {} diagonal walls; problems: {}", tagged, DiagonalWalls.all().size(), problems);
 		helper.assertTrue(problems.isEmpty(), "Problems: " + problems);
-		helper.assertTrue(tagged == 88 && DiagonalWalls.all().size() == 33, "88 blocks join diagonally and 33 walls have diagonal walls, not "
-				+ tagged + " and " + DiagonalWalls.all().size());
+		helper.assertTrue(tagged == eligible && DiagonalWalls.all().size() == walls,
+				"Diagonal coverage differs from registered fences, bars and walls: " + tagged + "/" + eligible + ", " + DiagonalWalls.all().size() + "/" + walls);
 		helper.succeed();
 	}
 }

@@ -1,5 +1,14 @@
 {
   "type": "minecraft:random_selector",
-  "default": "jugcraft:oak_bush_checked",
-  "features": []
+  "default": "jugcraft:hawthorn_bush_checked",
+  "features": [
+    {
+      "chance": 0.3,
+      "feature": "jugcraft:open_scrub"
+    },
+    {
+      "chance": 0.14285714285714288,
+      "feature": "jugcraft:oak_bush_checked"
+    }
+  ]
 }

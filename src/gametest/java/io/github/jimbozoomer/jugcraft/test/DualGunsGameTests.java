@@ -29,8 +29,8 @@ public class DualGunsGameTests {
 	/** The one-handed guns pair: two of them are two guns at once, and no other pair is. */
 	@GameTest
 	public void oneHandedGunsPair(GameTestHelper helper) {
-		helper.assertTrue(JugcraftGuns.SPECS.keySet().containsAll(JugcraftGuns.ONE_HANDED) && JugcraftGuns.ONE_HANDED.size() == 17,
-				"Not seventeen one-handed guns, each a gun: " + JugcraftGuns.ONE_HANDED);
+		helper.assertTrue(JugcraftGuns.SPECS.keySet().containsAll(JugcraftGuns.ONE_HANDED) && JugcraftGuns.ONE_HANDED.size() == 21,
+				"Not twenty-one one-handed guns, each a gun: " + JugcraftGuns.ONE_HANDED);
 		helper.assertTrue(GunItem.oneHanded(loaded("sentry_pistol", 0)) && !GunItem.oneHanded(loaded("garrison_rifle", 0))
 				&& !GunItem.oneHanded(new ItemStack(Items.STICK)), "The Sentry Pistol is not one-handed, or the Garrison Rifle or a stick is");
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();

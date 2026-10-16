@@ -5,6 +5,7 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.LoopType;
+import com.geckolib.constant.DataTickets;
 import io.github.jimbozoomer.jugcraft.guns.GunItem;
 import io.github.jimbozoomer.jugcraft.guns.GunSpec;
 import io.github.jimbozoomer.jugcraft.guns.JugcraftGuns;
@@ -25,12 +26,21 @@ import net.minecraft.world.item.ItemStack;
  * times, reload_stop. The animations' sound keyframes play the guns' sounds where the gun is, and their "eject_casing"
  * particle keyframes throw a spent casing ({@link GunEffects#eject}). A magazine change plays faster or slower with the
  * gun's magazine attachment, so that it ends when the reload does.
+ * <p>
+ * Slice 13D: a revolving gun's "rotate_cylinder" cue turns its cylinder on a chamber ({@link GunEffects#cylinderTurn}).
+ * A carbine (a one-handed gun with a stock fitted, {@link GunItem#carbine}) plays the owner's carbine_ animations in
+ * place of its own: each animation triggered is swapped for the carbine's, and it idles as a carbine until the next.
  */
 public final class GunAnimations {
 	public static final String CONTROLLER = "main";
 	/** The animations' particle cue for a spent casing (tools/guns.py EJECT_CUE). */
 	static final String EJECT_CUE = "eject_casing";
+	/** The animations' particle cue that turns a revolving gun's cylinder on a chamber (tools/guns.py CYLINDER_CUE). */
+	static final String CYLINDER_CUE = "rotate_cylinder";
+	/** What the owner's animations for a carbine with a stock fitted are named by: the gun's own, after this. */
+	static final String CARBINE = "carbine_";
 	private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+	private static final RawAnimation CARBINE_IDLE = RawAnimation.begin().thenLoop(CARBINE + "idle");
 	/** Animation sound keyframes that play another event's sound (tools/guns.py EVENT_SOUNDS: "rustle" is a rustle). */
 	public static final Map<String, String> SOUND_ALIASES = Map.of("rustle", "gun_rustle");
 	/**
@@ -39,7 +49,12 @@ public final class GunAnimations {
 	 * the Earthmover's drum as it twists free and home; the Skylark Rifle and the Bullfrog push a round in (slice 10A); the
 	 * Glowmouth is loaded a charge at a time, as the Stormlock Rifle is (slice 10B); the Mule pushes its shells in, as the
 	 * Coach Gun does (slice 10C), and the Reverb a shell at a time (slice 10D); of the Nether guns, the Tusker pushes a shell
-	 * in at a time and the Bastion Rifle a round (slice 11A), and the Crackling a shell (slice 11B).
+	 * in at a time and the Bastion Rifle a round (slice 11A), and the Crackling a shell (slice 11B); the Lookout Rifle
+	 * pushes a round in at a time, as the Drover Rifle does (slice 13A), and the Fencepost Carbine a round and the
+	 * Waystation Shotgun a shell (slice 13B); the Flatboat Gun pushes its shell into the chamber, and the Millstone
+	 * Rifle a round at a time, as the Drover Rifle does (slice 13C); the Fencepost Thumper pushes a grenade into its
+	 * cylinder at a time, as the Bullfrog does, and the Lantern Musket's core clanks home, as the Squall Rifle's canister
+	 * does (slice 13D).
 	 */
 	public static final Map<String, Map<String, String>> GUN_SOUND_ALIASES = Map.ofEntries(
 			Map.entry("thunderpipe", Map.of("reload_mag_in", "shell_in")),
@@ -61,35 +76,53 @@ public final class GunAnimations {
 			Map.entry("reverb", Map.of("reload_mag_in", "shell_in")),
 			Map.entry("tusker", Map.of("reload_mag_in", "shell_in")),
 			Map.entry("bastion_rifle", Map.of("reload_mag_in", "shell_in")),
-			Map.entry("crackling", Map.of("reload_mag_in", "shell_in")));
+			Map.entry("crackling", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("lookout_rifle", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("fencepost_carbine", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("waystation_shotgun", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("flatboat_gun", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("millstone_rifle", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("fencepost_thumper", Map.of("reload_mag_in", "shell_in")),
+			Map.entry("lantern_musket", Map.of("metal", "clank")));
 
 	private GunAnimations() {
 	}
 
 	public static void register(GunItem gun, AnimatableManager.ControllerRegistrar registrar) {
-		AnimationController<GunItem> controller = new AnimationController<GunItem>(CONTROLLER, 1, test -> test.setAndContinue(IDLE));
-		for (String name : new String[] {"draw", "shoot", "aim_shoot", "inspect"}) {
-			controller.triggerableAnim(name, once(name));
-		}
-		controller.triggerableAnim("idle", IDLE);
+		AnimationController<GunItem> controller = new AnimationController<GunItem>(CONTROLLER, 1,
+				test -> test.setAndContinue(test.getDataOrDefault(GunRenderer.CARBINE, false) ? CARBINE_IDLE : IDLE));
 		GunSpec spec = gun.spec();
-		if (spec.byShell()) {
-			for (int shells = 1; shells <= spec.capacity(); shells++) {
-				controller.triggerableAnim(reloadName(spec, shells), RawAnimation.begin().then("reload_start", LoopType.PLAY_ONCE)
-						.thenPlayXTimes("reload_loop", shells).then("reload_stop", LoopType.PLAY_ONCE).thenLoop("idle"));
+		for (String as : JugcraftGuns.CARBINES.contains(gun.name()) ? new String[] {"", CARBINE} : new String[] {""}) {
+			String idle = as + "idle";
+			for (String name : new String[] {"draw", "shoot", "aim_shoot", "inspect"}) {
+				controller.triggerableAnim(as + name, once(as + name, idle));
 			}
-		} else {
-			controller.triggerableAnim("reload", once("reload"));
+			controller.triggerableAnim(idle, RawAnimation.begin().thenLoop(idle));
+			if (spec.byShell()) {
+				for (int shells = 1; shells <= spec.capacity(); shells++) {
+					controller.triggerableAnim(as + reloadName(spec, shells), RawAnimation.begin().then(as + "reload_start", LoopType.PLAY_ONCE)
+							.thenPlayXTimes(as + "reload_loop", shells).then(as + "reload_stop", LoopType.PLAY_ONCE).thenLoop(idle));
+				}
+			} else {
+				controller.triggerableAnim(as + "reload", once(as + "reload", idle));
+			}
 		}
 		controller.setSoundKeyframeHandler(event -> {
 			Integer owner = event.renderState().getGeckolibData(GunRenderer.OWNER);
 			play(gun, event.keyframeData().getSound(), owner == null ? -1 : owner);
 		});
-		// The owner's particle cues: a spent casing at "eject_casing" (the others mark points in a reload and show nothing).
+		// The owner's particle cues: a spent casing at "eject_casing", a turn of the cylinder at "rotate_cylinder" (slice
+		// 13D; the others mark points in a reload and show nothing).
 		controller.setParticleKeyframeHandler(event -> {
 			Integer owner = event.renderState().getGeckolibData(GunRenderer.OWNER);
-			if (owner != null && EJECT_CUE.equals(event.keyframeData().getEffect())) {
+			String cue = event.keyframeData().getEffect();
+			if (owner != null && EJECT_CUE.equals(cue)) {
 				GunEffects.eject(gun, owner, event.renderState().getGeckolibData(GunRenderer.LEFT));
+			}
+			Long id = event.renderState().getGeckolibData(DataTickets.ANIMATABLE_INSTANCE_ID);
+			ClientLevel level = Minecraft.getInstance().level;
+			if (CYLINDER_CUE.equals(cue) && id != null && level != null) {
+				GunEffects.turnCylinder(id, spec.capacity(), level.getGameTime());
 			}
 		});
 		registrar.add(controller);
@@ -100,8 +133,8 @@ public final class GunAnimations {
 		return spec.byShell() ? "reload_" + Math.max(1, Math.min(spec.capacity(), rounds)) : "reload";
 	}
 
-	private static RawAnimation once(String name) {
-		return RawAnimation.begin().then(name, LoopType.PLAY_ONCE).thenLoop("idle");
+	private static RawAnimation once(String name, String idle) {
+		return RawAnimation.begin().then(name, LoopType.PLAY_ONCE).thenLoop(idle);
 	}
 
 	/** Plays this gun animation on the gun in this entity's main hand (on this client only). */
@@ -109,7 +142,10 @@ public final class GunAnimations {
 		trigger(holder, InteractionHand.MAIN_HAND, animation);
 	}
 
-	/** Plays this gun animation on the gun in this hand of this entity (slice 10G: a gun in each hand; this client only). */
+	/**
+	 * Plays this gun animation on the gun in this hand of this entity (slice 10G: a gun in each hand; this client only); a
+	 * carbine's, as a carbine, with a stock fitted (slice 13D).
+	 */
 	public static void trigger(LivingEntity holder, InteractionHand hand, String animation) {
 		ItemStack stack = holder.getItemInHand(hand);
 		if (stack.getItem() instanceof GunItem gun) {
@@ -121,7 +157,7 @@ public final class GunAnimations {
 				controller.setAnimationSpeed(animation.equals("reload") && !gun.spec().byShell()
 						? (double) gun.spec().reload() / GunItem.spec(stack).reload() : 1.0);
 			}
-			gun.triggerAnim(holder, id, CONTROLLER, animation);
+			gun.triggerAnim(holder, id, CONTROLLER, GunItem.carbine(stack) ? CARBINE + animation : animation);
 		}
 	}
 

@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -24,13 +25,19 @@ import net.minecraft.world.level.levelgen.feature.OreFeature;
 
 /** A finite native ore pocket selected by its surface biome, with an optional, linked surface outcrop. */
 public record SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiomes, BlockState outcrop,
-                                     int outcropChance) implements Feature {
+                                     int outcropChance, Optional<TagKey<Biome>> outcropBiomes) implements Feature {
 	public static final MapCodec<SurfaceLinkedOreFeature> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
 			OreFeature.CODEC.codec().fieldOf("ore").forGetter(SurfaceLinkedOreFeature::ore),
 			TagKey.codec(Registries.BIOME).fieldOf("surface_biomes").forGetter(SurfaceLinkedOreFeature::surfaceBiomes),
 			BlockState.CODEC.fieldOf("outcrop").forGetter(SurfaceLinkedOreFeature::outcrop),
-			Codec.intRange(1, 1024).fieldOf("outcrop_chance").forGetter(SurfaceLinkedOreFeature::outcropChance)
+			Codec.intRange(1, 1024).fieldOf("outcrop_chance").forGetter(SurfaceLinkedOreFeature::outcropChance),
+			TagKey.codec(Registries.BIOME).optionalFieldOf("outcrop_biomes").forGetter(SurfaceLinkedOreFeature::outcropBiomes)
 	).apply(i, SurfaceLinkedOreFeature::new));
+
+	/** Existing mineral definitions use the same biome policy above and below ground. */
+	public SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiomes, BlockState outcrop, int outcropChance) {
+		this(ore, surfaceBiomes, outcrop, outcropChance, Optional.empty());
+	}
 
 	@Override public MapCodec<SurfaceLinkedOreFeature> codec() { return CODEC; }
 
@@ -40,7 +47,10 @@ public record SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiome
 		int surfaceY = level.getHeight(Heightmap.Types.OCEAN_FLOOR, origin.getX(), origin.getZ());
 		if (!level.getBiome(new BlockPos(origin.getX(), surfaceY, origin.getZ())).is(surfaceBiomes)) return false;
 		if (!ore.place(level, generator, random, origin)) return false;
-		if (random.nextInt(outcropChance) == 0) placeOutcrop(level, random, origin);
+		if (random.nextInt(outcropChance) == 0
+				&& level.getBiome(new BlockPos(origin.getX(), surfaceY, origin.getZ())).is(outcropBiomes.orElse(surfaceBiomes))) {
+			placeOutcrop(level, random, origin);
+		}
 		return true;
 	}
 
@@ -66,7 +76,7 @@ public record SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiome
 				minY = Math.min(minY, pos.getY()); maxY = Math.max(maxY, pos.getY());
 				int height = radius < 0.45 && random.nextInt(4) != 0 ? 2 : 1;
 				int roots = radius < 0.65 ? 2 : 1;
-				if (maxY - minY > 2 || !level.getBiome(pos).is(surfaceBiomes)) { valid = false; break; }
+				if (maxY - minY > 2 || !level.getBiome(pos).is(outcropBiomes.orElse(surfaceBiomes))) { valid = false; break; }
 				for (int y = -roots - 1; y <= height; y++) {
 					BlockPos cell = pos.offset(0, y, 0);
 					if (!level.ensureCanWrite(cell)) { valid = false; break; }

@@ -1,5 +1,9 @@
 # Jugcraft implementation and remaining work
 
+## October 15 integration candidate
+
+The [October 15 integration record](features/oct15-community-integration.md) lists the ready source branches, conflict repairs, validation and excluded drafts. It remains a local candidate until the integration PR is published, passes its checks and merges.
+
 ## October 13 integration
 
 The [October 13 integration record](features/oct13-community-integration.md) tracks the 31 source PRs,

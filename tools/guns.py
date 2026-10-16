@@ -616,6 +616,195 @@ GUNS = {
         "damage": 16.0, "pellets": 1, "interval": 19, "auto": False, "capacity": 5,
         "reload": 53, "spread": (2.0, 0.05), "range": 160, "ammo": "rifle_round",
     },
+    # Slice 13A, the frontier guns: the owner's Micina, Red Raydar and Spirulida. A revolver held in one hand, its
+    # cylinder swung out to load a round at a time; a lever-action rifle loaded a round at a time through its gate; and a
+    # carbine fed from a long curved magazine under it.
+    "tabby_revolver": {
+        "display": "Tabby Revolver",
+        "source": "micina",
+        "tooltip": "A gunmetal revolver held in one hand, its cylinder swung out to load a round at a time. Fires light "
+                   "rounds.",
+        "damage": 6.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 6,
+        "reload": (9, 12, 13), "spread": (2.5, 0.8), "range": 56, "ammo": "light_round",
+    },
+    "lookout_rifle": {
+        "display": "Lookout Rifle",
+        "source": "red_raydar",
+        "tooltip": "A lever-action rifle loaded a round at a time through its gate, made to take a scope. Fires rifle "
+                   "rounds.",
+        "damage": 7.0, "pellets": 1, "interval": 13, "auto": False, "capacity": 8,
+        "reload": (13, 9, 17), "spread": (2.0, 0.2), "range": 112, "ammo": "rifle_round",
+    },
+    "ammonite_carbine": {
+        "display": "Ammonite Carbine",
+        "source": "spirulida",
+        "tooltip": "A carbine fed from a long curved magazine, its barrel caged in copper bands. One shot each pull. Fires "
+                   "rifle rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 16,
+        "reload": 60, "spread": (2.5, 0.4), "range": 88, "ammo": "rifle_round",
+    },
+    # Slice 13B, more of the frontier guns: the owner's Fencer Carabine, Callwell Terminal and Saketini. A lever-action
+    # carbine loaded a round at a time through a lid in its stock; a lever-action shotgun loaded a shell at a time; and a
+    # single-shot rifle whose barrel swings aside to be loaded.
+    "fencepost_carbine": {
+        "display": "Fencepost Carbine",
+        "source": "fencer_carabine",
+        "tooltip": "A lever-action carbine loaded a round at a time through a lid in its stock, its hammer cocked by the "
+                   "lever. Fires rifle rounds.",
+        "damage": 10.0, "pellets": 1, "interval": 18, "auto": False, "capacity": 7,
+        "reload": (15, 20, 27), "spread": (2.0, 0.3), "range": 104, "ammo": "rifle_round",
+    },
+    "waystation_shotgun": {
+        "display": "Waystation Shotgun",
+        "source": "callwell_terminal",
+        "tooltip": "A lever-action shotgun with a drum under its action, loaded a shell at a time. Eight pellets a shot. "
+                   "Fires buckshot shells.",
+        "damage": 3.0, "pellets": 8, "interval": 17, "auto": False, "capacity": 8,
+        "reload": (9, 13, 18), "spread": (6.5, 4.5), "range": 28, "ammo": "buckshot_shell",
+    },
+    "highball_rifle": {
+        "display": "Highball Rifle",
+        "source": "saketini",
+        "tooltip": "A single-shot rifle whose barrel swings aside to take each round: one heavy, true shot, quickly "
+                   "reloaded. Fires rifle rounds.",
+        "damage": 15.0, "pellets": 1, "interval": 13, "auto": False, "capacity": 1,
+        "reload": 33, "spread": (2.0, 0.1), "range": 128, "ammo": "rifle_round",
+    },
+    # Slice 13C: three more of the owner's guns on plain stone: a punt gun, a flintlock repeater and a heavier Winnie.
+    "flatboat_gun": {
+        "display": "Flatboat Gun",
+        "source": "big_bore",
+        "tooltip": "A punt gun, its long barrel loaded through a chamber that swings out to the side: one great blast of "
+                   "sixteen pellets, then a long reload. Fires buckshot shells.",
+        "damage": 3.0, "pellets": 16, "interval": 13, "auto": False, "capacity": 1,
+        "reload": 72, "spread": (8.0, 6.0), "range": 36, "ammo": "buckshot_shell",
+    },
+    "windlass_musket": {
+        "display": "Windlass Musket",
+        "source": "repeating_musket",
+        "tooltip": "A flintlock repeater fed from a magazine across its breech, its drum turned between shots. Seven "
+                   "shots, then the magazine is changed. Fires paper cartridges.",
+        "damage": 6.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 7,
+        "reload": 69, "spread": (3.0, 1.0), "range": 56, "ammo": "paper_cartridge",
+    },
+    "millstone_rifle": {
+        "display": "Millstone Rifle",
+        "source": "winnie_millend",
+        "tooltip": "A heavy lever-action rifle, slower to work than the Drover Rifle and harder hitting, loaded a round "
+                   "at a time. Fires rifle rounds.",
+        "damage": 8.5, "pellets": 1, "interval": 15, "auto": False, "capacity": 8,
+        "reload": (8, 13, 17), "spread": (2.0, 0.25), "range": 108, "ammo": "rifle_round",
+    },
+    # Slice 13D: the owner's Fencer Thumper, Pax and Laser Musket. A revolving grenade launcher whose barrel tips down to
+    # load its cylinder a grenade at a time, its pump turning the cylinder after each shot; a revolver held in one hand
+    # that, with a stock fitted, is held in both as a carbine; and an energy musket on plain stone.
+    "fencepost_thumper": {
+        "display": "Fencepost Thumper",
+        "source": "fencer_thumper",
+        "tooltip": "A revolving grenade launcher, its barrel tipped down to load the cylinder a grenade at a time and its "
+                   "pump worked to turn it. Each shot lobs a grenade that goes off where it lands; it never breaks a "
+                   "block. Loads any grenade, the one in the other hand first.",
+        "damage": 16.0, "pellets": 1, "interval": 18, "auto": False, "capacity": 4,
+        "reload": (12, 22, 19), "spread": (3.0, 1.25), "range": 20, "ammo": "grenade", "shot": "grenade",
+    },
+    "parley_revolver": {
+        "display": "Parley Revolver",
+        "source": "pax",
+        "tooltip": "A heavy single-action revolver held in one hand, its cylinder swung out to load a round at a time. "
+                   "With a stock fitted it is held in both hands, as a carbine. Fires rifle rounds.",
+        "damage": 10.0, "pellets": 1, "interval": 16, "auto": False, "capacity": 6,
+        "reload": (10, 13, 14), "spread": (2.5, 0.6), "range": 72, "ammo": "rifle_round",
+    },
+    "lantern_musket": {
+        "display": "Lantern Musket",
+        "source": "laser_musket",
+        "tooltip": "A musket that fires light: its beam passes through every creature in its line. Three shots to a "
+                   "charge, then its core is changed. Runs on Energy Cells.",
+        "damage": 12.0, "pellets": 1, "interval": 9, "auto": False, "capacity": 3,
+        "reload": 44, "spread": (2.0, 0.3), "range": 96, "ammo": "energy_cell", "shot": "beam", "charge": 900,
+    },
+    # Slice 14A, the first of the owner's guns whose item models name treated brass as their base texture: the Howler,
+    # the M22 Waltz and the Osgood 50. A heavy pistol fed from a box magazine ahead of its trigger, its bolt worked after
+    # each shot; a light target pistol held in one hand; and a break-top revolver that, as the Parley Revolver, is held
+    # in both hands as a carbine with a stock fitted.
+    "holler_pistol": {
+        "display": "Holler Pistol",
+        "source": "howler",
+        "tooltip": "A heavy pistol held in both hands, fed from a box magazine ahead of its trigger and its bolt worked "
+                   "after each shot. Fires rifle rounds.",
+        "damage": 12.0, "pellets": 1, "interval": 22, "auto": False, "capacity": 10,
+        "reload": 58, "spread": (3.0, 0.6), "range": 80, "ammo": "rifle_round",
+    },
+    "minuet_pistol": {
+        "display": "Minuet Pistol",
+        "source": "m22_waltz",
+        "tooltip": "A light target pistol held in one hand, quick to fire and, aimed, the truest of them. Fires light "
+                   "rounds.",
+        "damage": 3.5, "pellets": 1, "interval": 5, "auto": False, "capacity": 10,
+        "reload": 48, "spread": (2.0, 0.25), "range": 64, "ammo": "light_round",
+    },
+    "half_crown_revolver": {
+        "display": "Half-Crown Revolver",
+        "source": "osgood_50",
+        "tooltip": "A break-top revolver held in one hand, its barrel tipped down to load the cylinder a round at a time. "
+                   "With a stock fitted it is held in both hands, as a carbine. Fires rifle rounds.",
+        "damage": 9.0, "pellets": 1, "interval": 9, "auto": False, "capacity": 6,
+        "reload": (9, 13, 14), "spread": (2.5, 0.6), "range": 64, "ammo": "rifle_round",
+    },
+    # Slice 14B, the next three of the owner's treated-brass guns: the Howler Conversion and the Waltz Conversion, their
+    # Howler and M22 Waltz made over into carbines held in both hands, and the Grandle, a carbine fed from a box
+    # magazine, which takes every attachment the owner made for it.
+    "holler_carbine": {
+        "display": "Holler Carbine",
+        "source": "howler_conversion",
+        "tooltip": "The Holler Pistol made over into a carbine: a long shrouded barrel, and a bolt the shot works "
+                   "itself, so it fires quicker. Held in both hands. Fires rifle rounds.",
+        "damage": 9.0, "pellets": 1, "interval": 10, "auto": False, "capacity": 10,
+        "reload": 58, "spread": (2.5, 0.4), "range": 96, "ammo": "rifle_round",
+    },
+    "minuet_carbine": {
+        "display": "Minuet Carbine",
+        "source": "waltz_conversion",
+        "tooltip": "The Minuet Pistol made over into a carbine: a long barrel, a magazine ahead of the trigger and a "
+                   "lever under the barrel. Held in both hands. Fires light rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 5, "auto": False, "capacity": 10,
+        "reload": 46, "spread": (2.0, 0.2), "range": 80, "ammo": "light_round",
+    },
+    "grange_carbine": {
+        "display": "Grange Carbine",
+        "source": "grandle",
+        "tooltip": "A brass-fitted carbine held in both hands, fed from a box magazine under its receiver. Fires rifle "
+                   "rounds.",
+        "damage": 7.0, "pellets": 1, "interval": 7, "auto": False, "capacity": 12,
+        "reload": 45, "spread": (2.5, 0.35), "range": 96, "ammo": "rifle_round",
+    },
+    # Slice 14C, three more of the owner's treated-brass guns, which share one family of animations: the Cogloader, a
+    # rifle fed from a pan magazine on its top, wound after each change; the Jackhammer, an automatic shotgun fed from a
+    # box magazine; and the Libertas, a quick-firing rifle with glowing coils along its barrel.
+    "sprocket_gun": {
+        "display": "Sprocket Gun",
+        "source": "cogloader",
+        "tooltip": "An automatic rifle fed from a pan magazine on its top, wound like a sprocket after each change. "
+                   "Fires rifle rounds.",
+        "damage": 4.5, "pellets": 1, "interval": 4, "auto": True, "capacity": 40,
+        "reload": 63, "spread": (4.0, 1.5), "range": 80, "ammo": "rifle_round",
+    },
+    "navvy_shotgun": {
+        "display": "Navvy Shotgun",
+        "source": "jackhammer",
+        "tooltip": "An automatic shotgun fed from a box magazine of eight shells: it fires as long as the trigger is "
+                   "held. Fires buckshot shells.",
+        "damage": 2.5, "pellets": 6, "interval": 8, "auto": True, "capacity": 8,
+        "reload": 52, "spread": (6.0, 4.0), "range": 24, "ammo": "buckshot_shell",
+    },
+    "freeholder_rifle": {
+        "display": "Freeholder Rifle",
+        "source": "libertas",
+        "tooltip": "A quick-firing rifle with glowing coils along its barrel, fed from a magazine of twenty. Fires "
+                   "rifle rounds.",
+        "damage": 6.0, "pellets": 1, "interval": 5, "auto": False, "capacity": 20,
+        "reload": 53, "spread": (2.5, 0.3), "range": 104, "ammo": "rifle_round",
+    },
 }
 
 # What a gun fires: bullets, or a slice 8C or 8D gun's "shot".
@@ -736,10 +925,11 @@ RECIPES = {
     "caisson_pistol": (["LSS", " AB"], {"L": "minecraft:lightning_rod", "S": "#c:ingots/steel",
                                        "A": "jugcraft:advanced_circuit", "B": "#c:ingots/brass"}),
     # Slice 9D: steel, a lever and planks for the fore-end each; four steel ingots for the Sledge's heavy barrel and
-    # frame, brass for the Highwayman's long barrel's fittings, a copper ingot for the Throttle's bulb.
+    # frame, brass for the Highwayman's long barrel's fittings, a copper ingot for the Throttle's bulb. The Highwayman's
+    # second brass ingot, under the first, keeps its grid from being the Garrison Rifle's mirrored (14 October 2026).
     "sledge": (["SSS", "SLP"], {"S": "#c:ingots/steel", "L": "minecraft:lever", "P": "#minecraft:planks"}),
-    "highwayman": (["SSS", "PLB"], {"S": "#c:ingots/steel", "P": "#minecraft:planks", "L": "minecraft:lever",
-                                    "B": "#c:ingots/brass"}),
+    "highwayman": (["SSS", "PLB", "  B"], {"S": "#c:ingots/steel", "P": "#minecraft:planks", "L": "minecraft:lever",
+                                           "B": "#c:ingots/brass"}),
     "throttle": (["SSC", "PLB"], {"S": "#c:ingots/steel", "C": "minecraft:copper_ingot", "P": "#minecraft:planks",
                                   "L": "minecraft:lever", "B": "#c:ingots/brass"}),
     # Slice 10A: the rocket guns in steel plate, as the Rocket Launcher is, a tripwire hook for the trigger; copper for
@@ -806,6 +996,57 @@ RECIPES = {
     # The Lament Rifle as the sculk guns (slice 10D): steel and a lever, echo shards and sculk from the deep dark.
     "lament_rifle": (["SSS", "ELE", " K "], {"S": "#c:ingots/steel", "E": "minecraft:echo_shard", "L": "minecraft:lever",
                                              "K": "minecraft:sculk"}),
+    # Slice 13A: the Tabby Revolver iron and brass, as the other revolvers; the Lookout Rifle as the lever rifles, its
+    # stock two planks long; the Ammonite Carbine copper-banded over iron, with a wooden stock.
+    "tabby_revolver": (["IBI", " LP"], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass", "L": "minecraft:lever",
+                                        "P": "#minecraft:planks"}),
+    "lookout_rifle": (["IIB", "PLP"], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass", "L": "minecraft:lever",
+                                       "P": "#minecraft:planks"}),
+    "ammonite_carbine": (["CCC", "ILP"], {"C": "minecraft:copper_ingot", "I": "minecraft:iron_ingot",
+                                          "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    # Slice 13B: the Fencepost Carbine and the Waystation Shotgun iron and brass, as the lever guns, the shotgun with an
+    # iron ingot more for its drum; the Highball Rifle steel, a marksman's rifle.
+    "fencepost_carbine": (["IIB", "LPP"], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass", "L": "minecraft:lever",
+                                           "P": "#minecraft:planks"}),
+    "waystation_shotgun": (["BII", "ILP"], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass", "L": "minecraft:lever",
+                                            "P": "#minecraft:planks"}),
+    "highball_rifle": (["SSS", " LP"], {"S": "#c:ingots/steel", "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    # Slice 13C: the Flatboat Gun's breech is an iron block behind its barrel; the Windlass Musket a flintlock with a
+    # brass drum and its crank; the Millstone Rifle a lever rifle stiffened with steel.
+    "flatboat_gun": (["KII", "BLP"], {"K": "minecraft:iron_block", "I": "minecraft:iron_ingot", "B": "#c:ingots/brass",
+                                      "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "windlass_musket": (["IIB", "FLP"], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass", "F": "minecraft:flint",
+                                         "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "millstone_rifle": (["SIB", " LP"], {"S": "#c:ingots/steel", "I": "minecraft:iron_ingot", "B": "#c:ingots/brass",
+                                         "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    # Slice 13D: the Fencepost Thumper iron and brass, as the Fencepost Carbine, a brass ingot more under it for its
+    # cylinder (without it, the grid is the Marshal Revolver's); the Parley Revolver iron and brass on a steel frame; the
+    # Lantern Musket steel and an advanced circuit, as the energy weapons, and a lantern for its core.
+    "fencepost_thumper": (["IIB", "BLP", " B "], {"I": "minecraft:iron_ingot", "B": "#c:ingots/brass",
+                                                  "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "parley_revolver": (["SII", " LB"], {"S": "#c:ingots/steel", "I": "minecraft:iron_ingot", "L": "minecraft:lever",
+                                         "B": "#c:ingots/brass"}),
+    "lantern_musket": (["SSN", "PAB"], {"S": "#c:ingots/steel", "N": "minecraft:lantern", "P": "#minecraft:planks",
+                                        "A": "jugcraft:advanced_circuit", "B": "#c:ingots/brass"}),
+    # Slice 14A: steel and brass, as the library's other treated-brass guns, and a lever. The Holler Pistol's barrel is
+    # two steel ingots long; the Minuet Pistol is small; the Half-Crown Revolver takes a silver ingot for the coin it is
+    # named for.
+    "holler_pistol": (["SSB", " LB"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
+    "minuet_pistol": (["SB", "LB"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
+    "half_crown_revolver": (["SBV", " LB"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "V": "#c:ingots/silver",
+                                             "L": "minecraft:lever"}),
+    # Slice 14B: steel, brass and a lever as well. The Holler and Grange Carbines' barrels are three steel ingots long;
+    # the Minuet Carbine's is two, as the pistol it is made from is small.
+    "holler_carbine": (["SSS", "BLB"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
+    "minuet_carbine": (["SSB", "BL "], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
+    "grange_carbine": (["SSS", " LB", "  B"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
+    # Slice 14C: steel, brass and a lever again. The Sprocket Gun takes a hopper for the pan that feeds it; the Navvy
+    # Shotgun is short; the Freeholder Rifle takes an emerald for its green coils.
+    "sprocket_gun": (["SSS", "HLB", " B "], {"S": "#c:ingots/steel", "H": "minecraft:hopper", "L": "minecraft:lever",
+                                             "B": "#c:ingots/brass"}),
+    "navvy_shotgun": (["SBS", " LB"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
+    "freeholder_rifle": (["SSE", "BLB"], {"S": "#c:ingots/steel", "E": "minecraft:emerald", "B": "#c:ingots/brass",
+                                          "L": "minecraft:lever"}),
 }
 # The switches beyond "guns" a gun's recipe needs (separate load conditions, all of which must hold): the energy weapons
 # and their cells are useless without the Charging Station, so they need the machines too (as the leaf blower does).
@@ -816,7 +1057,9 @@ RECIPE_SWITCHES.update({gun: ("machines",) for gun, spec in GUNS.items() if spec
 # How each gun is built from the owner's parts, in the owner's model space (Java item-model pixels: x east, y up,
 # z south; the muzzle points north, -z). Each bone: (name, parent, [parts], pivot). The pivots are where the
 # animations turn each part about: the gun body turns about the grip in the right hand, the moving parts about
-# their own centres (docs/features/guns.md has the survey of the animations that chose them).
+# their own centres (docs/features/guns.md has the survey of the animations that chose them). Slice 14A's guns' bodies
+# turn about the model's origin (8, 0, 8), under the middle of the gun: about the grip, the Holler Pistol's reload
+# swung the back of the gun into the view, and the Minuet Pistol's brought the back of its slide up into it.
 # "hands": where the right hand holds the grip and the left hand holds the gun in the idle pose. The arm bones are
 # children of gun_body, so the hands go where the gun goes; each one's pivot is the hand, placed so that the idle
 # animation's offset brings it to these points (arm_pivot()). A one-handed gun's idle hides the left arm; its
@@ -833,7 +1076,9 @@ RECIPE_SWITCHES.update({gun: ("machines",) for gun, spec in GUNS.items() if spec
 # block (client/guns/GunLooks.EYE_RELIEF). Aiming slides the sight onto the middle of the screen at the hip's depth; a
 # gun whose moving parts slide back along the line of sight as it fires can reach the eye there.
 # "mounts" (optional): the bone a slot's attachments ride, where it is not the bone holding the slot's standard part
-# (effective_bones()): the Trench Lobber's leaf sight flaps with each shot, and a scope in its place should not.
+# (effective_bones()): the Trench Lobber's leaf sight flaps with each shot, and a scope in its place should not. An
+# attachment named there rides its own bone, whatever its slot's: the Fencepost Thumper's grips ride its pump, which
+# slides, and its bayonets the barrel, which tips (slice 13D).
 BUILDS = {
     "rust_midge": {
         "bones": [
@@ -1975,6 +2220,400 @@ BUILDS = {
         "sight": (8.0, 6.5, 16.5),
         "eye_relief": 6.0,
     },
+    # Slice 13A. The Micina is held in one hand, as the Goshawk Revolver: its idle hides the left arm, which comes in to
+    # load each round. Its draw tosses the gun end over end on gun_body_2, which holds every part; its cylinder swings
+    # out to the left about the crane under it; its hammer is the flat plane at the back. Its bolt, seal and shell bones
+    # hold nothing. Its sight is the notch at the back over the post at the front.
+    "tabby_revolver": {
+        "bones": [
+            ("gun_body", None, [], (8.0, 1.8, 14.6)),
+            ("gun_body_2", "gun_body", ["main", "stan_barrel"], (8.0, 2.6, 12.0)),
+            ("magazine", "gun_body_2", ["drum"], (6.9, 3.3, 12.0)),
+            ("hammer", "gun_body_2", ["hammer"], (8.0, 3.8, 14.3)),
+            ("bolt", "gun_body_2", [], (8.0, 4.5, 13.0)),
+            ("seal", "gun_body_2", [], (8.0, 4.5, 12.0)),
+            ("shell", "gun_body_2", [], (8.0, 4.5, 12.0)),
+        ],
+        "hands": {"right": (8.0, 1.8, 14.6), "left": (5.6, 3.6, 13.2)},
+        "hand_pose": {"left": ("reload_loop", "0.3016")},
+        "arms": {"right": (-0.7663, -0.2053, 0.6088), "left": (0.8536, -0.3536, 0.3827)},
+        "muzzle": (8.0, 3.82, 4.21),
+        "sight": (8.0, 5.9, 13.6),
+    },
+    # The Red Raydar is a lever rifle: its lever loop is the main part's element the owner named "lever", turned about its
+    # front where it meets the receiver. Its bolt and shell bones hold nothing (its reload keeps the round at scale 0).
+    "lookout_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-@lever", "sights"], (8.0, 1.9, 16.4)),
+            ("lever", "gun_body", ["main@lever"], (7.9, 2.2, 13.0)),
+            ("bolt", "gun_body", [], (8.0, 4.4, 14.0)),
+            ("shell", "gun_body", [], (8.0, 3.6, 13.0)),
+        ],
+        "hands": {"right": (8.0, 1.9, 16.4), "left": (8.0, 3.0, 8.0)},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.7663, -0.2053, 0.6088)},
+        "muzzle": (7.9, 4.47, 0.03),
+        "sight": (7.9, 5.45, 13.2),
+        "eye_relief": 3.5,
+    },
+    # The Spirulida keeps its moving parts in its main part: the curved magazine (the elements the owner named
+    # "default_mag") on the Magazine bone, swung down about its front; the lever loop under the grip (named "lever"),
+    # turned about its front; and the cocking piece on top at the back (the 41st to 43rd elements) on the bolt bone,
+    # drawn back with each shot. The gun_body2 bone its reload moves holds nothing. Its sight is the owner's.
+    "ammonite_carbine": {
+        "bones": [
+            ("gun_body", None, ["main-#30,31,32,33,34,35,36,37,38,40,41,42", "sights"], (8.0, 1.5, 16.5)),
+            ("Magazine", "gun_body", ["main#30,31,32,33,34,35,36,38"], (8.0, 2.2, 10.8)),
+            ("lever", "gun_body", ["main#37"], (8.0, 1.6, 12.4)),
+            ("bolt", "gun_body", ["main#40,41,42"], (8.0, 4.4, 15.0)),
+            ("gun_body2", "gun_body", [], (8.0, 1.5, 16.5)),
+        ],
+        "hands": {"right": (8.0, 1.5, 16.5), "left": (8.0, 2.4, 5.0)},
+        "arms": {"right": (0.0795, -0.6036, 0.7934), "left": (0.5624, -0.233, 0.7934)},
+        "muzzle": (7.96, 3.77, -3.8),
+        "sight": (7.96, 5.55, 11.84),
+        "eye_relief": 3.0,
+    },
+    # Slice 13B. The Fencer Carabine loads through a lid on top of its stock (the main part's elements the owner put in
+    # their lid group, the 20th and 21st), turned up and over about its front; its hammer is the owner's hammer part on
+    # the right of the lock, its lever loop the main part's 24th element, turned about its front. Its bolt and flash
+    # bones hold nothing. Its sight is the notch on the receiver over the post at the muzzle. Its right hand carries each
+    # round back to the lid, within a few pixels of the eye: its arm runs down and in from there, so that between the
+    # frames it is left out it does not sweep across the view (a CI screenshot of 14 October 2026).
+    "fencepost_carbine": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 1.4, 16.4)),
+            ("gun_body", "gun_body2", ["main-#19,20,21,22,23"], (8.0, 1.4, 16.4)),
+            ("lid", "gun_body", ["main#19,20"], (8.0, 2.66, 18.83)),
+            ("hammer", "gun_body", ["hammer"], (9.0, 3.1, 14.3)),
+            ("lever", "gun_body", ["main#23"], (8.0, 1.0, 14.6)),
+            ("bolt", "gun_body", [], (8.0, 4.5, 13.0)),
+            ("flash", "gun_body", [], (9.0, 3.6, 14.0)),
+        ],
+        "hands": {"right": (8.0, 1.4, 16.4), "left": (8.0, 1.6, 8.5)},
+        "arms": {"right": (-0.2097, -0.3961, 0.8939), "left": (0.8001, -0.3314, 0.5)},
+        "muzzle": (8.0, 4.25, -0.74),
+        "sight": (8.0, 5.3, 11.58),
+        "eye_relief": 6.0,
+    },
+    # The Callwell Terminal is a lever-action shotgun with a drum under its action and no shoulder stock. Its lever loop
+    # is the main part's element the owner named "lever"; the shell its loading loop carries in is the one they named
+    # "shell", resting inside the fore-end (the renderer shows it only while the loop moves it). Its sight is the notch
+    # on the receiver over the post at the muzzle.
+    "waystation_shotgun": {
+        "bones": [
+            ("gun_body", None, ["main-@lever", "stan_barrel"], (8.0, 2.0, 14.6)),
+            ("lever", "gun_body", ["main@lever"], (8.0, 1.8, 10.4)),
+            ("shell", "gun_body", ["main#26"], (8.0, 2.58, 5.88)),
+        ],
+        "hands": {"right": (8.0, 2.0, 14.6), "left": (8.0, 1.4, 4.5)},
+        "arms": {"right": (0.1913, -0.4619, 0.866), "left": (0.75, -0.433, 0.5)},
+        "muzzle": (8.0, 4.3, -4.97),
+        "sight": (8.0, 5.08, 11.8),
+        "eye_relief": 1.0,
+    },
+    # The Saketini is loaded a round at a time with its barrel (the owner's standard barrel part) swung aside about a
+    # hinge under the left of the breech; its hammer is the owner's hammer part on the right of the lock, its lever loop
+    # the main part's 13th element. Its bolt bone holds nothing. Its sight is the owner's notch over the post at the
+    # muzzle.
+    "highball_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-#12", "sights"], (8.0, 1.4, 16.4)),
+            ("barrel", "gun_body", ["stan_barrel"], (7.4, 3.5, 12.5)),
+            ("hammer", "gun_body", ["hammer"], (9.0, 3.0, 13.3)),
+            ("lever", "gun_body", ["main#12"], (8.0, 1.9, 11.8)),
+            ("bolt", "gun_body", [], (8.0, 4.5, 13.0)),
+        ],
+        "hands": {"right": (8.0, 1.4, 16.4), "left": (8.0, 2.4, 7.5)},
+        "arms": {"right": (-0.1576, -0.588, 0.7934), "left": (0.6533, -0.2706, 0.7071)},
+        "muzzle": (8.0, 4.29, -1.97),
+        "sight": (8.0, 5.25, 12.25),
+        "eye_relief": 3.0,
+    },
+    # Slice 13C. The Big Bore's chamber is the block behind its barrel (the main part's 3rd and 5th to 9th elements and
+    # the handle on its right, the 4th), which its reload swings out to the left about a hinge along its lower left
+    # edge; the shell (PROPS) is carried into it from the left. Its hammer is the owner's hammer part. Its sight is the
+    # owner's peep ring on the chamber's top.
+    "flatboat_gun": {
+        "bones": [
+            ("gun_body", None, ["main-#2,3,4,5,6,7,8", "sights"], (8.0, 1.9, 16.4)),
+            ("chamber", "gun_body", ["main#2,3,4,5,6,7,8"], (7.25, 3.37, 13.5)),
+            ("shell", "gun_body", ["@shell"], (8.0, 4.78, 13.5)),
+            ("Hammer", "gun_body", ["hammer"], (9.0, 4.62, 13.28)),
+            ("no_sights", "gun_body", [], (8.0, 6.4, 10.8)),
+        ],
+        "hands": {"right": (8.0, 1.9, 16.4), "left": (8.0, 1.85, 8.0)},
+        "arms": {"right": (-0.4087, -0.6214, 0.6684), "left": (0.7686, -0.3229, 0.5523)},
+        "muzzle": (8.0, 4.78, -16.0),
+        "sight": (8.0, 6.82, 12.25),
+        "eye_relief": 6.0,
+    },
+    # The Repeating Musket is a flintlock repeater: its crank is the drum across its breech (the main part's 25th and
+    # 27th to 35th elements), turned about the axis of the magazine that runs through it; its bolt the block behind the
+    # drum with the plate and knob on top (the 6th, 8th and 9th). Its priming flash had no part (PROPS); its glow bone
+    # holds nothing. Its sight is the notch between the two posts on the drum.
+    "windlass_musket": {
+        "bones": [
+            ("gun_body", None, ["main-#5,7,8,24,26,27,28,29,30,31,32,33,34"], (8.0, 1.9, 16.4)),
+            ("crank", "gun_body", ["main#24,26,27,28,29,30,31,32,33,34"], (8.0, 4.08, 10.29)),
+            ("magazine", "gun_body", ["magazine"], (3.6, 4.08, 10.29)),
+            ("bolt", "gun_body", ["main#5,7,8"], (8.0, 4.5, 12.3)),
+            ("hammer", "gun_body", ["hammer"], (8.96, 3.5, 14.9)),
+            ("flash", "gun_body", ["@flash"], (9.2, 3.9, 13.3)),
+            ("glow", "gun_body", [], (9.2, 3.9, 13.3)),
+        ],
+        "hands": {"right": (8.0, 1.9, 16.4), "left": (8.0, 1.6, 8.0)},
+        "arms": {"right": (-0.113, -0.5523, 0.826), "left": (0.733, -0.3036, 0.6088)},
+        "muzzle": (8.0, 4.03, 3.62),
+        "sight": (8.0, 5.7, 10.71),
+        "eye_relief": 3.0,
+    },
+    # The Winnie Millend is the Winnie made heavier: its lever is the main part's element the owner named "lever",
+    # turned about its front; its bolt bone holds nothing. Its sight is the owner's peep ring at the back.
+    "millstone_rifle": {
+        "bones": [
+            ("gun_body", None, ["main-@lever", "stan_barrel", "sights", "hammer"], (8.0, 1.9, 16.4)),
+            ("lever", "gun_body", ["main@lever"], (8.0, 2.2, 12.9)),
+            ("bolt", "gun_body", [], (8.0, 4.0, 14.5)),
+        ],
+        "hands": {"right": (8.0, 1.9, 16.4), "left": (8.0, 2.3, 7.0)},
+        "arms": {"right": (0.1913, -0.4619, 0.866), "left": (0.8001, -0.3314, 0.5)},
+        "muzzle": (8.0, 4.08, -1.45),
+        "sight": (8.0, 5.0, 14.05),
+        "eye_relief": 5.0,
+    },
+    # Slice 13D. The Fencer Thumper's barrel (the main part's 5th to 14th elements, with the cylinder and the pump on it)
+    # tips down about the knuckle under the front of the cylinder (the 12th) to be loaded, raising the cylinder's back
+    # out of the frame. Its cylinder (the 15th to 18th) turns a chamber at each shot's "rotate_cylinder" cue, from code
+    # (GunEffects.cylinderTurn); its pump (the 19th to 22nd: the slide and the handle out to its left) is worked back and
+    # forward after each shot, and the left hand, which holds the handle, rides it on a "left_arm2" bone. Its hammer is
+    # the owner's hammer part (the main part's 30th element is the same plane). Its grips ride the pump and its bayonets
+    # the barrel ("mounts"). Its bolt, flash and lid bones hold nothing.
+    "fencepost_thumper": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 1.6, 16.4)),
+            ("gun_body", "gun_body2", ["main-#4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,29"], (8.0, 1.6, 16.4)),
+            ("barrel", "gun_body", ["main#4,5,6,7,8,9,10,11,12,13"], (7.96, 1.87, 8.84)),
+            ("cylinder_magazine", "barrel", ["main#14,15,16,17"], (7.93, 3.57, 10.79)),
+            ("pump", "barrel", ["main#18,19,20,21"], (6.71, 2.5, 4.11)),
+            ("hammer", "gun_body", ["hammer"], (7.92, 3.8, 15.3)),
+            ("left_arm2", "gun_body", [], (6.71, 2.5, 4.11)),
+            ("bolt", "gun_body", [], (8.0, 4.5, 13.5)),
+            ("flash", "gun_body", [], (8.0, 4.5, 13.5)),
+            ("lid", "gun_body", [], (8.0, 4.5, 13.5)),
+        ],
+        "mounts": {"grip": "barrel", "light_grip": "pump", "vertical_grip": "pump"},
+        "arm_parents": {"left": "left_arm2"},
+        "hands": {"right": (8.0, 1.6, 16.4), "left": (4.5, 2.5, 4.1)},
+        "arms": {"right": (0.113, -0.4392, 0.8912), "left": (0.4997, -0.1364, 0.8554)},
+        "muzzle": (7.84, 3.87, -1.27),
+        "sight": (8.0, 6.0, 13.0),
+        "eye_relief": 5.5,
+    },
+    # The Pax is held in one hand, as the Tabby Revolver: its idle hides the left arm, which comes in to load each round.
+    # With a stock fitted it is held in both, as a carbine, and plays the owner's carbine_ animations (GunAnimations;
+    # JugcraftGuns.CARBINES). Its cylinder (the owner's drum part) swings out to the left about the crane under it; its
+    # hammer is the flat plane at the back. Its bolt, seal and shell bones hold nothing; gun_body2, which holds every
+    # part, cants the gun in the carbine's aimed shot. Its sight is the notch at the back over the post at the front.
+    "parley_revolver": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 1.0, 13.9)),
+            ("gun_body", "gun_body2", ["main", "stan_barrel"], (8.0, 1.0, 13.9)),
+            ("magazine", "gun_body", ["drum"], (6.9, 2.5, 11.12)),
+            ("hammer", "gun_body", ["hammer"], (8.0, 3.43, 13.73)),
+            ("bolt", "gun_body", [], (8.0, 4.5, 12.5)),
+            ("seal", "gun_body", [], (8.0, 4.5, 11.2)),
+            ("shell", "gun_body", [], (8.0, 4.5, 11.2)),
+        ],
+        "hands": {"right": (8.0, 1.0, 13.9), "left": (5.6, 2.8, 12.3)},
+        "hand_pose": {"left": ("reload_loop", "0.3333")},
+        "arms": {"right": (-0.5467, -0.2403, 0.8021), "left": (0.3536, -0.6124, 0.7071)},
+        "muzzle": (8.0, 4.3, 3.88),
+        "sight": (8.0, 5.5, 13.0),
+    },
+    # The Laser Musket is one part. Its core (the 22nd and 23rd elements: the glass tube at the breech and the glow
+    # inside it, on the owner's glass and three-frame glow textures) is drawn out to the right and down and a fresh one
+    # put in as it reloads, turning about its length. Its bolt bone, which only the draw names, holds nothing. Its sight
+    # is the notch on the breech's top over the post at the muzzle.
+    "lantern_musket": {
+        "bones": [
+            ("gun_body", None, ["main-#21,22"], (8.0, 2.0, 16.0)),
+            ("core", "gun_body", ["main#21,22"], (8.0, 3.89, 13.63)),
+            ("bolt", "gun_body", [], (8.0, 4.5, 13.0)),
+        ],
+        "hands": {"right": (8.0, 2.0, 16.0), "left": (8.0, 2.3, 7.0)},
+        "arms": {"right": (0.1256, -0.4392, 0.8896), "left": (0.553, -0.1067, 0.8263)},
+        "muzzle": (7.94, 3.91, -1.95),
+        "sight": (8.0, 5.35, 14.24),
+        "eye_relief": 3.5,
+    },
+    # Slice 14A. The Howler's magazine stands ahead of its trigger guard, and the left hand holds it from below. Its bolt
+    # is the owner's bolt part, the knobs out to either side, drawn back after each shot. Its magazine_2 and no_sights
+    # bones, which its reload and inspection only hide or tip, hold nothing. Its sight is the ring at the back.
+    "holler_pistol": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 0.0, 8.0)),
+            ("gun_body", "gun_body2", ["main", "stan_barrel", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 4.92, 9.78)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 3.3, 10.4)),
+            ("magazine_2", "gun_body", [], (8.0, 3.3, 10.4)),
+            ("no_sights", "gun_body", [], (8.0, 5.9, 15.5)),
+        ],
+        "hands": {"right": (8.0, 1.9, 15.6), "left": (8.0, 0.4, 10.4)},
+        "arms": {"right": (0.0795, -0.6036, 0.7933), "left": (0.7663, -0.588, 0.2588)},
+        "muzzle": (8.0, 4.57, -5.3),
+        "sight": (8.0, 6.23, 15.49),
+        "eye_relief": 5.0,
+    },
+    # The M22 Waltz is held in one hand; its idle hides the left arm, which comes in to drive the magazine home. Its
+    # slide is the owner's "receiver" part (the animations call it the bolt). Its magazine is only the base plate under
+    # the grip, which the reload drops; magazine_2, which every other animation hides, holds nothing.
+    "minuet_pistol": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 0.0, 8.0)),
+            ("gun_body", "gun_body2", ["main", "stan_barrel", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["receiver"], (8.0, 5.4, 14.2)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 0.25, 15.8)),
+            ("magazine_2", "gun_body", [], (8.0, 0.25, 15.8)),
+        ],
+        "hands": {"right": (8.0, 1.3, 15.4), "left": (8.0, -0.6, 16.0)},
+        "hand_pose": {"left": ("reload", "1.6667")},
+        "arms": {"right": (0.1217, -0.4369, 0.8912), "left": (0.7663, -0.588, 0.2588)},
+        "muzzle": (8.0, 5.1, 7.2),
+        "sight": (8.0, 6.6, 14.11),
+        "eye_relief": 3.0,
+    },
+    # The Osgood 50 breaks open: its barrel (the stan_barrel part with the main part's 3rd to 5th and 10th to 14th
+    # elements: the lug under the barrel, the core of the cylinder, the top strap and both sights) tips down about the
+    # hinge at the bottom front of the frame, raising the cylinder (the owner's drum part, on it), which turns as each
+    # round goes in. As the Parley Revolver it is held in one hand, and in both with a stock fitted, as a carbine
+    # (CARBINES). Its hammer is the owner's hammer part; its bolt, seal and shell bones hold nothing. Its sight is the
+    # notch at the back of the top strap.
+    "half_crown_revolver": {
+        "bones": [
+            ("gun_body", None, ["main-#2,3,4,9,10,11,12,13"], (8.0, 0.0, 8.0)),
+            ("barrel", "gun_body", ["main#2,3,4,9,10,11,12,13", "stan_barrel"], (8.0, 2.1, 7.3)),
+            ("magazine", "barrel", ["drum"], (7.97, 4.12, 8.89)),
+            ("hammer", "gun_body", ["hammer"], (8.0, 4.6, 13.7)),
+            ("bolt", "gun_body", [], (8.0, 5.0, 12.0)),
+            ("seal", "gun_body", [], (8.0, 6.3, 12.0)),
+            ("shell", "gun_body", [], (8.0, 4.12, 10.5)),
+        ],
+        "hands": {"right": (8.0, 1.2, 15.6), "left": (6.6, 5.0, 7.4)},
+        "hand_pose": {"left": ("reload_loop", "0.2083")},
+        "arms": {"right": (0.25, -0.433, 0.866), "left": (0.9114, -0.3782, 0.1626)},
+        "muzzle": (8.0, 5.22, 2.5),
+        "sight": (8.0, 6.6, 12.7),
+    },
+    # Slice 14B. The Howler Conversion is the Howler with a long shroud over its barrel, and its animations are the
+    # Howler's but for a shorter shot that works the bolt itself. Its model has no magazine part, though its reload
+    # draws one out from below and puts it back, so its magazine bone holds its Howler's (part_source()), where the
+    # Howler's stands, under the same receiver. Its magazine_2 and no_sights bones hold nothing.
+    "holler_carbine": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 5.1, 12.3)),
+            ("magazine", "gun_body", ["howler/stan_mag"], (8.0, 3.3, 10.4)),
+            ("magazine_2", "gun_body", [], (8.0, 3.3, 10.4)),
+            ("no_sights", "gun_body", [], (8.0, 6.6, 16.3)),
+        ],
+        "hands": {"right": (8.0, 1.9, 15.6), "left": (8.0, 0.4, 10.4)},
+        "arms": {"right": (0.0795, -0.6036, 0.7933), "left": (0.7663, -0.588, 0.2588)},
+        "muzzle": (8.0, 4.57, -5.3),
+        "sight": (8.0, 6.97, 16.3),
+        "eye_relief": 5.5,
+    },
+    # The Waltz Conversion's main part holds it all: its slide (the 19th, 20th, 23rd, 26th and 27th elements, the
+    # animations' bolt), the lever under its barrel (the 34th to 39th, turned about the hinge at their back, as the
+    # owner's model turns them) and its magazine (the 40th to 42nd, the animations' core). Its magazine, magazine_2,
+    # seal and scriptures bones hold nothing: its model has no part for them (its shot only sways the last two).
+    "minuet_carbine": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 0.0, 8.0)),
+            ("gun_body", "gun_body2", ["main-#18,19,22,25,26,33,34,35,36,37,38,39,40,41", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["main#18,19,22,25,26"], (8.0, 5.3, 14.1)),
+            ("lever", "gun_body", ["main#33,34,35,36,37,38"], (8.0, 4.11, 11.8)),
+            ("core", "gun_body", ["main#39,40,41"], (8.0, 1.7, 10.3)),
+            ("magazine", "gun_body", [], (8.0, 1.7, 10.3)),
+            ("magazine_2", "gun_body", [], (8.0, 1.7, 10.3)),
+            ("seal", "gun_body", [], (8.0, 5.0, 8.0)),
+            ("scriptures", "gun_body", [], (8.0, 5.0, 8.0)),
+        ],
+        "hands": {"right": (8.0, 1.3, 15.4), "left": (8.0, -0.8, 10.3)},
+        "arms": {"right": (0.0048, -0.4917, 0.8707), "left": (0.0143, -0.4312, 0.9021)},
+        "muzzle": (8.0, 5.07, -2.9),
+        "sight": (8.0, 6.77, 14.27),
+        "eye_relief": 2.0,
+    },
+    # The Grandle has no pistol grip: the right hand holds the wrist of its stock, the left its handguard. Its bolt is
+    # the owner's bolt part, the handle on its right; its magazine is the owner's, and its magazine_2 bone holds nothing.
+    # Its sight is the ring at the back.
+    "grange_carbine": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 5.8, 11.7)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 0.7, 11.3)),
+            ("magazine_2", "gun_body", [], (8.0, 0.7, 11.3)),
+        ],
+        "hands": {"right": (8.0, 2.4, 16.0), "left": (8.0, 2.6, 7.4)},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.5988, -0.1774, 0.781)},
+        "muzzle": (8.0, 4.9, -0.32),
+        "sight": (8.0, 6.47, 15.15),
+        "eye_relief": 4.0,
+    },
+    # Slice 14C. The Cogloader's pan magazine (the owner's magazine part) sits flat on its top. Its reload lifts the pan
+    # off to the left on the magazine bone and puts it back; then the cogloader_magazine bone, which holds the pan, winds
+    # it a full turn about its middle. As the Grandle, it has no pistol grip: the right hand holds the stock's wrist.
+    # Its bolt is the owner's bolt part, the handle on its left. Its magazine_2 and seal bones hold nothing. Its sight
+    # is the frame of posts at the back of the pan over the post at the muzzle.
+    "sprocket_gun": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["bolt"], (6.2, 5.8, 10.6)),
+            ("magazine", "gun_body", [], (8.0, 7.44, 8.0)),
+            ("cogloader_magazine", "magazine", ["magazine"], (8.0, 7.44, 8.0)),
+            ("magazine_2", "gun_body", [], (8.0, 7.44, 8.0)),
+            ("seal", "gun_body", [], (8.0, 6.0, 8.0)),
+        ],
+        "hands": {"right": (8.0, 2.6, 16.0), "left": (8.0, 2.0, 6.5)},
+        "arms": {"right": (0.0, -0.6088, 0.7934), "left": (0.5624, -0.2329, 0.7934)},
+        "muzzle": (8.0, 5.0, -6.2),
+        "sight": (8.0, 8.15, 13.9),
+        "eye_relief": 3.5,
+    },
+    # The Jackhammer's bolt is the owner's bolt part, the handle across its top; its grip and magazine are the owner's.
+    # Its sights are in its main part (the ring at the back over the post at the front), so it takes no scope. Its
+    # magazine_2 and seal bones hold nothing.
+    "navvy_shotgun": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "stan_grip"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", ["bolt"], (8.0, 5.45, 11.7)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 1.0, 9.65)),
+            ("magazine_2", "gun_body", [], (8.0, 1.0, 9.65)),
+            ("seal", "gun_body", [], (8.0, 6.0, 8.0)),
+        ],
+        "hands": {"right": (8.0, 2.0, 15.6), "left": (8.0, 1.6, 5.0)},
+        "arms": {"right": (-0.3672, -0.7161, 0.5936), "left": (0.233, -0.3036, 0.9239)},
+        "muzzle": (8.0, 5.2, -0.85),
+        "sight": (8.0, 6.75, 14.14),
+        "eye_relief": 2.0,
+    },
+    # The Libertas is held through the loop of its trigger guard. It has no bolt part, and none of its main part's
+    # elements slides as a bolt (its top carries the sights; the pieces on its sides are flat), so its bolt bone, as its
+    # magazine_2 and seal bones, holds nothing. Its sight is the ring at the back over the post at the front of the top.
+    "freeholder_rifle": {
+        "bones": [
+            ("gun_body", None, ["main", "sights"], (8.0, 0.0, 8.0)),
+            ("bolt", "gun_body", [], (8.0, 6.45, 12.0)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 1.8, 9.2)),
+            ("magazine_2", "gun_body", [], (8.0, 1.8, 9.2)),
+            ("seal", "gun_body", [], (8.0, 6.0, 8.0)),
+        ],
+        "hands": {"right": (8.0, 2.2, 14.3), "left": (8.0, 1.6, 5.5)},
+        "arms": {"right": (-0.0337, -0.5622, 0.8263), "left": (0.2706, -0.2706, 0.9239)},
+        "muzzle": (8.0, 5.2, -1.1),
+        "sight": (8.0, 7.0, 13.39),
+        "eye_relief": 2.0,
+    },
 }
 
 # Props the animations move on bones that had no part ("@<name>" in a bone's parts): the rounds a reload carries in,
@@ -2051,6 +2690,12 @@ PROPS = {
     # (0.3333 s) brings it, and shrinks to nothing there.
     "tuppence_pistol": {"shell": {"kind": "cartridge", "from": (7.5, 1.9, 11.0), "size": (1.0, 1.0, 3.0),
                                   "texture_at": (120, 120)}},
+    # Slice 13C: the Big Bore's shell, a great buckshot hull, rests in its chamber, where the reload's last carry brings
+    # it, and shrinks to nothing there; the Repeating Musket's priming flash at its pan, beside the hammer.
+    "flatboat_gun": {"shell": {"kind": "buckshot", "from": (7.4, 4.18, 12.2), "size": (1.2, 1.2, 2.6),
+                               "texture_at": (120, 120)}},
+    "windlass_musket": {"flash": {"kind": "flash", "from": (8.7, 3.4, 12.8), "size": (1.0, 1.0, 1.0),
+                                  "texture_at": (56, 56)}},
 }
 # The owner's pilot flame (Guns/item/spitfire_flame.png): three 8 x 8 frames, one above the other; the first frame's
 # flame is 4 px wide (columns 2 to 5) and 8 tall, its tip at the top.
@@ -2133,7 +2778,9 @@ ATTACHMENTS = {
         "tooltip": "A short grip under the fore-end: steadier from the hip.",
     },
     "vertical_grip": {
-        "display": "Vertical Grip", "slot": "grip", "parts": ["vertical_grip", "vert_grip", "grip_vertical"],
+        # Slice 13C: the Repeating Musket's is named "grip_vert".
+        "display": "Vertical Grip", "slot": "grip",
+        "parts": ["vertical_grip", "vert_grip", "grip_vertical", "grip_vert"],
         "replaces": False, "effects": {"kick": 0.65}, "model": "vertical_grip", "texture": "grips",
         "tooltip": "A grip to pull the gun down by: less kick.",
     },
@@ -2162,9 +2809,13 @@ ATTACHMENTS = {
     # The scopes, on the optic slot: they take the place of the gun's iron sights (the owner's "sights" part; their
     # "no_sights" part, a rail on the Riveter, shows with the scope). A scope steadies the aim and narrows the view;
     # the two magnifying ones are clumsy from the hip.
+    # "not_on" (slice 14A): the Holler Pistol's own texture is as big as the largest atlas, and beside it there is room
+    # for the pieces of only three of the four sights; it goes without the marksman's long scope. So does slice 14C's
+    # Freeholder Rifle, for the same reason.
     "long_scope": {
         "display": "Long Scope", "slot": "optic", "mount": True, "parts": [], "replaces": True,
         "effects": {"aim_spread": 0.5, "hip_spread": 1.25}, "model": "long_scope", "texture": "long_scope",
+        "not_on": ["holler_pistol", "freeholder_rifle"],
         "zoom": 0.3, "view": {"reticle": "long_scope_reticle2", "vignette": "scope_vignette"},
         "tooltip": "A long blackened-steel scope: a far closer view down the sights, clumsy from the hip.",
     },
@@ -2395,13 +3046,15 @@ def effective_bones(gun):
     moves to a "std_<slot>" bone of its own. A slot on two bones (the Warden Pistol's magazine and the spare its reload
     brings in) gets a second set suffixed "_2". The renderer shows the fitted attachments' bones and hides the standard
     parts they replace (GunRenderer). A slot the gun's "mounts" names a bone for hangs its attachments there instead
-    (the Trench Lobber's scopes ride its body, not the leaf sight that flaps)."""
+    (the Trench Lobber's scopes ride its body, not the leaf sight that flaps), and an attachment it names a bone for
+    hangs there (slice 13D: the Fencepost Thumper's grips ride its pump)."""
     kinds = fits(gun)
     bones = BUILDS[gun]["bones"]
     anchors = {slot: [name for name, _, parts, _ in bones if set(parts) & set(standard)] or ["gun_body"]
                for slot, standard in SLOTS.items()}
-    mounts = {slot: [BUILDS[gun].get("mounts", {})[slot]] if slot in BUILDS[gun].get("mounts", {}) else anchors[slot]
-              for slot in SLOTS}
+    given = BUILDS[gun].get("mounts", {})
+    mounts = {slot: [given[slot]] if slot in given else anchors[slot] for slot in SLOTS}
+    homes = {kind: [given[kind]] if kind in given else mounts[ATTACHMENTS[kind]["slot"]] for kind in kinds}
     replaced = {ATTACHMENTS[kind]["slot"] for kind in kinds if ATTACHMENTS[kind]["replaces"]}
     out = []
     for name, parent, parts, pivot in bones:
@@ -2413,10 +3066,10 @@ def effective_bones(gun):
                 if own and slot in replaced:
                     parts = [p for p in parts if p not in standard]
                     children.append((f"std_{slot}{suffix}", name, own, pivot))
-            if name in mounts[slot]:
-                suffix = "" if mounts[slot].index(name) == 0 else f"_{mounts[slot].index(name) + 1}"
-                children += [(f"att_{kind}{suffix}", name, attachment_parts(gun, kind), pivot)
-                             for kind in kinds if ATTACHMENTS[kind]["slot"] == slot]
+            for kind in kinds:
+                if ATTACHMENTS[kind]["slot"] == slot and name in homes[kind]:
+                    suffix = "" if homes[kind].index(name) == 0 else f"_{homes[kind].index(name) + 1}"
+                    children.append((f"att_{kind}{suffix}", name, attachment_parts(gun, kind), pivot))
         out.append((name, parent, parts, pivot))
         out += children
     return out
@@ -2479,6 +3132,19 @@ ZOOM = {
     "penny_pistol": 0.9, "conductor_carbine": 0.82, "magpie_smg": 0.88,
     # Slice 12C: a pistol, a revolver and a bolt-action rifle.
     "tuppence_pistol": 0.9, "goshawk_revolver": 0.9, "lament_rifle": 0.7,
+    # Slice 13A: a revolver, a lever rifle made to take a scope and a carbine.
+    "tabby_revolver": 0.9, "lookout_rifle": 0.8, "ammonite_carbine": 0.85,
+    # Slice 13B: a carbine, a shotgun and a marksman's single-shot rifle.
+    "fencepost_carbine": 0.82, "waystation_shotgun": 0.9, "highball_rifle": 0.75,
+    "flatboat_gun": 0.9, "windlass_musket": 0.85, "millstone_rifle": 0.78,
+    # Slice 13D: a grenade launcher, a revolver and an energy musket.
+    "fencepost_thumper": 0.9, "parley_revolver": 0.9, "lantern_musket": 0.8,
+    # Slice 14A: a heavy pistol, a target pistol and a revolver.
+    "holler_pistol": 0.88, "minuet_pistol": 0.9, "half_crown_revolver": 0.9,
+    # Slice 14B: three carbines.
+    "holler_carbine": 0.85, "minuet_carbine": 0.88, "grange_carbine": 0.85,
+    # Slice 14C: an automatic rifle, an automatic shotgun and a rifle.
+    "sprocket_gun": 0.85, "navvy_shotgun": 0.9, "freeholder_rifle": 0.8,
 }
 
 
@@ -2509,6 +3175,10 @@ LASER_DOT = "red_dot_reticle"
 # the server's timing already covers, and show nothing. Slice 12B: a side magazine's tracking cues (the owner's mod
 # slid such a magazine along as its rounds were spent; here it stays where the animations put it).
 EJECT_CUE = "eject_casing"
+# Slice 13D: the Fencer Thumper's shot cues "rotate_cylinder" as its pump comes back, and GunAnimations turns the gun's
+# cylinder_magazine bone on by a chamber (a whole turn over the gun's capacity) there, eased over a few ticks
+# (client/guns/GunEffects.cylinderTurn).
+CYLINDER_CUE = "rotate_cylinder"
 QUIET_CUES = ("loaded", "end_reload", "loop_end", "reload_end", "stop_mag_tracking", "reset_mag_position",
               "resume_mag_tracking")
 # The muzzle flash: the owner's four flash frames, copied to textures/item/guns/flash/flash_<n>.png; each shot shows
@@ -2584,7 +3254,17 @@ EVENT_OVERRIDES = {"thunderpipe": {"reload_mag_in": "shell_in"}, "haymaker": {"r
                    # Of the Nether guns (slice 11A), the Tusker pushes a shell in at a time, the Bastion Rifle a round;
                    # (slice 11B) the Crackling a shell.
                    "tusker": {"reload_mag_in": "shell_in"}, "bastion_rifle": {"reload_mag_in": "shell_in"},
-                   "crackling": {"reload_mag_in": "shell_in"}}
+                   "crackling": {"reload_mag_in": "shell_in"},
+                   # The Lookout Rifle (slice 13A) pushes a round in at a time, as the Drover Rifle does.
+                   "lookout_rifle": {"reload_mag_in": "shell_in"},
+                   # The Fencepost Carbine and the Waystation Shotgun (slice 13B) push a round or a shell in at a time.
+                   "fencepost_carbine": {"reload_mag_in": "shell_in"}, "waystation_shotgun": {"reload_mag_in": "shell_in"},
+                   # Slice 13C: the Big Bore pushes its shell into the chamber; the Winnie Millend a round at a time, as
+                   # the Winnie (the Drover Rifle) does.
+                   "flatboat_gun": {"reload_mag_in": "shell_in"}, "millstone_rifle": {"reload_mag_in": "shell_in"},
+                   # Slice 13D: the Fencer Thumper pushes a grenade into its cylinder at a time, as the Blooper (the
+                   # Bullfrog) does; the Laser Musket's core clanks home, as the Squall Rifle's canister does.
+                   "fencepost_thumper": {"reload_mag_in": "shell_in"}, "lantern_musket": {"metal": "clank"}}
 SHOT_SOUNDS = {
     "rust_midge": "item/rusty_gnat/fire.ogg",
     "patchwork_carbine": "item/makeshift_rifle/fire.ogg",
@@ -2675,6 +3355,38 @@ SHOT_SOUNDS = {
     "tuppence_pistol": "item/brass_pistol/fire.ogg",
     "goshawk_revolver": "item/heavier_rifle/fire.ogg",
     "lament_rifle": "item/scorched_sniper/fire.ogg",
+    # Slice 13A: the Marshal Revolver's, the Longhorn Rifle's and the Ranger Rifle's.
+    "tabby_revolver": "item/brass_revolver/fire.ogg",
+    "lookout_rifle": "item/heavy_rifle/fire.ogg",
+    "ammonite_carbine": "item/old_rifle/fire.ogg",
+    # Slice 13B: the Kestrel Rifle's, the Coach Gun's (the Callwell's) and the Thresher's.
+    "fencepost_carbine": "item/iron_rifle/fire.ogg",
+    "waystation_shotgun": "item/brass_shotgun/fire.ogg",
+    "highball_rifle": "item/new_rifle/fire.ogg",
+    # Slice 13C: the Culverin's cannon for the punt gun, the Line Musket's black powder, the Bastion Rifle's heavy shot.
+    "flatboat_gun": "item/cannon/fire.ogg",
+    "windlass_musket": "item/blackpowder/fire.ogg",
+    "millstone_rifle": "item/heavier_rifle/fire.ogg",
+    # Slice 13D: the Trench Lobber's grenade launcher, the Goshawk Revolver's heavy shot and the Linesman's laser.
+    "fencepost_thumper": "item/grenade_launcher/fire.ogg",
+    "parley_revolver": "item/heavier_rifle/fire.ogg",
+    "lantern_musket": "item/laser/fire.ogg",
+    # Slice 14A: the owner's brass pistol and brass revolver shots (the Sapper's and the Marshal's), and the Warden
+    # Pistol's lighter iron one for the target pistol.
+    "holler_pistol": "item/brass_pistol/fire.ogg",
+    "minuet_pistol": "item/iron_pistol/fire.ogg",
+    "half_crown_revolver": "item/brass_revolver/fire.ogg",
+    # Slice 14B: the two conversions keep their pistols' shots; the Grange Carbine fires the old rifle shot (the Ranger
+    # Rifle's and the Ammonite Carbine's). The library's carabine, pistol and revolver shots carry tags naming other
+    # sources, so none of them is used.
+    "holler_carbine": "item/brass_pistol/fire.ogg",
+    "minuet_carbine": "item/iron_pistol/fire.ogg",
+    "grange_carbine": "item/old_rifle/fire.ogg",
+    # Slice 14C: the scorched rifle shot (the Garrison Rifle's), the combat shotgun shot (the Breacher's) and the
+    # scorched sniper shot (the Picket Rifle's).
+    "sprocket_gun": "item/scorched_rifle/fire.ogg",
+    "navvy_shotgun": "item/combat_shotgun/fire.ogg",
+    "freeholder_rifle": "item/scorched_sniper/fire.ogg",
 }
 SUBTITLES = {
     "fire": "Gun fires",
@@ -2807,6 +3519,14 @@ DUAL_SPREAD = 1.5
 def one_handed():
     """The guns a player may hold two of, one in each hand (slice 10G): those held in one hand."""
     return [gun for gun in GUNS if not two_handed(gun)]
+
+
+# Slice 13D: one-handed guns that, with a stock fitted, are held in both hands as carbines. Such a gun plays the owner's
+# carbine_ animations in place of its own (its draw, idle, shots, inspect and reload: client/guns/GunAnimations), its
+# holder's other arm comes up to it seen from outside (GunPose), and it is no longer one of two guns held at once
+# (JugcraftGuns.CARBINES, GunItem.carbine).
+CARBINES = ("parley_revolver", "half_crown_revolver")
+CARBINE_ANIMATIONS = ("draw", "idle", "shoot", "aim_shoot", "inspect")
 
 
 # ------------------------------------------------------------------ the Nether guns' fire (slices 11A and 11B)
@@ -3030,9 +3750,10 @@ def load_part(gun, part):
     PART_SHIFTS entry if it has one. A scope's "%<kind>" is its item model mounted on the gun (optic_part())."""
     if part.startswith("%"):
         return optic_part(gun, part[1:])
-    data = json.loads((LIBRARY / "models" / "special" / GUNS[gun]["source"] / f"{part_file(part)}.json").read_text())
+    folder, name = part_source(gun, part)
+    data = json.loads((LIBRARY / "models" / "special" / folder / f"{name}.json").read_text())
     textures = data.get("textures", {})
-    shift = PART_SHIFTS.get((GUNS[gun]["source"], part_file(part)))
+    shift = PART_SHIFTS.get((folder, name))
     for element in data.get("elements", []):
         size = [t - f for f, t in zip(element["from"], element["to"])]
         for direction, face in list(element.get("faces", {}).items()):
@@ -3075,8 +3796,13 @@ def texture_file(texture):
     return None
 
 
+# The guns whose own texture is not named after their source: the Big Bore draws on the owner's punt_gun texture
+# (slice 13C).
+OWN_TEXTURES = {"flatboat_gun": "punt_gun"}
+
+
 def own_texture(gun):
-    return f"scguns:item/{GUNS[gun]['source']}"
+    return f"scguns:item/{OWN_TEXTURES.get(gun, GUNS[gun]['source'])}"
 
 
 def gun_textures(gun):
@@ -3206,7 +3932,9 @@ FRAMED = {"scguns:item/rocket_rifle",
           # Carbine's too.
           "scguns:item/pyroclastic_flow_animated",
           # Slice 12C: the Forlorn Hope's whole texture, seven frames.
-          "scguns:item/forlorn_hope"}
+          "scguns:item/forlorn_hope",
+          # Slice 13D: the Laser Musket's glowing core, three frames.
+          "scguns:item/animated_laser_musket"}
 
 
 def texture_size(texture):
@@ -3374,8 +4102,16 @@ def compose_atlas(gun):
 def part_file(part):
     """A bone's part entry names the owner's part file, optionally narrowed to some of its elements:
     "main@barrel" (the elements the owner named "barrel"), "main#8" (element 8), and "main-@barrel", "main-#8" (all
-    but those). Several numbers are comma-separated: "main#8,9"."""
+    but those). Several numbers are comma-separated: "main#8,9". "howler/stan_mag" is another of the owner's guns'
+    part (part_source())."""
     return part.split("@")[0].split("#")[0].removesuffix("-")
+
+
+def part_source(gun, part):
+    """The library folder and file name of a bone's part entry: the gun's own folder, or for "<gun>/<part>" that of
+    another of the owner's guns (slice 14B: the Howler Conversion has no magazine of its own, and takes its Howler's)."""
+    folder, _, name = part_file(part).rpartition("/")
+    return folder or GUNS[gun]["source"], name
 
 
 def part_elements(gun, part):
@@ -3772,8 +4508,10 @@ def check():
                     problems.append(f"{gun}: animation {name} plays {event['effect']}, which has no sound")
             for event in (data.get("particle_effects") or {}).values():
                 # (the Scrapper's carbine reload names "end_reload " with a space after it)
-                if event["effect"].strip() != EJECT_CUE and event["effect"].strip() not in QUIET_CUES:
+                if event["effect"].strip() not in (EJECT_CUE, CYLINDER_CUE) and event["effect"].strip() not in QUIET_CUES:
                     problems.append(f"{gun}: animation {name} cues particle {event['effect']}, which nothing shows")
+                if event["effect"].strip() == CYLINDER_CUE and "cylinder_magazine" not in bones:
+                    problems.append(f"{gun}: animation {name} turns a cylinder, which the model lacks")
         for kind in fits(gun):
             if ATTACHMENTS[kind]["slot"] == "barrel" and f"muzzle_{kind}" not in bones.get(f"att_{kind}", {}).get("locators", {}):
                 problems.append(f"{gun}: the {kind} bone has no muzzle_{kind} locator for the flash")
@@ -3895,9 +4633,16 @@ def check():
                             "a tick (rocket_speed)")
     if not all(isinstance(n, int) and n >= 1 for n in OTHER_AMMO.values()):
         problems.append("OTHER_AMMO: each item loads a whole number of rounds, at least one")
+    for gun in CARBINES:
+        stocks = [kind for kind in fits(gun) if ATTACHMENTS[kind]["slot"] == "stock"]
+        names = animations(gun)["animations"]
+        reloads = ("reload_start", "reload_loop", "reload_stop") if isinstance(GUNS[gun]["reload"], tuple) else ("reload",)
+        missing = [f"carbine_{name}" for name in CARBINE_ANIMATIONS + reloads if f"carbine_{name}" not in names]
+        if gun not in one_handed() or not stocks or missing:
+            problems.append(f"{gun}: a carbine is one-handed, takes a stock and has carbine_ animations (lacks {missing})")
     for name, mounts in ((g, b.get("mounts", {})) for g, b in BUILDS.items()):
-        if not set(mounts) <= set(SLOTS) or not set(mounts.values()) <= {bone for bone, _, _, _ in BUILDS[name]["bones"]}:
-            problems.append(f"{name}: its mounts name a slot or a bone it lacks")
+        if not set(mounts) <= set(SLOTS) | set(fits(name)) or not set(mounts.values()) <= {bone for bone, _, _, _ in BUILDS[name]["bones"]}:
+            problems.append(f"{name}: its mounts name a slot, an attachment or a bone it lacks")
     for gun in GUNS:
         # The arms hang lower by the tilt in either hand (GunPose); a turn about another axis they could not take up.
         display = base_model(gun)["display"]
@@ -4123,9 +4868,11 @@ def provenance():
     rows = []
     for gun, spec in GUNS.items():
         src = spec["source"]
-        paths = [f"models/item/{src}.json", f"item/{src}.png", f"item/{src}.animation.json"]
+        paths = [f"models/item/{src}.json", str(texture_file(own_texture(gun)).relative_to(LIBRARY)),
+                 f"item/{src}.animation.json"]
         for _, _, parts, _ in effective_bones(gun):
-            paths += [f"models/special/{src}/{part_file(p)}.json" for p in parts if not p.startswith(("@", "%"))]
+            paths += ["models/special/{}/{}.json".format(*part_source(gun, p)) for p in parts
+                      if not p.startswith(("@", "%"))]
         paths.append(f"sounds/{SHOT_SOUNDS[gun]}")
         # The shared textures its attachments draw on, merged into its atlas (slice 7).
         paths += [str(texture_file(t).relative_to(LIBRARY)) for t in atlas_layout(gun)[1] if t != own_texture(gun)]

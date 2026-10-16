@@ -795,7 +795,24 @@ def ores_page():
                      "Look for pale-green mineral faces in small stone outcrops, or use the prospector and ore drill. "
                      "The crusher gives two spodumene per ore; nine compact into a storage block. "
                      "Expanded lithium refining is planned separately; existing lepidolite processing remains available.")
+        elif mineral == "vanadium_iron":
+            line += (" Vanadiferous magnetite: richest below Shield and Volcano, with smaller, rarer pockets below "
+                     "Highland, Basin, Windswept Hills, Windswept Gravelly Hills, Windswept Forest and Stony Peaks. "
+                     "Centers peak near Y -8. Small stone outcrops sometimes mark pockets, except in Volcano. "
+                     "Needs an iron pickaxe; Fortune cannot increase the one raw feed per block. "
+                     "Crush one raw feed or intact ore into one Vanadium-bearing Iron Concentrate (200 ticks at 16 JE/t), "
+                     "then wash with 500 mB water into one Vanadium Oxide (200 ticks at 16 JE/t). "
+                     "Two bricks and the oxide make a reusable Vanadium Contact Bed, without acid. "
+                     "The prospector and ore drill work here; nine raw feeds compact into a storage block. "
+                     "Deposits never replenish. Ordinary iron shortcuts require the legacy configuration option.")
         lines.append(line)
+    from mineral_sands import SANDS
+    for name, info in SANDS.items():
+        lines.append(f"{info['display']}: shallow beds in {biome_names(info['biomes'])}. "
+                     "Look for surface streaks, then shovel the buried bed or use the prospector and powered Ore Drill. "
+                     "Each mineral-sand block is one finite feed unit; Fortune does not increase it. "
+                     "The Ore Drill leaves ordinary sand. Stockpile this feed for future separation/refining; "
+                     "the Deposit Drill and generic ore-doubling recipes do not process it.")
     return {"title": "Ores", "icon": f"{MOD}:tin_ore",
             "text": ["Jugcraft ores appear in Overworld stone and deepslate. Regional exceptions are listed below:"] + lines}
 

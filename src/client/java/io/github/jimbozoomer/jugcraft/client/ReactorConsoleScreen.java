@@ -22,12 +22,14 @@ import net.minecraft.resources.Identifier;
  * assembly's heat, the rod slider, the plant readouts, ten minutes of core temperature with the alarm and SCRAM lines,
  * the annunciator windows, the protection switch, the SCRAM button, the fuel line and REFUEL. Everything shown comes
  * from the linked vessel's synced block entity; every button is a {@link ConsoleActionPayload} the server checks.
- * The screen is laid out at 504 x 348 and scaled to fit.
+ * The screen is laid out at 504 x 348 and scaled to fit. It is drawn in the advanced look
+ * (docs/features/machine-screens.md): the hologram body and panes, and a status lamp and chip by the title.
  */
 public class ReactorConsoleScreen extends Screen {
 	static final int W = 504, H = 348;
 	static final Identifier SCRAM_TEXTURE = Jugcraft.id("textures/gui/reactor_scram.png");
-	static final int BG = 0xF00E1820, PANEL = 0xF0132029, EDGE = 0xFF2B5566, ACCENT = 0xFF4FC8E8, TEXT = 0xFFBCD4DC, DIM = 0xFF6F8A94,
+	/** The advanced look's tones for the parts the console draws itself (gauges, keys, annunciators). */
+	static final int EDGE = 0xFF2C7C7E, ACCENT = 0xFF80F4F0, TEXT = 0xFFC8ECEA, DIM = 0xFF5AA8A6,
 			GREEN = 0xFF5ADC78, AMBER = 0xFFF0B030, RED = 0xFFF04034, WHITE = 0xFFFFFFFF;
 	/** The annunciator windows: alarm bit and label key (in this order on the panel). */
 	static final int[][] ANNUNCIATORS = {{ReactorCore.A_HIGH_TEMP}, {ReactorCore.A_SCRAM}, {ReactorCore.A_LOW_WATER}, {ReactorCore.A_LOOPS},
@@ -37,6 +39,7 @@ public class ReactorConsoleScreen extends Screen {
 			"fuel_spent", "fuel_damaged", "not_formed", "refuel", "no_fuel", "rad_monitor"};
 
 	private final BlockPos console;
+	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("reactor_console");
 	private float scale = 1;
 	private int left, top;
 	private boolean dragging;
@@ -93,13 +96,12 @@ public class ReactorConsoleScreen extends Screen {
 
 	private void draw(GuiGraphicsExtractor g, int mx, int my) {
 		int x0 = left, y0 = top;
-		g.fill(x0, y0, x0 + W, y0 + H, BG);
-		g.fill(x0, y0 + 20, x0 + W, y0 + 21, ACCENT);
-		g.text(font, t("title"), x0 + 8, y0 + 6, ACCENT, false);
+		ScreenKit.body(g, theme, x0, y0, W, H);
 		EquipmentBlockEntity v = vessel();
 		EquipmentBlockEntity c = consoleEntity();
 		if (v == null || c == null) {
-			g.text(font, c != null && c.linked != null ? t("out_of_range", c.linked.toShortString()) : t("unlinked"), x0 + 8, y0 + 40, AMBER, false);
+			ScreenKit.title(g, font, theme, x0 + 4, y0 + 5, Component.literal(t("title")), AMBER, W / 2);
+			g.text(font, c != null && c.linked != null ? t("out_of_range", c.linked.toShortString()) : t("unlinked"), x0 + 12, y0 + 40, AMBER, false);
 			return;
 		}
 		ReactorCore core = v.core;
@@ -108,7 +110,7 @@ public class ReactorConsoleScreen extends Screen {
 			case "smr" -> t("header_smr");
 			default -> t("header", v.loops);
 		};
-		g.text(font, header, x0 + W / 2 - font.width(header) / 2, y0 + 6, DIM, false);
+		g.text(font, header, x0 + W / 2 - font.width(header) / 2, y0 + 7, DIM, false);
 		String status;
 		int statusColour;
 		if ((core.alarms & ReactorCore.A_NOT_FORMED) != 0) {
@@ -131,7 +133,8 @@ public class ReactorConsoleScreen extends Screen {
 			status = t("status.shut_down");
 			statusColour = DIM;
 		}
-		g.text(font, status, x0 + W - 8 - font.width(status), y0 + 6, statusColour, false);
+		ScreenKit.title(g, font, theme, x0 + 4, y0 + 5, Component.literal(t("title")), statusColour, W / 2 - font.width(header) / 2 - 12);
+		ScreenKit.chip(g, font, theme, x0 + W - 8, y0 + 4, status, statusColour);
 
 		coreMap(g, core, x0 + 6, y0 + 26);
 		rods(g, core, x0 + 160, y0 + 26, mx, my);
@@ -143,11 +146,7 @@ public class ReactorConsoleScreen extends Screen {
 	}
 
 	private void panel(GuiGraphicsExtractor g, int x, int y, int w, int h, String title) {
-		g.fill(x, y, x + w, y + h, PANEL);
-		g.outline(x, y, w, h, EDGE);
-		g.fill(x + w - 8, y, x + w, y + 1, ACCENT);
-		g.text(font, title, x + 6, y + 5, ACCENT, false);
-		g.fill(x + 6, y + 15, x + w - 6, y + 16, EDGE);
+		ScreenKit.pane(g, font, theme, x, y, w, h, title);
 	}
 
 	private void coreMap(GuiGraphicsExtractor g, ReactorCore core, int x, int y) {

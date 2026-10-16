@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:dynamo_halberd"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.grounded.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.grounded.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

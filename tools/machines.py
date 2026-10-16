@@ -665,6 +665,12 @@ def _crusher():
             recipes.append({"input": ore, "output": f"minecraft:raw_{vanilla}", "count": ORE_PROCESSING_MULTIPLIER,
                             "ticks": 160, "features": [FEATURE], "ore": True})
     for mineral, info in MINERALS.items():
+        if mineral == "vanadium_iron":
+            # A finite vanadium feed: neither intact ore nor upgrade cards multiply its yield.
+            for feed in (mineral, f"{mineral}_ore", f"deepslate_{mineral}_ore"):
+                recipes.append({"input": f"jugcraft:{feed}", "output": "jugcraft:vanadium_iron_concentrate",
+                                "count": 1, "ticks": 200, "features": [FEATURE, info["feature"]]})
+            continue
         for ore in (f"jugcraft:{mineral}_ore", f"jugcraft:deepslate_{mineral}_ore"):
             recipes.append({"input": ore, "output": f"jugcraft:{mineral}", "count": info["drops"][1] + 1,
                             "ticks": 160, "features": [FEATURE, info["feature"]], "ore": True})
@@ -886,7 +892,11 @@ def _own_trees():
 
 
 def _tree_farm():
-    return [{"input": f"{ns}:{sapling}", "output": f"{ns}:{wood}_log", "count": 6, "ticks": 400,
+    from agriculture import TREES as own, timber
+    def log(ns, tree):
+        wood = timber(tree) if ns == "jugcraft" else f"minecraft:{tree}"
+        return f"{wood if ':' in wood else 'jugcraft:' + wood}_log"
+    return [{"input": f"{ns}:{sapling}", "output": log(ns, wood), "count": own[wood].get("farm_yield", 6) if ns == "jugcraft" else 6, "ticks": 400,
              "features": [FEATURE], "renewable": True,
              "byproducts": [[f"{ns}:{sapling}", 1, 1.0, None], [extra, 1, 0.1, None]]}
             for ns, trees in (("minecraft", TREES), ("jugcraft", _own_trees())) for wood, (sapling, extra) in trees.items()]

@@ -806,6 +806,10 @@ def crop_textures():
     out.update(mire_hag_textures())
     from crypt_lich_art import crypt_lich_textures  # and the Crypt Lich, his dead, bolts and bones, and his loot
     out.update(crypt_lich_textures())
+    from iron_dreadnought_art import iron_dreadnought_textures  # and the Iron Dreadnought, his Sparkers, rivets and shells, and his loot
+    out.update(iron_dreadnought_textures())
+    from alpha_werewolf_art import alpha_werewolf_textures  # and the Alpha Werewolf, and his loot
+    out.update(alpha_werewolf_textures())
     from orchard_textures import orchard_textures  # and the orchards' fruit trees
     out.update(orchard_textures())
     from cake_art import cake_textures  # and the cakes, rebuilt from the owner's drawing of them

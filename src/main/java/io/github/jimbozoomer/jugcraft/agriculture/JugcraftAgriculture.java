@@ -170,10 +170,28 @@ public final class JugcraftAgriculture {
 	public static final TreeGrower MAHOGANY_GROWER = grower("mahogany");
 	/** The tree roster's batch 1: the swamp cedar, on its own wood (tools/trees.py "cedar"). */
 	public static final TreeGrower CEDAR_GROWER = grower("cedar");
+	public static final TreeGrower PINE_GROWER = grower("pine");
+	public static final TreeGrower YEW_GROWER = grower("yew");
+	public static final TreeGrower BALD_CYPRESS_GROWER = grower("bald_cypress");
+	public static final TreeGrower MAGNOLIA_GROWER = grower("magnolia");
+	public static final TreeGrower HAWTHORN_GROWER = weightedGrower("hawthorn", "hawthorn_bush", 1, 3);
+	public static final TreeGrower PERSIMMON_GROWER = grower("persimmon");
+	public static final SeasonalLeavesBlock.Schedule HAWTHORN_LEAVES = new SeasonalLeavesBlock.Schedule(85, 280, 325);
+	public static final SeasonalLeavesBlock.Schedule PERSIMMON_LEAVES = new SeasonalLeavesBlock.Schedule(98, 280, 315);
+	public static final TreeGrower ROWAN_GROWER = grower("rowan");
+	public static final TreeGrower ELDER_GROWER = grower("elder");
+	public static final SeasonalLeavesBlock.Schedule ROWAN_LEAVES = new SeasonalLeavesBlock.Schedule(98, 255, 305);
+	public static final SeasonalLeavesBlock.Schedule ELDER_LEAVES = new SeasonalLeavesBlock.Schedule(88, 283, 328);
+	public static final SeasonalLeavesBlock.Schedule BALD_CYPRESS_LEAVES = new SeasonalLeavesBlock.Schedule(98, 286, 330);
+	public static final TreeGrower SNOWPETAL_CHERRY_GROWER = grower("snowpetal_cherry");
+	public static final TreeGrower SHIMMER_BIRCH_GROWER = weightedGrower("shimmer_birch", "tall_shimmer_birch", 4, 1);
+	public static final TreeGrower ANCIENT_YEW_GROWER = grower("ancient_yew");
 	/** Giant trees, which four saplings in a square grow ({@link GiantSaplingBlock}; agriculture.TREES "giant"). */
 	public static final TreeGrower GIANT_REDWOOD_GROWER = grower("giant_redwood");
 	public static final TreeGrower GIANT_MAHOGANY_GROWER = grower("giant_mahogany");
-	private static final Map<String, TreeGrower> GIANT_GROWERS = Map.of("redwood", GIANT_REDWOOD_GROWER, "mahogany", GIANT_MAHOGANY_GROWER);
+	public static final TreeGrower GIANT_EUCALYPTUS_GROWER = grower("giant_eucalyptus");
+	private static final Map<String, TreeGrower> GIANT_GROWERS = Map.of("redwood", GIANT_REDWOOD_GROWER,
+			"mahogany", GIANT_MAHOGANY_GROWER, "eucalyptus", GIANT_EUCALYPTUS_GROWER, "yew", ANCIENT_YEW_GROWER);
 	/** The dead tree, which no sapling grows; it stands in the Dead Forest (and game tests grow it). */
 	public static final TreeGrower DEAD_TREE_GROWER = grower("dead_tree");
 	/** Seasonal trees' leaf schedules, in season days. Keep in sync with TREES in tools/agriculture.py. */
@@ -429,6 +447,7 @@ public final class JugcraftAgriculture {
 	public static BlockEntityType<ScarePropBlockEntity> SCARE_PROP_ENTITY;
 	/** Low ground fog from the Fog Machine (drawn by the client: client/FogParticle.java). */
 	public static final SimpleParticleType FOG = FabricParticleTypes.simple();
+	public static final SimpleParticleType SNOWPETAL = FabricParticleTypes.simple();
 	/** What each kind of pumpkin becomes when first carved by hand, and the loot table its seeds come from. */
 	private static final Map<Block, Block> CARVED_FROM = new HashMap<>();
 	private static final Map<Block, ResourceKey<LootTable>> CARVE_LOOT = new HashMap<>();
@@ -499,6 +518,7 @@ public final class JugcraftAgriculture {
 		registerOrchardTrees();
 		// Generated trees' seasonal leaves start in today's look (tools/trees.py DECORATOR).
 		Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, Jugcraft.id("seasonal_leaves"), SeasonalLeavesDecorator.TYPE);
+		Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, Jugcraft.id("fruiting_shrub"), FruitingShrubDecorator.TYPE);
 		registerTree("larch", "larch_needles", LARCH_GROWER, LARCH_LEAVES, Blocks.SPRUCE_SAPLING, Blocks.SPRUCE_LEAVES,
 				MapColor.TERRACOTTA_RED, MapColor.TERRACOTTA_ORANGE);
 		registerTree("maple", "maple_leaves", MAPLE_GROWER, MAPLE_LEAVES, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
@@ -524,7 +544,36 @@ public final class JugcraftAgriculture {
 		registerTree("cedar", "cedar_leaves", CEDAR_GROWER, null, Blocks.SPRUCE_SAPLING, Blocks.SPRUCE_LEAVES,
 				MapColor.TERRACOTTA_BROWN, MapColor.COLOR_BROWN);
 		registerWoodSet("dead", MapColor.COLOR_LIGHT_GRAY, MapColor.TERRACOTTA_LIGHT_GRAY);
+		registerTree("bald_cypress", "bald_cypress_needles", BALD_CYPRESS_GROWER, BALD_CYPRESS_LEAVES, Blocks.SPRUCE_SAPLING, Blocks.SPRUCE_LEAVES,
+				MapColor.TERRACOTTA_BROWN, MapColor.TERRACOTTA_LIGHT_GRAY);
+		registerTree("magnolia", "magnolia_leaves", MAGNOLIA_GROWER, null, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
+				MapColor.COLOR_GRAY, MapColor.TERRACOTTA_GREEN);
+		registerTree("yew", "yew_needles", YEW_GROWER, null, Blocks.SPRUCE_SAPLING, Blocks.SPRUCE_LEAVES,
+				MapColor.TERRACOTTA_BROWN, MapColor.TERRACOTTA_RED);
+		sweet("yew_arils", 1, 0.1F, MobEffects.POISON, 10);
+		registerWoodSet("fruitwood", MapColor.TERRACOTTA_LIGHT_GRAY, MapColor.TERRACOTTA_PINK);
+		registerFoliage("rowan", "rowan_leaves", ROWAN_GROWER, Blocks.BIRCH_SAPLING, Blocks.BIRCH_LEAVES,
+				props -> new SeasonalFruitLeavesBlock(ROWAN_LEAVES, "rowan_berries", props));
+		registerFoliage("elder", "elder_leaves", ELDER_GROWER, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
+				props -> new SeasonalFruitLeavesBlock(ELDER_LEAVES, "elderberries", props));
+		registerFoliage("hawthorn", "hawthorn_leaves", HAWTHORN_GROWER, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
+				props -> new SeasonalFruitLeavesBlock(HAWTHORN_LEAVES, "haws", props, true));
+		registerWoodSet("persimmon", MapColor.COLOR_BLACK, MapColor.COLOR_GRAY);
+		registerFoliage("persimmon", "persimmon_leaves", PERSIMMON_GROWER, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
+				props -> new SeasonalFruitLeavesBlock(PERSIMMON_LEAVES, "persimmon", props));
+		food("haws", 1, 0.1F, COMPOST_MEDIUM);
+		food("persimmon", 3, 0.3F, COMPOST_MEDIUM);
+		food("rowan_berries", 1, 0.1F, COMPOST_MEDIUM);
+		food("elderberries", 2, 0.2F, COMPOST_MEDIUM);
+		registerTree("pine", "pine_needles", PINE_GROWER, null, Blocks.SPRUCE_SAPLING, Blocks.SPRUCE_LEAVES,
+				MapColor.COLOR_BROWN, MapColor.COLOR_LIGHT_GRAY);
 		registerWildPlants();
+		Registry.register(BuiltInRegistries.PARTICLE_TYPE, Jugcraft.id("snowpetal"), SNOWPETAL);
+		registerFoliage("snowpetal_cherry", "snowpetal_cherry_leaves", SNOWPETAL_CHERRY_GROWER, Blocks.CHERRY_SAPLING, Blocks.CHERRY_LEAVES,
+				props -> new net.minecraft.world.level.block.UntintedParticleLeavesBlock(0.1F, SNOWPETAL,
+						net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer.noAmbientSound(), props));
+		registerFoliage("shimmer_birch", "shimmer_birch_leaves", SHIMMER_BIRCH_GROWER, Blocks.BIRCH_SAPLING, Blocks.BIRCH_LEAVES,
+				props -> new TintedParticleLeavesBlock(0.01F, props));
 
 		// Seeds, produce and food.
 		food("corn", 3, 0.6F, COMPOST_MEDIUM);
@@ -1877,6 +1926,9 @@ public final class JugcraftAgriculture {
 		registerItem("mason_jar", Item::new, new Item.Properties().stacksTo(16), INGREDIENT_TAB);
 		registerItem("cider_vinegar", Item::new, new Item.Properties().craftRemainder(Items.GLASS_BOTTLE).stacksTo(16), INGREDIENT_TAB);
 		preserve("sweet_berry_jam", 3, 0.4F, null, 0, 0x9A1E3A);
+		preserve("haw_jelly", 3, 0.4F, null, 0, 0xB8302A);
+		preserve("persimmon_preserve", 3, 0.4F, null, 0, 0xDE7A2A);
+		preserve("rowan_jelly", 3, 0.4F, null, 0, 0xC4300F);
 		preserve("apple_butter", 4, 0.5F, null, 0, 0x7A3A14);
 		preserve("pumpkin_butter", 4, 0.5F, null, 0, 0xC8701E);
 		preserve("cranberry_preserves", 3, 0.4F, null, 0, 0xB0122E);
@@ -2831,6 +2883,14 @@ public final class JugcraftAgriculture {
 		return new TreeGrower(Jugcraft.MOD_ID + "_" + shape, WeightedList.of(tree), WeightedList.of(), WeightedList.of(), tree);
 	}
 
+	private static TreeGrower weightedGrower(String normal, String tall, int normalWeight, int tallWeight) {
+		ResourceKey<Feature> small = ResourceKey.create(Registries.FEATURE, Jugcraft.id(normal));
+		ResourceKey<Feature> large = ResourceKey.create(Registries.FEATURE, Jugcraft.id(tall));
+		return new TreeGrower(Jugcraft.MOD_ID + "_" + normal, WeightedList.of(
+				new net.minecraft.util.random.Weighted<>(small, normalWeight), new net.minecraft.util.random.Weighted<>(large, tallWeight)),
+				WeightedList.of(), WeightedList.of(), small);
+	}
+
 	/**
 	 * A tree with its own sapling and leaves, and its wood set (agriculture.TREES and WOOD_SETS in tools). Leaves with a
 	 * {@code schedule} follow the seasons ({@link SeasonalLeavesBlock}); null: evergreen. The sapling and leaves copy
@@ -2839,17 +2899,23 @@ public final class JugcraftAgriculture {
 	 */
 	private static void registerTree(String tree, String leavesId, TreeGrower grower, SeasonalLeavesBlock.Schedule schedule,
 			Block saplingLike, Block leavesLike, MapColor bark, MapColor inner) {
+		Function<BlockBehaviour.Properties, Block> leavesFactory = tree.equals("yew") ? YewLeavesBlock::new : schedule == null
+				? props -> new TintedParticleLeavesBlock(0.01F, props)
+				: props -> new SeasonalLeavesBlock(schedule, props);
+		registerFoliage(tree, leavesId, grower, saplingLike, leavesLike, leavesFactory);
+		registerWoodSet(tree, bark, inner);
+	}
+
+	/** Foliage can share existing timber without registering a second wood set. */
+	private static void registerFoliage(String tree, String leavesId, TreeGrower grower, Block saplingLike, Block leavesLike,
+			Function<BlockBehaviour.Properties, Block> leavesFactory) {
 		TreeGrower giant = GIANT_GROWERS.get(tree);
 		Block sapling = registerBlock(tree + "_sapling", giant == null ? props -> new SaplingBlock(grower, props) {
 		} : props -> new GiantSaplingBlock(grower, giant, props), BlockBehaviour.Properties.ofFullCopy(saplingLike));
 		registerItem(tree + "_sapling", props -> new BlockItem(sapling, props), new Item.Properties().useBlockDescriptionPrefix()
 				.compostable(COMPOST_LOW), SEEDS_TAB);
-		Function<BlockBehaviour.Properties, Block> leavesFactory = schedule == null
-				? props -> new TintedParticleLeavesBlock(0.01F, props)
-				: props -> new SeasonalLeavesBlock(schedule, props);
 		Block leaves = registerBlock(leavesId, leavesFactory, BlockBehaviour.Properties.ofFullCopy(leavesLike).mapColor(MapColor.PLANT));
 		registerItem(leavesId, props -> new BlockItem(leaves, props), new Item.Properties().useBlockDescriptionPrefix(), SEEDS_TAB);
-		registerWoodSet(tree, bark, inner);
 		FlammableBlockRegistry.getDefaultInstance().add(leaves, 30, 60);
 	}
 

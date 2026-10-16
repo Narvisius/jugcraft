@@ -23,10 +23,12 @@ import net.minecraft.world.level.material.PushReaction;
 
 /**
  * The lairs' registrations (docs/features/hollow-acre.md, docs/features/spindle-loft.md, docs/features/glacier-hall.md,
- * docs/features/cinder-kiln.md, docs/features/lantern-fen.md, docs/features/crypt-archive.md): the lair-only blocks
- * (unbreakable, no items, no drops), the Mourning Wreath and the Death Knell of the Last Rites, the Cursed Spindle, the
- * Frost Horn, the Kiln Seal, the Hag Stone, the Writ of Exhumation, the Mist Gate, and the lairs' events, rules, rituals
- * and commands. Registered whatever the feature switch says, so saved worlds keep them; the switch
+ * docs/features/cinder-kiln.md, docs/features/lantern-fen.md, docs/features/crypt-archive.md,
+ * docs/features/foundry-trench.md, docs/features/moonlit-ring.md): the lair-only blocks (unbreakable, no items, no
+ * drops), the Mourning Wreath and the Death Knell of the Last Rites, the Cursed Spindle, the Frost Horn, the Kiln Seal,
+ * the Hag Stone, the Writ of Exhumation, Sealed Orders, the Howling Totem, the Mist Gate, and the lairs' events, rules,
+ * rituals and commands. Registered whatever the
+ * feature switch says, so saved worlds keep them; the switch
  * ({@value #FEATURE}) stops the rituals.
  */
 public final class JugcraftLairs {
@@ -67,6 +69,13 @@ public final class JugcraftLairs {
 	public static Block GRAVE_SEAL;
 	public static Block ARCHIVE_LECTERN;
 	public static Block PHYLACTERY;
+	public static Block PYLON_LATTICE;
+	public static Block PYLON_CROWN;
+	public static Block DISCHARGE_BREAKER;
+	public static Block GROUND_TERMINAL;
+	public static Block MOONWOOD_LEAVES;
+	public static Block WARDEN_BELL;
+	public static Block RAKED_TURF;
 	public static Block MOURNING_WREATH;
 	public static Item MOURNING_WREATH_ITEM;
 	public static Item DEATH_KNELL;
@@ -75,6 +84,8 @@ public final class JugcraftLairs {
 	public static Item KILN_SEAL;
 	public static Item HAG_STONE;
 	public static Item EXHUMATION_WRIT;
+	public static Item SEALED_ORDERS;
+	public static Item HOWLING_TOTEM;
 	public static EntityType<MistGateEntity> MIST_GATE;
 
 	private JugcraftLairs() {
@@ -125,6 +136,19 @@ public final class JugcraftLairs {
 				Fit.SEE_THROUGH);
 		PHYLACTERY = fixture("phylactery", p -> new PhylacteryBlock(p.lightLevel(PhylacteryBlock::light)), MapColor.GOLD,
 				SoundType.BONE_BLOCK, 0, Fit.SEE_THROUGH);
+		// The Foundry Trench's (docs/features/foundry-trench.md): its pylons' crowns, its breakers and its ground terminals
+		// burn while live, and go dark.
+		PYLON_LATTICE = fixture("pylon_lattice", Block::new, MapColor.METAL, SoundType.METAL, 0, Fit.SEE_THROUGH);
+		PYLON_CROWN = fixture("pylon_crown", p -> new PylonCrownBlock(p.lightLevel(PylonCrownBlock::light)), MapColor.COLOR_ORANGE,
+				SoundType.COPPER, 0, Fit.SEE_THROUGH);
+		DISCHARGE_BREAKER = fixture("discharge_breaker", p -> new DischargeBreakerBlock(p.lightLevel(DischargeBreakerBlock::light)),
+				MapColor.COLOR_GREEN, SoundType.METAL, 0, Fit.SEE_THROUGH);
+		GROUND_TERMINAL = fixture("ground_terminal", p -> new GroundTerminalBlock(p.lightLevel(GroundTerminalBlock::light)),
+				MapColor.COLOR_ORANGE, SoundType.COPPER, 0, Fit.SOLID);
+		// The Moonlit Ring's (docs/features/moonlit-ring.md): the giant oaks' leaves, which never fall, and its bells.
+		MOONWOOD_LEAVES = fixture("moonwood_leaves", Block::new, MapColor.PLANT, SoundType.GRASS, 0, Fit.SEE_THROUGH);
+		WARDEN_BELL = fixture("warden_bell", WardenBellBlock::new, MapColor.METAL, SoundType.ANVIL, 0, Fit.SEE_THROUGH);
+		RAKED_TURF = fixture("raked_turf", RakedTurfBlock::new, MapColor.PLANT, SoundType.MOSS, 0, Fit.SOLID);
 
 		ResourceKey<Block> wreathKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("mourning_wreath"));
 		MOURNING_WREATH = Registry.register(BuiltInRegistries.BLOCK, wreathKey, new MourningWreathBlock(BlockBehaviour.Properties.of()
@@ -147,6 +171,12 @@ public final class JugcraftLairs {
 		ResourceKey<Item> writKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("exhumation_writ"));
 		EXHUMATION_WRIT = Registry.register(BuiltInRegistries.ITEM, writKey, new ExhumationWritItem(new Item.Properties().stacksTo(16)
 				.setId(writKey)));
+		ResourceKey<Item> ordersKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("sealed_orders"));
+		SEALED_ORDERS = Registry.register(BuiltInRegistries.ITEM, ordersKey, new SealedOrdersItem(new Item.Properties().stacksTo(16)
+				.setId(ordersKey)));
+		ResourceKey<Item> totemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("howling_totem"));
+		HOWLING_TOTEM = Registry.register(BuiltInRegistries.ITEM, totemKey, new HowlingTotemItem(new Item.Properties().stacksTo(16)
+				.setId(totemKey)));
 
 		ResourceKey<EntityType<?>> gateKey = ResourceKey.create(Registries.ENTITY_TYPE, Jugcraft.id("mist_gate"));
 		MIST_GATE = Registry.register(BuiltInRegistries.ENTITY_TYPE, gateKey, EntityType.Builder.<MistGateEntity>of(MistGateEntity::new,
@@ -158,6 +188,7 @@ public final class JugcraftLairs {
 		LairRules.register();
 		SpindleRite.register();
 		ExhumationRite.register();
+		OrdersRite.register();
 		LairCommands.register();
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			output.accept(DEATH_KNELL);
@@ -166,6 +197,8 @@ public final class JugcraftLairs {
 			output.accept(KILN_SEAL);
 			output.accept(HAG_STONE);
 			output.accept(EXHUMATION_WRIT);
+			output.accept(SEALED_ORDERS);
+			output.accept(HOWLING_TOTEM);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> output.accept(MOURNING_WREATH_ITEM));
 	}

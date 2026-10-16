@@ -40,9 +40,15 @@ public abstract class FruitingLeavesBlock extends TintedParticleLeavesBlock {
 	/** Shared native yield for a validated companion harvest; does not change blocks or spawn items. */
 	public final ItemStack harvestFruit(RandomSource random) { return fruit(random); }
 
-	/** Whether leaves in {@code state} at {@code pos} can bear fruit: grown by the tree, near a log, over air. */
+	/** Fruit space defaults to the underside of the canopy; shrubs may also use an exposed edge. */
+	protected boolean hasFruitSpace(Level level, BlockPos pos) { return level.isEmptyBlock(pos.below()); }
+
+	protected BlockPos fruitDropPos(Level level, BlockPos pos) { return pos.below(); }
+
+	/** Whether leaves can bear fruit: grown by the tree, near a log, with the species' required space. */
 	public static boolean canFruit(BlockState state, Level level, BlockPos pos) {
-		return !state.getValue(PERSISTENT) && state.getValue(DISTANCE) < DECAY_DISTANCE && level.isEmptyBlock(pos.below());
+		return !state.getValue(PERSISTENT) && state.getValue(DISTANCE) < DECAY_DISTANCE
+				&& (state.getBlock() instanceof FruitingLeavesBlock leaves ? leaves.hasFruitSpace(level, pos) : level.isEmptyBlock(pos.below()));
 	}
 
 	/** Natural leaves always tick, to grow fruit (and, as in vanilla, to decay when cut off from logs). */
@@ -67,7 +73,7 @@ public abstract class FruitingLeavesBlock extends TintedParticleLeavesBlock {
 			return false;
 		}
 		RandomSource random = level.getRandom();
-		Block.popResource(level, pos.below(), fruit(random));
+		Block.popResource(level, fruitDropPos(level, pos), fruit(random));
 		level.setBlock(pos, state.setValue(FRUIT, 0), Block.UPDATE_CLIENTS);
 		level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.7F + random.nextFloat() * 0.3F);
 		return true;

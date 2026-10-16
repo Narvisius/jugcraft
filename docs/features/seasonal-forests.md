@@ -18,7 +18,7 @@ Nine biomes grow in Jugcraft regions, each in place of the vanilla biome with th
 | **Aspen Glade** | birch forests | tall, slender aspens and young aspens, a few maples and dark subalpine firs |
 | **Dead Forest** | dry cool plains | grey dead trees and broken snags, a few spruces and oaks, fallen logs, dead bushes, sparse brown grass; rabbits and wolves only |
 | **Tundra** | cool plains | no trees: maple, willow and fir scrub, mossy boulders, dead bushes, ferns; rabbits, foxes and wolves |
-| **Snowy Forest** | snowy plains (moister) | snow-covered oaks, firs, aspens and maples |
+| **Snowy Forest** | snowy plains (moister) | snow-covered rowans, firs, aspens and maples |
 | **Muskeg** | snowy plains | tamaracks, thin bog firs and grey snags, a few dead trees and fallen logs in wet, snowy flats; rabbits only |
 
 **The trees follow the seasons** (the server's season clock, [seasons.md](seasons.md)):
@@ -89,3 +89,5 @@ Results are recorded under "Results" below after CI runs.
 ## Rollout and open questions
 - Planned for later in this batch or the next: muskeg ponds that freeze in winter; toadstools; violets.
 - Open: should Dead Forests have no animals at all, as the catalog says? (They have rabbits and wolves here.)
+
+Tree roster batch 5 replaces the Snowy Forest's remaining oak attempts with rowan (36%), retaining fir 30%, aspen 20%, maple 14% and 7/8 attempts per chunk. See [the implementation and verification record](trees-batch-5.md).

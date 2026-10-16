@@ -91,8 +91,12 @@ public class GunsClientGameTests implements FabricClientGameTest {
 				// Slice 8D: an energy weapon loads each round's charge from Energy Cells.
 				int charge = JugcraftGuns.charge(JugcraftGuns.GUNS.get(gun));
 				// Each gun starts from the same aim: every shot kicks the view up, and twelve guns' kicks would lift it
-				// over the husk.
-				server.runCommand(String.format(Locale.ROOT, "tp @p %.1f %d %.1f 180 5", x + 0.5, y, z + 0.5));
+				// over the husk. A gun whose aimed cone is wider than the husk seven blocks off fires from where it is not
+				// (0.45 blocks either side of the aim: the husk's half width and the reach of the hit test past it), so a
+				// single shot cannot miss by chance: the Culverin's five pellets, 7 degrees out, all went past it about
+				// one shot in 280.
+				double distance = Math.min(7.0, 0.45 / Math.tan(Math.toRadians(spec.aimSpread())));
+				server.runCommand(String.format(Locale.ROOT, "tp @p %.1f %d %.2f 180 5", x + 0.5, y, z - 6.5 + distance));
 				server.runCommand("clear @p");
 				server.runCommand("item replace entity @p weapon.mainhand with jugcraft:%s[jugcraft:loaded_rounds=%d]".formatted(gun, capacity));
 				if (charge > 0) {

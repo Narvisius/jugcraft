@@ -35,8 +35,11 @@ def color_of(name, draw=None):
 
 
 def rotate(p, rotation):
+    """A point turned by (axis, angle, origin), or moved by ("move", (dx, dy, dz))."""
     if not rotation:
         return p
+    if rotation[0] == "move":
+        return [p[k] + rotation[1][k] for k in range(3)]
     axis, angle, origin = rotation[:3]
     a = math.radians(angle)
     i = "xyz".index(axis)

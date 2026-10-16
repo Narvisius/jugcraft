@@ -147,7 +147,8 @@ RULES = [
 ]
 
 # Trees from other features, given a placed feature ("<name>") that checks the given sapling-like block would survive.
-PLACED_TREES = {"chestnut_checked": ("jugcraft:chestnut", "jugcraft:chestnut_sapling"),
+PLACED_TREES = {"apple_tree_checked": ("jugcraft:apple_tree", "jugcraft:apple_sapling"),
+                "chestnut_checked": ("jugcraft:chestnut", "jugcraft:chestnut_sapling"),
                 # The orchards' fruit trees (tools/orchard.py), picked by the Orchard, Mediterranean Forest, Subtropics,
                 # Tropics and Rainforest.
                 **{f"{tree}_checked": (f"jugcraft:{tree}_tree", f"jugcraft:{tree}_sapling")
@@ -194,6 +195,19 @@ GROUND_COUNT = 5
 
 # Features the biomes add, in one fixed order, after their base's own (keeps the Overworld's feature order acyclic).
 EXTRAS = {
+    # Rare landmark tree: one attempt, then dry-ground and sapling survival checks. No forest count layer.
+    # A selector's unoccupied slot: no replacement plants or future-batch species.
+    "open_scrub": {"configured": {"type": "minecraft:no_op"}, "step": 9, "placement": []},
+    "lone_hawthorn": {"feature": "jugcraft:hawthorn", "step": 9, "placement": [
+        {"type": "minecraft:rarity_filter", "chance": 16}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+        {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"}, {"type": "minecraft:biome"},
+        {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": "jugcraft:hawthorn_sapling"}}]},
+    "lone_rowan": {"feature": "jugcraft:rowan", "step": 9, "placement": [
+        {"type": "minecraft:rarity_filter", "chance": 8}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+        {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"}, {"type": "minecraft:biome"},
+        {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": "jugcraft:rowan_sapling"}}]},
     "tundra_rocks": {"feature": "minecraft:forest_rock", "step": 2, "placement": [
         {"type": "minecraft:rarity_filter", "chance": 2}, {"type": "minecraft:in_square"},
         {"type": "minecraft:heightmap", "heightmap": "MOTION_BLOCKING"}, {"type": "minecraft:biome"}]},
@@ -493,7 +507,8 @@ BIOMES = {
         "display": "Seasonal Forest", "base": "forest", "temperature": 0.6, "downfall": 0.8, "seasons": True,
         "trees": {"count": [10, 11], "default": "minecraft:oak_bees_0002_leaf_litter", "picks": [
             ["jugcraft:maple_checked", 0.35], ["jugcraft:aspen_checked", 0.2], ["jugcraft:big_maple_checked", 0.0577],
-            ["jugcraft:fir_checked", 0.0816], ["jugcraft:fallen_maple_tree", 0.0222]]},
+            ["jugcraft:fir_checked", 0.0816], ["jugcraft:fallen_maple_tree", 0.0222],
+            ["jugcraft:persimmon_checked", 0.10 / (0.65 * 0.8 * 0.9423 * 0.9184 * 0.9778)]]},
         "extras": ["patch_pumpkin_dense"],
         "tags": ["minecraft:has_structure/village_plains", "c:is_deciduous_tree"],
     },
@@ -534,7 +549,7 @@ BIOMES = {
     },
     "snowy_forest": {
         "display": "Snowy Forest", "base": "snowy_plains", "temperature": -0.3, "downfall": 0.5, "seasons": False,
-        "trees": {"count": [7, 8], "default": "minecraft:oak_checked", "picks": [
+        "trees": {"count": [7, 8], "default": "jugcraft:rowan_checked", "picks": [
             ["jugcraft:fir_checked", 0.3], ["jugcraft:maple_checked", 0.2], ["jugcraft:aspen_checked", 0.3571]]},
         "creatures": [["minecraft:sheep", 12, 4, 4], ["minecraft:pig", 10, 4, 4], ["minecraft:chicken", 10, 4, 4],
                       ["minecraft:cow", 8, 4, 4], ["minecraft:rabbit", 6, 2, 3], ["minecraft:wolf", 5, 4, 4]],
@@ -583,7 +598,8 @@ BIOMES = {
         "display": "Lush Swamp", "base": "swamp", "temperature": 0.7, "downfall": 0.9, "seasons": True,
         "effects": {"grass_color": "#56b13a", "foliage_color": "#4aa22e", "grass_color_modifier": "none", "water_color": "#2e86a8"},
         "trees": {"count": [3, 4], "default": "jugcraft:tall_vine_oak_checked", "picks": [
-            ["jugcraft:willow_checked", 0.3], ["jugcraft:maple_checked", 0.1429]], "water_depth": 2},
+            ["jugcraft:bald_cypress_checked", 0.25], ["jugcraft:willow_checked", 0.30 / 0.75],
+            ["jugcraft:maple_checked", 0.10 / 0.45]], "water_depth": 2},
         "extras": ["cattails", "watergrass", "duckweed", "lily_pads", "ferns", "berry_bushes"],
         "tags": ["c:is_swamp", "c:is_wet"],
     },
@@ -591,7 +607,8 @@ BIOMES = {
     "swamp_woods": {
         "display": "Swamp Woods", "base": "swamp", "temperature": 0.65, "downfall": 0.9, "seasons": True,
         "trees": {"count": [7, 9], "default": "jugcraft:willow_checked", "picks": [
-            ["jugcraft:tall_vine_oak_checked", 0.2], ["jugcraft:azalea_tree_checked", 0.125]], "water_depth": 2},
+            ["jugcraft:bald_cypress_checked", 0.25], ["jugcraft:tall_vine_oak_checked", 0.20 / 0.75],
+            ["jugcraft:azalea_tree_checked", 0.10 / 0.55]], "water_depth": 2},
         "extras": ["duckweed", "lily_pads", "cattails", "ferns"],
         "creatures": [["minecraft:frog", 10, 2, 5], ["minecraft:sheep", 8, 4, 4], ["minecraft:pig", 8, 4, 4], ["minecraft:cow", 6, 4, 4],
                       ["minecraft:chicken", 8, 4, 4]],
@@ -602,7 +619,8 @@ BIOMES = {
         "display": "Bayou", "base": "mangrove_swamp", "temperature": 0.85, "downfall": 0.95, "seasons": True, "winter_snow": False,
         "effects": {"water_color": "#4d6a4c"},
         "attributes": {"minecraft:visual/fog_color": "#a9b8a6"},
-        "trees": {"count": [5, 6], "default": "jugcraft:willow_checked", "picks": [["jugcraft:tall_vine_oak_checked", 0.15]],
+        "trees": {"count": [5, 6], "default": "jugcraft:bald_cypress_checked", "picks": [
+            ["jugcraft:live_oak_checked", 0.15], ["jugcraft:willow_checked", 0.25 / 0.85]],
                   "water_depth": 3},
         "extras": ["mud", "cattails", "ferns", "large_ferns", "duckweed", "flora_shroud_moss"],
         "untags": ["minecraft:has_structure/trail_ruins"],
@@ -614,7 +632,7 @@ BIOMES = {
         "display": "Floodplain", "base": "mangrove_swamp", "temperature": 0.9, "downfall": 0.9, "seasons": True, "winter_snow": False,
         "effects": {"grass_color": "#6cb041", "foliage_color": "#5ea034", "grass_color_modifier": "none", "water_color": "#3d7f9a"},
         "trees": {"count": [3, 4], "default": "jugcraft:willow_bush_checked", "picks": [
-            ["minecraft:oak_checked", 0.3]], "water_depth": 1},
+            ["jugcraft:cottonwood_checked", 0.3]], "water_depth": 1},
         "extras": ["tall_grass_dense", "orange_cosmos", "watergrass", "lily_pads"],
         "tags": ["c:is_wet"],
     },
@@ -650,7 +668,7 @@ BIOMES = {
         "display": "Lush River", "base": "river", "temperature": 0.7, "downfall": 0.8, "seasons": True, "winter_snow": False,
         "effects": {"grass_color": "#5eb33f", "foliage_color": "#52a434", "water_color": "#2f9a96"},
         "trees": {"count": [1, 2], "default": "jugcraft:willow_bush_checked", "picks": [
-            ["jugcraft:willow_checked", 0.2], ["jugcraft:oak_bush_checked", 0.125]]},
+            ["jugcraft:willow_checked", 0.2], ["jugcraft:cottonwood_checked", 0.125]]},
         "extras": ["duckweed", "lily_pads", "watergrass", "cattails"],
         "tags": ["c:is_wet"],
     },
@@ -669,7 +687,8 @@ BIOMES = {
     "lake_district": {
         "display": "Lake District", "base": "forest", "temperature": 0.5, "downfall": 0.8, "seasons": True,
         "trees": {"count": [6, 7], "default": "minecraft:oak_checked", "picks": [
-            ["jugcraft:fir_checked", 0.3], ["jugcraft:larch_checked", 0.1429], ["minecraft:fancy_oak_checked", 0.1]]},
+            ["jugcraft:fir_checked", 0.3], ["jugcraft:larch_checked", 1 / 7], ["minecraft:fancy_oak_checked", 0.1],
+            ["jugcraft:rowan_checked", 0.1 / 0.54]]},
         "extras": ["ponds", "mud", "cattails", "lily_pads"],
         "tags": ["c:is_wet"],
     },
@@ -699,7 +718,7 @@ BIOMES = {
         "display": "Wetland", "base": "swamp", "temperature": 0.55, "downfall": 0.9, "seasons": True,
         "effects": {"water_color": "#6b5c9c"},
         "trees": {"count": [2, 3], "default": "jugcraft:cedar_checked", "picks": [
-            ["jugcraft:willow_checked", 0.4], ["minecraft:spruce_checked", 0.1667]], "water_depth": 1},
+            ["jugcraft:willow_checked", 0.4], ["jugcraft:elder_checked", 1 / 6]], "water_depth": 1},
         "extras": ["mud", "ferns", "cattails", "watergrass"],
         "tags": ["c:is_swamp", "c:is_wet", "minecraft:has_structure/village_taiga"],
     },
@@ -728,15 +747,17 @@ BIOMES = {
     "jacaranda_glade": {
         "display": "Jacaranda Glade", "base": "forest", "temperature": 0.75, "downfall": 0.8, "seasons": True, "winter_snow": False,
         "trees": {"count": [6, 7], "default": "jugcraft:jacaranda_checked", "picks": [
-            ["minecraft:cherry_checked", 0.15], ["minecraft:oak_bees_002", 0.2], ["jugcraft:azalea_tree_checked", 0.1]]},
+            ["minecraft:cherry_checked", 0.15], ["minecraft:oak_bees_002", 0.2], ("jugcraft:azalea_tree_checked", 0.1),
+                                     ("jugcraft:big_jacaranda_checked", 0.15 / (0.85 * 0.8 * 0.9))]},
         "extras": ["blue_orchids", "lilies_of_the_valley"],
         "tags": ["c:is_flower_forest"],
     },
     # Orange dunes of red sand that see rain: dune grass, acacia brush and bushes, a few wildflowers; villages.
     "lush_desert": {
         "display": "Lush Desert", "base": "desert", "temperature": 1.0, "downfall": 0.3, "seasons": False, "precipitation": True,
-        "surface": {"floor": "minecraft:red_sand", "under": "minecraft:red_sandstone", "patches": [[-0.2, 0.2, "minecraft:sand"]]},
-        "trees": {"count": [1, 2], "default": "jugcraft:desert_acacia_checked", "picks": [["jugcraft:oak_bush_checked", 0.3]]},
+        "surface": {"floor": "minecraft:red_sand", "under": "minecraft:red_sandstone", "patches": [[0.2, 1.7976931348623157e308, "minecraft:grass_block"], [-0.2, 0.2, "minecraft:sand"]],
+                                 "under_patches": [[0.2, 1.7976931348623157e308, "minecraft:dirt"]]},
+        "trees": {"count": [1, 2], "default": "jugcraft:desert_acacia_checked", "picks": [("jugcraft:small_palm_checked", 0.2)]},
         "extras": ["dry_grass", "meadow_wildflowers", "bushes_dense"],
         "tags": ["c:is_dry", "c:is_hot", "c:is_desert"],
     },
@@ -794,7 +815,7 @@ BIOMES = {
         "effects": {"grass_color": "#b8a858", "foliage_color": "#a49a4c"},
         "surface": {"floor": "minecraft:red_sand", "under": "minecraft:red_sandstone",
                     "patches": [[-0.25, 0.1, "minecraft:grass_block"]]},
-        "trees": {"count": [1, 2], "default": "jugcraft:desert_acacia_checked", "picks": []},
+        "trees": {"count": [1, 2], "default": "jugcraft:desert_acacia_checked", "picks": [("jugcraft:mallee_checked", 0.3)]},
         "extras": ["dry_grass"],
         "tags": ["c:is_dry", "c:is_hot"],
     },
@@ -804,7 +825,7 @@ BIOMES = {
         "effects": {"grass_color": "#7fbf4a", "foliage_color": "#6aad3c"},
         "surface": {"floor": "rule:minecraft:overworld/sand_or_sandstone_if_ceiling", "under": "minecraft:sand",
                     "patches": [[0.0, 0.45, "minecraft:grass_block"]]},
-        "trees": {"count": [2, 3], "default": "jugcraft:palm_checked", "picks": []},
+        "trees": {"count": [2, 3], "default": "jugcraft:palm_checked", "picks": [("jugcraft:small_palm_checked", 0.15)]},
         "extras": ["ponds", "tall_grass_dense"],
         "tags": ["c:is_hot", "c:is_desert"],
     },
@@ -876,7 +897,8 @@ BIOMES = {
         "display": "Eucalyptus Forest", "base": "sparse_jungle", "temperature": 0.95, "downfall": 0.8, "seasons": False,
         "effects": {"grass_color": "#7fb653", "foliage_color": "#6aa84a"},
         "trees": {"count": [8, 9], "default": "jugcraft:eucalyptus_checked", "picks": [
-            ["jugcraft:big_eucalyptus_checked", 0.3], ["jugcraft:oak_bush_checked", 0.25]]},
+            ("jugcraft:big_eucalyptus_checked", 0.25), ("jugcraft:oak_bush_checked", 0.20 / 0.75),
+                                       ("jugcraft:giant_eucalyptus_checked", 0.08 / 0.55)]},
         "extras": ["field_flowers", "melons", "bushes_dense"],
         "creatures": [["minecraft:sheep", 12, 4, 4], ["minecraft:pig", 10, 4, 4], ["minecraft:chicken", 10, 4, 4],
                       ["minecraft:cow", 8, 4, 4], ["minecraft:parrot", 20, 1, 2]],
@@ -901,7 +923,7 @@ BIOMES = {
         "display": "Subtropics", "base": "plains", "temperature": 0.9, "downfall": 0.7, "seasons": False,
         "effects": {"grass_color": "#6cc043", "foliage_color": "#5ab035"},
         "trees": {"count": [2, 3], "default": "jugcraft:azalea_tree_checked", "picks": [
-            ["minecraft:oak_checked", 0.3], ["minecraft:birch_checked", 0.1], ["jugcraft:small_palm_checked", 0.2],
+            ["jugcraft:live_oak_checked", 0.3], ["minecraft:birch_checked", 0.1], ["jugcraft:small_palm_checked", 0.2],
             ["jugcraft:tall_vine_oak_checked", 0.1], ["jugcraft:lemon_checked", 0.15], ["jugcraft:orange_checked", 0.15]]},
         "extras": ["hydrangeas", "field_flowers"],
         "tags": [],
@@ -947,7 +969,9 @@ BIOMES = {
         "display": "Woodland", "base": "forest", "temperature": 0.7, "downfall": 0.8, "seasons": True,
         "effects": {"grass_color": "#7aa84a", "foliage_color": "#68983e"},
         "trees": {"count": [9, 10], "default": "minecraft:oak_leaf_litter", "picks": [
-            ["minecraft:fancy_oak_leaf_litter", 0.25], ["jugcraft:oak_bush_checked", 0.1], ["minecraft:fallen_oak_tree", 0.03]]},
+            ["minecraft:fancy_oak_leaf_litter", 0.25], ["jugcraft:hawthorn_bush_checked", 0.04 / 0.75],
+            ["jugcraft:oak_bush_checked", 0.035 / 0.71], ["minecraft:fallen_oak_tree", 0.03],
+            ["jugcraft:elder_checked", 0.04 / (0.675 * 0.97)]]},
         "extras": ["leaf_litter", "berry_bushes", "oxeye_daisies", "poppies"],
         "tags": ["minecraft:has_structure/village_plains", "minecraft:has_structure/woodland_mansion"],
     },
@@ -986,7 +1010,7 @@ BIOMES = {
         "surface": {"floor": "minecraft:grass_block",
                     "patches": [[0.35, 0.45, "minecraft:coarse_dirt"], [-0.45, -0.38, "minecraft:gravel"], [0.6, 0.75, "minecraft:stone"]]},
         "trees": None,
-        "extras": ["tundra_rocks", "tall_grass_dense"],
+        "extras": ["tundra_rocks", "tall_grass_dense", "lone_rowan", "lone_hawthorn"],
         "creatures": [["minecraft:sheep", 12, 4, 4], ["minecraft:cow", 8, 4, 4], ["minecraft:rabbit", 4, 2, 3]],
         "tags": [],
     },
@@ -1007,7 +1031,7 @@ BIOMES = {
         "display": "Shield", "base": "windswept_forest", "temperature": 0.25, "downfall": 0.7, "seasons": True,
         "surface": {"floor": "minecraft:grass_block", "patches": [[-0.12, 0.12, "minecraft:stone"], [0.45, 0.55, "minecraft:andesite"]]},
         "trees": {"count": [6, 7], "default": "jugcraft:fir_checked", "picks": [
-            ["minecraft:pine_checked", 0.25], ["minecraft:spruce_checked", 0.1867], ["jugcraft:aspen_checked", 0.1311],
+            ["jugcraft:pine_checked", 0.25], ["minecraft:spruce_checked", 0.1867], ["jugcraft:aspen_checked", 0.1311],
             ["jugcraft:larch_checked", 0.1509]]},
         "extras": ["ponds", "coal_outcrops", "tundra_rocks"],
         "tags": ["c:is_coniferous_tree"],
@@ -1020,7 +1044,7 @@ BIOMES = {
         "attributes": {"minecraft:visual/sky_color": "#a3c4b5", "minecraft:visual/fog_color": "#b9d0c4"},
         "surface": {"floor": "minecraft:grass_block", "under": "minecraft:dirt",
                     "patches": [[-0.1, 0.1, "minecraft:calcite"], [0.4, 0.55, "minecraft:stone"]]},
-        "trees": {"count": [6, 8], "default": "minecraft:pine_checked", "picks": [["jugcraft:spruce_bush_checked", 0.35]]},
+        "trees": {"count": [6, 8], "default": "jugcraft:pine_checked", "picks": [["jugcraft:spruce_bush_checked", 0.35]]},
         "creatures": [["minecraft:panda", 4, 1, 2]],
         "tags": [],
     },
@@ -1029,7 +1053,8 @@ BIOMES = {
         "display": "Hot Springs", "base": "grove", "temperature": 0.4, "downfall": 0.8, "seasons": True,
         "effects": {"grass_color": "#6f9e5a", "foliage_color": "#5f8f4c", "water_color": "#3fbfc8"},
         "surface": {"floor": "minecraft:grass_block", "patches": [[-0.06, 0.06, "minecraft:calcite"], [0.5, 0.58, "minecraft:blackstone"]]},
-        "trees": {"count": [4, 5], "default": "minecraft:pine_checked", "picks": [["minecraft:spruce_checked", 0.3]]},
+        "trees": {"count": [4, 5], "default": "minecraft:pine_checked",
+                                 "picks": [("jugcraft:pine_checked", 0.55), ("jugcraft:japanese_maple_checked", 0.30 / 0.45)]},
         "extras": ["hot_pools", "ferns"],
         "tags": ["minecraft:has_structure/trail_ruins"],
     },
@@ -1075,7 +1100,7 @@ BIOMES = {
         "effects": {"grass_color": "#7cc04a", "foliage_color": "#68b03c"},
         "surface": {"floor": "rule:minecraft:overworld/sand_or_sandstone_if_ceiling", "under": "minecraft:sand",
                     "patches": [[-0.3, 0.3, "minecraft:grass_block"]]},
-        "trees": {"count": [1, 2], "default": "jugcraft:oak_bush_checked", "picks": []},
+        "trees": {"count": [1, 2], "default": "jugcraft:oak_bush_checked", "picks": [("jugcraft:palm_checked", 0.2), ("jugcraft:small_palm_checked", 0.2 / 0.8)]},
         "extras": ["tall_grass_dense", "sea_oats"],
         "tags": [],
     },
@@ -1085,7 +1110,8 @@ BIOMES = {
         "display": "Flower Isle", "base": "mushroom_fields", "temperature": 0.75, "downfall": 0.8, "seasons": True,
         "winter_snow": False,
         "effects": {"grass_color": "#6cd15a", "foliage_color": "#5cc04c"},
-        "trees": {"count": [1, 2], "default": "jugcraft:oak_bush_checked", "picks": []},
+        "trees": {"count": [1, 2], "default": "jugcraft:magnolia_checked", "picks": [
+            ["jugcraft:apple_tree_checked", 0.15], ["jugcraft:oak_bush_checked", 0.30 / 0.85]]},
         "drop": ["minecraft:mushroom_island_vegetation", "minecraft:brown_mushroom_taiga", "minecraft:red_mushroom_taiga"],
         "extras": ["field_sunflowers", "meadow_flowers", "hydrangeas", "poppies", "tall_grass_dense"],
         "creatures": [["minecraft:chicken", 10, 2, 4], ["minecraft:rabbit", 6, 2, 3], ["minecraft:sheep", 8, 2, 4]],
@@ -1126,7 +1152,7 @@ BIOMES = {
         "display": "Frostlight Garden", "base": "snowy_plains", "temperature": -0.3, "downfall": 0.5, "seasons": False,
         "effects": {"grass_color": "#8fc8b0", "foliage_color": "#7ab8a0"},
         "attributes": {"minecraft:visual/sky_color": "#86d6cc", "minecraft:visual/fog_color": "#c4ecf0"},
-        "trees": {"count": [3, 4], "default": "jugcraft:fir_checked", "picks": [["minecraft:birch_checked", 0.4]]},
+        "trees": {"count": [3, 4], "default": "jugcraft:fir_checked", "picks": [["jugcraft:shimmer_birch_checked", 0.4]]},
         "extras": ["frost_irises", "glimmerblooms"],
         "creatures": [["minecraft:rabbit", 10, 2, 3], ["minecraft:fox", 6, 2, 4]],
         "monsters": [],
@@ -1148,7 +1174,7 @@ BIOMES = {
         "attributes": {"minecraft:visual/sky_color": "#d4a4e0", "minecraft:visual/fog_color": "#e8b8e8",
                        "minecraft:visual/water_fog_color": "#a0408c"},
         "trees": {"count": [6, 7], "default": "jugcraft:jacaranda_checked", "picks": [
-            ["jugcraft:huge_red_mushroom_on_soil", 0.1], ["minecraft:oak_checked", 0.2]]},
+            ["jugcraft:huge_red_mushroom_on_soil", 0.1], ("jugcraft:shimmer_birch_checked", 0.20 / 0.90), ("jugcraft:big_jacaranda_checked", 0.15 / 0.70)]},
         "extras": ["glimmerblooms", "alliums", "lilacs", "hydrangeas"],
         "monsters": [["minecraft:witch", 10, 1, 1]],
         "tags": ["c:is_floral"],
@@ -1160,7 +1186,11 @@ BIOMES = {
         "effects": {"grass_color": "#4a5a3a", "foliage_color": "#3e4c32", "water_color": "#3a2850"},
         "attributes": {"minecraft:visual/sky_color": "#6a6478", "minecraft:visual/fog_color": "#4a4058",
                        "minecraft:visual/water_fog_color": "#1e1428"},
-        "trees": {"count": [2, 3], "default": "jugcraft:dead_tree_checked", "picks": [["minecraft:spruce_checked", 0.3]]},
+        "base_trees": "minecraft:dark_forest_vegetation",
+        "trees": {"count": [16, 17], "default": "jugcraft:huge_brown_mushroom_on_soil", "picks": [
+            ["minecraft:dark_oak_checked", .45], ["jugcraft:yew_checked", .20 / .55],
+            ["jugcraft:dead_tree_checked", .10 / .35], ["jugcraft:dead_snag_checked", .10 / .25],
+            ["jugcraft:huge_red_mushroom_on_soil", .08 / .15]]},
         "extras": ["ponds", "leaf_litter", "toadstools", "brown_toadstools", "flora_ghost_fern", "flora_large_ghost_fern",
                    "flora_ghost_pipe", "flora_deadly_nightshade", "flora_foxglove", "flora_wild_mandrake", "flora_creeping_ivy"],
         "tags": [],
@@ -1203,7 +1233,7 @@ BIOMES = {
         "attributes": {"minecraft:visual/fog_color": "#a8c890", "minecraft:visual/sky_color": "#a4c8a0"},
         "surface": {"floor": "minecraft:grass_block", "patches": [[-0.15, 0.15, "minecraft:mycelium"]]},
         "trees": {"count": [10, 12], "default": "minecraft:jungle_bush", "picks": [
-            ["jugcraft:huge_red_mushroom_on_soil", 0.3], ["jugcraft:huge_brown_mushroom_on_soil", 0.15], ["minecraft:oak_checked", 0.15]]},
+            ["jugcraft:huge_red_mushroom_on_soil", 0.3], ["jugcraft:huge_brown_mushroom_on_soil", 0.15], ["jugcraft:mahogany_checked", 0.15]]},
         "extras": ["toadstools", "brown_toadstools"],
         "creatures": [["minecraft:mooshroom", 8, 4, 8], ["minecraft:parrot", 20, 1, 2], ["minecraft:chicken", 10, 4, 4]],
         "tags": ["c:is_tropical"],
@@ -1223,7 +1253,7 @@ BIOMES = {
         "effects": {"grass_color": "#9ac8a0", "foliage_color": "#8ab890"},
         "attributes": {"minecraft:visual/ambient_particles": {"argument": [{"particle": {"type": "minecraft:snowflake"}, "probability": 0.005}],
                                                                "modifier": "append"}},
-        "trees": {"count": [3, 4], "default": "minecraft:cherry_checked", "picks": [["jugcraft:aspen_checked", 0.25]]},
+        "trees": {"count": [3, 4], "default": "jugcraft:snowpetal_cherry_checked", "picks": [["jugcraft:aspen_checked", 0.25]]},
         "extras": ["tundra_rocks", "snowpetals", "clover"],
         "creatures": [["minecraft:rabbit", 10, 2, 3], ["minecraft:fox", 6, 2, 4]],
         "tags": ["c:is_snowy", "c:is_cold"],
@@ -1246,7 +1276,8 @@ BIOMES = {
         "attributes": {"minecraft:visual/sky_color": "#5a6ab8", "minecraft:visual/fog_color": "#8a92c8",
                        "minecraft:visual/ambient_particles": {"argument": [{"particle": {"type": "minecraft:end_rod"}, "probability": 0.002}],
                                                              "modifier": "append"}},
-        "trees": {"count": [8, 9], "default": "minecraft:super_birch_bees", "picks": [["jugcraft:tall_fir_checked", 0.25]]},
+        "trees": {"count": [8, 9], "default": "jugcraft:tall_shimmer_birch_checked", "picks": [
+            ["jugcraft:tall_fir_checked", 0.25], ["minecraft:super_birch_bees", 0.30 / 0.75]]},
         "extras": ["glimmerblooms", "lilies_of_the_valley"],
         "tags": [],
     },
@@ -1266,7 +1297,8 @@ BIOMES = {
         "effects": {"grass_color": "#5a6a48", "foliage_color": "#4e5e40", "water_color": "#5a6a5a"},
         "attributes": {"minecraft:visual/fog_color": "#9aa0a0"},
         "trees": {"count": [6, 7], "default": "jugcraft:willow_checked", "picks": [
-            ["jugcraft:dead_tree_checked", 0.2], ["jugcraft:tall_vine_oak_checked", 0.2], ["minecraft:birch_checked", 0.1]]},
+            ["jugcraft:dead_tree_checked", 0.20], ["jugcraft:bald_cypress_checked", 0.15 / 0.80],
+            ["jugcraft:tall_vine_oak_checked", 0.08 / 0.65]]},
         "extras": ["tree_cobwebs", "toadstools", "cattails"],
         "monsters": [["minecraft:spider", 200, 2, 4], ["minecraft:zombie", 60, 2, 4], ["minecraft:skeleton", 60, 2, 4],
                      ["minecraft:creeper", 60, 2, 4], ["minecraft:enderman", 10, 1, 4], ["minecraft:witch", 5, 1, 1]],
@@ -1452,12 +1484,13 @@ BIOMES = {
         "tags": [],
     },
     # ---------------------------------------------------------------- batch 2: fields and meadows
-    # Cool, flat land with teal grass, scattered small spruces and clumps of oak bush, and many flowers.
+    # Cool, flat land with teal grass, scattered spruces and bent hawthorns, hawthorn hedges and many flowers.
     "field": {
         "display": "Field", "base": "forest", "temperature": 0.35, "downfall": 0.6, "seasons": True,
         "effects": {"grass_color": "#7fb38c", "foliage_color": "#6fa880"},
-        "trees": {"count": [2, 3], "default": "jugcraft:oak_bush_checked", "picks": [
-            ["minecraft:spruce_checked", 0.3], ["minecraft:oak_bees_002", 0.05]]},
+        "trees": {"count": [2, 3], "default": "jugcraft:hawthorn_bush_checked", "picks": [
+            ["minecraft:spruce_checked", 0.3], ["minecraft:oak_bees_002", 0.05],
+            ["jugcraft:hawthorn_checked", 0.10 / 0.665], ["jugcraft:oak_bush_checked", 0.015 / 0.565]]},
         "extras": ["field_sunflowers", "field_flowers"],
         "creatures": [["minecraft:sheep", 12, 4, 4], ["minecraft:pig", 10, 4, 4], ["minecraft:chicken", 10, 4, 4],
                       ["minecraft:cow", 8, 4, 4], ["minecraft:rabbit", 4, 2, 3], ["minecraft:fox", 2, 2, 4]],
@@ -1499,7 +1532,7 @@ BIOMES = {
     "lavender_field": {
         "display": "Lavender Field", "base": "sunflower_plains", "temperature": 0.7, "downfall": 0.6, "seasons": True,
         "effects": {"grass_color": "#8cbf64"},
-        "trees": {"count": [1, 2], "default": "jugcraft:jacaranda_checked", "picks": [["minecraft:oak_bees_002", 0.4]]},
+        "trees": {"count": [1, 2], "default": "jugcraft:jacaranda_checked", "picks": [("minecraft:oak_bees_002", 0.4), ("jugcraft:cypress_checked", 0.1 / 0.6)]},
         "drop": ["minecraft:patch_sunflower", "minecraft:flower_plains", "minecraft:patch_bush"],
         "extras": ["lavender", "tall_lavender"],
         "tags": ["c:is_plains", "c:is_flower_forest"],
@@ -1510,7 +1543,7 @@ BIOMES = {
         "winter_snow": False,
         "effects": {"grass_color": "#5fbd4a", "foliage_color": "#4fb03a"},
         "trees": {"count": [2, 3], "default": "minecraft:jungle_bush", "picks": [
-            ["jugcraft:oak_bush_checked", 0.3], ["minecraft:jungle_tree", 0.1]]},
+            ["jugcraft:oak_bush_checked", 0.3], ("minecraft:jungle_tree", 0.1), ("jugcraft:small_palm_checked", 0.1 / 0.63)]},
         "drop": ["minecraft:patch_melon_sparse"],
         "extras": ["orange_cosmos", "oxeye_daisies", "tall_grass_dense"],
         "creatures": [["minecraft:sheep", 12, 4, 4], ["minecraft:pig", 10, 4, 4], ["minecraft:chicken", 10, 4, 4],
@@ -1522,15 +1555,16 @@ BIOMES = {
     "prairie": {
         "display": "Prairie", "base": "plains", "temperature": 0.8, "downfall": 0.4, "seasons": True,
         "effects": {"grass_color": "#a3bd5c", "foliage_color": "#8fae4c"},
-        "trees": {"count": [1, 2], "default": "jugcraft:oak_bush_checked", "picks": [["minecraft:fancy_oak_checked", 0.15]]},
+        "trees": {"count": [1, 2], "default": "jugcraft:oak_bush_checked", "picks": [("jugcraft:cottonwood_checked", 0.1), ("minecraft:fancy_oak_checked", 0.05 / 0.9)]},
         "extras": ["goldenrod", "tall_grass_dense"],
         "tags": ["c:is_plains"],
     },
-    # Low hills of grass densely set with oak bushes and bushes, and alliums; no trees; wild horses.
+    # Low hills of grass and hawthorn hedges, occasional oak bushes and open gaps; alliums and wild horses.
     "shrubland": {
         "display": "Shrubland", "base": "plains", "temperature": 0.7, "downfall": 0.3, "seasons": True,
         "effects": {"grass_color": "#93ab5a", "foliage_color": "#7f9a49"},
-        "trees": {"count": [4, 6], "default": "jugcraft:oak_bush_checked", "picks": []},
+        "trees": {"count": [4, 6], "default": "jugcraft:hawthorn_bush_checked", "picks": [
+            ["jugcraft:open_scrub", 0.3], ["jugcraft:oak_bush_checked", 0.1 / 0.7]]},
         "extras": ["bushes_dense", "alliums"],
         "creatures": [["minecraft:horse", 8, 2, 6], ["minecraft:donkey", 1, 1, 3], ["minecraft:sheep", 12, 4, 4],
                       ["minecraft:pig", 8, 4, 4], ["minecraft:chicken", 10, 4, 4], ["minecraft:cow", 8, 4, 4]],

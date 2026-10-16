@@ -39,7 +39,8 @@ public enum PieFilling {
 	WHIPPED_PUMPKIN_PIE("whipped_pumpkin_pie", 4, 0.6F, 0xE07828, 7),
 	PORK_PIE("pork_pie", 5, 0.8F, 0xE0A848, 7),
 	STRAWBERRY_TART("strawberry_tart", 3, 0.6F, 0xE0607A, 4),
-	COFFEE_TART("coffee_tart", 3, 0.6F, 0xD8B890, 4);
+	COFFEE_TART("coffee_tart", 3, 0.6F, 0xD8B890, 4),
+	PERSIMMON("persimmon", "persimmon_pie", 4, 0.6F, 0xDE7A2A);
 
 	public final String id;
 	/** The baked pie's ID; the raw pie and the slice are named from it. */

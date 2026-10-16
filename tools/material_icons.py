@@ -95,6 +95,7 @@ ORE_RAMPS = {
     "thallite": ramp("4a5a2e 6e8048 98a86a c0cc8e e4ecb8"),    # the owner's sheet: sage green, the mineral as dug
     "fluorite": ramp("315a67 558d9e 88bdc9 bae2e7 edffff"),    # icy cyan, matching the owner's fluorite storage block
     "spodumene": ramp("455847 7e9574 b5c79b dfe7ba f6f7de"),  # pale-green crystal; append to preserve existing overlays
+    "vanadium_iron": ramp("202832 3c4750 66757e 99a6ad d2dbe0"),  # dark vanadiferous magnetite
 }
 
 # The three overlay layouts, taken in turn down ORE_RAMPS, so neighbouring ores do not look alike.
@@ -207,6 +208,8 @@ def material_textures():
     out[("item", "fluorite")] = draw("raw", tones(ORE_RAMPS["fluorite"]))
     out[("item", "spodumene")] = draw("raw", tones(ORE_RAMPS["spodumene"]))
     out[("block", "spodumene_block")] = draw("raw_block", tones(ORE_RAMPS["spodumene"]))
+    out[("item", "vanadium_iron")] = draw("raw", tones(ORE_RAMPS["vanadium_iron"]))
+    out[("block", "vanadium_iron_block")] = draw("raw_block", tones(ORE_RAMPS["vanadium_iron"]))
     return out
 
 

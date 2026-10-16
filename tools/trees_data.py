@@ -22,6 +22,8 @@ def variants(looks):
 
 def assets(root, write):
     models = root / "models" / "block"
+    write(root / "particles" / "snowpetal.json", {"textures": [rid("snowpetal")]})
+    write(root / "tree_leaf_tints.json", {info["leaves"]: info["leaf_tint"] for info in TREES.values() if "leaf_tint" in info})
     for tree, info in TREES.items():
         young = sapling(tree)
         write(models / f"{young}.json", {"parent": "minecraft:block/cross", "textures": {"cross": rid(f"block/{young}")}})
@@ -39,8 +41,31 @@ def assets(root, write):
             state = {"variants": {"": variants(looks[None])}}
         else:
             state = {"variants": {f"season={season}": variants(looks[season]) for season in SEASON_STATES}}
+        if "fruit" in info:
+            fruit_variants = {}
+            for season, choices in looks.items():
+                for fruit, suffix in enumerate(("", "_unripe", "_ripe")):
+                    fruit_looks = {texture + suffix: weight for texture, weight in choices.items()}
+                    for texture in fruit_looks:
+                        write(models / f"{texture}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{texture}")}})
+                    key = f"fruit={fruit}" if season is None else f"fruit={fruit},season={season}"
+                    fruit_variants[key] = variants(fruit_looks)
+            state = {"variants": fruit_variants}
         write(root / "blockstates" / f"{leaves}.json", state)
-        write(root / "items" / f"{leaves}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{leaves}")}})
+        item_model = {"type": "minecraft:model", "model": rid(f"block/{leaves}")}
+        if "leaf_tint" in info:
+            # Owner grayscale foliage keeps its original pixels. Only needles are tinted; brown twigs stay uncoloured.
+            faces = {side: {"texture": "#all", "cullface": side, "tintindex": 0}
+                     for side in ("down", "up", "north", "south", "west", "east")}
+            elements = [{"from": [0, 0, 0], "to": [16, 16, 16], "faces": faces}]
+            textures = {"all": rid(f"block/{leaves}"), "particle": rid(f"block/{leaves}")}
+            if "leaf_overlay" in info:
+                textures["overlay"] = rid(f"block/{info['leaf_overlay']}")
+                elements.append({"from": [-0.01, -0.01, -0.01], "to": [16.01, 16.01, 16.01], "faces": {
+                    side: {"texture": "#overlay", "cullface": side, "uv": [0, 0, 16, 16]} for side in faces}})
+            write(models / f"{leaves}.json", {"parent": "minecraft:block/block", "textures": textures, "elements": elements})
+            item_model["tints"] = [{"type": "minecraft:constant", "value": info["leaf_tint"]}]
+        write(root / "items" / f"{leaves}.json", {"model": item_model})
 
 
 def loot(out, write):
@@ -48,7 +73,7 @@ def loot(out, write):
     for tree, info in TREES.items():
         leaves, young = info["leaves"], rid(sapling(tree))
         # Vanilla spruce leaves' drops, with this tree's sapling.
-        write(out / f"{leaves}.json", {"type": "minecraft:block", "pools": [
+        table = {"type": "minecraft:block", "pools": [
             {"entries": [{"type": "minecraft:alternatives", "children": [
                 {"type": "minecraft:item", "condition": SHEARS_OR_SILK, "name": rid(leaves)},
                 {"type": "minecraft:item", "condition": {"type": "minecraft:all_of", "terms": [
@@ -59,7 +84,24 @@ def loot(out, write):
                 "type": "minecraft:table_bonus", "chances": [0.02, 0.022222223, 0.025, 0.033333335, 0.1], "enchantment": "minecraft:fortune"},
                 "modifier": [{"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}},
                              {"type": "minecraft:explosion_decay"}], "name": "minecraft:stick"}], "rolls": 1}],
-            "random_sequence": rid(f"blocks/{leaves}")})
+            "random_sequence": rid(f"blocks/{leaves}")}
+        if "fruit" in info:
+            fruit = info["fruit"]
+            table["pools"].append({"condition": {"type": "minecraft:all_of", "terms": [not_shears,
+                {"type": "minecraft:match_block", "blocks": rid(leaves), "state": {"fruit": "2"}}]},
+                "entries": [{"type": "minecraft:item", "name": rid(fruit["item"]), "modifier": [
+                    {"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": fruit["min"], "max": fruit["max"]}},
+                    {"type": "minecraft:explosion_decay"}]}], "rolls": 1})
+        if "seasonal_drop" in info:
+            drop = info["seasonal_drop"]
+            for season in SEASON_STATES:
+                table["pools"].append({"rolls": 1, "condition": {"type": "minecraft:all_of", "terms": [
+                    not_shears, {"type": "minecraft:match_block", "blocks": rid(leaves),
+                                 "state": {"season": season, "persistent": "false"}},
+                    {"type": "minecraft:random_chance", "chance": drop[season]}]},
+                    "entries": [{"type": "minecraft:item", "name": rid(drop["item"]),
+                                 "modifier": [{"type": "minecraft:explosion_decay"}]}]})
+        write(out / f"{leaves}.json", table)
         write(out / f"{sapling(tree)}.json", {"type": "minecraft:block", "pools": [{
             "condition": {"type": "minecraft:survives_explosion"}, "entries": [{"type": "minecraft:item", "name": young}], "rolls": 1}],
             "random_sequence": rid(f"blocks/{sapling(tree)}")})
@@ -99,8 +141,10 @@ def foliage_placer(foliage):
     return out
 
 
-def tree_blocks(wood):
+def tree_blocks(wood, tree=None):
     """A shape's log and leaves: its own (agriculture.TREES) or a vanilla wood's ("minecraft:oak")."""
+    if tree is not None:
+        return rid(f"{wood}_log"), rid(TREES[tree]["leaves"]), TREES[tree]["season"]
     if wood.startswith("minecraft:"):
         return f"{wood}_log", f"{wood}_leaves", None
     leaves = TREES[wood]["leaves"] if wood in TREES else None
@@ -110,6 +154,10 @@ def tree_blocks(wood):
 def minimum_size(info):
     """The free space a tree needs, as vanilla sets it for the same placers (spruce, pine, fancy oak, bush, oak)."""
     foliage = (info["foliage"] or {}).get("type")
+    if "minimum_size" in info:
+        return dict(info["minimum_size"])
+    if info["trunk"]["type"] == "dark_oak":
+        return {"type": "minecraft:three_layers_feature_size", "upper_size": 2}
     if info.get("giant") or info["trunk"]["type"] in ("giant", "mega_jungle"):
         # Two blocks wide: vanilla's giant spruce and mega jungle tree.
         return {"type": "minecraft:two_layers_feature_size", "lower_size": 1, "upper_size": 2}
@@ -135,7 +183,7 @@ def worldgen(data, write):
         else:
             foliage = foliage_placer(info["foliage"])
             properties = {"distance": "7", "persistent": "false", "waterlogged": "false"}
-            log, leaves, season = tree_blocks(wood)
+            log, leaves, season = tree_blocks(wood, info.get("tree"))
             if season is not None:
                 properties["season"] = SEASON_STATES[0]
                 decorators.append({"type": rid(DECORATOR)})
@@ -145,8 +193,10 @@ def worldgen(data, write):
             "foliage_placer": foliage, "foliage_provider": provider, "ignore_vines": True,
             "minimum_size": minimum_size(info),
             "trunk_placer": trunk_placer(info["trunk"]),
-            "trunk_provider": {"id": tree_blocks(wood)[0], "properties": {"axis": "y"}}})
-        survives = info.get("survives_as") or (f"{wood}_sapling" if wood.startswith("minecraft:") else rid(sapling(wood)))
+            "trunk_provider": {"id": tree_blocks(wood)[0], "properties": {"axis": "y"}},
+            **({"root_placer": info["root_placer"]} if "root_placer" in info else {})})
+        tree = info.get("tree", wood)
+        survives = info.get("survives_as") or (f"{tree}_sapling" if tree.startswith("minecraft:") else rid(sapling(tree)))
         write(folder / "placed_feature" / f"{shape}_checked.json", {"feature": rid(shape), "placement": [
             {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": survives}}]})
     for wood, length in FALLEN.items():

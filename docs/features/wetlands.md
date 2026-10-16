@@ -6,6 +6,8 @@ Owner: @jimbozoomer-byte
 Target milestone and tier: world generation, farming and building (Discovery).
 Primary specialty and supported player role: exploration and farming (cranberries, mud), building (willow wood).
 
+Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
+
 ## Player experience
 Fourteen wet biomes, most in the **wetland** layout of Jugcraft regions. The swamps and bayous also grow in the woodland and wild layouts, where nothing else claims those climates.
 
@@ -13,18 +15,18 @@ Fourteen wet biomes, most in the **wetland** layout of Jugcraft regions. The swa
 | --- | --- | --- |
 | **Bog** | cool swamps (one weirdness half) | reddish-orange grass, maple scrub, tamaracks and thin bog firs, bushes and berry bushes; **cranberries** ripe in its shallow, muddy pools |
 | **Dead Swamp** | cool swamps (the other half) | dark, muddy ponds, sparse dead trees and grey snags standing in them, fallen logs, cattails; no animals; villages |
-| **Lush Swamp** | temperate swamps (one half) | vibrant grass and blue water, tall oaks hung with vines, willows, a few maples, cattails, ferns, berries |
-| **Swamp Woods** | temperate swamps (the other half) | willows, vine-hung oaks and azalea trees over duckweed and lily pads; animals |
-| **Bayou** | warm mangrove swamps | willows standing in the water, trailing vines like moss, cattails and ferns on mud; overcast |
-| **Floodplain** | hot mangrove swamps | willow scrub with oaks among it, tall grass, orange cosmos; lily pads and watergrass in the floods |
+| **Lush Swamp** | temperate swamps (one half) | vibrant grass and blue water, bald cypresses, tall oaks hung with vines, willows, a few maples, cattails, ferns, berries |
+| **Swamp Woods** | temperate swamps (the other half) | willows, bald cypresses, vine-hung oaks and azalea trees over duckweed and lily pads; animals |
+| **Bayou** | warm mangrove swamps | rooted bald cypresses and willows standing in the water, with broad live oaks on the banks, hung with shroud moss, cattails and ferns on mud; overcast |
+| **Floodplain** | hot mangrove swamps | willow scrub with broad cottonwoods among it, tall grass, orange cosmos; lily pads and watergrass in the floods |
 | **Ghost Forest** | dark forests (one half; wetland layout) | grey snags and dead trees, with a living fringe of cedars, around many lakes |
 | **Sludge Mire** | dark forests (the other half) | a dense canopy of dark oaks and big oaks over mud and sludgy, algae-covered pools; no animals; villages |
-| **Lush River** | temperate and warm rivers (wetland layout) | duckweed, lily pads and watergrass; willow scrub, willows and a few oak bushes on the banks |
+| **Lush River** | temperate and warm rivers (wetland layout) | duckweed, lily pads and watergrass; willow scrub, willows and cottonwoods on the banks |
 | **Fen** | old-growth spruce taiga (wetland layout) | thin bog firs, tamaracks and willow scrub over muddy pools, cattails and lily pads |
-| **Lake District** | temperate forests (wetland layout) | oaks, firs and larches broken by many lakes with muddy shores |
+| **Lake District** | temperate forests (wetland layout) | oaks, firs, larches and rowans broken by many lakes with muddy shores |
 | **Quagmire** | dry cool plains (wetland layout) | muddy flats and brown ponds, cattails; no trees, no animals |
 | **Marsh** | cool plains (wetland layout) | a wide green plain of shallow lakes full of watergrass, ringed by cattails; no trees |
-| **Wetland** | temperate plains (wetland layout) | grass and mud, ferns, cedars, willows and a few spruces, cattails, purple water; villages |
+| **Wetland** | temperate plains (wetland layout) | grass and mud, ferns, cedars, willows and elder shrubs, cattails, purple water; villages |
 
 - Biomes O' Plenty's Deep Bayou merges into the Bayou, the Land of Lakes Marsh into the Marsh, and the Land of Lakes becomes the Lake District.
 - Seasons: all fourteen change colour with the seasons; all but the Bayou, Floodplain and Lush River take winter snow when `seasons.snow` is on ([seasons.md](seasons.md)).
@@ -90,3 +92,7 @@ Results are recorded under "Results" below after CI runs.
 ## World and event applicability
 - Biome fit: each biome takes the climate of the vanilla biome it replaces.
 - Seasons: see above.
+
+Tree roster batches 4b/4c add bald cypress at 60% of Bayou attempts and 25% in Lush Swamp and Swamp Woods, retaining existing attempt counts. See [the implementation record](trees-batch-4bc.md).
+
+Tree roster batch 5 adds rowan to 10% of Lake District attempts (oak 44%, fir 30%, larch 10%, fancy oak 6%) and elder to 10% of Wetland attempts (cedar 50%, willow 40%). Their 6/7 and 2/3 attempts per chunk remain unchanged. See [the implementation and verification record](trees-batch-5.md).

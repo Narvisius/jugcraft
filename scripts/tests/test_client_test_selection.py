@@ -1,6 +1,7 @@
 """Client selection must discover every registered package and preserve all shards' coverage."""
 import importlib.util
 import json
+import re
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -30,15 +31,17 @@ class ClientTestSelectionTests(unittest.TestCase):
         self.assertIn("PeepoDeliveryClientTests", shown)
 
     def test_full_run_assigns_every_class_exactly_once(self):
-        jobs = selection.share(set(self.tests), self.tests, 5)
+        jobs = selection.share(set(self.tests), self.tests, 8)
         assigned = [name for _, names in jobs for name in names]
         self.assertCountEqual(assigned, self.tests)
         self.assertEqual(len(assigned), len(set(assigned)))
-        # Added runtime suites put the full run above 25 minutes per shard even at perfect balance.
-        # Retain setup/slow-runner headroom under the 60-minute CI timeout without understating test weights.
+        # The all-gun gallery takes about 30 minutes on its own. Retain setup/slow-runner
+        # headroom under the unchanged 60-minute CI limit without understating that weight.
         durations = [seconds for seconds, _ in jobs]
-        self.assertLess(max(durations), 30 * 60)
-        self.assertLessEqual(max(durations), sum(durations) / len(durations) + 30)
+        self.assertLess(max(durations), 40 * 60)
+        self.assertLessEqual(max(durations), max(sum(durations) / len(durations) + 30, max(selection.WEIGHTS.values())))
+        gun_job = next(names for _, names in jobs if "GunsClientGameTests" in names)
+        self.assertEqual(gun_job, ["GunsClientGameTests"])
         self.assertNotEqual(
             next(i for i, (_, names) in enumerate(jobs) if "PeepoCompanionClientTests" in names),
             next(i for i, (_, names) in enumerate(jobs) if "BiomeClientGameTests" in names),
@@ -52,6 +55,16 @@ class ClientTestSelectionTests(unittest.TestCase):
             self.assertGreater(seconds, 8)
         finally:
             selection.WEIGHTS[name] = old
+
+    def test_workflow_runs_every_selected_shard(self):
+        workflow = (ROOT / ".github/workflows/build.yml").read_text()
+        matrix = re.search(r"shard: \[([\d, ]+)\]", workflow)
+        self.assertIsNotNone(matrix)
+        indices = [int(value) for value in matrix.group(1).split(",")]
+        self.assertEqual(indices, list(range(8)))
+        outputs = {int(value) for value in re.findall(r"^\s+shard(\d+):", workflow, re.MULTILINE)}
+        self.assertEqual(outputs, set(indices))
+        self.assertEqual(re.findall(r"--shards (\d+)", workflow), [str(len(indices))] * 2)
 
     def test_shared_helper_change_without_feature_names_retains_consumers(self):
         path = "src/main/java/io/github/jimbozoomer/jugcraft/agriculture/JugcraftAgriculture.java"

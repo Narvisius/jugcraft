@@ -1,6 +1,6 @@
 # The Crypt Lich
 
-Status: implemented in source; CI has not run on it yet (results and the client test's pictures go below once it has). This is part 2 of boss 6 in the [bosses plan](../branches/BOSSES.md#the-crypt-lich-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the boss of the Archive of Last Names, his ward and phylactery, his Restless Dead, his Soul Bolts and bones, and his loot. It is built on part 1, the archive and the Writ of Exhumation that opens it ([crypt-archive.md](crypt-archive.md)), and on the lair framework ([hollow-acre.md](hollow-acre.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do.
+Status: implemented in source; CI passes on `7ed1804` for everything of his (both server jobs, every one of the 1422 required game tests among them his sixteen, and his whole fight in the client test, whose pictures are below). All five client jobs pass, one of them after a single re-run of a Peepo companions' food test outside this part (below). This is part 2 of boss 6 in the [bosses plan](../branches/BOSSES.md#the-crypt-lich-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the boss of the Archive of Last Names, his ward and phylactery, his Restless Dead, his Soul Bolts and bones, and his loot. It is built on part 1, the archive and the Writ of Exhumation that opens it ([crypt-archive.md](crypt-archive.md)), and on the lair framework ([hollow-acre.md](hollow-acre.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do.
 Proposal issue: none. On 13 October 2026 the owner answered the Mire Hag's checkpoint with "go with recommendations", whose next chunk was the Crypt Lich, built the same two-part way: the crypt lair and its summoning, then the Lich, who raises the dead in waves, drains life with a soul beam, and has a phylactery that must be broken; the Crypt Lich is the next of the first eight in [branches/BOSSES.md](../branches/BOSSES.md).
 Owner: @jimbozoomer-byte
 
@@ -168,7 +168,28 @@ No Mojang texture is read, traced or copied.
 
 ## Verification
 
-CI: not run yet on this branch. Its results, and the client test's pictures, go here once it has run.
+![Waiting: he sits on his throne in the north apse, crowned, his staff in his hand, a candle in a skull on each side](../images/ingame_crypt_lich_waiting.jpg)
+![Woken: he rises from his throne as the player comes onto the hall's floor, soul-fire running down the north lane](../images/ingame_crypt_lich_wakes.jpg)
+![His chains: soul-fire runs from the phylactery on the dais up the north lane to him](../images/ingame_crypt_lich_chains.jpg)
+![Grave Sweep: a white arc of his staff across his front on the north lane](../images/ingame_crypt_lich_sweep.jpg)
+![Bone Lanes: clumps of bones burst up the whole north lane round him, blue fire among them](../images/ingame_crypt_lich_lanes.jpg)
+![Soul Bolt: a skull of blue fire flies from his hand toward where the player stood](../images/ingame_crypt_lich_bolt.jpg)
+![Raise the Dead: two Restless Dead climb out of the ledger stones either side of the north lane, small in the distance](../images/ingame_crypt_lich_dead.jpg)
+![Exposed: the phylactery on its plinth cracked open in the foreground, he staggered on the lane beyond](../images/ingame_crypt_lich_exposed.jpg)
+![The Erasure: he shrieks on the north lane, his crown burning](../images/ingame_crypt_lich_erasure.jpg)
+![Soul Drain: a beam of soul-fire from his hand down the lane to where the player stood](../images/ingame_crypt_lich_drain.jpg)
+![Grave Pull: bones burst round his feet as the ring closes](../images/ingame_crypt_lich_pull.jpg)
+![The Last Name: close, his crown's soul-fire flaring tall, his robe and chains of gold, bones round him](../images/ingame_crypt_lich_last_name.jpg)
+![He falls: Grey Mist stands on the dais where the phylactery stood, red with his death](../images/ingame_crypt_lich_defeated.jpg)
+
+*The client game test's pictures (CI, commit `7ed1804`): waiting and waking; his chains; the Warded King's Grave Sweep, Bone Lanes, Soul Bolt and Raise the Dead; the phylactery cracked and he exposed; the Erasure; the Unwritten's Soul Drain and Grave Pull; the Last Name; and his fall. Each attack is posed and frozen mid-move. The archive is a dark crypt and the test client renders at 480x270: the dead risen at the far graves are small, and the dark seal's dead, checked by the test, has no picture.*
+
+CI (13 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):
+
+| Commit | What ran | Result |
+| --- | --- | --- |
+| `43650dd` | Build, data audit, every server game test with and without the optional integrations, and every client test class (his arena is a new structure file, which the selection counts as shared) | **The build did not compile:** the Lich's name lighting played `SoundEvents.SOUL_ESCAPE`, a holder, at a block position, which no `playSound` takes. Nothing else ran |
+| `7ed1804` | The same | Every use of that sound now passes `.value()`, as the rest of the repo does, and the phylactery test builds its Wither harm from the damage-type registry. **All of his passed.** Both server jobs passed all 1422 required game tests, his sixteen among them, and the client job with his fight passed it from end to end, taking all thirteen pictures above. Four of the five client jobs passed. The fifth failed in its first class, `PeepoDeliveryClientTests.foodBreak`: the Peepo companion stood idle and hungry beside its meal until the wait ran out. This part touches nothing of the companions, and the same failure, with the same numbers, came on 10 October on the Yeti King's docs-only commit, the same class first in the same shard (the PR's comment has the cause as far as the code shows it). It was re-run once, unchanged, and passed: the companion ate, and the shard ran every class in it. **All five client jobs passed**, so every check on `7ed1804` passed. The food test failing and then passing on the same commit is a flaky test, to fix on its own. |
 
 Run locally (13 October 2026):
 

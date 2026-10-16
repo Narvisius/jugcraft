@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SBV",
+    " LB"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "B": "#c:ingots/brass",
+    "V": "#c:ingots/silver",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:half_crown_revolver"
+  }
+}

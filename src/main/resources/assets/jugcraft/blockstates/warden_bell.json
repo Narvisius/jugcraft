@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,ringing=false": {
+      "model": "jugcraft:block/warden_bell"
+    },
+    "facing=east,ringing=false": {
+      "model": "jugcraft:block/warden_bell",
+      "y": 90
+    },
+    "facing=south,ringing=false": {
+      "model": "jugcraft:block/warden_bell",
+      "y": 180
+    },
+    "facing=west,ringing=false": {
+      "model": "jugcraft:block/warden_bell",
+      "y": 270
+    },
+    "facing=north,ringing=true": {
+      "model": "jugcraft:block/warden_bell_ringing"
+    },
+    "facing=east,ringing=true": {
+      "model": "jugcraft:block/warden_bell_ringing",
+      "y": 90
+    },
+    "facing=south,ringing=true": {
+      "model": "jugcraft:block/warden_bell_ringing",
+      "y": 180
+    },
+    "facing=west,ringing=true": {
+      "model": "jugcraft:block/warden_bell_ringing",
+      "y": 270
+    }
+  }
+}

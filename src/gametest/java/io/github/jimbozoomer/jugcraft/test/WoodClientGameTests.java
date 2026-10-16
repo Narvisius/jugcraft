@@ -42,7 +42,8 @@ public class WoodClientGameTests implements FabricClientGameTest {
 			new String[] {"redwood", "redwood", "redwood_needles"},
 			new String[] {"eucalyptus", "eucalyptus", "eucalyptus_leaves"},
 			new String[] {"mahogany", "mahogany", "mahogany_leaves"},
-			new String[] {"cedar", "cedar", "cedar_leaves"});
+			new String[] {"cedar", "cedar", "cedar_leaves"},
+			new String[] {"pine", "pine", "pine_needles"});
 	/**
 	 * The tree roster's batch 1 (docs/features/trees-batch-1.md): each new shape beside its parent, between vanilla's spruce
 	 * and oak for scale, and the cedar beside the vanilla spruce it replaces. A "minecraft:" feature is vanilla's, placed but

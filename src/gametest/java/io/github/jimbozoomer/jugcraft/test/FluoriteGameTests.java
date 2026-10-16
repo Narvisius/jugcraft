@@ -85,7 +85,8 @@ public class FluoriteGameTests {
 		var family = JugcraftMaterials.FLUORITE;
 		var ore = new BlockPos(5, 1, 3); var deep = new BlockPos(2, 1, 6); var master = new BlockPos(4, 2, 4);
 		helper.setBlock(ore, family.ore); helper.setBlock(deep, family.deepslateOre);
-		var readings = OreSurvey.survey(helper.getLevel(), helper.absolutePos(master), helper.getLevel().getRandom(), 0, 1);
+		// Test structures may straddle a chunk edge; include both ore columns as the real prospector does.
+		var readings = OreSurvey.survey(helper.getLevel(), helper.absolutePos(master), helper.getLevel().getRandom(), OreSurvey.RADIUS, 1);
 		helper.assertTrue(readings.stream().anyMatch(r -> r.icon().equals(Jugcraft.id("fluorite_ore"))), "Prospector missed fluorite");
 		var block = (LargeMachineBlock) JugcraftMachines.MACHINES.get(MachineKind.ORE_DRILL);
 		helper.setBlock(master, block.defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));

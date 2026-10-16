@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.client.guns;
 
+import com.geckolib.animatable.GeoItem;
 import com.geckolib.cache.model.GeoLocator;
 import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.model.DefaultedItemGeoModel;
@@ -53,6 +54,9 @@ import org.joml.Vector3f;
  * Slice 10G, two guns at once: a gun drawn in a left hand has its holder's arms drawn as their mirror image
  * ({@link View#left}); the other hand's gun has its own flash and only its grip hand's arm, and is never slid onto its
  * sights or thrust ({@link View#offHand}).
+ * <p>
+ * Slice 13D: a revolving gun's cylinder turns on a chamber at each shot's cue ({@link GunEffects#cylinderTurn}); a
+ * carbine with a stock fitted idles as a carbine ({@link #CARBINE}).
  */
 public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	/** The entity holding the gun (for where its sounds play). */
@@ -67,6 +71,10 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	public static final DataTicket<Float> BARREL_TURN = DataTicket.create("jugcraft_gun_barrel_turn", Float.class);
 	/** Whether the gun is drawn in a left hand (slice 10G: its casings fly out to that side). */
 	public static final DataTicket<Boolean> LEFT = DataTicket.create("jugcraft_gun_left", Boolean.class);
+	/** How far a revolving gun's cylinder has turned (radians, slice 13D). */
+	public static final DataTicket<Float> CYLINDER_TURN = DataTicket.create("jugcraft_gun_cylinder_turn", Float.class);
+	/** Whether the gun is held as a carbine, a stock fitted (slice 13D, {@link GunItem#carbine}): its idle is the carbine's. */
+	public static final DataTicket<Boolean> CARBINE = DataTicket.create("jugcraft_gun_carbine", Boolean.class);
 	/** How far the gun drops, out of sight, while the view through its scope fills the screen (blocks). */
 	private static final float PUT_AWAY = 1.5F;
 	/** How far a bayonet stab drives the gun forward, and down, on screen at full thrust (blocks). */
@@ -120,6 +128,13 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 			}
 		}
 		Minecraft client = Minecraft.getInstance();
+		if (client.level != null) {
+			Float cylinder = GunEffects.cylinderTurn(GeoItem.getId(data.itemStack()), gun.spec().capacity(), client.level.getGameTime(), partialTick);
+			if (cylinder != null) {
+				state.addGeckolibData(CYLINDER_TURN, cylinder);
+			}
+		}
+		state.addGeckolibData(CARBINE, GunItem.carbine(data.itemStack()));
 		if (context.firstPerson() && owner instanceof AbstractClientPlayer player && player == client.player) {
 			boolean slim = player.getSkin().model() == PlayerModelType.SLIM;
 			String optic = GunItem.inSlot(data.itemStack(), "optic");
@@ -163,8 +178,8 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	 * <p>
 	 * Each attachment's bone ("att_&lt;id&gt;") shows only while it is fitted, and a slot's standard part
 	 * ("std_&lt;slot&gt;") only while nothing fitted replaces it. A rotary gun's barrels turn about their middle, which
-	 * runs along the bore (slice 8C). In the player's own view, a fitted stock is left out once they are halfway into
-	 * aiming down the gun's sights ({@link #SHOULDERED}; slice 9F).
+	 * runs along the bore (slice 8C), and a revolving gun's cylinder about its own (slice 13D). In the player's own view, a
+	 * fitted stock is left out once they are halfway into aiming down the gun's sights ({@link #SHOULDERED}; slice 9F).
 	 */
 	@Override
 	public void adjustModelBonesForRender(RenderPassInfo<GeoRenderState> info, BoneSnapshots snapshots) {
@@ -174,6 +189,10 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 		Float turn = info.getGeckolibData(BARREL_TURN);
 		if (turn != null) {
 			snapshots.ifPresent("barrels", bone -> bone.setRotZ(turn));
+		}
+		Float cylinder = info.getGeckolibData(CYLINDER_TURN);
+		if (cylinder != null) {
+			snapshots.ifPresent("cylinder_magazine", bone -> bone.setRotZ(cylinder));
 		}
 		Fitted fitted = info.getGeckolibData(FITTED);
 		List<String> on = fitted == null ? List.of() : fitted.attachments();
