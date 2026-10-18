@@ -476,7 +476,8 @@ def codex():
 
 
 def tags(tags):
-    pass
+    for item, slot in TRINKETS.items():
+        tags.add("item", f"trinkets:{slot}", rid(item))
 
 
 def write_all(write, assets, data, lang, condition, self_drop):
@@ -498,10 +499,6 @@ def write_all(write, assets, data, lang, condition, self_drop):
         group, name = slot.split("/")
         write(trinkets / "slots" / group / f"{name}.json", {"icon": rid(f"container/slots/{info['icon']}"), "amount": info["amount"],
                                                             "validator_predicates": ["trinkets:default"], "cosmetic_slots": False})
-    for slot in GRANTED_SLOTS:
-        group, name = slot.split("/")
-        write(trinkets / "tags" / "item" / group / f"{name}.json",
-              {"replace": False, "values": [rid(item) for item, worn in TRINKETS.items() if worn == slot]})
     write(trinkets / "entities" / f"{MOD}_wayfaring.json", {"entities": ["player"], "slots": sorted(GRANTED_SLOTS)})
     write_worn(write, assets)
 

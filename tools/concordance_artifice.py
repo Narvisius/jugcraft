@@ -294,6 +294,8 @@ CATEGORY = {"artifice": {"name": "Artifice", "icon": rid("resonant_ring"), "sort
 # ------------------------------------------------------------------------------------------------- data and assets
 
 def tags(tags):
+    # Participate in the shared tag collector so later ring branches preserve this item.
+    tags.add("item", "trinkets:hand/ring", rid("resonant_ring"))
     for ref in ARTIFICE_SPECIMENS:
         tags.add("item", ARTIFICE_SPECIMEN_TAG, ref)
     tags.add("block", "minecraft:mineable/pickaxe", rid("artificer_bench"))

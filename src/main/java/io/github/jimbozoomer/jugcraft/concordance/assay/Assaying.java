@@ -118,7 +118,7 @@ public final class Assaying {
 	}
 
 	public static EquivalenceCatalog catalog() {
-		return ConcordanceData.rules().equivalence();
+		return AlchemyValues.catalog();
 	}
 
 	public static boolean enabled() {
@@ -184,16 +184,20 @@ public final class Assaying {
 
 	/** Why {@code stack} may not be weighed, or the empty string. */
 	public static String eligibility(ItemStack stack) {
-		return Eligibility.check(specimen(stack), catalog());
+		if (stack.isEmpty()) return "empty";
+        // Default item types are all valued. State-bearing stacks must be emptied/reset first;
+        // withdrawing a pattern always creates the default item, never a saved inventory or entity.
+        return patched(stack).isEmpty() ? "" : "stateful";
 	}
 
-	/**
-	 * Why the scale is out of balance, if it is: the catalogue's own problems; any catalogued item that is excluded or
-	 * whose every stack carries an inventory, a creature or magic (an adapter cannot sneak one in); and the live
-	 * recipes' gains ({@link #probe}). Checked again whenever the data reloads. Empty: balanced.
-	 */
+	/** Generated universal catalogue load errors. This is not a proof of every industrial recipe's economic balance. */
 	public static synchronized List<String> problems(ServerLevel level) {
-		EquivalenceCatalog catalog = catalog();
+        return catalog().problems();
+    }
+
+    /** Historical narrow-catalogue diagnostic, retained separately from the universal player catalogue. */
+    public static synchronized List<String> legacyProblems(ServerLevel level) {
+		EquivalenceCatalog catalog = ConcordanceData.rules().equivalence();
 		if (catalog != checked) {
 			List<String> found = new ArrayList<>(catalog.problems());
 			found.addAll(probe(level, catalog));
@@ -223,10 +227,7 @@ public final class Assaying {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.disabled"));
 			return;
 		}
-		if (!knows(player)) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.assay.unknown"));
-			return;
-		}
+		if (!player.isAlive() || player.isSpectator()) return;
 		if (!problems(level).isEmpty()) {
 			player.sendOverlayMessage(Component.translatable("compose.jugcraft.assay.reason.unbalanced"));
 			return;
@@ -284,7 +285,7 @@ public final class Assaying {
 		}
 		long grains = Assay.dissolve(material, count);
 		Reservoir.Insertion insertion = new Reservoir(PRIMA, balance(player), Assay.MAX_BALANCE).insert(PRIMA, grains, Overflow.REJECT);
-		if (insertion.outcome() != Reservoir.Outcome.DONE) {
+		if (grains > 0 && insertion.outcome() != Reservoir.Outcome.DONE) {
 			refuse(player, stack, "full");
 			return 0;
 		}

@@ -1,0 +1,69 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "jugcraft:artifact_mode_3",
+    "on_true": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "jugcraft:alchemy_active",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/arcana_ring_mode3"
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "jugcraft:item/arcana_ring_mode3_on"
+      }
+    },
+    "on_false": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "jugcraft:artifact_mode_2",
+      "on_true": {
+        "type": "minecraft:condition",
+        "property": "minecraft:has_component",
+        "component": "jugcraft:alchemy_active",
+        "on_false": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/arcana_ring_mode2"
+        },
+        "on_true": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/arcana_ring_mode2_on"
+        }
+      },
+      "on_false": {
+        "type": "minecraft:condition",
+        "property": "minecraft:has_component",
+        "component": "jugcraft:artifact_mode_1",
+        "on_true": {
+          "type": "minecraft:condition",
+          "property": "minecraft:has_component",
+          "component": "jugcraft:alchemy_active",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "jugcraft:item/arcana_ring_mode1"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "jugcraft:item/arcana_ring_mode1_on"
+          }
+        },
+        "on_false": {
+          "type": "minecraft:condition",
+          "property": "minecraft:has_component",
+          "component": "jugcraft:alchemy_active",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "jugcraft:item/arcana_ring"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "jugcraft:item/arcana_ring_active"
+          }
+        }
+      }
+    }
+  }
+}

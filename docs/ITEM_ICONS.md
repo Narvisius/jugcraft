@@ -106,6 +106,12 @@ Units used below:
   redrawn, and a redraw is always 16×16. They are listed in `tools/legacy_item_icons.txt`. The checker fails any other
   item icon larger than 16×16, and warns when a listed icon has been redrawn, so that it leaves the list. Never add a
   name to it.
+- **Specific supplied-art exception (17 October 2026):** the owner asked to implement the remaining Equivalent Exchange
+  assets as supplied. The Alchemical Manual therefore retains the supplied **32×32** `originals/Magic/textures/item/book.png`
+  at `textures/item/alchemy/alchemy_manual.png`. This is an explicit owner-authorized import, not a legacy icon awaiting
+  redraw. `OWNER_ICON_EXCEPTIONS` in `tools/check_icon_maps.py` requires that exact size and a byte-identical source copy;
+  it does not exempt other icons. See [the owner's asset instruction](../art/owner-library/MAGIC_ASSETS.md) and
+  [the feature provenance](features/ee-storage.md).
 
 ### 2. Placement on the canvas
 | Pose | For | How |

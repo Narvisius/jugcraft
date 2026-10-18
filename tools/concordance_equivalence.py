@@ -1,7 +1,7 @@
 """Roadmap step 21: bounded material equivalence (docs/features/arcane-concordance-equivalence.md).
 
-The Balancewrights' Assay. A restricted catalogue of mundane materials each has an exact Prima Materia value (grains a
-unit, as a fraction), and says whether an Assayer's Scale may dissolve it into grains or form it from them. Dissolving
+The Balancewrights' Assay. A restricted catalogue of mundane materials each has an exact Prima Materia value (essence per
+unit, as a fraction; the stable data field remains named grains), and says whether an Assayer's Scale may dissolve it into essence or form matter from essence. Dissolving
 gives the batch's exact value rounded down once; forming costs FORM_MARKUP of it, rounded up once; so nothing is ever
 rounded into existence and every round trip loses. Only catalogued, plain items are weighed: anything carrying an
 inventory, a unique identity, a bound creature, other data or magic, or tagged as excluded, never is (Java:
@@ -17,6 +17,10 @@ the server side is concordance/assay). tools/concordance.py merges these tables 
 """
 
 from fractions import Fraction
+import concordance_ee_equipment
+import concordance_ee_machines
+import concordance_ee_storage
+import concordance_ee_artifacts
 
 MOD = "jugcraft"
 
@@ -28,8 +32,8 @@ def rid(path):
 # ------------------------------------------------------------------------------------------------------- numbers
 
 # Java: equivalence/Assay.java, equivalence/EquivalenceParser.java, equivalence/CycleAudit.java.
-FORM_MARKUP = Fraction(5, 4)
-MAX_BALANCE = 1_000_000
+FORM_MARKUP = Fraction(1, 1)
+MAX_BALANCE = 2_000_000_000
 MAX_BATCH = 64
 MAX_GRAINS = 100_000
 MAX_PER = 64
@@ -42,6 +46,7 @@ CONFIRM_TICKS = 200
 EXCLUDED_TAG = rid("equivalence/excluded")
 
 REASONS = {
+    "stateful": "empty stored contents and reset custom item state first",
     "excluded": "the scale will not weigh it: it is more than matter",
     "magical": "it carries magic the scale will not weigh",
     "inventory": "it holds other things",
@@ -51,8 +56,8 @@ REASONS = {
     "uncatalogued": "the scale does not know its worth",
     "not_dissolvable": "the scale knows its worth but will not dissolve it",
     "not_formable": "the scale will not form it",
-    "too_poor": "you have too few grains",
-    "full": "your ledger cannot hold more grains",
+    "too_poor": "you have too little essence",
+    "full": "your ledger cannot hold more essence",
     "unbalanced": "the scale is out of balance: an operator must fix its data (/jugcraft concordance equivalence audit)",
 }
 
@@ -178,6 +183,7 @@ TRANSMUTATIONS = {
 # Never weighed, whatever they carry: the Concordance's own magical things and vanilla's. (Uncatalogued items are refused
 # anyway; the tag makes the refusal say why, and keeps them out of the catalogue for good.)
 EXCLUDED = [
+    *[rid(f"collector_mk{i}") for i in range(1,4)], *[rid(f"condenser_mk{i}") for i in range(1,3)],
     rid("research_notes"), rid("initiate_wand"), rid("adept_wand"), rid("kindled_lantern"), rid("astrolabe"), rid("resonant_ring"),
     rid("wardlight"), rid("hearthstone"), rid("stormglass"), rid("owlsight_circlet"), rid("bonding_charm"), rid("porter_key"),
     rid("thornheart_blade"), rid("crimson_chalice"),
@@ -189,6 +195,15 @@ EXCLUDED = [
     "minecraft:enchanted_book", "minecraft:totem_of_undying", "minecraft:nether_star", "minecraft:experience_bottle",
     "minecraft:potion", "minecraft:splash_potion", "minecraft:lingering_potion", "minecraft:written_book",
     "minecraft:filled_map", "minecraft:player_head", "minecraft:spawner", "minecraft:trial_spawner", "minecraft:heart_of_the_sea",
+    rid("philosophers_stone"), rid("repair_talisman"), rid("black_hole_band"),
+    rid("low_covalence_dust"), rid("medium_covalence_dust"), rid("high_covalence_dust"),
+    rid("alchemical_coal"), rid("mobius_fuel"), rid("aeternalis_fuel"), rid("dark_matter"),
+    rid("dark_matter_pickaxe"), rid("dark_matter_hammer"), rid("dark_matter_axe"),
+    *[rid(f"klein_star_{i}") for i in range(1, 7)], rid("evertide_amulet"), rid("volcanite_amulet"),
+    *sorted({rid(name)
+             for module in (concordance_ee_equipment, concordance_ee_machines,
+                            concordance_ee_storage, concordance_ee_artifacts)
+             for name in (*getattr(module, "ITEMS", {}), *getattr(module, "BLOCKS", {}))}),
 ]
 
 ASSAY_SPECIMEN_TAG = f"{MOD}:assay_specimens"
@@ -247,7 +262,7 @@ def audit():
             continue
         g = gain(entry)
         if g > 0:
-            problems.append(f"transmutation {key} gains {g} grains")
+            problems.append(f"transmutation {key} gains {g} essence")
         for i, a in entry["inputs"].items():
             for o, b in gives(entry).items():
                 edges.setdefault(i, []).append((key, o, a, b, g))
@@ -313,16 +328,16 @@ RESEARCH = {
 ITEMS = {}
 BLOCKS = {"assayers_scale": {"name": "Assayer's Scale"}}
 DEVICE_TOOLTIPS = {
-    "assayers_scale": "Use with a material to weigh it, and again to dissolve it into grains; with an empty hand and a "
+    "assayers_scale": "Use with a material to weigh it, and again to dissolve it into essence; with an empty hand and a "
                       "material in your other hand, to form one more of it",
 }
 
 MESSAGES = {
-    "assay.value": "%s: worth %s grains each; %s dissolve into %s grains; one costs %s grains to form",
+    "assay.value": "%s: worth %s essence each; %s dissolve into %s essence; one costs %s essence to form",
     "assay.confirm": "Use the scale again within ten seconds to dissolve them",
-    "assay.dissolved": "%s %s dissolved into %s grains (ledger: %s)",
-    "assay.formed": "%s formed for %s grains (ledger: %s)",
-    "assay.balance": "Your ledger holds %s grains of Prima Materia (at most %s)",
+    "assay.dissolved": "%s %s dissolved into %s essence (ledger: %s)",
+    "assay.formed": "%s formed for %s essence (ledger: %s)",
+    "assay.balance": "Your ledger holds %s essence (Prima Materia) (at most %s)",
     "assay.refused": "%s: %s",
     "assay.unknown": "You have not understood Assay (the codex says how)",
     "assay.audit_clean": "The conversion graph is balanced: %s conversions, %s cycles searched, none profitable",
@@ -330,7 +345,7 @@ MESSAGES = {
 }
 TOOLTIPS = {
     "assay_specimen": "Raw matter: sneak and use to examine it",
-    "jade.scale": "Weighs catalogued mundane materials",
+    "jade.scale": "Weighs default items into essence",
 }
 
 
@@ -354,35 +369,30 @@ def codex():
          "Once you understand First Light, examine raw matter (**sneak and use**): raw iron, copper or gold, calcite or "
          "clay. Study one at a Lampwright's Bench to understand Assay."),
         ("crafting_recipe", "Assayer's Scale",
-         "Use the scale with a material in your main hand to **weigh** it: its worth in grains of Prima Materia, what "
+         "Use the scale with a material in your main hand to **weigh** it: its worth in essence (Prima Materia), what "
          "the stack would dissolve into, and what forming one costs. Use it again within ten seconds to **dissolve** "
          "the stack into your ledger. With an empty main hand and a material in your other hand, use it to **form** one "
          f"more of it (the one you hold is the scale's pattern and is kept). Dissolving pays the exact worth of the whole "
          f"stack rounded down; forming costs {FORM_MARKUP.numerator}/{FORM_MARKUP.denominator} of the worth rounded up, so "
-         f"every round trip loses. Your ledger holds at most {MAX_BALANCE:,} grains.", rid("assayers_scale")),
+         f"there is no surcharge and a round trip cannot gain value. Your ledger holds at most {MAX_BALANCE:,} essence.", rid("assayers_scale")),
         ("text", "What Is Weighed",
-         "Only catalogued, plain materials. The scale refuses anything that holds other things, is named, written or "
-         "marked, carries a creature or a block's state, has been changed in any other way, or carries magic: research, "
-         "spells, relics, rings, living equipment, bound spirits. Owning something, or seeing it in a recipe book, never "
-         "makes it weighable."),
-        ("text", "The Catalogue (grains each)", table),
-        ("text", "A Balanced Graph",
-         "Every recipe between catalogued materials is declared, with the containers it gives back and its byproducts, "
-         "and none may be worth more after than before. The scale's own dissolving and forming are part of the graph. "
-         "**/jugcraft concordance equivalence audit** (operators) searches every cycle for a profitable one. Matter enters "
-         "only from declared sources:\\\n" + sources),
+         "All registered default item types have a value. Empty stored contents and charge first: custom state is never copied or silently discarded. The tablet teaches an item only after consuming it; its learned menu creates the normal default item at its value."),
+        ("text", "Current Values",
+         "Iron: **256**; gold: **2,048**; diamond: **8,192**; coal: **128**; logs: **32**; planks: **8**. The Tome shows the current full catalogue. Custom items use recipe-derived or provisional local values; those are not historical EE prices."),
+        ("text", "Conservation",
+         "Dissolve for essence, then spend that essence on learned items. No extra formation fee. Fractional batches round down when dissolved and up when formed. Machine buffers, wallet and stars conserve transfers. Industrial and custom-item prices remain subject to owner playtest tuning."),
     ]
     return {
         ("equivalence", "assay"): {
             "name": "Assay", "x": 0, "y": 0, "icon": rid("assayers_scale"), "condition": None,
-            "description": "Bounded material equivalence and the Assayer's Scale",
+            "description": "Learn and exchange items through shared essence",
             "pages": pages,
         },
     }
 
 
 CATEGORY = {"equivalence": {"name": "Equivalence", "icon": rid("assayers_scale"), "sort": 12,
-                            "description": "Mundane matter weighed exactly, and never anything more"}}
+                            "description": "Material equivalence, learned patterns and magical workshops"}}
 
 
 # ------------------------------------------------------------------------------------------------- data and assets

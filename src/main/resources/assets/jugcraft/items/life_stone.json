@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "jugcraft:alchemy_active",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/life_stone"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:item/life_stone_active"
+    }
+  }
+}

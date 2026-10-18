@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LHL",
+    "BMB",
+    "LHL"
+  ],
+  "key": {
+    "L": "jugcraft:low_covalence_dust",
+    "H": "jugcraft:high_covalence_dust",
+    "B": "minecraft:book",
+    "M": "jugcraft:alchemy_manual"
+  },
+  "result": {
+    "id": "jugcraft:alchemy_tome",
+    "count": 1
+  }
+}

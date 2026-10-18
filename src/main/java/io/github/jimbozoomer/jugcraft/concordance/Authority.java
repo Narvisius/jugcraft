@@ -33,7 +33,8 @@ import org.jspecify.annotations.Nullable;
  * member ({@link ConcordanceEffects#mayHarm}); any creature that is not a monster only where every mod listening to
  * Fabric's {@code AttackEntityCallback} (a town's protection among them) lets them ({@link #mayStrike});</li>
  * <li>when the person behind a device is not here (offline, or in another dimension), nothing that needs their
- * permission is done: the device waits for them. A server may choose otherwise with
+	 * permission is done: the device waits for them. Loaded alchemy factories have the separately authorized
+	 * buffer-only route in {@link #loadedAlchemyFactory}. For other devices a server may choose otherwise with
  * {@code concordance.absent_owner_authority=true}: a stand-in then answers for them, Fabric's fake player carrying
  * their identity (as protection mods expect of machines), and is asked the same questions. It answers questions only:
  * it is never given anything, recorded as anyone or allowed to harm a player.</li>
@@ -74,6 +75,25 @@ public final class Authority {
 			return here;
 		}
 		return FakePlayer.get(level, new GameProfile(owner, STAND_IN));
+	}
+
+	/**
+	 * Owner-authorized alchemy factories use their own saved inventories while loaded, even when their owner is away.
+	 * The caller must have persisted research authorization and reject an online owner's ineligible state. This actor
+	 * answers current claim/protection questions only: never give it wallet funds, research, items or combat actions.
+	 * Other magical devices keep the server's absent-owner option through {@link #answering}.
+	 */
+	public static @Nullable ServerPlayer loadedAlchemyFactory(ServerLevel level, @Nullable UUID owner, boolean authorized) {
+		ServerPlayer here = present(level, owner);
+		if (here != null || owner == null || !authorized) {
+			return here;
+		}
+		return FakePlayer.get(level, new GameProfile(owner, STAND_IN));
+	}
+
+	/** A stand-in may answer protection questions but must not acquire personal progression or payment state. */
+	public static boolean isStandIn(Player actor) {
+		return actor instanceof FakePlayer;
 	}
 
 	/**

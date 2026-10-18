@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GOG",
+    "OEO",
+    "GOG"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:obsidian",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "jugcraft:black_hole_band",
+    "count": 1
+  }
+}

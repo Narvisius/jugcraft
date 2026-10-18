@@ -1,0 +1,55 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:equivalence/alchemical_gear",
+  "category": "jugcraft:equivalence",
+  "x": 2,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.name",
+  "description": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.description",
+  "icon": "jugcraft:philosophers_stone",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p0.title",
+      "text": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p1",
+      "title1": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p1.title",
+      "recipe_id_1": "jugcraft:philosophers_stone",
+      "text": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p2",
+      "title1": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p2.title",
+      "recipe_id_1": "jugcraft:repair_talisman",
+      "text": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p2.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p3",
+      "title1": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p3.title",
+      "recipe_id_1": "jugcraft:black_hole_band",
+      "text": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p4",
+      "title": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p4.title",
+      "text": "book.jugcraft.arcane_concordance.equivalence.alchemical_gear.p4.text",
+      "show_title_separator": true
+    }
+  ]
+}

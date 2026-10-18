@@ -22,13 +22,13 @@ and this guide is a bug.
 5. **Cast.** The use key casts the first invocation on the spell bar, and 2, 3 and on cast the ones after it. While the
    wand is in your hand those number keys cast instead of changing your hotbar slot; scroll to change slot.
 6. **Write your own spell.** Holding the wand, press **J** and choose **Compose** (or bind *Open the Spell Composer* in
-   Controls). Pick from the words you have learned, or type them: `touch struck ward` wards the friend you are looking
-   at, within 4 blocks, against 4 damage for 10 seconds, for 3 Focus; `here struck ward` wards only you. The composer
-   says what a spell does and costs, or exactly why it cannot work. **Inscribe** writes it on the wand, and it joins the
-   spell bar.
+   Controls). In the constellation, choose **Reach → Touch**, **Target → One target**, then **Effect → Protect**.
+   This wards a friend within 4 blocks against 4 damage for 10 seconds, for 3 Focus. **At your feet** instead of Touch
+   wards you. **Refine** adds optional enhancements to the selected part. The preview shows costs and any problem;
+   **Inscribe** writes the checked spell onto the wand so it joins the spell bar. No typing is needed.
 
 Lost on the way? Press **B**, or the scroll button beside the recipe book in your inventory, for the **Jugcraft
-Encyclopedia**: its Discover page shows each of these steps, which are done, and which comes next, with the recipes
+Encyclopedia**: choose **First steps**, then a topic, to see each of these steps, which are done, and which comes next, with the recipes
 your server actually has.
 
 ## Controls

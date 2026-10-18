@@ -8,16 +8,16 @@ import java.util.Map;
 /**
  * What an Assayer's Scale pays and charges (roadmap step 21), conservatively rounded: dissolving gives the exact value
  * of the whole batch rounded down once; forming costs {@value #FORM_NUMERATOR}/{@value #FORM_DENOMINATOR} of the exact
- * value rounded up once. So a batch dissolved and formed again always loses, and splitting a batch never earns more
+ * value rounded up once. So a batch dissolved and formed again never gains, and splitting a batch never earns more
  * than the whole. A player's grains are capped at {@value #MAX_BALANCE}.
  */
 public final class Assay {
 	/** The pseudo-item the audit uses for grains of Prima Materia: one grain is worth one. */
 	public static final String PRIMA = "jugcraft:prima_materia";
-	public static final long FORM_NUMERATOR = 5;
-	public static final long FORM_DENOMINATOR = 4;
+	public static final long FORM_NUMERATOR = 1;
+	public static final long FORM_DENOMINATOR = 1;
 	/** The most grains one player's ledger holds. */
-	public static final long MAX_BALANCE = 1_000_000L;
+	public static final long MAX_BALANCE = 2_000_000_000L;
 	/** The most items one dissolving or forming moves. */
 	public static final int MAX_BATCH = 64;
 

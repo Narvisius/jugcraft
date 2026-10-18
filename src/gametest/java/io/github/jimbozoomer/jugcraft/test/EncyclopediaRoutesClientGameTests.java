@@ -26,26 +26,40 @@ public class EncyclopediaRoutesClientGameTests implements FabricClientGameTest {
 		try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
 			singleplayer.getServer().runCommand("gamemode survival @a");
 			singleplayer.getConnection().waitForChunksRender();
+            singleplayer.getServer().runOnServer(server -> {
+                var player = server.getPlayerList().getPlayers().getFirst();
+                io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress.grant(player, "jugcraft:first_light",
+                    io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState.MASTERED);
+                player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.item.ItemStack(io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance.ADEPT_WAND));
+            });
+            context.waitTicks(10);
 
 			// The key, from the game.
 			context.getInput().pressKey(EncyclopediaClient.key());
 			context.waitForScreen(EncyclopediaScreen.class);
-			context.runOnClient(client -> ((Button) ((EncyclopediaScreen) client.gui.screen())
-					.find(Component.translatable("screen.jugcraft.routes.open")))
-					.onPress(new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0)));
+			context.clickScreenButton("ui.jugcraft.book.technology");
 			context.waitForScreen(EncyclopediaRoutesScreen.class);
 			context.waitTicks(2);
-			context.takeScreenshot("jugcraft_encyclopedia_home");
+			context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_encyclopedia_home");
 
 			// Technology: a milestone opens the handbook at its stage, which closes back to the route.
 			context.runOnClient(client -> ((EncyclopediaRoutesScreen) client.gui.screen()).showRoute(0));
 			context.waitTicks(2);
-			context.takeScreenshot("jugcraft_encyclopedia_technology");
-			context.getInput().pressKey(InputConstants.KEY_DOWN);
+			context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_encyclopedia_technology");
+			context.clickScreenButton("ui.jugcraft.book.progression");
+            context.waitTicks(2);
+            context.getInput().pressKey(InputConstants.KEY_DOWN);
 			context.getInput().pressKey(InputConstants.KEY_RETURN);
 			context.waitForScreen(HandbookScreen.class);
 			context.waitTicks(2);
-			context.takeScreenshot("jugcraft_encyclopedia_handbook");
+			context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_encyclopedia_handbook");
 			context.getInput().pressKey(ESCAPE);
 			context.waitForScreen(EncyclopediaRoutesScreen.class);
 			int route = context.computeOnClient(client -> ((EncyclopediaRoutesScreen) client.gui.screen()).route());
@@ -62,22 +76,34 @@ public class EncyclopediaRoutesClientGameTests implements FabricClientGameTest {
 			}
 			context.runOnClient(client -> ((EncyclopediaRoutesScreen) client.gui.screen()).showRoute(1));
 			context.waitTicks(2);
-			context.takeScreenshot("jugcraft_encyclopedia_magic");
-			context.getInput().pressKey(InputConstants.KEY_DOWN);
+			context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_encyclopedia_magic");
+			context.clickScreenButton("ui.jugcraft.book.progression");
+            context.waitTicks(2);
+            context.getInput().pressKey(InputConstants.KEY_DOWN);
 			context.getInput().pressKey(InputConstants.KEY_RETURN);
 			context.waitForScreen(BookParentNodeScreen.class);
 			context.waitTicks(5);
-			context.takeScreenshot("jugcraft_encyclopedia_codex");
+			context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_encyclopedia_codex");
 			context.setScreen(() -> null);
 
 			// The guide directory is a child of the live encyclopedia; closing returns there.
 			context.getInput().pressKey(EncyclopediaClient.key());
 			context.waitForScreen(EncyclopediaScreen.class);
-			context.runOnClient(client -> ((Button) ((EncyclopediaScreen) client.gui.screen())
-					.find(Component.translatable("screen.jugcraft.routes.open")))
-					.onPress(new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0)));
+			context.clickScreenButton("ui.jugcraft.book.technology");
 			context.waitForScreen(EncyclopediaRoutesScreen.class);
-			context.getInput().pressKey(ESCAPE);
+            context.getInput().pressKey(InputConstants.KEY_DOWN);
+            // Enter must activate the focused Contents button, not reopen the selected topic.
+            context.runOnClient(client -> {
+                var screen = (EncyclopediaRoutesScreen) client.gui.screen();
+                var contents = screen.children().stream().filter(w -> w instanceof Button b
+                    && b.getMessage().getString().equals(Component.translatable("ui.jugcraft.contents").getString())).findFirst().orElseThrow();
+                screen.setFocused(contents);
+            });
+            context.getInput().pressKey(InputConstants.KEY_RETURN);
 			context.waitForScreen(EncyclopediaScreen.class);
 			context.getInput().pressKey(ESCAPE);
 			context.waitForScreen(null);

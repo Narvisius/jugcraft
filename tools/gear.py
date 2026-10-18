@@ -432,6 +432,13 @@ def write_all(write, assets, data, lang, condition):
     from kitchen import KNIVES
     for tag in ("enchantable/melee_weapon", "enchantable/durability"):
         by_tag.setdefault(tag, []).extend(f"{MOD}:{knife}" for knife in KNIVES)
+    import concordance_dark_matter
+    for tag, values in concordance_dark_matter.item_tags().items():
+        by_tag.setdefault(tag, []).extend(values)
+    import concordance_ee_equipment, concordance_ee_artifacts
+    for module in (concordance_ee_equipment, concordance_ee_artifacts):
+        for tag, values in module.item_tags().items():
+            by_tag.setdefault(tag, []).extend(values)
     for tag, values in by_tag.items():
         write(tags / f"{tag}.json", {"replace": False, "values": values})
     for tier, info in GEAR_TIERS.items():

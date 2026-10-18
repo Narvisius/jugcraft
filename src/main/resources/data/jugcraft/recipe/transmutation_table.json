@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "ODO",
+    "OOO"
+  ],
+  "key": {
+    "S": "minecraft:stone",
+    "O": "minecraft:obsidian",
+    "D": "jugcraft:dark_matter"
+  },
+  "result": {
+    "id": "jugcraft:transmutation_table",
+    "count": 1
+  }
+}

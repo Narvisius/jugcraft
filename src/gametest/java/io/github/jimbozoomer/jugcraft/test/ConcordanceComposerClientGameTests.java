@@ -37,17 +37,9 @@ import net.spell_engine.internals.container.SpellContainerSource;
 import net.spell_engine.internals.target.SpellTarget;
 
 /**
- * Chunk A (A-02, A-03, A-08 steps 2 to 4) in a real client on a dedicated server, so every composer message is encoded,
- * sent and decoded. A survival player who understands First Light opens the plain Spell Composer and types a spell; the
- * server says what it does and costs (screenshot {@code jugcraft_concordance_composer_valid}). They type a modifier the
- * wand cannot hold and are told exactly why, with the word marked and Inscribe disabled
- * ({@code jugcraft_concordance_composer_problem}); Ctrl+Z undoes it; the Inscribe button writes the spell on the wand
- * ({@code jugcraft_concordance_composer_inscribed}); the inscribed spell, cast through Spell Engine, lights the wall it
- * touches and takes its 2 Focus once. Reopened, the composer shows what is inscribed and keeps the draft; Tab chooses
- * the spell's first word, and the keyboard stays there when the screen is laid out again; the composer is shown
- * at GUI scale 4 ({@code jugcraft_concordance_composer_scale4}), with GuiLib installed as in CI as the GuiLib workspace
- * over the same draft ({@code jugcraft_concordance_composer_workspace}), and in a small window
- * ({@code jugcraft_concordance_composer_small}). Results are logged with the prefix "[composer-check]". One client.
+ * A real client composes by selecting stars over the dedicated-server protocol, checks an invalid enhancement,
+ * undoes, inscribes and casts through Spell Engine (2 Focus, a lit wall). Also exercises focus restoration,
+ * both UI entry points, a second branch and large/small layouts. No spell is typed. One client.
  */
 public class ConcordanceComposerClientGameTests implements FabricClientGameTest {
 	private static final String SPELL = "touch struck light";
@@ -68,18 +60,26 @@ public class ConcordanceComposerClientGameTests implements FabricClientGameTest 
 				context.waitTicks(20);
 				connection.waitForChunksRender();
 
-				// The plain composer, whatever else is installed; the spell's text box has the keyboard.
+				// The same native constellation screen is used with and without optional UI libraries.
 				context.runOnClient(client -> ComposerClient.open(client, null));
 				context.setScreen(() -> new ComposerScreen(null));
 				context.waitFor(client -> ComposerClient.ready() && ComposerClient.state().words().size() == 7, WAIT);
 				context.waitTicks(5);
-				context.getInput().typeChars(SPELL);
+				context.clickScreenButton("ui.jugcraft.word.touch");
+                context.waitTicks(2);
+                context.clickScreenButton("ui.jugcraft.word.struck");
+                context.waitTicks(2);
+                context.clickScreenButton("ui.jugcraft.word.light");
 				context.waitFor(client -> answered(Composing.Outcome.VALID, SPELL), WAIT);
 				context.waitTicks(5);
-				context.takeScreenshot("jugcraft_concordance_composer_valid");
+				context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_concordance_composer_valid");
 
 				// An edit the wand cannot hold: told why, the word marked, nothing to inscribe.
-				context.getInput().typeChars("+prolong");
+				context.clickScreenButton("ui.jugcraft.stage.3");
+                context.waitTicks(2);
+                context.clickScreenButton("ui.jugcraft.word.prolong");
 				context.waitFor(client -> answered(Composing.Outcome.INVALID, SPELL + "+prolong"), WAIT);
 				String problem = context.computeOnClient(client -> ComposerClient.result().report().blamed() + " "
 						+ ComposerClient.result().report().lines().stream().map(line -> line.getString()).toList());
@@ -87,12 +87,12 @@ public class ConcordanceComposerClientGameTests implements FabricClientGameTest 
 				check(context.computeOnClient(client -> ComposerClient.result().report().blamed().contains("light") && !ComposerClient.inscribable()),
 						"Prolonged light should be refused with light marked and Inscribe disabled: " + problem);
 				context.waitTicks(5);
-				context.takeScreenshot("jugcraft_concordance_composer_problem");
+				context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_concordance_composer_problem");
 
-				// Ctrl+Z, a key press at a time (each typed character is one undo), takes the typing back to the valid spell.
-				for (int i = 0; i < "+prolong".length(); i++) {
-					pressUndo(context);
-				}
+				// One keyboard undo removes the entire enhancement selection.
+				pressUndo(context);
 				context.waitFor(client -> ComposerClient.draft().text().equals(SPELL), WAIT);
 				context.waitFor(client -> answered(Composing.Outcome.VALID, SPELL) && ComposerClient.inscribable(), WAIT);
 
@@ -106,7 +106,9 @@ public class ConcordanceComposerClientGameTests implements FabricClientGameTest 
 				Jugcraft.LOGGER.info("[composer-check] inscribed by the composer: {}", written);
 				check(written.equals(SPELL + " / 2 / 20"), "The wand should carry the spell, its 2 Focus and 20-tick cooldown: " + written);
 				context.waitTicks(5);
-				context.takeScreenshot("jugcraft_concordance_composer_inscribed");
+				context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_concordance_composer_inscribed");
 
 				// Cast through Spell Engine: it lights the wall's open side and takes its Focus once.
 				context.setScreen(() -> null);
@@ -120,24 +122,24 @@ public class ConcordanceComposerClientGameTests implements FabricClientGameTest 
 				context.waitFor(client -> ComposerClient.ready() && ComposerClient.state().inscribed().equals(SPELL)
 						&& ComposerClient.draft().text().equals(SPELL), WAIT);
 
-				// A keyboard player keeps their place: Tab from the text box reaches the spell's first word and chooses it, and
-				// laying the screen out again (as every answer and edit does) leaves the keyboard and the choice where they were.
-				context.getInput().pressKey(InputConstants.KEY_TAB);
-				context.waitTicks(2);
-				check(context.computeOnClient(client -> ComposerClient.draft().level() == 0 && ComposerClient.draft().index() == 0),
-						"Tab from the text box should choose the spell's first word");
-				context.runOnClient(client -> ComposerClient.changed());
-				context.waitTicks(10);
-				int chosen = context.computeOnClient(client -> ComposerClient.draft().index());
-				Jugcraft.LOGGER.info("[composer-check] the word chosen by keyboard, after the screen was laid out again: {}", chosen);
-				check(chosen == 0, "Laying the screen out again should leave the keyboard on the chosen word, not walk it on: " + chosen);
+                // Tab reaches narrated controls; refreshing a reply preserves the current focused control.
+                context.getInput().pressKey(InputConstants.KEY_TAB);
+                context.waitTicks(2);
+                String focused = context.computeOnClient(client -> ((net.minecraft.client.gui.components.AbstractWidget) client.gui.screen().getFocused()).getMessage().getString());
+                context.runOnClient(client -> ComposerClient.changed());
+                context.waitTicks(10);
+                String restored = context.computeOnClient(client -> ((net.minecraft.client.gui.components.AbstractWidget) client.gui.screen().getFocused()).getMessage().getString());
+                check(focused.equals(restored), "A server answer must preserve keyboard focus: " + focused + " / " + restored);
+
 				int scale = context.computeOnClient(client -> client.options.guiScale().get());
 				context.runOnClient(client -> {
 					client.options.guiScale().set(4);
 					client.resizeGui();
 				});
 				context.waitTicks(10);
-				context.takeScreenshot("jugcraft_concordance_composer_scale4");
+				context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_concordance_composer_scale4");
 				context.runOnClient(client -> {
 					client.options.guiScale().set(scale);
 					client.resizeGui();
@@ -146,13 +148,54 @@ public class ConcordanceComposerClientGameTests implements FabricClientGameTest 
 					context.setScreen(() -> null);
 					context.runOnClient(client -> ComposerWorkspace.open());
 					context.waitTicks(10);
-					context.takeScreenshot("jugcraft_concordance_composer_workspace");
+					context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_concordance_composer_workspace");
 					context.setScreen(() -> new ComposerScreen(null));
 				}
-				// Last, a small window (the runner restores the window's size after each test).
+                server.runOnServer(minecraft -> {
+                    ServerPlayer player = minecraft.getPlayerList().getPlayers().get(0);
+                    ConcordanceProgress.grant(player, "jugcraft:first_light", ResearchState.MASTERED);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(JugcraftConcordance.ADEPT_WAND));
+                });
+                context.waitTicks(10);
+                context.runOnClient(client -> { ComposerClient.draft().clear(); ComposerClient.open(client, null); });
+                context.waitFor(client -> ComposerClient.ready() && ComposerClient.state().words().size() > 7, WAIT);
+                context.waitTicks(5);
+                context.clickScreenButton("ui.jugcraft.word.ray"); context.waitTicks(2);
+                context.clickScreenButton("ui.jugcraft.word.creatures"); context.waitTicks(2);
+                context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_constellation_effects");
+                context.clickScreenButton("ui.jugcraft.word.reveal");
+                context.waitFor(client -> ComposerClient.inscribable(), WAIT);
+                context.clickScreenButton("ui.jugcraft.stage.3"); context.waitTicks(5);
+                context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_constellation_enhancements");
+                context.getInput().resizeWindow(1280, 800);
+                context.runOnClient(client -> { client.options.guiScale().set(2); client.resizeGui(); });
+                context.waitTicks(10);
+                context.clickScreenButton("ui.jugcraft.stage.2"); context.waitTicks(12);
+                context.takeScreenshot("jugcraft_constellation_large");
+                context.clickScreenButton(net.minecraft.network.chat.Component.translatable("ui.jugcraft.paths", 1).getString()); context.waitTicks(3);
+                context.clickScreenButton("ui.jugcraft.branch.add"); context.waitTicks(3);
+                context.clickScreenButton("ui.jugcraft.word.here"); context.waitTicks(3);
+                context.clickScreenButton("ui.jugcraft.word.struck"); context.waitTicks(3);
+                context.clickScreenButton("ui.jugcraft.word.ward");
+                context.waitFor(client -> ComposerClient.inscribable(), WAIT);
+                check(context.computeOnClient(client -> ComposerClient.draft().text().equals("ray creatures reveal then here struck ward")),
+                    "Visual branch should retain the first path and append the second path");
+                context.waitTicks(10);
+                context.takeScreenshot("jugcraft_constellation_branch");
+                check(context.computeOnClient(client -> client.gui.screen().children().stream().noneMatch(w -> w instanceof net.minecraft.client.gui.components.EditBox)),
+                    "The visual composer must not require or expose a text box");
+                // Last, a small window (the runner restores the window's size after each test).
 				context.getInput().resizeWindow(640, 360);
 				context.waitTicks(10);
-				context.takeScreenshot("jugcraft_concordance_composer_small");
+				context.runOnClient(client -> client.gui.toastManager().clear());
+                context.waitTicks(2);
+                context.takeScreenshot("jugcraft_concordance_composer_small");
 				context.setScreen(() -> null);
 			}
 		}

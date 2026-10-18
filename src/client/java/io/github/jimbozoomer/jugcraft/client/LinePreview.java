@@ -100,7 +100,7 @@ public final class LinePreview {
 		});
 	}
 
-	private static void cube(PoseStack.Pose pose, VertexConsumer c, float ax, float ay, float az, float bx, float by, float bz, int color) {
+	static void cube(PoseStack.Pose pose, VertexConsumer c, float ax, float ay, float az, float bx, float by, float bz, int color) {
 		quad(pose, c, color, ax, by, az, ax, by, bz, bx, by, bz, bx, by, az, 0, 1, 0);
 		quad(pose, c, color, ax, ay, bz, ax, ay, az, bx, ay, az, bx, ay, bz, 0, -1, 0);
 		quad(pose, c, color, ax, ay, az, ax, by, az, bx, by, az, bx, ay, az, 0, 0, -1);

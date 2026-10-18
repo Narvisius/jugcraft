@@ -26,7 +26,7 @@ Errors, which make the exit status 1:
   from tools/icon_materials.py) whose tones do not step from dark to light, whose outline is black, too light or too
   close to its dark, whose highlight jumps too far, or whose main metal sits too close to the copper, iron or gold it
   must be told apart from (skipped for vanilla's own metals and owner-approved palettes);
-- an item icon larger than 16x16 that is not one of the legacy icons in tools/legacy_item_icons.txt (full run only).
+- an item icon larger than 16x16 outside the frozen legacy list or a source-verified owner-authorized exception (full run only).
 Warnings, printed but never failing:
 - a map's size outside its family's norms (FAMILIES): span and blade share for the arms and tools, how much of the
   canvas a compact, upright or flat item covers and where it sits;
@@ -62,6 +62,12 @@ ROOT = os.path.dirname(HERE)
 FOLDERS = [os.path.join(HERE, "arms_icons"), os.path.join(HERE, "item_icons")]
 ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "jugcraft")
 LEGACY = os.path.join(HERE, "legacy_item_icons.txt")
+# Owner directed use of the supplied EE assets unchanged on 17 October 2026 (also MAGIC_ASSETS.md).
+# These are explicit source-verified imports, not additions to the frozen legacy-redraw list.
+# Runtime texture name -> (unchanged source under originals/Magic/, exact approved width).
+OWNER_ICON_EXCEPTIONS = {
+    "alchemy/alchemy_manual": ("textures/item/book.png", 32),
+}
 
 # The symbols every icon map shares (docs/ITEM_ICONS.md, "The symbols"). A map names roles, never colours: which
 # material fills each role comes from the arm's style, or from the map's `# materials:` line.
@@ -604,11 +610,26 @@ def item_icon_sizes():
 
 
 def icon_size_check():
-    """(errors, warnings): no item icon larger than 16x16 beyond the frozen legacy list (docs/ITEM_ICONS.md, rule 1)."""
+    """(errors, warnings): frozen legacy sizes plus specific, unchanged owner-authorized source imports."""
     legacy, sizes = set(legacy_icons()), item_icon_sizes()
-    errors = [f"textures/item/{name}.png: an item icon is 16x16, not {width}x{width} (docs/ITEM_ICONS.md, rule 1); "
-              "only the icons in tools/legacy_item_icons.txt may stay larger until they are redrawn"
-              for name, width in sorted(sizes.items()) if width > SIZE and name not in legacy]
+    errors, authorized = [], set()
+    for name, (source, approved_width) in OWNER_ICON_EXCEPTIONS.items():
+        runtime = os.path.join(ASSETS, "textures", "item", name + ".png")
+        original = os.path.join(ROOT, "art", "owner-library", "originals", "Magic", source)
+        if sizes.get(name) != approved_width:
+            errors.append(f"owner icon {name}: expected the approved {approved_width}x{approved_width} supplied icon")
+        elif not os.path.isfile(runtime) or not os.path.isfile(original):
+            errors.append(f"owner icon {name}: runtime or supplied source is missing")
+        else:
+            with open(runtime, "rb") as imported, open(original, "rb") as supplied:
+                unchanged = imported.read() == supplied.read()
+            if not unchanged:
+                errors.append(f"owner icon {name}: size exception requires an unchanged copy of originals/Magic/{source}")
+            else:
+                authorized.add(name)
+    errors.extend(f"textures/item/{name}.png: an item icon is 16x16, not {width}x{width} (docs/ITEM_ICONS.md, rule 1); "
+                  "larger icons require a frozen legacy entry or a specific source-verified owner authorization"
+                  for name, width in sorted(sizes.items()) if width > SIZE and name not in legacy and name not in authorized)
     warnings = [f"tools/legacy_item_icons.txt: {name} is now {sizes[name]}x{sizes[name]}; remove it from the list"
                 if name in sizes else f"tools/legacy_item_icons.txt: {name} is no longer an item icon; remove it"
                 for name in sorted(legacy) if sizes.get(name, 0) <= SIZE]

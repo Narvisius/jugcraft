@@ -109,6 +109,11 @@ KEY_HELP = {
     "concordance_composer": "Opens the Spell Composer straight away (not bound at first)",
     "concordance_config": "Opens the Concordance's settings on this computer (not bound at first)",
     "party": "Opens the Party screen",
+    "gem_abilities": "Opens worn Gem armor abilities (not bound at first)",
+    "gem_night_vision": "Toggles active Gem helmet night vision (not bound at first)",
+    "gem_repel": "Uses the active Gem chestplate's repel burst (not bound at first)",
+    "gem_dash": "Dashes with active Gem leggings (not bound at first)",
+    "gem_flight": "Toggles active Gem boots' flight (not bound at first)",
     "reload": "Reloads the gun in your hand",
     "inspect": "Inspects the gun in your hand",
     "stab": "Stabs with the bayonet on your gun",
@@ -119,6 +124,7 @@ KEY_HELP = {
 # used; that set's language file credits "Icons by JoeCreates (CC-BY-SA 3.0)" (waystones.iconCredits), a notice kept
 # with the asset in docs/features/arcane-concordance-first-route.md.
 OWNER_FILES = {
+    "textures/gui/encyclopedia/book.png": "gui/spell_book_template.png",
     "textures/gui/sprites/encyclopedia/inventory_button.png": "textures/gui/sprites/inventory/inventory_button.png",
 }
 
@@ -316,6 +322,8 @@ def lang_entries(lang):
     for key, text in KEY_HELP.items():
         lang[f"encyclopedia.{MOD}.key.{key}"] = text
     lang.update(CLIENT)
+    import reading_ui
+    reading_ui.lang_entries(lang)
 
 
 # ---------------------------------------------------------------- the record's table

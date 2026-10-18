@@ -21,7 +21,7 @@ public enum ResourceKind {
 	/** An agreement with an identity: records, never amounts ({@link BoundWillLedger}). */
 	BOUND_WILL("bound_will", "record", false, false, false),
 	/** Equivalence value of mundane matter, rounded down ({@link PrimaValue}). */
-	PRIMA_MATERIA("prima_materia", "grain", true, true, false);
+	PRIMA_MATERIA("prima_materia", "essence", true, true, false);
 
 	public final String id;
 	public final String unit;

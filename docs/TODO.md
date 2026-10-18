@@ -1,5 +1,39 @@
 # Jugcraft TODO list
 
+## Alchemical equipment — 16 October 2026
+
+- [x] Local interface/access revision: engraved alchemy panels, consistent controls and selected states; remove equipment-use research gates, including traded charms and old owned factories. Gem controls work directly after equipping. See [interface/access record](features/alchemy-interface-and-access.md).
+- [x] Interface/access validation: 1,929 server checks, rendered fresh-player menus and packet interactions, and data/art/repository audits passed locally.
+- [x] Owner accepted the Alchemy Refined presentation and authorized publishing all alchemy additions and UI fixes on 18 October 2026. Earlier per-pack publication checkpoints are superseded by this combined approval; detailed survival balance and independent multiplayer remain follow-up work.
+
+- [x] Local first slice: Philosopher's Stone interface, paid Repair Talisman and Black Hole Band, using supplied owner icons and the existing Prima Materia ledger.
+- [x] Automated validation: 1,771 server tests, full data/art audit, rendered interface and live equipment checks.
+- [x] Replace the transmutation book with a stone tablet and rename its currency to essence across Assay, gear and guides, preserving existing balances.
+- [x] Local Dark Matter workshop: three fuel tiers, three covalence dusts, Dark Matter, pickaxe/hammer/axe modes, essence costs and anvil repair, using ten supplied icons unchanged.
+- [x] Dark Matter validation: 1,787 server tests, full data/art checks, rendered mode switching/mining and held-model inspection passed locally.
+- [x] Local stars/amulets: six Klein Stars, storage tablet, charge-preserving smithing upgrades and Evertide/Volcanite utility amulets using eight supplied icons unchanged.
+- [x] Stars/amulets: 1,801 server tests, rendered transfers/amulet use, full data audit and original-art checks passed locally.
+- [x] Local implementation of remaining Dark Matter equipment, Red Matter tools, three armor sets and material/fuel blocks with supplied art. Combined automated validation passed; owner accepted the combined presentation on 18 October. See [complete alchemy](features/complete-alchemy.md).
+- [x] Local collectors/condensers: three daylight collectors, two material condensers, retained targets, essence/star transfers, hopper faces, pause controls and charge-preserving upgrades using supplied assets.
+- [x] Collector/condenser validation: 1,820 server tests, rendered menus/models, live hoppers, daylight/roof behavior, full data/art audit and showroom ownership binding passed locally.
+- [x] Local implementation of all remaining alchemy content: 82 entries across equipment, relays/furnaces/pedestals/wards/Nova charges, bags/chest/tablets/books/XP storage, mobility/combat/farming/support rings and mining/building artifacts. Existing 26 entries remain integrated.
+- [x] Complete the requested combined validation phase after all 82 entries are integrated: 1,886 server tests, 67 Python tests, full data/art audits and the rendered client check passed. Final layout changes were rebuilt and client-tested. See [complete alchemy](features/complete-alchemy.md).
+- [x] Local connected alchemy: learned patterns/favorites/search, Stone terrain/crafting, filtered converters and storage artifacts, expanded pedestals, collector fuel tiers, carried-star power, Gem controls, learned Eye building, remaining UI/state art and animated chest lids. See [connected alchemy](features/connected-alchemy.md).
+- [x] Connected Alchemy automated validation: all 1,909 server tests, 67 Python tests, full data/art audit and real rendered interface checks passed locally.
+- [x] Local alchemy playability pass: universal default-item values, one-screen dissolve/learn/withdraw, exact-value bulk withdrawal, wallet/star HUD, Gem direct controls/state, Density limits/reserve/status, storage sort/consolidation, factory offline operation, pedestal diagnostics/range and building/mining previews. See [playability record](features/alchemy-playability.md).
+- [x] Replace retained-sample learning and the 25% formation surcharge in the active tablet workflow; preserve saved balances and existing learned identities.
+- [x] Alchemy playability validation: all 1,923 server tests, 75 Python tests, full data/art checks, Stone and complete-showroom rendered checks passed. Final interface corrections were rebuilt and client-tested.
+- [ ] Owner survival/economy feedback: tune provisional custom-item root values; confirm industrial recipe/byproduct economics and the first Star/collector/automation milestones.
+- Scope and evidence: [alchemical gear](features/alchemical-gear.md).
+
+## Spellcraft and encyclopedia UI — 16 October 2026
+
+- [x] Local implementation: replace spell text entry with an animated, keyboard-accessible constellation editor over the existing compiler.
+- [x] Local implementation: illustrated two-page encyclopedia, simple contents, topic directories and focused detail/recipe pages.
+- [x] Rendered interaction/scale checks, full server regression and optional-library absence checks passed locally.
+- [ ] Expand the bestiary beyond encountered-lair dossiers and consider optional search/favorites.
+- Evidence and scope: [constellation and field-guide record](features/constellation-and-field-guide.md).
+
 ## Howitzer-Walker (owner request, 13 October 2026)
 
 - [x] **Howitzer-Walker implemented and owner playtested.** Main includes its model/animation integration, crafting, fuel/ammunition, movement, aiming, shelling, jump/stomp and server-authoritative controls. PR #356 adds continuous mouse aiming and hides the pilot model while driving. See [Howitzer-Walker](features/howitzer-walker.md). Two-player manual verification remains open.

@@ -138,9 +138,7 @@ public final class EncyclopediaClient {
 			case EncyclopediaPayload.Link.COMPOSER -> ComposerClient.open(client, from);
 			case EncyclopediaPayload.Link.JOURNAL -> JournalClient.open(client);
 			case EncyclopediaPayload.Link.PAGE -> {
-				if (NAVIGATOR.go(link.target())) {
-					changed();
-				}
+				from.showPage(link.target());
 			}
 			default -> {
 			}
@@ -169,7 +167,7 @@ public final class EncyclopediaClient {
 		notices = payload.notices();
 		if (inspect && payload.sequence() == sequence) {
 			inspect = false;
-			NAVIGATOR.go(INSPECT);
+			if (NAVIGATOR.go(INSPECT) && client.gui.screen() instanceof EncyclopediaScreen screen) screen.showPage(INSPECT);
 		}
 		changed();
 	}

@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "wall=false": {
+      "model": "jugcraft:block/interdiction_torch"
+    },
+    "wall=true,facing=east": {
+      "model": "jugcraft:block/wall_interdiction_torch",
+      "y": 0
+    },
+    "wall=true,facing=south": {
+      "model": "jugcraft:block/wall_interdiction_torch",
+      "y": 90
+    },
+    "wall=true,facing=west": {
+      "model": "jugcraft:block/wall_interdiction_torch",
+      "y": 180
+    },
+    "wall=true,facing=north": {
+      "model": "jugcraft:block/wall_interdiction_torch",
+      "y": 270
+    }
+  }
+}

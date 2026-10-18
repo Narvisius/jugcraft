@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ODO",
+    "DCD",
+    "ODO"
+  ],
+  "key": {
+    "O": "minecraft:obsidian",
+    "D": "jugcraft:dark_matter",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "jugcraft:condenser_mk1",
+    "count": 1
+  }
+}

@@ -1,5 +1,7 @@
 # Arcane Concordance: the Spell Composer
 
+**16 October local UI revision:** the owner requested a constellation composer with no typing and a simple illustrated field guide. See the [current redesign record](constellation-and-field-guide.md); earlier screen descriptions below document the prior implementation.
+
 Status: implemented for Concordance Chunk A (units 1 and 2: tickets A-01 to A-03); its tests pass in CI (run [38435014953](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38435014953)
 on `aa4d06c4e`). See Verification for what has run.
 Proposal: the owner chose Chunk A on 10 October 2026; [the chunk's contract](concordance-chunk-a.md) holds the scope.

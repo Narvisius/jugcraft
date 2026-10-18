@@ -22,8 +22,8 @@ import net.minecraft.world.item.ItemStack;
 final class EncyclopediaWidgets {
 	/** One item slot, with its frame. */
 	static final int SLOT = 18;
-	private static final int FRAME = 0xFF8B8B8B;
-	private static final int WELL = 0xFF373737;
+	private static final int FRAME = 0xFFB6A078;
+	private static final int WELL = 0xFFDFCFAD;
 	private static final int DONE = 0xFF55C46A;
 	private static final int NEXT = 0xFFFFC23D;
 	private static final int OPEN = 0xFF6FC8F0;
@@ -167,9 +167,12 @@ final class EncyclopediaWidgets {
 	static final class Items extends AbstractWidget {
 		private final Font font;
 		private final List<ItemStack> stacks = new ArrayList<>();
+        private final int columns;
 
-		Items(int x, Font font, List<Item> items) {
-			super(x, 0, Math.max(1, items.size()) * SLOT, SLOT, CommonComponents.EMPTY);
+		Items(int x, Font font, List<Item> items, int maxWidth) {
+            super(x, 0, Math.min(Math.max(1, items.size()) * SLOT, maxWidth),
+                ((items.size() + Math.max(1, maxWidth / SLOT) - 1) / Math.max(1, maxWidth / SLOT)) * SLOT, CommonComponents.EMPTY);
+            columns = Math.max(1, maxWidth / SLOT);
 			this.font = font;
 			items.forEach(item -> stacks.add(item.getDefaultInstance()));
 			active = false;
@@ -178,7 +181,7 @@ final class EncyclopediaWidgets {
 		@Override
 		protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
 			for (int i = 0; i < stacks.size(); i++) {
-				slot(graphics, font, stacks.get(i), getX() + i * SLOT, getY(), mouseX, mouseY);
+				slot(graphics, font, stacks.get(i), getX() + (i % columns) * SLOT, getY() + (i / columns) * SLOT, mouseX, mouseY);
 			}
 		}
 
@@ -203,8 +206,8 @@ final class EncyclopediaWidgets {
 			this.grid = grid;
 			columns = grid.station() == EncyclopediaPayload.Grid.STONECUTTER ? 1 : Math.max(1, Math.min(3, grid.width()));
 			rows = Math.max(1, (grid.slots().size() + columns - 1) / columns);
-			setWidth(3 * SLOT + 14 + SLOT + 4 + font.width(station(grid)));
-			setHeight(Math.max(rows, 1) * SLOT);
+			setWidth(3 * SLOT + 14 + SLOT + 4);
+			setHeight(Math.max(rows, 1) * SLOT + 12);
 			active = false;
 		}
 
@@ -220,12 +223,12 @@ final class EncyclopediaWidgets {
 			}
 			int arrowX = getX() + 3 * SLOT + 2;
 			int middle = getY() + (rows * SLOT - font.lineHeight) / 2;
-			graphics.text(font, "→", arrowX, middle, 0xFFC9C3D8, false);
+			graphics.text(font, "→", arrowX, middle, BookArt.MUTED, false);
 			int resultX = arrowX + 12;
 			int resultY = getY() + (rows * SLOT - SLOT) / 2;
 			ItemStack result = new ItemStack(grid.result(), Math.max(1, grid.count()));
 			slot(graphics, font, result, resultX, resultY, mouseX, mouseY);
-			graphics.text(font, station(grid), resultX + SLOT + 4, middle, 0xFFC9C3D8, false);
+			graphics.text(font, station(grid), getX(), getY() + rows * SLOT + 3, BookArt.MUTED, false);
 		}
 
 		@Override

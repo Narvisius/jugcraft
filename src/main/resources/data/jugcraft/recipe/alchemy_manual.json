@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " P ",
+    " B ",
+    " C "
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "B": "minecraft:book",
+    "C": "jugcraft:low_covalence_dust"
+  },
+  "result": {
+    "id": "jugcraft:alchemy_manual",
+    "count": 1
+  }
+}

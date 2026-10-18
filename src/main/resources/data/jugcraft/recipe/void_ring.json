@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OGO",
+    "DBD",
+    "ORO"
+  ],
+  "key": {
+    "O": "minecraft:obsidian",
+    "G": "jugcraft:gem_of_eternal_density",
+    "D": "jugcraft:dark_matter",
+    "B": "jugcraft:iron_band",
+    "R": "jugcraft:red_matter"
+  },
+  "result": {
+    "id": "jugcraft:void_ring",
+    "count": 1
+  }
+}

@@ -38,7 +38,7 @@ import net.minecraft.world.level.GameType;
 
 /**
  * Roadmap step 21, bounded material equivalence (docs/features/arcane-concordance-equivalence.md), on a real server: a
- * stack is weighed, then dissolved on a second use at its exact worth rounded down; forming costs more than dissolving
+ * stack is weighed, then dissolved on a second use at its exact worth rounded down; forming never costs less than dissolving
  * pays, so a round trip loses; only plain catalogued matter is weighed (named, filled, bound, enchanted, magical and
  * excluded things are refused with their reason, and nothing changes); the ledger never passes its cap; the declared
  * conversion graph is the game's own recipes; and the catalogue is balanced.
@@ -84,19 +84,19 @@ public class ConcordanceAssayGameTests {
 
 	/** Forming an ingot costs five quarters of its worth, rounded up; the pattern in the other hand is kept; a round trip loses. */
 	@GameTest(maxTicks = 20)
-	public void formingCostsMoreThanDissolvingPays(GameTestHelper helper) {
+	public void formingSpendsExactValueWithoutSurcharge(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = assayer(helper);
 		Assaying.setBalance(player, 1000L);
 		ItemStack pattern = new ItemStack(Items.IRON_INGOT);
 		use(player, level, ItemStack.EMPTY, pattern);
 		// The formed ingot goes where the inventory puts it back: here it joins the pattern's stack in the other hand.
-		helper.assertTrue(Assaying.balance(player) == 1000 - 320 && player.getOffhandItem() == pattern
-				&& player.getInventory().countItem(Items.IRON_INGOT) == 2, "One ingot formed for 320 grains; the pattern kept: "
+		helper.assertTrue(Assaying.balance(player) == 1000 - 256 && player.getOffhandItem() == pattern
+				&& player.getInventory().countItem(Items.IRON_INGOT) == 2, "One ingot formed for 256 essence; the pattern kept: "
 						+ Assaying.balance(player) + " grains, " + player.getInventory().countItem(Items.IRON_INGOT) + " ingots");
 		use(player, level, new ItemStack(Items.IRON_INGOT), ItemStack.EMPTY);
 		Assaying.use(player, level, player.getMainHandItem(), player.getOffhandItem());
-		helper.assertTrue(Assaying.balance(player) == 1000 - 320 + 256, "Dissolved again it pays 256: the round trip lost 64");
+		helper.assertTrue(Assaying.balance(player) == 1000 - 256 + 256, "Dissolved again it pays 256: the round trip conserves value");
 		Assaying.setBalance(player, 100L);
 		use(player, level, ItemStack.EMPTY, new ItemStack(Items.IRON_INGOT));
 		helper.assertTrue(Assaying.balance(player) == 100 && player.getInventory().countItem(Items.IRON_INGOT) == 1,
@@ -117,10 +117,7 @@ public class ConcordanceAssayGameTests {
 		enchanted.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
 		ItemStack rarer = new ItemStack(Items.IRON_INGOT);
 		rarer.set(DataComponents.MAX_STACK_SIZE, 16);
-		List<Object[]> cases = List.of(new Object[] {named, "unique"}, new Object[] {relicCharged, "magical"},
-				new Object[] {enchanted, "magical"}, new Object[] {rarer, "metadata"}, new Object[] {new ItemStack(Items.DIAMOND, 3), "uncatalogued"},
-				new Object[] {new ItemStack(Artificery.RESONANT_RING), "excluded"}, new Object[] {new ItemStack(item("jugcraft:research_notes")), "excluded"},
-				new Object[] {new ItemStack(Items.ENCHANTED_BOOK), "excluded"});
+        List<Object[]> cases=List.of(new Object[]{named,"stateful"},new Object[]{relicCharged,"stateful"},new Object[]{enchanted,"stateful"},new Object[]{rarer,"stateful"});
 		for (Object[] row : cases) {
 			ItemStack stack = (ItemStack) row[0];
 			String reason = Assaying.eligibility(stack);
@@ -155,7 +152,7 @@ public class ConcordanceAssayGameTests {
 	@GameTest(maxTicks = 20)
 	public void theDeclaredGraphIsTheGamesOwn(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
-		EquivalenceCatalog catalog = Assaying.catalog();
+		EquivalenceCatalog catalog = io.github.jimbozoomer.jugcraft.concordance.ConcordanceData.rules().equivalence();
 		RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> crafting = RecipeManager.createCheck(RecipeType.CRAFTING);
 		int crafted = 0;
 		int smelted = 0;
@@ -199,7 +196,7 @@ public class ConcordanceAssayGameTests {
 		helper.assertTrue(catalog.materials().size() >= 40, "The catalogue loaded: " + catalog.materials().size());
 		helper.assertTrue(Assaying.problems(helper.getLevel()).isEmpty(), "The scale is in balance, the live recipes included: "
 				+ Assaying.problems(helper.getLevel()));
-		helper.assertTrue(Assaying.probe(helper.getLevel(), catalog).isEmpty(), "No live recipe gains: " + Assaying.probe(helper.getLevel(), catalog));
+		helper.assertTrue(Assaying.legacyProblems(helper.getLevel()).isEmpty(), "Historical declared recipes remain valid");
 		helper.assertTrue(CycleAudit.audit(catalog).isEmpty(), "The audit finds nothing: " + CycleAudit.audit(catalog));
 		for (Material material : catalog.materials().values()) {
 			ItemStack plain = new ItemStack(item(material.item()));

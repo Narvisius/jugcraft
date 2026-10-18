@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LGL",
+    "DND",
+    "LGL"
+  ],
+  "key": {
+    "L": "minecraft:lapis_lazuli",
+    "G": "minecraft:gold_ingot",
+    "D": "jugcraft:dark_matter",
+    "N": "minecraft:amethyst_shard"
+  },
+  "result": {
+    "id": "jugcraft:mind_stone",
+    "count": 1
+  }
+}

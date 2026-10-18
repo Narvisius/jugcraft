@@ -50,7 +50,7 @@ JOURNAL = {
     "research.unknown": "%s: not in the loaded rules",
     "research.unknown_count": "%s more entries not yet encountered",
     "or": "; or ",
-    "assay.balance": "Prima Materia held: %s grains",
+    "assay.balance": "Essence held: %s",
     "assay.cap": "(at most %s)",
     "unreadable": "This part of the journal could not be read; the server's log says why",
 }

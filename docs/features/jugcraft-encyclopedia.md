@@ -1,5 +1,7 @@
 # Jugcraft Encyclopedia
 
+**16 October local UI revision:** the owner requested a constellation composer with no typing and a simple illustrated field guide. See the [current redesign record](constellation-and-field-guide.md); earlier screen descriptions below document the prior implementation.
+
 Status: owner-approved feature direction, recorded 6 October 2026. First slice implemented for Concordance Chunk A
 (unit 4: both ways in, one plain screen, and the First Light route; [its record](arcane-concordance-first-route.md)); integrated with the community technology/magic route directory from PR #322. The route canvas, search and quests remain future work.
 Proposal issue: direct owner request during progression planning; this feature is independently documented and tracked in the [TODO list](../TODO.md#jugcraft-encyclopedia).

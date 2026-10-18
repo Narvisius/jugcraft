@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GDG",
+    "WBW",
+    "GDG"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "D": "jugcraft:dark_matter",
+    "W": "minecraft:lava_bucket",
+    "B": "jugcraft:high_covalence_dust"
+  },
+  "result": {
+    "id": "jugcraft:volcanite_amulet",
+    "count": 1
+  }
+}

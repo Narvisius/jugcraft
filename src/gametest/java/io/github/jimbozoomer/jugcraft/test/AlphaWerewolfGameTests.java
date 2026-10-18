@@ -731,7 +731,8 @@ public class AlphaWerewolfGameTests {
 		helper.assertTrue(level.getBlockState(path).is(JugcraftLairs.RAKED_TURF) && RakedTurfBlock.knitsTo(level.getBlockState(path)).is(Blocks.DIRT_PATH),
 				"A trodden path he ran over is not raked turf that knits back to a path");
 		Set<BlockPos> trail = alpha.raked();
-		BlockPos one = trail.iterator().next();
+		// The path cell deliberately restores to DIRT_PATH; select a moss cell for this moss assertion.
+		BlockPos one = trail.stream().filter(cell -> !cell.equals(path)).findFirst().orElseThrow();
 		BlockState turf = level.getBlockState(one);
 		helper.assertTrue(torn >= 20 && turf.is(JugcraftLairs.RAKED_TURF), "His trail tore " + torn + " cells");
 		helper.assertTrue(level.getBlockTicks().hasScheduledTick(one, JugcraftLairs.RAKED_TURF), "Raked turf does not knit by itself");

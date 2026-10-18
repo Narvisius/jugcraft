@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    " G ",
+    " I "
+  ],
+  "key": {
+    "D": "jugcraft:dark_matter",
+    "G": "minecraft:glowstone",
+    "I": "jugcraft:iron_band"
+  },
+  "result": {
+    "id": "jugcraft:interdiction_torch",
+    "count": 1
+  }
+}

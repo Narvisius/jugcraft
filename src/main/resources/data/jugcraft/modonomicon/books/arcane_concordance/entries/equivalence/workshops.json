@@ -1,0 +1,62 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:equivalence/workshops",
+  "category": "jugcraft:equivalence",
+  "x": 8,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.equivalence.workshops.name",
+  "description": "book.jugcraft.arcane_concordance.equivalence.workshops.description",
+  "icon": "jugcraft:collector_mk1",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.equivalence.workshops.p0.title",
+      "recipe_id_1": "jugcraft:collector_mk1",
+      "text": "book.jugcraft.arcane_concordance.equivalence.workshops.p0.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p1",
+      "title1": "book.jugcraft.arcane_concordance.equivalence.workshops.p1.title",
+      "recipe_id_1": "jugcraft:condenser_mk1",
+      "text": "book.jugcraft.arcane_concordance.equivalence.workshops.p1.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.equivalence.workshops.p2.title",
+      "text": "book.jugcraft.arcane_concordance.equivalence.workshops.p2.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.equivalence.workshops.p3.title",
+      "text": "book.jugcraft.arcane_concordance.equivalence.workshops.p3.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p4",
+      "title": "book.jugcraft.arcane_concordance.equivalence.workshops.p4.title",
+      "text": "book.jugcraft.arcane_concordance.equivalence.workshops.p4.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p5",
+      "title": "book.jugcraft.arcane_concordance.equivalence.workshops.p5.title",
+      "text": "book.jugcraft.arcane_concordance.equivalence.workshops.p5.text",
+      "show_title_separator": true
+    }
+  ]
+}

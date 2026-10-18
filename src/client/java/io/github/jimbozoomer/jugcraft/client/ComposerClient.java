@@ -14,22 +14,14 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import org.jspecify.annotations.Nullable;
 
-/**
- * The Spell Composer on the client (Chunk A, A-03): the spell being written (one {@link Draft}, shared by both views,
- * so it survives switching between them and closing the screen), what the server last said the composer may offer
- * ({@link ComposerStatePayload}) and what its last check came to ({@link ComposerResultPayload}); and the requests:
- * open, a check a moment after editing pauses, inscribe and wipe. It opens from the journal or from its own key
- * (Controls: Open the Spell Composer, unbound until a player binds it). With GuiLib installed, and the simple screens
- * not chosen in the Concordance settings, it opens as a GuiLib workspace ({@link ComposerWorkspace}); otherwise as
- * {@link ComposerScreen}. Nothing here decides anything: the server checks every word, and only Inscribe and Wipe
- * change an item. Everything is forgotten on leaving a world.
- */
+/** Shared draft, server snapshots and bounded preview/inscription requests for the constellation composer.
+ * Every entry point opens the same accessible screen. The server alone validates and writes inscriptions.
+ * Drafts survive screen changes and are forgotten on leaving the world. */
 public final class ComposerClient {
 	/** Client ticks after the last edit before the draft is checked. */
 	public static final int CHECK_DELAY = 8;
@@ -86,11 +78,7 @@ public final class ComposerClient {
 	public static void open(Minecraft client, @Nullable Screen parent) {
 		loading = true;
 		request(ComposerRequestPayload.OPEN, 0, "");
-		if (!ConcordanceClientOptions.simpleJournal() && FabricLoader.getInstance().isModLoaded("guilib")) {
-			ComposerWorkspace.open(parent);
-		} else {
-			client.gui.setScreen(new ComposerScreen(parent));
-		}
+		client.gui.setScreen(new ComposerScreen(parent));
 	}
 
 	/** Whether this server composes spells at all (one without the Concordance cannot). */

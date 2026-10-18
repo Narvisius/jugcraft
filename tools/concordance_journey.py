@@ -133,9 +133,9 @@ ROUTES = {
              "route; the Adept's Attunement then makes an Adept's Wand",
              ["attunementCompletesOnce", "eachRouteClimbsItsOwnWay"]),
             ("adept", "Forge Resonant Rings at the Artificer's Bench; weigh and dissolve matter at the Assayer's "
-             "Scale and form it again at a loss",
+             "Scale and form it again at its essence value",
              ["aRingIsForgedAndSavedBeforeItIsShown", "gemsRunesAndBondsKeepTheirRules", "aStackIsWeighedThenDissolved",
-              "formingCostsMoreThanDissolvingPays"]),
+              "formingSpendsExactValueWithoutSurcharge"]),
             ("adept", "Key a Clockwork Porter to a Courier Post; requests are fetched and delivered under reservations",
              ["aRequestIsFetchedAndDelivered", "simultaneousRequestsNeverClaimTheSameItems", "aPorterSaysWhyItStops"]),
             ("master", "Master Circle Lore (rituals in three different chunks), Runesmithing (three different "
