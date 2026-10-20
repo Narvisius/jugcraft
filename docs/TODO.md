@@ -105,6 +105,17 @@ Related owner planning records: [industrial agriculture, PR #208](https://github
 
 - Regional mineral-sand world generation and finite reserves are implemented and visually accepted by the owner in [PR #354](https://github.com/jimbozoomer-byte/jugcraft/pull/354), public branch `speedygroyper:codex/regional-mineral-sands`; not yet merged. See the [deposit implementation record](features/regional-mineral-sands.md). Dedicated extraction and chemical separation/refining remain separate work.
 
+## Art flagged for redo (contributor review, 19 October 2026)
+
+The contributor reviewed the textures Claude made for their fork and flagged these for better versions. Some are still only on unmerged fork branches. Show redrawn art to the contributor before applying it, and follow [ITEM_ICONS.md](ITEM_ICONS.md) and [NATURAL_TEXTURES.md](NATURAL_TEXTURES.md).
+
+- [ ] Fluid textures (`textures/block/<fluid>_still.png`, and `_flow.png` for liquids): biogas, carbon dioxide, carbon monoxide, concentrated sulfuric acid, dinitrogen tetroxide, electronic-grade sulfuric acid, ethylene dichloride, hydrazine, hydrochloric acid, hydrogen chloride, liquid hydrogen, liquid methane, methane, methanol, methyl chloride, methylamine, monomethylhydrazine, phosphoric acid, raw syngas, sodium hypochlorite, sulfur dioxide, sulfur trioxide, vinyl acetate.
+- [ ] Bucket icons (`textures/item/<fluid>_bucket.png`): concentrated sulfuric acid, dinitrogen tetroxide, electronic-grade sulfuric acid, ethylene dichloride, hydrazine, hydrochloric acid, liquid hydrogen, liquid methane, methanol, methylamine, monomethylhydrazine, phosphoric acid, sodium hypochlorite.
+- [ ] Blocks: `aged_maple_planks`, `magnalium_block`, and the lead-acid battery's `el_battery_case`, `el_lead` and `el_terminal_red`.
+- [ ] Items: `cola`, `control_rod_assembly`, `glucose_syrup`.
+- [ ] Titanium tools: axe, hoe, paxel, pickaxe, shovel, sword.
+- PVAc glue keeps its redrawn icon (`claude/pvac-glue`, e1092c00b); it is not flagged.
+
 ## Industrial machine models textures and dimensions
 
 Owner-requested 10 October 2026. Independent art specification: [industrial machine models, textures and dimensions](features/industrial-machine-models-and-textures.md). It covers 79 unbuilt machine/module forms and later candidates, with 23 additional larger variants. All sizes are **width × depth × height**, each axis 2–6 blocks; several installations are 6×6×6.
