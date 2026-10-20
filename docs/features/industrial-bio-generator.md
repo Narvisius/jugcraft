@@ -84,6 +84,6 @@ Not applicable: a placed machine.
 
 ## Rollout and open questions
 
-- Cleaned biogas at 64 JE/t with the Anaerobic Digester; the 5×6×5 larger variant; exhaust animation; pollution once a pollution record exists.
+- Exhaust animation; pollution once a pollution record exists. The 5×6×5 larger variant is the [Large Bio Generator](industrial-large-bio-generator.md).
 - Open for review: the Steel Tank standing in for the plan's eight plates and Tinplate Tank in the grid.
 - Reversible: removing it would need its blocks broken first. Its saves use only the foundation's form data.

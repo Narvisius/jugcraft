@@ -94,3 +94,7 @@ Giant pumpkins now save their contest identity as `pumpkin_id`, separate from Mi
 The October 10 full combined validation is recorded in #277. The October 11 integration PR records this batch's combined validation; subsequent correction checks are available in the [Build history](https://github.com/jimbozoomer-byte/jugcraft/actions/workflows/build.yml). Individual branch successes are historical evidence, not a substitute for the combined build. Check the exact commit's results for compilation, data regeneration, both server configurations and the selected client tests. Human multiplayer/load testing remains outstanding unless a separate run record is supplied.
 
 Integration work includes actual conflict resolution, generator corrections and test reliability fixes; it does not change platform pins, remove review protections, execute owner-library programs or deploy to the live server. Integration and this status index were prepared with OpenAI Codex; feature authors and their original attribution are retained.
+
+## Bulk-factory integration — 20 October 2026
+
+The owner selected PRs #361, #362, #364, #365 and #374 for combined integration on current main. See [the integration record](features/bulk-factory-integration-oct20.md) for scope, compatibility repairs and validation. Historical contributor-only descriptions above refer to their original checkpoints. Final merge evidence will be recorded on the integration PR.

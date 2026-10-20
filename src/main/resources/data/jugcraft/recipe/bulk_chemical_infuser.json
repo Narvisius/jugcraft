@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TIT",
+    "PFP",
+    "PCP"
+  ],
+  "key": {
+    "T": "jugcraft:steel_tank",
+    "I": "jugcraft:chemical_infuser",
+    "P": "#c:plates/steel",
+    "F": "jugcraft:steel_fluid_pipe",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:bulk_chemical_infuser",
+    "count": 1
+  }
+}

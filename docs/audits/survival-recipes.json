@@ -20,7 +20,7 @@
     "Reachability is qualitative; energy, quantities, research and encounter difficulty require playtesting."
   ],
   "summary": {
-    "chain_with_acquisition_evidence": 3183,
+    "chain_with_acquisition_evidence": 3192,
     "recipe_chain_reachable": 1522,
     "natural_or_interaction_source": 561,
     "loot_only": 286,
@@ -28,8 +28,8 @@
     "intentional_noncraftable": 329
   },
   "recipe_types": {
-    "minecraft:crafting_shaped": 2729,
-    "minecraft:crafting_shapeless": 1037,
+    "minecraft:crafting_shaped": 2736,
+    "minecraft:crafting_shapeless": 1038,
     "jugcraft:alloying": 10,
     "minecraft:blasting": 40,
     "jugcraft:arc_smelting": 16,
@@ -43,7 +43,7 @@
     "minecraft:smithing_transform": 75,
     "minecraft:brewing": 108,
     "jugcraft:catalytic_cracking": 4,
-    "jugcraft:chemical_reaction": 235,
+    "jugcraft:chemical_reaction": 236,
     "jugcraft:chilling": 3,
     "minecraft:stonecutting": 221,
     "jugcraft:circuit_assembly": 7,
@@ -54,7 +54,7 @@
     "jugcraft:electrolysis": 9,
     "jugcraft:enrichment": 1,
     "jugcraft:fuel_fabrication": 1,
-    "jugcraft:gas_synthesis": 18,
+    "jugcraft:gas_synthesis": 21,
     "jugcraft:gun_attachment": 1,
     "jugcraft:gun_attachment_removal": 1,
     "jugcraft:household_oven": 4,
@@ -7682,6 +7682,28 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:bulk_chemical_infuser",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/bulk_chemical_infuser.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:bulk_chemical_oxidizer",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/bulk_chemical_oxidizer.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:bulk_chemical_reactor",
       "status": "chain_with_acquisition_evidence",
       "reason": "",
@@ -7689,6 +7711,28 @@
       "routes": [
         "src/main/resources/data/jugcraft/recipe/alloys_bulk_chemical_reactor.json",
         "src/main/resources/data/jugcraft/recipe/bulk_chemical_reactor.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:bulk_electrolytic_separator",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/bulk_electrolytic_separator.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:bulk_fermenter",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/bulk_fermenter.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -22225,6 +22269,17 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/columbarium.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:combined_cycle_power_plant",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/combined_cycle_power_plant.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -49497,6 +49552,28 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:large_bio_generator",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/large_bio_generator.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:large_gas_burning_generator",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/large_gas_burning_generator.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:large_ghost_fern",
       "status": "natural_or_interaction_source",
       "reason": "",
@@ -65350,6 +65427,28 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/rustic_scroll_headstone_from_stonecutting.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:ruthenium_catalyst_bed",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/ruthenium_catalyst_bed.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:ruthenium_powder",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/chemical_reaction/bulk_ruthenium_powder.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -90199,6 +90298,78 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/bulk_chemical_infuser.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:chemical_infuser"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_fluid_pipe"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_chemical_infuser"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/bulk_chemical_oxidizer.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:chemical_oxidizer"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:electric_motor"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_chemical_oxidizer"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/bulk_chemical_reactor.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -90232,6 +90403,78 @@
       ],
       "outputs": [
         "jugcraft:bulk_chemical_reactor"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/bulk_electrolytic_separator.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:electrolytic_separator"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:copper_cable"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_electrolytic_separator"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/bulk_fermenter.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:industrial_fermenter"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:electric_motor"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_fermenter"
       ]
     },
     {
@@ -108221,6 +108464,27 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/chemical_reaction/bulk_ruthenium_powder.json",
+      "type": "jugcraft:chemical_reaction",
+      "inputs": [
+        [
+          "jugcraft:washed_nickel_ore"
+        ],
+        [
+          "jugcraft:bulk_chemical_reactor"
+        ],
+        [
+          "fluid:jugcraft:hydrochloric_acid"
+        ],
+        [
+          "fluid:jugcraft:chlorine"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:ruthenium_powder"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/chemical_reaction/bulk_sulfuric_acid.json",
       "type": "jugcraft:chemical_reaction",
       "inputs": [
@@ -109443,6 +109707,7 @@
           "minecraft:charcoal"
         ],
         [
+          "jugcraft:bulk_chemical_oxidizer",
           "jugcraft:chemical_oxidizer"
         ],
         [
@@ -109461,6 +109726,7 @@
           "jugcraft:sulfur_dust"
         ],
         [
+          "jugcraft:bulk_chemical_oxidizer",
           "jugcraft:chemical_oxidizer"
         ],
         [
@@ -113976,6 +114242,42 @@
       ],
       "outputs": [
         "jugcraft:columbarium"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/combined_cycle_power_plant.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:advanced_circuit"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:gas_turbine"
+        ],
+        [
+          "jugcraft:machine_casing"
+        ],
+        [
+          "jugcraft:heat_recovery_unit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:combined_cycle_power_plant"
       ]
     },
     {
@@ -127272,6 +127574,7 @@
       "type": "jugcraft:electrolysis",
       "inputs": [
         [
+          "jugcraft:bulk_electrolytic_separator",
           "jugcraft:electrolytic_separator"
         ],
         [
@@ -133957,6 +134260,7 @@
           "jugcraft:nickel_catalyst_bed"
         ],
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -133976,6 +134280,7 @@
       "type": "jugcraft:gas_synthesis",
       "inputs": [
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -134063,6 +134368,7 @@
           "jugcraft:nickel_catalyst_bed"
         ],
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -134085,6 +134391,7 @@
           "jugcraft:nickel_catalyst_bed"
         ],
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -134107,6 +134414,7 @@
           "jugcraft:vanadium_contact_bed"
         ],
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -134154,6 +134462,72 @@
       ],
       "outputs": [
         "fluid:jugcraft:hydrogen_chloride"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/gas_synthesis/infuser_ruthenium_biogas_upgrading.json",
+      "type": "jugcraft:gas_synthesis",
+      "inputs": [
+        [
+          "jugcraft:ruthenium_catalyst_bed"
+        ],
+        [
+          "jugcraft:chemical_infuser"
+        ],
+        [
+          "fluid:jugcraft:hydrogen"
+        ],
+        [
+          "fluid:jugcraft:biogas"
+        ]
+      ],
+      "outputs": [
+        "fluid:jugcraft:methane",
+        "fluid:minecraft:water"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/gas_synthesis/infuser_ruthenium_carbon_dioxide_methanation.json",
+      "type": "jugcraft:gas_synthesis",
+      "inputs": [
+        [
+          "jugcraft:ruthenium_catalyst_bed"
+        ],
+        [
+          "jugcraft:chemical_infuser"
+        ],
+        [
+          "fluid:jugcraft:hydrogen"
+        ],
+        [
+          "fluid:jugcraft:carbon_dioxide"
+        ]
+      ],
+      "outputs": [
+        "fluid:jugcraft:methane",
+        "fluid:minecraft:water"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/gas_synthesis/infuser_ruthenium_carbon_monoxide_methanation.json",
+      "type": "jugcraft:gas_synthesis",
+      "inputs": [
+        [
+          "jugcraft:ruthenium_catalyst_bed"
+        ],
+        [
+          "jugcraft:chemical_infuser"
+        ],
+        [
+          "fluid:jugcraft:hydrogen"
+        ],
+        [
+          "fluid:jugcraft:carbon_monoxide"
+        ]
+      ],
+      "outputs": [
+        "fluid:jugcraft:methane",
+        "fluid:minecraft:water"
       ]
     },
     {
@@ -134222,6 +134596,7 @@
           "jugcraft:cobalt_catalyst_bed"
         ],
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -134244,6 +134619,7 @@
           "jugcraft:cobalt_catalyst_bed"
         ],
         [
+          "jugcraft:bulk_chemical_infuser",
           "jugcraft:chemical_infuser"
         ],
         [
@@ -175879,6 +176255,78 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/large_bio_generator.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:bio_generator"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_gear"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:large_bio_generator"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/large_gas_burning_generator.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:gas_burning_generator"
+        ],
+        [
+          "jugcraft:steel_tank"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_gear"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:large_gas_burning_generator"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/large_print.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -211607,6 +212055,21 @@
       ],
       "outputs": [
         "jugcraft:rustic_scroll_headstone"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/ruthenium_catalyst_bed.json",
+      "type": "minecraft:crafting_shapeless",
+      "inputs": [
+        [
+          "jugcraft:nickel_catalyst_bed"
+        ],
+        [
+          "jugcraft:ruthenium_powder"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:ruthenium_catalyst_bed"
       ]
     },
     {
@@ -252315,6 +252778,30 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/bulk_chemical_infuser.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:bulk_chemical_infuser"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_chemical_infuser"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/bulk_chemical_oxidizer.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:bulk_chemical_oxidizer"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_chemical_oxidizer"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/bulk_chemical_reactor.json",
       "type": "block_drop",
       "inputs": [
@@ -252324,6 +252811,30 @@
       ],
       "outputs": [
         "jugcraft:bulk_chemical_reactor"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/bulk_electrolytic_separator.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:bulk_electrolytic_separator"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_electrolytic_separator"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/bulk_fermenter.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:bulk_fermenter"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:bulk_fermenter"
       ]
     },
     {
@@ -258036,6 +258547,18 @@
       ],
       "outputs": [
         "jugcraft:columbarium"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/combined_cycle_power_plant.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:combined_cycle_power_plant"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:combined_cycle_power_plant"
       ]
     },
     {
@@ -278512,6 +279035,30 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/large_bio_generator.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:large_bio_generator"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:large_bio_generator"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/large_gas_burning_generator.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:large_gas_burning_generator"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:large_gas_burning_generator"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/large_ghost_fern.json",
       "type": "block_drop",
       "inputs": [
@@ -295806,7 +296353,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:rock_candy"
+        "jugcraft:candy_corn"
       ]
     },
     {
@@ -295902,7 +296449,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:candy_corn"
+        "jugcraft:hard_candy"
       ]
     },
     {
@@ -295926,61 +296473,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:hard_candy"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/cream",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ],
-        [
-          "minecraft:milk_bucket"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:fudge"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/cream",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ],
-        [
-          "minecraft:milk_bucket"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:burnt_sugar"
+        "jugcraft:rock_candy"
       ]
     },
     {
@@ -296035,6 +296528,60 @@
       ],
       "outputs": [
         "jugcraft:cream_caramel"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/cream",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ],
+        [
+          "minecraft:milk_bucket"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:burnt_sugar"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/cream",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ],
+        [
+          "minecraft:milk_bucket"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:fudge"
       ]
     },
     {

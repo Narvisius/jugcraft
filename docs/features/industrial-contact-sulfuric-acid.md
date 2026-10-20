@@ -32,7 +32,7 @@ The full industrial sulfuric acid chain:
 1. **Vanadium.** In the Bulk Chemical Reactor, four washed iron ores (the game's vanadium-bearing iron concentrate) roasted with 500 mB of lye give a **vanadium pentoxide** at the chute. It takes 200 ticks, with no sulfuric acid involved.
 2. **The contact bed.** The oxide on two fired bricks crafts the **Vanadium Contact Bed**. It goes in the Chemical Infuser's catalyst-bed socket, like the Nickel Catalyst Bed, and is never used up.
 3. **Contact conversion.** With the vanadium bed in, the Infuser turns 250 mB of sulfur dioxide (right inlet) and 125 mB of oxygen (left inlet) into **250 mB of sulfur trioxide** in 100 ticks. The nickel bed does not serve for this, and the screen names the bed socket.
-4. **Absorption.** The Bulk Chemical Reactor dissolves 250 mB of sulfur trioxide (lid inlet) in 500 mB of water (side inlet) into **500 mB of sulfuric acid** in 100 ticks.
+4. **Absorption.** The Bulk Chemical Reactor dissolves 250 mB of sulfur trioxide (lid inlet) in 750 mB of water (side inlet) into **1,000 mB of sulfuric acid** in 100 ticks (raised in [factory payoffs](industrial-factory-payoffs.md)).
 
 The Chemical Reactor's simple recipe (2 sulfur dust + 1,000 mB of water → 1,000 mB of acid) is unchanged, as the plan requires.
 
@@ -56,12 +56,12 @@ The Chemical Reactor's simple recipe (2 sulfur dust + 1,000 mB of water → 1,00
 ## Balance and automation
 
 - **Sulfur accounting.**
-  - The Oxidizer burns one sulfur dust into 250 mB of sulfur dioxide. Contact conversion and absorption then give 500 mB of acid per dust.
-  - The simple recipe gives 500 mB per dust, so the industrial route is not a better sulfur yield.
-  - It costs more energy: 9,600 + 12,800 + 8,700 JE per dust, against the simple recipe's 4,800. It needs no sulfur in the reactor's own slot, and every step can be piped.
+  - The Oxidizer burns one sulfur dust into 250 mB of sulfur dioxide. Contact conversion and absorption then give 1,000 mB of acid per dust.
+  - The simple recipe gives 500 mB per dust, so the industrial route doubles the acid from each sulfur (raised in [factory payoffs](industrial-factory-payoffs.md)).
+  - It costs more energy: 9,600 + 12,800 + 8,700 JE per dust, against the simple recipe's 4,800 for half the acid. It trades power and plant for sulfur. It needs no sulfur in the reactor's own slot, and every step can be piped.
 - **Oxygen.** 125 mB per 250 mB of sulfur trioxide: SO2 + ½ O2 → SO3.
 - **The bed** is a one-time purchase: four washed iron ores, 500 mB of lye and two bricks.
-- **Labels.** The Infuser's left tank is labelled "Hydrogen tank" but holds oxygen for this recipe. Its tanks are shared by role across recipes.
+- **Labels.** The Infuser's tanks are named "Left inlet tank" and "Right inlet tank", since the left one holds hydrogen or oxygen depending on the recipe.
 
 ## Choices made here for review
 
@@ -99,7 +99,7 @@ Locally, without Gradle or a game:
 For CI, server game tests:
 - `ChemicalInfuserGameTests.theVanadiumBedTurnsSulfurDioxideIntoSulfurTrioxide`: the nickel bed does not serve (the screen names the bed socket). With the vanadium bed, 250 mB of sulfur dioxide and 125 mB of oxygen give 250 mB of sulfur trioxide for exactly 12,800 JE, and the bed stays.
 - `ChemicalInfuserGameTests.itRunsItsOwnRecipeAndIsBuiltFromTheStarterBill`: now five recipes.
-- `BulkChemicalReactorGameTests.sulfurTrioxideDissolvesIntoSulfuricAcid`: 250 mB of sulfur trioxide and 500 mB of water give 500 mB of acid for exactly 8,700 JE.
+- `BulkChemicalReactorGameTests.sulfurTrioxideDissolvesIntoSulfuricAcid`: 250 mB of sulfur trioxide and 750 mB of water give 1,000 mB of acid for exactly 8,700 JE.
 - `BulkChemicalReactorGameTests.washedIronOreGivesTheContactBedsVanadium`: four washed iron ores and 500 mB of lye give a vanadium pentoxide at the chute, and the oxide on two bricks crafts the bed.
 
 ### Results

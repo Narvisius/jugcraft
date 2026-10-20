@@ -30,7 +30,7 @@ import net.minecraft.world.level.storage.TagValueInput;
 public class TechSevenGameTests {
     private static final String ARENA="jugcraft-test:arms_arena";
     private static final BlockPos AT=new BlockPos(7,1,7);
-    private static List<FormMachineBlock> blocks(){return List.of(IndustrialForms.PRECISION_FINISHER,IndustrialForms.WET_PROCESSING_BENCH,IndustrialForms.MINERAL_CONDITIONER,IndustrialForms.ALUMINA_CALCINER,IndustrialForms.CHEMICAL_DISSOLUTION_CHAMBER,IndustrialForms.ALUMINATE_FILTER_PRESS,IndustrialForms.CHEMICAL_INFUSER,IndustrialForms.CHEMICAL_DISTILLATION_STATION,IndustrialForms.BULK_CHEMICAL_REACTOR,IndustrialForms.ELECTROLYTIC_SEPARATOR);}
+    private static List<FormMachineBlock> blocks(){return List.of(IndustrialForms.PRECISION_FINISHER,IndustrialForms.WET_PROCESSING_BENCH,IndustrialForms.MINERAL_CONDITIONER,IndustrialForms.ALUMINA_CALCINER,IndustrialForms.CHEMICAL_DISSOLUTION_CHAMBER,IndustrialForms.ALUMINATE_FILTER_PRESS,IndustrialForms.CHEMICAL_INFUSER,IndustrialForms.CHEMICAL_DISTILLATION_STATION,IndustrialForms.BULK_CHEMICAL_REACTOR,IndustrialForms.ELECTROLYTIC_SEPARATOR,IndustrialForms.BULK_ELECTROLYTIC_SEPARATOR,IndustrialForms.BULK_CHEMICAL_INFUSER,IndustrialForms.BULK_CHEMICAL_OXIDIZER,IndustrialForms.BULK_FERMENTER);}
     @GameTest(structure = ARENA)
     public void sevenPackagesPayExactInputsEnergyOutputsAndTools(GameTestHelper h) {
         int checked = 0;

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TBT",
+    "PGP",
+    "PCP"
+  ],
+  "key": {
+    "T": "jugcraft:steel_tank",
+    "B": "jugcraft:bio_generator",
+    "P": "#c:plates/steel",
+    "G": "jugcraft:steel_gear",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:large_bio_generator",
+    "count": 1
+  }
+}

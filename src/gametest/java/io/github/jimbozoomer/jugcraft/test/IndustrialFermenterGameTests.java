@@ -45,7 +45,7 @@ import net.minecraft.world.level.material.Fluids;
 /**
  * The Industrial Fermenter (docs/features/industrial-fermenter.md), the controlled fermentation form: it stands whole in
  * every orientation with pipes, conveyors and cables reaching it only at its declared ports; eight crops and a bucket of
- * water ferment into 250 mB of bioethanol and 250 mB of carbon dioxide at the Chemical Reactor's 9,600 JE; a full
+ * water ferment into 375 mB of bioethanol (half again the Chemical Reactor's) and 250 mB of carbon dioxide at its 9,600 JE; a full
  * carbon dioxide tank vents the excess and never stops it, while a full alcohol tank does; every part lights while it
  * works; it runs only its own recipe; and it is built from its bill.
  */
@@ -114,8 +114,8 @@ public class IndustrialFermenterGameTests {
 	}
 
 	/**
-	 * Eight wheat and a bucket of water: 100 paid ticks at 96 JE, the Chemical Reactor's 9,600 JE, then 250 mB of
-	 * bioethanol leaving at the broth outlet and 250 mB of carbon dioxide at the upper flange.
+	 * Eight wheat and a bucket of water: 100 paid ticks at 96 JE, the Chemical Reactor's 9,600 JE, then 375 mB of
+	 * bioethanol (half again the reactor's 250) leaving at the broth outlet and 250 mB of carbon dioxide at the upper flange.
 	 */
 	@GameTest(structure = ARENA, maxTicks = 200)
 	public void wheatFermentsIntoBioethanolAndCarbonDioxide(GameTestHelper helper) {
@@ -128,13 +128,13 @@ public class IndustrialFermenterGameTests {
 		insert(helper, port(helper, machine, "water_in"), Fluids.WATER, 1000);
 		helper.succeedWhen(() -> {
 			helper.assertTrue(machine.lane(0) == null, "Still fermenting");
-			helper.assertTrue(amount(machine.tanks().output(0), PetroFluids.BIOETHANOL.source()) == 250
+			helper.assertTrue(amount(machine.tanks().output(0), PetroFluids.BIOETHANOL.source()) == 375
 					&& amount(machine.tanks().output(1), PetroFluids.CARBON_DIOXIDE.fluid()) == 250
 					&& machine.container().getItem(0).isEmpty() && machine.tanks().input(0).millibuckets() == 0,
-					"The wheat and water used, 250 mB of bioethanol and 250 mB of carbon dioxide made");
+					"The wheat and water used, 375 mB of bioethanol and 250 mB of carbon dioxide made");
 			long used = used(machine, supplied);
 			helper.assertTrue(used == TICKS * DRAW, "Paid " + used + " JE, not " + TICKS * DRAW);
-			helper.assertTrue(extract(helper, port(helper, machine, "product_out"), PetroFluids.BIOETHANOL.source()) == 250,
+			helper.assertTrue(extract(helper, port(helper, machine, "product_out"), PetroFluids.BIOETHANOL.source()) == 375,
 					"The bioethanol leaves at the broth outlet");
 			helper.assertTrue(extract(helper, port(helper, machine, "co2_out"), PetroFluids.CARBON_DIOXIDE.fluid()) == 250,
 					"The carbon dioxide leaves at the upper flange");
@@ -156,10 +156,10 @@ public class IndustrialFermenterGameTests {
 		helper.runAfterDelay(10, () -> helper.assertTrue(machine.lane(0) != null && machine.status().state().working(),
 				"A full carbon dioxide tank does not stop it: " + machine.status()));
 		helper.runAfterDelay(160, () -> {
-			helper.assertTrue(machine.lane(0) == null && amount(machine.tanks().output(0), PetroFluids.BIOETHANOL.source()) == 250
+			helper.assertTrue(machine.lane(0) == null && amount(machine.tanks().output(0), PetroFluids.BIOETHANOL.source()) == 375
 					&& amount(machine.tanks().output(1), PetroFluids.CARBON_DIOXIDE.fluid()) == full,
 					"The batch finished, the gas tank still exactly full: " + machine.tanks().output(1).millibuckets() + " mB");
-			machine.tanks().output(0).fill(PetroFluids.BIOETHANOL.source(), full - 250);
+			machine.tanks().output(0).fill(PetroFluids.BIOETHANOL.source(), full - 375);
 			machine.container().setItem(0, new ItemStack(Items.WHEAT, 8));
 			machine.tanks().input(0).fill(Fluids.WATER, 1000);
 		});

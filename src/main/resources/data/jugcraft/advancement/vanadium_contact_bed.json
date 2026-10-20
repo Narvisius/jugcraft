@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:vanadium_contact_bed"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.vanadium_contact_bed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.vanadium_contact_bed.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:vanadium_contact_bed"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:sulfuric_acid"
+}

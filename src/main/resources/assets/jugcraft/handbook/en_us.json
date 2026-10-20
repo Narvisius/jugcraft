@@ -717,7 +717,10 @@
           "title": "Milestones (21)",
           "icon": "jugcraft:crop_harvester",
           "text": [
-            "Reaping What You Sow: Build a crop harvester."
+            "Reaping What You Sow: Build a crop harvester.",
+            "Something Rotten: Build the Anaerobic Digester, six blocks high, and turn waste into gas.",
+            "Contact Process: Make a vanadium contact bed and double the acid from your sulfur.",
+            "Power Station: Build the Combined Cycle Power Plant: 2,048 JE/t from one machine."
           ]
         }
       ]
@@ -3817,7 +3820,7 @@
           "title": "Electrolytic Separator",
           "icon": "jugcraft:electrolytic_separator",
           "text": [
-            "Two wide, two deep and three tall: the first of the big industrial machines, built from steel, copper cable and a basic circuit, before the Electrolytic Cell's aluminum cable and advanced circuit. It is placed from the front; every block it fills must be free, or it says what is in the way and where.",
+            "Two wide, two deep and three tall: the first of the big industrial machines, built from steel, copper cable and a basic circuit, before the Electrolytic Cell's advanced circuit. It is placed from the front; every block it fills must be free, or it says what is in the way and where.",
             "Pipe water or brine into the inlet low at the back. A bucket of water gives 500 mB of hydrogen (the top left collar) and 250 mB of oxygen (top right) in 40 seconds; a bucket of brine gives 250 mB of hydrogen, 250 mB of chlorine (top right) and 500 mB of lye (the return on the right) in 20 seconds. It draws 256 JE/t through the socket at the foot of the right tower.",
             "It keeps its lye: when the lye tank is full, brine stops until the lye is piped away. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
             "Also makes peroxide from Oxygenated Process Water: the first outlet carries peroxide, the second returned water, and the third remains unused. Empty old products before changing jobs; see Advanced Electronics and Automation."
@@ -3835,6 +3838,31 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:electrolytic_separator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Bulk Electrolytic Separator",
+          "icon": "jugcraft:bulk_electrolytic_separator",
+          "text": [
+            "Four wide, four deep and six tall: the Electrolytic Separator's cell housing and collection towers twice as large, built from an Electrolytic Separator, two Steel Tanks, steel plates, copper cable and a basic circuit. Every block it fills must be free when it is placed.",
+            "It splits water and brine as the Separator does, but four batches at once from 16,000 mB tanks, at 80% of the draw a batch: a bucket of water gives its 500 mB of hydrogen for a fifth less power than in an uncarded Separator.",
+            "It takes no upgrade cards: carded, it would make hydrogen cheaper than the factory allows. The feed comes in at the back; hydrogen leaves high on the front left, oxygen or chlorine high on the front right, and lye from the return below that. Power comes in at the junction box low on the front, under the lye return.",
+            "Supports the same current recipes as the Electrolytic Separator. Use the recipe picker and lock to switch jobs; empty incompatible stored fluids first."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:electrolytic_separator",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:copper_cable",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:bulk_electrolytic_separator",
             "count": 1
           }
         },
@@ -3887,11 +3915,36 @@
           }
         },
         {
+          "title": "Bulk Chemical Oxidizer",
+          "icon": "jugcraft:bulk_chemical_oxidizer",
+          "text": [
+            "Four wide, four deep and six tall: the Chemical Oxidizer's reaction throat, collector hood and feed hopper twice as large, built from a Chemical Oxidizer, two Steel Tanks, steel plates, an electric motor and a basic circuit. Every block it fills must be free when it is placed.",
+            "It burns everything the Oxidizer does, sulfur into sulfur dioxide and coal into carbon dioxide, but four batches at once from 16,000 mB tanks, at 80% of the draw a batch.",
+            "Feed goes in at the hopper's mouth on top at the back; oxygen comes in low on its right side, at the front; the gas leaves at the collar on top at the front. Power comes in at the junction box low on its left side. Upgrade cards fit its terminal.",
+            "Supports the same current recipes as the Chemical Oxidizer. Use the recipe picker and lock to switch jobs; empty incompatible stored fluids first."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:chemical_oxidizer",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:bulk_chemical_oxidizer",
+            "count": 1
+          }
+        },
+        {
           "title": "Industrial Fermenter",
           "icon": "jugcraft:industrial_fermenter",
           "text": [
             "Three wide, three deep and four tall: a tall stirred vessel on four legs, built from steel plates, a Steel Tank, glass, an electric motor, a basic circuit and a Machine Casing. Every block it fills must be free when it is placed.",
-            "Drop eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) into the hatch on its crown and pipe water into the inlet low at the back left. With a bucket of water they ferment into 250 mB of bioethanol at the broth outlet low at the front, and 250 mB of carbon dioxide at the flange high at the back, in five seconds at 96 JE/t.",
+            "Drop eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) into the hatch on its crown and pipe water into the inlet low at the back left. With a bucket of water they ferment into 375 mB of bioethanol at the broth outlet low at the front (half again what the Chemical Reactor gets from the same crops), and 250 mB of carbon dioxide at the flange high at the back, in five seconds at 96 JE/t.",
             "The carbon dioxide feeds the Chemical Infuser's methane. Collecting it is optional: when its tank is full the rest is vented and fermentation goes on.",
             "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported."
           ],
@@ -3912,13 +3965,40 @@
           }
         },
         {
+          "title": "Bulk Fermenter",
+          "icon": "jugcraft:bulk_fermenter",
+          "text": [
+            "Five wide, five deep and six tall: the Industrial Fermenter's vessel enlarged, built from an Industrial Fermenter, two Steel Tanks, steel plates, an electric motor and a basic circuit. Every block it fills must be free when it is placed.",
+            "It ferments like the Industrial Fermenter, eight crops and a bucket of water into 375 mB of bioethanol and 250 mB of carbon dioxide, but runs four batches at once from 16,000 mB tanks, at 80% of the draw a batch. Crops go in at the hatch on its crown, water at the inlet low at the back left; the alcohol leaves at the outlet low at the front and the gas at the flange high at the back, which vents what is not collected.",
+            "It draws its power through the services box low at the back right. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
+            "Supports the same current recipes as the Industrial Fermenter. Use the recipe picker and lock to switch jobs; empty incompatible stored fluids first."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:industrial_fermenter",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:bulk_fermenter",
+            "count": 1
+          }
+        },
+        {
           "title": "Bulk Chemical Reactor",
           "icon": "jugcraft:bulk_chemical_reactor",
           "text": [
             "Four wide, four deep and four tall: the Chemical Reactor enlarged into a jacketed vessel with a stirring drive on its lid, built from a Chemical Reactor, a Steel Tank, a steel fluid pipe, an electric motor, a basic circuit and steel plates. Every block it fills must be free when it is placed. It runs two batches at once, from 8,000 mB tanks, at 90% of the reactor's draw.",
             "Pipe water into the inlet on its left side and hydrogen chloride from the Chemical Infuser into the short absorption inlet on its lid: 500 mB of the gas dissolves in a bucket of water into a bucket of hydrochloric acid in five seconds, which leaves at the outlet low at the front.",
-            "Hydrochloric acid leaches ore like sulfuric acid: drop an ore into the hatch on its lid, pipe 250 mB of the acid into the side inlet, and four washed ores come out of the chute at the front, ready for the furnace.",
+            "Hydrochloric acid leaches ore like sulfuric acid: drop an ore into the hatch on its lid, pipe 250 mB of the acid into the side inlet, and four washed ores come out of the chute at the front, ready for the furnace, in four seconds: two at a time, four times as fast as the Chemical Reactor leaches.",
+            "Sulfur trioxide from the Chemical Infuser dissolves in water here: 250 mB of it in 750 mB of water make a bucket of sulfuric acid, twice the acid a sulfur dust gives in the Chemical Reactor.",
             "Nitric acid in the side inlet and ammonia in the lid inlet neutralize each other: 250 mB of the acid and 125 mB of ammonia give four ammonium nitrate at the chute. It is a strong nitrogen fertilizer, and it packs grenades and high-explosive rockets in place of guncotton.",
+            "Eight washed nickel ores in the hatch, a bucket of hydrochloric acid and 250 mB of chlorine leave one ruthenium powder in twenty seconds: the metal of the Chemical Infuser's faster methanation bed.",
             "Also makes Wet Superphosphate from ground phosphate and phosphoric acid, or dissolves Mixed-farm Fertilizer into existing Nutrient Solution. Recipe lock selects the intended job.",
             "Also prepares storable hydrazine and N2O4 propellants, each with a solid process residue. See Cryogenics and Rocket Fuels for compatible loaded motors and waste recovery."
           ],
@@ -4062,6 +4142,30 @@
           }
         },
         {
+          "title": "Large Gas Burning Generator",
+          "icon": "jugcraft:large_gas_burning_generator",
+          "text": [
+            "Five wide, six deep and five tall: the Gas Burning Generator's engine-generator train enlarged on its skid, built from a Gas Burning Generator, two Steel Tanks, steel plates, a steel gear and a basic circuit. Every block it fills must be free when it is placed.",
+            "It burns the same gases four times as fast: hydrogen at 128 JE a millibucket and 512 JE/t, methane an eighth better at 504 JE a millibucket and 1,024 JE/t. Pipe either into the capped inlet low on its right side, near the front; the power leaves at the socket on the back of the terminal cabinet.",
+            "Its 8,000 mB tank holds four buckets. It makes only as much as its store has room for, and its intake fan and coupling turn while it runs. The Combined Cycle Power Plant still gets more from methane."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:gas_burning_generator",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:large_gas_burning_generator",
+            "count": 1
+          }
+        },
+        {
           "title": "Bio Generator",
           "icon": "jugcraft:bio_generator",
           "text": [
@@ -4083,6 +4187,55 @@
               null
             ],
             "result": "jugcraft:bio_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Large Bio Generator",
+          "icon": "jugcraft:large_bio_generator",
+          "text": [
+            "Five wide, six deep and five tall: the Bio Generator's engine-generator enlarged on its skid, built from a Bio Generator, two Steel Tanks, steel plates, a steel gear and a basic circuit. Every block it fills must be free when it is placed.",
+            "It burns the same fuels a quarter better and four times as fast: bioethanol at 240 JE a millibucket and 384 JE/t, biogas at 335 JE a millibucket and 256 JE/t. Pipe either into the liquid inlet low on its right side, behind the middle; the power leaves at the socket on the terminal box low on its left side.",
+            "Its 8,000 mB tank holds four buckets. It makes only as much as its store has room for, and its coupling and radiator fan turn while it runs.",
+            "Also accepts Clean Biogas from the Biogas Cleaner at 335 JE/mB and 256 JE/t, keeping the smaller generator compatible."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:bio_generator",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:large_bio_generator",
+            "count": 1
+          }
+        },
+        {
+          "title": "Combined Cycle Power Plant",
+          "icon": "jugcraft:combined_cycle_power_plant",
+          "text": [
+            "Six wide, four deep and five tall: the factory's power station. A gas turbine on a long skid draws air through the filter house over its generator, and its hot exhaust raises steam in the tall heat-recovery boiler on the right for a second turbine on the same shaft. It is built from a Gas Turbine, a Heat Recovery Unit, two Steel Tanks, an advanced circuit, a Machine Casing and steel plates. Every block it fills must be free when it is placed.",
+            "Pipe fuel into the flange low at the back. Methane gives 528 JE a millibucket, more than the large gas generator, at 2,048 JE/t: four times the Gas Turbine. Raw syngas straight from the Coal Gasifier burns whole at 256 JE a millibucket and the same 2,048 JE/t, and hydrogen at 128 JE a millibucket and 1,024 JE/t.",
+            "The power leaves at the generator's terminal low on its left side. It makes only as much as its store has room for, and its shaft turns while it runs. Feeding it takes a real gas works: two Coal Gasifiers, or a large digester and methane plant."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:advanced_circuit",
+              "jugcraft:steel_tank",
+              "jugcraft:gas_turbine",
+              "jugcraft:machine_casing",
+              "jugcraft:heat_recovery_unit",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:combined_cycle_power_plant",
             "count": 1
           }
         },
@@ -4219,6 +4372,7 @@
             "Two wide, three deep and three tall: a stepped reaction chamber with an inlet on each shoulder, a catalyst-bed drawer at its foot and a cooling jacket behind, built from steel plates, two steel fluid pipes, a Tinplate Tank, copper cable and a basic circuit. Every block it fills must be free when it is placed.",
             "Pipe hydrogen into the left inlet and chlorine into the right. 250 mB of each burn together into 500 mB of hydrogen chloride in under four seconds, which leaves at the top collar at the back. It draws 128 JE/t through the socket low on the right side at the back.",
             "With a Nickel Catalyst Bed in its bed socket it makes methane: 400 mB of hydrogen and 100 mB of carbon dioxide (the right inlet) give 100 mB of methane at the top collar and 400 mB of water at the drain below it in ten seconds. The bed is never used up. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
+            "A Ruthenium Catalyst Bed (ruthenium powder from the Bulk Chemical Reactor, laid on a nickel bed) does every methanation in half the time and for half the energy, from the same gases.",
             "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported.",
             "Install the reusable Cobalt-Ceramic Catalyst Bed for synthetic crude or CO/water gas balancing. First output carries crude or hydrogen; second carries water or CO2. Drain excess applies only to water. See Synthetic Fuels and Recovery."
           ],
@@ -4235,6 +4389,31 @@
               "jugcraft:steel_plate"
             ],
             "result": "jugcraft:chemical_infuser",
+            "count": 1
+          }
+        },
+        {
+          "title": "Bulk Chemical Infuser",
+          "icon": "jugcraft:bulk_chemical_infuser",
+          "text": [
+            "Four wide, six deep and six tall: the Chemical Infuser's chamber, inlets, bed drawer and cooling jacket twice as large, built from a Chemical Infuser, two Steel Tanks, steel plates, steel fluid pipe and a basic circuit. Every block it fills must be free when it is placed.",
+            "It runs everything the Infuser does, hydrogen chloride, ethylene dichloride, methanation over a nickel bed and contact conversion over a vanadium bed, but four batches at once from 16,000 mB tanks, at 80% of the draw a batch. Its catalyst bed goes in the same socket on its screen and serves every batch.",
+            "Hydrogen (or oxygen for contact conversion) comes in on its left shoulder, the other gas on its right; the product leaves high at the back and the water low at the back. Power comes in at the junction box low on its right side, near the back. Upgrade cards fit its terminal.",
+            "Supports the same current recipes as the Chemical Infuser. Use the recipe picker and lock to switch jobs; empty incompatible stored fluids first."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_tank",
+              "jugcraft:chemical_infuser",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_fluid_pipe",
+              "jugcraft:steel_plate",
+              "jugcraft:steel_plate",
+              "jugcraft:basic_circuit",
+              "jugcraft:steel_plate"
+            ],
+            "result": "jugcraft:bulk_chemical_infuser",
             "count": 1
           }
         },

@@ -3,6 +3,7 @@ package io.github.jimbozoomer.jugcraft.machine.form;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -111,7 +112,11 @@ public record MachineStatus(MachineLifecycle state, Reason reason, int index, in
 		return Component.translatable(reason.translationKey(), what, name, amount);
 	}
 
-	/** A tank's label from its role: "Hydrogen tank", or a translation of it when one is given. */
+	/**
+	 * A tank's label from its role: "Hydrogen tank", or a translation of it when one is given. A form whose tank holds
+	 * different fluids for different recipes names it its own way ({@code container.jugcraft.form.<form>.tank.<role>}),
+	 * so the Infuser's first inlet is not called a hydrogen tank while it holds oxygen.
+	 */
 	public static Component tankLabel(MachineForm form, int tank) {
 		if (tank < 0 || tank >= form.tankRoles().size()) {
 			return Component.literal("?");
@@ -122,6 +127,10 @@ public record MachineStatus(MachineLifecycle state, Reason reason, int index, in
 			default -> false;
 		}) {
 			return Component.translatable("container.jugcraft.form.tank." + form.id().getPath() + "." + role);
+		}
+		String own = "container.jugcraft.form." + form.id().getPath() + ".tank." + role;
+		if (Language.getInstance().has(own)) {
+			return Component.translatable(own);
 		}
 		return Component.translatableWithFallback("container.jugcraft.form.tank." + role, capitalize(role) + " tank");
 	}

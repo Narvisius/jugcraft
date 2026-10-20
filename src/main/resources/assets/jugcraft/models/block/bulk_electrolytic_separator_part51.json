@@ -1,0 +1,87 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "brine_still": "jugcraft:block/brine_still",
+    "chlorine_still": "jugcraft:block/chlorine_still",
+    "copper_busbar": "jugcraft:block/copper_busbar",
+    "dp_chrome": "jugcraft:block/dp_chrome",
+    "dp_gauge": "jugcraft:block/dp_gauge",
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "dp_hazard": "jugcraft:block/dp_hazard",
+    "dp_lamp": "jugcraft:block/dp_lamp",
+    "dp_olive": "jugcraft:block/dp_olive",
+    "dp_olive_stencil": "jugcraft:block/dp_olive_stencil",
+    "dp_rubber": "jugcraft:block/dp_rubber",
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dw_steel_plate": "jugcraft:block/dw_steel_plate",
+    "hydrogen_still": "jugcraft:block/hydrogen_still",
+    "lye_still": "jugcraft:block/lye_still",
+    "oxygen_still": "jugcraft:block/oxygen_still",
+    "power_port": "jugcraft:block/power_port",
+    "sp_copper": "jugcraft:block/sp_copper",
+    "sp_hopper_inside": "jugcraft:block/sp_hopper_inside",
+    "tk_body": "jugcraft:block/tk_body",
+    "tk_checker": "jugcraft:block/tk_checker",
+    "tk_top": "jugcraft:block/tk_top",
+    "particle": "jugcraft:block/dp_olive"
+  },
+  "elements": [
+    {
+      "from": [
+        4.0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "west": {
+          "texture": "#dp_olive"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        14.5,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "west": {
+          "texture": "#dp_gunmetal"
+        },
+        "down": {
+          "texture": "#dp_gunmetal"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        2.0,
+        16,
+        2.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#tk_body"
+        },
+        "east": {
+          "texture": "#tk_body"
+        }
+      }
+    }
+  ]
+}

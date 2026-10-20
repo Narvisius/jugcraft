@@ -224,6 +224,10 @@ ITEMS = {
     # Silicone (docs/features/silicone.md): silicon reacted with methyl chloride and water in the Chemical Reactor, a
     # heat-proof rubber the Polymer Molding Press's gasket mold presses into gaskets.
     "silicone": "Silicone Rubber",
+    # The owner's optional later methanation catalyst (tools/industrial_forms.py): ruthenium recovered from washed nickel
+    # ore with hydrochloric acid and chlorine in the Bulk Chemical Reactor, laid on the nickel bed. Never used up.
+    "ruthenium_powder": "Ruthenium Powder",
+    "ruthenium_catalyst_bed": "Ruthenium Catalyst Bed",
 }
 
 

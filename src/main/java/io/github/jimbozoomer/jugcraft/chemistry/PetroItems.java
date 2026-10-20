@@ -61,6 +61,8 @@ public final class PetroItems {
 	public static Item BORON_DOPED_SILICON;
 	/** Silicone rubber (docs/features/silicone.md): pressed into heat-proof gaskets. */
 	public static Item SILICONE;
+	public static Item RUTHENIUM_POWDER;
+	public static Item RUTHENIUM_CATALYST_BED;
 	/** Bone meal doses ammonium nitrate gives each crop. */
 	public static final int AMMONIUM_NITRATE_DOSES = 3;
 	public static Item VANADIUM_CONTACT_BED;
@@ -254,6 +256,8 @@ public final class PetroItems {
 		PVAC_GLUE = JugcraftRegistry.item("pvac_glue");
 		BORON_DOPED_SILICON = JugcraftRegistry.item("boron_doped_silicon");
 		SILICONE = JugcraftRegistry.item("silicone");
+		RUTHENIUM_POWDER = JugcraftRegistry.item("ruthenium_powder");
+		RUTHENIUM_CATALYST_BED = JugcraftRegistry.item("ruthenium_catalyst_bed", properties -> new Item(properties.stacksTo(1)));
 
 		VANADIUM_IRON_CONCENTRATE = JugcraftRegistry.item("vanadium_iron_concentrate");
 		VANADIUM_OXIDE = JugcraftRegistry.item("vanadium_oxide");
@@ -570,6 +574,8 @@ public final class PetroItems {
 			output.accept(PVAC_GLUE);
 			output.accept(BORON_DOPED_SILICON);
 			output.accept(SILICONE);
+			output.accept(RUTHENIUM_POWDER);
+			output.accept(RUTHENIUM_CATALYST_BED);
 			output.accept(VANADIUM_CONTACT_BED);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {

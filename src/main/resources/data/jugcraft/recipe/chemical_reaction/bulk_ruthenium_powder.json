@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:precious_metal_recovery",
+  "items": [
+    {
+      "ingredient": "jugcraft:washed_nickel_ore",
+      "count": 8
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrochloric_acid",
+      "amount": 1000
+    },
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:ruthenium_powder",
+      "count": 1
+    }
+  ],
+  "time": 400
+}

@@ -12,7 +12,7 @@ The **Industrial Fermenter** is a 3×3×4 multi-block: a tall stepped steel vess
 
 - Crops go in at the **feed hatch** on the crown, and water at the **water inlet** low at the back left.
 - Eight crops from `#jugcraft:fermentable` (wheat, sugar cane, potato, carrot, beetroot, sweet berries, melon slices or apples) and 1,000 mB of water become two outputs:
-  - **250 mB of bioethanol**, at the **broth outlet** low at the front;
+  - **375 mB of bioethanol**, at the **broth outlet** low at the front: half again the Chemical Reactor's 250 (raised in [factory payoffs](industrial-factory-payoffs.md));
   - **250 mB of carbon dioxide**, at the **upper flange** at the back.
 - A batch takes 100 ticks and 9,600 JE (96 JE/t). That is the Chemical Reactor's own fermentation, which stays unchanged, plus the gas the reactor cannot keep.
 
@@ -42,7 +42,7 @@ The **Industrial Fermenter** is a 3×3×4 multi-block: a tall stepped steel vess
 
 ## Balance and automation
 
-- **Bioethanol.** The Fermenter matches the reactor's figures exactly (8 crops + 1,000 mB of water → 250 mB in 100 ticks for 9,600 JE), so it adds no cheaper bioethanol. Its gain is the carbon dioxide, which the reactor discards.
+- **Bioethanol.** The Fermenter takes the reactor's inputs, time and energy (8 crops + 1,000 mB of water, 100 ticks, 9,600 JE) but gives 375 mB instead of 250, so the dedicated machine is worth building (raised in [factory payoffs](industrial-factory-payoffs.md)). Its gain is the carbon dioxide, which the reactor discards.
 - **Carbon dioxide.** It makes 250 mB per batch, the same amount of gas as alcohol. This is the plan's rough 1:1 molar ratio of ethanol to CO2, at the game's gas scale.
 - **Power-loop checks.** Carbon dioxide made this way is cheaper than the Oxidizer's (which needs electrolysed oxygen), so methane gets cheaper to make. `tools/check_mod_data.py`'s loop audit still passes:
   - It costs every recipe a fluid comes from, including this one.
@@ -58,7 +58,7 @@ The **Industrial Fermenter** is a 3×3×4 multi-block: a tall stepped steel vess
   - The Steel Tank and the casing already carry the plan's other 8 plates.
 - **250 mB of carbon dioxide per batch**, as above.
 - **The vent mechanism.** Excess venting is a property of the form's tank (`vent("co2")`), not of the recipe. The plan's "optional stop-instead" setting is now built separately ([vent or hold](industrial-vent-or-hold.md)).
-- **Not built yet:** the larger 5×5×6 variant and the separate milling/mashing and distillation steps.
+- **Not built yet:** the separate milling/mashing and distillation steps. The larger 5×5×6 variant is now the [Bulk Fermenter](industrial-bulk-fermenter.md).
 
 ## Multiplayer and persistence
 
@@ -88,7 +88,7 @@ Locally, without Gradle or a game:
 
 For CI, server game tests in `IndustrialFermenterGameTests`:
 - `itStandsWholeAndOnlyItsPortsAnswer`: 36 blocks in every orientation. Only the five declared ports answer. The hatch takes wheat, not cobblestone; the inlet takes water, not hydrogen; neither outlet takes anything.
-- `wheatFermentsIntoBioethanolAndCarbonDioxide`: 8 wheat and 1,000 mB of water give 250 mB of bioethanol and 250 mB of carbon dioxide at their outlets, for exactly 9,600 JE.
+- `wheatFermentsIntoBioethanolAndCarbonDioxide`: 8 wheat and 1,000 mB of water give 375 mB of bioethanol and 250 mB of carbon dioxide at their outlets, for exactly 9,600 JE.
 - `aFullGasTankVentsButAFullAlcoholTankWaits`: with the gas tank full, a batch still runs and the tank stays exactly full. A full alcohol tank stops it with "output full", and it carries on once drained.
 - `everyPartLightsWhileItWorks`: lit while working, dark when paused; only the controller gives off light.
 - `itRunsItsOwnRecipeAndIsBuiltFromItsBill`: its one recipe; the Chemical Reactor makes no carbon dioxide; the bill crafts it.
@@ -106,4 +106,4 @@ No survival playtest, two-client test or performance measurement has been done.
 ## Rollout and open questions
 
 - The bill and the carbon dioxide amount await the owner's review.
-- Still to come: the 5×5×6 bulk variant, milling/mashing, distillation and dehydration.
+- Still to come: milling/mashing, distillation and dehydration. The 5×5×6 variant is the [Bulk Fermenter](industrial-bulk-fermenter.md).

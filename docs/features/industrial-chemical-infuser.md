@@ -110,5 +110,5 @@ Not applicable: a placed machine, with no world generation, creatures, loot or s
 
 - **Next for the Infuser**: methanation with its nickel bed and water drain, and methane as the Gas Burning Generator's second fuel, follow in [methane power](industrial-methane-power.md).
 - **Open for review**: the 75-tick time keeps the plan's 9,600 JE at the synthesis family's 128 JE/t; the plan's 100 ticks at 96 JE/t would need a per-form draw.
-- **Not done here**: aqueous hydrochloric acid and hydrogen chloride consumers; the 4×6×6 larger variant; a Jade readout for forms; companions working forms.
+- **Not done here**: aqueous hydrochloric acid and hydrogen chloride consumers; the 4×6×6 larger variant (since built: the [Bulk Chemical Infuser](industrial-bulk-chemical-infuser.md)); a Jade readout for forms; companions working forms.
 - Reversible: removing the Infuser would need its blocks broken first. Its saves use only the foundation's form data.

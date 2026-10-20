@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nickel_catalyst_bed",
+    "jugcraft:ruthenium_powder"
+  ],
+  "result": {
+    "id": "jugcraft:ruthenium_catalyst_bed",
+    "count": 1
+  }
+}

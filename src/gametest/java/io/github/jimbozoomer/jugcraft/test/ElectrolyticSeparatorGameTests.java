@@ -260,6 +260,25 @@ public class ElectrolyticSeparatorGameTests {
 		helper.succeed();
 	}
 
+	/**
+	 * The owner's copper entry for aluminum: the Electrolytic Cell, which smelts aluminum, is wired with copper cable, so
+	 * building it never needs aluminum; aluminum cable no longer makes it.
+	 */
+	@GameTest
+	public void theAluminumCellIsWiredWithCopper(GameTestHelper helper) {
+		RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> crafting = RecipeManager.createCheck(RecipeType.CRAFTING);
+		ItemStack plate = stack("steel_plate");
+		ItemStack tank = stack("steel_tank");
+		for (String cable : List.of("copper_cable", "aluminum_cable")) {
+			CraftingInput cell = CraftingInput.of(3, 3, List.of(plate, stack(cable), plate, tank, stack("advanced_circuit"), tank, plate,
+					stack("machine_casing"), plate));
+			boolean builds = crafting.getRecipeFor(cell, helper.getLevel())
+					.map(holder -> holder.value().assemble(cell).is(item("electrolytic_cell"))).orElse(false);
+			helper.assertTrue(builds == cable.equals("copper_cable"), "With " + cable + " the cell " + (builds ? "builds" : "does not build"));
+		}
+		helper.succeed();
+	}
+
 	// ------------------------------------------------------------------ helpers
 
 	/** Places the whole Separator as its item would, facing {@code facing}, its controller at {@code relative}. */

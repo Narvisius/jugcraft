@@ -106,5 +106,5 @@ Not applicable: a placed machine, with no world generation, creatures, loot or s
 ## Rollout and open questions
 
 - **Next in the acid chain**: contact conversion (SO2 + O2 -> SO3) in the Chemical Infuser family with the selected vanadium contact bed, once its independent mineral supply is specified, then absorption into ordinary sulfuric acid.
-- **Not done here**: other oxidation recipes; a residue output; the 4×4×6 larger variant; a Jade readout for forms; companions working forms.
+- **Not done here**: other oxidation recipes; a residue output; the 4×4×6 larger variant (since built: the [Bulk Chemical Oxidizer](industrial-bulk-chemical-oxidizer.md)); a Jade readout for forms; companions working forms.
 - Reversible: removing the Oxidizer would need its blocks broken first. Its saves use only the foundation's form data.

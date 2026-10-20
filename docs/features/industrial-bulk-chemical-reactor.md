@@ -23,7 +23,7 @@ The **Bulk Chemical Reactor** is a 4×4×4 multi-block: the Chemical Reactor's j
   - The acid leaves at the outlet low at the front.
 - **Chloride leaching:**
   - Drop an ore into the hatch on its lid and give it 250 mB of hydrochloric acid at the side inlet.
-  - It gives **four washed ores** in 160 ticks, from the chute at the front. That is the same yield as sulfuric-acid leaching in the Chemical Reactor.
+  - It gives **four washed ores** in 80 ticks, from the chute at the front. That is the same yield as sulfuric-acid leaching in the Chemical Reactor, at four times its rate with both lanes (raised in [factory payoffs](industrial-factory-payoffs.md)).
 - Hydrochloric acid is a new liquid with a bucket. Like every liquid, it can be piped, carried and stored in tanks.
 - **Looks:**
   - Lit while it works: the amber activity strip under the access-plate window, and the control panel's amber and green lamps.
@@ -49,7 +49,7 @@ The **Bulk Chemical Reactor** is a 4×4×4 multi-block: the Chemical Reactor's j
 ## Balance and automation
 
 - **Absorption.** It uses exactly the plan's row: 500 mB of gas + 1,000 mB of water → 1,000 mB of acid, 100 ticks at the family's 96 JE/t, or 9,600 JE. The expanded profile's 90% makes that 8,700 JE a batch. The chlorine and hydrogen are accounted once: the acid volume holds the gas's solute and the water.
-- **Leaching.** It matches sulfuric-acid leaching: 1 ore + 250 mB of acid → 4 washed ores, 160 ticks. It is a second route to the same best yield, never a better one, so there is no gain loop.
+- **Leaching.** It matches sulfuric-acid leaching's yield, 1 ore + 250 mB of acid → 4 washed ores, in half the time (80 ticks). The 4× ore ceiling is unchanged, so there is no gain loop; the big machine wins on speed.
 - **The acid is not interchangeable with gas.** Nothing turns the acid back into hydrogen chloride, and the Chemical Reactor neither makes nor uses it.
 - **Automation.** Pipes reach the three fluid ports, and conveyors reach the hatch and the chute. The power socket is on the junction box at the back right.
 
@@ -96,7 +96,7 @@ For CI, server game tests in `BulkChemicalReactorGameTests`:
   - The outlet takes nothing.
 - `hydrogenChlorideDissolvesIntoHydrochloricAcid`: 1,000 mB of water and 500 mB of gas give 1,000 mB of acid at the outlet, for exactly 8,700 JE.
 - `twoBatchesRunSideBySide`: both lanes start together and make 2,000 mB, for twice the energy.
-- `hydrochloricAcidLeachesOre`: an iron ore and 250 mB of acid give four washed iron ores at the chute.
+- `hydrochloricAcidLeachesOre`: an iron ore and 250 mB of acid give four washed iron ores at the chute, done within 100 ticks.
 - `everyPartLightsWhileItWorks`: lit while working and dark when paused; only the controller gives off light.
 - `itRunsItsOwnRecipesAndIsBuiltFromItsBill`:
   - its absorption and leaching recipes run;

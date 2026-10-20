@@ -56,6 +56,8 @@ CONTACT_CONVERSION = f"{MOD}:contact_conversion"
 VANADIUM_RECOVERY = f"{MOD}:vanadium_recovery"
 # Neutralizing nitric acid with ammonia into solid ammonium nitrate (the Bulk Chemical Reactor).
 NITRATE_NEUTRALIZATION = f"{MOD}:nitrate_neutralization"
+# Recovering the ruthenium bed's metal from washed nickel ore (the Bulk Chemical Reactor).
+PRECIOUS_METAL_RECOVERY = f"{MOD}:precious_metal_recovery"
 
 # The owner's white tank family (the tank restyle) for the collection towers, with its checker band.
 TANK_BODY, TANK_TOP, TANK_CHECKER = "tk_body", "tk_top", "tk_checker"
@@ -82,6 +84,39 @@ GAS_GENERATOR_FUELS = [(f"{MOD}:hydrogen", 128, 128), (f"{MOD}:methane", 448, 25
 # generator's output; and the Anaerobic Digester's biogas at the plan's 64 JE/t, its 60% methane share worth 268 JE/mB
 # (60% of methane's 448, rounded down: the carbon dioxide burns for nothing).
 BIO_GENERATOR_FUELS = [(f"{MOD}:bioethanol", 192, 96), (f"{MOD}:biogas", 268, 64)]
+# What the Combined Cycle Power Plant burns, the factory's big power station: methane at a quarter more than the gas
+# generator's 448 JE/mB (its exhaust raises steam for a second turbine) and 2,048 JE/t, four times the gas turbine; the
+# Coal Gasifier's raw syngas whole at 256 JE/mB and the same rate; hydrogen at the Fuel Cell's 128 JE/mB at 1,024 JE/t.
+# The Bulk Electrolytic Separator's cells, as its model fills them (form_layers on bulk_electrolytic_separator()).
+BULK_SEPARATOR_LAYERS = [["C###", "####", "####", "####"],
+                         [".###", "####", "####", ".##."],
+                         [".###", "####", "####", ".##."],
+                         [".###", "####", "####", ".##."],
+                         ["####", "####", "####", ".##."],
+                         [".##.", "####", "####", ".##."]]
+# The Bulk Chemical Oxidizer's cells, as its model fills them (form_layers on bulk_chemical_oxidizer()).
+BULK_OXIDIZER_LAYERS = [["C###", "####", "####", "####"],
+                        ["####", "####", "####", "###."],
+                        ["####", "####", "####", "#.#."],
+                        ["####", "####", "####", "###."],
+                        ["####", "####", "####", "###."],
+                        ["####", "####", "####", "###."]]
+# What the Large Gas Burning Generator burns, four times as fast as the Gas Burning Generator: hydrogen at the same
+# 128 JE/mB (more would beat electrolysis's cost), methane an eighth better at 504 JE/mB, between the Gas Burning
+# Generator's 448 and the Combined Cycle Power Plant's 528. For review.
+LARGE_GAS_GENERATOR_FUELS = [(f"{MOD}:hydrogen", 128, 512), (f"{MOD}:methane", 504, 1024)]
+# The large generator's cells, as its model fills them (form_layers on large_gas_burning_generator()).
+LARGE_GAS_GENERATOR_LAYERS = [["C####", "#####", "#####", "#####", "#####", "#####"],
+                              [".###.", ".####", ".###.", "#####", "#####", "#####"],
+                              [".###.", ".###.", ".###.", "#####", "#####", "#####"],
+                              [".###.", ".###.", ".###.", ".###.", ".###.", ".####"],
+                              [".....", ".....", ".....", ".....", ".....", "..###"]]
+# What the Large Bio Generator burns: the same fuels a quarter better (a bigger, hotter engine with an exhaust heat
+# exchanger), four times as fast. For review.
+LARGE_BIO_GENERATOR_FUELS = [(f"{MOD}:bioethanol", 240, 384), (f"{MOD}:biogas", 335, 256), (f"{MOD}:clean_biogas", 335, 256)]
+COMBINED_CYCLE_FUELS = [(f"{MOD}:methane", 528, 2048), (f"{MOD}:raw_syngas", 256, 2048), (f"{MOD}:hydrogen", 128, 1024)]
+# Where its shaft runs: along x, at this height and depth (pixels).
+PLANT_AXIS = (20, 32)
 # The Bio Generator's materials (the art brief): pale ceramic heat shields over the combustion body.
 HEAT_SHIELD, FLANGE_FACE = "sp_ceramic", "dr_flange"
 
@@ -110,9 +145,38 @@ FORMS = {
             ("power", "ENERGY_IN", 0, 1, 0, 0, "FRONT"),
         ],
         # The owner's selected construction: 4 steel plates and two Steel Tanks (8 plates each), 20 plates in all,
-        # with copper cable and a basic circuit where the Electrolytic Cell needs aluminum cable and an advanced one.
+        # with copper cable and a basic circuit where the Electrolytic Cell needs an advanced one.
         "recipe": (["PWP", "TCT", "PMP"], {"P": "#c:plates/steel", "W": f"{MOD}:copper_cable", "T": f"{MOD}:steel_tank",
                                            "C": f"{MOD}:basic_circuit", "M": f"{MOD}:machine_casing"}),
+        "features": ["machines"],
+    },
+    "bulk_electrolytic_separator": {
+        "display": "Bulk Electrolytic Separator",
+        # The art brief's 4x4x6 larger variant: the Separator's own family, tanks and capability, so it splits the same
+        # water and brine, in the bulk profile (four batches side by side from 16,000 mB tanks at 80% of the draw a batch).
+        "family": "electrolytic_cell",
+        "layers": BULK_SEPARATOR_LAYERS,
+        "profile": "BULK",
+        "tank_mb": 16_000,
+        "input_tanks": ["feed"],
+        "output_tanks": ["anode_gas", "hydrogen", "lye"],
+        "capabilities": [AQUEOUS_ELECTROLYSIS],
+        # No upgrade cards: with four efficiency cards its bulk saving would make hydrogen for 134.4 JE/mB, under the
+        # plan's 256 JE/mB electrolysis floor (docs/features/industrial-electrolysis-floor.md). Without them it makes
+        # it for 328 JE/mB, a fifth less than an uncarded Separator.
+        "upgrades": False,
+        "warmup": 40,
+        "ports": [
+            ("feed_in", "FLUID_IN", 0, 1, 3, 1, "BACK"),
+            ("anode_gas_out", "FLUID_OUT", 0, 3, 0, 4, "FRONT"),
+            ("hydrogen_out", "FLUID_OUT", 1, 0, 0, 4, "FRONT"),
+            ("lye_out", "FLUID_OUT", 2, 2, 0, 2, "FRONT"),
+            ("power", "ENERGY_IN", 0, 2, 0, 0, "FRONT"),
+        ],
+        # This change's bill (open for review): an Electrolytic Separator enlarged with two Steel Tanks, steel plates,
+        # copper cable and a basic circuit.
+        "recipe": (["TST", "PWP", "PCP"], {"T": f"{MOD}:steel_tank", "S": f"{MOD}:electrolytic_separator",
+                                           "P": "#c:plates/steel", "W": f"{MOD}:copper_cable", "C": f"{MOD}:basic_circuit"}),
         "features": ["machines"],
     },
     "gas_burning_generator": {
@@ -178,6 +242,41 @@ FORMS = {
                                            "T": f"{MOD}:fluid_tank", "C": f"{MOD}:basic_circuit"}),
         "features": ["machines"],
     },
+    "bulk_chemical_infuser": {
+        "display": "Bulk Chemical Infuser",
+        # The art brief's 4x6x6 larger variant ("enlarges this exact chamber, its paired inlets and installed-bed
+        # compartment into a tall synthesis installation"): the Infuser's own family, tanks, bed socket and capabilities,
+        # so it runs the same recipes, in the bulk profile (four batches side by side from 16,000 mB tanks at 80% of the
+        # draw a batch).
+        "family": "synthesis_converter",
+        # Its cells as its model fills them (form_layers on bulk_chemical_infuser()): 110 blocks.
+        "layers": [["C###", "####", "####", "####", "####", "####"],
+                   ["####", "####", "####", "####", ".###", ".###"],
+                   ["####", "####", "####", "####", ".##.", ".##."],
+                   ["####", "####", "####", "####", ".##.", ".##."],
+                   ["####", "####", "####", "####", ".##.", ".##."],
+                   ["....", ".##.", ".##.", "....", "....", "...."]],
+        "profile": "BULK",
+        "tank_mb": 16_000,
+        "input_tanks": ["hydrogen", "reactant"],
+        "output_tanks": ["product", "water"],
+        "sockets": [("bed", CATALYST_BEDS)],
+        "capabilities": [GAS_COMBINATION, NICKEL_METHANATION, CONTACT_CONVERSION, f"{MOD}:starter_gas_infusing"],
+        "upgrades": True,
+        "warmup": 40,
+        "ports": [
+            ("hydrogen_in", "FLUID_IN", 0, 0, 2, 2, "LEFT"),
+            ("reactant_in", "FLUID_IN", 1, 3, 2, 2, "RIGHT"),
+            ("product_out", "FLUID_OUT", 0, 2, 5, 2, "BACK"),
+            ("water_out", "FLUID_OUT", 1, 1, 5, 0, "BACK"),
+            ("power", "ENERGY_IN", 0, 3, 4, 0, "RIGHT"),
+        ],
+        # This change's bill (open for review): a Chemical Infuser enlarged with two Steel Tanks, steel plates, steel
+        # fluid pipe and a basic circuit.
+        "recipe": (["TIT", "PFP", "PCP"], {"T": f"{MOD}:steel_tank", "I": f"{MOD}:chemical_infuser", "P": "#c:plates/steel",
+                                           "F": f"{MOD}:steel_fluid_pipe", "C": f"{MOD}:basic_circuit"}),
+        "features": ["machines"],
+    },
     "chemical_oxidizer": {
         "display": "Chemical Oxidizer",
         # The chemical reactor family (the Chemical Reactor's energy figures: 96 JE/t, a 30,000 JE store); it runs only
@@ -204,6 +303,32 @@ FORMS = {
         "recipe": (["PFP", "MCG", "PKP"], {"P": "#c:plates/steel", "F": "minecraft:furnace", "M": f"{MOD}:electric_motor",
                                            "C": f"{MOD}:basic_circuit", "G": "minecraft:glass",
                                            "K": f"{MOD}:machine_casing"}),
+        "features": ["machines"],
+    },
+    "bulk_chemical_oxidizer": {
+        "display": "Bulk Chemical Oxidizer",
+        # The art brief's 4x4x6 larger variant: the Oxidizer's own family, tanks, feed slot and capability, so it burns the
+        # same feeds, in the bulk profile (four batches side by side from 16,000 mB tanks at 80% of the draw a batch).
+        "family": "chemical_reactor",
+        "layers": BULK_OXIDIZER_LAYERS,
+        "profile": "BULK",
+        "tank_mb": 16_000,
+        "input_tanks": ["oxidant"],
+        "output_tanks": ["product"],
+        "item_inputs": 1,
+        "capabilities": [SOLID_OXIDATION, f"{MOD}:starter_gas_oxidizing"],
+        "upgrades": True,
+        "warmup": 40,
+        "ports": [
+            ("feed_in", "ITEM_IN", 0, 1, 2, 5, "TOP"),
+            ("oxidant_in", "FLUID_IN", 0, 3, 0, 0, "RIGHT"),
+            ("product_out", "FLUID_OUT", 0, 2, 0, 5, "TOP"),
+            ("power", "ENERGY_IN", 0, 0, 2, 0, "LEFT"),
+        ],
+        # This change's bill (open for review): a Chemical Oxidizer enlarged with two Steel Tanks, steel plates, an
+        # electric motor and a basic circuit.
+        "recipe": (["TOT", "PMP", "PCP"], {"T": f"{MOD}:steel_tank", "O": f"{MOD}:chemical_oxidizer", "P": "#c:plates/steel",
+                                           "M": f"{MOD}:electric_motor", "C": f"{MOD}:basic_circuit"}),
         "features": ["machines"],
     },
     "industrial_fermenter": {
@@ -237,6 +362,35 @@ FORMS = {
                                            "K": f"{MOD}:machine_casing"}),
         "features": ["machines"],
     },
+    "bulk_fermenter": {
+        "display": "Bulk Fermenter",
+        # The art brief's 5x5x6 variant: the same vessel enlarged, the same controlled fermentation, in the bulk profile
+        # (four batches side by side from 16,000 mB tanks at 80% of the draw a batch).
+        "family": "chemical_reactor",
+        "layers": [["C####", "#####", "#####", "#####", "#####"]] + [["#####"] * 5] * 5,
+        "profile": "BULK",
+        "tank_mb": 16_000,
+        "input_tanks": ["water"],
+        "output_tanks": ["product", "co2"],
+        "vents": ["co2"],
+        "item_inputs": 1,
+        "capabilities": [CONTROLLED_FERMENTATION],
+        "upgrades": True,
+        "warmup": 40,
+        "ports": [
+            ("feed_in", "ITEM_IN", 0, 0, 2, 5, "TOP"),
+            ("water_in", "FLUID_IN", 0, 0, 4, 1, "BACK"),
+            ("product_out", "FLUID_OUT", 0, 2, 0, 0, "FRONT"),
+            ("co2_out", "FLUID_OUT", 1, 2, 4, 4, "BACK"),
+            ("power", "ENERGY_IN", 0, 4, 4, 0, "BACK"),
+        ],
+        # This change's bill (open for review): an Industrial Fermenter enlarged with two Steel Tanks, steel plates, an
+        # electric motor and a basic circuit.
+        "recipe": (["TFT", "PMP", "PCP"], {"T": f"{MOD}:steel_tank", "F": f"{MOD}:industrial_fermenter",
+                                           "P": "#c:plates/steel", "M": f"{MOD}:electric_motor",
+                                           "C": f"{MOD}:basic_circuit"}),
+        "features": ["machines"],
+    },
     "bulk_chemical_reactor": {
         "display": "Bulk Chemical Reactor",
         # The chemical reactor family (96 JE/t), in the expanded profile: two batches side by side, 8,000 mB tanks and
@@ -251,7 +405,8 @@ FORMS = {
         "output_tanks": ["product"],
         "item_inputs": 1,
         "item_outputs": 1,
-        "capabilities": [ACID_ABSORPTION, CHLORIDE_LEACHING, VANADIUM_RECOVERY, NITRATE_NEUTRALIZATION],
+        "capabilities": [ACID_ABSORPTION, CHLORIDE_LEACHING, VANADIUM_RECOVERY, NITRATE_NEUTRALIZATION,
+                         PRECIOUS_METAL_RECOVERY],
         "upgrades": True,
         "warmup": 40,
         "ports": [
@@ -379,13 +534,88 @@ FORMS = {
                                            "T": f"{MOD}:steel_tank", "K": f"{MOD}:machine_casing"}),
         "features": ["machines"],
     },
+    "large_gas_burning_generator": {
+        "display": "Large Gas Burning Generator",
+        # The art brief's 5x6x5 larger variant, in the same gas turbine family (a 120,000 JE store, 2,048 JE/t out).
+        "family": "gas_turbine",
+        "layers": LARGE_GAS_GENERATOR_LAYERS,
+        "profile": "EXPANDED",
+        "tank_mb": 8_000,
+        "input_tanks": ["fuel"],
+        "output_tanks": [],
+        "capabilities": [],
+        "fuels": LARGE_GAS_GENERATOR_FUELS,
+        "upgrades": False,
+        "warmup": 0,
+        "ports": [
+            ("fuel_in", "FLUID_IN", 0, 4, 1, 0, "RIGHT"),
+            ("power_out", "ENERGY_OUT", 0, 3, 5, 1, "BACK"),
+        ],
+        # This change's bill (open for review): a Gas Burning Generator enlarged with two Steel Tanks, steel plates, a
+        # steel gear and a basic circuit.
+        "recipe": (["TBT", "PGP", "PCP"], {"T": f"{MOD}:steel_tank", "B": f"{MOD}:gas_burning_generator", "P": "#c:plates/steel",
+                                           "G": f"{MOD}:steel_gear", "C": f"{MOD}:basic_circuit"}),
+        "features": ["machines"],
+    },
+    "large_bio_generator": {
+        "display": "Large Bio Generator",
+        # The art brief's 5x6x5 larger variant of the Bio Generator, in the same diesel generator family (a 60,000 JE store,
+        # 1,024 JE/t out); its fuel list burns bioethanol and biogas a quarter better at four times the rate.
+        "family": "diesel_generator",
+        "layers": [["C####"] + ["#####"] * 5] + [["#####"] * 6] * 4,
+        "profile": "EXPANDED",
+        "tank_mb": 8_000,
+        "input_tanks": ["fuel"],
+        "output_tanks": [],
+        "capabilities": [],
+        "fuels": LARGE_BIO_GENERATOR_FUELS,
+        "upgrades": False,
+        "warmup": 0,
+        "ports": [
+            ("fuel_in", "FLUID_IN", 0, 4, 3, 0, "RIGHT"),
+            ("power_out", "ENERGY_OUT", 0, 0, 3, 0, "LEFT"),
+        ],
+        # This change's bill (open for review): a Bio Generator enlarged with two Steel Tanks, steel plates, a steel gear
+        # and a basic circuit.
+        "recipe": (["TBT", "PGP", "PCP"], {"T": f"{MOD}:steel_tank", "B": f"{MOD}:bio_generator", "P": "#c:plates/steel",
+                                           "G": f"{MOD}:steel_gear", "C": f"{MOD}:basic_circuit"}),
+        "features": ["machines"],
+    },
+    "combined_cycle_power_plant": {
+        "display": "Combined Cycle Power Plant",
+        # The gas turbine's family (a 120,000 JE store, 2,048 JE/t out); the form's fuel list says what it burns.
+        "family": "gas_turbine",
+        # The skid, generator, gas turbine and boiler fill the two lower layers; the filter house stands over the generator
+        # end and the heat-recovery boiler rises at the right, its steam drum and stack on top.
+        "layers": [["C#####", "######", "######", "######"], ["######", "######", "######", "######"],
+                   ["##..##", "##..##", "##..##", "##..##"], ["##..##", "##..##", "##..##", "##..##"],
+                   ["....##", "....##", "....##", "....##"]],
+        "profile": "ENTRY",
+        "tank_mb": 2_000,
+        "input_tanks": ["fuel"],
+        "output_tanks": [],
+        "capabilities": [],
+        "fuels": COMBINED_CYCLE_FUELS,
+        "upgrades": False,
+        "warmup": 0,
+        "ports": [
+            ("fuel_in", "FLUID_IN", 0, 2, 3, 0, "BACK"),
+            ("power_out", "ENERGY_OUT", 0, 0, 2, 0, "LEFT"),
+        ],
+        # This change's bill, for review: the big station is built from a Gas Turbine and a Heat Recovery Unit (the two
+        # halves of a combined cycle), two Steel Tanks, an advanced circuit, a Machine Casing and three steel plates.
+        "recipe": (["TCT", "GKH", "PPP"], {"T": f"{MOD}:steel_tank", "C": f"{MOD}:advanced_circuit", "G": f"{MOD}:gas_turbine",
+                                           "K": f"{MOD}:machine_casing", "H": f"{MOD}:heat_recovery_unit",
+                                           "P": "#c:plates/steel"}),
+        "features": ["machines"],
+    },
 }
 
 # Each form's Engineer's Handbook page (tools/handbook.py form_page), after its family's machine.
 HANDBOOK = {
     "electrolytic_separator": [
         "Two wide, two deep and three tall: the first of the big industrial machines, built from steel, copper cable "
-        "and a basic circuit, before the Electrolytic Cell's aluminum cable and advanced circuit. It is placed from "
+        "and a basic circuit, before the Electrolytic Cell's advanced circuit. It is placed from "
         "the front; every block it fills must be free, or it says what is in the way and where.",
         "Pipe water or brine into the inlet low at the back. A bucket of water gives 500 mB of hydrogen (the top "
         "left collar) and 250 mB of oxygen (top right) in 40 seconds; a bucket of brine gives 250 mB of hydrogen, "
@@ -416,15 +646,17 @@ HANDBOOK = {
         "dioxide (the right inlet) give 100 mB of methane at the top collar and 400 mB of water at the drain below it "
         "in ten seconds. The bed is never used up. Its screen says what it is waiting for, and upgrade cards fit its "
         "terminal.",
+        "A Ruthenium Catalyst Bed (ruthenium powder from the Bulk Chemical Reactor, laid on a nickel bed) does every "
+        "methanation in half the time and for half the energy, from the same gases.",
     ],
     "industrial_fermenter": [
         "Three wide, three deep and four tall: a tall stirred vessel on four legs, built from steel plates, a Steel Tank, "
         "glass, an electric motor, a basic circuit and a Machine Casing. Every block it fills must be free when it is "
         "placed.",
         "Drop eight crops (wheat, sugar cane, potatoes, carrots, beetroot, berries, melon or apples) into the hatch on its "
-        "crown and pipe water into the inlet low at the back left. With a bucket of water they ferment into 250 mB of "
-        "bioethanol at the broth outlet low at the front, and 250 mB of carbon dioxide at the flange high at the back, in "
-        "five seconds at 96 JE/t.",
+        "crown and pipe water into the inlet low at the back left. With a bucket of water they ferment into 375 mB of "
+        "bioethanol at the broth outlet low at the front (half again what the Chemical Reactor gets from the same crops), "
+        "and 250 mB of carbon dioxide at the flange high at the back, in five seconds at 96 JE/t.",
         "The carbon dioxide feeds the Chemical Infuser's methane. Collecting it is optional: when its tank is full the "
         "rest is vented and fermentation goes on.",
     ],
@@ -440,6 +672,18 @@ HANDBOOK = {
     ],
 }
 
+HANDBOOK["bulk_fermenter"] = [
+    "Five wide, five deep and six tall: the Industrial Fermenter's vessel enlarged, built from an Industrial Fermenter, "
+    "two Steel Tanks, steel plates, an electric motor and a basic circuit. Every block it fills must be free when it is "
+    "placed.",
+    "It ferments like the Industrial Fermenter, eight crops and a bucket of water into 375 mB of bioethanol and 250 mB "
+    "of carbon dioxide, but runs four batches at once from 16,000 mB tanks, at 80% of the draw a batch. Crops go in at "
+    "the hatch on its crown, water at the inlet low at the back left; the alcohol leaves at the outlet low at the front "
+    "and the gas at the flange high at the back, which vents what is not collected.",
+    "It draws its power through the services box low at the back right. Its screen says what it is waiting for, and "
+    "upgrade cards fit its terminal.",
+]
+
 HANDBOOK["bulk_chemical_reactor"] = [
     "Four wide, four deep and four tall: the Chemical Reactor enlarged into a jacketed vessel with a stirring drive on "
     "its lid, built from a Chemical Reactor, a Steel Tank, a steel fluid pipe, an electric motor, a basic circuit and "
@@ -449,10 +693,15 @@ HANDBOOK["bulk_chemical_reactor"] = [
     "absorption inlet on its lid: 500 mB of the gas dissolves in a bucket of water into a bucket of hydrochloric acid "
     "in five seconds, which leaves at the outlet low at the front.",
     "Hydrochloric acid leaches ore like sulfuric acid: drop an ore into the hatch on its lid, pipe 250 mB of the acid "
-    "into the side inlet, and four washed ores come out of the chute at the front, ready for the furnace.",
+    "into the side inlet, and four washed ores come out of the chute at the front, ready for the furnace, in four "
+    "seconds: two at a time, four times as fast as the Chemical Reactor leaches.",
+    "Sulfur trioxide from the Chemical Infuser dissolves in water here: 250 mB of it in 750 mB of water make a bucket of "
+    "sulfuric acid, twice the acid a sulfur dust gives in the Chemical Reactor.",
     "Nitric acid in the side inlet and ammonia in the lid inlet neutralize each other: 250 mB of the acid and 125 mB of "
     "ammonia give four ammonium nitrate at the chute. It is a strong nitrogen fertilizer, and it packs grenades and "
     "high-explosive rockets in place of guncotton.",
+    "Eight washed nickel ores in the hatch, a bucket of hydrochloric acid and 250 mB of chlorine leave one ruthenium "
+    "powder in twenty seconds: the metal of the Chemical Infuser's faster methanation bed.",
 ]
 
 HANDBOOK["anaerobic_digester"] = [
@@ -489,6 +738,18 @@ HANDBOOK["gas_cleanup_rack"] = [
     "hydrogen give 100 mB of methane and 200 mB of water.",
 ]
 
+HANDBOOK["combined_cycle_power_plant"] = [
+    "Six wide, four deep and five tall: the factory's power station. A gas turbine on a long skid draws air through "
+    "the filter house over its generator, and its hot exhaust raises steam in the tall heat-recovery boiler on the right "
+    "for a second turbine on the same shaft. It is built from a Gas Turbine, a Heat Recovery Unit, two Steel Tanks, an "
+    "advanced circuit, a Machine Casing and steel plates. Every block it fills must be free when it is placed.",
+    "Pipe fuel into the flange low at the back. Methane gives 528 JE a millibucket, more than the large gas "
+    "generator, at 2,048 JE/t: four times the Gas Turbine. Raw syngas straight from the Coal Gasifier burns whole at "
+    "256 JE a millibucket and the same 2,048 JE/t, and hydrogen at 128 JE a millibucket and 1,024 JE/t.",
+    "The power leaves at the generator's terminal low on its left side. It makes only as much as its store has room "
+    "for, and its shaft turns while it runs. Feeding it takes a real gas works: two Coal Gasifiers, or a large digester "
+    "and methane plant.",
+]
 HANDBOOK["bio_generator"] = [
         "Three wide, four deep and three tall: a compact engine-generator on a thick skid, built from a Steel Tank, an "
         "electric motor, a steel gear, a basic circuit and a Machine Casing. Every block it fills must be free when it is "
@@ -499,6 +760,62 @@ HANDBOOK["bio_generator"] = [
         "It makes only as much as its store has room for. It also burns biogas from the Anaerobic Digester, piped into "
         "the same inlet: 268 JE a millibucket at 64 JE/t, a bucket lasting about 210 seconds.",
     ]
+
+HANDBOOK["bulk_electrolytic_separator"] = [
+    "Four wide, four deep and six tall: the Electrolytic Separator's cell housing and collection towers twice as large, "
+    "built from an Electrolytic Separator, two Steel Tanks, steel plates, copper cable and a basic circuit. Every block "
+    "it fills must be free when it is placed.",
+    "It splits water and brine as the Separator does, but four batches at once from 16,000 mB tanks, at 80% of the "
+    "draw a batch: a bucket of water gives its 500 mB of hydrogen for a fifth less power than in an uncarded Separator.",
+    "It takes no upgrade cards: carded, it would make hydrogen cheaper than the factory allows. The feed comes in at "
+    "the back; hydrogen leaves high on the front left, oxygen or chlorine high on the front right, and lye from the "
+    "return below that. Power comes in at the junction box low on the front, under the lye return.",
+]
+
+HANDBOOK["bulk_chemical_oxidizer"] = [
+    "Four wide, four deep and six tall: the Chemical Oxidizer's reaction throat, collector hood and feed hopper twice as "
+    "large, built from a Chemical Oxidizer, two Steel Tanks, steel plates, an electric motor and a basic circuit. Every "
+    "block it fills must be free when it is placed.",
+    "It burns everything the Oxidizer does, sulfur into sulfur dioxide and coal into carbon dioxide, but four batches "
+    "at once from 16,000 mB tanks, at 80% of the draw a batch.",
+    "Feed goes in at the hopper's mouth on top at the back; oxygen comes in low on its right side, at the front; the gas "
+    "leaves at the collar on top at the front. Power comes in at the junction box low on its left side. Upgrade cards "
+    "fit its terminal.",
+]
+
+HANDBOOK["bulk_chemical_infuser"] = [
+    "Four wide, six deep and six tall: the Chemical Infuser's chamber, inlets, bed drawer and cooling jacket twice as "
+    "large, built from a Chemical Infuser, two Steel Tanks, steel plates, steel fluid pipe and a basic circuit. Every "
+    "block it fills must be free when it is placed.",
+    "It runs everything the Infuser does, hydrogen chloride, ethylene dichloride, methanation over a nickel bed and "
+    "contact conversion over a vanadium bed, but four batches at once from 16,000 mB tanks, at 80% of the draw a batch. "
+    "Its catalyst bed goes in the same socket on its screen and serves every batch.",
+    "Hydrogen (or oxygen for contact conversion) comes in on its left shoulder, the other gas on its right; the "
+    "product leaves high at the back and the water low at the back. Power comes in at the junction box low on its right "
+    "side, near the back. Upgrade cards fit its terminal.",
+]
+
+HANDBOOK["large_gas_burning_generator"] = [
+    "Five wide, six deep and five tall: the Gas Burning Generator's engine-generator train enlarged on its skid, built "
+    "from a Gas Burning Generator, two Steel Tanks, steel plates, a steel gear and a basic circuit. Every block it fills "
+    "must be free when it is placed.",
+    "It burns the same gases four times as fast: hydrogen at 128 JE a millibucket and 512 JE/t, methane an eighth better "
+    "at 504 JE a millibucket and 1,024 JE/t. Pipe either into the capped inlet low on its right side, near the front; "
+    "the power leaves at the socket on the back of the terminal cabinet.",
+    "Its 8,000 mB tank holds four buckets. It makes only as much as its store has room for, and its intake fan and "
+    "coupling turn while it runs. The Combined Cycle Power Plant still gets more from methane.",
+]
+
+HANDBOOK["large_bio_generator"] = [
+    "Five wide, six deep and five tall: the Bio Generator's engine-generator enlarged on its skid, built from a Bio "
+    "Generator, two Steel Tanks, steel plates, a steel gear and a basic circuit. Every block it fills must be free when "
+    "it is placed.",
+    "It burns the same fuels a quarter better and four times as fast: bioethanol at 240 JE a millibucket and 384 JE/t, "
+    "biogas at 335 JE a millibucket and 256 JE/t. Pipe either into the liquid inlet low on its right side, behind the "
+    "middle; the power leaves at the socket on the terminal box low on its left side.",
+    "Its 8,000 mB tank holds four buckets. It makes only as much as its store has room for, and its coupling and "
+    "radiator fan turn while it runs.",
+]
 
 # Tank labels on the screen and in its reasons (MachineStatus.tankLabel), by role.
 TANK_NAMES = {
@@ -515,6 +832,13 @@ TANK_NAMES = {
     "liquid": "Liquid tank",
     "gas": "Co-reactant tank",
     "biogas": "Biogas tank",
+}
+
+# A form's own names for tanks that hold different fluids for different recipes (MachineStatus.tankLabel): the
+# Infuser's first inlet takes hydrogen for its hydrogen recipes but oxygen for contact conversion.
+FORM_TANK_NAMES = {
+    "chemical_infuser": {"hydrogen": "Left inlet tank", "reactant": "Right inlet tank"},
+    "bulk_chemical_infuser": {"hydrogen": "Left inlet tank", "reactant": "Right inlet tank"},
 }
 
 # Recipes only forms run: each names the capability a form must offer. Fluid results go to output tanks by their
@@ -567,6 +891,20 @@ FORM_RECIPES = {
         {"name": "infuser_biogas_upgrading", "capability": NICKEL_METHANATION, "tool": f"{MOD}:nickel_catalyst_bed",
          "fluids": [(f"{MOD}:hydrogen", 400), (f"{MOD}:biogas", 250)],
          "fluid_results": [(f"{MOD}:methane", 250, 0), ("minecraft:water", 400, 1)], "ticks": 200, "features": ["machines"]},
+        # The owner's optional ruthenium improvement: the same three methanations over the ruthenium bed, the same gases
+        # in and out (a catalyst never makes more methane than its charge), in half the time and so half the energy.
+        {"name": "infuser_ruthenium_carbon_dioxide_methanation", "capability": NICKEL_METHANATION,
+         "tool": f"{MOD}:ruthenium_catalyst_bed", "fluids": [(f"{MOD}:hydrogen", 400), (f"{MOD}:carbon_dioxide", 100)],
+         "fluid_results": [(f"{MOD}:methane", 100, 0), ("minecraft:water", 400, 1)], "ticks": 100,
+         "features": ["machines", "nickel"]},
+        {"name": "infuser_ruthenium_carbon_monoxide_methanation", "capability": NICKEL_METHANATION,
+         "tool": f"{MOD}:ruthenium_catalyst_bed", "fluids": [(f"{MOD}:hydrogen", 300), (f"{MOD}:carbon_monoxide", 100)],
+         "fluid_results": [(f"{MOD}:methane", 100, 0), ("minecraft:water", 200, 1)], "ticks": 75,
+         "features": ["machines", "nickel"]},
+        {"name": "infuser_ruthenium_biogas_upgrading", "capability": NICKEL_METHANATION,
+         "tool": f"{MOD}:ruthenium_catalyst_bed", "fluids": [(f"{MOD}:hydrogen", 400), (f"{MOD}:biogas", 250)],
+         "fluid_results": [(f"{MOD}:methane", 250, 0), ("minecraft:water", 400, 1)], "ticks": 100,
+         "features": ["machines", "nickel"]},
     ],
     "anaerobic_digester": [
         # Organic waste digested (this change's proposal): sixteen items and a bucket of water make a bucket of raw biogas
@@ -578,10 +916,11 @@ FORM_RECIPES = {
     ],
     "industrial_fermenter": [
         # The Chemical Reactor's fermentation (eight fermentable crops and a bucket of water, 250 mB of bioethanol, 100 ticks)
-        # with its carbon dioxide collected: one reaction amount of gas for each of alcohol, 250 mB. Vented when not taken.
+        # done properly: controlled yeast and temperature draw half again as much alcohol from the same crops, 375 mB, and
+        # the carbon dioxide is collected, 250 mB. Vented when not taken. The dedicated machine is worth building.
         {"name": "fermenter_bioethanol", "capability": CONTROLLED_FERMENTATION, "items": [("#jugcraft:fermentable", 8)],
          "fluids": [("minecraft:water", 1000)],
-         "fluid_results": [(f"{MOD}:bioethanol", 250, 0), (f"{MOD}:carbon_dioxide", 250, 1)], "ticks": 100,
+         "fluid_results": [(f"{MOD}:bioethanol", 375, 0), (f"{MOD}:carbon_dioxide", 250, 1)], "ticks": 100,
          "features": ["machines"]},
     ],
     "bulk_chemical_reactor": [
@@ -591,11 +930,12 @@ FORM_RECIPES = {
         {"name": "bulk_hydrochloric_acid", "capability": ACID_ABSORPTION,
          "fluids": [("minecraft:water", 1000), (f"{MOD}:hydrogen_chloride", 500)],
          "fluid_results": [(f"{MOD}:hydrochloric_acid", 1000, 0)], "ticks": 100, "features": ["salt"]},
-        # Ordinary sulfuric-acid absorption (the plan's row): 250 mB of sulfur trioxide in 500 mB of water make 500 mB of
-        # acid, 100 ticks at 96 JE/t, the plan's 9,600 JE.
+        # Sulfuric-acid absorption: 250 mB of sulfur trioxide in 750 mB of water make a bucket of acid, 100 ticks at 96
+        # JE/t, 9,600 JE. One sulfur dust becomes 1,000 mB of acid this way, twice the simple recipe's 500: the contact
+        # process trades power and plant for sulfur.
         {"name": "bulk_sulfuric_acid", "capability": ACID_ABSORPTION,
-         "fluids": [("minecraft:water", 500), (f"{MOD}:sulfur_trioxide", 250)],
-         "fluid_results": [(f"{MOD}:sulfuric_acid", 500, 0)], "ticks": 100, "features": ["sulfur", "machines"]},
+         "fluids": [("minecraft:water", 750), (f"{MOD}:sulfur_trioxide", 250)],
+         "fluid_results": [(f"{MOD}:sulfuric_acid", 1000, 0)], "ticks": 100, "features": ["sulfur", "machines"]},
         # Four vanadium-bearing concentrates roasted with lye give pentoxide without an acid gate.
         # Preserve the ordinary washed-iron recipe only behind the explicit legacy fallback.
         {"name": "bulk_vanadium_pentoxide_from_concentrate", "capability": VANADIUM_RECOVERY,
@@ -611,6 +951,12 @@ FORM_RECIPES = {
         {"name": "bulk_ammonium_nitrate", "capability": NITRATE_NEUTRALIZATION,
          "fluids": [(f"{MOD}:nitric_acid", 250), (f"{MOD}:ammonia", 125)],
          "results": [(f"{MOD}:ammonium_nitrate", 4)], "ticks": 100, "features": ["salt", "machines"]},
+        # Ruthenium for the faster methanation bed (this change's proposal): the platinum-group metals ride along in nickel
+        # ores. Eight washed nickel ores dissolved in a bucket of hydrochloric acid under 250 mB of chlorine leave one
+        # ruthenium powder; the nickel itself is spent. 400 ticks at 96 JE/t.
+        {"name": "bulk_ruthenium_powder", "capability": PRECIOUS_METAL_RECOVERY, "items": [(f"{MOD}:washed_nickel_ore", 8)],
+         "fluids": [(f"{MOD}:hydrochloric_acid", 1000), (f"{MOD}:chlorine", 250)],
+         "results": [(f"{MOD}:ruthenium_powder", 1)], "ticks": 400, "features": ["salt", "nickel"]},
     ],
     "coal_gasifier": [
         # Steam gasification (this change's proposal for the pending carbon ledger): a coal or coke counts as 250 reaction
@@ -655,12 +1001,13 @@ FORM_RECIPES = {
 
 def _chloride_leaching():
     """Each ore dissolved in 250 mB of hydrochloric acid gives four washed ores, as sulfuric acid does in the Chemical
-    Reactor (tools/petro.py _leaching): a second, sulfur-free route to the best ore yield, never a better one."""
+    Reactor (tools/petro.py _leaching): the best ore yield, never a better one, but in half the time, and two at once in
+    the Bulk Chemical Reactor: four times the Chemical Reactor's leaching rate."""
     from machines import ORE_LEACHING_MULTIPLIER, _metal_features
     from materials import WASHED_ORES, ore_ids
     return [{"name": f"bulk_chloride_{ore.split(':')[1]}", "capability": CHLORIDE_LEACHING, "items": [(ore, 1)],
              "fluids": [(f"{MOD}:hydrochloric_acid", 250)],
-             "results": [(f"{MOD}:washed_{metal}_ore", ORE_LEACHING_MULTIPLIER)], "ticks": 160,
+             "results": [(f"{MOD}:washed_{metal}_ore", ORE_LEACHING_MULTIPLIER)], "ticks": 80,
              "ore_bonus": ORE_LEACHING_MULTIPLIER, "features": ["salt"] + _metal_features(metal)}
             for metal in WASHED_ORES for ore in ore_ids(metal)]
 
@@ -1041,6 +1388,95 @@ def chemical_infuser_still():
     return cyl("y", cx, cz, 4.75, y - 0.5, y + 0.5, GUNMETAL, "dr_fan") + cyl("y", cx, cz, 1.25, y - 1.25, y + 1.25, CHROME)
 
 
+# The Bulk Chemical Infuser is the Infuser drawn twice as large every way. Each port's pieces then move half a block
+# from the seam the doubling puts them on to the middle of a block: (shift, test on the Infuser's own element centre).
+BULK_INFUSER_PORT_SHIFTS = [
+    # The hydrogen branch on the left shoulder and the reactant branch on the right: down and forward half a block.
+    ((0, -8, -8), lambda c: c[0] > 9.9 and abs(c[1] - 24) <= 7 and abs(c[2] - 24) <= 5),
+    ((0, -8, -8), lambda c: c[0] < -9.9 and abs(c[1] - 24) <= 7 and abs(c[2] - 24) <= 5),
+    # The product collar high at the back, towards the middle; the water drain low at the back, towards the jacket.
+    ((8, -8, 0), lambda c: c[2] > 40 and abs(c[0] + 8) <= 3.5 and abs(c[1] - 24) <= 3.5),
+    ((-8, -8, 0), lambda c: c[2] > 37 and abs(c[0] - 8) <= 3.5 and abs(c[1] - 8) <= 3.5),
+    # The junction box low on the right side at the back, with its socket, insulators and conduit: down and forward.
+    ((0, -8, -8), lambda c: c[0] < -5.5 and 33 <= c[2] <= 47 and c[1] < 19),
+]
+
+
+def _doubled(model, keep, shifts):
+    """A small form's model drawn twice as large every way about its controller block's left edge, for its bulk
+    variant. Elements `keep` accepts (the controller's own box, gauges and lamp) keep their size. Doubling puts the middle
+    of each port's block face on a seam, so each port's pieces move half a block by the first matching (shift, test on
+    the small element's centre) in `shifts`; nothing moved down goes below the plinth, and a stretched face (a flange)
+    doubled past a block's width is trimmed back to 14 pixels across about its middle."""
+    m = []
+    for element in model:
+        frm, to = element[0], element[1]
+        if keep(element):
+            m.append(element)
+            continue
+        centre = [(frm[i] + to[i]) / 2 for i in range(3)]
+        shift = next((d for d, test in shifts if test(centre)), (0, 0, 0))
+        scaled = _scaled_element(element, lambda p, d=shift: tuple(v + d[i] for i, v in enumerate(_doubled_point(p))))
+        frm2, to2 = list(scaled[0]), list(scaled[1])
+        if frm2[1] < 4 and shift[1] < 0:
+            frm2[1] = 4.0
+        faces = scaled[2] if isinstance(scaled[2], dict) else {"*": scaled[2]}
+        if any(str(name).endswith("!") for name in faces.values()):
+            for axis in range(3):
+                if to2[axis] - frm2[axis] > 15:
+                    middle = (frm2[axis] + to2[axis]) / 2
+                    frm2[axis], to2[axis] = middle - 7, middle + 7
+                # And kept inside the block its middle is in.
+                low = math.floor((frm2[axis] + to2[axis]) / 32) * 16
+                slide = max(0.0, low - frm2[axis]) - max(0.0, to2[axis] - (low + 16))
+                frm2[axis], to2[axis] = frm2[axis] + slide, to2[axis] + slide
+        m.append(box(frm2, to2, scaled[2]))
+    return m
+
+
+def _doubled_point(point):
+    return (16 + (point[0] - 16) * 2, point[1] * 2, point[2] * 2)
+
+
+def _bulk_infuser(point):
+    return _doubled_point(point)
+
+
+def bulk_chemical_infuser():
+    """Four wide, six deep and six tall (the art brief's larger variant): the Chemical Infuser itself, twice as large: the
+    plinth, the stepped reaction chamber with its olive service plates, ceramic collar and crown, the catalyst-bed
+    drawer at the foot of the front with its handle and marker, the ringed inspection port and heat gauge, the amber
+    process band, the paired inlet branches on its shoulders with their valves, the closed loop into the ribbed cooling
+    jacket with its fan, the product collar and water drain at the back and the junction box with the power socket. The
+    control box (the controller) keeps its size at the front left. Each port's pieces sit at the middle of a block face,
+    clear of the seams the doubling would put them on."""
+    return _doubled(chemical_infuser(), lambda e: e[0][0] >= 8.4 and e[1][2] <= 4.1 and e[1][1] <= 14.1, BULK_INFUSER_PORT_SHIFTS)
+
+
+# Its fan, doubled with the jacket it sits on.
+BULK_INFUSER_FAN = _bulk_infuser((0, 35.5, 40))
+
+
+def bulk_chemical_infuser_rotor():
+    """The bulk cooling fan, turning about y (client/MachineRotors)."""
+    import machine_rotors as rotors
+    cx, y, cz = BULK_INFUSER_FAN
+    quads = rotors.disc("y", y - 2.5, y + 2.5, cx, cz, 2.5, CHROME, CHROME)
+    for blade in range(5):
+        angle = math.radians(72 * blade)
+        c, s = math.cos(angle), math.sin(angle)
+
+        def at(r, w):
+            return (cx + 2 * (r * c - w * s), cz + 2 * (r * s + w * c))
+        quads += rotors.prism("y", y - 1, y + 1, [at(1.6, -0.55), at(4.75, -1.6), at(4.75, 1.6), at(1.6, 0.55)], GUNMETAL, GUNMETAL)
+    return quads
+
+
+def bulk_chemical_infuser_still():
+    """The fan standing still, for the item model only."""
+    return [_scaled_element(e, _bulk_infuser) for e in chemical_infuser_still()]
+
+
 # The Oxidizer's feed screw, under the hopper at the back, turning about z: its axis's centre (x, y, z).
 OXIDIZER_SCREW = (6, 7.5, 27)
 
@@ -1132,6 +1568,81 @@ def chemical_oxidizer_still():
     return cyl("z", cx, cy, 0.75, 22.5, 30.5, CHROME) + cyl("z", cx, cy, 3, 24, 29.5, COPPER)
 
 
+# The Bulk Chemical Oxidizer: each port's pieces moved half a block off the seams the doubling puts them on (shift,
+# test on the Oxidizer's own element centre).
+BULK_OXIDIZER_PORT_SHIFTS = [
+    # The hopper, chute, trough and feed screw at the back: left and forward, so the mouth is in one block's top.
+    ((-8, 0, -8), lambda c: 0 < c[0] < 15.6 and c[2] >= 16 and not (c[0] >= 11.9 and c[1] < 14.5)),
+    # The capped oxidant inlet low on the right: down and forward.
+    ((0, -8, -8), lambda c: c[0] < -11.9 and c[1] < 13 and c[2] < 13),
+    # The gas outlet's riser and collar on top: inwards over the hood, and forward.
+    ((8, 0, -8), lambda c: abs(c[0] + 8) <= 3.5 and abs(c[2] - 8) <= 3.5 and c[1] > 40),
+    # The junction box low on the left at the back, its socket and hazard band: down and forward.
+    ((0, -8, -8), lambda c: c[0] >= 11.9 and c[1] < 14.5 and c[2] > 16),
+]
+# Its feed screw, doubled and moved with the trough.
+BULK_OXIDIZER_SCREW = tuple(v + d for v, d in zip(_doubled_point(OXIDIZER_SCREW), (-8, 0, -8)))
+
+
+def bulk_chemical_oxidizer():
+    """Four wide, four deep and six tall (the art brief's larger variant): the Chemical Oxidizer itself, twice as large:
+    the plinth, the squat dark-steel reaction throat with its refractory ring, bolted hatch, glowing reaction slit and
+    residue drawer; the gas column and ringed collector hood with its outlet rising to a collar; the broad olive hopper
+    at the back with its hazard-striped lip, chute and guarded trough with the feed screw; the capped oxidant inlet low
+    on the right and the junction box with the power socket low on the left. The control panel (the controller) keeps its
+    size at the front left. Each port's pieces sit at the middle of a block face."""
+    return _doubled(chemical_oxidizer(), lambda e: e[0][0] >= 9 and e[1][2] <= 3.1 and e[1][1] <= 13.1, BULK_OXIDIZER_PORT_SHIFTS)
+
+
+def bulk_chemical_oxidizer_rotor():
+    """The bulk feed screw in its trough (client/MachineRotors)."""
+    import machine_rotors as rotors
+    cx, cy, cz = BULK_OXIDIZER_SCREW
+    z_lo = (22.5 * 2) - 8
+    quads = rotors.disc("z", z_lo, z_lo + 16, cx, cy, 1.5, CHROME, CHROME)
+    for flight in range(6):
+        z0 = z_lo + 1 + flight * 2.5
+        angle = math.radians(60 * flight)
+        c, s_ = math.cos(angle), math.sin(angle)
+
+        def at(r, w):
+            return (cx + 2 * (r * c - w * s_), cy + 2 * (r * s_ + w * c))
+        quads += rotors.prism("z", z0, z0 + 1.5, [at(0.9, -1.1), at(3.5, -1.4), at(3.5, 1.4), at(0.9, 1.1)], COPPER, COPPER)
+    return quads
+
+
+def bulk_chemical_oxidizer_still():
+    """The feed screw standing still, for the item model only."""
+    return _doubled(chemical_oxidizer_still(), lambda e: False, [((-8, 0, -8), lambda c: True)])
+
+
+# The Bulk Electrolytic Separator: each port's pieces moved half a block off the seams the doubling puts them on
+# (shift, test on the Separator's own element centre).
+BULK_SEPARATOR_PORT_SHIFTS = [
+    # The hydrogen outlet pipe, its bands and collar high on the left tower: outwards and down.
+    ((8, -8, 0), lambda c: 36.9 < c[1] < 43.1 and c[2] < 13 and abs(c[0] - 8) <= 2.1),
+    # The anode gas outlet on the right tower: outwards and down.
+    ((-8, -8, 0), lambda c: 36.9 < c[1] < 43.1 and c[2] < 13 and abs(c[0] + 8) <= 2.1),
+    # The junction box at the foot of the right tower, its socket, insulators and bus bar: inwards and down.
+    ((8, -8, 0), lambda c: -14.1 < c[0] < -4.9 and c[1] < 19 and c[2] < 8),
+    # The lye return above it: inwards and down, and flush with the front so its frame clears the door.
+    ((8, -8, -0.5), lambda c: -13.1 < c[0] < -4.4 and 19 < c[1] < 29 and c[2] < 8),
+    # The feed inlet low at the back: inwards and up.
+    ((-8, 8, 0), lambda c: 4.9 < c[0] < 11.1 and c[1] < 12 and c[2] > 23.9),
+]
+
+
+def bulk_electrolytic_separator():
+    """Four wide, four deep and six tall (the art brief's larger variant): the Electrolytic Separator itself, twice as
+    large: the plinth, the olive cell housing with its stepped door, gunmetal bands and the crown of electrode
+    feedthroughs; the white collection towers with their checker shoulders, domes and level strips; the banded outlet
+    pipes to their collars high on the front, hydrogen on the left and oxygen or chlorine on the right; the junction box
+    with the power socket and the lye return above it; the feed inlet low at the back. The control box (the controller)
+    keeps its size at the front left. Each port's pieces sit at the middle of a block face."""
+    return _doubled(electrolytic_separator(), lambda e: e[0][0] >= 5.2 and e[1][2] <= 7.1 and e[1][1] <= 15.1,
+                    BULK_SEPARATOR_PORT_SHIFTS)
+
+
 # The Fermenter's agitator drive pulley on top of the vessel, turning about y: its centre (x, y, z).
 FERMENTER_DRIVE = (-8, 62.75, 24)
 # The Fermenter's materials (the art brief): dull stainless steel for the vessel, a cream insulated jacket.
@@ -1215,6 +1726,105 @@ def industrial_fermenter():
         m += cyl("y", x, 44, 1, 16, 22.5, COPPER)
         m += cyl("z", x, 22, 1, 38, 45, COPPER)
     return m
+
+
+# The Bulk Fermenter's vessel axis and its agitator drive pulley (x, y, z).
+BULK_FERMENTER_AXIS = (-24, 40)
+BULK_FERMENTER_DRIVE = (-24, 94.75, 40)
+
+
+def bulk_fermenter():
+    """Five wide, five deep and six tall (the art brief's larger variant): the Industrial Fermenter's stepped vessel
+    enlarged, not a second brewery. Dull stainless steel on four stout legs over a sloping cone; the cream jacket between
+    charcoal bands with the amber level strip on its front; the ringed manway on the upper body; the shallow domed crown
+    with the enclosed agitator drive (its pulley drawn turning by MachineRotors) and the motor lying towards the back. The
+    feed hatch rises beside the crown at the top on the left; the broth outlet leaves the cone low at the front, banded in
+    bioethanol with a red-wheeled valve; the carbon dioxide outlet leaves the upper body high at the back; the water inlet
+    enters low at the back left; and the heat-services box at the back right carries the power socket. At the front left,
+    under the vessel, the instrument box (the controller). Each port is at the middle of its block's face."""
+    cx, cz = BULK_FERMENTER_AXIS
+    m = []
+    # Four stout legs on feet, and the sloping bottom cone.
+    for lx in (cx - 24, cx + 24):
+        for lz in (cz - 24, cz + 24):
+            m.append(box((lx - 3.5, 0, lz - 3.5), (lx + 3.5, 1.5, lz + 3.5), GUNMETAL))
+            m.append(box((lx - 2.5, 1.5, lz - 2.5), (lx + 2.5, 22, lz + 2.5), GUNMETAL))
+    m += cyl("y", cx, cz, 16, 10, 16, GUNMETAL)
+    m += cyl("y", cx, cz, 24, 16, 21, GUNMETAL)
+    # The vessel: the lower body and its support ring, the cream jacket between charcoal bands, the shoulder ring, the
+    # stepped upper body with a band, and the shallow domed crown.
+    m += cyl("y", cx, cz, 31, 21, 60, STAINLESS, GUNMETAL)
+    m += cyl("y", cx, cz, 31.75, 21, 23.5, GUNMETAL)
+    m += cyl("y", cx, cz, 31.5, 27, 48, JACKET)
+    for y in (25.5, 48):
+        m += cyl("y", cx, cz, 31.75, y, y + 1.5, GUNMETAL)
+    m += cyl("y", cx, cz, 31.25, 59, 61.5, GUNMETAL)
+    m += cyl("y", cx, cz, 28, 61.5, 84, STAINLESS, GUNMETAL)
+    m += cyl("y", cx, cz, 28.5, 70, 72.5, GUNMETAL)
+    m += cyl("y", cx, cz, 23, 84, 87, STAINLESS)
+    m += cyl("y", cx, cz, 18, 87, 90, STAINLESS)
+    # The narrow level strip on the jacket's front, in a charcoal frame, and the ringed manway on the upper body.
+    m.append(box((cx - 2.5, 28, 8), (cx + 2.5, 47, 9.25), GUNMETAL))
+    m.append(box((cx - 1.5, 29, 7.75), (cx + 1.5, 46, 8), STRIP))
+    m += cyl("z", cx, 76, 8, 10.5, 12.25, GUNMETAL, FLANGE)
+    m.append(dial("north", (cx, 76, 10.5), 9, texture=PORTHOLE, body=CHROME))
+    # The instrument box (the controller) at the front left under the vessel: the amber gauge and the green batch lamp.
+    m.append(box((3, 0, 1), (15.5, 20, 9), {"*": OLIVE, "north": GUNMETAL, "up": STENCIL}))
+    m.append(dial("north", (11.5, 14, 0.75), 3.5, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (6.5, 14, 0.75), 2, texture=MINT, body=GUNMETAL))
+    m.append(dial("north", (9, 6.5, 0.75), 2, texture=LAMP, body=GUNMETAL))
+    # The low broth outlet from the cone to its flange at the front: a charcoal pipe banded in bioethanol, a riser into
+    # the cone, and a valve with a red handwheel.
+    m += cyl("z", cx, 8, 3, 0.75, 32, RUBBER)
+    m += cyl("y", cx, 32, 2.5, 8, 10.5, RUBBER)
+    m += cyl("z", cx, 8, 3.4, 4, 5.5, "bioethanol_still")
+    m.append(box((cx - 4.5, 3.5, 0), (cx + 4.5, 12.5, 0.75), {"*": CHROME, "north": f"{FLANGE}!"}))
+    m.append(box((cx - 2.5, 11, 10), (cx + 2.5, 13, 14), GUNMETAL))
+    m += cyl("y", cx, 12, 0.75, 13, 15, CHROME)
+    m += cyl("y", cx, 12, 3, 15, 16, HANDWHEEL)
+    # The enclosed agitator drive on the crown: a gearbox under the pulley and the motor lying towards the back.
+    m.append(box((cx - 6, 90, cz - 6), (cx + 6, 94, cz + 6), GUNMETAL))
+    m += cyl("z", cx, 92, 3.5, cz + 6, cz + 20, OLIVE, GUNMETAL)
+    for z in (cz + 9, cz + 14):
+        m += cyl("z", cx, 92, 4, z, z + 1.5, GUNMETAL)
+    m += cyl("z", cx, 92, 3.75, cz + 20, cz + 21.5, GUNMETAL, GRILLE)
+    # The feed hatch rising beside the crown at the top on the left, joined to the upper body, its hazard-banded rim.
+    m.append(box((2, 76, 36), (5, 82, 44), GUNMETAL))
+    m += cyl("y", 8, 40, 4.5, 74, 94, GUNMETAL)
+    m.append(box((1.5, 94, 33.5), (14.5, 95.25, 46.5), HAZARD))
+    m.append(box((3, 95.25, 35), (13, 96, 45), {"*": CHROME, "up": MOUTH}))
+    # The closed carbon dioxide outlet from the upper body to its flange high at the back.
+    m += cyl("z", cx, 72, 3, 66, 79.25, RUBBER)
+    m += cyl("z", cx, 72, 3.4, 74, 75.5, "carbon_dioxide_still")
+    m.append(box((cx - 4.5, 67.5, 79.25), (cx + 4.5, 76.5, 80), {"*": CHROME, "south": f"{FLANGE}!"}))
+    # The water inlet: from its flange low at the back left, forward and into the lower body.
+    m += cyl("z", 8, 24, 2.5, 52, 79.25, RUBBER)
+    m += cyl("z", 8, 24, 2.9, 74, 75.5, "sp_water")
+    m += cyl("x", 24, 52, 2.5, -6, 8, RUBBER)
+    m.append(box((3.5, 19.5, 79.25), (12.5, 28.5, 80), {"*": CHROME, "south": f"{FLANGE}!"}))
+    # The heat-services box at the back right: the power socket, a hazard band and a copper riser into the jacket.
+    m.append(box((-63, 1.5, 70), (-49, 20, 79.25), GUNMETAL))
+    m.append(box((-63.25, 20, 69.75), (-48.75, 21, 79.5), HAZARD))
+    m.append(box((-59, 5, 79.25), (-53, 11, 80), {"*": CHROME, "south": "power_port!"}))
+    m += cyl("y", -52, 72, 1.25, 21, 40, COPPER)
+    m += cyl("z", -52, 40, 1.25, 58, 72, COPPER)
+    return m
+
+
+def bulk_fermenter_rotor():
+    """The Bulk Fermenter's agitator drive pulley on its gearbox (client/MachineRotors)."""
+    import machine_rotors as rotors
+    cx, y, cz = BULK_FERMENTER_DRIVE
+    quads = rotors.disc("y", y - 0.75, y + 0.5, cx, cz, 5, COPPER, "dr_pulley")
+    quads += rotors.prism("y", y + 0.5, y + 1, [(cx - 4.5, cz - 0.75), (cx + 4.5, cz - 0.75), (cx + 4.5, cz + 0.75),
+                                               (cx - 4.5, cz + 0.75)], CHROME, CHROME)
+    return quads
+
+
+def bulk_fermenter_still():
+    """The pulley standing still, for the item model only."""
+    cx, y, cz = BULK_FERMENTER_DRIVE
+    return cyl("y", cx, cz, 5, y - 0.75, y + 0.5, COPPER, "dr_pulley")
 
 
 def industrial_fermenter_rotor():
@@ -1715,6 +2325,277 @@ def bio_generator_still():
             + cyl("z", cu, 25, 7.5, BIO_FAN_Z - 0.5, BIO_FAN_Z + 0.5, GUNMETAL, "dr_fan"))
 
 
+# The Large Bio Generator is the Bio Generator drawn larger: three blocks wide and tall become five, four deep become six.
+LARGE_BIO_SCALE = (5 / 3, 5 / 3, 1.5)
+
+
+def _large_bio(point):
+    """A Bio Generator point where the Large Bio Generator has it: scaled from the controller block's left edge (x 16),
+    the ground and the front."""
+    sx, sy, sz = LARGE_BIO_SCALE
+    return (16 + (point[0] - 16) * sx, point[1] * sy, point[2] * sz)
+
+
+def _large_bio_element(element):
+    return _scaled_element(element, _large_bio)
+
+
+def _scaled_element(element, place):
+    """An element of a smaller form moved and stretched by `place` into its larger variant (none are turned)."""
+    frm, to, texture = element[:3]
+    assert len(element) == 3, "a scaled form has no turned elements"
+    a, b = place(frm), place(to)
+    frm, to = [q(min(a[i], b[i])) for i in range(3)], [q(max(a[i], b[i])) for i in range(3)]
+    faces = texture if isinstance(texture, dict) else {"*": texture}
+    if any(str(name).endswith("!") for name in faces.values()):
+        # A stretched texture (a dial) must stay inside one block: slide it back into the block its middle is in.
+        for axis in range(3):
+            middle = (frm[axis] + to[axis]) / 2
+            low = math.floor(middle / 16) * 16
+            shift = max(0.0, low - frm[axis]) - max(0.0, to[axis] - (low + 16))
+            frm[axis], to[axis] = frm[axis] + shift, to[axis] + shift
+    return box(frm, to, texture)
+
+
+def _bio_panel(element):
+    """The Bio Generator's instrument panel (the controller) and its hood, gauges and lamp: kept at their own size in
+    the controller block, as only the master block lights its lamp."""
+    frm, to = element[0], element[1]
+    return frm[0] >= 3.4 and to[2] <= 9.6 and to[1] <= 17.5
+
+
+def _bio_port_mark(element):
+    """The Bio Generator's fuel flange, the bioethanol band on it and the power socket: drawn again at the large one's
+    ports."""
+    frm, texture = element[0], element[2]
+    faces = texture if isinstance(texture, dict) else {"*": texture}
+    names = set(faces.values())
+    return (f"{FLANGE_FACE}!" in names or "power_port!" in names
+            or ("bioethanol_still" in names and frm[0] <= -30))
+
+
+def large_bio_generator():
+    """Five wide, six deep and five tall (the art brief's larger variant): the Bio Generator itself, drawn larger, so the
+    family is plain at a glance: the skid, the ringed olive combustion body with its round inspection cover and heat
+    shields, the guarded coupling, the ribbed generator housing, the radiator and its fan, the fuel box on the right and
+    the terminal box on the left, the exhaust folded back over the top. The instrument panel (the controller) keeps its
+    size at the front left. The fuel flange (banded in bioethanol) and the power socket sit at the middle of their
+    ports' blocks, behind the middle of each side."""
+    m = [_large_bio_element(e) for e in bio_generator() if not _bio_panel(e) and not _bio_port_mark(e)]
+    m += [e for e in bio_generator() if _bio_panel(e)]
+    # The fuel flange on the fuel box's right side and the bioethanol band behind it (port: column 4, row 3, layer 0).
+    m.append(box((-63, 7, 51.5), (-62.25, 16, 60.5), {"*": CHROME, "west": f"{FLANGE_FACE}!"}))
+    m += cyl("x", 11.5, 56, 2.5, -62.25, -60.5, "bioethanol_still")
+    # The power socket on the terminal box's left side (port: column 0, row 3, layer 0).
+    m.append(box((14.25, 7, 53), (15, 13, 59), {"*": CHROME, "east": "power_port!"}))
+    return m
+
+
+def large_bio_generator_coupling():
+    """The large coupling shaft and flanges (client/MachineRotors)."""
+    import machine_rotors as rotors
+    cu, cv, _ = _large_bio((BIO_AXIS[0], BIO_AXIS[1], 0))
+    z0, z1 = (z * LARGE_BIO_SCALE[2] for z in BIO_COUPLING_Z)
+    k = LARGE_BIO_SCALE[0]
+    quads = rotors.disc("z", z0 - 1.5, z1 + 1.5, cu, cv, 1.75 * k, CHROME, CHROME)
+    quads += rotors.disc("z", z0 + 0.75, z0 + 3, cu, cv, 4.5 * k, CHROME, "dr_flange")
+    quads += rotors.disc("z", z1 - 3, z1 - 0.75, cu, cv, 4.5 * k, CHROME, "dr_flange")
+    return quads
+
+
+def large_bio_generator_fan():
+    """The large radiator fan behind its guard (client/MachineRotors): a hub and six blades."""
+    import machine_rotors as rotors
+    cu, cv, z = _large_bio((BIO_AXIS[0], 25, BIO_FAN_Z))
+    k = LARGE_BIO_SCALE[0]
+    quads = rotors.disc("z", z - 1.75, z + 1.75, cu, cv, 1.5 * k, CHROME, CHROME)
+    for blade in range(6):
+        angle = math.radians(60 * blade + 10)
+        c, s_ = math.cos(angle), math.sin(angle)
+
+        def at(r, w):
+            return (cu + k * (r * c - w * s_), cv + k * (r * s_ + w * c))
+        quads += rotors.prism("z", z - 0.75, z + 0.75, [at(2, -0.75), at(7.5, -1.75), at(7.5, 1.75), at(2, 0.75)], GUNMETAL, GUNMETAL)
+    return quads
+
+
+def large_bio_generator_still():
+    """The turning parts standing still, for the item model only."""
+    return [_large_bio_element(e) for e in bio_generator_still()]
+
+
+# The Large Gas Burning Generator is the Gas Burning Generator drawn larger: four blocks wide and tall become five,
+# five deep become six.
+LARGE_GAS_SCALE = (5 / 4, 5 / 4, 6 / 5)
+GAS_AXIS = (-16, 26)
+
+
+def _large_gas(point):
+    """A Gas Burning Generator point where the large one has it: scaled from the controller block's left edge (x 16),
+    the ground and the front."""
+    sx, sy, sz = LARGE_GAS_SCALE
+    return (16 + (point[0] - 16) * sx, point[1] * sy, point[2] * sz)
+
+
+def _gas_panel(element):
+    """The ignition box (the controller), its gauges, amber lamp and conduit: kept at their own size in the controller
+    block, as only the master block lights its lamp."""
+    frm, to = element[0], element[1]
+    return frm[0] >= -8.6 and to[2] <= 12.1 and to[1] <= 15.6
+
+
+def large_gas_burning_generator():
+    """Five wide, six deep and five tall (the art brief's larger variant, "the same engine-generator train"): the Gas
+    Burning Generator itself, drawn larger: the skid, the round intake and its fan, the ribbed olive combustion section
+    under its arched heat shield, the guarded coupling, the large ribbed generator housing, the terminal cabinet at the
+    rear right with the power socket, the exhaust run along the left, the capped gas inlet on the right. The ignition box
+    (the controller) keeps its size at the front left. The gas inlet stays at the second block back on the right side and
+    the socket on the cabinet's back."""
+    m = [_scaled_element(e, _large_gas) for e in gas_burning_generator() if not _gas_panel(e)]
+    m += [e for e in gas_burning_generator() if _gas_panel(e)]
+    return m
+
+
+def large_gas_burning_generator_rotor():
+    """The large intake fan and coupling (client/MachineRotors)."""
+    import machine_rotors as rotors
+    cu, cv, _ = _large_gas((GAS_AXIS[0], GAS_AXIS[1], 0))
+    k, kz = LARGE_GAS_SCALE[0], LARGE_GAS_SCALE[2]
+    quads = rotors.disc("z", 3.25 * kz, 5.75 * kz, cu, cv, 2.5 * k, CHROME, CHROME)
+    for blade in range(6):
+        angle = math.radians(60 * blade + 15)
+        c, s = math.cos(angle), math.sin(angle)
+
+        def at(r, w):
+            return (cu + k * (r * c - w * s), cv + k * (r * s + w * c))
+        quads += rotors.prism("z", 4 * kz, 5 * kz, [at(2.25, -1.25), at(10.25, -2), at(10.25, 2), at(2.25, 1.25)], GUNMETAL, GUNMETAL)
+    quads += rotors.disc("z", 38 * kz, 50 * kz, cu, cv, 2.5 * k, CHROME, CHROME)
+    for z0, z1, bolts in ((42.5, 44, (42, 42.5)), (44.5, 46, (46, 46.5))):
+        quads += rotors.disc("z", z0 * kz, z1 * kz, cu, cv, 7 * k, CHROME, "dr_flange")
+        for bolt in range(4):
+            angle = math.radians(90 * bolt + 45)
+            quads += rotors.disc("z", bolts[0] * kz, bolts[1] * kz, cu + 5 * k * math.cos(angle), cv + 5 * k * math.sin(angle),
+                                 0.75 * k, GUNMETAL, GUNMETAL, sides=6)
+    return quads
+
+
+def large_gas_burning_generator_still():
+    """The turning parts standing still, for the item model only."""
+    return [_scaled_element(e, _large_gas) for e in gas_burning_generator_still()]
+
+
+def form_layers(model, width, depth, height, controller=(0, 0, 0)):
+    """The form's cells from where its model reaches: '#' where any element enters a block, '.' where none does, 'C' at
+    the controller (column 0, row 0, layer 0). Columns run from the controller's block (x 0..16) towards -x."""
+    filled = set()
+    for element in model:
+        frm, to = element[0], element[1]
+        for column in range(width):
+            x0 = -16 * column
+            for row in range(depth):
+                for layer in range(height):
+                    if (frm[0] < x0 + 16 and to[0] > x0 and frm[2] < 16 * row + 16 and to[2] > 16 * row
+                            and frm[1] < 16 * layer + 16 and to[1] > 16 * layer):
+                        filled.add((column, row, layer))
+    return [["".join("C" if (c, r, l) == controller else "#" if (c, r, l) in filled else "." for c in range(width))
+             for r in range(depth)] for l in range(height)]
+
+
+def combined_cycle_power_plant():
+    """Six wide, four deep and five tall (the largest form): the factory's power station. On a long gunmetal skid, from the left: the olive
+    generator with its terminal box (the power socket, mint lamps and copper terminals) under the gridded air-filter
+    house, the controller cabinet at the front left; the guarded shaft coupling (drawn turning by MachineRotors); the gas
+    turbine, a ringed compressor stepping out to the copper-banded combustor and the heat-shielded turbine; the exhaust
+    diffuser widening into the tall heat-recovery boiler at the right, ribbed and buttressed, with its white steam drum
+    across the top and the hazard-banded stack at the back right. Behind the train the small steam turbine takes its steam
+    from the boiler, and the fuel skid at the back carries the inlet flange, banded in methane."""
+    cy, cz = PLANT_AXIS
+    m = [box((-80, 0, 0), (16, 4, 64), GUNMETAL)]
+    m.append(box((-80, 3, 0.5), (16, 4, 1.5), HAZARD))
+    # The generator under the filter house: olive, ribbed, on gunmetal saddles.
+    for x in (3, 8):
+        m.append(box((x - 1.5, 4, cz - 10), (x + 1.5, 10, cz + 10), GUNMETAL))
+    m += cyl("x", cy, cz, 11, 1, 11, OLIVE, GUNMETAL)
+    for x in (3, 7):
+        m += cyl("x", cy, cz, 11.75, x, x + 1.5, RIBBED)
+    # Its terminal box on the left end: the power socket (the port), a mint lamp and copper terminals on ceramic.
+    m.append(box((11, 4, 34), (15.25, 22, 47), GUNMETAL))
+    m.append(box((10.75, 22, 33.75), (15.5, 23, 47.25), HAZARD))
+    m.append(box((15.25, 5, 37), (16, 11, 43), {"*": CHROME, "east": "power_port!"}))
+    m.append(dial("east", (16, 16, 40.5), 2.5, texture=MINT, body=CHROME))
+    for z in (37, 44):
+        m += cyl("y", 13, z, 1, 23, 26, INSULATOR)
+        m.append(box((12.5, 26, z - 0.5), (13.5, 26.5, z + 0.5), COPPER))
+    # The controller cabinet at the front left: gauges, the amber lamp and an amber activity strip.
+    m.append(box((2, 4, 1), (15, 30, 11), {"*": OLIVE, "up": STENCIL, "north": GUNMETAL}))
+    m.append(dial("north", (11.5, 24, 0.75), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (5.5, 24, 0.75), 3, texture=GAUGE, body=CHROME))
+    m.append(dial("north", (8.5, 16, 0.75), 2.5, texture=LAMP, body=GUNMETAL))
+    m.append(box((4, 8, 0.25), (13, 10, 1), STRIP))
+    # The air-filter house over the generator end, its grille faces, and the intake duct down to the compressor.
+    m.append(box((-14, 33, 3), (14, 62, 61), {"*": GUNMETAL, "north": GRILLE, "south": GRILLE, "east": GRILLE,
+                                              "west": GRILLE, "up": STENCIL}))
+    m.append(box((-15, 62, 2), (15, 63.5, 62), CHROME))
+    m.append(box((-12, 28, 24), (-4, 33, 40), CHROME))
+    # The gas turbine: the ringed compressor, the copper-banded combustor and the heat-shielded turbine section.
+    m += cyl("x", cy, cz, 8, -14, -2, CHROME, GUNMETAL)
+    for x in (-6, -10):
+        m += cyl("x", cy, cz, 8.75, x, x + 1, GUNMETAL)
+    m += cyl("x", cy, cz, 11, -24, -14, GUNMETAL, GUNMETAL)
+    for x in (-22, -18):
+        m += cyl("x", cy, cz, 11.75, x, x + 1.5, COPPER)
+    m += cyl("x", cy, cz, 10, -36, -24, SHIELD, GUNMETAL)
+    m += cyl("x", cy, cz, 10.75, -31, -29.5, GUNMETAL)
+    for x in (-32, -20, -8):
+        m.append(box((x - 2, 4, cz - 9), (x + 2, 10, cz + 9), GUNMETAL))
+    # The exhaust diffuser widening into the boiler.
+    m.append(box((-48, 7, 18), (-36, 31, 46), GUNMETAL))
+    # The heat-recovery steam generator: a tall ribbed casing with buttresses, a cream band and an inspection door.
+    m.append(box((-78, 4, 4), (-48, 62, 60), {"*": RIBBED, "up": GUNMETAL}))
+    for x in (-76, -64, -52):
+        m.append(box((x, 4, 3), (x + 2, 62, 4), GUNMETAL))
+        m.append(box((x, 4, 60), (x + 2, 62, 61), GUNMETAL))
+    for z in (4, 32):
+        m.append(box((-79, 4, z), (-78, 62, z + 2), GUNMETAL))
+    m.append(box((-78.5, 54, 3.5), (-48, 57, 60.5), CERAMIC))
+    m.append(box((-71, 8, 3.25), (-57, 30, 4), {"*": GUNMETAL, "north": PORTHOLE}))
+    # The white steam drum across the top, on saddles, capped in chrome.
+    for z in (14, 36):
+        m.append(box((-70, 62, z - 2), (-58, 66, z + 2), GUNMETAL))
+    m += cyl("z", -64, 70, 6, 6, 44, TANK_BODY, CHROME)
+    for z in (10, 39):
+        m += cyl("z", -64, 70, 6.5, z, z + 1, CHROME)
+    # The stack at the back right, banded in hazard stripes near its lip.
+    m += cyl("y", -72, 52, 6, 62, 80, EXHAUST, "dr_soot")
+    m += cyl("y", -72, 52, 6.5, 74, 76, HAZARD)
+    # The small steam turbine behind the generator end, and its steam main from the boiler.
+    m += cyl("x", 16, 54, 7, -16, -2, OLIVE, CHROME)
+    m += cyl("x", 16, 54, 7.75, -10, -8.5, GUNMETAL)
+    m += cyl("x", 27, 54, 2, -48, -16, COPPER)
+    m.append(box((-18, 23, 52), (-14, 29, 56), COPPER))
+    # The fuel skid at the back: the inlet flange (the port), banded in methane, and the fuel line to the combustor.
+    m.append(box((-30, 4, 50), (-18, 14, 63.25), {"*": OLIVE, "up": STENCIL}))
+    m.append(box((-28, 4.5, 63.25), (-20, 12.5, 64), {"*": CHROME, "south": f"{FLANGE}!"}))
+    m += cyl("z", -24, 9, 2.4, 60, 61, "methane_still")
+    m += cyl("z", -24, 12, 1.75, 43, 50, RUBBER)
+    return m
+
+
+def combined_cycle_power_plant_shaft():
+    """The plant's shaft coupling between the generator and the compressor (client/MachineRotors)."""
+    import machine_rotors as rotors
+    cy, cz = PLANT_AXIS
+    quads = rotors.disc("x", -2.5, 1.5, cy, cz, 2, CHROME, CHROME)
+    quads += rotors.disc("x", -1, 0, cy, cz, 5, CHROME, "dr_flange")
+    return quads
+
+
+def combined_cycle_power_plant_still():
+    """The coupling standing still, for the item model only."""
+    cy, cz = PLANT_AXIS
+    return cyl("x", cy, cz, 2, -2.5, 1.5, CHROME) + cyl("x", cy, cz, 5, -1, 0, CHROME, "dr_flange")
+
+
 # Turning parts (tools/machine_rotors.py writes them for client/MachineRotors): on the train's axis, spinning up over
 # two seconds when the machine starts and running down as long when it stops, standing still while idle.
 ROTORS = {
@@ -1723,16 +2604,28 @@ ROTORS = {
         "ease": 40, "always": True, "quads": gas_burning_generator_rotor(),
     },
     # The Infuser's cooling fan, running while it works.
+    "bulk_chemical_infuser_fan": {
+        "block": "bulk_chemical_infuser", "axis": "y", "center": list(BULK_INFUSER_FAN), "property": "lit", "speed": 12,
+        "ease": 30, "always": True, "quads": bulk_chemical_infuser_rotor(),
+    },
     "chemical_infuser_fan": {
         "block": "chemical_infuser", "axis": "y", "center": list(INFUSER_FAN), "property": "lit", "speed": 18,
         "ease": 30, "always": True, "quads": chemical_infuser_rotor(),
     },
     # The Oxidizer's feed screw, turning while it burns.
+    "bulk_chemical_oxidizer_screw": {
+        "block": "bulk_chemical_oxidizer", "axis": "z", "center": list(BULK_OXIDIZER_SCREW), "property": "lit", "speed": 6,
+        "ease": 20, "always": True, "quads": bulk_chemical_oxidizer_rotor(),
+    },
     "chemical_oxidizer_screw": {
         "block": "chemical_oxidizer", "axis": "z", "center": list(OXIDIZER_SCREW), "property": "lit", "speed": 9,
         "ease": 20, "always": True, "quads": chemical_oxidizer_rotor(),
     },
     # The Fermenter's agitator drive, turning slowly while a batch works.
+    "bulk_fermenter_drive": {
+        "block": "bulk_fermenter", "axis": "y", "center": list(BULK_FERMENTER_DRIVE), "property": "lit", "speed": 3,
+        "ease": 30, "always": True, "quads": bulk_fermenter_rotor(),
+    },
     "industrial_fermenter_drive": {
         "block": "industrial_fermenter", "axis": "y", "center": list(FERMENTER_DRIVE), "property": "lit", "speed": 4,
         "ease": 30, "always": True, "quads": industrial_fermenter_rotor(),
@@ -1758,9 +2651,26 @@ ROTORS = {
         "ease": 30, "always": True, "quads": gas_cleanup_rack_rotor(),
     },
     # The Bio Generator's coupling and radiator fan, on two axes along z, spinning up as it starts.
+    "combined_cycle_power_plant_shaft": {
+        "block": "combined_cycle_power_plant", "axis": "x", "center": [0, PLANT_AXIS[0], PLANT_AXIS[1]], "property": "lit",
+        "speed": 18, "ease": 60, "always": True, "quads": combined_cycle_power_plant_shaft(),
+    },
     "bio_generator_coupling": {
         "block": "bio_generator", "axis": "z", "center": [BIO_AXIS[0], BIO_AXIS[1], 29.5], "property": "lit", "speed": 12,
         "ease": 40, "always": True, "quads": bio_generator_coupling(),
+    },
+    "large_gas_burning_generator": {
+        "block": "large_gas_burning_generator", "axis": "z", "center": [*_large_gas((GAS_AXIS[0], GAS_AXIS[1], 0))],
+        "property": "lit", "speed": 14, "ease": 40, "always": True, "quads": large_gas_burning_generator_rotor(),
+    },
+    "large_bio_generator_coupling": {
+        "block": "large_bio_generator", "axis": "z",
+        "center": [*_large_bio((BIO_AXIS[0], BIO_AXIS[1], 29.5))], "property": "lit", "speed": 10,
+        "ease": 40, "always": True, "quads": large_bio_generator_coupling(),
+    },
+    "large_bio_generator_fan": {
+        "block": "large_bio_generator", "axis": "z", "center": [*_large_bio((BIO_AXIS[0], 25, BIO_FAN_Z))],
+        "property": "lit", "speed": 15, "ease": 40, "always": True, "quads": large_bio_generator_fan(),
     },
     "bio_generator_fan": {
         "block": "bio_generator", "axis": "z", "center": [BIO_AXIS[0], 25, BIO_FAN_Z], "property": "lit", "speed": 18,
@@ -1768,17 +2678,26 @@ ROTORS = {
     },
 }
 
-MODELS = {"electrolytic_separator": electrolytic_separator(), "gas_burning_generator": gas_burning_generator(),
-          "chemical_infuser": chemical_infuser(), "chemical_oxidizer": chemical_oxidizer(),
-          "industrial_fermenter": industrial_fermenter(), "bulk_chemical_reactor": bulk_chemical_reactor(),
+MODELS = {"electrolytic_separator": electrolytic_separator(), "bulk_electrolytic_separator": bulk_electrolytic_separator(),
+          "gas_burning_generator": gas_burning_generator(),
+          "chemical_infuser": chemical_infuser(), "bulk_chemical_infuser": bulk_chemical_infuser(),
+          "chemical_oxidizer": chemical_oxidizer(), "bulk_chemical_oxidizer": bulk_chemical_oxidizer(),
+          "industrial_fermenter": industrial_fermenter(), "bulk_fermenter": bulk_fermenter(),
+          "bulk_chemical_reactor": bulk_chemical_reactor(),
           "anaerobic_digester": anaerobic_digester(), "coal_gasifier": coal_gasifier(),
-          "gas_cleanup_rack": gas_cleanup_rack(), "bio_generator": bio_generator()}
+          "gas_cleanup_rack": gas_cleanup_rack(), "bio_generator": bio_generator(),
+          "large_bio_generator": large_bio_generator(), "large_gas_burning_generator": large_gas_burning_generator(),
+          "combined_cycle_power_plant": combined_cycle_power_plant()}
 # Extra elements for a form's item model alone: its turning parts, standing still.
 ITEM_EXTRAS = {"gas_burning_generator": gas_burning_generator_still(), "chemical_infuser": chemical_infuser_still(),
+               "bulk_chemical_infuser": bulk_chemical_infuser_still(), "bulk_chemical_oxidizer": bulk_chemical_oxidizer_still(),
                "chemical_oxidizer": chemical_oxidizer_still(), "industrial_fermenter": industrial_fermenter_still(),
+               "bulk_fermenter": bulk_fermenter_still(),
                "bulk_chemical_reactor": bulk_chemical_reactor_still(), "anaerobic_digester": anaerobic_digester_still(),
                "coal_gasifier": coal_gasifier_still(), "gas_cleanup_rack": gas_cleanup_rack_still(),
-               "bio_generator": bio_generator_still()}
+               "bio_generator": bio_generator_still(), "large_bio_generator": large_bio_generator_still(),
+               "large_gas_burning_generator": large_gas_burning_generator_still(),
+               "combined_cycle_power_plant": combined_cycle_power_plant_still()}
 PARTICLE = "dp_olive"
 
 
@@ -1787,10 +2706,13 @@ def write_all(write, assets, data, lang, condition, self_drop):
     out = model_writer.StyleWriter(assets)
     for role, name in TANK_NAMES.items():
         lang[f"container.{MOD}.form.tank.{role}"] = name
+    for form, names in FORM_TANK_NAMES.items():
+        for role, name in names.items():
+            lang[f"container.{MOD}.form.{form}.tank.{role}"] = name
     lang[f"container.{MOD}.form.socket.bed"] = "Catalyst bed"
     # The Infuser's bed socket holds the nickel catalyst bed: the owner's selected one nickel ingot on two ordinary fired
     # bricks (docs/features/industrial-starter-gas-and-acid-factory.md), made once and never used up.
-    write(data / "tags" / "item" / f"{CATALYST_BEDS}.json", {"values": [f"{MOD}:nickel_catalyst_bed", f"{MOD}:vanadium_contact_bed", f"{MOD}:cobalt_catalyst_bed"]})
+    write(data / "tags" / "item" / f"{CATALYST_BEDS}.json", {"values": [f"{MOD}:nickel_catalyst_bed", f"{MOD}:vanadium_contact_bed", f"{MOD}:cobalt_catalyst_bed", f"{MOD}:ruthenium_catalyst_bed"]})
     # The vanadium contact bed: the owner's selected reusable vanadium-oxide/ceramic bed, its oxide on two fired bricks
     # like the nickel bed, made once and never used up.
     write(data / "recipe" / "vanadium_contact_bed.json", {
@@ -1810,6 +2732,12 @@ def write_all(write, assets, data, lang, condition, self_drop):
         "type": "minecraft:crafting_shaped", "category": "building", "pattern": ["RRR", "RBR", "RRR"],
         "key": {"R": f"{MOD}:gasification_residue", "B": f"{MOD}:asphalt_binder"},
         "result": {"id": f"{MOD}:asphalt", "count": 8}})
+    # The ruthenium bed: the recovered ruthenium laid on an existing nickel bed, made once and never used up.
+    write(data / "recipe" / "ruthenium_catalyst_bed.json", {
+        "fabric:load_conditions": condition("machines") + condition("nickel"),
+        "type": "minecraft:crafting_shapeless", "category": "misc",
+        "ingredients": [f"{MOD}:nickel_catalyst_bed", f"{MOD}:ruthenium_powder"],
+        "result": {"id": f"{MOD}:ruthenium_catalyst_bed", "count": 1}})
     # What the Anaerobic Digester takes: the fermentable crops and farm and kitchen waste.
     write(data / "tags" / "item" / f"{DIGESTIBLE}.json", {"values": [
         f"#{MOD}:fermentable", "minecraft:rotten_flesh", "minecraft:poisonous_potato", "minecraft:kelp",
@@ -2091,3 +3019,20 @@ for machine, recipes in cryogenic_fuels.RECIPES.items():
     FORM_RECIPES[machine].extend(recipes)
 HANDBOOK['bulk_chemical_reactor'].append('Also prepares storable hydrazine and N2O4 propellants, each with a solid process residue. See Cryogenics and Rocket Fuels for compatible loaded motors and waste recovery.')
 HANDBOOK['chemical_distillation_station'].append('Also vaporizes LOX, liquid methane or liquid hydrogen into the matching gas through the first outlet. Each paid batch expands 250 mB liquid to 1000 mB gas; clear old outputs and lock the desired recipe.')
+
+
+# Bulk variants must keep the current small station's shared recipes and named tank roles.
+# Apply after the seven-package extensions, retaining each variant's ports/profile/card policy.
+BULK_VARIANTS = {
+    'bulk_electrolytic_separator': 'electrolytic_separator',
+    'bulk_chemical_infuser': 'chemical_infuser',
+    'bulk_chemical_oxidizer': 'chemical_oxidizer',
+    'bulk_fermenter': 'industrial_fermenter',
+}
+for bulk, small in BULK_VARIANTS.items():
+    FORMS[bulk]['capabilities'] = list(FORMS[small]['capabilities'])
+    FORMS[bulk]['aliases'] = list(FORMS[small].get('aliases', []))
+    HANDBOOK[bulk].append('Supports the same current recipes as the ' + small.replace('_', ' ').title() +
+                         '. Use the recipe picker and lock to switch jobs; empty incompatible stored fluids first.')
+
+HANDBOOK['large_bio_generator'].append('Also accepts Clean Biogas from the Biogas Cleaner at 335 JE/mB and 256 JE/t, keeping the smaller generator compatible.')

@@ -156,7 +156,7 @@ Not applicable: a placed machine, with no world generation, creatures, loot or s
   - portable handling.
 - **Not done here**:
   - methane as a fuel (no methane exists yet);
-  - the 5×6×5 larger variant;
+  - the 5×6×5 larger variant (since built: the [Large Gas Burning Generator](industrial-large-gas-burning-generator.md));
   - exhaust or heat recovery, and the recovery ceiling that would bound it;
   - a pollution record;
   - a Jade readout for forms;

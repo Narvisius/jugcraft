@@ -46,6 +46,34 @@ public final class FluidFuels {
 	 */
 	public static final int BIOGAS = 268;
 	public static final int BIO_GENERATOR_BIOGAS = 64;
+	/**
+	 * The Large Gas Burning Generator (docs/features/industrial-large-gas-burning-generator.md), the Gas Burning
+	 * Generator's 5x6x5 variant: four times as fast, hydrogen at the same {@link #HYDROGEN} (more would beat electrolysis's
+	 * cost) and methane an eighth better, between the Gas Burning Generator and the Combined Cycle Power Plant.
+	 */
+	public static final int LARGE_GAS_BURNING_HYDROGEN = 512;
+	public static final int LARGE_GAS_METHANE = 504;
+	public static final int LARGE_GAS_BURNING_METHANE = 1_024;
+	/**
+	 * The Large Bio Generator (docs/features/industrial-large-bio-generator.md), the Bio Generator's 5x6x5 variant: a
+	 * bigger, hotter engine whose exhaust warms its fuel, so it gets a quarter more from each fuel than the Bio Generator,
+	 * and burns them four times as fast. Bioethanol at 240 JE/mB (still below the advanced engine's 256), biogas at 335.
+	 */
+	public static final int LARGE_BIOETHANOL = 240;
+	public static final int LARGE_BIO_GENERATOR_BIOETHANOL = 384;
+	public static final int LARGE_BIOGAS = 335;
+	public static final int LARGE_BIO_GENERATOR_BIOGAS = 256;
+	/**
+	 * The Combined Cycle Power Plant, the factory's big power station: a gas turbine whose exhaust raises steam for a
+	 * second turbine, so methane gives 528 JE/mB, above the large gas generator's 504, and it runs at 2,048 JE/t,
+	 * four times the gas turbine. It burns the Coal Gasifier's raw syngas whole, 256 JE/mB at the same rate, and hydrogen at
+	 * the Fuel Cell's 128 JE/mB (below electrolysis's cost) at 1,024 JE/t.
+	 */
+	public static final int COMBINED_CYCLE_METHANE = 528;
+	public static final int COMBINED_CYCLE_METHANE_RATE = 2_048;
+	public static final int RAW_SYNGAS = 256;
+	public static final int COMBINED_CYCLE_SYNGAS_RATE = 2_048;
+	public static final int COMBINED_CYCLE_HYDROGEN_RATE = 1_024;
 	/** The gas turbine's lubricant upkeep: 1 mB for every this many ticks it runs (a bucket lasts 20,000 ticks). */
 	public static final int LUBRICANT_TICKS = 20;
 	/** The advanced combustion engine (KE per mB): turbocharged, it gets a quarter more from diesel than the diesel

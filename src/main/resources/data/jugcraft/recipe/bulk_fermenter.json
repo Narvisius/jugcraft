@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TFT",
+    "PMP",
+    "PCP"
+  ],
+  "key": {
+    "T": "jugcraft:steel_tank",
+    "F": "jugcraft:industrial_fermenter",
+    "P": "#c:plates/steel",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:bulk_fermenter",
+    "count": 1
+  }
+}

@@ -13,7 +13,7 @@ Baseline: source at `f736ee3c5`, before this documentation change. [Machine defi
 
 | Existing equipment or recipe | Current relevant cost or behavior | Consequence for the starter factory |
 | --- | --- | --- |
-| Electrolytic Cell | 4 steel plates, 2 Steel Tanks, aluminum cable, advanced circuit, Machine Casing | Aluminum cable cannot gate the cell intended to begin the later aluminum route; provide copper entry |
+| Electrolytic Cell | 4 steel plates, 2 Steel Tanks, copper cable, advanced circuit, Machine Casing | Aluminum cable cannot gate the cell intended to begin the later aluminum route; copper entry implemented ([copper entry](industrial-copper-entry-aluminum.md)) |
 | Synthesis Converter | 4 steel plates, titanium ingot, 2 steel fluid pipes, Machine Casing, advanced circuit | Earlier methanation needs accessible starter hardware; retain the existing machine identity and saved contents |
 | Chemical Reactor | 4 steel plates, glass, 2 Tinplate Tanks, Machine Casing, lead ingot | Existing steel-era foundation for acid absorption and other compatible reactions |
 | Fuel Cell | Aluminum plates/cable, steel plates, advanced circuit, Tinplate Tank | Existing hydrogen consumer remains; the selected shared H2/methane generator needs an earlier reachable construction route |

@@ -304,6 +304,73 @@ def ammonium_nitrate():
     return img
 
 
+def ruthenium_powder():
+    """Ruthenium powder: a heap of steel-grey metal powder with a cold blue sheen, lit from the top left, outlined in its
+    own darkest tone (docs/ITEM_ICONS.md)."""
+    grey = [(58, 62, 74), (104, 110, 126), (146, 154, 172), (196, 204, 222)]
+    rows = [
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "......oooo......",
+        "....ooHHMMoo....",
+        "...oHHMMMMmmo...",
+        "..oHMMMMMmmmmo..",
+        ".oHMMMMMmmmmmmo.",
+        ".oMMMMMmmmmmmmo.",
+        ".ooommmmmmmmooo.",
+        "...oooooooooo...",
+        "................",
+        "................",
+    ]
+    tones = {"o": grey[0], "m": grey[1], "M": grey[2], "H": grey[3]}
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img
+
+
+def ruthenium_catalyst_bed():
+    """Ruthenium catalyst bed: the nickel bed's fired-brick tray with its nickel pellets, a dusting of steel-grey ruthenium
+    over them, in the item icon manner (docs/ITEM_ICONS.md): each part outlined in its own darkest tone, lit from the top
+    left."""
+    brick = [(92, 40, 28), (134, 62, 42), (166, 86, 58), (198, 118, 84)]
+    nickel = [(96, 98, 88), (150, 152, 138), (190, 192, 176), (226, 228, 214)]
+    ruthenium = [(58, 62, 74), (146, 154, 172), (196, 204, 222)]
+    rows = [
+        "................",
+        "................",
+        "................",
+        "................",
+        "......rrr.......",
+        "...nnnTUnnnn....",
+        "..nHMmnmmrTUn...",
+        "..nMmmrUmnMmnn..",
+        ".nnmmnHMnnmrTUn.",
+        ".nTUnnMmmnnnMmn.",
+        "bbbbbbbbbbbbbbbb",
+        "bLLLLLLLLLLLLLRb",
+        "bLRRRRRRRRRRRRSb",
+        ".bRRRRRRRRRRRSb.",
+        "..bbbbbbbbbbbb..",
+        "................",
+    ]
+    tones = {"n": nickel[0], "m": nickel[1], "M": nickel[2], "H": nickel[3],
+             "r": ruthenium[0], "U": ruthenium[1], "T": ruthenium[2],
+             "b": brick[0], "S": brick[1], "R": brick[2], "L": brick[3]}
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img
+
+
 def vanadium_contact_bed():
     """Vanadium contact bed: the nickel bed's fired-brick tray, heaped with orange-ochre vanadium oxide pellets. Drawn
     flat in the item icon manner (docs/ITEM_ICONS.md): each part outlined in its own darkest tone, lit from the top
@@ -710,6 +777,8 @@ def draw_all(save, save_animation):
     save(boric_acid(), "item", "boric_acid")
     save(control_rod_assembly(), "item", "control_rod_assembly")
     save(boron_doped_silicon(), "item", "boron_doped_silicon")
+    save(ruthenium_powder(), "item", "ruthenium_powder")
+    save(ruthenium_catalyst_bed(), "item", "ruthenium_catalyst_bed")
     save(guncotton(), "item", "guncotton")
     save(grenade(), "item", "grenade")
     save(grenade_launcher(), "item", "grenade_launcher")

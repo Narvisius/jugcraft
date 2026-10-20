@@ -79,5 +79,5 @@ No survival playtest, two-client test or performance measurement has been done.
 ## Rollout and open questions
 
 - CO methanation (CO + 3 H2) waits for the Coal Gasifier and Gas Cleanup and Separation.
-- An optional later ruthenium bed, and methane's cryogenic and rocket roles, are later work.
+- The optional later ruthenium bed is now built ([ruthenium bed](industrial-ruthenium-bed.md)). Methane's cryogenic and rocket roles are later work.
 - Reversible: the recipes and the fuel are data and form declarations; the item and gases would need removal migrations once released.

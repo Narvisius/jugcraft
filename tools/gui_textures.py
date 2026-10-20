@@ -133,6 +133,13 @@ ADVANCED = {"circuit_assembler", "lithography_station", "gas_centrifuge_cascade"
 FORM_LOOK = "industrial"
 # What each industrial form is for (tools/industrial_forms.py FORMS), shown in its help box.
 FORM_TAGLINES = {
+    "bulk_electrolytic_separator": "Splits fluids in four lanes, with efficient bulk power use.",
+    "bulk_chemical_infuser": "Combines gases and processes synthetic fuels in four lanes.",
+    "bulk_chemical_oxidizer": "Oxidizes solid feeds in four parallel batches.",
+    "bulk_fermenter": "Ferments crops or mash in four lanes and collects exhaust gas.",
+    "large_bio_generator": "Generates power from bioethanol or biogas at factory scale.",
+    "large_gas_burning_generator": "Generates high-output power from hydrogen or methane.",
+    "combined_cycle_power_plant": "Recovers exhaust heat for high-output gas power.",
     "precision_finisher": "Finishes ceramics, shafts and lenses with reusable heads and coolant.",
     "wet_processing_bench": "Cleans, coats, develops and etches wafers; collect the spent solution.",
     "electrolytic_separator": "Splits water or brine into gases, and lye from brine.",

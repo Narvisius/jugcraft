@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "id": "jugcraft:combined_cycle_power_plant"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.combined_cycle_power_plant.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.combined_cycle_power_plant.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jugcraft:combined_cycle_power_plant"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "parent": "jugcraft:heat_recovery_unit"
+}

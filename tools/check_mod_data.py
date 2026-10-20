@@ -3177,7 +3177,7 @@ def machines_stats(family):
 
 def cheapest_electrolysis(fluid, _seen=None):
     """The least JE electricity alone spends per mB of `fluid`, with the most efficiency cards its machine takes (the
-    legacy fluid machines take none), counting the cheapest cost of the fluids it uses up as well (methane's hydrogen,
+    legacy fluid machines take none) and its form's profile saving (an expanded or bulk form pays 90% or 80% a lane), counting the cheapest cost of the fluids it uses up as well (methane's hydrogen,
     say; water is free), or None when electricity alone cannot make it. All of a recipe's cost counts against `fluid`, so
     a fuel burning for less than this cannot pay back the electricity that made it, whatever else came out too.
 
@@ -3213,11 +3213,11 @@ def cheapest_electrolysis(fluid, _seen=None):
         use = machines.STATS.get(machine, {}).get("use_per_tick", 0)
         for recipe in recipes:
             offer(recipe, use)
-    for form, recipes in industrial_forms.FORM_RECIPES.items():
-        info = industrial_forms.FORMS[form]
+    for form, info in industrial_forms.FORMS.items():
+        recipes = industrial_forms.recipes_for_form(form)
+        if not recipes:
+            continue
         use = machines.STATS[info["family"]]["use_per_tick"]
-        # MachineUpgrades.Effect.use with four efficiency cards, the most that count.
-        cheapest = max(1, round(use * 0.8 ** 4)) if info["upgrades"] else use
         for recipe in recipes:
             base_use = recipe.get("energy_per_tick", 0) or use
             discounted = max(1, round(base_use * 0.8 ** 4)) if info["upgrades"] else base_use
@@ -3278,6 +3278,10 @@ def check_industrial_forms():
             for row in industrial_forms.FORM_RECIPES.get(form, []):
                 if any(petro.result_tank(i, r) == output and r[0] != gas for i, r in enumerate(row.get("fluid_results", []))):
                     err(f"{form}: declared gas overflow disagrees with a recipe product")
+        # MachineForm's own rule: every form is 2 to 6 blocks on each axis (it refuses to load otherwise).
+        extents = (len(info["layers"][0][0]), len(info["layers"][0]), len(info["layers"]))
+        if any(not 2 <= extent <= 6 for extent in extents):
+            err(f"{form}: must be 2 to 6 blocks on every axis, not {'x'.join(map(str, extents))}")
         if profiles.get(info["profile"]) != info["tank_mb"]:
             err(f"{form}: the {info['profile']} profile's tanks hold {profiles.get(info['profile'])} mB, not {info['tank_mb']}")
         parts = len(industrial_forms.footprint(info["layers"]))
@@ -3334,10 +3338,14 @@ def check_industrial_forms():
     # Methanation pays for its hydrogen as well as its processing. Treat CO/CO2 as free here for a conservative
     # bound; gasification instead pays a finite carbon item. Speed never reduces total energy per batch.
     hydrogen_cost = cheapest_electrolysis("jugcraft:hydrogen")
-    methane_value = dict((f, v) for f, v, _ in industrial_forms.GAS_GENERATOR_FUELS).get("jugcraft:methane")
+    methane_value = max((v for info in industrial_forms.FORMS.values()
+                         for f, v, _ in info.get("fuels", []) if f == "jugcraft:methane"), default=0)
     if methane_value is not None:
         import math
-        for recipe in industrial_forms.FORM_RECIPES.get("chemical_infuser", []):
+        for form, recipe in ((form, recipe) for form in industrial_forms.FORMS
+                             for recipe in industrial_forms.recipes_for_form(form)):
+            if recipe.get("capability") != industrial_forms.NICKEL_METHANATION:
+                continue  # Phase conversion consumes existing methane; it is not methanation.
             made = sum(r[1] for r in recipe.get("fluid_results", []) if r[0] == "jugcraft:methane")
             if not made:
                 continue
@@ -3346,12 +3354,15 @@ def check_industrial_forms():
             # Count its actual Bio-Generator opportunity cost, not a free feed or a second fuel award.
             bio_values = {f: v for f, v, _ in industrial_forms.FORMS.get("bio_generator", {}).get("fuels", [])}
             feed_energy = sum(mb * bio_values.get(fluid, 0) for fluid, mb in recipe["fluids"])
-            for speed in range(5):
-                for efficiency in range(5):
+            card_counts = range(5) if industrial_forms.FORMS[form]["upgrades"] else range(1)
+            for speed in card_counts:
+                for efficiency in card_counts:
                     ticks = math.ceil(recipe["ticks"] / (1 + .5 * speed))
-                    draw = max(1, math.floor(industrial_forms.form_energy("chemical_infuser", recipe.get("energy_per_tick", 0)) * (1 + .5 * speed) * (1 + .25 * speed) * .8**efficiency + .5))
+                    base_use = recipe.get("energy_per_tick", 0) or machines_stats(industrial_forms.FORMS[form]["family"])["use_per_tick"]
+                    upgraded = max(1, math.floor(base_use * (1 + .5 * speed) * (1 + .25 * speed) * .8**efficiency + .5))
+                    draw = industrial_forms.form_energy(form, upgraded)
                     if hydrogen_cost is None or hydrogen * hydrogen_cost + ticks * draw + feed_energy <= made * methane_value:
-                        err(f"{recipe['name']}: methanation can profit from electrolytic hydrogen")
+                        err(f"{form}/{recipe['name']}: methanation can profit from electrolytic hydrogen")
     # The Separator's construction: the owner's selected 20 steel plates, counting the Steel Tanks' own.
     pattern, key = industrial_forms.FORMS["electrolytic_separator"]["recipe"]
     tank = load(DATA / MOD / "recipe" / "steel_tank.json") or {}
@@ -3361,6 +3372,166 @@ def check_industrial_forms():
               + plates_per_tank * sum(row.count(ch) for row in pattern for ch, ref in key.items() if ref == f"{MOD}:steel_tank"))
     if plates != 20:
         err(f"The Electrolytic Separator costs {plates} steel plates, not the owner's selected 20")
+
+
+# The plan's electrolysis energy floor (docs/features/industrial-electrolytic-separator.md): an expanded or bulk form
+# that makes hydrogen from electricity alone spends at least this many JE a millibucket, cards and profile saving
+# included. The entry Separator, which has no profile saving, is not held to it.
+ELECTROLYSIS_FLOOR = 256
+
+
+def electrolysis_floor_breaches():
+    """Expanded or bulk forms whose recipes make hydrogen from electricity alone below ELECTROLYSIS_FLOOR: (form, recipe,
+    JE per mB). Inputs other than water count at their own cheapest electrolysis; recipes using items are not
+    electricity routes."""
+    import machines
+    hydrogen = f"{MOD}:hydrogen"
+    breaches = []
+    for form, info in industrial_forms.FORMS.items():
+        recipes = industrial_forms.recipes_for_form(form)
+        if not recipes:
+            continue
+        if info["profile"] == "ENTRY":
+            continue
+        use = machines.STATS[info["family"]]["use_per_tick"]
+        for recipe in recipes:
+            base_use = recipe.get("energy_per_tick", 0) or use
+            carded = max(1, int(base_use * 0.8 ** 4 + 0.5)) if info["upgrades"] else base_use
+            per_tick = industrial_forms.form_energy(form, carded)
+            if recipe.get("items"):
+                continue
+            made = sum(result[1] for result in recipe.get("fluid_results", []) if result[0] == hydrogen)
+            if not made:
+                continue
+            spent = 0.0
+            for source, mb in recipe.get("fluids", []):
+                if not source.startswith("minecraft:"):
+                    cost = cheapest_electrolysis(source, {hydrogen})
+                    spent = None if cost is None or spent is None else spent + cost * mb
+            if spent is None:
+                continue
+            per_mb = (recipe["ticks"] * per_tick + spent) / made
+            if per_mb < ELECTROLYSIS_FLOOR:
+                breaches.append((form, recipe["name"], per_mb))
+    return breaches
+
+
+def check_electrolysis_floor():
+    """No expanded or bulk form makes hydrogen from electricity alone for less than the plan's floor, so a larger
+    Separator can never undercut the entry one into a cheap hydrogen battery or a loop with a generator bonus."""
+    for form, recipe, per_mb in electrolysis_floor_breaches():
+        err(f"{form} recipe {recipe}: makes hydrogen from electricity for {per_mb:.1f} JE/mB with every card and its "
+            f"profile saving, below the {ELECTROLYSIS_FLOOR} JE/mB electrolysis floor")
+
+
+def check_self_output_gates():
+    """No machine's construction needs an item that only that machine can make (docs/features/
+    industrial-copper-entry-aluminum.md): for every machine that runs recipes, each ingredient of its crafting recipe,
+    tags resolved, must be reachable from the world and vanilla items through recipes some other machine or crafting
+    runs. Items no recipe makes (ores, crops, mob drops) and vanilla items count as found in the world."""
+    import recipe_view
+    recipe_dir = DATA / MOD / "recipe"
+
+    def outputs(data):
+        found = []
+        result = data.get("result")
+        if isinstance(result, dict) and "id" in result:
+            found.append(result["id"])
+        elif isinstance(result, str):
+            found.append(result)
+        found += [r["id"] for r in data.get("results", []) or [] if isinstance(r, dict) and "id" in r]
+        if isinstance(data.get("output"), str):
+            found.append(data["output"])
+        return found
+
+    def refs(value):
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, list):
+            return [ref for item in value for ref in refs(item)]
+        if isinstance(value, dict):
+            if "tag" in value:
+                return ["#" + value["tag"]]
+            for key in ("item", "ingredient", "id"):
+                if key in value:
+                    return refs(value[key])
+        return []
+
+    def ingredients(data):
+        found = [ref for value in data.get("key", {}).values() for ref in refs(value)]
+        for key in ("ingredients", "items", "inputs"):
+            found += [ref for item in data.get(key, []) or [] for ref in refs(item)]
+        for key in ("input", "ingredient", "tool"):
+            if key in data:
+                found += refs(data[key])
+        return found
+
+    type_blocks = {}
+    for block, (_, kind) in recipe_view.LISTS.items():
+        type_blocks.setdefault(f"{MOD}:{kind}", set()).add(f"{MOD}:{block}")
+    for name, spec in petro.FLUID_MACHINES.items():
+        if spec.get("recipe_type"):
+            type_blocks.setdefault(f"{MOD}:{spec['recipe_type']}", set()).add(f"{MOD}:{name}")
+    capability_blocks = {}
+    for form, info in industrial_forms.FORMS.items():
+        for capability in info["capabilities"]:
+            capability_blocks.setdefault(capability, set()).add(f"{MOD}:{form}")
+    recipes = []
+    for path in recipe_dir.rglob("*.json"):
+        data = load(path) or {}
+        kind = data.get("type", "")
+        if data.get("capability"):
+            makers = capability_blocks.get(data["capability"], {"?"})
+        else:
+            makers = type_blocks.get(kind, {kind or "?"})
+        made = outputs(data)
+        if made:
+            recipes.append((makers, ingredients(data), made, path.relative_to(recipe_dir).as_posix()))
+    produced = {item for _, _, made, _ in recipes for item in made}
+    tag_cache = {}
+
+    def tag_values(tag, seen=()):
+        if tag in tag_cache:
+            return tag_cache[tag]
+        namespace, _, path = tag[1:].partition(":")
+        values = []
+        for folder in ("item", "items"):
+            file = DATA / namespace / "tags" / folder / f"{path}.json"
+            if file.is_file():
+                for value in (load(file) or {}).get("values", []):
+                    value = value["id"] if isinstance(value, dict) else value
+                    values += (tag_values(value, seen + (tag,)) if value not in seen else []) if value.startswith("#") else [value]
+        tag_cache[tag] = values
+        return values
+
+    def available(ref, reached):
+        if ref.startswith("#"):
+            values = tag_values(ref)
+            return not values or any(available(value, reached) for value in values)
+        return ref.startswith("minecraft:") or ref not in produced or ref in reached
+
+    def reachable_without(block):
+        reached, changed = set(), True
+        while changed:
+            changed = False
+            for makers, needs, made, _ in recipes:
+                if makers - {block} and all(available(ref, reached) for ref in needs):
+                    for item in made:
+                        if item not in reached:
+                            reached.add(item)
+                            changed = True
+        return reached
+
+    crafting = {"minecraft:crafting_shaped", "minecraft:crafting_shapeless"}
+    for block in sorted(set().union(*type_blocks.values(), *capability_blocks.values())):
+        builds = [r for r in recipes if block in r[2] and r[0] & crafting]
+        if not builds:
+            continue
+        reached = reachable_without(block)
+        for _, needs, _, name in builds:
+            gated = [ref for ref in needs if not available(ref, reached)]
+            if gated:
+                err(f"{block}: its recipe {name} needs {gated}, which only it can make: a self-output gate")
 
 
 def check_large_machines():
@@ -16168,6 +16339,8 @@ def main():
     check_machine_recipe_files(registered)
     check_fluid_recipes(registered)
     check_industrial_forms()
+    check_electrolysis_floor()
+    check_self_output_gates()
     check_tags()
     check_worldgen()
     check_java()
